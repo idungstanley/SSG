@@ -29,6 +29,7 @@ interface HubState {
   createWLID: string | null;
   editHub: boolean;
   spaceStatuses: StatusProps[];
+  statusesToMatch: StatusProps[];
 }
 
 const initialState: HubState = {
@@ -60,7 +61,8 @@ const initialState: HubState = {
   entityToCreate: null,
   spaceStatuses: [
     { color: null, is_default: null, id: null, model_id: null, model: null, type: null, position: 0, name: '' }
-  ]
+  ],
+  statusesToMatch: []
 };
 
 export const hubSlice = createSlice({
@@ -78,6 +80,9 @@ export const hubSlice = createSlice({
     },
     setSpaceStatuses(state, action: PayloadAction<StatusProps[]>) {
       state.spaceStatuses = action.payload;
+    },
+    setStatusesToMatch(state, action: PayloadAction<StatusProps[]>) {
+      state.statusesToMatch = action.payload;
     },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
@@ -195,6 +200,7 @@ export const {
   setEditHub,
   setParentHubExt,
   setSelectedTreeDetails,
-  setEntityToCreate
+  setEntityToCreate,
+  setStatusesToMatch
 } = hubSlice.actions;
 export default hubSlice.reducer;

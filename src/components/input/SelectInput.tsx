@@ -3,12 +3,18 @@ import AlsoitMenuDropdown from '../DropDowns';
 import ArrowCaretUp from '../../assets/icons/ArrowCaretUp';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
+import { matchedStatusProps } from '../../common/Prompt';
+import { useAppSelector } from '../../app/hooks';
 
 interface SelectDropdownProps {
   options: StatusProps[];
+  index?: number;
+  setMatchedStatus: React.Dispatch<React.SetStateAction<matchedStatusProps[]>>;
 }
 
-export default function SelectDropdown({ options }: SelectDropdownProps) {
+export default function SelectDropdown({ options, setMatchedStatus, index }: SelectDropdownProps) {
+  const { statusesToMatch } = useAppSelector((state) => state.hub);
+
   const [selectItem, setSelectItem] = useState<string>('');
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
@@ -21,6 +27,23 @@ export default function SelectDropdown({ options }: SelectDropdownProps) {
 
   const handleSelectOption = (value: string) => {
     setSelectItem(value);
+    setMatchedStatus((prev) => {
+      const matchItem = options.map((option, optionIndex) => {
+        if (optionIndex === index) {
+          return { id: options[index].id, name: value };
+        }
+        return option;
+      });
+      console.log(matchItem, 'matchItem');
+      console.log(prev);
+      if (prev.length === 0) {
+        return prev.push(matchItem);
+      } else {
+        return prev.map((prevItem) => {
+          return { ...prevItem, matchItem };
+        });
+      }
+    });
   };
 
   return (
@@ -31,7 +54,7 @@ export default function SelectDropdown({ options }: SelectDropdownProps) {
       </div>
       <AlsoitMenuDropdown anchorEl={showSelectDropdown} handleClose={handleCloseSelectOption}>
         <div className="flex flex-col w-48 p-2 space-y-2">
-          {options.map((option) => (
+          {statusesToMatch.map((option) => (
             <span
               key={option.name}
               onClick={() => handleSelectOption(option.name)}

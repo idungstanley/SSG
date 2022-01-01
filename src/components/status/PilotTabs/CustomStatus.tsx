@@ -30,8 +30,9 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { displayPrompt } from '../../../features/general/prompt/promptSlice';
+import { displayPrompt, setVisibility } from '../../../features/general/prompt/promptSlice';
 import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
+import { setStatusesToMatch } from '../../../features/hubs/hubSlice';
 
 // const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 //   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -58,7 +59,6 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
   const [activeId, setActiveId] = useState<number | null>(null);
 
   const initialBoardSections = initializeBoard(statusTypesState);
@@ -71,10 +71,6 @@ export default function CustomStatus() {
     })
   );
 
-  const sortableItems = statusTypesState.map((status) => ({
-    id: status.name
-  }));
-
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
     const { id } = active;
@@ -83,8 +79,6 @@ export default function CustomStatus() {
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
-    console.log(active.id, 'active');
-    console.log(over?.id, 'over');
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
@@ -132,14 +126,6 @@ export default function CustomStatus() {
 
     setActiveId(null);
   };
-  // ... (remaining code)
-
-  const handleToggleGroup = (group: string) => {
-    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
-      ...prevCollapsedStatusGroups,
-      [group]: !prevCollapsedStatusGroups[group]
-    }));
-  };
 
   useEffect(() => {
     setStatusTypesState(
@@ -183,9 +169,6 @@ export default function CustomStatus() {
     }
     setAddStatus(false);
   };
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewStatusValue(e.target.value);
-  };
 
   const groupStylesMapping: Record<string, GroupStyles> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
@@ -219,10 +202,11 @@ export default function CustomStatus() {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
       const matchData = errorResponse.data.data.match;
       if (matchData) {
+        dispatch(setStatusesToMatch(statusData));
         dispatch(
           displayPrompt(
-            'Are you sure you want to delete this Status ?(“PENDING”)',
-            'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
+            'Different Statuses',
+            'You changed statuses in your List. 4 tasks will be affected. How should we handle these statuses?',
             [
               {
                 label: 'Save Changes',
@@ -232,7 +216,9 @@ export default function CustomStatus() {
               {
                 label: 'Cancel',
                 style: 'plain',
-                callback: () => ({})
+                callback: () => {
+                  dispatch(setVisibility(false));
+                }
               }
             ],
             matchData

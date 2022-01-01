@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
@@ -8,13 +8,21 @@ import StatusIconComp from '../assets/icons/StatusIconComp';
 import SelectDropdown from '../components/input/SelectInput';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 
+export interface matchedStatusProps {
+  id: string | null;
+  name: string;
+}
+
 export default function Prompt() {
   const dispatch = useDispatch();
   const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
+  const [matchedStatus, setMatchedStatus] = useState<matchedStatusProps[]>([]);
 
   const setShow = (state: boolean) => {
     dispatch(setVisibility(state));
   };
+
+  console.log(matchedStatus);
 
   interface optionsProps {
     label: string | null;
@@ -80,7 +88,7 @@ export default function Prompt() {
                           <p>MOVE TO</p>
                           <HiOutlineArrowNarrowRight />
                         </span>
-                        <SelectDropdown options={matchData} />
+                        <SelectDropdown options={matchData} index={index} setMatchedStatus={setMatchedStatus} />
                       </div>
                     </div>
                   ))}
