@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import {
-  useRoutes,
-} from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { HotKeys } from 'react-hotkeys';
 import { Toaster } from 'react-hot-toast';
