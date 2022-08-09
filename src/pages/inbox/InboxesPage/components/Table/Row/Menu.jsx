@@ -1,0 +1,118 @@
+import React, { Fragment, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Menu as HeadlessUIMenu, Transition } from '@headlessui/react';
+import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { useNavigate } from 'react-router-dom';
+import {
+  useGetInbox,
+  useGetPinnedInboxes,
+  usePinInbox,
+  useUnpinInbox,
+} from '../../../../../../features/inbox/inboxesService';
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
+
+export default function Menu({ inboxId }) {
+  const navigate = useNavigate();
+
+  const [pinnedInboxesIds, setPinnedInboxesIds] = useState([]);
+
+  const { status: pinnedInboxesStatus, data: pinnedInboxesData } = useGetPinnedInboxes();
+  const { data: inbox } = useGetInbox(inboxId);
+  const { mutate: pinInbox } = usePinInbox(inboxId);
+  const { mutate: unpinInbox } = useUnpinInbox(inboxId);
+
+  const onViewInbox = () => {
+    navigate(`/inbox/${inboxId}`);
+  };
+
+  const onPinInbox = () => {
+    pinInbox();
+  };
+
+  const onUnpinInbox = () => {
+    unpinInbox();
+  };
+
+  useEffect(() => {
+    var ids = [];
+
+    if (pinnedInboxesStatus === 'success') {
+      pinnedInboxesData.data.pinned_inboxes.map((pinnedInbox) => ids.push(pinnedInbox.id));
+    }
+
+    setPinnedInboxesIds(ids);
+  }, [pinnedInboxesStatus, pinnedInboxesData]);
+
+  return inbox ? (
+    <HeadlessUIMenu as="div" className="relative inline-block text-left">
+      <div>
+        <HeadlessUIMenu.Button className="relative top-1 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+          <span className="sr-only">Open options</span>
+          <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+        </HeadlessUIMenu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <HeadlessUIMenu.Items className=" z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
+          <div className="py-1">
+            <HeadlessUIMenu.Item>
+              {({ active }) => (
+                <button
+                  onClick={onViewInbox}
+                  type="button"
+                  className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                >
+                  View
+                </button>
+              )}
+            </HeadlessUIMenu.Item>
+          </div>
+          {!pinnedInboxesIds.some((curentInboxId) => curentInboxId === inboxId) ? (
+            <div className="py-1">
+              <HeadlessUIMenu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={onPinInbox}
+                    type="button"
+                    className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                  >
+                    Pin
+                  </button>
+                )}
+              </HeadlessUIMenu.Item>
+            </div>
+          ) : (
+            <div className="py-1">
+              <HeadlessUIMenu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={onUnpinInbox}
+                    type="button"
+                    className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                  >
+                    Unpin
+                  </button>
+                )}
+              </HeadlessUIMenu.Item>
+            </div>
+          )}
+        </HeadlessUIMenu.Items>
+      </Transition>
+    </HeadlessUIMenu>
+  ) : null;
+}
+
+Menu.propTypes = {
+  inboxId: PropTypes.string.isRequired,
+};
