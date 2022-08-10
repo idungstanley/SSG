@@ -55,6 +55,7 @@ function Toolbar() {
       queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
       queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
       queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['inboxes_unfiled_count']);
 
       // TODO: Select next... if there is... (otherwise keep current selected)
     },

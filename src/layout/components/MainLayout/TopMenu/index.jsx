@@ -15,6 +15,7 @@ import { selectCurrentUser, setCurrentUser } from '../../../../features/auth/aut
 import { logoutService } from '../../../../features/auth/authService';
 import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 
 const navigation = [
@@ -30,6 +31,8 @@ function TopMenu() {
   const dispatch = useDispatch();
 
   const user = useSelector(selectCurrentUser);
+
+  const { data: unfiledInboxesCount, status } = useGetInboxUnfiledCount();
 
   const logoutMutation = useMutation(logoutService, {
     onSuccess: async () => {
@@ -107,10 +110,10 @@ function TopMenu() {
                       >
                         {item.name}
 
-                        {item.name === 'Inbox' && (
+                        {item.name === 'Inbox' && status === 'success' && (
                           <span className="ml-1.5">
                             <Badge
-                              value="143"
+                              value={unfiledInboxesCount}
                               textColour="text-white"
                               backgroundColour="bg-red-500"
                             />
