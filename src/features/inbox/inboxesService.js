@@ -103,3 +103,15 @@ export function useUnpinInbox(inboxId) {
     },
   });
 }
+
+// Get total inbox unfiled account
+export const useGetInboxUnfiledCount = () => useQuery(
+  ['inboxes_unfiled_count'],
+  async () => {
+    const data = await requestNew({
+      url: 'inboxes/unfiled-count',
+      method: 'GET',
+    });
+    return data.data.unfiled_count;
+  },
+);
