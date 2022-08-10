@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import FolderPreview from './FolderPreview';
 import FilePreview from './FilePreview';
 
@@ -19,11 +19,4 @@ function Preview() {
   );
 }
 
-// eslint-disable-next-line no-unused-vars
-const mapStateToProps = (state, props) => ({
-});
-
-const mapDispatchToProps = {
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Preview);
+export default Preview;

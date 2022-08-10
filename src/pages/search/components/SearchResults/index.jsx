@@ -4,7 +4,7 @@ import FileResultsList from './FileResultsList';
 import FolderResultsList from './FolderResultsList';
 
 function SearchResults() {
-  const resultsType = useSelector((state) => state.search.results_type);
+  const resultsType = useSelector((state) => state.search.resultsType);
 
   if (resultsType === 'files') {
     return (

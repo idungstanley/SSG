@@ -4,9 +4,7 @@ import Header from './components/Header';
 import Table from './components/Table';
 import PinnedInboxes from './components/PinnedInboxes';
 import CreateInboxSlideOver from './components/CreateInboxSlideOver';
-import {
-  setCreateInboxSlideOverVisibility,
-} from '../../../features/general/slideOver/slideOverSlice';
+import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxes } from '../../../features/inbox/inboxesService';
 import { Spinner } from '../../../common';
 import { EmptyStateSimple } from '../../../components';

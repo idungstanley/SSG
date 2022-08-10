@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import { useGetFile } from '../../../../../../features/explorer/explorerService';
-import { OutputDateTime, OutputFileSize, GetFileWithHeaders } from '../../../../../../app/helpers';
+import { useGetSearchEverythingFile } from '../../../../../features/search/searchService';
+import { OutputDateTime, OutputFileSize, GetFileWithHeaders } from '../../../../../app/helpers';
+import { Button } from '../../../../../components';
 
 function FilePreview() {
-  const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
-  const { data: file } = useGetFile(selectedItemId);
+  const navigate = useNavigate();
+
+  const selectedItemId = useSelector((state) => state.search.selectedItemId);
+  const { data: file } = useGetSearchEverythingFile(selectedItemId);
 
   const [numPages, setNumPages] = useState(null);
   const [fileData, setFileData] = useState(null);
@@ -15,8 +19,8 @@ function FilePreview() {
     setNumPages(data.numPages);
   };
 
-  const onDownload = async () => {
-    console.log('to download');
+  const onShowInFolder = async () => {
+    navigate(`/explorer/${file.folder_id}`);
   };
 
   useEffect(async () => {
@@ -68,25 +72,13 @@ function FilePreview() {
           </div>
         </div>
         <div className="flex">
-          <button
-            onClick={onDownload}
-            type="button"
-            className="flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Download
-          </button>
-          <button
-            type="button"
-            className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Share
-          </button>
-          <button
-            type="button"
-            className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Delete
-          </button>
+          <Button
+            buttonStyle="white"
+            onClick={onShowInFolder}
+            label="Show in folder"
+            width="w-full"
+            ringOnFocus
+          />
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

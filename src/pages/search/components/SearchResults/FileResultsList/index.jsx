@@ -1,12 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  searchFoldersSelectors,
-} from '../../../../features/search/searchSlice';
-import FolderListItem from './FolderListItem';
+import { useSearchEverything } from '../../../../../features/search/searchService';
+import FileListItem from './FileListItem';
 
-function FolderResultsList() {
-  const folders = useSelector(searchFoldersSelectors.selectAll);
+function FileResultsList() {
+  const searchQuery = useSelector((state) => state.search.searchQuery);
+  const resultsType = useSelector((state) => state.search.resultsType);
+  const searchFileContents = useSelector((state) => state.search.searchFileContents);
+
+  const { data, status } = useSearchEverything(searchQuery, resultsType, searchFileContents);
 
   return (
     <div className="overflow-x-none bg-white h-full">
@@ -36,11 +38,19 @@ function FolderResultsList() {
                   >
                     Created at
                   </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Size
+                  </th>
+
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {folders.map((folder) => (
-                  <FolderListItem folder={folder} />
+                {status === 'success' && data.data.files.map((file) => (
+                  <FileListItem fileId={file.id} />
                 ))}
               </tbody>
             </table>
@@ -51,4 +61,4 @@ function FolderResultsList() {
   );
 }
 
-export default FolderResultsList;
+export default FileResultsList;

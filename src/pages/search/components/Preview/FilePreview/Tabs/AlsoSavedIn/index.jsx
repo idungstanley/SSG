@@ -3,10 +3,8 @@ import { connect, useSelector } from 'react-redux';
 import {
   DocumentDuplicateIcon,
 } from '@heroicons/react/solid';
-import {
-  searchFilesSelectors,
-} from '../../../../../../features/search/searchSlice';
-import { FileIcon, PathBadge } from '../../../../../../common';
+import { searchFilesSelectors } from '../../../../../../../features/search/searchSlice';
+import { FileIcon, PathBadge } from '../../../../../../../common';
 
 function AlsoSavedIn() {
   const selectedItemId = useSelector((state) => state.search.selectedItemId);
