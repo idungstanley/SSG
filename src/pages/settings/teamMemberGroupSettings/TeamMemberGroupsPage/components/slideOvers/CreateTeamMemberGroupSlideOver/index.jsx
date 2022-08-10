@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { useCreateTeamMemberGroupMutation } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { setTeamMemberGroupsPage } from '../../../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
+import { createTeamMemberGroupService } from '../../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
+import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../../../../features/general/slideOver/slideOverSlice';
 import {
   SlideOver,
   Button,
   Input,
-} from '../../../../../components';
+} from '../../../../../../../components';
 
 function CreateTeamMemberGroupSlideOver() {
   const dispatch = useDispatch();
 
-  const [createTeamMemberGroup, { isLoading }] = useCreateTeamMemberGroupMutation();
-
-  const showCreateTeamMemberGroupSlideOver = useSelector((state) => state.slideOver.showCreateTeamMemberGroupSlideOver);
+  const queryClient = useQueryClient();
 
   // Form state
 
@@ -32,18 +32,21 @@ function CreateTeamMemberGroupSlideOver() {
     }));
   };
 
-  const onSubmit = async () => {
-    try {
-      await createTeamMemberGroup({
-        name,
-        showSuccess: true,
-      }).unwrap();
-
-      setFormState(defaultFormState);
+  const createTeamMemberGroupMutation = useMutation(createTeamMemberGroupService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['team_member_groups', { page: 1 }]);
+      dispatch(setTeamMemberGroupsPage(1));
       dispatch(setCreateTeamMemberGroupSlideOverVisibility(false));
-    } catch (error) {
-      console.log(error);
-    }
+      setFormState(defaultFormState);
+    },
+  });
+
+  const showCreateTeamMemberGroupSlideOver = useSelector((state) => state.slideOver.showCreateTeamMemberGroupSlideOver);
+
+  const onSubmit = async () => {
+    createTeamMemberGroupMutation.mutate({
+      name,
+    });
   };
 
   return (
@@ -69,7 +72,7 @@ function CreateTeamMemberGroupSlideOver() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          loading={isLoading}
+          loading={createTeamMemberGroupMutation.status === 'loading'}
           label="Create group"
           width="w-40"
         />

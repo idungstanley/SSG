@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Spinner } from '../../../common';
-import { SimpleSectionHeading, Button } from '../../../components';
-import Breadcrumb from '../components/Breadcrumb';
+import { Spinner } from '../../../../common';
+import { SimpleSectionHeading, Button } from '../../../../components';
+import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
-import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import TeamMemberGroupMembersSlideOver from './components/TeamMemberGroupMembersSlideOver';
-import CreateTeamMemberGroupSlideOver from './components/CreateTeamMemberGroupSlideOver';
-import { useGetTeamMemberGroups } from '../../../features/settings/teamMemberGroups/teamMemberGroupService';
+import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import CreateTeamMemberGroupSlideOver from './components/slideOvers/CreateTeamMemberGroupSlideOver';
+import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 
 export default function TeamMemberGroupsPage() {
   const dispatch = useDispatch();
@@ -52,7 +51,6 @@ export default function TeamMemberGroupsPage() {
           )}
         </main>
       </div>
-      <TeamMemberGroupMembersSlideOver />
       <CreateTeamMemberGroupSlideOver />
     </>
   );

@@ -10,8 +10,10 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
 // Main
-import SearchScreen from './Search/screens/SearchScreen';
 import ExplorerPage from './pages/explorer/ExplorerPage';
+import SearchScreen from './Search/screens/SearchScreen';
+
+// Inboxes
 import InboxesPage from './pages/inbox/InboxesPage';
 import InboxPage from './pages/inbox/InboxPage';
 import GeneralSettingsPage from './pages/inbox/inboxSettings/GeneralSettingsPage';
@@ -23,7 +25,11 @@ import TeamMemberGroupsSettingsPage from './pages/inbox/inboxSettings/TeamMember
 import PermissionsPage from './pages/settings/PermissionsPage';
 import TeamMembersPage from './pages/settings/TeamMembersPage';
 import TeamMemberInvitesPage from './pages/settings/TeamMemberInvitesPage';
-import TeamMemberGroupsPage from './pages/settings/TeamMemberGroupsPage';
+
+// Team member group settings
+import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
+import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
+import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
 
 const routes = (user) => [
   {
@@ -43,7 +49,11 @@ const routes = (user) => [
       { path: 'settings/permissions', element: <PermissionsPage /> },
       { path: 'settings/team-members', element: <TeamMembersPage /> },
       { path: 'settings/team-members/invites', element: <TeamMemberInvitesPage /> },
+
+      // Team member group settings
       { path: 'settings/team-members/groups', element: <TeamMemberGroupsPage /> },
+      { path: 'settings/team-members/groups/:teamMemberGroupId', element: <TeamMemberGroupGeneralSettingsPage /> },
+      { path: 'settings/team-members/groups/:teamMemberGroupId/members', element: <TeamMemberGroupMembersPage /> },
     ],
   },
   {
