@@ -5,7 +5,7 @@ import {
   // InboxIcon,
 } from '@heroicons/react/solid';
 import { useSelector, useDispatch } from 'react-redux';
-import { setResultsType } from '../../../../features/search/searchSlice';
+import { setResultsType } from '../../../../../features/search/searchSlice';
 
 const tabs = [
   {
@@ -22,15 +22,6 @@ const tabs = [
     icon: FolderIcon,
     current: false,
   },
-  /*
-  {
-    name: 'Inbox files',
-    key: 'inbox-files',
-    href: '#',
-    icon: InboxIcon,
-    current: true,
-  },
-  */
 ];
 
 function classNames(...classes) {
@@ -39,7 +30,7 @@ function classNames(...classes) {
 
 export default function FilterResults() {
   const dispatch = useDispatch();
-  const resultsType = useSelector((state) => state.search.results_type);
+  const resultsType = useSelector((state) => state.search.resultsType);
 
   const onChangeTab = (key) => {
     dispatch(setResultsType(key));

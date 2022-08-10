@@ -111,7 +111,7 @@ export const fileInboxFileService = async (data) => {
     url: `inbox-files/${data.inboxFileId}/file`,
     method: 'POST',
     params: {
-      selectedFolderIds: data.folderIds,
+      selected_folder_ids: data.folderIds,
     },
   });
   return response;

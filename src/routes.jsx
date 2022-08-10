@@ -11,7 +11,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 
 // Main
 import ExplorerPage from './pages/explorer/ExplorerPage';
-import SearchScreen from './Search/screens/SearchScreen';
+import SearchPage from './pages/search/SearchPage';
 
 // Inboxes
 import InboxesPage from './pages/inbox/InboxesPage';
@@ -39,7 +39,7 @@ const routes = (user) => [
       { path: '/', element: <Navigate to="/explorer" /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
-      { path: 'search', element: <SearchScreen /> },
+      { path: 'search', element: <SearchPage /> },
       { path: 'inbox', element: <InboxesPage /> },
       { path: 'inbox/:inboxId', element: <InboxPage /> },
       { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
