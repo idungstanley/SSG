@@ -23,8 +23,8 @@ import TeamMemberGroupsSettingsPage from './pages/inbox/inboxSettings/TeamMember
 
 // Settings
 import PermissionsPage from './pages/settings/PermissionsPage';
-import TeamMembersPage from './pages/settings/TeamMembersPage';
-import TeamMemberInvitesPage from './pages/settings/TeamMemberInvitesPage';
+import TeamMembersPage from './pages/settings/teamMemberSettings/TeamMembersPage';
+import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/TeamMemberInvitesPage';
 
 // Team member group settings
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';

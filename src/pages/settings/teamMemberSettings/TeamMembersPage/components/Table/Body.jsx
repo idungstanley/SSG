@@ -1,23 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Row from './Row';
-
-// Features
-import { useGetTeamMembersQuery } from '../../../../../features/settings/teamMembers/teamMemberApi';
+import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 
 export default function Body() {
   const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
   const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
 
-  const { data } = useGetTeamMembersQuery({
+  const { status, data } = useGetTeamMembers({
     page: teamMembersPaginationPage,
-    search: teamMembersSearchQuery,
+    query: teamMembersSearchQuery,
   });
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
-      {data.data.team_members.map((teamMember) => (
-        <Row teamMember={teamMember} />
+      {status === 'success' && data.data.team_members.map((teamMember) => (
+        <Row teamMemberId={teamMember.id} />
       ))}
     </tbody>
   );

@@ -1,27 +1,25 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '../../../../../components';
-import {
-  goToPreviousTeamMemberInvitesPage,
-  goToNextTeamMemberInvitesPage,
-} from '../../../../../features/settings/teamMemberInvites/teamMemberInviteSlice';
-import { useGetTeamMemberInvitesQuery } from '../../../../../features/settings/teamMemberInvites/teamMemberInviteApi';
+import { Button } from '../../../../../../components';
+import { goToPreviousTeamMembersPage, goToNextTeamMembersPage } from '../../../../../../features/settings/teamMembers/teamMemberSlice';
+import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const teamMemberInvitesPaginationPage = useSelector((state) => state.teamMemberInvite.teamMemberInvitesPaginationPage);
+  const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
+  const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
 
-  const { data: response } = useGetTeamMemberInvitesQuery({
-    page: teamMemberInvitesPaginationPage,
+  const { data: response } = useGetTeamMembers({
+    page: teamMembersPaginationPage,
+    query: teamMembersSearchQuery,
   });
-
   const goToPreviousPage = () => {
-    dispatch(goToPreviousTeamMemberInvitesPage());
+    dispatch(goToPreviousTeamMembersPage());
   };
 
   const goToNextPage = () => {
-    dispatch(goToNextTeamMemberInvitesPage());
+    dispatch(goToNextTeamMembersPage());
   };
 
   return (

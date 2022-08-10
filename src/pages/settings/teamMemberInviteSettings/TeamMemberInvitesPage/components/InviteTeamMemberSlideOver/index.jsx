@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setInviteTeamMemberSlideOverVisibility,
-} from '../../../../../features/general/slideOver/slideOverSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { setInviteTeamMemberSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import {
   SlideOver,
   Button,
   Input,
   SelectMenuSimple,
-} from '../../../../../components';
-import { useInviteTeamMemberMutation } from '../../../../../features/settings/teamMemberInvites/teamMemberInviteApi';
+} from '../../../../../../components';
+import { createTeamMemberInviteService } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 
 function InviteTeamMemberSlideOver() {
   const dispatch = useDispatch();
-
-  const [inviteTeamMember, { isLoading }] = useInviteTeamMemberMutation();
-
-  const showInviteTeamMemberSlideOver = useSelector((state) => state.slideOver.showInviteTeamMemberSlideOver);
+  const queryClient = useQueryClient();
 
   // Form state
 
@@ -26,6 +22,8 @@ function InviteTeamMemberSlideOver() {
 
   const [formState, setFormState] = useState(defaultFormState);
   const [selectedRoleKey, setSelectedRoleKey] = useState(null);
+
+  const showInviteTeamMemberSlideOver = useSelector((state) => state.slideOver.showInviteTeamMemberSlideOver);
 
   const { email } = formState;
 
@@ -40,20 +38,21 @@ function InviteTeamMemberSlideOver() {
     setSelectedRoleKey(e.id);
   };
 
-  const onSubmit = async () => {
-    try {
-      await inviteTeamMember({
-        email,
-        teamMemberRoleKey: selectedRoleKey,
-        showSuccess: true,
-      }).unwrap();
+  const createTeamMemberInviteMutation = useMutation(createTeamMemberInviteService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['team_member_invites']);
 
       setFormState(defaultFormState);
       setSelectedRoleKey(null);
       dispatch(setInviteTeamMemberSlideOverVisibility(false));
-    } catch (error) {
-      console.log(error);
-    }
+    },
+  });
+
+  const onSubmit = async () => {
+    createTeamMemberInviteMutation.mutate({
+      email,
+      teamMemberRoleKey: selectedRoleKey,
+    });
   };
 
   return (
@@ -95,7 +94,7 @@ function InviteTeamMemberSlideOver() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          loading={isLoading}
+          loading={createTeamMemberInviteMutation.status === 'loading'}
           label="Send invite email"
           width="w-40"
         />

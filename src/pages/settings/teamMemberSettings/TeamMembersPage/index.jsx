@@ -1,13 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { SearchIcon } from '@heroicons/react/solid';
-import { AdjustmentsIcon } from '@heroicons/react/outline';
-import { Spinner } from '../../../common';
-import { SimpleSectionHeading, InputWithTrailingButton } from '../../../components';
-import Breadcrumb from '../components/Breadcrumb';
+import { Spinner } from '../../../../common';
+import { SimpleSectionHeading, SearchInput } from '../../../../components';
+import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
-import { setTeamMembersSearchQuery } from '../../../features/settings/teamMembers/teamMemberSlice';
-import { useGetTeamMembersQuery } from '../../../features/settings/teamMembers/teamMemberApi';
+import { setTeamMembersSearchQuery } from '../../../../features/settings/teamMembers/teamMemberSlice';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 
 export default function TeamMembersPage() {
   const dispatch = useDispatch();
@@ -15,13 +13,13 @@ export default function TeamMembersPage() {
   const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
   const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
 
-  const { isFetching } = useGetTeamMembersQuery({
+  const { status } = useGetTeamMembers({
     page: teamMembersPaginationPage,
-    search: teamMembersSearchQuery,
+    query: teamMembersSearchQuery,
   });
 
-  const onChange = (e) => {
-    dispatch(setTeamMembersSearchQuery(e.target.value));
+  const onChange = (value) => {
+    dispatch(setTeamMembersSearchQuery(value));
   };
 
   return (
@@ -37,17 +35,9 @@ export default function TeamMembersPage() {
             title="Team members"
             description="Manage all team members in your workspace"
             actions={(
-              <InputWithTrailingButton
-                icon={<SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
-                buttonInner={(
-                  <>
-                    <AdjustmentsIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    <span>Filter</span>
-                  </>
-                )}
-                buttonOnClick={() => alert('Filter by active or deactivated TODO')}
+              <SearchInput
+                loading={status === 'loading'}
                 placeholder="Search team members"
-                name="search-team-members"
                 value={teamMembersSearchQuery}
                 onChange={onChange}
               />
@@ -55,7 +45,7 @@ export default function TeamMembersPage() {
           />
         </div>
 
-        {isFetching ? (
+        {status === 'loading' ? (
           <div className="mx-auto w-6 justify-center">
             <Spinner size={22} color="#0F70B7" />
           </div>
