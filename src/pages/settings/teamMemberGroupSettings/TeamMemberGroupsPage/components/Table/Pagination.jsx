@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '../../../../../components';
+import { Button } from '../../../../../../components';
 import {
   goToPreviousTeamMemberGroupsPage,
   goToNextTeamMemberGroupsPage,
-} from '../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
-import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
+} from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
+import { useGetTeamMemberGroups } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 
 export default function Pagination() {
   const dispatch = useDispatch();

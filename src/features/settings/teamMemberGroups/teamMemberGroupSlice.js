@@ -16,6 +16,9 @@ export const teamMemberGroupSlice = createSlice({
     goToNextTeamMemberGroupsPage: (state) => {
       state.teamMemberGroupsPaginationPage += 1;
     },
+    setTeamMemberGroupsPage: (state, action) => {
+      state.teamMemberGroupsPaginationPage = action.payload;
+    },
     setSelectedTeamMemberGroup: (state, action) => {
       state.selectedTeamMemberGroupId = action.payload;
     },
@@ -26,6 +29,7 @@ export const teamMemberGroupSlice = createSlice({
 export const {
   goToPreviousTeamMemberGroupsPage,
   goToNextTeamMemberGroupsPage,
+  setTeamMemberGroupsPage,
   setSelectedTeamMemberGroup,
 } = teamMemberGroupSlice.actions;
 
