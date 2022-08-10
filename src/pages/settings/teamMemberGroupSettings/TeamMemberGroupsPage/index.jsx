@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
-import { SimpleSectionHeading, Button } from '../../../../components';
+import { SimpleSectionHeading, Button, EmptyStateSimple } from '../../../../components';
 import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
@@ -12,7 +12,7 @@ export default function TeamMemberGroupsPage() {
   const dispatch = useDispatch();
 
   const teamMemberGroupsPaginationPage = useSelector((state) => state.teamMemberGroup.teamMemberGroupsPaginationPage);
-  const { status } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
+  const { status, data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function TeamMemberGroupsPage() {
             { name: 'Groups', href: '/settings/team-members/groups', current: true },
           ]}
         />
-        <main className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
+        <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
           <div className="my-10">
             <SimpleSectionHeading
               title="Team member groups"
@@ -42,11 +42,27 @@ export default function TeamMemberGroupsPage() {
             />
           </div>
 
-          {status === 'loading' ? (
+          {status === 'loading' && (
             <div className="mx-auto w-6 justify-center">
               <Spinner size={22} color="#0F70B7" />
             </div>
-          ) : (
+          )}
+
+          {status === 'success' && data.data.team_member_groups.length === 0 && (
+            <div className="flex flex-1 h-full">
+              <div className="m-auto">
+                <EmptyStateSimple
+                  title="Create your first group"
+                  description="Do more with team member groups"
+                  ctaText="Create"
+                  ctaOnClick={() => dispatch(setCreateTeamMemberGroupSlideOverVisibility(true))}
+                  showCta
+                />
+              </div>
+            </div>
+          )}
+
+          {status === 'success' && data.data.team_member_groups.length !== 0 && (
             <Table />
           )}
         </main>

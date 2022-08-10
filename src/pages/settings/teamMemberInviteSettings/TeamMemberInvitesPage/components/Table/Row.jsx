@@ -1,36 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { useSelector } from 'react-redux';
-import {
-  UserRemoveIcon,
-  RefreshIcon,
-} from '@heroicons/react/outline';
-import { selectCurrentUser } from '../../../../../features/auth/authSlice';
-import {
-  useResendInviteMutation,
-  useDeleteInviteMutation,
-} from '../../../../../features/settings/teamMemberInvites/teamMemberInviteApi';
-import { Dropdown, Badge } from '../../../../../components';
-import { OutputDateTime } from '../../../../../app/helpers';
+import { useSelector, useDispatch } from 'react-redux';
+import { UserRemoveIcon, RefreshIcon } from '@heroicons/react/outline';
+import { selectCurrentUser } from '../../../../../../features/auth/authSlice';
+import { useGetTeamMemberInvite, useDeleteTeamMemberInvite, useResendTeamMemberInvite } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
+import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
+import { Dropdown, Badge } from '../../../../../../components';
+import { OutputDateTime } from '../../../../../../app/helpers';
 
-export default function Row({ teamMemberInvite }) {
+export default function Row({ teamMemberInviteId }) {
+  const dispatch = useDispatch();
+
   const user = useSelector(selectCurrentUser);
 
-  const [resendInviteMutation] = useResendInviteMutation();
-  const [deleteInviteMutation] = useDeleteInviteMutation();
+  const { data: teamMemberInvite, status } = useGetTeamMemberInvite(teamMemberInviteId);
+
+  const { mutate: resendTeamMemberInvite } = useResendTeamMemberInvite(teamMemberInviteId);
+  const { mutate: deleteTeamMemberInvite } = useDeleteTeamMemberInvite(teamMemberInviteId);
 
   const [dropdownItems, setDropdownItems] = useState([]);
 
   const resendInvite = () => {
-    resendInviteMutation({ id: teamMemberInvite.id });
+    resendTeamMemberInvite();
   };
 
-  const deleteInvite = () => {
-    deleteInviteMutation({ id: teamMemberInvite.id });
+  const deleteTeamMemberInviteConfirmation = () => {
+    dispatch(displayPrompt('Delete invite', 'Would you like to delete this team member invite?', [
+      {
+        label: 'Delete invite',
+        style: 'danger',
+        callback: async () => {
+          deleteTeamMemberInvite();
+          dispatch(setVisibility(false));
+        },
+      },
+      {
+        label: 'Cancel',
+        style: 'plain',
+        callback: () => {
+          dispatch(setVisibility(false));
+        },
+      },
+    ]));
   };
 
   useEffect(() => {
+    if (status !== 'success') {
+      return false;
+    }
+
     const tempDropdownItems = [];
 
     const tempPropdownItemsForPendingInvite = [
@@ -41,7 +60,7 @@ export default function Row({ teamMemberInvite }) {
       },
       {
         label: 'Delete',
-        onClick: deleteInvite,
+        onClick: deleteTeamMemberInviteConfirmation,
         icon: <UserRemoveIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />,
       },
     ];
@@ -52,9 +71,11 @@ export default function Row({ teamMemberInvite }) {
     } else {
       setDropdownItems(tempDropdownItems);
     }
+
+    return true;
   }, [teamMemberInvite]);
 
-  return (
+  return teamMemberInvite ? (
     <tr key={teamMemberInvite.id}>
       <td className="whitespace-nowrap pl-4 sm:pl-6 px-3 py-4 text-sm">
         <div className="font-medium text-gray-900">{teamMemberInvite.email}</div>
@@ -77,9 +98,9 @@ export default function Row({ teamMemberInvite }) {
         )}
       </td>
     </tr>
-  );
+  ) : null;
 }
 
 Row.propTypes = {
-  teamMemberInvite: PropTypes.string.isRequired,
+  teamMemberInviteId: PropTypes.string.isRequired,
 };
