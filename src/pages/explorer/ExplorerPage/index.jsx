@@ -27,6 +27,7 @@ export default function ExplorerPage() {
 
   const { data: currentFolder } = useGetFolder(folderId);
 
+  const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
   const showUploadModal = useSelector((state) => state.explorer.showUploadModal);
 
   const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/files`;
@@ -123,8 +124,8 @@ export default function ExplorerPage() {
             )}
           </div>
 
-          <FilePreview />
-          <FolderPreview />
+          {selectedItemType === 'file' && <FilePreview />}
+          {selectedItemType === 'folder' && <FolderPreview />}
         </div>
       </div>
 
