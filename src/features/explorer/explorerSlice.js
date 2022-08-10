@@ -144,15 +144,6 @@ export const explorerSlice = createSlice({
       .addCase(selectItem.pending, (state, action) => {
         state.selectedItemId = action.meta.arg.itemId;
         state.selectedItemType = action.meta.arg.itemType;
-        state.selectedItemFullDetails = null;
-        state.selectedItemLoadingFullDetails = true;
-      })
-      .addCase(selectItem.fulfilled, (state) => {
-        state.selectedItemLoadingFullDetails = false;
-        state.selectedItemFullDetails = null;
-      })
-      .addCase(selectItem.rejected, (state) => {
-        state.selectedItemLoadingFullDetails = false;
       });
   },
 });
