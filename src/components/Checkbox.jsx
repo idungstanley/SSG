@@ -19,7 +19,7 @@ function Checkbox({
       <div className="flex items-center">
         {loading ? (
           <div className="-mt-2">
-            <Spinner size={spinnerSize} color="#FC6061" />
+            <Spinner size={spinnerSize} color="#4f46e5" />
           </div>
         ) : (
           <input

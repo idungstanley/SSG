@@ -109,7 +109,7 @@ function AddFolders() {
               <StackListWithHeader
                 title={<span>Folders</span>}
                 items={(
-                  folderSearchData.data.folders.map((folder) => (
+                  folderSearchStatus === 'success' && folderSearchData.data.folders.map((folder) => (
                     <FolderSearchResultItem
                       folderId={folder.id}
                       handleAddFolder={handleAddFolder}

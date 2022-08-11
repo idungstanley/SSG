@@ -3,21 +3,14 @@ import { Spinner } from '../../../common';
 import { SimpleSectionHeading } from '../../../components';
 import Breadcrumb from '../components/Breadcrumb';
 import Table from './components/Table';
-
-// Features
 import {
-  useGetPermissionsQuery,
-  useGetPermissionValuesQuery,
-} from '../../../features/settings/permissions/permissionsApi';
+  useGetPermissionsList,
+  useGetPermissionsValues,
+} from '../../../features/settings/permissions/permissionsService';
 
 export default function PermissionsPage() {
-  const {
-    isLoading: isLoadingPermissions,
-  } = useGetPermissionsQuery();
-
-  const {
-    isLoading: isLoadingPermissionValues,
-  } = useGetPermissionValuesQuery();
+  const { status: permissionsListStatus } = useGetPermissionsList();
+  const { status: permissionsValuesStatus } = useGetPermissionsValues();
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
@@ -35,7 +28,7 @@ export default function PermissionsPage() {
           />
         </div>
 
-        {(isLoadingPermissions || isLoadingPermissionValues) ? (
+        {(permissionsValuesStatus === 'loading' || permissionsListStatus === 'loading') ? (
           <div className="mx-auto w-6 justify-center">
             <Spinner size={22} color="#0F70B7" />
           </div>

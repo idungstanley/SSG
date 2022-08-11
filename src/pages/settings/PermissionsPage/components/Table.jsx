@@ -1,87 +1,39 @@
-/* eslint-disable */
-import React, { Fragment, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { Fragment, useEffect, useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { permissionsSelectors, permissionValuesSelectors } from '../../../../features/settings/permissions/permissionsSlice';
-import {
-  useChangeRolePermissionMutation,
-  useGetPermissionsQuery,
-  useGetPermissionValuesQuery,
-} from '../../../../features/settings/permissions/permissionsApi';
-import { Spinner, Tooltip } from '../../../../common';
-import { Checkbox } from '../../../../components';
+import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
+import PermissionsCheckbox from './PermissionsCheckbox';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function Table() {
-  const dispatch = useDispatch();
-
-  const permissions = useSelector(permissionsSelectors.selectAll);
-  const permissionValues = useSelector(permissionValuesSelectors.selectAll);
-
   const [permissionsByCategory, setPermissionsByCategory] = useState([]);
 
-  const updatingWorkspacePermissionKey = useSelector((state) => state.permissions.updatingWorkspacePermissionKey);
-  const updatingTeamMemberRoleKey = useSelector((state) => state.permissions.updatingTeamMemberRoleKey);
-
-  const [changeRolePermission, { isLoading: isChangingRolePermission }] = useChangeRolePermissionMutation();
-
-  const {
-    isLoading: isLoadingPermissions,
-  } = useGetPermissionsQuery();
-
-  const {
-    isLoading: isLoadingPermissionValues,
-  } = useGetPermissionValuesQuery();
+  const { data: permissionsList, status: permissionsListStatus } = useGetPermissionsList();
 
   useEffect(() => {
-    const permissionsByCategory = permissions.reduce((permissionsByCategorySoFar, currentPermission) => {
-      if (!permissionsByCategorySoFar[currentPermission.workspace_permission_category.key]) permissionsByCategorySoFar[currentPermission.workspace_permission_category.key] = {
-        name: currentPermission.workspace_permission_category.name,
-        key: currentPermission.workspace_permission_category.key,
-        permissions: [],
-      };
+    if (permissionsListStatus !== 'success') {
+      return setPermissionsByCategory([]);
+    }
+
+    const permissionsByCategoryTemp = permissionsList.reduce((permissionsByCategorySoFar, currentPermission) => {
+      if (!permissionsByCategorySoFar[currentPermission.workspace_permission_category.key]) {
+        permissionsByCategorySoFar[currentPermission.workspace_permission_category.key] = {
+          name: currentPermission.workspace_permission_category.name,
+          key: currentPermission.workspace_permission_category.key,
+          permissions: [],
+        };
+      }
       permissionsByCategorySoFar[currentPermission.workspace_permission_category.key].permissions.push(currentPermission);
       return permissionsByCategorySoFar;
     }, {});
-    setPermissionsByCategory(permissionsByCategory);
-  }, [permissions]);
+    setPermissionsByCategory(permissionsByCategoryTemp);
 
-  const changeRole = (teamMemberRoleKey, permissionKey) => {
-    if (isChangingRolePermission){
-        return false;
-    }
-
-    changeRolePermission({
-      teamMemberRoleKey: teamMemberRoleKey,
-      workspacePermissionKey: permissionKey,
-      isPermissionAllowed: isRoleChecked(teamMemberRoleKey, permissionKey) ? 0 : 1,
-    });
-  }
-
-  const isRoleChecked = (teamMemberRoleKey, permissionKey) => {
-    const id = `${permissionKey}|${teamMemberRoleKey}`;
-
-    const results = permissionValues.filter((item) => item.id == id);
-    if (results.length == 0){
-        return false;
-    }
-    return results[0].value;
-  }
-
-  const isRoleEnabled = (teamMemberRoleKey, permissionKey) => {
-    const id = `${permissionKey}|${teamMemberRoleKey}`;
-
-    const results = permissionValues.filter((item) => item.id == id);
-    if (results.length == 0){
-        return true;
-    }
-    return results[0].can_be_changed;
-  }
+    return true;
+  }, [permissionsList, permissionsListStatus]);
 
   return (
     <div className="">
@@ -113,7 +65,7 @@ export default function Table() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {Object.keys(permissionsByCategory).map((key, index) => (
+                  {Object.keys(permissionsByCategory).map((key) => (
                     <Fragment key={permissionsByCategory[key].key}>
                       <tr className="border-t border-gray-200">
                         <th
@@ -142,53 +94,33 @@ export default function Table() {
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <Checkbox
-                              checked={isRoleChecked('guest', permission.key)}
-                              onChange={() => changeRole('guest', permission.key)}
-                              size={6}
-                              loading={updatingWorkspacePermissionKey === permission.key && updatingTeamMemberRoleKey === 'guest'}
-                              disabled={!isRoleEnabled('guest', permission.key) || isLoadingPermissionValues}
-                              spinnerSize={20}
+                            <PermissionsCheckbox
+                              teamMemberRoleKey="guest"
+                              workspacePermissionKey={permission.key}
                             />
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <Checkbox
-                              checked={isRoleChecked('low', permission.key)}
-                              onChange={() => changeRole('low', permission.key)}
-                              size={6}
-                              loading={updatingWorkspacePermissionKey === permission.key && updatingTeamMemberRoleKey === 'low'}
-                              disabled={!isRoleEnabled('low', permission.key) || isLoadingPermissionValues}
-                              spinnerSize={20}
+                            <PermissionsCheckbox
+                              teamMemberRoleKey="low"
+                              workspacePermissionKey={permission.key}
                             />
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <Checkbox
-                              checked={isRoleChecked('high', permission.key)}
-                              onChange={() => changeRole('high', permission.key)}
-                              size={6}
-                              loading={updatingWorkspacePermissionKey === permission.key && updatingTeamMemberRoleKey === 'high'}
-                              disabled={!isRoleEnabled('high', permission.key) || isLoadingPermissionValues}
-                              spinnerSize={20}
+                            <PermissionsCheckbox
+                              teamMemberRoleKey="high"
+                              workspacePermissionKey={permission.key}
                             />
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <Checkbox
-                              checked={isRoleChecked('admin', permission.key)}
-                              onChange={() => changeRole('admin', permission.key)}
-                              size={6}
-                              loading={updatingWorkspacePermissionKey === permission.key && updatingTeamMemberRoleKey === 'admin'}
-                              disabled={!isRoleEnabled('admin', permission.key) || isLoadingPermissionValues}
-                              spinnerSize={20}
+                            <PermissionsCheckbox
+                              teamMemberRoleKey="admin"
+                              workspacePermissionKey={permission.key}
                             />
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <Checkbox
-                              checked={isRoleChecked('owner', permission.key)}
-                              onChange={() => changeRole('owner', permission.key)}
-                              size={6}
-                              loading={updatingWorkspacePermissionKey === permission.key && updatingTeamMemberRoleKey === 'owner'}
-                              disabled={!isRoleEnabled('owner', permission.key) || isLoadingPermissionValues}
-                              spinnerSize={20}
+                            <PermissionsCheckbox
+                              teamMemberRoleKey="owner"
+                              workspacePermissionKey={permission.key}
                             />
                           </td>
                         </tr>
@@ -202,5 +134,5 @@ export default function Table() {
         </div>
       </div>
     </div>
-  )
+  );
 }
