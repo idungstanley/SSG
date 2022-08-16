@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { LogoutIcon } from '@heroicons/react/outline';
 import { switchWorkspaceService } from '../../../../../features/account/accountService';
-import { selectCurrentWorkspaceId, setCurrentWorkspace } from '../../../../../features/auth/authSlice';
-import {
-  setMyWorkspacesSlideOverVisibility,
-} from '../../../../../features/general/slideOver/slideOverSlice';
+import { selectCurrentWorkspaceId, setCurrentWorkspace, switchWorkspace } from '../../../../../features/auth/authSlice';
+import { setMyWorkspacesSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
   Button,
   StackListItemNarrow,
@@ -17,31 +16,34 @@ import {
 
 function ListItem({ userWorkspace }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const currentWorkspaceId = useSelector(selectCurrentWorkspaceId);
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
       // Clear react-query and redux cache
 
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
-      await dispatch(setCurrentWorkspace({
+
+      dispatch(setCurrentWorkspace({
         workspaceId: data.data.workspace.id,
       }));
 
-      await queryClient.invalidateQueries();
-
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      // window.location.reload(false);
+      navigate('/explorer');
+
+      queryClient.invalidateQueries();
+      dispatch(switchWorkspace());
     },
   });
 
-  const switchWorkspace = async () => {
-    await switchWorkspaceMutation.mutate({
+  const onSwitchWorkspace = () => {
+    switchWorkspaceMutation.mutate({
       workspaceId: userWorkspace.id,
     });
-    await queryClient.invalidateQueries();
+    queryClient.invalidateQueries();
   };
 
   return (
@@ -58,7 +60,7 @@ function ListItem({ userWorkspace }) {
       button={(
         <Button
           buttonStyle="white"
-          onClick={switchWorkspace}
+          onClick={onSwitchWorkspace}
           loading={switchWorkspaceMutation.status === 'loading'}
           disabled={currentWorkspaceId === userWorkspace.id}
           label={currentWorkspaceId === userWorkspace.id ? 'Current' : 'Switch'}

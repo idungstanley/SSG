@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { logout, switchWorkspace } from '../../auth/authSlice';
+
+const initialState = {
+  // Pagination
+  teamMemberInvitesPaginationPage: 1,
+};
 
 export const teamMemberInviteSlice = createSlice({
   name: 'teamMemberInvite',
-  initialState: {
-    // Pagination
-    teamMemberInvitesPaginationPage: 1,
-  },
+  initialState,
   reducers: {
     goToPreviousTeamMemberInvitesPage: (state) => {
       state.teamMemberInvitesPaginationPage -= 1;
@@ -13,6 +16,11 @@ export const teamMemberInviteSlice = createSlice({
     goToNextTeamMemberInvitesPage: (state) => {
       state.teamMemberInvitesPaginationPage += 1;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 

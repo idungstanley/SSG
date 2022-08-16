@@ -4,6 +4,7 @@ import {
 } from '@reduxjs/toolkit';
 import request from '../../app/request';
 import { displayNotification } from '../general/notification/notificationSlice';
+import { logout, switchWorkspace } from '../auth/authSlice';
 
 export const selectItem = createAsyncThunk('search/selectItem', async (data, thunkAPI) => {
   if (data.itemType === 'file' && data.itemId !== null) {
@@ -33,16 +34,18 @@ export const selectItem = createAsyncThunk('search/selectItem', async (data, thu
   }
 });
 
+const initialState = {
+  searchQuery: '',
+  resultsType: 'files',
+  searchFileContents: false,
+
+  selectedItemId: null,
+  selectedItemType: null,
+};
+
 export const searchSlice = createSlice({
   name: 'search',
-  initialState: {
-    searchQuery: '',
-    resultsType: 'files',
-    searchFileContents: false,
-
-    selectedItemId: null,
-    selectedItemType: null,
-  },
+  initialState,
   reducers: {
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
@@ -67,7 +70,9 @@ export const searchSlice = createSlice({
       .addCase(selectItem.pending, (state, action) => {
         state.selectedItemId = action.meta.arg.itemId;
         state.selectedItemType = action.meta.arg.itemType;
-      });
+      })
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 
