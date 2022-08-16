@@ -4,8 +4,6 @@ const client = (() => {
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
 
-  console.log(`access token ${accessToken}`);
-
   return axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
     headers: {
