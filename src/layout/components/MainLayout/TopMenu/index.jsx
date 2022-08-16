@@ -47,6 +47,8 @@ function TopMenu() {
         accessToken: null,
         currentWorkspaceId: null,
       }));
+
+      window.location.reload();
     },
   });
 

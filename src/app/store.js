@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { mainApi } from '../features/api';
 import authSlice from '../features/auth/authSlice';
 import explorerSlice from '../features/explorer/explorerSlice';
 import inboxSlice from '../features/inbox/inboxSlice';
@@ -17,7 +16,6 @@ import permissionsSlice from '../features/settings/permissions/permissionsSlice'
 
 export const store = configureStore({
   reducer: {
-    mainApi: mainApi.reducer,
     auth: authSlice,
     general: generalSlice,
     notification: notificationSlice,
@@ -32,7 +30,7 @@ export const store = configureStore({
     teamMemberGroup: teamMemberGroupSlice,
     permissions: permissionsSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(mainApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 setupListeners(store.dispatch);

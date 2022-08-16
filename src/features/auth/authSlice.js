@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import accountApi from '../account/accountApi';
 
 // Get user credentials from localStorage
 const localStorageUser = JSON.parse(localStorage.getItem('user'));
@@ -19,13 +18,9 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.currentWorkspaceId = action.payload.currentWorkspaceId;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(accountApi.endpoints.switchWorkspace.matchFulfilled, (state, { payload }) => {
-        state.currentWorkspaceId = payload.data.workspace.id;
-        localStorage.setItem('currentWorkspaceId', JSON.stringify(payload.data.workspace.id));
-      });
+    setCurrentWorkspace: (state, action) => {
+      state.currentWorkspaceId = action.payload.workspaceId;
+    },
   },
 });
 
@@ -34,6 +29,7 @@ export const selectCurrentWorkspaceId = (state) => state.auth.currentWorkspaceId
 
 export const {
   setCurrentUser,
+  setCurrentWorkspace,
 } = authSlice.actions;
 
 // Action creators are generated for each case reducer function

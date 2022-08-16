@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
-import { useGetMyWorkspacesQuery } from '../../../../features/account/accountApi';
+import { useGetMyWorkspaces } from '../../../../features/account/accountService';
 import {
   StackListWithHeader,
   SlideOver,
@@ -13,7 +13,7 @@ function MyWorkspacesSlideOver() {
 
   const showMyWorkspacesSlideOver = useSelector((state) => state.slideOver.showMyWorkspacesSlideOver);
 
-  const { data, isLoading } = useGetMyWorkspacesQuery();
+  const { data, status } = useGetMyWorkspaces();
 
   return (
     <SlideOver
@@ -21,7 +21,7 @@ function MyWorkspacesSlideOver() {
       onClose={() => dispatch(setMyWorkspacesSlideOverVisibility(false))}
       headerTitle="My workspaces"
       body={(
-        !isLoading && data ? (
+        data && status === 'success' ? (
           <div className="px-4 sm:px-6 space-y-8 sm:py-0">
             <div className="overflow-hidden flex-1 h-full mt-5">
               <StackListWithHeader
