@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { LogoutIcon } from '@heroicons/react/outline';
 import { switchWorkspaceService } from '../../../../../features/account/accountService';
@@ -17,6 +17,7 @@ import {
 
 function ListItem({ userWorkspace }) {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const currentWorkspaceId = useSelector(selectCurrentWorkspaceId);
 
@@ -25,19 +26,22 @@ function ListItem({ userWorkspace }) {
       // Clear react-query and redux cache
 
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
-      dispatch(setCurrentWorkspace({
+      await dispatch(setCurrentWorkspace({
         workspaceId: data.data.workspace.id,
       }));
 
+      await queryClient.invalidateQueries();
+
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      window.location.reload(false);
+      // window.location.reload(false);
     },
   });
 
   const switchWorkspace = async () => {
-    switchWorkspaceMutation.mutate({
+    await switchWorkspaceMutation.mutate({
       workspaceId: userWorkspace.id,
     });
+    await queryClient.invalidateQueries();
   };
 
   return (
