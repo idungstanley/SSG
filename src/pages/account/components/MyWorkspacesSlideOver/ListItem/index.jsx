@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { LogoutIcon } from '@heroicons/react/outline';
-import { useSwitchWorkspaceMutation } from '../../../../../features/account/accountApi';
-import { selectCurrentWorkspaceId } from '../../../../../features/auth/authSlice';
+import { switchWorkspaceService } from '../../../../../features/account/accountService';
+import { selectCurrentWorkspaceId, setCurrentWorkspace } from '../../../../../features/auth/authSlice';
 import {
   setMyWorkspacesSlideOverVisibility,
 } from '../../../../../features/general/slideOver/slideOverSlice';
@@ -17,32 +17,34 @@ import {
 
 function ListItem({ userWorkspace }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const currentWorkspaceId = useSelector(selectCurrentWorkspaceId);
-  const [switchWorkspaceMutation, { isLoading }] = useSwitchWorkspaceMutation();
 
-  const switchWorkspace = async () => {
-    try {
-      await switchWorkspaceMutation({
-        workspaceId: userWorkspace.id,
-        showSuccess: true,
-      }).unwrap();
+  const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
+    onSuccess: async (data) => {
+      // Clear react-query and redux cache
 
-      // Clear all cache
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
+      dispatch(setCurrentWorkspace({
+        workspaceId: data.data.workspace.id,
+      }));
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/explorer');
-    } catch (error) {
-      console.log(error);
-    }
+      window.location.reload(false);
+    },
+  });
+
+  const switchWorkspace = async () => {
+    switchWorkspaceMutation.mutate({
+      workspaceId: userWorkspace.id,
+    });
   };
 
   return (
     <StackListItemNarrow
       key={userWorkspace.id}
       title={userWorkspace.name}
-      description="Last accessed 27 minutes ago"
+      description="Add last activity timestamp"
       icon={(
         <AvatarWithInitials
           backgroundColour={userWorkspace.colour}
@@ -53,7 +55,7 @@ function ListItem({ userWorkspace }) {
         <Button
           buttonStyle="white"
           onClick={switchWorkspace}
-          loading={isLoading}
+          loading={switchWorkspaceMutation.status === 'loading'}
           disabled={currentWorkspaceId === userWorkspace.id}
           label={currentWorkspaceId === userWorkspace.id ? 'Current' : 'Switch'}
           icon={currentWorkspaceId === userWorkspace.id ? <CheckCircleIcon className="mr-1 -ml-2 h-5 w-5 text-green-500" aria-hidden="true" /> : <LogoutIcon className="mr-1 -ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />}
