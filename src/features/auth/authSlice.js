@@ -21,6 +21,8 @@ export const authSlice = createSlice({
     setCurrentWorkspace: (state, action) => {
       state.currentWorkspaceId = action.payload.workspaceId;
     },
+    logout: (state) => state,
+    switchWorkspace: (state) => state,
   },
 });
 
@@ -30,6 +32,8 @@ export const selectCurrentWorkspaceId = (state) => state.auth.currentWorkspaceId
 export const {
   setCurrentUser,
   setCurrentWorkspace,
+  logout,
+  switchWorkspace,
 } = authSlice.actions;
 
 // Action creators are generated for each case reducer function

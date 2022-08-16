@@ -1,10 +1,10 @@
-/* eslint-disable */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { displayNotification } from '../general/notification/notificationSlice';
 import {
   downloadInboxFile as downloadInboxFileService,
   previewInboxFile as previewInboxFileService,
 } from './inboxService';
+import { logout, switchWorkspace } from '../auth/authSlice';
 
 export const downloadInboxFile = createAsyncThunk('inbox/inbox-file/download', async (data, thunkAPI) => {
   downloadInboxFileService(data);
@@ -17,25 +17,27 @@ export const previewInboxFileFullPage = createAsyncThunk('inbox/inbox-file/previ
   return true;
 });
 
+const initialState = {
+  currentInboxId: null,
+
+  selectedInboxTabKey: 'inbox',
+  selectedInboxFileId: null,
+  selectedInboxFileIndex: 1,
+
+  showUploadModal: false,
+
+  // Folders for filing
+  searchFoldersQuery: '',
+  folderIdsForFiling: [],
+
+  // Assign inbox file to other inboxes
+  processingAssignInboxIds: [],
+  assignedInboxIds: [],
+};
+
 export const inboxSlice = createSlice({
   name: 'inbox',
-  initialState: {
-    currentInboxId: null,
-
-    selectedInboxTabKey: 'inbox',
-    selectedInboxFileId: null,
-    selectedInboxFileIndex: 1,
-
-    showUploadModal: false,
-
-    // Folders for filing
-    searchFoldersQuery: '',
-    folderIdsForFiling: [],
-
-    // Assign inbox file to other inboxes
-    processingAssignInboxIds: [],
-    assignedInboxIds: [],
-  },
+  initialState,
   reducers: {
     setCurrentInbox: (state, action) => {
       state.currentInboxId = action.payload.inboxId;
@@ -64,11 +66,16 @@ export const inboxSlice = createSlice({
       state.folderIdsForFiling.push(action.payload);
     },
     removeFolderForFiling: (state, action) => {
-      state.folderIdsForFiling = state.folderIdsForFiling.filter((folderId) => folderId != action.payload);
+      state.folderIdsForFiling = state.folderIdsForFiling.filter((folderId) => folderId !== action.payload);
     },
     setSearchFoldersQuery: (state, action) => {
       state.searchFoldersQuery = action.payload.query;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 

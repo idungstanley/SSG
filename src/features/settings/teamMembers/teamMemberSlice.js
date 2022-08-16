@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { logout, switchWorkspace } from '../../auth/authSlice';
+
+const initialState = {
+  // Search
+  teamMembersSearchQuery: '',
+
+  // Pagination
+  teamMembersPaginationPage: 1,
+};
 
 export const teamMemberSlice = createSlice({
   name: 'teamMember',
-  initialState: {
-    // Search
-    teamMembersSearchQuery: '',
-
-    // Pagination
-    teamMembersPaginationPage: 1,
-  },
+  initialState,
   reducers: {
     setTeamMembersSearchQuery: (state, action) => {
       state.teamMembersPaginationPage = 1;
@@ -20,6 +23,11 @@ export const teamMemberSlice = createSlice({
     goToNextTeamMembersPage: (state) => {
       state.teamMembersPaginationPage += 1;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 

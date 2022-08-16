@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { logout, switchWorkspace } from '../../auth/authSlice';
+
+const initialState = {
+  // Pagination
+  teamMemberGroupsPaginationPage: 1,
+
+  // General
+  selectedTeamMemberGroupId: null,
+};
 
 export const teamMemberGroupSlice = createSlice({
   name: 'teamMemberGroup',
-  initialState: {
-    // Pagination
-    teamMemberGroupsPaginationPage: 1,
-
-    // General
-    selectedTeamMemberGroupId: null,
-  },
+  initialState,
   reducers: {
     goToPreviousTeamMemberGroupsPage: (state) => {
       state.teamMemberGroupsPaginationPage -= 1;
@@ -22,6 +25,11 @@ export const teamMemberGroupSlice = createSlice({
     setSelectedTeamMemberGroup: (state, action) => {
       state.selectedTeamMemberGroupId = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 
