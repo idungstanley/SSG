@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { loginService } from '../../../features/auth/authService';
+import { GoogleLogin } from 'react-google-login';
+import { gapi } from 'gapi-script';
+import { loginService, loginGoogleService } from '../../../features/auth/authService';
 import { setCurrentUser } from '../../../features/auth/authSlice';
 import {
   Button,
@@ -14,6 +16,20 @@ function LoginPage() {
   const dispatch = useDispatch();
 
   const loginMutation = useMutation(loginService, {
+    onSuccess: async (successData) => {
+      localStorage.setItem('user', JSON.stringify(successData.data.user));
+      localStorage.setItem('accessToken', JSON.stringify(successData.data.token.accessToken));
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.user.default_workspace_id));
+
+      dispatch(setCurrentUser({
+        user: successData.data.user,
+        accessToken: successData.data.token.accessToken,
+        currentWorkspaceId: successData.data.user.default_workspace_id,
+      }));
+    },
+  });
+
+  const loginGoogleMutation = useMutation(loginGoogleService, {
     onSuccess: async (successData) => {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem('accessToken', JSON.stringify(successData.data.token.accessToken));
@@ -48,6 +64,31 @@ function LoginPage() {
       email,
       password,
     });
+  };
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        scope: 'email',
+      });
+    }
+
+    gapi.load('client:auth2', start);
+  }, []);
+
+  const handleGoogleLogin = (response) => {
+    if (response.code) {
+      loginGoogleMutation.mutate({
+        code: response.code,
+      });
+    } else {
+      // error handler
+    }
+  };
+  const handleGoogleFailure = (response) => {
+    // fail handler: todo delete console log
+    console.log(response);
   };
 
   return (
@@ -116,6 +157,16 @@ function LoginPage() {
                     width="w-full"
                   />
                 </div>
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  className="rounded-l-md rounded-r-md w-full h-10 py-2 px-4 inline-flex items-center justify-center"
+                  buttonText="Log in with Google"
+                  onSuccess={handleGoogleLogin}
+                  onFailure={handleGoogleFailure}
+                  cookiePolicy="single_host_origin"
+                  responseType="code"
+                  redirectUri="postmessage"
+                />
               </div>
             </div>
           </div>
