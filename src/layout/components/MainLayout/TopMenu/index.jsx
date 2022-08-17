@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import SearchInput from './SearchInput';
 import { Badge, AvatarWithInitials, StatusDot } from '../../../../components';
-import { selectCurrentUser, setCurrentUser } from '../../../../features/auth/authSlice';
+import { selectCurrentUser, setCurrentUser, logout } from '../../../../features/auth/authSlice';
 import { logoutService } from '../../../../features/auth/authService';
 import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
@@ -48,7 +48,7 @@ function TopMenu() {
         currentWorkspaceId: null,
       }));
 
-      window.location.reload();
+      dispatch(logout());
     },
   });
 
