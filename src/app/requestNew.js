@@ -1,20 +1,17 @@
 import axios from 'axios';
 
-const client = (() => {
+const requestNew = async function (options) {
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
 
-  return axios.create({
+  const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       current_workspace_id: currentWorkspaceId,
     },
   });
-})();
 
-// the request function which will destructure the response
-const requestNew = async function (options) {
   // request handler
   const onSuccess = function (response) {
     const { data } = response;

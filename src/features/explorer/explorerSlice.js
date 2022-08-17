@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../app/request';
 import { displayNotification } from '../general/notification/notificationSlice';
+import { logout, switchWorkspace } from '../auth/authSlice';
 
 export const selectItem = createAsyncThunk('explorer/selectItem', async (data) => data);
 
@@ -83,19 +84,21 @@ export const previewFileFullPage = createAsyncThunk('explorer/previewFileFullPag
   }
 });
 
+const initialState = {
+  showUploadModal: false,
+
+  selectedItemId: null,
+  selectedItemType: null,
+  selectedItemLoadingFullDetails: false,
+  selectedItemFullDetails: null,
+
+  selectedFileIds: [],
+  selectedFolderIds: [],
+};
+
 export const explorerSlice = createSlice({
   name: 'explorer',
-  initialState: {
-    showUploadModal: false,
-
-    selectedItemId: null,
-    selectedItemType: null,
-    selectedItemLoadingFullDetails: false,
-    selectedItemFullDetails: null,
-
-    selectedFileIds: [],
-    selectedFolderIds: [],
-  },
+  initialState,
   reducers: {
     resetSelectedItem: (state) => {
       state.selectedItemId = null;
@@ -144,7 +147,9 @@ export const explorerSlice = createSlice({
       .addCase(selectItem.pending, (state, action) => {
         state.selectedItemId = action.meta.arg.itemId;
         state.selectedItemType = action.meta.arg.itemType;
-      });
+      })
+      .addCase(switchWorkspace, () => initialState)
+      .addCase(logout, () => initialState);
   },
 });
 
