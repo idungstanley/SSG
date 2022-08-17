@@ -21,6 +21,7 @@ export const loginGoogleService = async (data) => {
     method: 'POST',
     params: {
       code: data.code,
+      invite_code: data.inviteCode || '',
     },
   });
   return response;
