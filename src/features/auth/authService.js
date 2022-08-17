@@ -14,6 +14,18 @@ export const loginService = async (data) => {
   return response;
 };
 
+// Login by Google
+export const loginGoogleService = async (data) => {
+  const response = requestNew({
+    url: 'auth/social/google',
+    method: 'POST',
+    params: {
+      code: data.code,
+    },
+  });
+  return response;
+};
+
 // Register
 export const registerService = async (data) => {
   const response = requestNew({
