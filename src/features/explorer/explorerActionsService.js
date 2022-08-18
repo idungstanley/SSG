@@ -1,40 +1,47 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-// Delete file service
-export const deleteFileService = async (data) => {
+// Delete service
+export const deleteService = async (data) => {
   const response = requestNew({
-    url: `files/${data.fileId}`,
-    method: 'DELETE',
+    url: 'explorer/multiple-delete',
+    method: 'POST',
+    params: {
+      file_ids: data.fileIds,
+      folder_ids: data.folderIds,
+    },
   });
   return response;
 };
 
-export function useDeleteFile() {
-  const queryClient = useQueryClient();
+// Paste service
+export const pasteService = async (data) => {
+  const url = data.copyToFolderId == null ? '/explorer/copy' : `/explorer/copy/${data.copyToFolderId}`;
 
-  return useMutation((fileId) => deleteFileService({ fileId }), {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['explorer_files_and_folders', data.data.deleted_from_folder_id == null ? 'root-folder' : data.data.deleted_from_folder_id]);
-    },
-  });
-}
-
-// Delete folder service
-export const deleteFolderService = async (data) => {
   const response = requestNew({
-    url: `folders/${data.folderId}`,
-    method: 'DELETE',
+    url,
+    method: 'POST',
+    params: {
+      file_ids: data.fileIds,
+      folder_ids: data.folderIds,
+    },
   });
   return response;
 };
 
-export function useDeleteFolder() {
-  const queryClient = useQueryClient();
+// Rename file service
+export const renameFileService = async (data) => requestNew({
+  url: `files/${data.fileId}/rename`,
+  method: 'POST',
+  params: {
+    name: data.name,
+  },
+});
 
-  return useMutation((folderId) => deleteFolderService({ folderId }), {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['explorer_files_and_folders', data.data.deleted_from_folder_id == null ? 'root-folder' : data.data.deleted_from_folder_id]);
-    },
-  });
-}
+// Rename folder service
+export const renameFolderService = async (data) => requestNew({
+  url: `folders/${data.folderId}/rename`,
+  method: 'POST',
+  params: {
+    name: data.name,
+  },
+});

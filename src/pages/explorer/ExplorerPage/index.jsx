@@ -15,6 +15,8 @@ import FolderPreview from './components/preview/FolderPreview';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
+import RenameFileSlideOver from './components/SlideOvers/RenameFileSlideOver';
+import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver';
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
 import { useGetExplorerFilesAndFolders, useGetFolder } from '../../../features/explorer/explorerService';
 
@@ -28,6 +30,7 @@ export default function ExplorerPage() {
   const { data: currentFolder } = useGetFolder(folderId);
 
   const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
+  const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
   const showUploadModal = useSelector((state) => state.explorer.showUploadModal);
 
   const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/files`;
@@ -124,13 +127,15 @@ export default function ExplorerPage() {
             )}
           </div>
 
-          {selectedItemType === 'file' && <FilePreview />}
-          {selectedItemType === 'folder' && <FolderPreview />}
+          {selectedItemType === 'file' && selectedItemId && <FilePreview />}
+          {selectedItemType === 'folder' && selectedItemId && <FolderPreview />}
         </div>
       </div>
 
       {/* Slide Overs */}
       <CreateFolderSlideOver />
+      {selectedItemType === 'file' && selectedItemId && <RenameFileSlideOver />}
+      {selectedItemType === 'folder' && selectedItemId && <RenameFolderSlideOver />}
     </>
   );
 }

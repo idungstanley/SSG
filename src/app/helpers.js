@@ -2,6 +2,7 @@
 import moment from 'moment-timezone';
 import axios from 'axios';
 import { Buffer } from 'buffer';
+var fileDownload = require('js-file-download');
 
 export function GetFileWithHeaders(type, id) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
@@ -25,12 +26,33 @@ export function GetFileWithHeaders(type, id) {
     });
 }
 
-export function FetchFileURLFromID(fileId, fullScreen = true) {
+export function DownloadFile(type, id, name) {
+  var endpoint = null;
+
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
-  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
 
-  return `${baseUrl}/files/${fileId}/contents?access_token=${accessToken}&current_workspace_id=${currentWorkspaceId}&full_screen=${fullScreen == true ? 'true' : 'false'}`;
+  if (type === 'inboxFile') {
+    endpoint = `${baseUrl}/inbox-files/${id}/download`;
+  } else if (type === 'file') {
+    endpoint = `${baseUrl}/files/${id}/download`;
+  } else if (type === 'folder') {
+    endpoint = `${baseUrl}/folders/${id}/download`;
+  }
+
+  return axios
+    .get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        current_workspace_id: currentWorkspaceId,
+      },
+      responseType: 'blob', // Important
+    })
+    .then((response) => {
+      console.log(response);
+      fileDownload(response.data, name);
+    });
 }
 
 export function OutputDateTime(timestamp, format = null, timezone = null) {

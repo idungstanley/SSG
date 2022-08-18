@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import moment from 'moment-timezone';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { LogoutIcon } from '@heroicons/react/outline';
 import { switchWorkspaceService } from '../../../../../features/account/accountService';
-import { selectCurrentWorkspaceId, setCurrentWorkspace, switchWorkspace } from '../../../../../features/auth/authSlice';
+import {
+  selectCurrentWorkspaceId,
+  setCurrentWorkspace,
+  switchWorkspace,
+} from '../../../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
   Button,
@@ -50,7 +55,7 @@ function ListItem({ userWorkspace }) {
     <StackListItemNarrow
       key={userWorkspace.id}
       title={userWorkspace.name}
-      description="Add last activity timestamp"
+      description={`Last activity ${moment(userWorkspace.last_activity_at).fromNow()}`}
       icon={(
         <AvatarWithInitials
           backgroundColour={userWorkspace.colour}

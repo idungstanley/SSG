@@ -6,7 +6,6 @@ import {
   DownloadIcon,
   ArchiveIcon,
   InboxIcon,
-  ExternalLinkIcon,
   ArrowCircleRightIcon,
   ArrowCircleLeftIcon,
   InboxInIcon,
@@ -20,6 +19,7 @@ import {
   unarchiveInboxFileService,
 } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
+import { DownloadFile } from '../../../../../../app/helpers';
 
 function Toolbar() {
   const dispatch = useDispatch();
@@ -95,11 +95,7 @@ function Toolbar() {
   };
 
   const onDownload = async () => {
-    console.log('download');
-  };
-
-  const onFullPagePreview = async () => {
-    console.log('full page preview');
+    DownloadFile('inboxFile', inboxFile.id, inboxFile.inbox_file_source.display_name);
   };
 
   return inboxFile ? (
@@ -186,28 +182,16 @@ function Toolbar() {
                           ringOnFocus
                           width="w-36"
                         />
-                        <Button
-                          buttonStyle="white"
-                          label="Download"
-                          onClick={onDownload}
-                          icon={<DownloadIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
-                          iconPosition="center"
-                          disabled={false}
-                          roundedLeft={false}
-                          roundedRight={false}
-                          ringOnFocus
-                          width="w-36"
-                        />
-                        <Tippy content={<span>Open full page preview</span>} placement="bottom">
+                        <Tippy content={<span>Download</span>} placement="bottom">
                           <div>
                             <Button
                               buttonStyle="white"
-                              label="Preview"
-                              onClick={onFullPagePreview}
-                              icon={<ExternalLinkIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
+                              label="Download"
+                              onClick={onDownload}
+                              icon={<DownloadIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
                               iconPosition="center"
                               disabled={false}
-                              borderLeft={false}
+                              borderLeft
                               roundedLeft={false}
                               ringOnFocus
                               width="w-36"
