@@ -16,6 +16,8 @@ export const slideOverSlice = createSlice({
     showAddInboxTeamMemberSlideOver: false,
     showAddInboxTeamMemberGroupSlideOver: false,
     showAddGroupTeamMemberSlideOver: false,
+    showRenameFileSlideOver: false,
+    showRenameFolderSlideOver: false,
   },
   reducers: {
     setCreateInboxSlideOverVisibility: (state, action) => {
@@ -57,6 +59,12 @@ export const slideOverSlice = createSlice({
     setAddGroupTeamMemberSlideOverVisibility: (state, action) => {
       state.showAddGroupTeamMemberSlideOver = action.payload;
     },
+    setRenameFileSlideOverVisibility: (state, action) => {
+      state.showRenameFileSlideOver = action.payload;
+    },
+    setRenameFolderSlideOverVisibility: (state, action) => {
+      state.showRenameFolderSlideOver = action.payload;
+    },
   },
 });
 
@@ -75,6 +83,8 @@ export const {
   setAddInboxTeamMemberSlideOverVisibility,
   setAddInboxTeamMemberGroupSlideOverVisibility,
   setAddGroupTeamMemberSlideOverVisibility,
+  setRenameFileSlideOverVisibility,
+  setRenameFolderSlideOverVisibility,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

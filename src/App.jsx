@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { HotKeys } from 'react-hotkeys';
 import { Toaster } from 'react-hot-toast';
 import routes from './routes';
 import './App.css';
@@ -10,11 +9,6 @@ import Prompt from './common/Prompt';
 import ContextMenu from './common/ContextMenu';
 import { resetContextMenu } from './features/general/contextMenu/contextMenuSlice';
 import { selectCurrentUser } from './features/auth/authSlice';
-
-const keyMap = {
-  COPY_SHORTCUT: ['command+c'],
-  PASTE_SHORTCUT: ['command+v'],
-};
 
 function App() {
   const dispatch = useDispatch();
@@ -34,10 +28,7 @@ function App() {
   const routing = useRoutes(routes(user));
 
   return (
-    <HotKeys
-      keyMap={keyMap}
-      className="h-full flex flex-col"
-    >
+    <div className="h-full flex flex-col">
       {routing}
       <Toaster
         position="top-right"
@@ -62,8 +53,7 @@ function App() {
       ) : (
         <> </>
       )}
-
-    </HotKeys>
+    </div>
   );
 }
 

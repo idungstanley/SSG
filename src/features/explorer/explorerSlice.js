@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import request from '../../app/request';
 import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
 export const selectItem = createAsyncThunk('explorer/selectItem', async (data) => data);
 
-export const copyItems = createAsyncThunk('explorer/copyItems', async (data, thunkAPI) => {
+export const copyItems = createAsyncThunk('explorer/copyItems', async (data) => {
   localStorage.setItem('fileIdsToPaste', JSON.stringify(data.fileIds));
   localStorage.setItem('folderIdsToPaste', JSON.stringify(data.folderIds));
 
@@ -15,53 +14,7 @@ export const copyItems = createAsyncThunk('explorer/copyItems', async (data, thu
     return totalItemsCount;
   }
 
-  thunkAPI.dispatch(displayNotification('success', `Copied ${totalItemsCount > 1 ? `${totalItemsCount} items ` : ' '}to clipboard`, null, 3000, true, false, false));
-
   return totalItemsCount;
-});
-
-export const pasteItems = createAsyncThunk('explorer/pasteItems', async (data, thunkAPI) => {
-  const url = data.folderId === null ? '/explorer/copy' : `/explorer/copy/${data.folderId}`;
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
-
-  const fileIdsToPaste = JSON.parse(localStorage.getItem('fileIdsToPaste'));
-  const folderIdsToPaste = JSON.parse(localStorage.getItem('folderIdsToPaste'));
-
-  const totalItemsCount = fileIdsToPaste.length + folderIdsToPaste.length;
-
-  if (totalItemsCount < 1) {
-    thunkAPI.dispatch(displayNotification('error', 'Clipboard is empty', null, 8000));
-    return thunkAPI.rejectWithValue('Clipboard is empty');
-  }
-
-  try {
-    const response = await request({
-      url,
-      method: 'POST',
-      data: {
-        file_ids: fileIdsToPaste,
-        folder_ids: folderIdsToPaste,
-        current_workspace_id: currentWorkspaceId,
-      },
-    });
-
-    if (response.success === false) {
-      thunkAPI.dispatch(displayNotification('error', response.message.title, response.message.body, 8000));
-      return thunkAPI.rejectWithValue(response.message.title);
-    }
-
-    thunkAPI.dispatch(displayNotification('success', response.message.title, response.message.body, 5000, true, false, false));
-
-    if (data.cb) {
-      data.cb();
-    }
-
-    return response.data;
-  } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    thunkAPI.dispatch(displayNotification('error', 'Oops! An unknown error has occurred.', null, 8000));
-    return thunkAPI.rejectWithValue(message);
-  }
 });
 
 export const previewFileFullPage = createAsyncThunk('explorer/previewFileFullPage', async (data, thunkAPI) => {
@@ -84,6 +37,9 @@ export const previewFileFullPage = createAsyncThunk('explorer/previewFileFullPag
   }
 });
 
+const fileIdsToPaste = JSON.parse(localStorage.getItem('fileIdsToPaste'));
+const folderIdsToPaste = JSON.parse(localStorage.getItem('folderIdsToPaste'));
+
 const initialState = {
   showUploadModal: false,
 
@@ -94,6 +50,9 @@ const initialState = {
 
   selectedFileIds: [],
   selectedFolderIds: [],
+
+  fileIdsToPaste: fileIdsToPaste != null ? fileIdsToPaste : [],
+  folderIdsToPaste: folderIdsToPaste != null ? folderIdsToPaste : [],
 };
 
 export const explorerSlice = createSlice({
@@ -141,9 +100,25 @@ export const explorerSlice = createSlice({
     setShowUploadModal: (state, action) => {
       state.showUploadModal = action.payload;
     },
+    resetSelectedFilesAndFolders: (state) => {
+      state.selectedFileIds = [];
+      state.selectedFolderIds = [];
+      state.selectedItemId = null;
+      state.selectedItemType = null;
+      state.selectedItemLoadingFullDetails = false;
+      state.selectedItemFullDetails = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(copyItems.fulfilled, (state, action) => {
+        state.fileIdsToPaste = action.meta.arg.fileIds;
+        state.folderIdsToPaste = action.meta.arg.folderIds;
+      })
+      .addCase(copyItems.rejected, (state) => {
+        state.fileIdsToPaste = [];
+        state.folderIdsToPaste = [];
+      })
       .addCase(selectItem.pending, (state, action) => {
         state.selectedItemId = action.meta.arg.itemId;
         state.selectedItemType = action.meta.arg.itemType;
@@ -166,6 +141,7 @@ export const {
   setSelectedFiles,
   setSelectedFolders,
   setShowUploadModal,
+  resetSelectedFilesAndFolders,
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

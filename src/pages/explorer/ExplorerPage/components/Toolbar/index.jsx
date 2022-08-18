@@ -1,11 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Menu, Transition } from '@headlessui/react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import toast from 'react-hot-toast';
 import {
   ChevronDownIcon,
-  PencilIcon,
   FolderAddIcon,
 } from '@heroicons/react/solid';
 import {
@@ -22,15 +24,21 @@ import {
   ClipboardIcon,
   UploadIcon,
   PlusCircleIcon,
+  PencilIcon,
 } from '@heroicons/react/outline';
 import {
-  copyItems,
-  pasteItems,
   setShowUploadModal,
+  copyItems,
+  resetSelectedFilesAndFolders,
+  setSelectedFiles,
+  setSelectedFolders,
 } from '../../../../../features/explorer/explorerSlice';
-import { useDeleteFile, useDeleteFolder } from '../../../../../features/explorer/explorerActionsService';
+import { deleteService, pasteService } from '../../../../../features/explorer/explorerActionsService';
+import { useGetFile, useGetFolder } from '../../../../../features/explorer/explorerService';
 import { Button } from '../../../../../components';
-import { setCreateFolderSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setCreateFolderSlideOverVisibility, setRenameFileSlideOverVisibility, setRenameFolderSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import Toast from '../../../../../common/Toast';
+import { DownloadFile } from '../../../../../app/helpers';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -38,64 +46,111 @@ function classNames(...classes) {
 
 export default function Toolbar() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const { folderId } = useParams();
+
+  const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
+  const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
+
+  const { data: file } = useGetFile(selectedItemId, selectedItemType === 'file');
+  const { data: folder } = useGetFolder(selectedItemId, selectedItemType === 'folder');
 
   const selectedFileIds = useSelector((state) => state.explorer.selectedFileIds);
   const selectedFolderIds = useSelector((state) => state.explorer.selectedFolderIds);
 
-  const { mutate: deleteFileMutation } = useDeleteFile();
-  const { mutate: deleteFolderMutation } = useDeleteFolder();
+  const fileIdsToPaste = useSelector((state) => state.explorer.fileIdsToPaste);
+  const folderIdsToPaste = useSelector((state) => state.explorer.folderIdsToPaste);
 
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
-  const [canDeleteFile, setCanDeleteFile] = useState(false);
-  const [canDeleteFolder, setCanDeleteFolder] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
+  const [canCopy, setCanCopy] = useState(false);
+
+  const deleteMutation = useMutation(deleteService, {
+    onSuccess: () => {
+      dispatch(resetSelectedFilesAndFolders());
+      queryClient.invalidateQueries(['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)]);
+    },
+  });
+
+  const pasteMutation = useMutation(pasteService, {
+    onSuccess: (successData) => {
+      dispatch(resetSelectedFilesAndFolders());
+      queryClient.invalidateQueries(['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)]);
+      dispatch(setSelectedFiles(successData.data.copied_files.map((copiedFile) => copiedFile.id)));
+      dispatch(setSelectedFolders(successData.data.copied_folders.map((copiedFolder) => copiedFolder.id)));
+    },
+  });
 
   useEffect(() => {
     setTotalSelectedItems(selectedFileIds.length + selectedFolderIds.length);
 
-    setCanDeleteFile(selectedFolderIds.length === 0 && selectedFileIds.length === 1);
-    setCanDeleteFolder(selectedFileIds.length === 0 && selectedFolderIds.length === 1);
+    setCanDelete(selectedFolderIds.length + selectedFileIds.length !== 0);
+    setCanCopy(selectedFolderIds.length + selectedFileIds.length !== 0);
   }, [selectedFileIds, selectedFolderIds]);
 
   const openCreateNewFolder = () => {
     dispatch(setCreateFolderSlideOverVisibility(true));
   };
 
-  const onCopyItems = () => {
+  const openRenameFile = () => {
+    dispatch(setRenameFileSlideOverVisibility(true));
+  };
+
+  const openRenameFolder = () => {
+    dispatch(setRenameFolderSlideOverVisibility(true));
+  };
+
+  const openRename = () => {
+    if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
+      openRenameFile();
+    }
+
+    if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
+      openRenameFolder();
+    }
+  };
+
+  const onCopy = () => {
     dispatch(copyItems({
       fileIds: selectedFileIds,
       folderIds: selectedFolderIds,
     }));
+
+    toast.custom(<Toast type="success" title={`Copied ${totalSelectedItems > 1 ? `${totalSelectedItems} items ` : ' '}to clipboard`} body={null} />);
   };
 
-  const onPasteItems = () => {
-    const folderId = null;
-
-    dispatch(pasteItems({
-      folderId,
-      cb: () => {
-        console.log('reload all files in the folder');
-      },
-    }));
+  const onPaste = () => {
+    pasteMutation.mutate({
+      copyToFolderId: folderId,
+      fileIds: fileIdsToPaste,
+      folderIds: folderIdsToPaste,
+    });
   };
 
-  const deleteFile = () => {
-    if (canDeleteFile) {
-      deleteFileMutation(selectedFileIds[0]);
+  const onDelete = () => {
+    // If can delete multiple (multiple selected) - delete... remove above delete...
+
+    deleteMutation.mutate({
+      fileIds: selectedFileIds,
+      folderIds: selectedFolderIds,
+    });
+
+    // Update current list
+  };
+
+  const onDownload = () => {
+    if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
+      DownloadFile('file', file.id, file.display_name);
     }
 
-    // Remove selected
-  };
-
-  const deleteFolder = () => {
-    if (canDeleteFolder) {
-      deleteFolderMutation(selectedFolderIds[0]);
+    if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
+      DownloadFile('folder', folder.id, `${folder.name}.zip`);
     }
   };
 
   return (
     <div className="flex flex-col">
-
       {/* Bottom section */}
       <div className="min-h-0 flex-1 flex">
 
@@ -166,47 +221,29 @@ export default function Toolbar() {
                         <span className="inline-flex sm:shadow-sm">
                           <Button
                             buttonStyle="white"
-                            onClick={() => console.log('archive')}
+                            onClick={onDownload}
+                            disabled={fileIdsToPaste.length + folderIdsToPaste.length !== 1}
                             icon={<DownloadIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
                             iconPosition="center"
-                            disabled={false}
                             borderRight={false}
                             roundedRight={false}
                             ringOnFocus
                             width="w-16"
                           />
 
-                          {canDeleteFile && (
-                            <Button
-                              buttonStyle="white"
-                              disabled={!canDeleteFile}
-                              loading={deleteFileMutation.status === 'loading'}
-                              onClick={deleteFile}
-                              icon={<TrashIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
-                              iconPosition="center"
-                              roundedLeft={false}
-                              roundedRight={false}
-                              borderRight={false}
-                              ringOnFocus
-                              width="w-16"
-                            />
-                          )}
-
-                          {canDeleteFolder && (
-                            <Button
-                              buttonStyle="white"
-                              disabled={!canDeleteFolder}
-                              loading={deleteFolderMutation.status === 'loading'}
-                              onClick={deleteFolder}
-                              icon={<TrashIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
-                              iconPosition="center"
-                              roundedLeft={false}
-                              roundedRight={false}
-                              borderRight={false}
-                              ringOnFocus
-                              width="w-16"
-                            />
-                          )}
+                          <Button
+                            disabled={!canDelete}
+                            buttonStyle="white"
+                            loading={deleteMutation.status === 'loading'}
+                            onClick={onDelete}
+                            icon={<TrashIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                            iconPosition="center"
+                            roundedLeft={false}
+                            roundedRight={false}
+                            borderRight={false}
+                            ringOnFocus
+                            width="w-16"
+                          />
 
                           <Tippy
                             content={(
@@ -217,27 +254,46 @@ export default function Toolbar() {
                             )}
                             placement="bottom"
                           >
-                            <Button
-                              buttonStyle="white"
-                              onClick={onCopyItems}
-                              icon={<DuplicateIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
-                              iconPosition="center"
-                              disabled={false}
-                              roundedLeft={false}
-                              roundedRight={false}
-                              borderRight={false}
-                              ringOnFocus
-                              width="w-16"
-                            />
+                            <div>
+                              <Button
+                                buttonStyle="white"
+                                onClick={onCopy}
+                                icon={<DuplicateIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                                iconPosition="center"
+                                disabled={!canCopy}
+                                roundedLeft={false}
+                                roundedRight={false}
+                                borderRight={false}
+                                ringOnFocus
+                                width="w-16"
+                              />
+                            </div>
                           </Tippy>
                           <Tippy content={<span>Paste</span>} placement="bottom">
                             <div>
                               <Button
                                 buttonStyle="white"
-                                onClick={onPasteItems}
+                                onClick={onPaste}
+                                loading={pasteMutation.status === 'loading'}
+                                disabled={fileIdsToPaste.length + folderIdsToPaste.length === 0}
                                 icon={<ClipboardIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
                                 iconPosition="center"
-                                disabled={false}
+                                roundedLeft={false}
+                                roundedRight={false}
+                                borderRight={false}
+                                ringOnFocus
+                                width="w-16"
+                              />
+                            </div>
+                          </Tippy>
+                          <Tippy content={<span>Rename</span>} placement="bottom">
+                            <div>
+                              <Button
+                                buttonStyle="white"
+                                onClick={openRename}
+                                disabled={selectedFileIds.length + selectedFolderIds.length !== 1}
+                                icon={<PencilIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                                iconPosition="center"
                                 borderLeft
                                 roundedLeft={false}
                                 ringOnFocus

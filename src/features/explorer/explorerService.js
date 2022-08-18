@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Get folder
-export const useGetFolder = (folderId) => {
+export const useGetFolder = (folderId, enabled = true) => {
   // TODO: If not in cache... get from endpoint (hard get)
   // Default data should use the previously set data TODO check...
 
@@ -12,14 +12,14 @@ export const useGetFolder = (folderId) => {
     ['explorer_folder', folderId],
     () => queryClient.getQueryData(['explorer_folder', folderId]),
     {
-      enabled: folderId != null,
+      enabled: folderId != null && enabled,
       initialData: () => queryClient.getQueryData(['explorer_folder', folderId]),
     },
   );
 };
 
 // Get file
-export const useGetFile = (fileId) => {
+export const useGetFile = (fileId, enabled = true) => {
   // TODO: If not in cache... get from endpoint (hard get)
   // Default data should use the previously set data TODO check...
 
@@ -29,7 +29,7 @@ export const useGetFile = (fileId) => {
     ['explorer_file', fileId],
     () => queryClient.getQueryData(['explorer_file', fileId]),
     {
-      enabled: fileId != null,
+      enabled: fileId != null && enabled,
       initialData: () => queryClient.getQueryData(['explorer_file', fileId]),
     },
   );

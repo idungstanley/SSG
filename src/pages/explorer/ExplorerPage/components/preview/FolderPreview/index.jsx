@@ -9,7 +9,7 @@ function FolderPreview() {
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
   const { data: folder } = useGetFolder(selectedItemId);
 
-  return folder ? (
+  return folder && selectedItemId ? (
     <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
       <div className="pb-16 space-y-6">
         <div>
@@ -38,7 +38,7 @@ function FolderPreview() {
             type="button"
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Delete
+            Share
           </button>
         </div>
 
