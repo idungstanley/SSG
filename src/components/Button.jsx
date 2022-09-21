@@ -104,8 +104,14 @@ Button.propTypes = {
   onClick: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   label: PropTypes.string,
-  icon: PropTypes.string,
-  width: PropTypes.string,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  width: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   height: PropTypes.string,
   padding: PropTypes.string,
   disabled: PropTypes.bool,

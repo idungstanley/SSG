@@ -12,7 +12,10 @@ function Spinner({ size = 10, color = '#FFFFFF' }) {
 }
 
 Spinner.propTypes = {
-  size: PropTypes.string.isRequired,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   color: PropTypes.string.isRequired,
 };
 

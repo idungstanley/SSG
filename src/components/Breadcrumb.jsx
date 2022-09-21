@@ -61,8 +61,11 @@ Breadcrumb.defaultProps = {
 };
 
 Breadcrumb.propTypes = {
-  pages: PropTypes.string.isRequired,
-  rootIcon: PropTypes.string,
+  pages: PropTypes.array.isRequired,
+  rootIcon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   rootIconHref: PropTypes.string,
 };
 
