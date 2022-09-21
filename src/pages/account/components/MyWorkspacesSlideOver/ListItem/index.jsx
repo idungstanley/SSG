@@ -78,7 +78,7 @@ function ListItem({ userWorkspace }) {
 }
 
 ListItem.propTypes = {
-  userWorkspace: PropTypes.objectOf(PropTypes.object).isRequired,
+  userWorkspace: PropTypes.object.isRequired,
 };
 
 export default ListItem;

@@ -28,7 +28,7 @@ function MyWorkspacesSlideOver() {
                 title={<span>All Workspaces</span>}
                 items={(
                   data.data.workspaces.map((userWorkspace) => (
-                    <ListItem userWorkspace={userWorkspace} />
+                    <ListItem key={userWorkspace.id} userWorkspace={userWorkspace} />
                   ))
                 )}
               />

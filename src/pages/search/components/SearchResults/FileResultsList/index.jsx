@@ -50,7 +50,7 @@ function FileResultsList() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {status === 'success' && data.data.files.map((file) => (
-                  <FileListItem fileId={file.id} />
+                  <FileListItem key={file.id} fileId={file.id} />
                 ))}
               </tbody>
             </table>
