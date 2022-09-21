@@ -42,7 +42,10 @@ function InboxFileListItem({ inboxFileId, index }) {
 
 InboxFileListItem.propTypes = {
   inboxFileId: PropTypes.string.isRequired,
-  index: PropTypes.string.isRequired,
+  index: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
 };
 
 export default InboxFileListItem;
