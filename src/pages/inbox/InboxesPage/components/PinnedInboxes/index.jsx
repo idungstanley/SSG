@@ -10,7 +10,7 @@ function PinnedInboxes() {
       <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">Pinned Inboxes</h2>
       <ul className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-3">
         {pinnedInboxesData.data.pinned_inboxes.map((pinnedInbox) => (
-          <PinnedInboxItem pinnedInboxId={pinnedInbox.id} />
+          <PinnedInboxItem key={pinnedInbox.id} pinnedInboxId={pinnedInbox.id} />
         ))}
       </ul>
     </div>

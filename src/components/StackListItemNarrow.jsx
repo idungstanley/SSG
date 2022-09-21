@@ -63,12 +63,24 @@ StackListItemNarrow.propTypes = {
   key: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   button: PropTypes.string,
-  paddingVertical: PropTypes.string,
-  paddingHorizontal: PropTypes.string,
-  onClick: PropTypes.string,
-  selected: PropTypes.string,
+  paddingVertical: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  paddingHorizontal: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  onClick: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
+  selected: PropTypes.bool,
 };
 
 export default StackListItemNarrow;

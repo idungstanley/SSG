@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { useGetFile } from '../../../../../../features/explorer/explorerService';
-import { OutputDateTime, OutputFileSize, GetFileWithHeaders } from '../../../../../../app/helpers';
+import {
+  OutputDateTime,
+  OutputFileSize,
+  GetFileWithHeaders,
+  DownloadFile,
+} from '../../../../../../app/helpers';
 
 function FilePreview() {
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
@@ -16,7 +21,7 @@ function FilePreview() {
   };
 
   const onDownload = async () => {
-    console.log('to download');
+    DownloadFile('file', file.id, file.display_name);
   };
 
   useEffect(async () => {
