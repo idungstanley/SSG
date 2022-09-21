@@ -66,7 +66,10 @@ Input.propTypes = {
   type: PropTypes.string,
   autoComplete: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.string.isRequired,
+  onChange: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]).isRequired,
   leadingIcon: PropTypes.string,
   trailingIcon: PropTypes.string,
 };

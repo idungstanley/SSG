@@ -18,8 +18,11 @@ function StackListWithHeader({
 }
 
 StackListWithHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  items: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+  items: PropTypes.array.isRequired,
 };
 
 export default StackListWithHeader;

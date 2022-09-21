@@ -58,5 +58,5 @@ Toast.propTypes = {
   title: PropTypes.string.isRequired,
   body: PropTypes.string,
   type: PropTypes.string,
-  showClose: PropTypes.string,
+  showClose: PropTypes.bool,
 };

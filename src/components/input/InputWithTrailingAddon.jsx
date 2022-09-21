@@ -62,7 +62,10 @@ InputWithTrailingAddon.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.string.isRequired,
+  onChange: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]).isRequired,
   hint: PropTypes.string,
   cornerHint: PropTypes.string,
 };

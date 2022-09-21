@@ -24,11 +24,17 @@ StatusDot.defaultProps = {
 };
 
 StatusDot.propTypes = {
-  on: PropTypes.string.isRequired,
+  on: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
   colour: PropTypes.string,
-  size: PropTypes.string,
-  ringSize: PropTypes.string,
-  top: PropTypes.string,
+  size: PropTypes.number,
+  ringSize: PropTypes.number,
+  top: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
 };
 
 export default StatusDot;

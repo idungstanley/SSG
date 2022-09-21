@@ -27,7 +27,10 @@ Badge.defaultProps = {
 };
 
 Badge.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   textColour: PropTypes.string,
   backgroundColour: PropTypes.string,
   paddingHorizontal: PropTypes.string,

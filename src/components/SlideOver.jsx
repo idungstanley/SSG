@@ -104,12 +104,24 @@ SlideOver.defaultProps = {
 };
 
 SlideOver.propTypes = {
-  show: PropTypes.string.isRequired,
-  onClose: PropTypes.string,
-  body: PropTypes.string.isRequired,
+  show: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]).isRequired,
+  onClose: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
+  body: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
   headerTitle: PropTypes.string.isRequired,
   headerDescription: PropTypes.string,
-  footerButtons: PropTypes.string,
+  footerButtons: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
 };
 
 export default SlideOver;
