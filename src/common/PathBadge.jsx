@@ -26,10 +26,7 @@ function PathBadge({ folder, expanded = true }) {
 }
 PathBadge.propTypes = {
   folder: PropTypes.object.isRequired,
-  expanded: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]).isRequired,
+  expanded: PropTypes.bool.isRequired,
 };
 
 export default PathBadge;

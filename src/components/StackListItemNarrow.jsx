@@ -68,14 +68,8 @@ StackListItemNarrow.propTypes = {
     PropTypes.object,
   ]),
   button: PropTypes.string,
-  paddingVertical: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  paddingHorizontal: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  paddingVertical: PropTypes.number,
+  paddingHorizontal: PropTypes.number,
   onClick: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
