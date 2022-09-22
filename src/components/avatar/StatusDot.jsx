@@ -31,10 +31,7 @@ StatusDot.propTypes = {
   colour: PropTypes.string,
   size: PropTypes.number,
   ringSize: PropTypes.number,
-  top: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
+  top: PropTypes.bool,
 };
 
 export default StatusDot;

@@ -108,10 +108,7 @@ function FileIcon({ extensionKey, size }) {
 
 FileIcon.propTypes = {
   extensionKey: PropTypes.string.isRequired,
-  size: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  size: PropTypes.number.isRequired,
 };
 
 export default FileIcon;

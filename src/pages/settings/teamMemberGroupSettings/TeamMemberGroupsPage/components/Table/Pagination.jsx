@@ -55,7 +55,7 @@ export default function Pagination() {
           loading={false}
           disabled={data.data.pagination.on_first_page}
           label="Previous"
-          width={28}
+          width="w-28"
         />
 
         <Button
@@ -64,7 +64,7 @@ export default function Pagination() {
           loading={false}
           disabled={data.data.pagination.on_last_page}
           label="Next"
-          width={28}
+          width="w-28"
         />
       </div>
     </nav>

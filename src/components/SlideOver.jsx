@@ -104,10 +104,7 @@ SlideOver.defaultProps = {
 };
 
 SlideOver.propTypes = {
-  show: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]).isRequired,
+  show: PropTypes.bool.isRequired,
   onClose: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
