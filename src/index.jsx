@@ -35,7 +35,7 @@ const onError = (error) => {
     title = error?.statusText || error?.message;
   }
 
-  toast.custom(<Toast type="error" title={title} body={body} />);
+  toast.custom((t) => (<Toast type="error" title={title} body={body} toastId={t.id} />));
 };
 
 const onSuccess = (data) => {
@@ -49,7 +49,7 @@ const onSuccess = (data) => {
     title = 'Success';
   }
 
-  toast.custom(<Toast type="success" title={title} body={body} />);
+  toast.custom((t) => (<Toast type="success" title={title} body={body} toastId={t.id} />));
 };
 
 const queryClient = new QueryClient({
