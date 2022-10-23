@@ -30,6 +30,7 @@ import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/Tea
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
+import SharedPage from './pages/shared';
 
 const routes = (user) => [
   {
@@ -39,6 +40,7 @@ const routes = (user) => [
       { path: '/', element: <Navigate to="/explorer" /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
+      { path: 'shared', element: <SharedPage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'inbox', element: <InboxesPage /> },
       { path: 'inbox/:inboxId', element: <InboxPage /> },

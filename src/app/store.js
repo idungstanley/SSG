@@ -11,6 +11,7 @@ import promptSlice from '../features/general/prompt/promptSlice';
 import teamMemberSlice from '../features/settings/teamMembers/teamMemberSlice';
 import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
+import sharedSlice from '../features/shared/sharedSlice';
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     teamMember: teamMemberSlice,
     teamMemberInvite: teamMemberInviteSlice,
     teamMemberGroup: teamMemberGroupSlice,
+    shared: sharedSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
