@@ -36,7 +36,6 @@ export default function SharedPage() {
   //   }
   //   return true;
   // }, [data]);
-  console.log(fileStatus, folderStatus);
 
   const selectedItemType = useSelector((state) => state.shared.selectedItemType);
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
@@ -45,16 +44,16 @@ export default function SharedPage() {
     <div className="h-full flex flex-col w-full">
       <div className="flex flex-row overflow-hidden h-full">
         <div className="flex-1 overflow-y-scroll">
-          {fileStatus === 'success' && (filesData?.data?.files.length !== 0) && (
-            <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-              <p>{filesData?.data?.files.length}</p>
-            </div>
-          )}
-          {folderStatus === 'success' && (foldersData?.data?.folders.length !== 0) && (
-            <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-              <p>{foldersData?.data?.folders.length}</p>
-            </div>
-          )}
+          {fileStatus === 'success' && filesData && filesData.data && filesData.data.files.length === 0 ? (
+          // <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
+            <p className="text-red-700 font-bold text-center my-2">No found shared files</p>
+          // </div>
+          ) : <> </> }
+          {folderStatus === 'success' && foldersData && foldersData.data && foldersData.data.folders.length === 0 ? (
+          // <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
+            <p className="text-red-700 font-bold text-center my-2">No found shared folders</p>
+          // </div>
+          ) : <> </> }
           {((fileStatus === 'loading') || (folderStatus === 'loading')) && (
             <div className="mx-auto w-6 mt-10 justify-center">
               <Spinner size={22} color="#0F70B7" />
