@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const requestNew = async function (options) {
+const requestNew = async (options) => {
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
 
@@ -13,15 +13,15 @@ const requestNew = async function (options) {
   });
 
   // request handler
-  const onSuccess = function (response) {
+  const onSuccess = (response) => {
     const { data } = response;
     return data;
   };
 
   // error handler
-  const onError = function (error) {
+  function onError(error) {
     return Promise.reject(error.response);
-  };
+  }
 
   // adding success and error handlers to client
   return client(options).then(onSuccess).catch(onError);
