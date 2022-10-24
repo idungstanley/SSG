@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 // import ExplorerTable from '../explorer/ExplorerPage/components/ExplorerTable';
+// import useInfiniteScroll from 'react-infinite-scroll-hook';
 import FilePreview from '../explorer/ExplorerPage/components/preview/FilePreview';
 import FolderPreview from '../explorer/ExplorerPage/components/preview/FolderPreview';
 import { Spinner } from '../../common';
@@ -9,6 +10,33 @@ import { useGetSharedFiles, useGetSharedFolders } from '../../features/shared/sh
 export default function SharedPage() {
   const { status: fileStatus, data: filesData } = useGetSharedFiles();
   const { status: folderStatus, data: foldersData } = useGetSharedFolders();
+
+  // const [unpaginatedData, setUnpaginatedData] = useState([]);
+
+  // const {
+  //   status,
+  //   data,
+  //   fetchNextPage,
+  //   hasNextPage,
+  // } = useGetInboxFiles({
+  //   inboxId,
+  // });
+
+  // const [sentryRef] = useInfiniteScroll({
+  //   loading: status === 'loading',
+  //   hasNextPage,
+  //   onLoadMore: fetchNextPage,
+  //   disabled: false,
+  //   rootMargin: '0px 0px 800px 0px',
+  // });
+
+  // useEffect(() => {
+  //   if (status === 'success' && data) {
+  //     setUnpaginatedData(data.pages.flatMap((page) => page.data.inbox_files));
+  //   }
+  //   return true;
+  // }, [data]);
+  console.log(fileStatus, folderStatus);
 
   const selectedItemType = useSelector((state) => state.shared.selectedItemType);
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
@@ -27,7 +55,7 @@ export default function SharedPage() {
               <p>{foldersData?.data?.folders.length}</p>
             </div>
           )}
-          {(fileStatus || folderStatus === 'loading') && (
+          {((fileStatus === 'loading') || (folderStatus === 'loading')) && (
             <div className="mx-auto w-6 mt-10 justify-center">
               <Spinner size={22} color="#0F70B7" />
             </div>
