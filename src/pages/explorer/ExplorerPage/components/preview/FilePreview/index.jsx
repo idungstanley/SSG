@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { useGetFile } from '../../../../../../features/explorer/explorerService';
 import {
@@ -8,6 +9,8 @@ import {
   GetFileWithHeaders,
   DownloadFile,
 } from '../../../../../../app/helpers';
+import requestNew from '../../../../../../app/requestNew';
+import Toast from '../../../../../../common/Toast';
 
 function FilePreview() {
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
@@ -32,6 +35,12 @@ function FilePreview() {
     const data = await GetFileWithHeaders('file', selectedItemId);
     return setFileData(data);
   }, [selectedItemId]);
+
+  const onClickHandler = async () => {
+    const request = await requestNew({ method: 'post', url: `files/${file.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
+    const type = request.success === true ? 'success' : 'error';
+    toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
+  };
 
   return file && selectedItemId ? (
     <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
@@ -81,6 +90,7 @@ function FilePreview() {
             Download
           </button>
           <button
+            onClick={onClickHandler}
             type="button"
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
