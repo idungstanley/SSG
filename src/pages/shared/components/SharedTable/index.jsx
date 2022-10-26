@@ -5,7 +5,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import { kaReducer, Table } from 'ka-table';
 import {
   deselectAllFilteredRows,
@@ -27,9 +26,6 @@ import {
   resetSelectedItem,
   previewFileFullPage,
 } from '../../../../features/shared/sharedSlice';
-import { prefetchExplorerFilesAndFoldersService } from '../../../../features/explorer/explorerService';
-// import { useGetSharedFilesAndFolders } from '../../../../features/shared/sharedService';
-// import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
 function SelectionCell({
   rowKeyValue,
@@ -118,7 +114,6 @@ function CustomCell({
 function SharedTable({ data, tableTitle }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
 
   const title = tableTitle === undefined ? 'Name' : tableTitle;
 
@@ -160,8 +155,8 @@ function SharedTable({ data, tableTitle }) {
     changeTableProps((prevState) => kaReducer(prevState, action));
   };
 
-  const selectedFileIds = useSelector((state) => state.explorer.selectedFileIds);
-  const selectedFolderIds = useSelector((state) => state.explorer.selectedFolderIds);
+  const selectedFileIds = useSelector((state) => state.shared.selectedFileIds);
+  const selectedFolderIds = useSelector((state) => state.shared.selectedFolderIds);
 
   const [processedData, setProcessedData] = useState([]);
 
@@ -342,9 +337,9 @@ function SharedTable({ data, tableTitle }) {
                 kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
               }
 
-              if (extendedEvent.childProps.rowData.item_type === 'folder') {
-                prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
-              }
+              // if (extendedEvent.childProps.rowData.item_type === 'folder') {
+              //   prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
+              // }
             },
             onDoubleClick: (event, extendedEvent) => {
               if (extendedEvent.childProps.rowData.item_type === 'folder') {
@@ -355,7 +350,7 @@ function SharedTable({ data, tableTitle }) {
                 dispatch(setSelectedFiles([]));
                 dispatch(setSelectedFolders([]));
 
-                navigate(`/explorer/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
+                navigate(`/shared/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
               } else if (extendedEvent.childProps.rowData.item_type === 'file') {
                 onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
               }
