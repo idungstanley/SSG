@@ -24,7 +24,8 @@ import {
   setSelectedFolders,
   selectItem,
   resetSelectedItem,
-  previewFileFullPage,
+  // previewFileFullPage,
+  setSelectedItem,
 } from '../../../../features/shared/sharedSlice';
 
 function SelectionCell({
@@ -76,7 +77,7 @@ function CustomCell({
       <div className="flex items-center">
         <div className="flex-shrink-0 h-10 w-10">
           {rowData.item_type === 'file' ? (
-            <FileIcon extensionKey="file" size={10} />
+            <FileIcon extensionKey={rowData.name.split('.').at(-1)} size={10} />
           ) : (
             <FileIcon extensionKey="folder" size={10} />
           )}
@@ -166,11 +167,10 @@ function SharedTable({ data, tableTitle }) {
     if (!data.filesStatus || !data.foldersStatus) {
       return false;
     }
-
     if (data) {
       const processedFolders = data.folders.map((folder, index) => ({
         full_object: folder,
-        name: folder.name,
+        name: folder.folder.name,
         created_at: folder.created_at,
         shared_by: folder.shared_by.user.name,
         item_id_raw: folder.id,
@@ -181,7 +181,7 @@ function SharedTable({ data, tableTitle }) {
 
       const processedFiles = data.files.map((file, index) => ({
         full_object: file,
-        name: file.display_name,
+        name: file.file.display_name,
         created_at: file.created_at,
         shared_by: file.shared_by.user.name,
         item_id_raw: file.id,
@@ -236,16 +236,16 @@ function SharedTable({ data, tableTitle }) {
     }
   }, [selectedFileIds, selectedFolderIds]);
 
-  const onFullPagePreview = async (fileId) => {
-    dispatch(
-      previewFileFullPage(
-        {
-          fileId,
-          cb: () => {},
-        },
-      ),
-    );
-  };
+  // const onFullPagePreview = async (fileId) => {
+  //   dispatch(
+  //     previewFileFullPage(
+  //       {
+  //         fileId,
+  //         cb: () => {},
+  //       },
+  //     ),
+  //   );
+  // };
 
   return (
     <Table
@@ -332,6 +332,10 @@ function SharedTable({ data, tableTitle }) {
                 // Deselect all currently selected
                 // Select just the current row
                 // Set it as the selected item (for preview)
+                dispatch(setSelectedItem({
+                  selectedItemId: extendedEvent.childProps.rowData.item_id_raw,
+                  selectedItemType: extendedEvent.childProps.rowData.item_type,
+                }));
 
                 kaTableDispatch(deselectAllRows());
                 kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
@@ -351,9 +355,10 @@ function SharedTable({ data, tableTitle }) {
                 dispatch(setSelectedFolders([]));
 
                 navigate(`/shared/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
-              } else if (extendedEvent.childProps.rowData.item_type === 'file') {
-                onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
               }
+              // else if (extendedEvent.childProps.rowData.item_type === 'file') {
+              // onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
+              // }
             },
             /*
             onContextMenu: (event, extendedEvent) => {

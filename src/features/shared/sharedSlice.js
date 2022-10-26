@@ -1,27 +1,27 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { displayNotification } from '../general/notification/notificationSlice';
+// import { displayNotification } from '../general/notification/notificationSlice';
 
 export const selectItem = createAsyncThunk('shared/selectItem', async (data) => data);
 
-export const previewFileFullPage = createAsyncThunk('shared/previewFileFullPage', async (data, thunkAPI) => {
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+// export const previewFileFullPage = createAsyncThunk('shared/previewFileFullPage', async (data, thunkAPI) => {
+//   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+//   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 
-  try {
-    const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
+//   try {
+//     const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
 
-    window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
+//     window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
 
-    if (data.cb) {
-      data.cb();
-    }
+//     if (data.cb) {
+//       data.cb();
+//     }
 
-    return true;
-  } catch (error) {
-    thunkAPI.dispatch(displayNotification('error', 'Oops! An unknown error has occurred.', null, 8000));
-    return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
-  }
-});
+//     return true;
+//   } catch (error) {
+//     thunkAPI.dispatch(displayNotification('error', 'Oops! An unknown error has occurred.', null, 8000));
+//     return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
+//   }
+// });
 
 const initialState = {
   selectedItemType: null,
@@ -64,6 +64,12 @@ export const sharedSlice = createSlice({
     },
     setSelectedFolders: (state, action) => {
       state.selectedFolderIds = action.payload;
+    },
+    extraReducers: (builder) => {
+      builder.addCase(selectItem.pending, (state, action) => {
+        state.selectedItemId = action.meta.arg.itemId;
+        state.selectedItemType = action.meta.arg.itemType;
+      });
     },
   },
 });

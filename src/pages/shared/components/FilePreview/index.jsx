@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -6,7 +6,7 @@ import { useGetFile } from '../../../../features/shared/sharedService';
 import {
   OutputDateTime,
   OutputFileSize,
-  GetFileWithHeaders,
+  // GetFileWithHeaders,
   DownloadFile,
 } from '../../../../app/helpers';
 import requestNew from '../../../../app/requestNew';
@@ -16,8 +16,11 @@ function FilePreview() {
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
   const { data: file } = useGetFile(selectedItemId);
 
+  console.log(file.file.display_name);
+  const extension = file.file.display_name.split('.').at(-1);
+
   const [numPages, setNumPages] = useState(null);
-  const [fileData, setFileData] = useState(null);
+  // const [fileData, setFileData] = useState(null);
 
   const onDocumentLoadSuccess = (data) => {
     setNumPages(data.numPages);
@@ -27,14 +30,16 @@ function FilePreview() {
     DownloadFile('file', file.id, file.display_name);
   };
 
-  useEffect(async () => {
-    if (selectedItemId == null) {
-      return setFileData(null);
-    }
+  // ! doesn't work
+  // useEffect(async () => {
+  //   if (selectedItemId == null) {
+  //     return setFileData(null);
+  //   }
 
-    const data = await GetFileWithHeaders('file', selectedItemId);
-    return setFileData(data);
-  }, [selectedItemId]);
+  //   const data = await GetFileWithHeaders('file', selectedItemId);
+  //   return setFileData(data);
+  //   // return true;
+  // }, [selectedItemId]);
 
   const onClickHandler = async () => {
     const request = await requestNew({ method: 'post', url: `files/${file.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
@@ -48,12 +53,12 @@ function FilePreview() {
         <div>
           <div className="block w-full rounded-md overflow-hidden">
 
-            {(file.file_format.extension === 'pdf' && fileData != null) && (
+            {(extension === 'pdf') && (
               <div className="h-full overflow-y-scroll overflow-x-hidden aspect-w-10 aspect-h-7 border-gray-200 border" id="PDF_PREVIEW">
                 <Document
                   className="h-full"
                   width={150}
-                  file={fileData}
+                  file="pdf"
                   onLoadSuccess={onDocumentLoadSuccess}
                 >
                   {/* eslint-disable-next-line prefer-spread */}
@@ -64,9 +69,9 @@ function FilePreview() {
               </div>
             )}
 
-            {(file.file_format.extension === 'jpeg' || file.file_format.extension === 'jpg' || file.file_format.extension === 'png') && (
+            {(extension === 'jpeg' || extension === 'jpg' || extension === 'png') && (
               <div className="w-full">
-                <img src={fileData} alt="" className="object-cover" />
+                <img src="/pdf.svg" alt="file extension" className="object-cover" />
               </div>
             )}
           </div>
@@ -75,9 +80,9 @@ function FilePreview() {
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 <span className="sr-only">Details for </span>
-                {file.display_name}
+                {file.file.display_name}
               </h2>
-              <p className="text-sm font-medium text-gray-500">{ OutputFileSize(file.size) }</p>
+              <p className="text-sm font-medium text-gray-500">{ OutputFileSize(file.file.size) }</p>
             </div>
           </div>
         </div>
@@ -92,6 +97,7 @@ function FilePreview() {
           <button
             onClick={onClickHandler}
             type="button"
+            disabled
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
@@ -100,17 +106,23 @@ function FilePreview() {
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
           <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-
             <div className="py-3 flex justify-between text-sm font-medium">
               <dt className="text-gray-500">Last modified</dt>
               <dd className="text-gray-900">{ OutputDateTime(file.updated_at) }</dd>
             </div>
-
             <div className="py-3 flex justify-between text-sm font-medium">
               <dt className="text-gray-500">Created</dt>
               <dd className="text-gray-900">{ OutputDateTime(file.created_at) }</dd>
             </div>
-
+            <h3 className="font-medium text-gray-900 py-2">Shared by</h3>
+            <div className="py-3 flex justify-between text-sm font-medium">
+              <dt className="text-gray-500">User name</dt>
+              <dd className="text-gray-900">{file.shared_by.user.name}</dd>
+            </div>
+            <div className="py-3 flex justify-between text-sm font-medium">
+              <dt className="text-gray-500">User email</dt>
+              <dd className="text-gray-900">{file.shared_by.user.email}</dd>
+            </div>
           </dl>
         </div>
       </div>

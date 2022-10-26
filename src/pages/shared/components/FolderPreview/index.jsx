@@ -29,7 +29,7 @@ function FolderPreview() {
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 <span className="sr-only">Details for </span>
-                {folder.name}
+                {folder.folder.name}
               </h2>
               <p className="text-sm font-medium text-gray-500">Folder</p>
             </div>
@@ -46,6 +46,7 @@ function FolderPreview() {
           <button
             onClick={onClickHandler}
             type="button"
+            disabled
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
@@ -62,6 +63,15 @@ function FolderPreview() {
             <div className="py-3 flex justify-between text-sm font-medium">
               <dt className="text-gray-500">Created</dt>
               <dd className="text-gray-900">{ OutputDateTime(folder.created_at) }</dd>
+            </div>
+            <h3 className="font-medium text-gray-900 py-2">Shared by</h3>
+            <div className="py-3 flex justify-between text-sm font-medium">
+              <dt className="text-gray-500">User name</dt>
+              <dd className="text-gray-900">{folder.shared_by.user.name}</dd>
+            </div>
+            <div className="py-3 flex justify-between text-sm font-medium">
+              <dt className="text-gray-500">User email</dt>
+              <dd className="text-gray-900">{folder.shared_by.user.email}</dd>
             </div>
           </dl>
         </div>

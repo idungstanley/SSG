@@ -105,7 +105,7 @@ export const useGetSharedFilesAndFolders = () => {
         if (data.data.current_file != null) {
           queryClient.setQueryData(['shared_file', data.data.current_file.id], data.data.current_file);
         }
-        data.data.files.map((file) => queryClient.setQueryData(['explorer_file', file.id], file));
+        data.data.files.map((file) => queryClient.setQueryData(['shared_file', file.id], file));
       },
     },
   );
@@ -118,24 +118,4 @@ export const useGetSharedFilesAndFolders = () => {
       foldersStatus: folders.data?.success,
     },
   };
-};
-
-export const prefetchSharedFilesAndFoldersService = (queryClient, folderId) => {
-  queryClient.prefetchQuery(
-    ['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)],
-    async () => requestNew({
-      url: `explorer/${folderId}`,
-      method: 'GET',
-    }),
-    {
-      onSuccess: (data) => {
-        if (data.data.current_folder != null) {
-          queryClient.setQueryData(['explorer_folder', data.data.current_folder.id], data.data.current_folder);
-        }
-
-        data.data.folders.map((folder) => queryClient.setQueryData(['explorer_folder', folder.id], folder));
-        data.data.files.map((file) => queryClient.setQueryData(['explorer_file', file.id], file));
-      },
-    },
-  );
 };
