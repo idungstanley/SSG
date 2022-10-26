@@ -53,6 +53,18 @@ export const sharedSlice = createSlice({
       state.selectedFileIds = [];
       state.selectedFolderIds = [action.payload.folder_id];
     },
+    resetSelectedItem: (state) => {
+      state.selectedItemId = null;
+      state.selectedItemType = null;
+      state.selectedItemFullDetails = null;
+      state.selectedItemLoadingFullDetails = false;
+    },
+    setSelectedFiles: (state, action) => {
+      state.selectedFileIds = action.payload;
+    },
+    setSelectedFolders: (state, action) => {
+      state.selectedFolderIds = action.payload;
+    },
   },
 });
 
@@ -61,6 +73,9 @@ export const {
   setSelectedItemFullDetails,
   setSelectedFile,
   setSelectedFolder,
+  resetSelectedItem,
+  setSelectedFiles,
+  setSelectedFolders,
 } = sharedSlice.actions;
 
 export default sharedSlice.reducer;
