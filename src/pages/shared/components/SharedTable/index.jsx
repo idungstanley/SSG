@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 /* eslint react/jsx-props-no-spreading: 0 */
 /* eslint react/no-unstable-nested-components: 0 */
+/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -79,7 +80,7 @@ function CustomCell({
       <div className="flex items-center">
         <div className="flex-shrink-0 h-10 w-10">
           {rowData.item_type === 'file' ? (
-            <FileIcon extensionKey={rowData.full_object} size={10} />
+            <FileIcon extensionKey="file" size={10} />
           ) : (
             <FileIcon extensionKey="folder" size={10} />
           )}
@@ -140,10 +141,10 @@ function SharedTable({ data, tableTitle }) {
         type: 'dateTime',
       },
       {
-        key: 'size',
-        title: 'Size',
+        key: 'shared_by',
+        title: 'Shared by',
         dataType: DataType.String,
-        type: 'sizeInBytes',
+        type: 'text',
       },
     ],
     paging: {
@@ -158,8 +159,6 @@ function SharedTable({ data, tableTitle }) {
   const kaTableDispatch = (action) => {
     changeTableProps((prevState) => kaReducer(prevState, action));
   };
-
-  // const { data } = useGetSharedFilesAndFolders();
 
   const selectedFileIds = useSelector((state) => state.explorer.selectedFileIds);
   const selectedFolderIds = useSelector((state) => state.explorer.selectedFolderIds);
@@ -178,7 +177,7 @@ function SharedTable({ data, tableTitle }) {
         full_object: folder,
         name: folder.name,
         created_at: folder.created_at,
-        size: '-',
+        shared_by: folder.shared_by.user.name,
         item_id_raw: folder.id,
         item_id_with_type: `folder|${folder.id}`,
         item_type: 'folder',
@@ -189,7 +188,7 @@ function SharedTable({ data, tableTitle }) {
         full_object: file,
         name: file.display_name,
         created_at: file.created_at,
-        size: file.size,
+        shared_by: file.shared_by.user.name,
         item_id_raw: file.id,
         item_id_with_type: `file|${file.id}`,
         item_type: 'file',
