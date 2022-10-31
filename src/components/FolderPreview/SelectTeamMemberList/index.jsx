@@ -1,36 +1,57 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { PropTypes } from 'prop-types';
 import React from 'react';
+import toast from 'react-hot-toast';
+import Toast from '../../../common/Toast';
 import requestNew from '../../../app/requestNew';
 
-const useGetTeamMembers = () => {
+const useGetTeamMembers = (currentUserId) => {
   const { data, status } = useQuery(['team-members'], async () => requestNew({
-    url: 'workspace/team-members',
+    url: 'settings/team-members',
     method: 'GET',
   }));
-  const teamMembers = data && data.data.team_members;
+
+  const teamMembers = data && data.data.team_members.filter((i) => i.user.id !== currentUserId);
 
   return { data: teamMembers, status };
 };
 
-function TeamMembersList() {
-  const { data, status } = useGetTeamMembers();
+function TeamMembersList({ setShowPopup, folderId }) {
+  const { currentUserId } = useSelector((state) => state.auth);
+  const { data, status } = useGetTeamMembers(currentUserId);
+
+  const onClickUser = async (id) => {
+    const request = await requestNew({ method: 'post', url: `folders/${folderId}/share/${id}` });
+    const type = request.success === true ? 'success' : 'error';
+    toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
+    setShowPopup(false);
+  };
 
   return (
-    <div className="absolute bg-white rounded-xl border right-0 top-12">
-      <ul className="divide-y divide-gray-200">
-        {data && data.length === 0 ? <p>no users</p> : null}
-        {status === 'success'
-          ? data && data.map((i) => (
-            <li className="flex py-4 hover:bg-gray-50 cursor-pointer" key={i.user.id}>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">{i.user.name}</p>
-                <p className="text-sm text-gray-500">{i.user.email}</p>
-              </div>
-            </li>
-          )) : null}
-      </ul>
-    </div>
+    <>
+      <div className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0" tabIndex={0} role="button" onClick={() => setShowPopup(false)} onKeyDown={() => {}}> </div>
+      <div className="absolute bg-white rounded-xl border right-0 top-12">
+        <ul className="divide-y divide-gray-200">
+          {data && data.length === 0 ? <p>no users</p> : null}
+          {status === 'success'
+            ? data && data.map((i) => (
+              <li className="flex py-4 hover:bg-gray-100 cursor-pointer rounded-xl" key={i.user.id}>
+                <div className="mx-3" tabIndex={0} role="button" onKeyDown={() => {}} onClick={() => onClickUser(i.id)}>
+                  <p className="text-sm font-medium text-gray-900">{i.user.name}</p>
+                  <p className="text-sm text-gray-500">{i.user.email}</p>
+                </div>
+              </li>
+            )) : null}
+        </ul>
+      </div>
+    </>
   );
 }
+
+TeamMembersList.propTypes = {
+  setShowPopup: PropTypes.func.isRequired,
+  folderId: PropTypes.string.isRequired,
+};
 
 export default TeamMembersList;

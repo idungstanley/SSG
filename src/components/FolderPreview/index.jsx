@@ -53,7 +53,7 @@ function FolderPreview({ folder }) {
           >
             Share
           </button>
-          {showPopup ? <TeamMembersList /> : null}
+          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderId={folder.id} /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
