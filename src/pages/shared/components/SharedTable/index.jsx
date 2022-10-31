@@ -27,6 +27,7 @@ import {
   // previewFileFullPage,
   setSelectedItem,
 } from '../../../../features/shared/sharedSlice';
+import Header from '../Header';
 
 function SelectionCell({
   rowKeyValue,
@@ -164,14 +165,11 @@ function SharedTable({ data, tableTitle }) {
   useEffect(() => {
     dispatch(resetSelectedItem());
 
-    if (!data.filesStatus || !data.foldersStatus) {
-      return false;
-    }
     if (data) {
       const processedFolders = data.folders.map((folder, index) => ({
         full_object: folder,
         name: folder.folder.name,
-        created_at: folder.created_at,
+        created_at: null,
         shared_by: folder.shared_by.user.name,
         item_id_raw: folder.id,
         item_id_with_type: `folder|${folder.id}`,
@@ -182,7 +180,7 @@ function SharedTable({ data, tableTitle }) {
       const processedFiles = data.files.map((file, index) => ({
         full_object: file,
         name: file.file.display_name,
-        created_at: file.created_at,
+        created_at: file.file.created_at,
         shared_by: file.shared_by.user.name,
         item_id_raw: file.id,
         item_id_with_type: `file|${file.id}`,
@@ -248,140 +246,143 @@ function SharedTable({ data, tableTitle }) {
   // };
 
   return (
-    <Table
-      {...tableProps}
-      childComponents={{
-        table: {
-          elementAttributes: () => ({
-            className: 'min-w-full',
-          }),
-        },
-        tableBody: {
-          elementAttributes: () => ({
-            className: 'bg-white divide-y divide-gray-200',
-          }),
-        },
-        cell: {
-          elementAttributes: (props) => ({
-            className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-4 whitespace-nowrap text-sm text-gray-500',
-          }),
-        },
-        cellText: {
-          elementAttributes: () => ({
-          }),
-          content: (props) => {
-            if (props.column.key === 'selection-cell') {
-              return <SelectionCell {...props} />;
-            }
-
-            return <CustomCell {...props} />;
+    <>
+      <Header />
+      <Table
+        {...tableProps}
+        childComponents={{
+          table: {
+            elementAttributes: () => ({
+              className: 'min-w-full',
+            }),
           },
-        },
-        filterRowCell: {
-          content: (props) => {
-            if (props.column.key === 'selection-cell') {
+          tableBody: {
+            elementAttributes: () => ({
+              className: 'bg-white divide-y divide-gray-200',
+            }),
+          },
+          cell: {
+            elementAttributes: (props) => ({
+              className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-4 whitespace-nowrap text-sm text-gray-500',
+            }),
+          },
+          cellText: {
+            elementAttributes: () => ({
+            }),
+            content: (props) => {
+              if (props.column.key === 'selection-cell') {
+                return <SelectionCell {...props} />;
+              }
+
+              return <CustomCell {...props} />;
+            },
+          },
+          filterRowCell: {
+            content: (props) => {
+              if (props.column.key === 'selection-cell') {
+                return null;
+              }
+
               return null;
-            }
-
-            return null;
+            },
           },
-        },
-        headCell: {
-          elementAttributes: (props) => ({
-            className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
-          }),
-          content: (props) => {
-            if (props.column.key === 'selection-cell') {
-              return (
-                <SelectionHeader
-                  {...props}
-                  areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
-                  // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
-                />
-              );
-            }
+          headCell: {
+            elementAttributes: (props) => ({
+              className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
+            }),
+            content: (props) => {
+              if (props.column.key === 'selection-cell') {
+                return (
+                  <SelectionHeader
+                    {...props}
+                    areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
+                    // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
+                  />
+                );
+              }
 
-            return null;
+              return null;
+            },
           },
-        },
-        tableHead: {
-          elementAttributes: () => ({
-            className: 'bg-gray-50 select-none border-b border-gray-200',
-          }),
-        },
-        dataRow: {
-          elementAttributes: (props) => ({
-            className: `select-none cursor-default ${props.isSelectedRow === true ? 'bg-gray-200' : 'hover:bg-gray-100 active:bg-gray-200'}`,
-            onClick: async (event, extendedEvent) => {
-              if (event.nativeEvent.shiftKey) {
-                // If shift key is being held, select the range of rows
-                // Deselect the current selected item (for preview)
+          tableHead: {
+            elementAttributes: () => ({
+              className: 'bg-gray-50 select-none border-b border-gray-200',
+            }),
+          },
+          dataRow: {
+            elementAttributes: (props) => ({
+              className: `select-none cursor-default ${props.isSelectedRow === true ? 'bg-gray-200' : 'hover:bg-gray-100 active:bg-gray-200'}`,
+              onClick: async (event, extendedEvent) => {
+                if (event.nativeEvent.shiftKey) {
+                  // If shift key is being held, select the range of rows
+                  // Deselect the current selected item (for preview)
 
-                extendedEvent.dispatch(selectRowsRange(extendedEvent.childProps.rowKeyValue, [...props.selectedRows].pop()));
-              } else if (event.nativeEvent.metaKey) {
-                // If control/command key is being held (meta key)
-                // Append/remove the current row from the selected rows
+                  extendedEvent.dispatch(selectRowsRange(extendedEvent.childProps.rowKeyValue, [...props.selectedRows].pop()));
+                } else if (event.nativeEvent.metaKey) {
+                  // If control/command key is being held (meta key)
+                  // Append/remove the current row from the selected rows
 
-                if (extendedEvent.childProps.isSelectedRow) {
-                  kaTableDispatch(deselectRow(extendedEvent.childProps.rowKeyValue));
+                  if (extendedEvent.childProps.isSelectedRow) {
+                    kaTableDispatch(deselectRow(extendedEvent.childProps.rowKeyValue));
+                  } else {
+                    kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
+                  }
                 } else {
+                  // No shift/control being held - basic select
+                  // Deselect all currently selected
+                  // Select just the current row
+                  // Set it as the selected item (for preview)
+                  dispatch(setSelectedItem({
+                    selectedItemId: extendedEvent.childProps.rowData.item_id_raw,
+                    selectedItemType: extendedEvent.childProps.rowData.item_type,
+                  }));
+
+                  kaTableDispatch(deselectAllRows());
                   kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
                 }
-              } else {
-                // No shift/control being held - basic select
-                // Deselect all currently selected
-                // Select just the current row
-                // Set it as the selected item (for preview)
-                dispatch(setSelectedItem({
-                  selectedItemId: extendedEvent.childProps.rowData.item_id_raw,
-                  selectedItemType: extendedEvent.childProps.rowData.item_type,
+
+                // if (extendedEvent.childProps.rowData.item_type === 'folder') {
+                //   prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
+                // }
+              },
+              onDoubleClick: (event, extendedEvent) => {
+                if (extendedEvent.childProps.rowData.item_type === 'folder') {
+                  // Remove selected files, folders, selected preview item - can cause it to crash as it won't exist
+
+                  kaTableDispatch(deselectAllRows()); // Very important
+                  dispatch(resetSelectedItem());
+                  dispatch(setSelectedFiles([]));
+                  dispatch(setSelectedFolders([]));
+
+                  navigate(`/shared/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
+                }
+                // else if (extendedEvent.childProps.rowData.item_type === 'file') {
+                // onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
+                // }
+              },
+              /*
+              onContextMenu: (event, extendedEvent) => {
+                event.preventDefault();
+
+                // If selected item, is not already selected
+                if (extendedEvent.childProps.isSelectedRow === false) {
+                  kaTableDispatch(deselectAllRows());
+                  kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
+                }
+
+                dispatch(showExplorerFileContextMenu({
+                  x: event.pageX,
+                  y: event.pageY,
                 }));
-
-                kaTableDispatch(deselectAllRows());
-                kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
-              }
-
-              // if (extendedEvent.childProps.rowData.item_type === 'folder') {
-              //   prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
-              // }
-            },
-            onDoubleClick: (event, extendedEvent) => {
-              if (extendedEvent.childProps.rowData.item_type === 'folder') {
-                // Remove selected files, folders, selected preview item - can cause it to crash as it won't exist
-
-                kaTableDispatch(deselectAllRows()); // Very important
-                dispatch(resetSelectedItem());
-                dispatch(setSelectedFiles([]));
-                dispatch(setSelectedFolders([]));
-
-                navigate(`/shared/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
-              }
-              // else if (extendedEvent.childProps.rowData.item_type === 'file') {
-              // onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
-              // }
-            },
-            /*
-            onContextMenu: (event, extendedEvent) => {
-              event.preventDefault();
-
-              // If selected item, is not already selected
-              if (extendedEvent.childProps.isSelectedRow === false) {
-                kaTableDispatch(deselectAllRows());
-                kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
-              }
-
-              dispatch(showExplorerFileContextMenu({
-                x: event.pageX,
-                y: event.pageY,
-              }));
-            },
-            */
-          }),
-        },
-      }}
-      dispatch={kaTableDispatch}
-      data={processedData}
-    />
+              },
+              */
+            }),
+          },
+        }}
+        dispatch={kaTableDispatch}
+        data={processedData}
+      />
+    </>
   );
 }
 
