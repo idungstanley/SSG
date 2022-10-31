@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+// import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { useGetFile } from '../../../../features/shared/sharedService';
 import {
   OutputDateTime,
@@ -11,20 +11,20 @@ import {
 } from '../../../../app/helpers';
 import requestNew from '../../../../app/requestNew';
 import Toast from '../../../../common/Toast';
+import { FileIcon } from '../../../../common';
 
 function FilePreview() {
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
   const { data: file } = useGetFile(selectedItemId);
 
-  console.log(file.file.display_name);
   const extension = file.file.display_name.split('.').at(-1);
 
-  const [numPages, setNumPages] = useState(null);
+  // const [setNumPages] = useState(null);
   // const [fileData, setFileData] = useState(null);
 
-  const onDocumentLoadSuccess = (data) => {
-    setNumPages(data.numPages);
-  };
+  // const onDocumentLoadSuccess = (data) => {
+  //   setNumPages(data.numPages);
+  // };
 
   const onDownload = async () => {
     DownloadFile('file', file.id, file.display_name);
@@ -51,31 +51,9 @@ function FilePreview() {
     <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
       <div className="pb-16 space-y-6">
         <div>
-          <div className="block w-full rounded-md overflow-hidden">
-
-            {(extension === 'pdf') && (
-              <div className="h-full overflow-y-scroll overflow-x-hidden aspect-w-10 aspect-h-7 border-gray-200 border" id="PDF_PREVIEW">
-                <Document
-                  className="h-full"
-                  width={150}
-                  file="pdf"
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  {/* eslint-disable-next-line prefer-spread */}
-                  {Array.apply(null, Array(numPages))
-                    .map((x, i) => i + 1)
-                    .map((page) => <Page key={page} pageNumber={page} />)}
-                </Document>
-              </div>
-            )}
-
-            {(extension === 'jpeg' || extension === 'jpg' || extension === 'png') && (
-              <div className="w-full">
-                <img src="/pdf.svg" alt="file extension" className="object-cover" />
-              </div>
-            )}
+          <div className="block w-24 h-10 overflow-hidden">
+            <FileIcon extensionKey={extension} size={10} />
           </div>
-
           <div className="mt-4 flex items-start justify-between">
             <div>
               <h2 className="text-lg font-medium text-gray-900">
