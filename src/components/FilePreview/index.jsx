@@ -1,33 +1,23 @@
-import React from 'react';
-// import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
-// import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-// import { useGetFile } from '../../features/shared/sharedService';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   OutputDateTime,
   OutputFileSize,
-  // GetFileWithHeaders,
   DownloadFile,
 } from '../../app/helpers';
-import requestNew from '../../app/requestNew';
-import Toast from '../../common/Toast';
+
 import { FileIcon } from '../../common';
+import TeamMembersList from '../FolderPreview/SelectTeamMemberList';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;
   const size = file.size || file.file.size;
+  const [showPopup, setShowPopup] = useState(false);
 
   const extension = title.split('.').at(-1);
 
   const onDownload = async () => {
     DownloadFile('file', file.id, title);
-  };
-
-  const onClickHandler = async () => {
-    const request = await requestNew({ method: 'post', url: `files/${file.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
-    const type = request.success === true ? 'success' : 'error';
-    toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
   };
 
   return file ? (
@@ -47,7 +37,7 @@ function FilePreview({ file }) {
             </div>
           </div>
         </div>
-        <div className="flex">
+        <div className="flex relative">
           <button
             onClick={onDownload}
             type="button"
@@ -56,13 +46,13 @@ function FilePreview({ file }) {
             Download
           </button>
           <button
-            onClick={onClickHandler}
+            onClick={() => setShowPopup(true)}
             type="button"
-            disabled
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
           </button>
+          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderOrFileId={file.id} dataType="files" /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

@@ -17,14 +17,18 @@ const useGetTeamMembers = (currentUserId) => {
   return { data: teamMembers, status };
 };
 
-function TeamMembersList({ setShowPopup, folderId }) {
+function TeamMembersList({ setShowPopup, folderOrFileId, dataType }) {
   const { currentUserId } = useSelector((state) => state.auth);
   const { data, status } = useGetTeamMembers(currentUserId);
 
   const onClickUser = async (id) => {
-    const request = await requestNew({ method: 'post', url: `folders/${folderId}/share/${id}` });
-    const type = request.success === true ? 'success' : 'error';
-    toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
+    try {
+      const request = await requestNew({ method: 'post', url: `${dataType}/${folderOrFileId}/share/${id}` });
+      toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
+    } catch (e) {
+      console.error(e);
+      toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
+    }
     setShowPopup(false);
   };
 
@@ -51,7 +55,8 @@ function TeamMembersList({ setShowPopup, folderId }) {
 
 TeamMembersList.propTypes = {
   setShowPopup: PropTypes.func.isRequired,
-  folderId: PropTypes.string.isRequired,
+  folderOrFileId: PropTypes.string.isRequired,
+  dataType: PropTypes.string.isRequired,
 };
 
 export default TeamMembersList;

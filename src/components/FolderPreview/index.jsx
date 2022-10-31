@@ -1,25 +1,13 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-// import toast from 'react-hot-toast';
 import { FileIcon } from '../../common';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
-// import requestNew from '../../app/requestNew';
-// import Toast from '../../common/Toast';
 import TeamMembersList from './SelectTeamMemberList';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
   const [showPopup, setShowPopup] = useState(false);
-
-  const onClickShare = async () => {
-    setShowPopup(!showPopup);
-    // const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
-    // const request = await requestNew({ method: 'get', url: 'workspace/team-members' });
-    // console.log(JSON.stringify(request));
-    // const type = request.success === true ? 'success' : 'error';
-    // toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
-  };
 
   return folder ? (
     <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
@@ -47,13 +35,13 @@ function FolderPreview({ folder }) {
             Download
           </button>
           <button
-            onClick={onClickShare}
+            onClick={() => setShowPopup(true)}
             type="button"
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
           </button>
-          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderId={folder.id} /> : null}
+          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderOrFileId={folder.id} dataType="folders" /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
