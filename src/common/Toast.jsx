@@ -11,6 +11,10 @@ export default function Toast({
   showClose,
   toastId,
 }) {
+  if (title === 'Query data cannot be undefined') {
+    return <> </>;
+  }
+
   return (
     <div
       aria-live="assertive"
