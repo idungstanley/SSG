@@ -1,16 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { PropTypes } from 'prop-types';
 import toast from 'react-hot-toast';
-import { useGetFolder } from '../../../../features/shared/sharedService';
-import { FileIcon } from '../../../../common';
-import { OutputDateTime } from '../../../../app/helpers';
-import Tabs from '../../../explorer/ExplorerPage/components/preview/FolderPreview/Tabs';
-import requestNew from '../../../../app/requestNew';
-import Toast from '../../../../common/Toast';
+import { FileIcon } from '../../common';
+import { OutputDateTime } from '../../app/helpers';
+import Tabs from './Tabs';
+import requestNew from '../../app/requestNew';
+import Toast from '../../common/Toast';
 
-function FolderPreview() {
-  const selectedItemId = useSelector((state) => state.shared.selectedItemId);
-  const { data: folder } = useGetFolder(selectedItemId);
+function FolderPreview({ folder }) {
+  const title = folder.name || folder.folder.name;
 
   const onClickHandler = async () => {
     const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
@@ -18,7 +16,7 @@ function FolderPreview() {
     toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
   };
 
-  return folder && selectedItemId ? (
+  return folder ? (
     <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
       <div className="pb-16 space-y-6">
         <div>
@@ -29,7 +27,7 @@ function FolderPreview() {
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 <span className="sr-only">Details for </span>
-                {folder.folder.name}
+                {title}
               </h2>
               <p className="text-sm font-medium text-gray-500">Folder</p>
             </div>
@@ -64,15 +62,20 @@ function FolderPreview() {
               <dt className="text-gray-500">Created</dt>
               <dd className="text-gray-900">{ OutputDateTime(folder.created_at) }</dd>
             </div>
-            <h3 className="font-medium text-gray-900 py-2">Shared by</h3>
-            <div className="py-3 flex justify-between text-sm font-medium">
-              <dt className="text-gray-500">User name</dt>
-              <dd className="text-gray-900">{folder.shared_by.user.name}</dd>
-            </div>
-            <div className="py-3 flex justify-between text-sm font-medium">
-              <dt className="text-gray-500">User email</dt>
-              <dd className="text-gray-900">{folder.shared_by.user.email}</dd>
-            </div>
+            {folder.shared_by
+              ? (
+                <>
+                  <h3 className="font-medium text-gray-900 py-2">Shared by</h3>
+                  <div className="py-3 flex justify-between text-sm font-medium">
+                    <dt className="text-gray-500">User name</dt>
+                    <dd className="text-gray-900">{folder.shared_by.user.name}</dd>
+                  </div>
+                  <div className="py-3 flex justify-between text-sm font-medium">
+                    <dt className="text-gray-500">User email</dt>
+                    <dd className="text-gray-900">{folder.shared_by.user.email}</dd>
+                  </div>
+                </>
+              ) : null }
           </dl>
         </div>
 
@@ -87,5 +90,23 @@ function FolderPreview() {
     </aside>
   ) : null;
 }
+
+FolderPreview.propTypes = {
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
+    folder: PropTypes.shape({
+      name: PropTypes.string,
+    }).isRequired,
+    shared_by: PropTypes.shape({
+      user: PropTypes.shape({
+        name: PropTypes.string,
+        email: PropTypes.string,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default FolderPreview;

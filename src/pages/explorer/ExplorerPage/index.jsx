@@ -10,8 +10,6 @@ import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import ExplorerTable from './components/ExplorerTable';
 import Toolbar from './components/Toolbar';
-// import FilePreview from './components/preview/FilePreview';
-import FolderPreview from './components/preview/FolderPreview';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
@@ -20,6 +18,7 @@ import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
 import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../features/explorer/explorerService';
 import FilePreview from '../../../components/FilePreview';
+import FolderPreview from '../../../components/FolderPreview';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
@@ -78,6 +77,7 @@ export default function ExplorerPage() {
   });
 
   const { data: file } = useGetFile(selectedItemId);
+  const { data: folder } = useGetFolder(selectedItemId);
 
   return (
     <>
@@ -131,7 +131,7 @@ export default function ExplorerPage() {
           </div>
 
           {selectedItemType === 'file' && selectedItemId && <FilePreview file={file} />}
-          {selectedItemType === 'folder' && selectedItemId && <FolderPreview />}
+          {selectedItemType === 'folder' && selectedItemId && <FolderPreview folder={folder} />}
         </div>
       </div>
 
