@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 import { FileIcon } from '../../common';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
-import requestNew from '../../app/requestNew';
-import Toast from '../../common/Toast';
+// import requestNew from '../../app/requestNew';
+// import Toast from '../../common/Toast';
+import TeamMembersList from './SelectTeamMemberList';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
+  const [showPopup, setShowPopup] = useState(false);
 
-  const onClickHandler = async () => {
-    const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
-    const type = request.success === true ? 'success' : 'error';
-    toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
+  const onClickShare = async () => {
+    setShowPopup(!showPopup);
+    // const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/3037545c-461a-4039-a296-e9ff6916cb0f` });
+    // const request = await requestNew({ method: 'get', url: 'workspace/team-members' });
+    // console.log(JSON.stringify(request));
+    // const type = request.success === true ? 'success' : 'error';
+    // toast.custom((t) => (<Toast type={type} title={request.message.title} body={null} toastId={t.id} />));
   };
 
   return folder ? (
@@ -34,7 +39,7 @@ function FolderPreview({ folder }) {
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex relative">
           <button
             type="button"
             className="flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -42,15 +47,14 @@ function FolderPreview({ folder }) {
             Download
           </button>
           <button
-            onClick={onClickHandler}
+            onClick={onClickShare}
             type="button"
-            disabled
             className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
           </button>
+          {showPopup ? <TeamMembersList /> : null}
         </div>
-
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
           <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
@@ -99,13 +103,13 @@ FolderPreview.propTypes = {
     updated_at: PropTypes.string,
     folder: PropTypes.shape({
       name: PropTypes.string,
-    }).isRequired,
+    }),
     shared_by: PropTypes.shape({
       user: PropTypes.shape({
         name: PropTypes.string,
         email: PropTypes.string,
       }).isRequired,
-    }).isRequired,
+    }),
   }).isRequired,
 };
 
