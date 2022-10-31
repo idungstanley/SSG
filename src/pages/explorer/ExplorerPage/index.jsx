@@ -10,7 +10,7 @@ import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import ExplorerTable from './components/ExplorerTable';
 import Toolbar from './components/Toolbar';
-import FilePreview from './components/preview/FilePreview';
+// import FilePreview from './components/preview/FilePreview';
 import FolderPreview from './components/preview/FolderPreview';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
@@ -18,7 +18,8 @@ import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver
 import RenameFileSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver';
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
-import { useGetExplorerFilesAndFolders, useGetFolder } from '../../../features/explorer/explorerService';
+import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../features/explorer/explorerService';
+import FilePreview from '../../../components/FilePreview';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
@@ -76,6 +77,8 @@ export default function ExplorerPage() {
     }
   });
 
+  const { data: file } = useGetFile(selectedItemId);
+
   return (
     <>
       <DashboardModal
@@ -127,7 +130,7 @@ export default function ExplorerPage() {
             )}
           </div>
 
-          {selectedItemType === 'file' && selectedItemId && <FilePreview />}
+          {selectedItemType === 'file' && selectedItemId && <FilePreview file={file} />}
           {selectedItemType === 'folder' && selectedItemId && <FolderPreview />}
         </div>
       </div>
