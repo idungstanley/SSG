@@ -110,12 +110,11 @@ export const useGetSharedFilesAndFolders = () => {
     },
   );
 
+  const data = files.data && folders.data && { files: files.data.data.files, folders: folders.data.data.folders };
+
   return {
-    data: {
-      files: files.data?.data.files,
-      filesStatus: files.data?.success,
-      folders: folders.data?.data.folders,
-      foldersStatus: folders.data?.success,
-    },
+    data,
+    filesStatus: files.status,
+    foldersStatus: folders.status,
   };
 };

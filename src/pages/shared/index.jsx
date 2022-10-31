@@ -5,9 +5,12 @@ import { Spinner } from '../../common';
 import SharedTable from './components/SharedTable';
 import FilePreview from './components/FilePreview';
 import FolderPreview from './components/FolderPreview';
+import { EmptyStateSimple } from '../../components';
 
 export default function SharedPage() {
-  const { data } = useGetSharedFilesAndFolders();
+  const {
+    data, filesStatus, foldersStatus,
+  } = useGetSharedFilesAndFolders();
 
   const selectedItemType = useSelector((state) => state.shared.selectedItemType);
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
@@ -16,28 +19,23 @@ export default function SharedPage() {
     <div className="h-full flex flex-col w-full">
       <div className="flex flex-row overflow-hidden h-full">
         <div className="flex-1 overflow-y-scroll">
-          {data.filesStatus === true && data.files.length === 0 ? (
-          // <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-            <p className="text-red-700 font-bold text-center my-2">No found shared files</p>
-          // </div>
-          ) : <> </> }
-          {data.foldersStatus === true && data.folders.length === 0 ? (
-          // <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-            <p className="text-red-700 font-bold text-center my-2">No found shared folders</p>
-          // </div>
-          ) : <> </> }
-          {data.filesStatus && data.foldersStatus ? (
-            <SharedTable data={data} tableTitle="Notes" />
-          ) : (
+          {filesStatus === 'loading' || foldersStatus === 'loading' ? (
             <div className="mx-auto w-6 mt-10 justify-center">
               <Spinner size={22} color="#0F70B7" />
             </div>
-          )}
+          ) : filesStatus === 'error' || foldersStatus === 'error' ? <p>Error</p> : data.folders === 0 || data.files === 0 ? (
+            <div className="flex flex-1 h-full bg-white">
+              <div className="m-auto">
+                <EmptyStateSimple
+                  title="No shared files or folders"
+                  description="Ask someone to share a folder or file with you"
+                />
+              </div>
+            </div>
+          ) : <SharedTable data={data} /> }
         </div>
 
         {selectedItemType === 'file' ? selectedItemId && <FilePreview /> : selectedItemId && <FolderPreview />}
-        {/* {selectedItemType === 'file' && selectedItemId && <FilePreview />}
-        {selectedItemType === 'folder' && selectedItemId && <FolderPreview />} */}
       </div>
     </div>
   );
