@@ -36,7 +36,6 @@ function ComboBox({ setShowPopup, folderOrFileId, dataType }) {
         const request = await requestNew({ method: 'post', url: `${dataType}/${folderOrFileId}/share/${id}` });
         toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
       } catch (e) {
-        console.error(e.data.message.title);
         toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
       }
       setShowPopup(false);
@@ -59,7 +58,7 @@ function ComboBox({ setShowPopup, folderOrFileId, dataType }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
             </svg>
           </Combobox.Button>
-          <svg onClick={onClickUser} role="button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6 absolute top-2 -right-8 cursor-pointer transition-all duration-300 ${selectedUser ? 'stroke-current text-indigo-600' : null}`}>
+          <svg onClick={() => onClickUser(selectedUser.id)} role="button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6 absolute top-2 -right-8 cursor-pointer transition-all duration-300 ${selectedUser ? 'stroke-current text-indigo-600' : null}`}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
           </svg>
           {users && filteredUsers.length > 0 && (

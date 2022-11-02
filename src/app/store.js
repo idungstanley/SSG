@@ -28,7 +28,9 @@ export const store = configureStore({
     teamMemberGroup: teamMemberGroupSlice,
     shared: sharedSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });
 
 setupListeners(store.dispatch);
