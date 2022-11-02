@@ -7,7 +7,7 @@ import {
 } from '../../app/helpers';
 
 import { FileIcon } from '../../common';
-import ComboBox from '../Combobox';
+import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;

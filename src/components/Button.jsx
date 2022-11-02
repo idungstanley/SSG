@@ -108,7 +108,10 @@ Button.propTypes = {
     PropTypes.string,
     PropTypes.object,
   ]),
-  width: PropTypes.number,
+  width: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   height: PropTypes.string,
   padding: PropTypes.string,
   disabled: PropTypes.bool,

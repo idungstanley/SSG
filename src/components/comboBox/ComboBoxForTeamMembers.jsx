@@ -22,7 +22,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function ComboBox({ setShowPopup, folderOrFileId, dataType }) {
+function ComboBoxForTeamMembers({ setShowPopup, folderOrFileId, dataType }) {
   const { currentUserId } = useSelector((state) => state.auth);
   const { users } = useGetTeamMembers(currentUserId);
   const [query, setQuery] = useState('');
@@ -95,10 +95,10 @@ function ComboBox({ setShowPopup, folderOrFileId, dataType }) {
   );
 }
 
-ComboBox.propTypes = {
+ComboBoxForTeamMembers.propTypes = {
   setShowPopup: PropTypes.func.isRequired,
   folderOrFileId: PropTypes.string.isRequired,
   dataType: PropTypes.string.isRequired,
 };
 
-export default ComboBox;
+export default ComboBoxForTeamMembers;

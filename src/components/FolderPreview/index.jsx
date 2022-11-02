@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import { FileIcon } from '../../common';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
-import ComboBox from '../Combobox';
+import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
