@@ -7,7 +7,7 @@ import {
 } from '../../app/helpers';
 
 import { FileIcon } from '../../common';
-import TeamMembersList from '../FolderPreview/SelectTeamMemberList';
+import ComboBox from '../Combobox';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;
@@ -52,7 +52,7 @@ function FilePreview({ file }) {
           >
             Share
           </button>
-          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderOrFileId={file.id} dataType="files" /> : null}
+          {showPopup ? <ComboBox dataType="files" folderOrFileId={file.id} setShowPopup={setShowPopup} /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

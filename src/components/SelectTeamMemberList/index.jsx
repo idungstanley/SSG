@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 import toast from 'react-hot-toast';
-import Toast from '../../../common/Toast';
-import requestNew from '../../../app/requestNew';
+import Toast from '../../common/Toast';
+import requestNew from '../../app/requestNew';
 
 const useGetTeamMembers = (currentUserId) => {
   const { data, status } = useQuery(['team-members'], async () => requestNew({
@@ -26,7 +26,7 @@ function TeamMembersList({ setShowPopup, folderOrFileId, dataType }) {
       const request = await requestNew({ method: 'post', url: `${dataType}/${folderOrFileId}/share/${id}` });
       toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
     } catch (e) {
-      console.error(e);
+      console.error(e.data.message.title);
       toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
     }
     setShowPopup(false);

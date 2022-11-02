@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import { FileIcon } from '../../common';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
-import TeamMembersList from './SelectTeamMemberList';
+import ComboBox from '../Combobox';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
@@ -41,7 +41,7 @@ function FolderPreview({ folder }) {
           >
             Share
           </button>
-          {showPopup ? <TeamMembersList setShowPopup={setShowPopup} folderOrFileId={folder.id} dataType="folders" /> : null}
+          {showPopup ? <ComboBox dataType="folders" folderOrFileId={folder.id} setShowPopup={setShowPopup} /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
