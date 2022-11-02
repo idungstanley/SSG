@@ -169,7 +169,7 @@ function SharedTable({ data, tableTitle }) {
       const processedFolders = data.folders.map((folder, index) => ({
         full_object: folder,
         name: folder.folder.name,
-        created_at: null,
+        created_at: folder.folder.created_at,
         shared_by: folder.shared_by.user.name,
         item_id_raw: folder.id,
         item_id_with_type: `folder|${folder.id}`,
