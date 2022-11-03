@@ -80,8 +80,12 @@ function PermissionsManagement({ dataId, type }) {
             </svg>
           </button>
           <div className="flex flex-col gap-3">
-            {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
-            {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:" /> : null}
+            {type === 'folder' ? (
+              <>
+                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
+                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:" /> : null}
+              </>
+            ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
           </div>
         </div>
       ) : null}
