@@ -8,6 +8,7 @@ import {
 
 import { FileIcon } from '../../common';
 import ComboBox from '../comboBox/ComboBoxForTeamMembers';
+import PermissionsManagement from '../PermissionsManagement';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;
@@ -21,7 +22,8 @@ function FilePreview({ file }) {
   };
 
   return file ? (
-    <aside className="hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
+    <aside className="relative hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
+      <PermissionsManagement dataId={file.id} type="file" />
       <div className="pb-16 space-y-6">
         <div>
           <div className="block w-24 h-10 overflow-hidden">

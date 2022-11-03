@@ -13,6 +13,10 @@ export default function SelectMenuTeamMembers({
   type,
   title,
 }) {
+  if (!teamMembers.length) {
+    return <> </>;
+  }
+
   return (
     <Listbox value={selectedData} onChange={setSelectedData}>
       {({ open }) => (

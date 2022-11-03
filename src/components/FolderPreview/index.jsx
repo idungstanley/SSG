@@ -12,7 +12,7 @@ function FolderPreview({ folder }) {
 
   return folder ? (
     <aside className="relative hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
-      <PermissionsManagement folderId={folder.id} />
+      <PermissionsManagement dataId={folder.id} type="folder" />
       <div className="pb-16 space-y-6">
         <div>
           <div className="block w-24 h-10 overflow-hidden">

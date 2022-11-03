@@ -4,21 +4,23 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PropTypes } from 'prop-types';
 import requestNew from '../../app/requestNew';
-import SelectMenuTeamMembers from '../selectMenu';
-import DisplayData from './components/DisplaySelectedData';
+import SelectAndDisplayData from './components/SelectAndDisplayData';
 
-const useGetFolderPermissions = (id) => {
-  const { data, status } = useQuery([`folder-permissions-${id}`], async () => requestNew({
-    url: `folders/${id}/access`,
+const useGetDataPermissions = (id, type) => {
+  const url = type === 'folder' ? `folders/${id}/access` : `files/${id}/access`;
+  const queryKey = [`${type}-permissions-${id}`];
+
+  const { data, status } = useQuery(queryKey, async () => requestNew({
+    url,
     method: 'GET',
   }));
 
   return { data: data?.data, status };
 };
 
-function PermissionsManagement({ folderId }) {
+function PermissionsManagement({ dataId, type }) {
   const [showPopup, setShowPopup] = useState(false);
-  const { data } = useGetFolderPermissions(folderId);
+  const { data } = useGetDataPermissions(dataId, type);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
@@ -64,6 +66,8 @@ function PermissionsManagement({ folderId }) {
     setSelectedUser(null);
   };
 
+  const usersList = data ? (type === 'folder' ? data : data.file_members) : null;
+
   return (
     <>
       {showPopup ? <div className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0" tabIndex={0} role="button" onClick={hidePopup} onKeyDown={() => {}}> </div> : null}
@@ -76,26 +80,8 @@ function PermissionsManagement({ folderId }) {
             </svg>
           </button>
           <div className="flex flex-col gap-3">
-            {data ? <SelectMenuTeamMembers teamMembers={data.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} type="user" title="Select team member:" /> : null}
-            {selectedUser ? (
-              <div className="border rounded-xl p-2 mt-2 font-medium">
-                <DisplayData data={teamMemberData} />
-                <div className="flex justify-between content-center text-sm mt-3">
-                  <button className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Change access</button>
-                  <button className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Remove access</button>
-                </div>
-              </div>
-            ) : null}
-            {data ? <SelectMenuTeamMembers teamMembers={data.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} type="group" title="Select team member group:" /> : null}
-            {selectedGroup ? (
-              <div className="border rounded-xl p-2 mt-2 font-medium">
-                <DisplayData data={groupData} />
-                <div className="flex justify-between content-center text-sm mt-3">
-                  <button className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Change access</button>
-                  <button className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Remove access</button>
-                </div>
-              </div>
-            ) : null}
+            {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
+            {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:" /> : null}
           </div>
         </div>
       ) : null}
@@ -104,7 +90,8 @@ function PermissionsManagement({ folderId }) {
 }
 
 PermissionsManagement.propTypes = {
-  folderId: PropTypes.string.isRequired,
+  dataId: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default PermissionsManagement;
