@@ -6,15 +6,21 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function SelectMenuTeamMembers({ teamMembers, selectedUser, setSelectedUser }) {
+export default function SelectMenuTeamMembers({
+  teamMembers,
+  selectedData,
+  setSelectedData,
+  type,
+  title,
+}) {
   return (
-    <Listbox value={selectedUser} onChange={setSelectedUser}>
+    <Listbox value={selectedData} onChange={setSelectedData}>
       {({ open }) => (
-        <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">Select team member:</Listbox.Label>
+        <div>
+          <Listbox.Label className="block text-sm font-medium text-gray-700">{title}</Listbox.Label>
           <div className="relative mt-1">
             <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-              <span className="block truncate">{selectedUser ? selectedUser.team_member.user.name : 'Select...'}</span>
+              <span className="block truncate">{selectedData ? (type === 'user' ? selectedData.team_member.user.name : selectedData.team_member_group.name) : 'Select...'}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
@@ -39,10 +45,10 @@ export default function SelectMenuTeamMembers({ teamMembers, selectedUser, setSe
                     {({ selectedId, active }) => (
                       <>
                         <span className={classNames(selectedId ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                          {person.team_member.user.name}
+                          {type === 'user' ? person.team_member.user.name : person.team_member_group.name}
                         </span>
 
-                        {selectedUser ? (
+                        {selectedData ? (
                           <span
                             className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}
                           >
@@ -58,18 +64,20 @@ export default function SelectMenuTeamMembers({ teamMembers, selectedUser, setSe
               </Listbox.Options>
             </Transition>
           </div>
-        </>
+        </div>
       )}
     </Listbox>
   );
 }
 
 SelectMenuTeamMembers.defaultProps = {
-  selectedUser: null,
+  selectedData: null,
 };
 
 SelectMenuTeamMembers.propTypes = {
   teamMembers: PropTypes.array.isRequired,
-  selectedUser: PropTypes.object,
-  setSelectedUser: PropTypes.func.isRequired,
+  selectedData: PropTypes.object,
+  type: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  setSelectedData: PropTypes.func.isRequired,
 };
