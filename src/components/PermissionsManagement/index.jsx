@@ -1,11 +1,14 @@
 /* eslint jsx-a11y/click-events-have-key-events: 0 */
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
+/* eslint react/jsx-wrap-multilines: 0 */
+/* eslint react/jsx-closing-tag-location: 0 */
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PropTypes } from 'prop-types';
 import requestNew from '../../app/requestNew';
 import SelectAndDisplayData from './components/SelectAndDisplayData';
-import AddAccessToData from './components/AddAccessToData';
+import AddAccess from './components/AddAccess';
+import RemoveAccess from './components/RemoveAccess';
 
 const useGetDataPermissions = (id, type) => {
   const url = `${type}s/${id}/access`;
@@ -89,12 +92,18 @@ function PermissionsManagement({ dataId, type }) {
             <h2>{`1. View ${type} access`}</h2>
             {type === 'folder' ? (
               <>
-                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
-                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:" /> : null}
+                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:">
+                  {selectedUser ? <RemoveAccess type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} /> : null}
+                </SelectAndDisplayData> : null}
+                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:">
+                  <p> </p>
+                </SelectAndDisplayData> : null}
               </>
-            ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
+            ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:">
+              {selectedUser ? <RemoveAccess type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} /> : null}
+            </SelectAndDisplayData> : null}
           </div>
-          <AddAccessToData type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]} />
+          <AddAccess type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]} />
         </div>
       ) : null}
     </>

@@ -9,7 +9,7 @@ export const useGetTeamMembers = (currentUserId, activeMembers) => {
     url: 'settings/team-members',
     method: 'GET',
   }));
-  const activeMembersWithCurrent = [currentUserId];
+  const activeMembersWithCurrent = currentUserId ? [currentUserId] : [];
 
   if (activeMembers) {
     activeMembersWithCurrent.push(...activeMembers);

@@ -6,7 +6,7 @@ import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import ComboBoxForTeamMembers, { useGetTeamMembers } from '../../comboBox/ComboBoxForTeamMembers';
 
-function AddAccessToData({
+function AddAccess({
   type,
   setShowPopup,
   dataId,
@@ -41,7 +41,7 @@ function AddAccessToData({
   );
 }
 
-AddAccessToData.propTypes = {
+AddAccess.propTypes = {
   setShowPopup: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   dataId: PropTypes.string.isRequired,
@@ -49,4 +49,4 @@ AddAccessToData.propTypes = {
   activeMembers: PropTypes.array.isRequired,
 };
 
-export default AddAccessToData;
+export default AddAccess;
