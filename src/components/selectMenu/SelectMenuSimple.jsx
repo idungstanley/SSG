@@ -16,7 +16,7 @@ export default function SelectMenuSimple({
   const [processedOptions, setProcessedOptions] = useState([]);
 
   useEffect(() => {
-    setProcessedOptions([...[{ id: null, name: 'Select...' }], ...options]);
+    setProcessedOptions([...options]);
   }, [options]);
 
   if (processedOptions.length === 0) {

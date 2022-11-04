@@ -9,6 +9,7 @@ import requestNew from '../../app/requestNew';
 import SelectAndDisplayData from './components/SelectAndDisplayData';
 import AddAccess from './components/AddAccess';
 import RemoveAccess from './components/RemoveAccess';
+import ChangeAccessLevel from './components/ChangeAccessLevel';
 
 const useGetDataPermissions = (id, type) => {
   const url = `${type}s/${id}/access`;
@@ -94,13 +95,13 @@ function PermissionsManagement({ dataId, type }) {
               <>
                 {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:">
                   {selectedUser ? <RemoveAccess type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} /> : null}
+                  {selectedUser ? <ChangeAccessLevel type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} actualAccess={selectedUser.access_level.key} /> : null}
                 </SelectAndDisplayData> : null}
-                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:">
-                  <p> </p>
-                </SelectAndDisplayData> : null}
+                {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_member_groups} selectedData={selectedGroup} setSelectedData={setSelectedGroup} columnsData={groupData} type="group" title="Select team members group:" /> : null}
               </>
             ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:">
               {selectedUser ? <RemoveAccess type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} /> : null}
+              {selectedUser ? <ChangeAccessLevel type={type} dataId={dataId} refetch={refetch} selectedUserId={selectedUser.team_member.user.id} setSelectedUser={setSelectedUser} actualAccess={selectedUser.access_level.key} /> : null}
             </SelectAndDisplayData> : null}
           </div>
           <AddAccess type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]} />

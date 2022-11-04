@@ -20,8 +20,6 @@ function SelectAndDisplayData({
           <Columns data={columnsData} />
           <div className="flex justify-between content-center text-sm mt-3">
             {children}
-            {/* <button className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Change access</button>
-            <button onClick={removeAccess} className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300" type="button">Remove access</button> */}
           </div>
         </div>
       ) : null}
