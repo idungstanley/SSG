@@ -72,6 +72,7 @@ function PermissionsManagement({ dataId, type }) {
   if (status === 'error' || status === 'loading') {
     return <> </>;
   }
+  const teamMembers = type === 'folder' ? data.folder_team_members : data.file_members;
 
   return (
     <>
@@ -93,7 +94,7 @@ function PermissionsManagement({ dataId, type }) {
               </>
             ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
           </div>
-          <AddAccessToData type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} />
+          <AddAccessToData type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]} />
         </div>
       ) : null}
     </>

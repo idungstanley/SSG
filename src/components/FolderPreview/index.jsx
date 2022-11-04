@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { FileIcon } from '../../common';
 import Toast from '../../common/Toast';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
-import ComboBox from '../comboBox/ComboBoxForTeamMembers';
+import ComboBox, { useGetTeamMembers } from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
 import requestNew from '../../app/requestNew';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
   const [showPopup, setShowPopup] = useState(false);
+  const { currentUserId } = useSelector((state) => state.auth);
+  const { users } = useGetTeamMembers(currentUserId);
 
   const onClickUser = async (id) => {
     if (id) {
@@ -58,7 +61,7 @@ function FolderPreview({ folder }) {
           >
             Share
           </button>
-          {showPopup ? <ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} /> : null}
+          {showPopup && users ? <ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} users={users} /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

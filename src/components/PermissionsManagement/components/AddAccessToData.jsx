@@ -1,16 +1,21 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { PropTypes } from 'prop-types';
+import { useSelector } from 'react-redux';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
-import ComboBoxForTeamMembers from '../../comboBox/ComboBoxForTeamMembers';
+import ComboBoxForTeamMembers, { useGetTeamMembers } from '../../comboBox/ComboBoxForTeamMembers';
 
 function AddAccessToData({
   type,
   setShowPopup,
   dataId,
   refetch,
+  activeMembers,
 }) {
+  const { currentUserId } = useSelector((state) => state.auth);
+  const { users } = useGetTeamMembers(currentUserId, activeMembers);
+
   const onClickUser = async (id) => {
     if (id) {
       const url = `${type}s/${dataId}/access/add-access`;
@@ -24,10 +29,14 @@ function AddAccessToData({
     }
   };
 
+  if (users && !users.length) {
+    return null;
+  }
+
   return (
     <>
       <h2>{`2. Add access to ${type}`}</h2>
-      <ComboBoxForTeamMembers setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={false} />
+      {users ? <ComboBoxForTeamMembers setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={false} users={users} /> : null}
     </>
   );
 }
@@ -37,6 +46,7 @@ AddAccessToData.propTypes = {
   type: PropTypes.string.isRequired,
   dataId: PropTypes.string.isRequired,
   refetch: PropTypes.func.isRequired,
+  activeMembers: PropTypes.array.isRequired,
 };
 
 export default AddAccessToData;

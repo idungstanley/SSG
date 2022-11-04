@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import {
   OutputDateTime,
   OutputFileSize,
   DownloadFile,
 } from '../../app/helpers';
+import requestNew from '../../app/requestNew';
 import Toast from '../../common/Toast';
 import { FileIcon } from '../../common';
-import ComboBox from '../comboBox/ComboBoxForTeamMembers';
+import ComboBox, { useGetTeamMembers } from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
-import requestNew from '../../app/requestNew';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;
   const size = file.size || file.file.size;
   const [showPopup, setShowPopup] = useState(false);
+  const { currentUserId } = useSelector((state) => state.auth);
+  const { users } = useGetTeamMembers(currentUserId);
 
   const extension = title.split('.').at(-1);
 
@@ -68,7 +71,7 @@ function FilePreview({ file }) {
           >
             Share
           </button>
-          {showPopup ? (<ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} />) : null}
+          {showPopup && users ? (<ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} users={users} />) : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

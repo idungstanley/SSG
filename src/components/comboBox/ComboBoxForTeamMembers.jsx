@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
-import { useSelector } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-const useGetTeamMembers = (currentUserId) => {
+export const useGetTeamMembers = (currentUserId, activeMembers) => {
   const { data, status } = useQuery(['team-members'], async () => requestNew({
     url: 'settings/team-members',
     method: 'GET',
   }));
+  const activeMembersWithCurrent = [currentUserId];
 
-  const teamMembers = data && data.data.team_members.filter((i) => i.user.id !== currentUserId);
+  if (activeMembers) {
+    activeMembersWithCurrent.push(...activeMembers);
+    activeMembersWithCurrent.filter((v, i, a) => a.indexOf(v) === i);
+  }
+
+  const teamMembers = data && data.data.team_members.filter((i) => !activeMembersWithCurrent.includes(i.user.id));
 
   return { users: teamMembers, status };
 };
@@ -20,9 +25,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function ComboBoxForTeamMembers({ setShowPopup, onClickArrow, absolute }) {
-  const { currentUserId } = useSelector((state) => state.auth);
-  const { users } = useGetTeamMembers(currentUserId);
+function ComboBoxForTeamMembers({
+  setShowPopup,
+  onClickArrow,
+  absolute,
+  users,
+}) {
   const [query, setQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -89,6 +97,7 @@ ComboBoxForTeamMembers.propTypes = {
   setShowPopup: PropTypes.func,
   onClickArrow: PropTypes.func.isRequired,
   absolute: PropTypes.bool.isRequired,
+  users: PropTypes.array.isRequired,
 };
 
 export default ComboBoxForTeamMembers;
