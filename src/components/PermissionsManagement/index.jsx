@@ -7,7 +7,7 @@ import requestNew from '../../app/requestNew';
 import SelectAndDisplayData from './components/SelectAndDisplayData';
 
 const useGetDataPermissions = (id, type) => {
-  const url = type === 'folder' ? `folders/${id}/access` : `files/${id}/access`;
+  const url = `${type}s/${id}/access`;
   const queryKey = [`${type}-permissions-${id}`];
 
   const { data, status } = useQuery(queryKey, async () => requestNew({
@@ -20,7 +20,7 @@ const useGetDataPermissions = (id, type) => {
 
 function PermissionsManagement({ dataId, type }) {
   const [showPopup, setShowPopup] = useState(false);
-  const { data } = useGetDataPermissions(dataId, type);
+  const { data, status } = useGetDataPermissions(dataId, type);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
@@ -67,6 +67,10 @@ function PermissionsManagement({ dataId, type }) {
   };
 
   const usersList = data ? (type === 'folder' ? data : data.file_members) : null;
+
+  if (status === 'error' || status === 'loading') {
+    return <> </>;
+  }
 
   return (
     <>

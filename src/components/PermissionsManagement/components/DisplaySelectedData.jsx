@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
-function DisplayData({ data }) {
+function Columns({ data }) {
   if (!data) {
     return <> </>;
   }
@@ -18,8 +18,8 @@ function DisplayData({ data }) {
   );
 }
 
-DisplayData.propTypes = {
+Columns.propTypes = {
   data: PropTypes.array.isRequired,
 };
 
-export default DisplayData;
+export default Columns;

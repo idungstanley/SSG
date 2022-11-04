@@ -21,6 +21,10 @@ const onError = (error) => {
   var body;
 
   if (error.status === 403) {
+    return;
+  }
+
+  if (error.status === 403) {
     title = 'Oops! You are not authorized to perform this action.';
   } else if (error.status === 401) {
     title = 'Oops! You are no longer authenticated. Please logout and login again.';
