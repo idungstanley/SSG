@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
 import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
 import { PropTypes } from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import Toast from '../../common/Toast';
 
 const useGetTeamMembers = (currentUserId) => {
   const { data, status } = useQuery(['team-members'], async () => requestNew({
@@ -22,7 +20,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function ComboBoxForTeamMembers({ setShowPopup, folderOrFileId, dataType }) {
+function ComboBoxForTeamMembers({ setShowPopup, onClickArrow, absolute }) {
   const { currentUserId } = useSelector((state) => state.auth);
   const { users } = useGetTeamMembers(currentUserId);
   const [query, setQuery] = useState('');
@@ -30,22 +28,10 @@ function ComboBoxForTeamMembers({ setShowPopup, folderOrFileId, dataType }) {
 
   const filteredUsers = query === '' ? users : users.filter((person) => person.user.name.toLowerCase().includes(query.toLowerCase()));
 
-  const onClickUser = async (id) => {
-    if (selectedUser) {
-      try {
-        const request = await requestNew({ method: 'post', url: `${dataType}/${folderOrFileId}/share/${id}` });
-        toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
-      } catch (e) {
-        toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
-      }
-      setShowPopup(false);
-    }
-  };
-
   return (
     <>
-      <div className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0" tabIndex={0} role="button" onClick={() => setShowPopup(false)} onKeyDown={() => {}}> </div>
-      <Combobox as="div" value={selectedUser} onChange={setSelectedUser} className="absolute top-12 right-0 bg-white border-2 p-2 pr-10 rounded-xl">
+      {absolute ? <div className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0" tabIndex={0} role="button" onClick={() => setShowPopup(false)} onKeyDown={() => {}}> </div> : null}
+      <Combobox as="div" value={selectedUser} onChange={setSelectedUser} className={`${absolute ? 'absolute top-12 right-0' : null} bg-white border-2 p-2 pr-10 rounded-xl`}>
         <Combobox.Label className="block text-sm font-medium text-gray-700">Select member:</Combobox.Label>
         <div className="relative mt-1">
           <Combobox.Input
@@ -58,7 +44,7 @@ function ComboBoxForTeamMembers({ setShowPopup, folderOrFileId, dataType }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
             </svg>
           </Combobox.Button>
-          <svg onClick={() => onClickUser(selectedUser.id)} role="button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6 absolute top-2 -right-8 cursor-pointer transition-all duration-300 ${selectedUser ? 'stroke-current text-indigo-600' : null}`}>
+          <svg onClick={() => onClickArrow(selectedUser.id)} role="button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6 absolute top-2 -right-8 cursor-pointer transition-all duration-300 ${selectedUser ? 'stroke-current text-indigo-600' : null}`}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
           </svg>
           {users && filteredUsers.length > 0 && (
@@ -95,10 +81,14 @@ function ComboBoxForTeamMembers({ setShowPopup, folderOrFileId, dataType }) {
   );
 }
 
+ComboBoxForTeamMembers.defaultProps = {
+  setShowPopup: () => {},
+};
+
 ComboBoxForTeamMembers.propTypes = {
-  setShowPopup: PropTypes.func.isRequired,
-  folderOrFileId: PropTypes.string.isRequired,
-  dataType: PropTypes.string.isRequired,
+  setShowPopup: PropTypes.func,
+  onClickArrow: PropTypes.func.isRequired,
+  absolute: PropTypes.bool.isRequired,
 };
 
 export default ComboBoxForTeamMembers;
