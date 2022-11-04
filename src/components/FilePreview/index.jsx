@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import toast from 'react-hot-toast';
 import {
   OutputDateTime,
   OutputFileSize,
   DownloadFile,
 } from '../../app/helpers';
-
+import Toast from '../../common/Toast';
 import { FileIcon } from '../../common';
 import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
+import requestNew from '../../app/requestNew';
 
 function FilePreview({ file }) {
   const title = file.display_name ? file.display_name : file.file.display_name;
@@ -19,6 +21,18 @@ function FilePreview({ file }) {
 
   const onDownload = async () => {
     DownloadFile('file', file.id, title);
+  };
+
+  const onClickUser = async (id) => {
+    if (id) {
+      try {
+        const request = await requestNew({ method: 'post', url: `files/${file.id}/share/${id}` });
+        toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
+      } catch (e) {
+        toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
+      }
+      setShowPopup(false);
+    }
   };
 
   return file ? (
@@ -54,7 +68,7 @@ function FilePreview({ file }) {
           >
             Share
           </button>
-          {showPopup ? <ComboBox dataType="files" folderOrFileId={file.id} setShowPopup={setShowPopup} /> : null}
+          {showPopup ? (<ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} />) : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

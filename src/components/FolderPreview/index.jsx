@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import toast from 'react-hot-toast';
 import { FileIcon } from '../../common';
+import Toast from '../../common/Toast';
 import { OutputDateTime } from '../../app/helpers';
 import Tabs from './Tabs';
 import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
+import requestNew from '../../app/requestNew';
 
 function FolderPreview({ folder }) {
   const title = folder.name || folder.folder.name;
   const [showPopup, setShowPopup] = useState(false);
+
+  const onClickUser = async (id) => {
+    if (id) {
+      try {
+        const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/${id}` });
+        toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
+      } catch (e) {
+        toast.custom((t) => (<Toast type="error" title="You don't have permission to share this." body={null} toastId={t.id} />));
+      }
+      setShowPopup(false);
+    }
+  };
 
   return folder ? (
     <aside className="relative hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
@@ -43,7 +58,7 @@ function FolderPreview({ folder }) {
           >
             Share
           </button>
-          {showPopup ? <ComboBox dataType="folders" folderOrFileId={folder.id} setShowPopup={setShowPopup} /> : null}
+          {showPopup ? <ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} /> : null}
         </div>
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>

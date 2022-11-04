@@ -5,22 +5,23 @@ import { useQuery } from '@tanstack/react-query';
 import { PropTypes } from 'prop-types';
 import requestNew from '../../app/requestNew';
 import SelectAndDisplayData from './components/SelectAndDisplayData';
+import AddAccessToData from './components/AddAccessToData';
 
 const useGetDataPermissions = (id, type) => {
   const url = `${type}s/${id}/access`;
   const queryKey = [`${type}-permissions-${id}`];
 
-  const { data, status } = useQuery(queryKey, async () => requestNew({
+  const { data, status, refetch } = useQuery(queryKey, async () => requestNew({
     url,
     method: 'GET',
   }));
 
-  return { data: data?.data, status };
+  return { data: data?.data, status, refetch };
 };
 
 function PermissionsManagement({ dataId, type }) {
   const [showPopup, setShowPopup] = useState(false);
-  const { data, status } = useGetDataPermissions(dataId, type);
+  const { data, status, refetch } = useGetDataPermissions(dataId, type);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
@@ -77,13 +78,14 @@ function PermissionsManagement({ dataId, type }) {
       {showPopup ? <div className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0" tabIndex={0} role="button" onClick={hidePopup} onKeyDown={() => {}}> </div> : null}
       <p onClick={() => setShowPopup(true)} className="text-right text-gray-600 underline cursor-pointer">Manage permissions</p>
       {showPopup ? (
-        <div className="absolute top-0 right-0 w-80 bg-white m-2 rounded-xl border p-3 flex flex-col z-10">
+        <div role="document" className="absolute top-0 right-0 w-80 bg-white m-2 rounded-xl border p-3 flex flex-col z-10 gap-3">
           <button type="button" onClick={hidePopup} className="flex w-full justify-end">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
           <div className="flex flex-col gap-3">
+            <h2>{`1. View ${type} access`}</h2>
             {type === 'folder' ? (
               <>
                 {usersList ? <SelectAndDisplayData usersList={usersList.folder_team_members} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
@@ -91,6 +93,7 @@ function PermissionsManagement({ dataId, type }) {
               </>
             ) : usersList ? <SelectAndDisplayData usersList={usersList} selectedData={selectedUser} setSelectedData={setSelectedUser} columnsData={teamMemberData} type="user" title="Select team member:" /> : null}
           </div>
+          <AddAccessToData type={type} setShowPopup={setShowPopup} dataId={dataId} refetch={refetch} />
         </div>
       ) : null}
     </>
