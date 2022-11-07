@@ -17,3 +17,17 @@ export const useGetFilteredTeamMembers = (currentUserId, activeMembers) => {
 
   return { users: teamMembers, status };
 };
+
+export const useGetDataPermissions = (id, type) => {
+  // type: folder or file
+
+  const url = `${type}s/${id}/access`;
+  const queryKey = [`${type}-permissions-${id}`];
+
+  const { data, status, refetch } = useQuery(queryKey, async () => requestNew({
+    url,
+    method: 'GET',
+  }));
+
+  return { data: data?.data, status, refetch };
+};
