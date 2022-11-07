@@ -23,19 +23,41 @@ function ChangeAccessLevel({
     const url = `${type}s/${dataId}/access/change-access-level`;
 
     try {
-      const request = await requestNew({ method: 'post', url, data: { access_type: 'member', access_to_id: userId, access_level_key: e.id } });
-      toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
+      const request = await requestNew({
+        method: 'post',
+        url,
+        data: {
+          access_type: 'member',
+          access_to_id: userId,
+          access_level_key: e.id,
+        },
+      });
+      toast.custom((t) => (
+        <Toast
+          type='success'
+          title={request.message.title}
+          body={null}
+          toastId={t.id}
+        />
+      ));
       refetch();
       setSelectedUser(null);
     } catch (error) {
-      toast.custom((t) => (<Toast type="error" title={error.data.message.title} body={null} toastId={t.id} />));
+      toast.custom((t) => (
+        <Toast
+          type='error'
+          title={error.data.message.title}
+          body={null}
+          toastId={t.id}
+        />
+      ));
     }
   };
 
   return (
     <div>
       <SelectMenuSimple
-        label="Change role"
+        label='Change role'
         options={[
           { id: 'read', name: 'Read-only' },
           { id: 'modify', name: 'Manage' },
@@ -44,7 +66,7 @@ function ChangeAccessLevel({
         ]}
         onChange={onChangeAccessLevel}
         selectedId={actualAccess}
-        />
+      />
     </div>
   );
 }
