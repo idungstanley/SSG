@@ -20,10 +20,27 @@ function FolderPreview({ folder }) {
   const onClickUser = async (id) => {
     if (id) {
       try {
-        const request = await requestNew({ method: 'post', url: `folders/${folder.id}/share/${id}` });
-        toast.custom((t) => (<Toast type='success' title={request.message.title} body={null} toastId={t.id} />));
+        const request = await requestNew({
+          method: 'post',
+          url: `folders/${folder.id}/share/${id}`,
+        });
+        toast.custom((t) => (
+          <Toast
+            type='success'
+            title={request.message.title}
+            body={null}
+            toastId={t.id}
+          />
+        ));
       } catch (e) {
-        toast.custom((t) => (<Toast type='error' title="You don't have permission to share this." body={null} toastId={t.id} />));
+        toast.custom((t) => (
+          <Toast
+            type='error'
+            title="You don't have permission to share this."
+            body={null}
+            toastId={t.id}
+          />
+        ));
       }
       setShowPopup(false);
     }
@@ -31,7 +48,7 @@ function FolderPreview({ folder }) {
 
   return folder ? (
     <aside className='relative hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll'>
-      <PermissionsManagement dataId={folder.id} type='folder' />
+      <PermissionsManagement selectedDataId={folder.id} type='folder' />
       <div className='pb-16 space-y-6'>
         <div>
           <div className='block w-24 h-10 overflow-hidden'>
@@ -62,33 +79,47 @@ function FolderPreview({ folder }) {
           >
             Share
           </button>
-          {showPopup && users ? <ComboBox setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={!false} users={users} /> : null}
+          {showPopup && users ? (
+            <ComboBox
+              setShowPopup={setShowPopup}
+              onClickArrow={onClickUser}
+              absolute={!false}
+              users={users}
+            />
+          ) : null}
         </div>
         <div>
           <h3 className='font-medium text-gray-900'>Information</h3>
           <dl className='mt-2 border-t border-b border-gray-200 divide-y divide-gray-200'>
             <div className='py-3 flex justify-between text-sm font-medium'>
               <dt className='text-gray-500'>Last modified</dt>
-              <dd className='text-gray-900'>{ OutputDateTime(folder.updated_at) }</dd>
+              <dd className='text-gray-900'>
+                {OutputDateTime(folder.updated_at)}
+              </dd>
             </div>
             <div className='py-3 flex justify-between text-sm font-medium'>
               <dt className='text-gray-500'>Created</dt>
-              <dd className='text-gray-900'>{ OutputDateTime(folder.created_at) }</dd>
+              <dd className='text-gray-900'>
+                {OutputDateTime(folder.created_at)}
+              </dd>
             </div>
-            {folder.shared_by
-              ? (
-                <>
-                  <h3 className='font-medium text-gray-900 py-2'>Shared by</h3>
-                  <div className='py-3 flex justify-between text-sm font-medium'>
-                    <dt className='text-gray-500'>User name</dt>
-                    <dd className='text-gray-900'>{folder.shared_by.user.name}</dd>
-                  </div>
-                  <div className='py-3 flex justify-between text-sm font-medium'>
-                    <dt className='text-gray-500'>User email</dt>
-                    <dd className='text-gray-900'>{folder.shared_by.user.email}</dd>
-                  </div>
-                </>
-              ) : null }
+            {folder.shared_by ? (
+              <>
+                <h3 className='font-medium text-gray-900 py-2'>Shared by</h3>
+                <div className='py-3 flex justify-between text-sm font-medium'>
+                  <dt className='text-gray-500'>User name</dt>
+                  <dd className='text-gray-900'>
+                    {folder.shared_by.user.name}
+                  </dd>
+                </div>
+                <div className='py-3 flex justify-between text-sm font-medium'>
+                  <dt className='text-gray-500'>User email</dt>
+                  <dd className='text-gray-900'>
+                    {folder.shared_by.user.email}
+                  </dd>
+                </div>
+              </>
+            ) : null}
           </dl>
         </div>
 
@@ -98,7 +129,6 @@ function FolderPreview({ folder }) {
             <Tabs />
           </div>
         )}
-
       </div>
     </aside>
   ) : null;

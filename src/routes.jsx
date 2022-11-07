@@ -35,9 +35,9 @@ import SharedPage from './pages/shared';
 const routes = (user) => [
   {
     path: '/',
-    element: user != null ? <MainLayout /> : <Navigate to="/auth/login" />,
+    element: user != null ? <MainLayout /> : <Navigate to='/auth/login' />,
     children: [
-      { path: '/', element: <Navigate to="/explorer" /> },
+      { path: '/', element: <Navigate to='/explorer' /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
@@ -60,7 +60,7 @@ const routes = (user) => [
   },
   {
     path: '/auth',
-    element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
+    element: user == null ? <UnauthenticatedLayout /> : <Navigate to='/' />,
     children: [
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },

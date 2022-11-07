@@ -20,7 +20,7 @@ function ComboBoxForTeamMembers({
   return (
     <>
       {absolute ? <div className='fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0' tabIndex={0} role='button' onClick={() => setShowPopup(false)} onKeyDown={() => {}}> </div> : null}
-      <Combobox as='div' value={selectedUser} onChange={setSelectedUser} className={`${absolute ? 'absolute top-12 right-0' : null} bg-white border-2 p-2 pr-10 rounded-xl`}>
+      <Combobox as='div' value={selectedUser} onChange={setSelectedUser} className={`${absolute ? 'absolute top-12 right-0 border-2 p-2' : null} bg-white pr-10 rounded-xl`}>
         <Combobox.Label className='block text-sm font-medium text-gray-700'>Select member:</Combobox.Label>
         <div className='relative mt-1'>
           <Combobox.Input
