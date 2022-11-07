@@ -10,7 +10,7 @@ import { useGetFilteredTeamMembers } from '../../../features/permissions/permiss
 function AddAccess({
   type,
   setShowPopup,
-  dataId,
+  selectedDataId,
   refetch,
   activeMembers,
 }) {
@@ -19,13 +19,35 @@ function AddAccess({
 
   const onClickUser = async (id) => {
     if (id) {
-      const url = `${type}s/${dataId}/access/add-access`;
+      const url = `${type}s/${selectedDataId}/access/add-access`;
       try {
-        const request = await requestNew({ method: 'post', url, data: { access_type: 'member', access_to_id: id, access_level_key: 'read' } });
-        toast.custom((t) => (<Toast type='success' title={request.message.title} body={null} toastId={t.id} />));
+        const request = await requestNew({
+          method: 'post',
+          url,
+          data: {
+            access_type: 'member',
+            access_to_id: id,
+            access_level_key: 'read',
+          },
+        });
+        toast.custom((t) => (
+          <Toast
+            type='success'
+            title={request.message.title}
+            body={null}
+            toastId={t.id}
+          />
+        ));
         refetch();
       } catch (e) {
-        toast.custom((t) => (<Toast type='error' title={e.data.message.title} body={null} toastId={t.id} />));
+        toast.custom((t) => (
+          <Toast
+            type='error'
+            title={e.data.message.title}
+            body={null}
+            toastId={t.id}
+          />
+        ));
       }
     }
   };
@@ -37,7 +59,14 @@ function AddAccess({
   return (
     <>
       <h2>{`2. Add access to ${type}`}</h2>
-      {users ? <ComboBoxForTeamMembers setShowPopup={setShowPopup} onClickArrow={onClickUser} absolute={false} users={users} /> : null}
+      {users ? (
+        <ComboBoxForTeamMembers
+          setShowPopup={setShowPopup}
+          onClickArrow={onClickUser}
+          absolute={false}
+          users={users}
+        />
+      ) : null}
     </>
   );
 }
@@ -45,7 +74,7 @@ function AddAccess({
 AddAccess.propTypes = {
   setShowPopup: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
-  dataId: PropTypes.string.isRequired,
+  selectedDataId: PropTypes.string.isRequired,
   refetch: PropTypes.func.isRequired,
   activeMembers: PropTypes.array.isRequired,
 };

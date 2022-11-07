@@ -10,7 +10,7 @@ import { useGetFilteredTeamMembers } from '../../../features/permissions/permiss
 
 function ChangeAccessLevel({
   type,
-  dataId,
+  selectedDataId,
   refetch,
   selectedUserId,
   setSelectedUser,
@@ -20,7 +20,7 @@ function ChangeAccessLevel({
   const userId = users.find((i) => i.user.id === selectedUserId).id;
 
   const onChangeAccessLevel = async (e) => {
-    const url = `${type}s/${dataId}/access/change-access-level`;
+    const url = `${type}s/${selectedDataId}/access/change-access-level`;
 
     try {
       const request = await requestNew({
@@ -73,7 +73,7 @@ function ChangeAccessLevel({
 
 ChangeAccessLevel.propTypes = {
   type: PropTypes.string.isRequired,
-  dataId: PropTypes.string.isRequired,
+  selectedDataId: PropTypes.string.isRequired,
   refetch: PropTypes.func.isRequired,
   selectedUserId: PropTypes.string.isRequired,
   setSelectedUser: PropTypes.func.isRequired,
