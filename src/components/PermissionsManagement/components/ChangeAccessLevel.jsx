@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import SelectMenuSimple from '../../selectMenu/SelectMenuSimple';
-import { useGetTeamMembers } from '../../comboBox/ComboBoxForTeamMembers';
+import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
 
 function ChangeAccessLevel({
   type,
@@ -16,7 +16,7 @@ function ChangeAccessLevel({
   setSelectedUser,
   actualAccess,
 }) {
-  const { users } = useGetTeamMembers();
+  const { users } = useGetFilteredTeamMembers();
   const userId = users.find((i) => i.user.id === selectedUserId).id;
 
   const onChangeAccessLevel = async (e) => {

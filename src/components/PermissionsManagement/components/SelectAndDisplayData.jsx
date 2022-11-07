@@ -14,11 +14,17 @@ function SelectAndDisplayData({
 }) {
   return (
     <>
-      <SelectMenuTeamMembers teamMembers={usersList} selectedData={selectedData} setSelectedData={setSelectedData} type={type} title={title} />
+      <SelectMenuTeamMembers
+        teamMembers={usersList}
+        selectedData={selectedData}
+        setSelectedData={setSelectedData}
+        type={type}
+        title={title}
+      />
       {selectedData ? (
-        <div className="border rounded-xl p-2 mt-2 font-medium">
+        <div className='border rounded-xl p-2 mt-2 font-medium'>
           <Columns data={columnsData} />
-          <div className="flex justify-between content-center text-sm mt-3">
+          <div className='flex justify-between content-center text-sm mt-3'>
             {children}
           </div>
         </div>

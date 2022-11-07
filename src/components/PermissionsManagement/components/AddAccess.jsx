@@ -4,7 +4,8 @@ import { PropTypes } from 'prop-types';
 import { useSelector } from 'react-redux';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
-import ComboBoxForTeamMembers, { useGetTeamMembers } from '../../comboBox/ComboBoxForTeamMembers';
+import ComboBoxForTeamMembers from '../../comboBox/ComboBoxForTeamMembers';
+import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
 
 function AddAccess({
   type,
@@ -14,17 +15,17 @@ function AddAccess({
   activeMembers,
 }) {
   const { currentUserId } = useSelector((state) => state.auth);
-  const { users } = useGetTeamMembers(currentUserId, activeMembers);
+  const { users } = useGetFilteredTeamMembers(currentUserId, activeMembers);
 
   const onClickUser = async (id) => {
     if (id) {
       const url = `${type}s/${dataId}/access/add-access`;
       try {
         const request = await requestNew({ method: 'post', url, data: { access_type: 'member', access_to_id: id, access_level_key: 'read' } });
-        toast.custom((t) => (<Toast type="success" title={request.message.title} body={null} toastId={t.id} />));
+        toast.custom((t) => (<Toast type='success' title={request.message.title} body={null} toastId={t.id} />));
         refetch();
       } catch (e) {
-        toast.custom((t) => (<Toast type="error" title={e.data.message.title} body={null} toastId={t.id} />));
+        toast.custom((t) => (<Toast type='error' title={e.data.message.title} body={null} toastId={t.id} />));
       }
     }
   };
