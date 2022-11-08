@@ -38,7 +38,7 @@ function SelectAndDisplayData({
 SelectAndDisplayData.defaultProps = {
   selectedData: null,
   columnsData: null,
-  children: <> </>,
+  children: null,
 };
 
 SelectAndDisplayData.propTypes = {
