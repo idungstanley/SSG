@@ -24,9 +24,11 @@ function SelectAndDisplayData({
       {selectedData ? (
         <div className="border border-indigo-400 rounded-xl p-2 mt-2 font-medium">
           <Columns data={columnsData} />
-          <div className="flex flex-col justify-between content-center text-sm mt-3 gap-3">
-            {children}
-          </div>
+          {children ? (
+            <div className="flex flex-col justify-between content-center text-sm mt-3 gap-3">
+              {children}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </>

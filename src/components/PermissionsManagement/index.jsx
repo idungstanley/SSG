@@ -183,7 +183,7 @@ function PermissionsManagement({ selectedDataId, type }) {
                         <RemoveAccess
                           type={type}
                           refetch={refetch}
-                          selectedUserId={selectedUser.team_member.user.id}
+                          selectedUser={selectedUser}
                           setSelectedUser={setSelectedUser}
                         />
                         <ChangeAccessLevel
@@ -222,7 +222,7 @@ function PermissionsManagement({ selectedDataId, type }) {
                   <RemoveAccess
                     type={type}
                     refetch={refetch}
-                    selectedUserId={selectedUser.team_member.user.id}
+                    selectedUser={selectedUser}
                     setSelectedUser={setSelectedUser}
                   />
                 ) : null}

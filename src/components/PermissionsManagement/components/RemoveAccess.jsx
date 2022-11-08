@@ -9,18 +9,21 @@ import { useGetExplorerFilesAndFolders } from '../../../features/explorer/explor
 import { useGetSharedFilesAndFolders } from '../../../features/shared/sharedService';
 
 function RemoveAccess({
-  type, refetch, selectedUserId, setSelectedUser,
+  type, refetch, selectedUser, setSelectedUser,
 }) {
-  const { users } = useGetFilteredTeamMembers();
-  const userId = users.find((i) => i.user.id === selectedUserId).id;
-  const { currentUserId } = useSelector((state) => state.auth);
-  const explorerId = useSelector((state) => state.explorer.selectedItemId);
-  const sharedId = useSelector((state) => state.shared.selectedItemId);
-  const selectedDataId = explorerId !== null ? explorerId : sharedId;
   const { refetch: refetchShared } = useGetSharedFilesAndFolders();
   const { refetch: refetchExplorer } = useGetExplorerFilesAndFolders();
+  const { users } = useGetFilteredTeamMembers();
 
+  const explorerId = useSelector((state) => state.explorer.selectedItemId);
+  const sharedId = useSelector((state) => state.shared.selectedItemId);
+  const { currentUserId } = useSelector((state) => state.auth);
+
+  const selectedUserId = selectedUser.team_member.user.id;
+  const userId = users.find((i) => i.user.id === selectedUserId).id;
+  const selectedDataId = explorerId !== null ? explorerId : sharedId;
   const isActiveUser = selectedUserId === currentUserId;
+  const isOwner = selectedUser.access_level.key === 'owner';
 
   const removeAccess = async () => {
     const url = `${type}s/${selectedDataId}/access/${
@@ -65,6 +68,10 @@ function RemoveAccess({
     }
   };
 
+  if (isOwner) {
+    return null;
+  }
+
   return (
     <button
       onClick={removeAccess}
@@ -79,7 +86,7 @@ function RemoveAccess({
 RemoveAccess.propTypes = {
   type: PropTypes.string.isRequired,
   refetch: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.string.isRequired,
+  selectedUser: PropTypes.object.isRequired,
   setSelectedUser: PropTypes.func.isRequired,
 };
 
