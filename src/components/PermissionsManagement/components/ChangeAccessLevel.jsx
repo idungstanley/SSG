@@ -34,7 +34,7 @@ function ChangeAccessLevel({
       });
       toast.custom((t) => (
         <Toast
-          type='success'
+          type="success"
           title={request.message.title}
           body={null}
           toastId={t.id}
@@ -45,7 +45,7 @@ function ChangeAccessLevel({
     } catch (error) {
       toast.custom((t) => (
         <Toast
-          type='error'
+          type="error"
           title={error.data.message.title}
           body={null}
           toastId={t.id}
@@ -57,7 +57,7 @@ function ChangeAccessLevel({
   return (
     <div>
       <SelectMenuSimple
-        label='Change role'
+        label="Change role"
         options={[
           { id: 'read', name: 'Read-only' },
           { id: 'modify', name: 'Manage' },

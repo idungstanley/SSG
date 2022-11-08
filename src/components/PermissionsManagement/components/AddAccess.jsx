@@ -32,7 +32,7 @@ function AddAccess({
         });
         toast.custom((t) => (
           <Toast
-            type='success'
+            type="success"
             title={request.message.title}
             body={null}
             toastId={t.id}
@@ -42,7 +42,7 @@ function AddAccess({
       } catch (e) {
         toast.custom((t) => (
           <Toast
-            type='error'
+            type="error"
             title={e.data.message.title}
             body={null}
             toastId={t.id}

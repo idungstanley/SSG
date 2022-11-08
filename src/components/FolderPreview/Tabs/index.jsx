@@ -36,19 +36,19 @@ function classNames(...classes) {
 
 function Tabs() {
   return (
-    <div className='h-full flex-1'>
-      <div className='relative h-full'>
-        <div className='absolute inset-0 h-full w-full overflow-hidden flex-col'>
-          <div className='h-full flex-1'>
-            <div className='sm:hidden'>
-              <label htmlFor='tabs' className='sr-only'>
+    <div className="h-full flex-1">
+      <div className="relative h-full">
+        <div className="absolute inset-0 h-full w-full overflow-hidden flex-col">
+          <div className="h-full flex-1">
+            <div className="sm:hidden">
+              <label htmlFor="tabs" className="sr-only">
                 Select a tab
               </label>
               {/* Use an 'onChange' listener to redirect the user to the selected tab URL. */}
               <select
-                id='tabs'
-                name='tabs'
-                className='block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md'
+                id="tabs"
+                name="tabs"
+                className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                 defaultValue={tabs.find((tab) => tab.current).name}
               >
                 {tabs.map((tab) => (
@@ -56,11 +56,11 @@ function Tabs() {
                 ))}
               </select>
             </div>
-            <div className='hidden sm:block h-full w-full'>
-              <Tab.Group as='div' className='h-full w-full flex flex-col'>
+            <div className="hidden sm:block h-full w-full">
+              <Tab.Group as="div" className="h-full w-full flex flex-col">
                 <Tab.List
-                  as='nav'
-                  className='flex space-x-8 border-b border-gray-200 w-full'
+                  as="nav"
+                  className="flex space-x-8 border-b border-gray-200 w-full"
                 >
                   {tabs.map((tab) => (
                     <Tab key={tab.name}>
@@ -80,7 +80,7 @@ function Tabs() {
                                 : 'text-gray-400 group-hover:text-gray-500',
                               '-ml-0.5 mr-2 h-5 w-5',
                             )}
-                            aria-hidden='true'
+                            aria-hidden="true"
                           />
                           <span>{tab.name}</span>
                         </div>
@@ -89,17 +89,17 @@ function Tabs() {
                   ))}
                 </Tab.List>
 
-                <div className='h-full flex-1'>
+                <div className="h-full flex-1">
                   <Tab.Panels as={Fragment}>
-                    <Tab.Panel className='h-full'>
+                    <Tab.Panel className="h-full">
                       <People />
                     </Tab.Panel>
 
-                    <Tab.Panel className='h-full'>
+                    <Tab.Panel className="h-full">
                       <p>Permissions</p>
                     </Tab.Panel>
 
-                    <Tab.Panel className='h-full'>
+                    <Tab.Panel className="h-full">
                       <Activity />
                     </Tab.Panel>
                   </Tab.Panels>

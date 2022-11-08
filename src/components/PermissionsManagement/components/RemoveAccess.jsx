@@ -9,10 +9,7 @@ import { useGetExplorerFilesAndFolders } from '../../../features/explorer/explor
 import { useGetSharedFilesAndFolders } from '../../../features/shared/sharedService';
 
 function RemoveAccess({
-  type,
-  refetch,
-  selectedUserId,
-  setSelectedUser,
+  type, refetch, selectedUserId, setSelectedUser,
 }) {
   const { users } = useGetFilteredTeamMembers();
   const userId = users.find((i) => i.user.id === selectedUserId).id;
@@ -26,8 +23,12 @@ function RemoveAccess({
   const isActiveUser = selectedUserId === currentUserId;
 
   const removeAccess = async () => {
-    const url = `${type}s/${selectedDataId}/access/${isActiveUser ? 'leave' : 'remove-access'}`;
-    const data = isActiveUser ? null : { access_type: 'member', access_to_id: userId };
+    const url = `${type}s/${selectedDataId}/access/${
+      isActiveUser ? 'leave' : 'remove-access'
+    }`;
+    const data = isActiveUser
+      ? null
+      : { access_type: 'member', access_to_id: userId };
 
     try {
       const request = await requestNew({
@@ -37,7 +38,7 @@ function RemoveAccess({
       });
       toast.custom((t) => (
         <Toast
-          type='success'
+          type="success"
           title={request.message.title}
           body={null}
           toastId={t.id}
@@ -55,7 +56,7 @@ function RemoveAccess({
     } catch (e) {
       toast.custom((t) => (
         <Toast
-          type='error'
+          type="error"
           title={e.data.message.title}
           body={null}
           toastId={t.id}
@@ -67,8 +68,8 @@ function RemoveAccess({
   return (
     <button
       onClick={removeAccess}
-      className='border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300'
-      type='button'
+      className="border p-2 rounded-xl text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300"
+      type="button"
     >
       {isActiveUser ? `Leave ${type}` : 'Remove access'}
     </button>
