@@ -5,7 +5,7 @@ import axios from 'axios';
  * Request Wrapper with default success/error actions
  */
 const request = async (options) => {
-  const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
+  const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   const currentWorkspaceId = JSON.parse(localStorage.getItem("currentWorkspaceId"));
 

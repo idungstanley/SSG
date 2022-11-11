@@ -5,7 +5,7 @@ const requestNew = async (options) => {
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
 
   const client = axios.create({
-    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
+    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/af`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       current_workspace_id: currentWorkspaceId,

@@ -3,7 +3,7 @@ import requestNew from '../../app/requestNew';
 // Delete service
 export const deleteService = async (data) => {
   const response = requestNew({
-    url: 'af/explorer/multiple-delete',
+    url: 'explorer/multiple-delete',
     method: 'POST',
     params: {
       file_ids: data.fileIds,
@@ -15,7 +15,7 @@ export const deleteService = async (data) => {
 
 // Paste service
 export const pasteService = async (data) => {
-  const url = data.copyToFolderId == null ? '/af/explorer/copy' : `/af/explorer/copy/${data.copyToFolderId}`;
+  const url = data.copyToFolderId == null ? '/explorer/copy' : `/explorer/copy/${data.copyToFolderId}`;
 
   const response = requestNew({
     url,
@@ -30,7 +30,7 @@ export const pasteService = async (data) => {
 
 // Rename file service
 export const renameFileService = async (data) => requestNew({
-  url: `af/files/${data.fileId}/rename`,
+  url: `files/${data.fileId}/rename`,
   method: 'POST',
   params: {
     name: data.name,
@@ -39,7 +39,7 @@ export const renameFileService = async (data) => requestNew({
 
 // Rename folder service
 export const renameFolderService = async (data) => requestNew({
-  url: `af/folders/${data.folderId}/rename`,
+  url: `folders/${data.folderId}/rename`,
   method: 'POST',
   params: {
     name: data.name,

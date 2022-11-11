@@ -40,7 +40,7 @@ export const useGetSharedFiles = () => {
   return useQuery(
     ['shared_files', ('root-file')],
     async () => requestNew({
-      url: 'af/files/shared',
+      url: 'files/shared',
       method: 'GET',
     }),
     {
@@ -60,7 +60,7 @@ export const useGetSharedFolders = () => {
   return useQuery(
     ['shared_folders', ('root-folder')],
     async () => requestNew({
-      url: 'af/folders/shared',
+      url: 'folders/shared',
       method: 'GET',
     }),
     {
@@ -81,7 +81,7 @@ export const useGetSharedFilesAndFolders = () => {
   const folders = useQuery(
     ['shared_folders', ('root-folder')],
     async () => requestNew({
-      url: 'af/folders/shared',
+      url: 'folders/shared',
       method: 'GET',
     }),
     {
@@ -97,7 +97,7 @@ export const useGetSharedFilesAndFolders = () => {
   const files = useQuery(
     ['shared_files', ('root-file')],
     async () => requestNew({
-      url: 'af/files/shared',
+      url: 'files/shared',
       method: 'GET',
     }),
     {
