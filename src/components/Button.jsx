@@ -29,20 +29,16 @@ function Button({
 
   if (buttonStyle === 'primary') {
     hoverBackgroundColor = 'hover:bg-primary-700';
-    buttonClassName =
-      'border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none';
+    buttonClassName = 'border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none';
   } else if (buttonStyle === 'secondary') {
     hoverBackgroundColor = 'hover:bg-primary-200';
-    buttonClassName =
-      'border border-transparent text-sm font-medium text-primary-700 bg-primary-100 focus:outline-none';
+    buttonClassName = 'border border-transparent text-sm font-medium text-primary-700 bg-primary-100 focus:outline-none';
   } else if (buttonStyle === 'danger') {
     hoverBackgroundColor = 'hover:bg-red-700';
-    buttonClassName =
-      'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
+    buttonClassName = 'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
   } else if (buttonStyle === 'white') {
     hoverBackgroundColor = 'hover:bg-gray-50';
-    buttonClassName =
-      'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
+    buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
   }
 
   if (ringOnFocus === true) {
@@ -74,7 +70,7 @@ function Button({
       disabled={disabled || loading}
       className={classNames(
         disabled || loading ? 'opacity-50' : hoverBackgroundColor,
-        `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`
+        `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`,
       )}
     >
       {loading ? (
@@ -125,7 +121,7 @@ Button.propTypes = {
   loading: PropTypes.bool,
   label: PropTypes.string,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  width: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   value: PropTypes.string,
   height: PropTypes.string,
   padding: PropTypes.string,

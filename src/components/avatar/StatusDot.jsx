@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function StatusDot({ on, colour, size, ringSize, top }) {
+function StatusDot({
+  on, colour, size, ringSize, top,
+}) {
   return (
     <span className="inline-block relative">
       {on}

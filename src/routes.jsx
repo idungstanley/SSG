@@ -34,7 +34,7 @@ import SharedPage from './pages/shared';
 
 // At workspace
 import Index from './pages/workspace/Index';
-import Home from './pages/workspace/home/Home';
+import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 
 const routes = (user) => [
