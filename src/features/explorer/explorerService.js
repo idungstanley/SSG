@@ -63,7 +63,7 @@ export const prefetchExplorerFilesAndFoldersService = (queryClient, folderId) =>
   queryClient.prefetchQuery(
     ['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)],
     async () => requestNew({
-      url: `explorer/${folderId}`,
+      url: `af/explorer/${folderId}`,
       method: 'GET',
     }),
     {
@@ -82,7 +82,7 @@ export const prefetchExplorerFilesAndFoldersService = (queryClient, folderId) =>
 // Create a folder
 export const createFolderService = async (data) => {
   const response = requestNew({
-    url: 'folders',
+    url: 'af/folders',
     method: 'POST',
     params: {
       name: data.folderName,
