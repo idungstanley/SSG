@@ -31,6 +31,11 @@ import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamM
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
 
+// At workspace
+import Index from './pages/workspace/Index';
+import Home from './pages/workspace/home/Home';
+import CreateWorkspace from './pages/workspace/createWorkspace';
+
 const routes = (user) => [
   {
     path: '/',
@@ -43,17 +48,38 @@ const routes = (user) => [
       { path: 'inbox', element: <InboxesPage /> },
       { path: 'inbox/:inboxId', element: <InboxPage /> },
       { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/permissions', element: <PermissionsSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/members', element: <TeamMembersSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/groups', element: <TeamMemberGroupsSettingsPage /> },
+      {
+        path: 'inbox/:inboxId/settings/permissions',
+        element: <PermissionsSettingsPage />,
+      },
+      {
+        path: 'inbox/:inboxId/settings/members',
+        element: <TeamMembersSettingsPage />,
+      },
+      {
+        path: 'inbox/:inboxId/settings/groups',
+        element: <TeamMemberGroupsSettingsPage />,
+      },
       { path: 'settings/permissions', element: <PermissionsPage /> },
       { path: 'settings/team-members', element: <TeamMembersPage /> },
-      { path: 'settings/team-members/invites', element: <TeamMemberInvitesPage /> },
+      {
+        path: 'settings/team-members/invites',
+        element: <TeamMemberInvitesPage />,
+      },
 
       // Team member group settings
-      { path: 'settings/team-members/groups', element: <TeamMemberGroupsPage /> },
-      { path: 'settings/team-members/groups/:teamMemberGroupId', element: <TeamMemberGroupGeneralSettingsPage /> },
-      { path: 'settings/team-members/groups/:teamMemberGroupId/members', element: <TeamMemberGroupMembersPage /> },
+      {
+        path: 'settings/team-members/groups',
+        element: <TeamMemberGroupsPage />,
+      },
+      {
+        path: 'settings/team-members/groups/:teamMemberGroupId',
+        element: <TeamMemberGroupGeneralSettingsPage />,
+      },
+      {
+        path: 'settings/team-members/groups/:teamMemberGroupId/members',
+        element: <TeamMemberGroupMembersPage />,
+      },
     ],
   },
   {
@@ -63,6 +89,16 @@ const routes = (user) => [
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'register/:inviteCode', element: <RegisterPage /> },
+    ],
+  },
+  {
+    path: '/workspace',
+    element:
+      user != null ? <UnauthenticatedLayout /> : <Navigate to="/auth/login" />,
+    children: [
+      { path: 'id', element: <Index /> },
+      { path: 'onboarding', element: <CreateWorkspace /> },
+      { path: 'home', element: <Home /> },
     ],
   },
 ];
