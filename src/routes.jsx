@@ -30,7 +30,11 @@ import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/Tea
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
-import SharedPage from './pages/shared';
+
+// At workspace
+import Index from './pages/workspace/Index';
+import Home from './pages/workspace/home/Home';
+import CreateWorkspace from './pages/workspace/createWorkspace';
 
 const routes = (user) => [
   {
@@ -86,6 +90,16 @@ const routes = (user) => [
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'register/:inviteCode', element: <RegisterPage /> },
+    ],
+  },
+  {
+    path: '/workspace',
+    element:
+      user != null ? <UnauthenticatedLayout /> : <Navigate to="/auth/login" />,
+    children: [
+      { path: 'id', element: <Index /> },
+      { path: 'onboarding', element: <CreateWorkspace /> },
+      { path: 'home', element: <Home /> },
     ],
   },
 ];

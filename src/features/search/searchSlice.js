@@ -21,6 +21,8 @@ export const selectItem = createAsyncThunk('search/selectItem', async (data, thu
         },
       });
 
+      console.log(response);
+
       return response.data;
     } catch (error) {
       const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
