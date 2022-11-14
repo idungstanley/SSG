@@ -1,18 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useGetFile, useGetFolder, useGetSharedFilesAndFolders } from '../../features/shared/sharedService';
+import {
+  useGetFile,
+  useGetFolder,
+  useGetSharedFilesAndFolders,
+} from '../../features/shared/sharedService';
 import { Spinner } from '../../common';
 import SharedTable from './components/SharedTable';
-import { EmptyStateSimple } from '../../components';
 import FilePreview from '../../components/FilePreview';
 import FolderPreview from '../../components/FolderPreview';
+import FullScreenMessage from './components/FullScreenMessage';
 
 export default function SharedPage() {
-  const {
-    data, filesStatus, foldersStatus,
-  } = useGetSharedFilesAndFolders();
+  const { data, filesStatus, foldersStatus } = useGetSharedFilesAndFolders();
 
-  const selectedItemType = useSelector((state) => state.shared.selectedItemType);
+  const selectedItemType = useSelector(
+    (state) => state.shared.selectedItemType,
+  );
   const selectedItemId = useSelector((state) => state.shared.selectedItemId);
   const { data: file } = useGetFile(selectedItemId);
   const { data: folder } = useGetFolder(selectedItemId);
@@ -25,19 +29,25 @@ export default function SharedPage() {
             <div className="mx-auto w-6 mt-10 justify-center">
               <Spinner size={22} color="#0F70B7" />
             </div>
-          ) : filesStatus === 'error' || foldersStatus === 'error' ? <p>Error</p> : data && (data.folders.length === 0 || data.files.length === 0) ? (
+          ) : filesStatus === 'error' || foldersStatus === 'error' ? (
+            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
+          ) : data && (data.folders.length === 0 || data.files.length === 0) ? (
             <div className="flex flex-1 h-full bg-white">
               <div className="m-auto">
-                <EmptyStateSimple
+                <FullScreenMessage
                   title="No shared files or folders"
                   description="Ask someone to share a folder or file with you"
                 />
               </div>
             </div>
-          ) : <SharedTable data={data} /> }
+          ) : (
+            <SharedTable data={data} />
+          )}
         </div>
 
-        {selectedItemType === 'file' ? selectedItemId && <FilePreview file={file} /> : selectedItemId && <FolderPreview folder={folder} />}
+        {selectedItemType === 'file'
+          ? selectedItemId && <FilePreview file={file} />
+          : selectedItemId && <FolderPreview folder={folder} />}
       </div>
     </div>
   );
