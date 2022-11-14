@@ -32,13 +32,13 @@ function ListItem({ userWorkspace }) {
 
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(data.data.workspace.id)
+        JSON.stringify(data.data.workspace.id),
       );
 
       dispatch(
         setCurrentWorkspace({
           workspaceId: data.data.workspace.id,
-        })
+        }),
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
@@ -61,15 +61,15 @@ function ListItem({ userWorkspace }) {
       key={userWorkspace.id}
       title={userWorkspace.name}
       description={`Last activity ${moment(
-        userWorkspace.last_activity_at
+        userWorkspace.last_activity_at,
       ).fromNow()}`}
-      icon={
+      icon={(
         <AvatarWithInitials
           backgroundColour={userWorkspace.colour}
           initials={userWorkspace.initials}
         />
-      }
-      button={
+      )}
+      button={(
         <Button
           buttonStyle="white"
           onClick={onSwitchWorkspace}
@@ -91,7 +91,7 @@ function ListItem({ userWorkspace }) {
           }
           width="w-36"
         />
-      }
+      )}
     />
   );
 }

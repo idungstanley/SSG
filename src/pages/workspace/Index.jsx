@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 
 function Index() {
@@ -7,6 +8,7 @@ function Index() {
       <section>
         <Sidebar />
       </section>
+      <Outlet />
     </main>
   );
 }

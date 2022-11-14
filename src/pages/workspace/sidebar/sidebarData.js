@@ -11,8 +11,8 @@
 export const menuItems = [
   { path: '/workspace/home', name: 'Home' },
   { path: '/workspace/notification', name: 'Notifications' },
-  { path: '/community', name: 'Community' },
-  { path: '/goals', name: 'Goals' },
+  { path: '/workspace/community', name: 'Community' },
+  { path: '/workspace/goals', name: 'Goals' },
 ];
 
 export const dropDownMenus = [

@@ -18,8 +18,7 @@ import { menuItems, dropDownMenus } from './sidebarData';
 function Sidebar() {
   const [active, setIsActive] = useState(false);
 
-  const handleMenuClicks = (val) => {
-    window.location.pathname = val.path;
+  const handleMenuClicks = () => {
     setIsActive(!active);
   };
 
@@ -27,7 +26,8 @@ function Sidebar() {
     <main className="w-full flex justify-start items-center">
       <section className="w-3/12 p-3 h-screen border-r-2">
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
-          <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
+          {/* <img className="h-6 w-auto" src={MainLogo} alt="Workflow" /> */}
+          <img className="w-auto" src={MainLogo} alt="Workflow" />
         </div>
         <div>
           <Search placeholder="Search" />
@@ -35,14 +35,16 @@ function Sidebar() {
         {/* static menu */}
         <div id="static-menu" className="my-4 text-gray-500">
           {menuItems.map((val) => (
-            <div
+            <Link
+              to={val.path}
               id="home"
+              key={val.path}
               className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-              onClick={() => handleMenuClicks(val)}
+              onClick={handleMenuClicks}
             >
               <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
               <p>{val.name}</p>
-            </div>
+            </Link>
           ))}
           {/* <div
             id="notifications"
@@ -84,7 +86,7 @@ function Sidebar() {
               id="favorites"
               className="flex items-center justify-between rounded h-10 pl-2 hover:bg-gray-200 "
               // onClick={() => {
-              //   window.location.pathname = val.path;
+                // window.location.pathname = val.path;
               // }}
             >
               <p className="font-bold text-sm">{val.name}</p>
