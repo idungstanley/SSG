@@ -101,6 +101,9 @@ const routes = (user) => [
       { path: 'onboarding', element: <CreateWorkspace /> },
       { path: 'home', element: <Home /> },
       { path: 'notification', element: <Notification /> },
+      // temporary
+      { path: 'community', element: <Home /> },
+      { path: 'goals', element: <Home /> },
     ],
   },
 ];
