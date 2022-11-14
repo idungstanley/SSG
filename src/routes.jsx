@@ -36,6 +36,7 @@ import SharedPage from './pages/shared';
 import Index from './pages/workspace/Index';
 import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
+import Notification from './pages/workspace/notification/Notification';
 
 const routes = (user) => [
   {
@@ -95,12 +96,11 @@ const routes = (user) => [
   },
   {
     path: '/workspace',
-    element:
-      user != null ? <UnauthenticatedLayout /> : <Navigate to="/auth/login" />,
+    element: user != null ? <Index /> : <Navigate to="/auth/login" />,
     children: [
-      { path: 'id', element: <Index /> },
       { path: 'onboarding', element: <CreateWorkspace /> },
       { path: 'home', element: <Home /> },
+      { path: 'notification', element: <Notification /> },
     ],
   },
 ];

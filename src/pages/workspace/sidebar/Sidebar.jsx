@@ -1,19 +1,31 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useState } from 'react';
 import { HomeIcon } from '@heroicons/react/outline';
 import {
-  NotificationOutlined,
-  TrophyOutlined,
-  RocketFilled,
+  // NotificationOutlined,
+  // TrophyOutlined,
+  // RocketFilled,
   PlusOutlined,
 } from '@ant-design/icons';
 import { ArrowDownIcon } from '@heroicons/react/solid';
+import { Link } from 'react-router-dom';
 import { AvatarWithInitials, Search } from '../../../components';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import { menuItems, dropDownMenus } from './sidebarData';
 
 function Sidebar() {
+  const [active, setIsActive] = useState(false);
+
+  const handleMenuClicks = (val) => {
+    window.location.pathname = val.path;
+    setIsActive(!active);
+  };
+
   return (
-    <main className="flex">
-      <section className="p-3 h-screen border-r-2">
+    <main className="w-full flex justify-start items-center">
+      <section className="w-3/12 p-3 h-screen border-r-2">
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
           <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
         </div>
@@ -22,14 +34,17 @@ function Sidebar() {
         </div>
         {/* static menu */}
         <div id="static-menu" className="my-4 text-gray-500">
-          <div
-            id="home"
-            className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-          >
-            <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
-            <p>Home</p>
-          </div>
-          <div
+          {menuItems.map((val) => (
+            <div
+              id="home"
+              className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
+              onClick={() => handleMenuClicks(val)}
+            >
+              <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+              <p>{val.name}</p>
+            </div>
+          ))}
+          {/* <div
             id="notifications"
             className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
           >
@@ -58,23 +73,30 @@ function Sidebar() {
               aria-hidden="true"
             />
             <p>Goals</p>
-          </div>
+          </div> */}
         </div>
         {/* dropdown menus */}
         <div id="dropdown-menu" className="my-4 text-gray-500">
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          <div
-            id="favorites"
-            className="flex items-center justify-between rounded h-10 pl-2 hover:bg-gray-200 "
-          >
-            <p className="font-bold text-sm">FAVORITES</p>
-            <ArrowDownIcon
-              className="flex-shrink-0 h-3 w-5"
-              aria-hidden="true"
-            />
-          </div>
+          {dropDownMenus.map((val) => (
+            <Link
+              to={val.path}
+              id="favorites"
+              className="flex items-center justify-between rounded h-10 pl-2 hover:bg-gray-200 "
+              // onClick={() => {
+              //   window.location.pathname = val.path;
+              // }}
+            >
+              <p className="font-bold text-sm">{val.name}</p>
+              <ArrowDownIcon
+                className="flex-shrink-0 h-3 w-5"
+                aria-hidden="true"
+              />
+            </Link>
+          ))}
+
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          <div
+          {/* <div
             id="hubs"
             className="flex items-center justify-between rounded h-10 pl-2 hover:bg-gray-200 "
           >
@@ -117,7 +139,7 @@ function Sidebar() {
               aria-hidden="true"
             />
           </div>
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" /> */}
         </div>
         {/* dashboard switch and menu */}
         <div className="my-48 sticky top-[100vh] h-px bg-gray-200 border-0 dark:bg-gray-700">
@@ -127,7 +149,6 @@ function Sidebar() {
           </div>
         </div>
       </section>
-      {/* <main>{children}</main> */}
     </main>
   );
 }
