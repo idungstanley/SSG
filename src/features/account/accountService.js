@@ -10,7 +10,7 @@ export const useGetMyWorkspaces = () => {
     async () => requestNew({
       url: 'auth/account/workspaces',
       method: 'GET',
-    }),
+    }, true),
     {
       onSuccess: (data) => {
         data.data.workspaces.map((workspace) => queryClient.setQueryData(['my_workspace', workspace.id], workspace));
@@ -24,6 +24,6 @@ export const switchWorkspaceService = async (data) => {
   const response = requestNew({
     url: `auth/account/workspaces/${data.workspaceId}/switch`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
