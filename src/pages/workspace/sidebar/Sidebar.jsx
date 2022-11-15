@@ -24,10 +24,9 @@ function Sidebar() {
 
   return (
     <main className="w-full flex justify-start items-center">
-      <section className="w-3/12 p-3 h-screen border-r-2">
+      <section className="w-full p-3 h-screen border-r-2">
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
-          {/* <img className="h-6 w-auto" src={MainLogo} alt="Workflow" /> */}
-          <img className="w-auto" src={MainLogo} alt="Workflow" />
+          <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
         </div>
         <div>
           <Search placeholder="Search" />
@@ -86,7 +85,7 @@ function Sidebar() {
               id="favorites"
               className="flex items-center justify-between rounded h-10 pl-2 hover:bg-gray-200 "
               // onClick={() => {
-                // window.location.pathname = val.path;
+              // window.location.pathname = val.path;
               // }}
             >
               <p className="font-bold text-sm">{val.name}</p>

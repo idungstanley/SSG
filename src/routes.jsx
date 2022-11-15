@@ -37,6 +37,7 @@ import Index from './pages/workspace/Index';
 import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
+import Community from './pages/workspace/community/Community';
 
 const routes = (user) => [
   {
@@ -102,7 +103,7 @@ const routes = (user) => [
       { path: 'home', element: <Home /> },
       { path: 'notification', element: <Notification /> },
       // temporary
-      { path: 'community', element: <Home /> },
+      { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
     ],
   },

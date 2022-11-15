@@ -5,10 +5,12 @@ import Sidebar from './sidebar/Sidebar';
 function Index() {
   return (
     <main className="flex w-full">
-      <section>
+      <section className="w-3/12">
         <Sidebar />
       </section>
-      <Outlet />
+      <section className="w-9/12">
+        <Outlet />
+      </section>
     </main>
   );
 }
