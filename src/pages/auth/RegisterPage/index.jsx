@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { GoogleLogin } from 'react-google-login';
@@ -7,12 +8,11 @@ import { gapi } from 'gapi-script';
 import { registerService, loginGoogleService } from '../../../features/auth/authService';
 import { setCurrentUser } from '../../../features/auth/authSlice';
 import {
-  Button,
-  Input,
   Hyperlink,
 } from '../../../components';
 import InviteDetails from './components/InviteDetails';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import Form from '../../../components/Form';
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -46,36 +46,13 @@ function RegisterPage() {
     },
   });
 
-  const defaultFormState = {
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-  };
-
-  const [formState, setFormState] = useState(defaultFormState);
-
-  const {
-    name,
-    email,
-    password,
-    passwordConfirmation,
-  } = formState;
-
-  const onChange = (e) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onSubmit = () => {
+  const onSubmit = (values) => {
     registerMutation.mutate({
-      name,
-      email,
-      password,
-      passwordConfirmation,
-      inviteCode,
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      passwordConfirmation: values.passwordConfirmation,
+      // inviteCode,
     });
   };
 
@@ -103,6 +80,24 @@ function RegisterPage() {
   const handleGoogleFailure = (response) => {
     // fail handler: todo delete console log
     console.log(response);
+  };
+
+  const formikConfig = {
+    initValues: {
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().min(3, 'Must be 3 characters or more').max(15, 'Must be 15 characters or less').required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+      password: Yup.string()
+        .min(8, 'Password must be 8 characters or longer!')
+        .required('Required'),
+      passwordConfirmation: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
+    }),
   };
 
   return (
@@ -142,48 +137,11 @@ function RegisterPage() {
 
             <div className="mt-6">
               <div className="space-y-6">
-                <Input
-                  name="name"
-                  label="Name"
-                  onChange={onChange}
-                  value={name}
+                <Form
+                  onSubmit={(values) => onSubmit(values)}
+                  formikConfig={formikConfig}
                 />
 
-                <Input
-                  name="email"
-                  label="Email"
-                  onChange={onChange}
-                  type="email"
-                  value={email}
-                />
-
-                <Input
-                  name="password"
-                  label="Create your password"
-                  onChange={onChange}
-                  type="password"
-                  value={password}
-                />
-
-                <Input
-                  name="passwordConfirmation"
-                  label="Confirm your password"
-                  onChange={onChange}
-                  type="password"
-                  value={passwordConfirmation}
-                />
-
-                <div>
-                  <Button
-                    buttonStyle="primary"
-                    onClick={onSubmit}
-                    loading={registerMutation.status === 'loading'}
-                    label="Register"
-                    padding="py-2 px-4"
-                    height="h-10"
-                    width="w-full"
-                  />
-                </div>
                 <GoogleLogin
                   clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                   className="rounded-l-md rounded-r-md w-full h-10 py-2 px-4 inline-flex items-center justify-center"

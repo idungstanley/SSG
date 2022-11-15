@@ -108,14 +108,6 @@ function LoginPage() {
         .min(8, 'Password must be 8 characters or longer!')
         .required('Required'),
     }),
-    inputLabels: [
-      {
-        label: 'email',
-      },
-      {
-        label: 'password',
-      },
-    ],
   };
 
   return (
@@ -131,7 +123,7 @@ function LoginPage() {
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
               Sign in to your account
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 flex gap-1">
               Or
               <Hyperlink href="/auth/register" label="create your account" />
             </p>
