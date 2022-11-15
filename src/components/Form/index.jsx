@@ -1,22 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import InputWithValidation from '../input/InputWithValidation';
 
-export default function From({ onSubmit }) {
+export default function From({ onSubmit, formikConfig }) {
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      ...formikConfig.initValues,
     },
 
-    validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string()
-        .min(8, 'Password must be 8 characters or longer!')
-        .required('Required'),
-    }),
+    validationSchema: formikConfig.validationSchema,
 
     onSubmit: (values) => {
       onSubmit(values);
@@ -25,7 +18,7 @@ export default function From({ onSubmit }) {
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-3">
-      <InputWithValidation
+      {/* <InputWithValidation
         id="email"
         type="text"
         placeholder="Enter email"
@@ -36,17 +29,35 @@ export default function From({ onSubmit }) {
         message={
           formik.touched.email && formik.errors.email && formik.errors.email
         }
-      />
-
-      <InputWithValidation
+      /> */}
+      {Object.keys(formik.values).map((i) => (
+        <InputWithValidation
+          id={i.toString()}
+          type="text"
+          key={i}
+          placeholder={`Enter ${i}`}
+          value={formik.values[i]}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          isFocused={Object.keys(formik.values).indexOf(i) === 0}
+          message={
+            formik.touched[i] && formik.errors[i] && formik.errors[i]
+          }
+        />
+      ))}
+      {/* <InputWithValidation
         id="password"
         type="password"
         placeholder="Enter password"
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        message={formik.touched.password && formik.errors.password && formik.errors.password}
-      />
+        // message={
+        //   formik.touched.password &&
+        //   formik.errors.password &&
+        //   formik.errors.password
+        // }
+      /> */}
       <button
         className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md"
         type="submit"
@@ -59,4 +70,5 @@ export default function From({ onSubmit }) {
 
 From.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  formikConfig: PropTypes.object.isRequired,
 };

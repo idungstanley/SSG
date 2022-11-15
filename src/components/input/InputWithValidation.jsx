@@ -21,7 +21,7 @@ export default function InputWithValidation({
   isFocused,
 }) {
   const label = placeholder.split(' ').at(-1);
-
+  console.log(message);
   return (
     <div className="relative">
       <label
