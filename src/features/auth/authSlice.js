@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const localStorageUser = JSON.parse(localStorage.getItem('user'));
 const localStorageAccessToken = JSON.parse(localStorage.getItem('accessToken'));
 const localStorageCurrentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+const localStorageCurrentUserId = JSON.parse(localStorage.getItem('currentUserId'));
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -11,12 +12,14 @@ export const authSlice = createSlice({
     user: localStorageUser,
     accessToken: localStorageAccessToken,
     currentWorkspaceId: localStorageCurrentWorkspaceId,
+    currentUserId: localStorageCurrentUserId,
   },
   reducers: {
     setCurrentUser: (state, action) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.currentWorkspaceId = action.payload.currentWorkspaceId;
+      state.currentUserId = action.payload.currentUserId;
     },
     setCurrentWorkspace: (state, action) => {
       state.currentWorkspaceId = action.payload.workspaceId;

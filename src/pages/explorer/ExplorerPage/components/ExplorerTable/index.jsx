@@ -113,43 +113,45 @@ function CustomCell({
   );
 }
 
-const tablePropsInit = {
-  columns: [
-    {
-      key: 'selection-cell',
-      type: 'select',
-    },
-    {
-      key: 'name',
-      title: 'Name',
-      dataType: DataType.String,
-      type: 'text',
-    },
-    {
-      key: 'created_at',
-      title: 'Created at',
-      dataType: DataType.String,
-      type: 'dateTime',
-    },
-    {
-      key: 'size',
-      title: 'Size',
-      dataType: DataType.String,
-      type: 'sizeInBytes',
-    },
-  ],
-  paging: {
-    enabled: false,
-  },
-  rowKeyField: 'item_id_with_type',
-  selectedRows: [],
-};
-
-function ExplorerTable() {
+function ExplorerTable({ tableTitle }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { folderId } = useParams();
   const queryClient = useQueryClient();
+
+  const title = tableTitle === undefined ? 'Name' : tableTitle;
+
+  const tablePropsInit = {
+    columns: [
+      {
+        key: 'selection-cell',
+        type: 'select',
+      },
+      {
+        key: 'name',
+        title,
+        dataType: DataType.String,
+        type: 'text',
+      },
+      {
+        key: 'created_at',
+        title: 'Created at',
+        dataType: DataType.String,
+        type: 'dateTime',
+      },
+      {
+        key: 'size',
+        title: 'Size',
+        dataType: DataType.String,
+        type: 'sizeInBytes',
+      },
+    ],
+    paging: {
+      enabled: false,
+    },
+    rowKeyField: 'item_id_with_type',
+    selectedRows: [],
+  };
 
   const [tableProps, changeTableProps] = useState(tablePropsInit);
 

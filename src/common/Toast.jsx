@@ -2,13 +2,19 @@ import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { XIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import PropTypes from 'prop-types';
+import toast from 'react-hot-toast';
 
 export default function Toast({
   type,
   title,
   body,
   showClose,
+  toastId,
 }) {
+  if (title === 'Query data cannot be undefined') {
+    return <> </>;
+  }
+
   return (
     <div
       aria-live="assertive"
@@ -33,6 +39,7 @@ export default function Toast({
                 <div className="ml-4 flex-shrink-0 flex pt-0.5">
                   <button
                     type="button"
+                    onClick={() => toast.remove(toastId)}
                     className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     <span className="sr-only">Close</span>
@@ -52,6 +59,7 @@ Toast.defaultProps = {
   body: null,
   type: 'success',
   showClose: true,
+  toastId: null,
 };
 
 Toast.propTypes = {
@@ -59,4 +67,5 @@ Toast.propTypes = {
   body: PropTypes.string,
   type: PropTypes.string,
   showClose: PropTypes.bool,
+  toastId: PropTypes.string,
 };

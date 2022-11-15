@@ -30,11 +30,16 @@ function ListItem({ userWorkspace }) {
     onSuccess: (data) => {
       // Clear react-query and redux cache
 
-      localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
+      localStorage.setItem(
+        'currentWorkspaceId',
+        JSON.stringify(data.data.workspace.id),
+      );
 
-      dispatch(setCurrentWorkspace({
-        workspaceId: data.data.workspace.id,
-      }));
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: data.data.workspace.id,
+        }),
+      );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       navigate('/explorer');
@@ -55,7 +60,9 @@ function ListItem({ userWorkspace }) {
     <StackListItemNarrow
       key={userWorkspace.id}
       title={userWorkspace.name}
-      description={`Last activity ${moment(userWorkspace.last_activity_at).fromNow()}`}
+      description={`Last activity ${moment(
+        userWorkspace.last_activity_at,
+      ).fromNow()}`}
       icon={(
         <AvatarWithInitials
           backgroundColour={userWorkspace.colour}
@@ -69,7 +76,19 @@ function ListItem({ userWorkspace }) {
           loading={switchWorkspaceMutation.status === 'loading'}
           disabled={currentWorkspaceId === userWorkspace.id}
           label={currentWorkspaceId === userWorkspace.id ? 'Current' : 'Switch'}
-          icon={currentWorkspaceId === userWorkspace.id ? <CheckCircleIcon className="mr-1 -ml-2 h-5 w-5 text-green-500" aria-hidden="true" /> : <LogoutIcon className="mr-1 -ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />}
+          icon={
+            currentWorkspaceId === userWorkspace.id ? (
+              <CheckCircleIcon
+                className="mr-1 -ml-2 h-5 w-5 text-green-500"
+                aria-hidden="true"
+              />
+            ) : (
+              <LogoutIcon
+                className="mr-1 -ml-2 h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            )
+          }
           width="w-36"
         />
       )}

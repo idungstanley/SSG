@@ -117,7 +117,7 @@ export default function Toolbar() {
       folderIds: selectedFolderIds,
     }));
 
-    toast.custom(<Toast type="success" title={`Copied ${totalSelectedItems > 1 ? `${totalSelectedItems} items ` : ' '}to clipboard`} body={null} />);
+    toast.custom((t) => (<Toast type="success" title={`Copied ${totalSelectedItems > 1 ? `${totalSelectedItems} items ` : ' '}to clipboard`} body={null} toastId={t.id} />));
   };
 
   const onPaste = () => {

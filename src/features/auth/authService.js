@@ -10,7 +10,7 @@ export const loginService = async (data) => {
       email: data.email,
       password: data.password,
     },
-  });
+  }, true);
   return response;
 };
 
@@ -23,7 +23,7 @@ export const loginGoogleService = async (data) => {
       code: data.code,
       invite_code: data.inviteCode || '',
     },
-  });
+  }, true);
   return response;
 };
 
@@ -39,7 +39,7 @@ export const registerService = async (data) => {
       password_confirmation: data.passwordConfirmation,
       invite_code: data.inviteCode,
     },
-  });
+  }, true);
   return response;
 };
 
@@ -48,7 +48,7 @@ export const logoutService = async () => {
   const response = requestNew({
     url: 'auth/logout',
     method: 'GET',
-  });
+  }, true);
   return response;
 };
 

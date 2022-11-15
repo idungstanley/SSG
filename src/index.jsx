@@ -21,6 +21,10 @@ const onError = (error) => {
   var body;
 
   if (error.status === 403) {
+    return;
+  }
+
+  if (error.status === 403) {
     title = 'Oops! You are not authorized to perform this action.';
   } else if (error.status === 401) {
     title = 'Oops! You are no longer authenticated. Please logout and login again.';
@@ -35,7 +39,7 @@ const onError = (error) => {
     title = error?.statusText || error?.message;
   }
 
-  toast.custom(<Toast type="error" title={title} body={body} />);
+  toast.custom((t) => (<Toast type="error" title={title} body={body} toastId={t.id} />));
 };
 
 const onSuccess = (data) => {
@@ -49,7 +53,7 @@ const onSuccess = (data) => {
     title = 'Success';
   }
 
-  toast.custom(<Toast type="success" title={title} body={body} />);
+  toast.custom((t) => (<Toast type="success" title={title} body={body} toastId={t.id} />));
 };
 
 const queryClient = new QueryClient({

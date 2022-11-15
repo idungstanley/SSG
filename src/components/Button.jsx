@@ -22,6 +22,7 @@ function Button({
   roundedRight,
   borderLeft,
   borderRight,
+  value,
 }) {
   var buttonClassName;
   var hoverBackgroundColor;
@@ -40,7 +41,8 @@ function Button({
     buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
   }
 
-  if (ringOnFocus === true) { // What about danger which already have a ring?
+  if (ringOnFocus === true) {
+    // What about danger which already have a ring?
     buttonClassName = `${buttonClassName} focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-primary-600`;
   }
 
@@ -62,21 +64,34 @@ function Button({
 
   return (
     <button
+      value={value}
       onClick={onClick}
       type="button"
       disabled={disabled || loading}
-      className={classNames((disabled || loading) ? 'opacity-50' : hoverBackgroundColor, `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`)}
+      className={classNames(
+        disabled || loading ? 'opacity-50' : hoverBackgroundColor,
+        `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`,
+      )}
     >
       {loading ? (
         <div className="items-center -mt-1 justify-center w-full">
-          <Spinner size={18} color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'} />
+          <Spinner
+            size={18}
+            color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'}
+          />
         </div>
       ) : (
         <>
-          {icon && iconPosition === 'center' && <span className="">{icon}</span>}
-          {icon && (iconPosition === 'left' || iconPosition === null) && <span className="mr-1">{icon}</span>}
-          {label && (<span>{label}</span>)}
-          {icon && iconPosition === 'right' && <span className="ml-1">{icon}</span>}
+          {icon && iconPosition === 'center' && (
+            <span className="">{icon}</span>
+          )}
+          {icon && (iconPosition === 'left' || iconPosition === null) && (
+            <span className="mr-1">{icon}</span>
+          )}
+          {label && <span>{label}</span>}
+          {icon && iconPosition === 'right' && (
+            <span className="ml-1">{icon}</span>
+          )}
         </>
       )}
     </button>
@@ -97,6 +112,7 @@ Button.defaultProps = {
   roundedRight: true,
   borderLeft: true,
   borderRight: true,
+  value: null,
 };
 
 Button.propTypes = {
@@ -104,11 +120,9 @@ Button.propTypes = {
   onClick: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   label: PropTypes.string,
-  icon: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  width: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.string,
   height: PropTypes.string,
   padding: PropTypes.string,
   disabled: PropTypes.bool,

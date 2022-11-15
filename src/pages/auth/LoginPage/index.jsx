@@ -20,11 +20,13 @@ function LoginPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem('accessToken', JSON.stringify(successData.data.token.accessToken));
       localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.user.default_workspace_id));
+      localStorage.setItem('currentUserId', JSON.stringify(successData.data.token.token.user_id));
 
       dispatch(setCurrentUser({
         user: successData.data.user,
         accessToken: successData.data.token.accessToken,
         currentWorkspaceId: successData.data.user.default_workspace_id,
+        currentUserId: successData.data.token.token.user_id,
       }));
     },
   });

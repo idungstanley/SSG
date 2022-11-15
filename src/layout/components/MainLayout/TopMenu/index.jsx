@@ -20,6 +20,7 @@ import MainLogo from '../../../../assets/branding/main-logo.png';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
+  { name: 'Shared', href: '/shared', current: false },
   { name: 'Inbox', href: '/inbox', current: false },
 ];
 

@@ -30,6 +30,14 @@ import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/Tea
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
+import SharedPage from './pages/shared';
+
+// At workspace
+import Index from './pages/workspace/Index';
+import Home from './pages/workspace/Home/Home';
+import CreateWorkspace from './pages/workspace/createWorkspace';
+import Notification from './pages/workspace/notification/Notification';
+import Community from './pages/workspace/community/Community';
 
 const routes = (user) => [
   {
@@ -39,21 +47,43 @@ const routes = (user) => [
       { path: '/', element: <Navigate to="/explorer" /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
+      { path: 'shared', element: <SharedPage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'inbox', element: <InboxesPage /> },
       { path: 'inbox/:inboxId', element: <InboxPage /> },
       { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/permissions', element: <PermissionsSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/members', element: <TeamMembersSettingsPage /> },
-      { path: 'inbox/:inboxId/settings/groups', element: <TeamMemberGroupsSettingsPage /> },
+      {
+        path: 'inbox/:inboxId/settings/permissions',
+        element: <PermissionsSettingsPage />,
+      },
+      {
+        path: 'inbox/:inboxId/settings/members',
+        element: <TeamMembersSettingsPage />,
+      },
+      {
+        path: 'inbox/:inboxId/settings/groups',
+        element: <TeamMemberGroupsSettingsPage />,
+      },
       { path: 'settings/permissions', element: <PermissionsPage /> },
       { path: 'settings/team-members', element: <TeamMembersPage /> },
-      { path: 'settings/team-members/invites', element: <TeamMemberInvitesPage /> },
+      {
+        path: 'settings/team-members/invites',
+        element: <TeamMemberInvitesPage />,
+      },
 
       // Team member group settings
-      { path: 'settings/team-members/groups', element: <TeamMemberGroupsPage /> },
-      { path: 'settings/team-members/groups/:teamMemberGroupId', element: <TeamMemberGroupGeneralSettingsPage /> },
-      { path: 'settings/team-members/groups/:teamMemberGroupId/members', element: <TeamMemberGroupMembersPage /> },
+      {
+        path: 'settings/team-members/groups',
+        element: <TeamMemberGroupsPage />,
+      },
+      {
+        path: 'settings/team-members/groups/:teamMemberGroupId',
+        element: <TeamMemberGroupGeneralSettingsPage />,
+      },
+      {
+        path: 'settings/team-members/groups/:teamMemberGroupId/members',
+        element: <TeamMemberGroupMembersPage />,
+      },
     ],
   },
   {
@@ -63,6 +93,18 @@ const routes = (user) => [
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'register/:inviteCode', element: <RegisterPage /> },
+    ],
+  },
+  {
+    path: '/workspace',
+    element: user != null ? <Index /> : <Navigate to="/auth/login" />,
+    children: [
+      { path: 'onboarding', element: <CreateWorkspace /> },
+      { path: 'home', element: <Home /> },
+      { path: 'notification', element: <Notification /> },
+      // temporary
+      { path: 'community', element: <Community /> },
+      { path: 'goals', element: <Home /> },
     ],
   },
 ];
