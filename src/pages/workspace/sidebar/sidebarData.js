@@ -1,24 +1,23 @@
+/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-// import { HomeIcon } from '@heroicons/react/outline';
-// import {
-//   NotificationOutlined,
-//   TrophyOutlined,
-//   RocketFilled,
-//   PlusOutlined,
-// } from '@ant-design/icons';
-// import { ArrowDownIcon } from '@heroicons/react/solid';
+import { HomeIcon } from '@heroicons/react/outline';
+import { NotificationOutlined, RocketFilled } from '@ant-design/icons';
 
 export const menuItems = [
-  { path: '/workspace/home', name: 'Home' },
-  { path: '/workspace/notification', name: 'Notifications' },
-  { path: '/workspace/community', name: 'Community' },
-  { path: '/workspace/goals', name: 'Goals' },
+  { path: '/workspace/home', name: 'Home', icon: <HomeIcon /> },
+  {
+    path: '/workspace/notification',
+    name: 'Notifications',
+    icon: <NotificationOutlined />,
+  },
+  { path: '/workspace/community', name: 'Community', icon: <RocketFilled /> },
 ];
 
 export const dropDownMenus = [
-  { path: '/favourite', name: 'FAVOURITE' },
-  { path: '/hubs', name: 'HUBS' },
-  { path: '/inbox', name: 'INBOX' },
-  { path: '/files', name: 'FILES' },
-  { path: '/dashboard', name: 'DASHBOARD' },
+  { path: '/workspace/favourite', name: 'FAVOURITE' },
+  { path: '/workspace/hubs', name: 'HUBS' },
+  { path: '/workspace/inbox', name: 'INBOX' },
+  { path: '/workspace/files', name: 'FILES' },
+  { path: '/workspace/dashboard', name: 'DASHBOARD' },
+  { path: '/workspace/directory', name: 'DIRECTORY' },
 ];
