@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { GoogleLogin } from 'react-google-login';
@@ -6,11 +6,10 @@ import { gapi } from 'gapi-script';
 import { loginService, loginGoogleService } from '../../../features/auth/authService';
 import { setCurrentUser } from '../../../features/auth/authSlice';
 import {
-  Button,
-  Input,
   Hyperlink,
 } from '../../../components';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import Form from '../../../components/Form';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -45,26 +44,10 @@ function LoginPage() {
     },
   });
 
-  const defaultFormState = {
-    email: '',
-    password: '',
-  };
-
-  const [formState, setFormState] = useState(defaultFormState);
-
-  const { email, password } = formState;
-
-  const onChange = (e) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onSubmit = () => {
+  const onSubmit = (values) => {
     loginMutation.mutate({
-      email,
-      password,
+      email: values.email,
+      password: values.password,
     });
   };
 
@@ -128,37 +111,12 @@ function LoginPage() {
 
             <div className="mt-6">
               <div className="space-y-6">
-                <Input
-                  name="email"
-                  label="Email"
-                  onChange={onChange}
-                  type="email"
-                  value={email}
-                />
-
-                <Input
-                  name="password"
-                  label="Password"
-                  onChange={onChange}
-                  type="password"
-                  value={password}
-                />
+                <Form onSubmit={(values) => onSubmit(values)} />
 
                 <div className="flex items-left justify-between">
                   <Hyperlink href="/auth/forgot" label="Forgot your password?" />
                 </div>
 
-                <div>
-                  <Button
-                    buttonStyle="primary"
-                    onClick={onSubmit}
-                    loading={loginMutation.status === 'loading'}
-                    label="Sign in"
-                    padding="py-2 px-4"
-                    height="h-10"
-                    width="w-full"
-                  />
-                </div>
                 <GoogleLogin
                   clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                   className="rounded-l-md rounded-r-md w-full h-10 py-2 px-4 inline-flex items-center justify-center"
