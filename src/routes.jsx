@@ -96,7 +96,7 @@ const routes = (user) => [
     ],
   },
   {
-    path: '/onboarding', element: <CreateWorkspace />,
+    path: '/user/onboarding', element: <CreateWorkspace />,
   },
   {
     path: '/workspace',
