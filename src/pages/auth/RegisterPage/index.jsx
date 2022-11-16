@@ -94,6 +94,7 @@ function RegisterPage() {
         .min(8, 'Password must be 8 characters or longer!')
         .required('Required'),
     }),
+    buttonTitle: 'Sign Up',
   };
 
   return (
