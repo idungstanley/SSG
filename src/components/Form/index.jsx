@@ -21,9 +21,9 @@ export default function From({ onSubmit, formikConfig }) {
 
       {Object.keys(formik.values).map((i) => (
         <InputWithValidation
-          id={i.toString()}
-          type={i === 'password' ? 'password' : i === 'email' ? 'email' : 'text'}
           key={i}
+          id={i}
+          type={i === 'name' ? 'text' : i}
           placeholder={`Enter ${i}`}
           value={formik.values[i]}
           onChange={formik.handleChange}
@@ -39,7 +39,7 @@ export default function From({ onSubmit, formikConfig }) {
         className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md"
         type="submit"
       >
-        Sign in
+        {formikConfig.buttonTitle}
       </button>
     </form>
   );
