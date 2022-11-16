@@ -18,7 +18,7 @@ function Activity() {
       <div className="relative h-full">
         <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col px-5 pt-2 pb-7">
           <ul className="divide-y divide-gray-200 h-full flex-1">
-            {selectedInboxFileFullDetails.inbox_file_activity_logs.map((activityLog) => (
+            {selectedInboxFileFullDetails?.inbox_file_activity_logs.map((activityLog) => (
               <li key={activityLog.id} className="py-4">
                 <div className="flex space-x-3">
                   {activityLog.team_member !== null ? (
