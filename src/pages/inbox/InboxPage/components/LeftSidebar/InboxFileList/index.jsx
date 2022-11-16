@@ -63,7 +63,7 @@ function InboxFileList() {
         <ul className="relative z-0 divide-y divide-gray-200">
           <div className="relative divide-y divide-gray-200">
             {status === 'success' && unpaginatedInboxFiles.map((inboxFile, index) => (
-              <>
+              <div key={inboxFile.id}>
                 {selectedInboxTabKey === 'inbox' && index !== 0 && (moment.utc(inboxFile.created_at).tz(moment.tz.guess()).format('DD MMM YYYY') !== moment.utc(unpaginatedInboxFiles[index - 1]?.created_at).tz(moment.tz.guess()).format('DD MMM YYYY')) && (
                   <div className="z-10 sticky top-0 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
                     {moment.utc(inboxFile.created_at).tz(moment.tz.guess()).format('DD MMM YYYY') === moment.utc().tz(moment.tz.guess()).format('DD MMM YYYY') ? (
@@ -106,7 +106,7 @@ function InboxFileList() {
                   inboxFileId={inboxFile.id}
                   index={index}
                 />
-              </>
+              </div>
             ))}
           </div>
         </ul>

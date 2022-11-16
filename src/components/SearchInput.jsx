@@ -50,10 +50,10 @@ SearchInput.defaultProps = {
 };
 
 SearchInput.propTypes = {
-  onChange: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  loading: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default SearchInput;

@@ -15,7 +15,7 @@ function Row({ inboxId }) {
         <div className="flex items-center space-x-3">
           <div
             className="flex-shrink-0 w-2.5 h-2.5 rounded-full"
-            style={{ 'background-color': inbox.colour }}
+            style={{ backgroundColor: inbox.colour }}
             aria-hidden="true"
           />
           <Link to={`/inbox/${inbox.id}`} className="truncate hover:text-gray-600">

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function StackListItemNarrow({
-  key,
   title,
   description,
   icon,
@@ -13,7 +12,7 @@ function StackListItemNarrow({
   selected,
 }) {
   return (
-    <li key={key} className="bg-white">
+    <li className="bg-white">
       <div className={`relative flex items-center space-x-3 py-${paddingVertical} px-${paddingHorizontal} min-w-0 flex-1 flex items-center space-x-3 ${selected && 'ring-2 ring-inset ring-indigo-500'} ${onClick && 'hover:bg-gray-50'}`}>
         {icon && (
           <div className="flex-shrink-0">
@@ -60,7 +59,6 @@ StackListItemNarrow.defaultProps = {
 };
 
 StackListItemNarrow.propTypes = {
-  key: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   icon: PropTypes.oneOfType([
