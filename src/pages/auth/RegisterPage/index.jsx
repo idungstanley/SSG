@@ -51,7 +51,6 @@ function RegisterPage() {
       name: values.name,
       email: values.email,
       password: values.password,
-      passwordConfirmation: values.passwordConfirmation,
       // inviteCode,
     });
   };
@@ -87,7 +86,6 @@ function RegisterPage() {
       name: '',
       email: '',
       password: '',
-      passwordConfirmation: '',
     },
     validationSchema: Yup.object({
       name: Yup.string().min(3, 'Must be 3 characters or more').max(15, 'Must be 15 characters or less').required('Required'),
@@ -95,8 +93,6 @@ function RegisterPage() {
       password: Yup.string()
         .min(8, 'Password must be 8 characters or longer!')
         .required('Required'),
-      passwordConfirmation: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
     }),
   };
 

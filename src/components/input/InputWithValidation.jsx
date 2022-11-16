@@ -23,11 +23,7 @@ export default function InputWithValidation({
   message,
   isFocused,
 }) {
-  let label = placeholder.split(' ').at(-1);
-
-  if (label === 'passwordConfirmation') {
-    label = 'Confirm password';
-  }
+  const label = placeholder.split(' ').at(-1);
 
   return (
     <div className="relative">
@@ -54,7 +50,7 @@ export default function InputWithValidation({
             d={
               label === 'email'
                 ? icons[1].path
-                : (label === 'password' || label === 'Confirm password')
+                : label === 'password'
                   ? icons[0].path
                   : icons[2].path
             }
@@ -71,9 +67,7 @@ export default function InputWithValidation({
         id={id}
         type={type}
         placeholder={
-          placeholder === 'Enter passwordConfirmation'
-            ? 'Confirm password'
-            : placeholder
+          placeholder
         }
         value={value}
         onChange={onChange}
