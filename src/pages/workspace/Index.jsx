@@ -4,7 +4,7 @@ import Sidebar from './sidebar/Sidebar';
 
 function Index() {
   return (
-    <main className="flex w-full">
+    <main className="flex w-full overflow-y-scroll">
       <section className="w-3/12">
         <Sidebar />
       </section>

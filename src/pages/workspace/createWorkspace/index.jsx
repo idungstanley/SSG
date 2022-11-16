@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
+import { useDispatch } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
 import {
   Breadcrumb,
   SimpleSectionHeading,
@@ -10,13 +12,30 @@ import {
   Button,
 } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
+import { createWorkspaceService } from '../../../features/workspace/workspaceService';
+import { createWorkspace } from '../../../features/workspace/workspaceSlice';
 
 function CreateWorkspace() {
+  const dispatch = useDispatch();
+  const createWSMutation = useMutation(createWorkspaceService, {
+    onSuccess: async (successData) => {
+      localStorage.setItem('wsid', JSON.stringify(successData.data.workspace.id));
+      localStorage.setItem('wsname', JSON.stringify(successData.data.workspace.name));
+      localStorage.setItem('wssize', JSON.stringify(successData.data.workspace.company_size));
+
+      dispatch(
+        createWorkspace({
+          wsid: successData.data.workspace.id,
+          wsname: successData.data.workspace.name,
+          wssize: successData.data.workspace.company_size,
+        }),
+      );
+    },
+  });
+
   const defaultFormState = {
     name: '',
     email: '',
-    // company_size: '',
-    // avatarBackgroudColor: '',
   };
 
   const [formState, setFormState] = useState(defaultFormState);
@@ -33,14 +52,26 @@ function CreateWorkspace() {
     setCompanySize(value);
   };
 
+  const { name, email } = formState;
+
+  const emails = email.split(' ');
+
+  const onSubmit = () => {
+    createWSMutation.mutate({
+      name,
+      emails,
+      companySize,
+    });
+  };
+
   const handleBgClick = (colour) => {
     setBgAvatart(colour);
   };
 
-  console.log(formState);
-  console.log(bgAvatar, companySize);
+  console.log(emails);
+  // console.log(bgAvatar, companySize);
   return (
-    <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
+    <div className="h-full flex-1 flex flex-col overflow-y-scroll bg-gray-50">
       <Breadcrumb
         pages={[
           {
@@ -52,7 +83,7 @@ function CreateWorkspace() {
         rootIcon={
           <PlusIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
         }
-        rootIconHref="/workspace/onboarding"
+        rootIconHref="/onboarding"
       />
 
       <section className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6 ">
@@ -129,7 +160,7 @@ function CreateWorkspace() {
           <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
             <Button
               buttonStyle="primary"
-              // onClick={onSubmit}
+              onClick={onSubmit}
               // loading={loginMutation.status === 'loading'}
               type="submit"
               label="Create Workspace"

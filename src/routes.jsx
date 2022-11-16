@@ -96,10 +96,12 @@ const routes = (user) => [
     ],
   },
   {
+    path: '/onboarding', element: <CreateWorkspace />,
+  },
+  {
     path: '/workspace',
     element: user != null ? <Index /> : <Navigate to="/auth/login" />,
     children: [
-      { path: 'onboarding', element: <CreateWorkspace /> },
       { path: 'home', element: <Home /> },
       { path: 'notification', element: <Notification /> },
       // temporary

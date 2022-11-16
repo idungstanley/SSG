@@ -5,7 +5,7 @@ function Community() {
   return (
     <>
       <Nav navName="Community" buttonLabel="Calendar" Assigned="Agenda" />
-      <p>This is conmu</p>
+      <p>This is community</p>
     </>
   );
 }
