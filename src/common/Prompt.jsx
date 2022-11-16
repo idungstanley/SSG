@@ -66,7 +66,7 @@ export default function Prompt() {
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 {options.map((option) => (
-                  <>
+                  <div key={option.label}>
                     {option.style === 'plain' && (
                       <button
                         type="button"
@@ -85,7 +85,7 @@ export default function Prompt() {
                         {option.label}
                       </button>
                     )}
-                  </>
+                  </div>
                 ))}
               </div>
             </div>

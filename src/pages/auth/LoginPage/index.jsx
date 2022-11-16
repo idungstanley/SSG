@@ -17,7 +17,7 @@ function LoginPage() {
   const dispatch = useDispatch();
 
   const loginMutation = useMutation(loginService, {
-    onSuccess: async (successData) => {
+    onSuccess: (successData) => {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
@@ -44,7 +44,7 @@ function LoginPage() {
   });
 
   const loginGoogleMutation = useMutation(loginGoogleService, {
-    onSuccess: async (successData) => {
+    onSuccess: (successData) => {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',

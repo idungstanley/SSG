@@ -54,7 +54,7 @@ export const {
   reset,
 } = promptSlice.actions;
 
-export const displayPrompt = (title, body, options) => async (dispatch) => {
+export const displayPrompt = (title, body, options) => (dispatch) => {
   dispatch(setData({
     title,
     body,

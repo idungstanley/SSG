@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Login
-export const loginService = async (data) => {
+export const loginService = (data) => {
   const response = requestNew(
     {
       url: 'auth/login',
@@ -18,7 +18,7 @@ export const loginService = async (data) => {
 };
 
 // Login by Google
-export const loginGoogleService = async (data) => {
+export const loginGoogleService = (data) => {
   const response = requestNew(
     {
       url: 'auth/social/google',
@@ -34,7 +34,7 @@ export const loginGoogleService = async (data) => {
 };
 
 // Register
-export const registerService = async (data) => {
+export const registerService = (data) => {
   const response = requestNew(
     {
       url: 'auth/register',
@@ -52,7 +52,7 @@ export const registerService = async (data) => {
 };
 
 // Logout
-export const logoutService = async () => {
+export const logoutService = () => {
   const response = requestNew(
     {
       url: 'auth/logout',

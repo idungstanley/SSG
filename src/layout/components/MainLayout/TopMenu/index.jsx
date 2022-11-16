@@ -36,7 +36,7 @@ function TopMenu() {
   const { data: unfiledInboxesCount, status } = useGetInboxUnfiledCount();
 
   const logoutMutation = useMutation(logoutService, {
-    onSuccess: async () => {
+    onSuccess: () => {
       dispatch(setVisibility(false));
 
       localStorage.removeItem('user');
@@ -58,8 +58,8 @@ function TopMenu() {
       {
         label: 'Sign out',
         style: 'danger',
-        callback: async () => {
-          await logoutMutation.mutate();
+        callback: () => {
+          logoutMutation.mutate();
         },
       },
       {
