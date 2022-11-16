@@ -24,19 +24,15 @@ function InboxFileListItem({ inboxFileId, index }) {
       }),
     );
   };
-  console.log(inboxFile);
+
+  const uploadMethod = inboxFile.inbox_file_source.upload_method.key;
+  const description = uploadMethod === 'email' ? `Sent by ${inboxFile.inbox_file_source.sent_from_email} via email` : uploadMethod === 'dashboard' ? `Uploaded by ${inboxFile.inbox_file_source.created_by_team_member?.user.name}` : '-';
 
   return inboxFile ? (
     <StackListItemNarrow
       key={inboxFile.id}
       title={inboxFile.inbox_file_source.display_name}
-      description={
-        inboxFile.inbox_file_source.upload_method.key === 'email'
-          ? `Sent by ${inboxFile.inbox_file_source.sent_from_email} via email`
-          : inboxFile.inbox_file_source.upload_method.key === 'dashboard'
-            ? `Uploaded by ${inboxFile.inbox_file_source.created_by_team_member?.user.name}`
-            : '-'
-      }
+      description={description}
       icon={(
         <span className="inline-block relative">
           <FileIcon

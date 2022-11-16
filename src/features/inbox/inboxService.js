@@ -172,5 +172,5 @@ export const previewInboxFile = async (data) => {
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const url = `/inbox-files/${data.inboxFileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-  window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
+  window.open(`${process.env.REACT_APP_API_BASE_URL}/api/af/${url}`, '_blank');
 };

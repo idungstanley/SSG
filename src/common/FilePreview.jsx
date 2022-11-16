@@ -9,13 +9,13 @@ function FilePreview({ fileData, fileExtension }) {
       fileData,
     },
   ];
-
   return (
     <div className="react-doc-viewer-wrapper h-full w-full overflow-y-scroll flex-1">
-      <DocViewer
-        pluginRenderers={DocViewerRenderers}
-        documents={docs}
-      />
+      {fileExtension === 'bin' ? (
+        <p className="text-center mt-2 text-red-500">Unsupported file extension</p>
+      ) : (
+        <DocViewer pluginRenderers={DocViewerRenderers} documents={docs} />
+      )}
     </div>
   );
 }
