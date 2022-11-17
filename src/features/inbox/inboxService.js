@@ -2,6 +2,7 @@ import {
   useQuery,
   useInfiniteQuery,
   useQueryClient,
+  useMutation,
 } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
@@ -157,6 +158,31 @@ export const unarchiveInboxFileService = async (data) => {
     method: 'POST',
   });
   return response;
+};
+
+// multiple archive / unarchive
+export const multipleArchiveOrUnarchiveInboxFiles = async (id, fileIdsArr, type) => {
+  // type: archive / unarchive
+
+  const request = await requestNew({
+    url: `inboxes/${id}/multiple-files-${type}`,
+    method: 'POST',
+    params: {
+      inbox_file_ids: fileIdsArr,
+    },
+  });
+  return request;
+};
+
+export const useMultipleArchiveOrUnArchive = (id, fileIdsArr, type) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => multipleArchiveOrUnarchiveInboxFiles(id, fileIdsArr, type), {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
+      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 1 }]);
+    },
+  });
 };
 
 // Download inbox file

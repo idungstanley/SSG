@@ -145,19 +145,6 @@ export const useHideOrUnhideInbox = (id, type) => {
   });
 };
 
-export const multipleArchiveOrUnarchiveInboxFiles = async (id, fileIdsArr, type) => {
-  // type: archive / unarchive
-
-  const request = await requestNew({
-    url: `inboxes/${id}/multiple-files-${type}`,
-    method: 'POST',
-    params: {
-      inbox_file_ids: fileIdsArr,
-    },
-  });
-  return request;
-};
-
 // delete
 export const deleteInboxService = async (id) => {
   const request = await requestNew({
