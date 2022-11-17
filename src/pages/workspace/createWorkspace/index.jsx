@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
+// import { useNavigate } from 'react-router-dom';
 import {
   Breadcrumb,
   SimpleSectionHeading,
@@ -12,26 +13,58 @@ import {
   Button,
 } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
-import { createWorkspaceService } from '../../../features/workspace/workspaceService';
-import { createWorkspace } from '../../../features/workspace/workspaceSlice';
+import {
+  createWorkspaceService,
+} from '../../../features/workspace/workspaceService';
+import {
+  createWorkspace,
+} from '../../../features/workspace/workspaceSlice';
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: async (successData) => {
-      localStorage.setItem('wsid', JSON.stringify(successData.data.workspace.id));
-      localStorage.setItem('wsname', JSON.stringify(successData.data.workspace.name));
-      localStorage.setItem('wssize', JSON.stringify(successData.data.workspace.company_size));
+      localStorage.setItem(
+        'wsid',
+        JSON.stringify(successData.data.workspace.id),
+      );
+      localStorage.setItem(
+        'wsname',
+        JSON.stringify(successData.data.workspace.name),
+      );
+      localStorage.setItem(
+        'wssize',
+        JSON.stringify(successData.data.workspace.company_size),
+      );
+      localStorage.setItem(
+        'wsemail',
+        JSON.stringify(successData.data.workspace.emails),
+      );
 
       dispatch(
         createWorkspace({
           wsid: successData.data.workspace.id,
           wsname: successData.data.workspace.name,
           wssize: successData.data.workspace.company_size,
+          wsemail: successData.data.workspace.emails,
         }),
       );
     },
   });
+
+  // const getWsMutation = useMutation(getWorkspaceService, {
+  //   onSuccess: async (successData) => {
+  //     const myWs = successData.data.workspace;
+  //     if (myWs) {
+  //       localStorage.setItem(
+  //         'currentWsID',
+  //         JSON.stringify(successData.data.workspace.id),
+  //       );
+  //     }
+  //   },
+  // });
+
+  // console.log(localStorage.getItem('isworkspace'));
 
   const defaultFormState = {
     name: '',
@@ -41,8 +74,6 @@ function CreateWorkspace() {
   const [formState, setFormState] = useState(defaultFormState);
   const [bgAvatar, setBgAvatart] = useState('red');
   const [companySize, setCompanySize] = useState(0);
-
-  // const { name, email } = formState;
 
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -68,15 +99,25 @@ function CreateWorkspace() {
     setBgAvatart(colour);
   };
 
-  console.log(emails);
-  // console.log(bgAvatar, companySize);
+  // const getWs = () => {
+  //   getWsMutation.mutate();
+  // };
+
+  // const navigate = useNavigate();
+  useEffect(() => {
+    // getWs();
+    // if (localStorage.getItem('currentWorkspaceId') !== null) {
+    //   navigate('/workspace/notification');
+    // }
+  }, []);
+
   return (
     <div className="h-full flex-1 flex flex-col overflow-y-scroll bg-gray-50">
       <Breadcrumb
         pages={[
           {
             name: 'Workspace',
-            href: '/workspace',
+            href: '/onboarding',
             current: true,
           },
         ]}

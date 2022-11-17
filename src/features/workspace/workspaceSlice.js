@@ -11,9 +11,10 @@ export const wsSlice = createSlice({
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
+    checkIfWs: (state) => state,
   },
 });
 
-export const { createWorkspace } = wsSlice.actions;
+export const { createWorkspace, checkIfWs } = wsSlice.actions;
 
 export default wsSlice.reducer;

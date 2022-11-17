@@ -95,8 +95,10 @@ const routes = (user) => [
       { path: 'register/:inviteCode', element: <RegisterPage /> },
     ],
   },
+  // temporary onboarding route
   {
-    path: '/user/onboarding', element: <CreateWorkspace />,
+    path: '/onboarding',
+    element: user != null ? <CreateWorkspace /> : <Navigate to="/auth/login" />,
   },
   {
     path: '/workspace',
@@ -104,7 +106,6 @@ const routes = (user) => [
     children: [
       { path: 'home', element: <Home /> },
       { path: 'notification', element: <Notification /> },
-      // temporary
       { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
     ],

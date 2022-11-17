@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authSlice from '../features/auth/authSlice';
-import createWorkspace from '../features/workspace/workspaceSlice';
+import wsSlice from '../features/workspace/workspaceSlice';
 import explorerSlice from '../features/explorer/explorerSlice';
 import inboxSlice from '../features/inbox/inboxSlice';
 import searchSlice from '../features/search/searchSlice';
@@ -28,7 +28,7 @@ export const store = configureStore({
     teamMemberInvite: teamMemberInviteSlice,
     teamMemberGroup: teamMemberGroupSlice,
     shared: sharedSlice,
-    workspace: createWorkspace,
+    workspace: wsSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

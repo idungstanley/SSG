@@ -16,3 +16,22 @@ export const createWorkspaceService = async (data) => {
   );
   return response;
 };
+
+export const getWorkspaceService = async () => {
+  const response = requestNew({
+    url: 'workspace',
+    method: 'GET',
+  }, true);
+  return response;
+};
+
+export const checkIfWorkspaceService = async () => {
+  const response = requestNew(
+    {
+      url: 'user/self',
+      method: 'GET',
+    },
+    true,
+  );
+  return response;
+};

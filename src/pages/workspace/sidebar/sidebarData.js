@@ -14,10 +14,10 @@ export const menuItems = [
 ];
 
 export const dropDownMenus = [
-  { path: '/workspace/favourite', name: 'FAVOURITE' },
-  { path: '/workspace/hubs', name: 'HUBS' },
-  { path: '/workspace/inbox', name: 'INBOX' },
-  { path: '/workspace/files', name: 'FILES' },
-  { path: '/workspace/dashboard', name: 'DASHBOARD' },
-  { path: '/workspace/directory', name: 'DIRECTORY' },
+  { name: 'FAVOURITE' },
+  { name: 'HUBS' },
+  { name: 'INBOX' },
+  { name: 'FILES' },
+  { name: 'DASHBOARD' },
+  { name: 'DIRECTORY' },
 ];
