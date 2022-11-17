@@ -20,7 +20,9 @@ const onError = (error) => {
   var title;
   var body;
 
-  if (error.status === 403) {
+  if (!error) {
+    title = 'Oops! An internal server error occurred.';
+    toast.custom((t) => (<Toast type="error" title={title} body={body} toastId={t.id} />));
     return;
   }
 
@@ -28,7 +30,7 @@ const onError = (error) => {
     title = 'Oops! You are not authorized to perform this action.';
   } else if (error.status === 401) {
     title = 'Oops! You are no longer authenticated. Please logout and login again.';
-  } else if (error.status === 500) {
+  } else if (error.status === 500 || !error) {
     title = 'Oops! An internal server error occurred.';
   } else if (error.status === 404) {
     title = 'Oops! Resource not found.';
