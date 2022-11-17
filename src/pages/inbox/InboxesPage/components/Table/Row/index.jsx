@@ -2,12 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { OutputDateTime } from '../../../../../../app/helpers';
-import { useGetInbox } from '../../../../../../features/inbox/inboxesService';
+import {
+  markOpenedInbox,
+  useGetInbox,
+} from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
 
 function Row({ inboxId }) {
   const { data: inbox } = useGetInbox(inboxId);
+
+  const handleClickInbox = async () => {
+    if (inbox.is_new) {
+      await markOpenedInbox(inbox.id);
+    }
+  };
 
   return inbox ? (
     <tr key={inbox.id}>
@@ -18,20 +27,23 @@ function Row({ inboxId }) {
             style={{ backgroundColor: inbox.colour }}
             aria-hidden="true"
           />
-          <Link to={`/inbox/${inbox.id}`} className="truncate hover:text-gray-600">
+          <Link
+            to={`/inbox/${inbox.id}`}
+            className="truncate hover:text-gray-600"
+            onClick={handleClickInbox}
+          >
             <span className="space-x-2">
-              <span>
-                {inbox.name}
-              </span>
+              <span>{inbox.name}</span>
 
-              {inbox.unfiled_count > 0
-                && (
-                  <Badge
-                    value={inbox.unfiled_count >= 99 ? '99+' : inbox.unfiled_count}
-                    textColour="text-red-800"
-                    backgroundColour="bg-red-100"
-                  />
-                )}
+              {inbox.unfiled_count > 0 && (
+                <Badge
+                  value={
+                    inbox.unfiled_count >= 99 ? '99+' : inbox.unfiled_count
+                  }
+                  textColour="text-red-800"
+                  backgroundColour="bg-red-100"
+                />
+              )}
             </span>
           </Link>
         </div>

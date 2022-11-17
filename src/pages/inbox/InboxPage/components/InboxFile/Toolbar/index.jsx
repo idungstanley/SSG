@@ -118,7 +118,7 @@ function Toolbar() {
                   <div className="py-3 flex justify-between">
 
                     {/* Left buttons */}
-                    <div className="relative z-0 inline-flex inline-flex space-x-2">
+                    <div className="relative z-0 inline-flex space-x-2">
                       <Button
                         buttonStyle="white"
                         onClick={() => handleNavigateToFile('previous')}

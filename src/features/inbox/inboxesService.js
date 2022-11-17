@@ -115,3 +115,11 @@ export const useGetInboxUnfiledCount = () => useQuery(
     return data.data.unfiled_count;
   },
 );
+
+export const markOpenedInbox = async (id) => {
+  const request = await requestNew({
+    url: `inboxes/${id}/mark-opened`,
+    method: 'POST',
+  });
+  return request;
+};

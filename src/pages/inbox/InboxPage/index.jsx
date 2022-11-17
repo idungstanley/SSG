@@ -46,7 +46,7 @@ function InboxPage() {
     const httpStatus = response.status;
     const httpBody = response.body;
 
-    console.log(httpBody);
+    // console.log(httpBody);
 
     if (httpStatus === 200) {
       if (httpBody.success === true) {
@@ -93,7 +93,6 @@ function InboxPage() {
             <InboxFile />
           </div>
         </div>
-
         {/* Slide Overs */}
         <AssignInboxFileSlideOver />
       </div>
