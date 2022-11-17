@@ -124,6 +124,7 @@ export const markOpenedInbox = async (id) => {
   return request;
 };
 
+// hide inbox
 export const hideOrUnhideInbox = async (id, type) => {
   // type: hide / unhide
 
@@ -132,6 +133,16 @@ export const hideOrUnhideInbox = async (id, type) => {
     method: 'POST',
   });
   return request;
+};
+
+export const useHideOrUnhideInbox = (id, type) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => hideOrUnhideInbox(id, type), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inboxes']);
+    },
+  });
 };
 
 export const multipleArchiveOrUnarchiveInboxFiles = async (id, fileIdsArr, type) => {
@@ -148,10 +159,20 @@ export const multipleArchiveOrUnarchiveInboxFiles = async (id, fileIdsArr, type)
 };
 
 // delete
-export const deleteInbox = async (id) => {
+export const deleteInboxService = async (id) => {
   const request = await requestNew({
     url: `inboxes/${id}`,
     method: 'DELETE',
   });
   return request;
+};
+
+export const useDeleteInbox = (id) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => deleteInboxService(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inboxes']);
+    },
+  });
 };

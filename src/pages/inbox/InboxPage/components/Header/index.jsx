@@ -1,19 +1,19 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { useMutation } from '@tanstack/react-query';
 import { CogIcon } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
-import { deleteInbox } from '../../../../../features/inbox/inboxesService';
+import { useDeleteInbox } from '../../../../../features/inbox/inboxesService';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const upload = () => {
     dispatch(setShowUploadModal(true));
@@ -23,18 +23,20 @@ function Header() {
     navigate(`/inbox/${inboxId}/settings`);
   };
 
-  const deleteMutation = useMutation(deleteInbox, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['inboxes']);
-      // eslint-disable-next-line no-console
-      console.log('deleted');
-    },
-  });
+  const { mutateAsync: deleteInbox } = useDeleteInbox(inboxId);
+  // const deleteMutation = useMutation(deleteInbox, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['inboxes']);
+  //     // eslint-disable-next-line no-console
+  //     console.log('deleted');
+  //   },
+  // });
 
   const handleDelete = async () => {
-    await deleteMutation.mutateAsync({
-      id: inboxId,
-    });
+    // await deleteMutation.mutateAsync({
+    //   id: inboxId,
+    // });
+    await deleteInbox();
     navigate('/inbox');
   };
 
