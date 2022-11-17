@@ -26,14 +26,12 @@ function Toolbar() {
   const queryClient = useQueryClient();
 
   // Selectors
-
   const selectedInboxFileIndex = useSelector((state) => state.inbox.selected_inbox_file_index);
   const selectedInboxFileId = useSelector((state) => state.inbox.selectedInboxFileId);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
   const folderIdsForFiling = useSelector((state) => state.inbox.folderIdsForFiling);
 
   // Mutations
-
   const archiveInboxFileMutation = useMutation(archiveInboxFileService, {
     onSuccess: (data) => {
       queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
@@ -75,7 +73,7 @@ function Toolbar() {
     }
   };
 
-  const fileDocument = async () => {
+  const fileDocument = () => {
     fileInboxFileMutation.mutate({
       inboxFileId: inboxFile.id,
       folderIds: folderIdsForFiling,

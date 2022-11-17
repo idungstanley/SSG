@@ -123,3 +123,35 @@ export const markOpenedInbox = async (id) => {
   });
   return request;
 };
+
+export const hideOrUnhideInbox = async (id, type) => {
+  // type: hide / unhide
+
+  const request = await requestNew({
+    url: `inboxes/${id}/${type}`,
+    method: 'POST',
+  });
+  return request;
+};
+
+export const multipleArchiveOrUnarchiveInboxFiles = async (id, fileIdsArr, type) => {
+  // type: archive / unarchive
+
+  const request = await requestNew({
+    url: `inboxes/${id}/multiple-files-${type}`,
+    method: 'POST',
+    params: {
+      inbox_file_ids: fileIdsArr,
+    },
+  });
+  return request;
+};
+
+// delete
+export const deleteInbox = async (id) => {
+  const request = await requestNew({
+    url: `inboxes/${id}`,
+    method: 'DELETE',
+  });
+  return request;
+};
