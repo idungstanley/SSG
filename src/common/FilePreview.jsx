@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
+import FullScreenMessage from '../pages/shared/components/FullScreenMessage';
 
 const docks = ['docx', 'doc'];
 const images = ['jpg', 'png'];
@@ -20,9 +21,7 @@ function FilePreview({ fileData, fileExtension }) {
       ) : images.includes(fileExtension) ? (
         <img src={fileData} alt="img" />
       ) : (
-        <p className="text-center mt-2 text-red-500">
-          Unsupported file extension
-        </p>
+        <FullScreenMessage title="Unsupported file extension." description="Sorry :(" />
       )}
     </div>
   );

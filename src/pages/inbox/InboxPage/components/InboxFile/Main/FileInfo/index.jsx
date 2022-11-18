@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { EyeIcon, InformationCircleIcon, ClockIcon } from '@heroicons/react/outline';
+import {
+  EyeIcon, InformationCircleIcon, ClockIcon, ChatIcon,
+} from '@heroicons/react/outline';
 import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
@@ -23,6 +25,12 @@ const tabs = [
     key: 'activity',
     name: 'Activity',
     icon: ClockIcon,
+    current: false,
+  },
+  {
+    key: 'comments',
+    name: 'Comments',
+    icon: ChatIcon,
     current: false,
   },
 ];
