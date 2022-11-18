@@ -44,7 +44,7 @@ const routes = (user) => [
     path: '/',
     element: user ? <MainLayout /> : <Navigate to="/auth/login" />,
     children: [
-      { path: '/', element: <Navigate to="/explorer" /> },
+      { path: '/', element: <Navigate to="/workspace" /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
@@ -90,7 +90,7 @@ const routes = (user) => [
         element: user?.default_workspace_id ? (
           <Index />
         ) : (
-          <Navigate to="workspace/onboarding" />
+          <Navigate to="/workspace/onboarding" />
         ),
         children: [
           { path: 'home', element: <Home /> },

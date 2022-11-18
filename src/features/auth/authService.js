@@ -43,6 +43,7 @@ export const registerService = (data) => {
         name: data.name,
         email: data.email,
         password: data.password,
+        password_confirmation: data.password,
         invite_code: data.inviteCode,
       },
     },

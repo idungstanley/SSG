@@ -78,6 +78,7 @@ function RegisterPage() {
   };
   const handleGoogleFailure = (response) => {
     // fail handler: todo delete console log
+    // eslint-disable-next-line no-console
     console.log(response);
   };
 

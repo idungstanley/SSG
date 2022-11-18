@@ -1,22 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import LoadingBar from 'react-top-loading-bar';
 import TopMenu from './TopMenu';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
-import { selectCurrentWorkspaceId } from '../../../features/auth/authSlice';
 
 function MainLayout() {
   const progressBarRef = useRef(null);
-  const workspaceId = useSelector(selectCurrentWorkspaceId);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!workspaceId) {
-      navigate('/workspace/onboarding');
-    }
-  }, []);
 
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
