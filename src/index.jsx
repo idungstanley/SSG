@@ -22,7 +22,9 @@ const onError = (error) => {
 
   if (!error) {
     title = 'Oops! An internal server error occurred.';
-    toast.custom((t) => (<Toast type="error" title={title} body={body} toastId={t.id} />));
+    toast.custom((t) => (
+      <Toast type="error" title={title} body={body} toastId={t.id} />
+    ));
     return;
   }
 
@@ -41,12 +43,18 @@ const onError = (error) => {
     title = error?.statusText || error?.message;
   }
 
-  toast.custom((t) => (<Toast type="error" title={title} body={body} toastId={t.id} />));
+  toast.custom((t) => (
+    <Toast type="error" title={title} body={body} toastId={t.id} />
+  ));
 };
 
 const onSuccess = (data) => {
   var title;
   var body;
+
+  if (!data?.message?.title) {
+    return;
+  }
 
   if (data?.message) {
     title = data?.message.title;
@@ -55,7 +63,9 @@ const onSuccess = (data) => {
     title = 'Success';
   }
 
-  toast.custom((t) => (<Toast type="success" title={title} body={body} toastId={t.id} />));
+  toast.custom((t) => (
+    <Toast type="success" title={title} body={body} toastId={t.id} />
+  ));
 };
 
 const queryClient = new QueryClient({
