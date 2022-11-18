@@ -163,3 +163,27 @@ export const useDeleteInbox = (id) => {
     },
   });
 };
+
+// responsible inboxes
+export const getResponsibleInboxes = async () => {
+  const request = await requestNew({
+    url: 'inboxes/responsible',
+    method: 'GET',
+  });
+  return request;
+};
+
+export const useGetResponsibleInboxes = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['responsible-inbox'],
+    () => getResponsibleInboxes(),
+    {
+      onSuccess: (data) => {
+        // ! set actual data, not pinned_inboxes
+        data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['responsible-inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
