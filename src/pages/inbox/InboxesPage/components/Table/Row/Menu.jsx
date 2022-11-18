@@ -51,7 +51,6 @@ export default function Menu({ inboxId }) {
 
     setPinnedInboxesIds(ids);
   }, [pinnedInboxesStatus, pinnedInboxesData]);
-  console.log(inbox);
 
   return inbox ? (
     <HeadlessUIMenu as="div" className="relative inline-block text-left">

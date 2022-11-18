@@ -20,7 +20,7 @@ function Header() {
           Inbox
         </h1>
       </div>
-      <div className="mt-4 flex sm:mt-0 sm:ml-4 gap-3">
+      <div className="mt-4 flex sm:mt-0 sm:ml-4 gap-10">
         <div className="relative flex items-center">
           <div className="flex h-5 items-center">
             <input

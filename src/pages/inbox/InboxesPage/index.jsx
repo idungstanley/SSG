@@ -38,9 +38,9 @@ function InboxDashboard() {
                 />
               </div>
             </div>
-          ) : <Table /> : (
+          ) : <Table /> : status === 'error' ? (
             <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
-          )}
+          ) : null}
         </div>
       </div>
       <CreateInboxSlideOver />
