@@ -58,7 +58,7 @@ export const createInboxService = async (data) => {
   const response = requestNew({
     url: 'inboxes',
     method: 'POST',
-    params: {
+    data: {
       name: data.name,
       email_username: data.emailUsername,
     },
