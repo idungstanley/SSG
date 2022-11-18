@@ -1,12 +1,13 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { EmptyStateSimple } from '../../../../components';
 
-export default function FullScreenMessage({ title, description }) {
+export default function FullScreenMessage(props) {
   return (
     <div className="flex flex-1 h-full bg-white">
       <div className="m-auto">
-        <EmptyStateSimple title={title} description={description} />
+        <EmptyStateSimple {...props} />
       </div>
     </div>
   );
