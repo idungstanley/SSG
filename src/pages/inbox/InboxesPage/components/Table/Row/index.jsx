@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { OutputDateTime } from '../../../../../../app/helpers';
 import {
-  markOpenedInbox,
-  useGetInbox,
+  useGetInbox, useMarkOpenedInbox,
 } from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
@@ -12,9 +11,11 @@ import { Badge } from '../../../../../../components';
 function Row({ inboxId }) {
   const { data: inbox } = useGetInbox(inboxId);
 
-  const handleClickInbox = async () => {
+  const { mutate: markOpened } = useMarkOpenedInbox(inboxId);
+
+  const handleClickInbox = () => {
     if (inbox.is_new) {
-      await markOpenedInbox(inbox.id);
+      markOpened();
     }
   };
 

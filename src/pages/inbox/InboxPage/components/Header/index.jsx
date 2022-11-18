@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-// import { useMutation } from '@tanstack/react-query';
-import { CogIcon } from '@heroicons/react/solid';
+import { CogIcon, TrashIcon } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
@@ -13,7 +12,6 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
-  // const queryClient = useQueryClient();
 
   const upload = () => {
     dispatch(setShowUploadModal(true));
@@ -23,20 +21,10 @@ function Header() {
     navigate(`/inbox/${inboxId}/settings`);
   };
 
-  const { mutateAsync: deleteInbox } = useDeleteInbox(inboxId);
-  // const deleteMutation = useMutation(deleteInbox, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(['inboxes']);
-  //     // eslint-disable-next-line no-console
-  //     console.log('deleted');
-  //   },
-  // });
+  const { mutate: deleteInbox } = useDeleteInbox(inboxId);
 
-  const handleDelete = async () => {
-    // await deleteMutation.mutateAsync({
-    //   id: inboxId,
-    // });
-    await deleteInbox();
+  const handleDelete = () => {
+    deleteInbox();
     navigate('/inbox');
   };
 
@@ -75,7 +63,7 @@ function Header() {
           buttonStyle="danger"
           label="Delete inbox"
           onClick={handleDelete}
-          icon={<CogIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
+          icon={<TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />}
           iconPosition="center"
           disabled={false}
           ringOnFocus

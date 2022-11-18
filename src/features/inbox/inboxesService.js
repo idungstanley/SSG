@@ -116,12 +116,22 @@ export const useGetInboxUnfiledCount = () => useQuery(
   },
 );
 
-export const markOpenedInbox = async (id) => {
-  const request = await requestNew({
+export const markOpenedInbox = (id) => {
+  const request = requestNew({
     url: `inboxes/${id}/mark-opened`,
     method: 'POST',
   });
   return request;
+};
+
+export const useMarkOpenedInbox = (id) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => markOpenedInbox(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inboxes']);
+    },
+  });
 };
 
 // hide inbox
@@ -146,8 +156,8 @@ export const useHideOrUnhideInbox = (id, type) => {
 };
 
 // delete
-export const deleteInboxService = async (id) => {
-  const request = await requestNew({
+export const deleteInboxService = (id) => {
+  const request = requestNew({
     url: `inboxes/${id}`,
     method: 'DELETE',
   });
