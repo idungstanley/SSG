@@ -267,6 +267,7 @@ export const usePostInboxFileComment = (fileId, message) => {
   });
 };
 
+// delete comments
 export const deleteInboxFileComment = (data) => {
   const request = requestNew({
     url: `inbox-files/${data.fileId}/comment/${data.messageId}`,

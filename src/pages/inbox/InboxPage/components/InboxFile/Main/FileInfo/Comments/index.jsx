@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TrashIcon } from '@heroicons/react/solid';
@@ -43,7 +44,7 @@ function Comments() {
               <input
                 type="text"
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-base pr-12"
-                placeholder="you@example.com"
+                placeholder="Enter comment"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />
@@ -73,20 +74,17 @@ function Comments() {
               </div>
             ) : status === 'success' ? (
               comments?.length ? (
-                <div className="flex flex-col gap-2">
+                <ul role="list" className="divide-y divide-gray-200">
                   {comments.map((i) => (
-                    <div
-                      key={i.id}
-                      className="p-2 border rounded border-gray-300 flex justify-between"
-                    >
+                    <li key={i.id} className="py-4 flex justify-between">
                       <p>{i.message}</p>
                       <TrashIcon
                         onClick={() => handleDelete(i.id)}
-                        className="w-6 h-6 text-red-500 cursor-pointer"
+                        className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
                       />
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
                 <FullScreenMessage
                   title="No messages yes."
