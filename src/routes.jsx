@@ -40,6 +40,7 @@ import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
 
 const routes = (user) => [
+  { path: 'workspace/onboarding', element: <CreateWorkspace /> },
   {
     path: '/',
     element: user ? <MainLayout /> : <Navigate to="/auth/login" />,
@@ -70,7 +71,6 @@ const routes = (user) => [
         path: 'settings/team-members/invites',
         element: <TeamMemberInvitesPage />,
       },
-
       // Team member group settings
       {
         path: 'settings/team-members/groups',
@@ -84,7 +84,6 @@ const routes = (user) => [
         path: 'settings/team-members/groups/:teamMemberGroupId/members',
         element: <TeamMemberGroupMembersPage />,
       },
-      { path: 'workspace/onboarding', element: <CreateWorkspace /> },
       {
         path: 'workspace',
         element: user?.default_workspace_id ? (

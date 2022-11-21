@@ -2,6 +2,7 @@ import {
   useQuery,
   useInfiniteQuery,
   useQueryClient,
+  useMutation,
 } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
@@ -93,7 +94,10 @@ export const useSearchFoldersForFiling = (query) => {
     },
     {
       onSuccess: (data) => {
-        data.data.folders.map((folder) => queryClient.setQueryData(['inbox_folder_search_result', folder.id], folder));
+        data.data.folders.map((folder) => queryClient.setQueryData(
+          ['inbox_folder_search_result', folder.id],
+          folder,
+        ));
       },
     },
   );
@@ -159,9 +163,51 @@ export const unarchiveInboxFileService = async (data) => {
   return response;
 };
 
+// multiple archive / unarchive
+export const multipleArchiveOrUnarchiveInboxFiles = async (
+  id,
+  fileIdsArr,
+  type,
+) => {
+  // type: archive / unarchive
+
+  const request = await requestNew({
+    url: `inboxes/${id}/multiple-files-${type}`,
+    method: 'POST',
+    params: {
+      inbox_file_ids: fileIdsArr,
+    },
+  });
+  return request;
+};
+
+export const useMultipleArchiveOrUnArchive = (id, fileIdsArr, type) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    () => multipleArchiveOrUnarchiveInboxFiles(id, fileIdsArr, type),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries([
+          'inbox_files',
+          data.data.inbox_file.inbox_id,
+          { isArchived: 0 },
+        ]);
+        queryClient.invalidateQueries([
+          'inbox_files',
+          data.data.inbox_file.inbox_id,
+          { isArchived: 1 },
+        ]);
+      },
+    },
+  );
+};
+
 // Download inbox file
 export const downloadInboxFile = async (data) => {
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+  const currentWorkspaceId = JSON.parse(
+    localStorage.getItem('currentWorkspaceId'),
+  );
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const url = `/inbox-files/${data.inboxFileId}/download?current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
   window.location.href = `${process.env.REACT_APP_API_BASE_URL}/api${url}`;
@@ -169,8 +215,73 @@ export const downloadInboxFile = async (data) => {
 
 // Preview file
 export const previewInboxFile = async (data) => {
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+  const currentWorkspaceId = JSON.parse(
+    localStorage.getItem('currentWorkspaceId'),
+  );
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const url = `/inbox-files/${data.inboxFileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-  window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
+  window.open(`${process.env.REACT_APP_API_BASE_URL}/api/af/${url}`, '_blank');
+};
+
+// file comments
+export const getInboxFileComments = async (fileId) => {
+  const request = await requestNew({
+    url: `inbox-files/${fileId}/comments`,
+    method: 'GET',
+  });
+  return request;
+};
+
+export const useGetInboxFileComments = (fileId) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    [`inbox-${fileId}-comments`],
+    () => getInboxFileComments(fileId),
+    {
+      onSuccess: (data) => {
+        // console.log(data);
+        data.data.comments.map((comment) => queryClient.setQueryData(['comment', comment.id], comment));
+      },
+    },
+  );
+};
+
+export const postInboxFileComment = async (fileId, message) => {
+  const request = await requestNew({
+    url: `inbox-files/${fileId}/comment`,
+    method: 'POST',
+    data: {
+      message,
+    },
+  });
+  return request;
+};
+
+export const usePostInboxFileComment = (fileId, message) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => postInboxFileComment(fileId, message), {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`inbox-${fileId}-comments`]);
+    },
+  });
+};
+
+// delete comments
+export const deleteInboxFileComment = (data) => {
+  const request = requestNew({
+    url: `inbox-files/${data.fileId}/comment/${data.messageId}`,
+    method: 'DELETE',
+  });
+  return request;
+};
+
+export const useDeleteInboxFileComment = (fileId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteInboxFileComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`inbox-${fileId}-comments`]);
+    },
+  });
 };

@@ -11,8 +11,8 @@ export default function Toast({
   showClose,
   toastId,
 }) {
-  if (title === 'Query data cannot be undefined') {
-    return <> </>;
+  if (title === 'Query data cannot be undefined' || !title) {
+    return null;
   }
 
   return (

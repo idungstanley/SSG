@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useGetInbox,
   useGetPinnedInboxes,
+  useHideOrUnhideInbox,
   usePinInbox,
   useUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
@@ -23,6 +24,7 @@ export default function Menu({ inboxId }) {
   const { data: inbox } = useGetInbox(inboxId);
   const { mutate: pinInbox } = usePinInbox(inboxId);
   const { mutate: unpinInbox } = useUnpinInbox(inboxId);
+  const { mutate: hideInbox } = useHideOrUnhideInbox(inboxId, 'hide');
 
   const onViewInbox = () => {
     navigate(`/inbox/${inboxId}`);
@@ -34,6 +36,10 @@ export default function Menu({ inboxId }) {
 
   const onUnpinInbox = () => {
     unpinInbox();
+  };
+
+  const onHideInbox = () => {
+    hideInbox();
   };
 
   useEffect(() => {
@@ -107,6 +113,19 @@ export default function Menu({ inboxId }) {
               </HeadlessUIMenu.Item>
             </div>
           )}
+          <div className="py-1">
+            <HeadlessUIMenu.Item>
+              {({ active }) => (
+                <button
+                  onClick={onHideInbox}
+                  type="button"
+                  className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                >
+                  Hide
+                </button>
+              )}
+            </HeadlessUIMenu.Item>
+          </div>
         </HeadlessUIMenu.Items>
       </Transition>
     </HeadlessUIMenu>

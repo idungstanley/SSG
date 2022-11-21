@@ -7,7 +7,7 @@ import CreateInboxSlideOver from './components/CreateInboxSlideOver';
 import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxes } from '../../../features/inbox/inboxesService';
 import { Spinner } from '../../../common';
-import { EmptyStateSimple } from '../../../components';
+import FullScreenMessage from '../../shared/components/FullScreenMessage';
 
 function InboxDashboard() {
   const dispatch = useDispatch();
@@ -21,10 +21,15 @@ function InboxDashboard() {
         <div className="flex-1 h-full overflow-y-scroll">
           <PinnedInboxes />
 
-          {status === 'success' && data?.data?.inboxes.length === 0 && (
+          {status === 'loading' && (
+            <div className="mx-auto w-6 mt-10 justify-center">
+              <Spinner size={22} color="#0F70B7" />
+            </div>
+          )}
+          {status === 'success' ? data?.data?.inboxes.length === 0 ? (
             <div className="flex flex-1 h-full bg-white">
               <div className="m-auto">
-                <EmptyStateSimple
+                <FullScreenMessage
                   title="You have no inboxes yet"
                   description="Get started by creating a new inbox"
                   ctaText="Create inbox"
@@ -33,15 +38,9 @@ function InboxDashboard() {
                 />
               </div>
             </div>
-          )}
-          {status === 'success' && data?.data?.inboxes.length !== 0 && (
-            <Table />
-          )}
-          {status === 'loading' && (
-            <div className="mx-auto w-6 mt-10 justify-center">
-              <Spinner size={22} color="#0F70B7" />
-            </div>
-          )}
+          ) : <Table /> : status === 'error' ? (
+            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
+          ) : null}
         </div>
       </div>
       <CreateInboxSlideOver />

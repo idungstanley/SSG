@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 var fileDownload = require('js-file-download');
 
 export function GetFileWithHeaders(type, id) {
-  const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
+  const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
   const endpoint = (type === 'inboxFile' ? `${baseUrl}/inbox-files/${id}/contents` : `${baseUrl}/files/${id}/contents`);

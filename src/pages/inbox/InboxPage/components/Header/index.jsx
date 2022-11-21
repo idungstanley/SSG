@@ -1,11 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CogIcon } from '@heroicons/react/solid';
+import { CogIcon, TrashIcon } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
+import { useDeleteInbox } from '../../../../../features/inbox/inboxesService';
 
 function Header() {
   const dispatch = useDispatch();
@@ -18,6 +19,13 @@ function Header() {
 
   const goToSettings = () => {
     navigate(`/inbox/${inboxId}/settings`);
+  };
+
+  const { mutate: deleteInbox } = useDeleteInbox(inboxId);
+
+  const handleDelete = () => {
+    deleteInbox();
+    navigate('/inbox');
   };
 
   return (
@@ -45,6 +53,17 @@ function Header() {
           label="Inbox settings"
           onClick={goToSettings}
           icon={<CogIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
+          iconPosition="center"
+          disabled={false}
+          ringOnFocus
+          width="w-44"
+        />
+
+        <Button
+          buttonStyle="danger"
+          label="Delete inbox"
+          onClick={handleDelete}
+          icon={<TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />}
           iconPosition="center"
           disabled={false}
           ringOnFocus

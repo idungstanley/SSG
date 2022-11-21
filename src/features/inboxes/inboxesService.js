@@ -1,4 +1,4 @@
-import request from '../../App/request';
+import request from '../../app/requestNew';
 
 // Update inbox settings
 export const updateInboxSettings = async (data) => {

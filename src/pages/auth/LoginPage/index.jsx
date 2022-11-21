@@ -1,70 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
+import * as Yup from 'yup';
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
-import { loginService, loginGoogleService } from '../../../features/auth/authService';
-import { setCurrentUser } from '../../../features/auth/authSlice';
 import {
-  Button,
-  Input,
-  Hyperlink,
-} from '../../../components';
+  loginService,
+  loginGoogleService,
+} from '../../../features/auth/authService';
+import { setCurrentUser } from '../../../features/auth/authSlice';
+import { Hyperlink } from '../../../components';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import Form from '../../../components/Form';
 
 function LoginPage() {
   const dispatch = useDispatch();
 
   const loginMutation = useMutation(loginService, {
-    onSuccess: async (successData) => {
+    onSuccess: (successData) => {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem('accessToken', JSON.stringify(successData.data.token.accessToken));
-      localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.user.default_workspace_id));
-      localStorage.setItem('currentUserId', JSON.stringify(successData.data.token.token.user_id));
+      localStorage.setItem(
+        'accessToken',
+        JSON.stringify(successData.data.token.accessToken),
+      );
+      localStorage.setItem(
+        'currentWorkspaceId',
+        JSON.stringify(successData.data.user.default_workspace_id),
+      );
+      localStorage.setItem(
+        'currentUserId',
+        JSON.stringify(successData.data.token.token.user_id),
+      );
 
-      dispatch(setCurrentUser({
-        user: successData.data.user,
-        accessToken: successData.data.token.accessToken,
-        currentWorkspaceId: successData.data.user.default_workspace_id,
-        currentUserId: successData.data.token.token.user_id,
-      }));
+      dispatch(
+        setCurrentUser({
+          user: successData.data.user,
+          accessToken: successData.data.token.accessToken,
+          currentWorkspaceId: successData.data.user.default_workspace_id,
+          currentUserId: successData.data.token.token.user_id,
+        }),
+      );
     },
   });
 
   const loginGoogleMutation = useMutation(loginGoogleService, {
-    onSuccess: async (successData) => {
+    onSuccess: (successData) => {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem('accessToken', JSON.stringify(successData.data.token.accessToken));
-      localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.user.default_workspace_id));
+      localStorage.setItem(
+        'accessToken',
+        JSON.stringify(successData.data.token.accessToken),
+      );
+      localStorage.setItem(
+        'currentWorkspaceId',
+        JSON.stringify(successData.data.user.default_workspace_id),
+      );
 
-      dispatch(setCurrentUser({
-        user: successData.data.user,
-        accessToken: successData.data.token.accessToken,
-        currentWorkspaceId: successData.data.user.default_workspace_id,
-      }));
+      dispatch(
+        setCurrentUser({
+          user: successData.data.user,
+          accessToken: successData.data.token.accessToken,
+          currentWorkspaceId: successData.data.user.default_workspace_id,
+        }),
+      );
     },
   });
 
-  const defaultFormState = {
-    email: '',
-    password: '',
-  };
-
-  const [formState, setFormState] = useState(defaultFormState);
-
-  const { email, password } = formState;
-
-  const onChange = (e) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onSubmit = () => {
+  const onSubmit = (values) => {
     loginMutation.mutate({
-      email,
-      password,
+      email: values.email,
+      password: values.password,
     });
   };
 
@@ -90,7 +94,22 @@ function LoginPage() {
   };
   const handleGoogleFailure = (response) => {
     // fail handler: todo delete console log
+    // eslint-disable-next-line no-console
     console.log(response);
+  };
+
+  const formikConfig = {
+    initValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Invalid email address').required('Required'),
+      password: Yup.string()
+        .min(8, 'Password must be 8 characters or longer!')
+        .required('Required'),
+    }),
+    buttonTitle: 'Sign In',
   };
 
   return (
@@ -103,62 +122,46 @@ function LoginPage() {
               src={MainLogo}
               alt="Workflow"
             />
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              Sign in to your account
+            </h2>
+            <p className="mt-2 text-sm text-gray-600 flex gap-1">
               Or
-              {' '}
-              <Hyperlink
-                href="/auth/register"
-                label="create your account"
-              />
+              <Hyperlink href="/auth/register" label="create your account" />
             </p>
           </div>
 
           <div className="mt-8">
             <div>
               <div className="mt-6 relative">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                <div
+                  className="absolute inset-0 flex items-center"
+                  aria-hidden="true"
+                >
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Continue with</span>
+                  <span className="px-2 bg-white text-gray-500">
+                    Continue with
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="mt-6">
               <div className="space-y-6">
-                <Input
-                  name="email"
-                  label="Email"
-                  onChange={onChange}
-                  type="email"
-                  value={email}
-                />
-
-                <Input
-                  name="password"
-                  label="Password"
-                  onChange={onChange}
-                  type="password"
-                  value={password}
+                <Form
+                  onSubmit={(values) => onSubmit(values)}
+                  formikConfig={formikConfig}
                 />
 
                 <div className="flex items-left justify-between">
-                  <Hyperlink href="/auth/forgot" label="Forgot your password?" />
-                </div>
-
-                <div>
-                  <Button
-                    buttonStyle="primary"
-                    onClick={onSubmit}
-                    loading={loginMutation.status === 'loading'}
-                    label="Sign in"
-                    padding="py-2 px-4"
-                    height="h-10"
-                    width="w-full"
+                  <Hyperlink
+                    href="/auth/forgot"
+                    label="Forgot your password?"
                   />
                 </div>
+
                 <GoogleLogin
                   clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                   className="rounded-l-md rounded-r-md w-full h-10 py-2 px-4 inline-flex items-center justify-center"

@@ -8,7 +8,7 @@ function Body() {
   return (
     <tbody className="bg-white divide-y divide-gray-100">
       {status === 'success' && data && data.data.inboxes.map((inbox) => (
-        <Row inboxId={inbox.id} />
+        <Row key={inbox.id} inboxId={inbox.id} />
       ))}
     </tbody>
   );

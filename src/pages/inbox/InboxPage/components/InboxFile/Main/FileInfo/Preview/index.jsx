@@ -25,7 +25,7 @@ function Preview() {
       <div className="relative h-full">
 
         <div className="flex h-full flex-col">
-          {fileData != null && fileData !== undefined ? (
+          {fileData ? (
             <FilePreview
               fileData={fileData}
               fileExtension={inboxFile.inbox_file_source.file_format.extension}
