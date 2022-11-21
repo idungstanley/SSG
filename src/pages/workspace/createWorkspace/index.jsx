@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Breadcrumb,
   SimpleSectionHeading,
@@ -22,18 +23,15 @@ import {
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: async (successData) => {
       localStorage.setItem(
-        'wsid',
-        JSON.stringify(successData.data.workspace.id),
-      );
-      localStorage.setItem(
-        'wsname',
+        'currentWorkspacename',
         JSON.stringify(successData.data.workspace.name),
       );
       localStorage.setItem(
-        'wssize',
+        'currentWorkspaceSize',
         JSON.stringify(successData.data.workspace.company_size),
       );
       localStorage.setItem(
@@ -41,14 +39,26 @@ function CreateWorkspace() {
         JSON.stringify(successData.data.workspace.emails),
       );
 
+      const existingWsId = localStorage.getItem('currentWorkspaceId');
+      existingWsId == null
+        ? localStorage.setItem(
+          'currentWorkspaceId',
+          JSON.stringify(successData.data.workspace.id),
+        )
+        : localStorage.setItem(
+          'currentWorkspaceId',
+          existingWsId,
+        );
+
       dispatch(
         createWorkspace({
-          wsid: successData.data.workspace.id,
-          wsname: successData.data.workspace.name,
-          wssize: successData.data.workspace.company_size,
+          currentWorkspaceId: successData.data.workspace.id,
+          currentWorkspacename: successData.data.workspace.name,
+          currentWorkspaceSize: successData.data.workspace.company_size,
           wsemail: successData.data.workspace.emails,
         }),
       );
+      navigate('/workspace');
     },
   });
 
@@ -87,12 +97,9 @@ function CreateWorkspace() {
     setBgAvatart(colour);
   };
 
-  // const navigate = useNavigate();
   useEffect(() => {
     // getWs();
-    // if (localStorage.getItem('currentWorkspaceId') !== null) {
-    //   navigate('/workspace/notification');
-    // }
+    // console.log(localStorage.getItem('currentWorkspaceId'));
   }, []);
 
   return (
@@ -101,14 +108,14 @@ function CreateWorkspace() {
         pages={[
           {
             name: 'Workspace',
-            href: '/onboarding',
+            href: '/workspace/onboarding',
             current: true,
           },
         ]}
         rootIcon={
           <PlusIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
         }
-        rootIconHref="/onboarding"
+        rootIconHref="/workspace/onboarding"
       />
 
       <section className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6 ">
