@@ -20,38 +20,74 @@ import {
 } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
 import { DownloadFile } from '../../../../../../app/helpers';
+import Blacklist from './components/Blacklist';
 
 function Toolbar() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   // Selectors
-  const selectedInboxFileIndex = useSelector((state) => state.inbox.selected_inbox_file_index);
-  const selectedInboxFileId = useSelector((state) => state.inbox.selectedInboxFileId);
+  const selectedInboxFileIndex = useSelector(
+    (state) => state.inbox.selected_inbox_file_index,
+  );
+  const selectedInboxFileId = useSelector(
+    (state) => state.inbox.selectedInboxFileId,
+  );
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
-  const folderIdsForFiling = useSelector((state) => state.inbox.folderIdsForFiling);
+  const folderIdsForFiling = useSelector(
+    (state) => state.inbox.folderIdsForFiling,
+  );
 
   // Mutations
   const archiveInboxFileMutation = useMutation(archiveInboxFileService, {
     onSuccess: (data) => {
-      queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
-      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
-      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 1 }]);
+      queryClient.setQueryData(
+        ['inbox_file', data.data.inbox_file.id],
+        data.data.inbox_file,
+      );
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 0 },
+      ]);
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 1 },
+      ]);
     },
   });
 
   const unarchiveInboxFileMutation = useMutation(unarchiveInboxFileService, {
     onSuccess: (data) => {
-      queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
-      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
-      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 1 }]);
+      queryClient.setQueryData(
+        ['inbox_file', data.data.inbox_file.id],
+        data.data.inbox_file,
+      );
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 0 },
+      ]);
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 1 },
+      ]);
     },
   });
 
   const fileInboxFileMutation = useMutation(fileInboxFileService, {
     onSuccess: (data) => {
-      queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
-      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
+      queryClient.setQueryData(
+        ['inbox_file', data.data.inbox_file.id],
+        data.data.inbox_file,
+      );
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 0 },
+      ]);
       queryClient.invalidateQueries(['inboxes']);
       queryClient.invalidateQueries(['inboxes_unfiled_count']);
 
@@ -60,16 +96,18 @@ function Toolbar() {
   });
 
   const handleNavigateToFile = (action) => {
-    const relative = (action === 'previous' ? -1 : 1);
+    const relative = action === 'previous' ? -1 : 1;
 
     const navigateToFileIndex = selectedInboxFileIndex + relative;
     const navigateToFileId = null;
 
     if (navigateToFileId != null && navigateToFileId !== undefined) {
-      dispatch(setCurrentInboxFile({
-        inboxFileId: navigateToFileId,
-        inboxFileIndex: navigateToFileIndex,
-      }));
+      dispatch(
+        setCurrentInboxFile({
+          inboxFileId: navigateToFileId,
+          inboxFileIndex: navigateToFileIndex,
+        }),
+      );
     }
   };
 
@@ -93,15 +131,17 @@ function Toolbar() {
   };
 
   const onDownload = async () => {
-    DownloadFile('inboxFile', inboxFile.id, inboxFile.inbox_file_source.display_name);
+    DownloadFile(
+      'inboxFile',
+      inboxFile.id,
+      inboxFile.inbox_file_source.display_name,
+    );
   };
 
   return inboxFile ? (
     <div className="flex flex-col">
-
       {/* Bottom section */}
       <div className="min-h-0 flex-1 flex">
-
         {/* Main area */}
         <main className="min-w-0 flex-1 border-gray-200 xl:flex">
           <section
@@ -114,13 +154,17 @@ function Toolbar() {
               <div className="h-16 flex flex-col justify-center">
                 <div className="px-4 sm:px-6">
                   <div className="py-3 flex justify-between">
-
                     {/* Left buttons */}
                     <div className="relative z-0 inline-flex space-x-2">
                       <Button
                         buttonStyle="white"
                         onClick={() => handleNavigateToFile('previous')}
-                        icon={<ArrowCircleLeftIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                        icon={(
+                          <ArrowCircleLeftIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        )}
                         iconPosition="center"
                         disabled={false}
                         ringOnFocus
@@ -129,7 +173,12 @@ function Toolbar() {
                       <Button
                         buttonStyle="white"
                         onClick={() => handleNavigateToFile('next')}
-                        icon={<ArrowCircleRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                        icon={(
+                          <ArrowCircleRightIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        )}
                         iconPosition="center"
                         disabled={false}
                         ringOnFocus
@@ -143,13 +192,20 @@ function Toolbar() {
                             buttonStyle="white"
                             label="Archive"
                             onClick={archive}
-                            icon={<ArchiveIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
+                            icon={(
+                              <ArchiveIcon
+                                className="mr-2.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            )}
                             iconPosition="center"
                             disabled={false}
                             borderRight={false}
                             roundedRight={false}
                             ringOnFocus
-                            loading={archiveInboxFileMutation.status === 'loading'}
+                            loading={
+                              archiveInboxFileMutation.status === 'loading'
+                            }
                             width="w-36"
                           />
                         ) : (
@@ -157,21 +213,35 @@ function Toolbar() {
                             buttonStyle="white"
                             label="Unarchive"
                             onClick={unarchive}
-                            icon={<InboxIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
+                            icon={(
+                              <InboxIcon
+                                className="mr-2.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            )}
                             iconPosition="center"
                             disabled={false}
                             borderRight={false}
                             roundedRight={false}
                             ringOnFocus
-                            loading={unarchiveInboxFileMutation.status === 'loading'}
+                            loading={
+                              unarchiveInboxFileMutation.status === 'loading'
+                            }
                             width="w-36"
                           />
                         )}
                         <Button
                           buttonStyle="white"
                           label="Assign"
-                          onClick={() => dispatch(setAssignInboxFileSlideOverVisibility(true))}
-                          icon={<InboxInIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
+                          onClick={() => dispatch(
+                            setAssignInboxFileSlideOverVisibility(true),
+                          )}
+                          icon={(
+                            <InboxInIcon
+                              className="mr-2.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          )}
                           iconPosition="center"
                           disabled={false}
                           roundedLeft={false}
@@ -180,13 +250,22 @@ function Toolbar() {
                           ringOnFocus
                           width="w-36"
                         />
-                        <Tippy content={<span>Download</span>} placement="bottom">
+                        <Blacklist />
+                        <Tippy
+                          content={<span>Download</span>}
+                          placement="bottom"
+                        >
                           <div>
                             <Button
                               buttonStyle="white"
                               label="Download"
                               onClick={onDownload}
-                              icon={<DownloadIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />}
+                              icon={(
+                                <DownloadIcon
+                                  className="mr-2.5 h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              )}
                               iconPosition="center"
                               disabled={false}
                               borderLeft
@@ -205,7 +284,12 @@ function Toolbar() {
                         onClick={fileDocument}
                         loading={fileInboxFileMutation.status === 'loading'}
                         label="File document"
-                        icon={<ArrowCircleRightIcon className="ml-2.5 mr-2 h-5 w-5" aria-hidden="true" />}
+                        icon={(
+                          <ArrowCircleRightIcon
+                            className="ml-2.5 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        )}
                         iconPosition="right"
                         width="w-48"
                         disabled={inboxFile.status === 'filed'}
@@ -217,7 +301,6 @@ function Toolbar() {
               </div>
             </div>
           </section>
-
         </main>
       </div>
     </div>

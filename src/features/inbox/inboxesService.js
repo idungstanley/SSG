@@ -205,9 +205,8 @@ export const useGetBlacklistFiles = () =>
 
   // eslint-disable-next-line implicit-arrow-linebreak
   useQuery(['blacklist-files'], () => getBlacklistFiles(), {
-    onSuccess: (data) => {
+    onSuccess: () => {
       // eslint-disable-next-line no-console
-      console.log(data);
       // ! set blacklist files
     },
   });
@@ -238,10 +237,10 @@ export const deleteBlacklistFile = (fileId) => {
   return request;
 };
 
-export const useDeleteBlacklistFile = (fileId) => {
+export const useDeleteBlacklistFile = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => deleteBlacklistFile(fileId), {
+  return useMutation(deleteBlacklistFile, {
     onSuccess: () => {
       queryClient.invalidateQueries(['blacklist-files']);
     },
