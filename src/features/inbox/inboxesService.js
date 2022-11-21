@@ -105,16 +105,13 @@ export function useUnpinInbox(inboxId) {
 }
 
 // Get total inbox unfiled account
-export const useGetInboxUnfiledCount = () => useQuery(
-  ['inboxes_unfiled_count'],
-  async () => {
-    const data = await requestNew({
-      url: 'inboxes/unfiled-count',
-      method: 'GET',
-    });
-    return data.data.unfiled_count;
-  },
-);
+export const useGetInboxUnfiledCount = () => useQuery(['inboxes_unfiled_count'], async () => {
+  const data = await requestNew({
+    url: 'inboxes/unfiled-count',
+    method: 'GET',
+  });
+  return data.data.unfiled_count;
+});
 
 export const markOpenedInbox = (id) => {
   const request = requestNew({
@@ -175,8 +172,8 @@ export const useDeleteInbox = (id) => {
 };
 
 // responsible inboxes
-export const getResponsibleInboxes = async () => {
-  const request = await requestNew({
+export const getResponsibleInboxes = () => {
+  const request = requestNew({
     url: 'inboxes/responsible',
     method: 'GET',
   });
@@ -186,14 +183,67 @@ export const getResponsibleInboxes = async () => {
 export const useGetResponsibleInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
-    ['responsible-inbox'],
-    () => getResponsibleInboxes(),
-    {
-      onSuccess: (data) => {
-        // ! set actual data, not pinned_inboxes
-        data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['responsible-inbox', inbox.id], inbox));
-      },
+  return useQuery(['responsible-inbox'], () => getResponsibleInboxes(), {
+    onSuccess: (data) => {
+      // ! set actual data, not pinned_inboxes
+      data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['responsible-inbox', inbox.id], inbox));
     },
-  );
+  });
+};
+
+// blacklist
+export const getBlacklistFiles = () => {
+  const request = requestNew({
+    url: 'blacklist-inbox-files',
+    method: 'GET',
+  });
+  return request;
+};
+
+export const useGetBlacklistFiles = () =>
+// const queryClient = useQueryClient();
+
+  // eslint-disable-next-line implicit-arrow-linebreak
+  useQuery(['blacklist-files'], () => getBlacklistFiles(), {
+    onSuccess: (data) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
+      // ! set blacklist files
+    },
+  });
+
+export const addFileToBlacklist = (fileId) => {
+  const request = requestNew({
+    url: `inbox-files/${fileId}/blacklist`,
+    method: 'POST',
+  });
+  return request;
+};
+
+export const useAddFileToBlacklist = (fileId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => addFileToBlacklist(fileId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['blacklist-files']);
+    },
+  });
+};
+
+export const deleteBlacklistFile = (fileId) => {
+  const request = requestNew({
+    url: `blacklist-inbox-files/${fileId}`,
+    method: 'DELETE',
+  });
+  return request;
+};
+
+export const useDeleteBlacklistFile = (fileId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => deleteBlacklistFile(fileId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['blacklist-files']);
+    },
+  });
 };
