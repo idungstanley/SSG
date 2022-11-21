@@ -247,3 +247,63 @@ export const useDeleteBlacklistFile = (fileId) => {
     },
   });
 };
+
+// email list
+export const getEmailList = (inboxId) => {
+  const request = requestNew({
+    url: `inboxes/${inboxId}/email-list`,
+    method: 'GET',
+  });
+  return request;
+};
+
+export const addEmailToList = (inboxId, email) => {
+  const request = requestNew({
+    url: `inboxes/${inboxId}/email-list`,
+    method: 'POST',
+    data: {
+      email,
+    },
+  });
+  return request;
+};
+
+export const deleteEmailFromList = (inboxId, emailId) => {
+  const request = requestNew({
+    url: `/inboxes/${inboxId}/email-list/${emailId}`,
+    method: 'DELETE',
+  });
+  return request;
+};
+
+export const useGetEmailList = (inboxId) => {
+  const queryClient = useQueryClient();
+
+  return useQuery(['email-list'], () => getEmailList(inboxId), {
+    onSuccess: () => {
+      // eslint-disable-next-line no-console
+      console.log(queryClient);
+      // queryClient.invalidateQueries(['blacklist-files']);
+    },
+  });
+};
+
+export const useAddEmailToList = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addEmailToList, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['email-list']);
+    },
+  });
+};
+
+export const useDeleteEmailFromList = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteBlacklistFile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['blacklist-files']);
+    },
+  });
+};
