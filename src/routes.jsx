@@ -42,9 +42,9 @@ import Community from './pages/workspace/community/Community';
 const routes = (user) => [
   {
     path: '/',
-    element: user != null ? <MainLayout /> : <Navigate to="/auth/login" />,
+    element: user ? <MainLayout /> : <Navigate to="/auth/login" />,
     children: [
-      { path: '/', element: <Navigate to="/explorer" /> },
+      { path: '/', element: <Navigate to="/workspace" /> },
       { path: 'explorer', element: <ExplorerPage /> },
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
@@ -84,6 +84,21 @@ const routes = (user) => [
         path: 'settings/team-members/groups/:teamMemberGroupId/members',
         element: <TeamMemberGroupMembersPage />,
       },
+      { path: 'workspace/onboarding', element: <CreateWorkspace /> },
+      {
+        path: 'workspace',
+        element: user?.default_workspace_id ? (
+          <Index />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        ),
+        children: [
+          { path: 'home', element: <Home /> },
+          { path: 'notification', element: <Notification /> },
+          { path: 'community', element: <Community /> },
+          { path: 'goals', element: <Home /> },
+        ],
+      },
     ],
   },
   {
@@ -93,21 +108,6 @@ const routes = (user) => [
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
       { path: 'register/:inviteCode', element: <RegisterPage /> },
-    ],
-  },
-  // temporary onboarding route
-  {
-    path: '/onboarding',
-    element: user != null ? <CreateWorkspace /> : <Navigate to="/auth/login" />,
-  },
-  {
-    path: '/workspace',
-    element: user != null ? <Index /> : <Navigate to="/auth/login" />,
-    children: [
-      { path: 'home', element: <Home /> },
-      { path: 'notification', element: <Notification /> },
-      { path: 'community', element: <Community /> },
-      { path: 'goals', element: <Home /> },
     ],
   },
 ];
