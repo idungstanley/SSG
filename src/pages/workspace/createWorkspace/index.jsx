@@ -52,18 +52,6 @@ function CreateWorkspace() {
     },
   });
 
-  // const getWsMutation = useMutation(getWorkspaceService, {
-  //   onSuccess: async (successData) => {
-  //     const myWs = successData.data.workspace;
-  //     if (myWs) {
-  //       localStorage.setItem(
-  //         'currentWsID',
-  //         JSON.stringify(successData.data.workspace.id),
-  //       );
-  //     }
-  //   },
-  // });
-
   // console.log(localStorage.getItem('isworkspace'));
 
   const defaultFormState = {
@@ -98,10 +86,6 @@ function CreateWorkspace() {
   const handleBgClick = (colour) => {
     setBgAvatart(colour);
   };
-
-  // const getWs = () => {
-  //   getWsMutation.mutate();
-  // };
 
   // const navigate = useNavigate();
   useEffect(() => {

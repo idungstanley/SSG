@@ -137,12 +137,11 @@ function Sidebar() {
         <div id="dropdown-menu" className="my-4 text-gray-500">
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            onClick={() => handleFavClicks()}
-            id="favorites"
-            className="rounded flex-col   "
-          >
-            <div className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col   ">
+            <div
+              onClick={() => handleFavClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">FAVOURITE</p>
               {favClicks ? (
                 <ChevronDownIcon
@@ -169,12 +168,11 @@ function Sidebar() {
           {/* hubs */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            onClick={() => handleHubClicks()}
-            id="favorites"
-            className="rounded flex-col "
-          >
-            <div className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col ">
+            <div
+              onClick={() => handleHubClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">HUBS</p>
               {hubClicks ? (
                 <ChevronDownIcon
@@ -201,12 +199,11 @@ function Sidebar() {
           {/* inbox */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            onClick={() => handleInboxClicks()}
-            id="favorites"
-            className="rounded flex-col"
-          >
-            <div className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col">
+            <div
+              onClick={() => handleInboxClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">INBOX</p>
               {inboxClicks ? (
                 <ChevronDownIcon
@@ -232,12 +229,11 @@ function Sidebar() {
           {/* files */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            onClick={() => handleFilesClicks()}
-            id="favorites"
-            className="rounded flex-col"
-          >
-            <div className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col">
+            <div
+              onClick={() => handleFilesClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">FILES</p>
               {filesClicks ? (
                 <ChevronDownIcon
@@ -263,12 +259,11 @@ function Sidebar() {
           {/* dashboard */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            onClick={() => handleDashClicks()}
-            id="favorites"
-            className="rounded flex-col"
-          >
-            <div className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col">
+            <div
+              onClick={() => handleDashClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">DASHBOARD</p>
               {dashClicks ? (
                 <ChevronDownIcon
@@ -295,11 +290,10 @@ function Sidebar() {
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
           <section
-            onClick={() => handleDirClicks()}
             id="favorites"
             className="rounded flex-col"
           >
-            <div className="flex items-stretch justify-between">
+            <div onClick={() => handleDirClicks()} className="flex items-stretch justify-between">
               <p className="font-bold text-sm">DIRECTORY</p>
               {dirClicks ? (
                 <ChevronDownIcon
