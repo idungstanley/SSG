@@ -25,13 +25,16 @@ export default function From({ onSubmit, formikConfig }) {
           id={i}
           type={i === 'name' ? 'text' : i}
           placeholder={`Enter ${i}`}
-          value={formik.values[i]}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...formik.getFieldProps(i)}
+          // value={formik.values[i]}
+          // onChange={formik.handleChange}
+          // onBlur={formik.handleBlur}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
           message={
             formik.touched[i] && formik.errors[i] && formik.errors[i]
           }
+          handleSubmit={formik.submitCount}
         />
       ))}
 
