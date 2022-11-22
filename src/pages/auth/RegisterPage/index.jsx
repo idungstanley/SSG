@@ -109,7 +109,7 @@ function RegisterPage() {
     validationSchema: Yup.object({
       name: Yup.string()
         .min(3, 'Must be 3 characters or more')
-        .max(15, 'Must be 15 characters or less')
+        .max(20, 'Must be 20 characters or less')
         .required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()

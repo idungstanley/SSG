@@ -191,6 +191,26 @@ export const useGetResponsibleInboxes = () => {
   });
 };
 
+// responsible file team members
+export const useGetResponsibleTeamMembers = (inboxId) => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['responsible-team-members'],
+    () => requestNew({
+      url: `inboxes/${inboxId}/responsible-team-members`,
+      method: 'GET',
+    }),
+    {
+      onSuccess: (data) => {
+        // eslint-disable-next-line no-console
+        console.log(data, queryClient);
+        // data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
+
 // blacklist
 export const getBlacklistFiles = () => {
   const request = requestNew({

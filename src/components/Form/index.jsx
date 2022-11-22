@@ -18,7 +18,6 @@ export default function From({ onSubmit, formikConfig }) {
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-3">
-
       {Object.keys(formik.values).map((i) => (
         <InputWithValidation
           key={i}
@@ -27,20 +26,15 @@ export default function From({ onSubmit, formikConfig }) {
           placeholder={`Enter ${i}`}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...formik.getFieldProps(i)}
-          // value={formik.values[i]}
-          // onChange={formik.handleChange}
-          // onBlur={formik.handleBlur}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
-          message={
-            formik.touched[i] && formik.errors[i] && formik.errors[i]
-          }
+          message={formik.touched[i] && formik.errors[i] && formik.errors[i]}
           handleSubmit={formik.submitCount}
           isNewPassword={formikConfig.buttonTitle === 'Sign Up'}
         />
       ))}
 
       <button
-        className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md"
+        className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md transition-all duration-150 hover:ease-in"
         type="submit"
       >
         {formikConfig.buttonTitle}

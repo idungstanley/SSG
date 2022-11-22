@@ -59,24 +59,6 @@ export default function InputWithValidation({
           />
         </svg>
       </div>
-      {type === 'password' ? (
-        isNewPassword ? (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-          <p
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
-          >
-            {showPassword ? 'Show' : 'Hide'}
-          </p>
-        ) : (
-          <Link
-            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
-            to="/auth/forgot"
-          >
-            Forgot password?
-          </Link>
-        )
-      ) : null}
       <input
         className={`appearance-none block w-full px-3 py-2 pl-8 border ${
           newMessage ? 'border-red-700' : 'border-gray-300'
@@ -96,6 +78,24 @@ export default function InputWithValidation({
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={isFocused}
       />
+      {type === 'password' ? (
+        isNewPassword ? (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <p
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+          >
+            {showPassword ? 'Show' : 'Hide'}
+          </p>
+        ) : (
+          <Link
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+            to="/auth/forgot"
+          >
+            Forgot password?
+          </Link>
+        )
+      ) : null}
       <p className="block text-sm font-medium text-red-700 mt-1 h-5 ml-1">
         {newMessage}
       </p>
