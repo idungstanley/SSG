@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const icons = [
@@ -27,6 +28,7 @@ export default function InputWithValidation({
   isFocused,
   handleSubmit,
 }) {
+  const [showPassword, setShowPassword] = useState(type === 'password');
   const newMessage = handleSubmit || value ? message : null;
 
   return (
@@ -55,7 +57,15 @@ export default function InputWithValidation({
           />
         </svg>
       </div>
-
+      {type === 'password' ? (
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+        <p
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute top-8 right-3 text-sm text-primary-600 border-b-dashed cursor-pointer"
+        >
+          {showPassword ? 'Show' : 'Hide'}
+        </p>
+      ) : null}
       <input
         className={`appearance-none block w-full px-3 py-2 pl-8 border ${
           newMessage ? 'border-red-700' : 'border-gray-300'
@@ -65,7 +75,7 @@ export default function InputWithValidation({
           newMessage ? 'border-red-700' : 'border-gray-300'
         } sm:text-sm`}
         id={id}
-        type={type}
+        type={showPassword ? type : 'text'}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
