@@ -121,7 +121,7 @@ function RegisterPage() {
 
   return (
     <Wrapper>
-      <div>
+      <div className="flex flex-col justify-center items-center">
         <img className="mx-auto h-12 w-auto" src={MainLogo} alt="Workflow" />
         <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
           Create your account

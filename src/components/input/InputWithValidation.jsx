@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const icons = [
   {
@@ -27,6 +28,7 @@ export default function InputWithValidation({
   message,
   isFocused,
   handleSubmit,
+  isNewPassword,
 }) {
   const [showPassword, setShowPassword] = useState(type === 'password');
   const newMessage = handleSubmit || value ? message : null;
@@ -58,13 +60,22 @@ export default function InputWithValidation({
         </svg>
       </div>
       {type === 'password' ? (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-        <p
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
-        >
-          {showPassword ? 'Show' : 'Hide'}
-        </p>
+        isNewPassword ? (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <p
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+          >
+            {showPassword ? 'Show' : 'Hide'}
+          </p>
+        ) : (
+          <Link
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+            to="/auth/forgot"
+          >
+            Forgot password?
+          </Link>
+        )
       ) : null}
       <input
         className={`appearance-none block w-full px-3 py-2 pl-8 border ${
@@ -73,14 +84,15 @@ export default function InputWithValidation({
           newMessage ? 'ring-red-700' : 'ring-gray-300'
         } focus:${
           newMessage ? 'border-red-700' : 'border-gray-300'
-        } sm:text-sm ${type === 'password' ? 'pr-14' : null}`}
+        } sm:text-sm ${
+          type === 'password' ? (isNewPassword ? 'pr-14' : 'pr-36') : null
+        }`}
         id={id}
         type={showPassword ? type : 'text'}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        autoComplete
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={isFocused}
       />
@@ -93,7 +105,6 @@ export default function InputWithValidation({
 
 InputWithValidation.defaultProps = {
   message: '',
-  isFocused: false,
 };
 
 InputWithValidation.propTypes = {
@@ -104,6 +115,7 @@ InputWithValidation.propTypes = {
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   message: PropTypes.string,
-  isFocused: PropTypes.bool,
+  isFocused: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.number.isRequired,
+  isNewPassword: PropTypes.bool.isRequired,
 };

@@ -115,7 +115,7 @@ function LoginPage() {
 
   return (
     <Wrapper>
-      <div>
+      <div className="flex flex-col justify-center items-center">
         <img className="mx-auto h-12 w-auto" src={MainLogo} alt="Workflow" />
         <h2 className="mt-6 text-2xl sm:text-3xl font-extrabold text-gray-900">
           Sign in to your account
@@ -147,10 +147,6 @@ function LoginPage() {
               onSubmit={(values) => onSubmit(values)}
               formikConfig={formikConfig}
             />
-
-            <div className="flex items-left justify-between">
-              <Hyperlink href="/auth/forgot" label="Forgot your password?" />
-            </div>
 
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}

@@ -35,6 +35,7 @@ export default function From({ onSubmit, formikConfig }) {
             formik.touched[i] && formik.errors[i] && formik.errors[i]
           }
           handleSubmit={formik.submitCount}
+          isNewPassword={formikConfig.buttonTitle === 'Sign Up'}
         />
       ))}
 
