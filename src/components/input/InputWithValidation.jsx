@@ -61,7 +61,7 @@ export default function InputWithValidation({
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <p
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute top-8 right-3 text-sm text-primary-600 border-b-dashed cursor-pointer"
+          className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
         >
           {showPassword ? 'Show' : 'Hide'}
         </p>
