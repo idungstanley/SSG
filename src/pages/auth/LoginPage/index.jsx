@@ -114,8 +114,8 @@ function LoginPage() {
 
   return (
     <div className="min-h-full flex bg-white">
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
+      <div className="flex-1 flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div className="w-full max-w-lg border-2 rounded-2xl p-20">
           <div>
             <img
               className="mx-auto h-12 w-auto"
@@ -177,13 +177,13 @@ function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block relative w-0 flex-1">
+      {/* <div className="hidden lg:block relative w-0 flex-1">
         <img
           className="absolute inset-0 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2669&q=80"
           alt=""
         />
-      </div>
+      </div> */}
     </div>
   );
 }

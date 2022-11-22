@@ -73,13 +73,14 @@ export default function InputWithValidation({
           newMessage ? 'ring-red-700' : 'ring-gray-300'
         } focus:${
           newMessage ? 'border-red-700' : 'border-gray-300'
-        } sm:text-sm`}
+        } sm:text-sm ${type === 'password' ? 'pr-14' : null}`}
         id={id}
         type={showPassword ? type : 'text'}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        autoComplete
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={isFocused}
       />
