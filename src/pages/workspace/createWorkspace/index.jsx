@@ -38,26 +38,6 @@ function CreateWorkspace() {
         JSON.stringify(successData.data.workspace.emails),
       );
 
-      // const existingWsId = localStorage.getItem('currentWorkspaceId');
-      // existingWsId == null
-      //   ? localStorage.setItem(
-      //     'currentWorkspaceId',
-      //     JSON.stringify(successData.data.workspace.id),
-      //   )
-      //   : localStorage.setItem(
-      //     'currentWorkspaceId',
-      //     existingWsId,
-      //   );
-
-      // dispatch(
-      //   createWorkspace({
-      //     currentWorkspaceId: successData.data.workspace.id,
-      //     currentWorkspacename: successData.data.workspace.name,
-      //     currentWorkspaceSize: successData.data.workspace.company_size,
-      //     wsemail: successData.data.workspace.emails,
-      //   }),
-      // );
-
       localStorage.setItem(
         'user',
         JSON.stringify({
