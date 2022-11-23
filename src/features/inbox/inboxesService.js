@@ -2,9 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Get all inboxes
-export const useGetInboxes = (showHidden) => {
+export const useGetInboxes = () => {
   const queryClient = useQueryClient();
-  console.log(showHidden);
 
   return useQuery(
     ['inboxes'],
@@ -12,12 +11,32 @@ export const useGetInboxes = (showHidden) => {
       url: 'inboxes',
       method: 'GET',
       params: {
-        show_hidden: showHidden ? 1 : 0,
+        show_hidden: 0,
       },
     }),
     {
       onSuccess: (data) => {
         data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
+
+export const useGetHiddenInboxes = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['hidden-inboxes'],
+    () => requestNew({
+      url: 'inboxes',
+      method: 'GET',
+      params: {
+        show_hidden: 1,
+      },
+    }),
+    {
+      onSuccess: (data) => {
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['hidden-inbox', inbox.id], inbox));
       },
     },
   );
@@ -53,6 +72,21 @@ export const useGetInbox = (inboxId) => {
     () => queryClient.getQueryData(['inbox', inboxId]),
     {
       initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+    },
+  );
+};
+
+export const useGetHiddenInbox = (inboxId) => {
+  // TODO: If not in cache... get from endpoint (hard get)
+  // Default data should use the previously set data TODO check...
+
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['hidden-inbox', inboxId],
+    () => queryClient.getQueryData(['hidden-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['hidden-inbox', inboxId]),
     },
   );
 };
@@ -136,22 +170,21 @@ export const useMarkOpenedInbox = (id) => {
 };
 
 // hide inbox
-export const hideOrUnhideInbox = async (id, type) => {
-  // type: hide / unhide
-
-  const request = await requestNew({
-    url: `inboxes/${id}/${type}`,
+export const hideOrUnhideInbox = (data) => {
+  const request = requestNew({
+    url: `inboxes/${data.id}/${data.hide ? 'hide' : 'unhide'}`,
     method: 'POST',
   });
   return request;
 };
 
-export const useHideOrUnhideInbox = (id, type) => {
+export const useHideOrUnhideInbox = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => hideOrUnhideInbox(id, type), {
+  return useMutation(hideOrUnhideInbox, {
     onSuccess: () => {
       queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['hidden-inboxes']);
     },
   });
 };

@@ -1,18 +1,31 @@
 import { useSelector } from 'react-redux';
 import React from 'react';
 import Row from './Row';
-import { useGetInboxes } from '../../../../../features/inbox/inboxesService';
+import {
+  useGetHiddenInboxes,
+  useGetInboxes,
+} from '../../../../../features/inbox/inboxesService';
 
 function Body() {
   const { showHidden } = useSelector((state) => state.inboxes);
-  const { status, data } = useGetInboxes(showHidden);
+  const { status: activeStatus, data: active } = useGetInboxes();
+  const { status: hiddenStatus, data: hidden } = useGetHiddenInboxes();
+  const data = active && hidden
+    ? showHidden
+      ? [...hidden.data.inboxes]
+      : [...active.data.inboxes]
+    : null;
 
   return (
     <tbody className="bg-white divide-y divide-gray-100">
-      {status === 'success'
-        && data
-        && data.data.inboxes.map((inbox) => (
-          <Row key={inbox.id} inboxId={inbox.id} />
+      {activeStatus === 'success'
+        && hiddenStatus === 'success'
+        && data?.map((inbox) => (
+          <Row
+            key={inbox.id}
+            inboxId={inbox.id}
+            isHidden={!active.data.inboxes.map((i) => i.id).includes(inbox.id)}
+          />
         ))}
     </tbody>
   );

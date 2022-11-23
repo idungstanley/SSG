@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Header from './components/Header';
 import Table from './components/Table';
 import PinnedInboxes from './components/PinnedInboxes';
@@ -12,9 +12,7 @@ import FullScreenMessage from '../../shared/components/FullScreenMessage';
 function InboxDashboard() {
   const dispatch = useDispatch();
 
-  const { showHidden } = useSelector((state) => state.inboxes);
-  const { status, data } = useGetInboxes(showHidden);
-  console.log(data?.data);
+  const { status, data } = useGetInboxes();
 
   return (
     <>

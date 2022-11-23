@@ -2,16 +2,16 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../../../components';
 import { setCreateInboxSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
-import { useGetInboxes } from '../../../../features/inbox/inboxesService';
+// import { useGetInboxes } from '../../../../features/inbox/inboxesService';
 import { setShowHidden } from '../../../../features/inboxes/inboxesSlice';
 
 function Header() {
   const dispatch = useDispatch();
   const { showHidden } = useSelector((state) => state.inboxes);
-  const { refetch } = useGetInboxes(showHidden);
+  // const { refetch } = useGetInboxes(showHidden);
   const handleShow = () => {
     dispatch(setShowHidden(!showHidden));
-    refetch();
+    // refetch();
   };
 
   return (

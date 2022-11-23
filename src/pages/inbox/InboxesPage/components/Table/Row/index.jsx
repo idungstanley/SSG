@@ -1,15 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { OutputDateTime } from '../../../../../../app/helpers';
 import {
-  useGetInbox, useMarkOpenedInbox,
+  useGetHiddenInbox,
+  useGetInbox,
+  useMarkOpenedInbox,
 } from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
 
-function Row({ inboxId }) {
-  const { data: inbox } = useGetInbox(inboxId);
+function Row({ inboxId, isHidden }) {
+  const { showHidden } = useSelector((state) => state.inboxes);
+
+  const { data: inbox } = showHidden
+    ? useGetHiddenInbox(inboxId)
+    : useGetInbox(inboxId);
 
   const { mutate: markOpened } = useMarkOpenedInbox(inboxId);
 
@@ -20,7 +27,7 @@ function Row({ inboxId }) {
   };
 
   return inbox ? (
-    <tr key={inbox.id}>
+    <tr key={inbox.id} className={`${isHidden ? 'bg-gray-200' : null}`}>
       <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
         <div className="flex items-center space-x-3">
           <div
@@ -58,7 +65,7 @@ function Row({ inboxId }) {
         {OutputDateTime(inbox.updated_at)}
       </td>
       <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
-        <Menu inboxId={inboxId} />
+        <Menu inboxId={inboxId} isHidden={isHidden} />
       </td>
     </tr>
   ) : null;
@@ -66,6 +73,7 @@ function Row({ inboxId }) {
 
 Row.propTypes = {
   inboxId: PropTypes.string.isRequired,
+  isHidden: PropTypes.bool.isRequired,
 };
 
 export default Row;

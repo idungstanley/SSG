@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetInboxes } from '../../../../../features/inbox/inboxesService';
 import {
@@ -14,8 +13,7 @@ function SelectInboxMenu() {
   const [processedInboxes, setProcessedInboxes] = useState([]);
   const [selectedInboxId, setSelectedInboxId] = useState(null);
 
-  const { showHidden } = useSelector((state) => state.inboxes);
-  const { status, data } = useGetInboxes(showHidden);
+  const { status, data } = useGetInboxes();
 
   const onChangeInbox = (e) => {
     setSelectedInboxId(e.id);
