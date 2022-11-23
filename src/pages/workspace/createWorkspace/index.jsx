@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-// import { useNavigate } from 'react-router-dom';
 import {
   Breadcrumb,
   SimpleSectionHeading,
@@ -22,7 +21,6 @@ import {
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
-
   const user = useSelector(selectCurrentUser);
 
   const createWSMutation = useMutation(createWorkspaceService, {
