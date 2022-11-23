@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Menu as HeadlessUIMenu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
@@ -19,9 +19,7 @@ function classNames(...classes) {
 export default function Menu({ inboxId, isHidden }) {
   const navigate = useNavigate();
 
-  const [pinnedInboxesIds, setPinnedInboxesIds] = useState([]);
-
-  const { status: pinnedInboxesStatus, data: pinnedInboxesData } = useGetPinnedInboxes();
+  const { data: pinnedInboxesData } = useGetPinnedInboxes();
 
   const { showHidden } = useSelector((state) => state.inboxes);
   const { data: inbox } = showHidden
@@ -35,17 +33,14 @@ export default function Menu({ inboxId, isHidden }) {
   };
 
   const onPinInbox = () => {
-    // pinInbox();
-    const isPinned = pinnedInboxesData.data.pinned_inboxes.map((i) => i.id).includes(inboxId);
+    const isPinned = pinnedInboxesData.data.pinned_inboxes
+      .map((i) => i.id)
+      .includes(inboxId);
     pinOrUnpinInbox({
       inboxId,
       isPinned,
     });
   };
-
-  // const onUnpinInbox = () => {
-  //   unpinInbox();
-  // };
 
   const onHideInbox = () => {
     hideOrShowInbox({ id: inboxId, hide: !isHidden });
@@ -55,16 +50,6 @@ export default function Menu({ inboxId, isHidden }) {
   const inArchive = false;
   const onArchiveInbox = () => {};
 
-  useEffect(() => {
-    var ids = [];
-
-    if (pinnedInboxesStatus === 'success') {
-      pinnedInboxesData.data.pinned_inboxes.map((pinnedInbox) => ids.push(pinnedInbox.id));
-    }
-
-    setPinnedInboxesIds(ids);
-  }, [pinnedInboxesStatus, pinnedInboxesData]);
-
   const menuItems = [
     {
       id: 1,
@@ -73,11 +58,20 @@ export default function Menu({ inboxId, isHidden }) {
     },
     {
       id: 2,
+      onClick: onPinInbox,
+      title: pinnedInboxesData?.data.pinned_inboxes
+        .map((i) => i.id)
+        .includes(inboxId)
+        ? 'Unpin'
+        : 'Pin',
+    },
+    {
+      id: 3,
       onClick: onHideInbox,
       title: isHidden ? 'Unhide' : 'Hide',
     },
     {
-      id: 3,
+      id: 4,
       onClick: onArchiveInbox,
       title: inArchive ? 'Unarchive' : 'Archive',
     },
@@ -120,43 +114,6 @@ export default function Menu({ inboxId, isHidden }) {
               </HeadlessUIMenu.Item>
             </div>
           ))}
-          {!pinnedInboxesIds.some(
-            (currentInboxId) => currentInboxId === inboxId,
-          ) ? (
-            <div className="py-1">
-              <HeadlessUIMenu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={onPinInbox}
-                    type="button"
-                    className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block w-full px-4 py-2 text-sm text-left',
-                    )}
-                  >
-                    Pin
-                  </button>
-                )}
-              </HeadlessUIMenu.Item>
-            </div>
-            ) : (
-              <div className="py-1">
-                <HeadlessUIMenu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={onPinInbox}
-                      type="button"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block w-full px-4 py-2 text-sm text-left',
-                      )}
-                    >
-                      Unpin
-                    </button>
-                  )}
-                </HeadlessUIMenu.Item>
-              </div>
-            )}
         </HeadlessUIMenu.Items>
       </Transition>
     </HeadlessUIMenu>
