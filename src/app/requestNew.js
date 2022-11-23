@@ -2,7 +2,9 @@ import axios from 'axios';
 
 const requestNew = async (options, isMainRequest) => {
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+  const currentWorkspaceId = JSON.parse(
+    localStorage.getItem('currentWorkspaceId'),
+  );
 
   const additionalRoute = isMainRequest ? '' : 'af';
 
