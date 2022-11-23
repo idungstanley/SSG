@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
@@ -5,14 +6,14 @@ import PropTypes from 'prop-types';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
 
-function Modal({ isVisible, setShowModal }) {
+function Modal({ isVisible, onCloseHubModal }) {
   if (!isVisible) return null;
   return (
     <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
       <div className="w-5/12 flex flex-col">
         <div
           className="text-white text-xl place-self-end"
-          onClick={() => setShowModal(false)}
+          onClick={() => onCloseHubModal()}
         >
           X
         </div>
@@ -50,7 +51,7 @@ function Modal({ isVisible, setShowModal }) {
             <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
               <Button
                 buttonStyle="primary"
-                // onClick={onSubmit}
+                onClick={null}
                 // loading={loginMutation.status === 'loading'}
                 type="submit"
                 label="Create Hub"
@@ -68,14 +69,12 @@ function Modal({ isVisible, setShowModal }) {
 
 Modal.defaultProps = {
   isVisible: false,
-  setShowModal: false,
-  // showModal: false,
+  onCloseHubModal: false,
 };
 
 Modal.propTypes = {
   isVisible: PropTypes.bool,
-  setShowModal: PropTypes.bool,
-  // showModal: PropTypes.bool,
+  onCloseHubModal: PropTypes.bool,
 };
 
 export default Modal;

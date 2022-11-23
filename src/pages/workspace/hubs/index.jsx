@@ -1,23 +1,239 @@
+/* eslint-disable react/button-has-type */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { PlusOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
+import { Menu, Transition } from '@headlessui/react';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
+import React, { useState, Fragment } from 'react';
+// import { FolderAddIcon } from '@heroicons/react/solid';
+import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
+import ListModal from '../Lists/components/ListModal';
 
 function Hubs() {
   const [showModal, setShowModal] = useState(false);
+  const [showListModal, setShowListModal] = useState(false);
+  const [showHubList, setShowHubList] = useState(false);
+
+  // const handleCreateList = () => {
+  //   console.log('this creates');
+  // };
+  console.log(showListModal);
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ');
+  }
   return (
     <>
       <div
         id="createHubs"
         className="flex items-center justify-center bg-gray-100 space-x-2 rounded-xl w-full"
-        onClick={() => setShowModal(!showModal)}
+        onClick={() => setShowModal(true)}
       >
         <PlusOutlined />
         <p>New Hub</p>
-        <Modal isVisible={showModal} setShowModal={setShowModal} showModal={showModal} />
       </div>
-      <p>ok</p>
+      <Modal isVisible={showModal} onCloseHubModal={() => setShowModal(false)} />
+      <ListModal
+        listVisible={showListModal}
+        onCloseListModal={() => setShowListModal(false)}
+      />
+      {/* show hublist */}
+      <section id="hubList">
+        <div className="flex justify-between items-center hover:bg-gray-100 p-1 rounded mt-1 mb-1">
+          <div
+            id="hubListLeft"
+            className="flex items-center space-x-1 justify-start text-sm mt-1"
+          >
+            <div onClick={() => setShowHubList(!showHubList)}>
+              {showHubList ? (
+                <ChevronRightIcon
+                  className="flex-shrink-0 h-3 w-5"
+                  aria-hidden="true"
+                />
+              ) : (
+                <ChevronDownIcon
+                  className="flex-shrink-0 h-3 w-5"
+                  aria-hidden="true"
+                />
+              )}
+            </div>
+            <AvatarWithInitials initials="hn" height="h-6" width="w-6" />
+            <h4 className="text-sm font-bold">HubName</h4>
+          </div>
+          <div
+            id="hubListRight"
+            className="space-x-1 flex items-center justify-end"
+          >
+            <Menu as="div" className="relative">
+              <div>
+                <Menu.Button className=" text-gray-400 mt-4 flex text-sm">
+                  <EllipsisOutlined className="h-6 w-6" aria-hidden="true" />
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="origin-top-right absolute right-0 left-2 z-10 -mt-8 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Create new
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/team-members/invites"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Rename
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/team-members/groups"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Archive
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/permissions"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Delete
+                      </Link>
+                    )}
+                  </Menu.Item>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+            {/* new */}
+            <Menu as="div" className="relative">
+              <div>
+                <Menu.Button className=" text-gray-400 mt-4 flex text-sm">
+                  <PlusOutlined className="h-6 w-6" aria-hidden="true" />
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="origin-top-right absolute right-0 left-9 z-10 -mt-3 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                        onClick={() => setShowListModal(true)}
+                      >
+                        List
+                      </div>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/team-members/invites"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Doc
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/team-members/groups"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Wallet
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/settings/permissions"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        Import
+                      </Link>
+                    )}
+                  </Menu.Item>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
+        </div>
+        <div
+          id="createWallet"
+          className={`${showHubList ? 'block' : 'hidden'}`}
+        >
+          <p className="text-sm pl-7">
+            Create a
+            {' '}
+            <span className="underline text-gray-600">
+              <Hyperlink label="Wallet" href="/" />
+            </span>
+            ,
+            {' '}
+            <span className="underline text-gray-600">
+              <Hyperlink label="List" href="/" />
+            </span>
+            {' '}
+          </p>
+        </div>
+      </section>
     </>
   );
 }
