@@ -67,8 +67,8 @@ function LoginPage() {
     },
   });
 
-  const onSubmit = (values) => {
-    loginMutation.mutate({
+  const onSubmit = async (values) => {
+    await loginMutation.mutateAsync({
       email: values.email,
       password: values.password,
     });
