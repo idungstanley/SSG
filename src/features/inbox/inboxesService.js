@@ -22,6 +22,8 @@ export const useGetInboxes = () => {
   );
 };
 
+// TODO: add inbox archiving
+
 export const useGetHiddenInboxes = () => {
   const queryClient = useQueryClient();
 

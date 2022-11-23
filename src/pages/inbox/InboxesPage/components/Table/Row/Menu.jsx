@@ -48,6 +48,10 @@ export default function Menu({ inboxId, isHidden }) {
     hideOrShowInbox({ id: inboxId, hide: !isHidden });
   };
 
+  // ! change this to real value
+  const inArchive = false;
+  const onArchiveInbox = () => {};
+
   useEffect(() => {
     var ids = [];
 
@@ -57,6 +61,24 @@ export default function Menu({ inboxId, isHidden }) {
 
     setPinnedInboxesIds(ids);
   }, [pinnedInboxesStatus, pinnedInboxesData]);
+
+  const menuItems = [
+    {
+      id: 1,
+      onClick: onViewInbox,
+      title: 'View',
+    },
+    {
+      id: 2,
+      onClick: onHideInbox,
+      title: isHidden ? 'Unhide' : 'Hide',
+    },
+    {
+      id: 3,
+      onClick: onArchiveInbox,
+      title: inArchive ? 'Unarchive' : 'Archive',
+    },
+  ];
 
   return inbox ? (
     <HeadlessUIMenu as="div" className="relative inline-block text-left">
@@ -77,22 +99,24 @@ export default function Menu({ inboxId, isHidden }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <HeadlessUIMenu.Items className=" z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
-          <div className="py-1">
-            <HeadlessUIMenu.Item>
-              {({ active }) => (
-                <button
-                  onClick={onViewInbox}
-                  type="button"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block w-full px-4 py-2 text-sm text-left',
-                  )}
-                >
-                  View
-                </button>
-              )}
-            </HeadlessUIMenu.Item>
-          </div>
+          {menuItems.map((i) => (
+            <div className="py-1" key={i.id}>
+              <HeadlessUIMenu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={i.onClick}
+                    type="button"
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block w-full px-4 py-2 text-sm text-left',
+                    )}
+                  >
+                    {i.title}
+                  </button>
+                )}
+              </HeadlessUIMenu.Item>
+            </div>
+          ))}
           {!pinnedInboxesIds.some(
             (curentInboxId) => curentInboxId === inboxId,
           ) ? (
@@ -130,22 +154,6 @@ export default function Menu({ inboxId, isHidden }) {
                 </HeadlessUIMenu.Item>
               </div>
             )}
-          <div className="py-1">
-            <HeadlessUIMenu.Item>
-              {({ active }) => (
-                <button
-                  onClick={onHideInbox}
-                  type="button"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block w-full px-4 py-2 text-sm text-left',
-                  )}
-                >
-                  {isHidden ? 'Show' : 'Hide'}
-                </button>
-              )}
-            </HeadlessUIMenu.Item>
-          </div>
         </HeadlessUIMenu.Items>
       </Transition>
     </HeadlessUIMenu>
