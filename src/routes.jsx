@@ -42,10 +42,14 @@ import Community from './pages/workspace/community/Community';
 const routes = (user) => [
   {
     path: 'workspace/onboarding',
-    element: user?.default_workspace_id ? (
-      <Navigate to="/workspace" />
+    element: user ? (
+      user.default_workspace_id ? (
+        <Navigate to="/workspace" />
+      ) : (
+        <CreateWorkspace />
+      )
     ) : (
-      <CreateWorkspace />
+      <Navigate to="/auth/login" />
     ),
   },
   {

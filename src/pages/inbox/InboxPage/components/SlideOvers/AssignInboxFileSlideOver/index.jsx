@@ -27,7 +27,8 @@ function AssignInboxFileSlideOver() {
   const [inInboxIds, setInInboxIds] = useState([]);
   const [processingInboxId, setProcessingInboxId] = useState(null);
 
-  const { status, data } = useGetInboxes();
+  const { showHidden } = useSelector((state) => state.inboxes);
+  const { status, data } = useGetInboxes(showHidden);
   const { status: fullDetailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId);
 
   const assignInboxFileMutation = useMutation(assignInboxFileService, {

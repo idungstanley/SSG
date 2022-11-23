@@ -61,13 +61,12 @@ function Header() {
 
         <Button
           buttonStyle="danger"
-          label="Delete inbox"
+          label="Delete"
           onClick={handleDelete}
           icon={<TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />}
           iconPosition="center"
           disabled={false}
           ringOnFocus
-          width="w-44"
         />
       </div>
     </div>

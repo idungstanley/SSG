@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from './components/Header';
 import Table from './components/Table';
 import PinnedInboxes from './components/PinnedInboxes';
@@ -12,7 +12,9 @@ import FullScreenMessage from '../../shared/components/FullScreenMessage';
 function InboxDashboard() {
   const dispatch = useDispatch();
 
-  const { status, data } = useGetInboxes();
+  const { showHidden } = useSelector((state) => state.inboxes);
+  const { status, data } = useGetInboxes(showHidden);
+  console.log(data?.data);
 
   return (
     <>
@@ -26,20 +28,27 @@ function InboxDashboard() {
               <Spinner size={22} color="#0F70B7" />
             </div>
           )}
-          {status === 'success' ? data?.data?.inboxes.length === 0 ? (
-            <div className="flex flex-1 h-full bg-white">
-              <div className="m-auto">
-                <FullScreenMessage
-                  title="You have no inboxes yet"
-                  description="Get started by creating a new inbox"
-                  ctaText="Create inbox"
-                  ctaOnClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
-                  showCta
-                />
+          {status === 'success' ? (
+            data?.data?.inboxes.length === 0 ? (
+              <div className="flex flex-1 h-full bg-white">
+                <div className="m-auto">
+                  <FullScreenMessage
+                    title="You have no inboxes yet"
+                    description="Get started by creating a new inbox"
+                    ctaText="Create inbox"
+                    ctaOnClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
+                    showCta
+                  />
+                </div>
               </div>
-            </div>
-          ) : <Table /> : status === 'error' ? (
-            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
+            ) : (
+              <Table />
+            )
+          ) : status === 'error' ? (
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
           ) : null}
         </div>
       </div>

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../../../components';
 import { setCreateInboxSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { useGetInboxes } from '../../../../features/inbox/inboxesService';
+import { setShowHidden } from '../../../../features/inboxes/inboxesSlice';
 
 function Header() {
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState(false);
-
+  const { showHidden } = useSelector((state) => state.inboxes);
+  const { refetch } = useGetInboxes(showHidden);
   const handleShow = () => {
-    setChecked(!checked);
-
-    // TODO: add hidden inboxes to all
+    dispatch(setShowHidden(!showHidden));
+    refetch();
   };
 
   return (
@@ -27,9 +28,9 @@ function Header() {
               id="ShowHidden"
               name="ShowHidden"
               type="checkbox"
-              checked={checked}
+              checked={showHidden}
               onChange={handleShow}
-              className="h-6 w-6 rounded border-gray-300 text-indigo-600 hover:border-gray-500 transition-all duration-300 focus:ring-0 focus:ring-offset-0"
+              className="h-6 w-6 cursor-pointer rounded border-gray-300 text-indigo-600 hover:border-gray-500 transition-all duration-300 focus:ring-0 focus:ring-offset-0"
             />
           </div>
           <div className="ml-2 text-sm">

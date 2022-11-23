@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetInboxes } from '../../../../../features/inbox/inboxesService';
-import { AvatarWithInitials, SelectMenuWithAvatar } from '../../../../../components';
+import {
+  AvatarWithInitials,
+  SelectMenuWithAvatar,
+} from '../../../../../components';
 
 function SelectInboxMenu() {
   const navigate = useNavigate();
@@ -10,7 +14,8 @@ function SelectInboxMenu() {
   const [processedInboxes, setProcessedInboxes] = useState([]);
   const [selectedInboxId, setSelectedInboxId] = useState(null);
 
-  const { status, data } = useGetInboxes();
+  const { showHidden } = useSelector((state) => state.inboxes);
+  const { status, data } = useGetInboxes(showHidden);
 
   const onChangeInbox = (e) => {
     setSelectedInboxId(e.id);
@@ -50,7 +55,7 @@ function SelectInboxMenu() {
     setSelectedInboxId(inboxId);
   }, [inboxId]);
 
-  return (status === 'success' && data) ? (
+  return status === 'success' && data ? (
     <SelectMenuWithAvatar
       options={processedInboxes}
       selectedId={selectedInboxId}

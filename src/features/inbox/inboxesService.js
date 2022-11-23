@@ -2,14 +2,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Get all inboxes
-export const useGetInboxes = () => {
+export const useGetInboxes = (showHidden) => {
   const queryClient = useQueryClient();
+  console.log(showHidden);
 
   return useQuery(
     ['inboxes'],
-    async () => requestNew({
+    () => requestNew({
       url: 'inboxes',
       method: 'GET',
+      params: {
+        show_hidden: showHidden ? 1 : 0,
+      },
     }),
     {
       onSuccess: (data) => {
