@@ -9,8 +9,7 @@ import {
   useGetInbox,
   useGetPinnedInboxes,
   useHideOrUnhideInbox,
-  usePinInbox,
-  useUnpinInbox,
+  usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
 
 function classNames(...classes) {
@@ -28,8 +27,7 @@ export default function Menu({ inboxId, isHidden }) {
   const { data: inbox } = showHidden
     ? useGetHiddenInbox(inboxId)
     : useGetInbox(inboxId);
-  const { mutate: pinInbox } = usePinInbox(inboxId);
-  const { mutate: unpinInbox } = useUnpinInbox(inboxId);
+  const { mutate: pinOrUnpinInbox } = usePinOrUnpinInbox();
   const { mutate: hideOrShowInbox } = useHideOrUnhideInbox();
 
   const onViewInbox = () => {
@@ -37,12 +35,17 @@ export default function Menu({ inboxId, isHidden }) {
   };
 
   const onPinInbox = () => {
-    pinInbox();
+    // pinInbox();
+    const isPinned = pinnedInboxesData.data.pinned_inboxes.map((i) => i.id).includes(inboxId);
+    pinOrUnpinInbox({
+      inboxId,
+      isPinned,
+    });
   };
 
-  const onUnpinInbox = () => {
-    unpinInbox();
-  };
+  // const onUnpinInbox = () => {
+  //   unpinInbox();
+  // };
 
   const onHideInbox = () => {
     hideOrShowInbox({ id: inboxId, hide: !isHidden });
@@ -118,7 +121,7 @@ export default function Menu({ inboxId, isHidden }) {
             </div>
           ))}
           {!pinnedInboxesIds.some(
-            (curentInboxId) => curentInboxId === inboxId,
+            (currentInboxId) => currentInboxId === inboxId,
           ) ? (
             <div className="py-1">
               <HeadlessUIMenu.Item>
@@ -141,7 +144,7 @@ export default function Menu({ inboxId, isHidden }) {
                 <HeadlessUIMenu.Item>
                   {({ active }) => (
                     <button
-                      onClick={onUnpinInbox}
+                      onClick={onPinInbox}
                       type="button"
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',

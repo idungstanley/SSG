@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
-import { useGetInbox, useUnpinInbox } from '../../../../../../features/inbox/inboxesService';
+import {
+  useGetInbox,
+  usePinOrUnpinInbox,
+} from '../../../../../../features/inbox/inboxesService';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -13,18 +16,24 @@ function PinnedInboxItem({ pinnedInboxId }) {
   const navigate = useNavigate();
 
   const { data: inbox } = useGetInbox(pinnedInboxId);
-  const { mutate: unpinInbox } = useUnpinInbox(pinnedInboxId);
+  const { mutate: unpinInbox } = usePinOrUnpinInbox();
 
   const onViewInbox = () => {
     navigate(`/inbox/${inbox.id}`);
   };
 
   const onUnpinInbox = () => {
-    unpinInbox();
+    unpinInbox({
+      inboxId: pinnedInboxId,
+      isPinned: true,
+    });
   };
 
   return inbox ? (
-    <li key={inbox.id} className="relative col-span-1 flex shadow-sm rounded-md">
+    <li
+      key={inbox.id}
+      className="relative col-span-1 flex shadow-sm rounded-md"
+    >
       <div
         className="flex-shrink-0 flex items-center justify-center w-16 text-white text-sm font-medium rounded-l-md"
         style={{ backgroundColor: inbox.colour }}
@@ -33,7 +42,6 @@ function PinnedInboxItem({ pinnedInboxId }) {
       </div>
       <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
         <div className="flex-1 px-4 py-2 text-sm truncate">
-
           <div className="space-x-2">
             <Link
               key={inbox.id}
@@ -76,7 +84,10 @@ function PinnedInboxItem({ pinnedInboxId }) {
                     <button
                       onClick={onViewInbox}
                       type="button"
-                      className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-full px-4 py-2 text-sm text-left',
+                      )}
                     >
                       View
                     </button>
@@ -89,7 +100,10 @@ function PinnedInboxItem({ pinnedInboxId }) {
                     <button
                       onClick={onUnpinInbox}
                       type="button"
-                      className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-sm text-left')}
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-full px-4 py-2 text-sm text-left',
+                      )}
                     >
                       Unpin
                     </button>

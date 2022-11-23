@@ -38,7 +38,7 @@ export const useGetHiddenInboxes = () => {
     }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['hidden-inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
       },
     },
   );
@@ -85,10 +85,10 @@ export const useGetHiddenInbox = (inboxId) => {
   const queryClient = useQueryClient();
 
   return useQuery(
-    ['hidden-inbox', inboxId],
-    () => queryClient.getQueryData(['hidden-inbox', inboxId]),
+    ['inbox', inboxId],
+    () => queryClient.getQueryData(['inbox', inboxId]),
     {
-      initialData: () => queryClient.getQueryData(['hidden-inbox', inboxId]),
+      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
     },
   );
 };
@@ -107,42 +107,60 @@ export const createInboxService = async (data) => {
 };
 
 // Pin inbox
-export const pinInboxService = async (data) => {
+// export const pinInboxService = (data) => {
+//   const response = requestNew({
+//     url: `inboxes/${data.inboxId}/pin`,
+//     method: 'POST',
+//   });
+//   return response;
+// };
+
+const pinOrUnpinInbox = (data) => {
   const response = requestNew({
-    url: `inboxes/${data.inboxId}/pin`,
+    url: `inboxes/${data.inboxId}/${data.isPinned ? 'unpin' : 'pin'}`,
     method: 'POST',
   });
   return response;
 };
 
-export function usePinInbox(inboxId) {
+export function usePinOrUnpinInbox() {
   const queryClient = useQueryClient();
 
-  return useMutation(() => pinInboxService({ inboxId }), {
+  return useMutation(pinOrUnpinInbox, {
     onSuccess: () => {
       queryClient.invalidateQueries(['pinned_inboxes']);
     },
   });
 }
+
+// export function usePinInbox(inboxId) {
+//   const queryClient = useQueryClient();
+
+//   return useMutation(() => pinInboxService({ inboxId }), {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(['pinned_inboxes']);
+//     },
+//   });
+// }
 
 // Unpin inbox
-export const unpinInboxService = async (data) => {
-  const response = requestNew({
-    url: `inboxes/${data.inboxId}/unpin`,
-    method: 'POST',
-  });
-  return response;
-};
+// export const unpinInboxService = (data) => {
+//   const response = requestNew({
+//     url: `inboxes/${data.inboxId}/unpin`,
+//     method: 'POST',
+//   });
+//   return response;
+// };
 
-export function useUnpinInbox(inboxId) {
-  const queryClient = useQueryClient();
+// export function useUnpinInbox(inboxId) {
+//   const queryClient = useQueryClient();
 
-  return useMutation(() => unpinInboxService({ inboxId }), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['pinned_inboxes']);
-    },
-  });
-}
+//   return useMutation(() => unpinInboxService({ inboxId }), {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(['pinned_inboxes']);
+//     },
+//   });
+// }
 
 // Get total inbox unfiled account
 export const useGetInboxUnfiledCount = () => useQuery(['inboxes_unfiled_count'], async () => {
