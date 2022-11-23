@@ -1,18 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import Header from './components/Header';
 import Table from './components/Table';
 import PinnedInboxes from './components/PinnedInboxes';
 import CreateInboxSlideOver from './components/CreateInboxSlideOver';
-import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { useGetInboxes } from '../../../features/inbox/inboxesService';
-import { Spinner } from '../../../common';
-import FullScreenMessage from '../../shared/components/FullScreenMessage';
+// import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
+// import { useGetHiddenInboxes } from '../../../features/inbox/inboxesService';
+// import { Spinner } from '../../../common';
+// import FullScreenMessage from '../../shared/components/FullScreenMessage';
 
 function InboxDashboard() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const { status, data } = useGetInboxes();
+  // const { status, data } = useGetHiddenInboxes();
 
   return (
     <>
@@ -20,13 +20,14 @@ function InboxDashboard() {
         <Header />
         <div className="flex-1 h-full overflow-y-scroll">
           <PinnedInboxes />
+          <Table />
 
-          {status === 'loading' && (
+          {/* {status === 'loading' && (
             <div className="mx-auto w-6 mt-10 justify-center">
               <Spinner size={22} color="#0F70B7" />
             </div>
-          )}
-          {status === 'success' ? (
+          )} */}
+          {/* {status === 'success' ? (
             data?.data?.inboxes.length === 0 ? (
               <div className="flex flex-1 h-full bg-white">
                 <div className="m-auto">
@@ -40,14 +41,13 @@ function InboxDashboard() {
                 </div>
               </div>
             ) : (
-              <Table />
             )
           ) : status === 'error' ? (
             <FullScreenMessage
               title="Oops, an error occurred :("
               description="Please try again later."
             />
-          ) : null}
+          ) : null} */}
         </div>
       </div>
       <CreateInboxSlideOver />
