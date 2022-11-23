@@ -5,6 +5,7 @@ import Body from './Body';
 import {
   useGetHiddenInboxes,
   useGetInboxes,
+  useGetPinnedInboxes,
 } from '../../../../../features/inbox/inboxesService';
 import { Spinner } from '../../../../../common';
 import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
@@ -15,10 +16,14 @@ function Table() {
   const { showHidden } = useSelector((state) => state.inboxes);
   const { status: activeStatus, data: active } = useGetInboxes();
   const { status: hiddenStatus, data: hidden } = useGetHiddenInboxes();
+  const { status: pinnedStatus, data: pinned } = useGetPinnedInboxes();
   const data = activeStatus === 'success' && hiddenStatus === 'success'
-    ? showHidden
+    ? (showHidden
       ? [...hidden.data.inboxes]
       : [...active.data.inboxes]
+    ).filter(
+      (i) => !pinned?.data.pinned_inboxes.map((j) => j.id).includes(i.id),
+    )
     : null;
 
   return (
@@ -28,33 +33,35 @@ function Table() {
           <Spinner size={22} color="#0F70B7" />
         </div>
       )}
-      {activeStatus === 'success' && hiddenStatus === 'success' ? (
-        data.length === 0 ? (
-          <div className="flex flex-1 h-full bg-white">
-            <div className="m-auto">
-              <FullScreenMessage
-                title="You have no inboxes yet"
-                description="Get started by creating a new inbox"
-                ctaText="Create inbox"
-                ctaOnClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
-                showCta
-              />
+      {activeStatus === 'success'
+      && hiddenStatus === 'success'
+      && pinnedStatus === 'success' ? (
+          data.length === 0 && !pinned.data.pinned_inboxes.length ? (
+            <div className="flex flex-1 h-full bg-white">
+              <div className="m-auto">
+                <FullScreenMessage
+                  title="You have no inboxes yet"
+                  description="Get started by creating a new inbox"
+                  ctaText="Create inbox"
+                  ctaOnClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
+                  showCta
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="flex-1 align-middle inline-block min-w-full border-b border-gray-200">
-            <table className="min-w-full">
-              <Header />
-              <Body data={data} />
-            </table>
-          </div>
-        )
-      ) : activeStatus === 'error' || hiddenStatus === 'error' ? (
-        <FullScreenMessage
-          title="Oops, an error occurred :("
-          description="Please try again later."
-        />
-      ) : null}
+          ) : (
+            <div className="flex-1 align-middle inline-block min-w-full border-b border-gray-200">
+              <table className="min-w-full">
+                {data.length === 0 && !pinned.data.pinned_inboxes.length ? <Header /> : null}
+                <Body data={data} />
+              </table>
+            </div>
+          )
+        ) : activeStatus === 'error' || hiddenStatus === 'error' ? (
+          <FullScreenMessage
+            title="Oops, an error occurred :("
+            description="Please try again later."
+          />
+        ) : null}
     </>
   );
 }

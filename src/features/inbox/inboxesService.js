@@ -24,6 +24,7 @@ export const useGetInboxes = () => {
 
 // TODO: add inbox archiving
 
+// hidden inboxes
 export const useGetHiddenInboxes = () => {
   const queryClient = useQueryClient();
 
@@ -38,8 +39,23 @@ export const useGetHiddenInboxes = () => {
     }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['hidden-inbox', inbox.id], inbox));
       },
+    },
+  );
+};
+
+export const useGetHiddenInbox = (inboxId) => {
+  // TODO: If not in cache... get from endpoint (hard get)
+  // Default data should use the previously set data TODO check...
+
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['hidden-inbox', inboxId],
+    () => queryClient.getQueryData(['hidden-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
     },
   );
 };
@@ -78,21 +94,6 @@ export const useGetInbox = (inboxId) => {
   );
 };
 
-export const useGetHiddenInbox = (inboxId) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
-  const queryClient = useQueryClient();
-
-  return useQuery(
-    ['inbox', inboxId],
-    () => queryClient.getQueryData(['inbox', inboxId]),
-    {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
-    },
-  );
-};
-
 // Create inbox
 export const createInboxService = async (data) => {
   const response = requestNew({
@@ -105,15 +106,6 @@ export const createInboxService = async (data) => {
   });
   return response;
 };
-
-// Pin inbox
-// export const pinInboxService = (data) => {
-//   const response = requestNew({
-//     url: `inboxes/${data.inboxId}/pin`,
-//     method: 'POST',
-//   });
-//   return response;
-// };
 
 const pinOrUnpinInbox = (data) => {
   const response = requestNew({
@@ -132,35 +124,6 @@ export function usePinOrUnpinInbox() {
     },
   });
 }
-
-// export function usePinInbox(inboxId) {
-//   const queryClient = useQueryClient();
-
-//   return useMutation(() => pinInboxService({ inboxId }), {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(['pinned_inboxes']);
-//     },
-//   });
-// }
-
-// Unpin inbox
-// export const unpinInboxService = (data) => {
-//   const response = requestNew({
-//     url: `inboxes/${data.inboxId}/unpin`,
-//     method: 'POST',
-//   });
-//   return response;
-// };
-
-// export function useUnpinInbox(inboxId) {
-//   const queryClient = useQueryClient();
-
-//   return useMutation(() => unpinInboxService({ inboxId }), {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(['pinned_inboxes']);
-//     },
-//   });
-// }
 
 // Get total inbox unfiled account
 export const useGetInboxUnfiledCount = () => useQuery(['inboxes_unfiled_count'], async () => {
