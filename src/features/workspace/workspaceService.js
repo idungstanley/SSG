@@ -1,7 +1,7 @@
 // import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-export const createWorkspaceService = async (data) => {
+export const createWorkspaceService = (data) => {
   const response = requestNew(
     {
       url: 'workspace',

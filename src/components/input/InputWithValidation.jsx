@@ -1,5 +1,7 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const icons = [
   {
@@ -25,7 +27,12 @@ export default function InputWithValidation({
   onBlur,
   message,
   isFocused,
+  handleSubmit,
+  isNewPassword,
 }) {
+  const [showPassword, setShowPassword] = useState(type === 'password');
+  const newMessage = handleSubmit || value ? message : null;
+
   return (
     <div className="relative">
       <label
@@ -42,7 +49,7 @@ export default function InputWithValidation({
           strokeWidth={1.5}
           stroke="currentColor"
           className={`w-5 h-5 stroke-current ${
-            message ? 'text-red-700' : 'text-gray-400'
+            newMessage ? 'text-red-700' : 'text-gray-400'
           }`}
         >
           <path
@@ -52,15 +59,18 @@ export default function InputWithValidation({
           />
         </svg>
       </div>
-
       <input
         className={`appearance-none block w-full px-3 py-2 pl-8 border ${
-          message ? 'border-red-700' : 'border-gray-300'
+          newMessage ? 'border-red-700' : 'border-gray-300'
         } rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:${
-          message ? 'ring-red-700' : 'ring-gray-300'
-        } focus:${message ? 'border-red-700' : 'border-gray-300'} sm:text-sm`}
+          newMessage ? 'ring-red-700' : 'ring-gray-300'
+        } focus:${
+          newMessage ? 'border-red-700' : 'border-gray-300'
+        } sm:text-sm ${
+          type === 'password' ? (isNewPassword ? 'pr-14' : 'pr-36') : null
+        }`}
         id={id}
-        type={type}
+        type={showPassword ? type : 'text'}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
@@ -68,8 +78,26 @@ export default function InputWithValidation({
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={isFocused}
       />
+      {type === 'password' ? (
+        isNewPassword ? (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <p
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+          >
+            {showPassword ? 'Show' : 'Hide'}
+          </p>
+        ) : (
+          <Link
+            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+            to="/auth/forgot"
+          >
+            Forgot password?
+          </Link>
+        )
+      ) : null}
       <p className="block text-sm font-medium text-red-700 mt-1 h-5 ml-1">
-        {message}
+        {newMessage}
       </p>
     </div>
   );
@@ -77,7 +105,6 @@ export default function InputWithValidation({
 
 InputWithValidation.defaultProps = {
   message: '',
-  isFocused: false,
 };
 
 InputWithValidation.propTypes = {
@@ -88,5 +115,7 @@ InputWithValidation.propTypes = {
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   message: PropTypes.string,
-  isFocused: PropTypes.bool,
+  isFocused: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.number.isRequired,
+  isNewPassword: PropTypes.bool.isRequired,
 };

@@ -40,10 +40,29 @@ import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
 
 const routes = (user) => [
-  { path: 'workspace/onboarding', element: <CreateWorkspace /> },
+  {
+    path: 'workspace/onboarding',
+    element: user ? (
+      user.default_workspace_id ? (
+        <Navigate to="/workspace" />
+      ) : (
+        <CreateWorkspace />
+      )
+    ) : (
+      <Navigate to="/auth/login" />
+    ),
+  },
   {
     path: '/',
-    element: user ? <MainLayout /> : <Navigate to="/auth/login" />,
+    element: user ? (
+      user.default_workspace_id ? (
+        <MainLayout />
+      ) : (
+        <Navigate to="/workspace/onboarding" />
+      )
+    ) : (
+      <Navigate to="/auth/login" />
+    ),
     children: [
       { path: '/', element: <Navigate to="/workspace" /> },
       { path: 'explorer', element: <ExplorerPage /> },
@@ -84,20 +103,24 @@ const routes = (user) => [
         path: 'settings/team-members/groups/:teamMemberGroupId/members',
         element: <TeamMemberGroupMembersPage />,
       },
-      {
-        path: 'workspace',
-        element: user?.default_workspace_id ? (
-          <Index />
-        ) : (
-          <Navigate to="/workspace/onboarding" />
-        ),
-        children: [
-          { path: 'home', element: <Home /> },
-          { path: 'notification', element: <Notification /> },
-          { path: 'community', element: <Community /> },
-          { path: 'goals', element: <Home /> },
-        ],
-      },
+    ],
+  },
+  {
+    path: 'workspace',
+    element: user ? (
+      user.default_workspace_id ? (
+        <Index />
+      ) : (
+        <Navigate to="/workspace/onboarding" />
+      )
+    ) : (
+      <Navigate to="/auth/login" />
+    ),
+    children: [
+      { path: 'home', element: <Home /> },
+      { path: 'notification', element: <Notification /> },
+      { path: 'community', element: <Community /> },
+      { path: 'goals', element: <Home /> },
     ],
   },
   {

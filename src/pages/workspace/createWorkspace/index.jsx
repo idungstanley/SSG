@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import {
   Breadcrumb,
   SimpleSectionHeading,
@@ -14,18 +13,18 @@ import {
   Button,
 } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
+import { createWorkspaceService } from '../../../features/workspace/workspaceService';
 import {
-  createWorkspaceService,
-} from '../../../features/workspace/workspaceService';
-import {
-  createWorkspace,
-} from '../../../features/workspace/workspaceSlice';
+  selectCurrentUser,
+  setCurrentUser,
+} from '../../../features/auth/authSlice';
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
+
   const createWSMutation = useMutation(createWorkspaceService, {
-    onSuccess: async (successData) => {
+    onSuccess: (successData) => {
       localStorage.setItem(
         'currentWorkspacename',
         JSON.stringify(successData.data.workspace.name),
@@ -39,30 +38,45 @@ function CreateWorkspace() {
         JSON.stringify(successData.data.workspace.emails),
       );
 
-      const existingWsId = localStorage.getItem('currentWorkspaceId');
-      existingWsId == null
-        ? localStorage.setItem(
-          'currentWorkspaceId',
-          JSON.stringify(successData.data.workspace.id),
-        )
-        : localStorage.setItem(
-          'currentWorkspaceId',
-          existingWsId,
-        );
+      // const existingWsId = localStorage.getItem('currentWorkspaceId');
+      // existingWsId == null
+      //   ? localStorage.setItem(
+      //     'currentWorkspaceId',
+      //     JSON.stringify(successData.data.workspace.id),
+      //   )
+      //   : localStorage.setItem(
+      //     'currentWorkspaceId',
+      //     existingWsId,
+      //   );
 
-      dispatch(
-        createWorkspace({
-          currentWorkspaceId: successData.data.workspace.id,
-          currentWorkspacename: successData.data.workspace.name,
-          currentWorkspaceSize: successData.data.workspace.company_size,
-          wsemail: successData.data.workspace.emails,
+      // dispatch(
+      //   createWorkspace({
+      //     currentWorkspaceId: successData.data.workspace.id,
+      //     currentWorkspacename: successData.data.workspace.name,
+      //     currentWorkspaceSize: successData.data.workspace.company_size,
+      //     wsemail: successData.data.workspace.emails,
+      //   }),
+      // );
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          ...user,
+          default_workspace_id: successData.data.workspace.id,
         }),
       );
-      navigate('/workspace');
+      localStorage.setItem(
+        'currentWorkspaceId',
+        JSON.stringify(successData.data.workspace.id),
+      );
+      dispatch(
+        setCurrentUser({
+          ...user,
+          currentWorkspaceId: successData.data.workspace.id,
+        }),
+      );
     },
   });
-
-  // console.log(localStorage.getItem('isworkspace'));
 
   const defaultFormState = {
     name: '',
@@ -85,8 +99,8 @@ function CreateWorkspace() {
 
   const emails = email.split(' ');
 
-  const onSubmit = () => {
-    createWSMutation.mutate({
+  const onSubmit = async () => {
+    await createWSMutation.mutateAsync({
       name,
       emails,
       companySize,
