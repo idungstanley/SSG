@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authSlice from '../features/auth/authSlice';
 import wsSlice from '../features/workspace/workspaceSlice';
+import hubSlice from '../features/hubs/hubSlice';
 import explorerSlice from '../features/explorer/explorerSlice';
 import inboxSlice from '../features/inbox/inboxSlice';
 import searchSlice from '../features/search/searchSlice';
@@ -29,6 +30,7 @@ export const store = configureStore({
     teamMemberGroup: teamMemberGroupSlice,
     shared: sharedSlice,
     workspace: wsSlice,
+    hub: hubSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

@@ -3,15 +3,24 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import {
-  EllipsisOutlined, FolderAddOutlined, ImportOutlined, PlusOutlined, WalletOutlined,
+  BgColorsOutlined,
+  EllipsisOutlined, FolderAddOutlined, ImportOutlined, LinkOutlined, PlusOutlined, StarOutlined, WalletOutlined,
 } from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
 import {
+  ArchiveIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  CogIcon,
   DocumentAddIcon,
+  DocumentDuplicateIcon,
+  EyeOffIcon,
   PencilAltIcon,
+  PencilIcon,
+  ShareIcon,
+  SparklesIcon,
   TemplateIcon,
+  TrashIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import React, { useState, Fragment } from 'react';
@@ -94,17 +103,27 @@ function Hubs() {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="origin-top-right absolute right-0 left-2 z-10 -mt-8 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="origin-top-right absolute right-0 left-2 z-10 -mt-28 w-56 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <Menu.Item>
                     {({ active }) => (
                       <Link
                         to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'flex items-center justify-between space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        Create new
+                        <div className="flex items-center space-x-1">
+                          <PlusOutlined
+                            className="h-7 w-5 pt-2 text-gray-700"
+                            aria-hidden="true"
+                          />
+                          <p>Create new</p>
+                        </div>
+                        <ChevronRightIcon
+                          className="h-5 w-5 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
                       </Link>
                     )}
                   </Menu.Item>
@@ -114,10 +133,11 @@ function Hubs() {
                         to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        Rename
+                        <PencilIcon className="h-4 w-4" aria-hidden="true" />
+                        <p>Rename</p>
                       </Link>
                     )}
                   </Menu.Item>
@@ -127,10 +147,20 @@ function Hubs() {
                         to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'flex items-center justify-between space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        Archive
+                        <div className="flex items-center space-x-1">
+                          <BgColorsOutlined
+                            className="h-7 w-5 pt-2 text-gray-700"
+                            aria-hidden="true"
+                          />
+                          <p>Color & Avatar</p>
+                        </div>
+                        <ChevronRightIcon
+                          className="h-5 w-5 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
                       </Link>
                     )}
                   </Menu.Item>
@@ -140,10 +170,147 @@ function Hubs() {
                         to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        Delete
+                        <LinkOutlined className="h-4 w-4" aria-hidden="true" />
+                        <p>Copy link</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <DocumentDuplicateIcon
+                          className="h-4 w-4"
+                          aria-hidden="true"
+                        />
+                        <p>Duplicate</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <StarOutlined className="h-4 w-4" aria-hidden="true" />
+                        <p>Add to favorites</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <EyeOffIcon className="h-4 w-4" aria-hidden="true" />
+                        <p>Hide in my sidebar</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center justify-between space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <SparklesIcon
+                            className="h-6 w-5 pt-2 text-gray-700"
+                            aria-hidden="true"
+                          />
+                          <p>Templates</p>
+                        </div>
+                        <ChevronRightIcon
+                          className="h-5 w-5 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center justify-between space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <CogIcon
+                            className="h-6 w-5 pt-2 text-gray-700"
+                            aria-hidden="true"
+                          />
+                          <p>More settings</p>
+                        </div>
+                        <ChevronRightIcon
+                          className="h-5 w-5 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <ShareIcon className="h-4 w-4" aria-hidden="true" />
+                        <p>Sharing & Permission</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <ArchiveIcon className="h-4 w-4" aria-hidden="true" />
+                        <p>Archive</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="#"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-red-700 text-left',
+                        )}
+                      >
+                        <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                        <p>Delete</p>
                       </Link>
                     )}
                   </Menu.Item>
@@ -177,7 +344,7 @@ function Hubs() {
                         onClick={() => setShowListModal(true)}
                       >
                         <FolderAddOutlined
-                          className="h-7 w-6 pt-2 text-gray-700"
+                          className="h-7 w-5 pt-2 text-gray-700"
                           aria-hidden="true"
                         />
                         <p>List</p>
@@ -195,7 +362,7 @@ function Hubs() {
                         )}
                       >
                         <DocumentAddIcon
-                          className="h-5 w-5"
+                          className="h-4 w-4"
                           aria-hidden="true"
                         />
                         <p>Doc</p>
@@ -211,7 +378,7 @@ function Hubs() {
                           'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
+                        <PencilAltIcon className="h-4 w-4" aria-hidden="true" />
                         <p>Whiteboard</p>
                       </Link>
                     )}
@@ -227,7 +394,7 @@ function Hubs() {
                         )}
                       >
                         <WalletOutlined
-                          className="h-7 w-6 pt-2 text-gray-700"
+                          className="h-7 w-5 pt-2 text-gray-700"
                           aria-hidden="true"
                         />
                         <p>Wallet</p>
@@ -243,7 +410,7 @@ function Hubs() {
                           'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        <TemplateIcon className="h-5 w-5" aria-hidden="true" />
+                        <TemplateIcon className="h-4 w-4" aria-hidden="true" />
                         <p>From template</p>
                       </div>
                     )}
@@ -257,7 +424,7 @@ function Hubs() {
                         )}
                       >
                         <ImportOutlined
-                          className="h-7 w-6 pt-2 text-gray-700"
+                          className="h-7 w-5 pt-2 text-gray-700"
                           aria-hidden="true"
                         />
                         <p>Import</p>

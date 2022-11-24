@@ -1,12 +1,43 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from '@tanstack/react-query';
+// import { useDispatch } from 'react-redux';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
+// import { createHub } from '../../../../features/hubs/hubSlice';
+import { createHubService } from '../../../../features/hubs/hubService';
 
 function Modal({ isVisible, onCloseHubModal }) {
+  // const dispatch = useDispatch();
+
+  const createHub = useMutation(createHubService, {
+    onSuccess: (successData) => {
+      console.log(successData);
+    },
+  });
+
+  const defaultHubFormState = {
+    name: '',
+  };
+
+  const [formState, setFormState] = useState(defaultHubFormState);
+
+  const handleHubChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
+
+  const { name } = formState;
+  console.log(name);
+
+  const onSubmit = async () => {
+    await createHub.mutateAsync({
+      name,
+    });
+  };
+
   if (!isVisible) return null;
   return (
     <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
@@ -45,13 +76,13 @@ function Modal({ isVisible, onCloseHubModal }) {
                 name="name"
                 // value={name}
                 type="text"
-                // onChange={handleChange}
+                onChange={handleHubChange}
               />
             </div>
             <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
               <Button
                 buttonStyle="primary"
-                onClick={null}
+                onClick={onSubmit}
                 // loading={loginMutation.status === 'loading'}
                 type="submit"
                 label="Create Hub"
