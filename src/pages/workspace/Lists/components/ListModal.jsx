@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Input } from '../../../../components';
 
 function ListModal({ listVisible, onCloseListModal }) {
   if (!listVisible) return null;
@@ -16,8 +17,33 @@ function ListModal({ listVisible, onCloseListModal }) {
           X
         </div>
         <div className="bg-white p-2 rounded">
-          <section className="header h-36 flex justify-center items-center flex-col">
-            ListModal
+          <section className="header pl-4 pt-4 h-24">
+            <h3 className="font-bold text-xl">Create List</h3>
+          </section>
+          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+          <section id="listform">
+            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+              <Input
+                label="List Name:"
+                placeholder="Enter List Name"
+                name="name"
+                // value={name}
+                type="text"
+                // onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
+              <Button
+                buttonStyle="primary"
+                onClick={null}
+                // loading={loginMutation.status === 'loading'}
+                type="submit"
+                label="Create List"
+                padding="py-2 px-4"
+                height="h-10"
+                width="w-full"
+              />
+            </div>
           </section>
         </div>
       </div>

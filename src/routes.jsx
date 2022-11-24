@@ -38,6 +38,7 @@ import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
+import Docs from './pages/workspace/Docs/Docs';
 
 const routes = (user) => [
   {
@@ -121,6 +122,7 @@ const routes = (user) => [
       { path: 'notification', element: <Notification /> },
       { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
+      { path: 'docs', element: <Docs /> },
     ],
   },
   {

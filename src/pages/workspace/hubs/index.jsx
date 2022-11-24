@@ -2,11 +2,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  EllipsisOutlined, FolderAddOutlined, ImportOutlined, PlusOutlined, WalletOutlined,
+} from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  DocumentAddIcon,
+  PencilAltIcon,
+  TemplateIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import React, { useState, Fragment } from 'react';
@@ -14,16 +19,13 @@ import React, { useState, Fragment } from 'react';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
 import ListModal from '../Lists/components/ListModal';
+import WalletModal from '../wallet/components/WalletModal';
 
 function Hubs() {
   const [showModal, setShowModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
   const [showHubList, setShowHubList] = useState(false);
-
-  // const handleCreateList = () => {
-  //   console.log('this creates');
-  // };
-  console.log(showListModal);
+  const [showWalletModal, setShowWalletModal] = useState(false);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -38,10 +40,17 @@ function Hubs() {
         <PlusOutlined />
         <p>New Hub</p>
       </div>
-      <Modal isVisible={showModal} onCloseHubModal={() => setShowModal(false)} />
+      <Modal
+        isVisible={showModal}
+        onCloseHubModal={() => setShowModal(false)}
+      />
       <ListModal
         listVisible={showListModal}
         onCloseListModal={() => setShowListModal(false)}
+      />
+      <WalletModal
+        walletVisible={showWalletModal}
+        onCloseWalletModal={() => setShowWalletModal(false)}
       />
       {/* show hublist */}
       <section id="hubList">
@@ -89,7 +98,7 @@ function Hubs() {
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        to="/"
+                        to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
                           'block px-4 py-2 text-sm text-gray-700 text-left',
@@ -102,7 +111,7 @@ function Hubs() {
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        to="/settings/team-members/invites"
+                        to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
                           'block px-4 py-2 text-sm text-gray-700 text-left',
@@ -115,7 +124,7 @@ function Hubs() {
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        to="/settings/team-members/groups"
+                        to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
                           'block px-4 py-2 text-sm text-gray-700 text-left',
@@ -128,7 +137,7 @@ function Hubs() {
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        to="/settings/permissions"
+                        to="#"
                         className={classNames(
                           active ? 'bg-gray-100' : '',
                           'block px-4 py-2 text-sm text-gray-700 text-left',
@@ -163,51 +172,96 @@ function Hubs() {
                       <div
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2',
                         )}
                         onClick={() => setShowListModal(true)}
                       >
-                        List
+                        <FolderAddOutlined
+                          className="h-7 w-6 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
+                        <p>List</p>
+                      </div>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/workspace/docs"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <DocumentAddIcon
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        <p>Doc</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/workspace/docs"
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
+                        <p>Whiteboard</p>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        onClick={() => setShowWalletModal(true)}
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <WalletOutlined
+                          className="h-7 w-6 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
+                        <p>Wallet</p>
+                      </div>
+                    )}
+                  </Menu.Item>
+                  <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                        )}
+                      >
+                        <TemplateIcon className="h-5 w-5" aria-hidden="true" />
+                        <p>From template</p>
                       </div>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <Link
-                        to="/settings/team-members/invites"
+                      <div
                         className={classNames(
                           active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
+                          'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
                         )}
                       >
-                        Doc
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        to="/settings/team-members/groups"
-                        className={classNames(
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
-                        )}
-                      >
-                        Wallet
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        to="/settings/permissions"
-                        className={classNames(
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700 text-left',
-                        )}
-                      >
-                        Import
-                      </Link>
+                        <ImportOutlined
+                          className="h-7 w-6 pt-2 text-gray-700"
+                          aria-hidden="true"
+                        />
+                        <p>Import</p>
+                      </div>
                     )}
                   </Menu.Item>
                 </Menu.Items>
