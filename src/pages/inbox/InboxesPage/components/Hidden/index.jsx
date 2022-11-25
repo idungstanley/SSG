@@ -7,8 +7,6 @@ import Row from '../Table/Row';
 
 function Hidden() {
   const { data, status, type } = useInboxes('hidden');
-  // eslint-disable-next-line no-console
-  console.log(data, status);
 
   if (status === 'loading') {
     return (

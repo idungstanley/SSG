@@ -13,7 +13,6 @@ import teamMemberSlice from '../features/settings/teamMembers/teamMemberSlice';
 import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import sharedSlice from '../features/shared/sharedSlice';
-import inboxesSlice from '../features/inboxes/inboxesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -30,7 +29,6 @@ export const store = configureStore({
     teamMemberGroup: teamMemberGroupSlice,
     shared: sharedSlice,
     workspace: wsSlice,
-    inboxes: inboxesSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

@@ -10,8 +10,6 @@ import Row from '../Table/Row';
 function Active() {
   const { data, status, type } = useInboxes('active');
   const dispatch = useDispatch();
-  // eslint-disable-next-line no-console
-  console.log(data, status);
 
   if (status === 'loading') {
     return (

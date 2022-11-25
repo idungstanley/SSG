@@ -7,8 +7,6 @@ import Row from '../Table/Row';
 
 function Archived() {
   const { data, status, type } = useInboxes('archived');
-  // eslint-disable-next-line no-console
-  console.log(data, status);
 
   if (status === 'loading') {
     return (
