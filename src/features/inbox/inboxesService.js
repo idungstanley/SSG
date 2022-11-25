@@ -219,7 +219,6 @@ export const useArchiveOrUnarchiveInbox = () => {
   return useMutation(archiveOrUnarchiveInbox, {
     onSuccess: () => {
       queryClient.invalidateQueries(['inboxes']);
-      queryClient.invalidateQueries(['hidden-inboxes']);
       queryClient.invalidateQueries(['archived-inboxes']);
     },
   });

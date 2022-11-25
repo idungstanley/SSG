@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 
 const tabs = [
   { name: 'Active', href: '/inbox' },
-  { name: 'Hidden', href: '/inbox/hidden' },
   { name: 'Archive', href: '/inbox/archived' },
+  { name: 'Hidden', href: '/inbox/hidden' },
 ];
 
 function classNames(...classes) {

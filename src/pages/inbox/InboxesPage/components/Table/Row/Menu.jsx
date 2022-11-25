@@ -55,17 +55,23 @@ export default function Menu({ inboxId, type }) {
       onClick: onPinInbox,
       title: 'Pin',
     },
-    {
+  ];
+
+  if (type !== 'archived') {
+    menuItems.push({
       id: 3,
       onClick: onHideInbox,
       title: type === 'hidden' ? 'Unhide' : 'Hide',
-    },
-    {
+    });
+  }
+
+  if (type !== 'hidden') {
+    menuItems.push({
       id: 4,
       onClick: onArchiveInbox,
       title: type === 'archived' ? 'Unarchive' : 'Archive',
-    },
-  ];
+    });
+  }
 
   return inbox ? (
     <HeadlessUIMenu as="div" className="relative inline-block text-left">
