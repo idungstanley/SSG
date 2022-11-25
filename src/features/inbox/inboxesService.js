@@ -22,7 +22,58 @@ export const useGetInboxes = () => {
   );
 };
 
-// TODO: add inbox archiving
+// Get inbox
+export const useGetInbox = (inboxId, type) => {
+  // TODO: If not in cache... get from endpoint (hard get)
+  // Default data should use the previously set data TODO check...
+
+  const queryClient = useQueryClient();
+  const queryName = type === 'active' ? 'inbox' : `${type}-inbox`;
+
+  return useQuery(
+    [queryName, inboxId],
+    () => queryClient.getQueryData([queryName, inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+    },
+  );
+};
+
+// archived inboxes
+export const useGetArchivedInboxes = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['archived-inboxes'],
+    () => requestNew({
+      url: 'inboxes',
+      method: 'GET',
+      params: {
+        is_archived: 1,
+      },
+    }),
+    {
+      onSuccess: (data) => {
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['archived-inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
+
+export const useGetArchivedInbox = (inboxId) => {
+  // TODO: If not in cache... get from endpoint (hard get)
+  // Default data should use the previously set data TODO check...
+
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['archived-inbox', inboxId],
+    () => queryClient.getQueryData(['archived-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+    },
+  );
+};
 
 // hidden inboxes
 export const useGetHiddenInboxes = () => {
@@ -74,22 +125,6 @@ export const useGetPinnedInboxes = () => {
       onSuccess: (data) => {
         data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
       },
-    },
-  );
-};
-
-// Get inbox
-export const useGetInbox = (inboxId) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
-  const queryClient = useQueryClient();
-
-  return useQuery(
-    ['inbox', inboxId],
-    () => queryClient.getQueryData(['inbox', inboxId]),
-    {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
     },
   );
 };
@@ -168,6 +203,26 @@ export const useHideOrUnhideInbox = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['inboxes']);
       queryClient.invalidateQueries(['hidden-inboxes']);
+    },
+  });
+};
+
+// archive inbox
+export const archiveOrUnarchiveInbox = (data) => {
+  const request = requestNew({
+    url: `inboxes/${data.id}/${data.isArchived ? 'archive' : 'unarchive'}`,
+    method: 'POST',
+  });
+  return request;
+};
+
+export const useArchiveOrUnarchiveInbox = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(hideOrUnhideInbox, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['archived-inboxes']);
     },
   });
 };
@@ -345,4 +400,29 @@ export const useDeleteEmailFromList = () => {
       queryClient.invalidateQueries(['blacklist-files']);
     },
   });
+};
+
+// main hook
+export const useInboxes = (type) => {
+  const { data: pinned } = useGetPinnedInboxes();
+  const pinnedIds = pinned?.data.pinned_inboxes.map((i) => i.id);
+
+  const { data: active, status: activeStatus } = useGetInboxes();
+  const activeIds = active?.data.inboxes.map((i) => i.id);
+
+  if (type === 'active') {
+    const activeWithoutPinned = active?.data.inboxes.filter((i) => !pinnedIds?.includes(i.id));
+    return { data: activeWithoutPinned, status: activeStatus, type };
+  }
+  if (type === 'hidden') {
+    const { data: hidden, status: hiddenStatus } = useGetHiddenInboxes();
+    const hiddenWithoutActive = hidden?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+    return { data: hiddenWithoutActive, status: hiddenStatus, type };
+  }
+  if (type === 'archived') {
+    const { data: archived, status: archivedStatus } = useGetArchivedInboxes();
+    const archivedWithoutActive = archived?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+    return { data: archivedWithoutActive, status: archivedStatus, type };
+  }
+  return { data: null };
 };
