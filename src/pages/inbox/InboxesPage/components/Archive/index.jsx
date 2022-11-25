@@ -2,7 +2,8 @@ import React from 'react';
 import { Spinner } from '../../../../../common';
 import { useInboxes } from '../../../../../features/inbox/inboxesService';
 import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
-import Table from '../Table';
+import Header from '../Header';
+import Row from '../Table/Row';
 
 function Archived() {
   const { data, status, type } = useInboxes('archived');
@@ -27,7 +28,16 @@ function Archived() {
   }
 
   return data.length ? (
-    <Table data={data} type={type} />
+    <div className="flex-1 align-middle inline-block min-w-full border-b border-gray-200">
+      <table className="min-w-full">
+        <Header />
+        <tbody className="bg-white divide-y divide-gray-100">
+          {data.map((inbox) => (
+            <Row key={inbox.id} inboxId={inbox.id} type={type} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   ) : (
     <FullScreenMessage
       title="You have no archive inboxes yet"

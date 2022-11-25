@@ -34,10 +34,9 @@ export default function Menu({ inboxId, type }) {
   };
 
   const onHideInbox = () => {
-    hideOrShowInbox({ id: inboxId, hide: true });
+    hideOrShowInbox({ id: inboxId, isHidden: true });
   };
 
-  const inArchive = false;
   const onArchiveInbox = () => {
     archiveInbox({
       id: inboxId,
@@ -64,7 +63,7 @@ export default function Menu({ inboxId, type }) {
     {
       id: 4,
       onClick: onArchiveInbox,
-      title: inArchive ? 'Unarchive' : 'Archive',
+      title: type === 'archived' ? 'Unarchive' : 'Archive',
     },
   ];
 

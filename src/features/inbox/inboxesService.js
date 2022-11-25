@@ -190,7 +190,7 @@ export const useMarkOpenedInbox = (id) => {
 // hide inbox
 export const hideOrUnhideInbox = (data) => {
   const request = requestNew({
-    url: `inboxes/${data.id}/${data.hide ? 'hide' : 'unhide'}`,
+    url: `inboxes/${data.id}/${data.isHidden ? 'hide' : 'unhide'}`,
     method: 'POST',
   });
   return request;
@@ -405,23 +405,28 @@ export const useDeleteEmailFromList = () => {
 // main hook
 export const useInboxes = (type) => {
   const { data: pinned } = useGetPinnedInboxes();
-  const pinnedIds = pinned?.data.pinned_inboxes.map((i) => i.id);
-
   const { data: active, status: activeStatus } = useGetInboxes();
+
+  const pinnedIds = pinned?.data.pinned_inboxes.map((i) => i.id);
   const activeIds = active?.data.inboxes.map((i) => i.id);
 
   if (type === 'active') {
     const activeWithoutPinned = active?.data.inboxes.filter((i) => !pinnedIds?.includes(i.id));
+
     return { data: activeWithoutPinned, status: activeStatus, type };
   }
   if (type === 'hidden') {
     const { data: hidden, status: hiddenStatus } = useGetHiddenInboxes();
+
     const hiddenWithoutActive = hidden?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+
     return { data: hiddenWithoutActive, status: hiddenStatus, type };
   }
   if (type === 'archived') {
     const { data: archived, status: archivedStatus } = useGetArchivedInboxes();
+
     const archivedWithoutActive = archived?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+
     return { data: archivedWithoutActive, status: archivedStatus, type };
   }
   return { data: null };
