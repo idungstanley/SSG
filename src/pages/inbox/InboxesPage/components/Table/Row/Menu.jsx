@@ -8,6 +8,7 @@ import {
   useGetInbox,
   useHideOrUnhideInbox,
   usePinOrUnpinInbox,
+  useRestoreOrDeletInbox,
 } from '../../../../../../features/inbox/inboxesService';
 
 function classNames(...classes) {
@@ -21,6 +22,7 @@ export default function Menu({ inboxId, type }) {
   const { mutate: pinOrUnpinInbox } = usePinOrUnpinInbox();
   const { mutate: hideOrShowInbox } = useHideOrUnhideInbox();
   const { mutate: archiveInbox } = useArchiveOrUnarchiveInbox();
+  const { mutate: restoreInbox } = useRestoreOrDeletInbox();
 
   const onViewInbox = () => {
     navigate(`/inbox/${inboxId}`);
@@ -44,33 +46,55 @@ export default function Menu({ inboxId, type }) {
     });
   };
 
+  const onRestoreInbox = () => {
+    restoreInbox({
+      inboxId,
+      isDeleted: type === 'trashed',
+    });
+  };
+
   const menuItems = [
     {
       id: 1,
+      onClick: onRestoreInbox,
+      title: type === 'trashed' ? 'Restore' : 'Delete',
+    },
+    {
+      id: 2,
       onClick: onViewInbox,
       title: 'View',
     },
     {
-      id: 2,
+      id: 3,
       onClick: onPinInbox,
       title: 'Pin',
     },
-  ];
-
-  if (type !== 'archived') {
-    menuItems.push({
-      id: 3,
+    {
+      id: 4,
       onClick: onHideInbox,
       title: type === 'hidden' ? 'Unhide' : 'Hide',
-    });
-  }
-
-  if (type !== 'hidden') {
-    menuItems.push({
-      id: 4,
+    },
+    {
+      id: 5,
       onClick: onArchiveInbox,
       title: type === 'archived' ? 'Unarchive' : 'Archive',
-    });
+    },
+  ];
+  const activeMenuItems = [];
+
+  if (type === 'trashed') {
+    activeMenuItems.push(menuItems[0]);
+  } else {
+    activeMenuItems.push(menuItems[1]);
+    if (type === 'active') {
+      activeMenuItems.push(menuItems[2], menuItems[0]);
+    }
+    if (type === 'active' || type === 'hidden') {
+      activeMenuItems.push(menuItems[3]);
+    }
+    if (type === 'active' || type === 'archived') {
+      activeMenuItems.push(menuItems[4]);
+    }
   }
 
   return inbox ? (
@@ -92,7 +116,7 @@ export default function Menu({ inboxId, type }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <HeadlessUIMenu.Items className=" z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
-          {menuItems.map((i) => (
+          {activeMenuItems.map((i) => (
             <div className="py-1" key={i.id}>
               <HeadlessUIMenu.Item>
                 {({ active }) => (
