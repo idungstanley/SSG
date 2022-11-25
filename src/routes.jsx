@@ -38,6 +38,9 @@ import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
+import Active from './pages/inbox/InboxesPage/components/Active';
+import Hidden from './pages/inbox/InboxesPage/components/Hidden';
+import Archived from './pages/inbox/InboxesPage/components/Archive';
 
 const routes = (user) => [
   {
@@ -69,7 +72,15 @@ const routes = (user) => [
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
       { path: 'search', element: <SearchPage /> },
-      { path: 'inbox', element: <InboxesPage /> },
+      {
+        path: 'inbox',
+        element: <InboxesPage />,
+        children: [
+          { path: '', element: <Active /> },
+          { path: 'hidden', element: <Hidden /> },
+          { path: 'archived', element: <Archived /> },
+        ],
+      },
       { path: 'inbox/:inboxId', element: <InboxPage /> },
       { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
       {
