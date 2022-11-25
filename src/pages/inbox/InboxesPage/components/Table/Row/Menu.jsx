@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import { Menu as HeadlessUIMenu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import {
-  useGetHiddenInbox,
+  useArchiveOrUnarchiveInbox,
   useGetInbox,
-  useGetPinnedInboxes,
   useHideOrUnhideInbox,
   usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
@@ -16,39 +14,36 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Menu({ inboxId, isHidden }) {
+export default function Menu({ inboxId, type }) {
   const navigate = useNavigate();
 
-  const { data: pinnedInboxesData } = useGetPinnedInboxes();
-
-  const { showHidden } = useSelector((state) => state.inboxes);
-  const { data: inbox } = showHidden
-    ? useGetHiddenInbox(inboxId)
-    : useGetInbox(inboxId);
+  const { data: inbox } = useGetInbox(inboxId, type);
   const { mutate: pinOrUnpinInbox } = usePinOrUnpinInbox();
   const { mutate: hideOrShowInbox } = useHideOrUnhideInbox();
+  const { mutate: archiveInbox } = useArchiveOrUnarchiveInbox();
 
   const onViewInbox = () => {
     navigate(`/inbox/${inboxId}`);
   };
 
   const onPinInbox = () => {
-    const isPinned = pinnedInboxesData.data.pinned_inboxes
-      .map((i) => i.id)
-      .includes(inboxId);
     pinOrUnpinInbox({
       inboxId,
-      isPinned,
+      isPinned: false,
     });
   };
 
   const onHideInbox = () => {
-    hideOrShowInbox({ id: inboxId, hide: !isHidden });
+    hideOrShowInbox({ id: inboxId, hide: true });
   };
 
-  // ! change this to real value
   const inArchive = false;
-  const onArchiveInbox = () => {};
+  const onArchiveInbox = () => {
+    archiveInbox({
+      id: inboxId,
+      isArchived: type === 'archived',
+    });
+  };
 
   const menuItems = [
     {
@@ -59,16 +54,12 @@ export default function Menu({ inboxId, isHidden }) {
     {
       id: 2,
       onClick: onPinInbox,
-      title: pinnedInboxesData?.data.pinned_inboxes
-        .map((i) => i.id)
-        .includes(inboxId)
-        ? 'Unpin'
-        : 'Pin',
+      title: 'Pin',
     },
     {
       id: 3,
       onClick: onHideInbox,
-      title: isHidden ? 'Unhide' : 'Hide',
+      title: type === 'hidden' ? 'Unhide' : 'Hide',
     },
     {
       id: 4,
@@ -122,5 +113,5 @@ export default function Menu({ inboxId, isHidden }) {
 
 Menu.propTypes = {
   inboxId: PropTypes.string.isRequired,
-  isHidden: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };
