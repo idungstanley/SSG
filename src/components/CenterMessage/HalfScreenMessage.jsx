@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { EmptyStateSimple } from '../../../../components';
+import EmptyStateSimple from '../emptyState/EmptyStateSimple';
 
-export default function FullScreenMessage(props) {
+export default function HalfScreenMessage(props) {
   return (
-    <div className="flex flex-1 h-full bg-white">
+    <div className="flex flex-1 h-2/4 bg-white">
       <div className="m-auto">
         <EmptyStateSimple {...props} />
       </div>
@@ -13,10 +13,10 @@ export default function FullScreenMessage(props) {
   );
 }
 
-FullScreenMessage.defaultProps = {
-  props: null,
+HalfScreenMessage.defaultProps = {
+  props: {},
 };
 
-FullScreenMessage.propTypes = {
+HalfScreenMessage.propTypes = {
   props: PropTypes.object,
 };

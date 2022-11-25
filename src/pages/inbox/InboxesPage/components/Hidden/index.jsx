@@ -1,12 +1,12 @@
 import React from 'react';
 import { Spinner } from '../../../../../common';
+import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
 import { useInboxes } from '../../../../../features/inbox/inboxesService';
-import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
-import Header from '../Header';
+import Header from '../Table/Header';
 import Row from '../Table/Row';
 
 function Hidden() {
-  const { data, status, type } = useInboxes('active');
+  const { data, status, type } = useInboxes('hidden');
   // eslint-disable-next-line no-console
   console.log(data, status);
 
@@ -20,7 +20,7 @@ function Hidden() {
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
+      <HalfScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
       />
@@ -39,7 +39,7 @@ function Hidden() {
       </table>
     </div>
   ) : (
-    <FullScreenMessage
+    <HalfScreenMessage
       title="You have no hidden inboxes yet"
       description="Get started by creating a new inbox"
     />

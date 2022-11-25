@@ -34,7 +34,7 @@ export default function Menu({ inboxId, type }) {
   };
 
   const onHideInbox = () => {
-    hideOrShowInbox({ id: inboxId, isHidden: true });
+    hideOrShowInbox({ id: inboxId, isHidden: type === 'hidden' });
   };
 
   const onArchiveInbox = () => {

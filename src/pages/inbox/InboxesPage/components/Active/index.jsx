@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../../common';
+import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
 import { setCreateInboxSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import { useInboxes } from '../../../../../features/inbox/inboxesService';
-import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
-import Header from '../Header';
+import Header from '../Table/Header';
 import Row from '../Table/Row';
 
 function Active() {
@@ -23,7 +23,7 @@ function Active() {
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
+      <HalfScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
       />
@@ -42,7 +42,7 @@ function Active() {
       </table>
     </div>
   ) : (
-    <FullScreenMessage
+    <HalfScreenMessage
       title="You have no inboxes yet"
       description="Get started by creating a new inbox"
       ctaText="Create inbox"
