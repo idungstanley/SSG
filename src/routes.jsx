@@ -41,6 +41,7 @@ import Community from './pages/workspace/community/Community';
 import Active from './pages/inbox/InboxesPage/components/Active';
 import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
+import Restore from './pages/inbox/InboxesPage/components/Restore';
 
 const routes = (user) => [
   {
@@ -79,6 +80,7 @@ const routes = (user) => [
           { path: '', element: <Active /> },
           { path: 'hidden', element: <Hidden /> },
           { path: 'archived', element: <Archived /> },
+          { path: 'restore', element: <Restore /> },
         ],
       },
       { path: 'inbox/:inboxId', element: <InboxPage /> },

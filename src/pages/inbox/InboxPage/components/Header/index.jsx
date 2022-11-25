@@ -6,7 +6,7 @@ import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
-import { useDeleteInbox } from '../../../../../features/inbox/inboxesService';
+import { useRestoreOrDeletInbox } from '../../../../../features/inbox/inboxesService';
 
 function Header() {
   const dispatch = useDispatch();
@@ -21,10 +21,13 @@ function Header() {
     navigate(`/inbox/${inboxId}/settings`);
   };
 
-  const { mutate: deleteInbox } = useDeleteInbox(inboxId);
+  const { mutate: deleteInbox } = useRestoreOrDeletInbox();
 
   const handleDelete = () => {
-    deleteInbox();
+    deleteInbox({
+      inboxId,
+      isDeleted: false,
+    });
     navigate('/inbox');
   };
 

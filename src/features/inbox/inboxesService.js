@@ -19,6 +19,36 @@ export const useGetInboxes = () => {
   );
 };
 
+// trashed
+export const useGetTrashedInboxes = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['trashed-inboxes'],
+    () => requestNew({
+      url: 'inboxes/trashed',
+      method: 'GET',
+    }),
+    {
+      onSuccess: (data) => {
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['trashed-inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
+
+export const useGetTrashedInbox = (inboxId) => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['trashed-inbox', inboxId],
+    () => queryClient.getQueryData(['trashed-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+    },
+  );
+};
+
 // Get inbox
 export const useGetInbox = (inboxId, type) => {
   // TODO: If not in cache... get from endpoint (hard get)
@@ -224,20 +254,22 @@ export const useArchiveOrUnarchiveInbox = () => {
   });
 };
 
-// delete
-export const deleteInboxService = (id) => {
+const restoreOrDeleteInbox = (data) => {
+  const url = data.isDeleted ? `inboxes/${data.inboxId}/restore` : `inboxes/${data.inboxId}`;
+  const method = data.isDeleted ? 'POST' : 'DELETE';
   const request = requestNew({
-    url: `inboxes/${id}`,
-    method: 'DELETE',
+    url,
+    method,
   });
   return request;
 };
 
-export const useDeleteInbox = (id) => {
+export const useRestoreOrDeletInbox = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => deleteInboxService(id), {
+  return useMutation(restoreOrDeleteInbox, {
     onSuccess: () => {
+      queryClient.invalidateQueries(['trashed-inboxes']);
       queryClient.invalidateQueries(['inboxes']);
     },
   });
