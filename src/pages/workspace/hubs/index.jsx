@@ -7,6 +7,8 @@ import {
   EllipsisOutlined, FolderAddOutlined, ImportOutlined, LinkOutlined, PlusOutlined, StarOutlined, WalletOutlined,
 } from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
 import {
   ArchiveIcon,
   ChevronDownIcon,
@@ -23,14 +25,39 @@ import {
   TrashIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 // import { FolderAddIcon } from '@heroicons/react/solid';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
 import ListModal from '../Lists/components/ListModal';
 import WalletModal from '../wallet/components/WalletModal';
+// import { getWorkspaceService } from '../../../features/workspace/workspaceService';
+import { getHubListService } from '../../../features/hubs/hubService';
 
 function Hubs() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.hub.hubs);
+  console.log(user);
+
+  const getHubListMutation = useMutation(getHubListService, {
+    onSuccess: (data) => {
+      const hubData = data.data.hubs;
+      const newData = {
+        item: hubData,
+      };
+      dispatch(newData);
+      console.log(newData);
+    },
+  });
+
+  const getHubList = () => {
+    getHubListMutation.mutate();
+  };
+
+  useEffect(() => {
+    getHubList();
+  }, []);
+
   const [showModal, setShowModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
   const [showHubList, setShowHubList] = useState(false);

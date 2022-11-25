@@ -10,3 +10,11 @@ export const createHubService = (data) => {
   }, true);
   return response;
 };
+
+export const getHubListService = () => {
+  const response = requestNew({
+    url: 'at/hubs',
+    method: 'GET',
+  }, true);
+  return response;
+};

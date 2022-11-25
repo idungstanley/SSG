@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
@@ -90,11 +90,6 @@ function CreateWorkspace() {
   const handleBgClick = (colour) => {
     setBgAvatart(colour);
   };
-
-  useEffect(() => {
-    // getWs();
-    // console.log(localStorage.getItem('currentWorkspaceId'));
-  }, []);
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-y-scroll bg-gray-50">
