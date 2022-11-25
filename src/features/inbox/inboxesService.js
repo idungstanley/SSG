@@ -10,9 +10,6 @@ export const useGetInboxes = () => {
     () => requestNew({
       url: 'inboxes',
       method: 'GET',
-      params: {
-        show_hidden: 0,
-      },
     }),
     {
       onSuccess: (data) => {
@@ -190,7 +187,7 @@ export const useMarkOpenedInbox = (id) => {
 // hide inbox
 export const hideOrUnhideInbox = (data) => {
   const request = requestNew({
-    url: `inboxes/${data.id}/${data.isHidden ? 'hide' : 'unhide'}`,
+    url: `inboxes/${data.id}/${data.isHidden ? 'unhide' : 'hide'}`,
     method: 'POST',
   });
   return request;
@@ -210,7 +207,7 @@ export const useHideOrUnhideInbox = () => {
 // archive inbox
 export const archiveOrUnarchiveInbox = (data) => {
   const request = requestNew({
-    url: `inboxes/${data.id}/${data.isArchived ? 'archive' : 'unarchive'}`,
+    url: `inboxes/${data.id}/${data.isArchived ? 'unarchive' : 'archive'}`,
     method: 'POST',
   });
   return request;
@@ -219,9 +216,10 @@ export const archiveOrUnarchiveInbox = (data) => {
 export const useArchiveOrUnarchiveInbox = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(hideOrUnhideInbox, {
+  return useMutation(archiveOrUnarchiveInbox, {
     onSuccess: () => {
       queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['hidden-inboxes']);
       queryClient.invalidateQueries(['archived-inboxes']);
     },
   });
