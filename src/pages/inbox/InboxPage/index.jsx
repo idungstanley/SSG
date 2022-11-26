@@ -65,7 +65,7 @@ function InboxPage() {
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/inboxes/${inboxId}/upload-file`,
+        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/af/inboxes/${inboxId}/upload-file`,
       },
     });
   }, [inboxId]);
