@@ -24,29 +24,6 @@ function CreateWorkspace() {
   const user = useSelector(selectCurrentUser);
 
   const createWSMutation = useMutation(createWorkspaceService, {
-    onError: () => {
-      const id = '2b36c72d-6d08-4740-bac5-228e4e8dbc10';
-      //   dispatch(setCurrentUser({ ...user, default_workspace_id: id }));
-      //   localStorage.setItem('user', JSON.stringify({
-      //     ...user,
-      //     default_workspace_id: id,
-      //   }));
-      //   localStorage.setItem('currentWorkspaceId', JSON.stringify(id));
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          ...user,
-          default_workspace_id: id,
-        }),
-      );
-      localStorage.setItem('currentWorkspaceId', JSON.stringify(id));
-      dispatch(
-        setCurrentUser({
-          ...user,
-          default_workspace_id: id,
-        }),
-      );
-    },
     onSuccess: (successData) => {
       // localStorage.setItem(
       //   'currentWorkspacename',
