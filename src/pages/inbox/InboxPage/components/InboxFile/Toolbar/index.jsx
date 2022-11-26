@@ -185,7 +185,7 @@ function Toolbar() {
                       />
                     </div>
 
-                    <div className="relative z-0 inline-flex">
+                    <div className="relative z-0 inline-flex mx-6 overflow-x-scroll max-w-[592px]">
                       <span className="inline-flex">
                         {inboxFile.archived_at == null ? (
                           <Button

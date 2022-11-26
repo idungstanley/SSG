@@ -38,3 +38,21 @@ code {
 .react-doc-viewer-wrapper #header-bar{
   display: none;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(201, 201, 201);
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(153, 153, 153);
+}
