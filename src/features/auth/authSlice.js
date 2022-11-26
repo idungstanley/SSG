@@ -3,8 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 // Get user credentials from localStorage
 const localStorageUser = JSON.parse(localStorage.getItem('user'));
 const localStorageAccessToken = JSON.parse(localStorage.getItem('accessToken'));
-const localStorageCurrentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
-const localStorageCurrentUserId = JSON.parse(localStorage.getItem('currentUserId'));
+const localStorageCurrentWorkspaceId = JSON.parse(
+  localStorage.getItem('currentWorkspaceId'),
+);
+const localStorageCurrentUserId = JSON.parse(
+  localStorage.getItem('currentUserId'),
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -15,7 +19,7 @@ export const authSlice = createSlice({
     currentUserId: localStorageCurrentUserId,
   },
   reducers: {
-    setCurrentUser: (state, action) => {
+    setAuthData: (state, action) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.currentWorkspaceId = action.payload.currentWorkspaceId;
@@ -23,6 +27,9 @@ export const authSlice = createSlice({
     },
     setCurrentWorkspace: (state, action) => {
       state.currentWorkspaceId = action.payload.workspaceId;
+    },
+    setCurrentUser: (state, action) => {
+      state.user = action.payload;
     },
     logout: (state) => state,
     switchWorkspace: (state) => state,
@@ -33,10 +40,11 @@ export const selectCurrentUser = (state) => state.auth.user;
 export const selectCurrentWorkspaceId = (state) => state.auth.currentWorkspaceId;
 
 export const {
-  setCurrentUser,
+  setAuthData,
   setCurrentWorkspace,
   logout,
   switchWorkspace,
+  setCurrentUser,
 } = authSlice.actions;
 
 // Action creators are generated for each case reducer function

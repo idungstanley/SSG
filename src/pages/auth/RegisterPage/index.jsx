@@ -10,7 +10,7 @@ import {
   registerService,
   loginGoogleService,
 } from '../../../features/auth/authService';
-import { setCurrentUser } from '../../../features/auth/authSlice';
+import { setAuthData } from '../../../features/auth/authSlice';
 import { Hyperlink } from '../../../components';
 import InviteDetails from './components/InviteDetails';
 import MainLogo from '../../../assets/branding/main-logo.png';
@@ -34,7 +34,7 @@ function RegisterPage() {
       );
 
       dispatch(
-        setCurrentUser({
+        setAuthData({
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
@@ -56,7 +56,7 @@ function RegisterPage() {
       );
 
       dispatch(
-        setCurrentUser({
+        setAuthData({
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,

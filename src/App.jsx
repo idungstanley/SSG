@@ -13,9 +13,14 @@ import { selectCurrentUser } from './features/auth/authSlice';
 function App() {
   const dispatch = useDispatch();
 
-  const { anchorPointX, anchorPointY, showContextMenu } = useSelector((state) => state.contextMenu);
+  const { anchorPointX, anchorPointY, showContextMenu } = useSelector(
+    (state) => state.contextMenu,
+  );
 
-  const handleClick = useCallback(() => dispatch(resetContextMenu()), [showContextMenu]);
+  const handleClick = useCallback(
+    () => dispatch(resetContextMenu()),
+    [showContextMenu],
+  );
 
   useEffect(() => {
     document.addEventListener('click', handleClick);

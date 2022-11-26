@@ -1,19 +1,23 @@
 import React, { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
-  MenuIcon,
-  XIcon,
-  CogIcon,
-  BellIcon,
+  MenuIcon, XIcon, CogIcon, BellIcon,
 } from '@heroicons/react/outline';
 import { NavLink, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import SearchInput from './SearchInput';
 import { Badge, AvatarWithInitials, StatusDot } from '../../../../components';
-import { selectCurrentUser, setCurrentUser, logout } from '../../../../features/auth/authSlice';
+import {
+  selectCurrentUser,
+  setAuthData,
+  logout,
+} from '../../../../features/auth/authSlice';
 import { logoutService } from '../../../../features/auth/authService';
-import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
+import {
+  displayPrompt,
+  setVisibility,
+} from '../../../../features/general/prompt/promptSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
@@ -43,33 +47,37 @@ function TopMenu() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('currentWorkspaceId');
 
-      dispatch(setCurrentUser({
-        user: null,
-        accessToken: null,
-        currentWorkspaceId: null,
-      }));
+      dispatch(
+        setAuthData({
+          user: null,
+          accessToken: null,
+          currentWorkspaceId: null,
+        }),
+      );
 
       dispatch(logout());
     },
   });
 
   const onLogout = () => {
-    dispatch(displayPrompt('Sign out', 'Would you like to sign out of your account?', [
-      {
-        label: 'Sign out',
-        style: 'danger',
-        callback: () => {
-          logoutMutation.mutate();
+    dispatch(
+      displayPrompt('Sign out', 'Would you like to sign out of your account?', [
+        {
+          label: 'Sign out',
+          style: 'danger',
+          callback: () => {
+            logoutMutation.mutate();
+          },
         },
-      },
-      {
-        label: 'Cancel',
-        style: 'plain',
-        callback: () => {
-          dispatch(setVisibility(false));
+        {
+          label: 'Cancel',
+          style: 'plain',
+          callback: () => {
+            dispatch(setVisibility(false));
+          },
         },
-      },
-    ]));
+      ]),
+    );
   };
 
   return (
@@ -108,7 +116,9 @@ function TopMenu() {
                       <NavLink
                         key={item.name}
                         to={item.href}
-                        className={({ isActive }) => (isActive ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium' : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium')}
+                        className={({ isActive }) => (isActive
+                          ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium')}
                         aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
                       >
                         {item.name}
@@ -122,7 +132,6 @@ function TopMenu() {
                             />
                           </span>
                         )}
-
                       </NavLink>
                     ))}
                   </div>
@@ -162,7 +171,10 @@ function TopMenu() {
                         {({ active }) => (
                           <Link
                             to="/settings/team-members"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 text-left',
+                            )}
                           >
                             Team members
                           </Link>
@@ -172,7 +184,10 @@ function TopMenu() {
                         {({ active }) => (
                           <Link
                             to="/settings/team-members/invites"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 text-left',
+                            )}
                           >
                             Team member invites
                           </Link>
@@ -182,7 +197,10 @@ function TopMenu() {
                         {({ active }) => (
                           <Link
                             to="/settings/team-members/groups"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 text-left',
+                            )}
                           >
                             Team member groups
                           </Link>
@@ -192,7 +210,10 @@ function TopMenu() {
                         {({ active }) => (
                           <Link
                             to="/settings/permissions"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 text-left',
+                            )}
                           >
                             Permissions
                           </Link>
@@ -236,7 +257,10 @@ function TopMenu() {
                           <button
                             type="button"
                             onClick={() => dispatch(setMyWorkspacesSlideOverVisibility(true))}
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-left text-gray-700 w-full')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-left text-gray-700 w-full',
+                            )}
                           >
                             My workspaces
                           </button>
@@ -246,7 +270,10 @@ function TopMenu() {
                         {({ active }) => (
                           <a
                             href="tempurl"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 text-left',
+                            )}
                           >
                             Account
                           </a>
@@ -257,7 +284,10 @@ function TopMenu() {
                           <button
                             onClick={onLogout}
                             type="button"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 w-full text-left')}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                            )}
                           >
                             Sign out
                           </button>
@@ -277,9 +307,12 @@ function TopMenu() {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={
-                    classNames(item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium')
-                  }
+                  className={classNames(
+                    item.current
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'block px-3 py-2 rounded-md text-base font-medium',
+                  )}
                   aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}

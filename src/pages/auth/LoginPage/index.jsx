@@ -9,7 +9,7 @@ import {
   loginService,
   loginGoogleService,
 } from '../../../features/auth/authService';
-import { setCurrentUser } from '../../../features/auth/authSlice';
+import { setAuthData } from '../../../features/auth/authSlice';
 import { Hyperlink } from '../../../components';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import Form from '../../../components/Form';
@@ -35,7 +35,7 @@ function LoginPage() {
       );
 
       dispatch(
-        setCurrentUser({
+        setAuthData({
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
@@ -58,7 +58,7 @@ function LoginPage() {
       );
 
       dispatch(
-        setCurrentUser({
+        setAuthData({
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,

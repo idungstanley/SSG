@@ -24,38 +24,41 @@ function CreateWorkspace() {
   const user = useSelector(selectCurrentUser);
 
   const createWSMutation = useMutation(createWorkspaceService, {
+    onError: () => {
+      const id = '2b36c72d-6d08-4740-bac5-228e4e8dbc10';
+      //   dispatch(setCurrentUser({ ...user, default_workspace_id: id }));
+      //   localStorage.setItem('user', JSON.stringify({
+      //     ...user,
+      //     default_workspace_id: id,
+      //   }));
+      //   localStorage.setItem('currentWorkspaceId', JSON.stringify(id));
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          ...user,
+          default_workspace_id: id,
+        }),
+      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(id));
+      dispatch(
+        setCurrentUser({
+          ...user,
+          default_workspace_id: id,
+        }),
+      );
+    },
     onSuccess: (successData) => {
-      localStorage.setItem(
-        'currentWorkspacename',
-        JSON.stringify(successData.data.workspace.name),
-      );
-      localStorage.setItem(
-        'currentWorkspaceSize',
-        JSON.stringify(successData.data.workspace.company_size),
-      );
-      localStorage.setItem(
-        'wsemail',
-        JSON.stringify(successData.data.workspace.emails),
-      );
-
-      // const existingWsId = localStorage.getItem('currentWorkspaceId');
-      // existingWsId == null
-      //   ? localStorage.setItem(
-      //     'currentWorkspaceId',
-      //     JSON.stringify(successData.data.workspace.id),
-      //   )
-      //   : localStorage.setItem(
-      //     'currentWorkspaceId',
-      //     existingWsId,
-      //   );
-
-      // dispatch(
-      //   createWorkspace({
-      //     currentWorkspaceId: successData.data.workspace.id,
-      //     currentWorkspacename: successData.data.workspace.name,
-      //     currentWorkspaceSize: successData.data.workspace.company_size,
-      //     wsemail: successData.data.workspace.emails,
-      //   }),
+      // localStorage.setItem(
+      //   'currentWorkspacename',
+      //   JSON.stringify(successData.data.workspace.name),
+      // );
+      // localStorage.setItem(
+      //   'currentWorkspaceSize',
+      //   JSON.stringify(successData.data.workspace.company_size),
+      // );
+      // localStorage.setItem(
+      //   'wsemail',
+      //   JSON.stringify(successData.data.workspace.emails),
       // );
 
       localStorage.setItem(
@@ -72,7 +75,7 @@ function CreateWorkspace() {
       dispatch(
         setCurrentUser({
           ...user,
-          currentWorkspaceId: successData.data.workspace.id,
+          default_workspace_id: successData.data.workspace.id,
         }),
       );
     },
