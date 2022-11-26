@@ -3,12 +3,15 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../../common';
 import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
 import { setCreateInboxSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { useInboxes } from '../../../../../features/inbox/inboxesService';
+import {
+  useInboxes,
+} from '../../../../../features/inbox/inboxesService';
 import Header from '../Table/Header';
 import Row from '../Table/Row';
 
 function Active() {
   const { data, status, type } = useInboxes('active');
+
   const dispatch = useDispatch();
 
   if (status === 'loading') {

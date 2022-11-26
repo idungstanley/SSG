@@ -19,6 +19,35 @@ export const useGetInboxes = () => {
   );
 };
 
+export const useGetActiveInboxes = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['active-inboxes'],
+    () => requestNew({
+      url: 'inboxes',
+      method: 'GET',
+    }),
+    {
+      onSuccess: (data) => {
+        data.data.inboxes.map((inbox) => queryClient.setQueryData(['active-inbox', inbox.id], inbox));
+      },
+    },
+  );
+};
+
+export const useGetActiveInbox = (inboxId) => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['active-inbox', inboxId],
+    () => queryClient.getQueryData(['active-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['active-inbox', inboxId]),
+    },
+  );
+};
+
 // trashed
 export const useGetTrashedInboxes = () => {
   const queryClient = useQueryClient();
@@ -44,7 +73,7 @@ export const useGetTrashedInbox = (inboxId) => {
     ['trashed-inbox', inboxId],
     () => queryClient.getQueryData(['trashed-inbox', inboxId]),
     {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+      initialData: () => queryClient.getQueryData(['trashed-inbox', inboxId]),
     },
   );
 };
@@ -55,13 +84,13 @@ export const useGetInbox = (inboxId, type) => {
   // Default data should use the previously set data TODO check...
 
   const queryClient = useQueryClient();
-  const queryName = type === 'active' ? 'inbox' : `${type}-inbox`;
+  const queryName = `${type}-inbox`;
 
   return useQuery(
     [queryName, inboxId],
     () => queryClient.getQueryData([queryName, inboxId]),
     {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+      initialData: () => queryClient.getQueryData([queryName, inboxId]),
     },
   );
 };
@@ -97,7 +126,7 @@ export const useGetArchivedInbox = (inboxId) => {
     ['archived-inbox', inboxId],
     () => queryClient.getQueryData(['archived-inbox', inboxId]),
     {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+      initialData: () => queryClient.getQueryData(['archived-inbox', inboxId]),
     },
   );
 };
@@ -133,7 +162,7 @@ export const useGetHiddenInbox = (inboxId) => {
     ['hidden-inbox', inboxId],
     () => queryClient.getQueryData(['hidden-inbox', inboxId]),
     {
-      initialData: () => queryClient.getQueryData(['inbox', inboxId]),
+      initialData: () => queryClient.getQueryData(['hidden-inbox', inboxId]),
     },
   );
 };
@@ -143,15 +172,30 @@ export const useGetPinnedInboxes = () => {
   const queryClient = useQueryClient();
 
   return useQuery(
-    ['pinned_inboxes'],
+    ['pinned-inboxes'],
     async () => requestNew({
       url: 'inboxes/pinned',
       method: 'GET',
     }),
     {
       onSuccess: (data) => {
-        data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
+        data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['pinned-inbox', inbox.id], inbox));
       },
+    },
+  );
+};
+
+export const useGetPinnedInbox = (inboxId) => {
+  // TODO: If not in cache... get from endpoint (hard get)
+  // Default data should use the previously set data TODO check...
+
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['pinned-inbox', inboxId],
+    () => queryClient.getQueryData(['pinned-inbox', inboxId]),
+    {
+      initialData: () => queryClient.getQueryData(['pinned-inbox', inboxId]),
     },
   );
 };
@@ -182,7 +226,7 @@ export function usePinOrUnpinInbox() {
 
   return useMutation(pinOrUnpinInbox, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['pinned_inboxes']);
+      queryClient.invalidateQueries(['pinned-inboxes']);
     },
   });
 }
@@ -209,7 +253,7 @@ export const useMarkOpenedInbox = (id) => {
 
   return useMutation(() => markOpenedInbox(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['active-inboxes']);
     },
   });
 };
@@ -228,7 +272,7 @@ export const useHideOrUnhideInbox = () => {
 
   return useMutation(hideOrUnhideInbox, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['active-inboxes']);
       queryClient.invalidateQueries(['hidden-inboxes']);
     },
   });
@@ -248,7 +292,7 @@ export const useArchiveOrUnarchiveInbox = () => {
 
   return useMutation(archiveOrUnarchiveInbox, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['active-inboxes']);
       queryClient.invalidateQueries(['archived-inboxes']);
     },
   });
@@ -270,7 +314,7 @@ export const useRestoreOrDeletInbox = () => {
   return useMutation(restoreOrDeleteInbox, {
     onSuccess: () => {
       queryClient.invalidateQueries(['trashed-inboxes']);
-      queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['active-inboxes']);
     },
   });
 };
@@ -434,7 +478,7 @@ export const useDeleteEmailFromList = () => {
 // main hook
 export const useInboxes = (type) => {
   const { data: pinned } = useGetPinnedInboxes();
-  const { data: active, status: activeStatus } = useGetInboxes();
+  const { data: active, status: activeStatus } = useGetActiveInboxes();
 
   const pinnedIds = pinned?.data.pinned_inboxes.map((i) => i.id);
   const activeIds = active?.data.inboxes.map((i) => i.id);

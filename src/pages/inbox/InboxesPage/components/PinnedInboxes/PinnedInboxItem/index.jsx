@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import {
-  useGetInbox,
+  useGetPinnedInbox,
   usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
 
@@ -15,7 +15,7 @@ function classNames(...classes) {
 function PinnedInboxItem({ pinnedInboxId }) {
   const navigate = useNavigate();
 
-  const { data: inbox } = useGetInbox(pinnedInboxId);
+  const { data: inbox } = useGetPinnedInbox(pinnedInboxId);
   const { mutate: unpinInbox } = usePinOrUnpinInbox();
 
   const onViewInbox = () => {
