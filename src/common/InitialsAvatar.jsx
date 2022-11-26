@@ -17,7 +17,7 @@ function InitialsAvatar({
 }
 
 InitialsAvatar.propTypes = {
-  size: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
   colour: PropTypes.string.isRequired,
   initials: PropTypes.string.isRequired,
 };

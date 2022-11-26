@@ -285,3 +285,17 @@ export const useDeleteInboxFileComment = (fileId) => {
     },
   });
 };
+
+export const fileActivity = (fileId) => {
+  const request = requestNew({
+    url: `inbox-files/${fileId}/activity-logs`,
+    method: 'GET',
+  });
+  return request;
+};
+export const useGetInboxFileActivity = (fileId) => useQuery(
+  [`inbox-${fileId}-activity`],
+  () => fileActivity(fileId),
+  {
+  },
+);

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Toolbar from './Toolbar';
 import Main from './Main';
-import { useInboxes } from '../../../../../features/inbox/inboxesService';
+import { useGetInboxes, useInboxes } from '../../../../../features/inbox/inboxesService';
 import { useGetInboxFile } from '../../../../../features/inbox/inboxService';
 
 function InboxFile() {
@@ -14,7 +14,9 @@ function InboxFile() {
 
   const { status, data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const { data: active } = useInboxes('active');
+  const { data } = useGetInboxes();
+  const active = data?.data.inboxes;
+
   const { data: hidden } = useInboxes('hidden');
   const { data: archive } = useInboxes('archived');
   const inbox = active?.find((i) => i.id === inboxId)
