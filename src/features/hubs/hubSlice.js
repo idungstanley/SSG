@@ -13,10 +13,7 @@ export const hubSlice = createSlice({
     },
 
     getHub(state, action) {
-      return {
-        ...state,
-        hub: action.payload,
-      };
+      state.hub = action.payload;
     },
     chechIfHub: (state) => state,
 
