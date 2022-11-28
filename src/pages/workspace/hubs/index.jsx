@@ -1,15 +1,17 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
   BgColorsOutlined,
-  EllipsisOutlined, FolderAddOutlined, ImportOutlined, LinkOutlined, PlusOutlined, StarOutlined, WalletOutlined,
+  EllipsisOutlined,
+  FolderAddOutlined,
+  ImportOutlined,
+  LinkOutlined,
+  PlusOutlined,
+  StarOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
 import {
   ArchiveIcon,
   ChevronDownIcon,
@@ -26,36 +28,18 @@ import {
   TrashIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
 import ListModal from '../Lists/components/ListModal';
 import WalletModal from '../wallet/components/WalletModal';
-import { getHubListService } from '../../../features/hubs/hubService';
-import { getHub } from '../../../features/hubs/hubSlice';
+import { useGetHubList } from '../../../features/hubs/hubService';
 
 function Hubs() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.hub.hub);
-  // console.log(user);
-
-  const getHubListMutation = useMutation(getHubListService, {
-    onSuccess: (data) => {
-      const newData = data.data.hubs;
-      // const newVal = { ...newData };
-      // setHubData(data.data.hubs);
-      // console.log(newVal);
-      dispatch(getHub(newData));
-    },
-  });
-
-  const getHubList = () => {
-    getHubListMutation.mutate();
-  };
-
-  useEffect(() => {
-    getHubList();
-  }, []);
+  const { data, status } = useGetHubList();
+  const user = data?.data.hubs;
+  // eslint-disable-next-line no-console
+  console.log(status);
 
   const [showModal, setShowModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
@@ -96,8 +80,8 @@ function Hubs() {
         ))
       } */}
 
-      {user.map((data) => (
-        <section id="hubList" key={data.id}>
+      {user?.map((item) => (
+        <section id="hubList" key={item.id}>
           <div className="flex justify-between items-center hover:bg-gray-100 p-1 rounded mt-1 mb-1">
             <div
               id="hubListLeft"
@@ -117,7 +101,7 @@ function Hubs() {
                 )}
               </div>
               <AvatarWithInitials initials="hn" height="h-6" width="w-6" />
-              <h4 className="text-sm font-bold">{data.name}</h4>
+              <h4 className="text-sm font-bold">{item.name}</h4>
             </div>
             <div
               id="hubListRight"

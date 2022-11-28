@@ -3,43 +3,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-// import { useDispatch } from 'react-redux';
 import MainLogo from '../../../../assets/branding/main-logo.png';
-import { Button, Input } from '../../../../components';
-// import { createHub } from '../../../../features/hubs/hubSlice';
-import { createHubService } from '../../../../features/hubs/hubService';
+import { Input } from '../../../../components';
+import {
+  useCreateHub,
+} from '../../../../features/hubs/hubService';
 
 function Modal({ isVisible, onCloseHubModal }) {
-  // const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  const { mutate: crateHub } = useCreateHub();
 
-  const createHub = useMutation(createHubService, {
-    onSuccess: (successData) => {
-      queryClient.invalidateQueries(['hubs']);
-      const hubId = successData.data.hub;
-      console.log(hubId);
-      onCloseHubModal();
-    },
-  });
+  const [formState, setFormState] = useState('');
 
-  const defaultHubFormState = {
-    name: '',
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const [formState, setFormState] = useState(defaultHubFormState);
-
-  const handleHubChange = (e) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
-  };
-
-  const { name } = formState;
-  // console.log(name);
-
-  const onSubmit = async () => {
-    await createHub.mutateAsync({
-      name,
+    crateHub({
+      name: formState,
     });
+
+    onCloseHubModal();
   };
 
   if (!isVisible) return null;
@@ -72,30 +54,21 @@ function Modal({ isVisible, onCloseHubModal }) {
             </div>
             <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
           </section>
-          <section id="input" className="mt-5 ml-2">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="Hub Name:"
-                placeholder="Enter Hub Name"
-                name="name"
-                // value={name}
-                type="text"
-                onChange={handleHubChange}
-              />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
-                label="Create Hub"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section>
+          <form
+            onSubmit={(e) => handleSubmit(e)}
+            id="input"
+            className="flex py-2 flex-col mx-5 justify-center items-center gap-7"
+          >
+            <Input
+              label="Hub Name:"
+              placeholder="Enter Hub Name"
+              name="name"
+              value={formState}
+              type="text"
+              onChange={(e) => setFormState(e.target.value)}
+            />
+            <button className="w-full rounded-md h-10 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700" type="submit">Create Hub</button>
+          </form>
         </div>
       </div>
     </div>
