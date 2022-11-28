@@ -77,7 +77,7 @@ function Comments() {
                 <ul role="list" className="divide-y divide-gray-200">
                   {comments.map((i) => (
                     <li key={i.id} className="py-4 flex justify-between">
-                      <p>{i.message}</p>
+                      <p className="pl-1">{i.message}</p>
                       <TrashIcon
                         onClick={() => handleDelete(i.id)}
                         className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"

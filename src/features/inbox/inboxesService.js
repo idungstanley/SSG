@@ -299,7 +299,9 @@ export const useArchiveOrUnarchiveInbox = () => {
 };
 
 const restoreOrDeleteInbox = (data) => {
-  const url = data.isDeleted ? `inboxes/${data.inboxId}/restore` : `inboxes/${data.inboxId}`;
+  const url = data.isDeleted
+    ? `inboxes/${data.inboxId}/restore`
+    : `inboxes/${data.inboxId}`;
   const method = data.isDeleted ? 'POST' : 'DELETE';
   const request = requestNew({
     url,
@@ -416,20 +418,12 @@ export const useDeleteBlacklistFile = () => {
 };
 
 // email list
-export const getEmailList = (inboxId) => {
+export const addEmailToList = (data) => {
   const request = requestNew({
-    url: `inboxes/${inboxId}/email-list`,
-    method: 'GET',
-  });
-  return request;
-};
-
-export const addEmailToList = (inboxId, email) => {
-  const request = requestNew({
-    url: `inboxes/${inboxId}/email-list`,
+    url: `inboxes/${data.inboxId}/email-list`,
     method: 'POST',
     data: {
-      email,
+      email: data.email,
     },
   });
   return request;
@@ -443,17 +437,10 @@ export const deleteEmailFromList = (inboxId, emailId) => {
   return request;
 };
 
-export const useGetEmailList = (inboxId) => {
-  const queryClient = useQueryClient();
-
-  return useQuery(['email-list'], () => getEmailList(inboxId), {
-    onSuccess: () => {
-      // eslint-disable-next-line no-console
-      console.log(queryClient);
-      // queryClient.invalidateQueries(['blacklist-files']);
-    },
-  });
-};
+export const useGetEmailList = (inboxId) => useQuery(['email-list'], () => requestNew({
+  url: `inboxes/${inboxId}/email-list`,
+  method: 'GET',
+}));
 
 export const useAddEmailToList = () => {
   const queryClient = useQueryClient();
@@ -484,21 +471,27 @@ export const useInboxes = (type) => {
   const activeIds = active?.data.inboxes.map((i) => i.id);
 
   if (type === 'active') {
-    const activeWithoutPinned = active?.data.inboxes.filter((i) => !pinnedIds?.includes(i.id));
+    const activeWithoutPinned = active?.data.inboxes.filter(
+      (i) => !pinnedIds?.includes(i.id),
+    );
 
     return { data: activeWithoutPinned, status: activeStatus, type };
   }
   if (type === 'hidden') {
     const { data: hidden, status: hiddenStatus } = useGetHiddenInboxes();
 
-    const hiddenWithoutActive = hidden?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+    const hiddenWithoutActive = hidden?.data.inboxes.filter(
+      (i) => !activeIds?.includes(i.id),
+    );
 
     return { data: hiddenWithoutActive, status: hiddenStatus, type };
   }
   if (type === 'archived') {
     const { data: archived, status: archivedStatus } = useGetArchivedInboxes();
 
-    const archivedWithoutActive = archived?.data.inboxes.filter((i) => !activeIds?.includes(i.id));
+    const archivedWithoutActive = archived?.data.inboxes.filter(
+      (i) => !activeIds?.includes(i.id),
+    );
 
     return { data: archivedWithoutActive, status: archivedStatus, type };
   }

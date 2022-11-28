@@ -7,11 +7,9 @@ function Activity() {
   const selectedInboxFileId = useSelector(
     (state) => state.inbox.selectedInboxFileId,
   );
-  const { data, status } = useGetInboxFileActivity(selectedInboxFileId);
+  const { data } = useGetInboxFileActivity(selectedInboxFileId);
 
   const logs = data?.data.logs;
-  // eslint-disable-next-line no-console
-  console.log(status);
 
   return (
     <div className="h-full flex-1">
