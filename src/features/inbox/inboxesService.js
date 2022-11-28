@@ -429,35 +429,35 @@ export const addEmailToList = (data) => {
   return request;
 };
 
-export const deleteEmailFromList = (inboxId, emailId) => {
+export const deleteEmailFromList = (data) => {
   const request = requestNew({
-    url: `/inboxes/${inboxId}/email-list/${emailId}`,
+    url: `/inboxes/${data.inboxId}/email-list/${data.emailId}`,
     method: 'DELETE',
   });
   return request;
 };
 
-export const useGetEmailList = (inboxId) => useQuery(['email-list'], () => requestNew({
+export const useGetEmailList = (inboxId) => useQuery([`email-list-${inboxId}`], () => requestNew({
   url: `inboxes/${inboxId}/email-list`,
   method: 'GET',
 }));
 
-export const useAddEmailToList = () => {
+export const useAddEmailToList = (inboxId) => {
   const queryClient = useQueryClient();
 
   return useMutation(addEmailToList, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['email-list']);
+      queryClient.invalidateQueries([`email-list-${inboxId}`]);
     },
   });
 };
 
-export const useDeleteEmailFromList = () => {
+export const useDeleteEmailFromList = (inboxId) => {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteBlacklistFile, {
+  return useMutation(deleteEmailFromList, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['blacklist-files']);
+      queryClient.invalidateQueries([`email-list-${inboxId}`]);
     },
   });
 };
