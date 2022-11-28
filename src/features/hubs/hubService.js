@@ -11,6 +11,7 @@ export const createHubService = (data) => {
   return response;
 };
 
+// get all hubs
 export const getHubListService = () => {
   const response = requestNew({
     url: 'at/hubs',

@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 // import { useDispatch } from 'react-redux';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
@@ -12,10 +12,14 @@ import { createHubService } from '../../../../features/hubs/hubService';
 
 function Modal({ isVisible, onCloseHubModal }) {
   // const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const createHub = useMutation(createHubService, {
     onSuccess: (successData) => {
-      console.log(successData);
+      queryClient.invalidateQueries(['hubs']);
+      const hubId = successData.data.hub;
+      console.log(hubId);
+      onCloseHubModal();
     },
   });
 
@@ -30,7 +34,7 @@ function Modal({ isVisible, onCloseHubModal }) {
   };
 
   const { name } = formState;
-  console.log(name);
+  // console.log(name);
 
   const onSubmit = async () => {
     await createHub.mutateAsync({

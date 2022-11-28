@@ -13,6 +13,7 @@ function InboxDashboard() {
   const dispatch = useDispatch();
 
   const { status, data } = useGetInboxes();
+  console.log(data);
 
   return (
     <>

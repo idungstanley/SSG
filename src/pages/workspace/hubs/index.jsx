@@ -26,27 +26,25 @@ import {
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import React, { useState, Fragment, useEffect } from 'react';
-// import { FolderAddIcon } from '@heroicons/react/solid';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
 import ListModal from '../Lists/components/ListModal';
 import WalletModal from '../wallet/components/WalletModal';
-// import { getWorkspaceService } from '../../../features/workspace/workspaceService';
 import { getHubListService } from '../../../features/hubs/hubService';
+import { getHub } from '../../../features/hubs/hubSlice';
 
 function Hubs() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.hub.hubs);
+  const user = useSelector((state) => state);
   console.log(user);
 
   const getHubListMutation = useMutation(getHubListService, {
     onSuccess: (data) => {
-      const hubData = data.data.hubs;
-      const newData = {
-        item: hubData,
-      };
-      dispatch(newData);
-      console.log(newData);
+      const newData = data.data.hubs;
+      const newVal = { ...newData };
+      // setHubData(data.data.hubs);
+      console.log(newVal);
+      dispatch(getHub(newVal));
     },
   });
 
@@ -89,6 +87,8 @@ function Hubs() {
         onCloseWalletModal={() => setShowWalletModal(false)}
       />
       {/* show hublist */}
+      {/* {user?.map(({ name }) => ( */}
+
       <section id="hubList">
         <div className="flex justify-between items-center hover:bg-gray-100 p-1 rounded mt-1 mb-1">
           <div
@@ -109,7 +109,7 @@ function Hubs() {
               )}
             </div>
             <AvatarWithInitials initials="hn" height="h-6" width="w-6" />
-            <h4 className="text-sm font-bold">HubName</h4>
+            <h4 className="text-sm font-bold">sample</h4>
           </div>
           <div
             id="hubListRight"
@@ -482,6 +482,7 @@ function Hubs() {
           </p>
         </div>
       </section>
+      {/* ))} */}
     </>
   );
 }

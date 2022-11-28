@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  hubs: [],
+  hub: [],
 };
 
 export const hubSlice = createSlice({
@@ -11,10 +11,17 @@ export const hubSlice = createSlice({
     createHub(state, action) {
       state.hub.push(action.payload);
     },
+
+    getHub(state, action) {
+      return {
+        ...state,
+        hub: action.payload,
+      };
+    },
     chechIfHub: (state) => state,
 
   },
 });
 
-export const { createHub, chechIfHub } = hubSlice.actions;
+export const { createHub, getHub, chechIfHub } = hubSlice.actions;
 export default hubSlice.reducer;
