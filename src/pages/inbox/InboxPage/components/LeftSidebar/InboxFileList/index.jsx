@@ -179,7 +179,6 @@ function InboxFileList() {
                         )}
                     </div>
                   )}
-
                   <InboxFileListItem inboxFileId={inboxFile.id} index={index} />
                 </div>
               ))
