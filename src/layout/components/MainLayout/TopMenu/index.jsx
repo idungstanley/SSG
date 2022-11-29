@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import React from 'react';
+import { Disclosure } from '@headlessui/react';
 import {
   MenuIcon, XIcon, CogIcon, BellIcon,
 } from '@heroicons/react/outline';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import SearchInput from './SearchInput';
@@ -21,6 +21,7 @@ import {
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
+import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
@@ -79,6 +80,54 @@ function TopMenu() {
       ]),
     );
   };
+
+  const leftMenuItems = [
+    {
+      id: 1,
+      type: 'link',
+      onClick: '/settings/team-members',
+      title: 'Team members',
+    },
+    {
+      id: 2,
+      type: 'link',
+      onClick: '/settings/team-members/invites',
+      title: 'Team member invites',
+    },
+    {
+      id: 3,
+      type: 'link',
+      onClick: '/settings/team-members/groups',
+      title: 'Team member groups',
+    },
+    {
+      id: 4,
+      type: 'link',
+      onClick: '/settings/permissions',
+      title: 'Permissions',
+    },
+  ];
+
+  const rightMenuItems = [
+    {
+      id: 1,
+      type: 'button',
+      onClick: () => dispatch(setMyWorkspacesSlideOverVisibility(true)),
+      title: 'My workspaces',
+    },
+    {
+      id: 2,
+      type: 'link',
+      onClick: 'tempurl',
+      title: 'Account',
+    },
+    {
+      id: 3,
+      type: 'button',
+      onClick: onLogout,
+      title: 'Sign out',
+    },
+  ];
 
   return (
     <Disclosure as="nav" className="bg-gray-800 select-none">
@@ -151,151 +200,30 @@ function TopMenu() {
                 </button>
 
                 {/* Workspace settings dropdown */}
-                <Menu as="div" className="relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 p-1 text-gray-400 hover:text-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <CogIcon className="h-6 w-6" aria-hidden="true" />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/settings/team-members"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 text-left',
-                            )}
-                          >
-                            Team members
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/settings/team-members/invites"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 text-left',
-                            )}
-                          >
-                            Team member invites
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/settings/team-members/groups"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 text-left',
-                            )}
-                          >
-                            Team member groups
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/settings/permissions"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 text-left',
-                            )}
-                          >
-                            Permissions
-                          </Link>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <MenuWithTransition
+                  icon={<CogIcon className="h-6 w-6" aria-hidden="true" />}
+                  menuItems={leftMenuItems}
+                />
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <StatusDot
-                        on={(
-                          <AvatarWithInitials
-                            height="h-8"
-                            width="w-8"
-                            initials={user.initials}
-                            backgroundColour={user.colour}
-                            textSize="text-xs"
-                          />
-                        )}
-                        top={false}
-                        size={2}
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            type="button"
-                            onClick={() => dispatch(setMyWorkspacesSlideOverVisibility(true))}
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-left text-gray-700 w-full',
-                            )}
-                          >
-                            My workspaces
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="tempurl"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 text-left',
-                            )}
-                          >
-                            Account
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={onLogout}
-                            type="button"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700 w-full text-left',
-                            )}
-                          >
-                            Sign out
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <MenuWithTransition
+                  icon={(
+                    <StatusDot
+                      on={(
+                        <AvatarWithInitials
+                          height="h-8"
+                          width="w-8"
+                          initials={user.initials}
+                          backgroundColour={user.colour}
+                          textSize="text-xs"
+                        />
+                      )}
+                      top={false}
+                      size={2}
+                    />
+                  )}
+                  menuItems={rightMenuItems}
+                />
               </div>
             </div>
           </div>
