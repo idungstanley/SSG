@@ -33,7 +33,7 @@ export default function ExplorerPage() {
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
   const showUploadModal = useSelector((state) => state.explorer.showUploadModal);
 
-  const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/files`;
+  const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/files`;
 
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));

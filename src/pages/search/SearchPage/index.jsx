@@ -16,6 +16,7 @@ export default function SearchPage() {
   const searchFileContents = useSelector((state) => state.search.searchFileContents);
 
   const { data, status } = useSearchEverything(searchQuery, resultsType, searchFileContents);
+  console.log(data);
 
   return (
     <div className="h-full flex flex-col w-full">
