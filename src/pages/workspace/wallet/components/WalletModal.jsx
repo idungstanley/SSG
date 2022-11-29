@@ -1,10 +1,40 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from '@tanstack/react-query';
+import { createWalletService } from '../../../../features/wallet/walletService';
 import { Button, Input } from '../../../../components';
 
 function WalletModal({ walletVisible, onCloseWalletModal }) {
+  const createWallet = useMutation(createWalletService, {
+    onSuccess: (successData) => {
+      const walletData = successData.data.wallet;
+      console.log(walletData);
+    },
+  });
+
+  const defaultWalletFormState = {
+    name: '',
+  };
+
+  const hubID = JSON.parse(localStorage.getItem('currentHubId'));
+
+  const [formState, setFormState] = useState(defaultWalletFormState);
+
+  const handleWalletChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
+
+  const { name } = formState;
+
+  const onSubmit = async () => {
+    await createWallet.mutateAsync({
+      name, hubID,
+    });
+  };
+
   if (!walletVisible) return null;
 
   return (
@@ -37,13 +67,13 @@ function WalletModal({ walletVisible, onCloseWalletModal }) {
                 name="name"
                 // value={name}
                 type="text"
-                // onChange={handleChange}
+                onChange={handleWalletChange}
               />
             </div>
             <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
               <Button
                 buttonStyle="primary"
-                onClick={null}
+                onClick={onSubmit}
                 // loading={loginMutation.status === 'loading'}
                 type="submit"
                 label="Create List"

@@ -6,6 +6,7 @@ export const createWalletService = (data) => {
     method: 'POST',
     params: {
       name: data.name,
+      hub_id: data.hubID,
     },
   }, true);
   return response;
