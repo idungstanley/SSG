@@ -164,28 +164,26 @@ export const unarchiveInboxFileService = async (data) => {
 };
 
 // multiple archive / unarchive
-export const multipleArchiveOrUnarchiveInboxFiles = async (
-  id,
-  fileIdsArr,
-  type,
+export const multipleArchiveOrUnarchiveInboxFiles = (
+  data,
 ) => {
   // type: archive / unarchive
 
-  const request = await requestNew({
-    url: `inboxes/${id}/multiple-files-${type}`,
+  const request = requestNew({
+    url: `inboxes/${data.id}/multiple-files-${data.type}`,
     method: 'POST',
     params: {
-      inbox_file_ids: fileIdsArr,
+      inbox_file_ids: data.fileIdsArr,
     },
   });
   return request;
 };
 
-export const useMultipleArchiveOrUnArchive = (id, fileIdsArr, type) => {
+export const useMultipleArchiveOrUnArchive = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    () => multipleArchiveOrUnarchiveInboxFiles(id, fileIdsArr, type),
+    multipleArchiveOrUnarchiveInboxFiles,
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries([
@@ -246,7 +244,7 @@ export const useGetInboxFileComments = (fileId) => {
   );
 };
 
-export const postInboxFileComment = async (fileId, message) => {
+const postInboxFileComment = async (fileId, message) => {
   const request = await requestNew({
     url: `inbox-files/${fileId}/comment`,
     method: 'POST',
@@ -268,7 +266,7 @@ export const usePostInboxFileComment = (fileId, message) => {
 };
 
 // delete comments
-export const deleteInboxFileComment = (data) => {
+const deleteInboxFileComment = (data) => {
   const request = requestNew({
     url: `inbox-files/${data.fileId}/comment/${data.messageId}`,
     method: 'DELETE',
@@ -286,16 +284,15 @@ export const useDeleteInboxFileComment = (fileId) => {
   });
 };
 
-export const fileActivity = (fileId) => {
+const fileActivity = (fileId) => {
   const request = requestNew({
     url: `inbox-files/${fileId}/activity-logs`,
     method: 'GET',
   });
   return request;
 };
+
 export const useGetInboxFileActivity = (fileId) => useQuery(
   [`inbox-${fileId}-activity`],
   () => fileActivity(fileId),
-  {
-  },
 );

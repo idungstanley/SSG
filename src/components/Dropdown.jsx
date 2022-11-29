@@ -36,7 +36,7 @@ export default function Dropdown({
                     type="button"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'group flex items-center font-medium px-4 py-2 text-sm block w-full',
+                      'group flex items-center font-medium px-4 py-2 text-sm w-full',
                     )}
                     onClick={item.onClick}
                   >

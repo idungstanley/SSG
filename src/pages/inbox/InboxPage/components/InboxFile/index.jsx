@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Toolbar from './Toolbar';
 import Main from './Main';
-import { useGetInboxes, useInboxes } from '../../../../../features/inbox/inboxesService';
+import { useGetActiveInboxes, useInboxes } from '../../../../../features/inbox/inboxesService';
 import { useGetInboxFile } from '../../../../../features/inbox/inboxService';
 
 function InboxFile() {
@@ -14,11 +14,15 @@ function InboxFile() {
 
   const { status, data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const { data } = useGetInboxes();
-  const active = data?.data.inboxes;
+  // TODO: check if its can be removed
+  const { data: dataActiveWithPinned } = useGetActiveInboxes();
+  const { data: dataHidden } = useInboxes('hidden');
+  const { data: dataArchive } = useInboxes('archived');
 
-  const { data: hidden } = useInboxes('hidden');
-  const { data: archive } = useInboxes('archived');
+  const active = dataActiveWithPinned?.data.inboxes;
+  const hidden = dataHidden?.data.inboxes;
+  const archive = dataArchive?.data.inboxes;
+
   const inbox = active?.find((i) => i.id === inboxId)
     || hidden?.find((i) => i.id === inboxId)
     || archive?.find((i) => i.id === inboxId);
