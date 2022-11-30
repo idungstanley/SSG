@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  CogIcon, TrashIcon, MailOpenIcon,
-} from '@heroicons/react/solid';
+import { CogIcon, TrashIcon, MailOpenIcon } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
@@ -35,6 +33,51 @@ function Header() {
     navigate('/inbox');
   };
 
+  const menuItems = [
+    {
+      id: 1,
+      buttonStyle: 'white',
+      label: 'Blacklist',
+      onClick: () => setShowEmailsModal(!showEmailsModal),
+      icon: (
+        <MailOpenIcon
+          className="mr-2.5 h-5 w-5 text-gray-500"
+          aria-hidden="true"
+        />
+      ),
+    },
+    {
+      id: 2,
+      buttonStyle: 'white',
+      label: 'Upload',
+      onClick: upload,
+      icon: (
+        <UploadIcon
+          className="mr-2.5 h-5 w-5 text-gray-500"
+          aria-hidden="true"
+        />
+      ),
+    },
+    {
+      id: 3,
+      buttonStyle: 'white',
+      label: 'Settings',
+      onClick: goToSettings,
+      icon: (
+        <CogIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
+      ),
+    },
+    {
+      id: 4,
+      buttonStyle: 'danger',
+      label: 'Delete',
+      onClick: handleDelete,
+      icon: (
+        <TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />
+      ),
+    },
+  ];
+
   return (
     <div className="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 h-20">
       <div className="flex items-center">
@@ -47,68 +90,20 @@ function Header() {
       </div>
 
       <div className="relative flex lg:mt-0 lg:ml-4 space-x-3">
-        <Button
-          buttonStyle="white"
-          label="Black list emails"
-          onClick={() => setShowEmailsModal(!showEmailsModal)}
-          icon={(
-            <MailOpenIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          )}
-          iconPosition="center"
-          disabled={false}
-          ringOnFocus
-        />
+        {menuItems.map((i) => (
+          <Button
+            key={i.id}
+            buttonStyle={i.buttonStyle}
+            label={i.label}
+            onClick={i.onClick}
+            icon={i.icon}
+            iconPosition="center"
+            ringOnFocus
+          />
+        ))}
         {showEmailsModal ? (
           <BlackListEmails setShowModal={setShowEmailsModal} />
         ) : null}
-        <Button
-          buttonStyle="white"
-          label="Upload"
-          onClick={upload}
-          icon={(
-            <UploadIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          )}
-          iconPosition="center"
-          disabled={false}
-          ringOnFocus
-        />
-
-        <Button
-          buttonStyle="white"
-          label="Inbox settings"
-          onClick={goToSettings}
-          icon={(
-            <CogIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          )}
-          iconPosition="center"
-          disabled={false}
-          ringOnFocus
-          width="w-44"
-        />
-
-        <Button
-          buttonStyle="danger"
-          label="Delete"
-          onClick={handleDelete}
-          icon={(
-            <TrashIcon
-              className="mr-2.5 h-5 w-5 text-white"
-              aria-hidden="true"
-            />
-          )}
-          iconPosition="center"
-          disabled={false}
-          ringOnFocus
-        />
       </div>
     </div>
   );

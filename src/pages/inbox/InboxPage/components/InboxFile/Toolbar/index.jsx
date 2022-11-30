@@ -4,8 +4,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react';
 import {
   DownloadIcon,
-  ArchiveIcon,
-  InboxIcon,
   ArrowCircleRightIcon,
   ArrowCircleLeftIcon,
   InboxInIcon,
@@ -15,12 +13,11 @@ import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice
 import {
   useGetInboxFile,
   fileInboxFileService,
-  archiveInboxFileService,
-  unarchiveInboxFileService,
 } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
 import { DownloadFile } from '../../../../../../app/helpers';
 import Blacklist from './components/Blacklist';
+import ArchiveInboxFile from '../../ArchiveInboxFile';
 
 function Toolbar() {
   const dispatch = useDispatch();
@@ -37,45 +34,6 @@ function Toolbar() {
   const folderIdsForFiling = useSelector(
     (state) => state.inbox.folderIdsForFiling,
   );
-
-  // Mutations
-  const archiveInboxFileMutation = useMutation(archiveInboxFileService, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['inbox_file', data.data.inbox_file.id],
-        data.data.inbox_file,
-      );
-      queryClient.invalidateQueries([
-        'inbox_files',
-        data.data.inbox_file.inbox_id,
-        { isArchived: 0 },
-      ]);
-      queryClient.invalidateQueries([
-        'inbox_files',
-        data.data.inbox_file.inbox_id,
-        { isArchived: 1 },
-      ]);
-    },
-  });
-
-  const unarchiveInboxFileMutation = useMutation(unarchiveInboxFileService, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['inbox_file', data.data.inbox_file.id],
-        data.data.inbox_file,
-      );
-      queryClient.invalidateQueries([
-        'inbox_files',
-        data.data.inbox_file.inbox_id,
-        { isArchived: 0 },
-      ]);
-      queryClient.invalidateQueries([
-        'inbox_files',
-        data.data.inbox_file.inbox_id,
-        { isArchived: 1 },
-      ]);
-    },
-  });
 
   const fileInboxFileMutation = useMutation(fileInboxFileService, {
     onSuccess: (data) => {
@@ -115,18 +73,6 @@ function Toolbar() {
     fileInboxFileMutation.mutate({
       inboxFileId: inboxFile.id,
       folderIds: folderIdsForFiling,
-    });
-  };
-
-  const archive = () => {
-    archiveInboxFileMutation.mutate({
-      inboxFileId: inboxFile.id,
-    });
-  };
-
-  const unarchive = () => {
-    unarchiveInboxFileMutation.mutate({
-      inboxFileId: inboxFile.id,
     });
   };
 
@@ -187,49 +133,36 @@ function Toolbar() {
 
                     <div className="relative z-0 inline-flex mx-6 overflow-x-scroll max-w-[592px]">
                       <span className="inline-flex">
-                        {inboxFile.archived_at == null ? (
-                          <Button
-                            buttonStyle="white"
-                            label="Archive"
-                            onClick={archive}
-                            icon={(
-                              <ArchiveIcon
-                                className="mr-2.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            )}
-                            iconPosition="center"
-                            disabled={false}
-                            borderRight={false}
-                            roundedRight={false}
-                            ringOnFocus
-                            loading={
-                              archiveInboxFileMutation.status === 'loading'
-                            }
-                            width="w-36"
-                          />
-                        ) : (
-                          <Button
-                            buttonStyle="white"
-                            label="Unarchive"
-                            onClick={unarchive}
-                            icon={(
+                        {/* <Button
+                          buttonStyle="white"
+                          label={
+                            inboxFile.archived_at ? 'Unarchive' : 'Archive'
+                          }
+                          onClick={inboxFile.archived_at ? unarchive : archive}
+                          icon={
+                            inboxFile.archived_at ? (
                               <InboxIcon
                                 className="mr-2.5 h-5 w-5 text-gray-400"
                                 aria-hidden="true"
                               />
-                            )}
-                            iconPosition="center"
-                            disabled={false}
-                            borderRight={false}
-                            roundedRight={false}
-                            ringOnFocus
-                            loading={
-                              unarchiveInboxFileMutation.status === 'loading'
-                            }
-                            width="w-36"
-                          />
-                        )}
+                            ) : (
+                              <ArchiveIcon
+                                className="mr-2.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            )
+                          }
+                          iconPosition="center"
+                          disabled={false}
+                          borderRight={false}
+                          roundedRight={false}
+                          ringOnFocus
+                          loading={
+                            archiveInboxFileMutation.status === 'loading'
+                          }
+                          width="w-36"
+                        /> */}
+                        <ArchiveInboxFile />
                         <Button
                           buttonStyle="white"
                           label="Assign"
@@ -278,24 +211,22 @@ function Toolbar() {
                       </span>
                     </div>
 
-                    <div>
-                      <Button
-                        buttonStyle="primary"
-                        onClick={fileDocument}
-                        loading={fileInboxFileMutation.status === 'loading'}
-                        label="File document"
-                        icon={(
-                          <ArrowCircleRightIcon
-                            className="ml-2.5 mr-2 h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        )}
-                        iconPosition="right"
-                        width="w-48"
-                        disabled={inboxFile.status === 'filed'}
-                        ringOnFocus
-                      />
-                    </div>
+                    <Button
+                      buttonStyle="primary"
+                      onClick={fileDocument}
+                      loading={fileInboxFileMutation.status === 'loading'}
+                      label="File document"
+                      icon={(
+                        <ArrowCircleRightIcon
+                          className="ml-2.5 mr-2 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                      )}
+                      iconPosition="right"
+                      width="w-48"
+                      disabled={inboxFile.status === 'filed'}
+                      ringOnFocus
+                    />
                   </div>
                 </div>
               </div>

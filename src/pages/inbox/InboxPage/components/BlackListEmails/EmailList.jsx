@@ -28,7 +28,7 @@ export default function EmailList() {
     </div>
   ) : status === 'success' ? (
     list?.length ? (
-      <ul role="list" className="divide-y divide-gray-200">
+      <ul role="list" className="divide-y divide-gray-200 border-t">
         {list.map((i) => (
           <li key={i.id} className="py-4 flex justify-between">
             <p className="pl-1">{i.email}</p>
