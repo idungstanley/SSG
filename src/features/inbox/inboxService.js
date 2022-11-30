@@ -164,15 +164,13 @@ export const unarchiveInboxFileService = async (data) => {
 };
 
 // multiple archive / unarchive
-export const multipleArchiveOrUnarchiveInboxFiles = (
-  data,
-) => {
+export const multipleArchiveOrUnarchiveInboxFiles = (data) => {
   // type: archive / unarchive
 
   const request = requestNew({
-    url: `inboxes/${data.id}/multiple-files-${data.type}`,
+    url: `inboxes/${data.inboxId}/${data.type}-multiple-files`,
     method: 'POST',
-    params: {
+    data: {
       inbox_file_ids: data.fileIdsArr,
     },
   });
@@ -182,23 +180,25 @@ export const multipleArchiveOrUnarchiveInboxFiles = (
 export const useMultipleArchiveOrUnArchive = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    multipleArchiveOrUnarchiveInboxFiles,
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries([
-          'inbox_files',
-          data.data.inbox_file.inbox_id,
-          { isArchived: 0 },
-        ]);
-        queryClient.invalidateQueries([
-          'inbox_files',
-          data.data.inbox_file.inbox_id,
-          { isArchived: 1 },
-        ]);
-      },
+  return useMutation(multipleArchiveOrUnarchiveInboxFiles, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['inbox_files']);
+      queryClient.setQueryData(
+        ['inbox_file', data.data.inbox_file.id],
+        data.data.inbox_file,
+      );
+      // queryClient.invalidateQueries([
+      //   'inbox_files',
+      //   data.data.inbox_file.inbox_id,
+      //   { isArchived: 0 },
+      // ]);
+      // queryClient.invalidateQueries([
+      //   'inbox_files',
+      //   data.data.inbox_file.inbox_id,
+      //   { isArchived: 1 },
+      // ]);
     },
-  );
+  });
 };
 
 // Download inbox file
@@ -292,7 +292,4 @@ const fileActivity = (fileId) => {
   return request;
 };
 
-export const useGetInboxFileActivity = (fileId) => useQuery(
-  [`inbox-${fileId}-activity`],
-  () => fileActivity(fileId),
-);
+export const useGetInboxFileActivity = (fileId) => useQuery([`inbox-${fileId}-activity`], () => fileActivity(fileId));

@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { setSelectedInboxTabKey } from '../../../../../../features/inbox/inboxSlice';
 import { useGetInboxFiles } from '../../../../../../features/inbox/inboxService';
 import {
-  // useGetInbox,
   useGetInboxes,
 } from '../../../../../../features/inbox/inboxesService';
 import { TabsWithUnderline } from '../../../../../../components';
@@ -47,6 +46,7 @@ export default function Tabs() {
   const { data: inboxes } = useGetInboxes();
 
   const inbox = inboxes?.data.inboxes.find((i) => i.id === inboxId);
+  console.log(inboxes, inbox);
 
   useEffect(() => {
     if (status === 'success') {

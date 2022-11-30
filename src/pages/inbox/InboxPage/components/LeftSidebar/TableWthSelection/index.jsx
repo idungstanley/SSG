@@ -3,33 +3,41 @@ import 'antd/dist/antd.css';
 import React, { useState } from 'react';
 import { Table } from 'antd';
 import { useParams } from 'react-router-dom';
-import { useGetInboxFiles } from '../../../../../../features/inbox/inboxService';
-import { FileIcon } from '../../../../../../common';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  useGetInboxFiles,
+  useMultipleArchiveOrUnArchive,
+} from '../../../../../../features/inbox/inboxService';
+import { FileIcon, Spinner } from '../../../../../../common';
+import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
+import FullScreenMessage from '../../../../../shared/components/FullScreenMessage';
 
 const columns = [
   {
-    title: 'Name',
     dataIndex: 'logo',
   },
   {
-    title: 'Title',
+    title: 'File name',
     dataIndex: 'title',
   },
 ];
 
 export default function TableWithSelection() {
+  const dispatch = useDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
+  const { mutate: multipleArchive } = useMultipleArchiveOrUnArchive();
   const { inboxId } = useParams();
-
-  const { data: dataT } = useGetInboxFiles({
+  const selectedInboxTabKey = useSelector(
+    (state) => state.inbox.selectedInboxTabKey,
+  );
+  const { data, status } = useGetInboxFiles({
     inboxId,
-    isArchived: 0,
+    isArchived: selectedInboxTabKey === 'archived' ? 1 : 0,
   });
 
   const inboxFiles = [];
 
-  dataT?.pages.flatMap((page) =>
+  data?.pages.flatMap((page) =>
     page.data.inbox_files.map((i) =>
       inboxFiles.push({
         key: i.id,
@@ -41,27 +49,67 @@ export default function TableWithSelection() {
         ),
         title: i.inbox_file_source.display_name,
       })));
-  // console.log(inboxFiles);
+
+  const handleClick = (fileId, index) => {
+    dispatch(
+      setCurrentInboxFile({
+        inboxFileId: fileId,
+        inboxFileIndex: index,
+      }),
+    );
+  };
 
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+    selections: selectedRowKeys.length ? [
+      {
+        key: 'archive',
+        text: `${selectedInboxTabKey === 'inbox' ? 'Archive' : 'Unarchive'} selected`,
+        onSelect: () => {
+          const type = selectedInboxTabKey === 'inbox' ? 'archive' : 'unarchive';
+          multipleArchive({
+            inboxId,
+            type,
+            fileIdsArr: selectedRowKeys,
+          });
+          setSelectedRowKeys([]);
+        },
+      },
+    ] : null,
   };
+
+  if (status === 'loading') {
+    return (
+      <div className="mx-auto w-6 mt-10 justify-center">
+        <Spinner size={22} color="#0F70B7" />
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <FullScreenMessage
+        title="Oops, an error occurred :("
+        description="Please try again later."
+      />
+    );
+  }
 
   return inboxFiles ? (
     <Table
+      size="middle"
+      className="bg-red-700"
       rowClassName="cursor-pointer"
       onRow={(record, rowIndex) => ({
-        onClick: () => console.log(record, rowIndex), // click row
+        onClick: () => handleClick(record.key, rowIndex),
       })}
       rowSelection={rowSelection}
       pagination={false}
-      showHeader={false}
       columns={columns}
       dataSource={inboxFiles}
     />
