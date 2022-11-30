@@ -9,7 +9,10 @@ import {
   useMultipleArchiveOrUnArchive,
 } from '../../../../../../features/inbox/inboxService';
 import { FileIcon, Spinner } from '../../../../../../common';
-import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
+import {
+  setCurrentInboxFile,
+  setShowUploadModal,
+} from '../../../../../../features/inbox/inboxSlice';
 import FullScreenMessage from '../../../../../shared/components/FullScreenMessage';
 
 const columns = [
@@ -66,21 +69,25 @@ export default function TableWithSelection() {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
-    selections: selectedRowKeys.length ? [
-      {
-        key: 'archive',
-        text: `${selectedInboxTabKey === 'inbox' ? 'Archive' : 'Unarchive'} selected`,
-        onSelect: () => {
-          const type = selectedInboxTabKey === 'inbox' ? 'archive' : 'unarchive';
-          multipleArchive({
-            inboxId,
-            type,
-            fileIdsArr: selectedRowKeys,
-          });
-          setSelectedRowKeys([]);
+    selections: selectedRowKeys.length
+      ? [
+        {
+          key: 'archive',
+          text: `${
+            selectedInboxTabKey === 'inbox' ? 'Archive' : 'Unarchive'
+          } selected`,
+          onSelect: () => {
+            const type = selectedInboxTabKey === 'inbox' ? 'archive' : 'unarchive';
+            multipleArchive({
+              inboxId,
+              type,
+              fileIdsArr: selectedRowKeys,
+            });
+            setSelectedRowKeys([]);
+          },
         },
-      },
-    ] : null,
+      ]
+      : null,
   };
 
   if (status === 'loading') {
@@ -100,7 +107,23 @@ export default function TableWithSelection() {
     );
   }
 
-  return inboxFiles ? (
+  return !inboxFiles.length ? (
+    <FullScreenMessage
+      title={
+        selectedInboxTabKey === 'inbox'
+          ? 'No files in your inbox'
+          : 'No archived files'
+      }
+      description={
+        selectedInboxTabKey === 'inbox'
+          ? 'Upload files to start filing'
+          : 'Archived files will appear here'
+      }
+      ctaText="Upload"
+      ctaOnClick={() => dispatch(setShowUploadModal(true))}
+      showCta={selectedInboxTabKey === 'inbox'}
+    />
+  ) : (
     <Table
       size="middle"
       className="bg-red-700"
@@ -113,5 +136,5 @@ export default function TableWithSelection() {
       columns={columns}
       dataSource={inboxFiles}
     />
-  ) : null;
+  );
 }
