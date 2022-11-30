@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { setSelectedInboxTabKey } from '../../../../../../features/inbox/inboxSlice';
 import { useGetInboxFiles } from '../../../../../../features/inbox/inboxService';
-import {
-  useGetInboxes,
-} from '../../../../../../features/inbox/inboxesService';
 import { TabsWithUnderline } from '../../../../../../components';
 
 export default function Tabs() {
   const dispatch = useDispatch();
   const { inboxId } = useParams();
-  const selectedInboxTabKey = useSelector(
-    (state) => state.inbox.selectedInboxTabKey,
-  );
 
   const goToInboxTab = () => {
     dispatch(setSelectedInboxTabKey('inbox'));
@@ -23,51 +17,28 @@ export default function Tabs() {
     dispatch(setSelectedInboxTabKey('archived'));
   };
 
-  const [tabs, setTabs] = useState([
+  const { data } = useGetInboxFiles({
+    inboxId,
+    isArchived: 0,
+  });
+
+  const activeCount = data?.pages[0].data.not_archived_files_count;
+  const archiveCount = data?.pages[0].data.archived_files_count;
+
+  const tabs = [
     {
       key: 'inbox',
       name: 'Inbox',
       onClick: goToInboxTab,
-      badge: null,
+      badge: activeCount,
     },
     {
       key: 'archived',
       name: 'Archived',
       onClick: goToArchivedTab,
-      badge: null,
+      badge: archiveCount,
     },
-  ]);
+  ];
 
-  const { status, data } = useGetInboxFiles({
-    inboxId,
-    isArchived: selectedInboxTabKey === 'archived' ? 1 : 0,
-  });
-
-  const { data: inboxes } = useGetInboxes();
-
-  const inbox = inboxes?.data.inboxes.find((i) => i.id === inboxId);
-  console.log(inboxes, inbox);
-
-  useEffect(() => {
-    if (status === 'success') {
-      setTabs([
-        {
-          key: 'inbox',
-          name: 'Inbox',
-          onClick: goToInboxTab,
-          badge: inbox && inbox.unfiled_count,
-        },
-        {
-          key: 'archived',
-          name: 'Archived',
-          onClick: goToArchivedTab,
-          badge: null,
-        },
-      ]);
-    }
-
-    return true;
-  }, [data, inbox]);
-
-  return <TabsWithUnderline tabs={tabs} selectedTab={selectedInboxTabKey} />;
+  return <TabsWithUnderline tabs={tabs} />;
 }
