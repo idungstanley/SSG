@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  CogIcon, TrashIcon, MailOpenIcon, ArchiveIcon,
+  CogIcon, TrashIcon, MailOpenIcon,
 } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
@@ -47,20 +47,6 @@ function Header() {
       </div>
 
       <div className="relative flex lg:mt-0 lg:ml-4 space-x-3">
-        <Button
-          buttonStyle="white"
-          label="Multiple archive"
-          onClick={() => setShowEmailsModal(!showEmailsModal)}
-          icon={(
-            <ArchiveIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          )}
-          iconPosition="center"
-          disabled={false}
-          ringOnFocus
-        />
         <Button
           buttonStyle="white"
           label="Black list emails"
