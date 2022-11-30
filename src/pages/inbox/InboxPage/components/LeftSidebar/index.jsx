@@ -1,6 +1,7 @@
 import React from 'react';
 import InboxFileList from './InboxFileList';
 import Header from './Header';
+import TableWithSelection from './TableWthSelection';
 
 function LeftSidebar() {
   return (
@@ -13,6 +14,7 @@ function LeftSidebar() {
               <Header />
             </div>
             <div className="h-full overflow-y-scroll">
+              <TableWithSelection />
               <InboxFileList />
             </div>
           </div>
