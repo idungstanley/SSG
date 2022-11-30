@@ -187,16 +187,6 @@ export const useMultipleArchiveOrUnArchive = () => {
         ['inbox_file', data.data.inbox_file.id],
         data.data.inbox_file,
       );
-      // queryClient.invalidateQueries([
-      //   'inbox_files',
-      //   data.data.inbox_file.inbox_id,
-      //   { isArchived: 0 },
-      // ]);
-      // queryClient.invalidateQueries([
-      //   'inbox_files',
-      //   data.data.inbox_file.inbox_id,
-      //   { isArchived: 1 },
-      // ]);
     },
   });
 };
