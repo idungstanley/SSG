@@ -126,7 +126,6 @@ export default function TableWithSelection() {
   ) : (
     <Table
       size="middle"
-      className="bg-red-700"
       rowClassName="cursor-pointer"
       onRow={(record, rowIndex) => ({
         onClick: () => handleClick(record.key, rowIndex),

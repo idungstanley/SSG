@@ -342,23 +342,30 @@ export const useGetResponsibleInboxes = () => {
 };
 
 // responsible file team members
-export const useGetResponsibleTeamMembers = (inboxId) => {
+export const useGetResponsibleTeamMembers = (inboxId) => useQuery([`responsible-team-members-${inboxId}`], () => requestNew({
+  url: `inboxes/${inboxId}/responsible-team-members`,
+  method: 'GET',
+}));
+
+const createResponsibleFileTeamMember = (data) => {
+  const request = requestNew({
+    url: `inboxes/${data.inboxId}/responsible-team-members`,
+    method: 'POST',
+    data: {
+      team_member_id: data.memberIdm,
+    },
+  });
+  return request;
+};
+
+export const useCreateResponsibleFileTeamMember = (inboxId) => {
   const queryClient = useQueryClient();
 
-  return useQuery(
-    ['responsible-team-members'],
-    () => requestNew({
-      url: `inboxes/${inboxId}/responsible-team-members`,
-      method: 'GET',
-    }),
-    {
-      onSuccess: (data) => {
-        // eslint-disable-next-line no-console
-        console.log(data, queryClient);
-        // data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
-      },
+  return useMutation(createResponsibleFileTeamMember, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`responsible-team-members-${inboxId}`]);
     },
-  );
+  });
 };
 
 // blacklist
