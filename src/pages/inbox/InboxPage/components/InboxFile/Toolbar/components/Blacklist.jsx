@@ -57,7 +57,7 @@ export default function Blacklist() {
       roundedRight={false}
       borderRight={false}
       ringOnFocus
-      width="w-46"
+      width="w-40"
     />
   ) : null;
 }

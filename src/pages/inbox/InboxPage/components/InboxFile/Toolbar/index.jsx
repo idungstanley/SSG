@@ -18,6 +18,7 @@ import { Button } from '../../../../../../components';
 import { DownloadFile } from '../../../../../../app/helpers';
 import Blacklist from './components/Blacklist';
 import ArchiveInboxFile from '../../ArchiveInboxFile';
+import ResponsibleTeamMembers from '../../ResponsibleTeamMembers';
 
 function Toolbar() {
   const dispatch = useDispatch();
@@ -133,35 +134,6 @@ function Toolbar() {
 
                     <div className="relative z-0 inline-flex mx-6 overflow-x-scroll max-w-[592px]">
                       <span className="inline-flex">
-                        {/* <Button
-                          buttonStyle="white"
-                          label={
-                            inboxFile.archived_at ? 'Unarchive' : 'Archive'
-                          }
-                          onClick={inboxFile.archived_at ? unarchive : archive}
-                          icon={
-                            inboxFile.archived_at ? (
-                              <InboxIcon
-                                className="mr-2.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <ArchiveIcon
-                                className="mr-2.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            )
-                          }
-                          iconPosition="center"
-                          disabled={false}
-                          borderRight={false}
-                          roundedRight={false}
-                          ringOnFocus
-                          loading={
-                            archiveInboxFileMutation.status === 'loading'
-                          }
-                          width="w-36"
-                        /> */}
                         <ArchiveInboxFile />
                         <Button
                           buttonStyle="white"
@@ -183,6 +155,7 @@ function Toolbar() {
                           ringOnFocus
                           width="w-36"
                         />
+                        <ResponsibleTeamMembers />
                         <Blacklist />
                         <Tippy
                           content={<span>Download</span>}

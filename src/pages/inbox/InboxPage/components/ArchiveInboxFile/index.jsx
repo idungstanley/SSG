@@ -12,10 +12,10 @@ export default function ArchiveInboxFile() {
     (state) => state.inbox.selectedInboxFileId,
   );
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
-  const { mutate: archivFile } = useArchiveOrUnarchiveInboxFile();
+  const { mutate: archiveFile } = useArchiveOrUnarchiveInboxFile();
 
   const archive = () => {
-    archivFile({
+    archiveFile({
       inboxFileId: inboxFile.id,
       type: inboxFile.archived_at ? 'unarchive' : 'archive',
     });
