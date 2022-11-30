@@ -145,22 +145,38 @@ export const unassignInboxFileService = async (data) => {
   return response;
 };
 
-// Archive inbox file
-export const archiveInboxFileService = async (data) => {
+const archiveOrUnarchiveInboxFile = (data) => {
+  // type: archive | unarchive
+
   const response = requestNew({
-    url: `inbox-files/${data.inboxFileId}/archive`,
+    url: `inbox-files/${data.inboxFileId}/${data.type}`,
     method: 'POST',
   });
   return response;
 };
 
-// Unarchive inbox file
-export const unarchiveInboxFileService = async (data) => {
-  const response = requestNew({
-    url: `inbox-files/${data.inboxFileId}/unarchive`,
-    method: 'POST',
+// Archive inbox file
+export const useArchiveOrUnarchiveInboxFile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(archiveOrUnarchiveInboxFile, {
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        ['inbox_file', data.data.inbox_file.id],
+        data.data.inbox_file,
+      );
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 0 },
+      ]);
+      queryClient.invalidateQueries([
+        'inbox_files',
+        data.data.inbox_file.inbox_id,
+        { isArchived: 1 },
+      ]);
+    },
   });
-  return response;
 };
 
 // multiple archive / unarchive
