@@ -1,46 +1,30 @@
-import { UserIcon } from '@heroicons/react/solid';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Button } from '../../../../../components';
-import { useGetInboxFile } from '../../../../../features/inbox/inboxService';
-// import Modal from './Modal';
+// /* eslint-disable jsx-a11y/click-events-have-key-events */
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function ResponsibleTeamMembers() {
+export default function ResponsibleTeamMembers({ setShowModal }) {
   // TODO: add modal with selection team member dropdown, list all members and removing members
   // * select team members from reusable component
   // * list all items as list blacklist emails
 
-  const [showModal, setShowModal] = useState(false);
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
-  );
-  const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
-
-  const handleClick = () => {
-    setShowModal(!showModal);
-  };
-
-  return inboxFile ? (
+  return (
     <>
-      {/* {showModal ? <Modal setShowModal={setShowModal} /> : null} */}
-      <Button
-        buttonStyle="white"
-        label="Responsible members"
-        onClick={handleClick}
-        icon={(
-          <UserIcon
-            className="mr-2.5 h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-        )}
-        iconPosition="center"
-        disabled={false}
-        roundedLeft={false}
-        roundedRight={false}
-        borderRight={false}
-        ringOnFocus
-        width="w-52"
-      />
+      <div
+        className="fixed left-0 right-0 bottom-0 top-0 opacity-0 z-40"
+        tabIndex={0}
+        role="button"
+        onClick={() => setShowModal(false)}
+        onKeyDown={() => {}}
+      >
+        {' '}
+      </div>
+      <div className="absolute top-14 right-52 p-6 rounded-xl border bg-white z-50 w-80">
+        <p>Responsible</p>
+      </div>
     </>
-  ) : null;
+  );
 }
+
+ResponsibleTeamMembers.propTypes = {
+  setShowModal: PropTypes.func.isRequired,
+};

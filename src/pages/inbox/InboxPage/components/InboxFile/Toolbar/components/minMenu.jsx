@@ -20,6 +20,7 @@ import {
   useGetBlacklistFiles,
 } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
+import ResponsibleTeamMembers from '../../../ResponsibleTeamMembers';
 
 const noSymbolIcon = (
   <svg
@@ -119,6 +120,10 @@ export default function MinMenu() {
 
   return (
     <div className="inline-flex rounded-md shadow-sm bg-white">
+      {showResponsibleModal ? (
+        <ResponsibleTeamMembers setShowModal={setShowResponsibleModal} />
+      ) : null}
+
       <Menu as="div" className="relative -ml-px block">
         <Menu.Button className="relative w-10 h-10 flex items-center rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
           <span className="sr-only">Open options</span>
@@ -138,7 +143,7 @@ export default function MinMenu() {
               {items.map((item) => (
                 <Menu.Item key={item.label}>
                   {() => (
-                    <div className="flex whitespace-nowrap items-center justify-between hover:bg-gray-100 px-3">
+                    <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
                       {item.icon}
                       <button
                         type="button"
@@ -152,7 +157,7 @@ export default function MinMenu() {
                 </Menu.Item>
               ))}
               <Tippy content={<span>Download</span>} placement="bottom">
-                <div className="flex whitespace-nowrap items-center justify-between hover:bg-gray-100 px-3">
+                <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
                   <DownloadIcon
                     className="mr-2.5 h-5 w-5 text-gray-400"
                     aria-hidden="true"

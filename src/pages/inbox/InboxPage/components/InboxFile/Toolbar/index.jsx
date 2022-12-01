@@ -116,7 +116,7 @@ function Toolbar() {
                         ringOnFocus
                       />
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 relative">
                       <MinMenu />
                       <Button
                         buttonStyle="primary"
