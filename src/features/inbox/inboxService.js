@@ -311,7 +311,7 @@ const createResponsibleFileTeamMember = (data) => {
     url: `inboxes/${data.inboxId}/responsible-team-members`,
     method: 'POST',
     data: {
-      team_member_id: data.memberIdm,
+      team_member_id: data.memberId,
     },
   });
   return request;

@@ -12,10 +12,11 @@ function SelectAndDisplayData({
   title,
   children,
 }) {
-  const users = type === 'user' ? usersList.map((i) => ({
+  const users = usersList.map((i) => ({
     id: i.id,
-    user: i.user.name,
+    user: type === 'user' ? i.team_member.user.name : i.team_member_group.name,
   }));
+
   return (
     <>
       <SelectMenuTeamMembers

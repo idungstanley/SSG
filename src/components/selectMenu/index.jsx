@@ -10,7 +10,6 @@ export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,
   setSelectedData,
-  // type,
   title,
 }) {
   if (!teamMembers.length) {
@@ -81,7 +80,6 @@ SelectMenuTeamMembers.defaultProps = {
 SelectMenuTeamMembers.propTypes = {
   teamMembers: PropTypes.array.isRequired,
   selectedData: PropTypes.object,
-  // type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   setSelectedData: PropTypes.func.isRequired,
 };

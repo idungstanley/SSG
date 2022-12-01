@@ -1,21 +1,26 @@
 // /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 import SelectMenuTeamMembers from '../../../../../components/selectMenu';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import { Spinner } from '../../../../../common';
 import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
+import { useCreateResponsibleFileTeamMember, useGetResponsibleTeamMembers } from '../../../../../features/inbox/inboxService';
 
 export default function ResponsibleTeamMembers({ setShowModal }) {
+  const { inboxId } = useParams();
   // TODO: add modal with selection team member dropdown, list all members and removing members
   // * select team members from reusable component
   // * list all items as list blacklist emails
   const [selectedUser, setSelectedUser] = useState(null);
   const { data, status } = useGetTeamMembers({ page: 0, query: '' });
+  const { mutate: onCreate } = useCreateResponsibleFileTeamMember(inboxId);
+  const { data: dt } = useGetResponsibleTeamMembers(inboxId);
+
+  console.log(dt?.data.inbox_responsible_team_members);
 
   const teamMembers = data?.data.team_members;
-
-  console.log(status, selectedUser);
 
   if (status === 'loading') {
     return (
@@ -38,6 +43,14 @@ export default function ResponsibleTeamMembers({ setShowModal }) {
     );
   }
 
+  const handleChange = (user) => {
+    setSelectedUser(user);
+    onCreate({
+      inboxId,
+      memberId: user.id,
+    });
+  };
+
   return (
     <>
       <div
@@ -57,7 +70,7 @@ export default function ResponsibleTeamMembers({ setShowModal }) {
               user: i.user.name,
             }))}
             selectedData={selectedUser}
-            setSelectedData={setSelectedUser}
+            setSelectedData={handleChange}
             type="user"
             title="Add new responsible team member"
           />
