@@ -361,41 +361,61 @@ export const useGetBlacklistFiles = () =>
     },
   });
 
-export const addFileToBlacklist = (fileId) => {
+// export const addFileToBlacklist = (fileId) => {
+//   const request = requestNew({
+//     url: `inbox-files/${fileId}/blacklist`,
+//     method: 'POST',
+//   });
+//   return request;
+// };
+
+// export const useAddFileToBlacklist = (fileId) => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation(() => addFileToBlacklist(fileId), {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(['blacklist-files']);
+//     },
+//   });
+// };
+
+const blacklistFile = (data) => {
+  const url = data.type === 'add' ? `inbox-files/${data.fileId}/blacklist` : `blacklist-inbox-files/${data.fileId}`;
+  const method = data.type === 'add' ? 'POST' : 'DELETE';
   const request = requestNew({
-    url: `inbox-files/${fileId}/blacklist`,
-    method: 'POST',
+    url,
+    method,
   });
   return request;
 };
 
-export const useAddFileToBlacklist = (fileId) => {
+export const useBlacklistFile = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => addFileToBlacklist(fileId), {
+  return useMutation(blacklistFile, {
     onSuccess: () => {
       queryClient.invalidateQueries(['blacklist-files']);
     },
   });
 };
 
-export const deleteBlacklistFile = (fileId) => {
-  const request = requestNew({
-    url: `blacklist-inbox-files/${fileId}`,
-    method: 'DELETE',
-  });
-  return request;
-};
+// export const deleteBlacklistFile = (fileId) => {
+//   const request = requestNew({
+//     url: `blacklist-inbox-files/${fileId}`,
+//     method: 'DELETE',
+//   });
+//   return request;
+// };
 
-export const useDeleteBlacklistFile = () => {
-  const queryClient = useQueryClient();
+// export const useDeleteBlacklistFile = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation(deleteBlacklistFile, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['blacklist-files']);
-    },
-  });
-};
+//   return useMutation(deleteBlacklistFile, {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(['blacklist-files']);
+//     },
+//   });
+// };
 
 // email list
 export const addEmailToList = (data) => {

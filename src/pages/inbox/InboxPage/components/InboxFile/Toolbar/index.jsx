@@ -1,32 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Tippy from '@tippyjs/react';
 import {
-  DownloadIcon,
   ArrowCircleRightIcon,
   ArrowCircleLeftIcon,
-  InboxInIcon,
 } from '@heroicons/react/outline';
-import { UserIcon } from '@heroicons/react/solid';
-import { setAssignInboxFileSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import {
   useGetInboxFile,
   fileInboxFileService,
 } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
-import { DownloadFile } from '../../../../../../app/helpers';
-import Blacklist from './components/Blacklist';
-// ! DELETE FILE import ArchiveInboxFile from '../../ArchiveInboxFile';
-// import ResponsibleTeamMembers from '../../ResponsibleTeamMembers';
-import Modal from '../../ResponsibleTeamMembers/Modal';
 import MinMenu from './components/minMenu';
 
 function Toolbar() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const [showResponsibleModal, setShowResponsibleModal] = useState(false);
 
   // Selectors
   const selectedInboxFileIndex = useSelector(
@@ -81,14 +70,6 @@ function Toolbar() {
     });
   };
 
-  const onDownload = async () => {
-    DownloadFile(
-      'inboxFile',
-      inboxFile.id,
-      inboxFile.inbox_file_source.display_name,
-    );
-  };
-
   return inboxFile ? (
     <div className="flex flex-col">
       {/* Bottom section */}
@@ -135,96 +116,25 @@ function Toolbar() {
                         ringOnFocus
                       />
                     </div>
-                    <div className="relative inline-flex mx-6 max-w-[592px]">
+                    <div className="flex gap-4">
                       <MinMenu />
-                      <span className="inline-flex">
-                        {/* <ArchiveInboxFile /> */}
-                        <Button
-                          buttonStyle="white"
-                          label="Assign"
-                          onClick={() => dispatch(
-                            setAssignInboxFileSlideOverVisibility(true),
-                          )}
-                          icon={(
-                            <InboxInIcon
-                              className="mr-2.5 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          )}
-                          iconPosition="center"
-                          disabled={false}
-                          roundedLeft={false}
-                          roundedRight={false}
-                          borderRight={false}
-                          ringOnFocus
-                          width="w-36"
-                        />
-                        {showResponsibleModal ? (
-                          <Modal setShowModal={setShowResponsibleModal} />
-                        ) : null}
-                        <Button
-                          buttonStyle="white"
-                          label="Responsible members"
-                          onClick={() => setShowResponsibleModal(!showResponsibleModal)}
-                          icon={(
-                            <UserIcon
-                              className="mr-2.5 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          )}
-                          iconPosition="center"
-                          disabled={false}
-                          roundedLeft={false}
-                          roundedRight={false}
-                          borderRight={false}
-                          ringOnFocus
-                          width="w-52"
-                        />
-                        {/* <ResponsibleTeamMembers /> */}
-                        <Blacklist />
-                        <Tippy
-                          content={<span>Download</span>}
-                          placement="bottom"
-                        >
-                          <div>
-                            <Button
-                              buttonStyle="white"
-                              label="Download"
-                              onClick={onDownload}
-                              icon={(
-                                <DownloadIcon
-                                  className="mr-2.5 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              )}
-                              iconPosition="center"
-                              disabled={false}
-                              borderLeft
-                              roundedLeft={false}
-                              ringOnFocus
-                              width="w-36"
-                            />
-                          </div>
-                        </Tippy>
-                      </span>
+                      <Button
+                        buttonStyle="primary"
+                        onClick={fileDocument}
+                        loading={fileInboxFileMutation.status === 'loading'}
+                        label="File document"
+                        icon={(
+                          <ArrowCircleRightIcon
+                            className="ml-2.5 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        )}
+                        iconPosition="right"
+                        width="w-48"
+                        disabled={inboxFile.status === 'filed'}
+                        ringOnFocus
+                      />
                     </div>
-
-                    <Button
-                      buttonStyle="primary"
-                      onClick={fileDocument}
-                      loading={fileInboxFileMutation.status === 'loading'}
-                      label="File document"
-                      icon={(
-                        <ArrowCircleRightIcon
-                          className="ml-2.5 mr-2 h-5 w-5"
-                          aria-hidden="true"
-                        />
-                      )}
-                      iconPosition="right"
-                      width="w-48"
-                      disabled={inboxFile.status === 'filed'}
-                      ringOnFocus
-                    />
                   </div>
                 </div>
               </div>
