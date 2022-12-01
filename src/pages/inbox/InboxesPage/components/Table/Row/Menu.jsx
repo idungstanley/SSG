@@ -125,7 +125,7 @@ export default function Menu({ inboxId, type }) {
                     type="button"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block w-full px-4 py-2 text-sm text-left'
+                      'block w-full px-4 py-2 text-sm text-left',
                     )}
                   >
                     {i.title}
