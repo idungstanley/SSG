@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from '../../../../../components';
 import { useGetInboxFile } from '../../../../../features/inbox/inboxService';
-import Modal from './Modal';
+// import Modal from './Modal';
 
 export default function ResponsibleTeamMembers() {
   // TODO: add modal with selection team member dropdown, list all members and removing members
-  // * seelct team members from reusable component
+  // * select team members from reusable component
   // * list all items as list blacklist emails
 
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +22,7 @@ export default function ResponsibleTeamMembers() {
 
   return inboxFile ? (
     <>
-      {showModal ? <Modal setShowModal={setShowModal} /> : null}
+      {/* {showModal ? <Modal setShowModal={setShowModal} /> : null} */}
       <Button
         buttonStyle="white"
         label="Responsible members"

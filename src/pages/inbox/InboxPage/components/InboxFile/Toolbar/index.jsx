@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react';
@@ -8,6 +8,7 @@ import {
   ArrowCircleLeftIcon,
   InboxInIcon,
 } from '@heroicons/react/outline';
+import { UserIcon } from '@heroicons/react/solid';
 import { setAssignInboxFileSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import {
@@ -17,12 +18,15 @@ import {
 import { Button } from '../../../../../../components';
 import { DownloadFile } from '../../../../../../app/helpers';
 import Blacklist from './components/Blacklist';
-import ArchiveInboxFile from '../../ArchiveInboxFile';
-import ResponsibleTeamMembers from '../../ResponsibleTeamMembers';
+// ! DELETE FILE import ArchiveInboxFile from '../../ArchiveInboxFile';
+// import ResponsibleTeamMembers from '../../ResponsibleTeamMembers';
+import Modal from '../../ResponsibleTeamMembers/Modal';
+import MinMenu from './components/minMenu';
 
 function Toolbar() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
+  const [showResponsibleModal, setShowResponsibleModal] = useState(false);
 
   // Selectors
   const selectedInboxFileIndex = useSelector(
@@ -131,10 +135,10 @@ function Toolbar() {
                         ringOnFocus
                       />
                     </div>
-
-                    <div className="relative z-0 inline-flex mx-6 overflow-x-scroll max-w-[592px]">
+                    <div className="relative inline-flex mx-6 max-w-[592px]">
+                      <MinMenu />
                       <span className="inline-flex">
-                        <ArchiveInboxFile />
+                        {/* <ArchiveInboxFile /> */}
                         <Button
                           buttonStyle="white"
                           label="Assign"
@@ -155,7 +159,28 @@ function Toolbar() {
                           ringOnFocus
                           width="w-36"
                         />
-                        <ResponsibleTeamMembers />
+                        {showResponsibleModal ? (
+                          <Modal setShowModal={setShowResponsibleModal} />
+                        ) : null}
+                        <Button
+                          buttonStyle="white"
+                          label="Responsible members"
+                          onClick={() => setShowResponsibleModal(!showResponsibleModal)}
+                          icon={(
+                            <UserIcon
+                              className="mr-2.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          )}
+                          iconPosition="center"
+                          disabled={false}
+                          roundedLeft={false}
+                          roundedRight={false}
+                          borderRight={false}
+                          ringOnFocus
+                          width="w-52"
+                        />
+                        {/* <ResponsibleTeamMembers /> */}
                         <Blacklist />
                         <Tippy
                           content={<span>Download</span>}

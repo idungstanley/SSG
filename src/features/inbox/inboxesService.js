@@ -310,7 +310,7 @@ const restoreOrDeleteInbox = (data) => {
   return request;
 };
 
-export const useRestoreOrDeletInbox = () => {
+export const useRestoreOrDeleteInbox = () => {
   const queryClient = useQueryClient();
 
   return useMutation(restoreOrDeleteInbox, {
