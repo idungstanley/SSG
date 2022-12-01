@@ -3,7 +3,6 @@ import { useRoutes } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import routes from './routes';
-import './App.css';
 import 'tippy.js/dist/tippy.css';
 import Prompt from './common/Prompt';
 import ContextMenu from './common/ContextMenu';
