@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CogIcon, TrashIcon, MailOpenIcon } from '@heroicons/react/solid';
+import {
+  CogIcon,
+  TrashIcon,
+  MailOpenIcon,
+  UserIcon,
+} from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
 import BlackListEmails from '../BlackListEmails';
 import { useRestoreOrDeleteInbox } from '../../../../../features/inbox/inboxesService';
+import ResponsibleTeamMembers from '../ResponsibleTeamMembers';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
   const [showEmailsModal, setShowEmailsModal] = useState(false);
+  const [showResponsibleModal, setShowResponsibleModal] = useState(false);
 
   const upload = () => {
     dispatch(setShowUploadModal(true));
@@ -35,7 +42,6 @@ function Header() {
 
   const menuItems = [
     {
-      id: 1,
       buttonStyle: 'white',
       label: 'Blacklist',
       onClick: () => setShowEmailsModal(!showEmailsModal),
@@ -47,7 +53,14 @@ function Header() {
       ),
     },
     {
-      id: 2,
+      buttonStyle: 'white',
+      label: 'Responsible members',
+      onClick: () => setShowResponsibleModal(!showResponsibleModal),
+      icon: (
+        <UserIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+      ),
+    },
+    {
       buttonStyle: 'white',
       label: 'Upload',
       onClick: upload,
@@ -59,7 +72,6 @@ function Header() {
       ),
     },
     {
-      id: 3,
       buttonStyle: 'white',
       label: 'Settings',
       onClick: goToSettings,
@@ -68,7 +80,6 @@ function Header() {
       ),
     },
     {
-      id: 4,
       buttonStyle: 'danger',
       label: 'Delete',
       onClick: handleDelete,
@@ -92,7 +103,7 @@ function Header() {
       <div className="relative flex lg:mt-0 lg:ml-4 space-x-3">
         {menuItems.map((i) => (
           <Button
-            key={i.id}
+            key={i.label}
             buttonStyle={i.buttonStyle}
             label={i.label}
             onClick={i.onClick}
@@ -101,6 +112,9 @@ function Header() {
             ringOnFocus
           />
         ))}
+        {showResponsibleModal ? (
+          <ResponsibleTeamMembers setShowModal={setShowResponsibleModal} />
+        ) : null}
         {showEmailsModal ? (
           <BlackListEmails setShowModal={setShowEmailsModal} />
         ) : null}

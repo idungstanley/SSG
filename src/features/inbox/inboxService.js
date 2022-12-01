@@ -306,7 +306,7 @@ export const useGetResponsibleTeamMembers = (inboxId) => useQuery([`responsible-
   method: 'GET',
 }));
 
-const createResponsibleFileTeamMember = (data) => {
+const createResponsibleTeamMember = (data) => {
   const request = requestNew({
     url: `inboxes/${data.inboxId}/responsible-team-members`,
     method: 'POST',
@@ -317,17 +317,17 @@ const createResponsibleFileTeamMember = (data) => {
   return request;
 };
 
-export const useCreateResponsibleFileTeamMember = (inboxId) => {
+export const useCreateResponsibleTeamMember = (inboxId) => {
   const queryClient = useQueryClient();
 
-  return useMutation(createResponsibleFileTeamMember, {
+  return useMutation(createResponsibleTeamMember, {
     onSuccess: () => {
       queryClient.invalidateQueries([`responsible-team-members-${inboxId}`]);
     },
   });
 };
 
-const deleteResponsibleFileTeamMember = (data) => {
+const deleteResponsibleTeamMember = (data) => {
   const request = requestNew({
     url: `inboxes/${data.fileId}/responsible-team-members/${data.memberId}`,
     method: 'DELETE',
@@ -335,10 +335,10 @@ const deleteResponsibleFileTeamMember = (data) => {
   return request;
 };
 
-export const useDeleteResponsibleFileTeamMember = (inboxId) => {
+export const useDeleteResponsibleTeamMember = (inboxId) => {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteResponsibleFileTeamMember, {
+  return useMutation(deleteResponsibleTeamMember, {
     onSuccess: () => {
       queryClient.invalidateQueries([`responsible-team-members-${inboxId}`]);
     },

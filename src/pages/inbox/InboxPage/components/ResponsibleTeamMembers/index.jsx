@@ -2,24 +2,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
+import { TrashIcon } from '@heroicons/react/solid';
 import SelectMenuTeamMembers from '../../../../../components/selectMenu';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import { Spinner } from '../../../../../common';
 import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
-import { useCreateResponsibleFileTeamMember, useGetResponsibleTeamMembers } from '../../../../../features/inbox/inboxService';
+import {
+  useCreateResponsibleTeamMember,
+  useDeleteResponsibleTeamMember,
+  useGetResponsibleTeamMembers,
+} from '../../../../../features/inbox/inboxService';
+import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
 
 export default function ResponsibleTeamMembers({ setShowModal }) {
   const { inboxId } = useParams();
-  // TODO: add modal with selection team member dropdown, list all members and removing members
-  // * select team members from reusable component
-  // * list all items as list blacklist emails
   const [selectedUser, setSelectedUser] = useState(null);
   const { data, status } = useGetTeamMembers({ page: 0, query: '' });
-  const { mutate: onCreate } = useCreateResponsibleFileTeamMember(inboxId);
+  const { mutate: onCreate } = useCreateResponsibleTeamMember(inboxId);
   const { data: dt } = useGetResponsibleTeamMembers(inboxId);
+  const { mutate: onDelete } = useDeleteResponsibleTeamMember(inboxId);
 
-  console.log(dt?.data.inbox_responsible_team_members);
-
+  const responsibleUsers = dt?.data.inbox_responsible_team_members;
   const teamMembers = data?.data.team_members;
 
   if (status === 'loading') {
@@ -51,6 +54,13 @@ export default function ResponsibleTeamMembers({ setShowModal }) {
     });
   };
 
+  const handleDelete = (id) => {
+    onDelete({
+      fileId: inboxId,
+      memberId: id,
+    });
+  };
+
   return (
     <>
       <div
@@ -62,7 +72,7 @@ export default function ResponsibleTeamMembers({ setShowModal }) {
       >
         {' '}
       </div>
-      <div className="absolute top-14 right-52 p-6 rounded-xl border bg-white z-50 w-80">
+      <div className="absolute top-14 left-28 p-6 rounded-xl border bg-white z-50 w-80">
         {teamMembers ? (
           <SelectMenuTeamMembers
             teamMembers={teamMembers.map((i) => ({
@@ -74,6 +84,45 @@ export default function ResponsibleTeamMembers({ setShowModal }) {
             type="user"
             title="Add new responsible team member"
           />
+        ) : null}
+        {responsibleUsers ? (
+          !responsibleUsers.length ? (
+            <div className="mt-4">
+              <FullScreenMessage
+                title="No members yes."
+                description="Create one."
+                showIcon={false}
+              />
+            </div>
+          ) : (
+            <>
+              <p className="mt-4 text-sm font-medium text-gray-700">
+                Responsible team members:
+              </p>
+              <ul className="divide-y divide-gray-200">
+                {responsibleUsers.map((i) => (
+                  <li
+                    key={i.id}
+                    className="py-4 flex justify-between items-center"
+                  >
+                    <div className="flex flex-col pl-1">
+                      <p className="text-indigo-700 font-bold">
+                        {i.team_member.user.name}
+                      </p>
+                      <p className="text-gray-500">
+                        {i.team_member.user.email}
+                      </p>
+                    </div>
+
+                    <TrashIcon
+                      onClick={() => handleDelete(i.id)}
+                      className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
         ) : null}
       </div>
     </>

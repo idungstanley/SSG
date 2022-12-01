@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
   ArchiveIcon,
@@ -6,7 +6,6 @@ import {
   DownloadIcon,
   InboxIcon,
   InboxInIcon,
-  UserIcon,
 } from '@heroicons/react/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import Tippy from '@tippyjs/react';
@@ -20,7 +19,6 @@ import {
   useGetBlacklistFiles,
 } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
-import ResponsibleTeamMembers from '../../../ResponsibleTeamMembers';
 
 const noSymbolIcon = (
   <svg
@@ -48,7 +46,6 @@ export default function MinMenu() {
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
   const { mutate: archiveFile } = useArchiveOrUnarchiveInboxFile();
   const { mutate: addOrRemoveFromBlacklist } = useBlacklistFile();
-  const [showResponsibleModal, setShowResponsibleModal] = useState(false);
   const { data: bl } = useGetBlacklistFiles();
   const blacklistFiles = bl?.data.blacklist;
 
@@ -105,13 +102,6 @@ export default function MinMenu() {
       ),
     },
     {
-      label: 'Responsible members',
-      onClick: () => setShowResponsibleModal(!showResponsibleModal),
-      icon: (
-        <UserIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-      ),
-    },
-    {
       label: fileInBlacklist ? 'Remove from blacklist' : 'Add to blacklist',
       onClick: blacklist,
       icon: noSymbolIcon,
@@ -120,10 +110,6 @@ export default function MinMenu() {
 
   return (
     <div className="inline-flex rounded-md shadow-sm bg-white">
-      {showResponsibleModal ? (
-        <ResponsibleTeamMembers setShowModal={setShowResponsibleModal} />
-      ) : null}
-
       <Menu as="div" className="relative -ml-px block">
         <Menu.Button className="relative w-10 h-10 flex items-center rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
           <span className="sr-only">Open options</span>
