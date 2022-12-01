@@ -14,14 +14,14 @@ function Activity() {
   return (
     <div className="h-full flex-1">
       <div className="relative h-full">
-        <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col px-5 pt-2 pb-7">
+        <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col px-5 pt-2">
           <ul className="divide-y divide-gray-200 h-full flex-1">
             {logs?.map((activityLog) => (
               <li
                 key={activityLog.id}
-                className="py-4 flex justify-between content-between"
+                className="py-4 flex justify-between items-center"
               >
-                <div className="flex space-x-3">
+                <div className="flex gap-3 justify-center items-center">
                   {activityLog.team_member !== null ? (
                     <InitialsAvatar
                       size={6}
@@ -31,20 +31,12 @@ function Activity() {
                   ) : (
                     <InitialsAvatar size={6} colour="#4F46E5" initials="U" />
                   )}
-                  <div className="flex items-center gap-1">
-                    <p className="text-sm">
-                      {`${activityLog.description || ''} ${
-                        activityLog.team_member !== null && 'by'
-                      }`}
-                    </p>
-                    {activityLog.team_member !== null && (
-                      <h3 className="text-sm font-medium  ml-1 text-indigo-600">
-                        {activityLog.team_member.name}
-                      </h3>
-                    )}
-                  </div>
+                  <p className="text-indigo-600 mb-0">
+                    {activityLog.team_member.name}
+                  </p>
                 </div>
-                <p className="text-gray-400">{activityLog.type}</p>
+
+                <p className="text-gray-400 mb-0">{activityLog.type}</p>
               </li>
             ))}
           </ul>
