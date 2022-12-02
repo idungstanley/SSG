@@ -69,7 +69,7 @@ StackListItemNarrow.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  button: PropTypes.string,
+  button: PropTypes.object,
   paddingVertical: PropTypes.number,
   paddingHorizontal: PropTypes.number,
   onClick: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),

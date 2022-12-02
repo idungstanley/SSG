@@ -58,22 +58,21 @@ export const useGetInboxFile = (inboxFileId) => {
 };
 
 // Get inbox file full details
-export const useGetInboxFileFullDetails = (inboxFileId) => useQuery(
-  ['inbox_file_full_details', inboxFileId],
-  async () => {
-    const url = `inbox-files/${inboxFileId}/details`;
-
-    return requestNew({
+export const useGetInboxFileFullDetails = (inboxFileId) => {
+  const url = `inbox-files/${inboxFileId}/details`;
+  return useQuery(
+    ['inbox_file_full_details', inboxFileId],
+    () => requestNew({
       url,
       method: 'GET',
-    });
-  },
-  {
-    select: (data) => data.data.inbox_file_full,
-    enabled: inboxFileId != null,
-    staleTime: 0, // So it refetches which inboxes the file is assigned to
-  },
-);
+    }),
+    {
+      select: (data) => data.data.inbox_file,
+      enabled: inboxFileId != null,
+      staleTime: 0, // So it refetches which inboxes the file is assigned to
+    },
+  );
+};
 
 // Search folders for filing
 export const useSearchFoldersForFiling = (query) => {
