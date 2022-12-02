@@ -5,7 +5,6 @@ import {
   CogIcon,
   TrashIcon,
   MailOpenIcon,
-  UserIcon,
 } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
@@ -13,14 +12,13 @@ import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
 import BlackListEmails from '../BlackListEmails';
 import { useRestoreOrDeleteInbox } from '../../../../../features/inbox/inboxesService';
-import ResponsibleTeamMembers from '../ResponsibleTeamMembers';
+import MinMenuForResponsible from './MinMenuForResponsible';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
   const [showEmailsModal, setShowEmailsModal] = useState(false);
-  const [showResponsibleModal, setShowResponsibleModal] = useState(false);
 
   const upload = () => {
     dispatch(setShowUploadModal(true));
@@ -50,14 +48,6 @@ function Header() {
           className="mr-2.5 h-5 w-5 text-gray-500"
           aria-hidden="true"
         />
-      ),
-    },
-    {
-      buttonStyle: 'white',
-      label: 'Responsible members',
-      onClick: () => setShowResponsibleModal(!showResponsibleModal),
-      icon: (
-        <UserIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
       ),
     },
     {
@@ -101,6 +91,7 @@ function Header() {
       </div>
 
       <div className="relative flex lg:mt-0 lg:ml-4 space-x-3">
+        <MinMenuForResponsible />
         {menuItems.map((i) => (
           <Button
             key={i.label}
@@ -112,9 +103,7 @@ function Header() {
             ringOnFocus
           />
         ))}
-        {showResponsibleModal ? (
-          <ResponsibleTeamMembers setShowModal={setShowResponsibleModal} />
-        ) : null}
+
         {showEmailsModal ? (
           <BlackListEmails setShowModal={setShowEmailsModal} />
         ) : null}
