@@ -14,7 +14,7 @@ function SelectAndDisplayData({
 }) {
   const users = usersList.map((i) => ({
     id: i.id,
-    user: type === 'user' ? i.team_member.user.name : i.team_member_group.name,
+    name: type === 'user' ? i.team_member.user.name : i.team_member_group.name,
   }));
 
   return (
@@ -23,7 +23,6 @@ function SelectAndDisplayData({
         teamMembers={users}
         selectedData={selectedData}
         setSelectedData={setSelectedData}
-        type={type}
         title={title}
       />
       {selectedData ? (
