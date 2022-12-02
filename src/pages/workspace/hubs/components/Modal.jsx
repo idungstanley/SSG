@@ -34,6 +34,8 @@ function Modal({ isVisible, onCloseHubModal }) {
     await createHub.mutateAsync({
       name,
     });
+
+    onCloseHubModal();
   };
 
   if (!isVisible) return null;
@@ -98,7 +100,6 @@ function Modal({ isVisible, onCloseHubModal }) {
 
 Modal.defaultProps = {
   isVisible: false,
-  // onCloseHubModal: false,
 };
 
 Modal.propTypes = {
