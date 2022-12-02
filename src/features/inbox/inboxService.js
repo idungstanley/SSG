@@ -300,47 +300,72 @@ const fileActivity = (fileId) => {
 
 export const useGetInboxFileActivity = (fileId) => useQuery([`inbox-${fileId}-activity`], () => fileActivity(fileId));
 
-// responsible file team members
-export const useGetResponsibleTeamMembers = (inboxId) => useQuery([`responsible-team-members-${inboxId}`], () => requestNew({
-  url: `inboxes/${inboxId}/responsible-team-members`,
-  method: 'GET',
-}));
+// responsible inbox team members and groups
+export const useGetResponsibleMembersOrGroups = (inboxId, isGroups) => {
+  const query = `responsible-team-${
+    isGroups ? 'member-groups' : 'members'
+  }-${inboxId}`;
+  const url = `inboxes/${inboxId}/responsible-team-${
+    isGroups ? 'member-groups' : 'members'
+  }`;
 
-const createResponsibleTeamMember = (data) => {
+  return useQuery([query], () => requestNew({
+    url,
+    method: 'GET',
+  }));
+};
+
+const createResponsibleMemberOrGroup = (data) => {
+  const url = `inboxes/${data.inboxId}/responsible-team-${
+    data.isGroups ? 'member-groups' : 'members'
+  }`;
+  const body = data.isGroups
+    ? {
+      team_member_group_id: data.dataId,
+    }
+    : { team_member_id: data.dataId };
   const request = requestNew({
-    url: `inboxes/${data.inboxId}/responsible-team-members`,
+    url,
     method: 'POST',
-    data: {
-      team_member_id: data.memberId,
-    },
+    data: body,
   });
   return request;
 };
 
-export const useCreateResponsibleTeamMember = (inboxId) => {
+export const useCreateResponsibleMemberOrGroup = (inboxId, isGroups) => {
   const queryClient = useQueryClient();
+  const query = `responsible-team-${
+    isGroups ? 'member-groups' : 'members'
+  }-${inboxId}`;
 
-  return useMutation(createResponsibleTeamMember, {
+  return useMutation(createResponsibleMemberOrGroup, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`responsible-team-members-${inboxId}`]);
+      queryClient.invalidateQueries([query]);
     },
   });
 };
 
-const deleteResponsibleTeamMember = (data) => {
+const deleteResponsibleTeamMemberOrGroup = (data) => {
+  const url = `inboxes/${data.inboxId}/responsible-team-${
+    data.isGroups ? 'member-groups' : 'members'
+  }/${data.dataId}`;
+
   const request = requestNew({
-    url: `inboxes/${data.fileId}/responsible-team-members/${data.memberId}`,
+    url,
     method: 'DELETE',
   });
   return request;
 };
 
-export const useDeleteResponsibleTeamMember = (inboxId) => {
+export const useDeleteResponsibleMemberOrGroup = (inboxId, isGroups) => {
   const queryClient = useQueryClient();
+  const query = `responsible-team-${
+    isGroups ? 'member-groups' : 'members'
+  }-${inboxId}`;
 
-  return useMutation(deleteResponsibleTeamMember, {
+  return useMutation(deleteResponsibleTeamMemberOrGroup, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`responsible-team-members-${inboxId}`]);
+      queryClient.invalidateQueries([query]);
     },
   });
 };
