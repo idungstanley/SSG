@@ -96,7 +96,7 @@ function Sidebar() {
 
   return (
     <main className="w-full relative flex justify-start items-center">
-      <section className="w-full p-3 h-screen border-r-2">
+      <section className="w-full h-screen p-3 border-r-2">
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
           <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
         </div>
@@ -183,7 +183,7 @@ function Sidebar() {
           {/* hubs */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section id="favorites" className="rounded flex-col ">
+          <section id="favorites" className="rounded flex-col">
             <div
               onClick={() => handleHubClicks()}
               className="flex items-stretch justify-between"

@@ -3,15 +3,17 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../features/wallet/walletService';
 import { Button, Input } from '../../../../components';
 
 function WalletModal({ walletVisible, onCloseWalletModal }) {
+  const queryClient = useQueryClient();
   const createWallet = useMutation(createWalletService, {
-    onSuccess: (successData) => {
-      const walletData = successData.data.wallet;
-      console.log(walletData);
+    onSuccess: () => {
+      // console.log(data);
+      queryClient.invalidateQueries('walletData');
+      onCloseWalletModal();
     },
   });
 
@@ -65,7 +67,7 @@ function WalletModal({ walletVisible, onCloseWalletModal }) {
                 label="Wallet Name:"
                 placeholder="Enter Wallet Name"
                 name="name"
-                // value={name}
+                value={name}
                 type="text"
                 onChange={handleWalletChange}
               />
@@ -91,12 +93,12 @@ function WalletModal({ walletVisible, onCloseWalletModal }) {
 
 WalletModal.defaultProps = {
   walletVisible: false,
-  onCloseWalletModal: false,
+  // onCloseWalletModal: false,
 };
 
 WalletModal.propTypes = {
   walletVisible: PropTypes.bool,
-  onCloseWalletModal: PropTypes.bool,
+  onCloseWalletModal: PropTypes.func.isRequired,
 };
 
 export default WalletModal;

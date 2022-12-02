@@ -4,6 +4,7 @@ import authSlice from '../features/auth/authSlice';
 import wsSlice from '../features/workspace/workspaceSlice';
 import hubSlice from '../features/hubs/hubSlice';
 import walletSlice from '../features/wallet/walletSlice';
+import listSlice from '../features/list/listSlice';
 import explorerSlice from '../features/explorer/explorerSlice';
 import inboxSlice from '../features/inbox/inboxSlice';
 import searchSlice from '../features/search/searchSlice';
@@ -33,6 +34,7 @@ export const store = configureStore({
     workspace: wsSlice,
     hub: hubSlice,
     wallet: walletSlice,
+    list: listSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

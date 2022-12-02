@@ -4,21 +4,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-// import { useDispatch } from 'react-redux';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
-// import { createHub } from '../../../../features/hubs/hubSlice';
 import { createHubService } from '../../../../features/hubs/hubService';
 
 function Modal({ isVisible, onCloseHubModal }) {
-  // const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   const createHub = useMutation(createHubService, {
-    onSuccess: (successData) => {
-      queryClient.invalidateQueries(['hubs']);
-      const hubId = successData.data.hub;
-      console.log(hubId);
+    onSuccess: () => {
+      queryClient.invalidateQueries('hubdata');
       onCloseHubModal();
     },
   });
@@ -35,7 +30,6 @@ function Modal({ isVisible, onCloseHubModal }) {
 
   const { name } = formState;
   // console.log(name);
-
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,
@@ -78,7 +72,7 @@ function Modal({ isVisible, onCloseHubModal }) {
                 label="Hub Name:"
                 placeholder="Enter Hub Name"
                 name="name"
-                // value={name}
+                value={name}
                 type="text"
                 onChange={handleHubChange}
               />
@@ -104,12 +98,12 @@ function Modal({ isVisible, onCloseHubModal }) {
 
 Modal.defaultProps = {
   isVisible: false,
-  onCloseHubModal: false,
+  // onCloseHubModal: false,
 };
 
 Modal.propTypes = {
   isVisible: PropTypes.bool,
-  onCloseHubModal: PropTypes.bool,
+  onCloseHubModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

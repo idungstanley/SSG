@@ -11,3 +11,18 @@ export const createWalletService = (data) => {
   }, true);
   return response;
 };
+
+// get wallets
+export const getWalletService = (data) => {
+  const hubID = data.queryKey[1];
+  // console.log(hubID);
+  const response = requestNew({
+    url: 'at/wallets',
+    method: 'GET',
+    params: {
+      hub_id: hubID,
+    },
+  }, true);
+
+  return response;
+};

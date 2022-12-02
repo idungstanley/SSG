@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/anchor-is-valid */
@@ -6,45 +8,50 @@
 import {
   FolderAddOutlined, ImportOutlined, PlusOutlined, WalletOutlined,
 } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from '@heroicons/react/outline';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
 import { getHubListService } from '../../../features/hubs/hubService';
-import { getHub } from '../../../features/hubs/hubSlice';
 import MenuDropdown from './components/MenuDropdown';
 import PlusDropDown from './components/PlusDropDown';
+import WalletIndex from '../wallet';
+import ListIndex from '../Lists';
 
 function Hubs() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.hub.hub);
-
-  const getHubListMutation = useMutation(getHubListService, {
-    onSuccess: (data) => {
-      const newData = data.data.hubs;
-      dispatch(getHub(newData));
-    },
+  const [getCurrentHubId, setGetCurrentHubId] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [showHubList, setShowHubList] = useState(false);
+  const {
+    isLoading,
+    data: hubdata,
+  } = useQuery({
+    queryKey: ['hubdata'],
+    queryFn: getHubListService,
   });
 
-  const getHubList = () => {
-    getHubListMutation.mutate();
-  };
-
+  // console.log(hubdata);
   const HandleGetHubId = (id) => {
+    setGetCurrentHubId(id);
     localStorage.setItem('currentHubId', JSON.stringify(id));
   };
 
-  useEffect(() => {
-    getHubList();
-  }, []);
+  const handleShowWallet = (id) => {
+    setGetCurrentHubId(id);
+    setShowHubList(!showHubList);
+  };
 
-  const [showModal, setShowModal] = useState(false);
-  const [showHubList, setShowHubList] = useState(false);
+  const toggle = (index, id) => {
+    setGetCurrentHubId(id);
+    if (showHubList === index) {
+      return setShowHubList(null);
+    }
+    setShowHubList(index);
+  };
 
   return (
     <>
@@ -61,62 +68,60 @@ function Hubs() {
         onCloseHubModal={() => setShowModal(false)}
       />
 
-      {user.map(({ id, name }) => (
-        <section id="hubList" key={id}>
-          <div className="flex justify-between items-center hover:bg-gray-100 p-1 rounded mt-1 mb-1">
+      {hubdata?.data?.hubs.map((hub, index) => (
+        <section id="hubList" key={hub.id}>
+          <div
+            className="flex justify-between items-center hover:bg-gray-100 p-0.5 rounded mt-0.5 mb-0.5"
+            onClick={() => toggle(index, hub.id)}
+          >
             <div
               id="hubListLeft"
               className="flex items-center space-x-1 justify-start text-sm mt-1 overflow-y-hidden"
             >
-              <div onClick={() => setShowHubList(!showHubList)}>
-                {showHubList ? (
-                  <ChevronRightIcon
+              <div onClick={() => handleShowWallet(hub.id)}>
+                {showHubList === index ? (
+                  <ChevronDownIcon
                     className="flex-shrink-0 h-3 w-5"
                     aria-hidden="true"
                   />
                 ) : (
-                  <ChevronDownIcon
+                  <ChevronRightIcon
                     className="flex-shrink-0 h-3 w-5"
                     aria-hidden="true"
                   />
                 )}
               </div>
               <AvatarWithInitials
-                initials={name.substr(0, 2)}
+                initials={hub.name.substr(0, 1).toUpperCase()}
                 height="h-6"
                 width="w-6"
+                backgroundColour="#cf30cf"
               />
-              <h4 className="text-sm font-bold">
-                {name.length > 10 ? name.substr(0, 10) : name}
+              <h4 className="text-sm font-medium">
+                {hub.name.length > 10 ? hub.name.substr(0, 10) : hub.name}
               </h4>
             </div>
             <div
               id="hubListRight"
               className="space-x-1 flex items-center justify-end"
-              onClick={() => HandleGetHubId(id)}
+              onClick={() => HandleGetHubId(hub.id)}
             >
               <MenuDropdown />
               <PlusDropDown />
             </div>
           </div>
-          <div
-            id="createWallet"
-            className={`${showHubList ? 'block' : 'hidden'}`}
-          >
-            <p className="text-sm pl-7">
-              Create a
-              {' '}
-              <span className="underline text-gray-600">
-                <Hyperlink label="Wallet" href="/" />
-              </span>
-              ,
-              {' '}
-              <span className="underline text-gray-600">
-                <Hyperlink label="List" href="/" />
-              </span>
-              {' '}
-            </p>
-          </div>
+          {showHubList === index ? (
+            <>
+              <WalletIndex
+                showHubList={showHubList}
+                getCurrentHubId={getCurrentHubId}
+              />
+              <ListIndex
+                showHubList={showHubList}
+                getCurrentHubId={getCurrentHubId}
+              />
+            </>
+          ) : null}
         </section>
       ))}
     </>
