@@ -98,7 +98,7 @@ const prefetchedInbox = {
 // Get inbox
 export const useGetInbox = (inboxId, type) => {
   const queryClient = useQueryClient();
-  const queryName = `${type}-inbox`;
+  const queryName = type ? `${type}-inbox` : 'inbox';
 
   return useQuery(
     [queryName, inboxId],

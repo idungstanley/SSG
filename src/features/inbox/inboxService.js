@@ -121,28 +121,62 @@ export const fileInboxFileService = async (data) => {
 };
 
 // Assign inbox file
-export const assignInboxFileService = async (data) => {
+// export const assignInboxFileService = async (data) => {
+//   const response = requestNew({
+//     url: `inbox-files/${data.inboxFileId}/assign`,
+//     method: 'POST',
+//     params: {
+//       assign_to_inbox_id: data.assignToInboxId,
+//     },
+//   });
+//   return response;
+// };
+
+const assignOrUnassignInboxFile = (data) => {
+  const url = `inbox-files/${data.inboxFileId}/${
+    data.isAssigned ? 'unassign' : 'assign'
+  }`;
+  const params = data.isAssigned
+    ? {
+      unassign_from_inbox_id: data.inboxId,
+    }
+    : {
+      assign_to_inbox_id: data.inboxId,
+    };
+
   const response = requestNew({
-    url: `inbox-files/${data.inboxFileId}/assign`,
+    url,
     method: 'POST',
-    params: {
-      assign_to_inbox_id: data.assignToInboxId,
-    },
+    params,
   });
   return response;
 };
 
-// Unassign inbox file
-export const unassignInboxFileService = async (data) => {
-  const response = requestNew({
-    url: `inbox-files/${data.inboxFileId}/unassign`,
-    method: 'POST',
-    params: {
-      unassign_from_inbox_id: data.unassignFromInboxId,
+export const useAssignOrUnassignInboxFile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(assignOrUnassignInboxFile, {
+    onSuccess: (successData) => {
+      queryClient.invalidateQueries([
+        'inbox_files',
+        successData.data.copied_to_inbox_id,
+        { isArchived: 0 },
+      ]);
     },
   });
-  return response;
 };
+
+// Unassign inbox file
+// export const unassignInboxFileService = async (data) => {
+//   const response = requestNew({
+//     url: `inbox-files/${data.inboxFileId}/unassign`,
+//     method: 'POST',
+//     params: {
+//       unassign_from_inbox_id: data.unassignFromInboxId,
+//     },
+//   });
+//   return response;
+// };
 
 const archiveOrUnarchiveInboxFile = (data) => {
   // type: archive | unarchive
