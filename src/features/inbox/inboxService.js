@@ -120,18 +120,7 @@ export const fileInboxFileService = async (data) => {
   return response;
 };
 
-// Assign inbox file
-// export const assignInboxFileService = async (data) => {
-//   const response = requestNew({
-//     url: `inbox-files/${data.inboxFileId}/assign`,
-//     method: 'POST',
-//     params: {
-//       assign_to_inbox_id: data.assignToInboxId,
-//     },
-//   });
-//   return response;
-// };
-
+// Assign / Unassign inbox file
 const assignOrUnassignInboxFile = (data) => {
   const url = `inbox-files/${data.inboxFileId}/${
     data.isAssigned ? 'unassign' : 'assign'
@@ -152,7 +141,7 @@ const assignOrUnassignInboxFile = (data) => {
   return response;
 };
 
-export const useAssignOrUnassignInboxFile = () => {
+export const useAssignOrUnassignInboxFile = (fileId) => {
   const queryClient = useQueryClient();
 
   return useMutation(assignOrUnassignInboxFile, {
@@ -162,21 +151,10 @@ export const useAssignOrUnassignInboxFile = () => {
         successData.data.copied_to_inbox_id,
         { isArchived: 0 },
       ]);
+      queryClient.invalidateQueries(['inbox_file_full_details', fileId]);
     },
   });
 };
-
-// Unassign inbox file
-// export const unassignInboxFileService = async (data) => {
-//   const response = requestNew({
-//     url: `inbox-files/${data.inboxFileId}/unassign`,
-//     method: 'POST',
-//     params: {
-//       unassign_from_inbox_id: data.unassignFromInboxId,
-//     },
-//   });
-//   return response;
-// };
 
 const archiveOrUnarchiveInboxFile = (data) => {
   // type: archive | unarchive
