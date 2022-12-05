@@ -1,30 +1,24 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowCircleRightIcon,
-  ArrowCircleLeftIcon,
 } from '@heroicons/react/outline';
-import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import {
   useGetInboxFile,
   fileInboxFileService,
 } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
 import MinMenu from './components/minMenu';
+import NavigationBetweenFiles from './components/navigationBetweenFiles';
 
 function Toolbar() {
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  // Selectors
-  const selectedInboxFileIndex = useSelector(
-    (state) => state.inbox.selected_inbox_file_index,
-  );
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
-  );
+  const { selectedInboxFileId } = useSelector((state) => state.inbox);
+
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
+
   const folderIdsForFiling = useSelector(
     (state) => state.inbox.folderIdsForFiling,
   );
@@ -42,26 +36,8 @@ function Toolbar() {
       ]);
       queryClient.invalidateQueries(['inboxes']);
       queryClient.invalidateQueries(['inboxes_unfiled_count']);
-
-      // TODO: Select next... if there is... (otherwise keep current selected)
     },
   });
-
-  const handleNavigateToFile = (action) => {
-    const relative = action === 'previous' ? -1 : 1;
-
-    const navigateToFileIndex = selectedInboxFileIndex + relative;
-    const navigateToFileId = null;
-
-    if (navigateToFileId != null && navigateToFileId !== undefined) {
-      dispatch(
-        setCurrentInboxFile({
-          inboxFileId: navigateToFileId,
-          inboxFileIndex: navigateToFileIndex,
-        }),
-      );
-    }
-  };
 
   const fileDocument = () => {
     fileInboxFileMutation.mutate({
@@ -87,35 +63,7 @@ function Toolbar() {
                 <div className="px-4 sm:px-6">
                   <div className="py-3 flex justify-between">
                     {/* Left buttons */}
-                    <div className="relative z-0 inline-flex space-x-2">
-                      <Button
-                        buttonStyle="white"
-                        onClick={() => handleNavigateToFile('previous')}
-                        icon={(
-                          <ArrowCircleLeftIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                        )}
-                        iconPosition="center"
-                        disabled={false}
-                        ringOnFocus
-                      />
-
-                      <Button
-                        buttonStyle="white"
-                        onClick={() => handleNavigateToFile('next')}
-                        icon={(
-                          <ArrowCircleRightIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                        )}
-                        iconPosition="center"
-                        disabled={false}
-                        ringOnFocus
-                      />
-                    </div>
+                    <NavigationBetweenFiles />
                     <div className="flex gap-4 relative">
                       <MinMenu />
                       <Button

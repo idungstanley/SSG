@@ -70,6 +70,7 @@ export default function TableWithSelection() {
     if (selectedFiles.length) {
       setSelectedFiles([]);
     }
+
     if (!e.target.value) {
       dispatch(
         setCurrentInboxFile({
