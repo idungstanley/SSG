@@ -1,18 +1,36 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MainLogo from '../../../../assets/branding/main-logo.png';
-import { Button, Input } from '../../../../components';
+import { Input } from '../../../../components';
+import {
+  useCreateHub,
+} from '../../../../features/hubs/hubService';
 
-function Modal({ isVisible, setShowModal }) {
+function Modal({ isVisible, onCloseHubModal }) {
+  const { mutate: crateHub } = useCreateHub();
+
+  const [formState, setFormState] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    crateHub({
+      name: formState,
+    });
+
+    onCloseHubModal();
+  };
+
   if (!isVisible) return null;
   return (
     <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
       <div className="w-5/12 flex flex-col">
         <div
           className="text-white text-xl place-self-end"
-          onClick={() => setShowModal(false)}
+          onClick={() => onCloseHubModal()}
         >
           X
         </div>
@@ -36,30 +54,21 @@ function Modal({ isVisible, setShowModal }) {
             </div>
             <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
           </section>
-          <section id="input" className="mt-5 ml-2">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="Hub Name:"
-                placeholder="Enter Hub Name"
-                name="name"
-                // value={name}
-                type="text"
-                // onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                // onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
-                label="Create Hub"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section>
+          <form
+            onSubmit={(e) => handleSubmit(e)}
+            id="input"
+            className="flex py-2 flex-col mx-5 justify-center items-center gap-7"
+          >
+            <Input
+              label="Hub Name:"
+              placeholder="Enter Hub Name"
+              name="name"
+              value={formState}
+              type="text"
+              onChange={(e) => setFormState(e.target.value)}
+            />
+            <button className="w-full rounded-md h-10 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700" type="submit">Create Hub</button>
+          </form>
         </div>
       </div>
     </div>
@@ -68,14 +77,12 @@ function Modal({ isVisible, setShowModal }) {
 
 Modal.defaultProps = {
   isVisible: false,
-  setShowModal: false,
-  // showModal: false,
+  onCloseHubModal: false,
 };
 
 Modal.propTypes = {
   isVisible: PropTypes.bool,
-  setShowModal: PropTypes.bool,
-  // showModal: PropTypes.bool,
+  onCloseHubModal: PropTypes.bool,
 };
 
 export default Modal;

@@ -5,8 +5,12 @@ import React, { useState } from 'react';
 import { PlusOutlined, TrophyOutlined } from '@ant-design/icons';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import { Link } from 'react-router-dom';
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
-import { AvatarWithInitials, Search } from '../../../components';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from '@heroicons/react/outline';
+import { AvatarWithInitials } from '../../../components';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import { menuItems } from './sidebarData';
 import Hubs from '../hubs';
@@ -15,6 +19,7 @@ import Inbox from '../inbox';
 import Files from '../files';
 import Dashboard from '../dashboard';
 import Directory from '../directory';
+import CommandSearchModal from './components/CommandSearchModal';
 
 function Sidebar() {
   const [active, setIsActive] = useState(false);
@@ -25,6 +30,7 @@ function Sidebar() {
   const [dashClicks, setDashClicks] = useState(false);
   const [dirClicks, setDirClicks] = useState(false);
   const [showMoreActive, setShowMoreIsActive] = useState(false);
+  const [commandSearchModal, setCommandSearchModal] = useState(false);
 
   const handleMenuClicks = () => {
     setIsActive(!active);
@@ -94,9 +100,18 @@ function Sidebar() {
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
           <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
         </div>
-        <div>
-          <Search placeholder="Search" />
+        {/* search */}
+        <div
+          className="mt-3 relative w-full border-2 text-gray-400 border-gray-300 rounded flex justify-start items-center pl-2 space-x-1 hover:border-primary-400 hover:text-primary-400"
+          onClick={() => setCommandSearchModal(true)}
+        >
+          <SearchIcon className="h-4 w-5" aria-hidden="true" />
+          <p>Search</p>
         </div>
+        <CommandSearchModal
+          commandSearchVisible={commandSearchModal}
+          onCloseCommandSearchModal={() => setCommandSearchModal(false)}
+        />
         {/* static menu */}
         <div id="static-menu" className="my-4 text-gray-500">
           {menuItems.map((val) => (
@@ -289,11 +304,11 @@ function Sidebar() {
           {/* directory */}
           <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
-          <section
-            id="favorites"
-            className="rounded flex-col"
-          >
-            <div onClick={() => handleDirClicks()} className="flex items-stretch justify-between">
+          <section id="favorites" className="rounded flex-col">
+            <div
+              onClick={() => handleDirClicks()}
+              className="flex items-stretch justify-between"
+            >
               <p className="font-bold text-sm">DIRECTORY</p>
               {dirClicks ? (
                 <ChevronDownIcon

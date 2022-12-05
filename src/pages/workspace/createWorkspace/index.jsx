@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
@@ -25,18 +25,18 @@ function CreateWorkspace() {
 
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: (successData) => {
-      // localStorage.setItem(
-      //   'currentWorkspacename',
-      //   JSON.stringify(successData.data.workspace.name),
-      // );
-      // localStorage.setItem(
-      //   'currentWorkspaceSize',
-      //   JSON.stringify(successData.data.workspace.company_size),
-      // );
-      // localStorage.setItem(
-      //   'wsemail',
-      //   JSON.stringify(successData.data.workspace.emails),
-      // );
+      localStorage.setItem(
+        'currentWorkspacename',
+        JSON.stringify(successData.data.workspace.name),
+      );
+      localStorage.setItem(
+        'currentWorkspaceSize',
+        JSON.stringify(successData.data.workspace.company_size),
+      );
+      localStorage.setItem(
+        'wsemail',
+        JSON.stringify(successData.data.workspace.emails),
+      );
 
       localStorage.setItem(
         'user',
@@ -90,11 +90,6 @@ function CreateWorkspace() {
   const handleBgClick = (colour) => {
     setBgAvatart(colour);
   };
-
-  useEffect(() => {
-    // getWs();
-    // console.log(localStorage.getItem('currentWorkspaceId'));
-  }, []);
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-y-scroll bg-gray-50">
