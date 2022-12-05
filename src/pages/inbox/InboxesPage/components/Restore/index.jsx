@@ -32,7 +32,7 @@ export default function Restore() {
         <Header />
         <tbody className="bg-white divide-y divide-gray-100">
           {trashed.map((inbox) => (
-            <Row key={inbox.id} inboxId={inbox.id} type="trashed" />
+            <Row key={inbox.id} inboxId={inbox.id} type="trashed" inbox={inbox} />
           ))}
         </tbody>
       </table>

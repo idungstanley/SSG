@@ -31,7 +31,7 @@ function Archived() {
         <Header />
         <tbody className="bg-white divide-y divide-gray-100">
           {data.map((inbox) => (
-            <Row key={inbox.id} inboxId={inbox.id} type={type} />
+            <Row key={inbox.id} inboxId={inbox.id} type={type} inbox={inbox} />
           ))}
         </tbody>
       </table>

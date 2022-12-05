@@ -11,7 +11,6 @@ import { useGetInbox } from '../../../../../../../features/inbox/inboxesService'
 function InboxResultItem({
   inboxId,
   isAssigned,
-  // isProcessing,
   isDisabled,
   handleAssignToInbox,
   handleUnassignFromInbox,
@@ -33,7 +32,6 @@ function InboxResultItem({
         <Button
           buttonStyle="white"
           onClick={isAssigned ? () => handleUnassignFromInbox(inbox.id) : () => handleAssignToInbox(inbox.id)}
-          // loading={isProcessing}
           disabled={isDisabled}
           label={isAssigned ? 'Assigned' : 'Assign'}
           icon={isAssigned ? <CheckCircleIcon className="mr-1 -ml-2 h-5 w-5 text-green-500" aria-hidden="true" /> : <PlusIcon className="mr-1 -ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />}
@@ -47,7 +45,6 @@ function InboxResultItem({
 InboxResultItem.propTypes = {
   inboxId: PropTypes.string.isRequired,
   isAssigned: PropTypes.bool.isRequired,
-  // isProcessing: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   handleAssignToInbox: PropTypes.func.isRequired,
   handleUnassignFromInbox: PropTypes.func.isRequired,

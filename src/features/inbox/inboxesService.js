@@ -78,23 +78,6 @@ export const useGetTrashedInbox = (inboxId) => {
   );
 };
 
-const prefetchedInbox = {
-  id: 'e31eaf13-2bb4-4081-9cc7-c940a5734ec8',
-  email_key: '263816694002409315',
-  name: 'react ts',
-  initials: 'RT',
-  colour: '#10B981',
-  unfiled_count: 3,
-  is_new: false,
-  has_email_whitelist: 0,
-  last_received_at: '2022-11-26 11:59:11',
-  last_filed_at: null,
-  archived_at: null,
-  created_at: '2022-11-25T18:17:20.000000Z',
-  updated_at: '2022-11-26T11:59:11.000000Z',
-  is_watch: false,
-};
-
 // Get inbox
 export const useGetInbox = (inboxId, type) => {
   const queryClient = useQueryClient();
@@ -104,7 +87,7 @@ export const useGetInbox = (inboxId, type) => {
     [queryName, inboxId],
     () => queryClient.getQueryData([queryName, inboxId]),
     {
-      initialData: prefetchedInbox,
+      initialData: () => queryClient.getQueryData([queryName, inboxId]),
     },
   );
 };
@@ -336,14 +319,6 @@ export const useRestoreOrDeleteInbox = () => {
 };
 
 // responsible inboxes
-// export const getResponsibleInboxes = () => {
-//   const request = requestNew({
-//     url: 'inboxes/responsible',
-//     method: 'GET',
-//   });
-//   return request;
-// };
-
 export const useGetResponsibleInboxes = () => {
   useQuery(['responsible-inbox'], () => requestNew({
     url: 'inboxes/responsible',

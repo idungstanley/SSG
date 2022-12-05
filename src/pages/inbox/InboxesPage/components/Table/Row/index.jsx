@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { OutputDateTime } from '../../../../../../app/helpers';
 import {
-  useGetInbox,
   useMarkOpenedInbox,
 } from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
 
-function Row({ inboxId, type }) {
-  const { data: inbox } = useGetInbox(inboxId, type);
-
+function Row({ inboxId, type, inbox }) {
   const { mutate: markOpened } = useMarkOpenedInbox(inboxId);
 
   const handleClickInbox = () => {
@@ -68,6 +65,7 @@ function Row({ inboxId, type }) {
 Row.propTypes = {
   inboxId: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  inbox: PropTypes.object.isRequired,
 };
 
 export default Row;
