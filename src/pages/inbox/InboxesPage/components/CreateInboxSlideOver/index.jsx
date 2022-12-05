@@ -24,7 +24,9 @@ function CreateInboxSlideOver() {
     },
   });
 
-  const showCreateInboxSlideOver = useSelector((state) => state.slideOver.showCreateInboxSlideOver);
+  const showCreateInboxSlideOver = useSelector(
+    (state) => state.slideOver.showCreateInboxSlideOver,
+  );
 
   // Form state
 

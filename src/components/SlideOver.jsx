@@ -1,6 +1,4 @@
-import React, {
-  Fragment,
-} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
@@ -16,9 +14,12 @@ function SlideOver({
 }) {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden z-40" onClose={onClose}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 overflow-hidden z-40"
+        onClose={onClose}
+      >
         <div className="absolute inset-0 overflow-hidden">
-
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-300"
@@ -48,7 +49,9 @@ function SlideOver({
                     <div className="px-4 py-6 bg-gray-50 sm:px-6">
                       <div className="flex items-start justify-between space-x-3">
                         <div className="space-y-1">
-                          <Dialog.Title className="text-lg font-medium text-gray-900">{headerTitle}</Dialog.Title>
+                          <Dialog.Title className="text-lg font-medium text-gray-900">
+                            {headerTitle}
+                          </Dialog.Title>
                           {headerDescription && (
                             <p className="text-sm text-gray-500">
                               {headerDescription}
@@ -105,20 +108,11 @@ SlideOver.defaultProps = {
 
 SlideOver.propTypes = {
   show: PropTypes.bool.isRequired,
-  onClose: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-  body: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
+  onClose: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   headerTitle: PropTypes.string.isRequired,
   headerDescription: PropTypes.string,
-  footerButtons: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  footerButtons: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default SlideOver;
