@@ -15,7 +15,9 @@ export const deleteService = async (data) => {
 
 // Paste service
 export const pasteService = async (data) => {
-  const url = data.copyToFolderId == null ? '/explorer/copy' : `/explorer/copy/${data.copyToFolderId}`;
+  const url = data.copyToFolderId == null
+    ? '/explorer/copy'
+    : `/explorer/copy/${data.copyToFolderId}`;
 
   const response = requestNew({
     url,
@@ -26,6 +28,17 @@ export const pasteService = async (data) => {
     },
   });
   return response;
+};
+
+export const renameItemService = (data) => {
+  const url = `${data.type}s/${data.id}/rename`;
+  return requestNew({
+    url,
+    method: 'POST',
+    params: {
+      name: data.name,
+    },
+  });
 };
 
 // Rename file service

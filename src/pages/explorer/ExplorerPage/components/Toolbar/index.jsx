@@ -36,7 +36,7 @@ import {
 import { deleteService, pasteService } from '../../../../../features/explorer/explorerActionsService';
 import { useGetFile, useGetFolder } from '../../../../../features/explorer/explorerService';
 import { Button } from '../../../../../components';
-import { setCreateFolderSlideOverVisibility, setRenameFileSlideOverVisibility, setRenameFolderSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setCreateFolderSlideOverVisibility, setRenameFileSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import Toast from '../../../../../common/Toast';
 import { DownloadFile } from '../../../../../app/helpers';
 
@@ -93,22 +93,23 @@ export default function Toolbar() {
     dispatch(setCreateFolderSlideOverVisibility(true));
   };
 
-  const openRenameFile = () => {
-    dispatch(setRenameFileSlideOverVisibility(true));
-  };
+  // const openRenameFile = () => {
+  //   dispatch(setRenameFileSlideOverVisibility(true));
+  // };
 
-  const openRenameFolder = () => {
-    dispatch(setRenameFolderSlideOverVisibility(true));
-  };
+  // const openRenameFolder = () => {
+  //   dispatch(setRenameFolderSlideOverVisibility(true));
+  // };
 
   const openRename = () => {
-    if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-      openRenameFile();
-    }
+    dispatch(setRenameFileSlideOverVisibility(true));
+    // if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
+    //   openRenameFile();
+    // }
 
-    if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-      openRenameFolder();
-    }
+    // if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
+    //   openRenameFolder();
+    // }
   };
 
   const onCopy = () => {
@@ -177,7 +178,7 @@ export default function Toolbar() {
 
                       <Menu as="div" className="relative inline-block text-left">
                         <div>
-                          <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                          <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0">
                             <PlusCircleIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                             Create
                             <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
@@ -291,7 +292,8 @@ export default function Toolbar() {
                               <Button
                                 buttonStyle="white"
                                 onClick={openRename}
-                                disabled={selectedFileIds.length + selectedFolderIds.length !== 1}
+                                // disabled={selectedFileIds.length + selectedFolderIds.length !== 1}
+                                disabled={!selectedFileIds.length && !selectedFolderIds.length}
                                 icon={<PencilIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
                                 iconPosition="center"
                                 borderLeft

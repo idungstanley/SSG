@@ -14,7 +14,7 @@ import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
 import RenameFileSlideOver from './components/SlideOvers/RenameFileSlideOver';
-import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver';
+// import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver';
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
 import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../features/explorer/explorerService';
 import FilePreview from '../../../components/FilePreview';
@@ -29,6 +29,9 @@ export default function ExplorerPage() {
 
   const { data: currentFolder } = useGetFolder(folderId);
 
+  const showRename = useSelector(
+    (state) => state.slideOver.showRenameFileSlideOver,
+  );
   const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
   const showUploadModal = useSelector((state) => state.explorer.showUploadModal);
@@ -137,8 +140,9 @@ export default function ExplorerPage() {
 
       {/* Slide Overs */}
       <CreateFolderSlideOver />
-      {selectedItemType === 'file' && selectedItemId && <RenameFileSlideOver />}
-      {selectedItemType === 'folder' && selectedItemId && <RenameFolderSlideOver />}
+      {showRename ? <RenameFileSlideOver /> : null}
+      {/* {selectedItemType === 'file' && selectedItemId && <RenameFileSlideOver />}
+      {selectedItemType === 'folder' && selectedItemId && <RenameFolderSlideOver />} */}
     </>
   );
 }

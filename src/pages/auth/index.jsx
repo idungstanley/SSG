@@ -33,7 +33,7 @@ function Wrapper({ children }) {
           <p className="hidden sm:block whitespace-nowrap">{data[isSignIn].massage}</p>
           <Link
             to={data[isSignIn].link}
-            className="flex w-full justify-center rounded-md font-bold border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+            className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
           >
             {data[isSignIn].title}
           </Link>

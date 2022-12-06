@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/jsx-filename-extension */
 import { HomeIcon } from '@heroicons/react/outline';
 import { NotificationOutlined, RocketFilled } from '@ant-design/icons';
 
