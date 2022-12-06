@@ -96,7 +96,7 @@ export default function InputWithValidation({
           </Link>
         )
       ) : null}
-      <p className="block text-sm font-medium text-red-700 mt-1 h-5 ml-1">
+      <p className="block text-sm font-medium text-red-700 mt-1 h-4 ml-1">
         {newMessage}
       </p>
     </div>

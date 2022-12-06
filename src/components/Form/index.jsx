@@ -17,8 +17,6 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
     },
   });
 
-  console.log(checkboxConfig);
-
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-3">
       {Object.keys(formik.values).map((i) => (
@@ -37,28 +35,23 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
       ))}
 
       {checkboxConfig ? (
-        <div className="mb-6">
+        <div className="mb-6 space-y-3">
           {checkboxConfig.map((i) => (
             <div key={i.id} className="relative flex items-start">
               <div className="flex h-5 items-center">
                 <input
                   id={i.id}
-                  // aria-describedby="comments-description"
                   name={i.id}
                   type="checkbox"
                   value={i.value}
                   onChange={i.onChange}
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600"
+                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 cursor-pointer ring-0 focus:ring-0"
                 />
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor={i.id} className="font-medium text-gray-700">
                   {i.label}
                 </label>
-                {/* <span id="comments-description" className="text-gray-500">
-                  <span className="sr-only">New comments </span>
-                  so you always know what&apos;s happening.
-                </span> */}
               </div>
             </div>
           ))}
@@ -68,6 +61,7 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
       <button
         className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md transition-all duration-150 hover:ease-in"
         type="submit"
+        // disabled={checkboxConfig ? checkboxConfig.find((i) => i.value !== true) : false}
       >
         {formikConfig.buttonTitle}
       </button>
