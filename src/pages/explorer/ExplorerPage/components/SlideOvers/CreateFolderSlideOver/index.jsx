@@ -11,38 +11,29 @@ function CreateFolderSlideOver() {
   const queryClient = useQueryClient();
   const { folderId } = useParams();
 
-  const showSlideOver = useSelector((state) => state.slideOver.showCreateFolderSlideOver);
+  const showSlideOver = useSelector(
+    (state) => state.slideOver.showCreateFolderSlideOver,
+  );
 
-  // Form state
-
-  const defaultFormState = {
-    name: '',
-  };
-
-  const [formState, setFormState] = useState(defaultFormState);
-
-  const { name } = formState;
-
-  const onChange = (e) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const [folderName, setFolderName] = useState('');
 
   const createFolderMutation = useMutation(createFolderService, {
     onSuccess: (data) => {
-      queryClient.invalidateQueries(['explorer_files_and_folders', data.data.parent_folder == null ? 'root-folder' : data.data.parent_folder.id]);
-      dispatch(setCreateFolderSlideOverVisibility(false));
-      setFormState(defaultFormState);
+      queryClient.invalidateQueries([
+        'explorer_files_and_folders',
+        data.data.parent_folder == null
+          ? 'root-folder'
+          : data.data.parent_folder.id,
+      ]);
     },
   });
 
   const onSubmit = async () => {
-    createFolderMutation.mutate({
-      folderName: name,
+    await createFolderMutation.mutateAsync({
+      folderName,
       parentId: folderId,
     });
+    dispatch(setCreateFolderSlideOverVisibility(false));
   };
 
   return (
@@ -57,9 +48,9 @@ function CreateFolderSlideOver() {
               label="Folder name"
               placeholder="Folder name"
               name="name"
-              value={name}
+              value={folderName}
               type="text"
-              onChange={onChange}
+              onChange={(e) => setFolderName(e.target.value)}
             />
           </div>
         </div>
