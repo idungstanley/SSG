@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
@@ -15,6 +14,7 @@ import { setAuthData } from '../../../features/auth/authSlice';
 import InviteDetails from './components/InviteDetails';
 import Form from '../../../components/Form';
 import Wrapper from '..';
+import Help from '../Help';
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -169,13 +169,7 @@ function RegisterPage() {
             )}
           />
         </div>
-        <div className="absolute bottom-0 -right-16 bg-gray-200 p-2 flex flex-col items-center border bg-opacity-50 rounded-lg">
-          <QuestionMarkCircleIcon
-            className="h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-          <p className="text-gray-500">Help</p>
-        </div>
+        <Help />
       </div>
     </Wrapper>
   );

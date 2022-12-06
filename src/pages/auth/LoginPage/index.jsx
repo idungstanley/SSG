@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
 import {
   loginService,
   loginGoogleService,
@@ -13,6 +12,7 @@ import {
 import { setAuthData } from '../../../features/auth/authSlice';
 import Form from '../../../components/Form';
 import Wrapper from '..';
+import Help from '../Help';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -141,13 +141,7 @@ function LoginPage() {
             )}
           />
         </div>
-        <div className="absolute bottom-0 -right-16 bg-gray-200 p-2 flex flex-col items-center border bg-opacity-50 rounded-lg">
-          <QuestionMarkCircleIcon
-            className="h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-          <p className="text-gray-500">Help</p>
-        </div>
+        <Help />
       </div>
     </Wrapper>
   );

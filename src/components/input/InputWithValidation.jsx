@@ -67,7 +67,7 @@ export default function InputWithValidation({
         } focus:${
           newMessage ? 'border-red-700' : 'border-gray-300'
         } sm:text-sm ${
-          type === 'password' ? (isNewPassword ? 'pr-14' : 'pr-36') : null
+          type === 'password' ? (isNewPassword ? 'pr-14' : 'pr-20 sm:pr-36') : null
         }`}
         id={id}
         type={showPassword ? type : 'text'}
@@ -92,7 +92,10 @@ export default function InputWithValidation({
             className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
             to="/auth/forgot"
           >
-            Forgot password?
+            Forgot
+            {' '}
+            <span className="hidden sm:inline-block">password</span>
+            ?
           </Link>
         )
       ) : null}
