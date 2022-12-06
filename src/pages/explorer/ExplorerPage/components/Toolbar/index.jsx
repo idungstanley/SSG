@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Menu, Transition } from '@headlessui/react';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import toast from 'react-hot-toast';
 import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
@@ -27,8 +26,6 @@ import {
   setShowUploadModal,
   copyItems,
   resetSelectedFilesAndFolders,
-  // setSelectedFiles,
-  // setSelectedFolders,
 } from '../../../../../features/explorer/explorerSlice';
 import {
   deleteService,
@@ -89,10 +86,7 @@ export default function Toolbar() {
   const deleteMutation = useMutation(deleteService, {
     onSuccess: () => {
       dispatch(resetSelectedFilesAndFolders());
-      queryClient.invalidateQueries([
-        'explorer_files_and_folders',
-        folderId == null ? 'root-folder' : folderId,
-      ]);
+      queryClient.invalidateQueries(['explorer_files_and_folders']);
     },
   });
 
@@ -169,6 +163,49 @@ export default function Toolbar() {
       DownloadFile(selectedItemType, selectedItemId, itemName);
     }
   };
+
+  console.log(selectedItemId);
+
+  const toolbarItems = [
+    {
+      icon: (
+        <DownloadIcon className="h-5 w-5" aria-hidden="true" />
+      ),
+      onClick: onDownload,
+      disabled: selectedFileIds.length + selectedFolderIds.length === 0,
+      title: 'Download',
+      isInLeft: true,
+    },
+    {
+      icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
+      onClick: onDelete,
+      disabled: selectedFileIds.length + selectedFolderIds.length === 0,
+      title: 'Delete',
+    },
+    {
+      icon: (
+        <DuplicateIcon className="h-5 w-5" aria-hidden="true" />
+      ),
+      onClick: onCopy,
+      disabled: selectedFileIds.length + selectedFolderIds.length === 0,
+      title: 'Copy',
+    },
+    {
+      icon: (
+        <ClipboardIcon className="h-5 w-5" aria-hidden="true" />
+      ),
+      onClick: onPaste,
+      disabled: fileIdsToPaste.length + folderIdsToPaste.length === 0,
+      title: 'Paste',
+    },
+    {
+      icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
+      onClick: openRename,
+      disabled: !selectedItemId,
+      title: 'Rename',
+      isInRight: true,
+    },
+  ];
 
   return (
     <div className="flex flex-col">
@@ -255,135 +292,20 @@ export default function Toolbar() {
                         </Transition>
                       </Menu>
                     </div>
-
-                    <div className="">
-                      <span className="relative z-0 inline-flex shadow-sm rounded-md sm:shadow-none sm:space-x-3">
-                        <span className="inline-flex sm:shadow-sm">
-                          <Button
-                            buttonStyle="white"
-                            onClick={onDownload}
-                            disabled={
-                              fileIdsToPaste.length
-                                + folderIdsToPaste.length
-                              !== 1
-                            }
-                            icon={(
-                              <DownloadIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            )}
-                            iconPosition="center"
-                            borderRight={false}
-                            roundedRight={false}
-                            ringOnFocus
-                            width="w-16"
-                          />
-
-                          <Button
-                            disabled={!canDelete}
-                            buttonStyle="white"
-                            loading={deleteMutation.status === 'loading'}
-                            onClick={onDelete}
-                            icon={(
-                              <TrashIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            )}
-                            iconPosition="center"
-                            roundedLeft={false}
-                            roundedRight={false}
-                            borderRight={false}
-                            ringOnFocus
-                            width="w-16"
-                          />
-
-                          <Tippy
-                            content={(
-                              <span>
-                                Copy
-                                {totalSelectedItems > 1
-                                  && ` ${totalSelectedItems} items`}
-                              </span>
-                            )}
-                            placement="bottom"
-                          >
-                            <div>
-                              <Button
-                                buttonStyle="white"
-                                onClick={onCopy}
-                                icon={(
-                                  <DuplicateIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                                iconPosition="center"
-                                disabled={!canCopy}
-                                roundedLeft={false}
-                                roundedRight={false}
-                                borderRight={false}
-                                width="w-16"
-                              />
-                            </div>
-                          </Tippy>
-                          <Tippy
-                            content={<span>Paste</span>}
-                            placement="bottom"
-                          >
-                            <div>
-                              <Button
-                                buttonStyle="white"
-                                onClick={onPaste}
-                                loading={pasteMutation.status === 'loading'}
-                                disabled={
-                                  fileIdsToPaste.length
-                                    + folderIdsToPaste.length
-                                  === 0
-                                }
-                                icon={(
-                                  <ClipboardIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                                iconPosition="center"
-                                roundedLeft={false}
-                                roundedRight={false}
-                                borderRight={false}
-                                width="w-16"
-                              />
-                            </div>
-                          </Tippy>
-                          <Tippy
-                            content={<span>Rename</span>}
-                            placement="bottom"
-                          >
-                            <div>
-                              <Button
-                                buttonStyle="white"
-                                onClick={openRename}
-                                disabled={
-                                  selectedFileIds.length > 1
-                                  || selectedFolderIds.length > 1
-                                }
-                                icon={(
-                                  <PencilIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                                iconPosition="center"
-                                borderLeft
-                                roundedLeft={false}
-                                width="w-16"
-                              />
-                            </div>
-                          </Tippy>
-                        </span>
-                      </span>
-                    </div>
+                    <span className="isolate inline-flex rounded-md shadow-sm">
+                      {toolbarItems.map((i) => (
+                        <button
+                          key={i.title}
+                          title={i.title}
+                          onClick={i.onClick}
+                          type="button"
+                          disabled={i.disabled}
+                          className={`relative inline-flex items-center ${i?.isInLeft ? 'rounded-l-md' : i?.isInRight ? 'rounded-r-md' : null} border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${i.disabled ? 'border-opacity-40 text-gray-300' : 'text-gray-400'}`}
+                        >
+                          {i.icon}
+                        </button>
+                      ))}
+                    </span>
 
                     <div className="hidden">
                       <Menu
