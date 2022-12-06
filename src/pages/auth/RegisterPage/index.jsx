@@ -25,11 +25,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
+        JSON.stringify(successData.data.token.accessToken),
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
+        JSON.stringify(successData.data.user.default_workspace_id),
       );
 
       dispatch(
@@ -37,7 +37,7 @@ function RegisterPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
-        })
+        }),
       );
     },
   });
@@ -47,11 +47,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
+        JSON.stringify(successData.data.token.accessToken),
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
+        JSON.stringify(successData.data.user.default_workspace_id),
       );
 
       dispatch(
@@ -59,7 +59,7 @@ function RegisterPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
-        })
+        }),
       );
     },
   });
@@ -121,12 +121,19 @@ function RegisterPage() {
 
   const [firstCheckbox, setFirstCheckbox] = useState(false);
   const [secondCheckbox, setSecondCheckbox] = useState(false);
+
   const checkboxConfig = [
     {
+      id: 'First',
       label: 'Lorem ipsum',
+      value: firstCheckbox,
+      onChange: (e) => setFirstCheckbox(e.target.value),
     },
     {
+      id: 'Second',
       label: 'Lorem ipsum 2 some text some text some text',
+      value: secondCheckbox,
+      onChange: (e) => setSecondCheckbox(e.target.value),
     },
   ];
 
@@ -138,30 +145,10 @@ function RegisterPage() {
 
           <InviteDetails />
 
-          <div className="relative flex items-start">
-            <div className="flex h-5 items-center">
-              <input
-                id="comments"
-                aria-describedby="comments-description"
-                name="comments"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-              />
-            </div>
-            <div className="ml-3 text-sm">
-              <label htmlFor="comments" className="font-medium text-gray-700">
-                New comments
-              </label>
-              <span id="comments-description" className="text-gray-500">
-                <span className="sr-only">New comments </span>
-                so you always know what&apos;s happening.
-              </span>
-            </div>
-          </div>
-
           <Form
             onSubmit={(values) => onSubmit(values)}
             formikConfig={formikConfig}
+            checkboxConfig={checkboxConfig}
           />
 
           <GoogleLogin
