@@ -11,8 +11,6 @@ import {
   loginGoogleService,
 } from '../../../features/auth/authService';
 import { setAuthData } from '../../../features/auth/authSlice';
-// import { Hyperlink } from '../../../components';
-// import MainLogo from '../../../assets/branding/main-logo.png';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 
@@ -142,7 +140,6 @@ function LoginPage() {
               </button>
             )}
           />
-
         </div>
         <div className="absolute bottom-0 -right-16 bg-gray-200 p-2 flex flex-col items-center border bg-opacity-50 rounded-lg">
           <QuestionMarkCircleIcon

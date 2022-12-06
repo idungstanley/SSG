@@ -1,9 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
+import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
@@ -11,9 +12,7 @@ import {
   loginGoogleService,
 } from '../../../features/auth/authService';
 import { setAuthData } from '../../../features/auth/authSlice';
-import { Hyperlink } from '../../../components';
 import InviteDetails from './components/InviteDetails';
-import MainLogo from '../../../assets/branding/main-logo.png';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 
@@ -26,11 +25,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
 
       dispatch(
@@ -38,7 +37,7 @@ function RegisterPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
-        }),
+        })
       );
     },
   });
@@ -48,11 +47,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
 
       dispatch(
@@ -60,7 +59,7 @@ function RegisterPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
-        }),
+        })
       );
     },
   });
@@ -120,9 +119,78 @@ function RegisterPage() {
     buttonTitle: 'Sign Up',
   };
 
+  const [firstCheckbox, setFirstCheckbox] = useState(false);
+  const [secondCheckbox, setSecondCheckbox] = useState(false);
+  const checkboxConfig = [
+    {
+      label: 'Lorem ipsum',
+    },
+    {
+      label: 'Lorem ipsum 2 some text some text some text',
+    },
+  ];
+
   return (
     <Wrapper>
-      <div className="flex flex-col justify-center items-center">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative">
+        <div className="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 flex flex-col gap-7">
+          <h2 className="text-center text-2xl font-bold">Change me</h2>
+
+          <InviteDetails />
+
+          <div className="relative flex items-start">
+            <div className="flex h-5 items-center">
+              <input
+                id="comments"
+                aria-describedby="comments-description"
+                name="comments"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="ml-3 text-sm">
+              <label htmlFor="comments" className="font-medium text-gray-700">
+                New comments
+              </label>
+              <span id="comments-description" className="text-gray-500">
+                <span className="sr-only">New comments </span>
+                so you always know what&apos;s happening.
+              </span>
+            </div>
+          </div>
+
+          <Form
+            onSubmit={(values) => onSubmit(values)}
+            formikConfig={formikConfig}
+          />
+
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleFailure}
+            cookiePolicy="single_host_origin"
+            responseType="code"
+            redirectUri="postmessage"
+            render={(renderProps) => (
+              <button
+                type="button"
+                onClick={renderProps.onClick}
+                className="text-center w-full text-sm mt-5 text-gray-500 hover:text-gray-600"
+              >
+                Or sign up with Google
+              </button>
+            )}
+          />
+        </div>
+        <div className="absolute bottom-0 -right-16 bg-gray-200 p-2 flex flex-col items-center border bg-opacity-50 rounded-lg">
+          <QuestionMarkCircleIcon
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
+          <p className="text-gray-500">Help</p>
+        </div>
+      </div>
+      {/* <div className="flex flex-col justify-center items-center">
         <img className="mx-auto h-12 w-auto" src={MainLogo} alt="Workflow" />
         <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
           Create your account
@@ -170,7 +238,7 @@ function RegisterPage() {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </Wrapper>
   );
 }
