@@ -1,25 +1,15 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Menu, Transition } from '@headlessui/react';
 import 'tippy.js/dist/tippy.css';
 import toast from 'react-hot-toast';
-import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
 import {
   TrashIcon,
   DuplicateIcon,
   DownloadIcon,
-  // ViewListIcon,
-  // ViewGridIcon,
-  // PhotographIcon,
-  // SortDescendingIcon,
-  // SortAscendingIcon,
-  // SwitchHorizontalIcon,
-  // ClockIcon,
   ClipboardIcon,
   UploadIcon,
-  PlusCircleIcon,
   PencilIcon,
 } from '@heroicons/react/outline';
 import {
@@ -36,15 +26,11 @@ import {
   useGetFolder,
 } from '../../../../../features/explorer/explorerService';
 import {
-  setCreateFolderSlideOverVisibility,
   setRenameFileSlideOverVisibility,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import Toast from '../../../../../common/Toast';
 import { DownloadFile } from '../../../../../app/helpers';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import CreateNewSelect from './CreateNewSelect';
 
 export default function Toolbar() {
   const dispatch = useDispatch();
@@ -103,10 +89,6 @@ export default function Toolbar() {
     setTotalSelectedItems(selectedFileIds.length + selectedFolderIds.length);
   }, [selectedFileIds, selectedFolderIds]);
 
-  const openCreateNewFolder = () => {
-    dispatch(setCreateFolderSlideOverVisibility(true));
-  };
-
   const openRename = () => {
     dispatch(setRenameFileSlideOverVisibility(true));
   };
@@ -151,8 +133,6 @@ export default function Toolbar() {
     });
   };
 
-  // console.log(selectedItemId, selectedItemType);
-
   const onDownload = () => {
     const itemName = selectedItemType === 'file' ? file.display_name : `${folder.name}.zip`;
 
@@ -163,9 +143,7 @@ export default function Toolbar() {
 
   const toolbarItems = [
     {
-      icon: (
-        <DownloadIcon className="h-5 w-5" aria-hidden="true" />
-      ),
+      icon: <DownloadIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: onDownload,
       disabled: selectedFileIds.length + selectedFolderIds.length === 0,
       title: 'Download',
@@ -178,17 +156,13 @@ export default function Toolbar() {
       title: 'Delete',
     },
     {
-      icon: (
-        <DuplicateIcon className="h-5 w-5" aria-hidden="true" />
-      ),
+      icon: <DuplicateIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: onCopy,
       disabled: selectedFileIds.length + selectedFolderIds.length === 0,
       title: 'Copy',
     },
     {
-      icon: (
-        <ClipboardIcon className="h-5 w-5" aria-hidden="true" />
-      ),
+      icon: <ClipboardIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: onPaste,
       disabled: fileIdsToPaste.length + folderIdsToPaste.length === 0,
       title: 'Paste',
@@ -219,73 +193,9 @@ export default function Toolbar() {
                 <div className="px-4 sm:px-6">
                   <div className="py-4 flex justify-start space-x-6">
                     <div className="space-x-3">
-                      <div className="relative inline-block text-left">
-                        <button
-                          onClick={() => dispatch(setShowUploadModal(true))}
-                          type="button"
-                          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 pr-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0"
-                        >
-                          <UploadIcon
-                            className="mr-2.5 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          Upload
-                        </button>
-                      </div>
+                      <Upload />
 
-                      <Menu
-                        as="div"
-                        className="relative inline-block text-left"
-                      >
-                        <div>
-                          <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0">
-                            <PlusCircleIcon
-                              className="mr-2.5 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                            Create
-                            <ChevronDownIcon
-                              className="-mr-1 ml-2 h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </Menu.Button>
-                        </div>
-
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="origin-top-left absolute z-20 left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-                            <div className="py-1">
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <button
-                                    type="button"
-                                    onClick={openCreateNewFolder}
-                                    className={classNames(
-                                      active
-                                        ? 'bg-gray-100 text-gray-900'
-                                        : 'text-gray-700',
-                                      'group flex items-center px-4 py-2 text-sm w-full',
-                                    )}
-                                  >
-                                    <FolderAddIcon
-                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                      aria-hidden="true"
-                                    />
-                                    Folder
-                                  </button>
-                                )}
-                              </Menu.Item>
-                            </div>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
+                      <CreateNewSelect />
                     </div>
                     <span className="isolate inline-flex rounded-md shadow-sm">
                       {toolbarItems.map((i) => (
@@ -295,7 +205,17 @@ export default function Toolbar() {
                           onClick={i.onClick}
                           type="button"
                           disabled={i.disabled}
-                          className={`relative inline-flex items-center ${i?.isInLeft ? 'rounded-l-md' : i?.isInRight ? 'rounded-r-md' : null} border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${i.disabled ? 'border-opacity-40 text-gray-300' : 'text-gray-400'}`}
+                          className={`relative inline-flex items-center ${
+                            i?.isInLeft
+                              ? 'rounded-l-md'
+                              : i?.isInRight
+                                ? 'rounded-r-md'
+                                : null
+                          } border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
+                            i.disabled
+                              ? 'border-opacity-40 text-gray-300'
+                              : 'text-gray-400'
+                          }`}
                         >
                           {i.icon}
                         </button>
@@ -561,6 +481,26 @@ export default function Toolbar() {
           </section>
         </main>
       </div>
+    </div>
+  );
+}
+
+function Upload() {
+  const dispatch = useDispatch();
+
+  return (
+    <div className="relative inline-block text-left">
+      <button
+        onClick={() => dispatch(setShowUploadModal(true))}
+        type="button"
+        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 pr-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0"
+      >
+        <UploadIcon
+          className="mr-2.5 h-5 w-5 text-gray-400"
+          aria-hidden="true"
+        />
+        Upload
+      </button>
     </div>
   );
 }

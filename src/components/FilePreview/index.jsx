@@ -21,8 +21,6 @@ function FilePreview({ file }) {
   const { currentUserId } = useSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId);
 
-  console.log(file);
-
   const extension = title.split('.').at(-1);
 
   const onDownload = async () => {

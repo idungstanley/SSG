@@ -32,8 +32,8 @@ export default function ExplorerPage() {
 
   const { data: currentFolder } = useGetFolder(folderId);
 
-  const showRename = useSelector(
-    (state) => state.slideOver.showRenameFileSlideOver,
+  const { showRenameFileSlideOver, showCreateFolderSlideOver } = useSelector(
+    (state) => state.slideOver,
   );
 
   const { selectedItemId, showUploadModal, selectedItemType } = useSelector((state) => state.explorer);
@@ -169,8 +169,8 @@ export default function ExplorerPage() {
       </div>
 
       {/* Slide Overs */}
-      <CreateFolderSlideOver />
-      {showRename ? <RenameItemSlideOver /> : null}
+      {showCreateFolderSlideOver ? <CreateFolderSlideOver /> : null}
+      {showRenameFileSlideOver ? <RenameItemSlideOver /> : null}
     </>
   );
 }
