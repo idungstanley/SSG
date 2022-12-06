@@ -51,21 +51,3 @@ export const useRenameItem = () => {
     },
   });
 };
-
-// Rename file service
-// export const renameFileService = async (data) => requestNew({
-//   url: `files/${data.fileId}/rename`,
-//   method: 'POST',
-//   params: {
-//     name: data.name,
-//   },
-// });
-
-// // Rename folder service
-// export const renameFolderService = async (data) => requestNew({
-//   url: `folders/${data.folderId}/rename`,
-//   method: 'POST',
-//   params: {
-//     name: data.name,
-//   },
-// });

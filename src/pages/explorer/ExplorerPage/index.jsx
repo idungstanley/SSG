@@ -13,12 +13,15 @@ import Toolbar from './components/Toolbar';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
-import RenameFileSlideOver from './components/SlideOvers/RenameFileSlideOver';
-// import RenameFolderSlideOver from './components/SlideOvers/RenameFolderSlideOver';
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
-import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../features/explorer/explorerService';
+import {
+  useGetExplorerFilesAndFolders,
+  useGetFile,
+  useGetFolder,
+} from '../../../features/explorer/explorerService';
 import FilePreview from '../../../components/FilePreview';
 import FolderPreview from '../../../components/FolderPreview';
+import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
@@ -32,14 +35,20 @@ export default function ExplorerPage() {
   const showRename = useSelector(
     (state) => state.slideOver.showRenameFileSlideOver,
   );
-  const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
+  const selectedItemType = useSelector(
+    (state) => state.explorer.selectedItemType,
+  );
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
-  const showUploadModal = useSelector((state) => state.explorer.showUploadModal);
+  const showUploadModal = useSelector(
+    (state) => state.explorer.showUploadModal,
+  );
 
   const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/files`;
 
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
+  const currentWorkspaceId = JSON.parse(
+    localStorage.getItem('currentWorkspaceId'),
+  );
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,
@@ -50,12 +59,11 @@ export default function ExplorerPage() {
     debug: true,
     autoProceed: true,
     meta: {},
-  })
-    .use(XHRUpload, {
-      endpoint: null,
-      bundle: false,
-      headers,
-    }));
+  }).use(XHRUpload, {
+    endpoint: null,
+    bundle: false,
+    headers,
+  }));
 
   const { xhrUpload } = uppy.getState();
 
@@ -63,7 +71,8 @@ export default function ExplorerPage() {
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint: folderId == null ? uploadFilesUrl : `${uploadFilesUrl}/${folderId}`,
+        endpoint:
+          folderId == null ? uploadFilesUrl : `${uploadFilesUrl}/${folderId}`,
       },
     });
   }, [folderId]);
@@ -74,7 +83,12 @@ export default function ExplorerPage() {
 
     if (httpStatus === 200) {
       if (httpBody.success === true) {
-        queryClient.invalidateQueries(['explorer_files_and_folders', (httpBody.data.uploaded_to_folder_id == null ? 'root-folder' : httpBody.data.uploaded_to_folder_id)]);
+        queryClient.invalidateQueries([
+          'explorer_files_and_folders',
+          httpBody.data.uploaded_to_folder_id == null
+            ? 'root-folder'
+            : httpBody.data.uploaded_to_folder_id,
+        ]);
       }
     }
   });
@@ -99,31 +113,48 @@ export default function ExplorerPage() {
 
         {/* Breadcrumb */}
         <Breadcrumb
-          pages={currentFolder != null ? [...currentFolder.ancestors.map((ancestor) => ({ name: ancestor.name, current: false, href: `/explorer/${ancestor.id}` })), ...[{ name: currentFolder.name, current: true, href: null }]] : [{ name: 'Home', current: true, href: null }]}
-          rootIcon={<HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />}
+          pages={
+            currentFolder != null
+              ? [
+                ...currentFolder.ancestors.map((ancestor) => ({
+                  name: ancestor.name,
+                  current: false,
+                  href: `/explorer/${ancestor.id}`,
+                })),
+                ...[{ name: currentFolder.name, current: true, href: null }],
+              ]
+              : [{ name: 'Home', current: true, href: null }]
+          }
+          rootIcon={
+            <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+          }
           rootIconHref="/explorer"
         />
 
         <div className="flex flex-row overflow-hidden h-full">
           <div className="flex-1 overflow-y-scroll">
-            {status === 'success' && (data?.data?.folders.length !== 0 || data?.data?.files.length !== 0) && (
-              <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-                <ExplorerTable />
-              </div>
+            {status === 'success'
+              && (data?.data?.folders.length !== 0
+                || data?.data?.files.length !== 0) && (
+                <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
+                  <ExplorerTable />
+                </div>
             )}
 
-            {status === 'success' && data?.data?.folders.length === 0 && data?.data?.files.length === 0 && (
-              <div className="flex flex-1 h-full bg-white">
-                <div className="m-auto">
-                  <EmptyStateSimple
-                    title="Empty folder"
-                    description="Upload files to this folder"
-                    ctaText="Upload"
-                    ctaOnClick={() => dispatch(setShowUploadModal(true))}
-                    showCta
-                  />
+            {status === 'success'
+              && data?.data?.folders.length === 0
+              && data?.data?.files.length === 0 && (
+                <div className="flex flex-1 h-full bg-white">
+                  <div className="m-auto">
+                    <EmptyStateSimple
+                      title="Empty folder"
+                      description="Upload files to this folder"
+                      ctaText="Upload"
+                      ctaOnClick={() => dispatch(setShowUploadModal(true))}
+                      showCta
+                    />
+                  </div>
                 </div>
-              </div>
             )}
 
             {status === 'loading' && (
@@ -133,16 +164,18 @@ export default function ExplorerPage() {
             )}
           </div>
 
-          {selectedItemType === 'file' && selectedItemId && <FilePreview file={file} />}
-          {selectedItemType === 'folder' && selectedItemId && <FolderPreview folder={folder} />}
+          {selectedItemType === 'file' && selectedItemId && (
+            <FilePreview file={file} />
+          )}
+          {selectedItemType === 'folder' && selectedItemId && (
+            <FolderPreview folder={folder} />
+          )}
         </div>
       </div>
 
       {/* Slide Overs */}
       <CreateFolderSlideOver />
-      {showRename ? <RenameFileSlideOver /> : null}
-      {/* {selectedItemType === 'file' && selectedItemId && <RenameFileSlideOver />}
-      {selectedItemType === 'folder' && selectedItemId && <RenameFolderSlideOver />} */}
+      {showRename ? <RenameItemSlideOver /> : null}
     </>
   );
 }
