@@ -35,13 +35,8 @@ export default function ExplorerPage() {
   const showRename = useSelector(
     (state) => state.slideOver.showRenameFileSlideOver,
   );
-  const selectedItemType = useSelector(
-    (state) => state.explorer.selectedItemType,
-  );
-  const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
-  const showUploadModal = useSelector(
-    (state) => state.explorer.showUploadModal,
-  );
+
+  const { selectedItemId, showUploadModal, selectedItemType } = useSelector((state) => state.explorer);
 
   const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/files`;
 

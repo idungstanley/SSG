@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-export const selectItem = createAsyncThunk('explorer/selectItem', async (data) => data);
-
 export const copyItems = createAsyncThunk('explorer/copyItems', async (data) => {
   localStorage.setItem('fileIdsToPaste', JSON.stringify(data.fileIds));
   localStorage.setItem('folderIdsToPaste', JSON.stringify(data.folderIds));
@@ -118,10 +116,6 @@ export const explorerSlice = createSlice({
       .addCase(copyItems.rejected, (state) => {
         state.fileIdsToPaste = [];
         state.folderIdsToPaste = [];
-      })
-      .addCase(selectItem.pending, (state, action) => {
-        state.selectedItemId = action.meta.arg.itemId;
-        state.selectedItemType = action.meta.arg.itemType;
       })
       .addCase(switchWorkspace, () => initialState)
       .addCase(logout, () => initialState);

@@ -10,13 +10,13 @@ import {
   TrashIcon,
   DuplicateIcon,
   DownloadIcon,
-  ViewListIcon,
-  ViewGridIcon,
-  PhotographIcon,
-  SortDescendingIcon,
-  SortAscendingIcon,
-  SwitchHorizontalIcon,
-  ClockIcon,
+  // ViewListIcon,
+  // ViewGridIcon,
+  // PhotographIcon,
+  // SortDescendingIcon,
+  // SortAscendingIcon,
+  // SwitchHorizontalIcon,
+  // ClockIcon,
   ClipboardIcon,
   UploadIcon,
   PlusCircleIcon,
@@ -82,7 +82,10 @@ export default function Toolbar() {
   const deleteMutation = useMutation(deleteService, {
     onSuccess: () => {
       dispatch(resetSelectedFilesAndFolders());
-      queryClient.invalidateQueries(['explorer_files_and_folders']);
+      queryClient.invalidateQueries([
+        'explorer_files_and_folders',
+        folderId == null ? 'root-folder' : folderId,
+      ]);
     },
   });
 
@@ -115,7 +118,10 @@ export default function Toolbar() {
         folderIds: selectedFolderIds,
       }),
     );
-    queryClient.invalidateQueries(['explorer_files_and_folders']);
+    queryClient.invalidateQueries([
+      'explorer_files_and_folders',
+      folderId == null ? 'root-folder' : folderId,
+    ]);
 
     toast.custom((t) => (
       <Toast
@@ -143,9 +149,9 @@ export default function Toolbar() {
       fileIds: selectedFileIds,
       folderIds: selectedFolderIds,
     });
-    // queryClient.invalidateQueries(['explorer_files_and_folders']);
-    dispatch(resetSelectedFilesAndFolders());
   };
+
+  // console.log(selectedItemId, selectedItemType);
 
   const onDownload = () => {
     const itemName = selectedItemType === 'file' ? file.display_name : `${folder.name}.zip`;
@@ -296,7 +302,7 @@ export default function Toolbar() {
                       ))}
                     </span>
 
-                    <div className="hidden">
+                    {/* <div className="hidden">
                       <Menu
                         as="div"
                         className="relative inline-block text-left mr-2"
@@ -546,7 +552,7 @@ export default function Toolbar() {
                           </Menu.Items>
                         </Transition>
                       </Menu>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -22,9 +22,9 @@ import { OutputDateTime, OutputFileSize } from '../../../../../app/helpers';
 import {
   setSelectedFiles,
   setSelectedFolders,
-  selectItem,
   resetSelectedItem,
   previewFileFullPage,
+  setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
 import { useGetExplorerFilesAndFolders, prefetchExplorerFilesAndFoldersService } from '../../../../../features/explorer/explorerService';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
@@ -226,14 +226,14 @@ function ExplorerTable({ tableTitle }) {
     // Set selected item for preview
 
     if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-      dispatch(selectItem({
-        itemId: selectedFileIds[0],
-        itemType: 'file',
+      dispatch(setSelectedItem({
+        selectedItemId: selectedFileIds[0],
+        selectedItemType: 'file',
       }));
     } else if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-      dispatch(selectItem({
-        itemId: selectedFolderIds[0],
-        itemType: 'folder',
+      dispatch(setSelectedItem({
+        selectedItemId: selectedFolderIds[0],
+        selectedItemType: 'folder',
       }));
     } else {
       // Multiple items selected

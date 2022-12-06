@@ -17,7 +17,7 @@ export default function SharedPage() {
   const selectedItemType = useSelector(
     (state) => state.shared.selectedItemType,
   );
-  const selectedItemId = useSelector((state) => state.shared.selectedItemId);
+  const { selectedItemId } = useSelector((state) => state.shared);
   const { data: file } = useGetFile(selectedItemId);
   const { data: folder } = useGetFolder(selectedItemId);
 

@@ -15,7 +15,7 @@ export const updateInboxSettingsService = async (data) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/update-settings`,
     method: 'POST',
-    params: {
+    data: {
       name: data.name,
       email_username: data.emailUsername,
     },
