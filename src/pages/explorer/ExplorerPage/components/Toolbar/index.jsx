@@ -6,10 +6,7 @@ import { Menu, Transition } from '@headlessui/react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import toast from 'react-hot-toast';
-import {
-  ChevronDownIcon,
-  FolderAddIcon,
-} from '@heroicons/react/solid';
+import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
 import {
   TrashIcon,
   DuplicateIcon,
@@ -33,10 +30,19 @@ import {
   setSelectedFiles,
   setSelectedFolders,
 } from '../../../../../features/explorer/explorerSlice';
-import { deleteService, pasteService } from '../../../../../features/explorer/explorerActionsService';
-import { useGetFile, useGetFolder } from '../../../../../features/explorer/explorerService';
+import {
+  deleteService,
+  pasteService,
+} from '../../../../../features/explorer/explorerActionsService';
+import {
+  useGetFile,
+  useGetFolder,
+} from '../../../../../features/explorer/explorerService';
 import { Button } from '../../../../../components';
-import { setCreateFolderSlideOverVisibility, setRenameFileSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import {
+  setCreateFolderSlideOverVisibility,
+  setRenameFileSlideOverVisibility,
+} from '../../../../../features/general/slideOver/slideOverSlice';
 import Toast from '../../../../../common/Toast';
 import { DownloadFile } from '../../../../../app/helpers';
 
@@ -49,17 +55,31 @@ export default function Toolbar() {
   const queryClient = useQueryClient();
   const { folderId } = useParams();
 
-  const selectedItemType = useSelector((state) => state.explorer.selectedItemType);
+  const selectedItemType = useSelector(
+    (state) => state.explorer.selectedItemType,
+  );
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
 
-  const { data: file } = useGetFile(selectedItemId, selectedItemType === 'file');
-  const { data: folder } = useGetFolder(selectedItemId, selectedItemType === 'folder');
+  const { data: file } = useGetFile(
+    selectedItemId,
+    selectedItemType === 'file',
+  );
+  const { data: folder } = useGetFolder(
+    selectedItemId,
+    selectedItemType === 'folder',
+  );
 
-  const selectedFileIds = useSelector((state) => state.explorer.selectedFileIds);
-  const selectedFolderIds = useSelector((state) => state.explorer.selectedFolderIds);
+  const selectedFileIds = useSelector(
+    (state) => state.explorer.selectedFileIds,
+  );
+  const selectedFolderIds = useSelector(
+    (state) => state.explorer.selectedFolderIds,
+  );
 
   const fileIdsToPaste = useSelector((state) => state.explorer.fileIdsToPaste);
-  const folderIdsToPaste = useSelector((state) => state.explorer.folderIdsToPaste);
+  const folderIdsToPaste = useSelector(
+    (state) => state.explorer.folderIdsToPaste,
+  );
 
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
@@ -69,16 +89,30 @@ export default function Toolbar() {
   const deleteMutation = useMutation(deleteService, {
     onSuccess: () => {
       dispatch(resetSelectedFilesAndFolders());
-      queryClient.invalidateQueries(['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)]);
+      queryClient.invalidateQueries([
+        'explorer_files_and_folders',
+        folderId == null ? 'root-folder' : folderId,
+      ]);
     },
   });
 
   const pasteMutation = useMutation(pasteService, {
     onSuccess: (successData) => {
       dispatch(resetSelectedFilesAndFolders());
-      queryClient.invalidateQueries(['explorer_files_and_folders', (folderId == null ? 'root-folder' : folderId)]);
-      dispatch(setSelectedFiles(successData.data.copied_files.map((copiedFile) => copiedFile.id)));
-      dispatch(setSelectedFolders(successData.data.copied_folders.map((copiedFolder) => copiedFolder.id)));
+      queryClient.invalidateQueries([
+        'explorer_files_and_folders',
+        folderId == null ? 'root-folder' : folderId,
+      ]);
+      dispatch(
+        setSelectedFiles(
+          successData.data.copied_files.map((copiedFile) => copiedFile.id),
+        ),
+      );
+      dispatch(
+        setSelectedFolders(
+          successData.data.copied_folders.map((copiedFolder) => copiedFolder.id),
+        ),
+      );
     },
   });
 
@@ -93,32 +127,29 @@ export default function Toolbar() {
     dispatch(setCreateFolderSlideOverVisibility(true));
   };
 
-  // const openRenameFile = () => {
-  //   dispatch(setRenameFileSlideOverVisibility(true));
-  // };
-
-  // const openRenameFolder = () => {
-  //   dispatch(setRenameFolderSlideOverVisibility(true));
-  // };
-
   const openRename = () => {
     dispatch(setRenameFileSlideOverVisibility(true));
-    // if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-    //   openRenameFile();
-    // }
-
-    // if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-    //   openRenameFolder();
-    // }
   };
 
   const onCopy = () => {
-    dispatch(copyItems({
-      fileIds: selectedFileIds,
-      folderIds: selectedFolderIds,
-    }));
+    dispatch(
+      copyItems({
+        fileIds: selectedFileIds,
+        folderIds: selectedFolderIds,
+      }),
+    );
+    queryClient.invalidateQueries(['explorer_files_and_folders']);
 
-    toast.custom((t) => (<Toast type="success" title={`Copied ${totalSelectedItems > 1 ? `${totalSelectedItems} items ` : ' '}to clipboard`} body={null} toastId={t.id} />));
+    toast.custom((t) => (
+      <Toast
+        type="success"
+        title={`Copied ${
+          totalSelectedItems > 1 ? `${totalSelectedItems} items ` : ' '
+        }to clipboard`}
+        body={null}
+        toastId={t.id}
+      />
+    ));
   };
 
   const onPaste = () => {
@@ -131,22 +162,21 @@ export default function Toolbar() {
 
   const onDelete = () => {
     // If can delete multiple (multiple selected) - delete... remove above delete...
-
     deleteMutation.mutate({
       fileIds: selectedFileIds,
       folderIds: selectedFolderIds,
     });
+    // queryClient.invalidateQueries(['explorer_files_and_folders']);
+    dispatch(resetSelectedFilesAndFolders());
 
     // Update current list
   };
 
   const onDownload = () => {
-    if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-      DownloadFile('file', file.id, file.display_name);
-    }
+    const itemName = selectedItemType === 'file' ? file.display_name : `${folder.name}.zip`;
 
-    if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-      DownloadFile('folder', folder.id, `${folder.name}.zip`);
+    if (selectedFileIds.length === 1 || selectedFolderIds.length === 1) {
+      DownloadFile(selectedItemType, selectedItemId, itemName);
     }
   };
 
@@ -154,7 +184,6 @@ export default function Toolbar() {
     <div className="flex flex-col">
       {/* Bottom section */}
       <div className="min-h-0 flex-1 flex">
-
         {/* Main area */}
         <main className="min-w-0 flex-1 border-gray-200 xl:flex">
           <section
@@ -167,21 +196,36 @@ export default function Toolbar() {
               <div className="flex flex-col justify-center">
                 <div className="px-4 sm:px-6">
                   <div className="py-4 flex justify-start space-x-6">
-
                     <div className="space-x-3">
                       <div className="relative inline-block text-left">
-                        <button onClick={() => dispatch(setShowUploadModal(true))} type="button" className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 pr-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                          <UploadIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <button
+                          onClick={() => dispatch(setShowUploadModal(true))}
+                          type="button"
+                          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 pr-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                        >
+                          <UploadIcon
+                            className="mr-2.5 h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
                           Upload
                         </button>
                       </div>
 
-                      <Menu as="div" className="relative inline-block text-left">
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
                         <div>
                           <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0">
-                            <PlusCircleIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <PlusCircleIcon
+                              className="mr-2.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
                             Create
-                            <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                            <ChevronDownIcon
+                              className="-mr-1 ml-2 h-5 w-5"
+                              aria-hidden="true"
+                            />
                           </Menu.Button>
                         </div>
 
@@ -202,11 +246,16 @@ export default function Toolbar() {
                                     type="button"
                                     onClick={openCreateNewFolder}
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm w-full',
                                     )}
                                   >
-                                    <FolderAddIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <FolderAddIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Folder
                                   </button>
                                 )}
@@ -223,8 +272,17 @@ export default function Toolbar() {
                           <Button
                             buttonStyle="white"
                             onClick={onDownload}
-                            disabled={fileIdsToPaste.length + folderIdsToPaste.length !== 1}
-                            icon={<DownloadIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                            disabled={
+                              fileIdsToPaste.length
+                                + folderIdsToPaste.length
+                              !== 1
+                            }
+                            icon={(
+                              <DownloadIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            )}
                             iconPosition="center"
                             borderRight={false}
                             roundedRight={false}
@@ -237,7 +295,12 @@ export default function Toolbar() {
                             buttonStyle="white"
                             loading={deleteMutation.status === 'loading'}
                             onClick={onDelete}
-                            icon={<TrashIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                            icon={(
+                              <TrashIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            )}
                             iconPosition="center"
                             roundedLeft={false}
                             roundedRight={false}
@@ -250,7 +313,8 @@ export default function Toolbar() {
                             content={(
                               <span>
                                 Copy
-                                {totalSelectedItems > 1 && ` ${totalSelectedItems} items`}
+                                {totalSelectedItems > 1
+                                  && ` ${totalSelectedItems} items`}
                               </span>
                             )}
                             placement="bottom"
@@ -259,7 +323,12 @@ export default function Toolbar() {
                               <Button
                                 buttonStyle="white"
                                 onClick={onCopy}
-                                icon={<DuplicateIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                                icon={(
+                                  <DuplicateIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                )}
                                 iconPosition="center"
                                 disabled={!canCopy}
                                 roundedLeft={false}
@@ -270,35 +339,55 @@ export default function Toolbar() {
                               />
                             </div>
                           </Tippy>
-                          <Tippy content={<span>Paste</span>} placement="bottom">
+                          <Tippy
+                            content={<span>Paste</span>}
+                            placement="bottom"
+                          >
                             <div>
                               <Button
                                 buttonStyle="white"
                                 onClick={onPaste}
                                 loading={pasteMutation.status === 'loading'}
-                                disabled={fileIdsToPaste.length + folderIdsToPaste.length === 0}
-                                icon={<ClipboardIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                                disabled={
+                                  fileIdsToPaste.length
+                                    + folderIdsToPaste.length
+                                  === 0
+                                }
+                                icon={(
+                                  <ClipboardIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                )}
                                 iconPosition="center"
                                 roundedLeft={false}
                                 roundedRight={false}
                                 borderRight={false}
-                                ringOnFocus
                                 width="w-16"
                               />
                             </div>
                           </Tippy>
-                          <Tippy content={<span>Rename</span>} placement="bottom">
+                          <Tippy
+                            content={<span>Rename</span>}
+                            placement="bottom"
+                          >
                             <div>
                               <Button
                                 buttonStyle="white"
                                 onClick={openRename}
-                                // disabled={selectedFileIds.length + selectedFolderIds.length !== 1}
-                                disabled={!selectedFileIds.length && !selectedFolderIds.length}
-                                icon={<PencilIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                                disabled={
+                                  selectedFileIds.length > 1
+                                  || selectedFolderIds.length > 1
+                                }
+                                icon={(
+                                  <PencilIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                )}
                                 iconPosition="center"
                                 borderLeft
                                 roundedLeft={false}
-                                ringOnFocus
                                 width="w-16"
                               />
                             </div>
@@ -308,12 +397,21 @@ export default function Toolbar() {
                     </div>
 
                     <div className="hidden">
-                      <Menu as="div" className="relative inline-block text-left mr-2">
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left mr-2"
+                      >
                         <div>
                           <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                            <SwitchHorizontalIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <SwitchHorizontalIcon
+                              className="mr-2.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
                             Sort by
-                            <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                            <ChevronDownIcon
+                              className="-mr-1 ml-2 h-5 w-5"
+                              aria-hidden="true"
+                            />
                           </Menu.Button>
                         </div>
 
@@ -333,11 +431,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <ClockIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <ClockIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Created at (latest)
                                   </a>
                                 )}
@@ -348,16 +451,20 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <ClockIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <ClockIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Created at (oldest)
                                   </a>
                                 )}
                               </Menu.Item>
-
                             </div>
                             <div className="py-1">
                               <Menu.Item>
@@ -365,11 +472,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <PencilIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <PencilIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Modified at (latest)
                                   </a>
                                 )}
@@ -380,16 +492,20 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <PencilIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <PencilIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Modified at (oldest)
                                   </a>
                                 )}
                               </Menu.Item>
-
                             </div>
                             <div className="py-1">
                               <Menu.Item>
@@ -397,11 +513,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <SortAscendingIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Name (A-Z)
                                   </a>
                                 )}
@@ -412,27 +533,40 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <SortDescendingIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <SortDescendingIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Name (Z-A)
                                   </a>
                                 )}
                               </Menu.Item>
-
                             </div>
                           </Menu.Items>
                         </Transition>
                       </Menu>
 
-                      <Menu as="div" className="relative inline-block text-left">
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
                         <div>
                           <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                            <ViewListIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <ViewListIcon
+                              className="mr-2.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
                             List
-                            <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                            <ChevronDownIcon
+                              className="-mr-1 ml-2 h-5 w-5"
+                              aria-hidden="true"
+                            />
                           </Menu.Button>
                         </div>
 
@@ -452,11 +586,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <ViewListIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <ViewListIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     List
                                   </a>
                                 )}
@@ -468,11 +607,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <ViewGridIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <ViewGridIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Thumbnails
                                   </a>
                                 )}
@@ -484,11 +628,16 @@ export default function Toolbar() {
                                   <a
                                     href="tempurl"
                                     className={classNames(
-                                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                      active
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-700',
                                       'group flex items-center px-4 py-2 text-sm',
                                     )}
                                   >
-                                    <PhotographIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                    <PhotographIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
                                     Gallery
                                   </a>
                                 )}
@@ -498,15 +647,12 @@ export default function Toolbar() {
                         </Transition>
                       </Menu>
                     </div>
-
                   </div>
                 </div>
               </div>
               {/* Message header */}
             </div>
-
           </section>
-
         </main>
       </div>
     </div>

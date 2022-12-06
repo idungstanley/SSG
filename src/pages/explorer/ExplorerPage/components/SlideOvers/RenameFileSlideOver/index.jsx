@@ -15,14 +15,13 @@ function RenameItemSlideOver() {
   const showSlideOver = useSelector(
     (state) => state.slideOver.showRenameFileSlideOver,
   );
-  const { selectedItemType, selectedFileIds, selectedFolderIds } = useSelector(
+  const { selectedItemId, selectedItemType } = useSelector(
     (state) => state.explorer,
   );
 
   const isFile = selectedItemType === 'file';
-  const itemId = isFile ? selectedFileIds[0] : selectedFolderIds[0];
 
-  const { data: item } = isFile ? useGetFile(itemId) : useGetFolder(itemId);
+  const { data: item } = isFile ? useGetFile(selectedItemId) : useGetFolder(selectedItemId);
 
   const [itemName, setItemName] = useState(
     isFile ? item?.display_name.split('.').slice(0, -1).join('') : item?.name,
@@ -33,7 +32,7 @@ function RenameItemSlideOver() {
   const onSubmit = async () => {
     await onRename({
       type: selectedItemType,
-      id: itemId,
+      id: selectedItemId,
       name: `${itemName}.${item?.file_format.extension}`,
     });
 
