@@ -27,8 +27,8 @@ import {
   setShowUploadModal,
   copyItems,
   resetSelectedFilesAndFolders,
-  setSelectedFiles,
-  setSelectedFolders,
+  // setSelectedFiles,
+  // setSelectedFolders,
 } from '../../../../../features/explorer/explorerSlice';
 import {
   deleteService,
@@ -97,22 +97,12 @@ export default function Toolbar() {
   });
 
   const pasteMutation = useMutation(pasteService, {
-    onSuccess: (successData) => {
+    onSuccess: () => {
       dispatch(resetSelectedFilesAndFolders());
       queryClient.invalidateQueries([
         'explorer_files_and_folders',
         folderId == null ? 'root-folder' : folderId,
       ]);
-      dispatch(
-        setSelectedFiles(
-          successData.data.copied_files.map((copiedFile) => copiedFile.id),
-        ),
-      );
-      dispatch(
-        setSelectedFolders(
-          successData.data.copied_folders.map((copiedFolder) => copiedFolder.id),
-        ),
-      );
     },
   });
 
@@ -334,7 +324,6 @@ export default function Toolbar() {
                                 roundedLeft={false}
                                 roundedRight={false}
                                 borderRight={false}
-                                ringOnFocus
                                 width="w-16"
                               />
                             </div>
