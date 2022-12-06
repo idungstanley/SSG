@@ -35,7 +35,6 @@ import {
   useGetFile,
   useGetFolder,
 } from '../../../../../features/explorer/explorerService';
-import { Button } from '../../../../../components';
 import {
   setCreateFolderSlideOverVisibility,
   setRenameFileSlideOverVisibility,
@@ -80,9 +79,6 @@ export default function Toolbar() {
 
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
-  const [canDelete, setCanDelete] = useState(false);
-  const [canCopy, setCanCopy] = useState(false);
-
   const deleteMutation = useMutation(deleteService, {
     onSuccess: () => {
       dispatch(resetSelectedFilesAndFolders());
@@ -102,9 +98,6 @@ export default function Toolbar() {
 
   useEffect(() => {
     setTotalSelectedItems(selectedFileIds.length + selectedFolderIds.length);
-
-    setCanDelete(selectedFolderIds.length + selectedFileIds.length !== 0);
-    setCanCopy(selectedFolderIds.length + selectedFileIds.length !== 0);
   }, [selectedFileIds, selectedFolderIds]);
 
   const openCreateNewFolder = () => {
@@ -152,8 +145,6 @@ export default function Toolbar() {
     });
     // queryClient.invalidateQueries(['explorer_files_and_folders']);
     dispatch(resetSelectedFilesAndFolders());
-
-    // Update current list
   };
 
   const onDownload = () => {
@@ -163,8 +154,6 @@ export default function Toolbar() {
       DownloadFile(selectedItemType, selectedItemId, itemName);
     }
   };
-
-  console.log(selectedItemId);
 
   const toolbarItems = [
     {
