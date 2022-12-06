@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function PathBadge({ folder, expanded = true }) {
+function PathBadge({ folder, expanded }) {
   if (folder === null) {
     return (
       <span className="truncate px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
@@ -24,9 +24,15 @@ function PathBadge({ folder, expanded = true }) {
     </span>
   );
 }
+
+PathBadge.defaultProps = {
+  folder: null,
+  expanded: true,
+};
+
 PathBadge.propTypes = {
-  folder: PropTypes.object.isRequired,
-  expanded: PropTypes.bool.isRequired,
+  folder: PropTypes.object,
+  expanded: PropTypes.bool,
 };
 
 export default PathBadge;
