@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRenameFileSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import {
-  renameItemService,
+  useRenameItem,
   // renameFileService,
 } from '../../../../../../features/explorer/explorerActionsService';
 import {
@@ -15,29 +15,24 @@ import { SlideOver, Button, Input } from '../../../../../../components';
 
 function RenameFileSlideOver() {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const showSlideOver = useSelector(
     (state) => state.slideOver.showRenameFileSlideOver,
   );
 
-  const {
-    selectedItemType, selectedFileIds, selectedFolderIds,
-  } = useSelector(
+  const { selectedItemType, selectedFileIds, selectedFolderIds } = useSelector(
     (state) => state.explorer,
   );
 
   const isFile = selectedItemType === 'file';
   const itemId = isFile ? selectedFileIds[0] : selectedFolderIds[0];
-  const { data: item } = isFile
-    ? useGetFile(itemId)
-    : useGetFolder(itemId);
+  const { data: item } = isFile ? useGetFile(itemId) : useGetFolder(itemId);
 
   // Form state
   const [itemName, setItemName] = useState(
     isFile ? item?.display_name : item?.name,
   );
-  console.log(item);
 
   // console.log(selectedItemId, selectedFileIds, selectedFolderIds);
 
@@ -63,25 +58,37 @@ function RenameFileSlideOver() {
   //     });
   //   }
   // }, [file]);
+  const { mutateAsync: onRename } = useRenameItem();
 
-  const renameFileMutation = useMutation(renameItemService, {
-    onSuccess: () => {
-      dispatch(setRenameFileSlideOverVisibility(false));
-      // setFormState(defaultFormState);
-      queryClient.invalidateQueries(['explorer_files_and_folders']);
-      // queryClient.setQueryData(
-      //   ['explorer_file', successData.data.file.id],
-      //   successData.data.file
-      // );
-    },
-  });
+  // const renameFileMutation = useMutation(renameItemService, {
+  //   onSuccess: () => {
+  //     dispatch(setRenameFileSlideOverVisibility(false));
+  //     // setFormState(defaultFormState);
+  //     queryClient.invalidateQueries(['explorer_files_and_folders']);
+  //     // queryClient.setQueryData(
+  //     //   ['explorer_file', successData.data.file.id],
+  //     //   successData.data.file
+  //     // );
+  //   },
+  // });
+  // if (status === 'success' && showSlideOver) {
+  //   dispatch(setRenameFileSlideOverVisibility(false));
+  // }
+  // console.log(status);
 
-  const onSubmit = () => {
-    renameFileMutation.mutate({
+  // if (isSuccess && showSlideOver) {
+  //   dispatch(setRenameFileSlideOverVisibility(false));
+  // }
+
+  const onSubmit = async () => {
+    await onRename({
       type: selectedItemType,
       id: itemId,
       name: itemName,
     });
+    // if (isSuccess) {
+    dispatch(setRenameFileSlideOverVisibility(false));
+    // }
   };
 
   return (
@@ -107,7 +114,6 @@ function RenameFileSlideOver() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          loading={renameFileMutation.status === 'loading'}
           label="Rename"
           width="w-40"
         />

@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Delete service
@@ -30,7 +31,7 @@ export const pasteService = async (data) => {
   return response;
 };
 
-export const renameItemService = (data) => {
+const renameItemService = (data) => {
   const url = `${data.type}s/${data.id}/rename`;
   return requestNew({
     url,
@@ -41,20 +42,30 @@ export const renameItemService = (data) => {
   });
 };
 
-// Rename file service
-export const renameFileService = async (data) => requestNew({
-  url: `files/${data.fileId}/rename`,
-  method: 'POST',
-  params: {
-    name: data.name,
-  },
-});
+export const useRenameItem = () => {
+  const queryClient = useQueryClient();
 
-// Rename folder service
-export const renameFolderService = async (data) => requestNew({
-  url: `folders/${data.folderId}/rename`,
-  method: 'POST',
-  params: {
-    name: data.name,
-  },
-});
+  return useMutation(renameItemService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer_files_and_folders']);
+    },
+  });
+};
+
+// Rename file service
+// export const renameFileService = async (data) => requestNew({
+//   url: `files/${data.fileId}/rename`,
+//   method: 'POST',
+//   params: {
+//     name: data.name,
+//   },
+// });
+
+// // Rename folder service
+// export const renameFolderService = async (data) => requestNew({
+//   url: `folders/${data.folderId}/rename`,
+//   method: 'POST',
+//   params: {
+//     name: data.name,
+//   },
+// });
