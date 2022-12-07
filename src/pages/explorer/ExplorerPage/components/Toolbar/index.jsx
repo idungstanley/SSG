@@ -11,9 +11,6 @@ import {
   ClipboardIcon,
   UploadIcon,
   PencilIcon,
-  ClockIcon,
-  SortAscendingIcon,
-  SortDescendingIcon,
 } from '@heroicons/react/outline';
 import {
   setShowUploadModal,
@@ -34,74 +31,10 @@ import { DownloadFile } from '../../../../../app/helpers';
 import CreateNewSelect from './CreateNewSelect';
 import SortingItems from './SortingItems';
 
-const sortingItems = [
-  {
-    id: 1,
-    title: 'Created at (latest)',
-    icon: (
-      <ClockIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-  {
-    id: 2,
-    title: 'Created at (oldest)',
-    icon: (
-      <ClockIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-  {
-    id: 3,
-    title: 'Modified at (latest)',
-    icon: (
-      <PencilIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-  {
-    id: 4,
-    title: 'Modified at (oldest)',
-    icon: (
-      <PencilIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-  {
-    id: 5,
-    title: 'Name (A-Z)',
-    icon: (
-      <SortAscendingIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-  {
-    id: 6,
-    title: 'Name (Z-A)',
-    icon: (
-      <SortDescendingIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
-];
-
 export default function Toolbar() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { folderId } = useParams();
-  const [selectedSortingId, setSelectedSortingId] = useState({ id: 1, title: 'Created at (latest)' });
 
   const selectedItemType = useSelector(
     (state) => state.explorer.selectedItemType,
@@ -287,7 +220,7 @@ export default function Toolbar() {
                         </button>
                       ))}
                     </span>
-                    <SortingItems selectedSortingId={selectedSortingId} setSelectedSortingId={setSelectedSortingId} sortingItems={sortingItems} />
+                    <SortingItems />
                   </div>
                 </div>
               </div>

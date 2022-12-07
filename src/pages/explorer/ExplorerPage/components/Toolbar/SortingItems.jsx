@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
   PhotographIcon,
@@ -7,13 +6,85 @@ import {
   ViewListIcon,
   ChevronDownIcon,
   SwitchHorizontalIcon,
+  PencilIcon,
+  SortAscendingIcon,
+  SortDescendingIcon,
+  ClockIcon,
 } from '@heroicons/react/outline';
+
+const sortingItems = [
+  {
+    id: 1,
+    title: 'Created at (latest)',
+    icon: (
+      <ClockIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    id: 2,
+    title: 'Created at (oldest)',
+    icon: (
+      <ClockIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    id: 3,
+    title: 'Modified at (latest)',
+    icon: (
+      <PencilIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    id: 4,
+    title: 'Modified at (oldest)',
+    icon: (
+      <PencilIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    id: 5,
+    title: 'Name (A-Z)',
+    icon: (
+      <SortAscendingIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    id: 6,
+    title: 'Name (Z-A)',
+    icon: (
+      <SortDescendingIcon
+        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        aria-hidden="true"
+      />
+    ),
+  },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Sorting({ sortingItems, selectedSortingId, setSelectedSortingId }) {
+export default function Sorting() {
+  const [selectedSorting, setSelectedSorting] = useState({
+    id: 1,
+    title: 'Created at (latest)',
+  });
+
   return (
     <div>
       <Menu as="div" className="relative inline-block text-left mr-2">
@@ -23,7 +94,7 @@ export default function Sorting({ sortingItems, selectedSortingId, setSelectedSo
               className="mr-2.5 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            {selectedSortingId.title}
+            {selectedSorting.title}
             <ChevronDownIcon
               className="-mr-1 ml-2 h-5 w-5"
               aria-hidden="true"
@@ -49,9 +120,11 @@ export default function Sorting({ sortingItems, selectedSortingId, setSelectedSo
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'group flex items-center px-4 py-2 text-sm w-full',
-                      selectedSortingId === i.id ? 'bg-gray-100 text-gray-900' : null,
+                      selectedSorting === i.id
+                        ? 'bg-gray-100 text-gray-900'
+                        : null,
                     )}
-                    onClick={() => setSelectedSortingId({ id: i.id, title: i.title })}
+                    onClick={() => setSelectedSorting({ id: i.id, title: i.title })}
                   >
                     {i.icon}
                     {i.title}
@@ -65,7 +138,8 @@ export default function Sorting({ sortingItems, selectedSortingId, setSelectedSo
         </Transition>
       </Menu>
 
-      <Menu as="div" className="hidden relative inline-block text-left">
+      <Menu as="div" className="hidden relative text-left">
+        {/* inline-block */}
         <div>
           <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
             <ViewListIcon
@@ -153,9 +227,3 @@ export default function Sorting({ sortingItems, selectedSortingId, setSelectedSo
     </div>
   );
 }
-
-Sorting.propTypes = {
-  sortingItems: PropTypes.array.isRequired,
-  selectedSortingId: PropTypes.object.isRequired,
-  setSelectedSortingId: PropTypes.func.isRequired,
-};
