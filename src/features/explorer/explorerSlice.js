@@ -37,6 +37,7 @@ export const previewFileFullPage = createAsyncThunk('explorer/previewFileFullPag
 
 const fileIdsToPaste = JSON.parse(localStorage.getItem('fileIdsToPaste'));
 const folderIdsToPaste = JSON.parse(localStorage.getItem('folderIdsToPaste'));
+const selectedSorting = JSON.parse(localStorage.getItem('selectedSorting')) || { id: 1, title: 'Created at (latest)' };
 
 const initialState = {
   showUploadModal: false,
@@ -48,10 +49,7 @@ const initialState = {
 
   selectedFileIds: [],
   selectedFolderIds: [],
-  selectedSorting: {
-    id: 1,
-    title: 'Created at (latest)',
-  },
+  selectedSorting,
 
   fileIdsToPaste: fileIdsToPaste != null ? fileIdsToPaste : [],
   folderIdsToPaste: folderIdsToPaste != null ? folderIdsToPaste : [],

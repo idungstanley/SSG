@@ -85,6 +85,11 @@ export default function Sorting() {
   const dispatch = useDispatch();
   const { selectedSorting } = useSelector((state) => state.explorer);
 
+  const handleClick = (item) => {
+    dispatch(setSelectedSorting(item));
+    localStorage.setItem('selectedSorting', JSON.stringify(item));
+  };
+
   return (
     <div>
       <Menu as="div" className="relative inline-block text-left">
@@ -124,7 +129,7 @@ export default function Sorting() {
                         ? 'bg-gray-100 text-gray-900'
                         : null,
                     )}
-                    onClick={() => dispatch(setSelectedSorting({ id: i.id, title: i.title }))}
+                    onClick={() => handleClick(({ id: i.id, title: i.title }))}
                   >
                     {i.icon}
                     {i.title}
