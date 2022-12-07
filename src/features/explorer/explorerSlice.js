@@ -48,6 +48,10 @@ const initialState = {
 
   selectedFileIds: [],
   selectedFolderIds: [],
+  selectedSorting: {
+    id: 1,
+    title: 'Created at (latest)',
+  },
 
   fileIdsToPaste: fileIdsToPaste != null ? fileIdsToPaste : [],
   folderIdsToPaste: folderIdsToPaste != null ? folderIdsToPaste : [],
@@ -106,6 +110,9 @@ export const explorerSlice = createSlice({
       state.selectedItemLoadingFullDetails = false;
       state.selectedItemFullDetails = null;
     },
+    setSelectedSorting: (state, action) => {
+      state.selectedSorting = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -136,6 +143,7 @@ export const {
   setSelectedFolders,
   setShowUploadModal,
   resetSelectedFilesAndFolders,
+  setSelectedSorting,
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

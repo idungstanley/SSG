@@ -22,7 +22,6 @@ import {
 import FilePreview from '../../../components/FilePreview';
 import FolderPreview from '../../../components/FolderPreview';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
-// import ExplorerTable from './components/NewExplorerTable';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
@@ -135,7 +134,6 @@ export default function ExplorerPage() {
               && (data?.data?.folders.length !== 0
                 || data?.data?.files.length !== 0) && (
                 <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-                  {/* <ExplorerTable /> */}
                   <OldExplorerTable />
                 </div>
             )}

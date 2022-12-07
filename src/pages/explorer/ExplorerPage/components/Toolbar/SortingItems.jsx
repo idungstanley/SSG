@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
   PhotographIcon,
@@ -11,6 +11,8 @@ import {
   SortDescendingIcon,
   ClockIcon,
 } from '@heroicons/react/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedSorting } from '../../../../../features/explorer/explorerSlice';
 
 const sortingItems = [
   {
@@ -80,14 +82,12 @@ function classNames(...classes) {
 }
 
 export default function Sorting() {
-  const [selectedSorting, setSelectedSorting] = useState({
-    id: 1,
-    title: 'Created at (latest)',
-  });
+  const dispatch = useDispatch();
+  const { selectedSorting } = useSelector((state) => state.explorer);
 
   return (
     <div>
-      <Menu as="div" className="relative inline-block text-left mr-2">
+      <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0">
             <SwitchHorizontalIcon
@@ -124,7 +124,7 @@ export default function Sorting() {
                         ? 'bg-gray-100 text-gray-900'
                         : null,
                     )}
-                    onClick={() => setSelectedSorting({ id: i.id, title: i.title })}
+                    onClick={() => dispatch(setSelectedSorting({ id: i.id, title: i.title }))}
                   >
                     {i.icon}
                     {i.title}
