@@ -23,18 +23,14 @@ import WalletIndex from '../wallet';
 import ListIndex from '../Lists';
 
 function Hubs() {
-  const [getCurrentHubId, setGetCurrentHubId] = useState('');
+  const [getCurrentHubId, setGetCurrentHubId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showHubList, setShowHubList] = useState(false);
-  const {
-    isLoading,
-    data: hubdata,
-  } = useQuery({
+  const { isLoading, data: hubdata } = useQuery({
     queryKey: ['hubdata'],
     queryFn: getHubListService,
   });
 
-  // console.log(hubdata);
   const HandleGetHubId = (id) => {
     setGetCurrentHubId(id);
     localStorage.setItem('currentHubId', JSON.stringify(id));
@@ -45,12 +41,12 @@ function Hubs() {
     setShowHubList(!showHubList);
   };
 
-  const toggle = (index, id) => {
+  const toggle = (id) => {
     setGetCurrentHubId(id);
-    if (showHubList === index) {
+    if (showHubList === id) {
       return setShowHubList(null);
     }
-    setShowHubList(index);
+    setShowHubList(id);
   };
 
   return (
@@ -68,18 +64,18 @@ function Hubs() {
         onCloseHubModal={() => setShowModal(false)}
       />
 
-      {hubdata?.data?.hubs.map((hub, index) => (
-        <section id="hubList" key={hub.id}>
+      {hubdata?.data?.hubs.map(({ name, id }) => (
+        <section id="hubList" key={id}>
           <div
             className="flex justify-between items-center hover:bg-gray-100 p-0.5 rounded mt-0.5 mb-0.5"
-            onClick={() => toggle(index, hub.id)}
+            onClick={() => toggle(id)}
           >
             <div
               id="hubListLeft"
               className="flex items-center space-x-1 justify-start text-sm mt-1 overflow-y-hidden"
             >
-              <div onClick={() => handleShowWallet(hub.id)}>
-                {showHubList === index ? (
+              <div onClick={() => handleShowWallet(id)}>
+                {showHubList === id ? (
                   <ChevronDownIcon
                     className="flex-shrink-0 h-3 w-5"
                     aria-hidden="true"
@@ -92,25 +88,25 @@ function Hubs() {
                 )}
               </div>
               <AvatarWithInitials
-                initials={hub.name.substr(0, 1).toUpperCase()}
+                initials={name.substr(0, 1).toUpperCase()}
                 height="h-6"
                 width="w-6"
                 backgroundColour="#cf30cf"
               />
               <h4 className="text-sm font-medium">
-                {hub.name.length > 10 ? hub.name.substr(0, 10) : hub.name}
+                {name.length > 10 ? name.substr(0, 10) : name}
               </h4>
             </div>
             <div
               id="hubListRight"
               className="space-x-1 flex items-center justify-end"
-              onClick={() => HandleGetHubId(hub.id)}
+              onClick={() => HandleGetHubId(id)}
             >
               <MenuDropdown />
               <PlusDropDown />
             </div>
           </div>
-          {showHubList === index ? (
+          {showHubList === id ? (
             <>
               <WalletIndex
                 showHubList={showHubList}

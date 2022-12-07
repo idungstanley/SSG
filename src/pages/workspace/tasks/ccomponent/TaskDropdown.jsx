@@ -4,9 +4,9 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
+  EllipsisOutlined,
   FolderAddOutlined,
   ImportOutlined,
-  PlusOutlined,
   WalletOutlined,
 } from '@ant-design/icons';
 import {
@@ -15,30 +15,27 @@ import {
   TemplateIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import WalletModal from '../../wallet/components/WalletModal';
-import ListModal from '../../Lists/components/ListModal';
+import PropTypes from 'prop-types';
+import TaskModal from './TaskModal';
 
-function PlusDropDown() {
-  const [showWalletModal, setShowWalletModal] = useState(false);
-  const [showListModal, setShowListModal] = useState(false);
+function TaskDropdown({ getListId }) {
+  const [showTaskModal, setShowTaskModal] = useState(false);
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }
+
   return (
     <>
-      <WalletModal
-        walletVisible={showWalletModal}
-        onCloseWalletModal={() => setShowWalletModal(false)}
-      />
-      <ListModal
-        listVisible={showListModal}
-        onCloseListModal={() => setShowListModal(false)}
+      <TaskModal
+        taskVisible={showTaskModal}
+        getListId={getListId}
+        onCloseTaskModal={() => setShowTaskModal(false)}
       />
 
       <Menu as="div" className="">
         <div>
           <Menu.Button className=" text-gray-400 mt-4 flex text-sm">
-            <PlusOutlined className="h-6 w-6" aria-hidden="true" />
+            <EllipsisOutlined className="h-6 w-6" aria-hidden="true" />
           </Menu.Button>
         </div>
         <Transition
@@ -50,7 +47,7 @@ function PlusDropDown() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="origin-top-right absolute left-50 bottom-20 z-10 -mt-3 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="origin-top-right absolute bottom-20 left-50 z-10 -mt-3 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
             <Menu.Item>
               {({ active }) => (
                 <div
@@ -58,13 +55,13 @@ function PlusDropDown() {
                     active ? 'bg-gray-100' : '',
                     'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2',
                   )}
-                  onClick={() => setShowListModal(true)}
+                  onClick={() => setShowTaskModal(true)}
                 >
                   <FolderAddOutlined
                     className="h-7 w-5 pt-2 text-gray-700"
                     aria-hidden="true"
                   />
-                  <p>List</p>
+                  <p>Create Task</p>
                 </div>
               )}
             </Menu.Item>
@@ -101,7 +98,6 @@ function PlusDropDown() {
             <Menu.Item>
               {({ active }) => (
                 <div
-                  onClick={() => setShowWalletModal(true)}
                   className={classNames(
                     active ? 'bg-gray-100' : '',
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
@@ -152,4 +148,12 @@ function PlusDropDown() {
   );
 }
 
-export default PlusDropDown;
+TaskDropdown.defaultProps = {
+  getListId: '',
+};
+
+TaskDropdown.propTypes = {
+  getListId: PropTypes.string,
+};
+
+export default TaskDropdown;

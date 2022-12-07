@@ -5,6 +5,7 @@ import wsSlice from '../features/workspace/workspaceSlice';
 import hubSlice from '../features/hubs/hubSlice';
 import walletSlice from '../features/wallet/walletSlice';
 import listSlice from '../features/list/listSlice';
+import taskSlice from '../features/task/taskSlice';
 import explorerSlice from '../features/explorer/explorerSlice';
 import inboxSlice from '../features/inbox/inboxSlice';
 import searchSlice from '../features/search/searchSlice';
@@ -35,6 +36,7 @@ export const store = configureStore({
     hub: hubSlice,
     wallet: walletSlice,
     list: listSlice,
+    task: taskSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

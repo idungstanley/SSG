@@ -39,6 +39,8 @@ import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
 import Docs from './pages/workspace/Docs/Docs';
+import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
+import RenderList from './pages/workspace/Lists/components/RenderList';
 
 const routes = (user) => [
   {
@@ -123,6 +125,8 @@ const routes = (user) => [
       { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
       { path: 'docs', element: <Docs /> },
+      { path: 'wallet/:walletId', element: <RenderWallets /> },
+      { path: 'list/:listId', element: <RenderList /> },
     ],
   },
   {

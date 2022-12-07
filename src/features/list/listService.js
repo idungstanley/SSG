@@ -18,7 +18,6 @@ export const createListService = (data) => {
 // get lists
 export const getListService = (data) => {
   const hubID = data.queryKey[1];
-  // console.log(hubID);
   const response = requestNew({
     url: 'at/lists',
     method: 'GET',
@@ -26,5 +25,20 @@ export const getListService = (data) => {
       hub_id: hubID,
     },
   }, true);
+  return response;
+};
+
+export const getListsListService = (data) => {
+  const walletID = data.queryKey[1];
+  const response = requestNew(
+    {
+      url: 'at/lists',
+      method: 'GET',
+      params: {
+        wallet_id: walletID,
+      },
+    },
+    true,
+  );
   return response;
 };

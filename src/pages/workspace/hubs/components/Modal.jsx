@@ -29,7 +29,6 @@ function Modal({ isVisible, onCloseHubModal }) {
   };
 
   const { name } = formState;
-  // console.log(name);
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,

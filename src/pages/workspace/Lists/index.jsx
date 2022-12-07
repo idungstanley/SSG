@@ -1,40 +1,50 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+/* eslint-disable */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { PlusSquareOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { Hyperlink } from '../../../components';
 import { getListService } from '../../../features/list/listService';
+import { useGetHubService } from '../../../features/hubs/hubService';
 import MenuDropdown from '../hubs/components/MenuDropdown';
+import TaskDropdown from '../tasks/ccomponent/TaskDropdown';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
-  const { isLoading, data } = useQuery({
-    queryKey: ['listData', getCurrentHubId],
-    queryFn: getListService,
+  const [getListId, setGetListId] = useState('');
+  const { data: hubdataById } = useQuery({
+    queryKey: ['hubdata_hubByID', getCurrentHubId],
+    queryFn: useGetHubService,
   });
-
-  console.log(data);
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data?.lists
-        && data?.data?.lists.map((list) => (
+      {hubdataById?.data?.lists &&
+        hubdataById?.data?.lists.map((list) => (
           <div key={list.id}>
             <section className="flex justify-between items-center text-sm pl-14 hover:bg-gray-100">
               <div
                 id="walletLeft"
                 className="flex items-center justify-center space-x-1"
               >
-                <PlusSquareOutlined />
-                <p className="text-sm">{list.name}</p>
+                <p className="text-4xl text-gray-400 mb-2">.</p>
+                <Link
+                  to={`/workspace/list/${list.id}`}
+                  // to="orkspace/list/list.id"
+                  className="text-sm"
+                >
+                  {list.name}
+                </Link>
               </div>
 
               <div
-                id="walletRight"
+                onClick={() => setGetListId(list.id)}
                 className="space-x-1 flex items-center justify-end"
-                // onClick={() => HandleGetHubId(hub.id)}
               >
-                <MenuDropdown />
+                <TaskDropdown getListId={getListId} />
               </div>
             </section>
           </div>
@@ -44,7 +54,7 @@ function ListIndex({ showHubList, getCurrentHubId }) {
 }
 
 ListIndex.propTypes = {
-  showHubList: PropTypes.bool.isRequired,
+  showHubList: PropTypes.string.isRequired,
   getCurrentHubId: PropTypes.string.isRequired,
 };
 
