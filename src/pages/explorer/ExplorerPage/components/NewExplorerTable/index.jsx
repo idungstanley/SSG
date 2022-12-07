@@ -1,17 +1,25 @@
 import React, {
   useLayoutEffect, useMemo, useRef, useState,
 } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetExplorerFilesAndFolders } from '../../../../../features/explorer/explorerService';
+import { setSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
+
 export default function ExplorerTable() {
+  const dispatch = useDispatch();
   const { folderId } = useParams();
   const checkbox = useRef();
   const [checked, setChecked] = useState(false);
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
   const [indeterminate, setIndeterminate] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const { selectedItemId } = useSelector((state) => state.explorer);
 
   const files = useMemo(
     () => data?.data.files.map((i) => ({
@@ -58,6 +66,29 @@ export default function ExplorerTable() {
     setIndeterminate(false);
   }
 
+  const handleChangeInbox = (e, fileId) => {
+    setSelectedItem(
+      e.target.checked
+        ? [...selectedItems, fileId]
+        : selectedItems.filter((p) => p !== fileId),
+    );
+  };
+
+  const handleClick = (e, fileId, index) => {
+    if (selectedItems.length) {
+      setSelectedItems([]);
+    }
+
+    if (!e.target.value) {
+      dispatch(
+        setSelectedItem({
+          inboxFileId: fileId,
+          inboxFileIndex: index,
+        }),
+      );
+    }
+  };
+
   if (status === 'error') {
     return (
       <FullScreenMessage
@@ -97,17 +128,65 @@ export default function ExplorerTable() {
                       onChange={toggleAll}
                     />
                   </th>
-                  <th scope="col" className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Name
                   </th>
-                  <th scope="col" className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Created at
                   </th>
-                  <th scope="col" className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     size
                   </th>
                 </tr>
               </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {items.map((item, index) => (
+                  <tr
+                    key={item.id}
+                    className={`${
+                      selectedItems.includes(item.id) ? 'bg-gray-50' : null
+                    } ${
+                      selectedItemId === item.id ? 'bg-indigo-100' : null
+                    } cursor-pointer`}
+                    onClick={(e) => handleClick(e, item.id, index)}
+                  >
+                    <td className="relative w-12 px-6 sm:w-16 sm:px-8">
+                      {selectedItems.includes(item.id) && (
+                        <div className="absolute inset-y-0 left-0 w-0.5 bg-indigo-600" />
+                      )}
+                      <input
+                        type="checkbox"
+                        className="absolute left-4 top-1/2 -mt-2 h-4 cursor-pointer w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0 sm:left-6"
+                        value={item.id}
+                        checked={selectedItems.includes(item.id)}
+                        onChange={(e) => handleChangeInbox(e, item.id)}
+                      />
+                    </td>
+                    <td
+                      className={classNames(
+                        'whitespace-nowrap py-4 pr-3 text-sm font-medium',
+                        selectedItems.includes(item.id)
+                          ? 'text-indigo-600'
+                          : 'text-gray-900',
+                      )}
+                    >
+                      {item.name}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {item.title}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
