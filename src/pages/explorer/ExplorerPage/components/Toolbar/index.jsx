@@ -190,36 +190,38 @@ export default function Toolbar() {
               {/* Toolbar */}
               <div className="flex flex-col justify-center">
                 <div className="px-4 sm:px-6">
-                  <div className="py-4 flex justify-start space-x-6">
+                  <div className="py-4 flex justify-between space-x-6">
                     <div className="space-x-3">
                       <Upload />
 
                       <CreateNewSelect />
+
+                      <span className="isolate inline-flex rounded-md shadow-sm">
+                        {toolbarItems.map((i) => (
+                          <button
+                            key={i.title}
+                            title={i.title}
+                            onClick={i.onClick}
+                            type="button"
+                            disabled={i.disabled}
+                            className={`relative inline-flex items-center ${
+                              i?.isInLeft
+                                ? 'rounded-l-md'
+                                : i?.isInRight
+                                  ? 'rounded-r-md'
+                                  : null
+                            } border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
+                              i.disabled
+                                ? 'border-opacity-40 text-gray-300'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            {i.icon}
+                          </button>
+                        ))}
+                      </span>
                     </div>
-                    <span className="isolate inline-flex rounded-md shadow-sm">
-                      {toolbarItems.map((i) => (
-                        <button
-                          key={i.title}
-                          title={i.title}
-                          onClick={i.onClick}
-                          type="button"
-                          disabled={i.disabled}
-                          className={`relative inline-flex items-center ${
-                            i?.isInLeft
-                              ? 'rounded-l-md'
-                              : i?.isInRight
-                                ? 'rounded-r-md'
-                                : null
-                          } border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
-                            i.disabled
-                              ? 'border-opacity-40 text-gray-300'
-                              : 'text-gray-400'
-                          }`}
-                        >
-                          {i.icon}
-                        </button>
-                      ))}
-                    </span>
+
                     <SortingItems />
                   </div>
                 </div>
