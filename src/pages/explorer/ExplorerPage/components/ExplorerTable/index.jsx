@@ -26,14 +26,26 @@ import {
   previewFileFullPage,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
-import { useGetExplorerFilesAndFolders, prefetchExplorerFilesAndFoldersService } from '../../../../../features/explorer/explorerService';
+import {
+  useGetExplorerFilesAndFolders,
+  prefetchExplorerFilesAndFoldersService,
+} from '../../../../../features/explorer/explorerService';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
+const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
+  ? b.created_at.localeCompare(a.created_at)
+  : sortType === 2
+    ? a.created_at.localeCompare(b.created_at)
+    : sortType === 3
+      ? b.full_object.updated_at.localeCompare(a.full_object.updated_at)
+      : sortType === 4
+        ? a.full_object.updated_at.localeCompare(b.full_object.updated_at)
+        : sortType === 5
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)));
+
 function SelectionCell({
-  rowKeyValue,
-  dispatch,
-  isSelectedRow,
-  selectedRows,
+  rowKeyValue, dispatch, isSelectedRow, selectedRows,
 }) {
   return (
     <input
@@ -68,49 +80,40 @@ function SelectionHeader({ dispatch, areAllRowsSelected }) {
   );
 }
 
-function CustomCell({
-  column,
-  value,
-  rowData,
-}) {
+function CustomCell({ column, value, rowData }) {
   if (column.key === 'name') {
     return (
       <div className="flex items-center">
         <div className="flex-shrink-0 h-10 w-10">
           {rowData.item_type === 'file' ? (
-            <FileIcon extensionKey={rowData.full_object.file_format.key} size={10} />
+            <FileIcon
+              extensionKey={rowData.full_object.file_format.key}
+              size={10}
+            />
           ) : (
             <FileIcon extensionKey="folder" size={10} />
           )}
         </div>
         <div className="ml-4">
-          <div className="text-sm font-medium text-gray-900">{rowData.name}</div>
+          <div className="text-sm font-medium text-gray-900">
+            {rowData.name}
+          </div>
         </div>
       </div>
     );
   }
 
   if (column.type === 'dateTime') {
-    return (
-      <div>
-        { OutputDateTime(value) }
-      </div>
-    );
+    return <div>{OutputDateTime(value)}</div>;
   }
 
   if (column.type === 'sizeInBytes') {
     return (
-      <div>
-        { value === null || value === '-' ? '-' : OutputFileSize(value) }
-      </div>
+      <div>{value === null || value === '-' ? '-' : OutputFileSize(value)}</div>
     );
   }
 
-  return (
-    <div>
-      {value}
-    </div>
-  );
+  return <div>{value}</div>;
 }
 
 function ExplorerTable({ tableTitle }) {
@@ -161,8 +164,9 @@ function ExplorerTable({ tableTitle }) {
 
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
 
-  const selectedFileIds = useSelector((state) => state.explorer.selectedFileIds);
-  const selectedFolderIds = useSelector((state) => state.explorer.selectedFolderIds);
+  const { selectedFileIds, selectedSorting, selectedFolderIds } = useSelector(
+    (state) => state.explorer,
+  );
 
   const [processedData, setProcessedData] = useState([]);
 
@@ -195,12 +199,16 @@ function ExplorerTable({ tableTitle }) {
       id: processedFolders.length + index + 1, // Must be index, and not the ID of the folder/file, must be + 1 as otherwise issue with selecting shift from first item...
     }));
 
-    setProcessedData([...processedFolders, ...processedFiles]);
+    setProcessedData([
+      ...sortItems(processedFolders, selectedSorting.id),
+      ...sortItems(processedFiles, selectedSorting.id),
+    ]);
 
-    kaTableDispatch(updateData([...processedFolders, ...processedFiles]));
+    kaTableDispatch(updateData([...sortItems(processedFolders, selectedSorting),
+      ...sortItems(processedFiles, selectedSorting)]));
 
     return true;
-  }, [data]);
+  }, [data, selectedSorting]);
 
   useEffect(() => {
     var i = 0;
@@ -226,15 +234,19 @@ function ExplorerTable({ tableTitle }) {
     // Set selected item for preview
 
     if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-      dispatch(setSelectedItem({
-        selectedItemId: selectedFileIds[0],
-        selectedItemType: 'file',
-      }));
+      dispatch(
+        setSelectedItem({
+          selectedItemId: selectedFileIds[0],
+          selectedItemType: 'file',
+        }),
+      );
     } else if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-      dispatch(setSelectedItem({
-        selectedItemId: selectedFolderIds[0],
-        selectedItemType: 'folder',
-      }));
+      dispatch(
+        setSelectedItem({
+          selectedItemId: selectedFolderIds[0],
+          selectedItemType: 'folder',
+        }),
+      );
     } else {
       // Multiple items selected
       dispatch(resetSelectedItem());
@@ -243,12 +255,10 @@ function ExplorerTable({ tableTitle }) {
 
   const onFullPagePreview = async (fileId) => {
     dispatch(
-      previewFileFullPage(
-        {
-          fileId,
-          cb: () => {},
-        },
-      ),
+      previewFileFullPage({
+        fileId,
+        cb: () => {},
+      }),
     );
   };
 
@@ -268,12 +278,14 @@ function ExplorerTable({ tableTitle }) {
         },
         cell: {
           elementAttributes: (props) => ({
-            className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-4 whitespace-nowrap text-sm text-gray-500',
+            className:
+              props.column.key === 'selection-cell'
+                ? 'hidden'
+                : 'px-6 py-4 whitespace-nowrap text-sm text-gray-500',
           }),
         },
         cellText: {
-          elementAttributes: () => ({
-          }),
+          elementAttributes: () => ({}),
           content: (props) => {
             if (props.column.key === 'selection-cell') {
               return <SelectionCell {...props} />;
@@ -293,14 +305,19 @@ function ExplorerTable({ tableTitle }) {
         },
         headCell: {
           elementAttributes: (props) => ({
-            className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
+            className:
+              props.column.key === 'selection-cell'
+                ? 'hidden'
+                : 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
           }),
           content: (props) => {
             if (props.column.key === 'selection-cell') {
               return (
                 <SelectionHeader
                   {...props}
-                  areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
+                  areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(
+                    tableProps,
+                  )}
                   // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
                 />
               );
@@ -316,21 +333,34 @@ function ExplorerTable({ tableTitle }) {
         },
         dataRow: {
           elementAttributes: (props) => ({
-            className: `select-none cursor-default ${props.isSelectedRow === true ? 'bg-gray-200' : 'hover:bg-gray-100 active:bg-gray-200'}`,
+            className: `select-none cursor-default ${
+              props.isSelectedRow === true
+                ? 'bg-gray-200'
+                : 'hover:bg-gray-100 active:bg-gray-200'
+            }`,
             onClick: async (event, extendedEvent) => {
               if (event.nativeEvent.shiftKey) {
                 // If shift key is being held, select the range of rows
                 // Deselect the current selected item (for preview)
 
-                extendedEvent.dispatch(selectRowsRange(extendedEvent.childProps.rowKeyValue, [...props.selectedRows].pop()));
+                extendedEvent.dispatch(
+                  selectRowsRange(
+                    extendedEvent.childProps.rowKeyValue,
+                    [...props.selectedRows].pop(),
+                  ),
+                );
               } else if (event.nativeEvent.metaKey) {
                 // If control/command key is being held (meta key)
                 // Append/remove the current row from the selected rows
 
                 if (extendedEvent.childProps.isSelectedRow) {
-                  kaTableDispatch(deselectRow(extendedEvent.childProps.rowKeyValue));
+                  kaTableDispatch(
+                    deselectRow(extendedEvent.childProps.rowKeyValue),
+                  );
                 } else {
-                  kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
+                  kaTableDispatch(
+                    selectRow(extendedEvent.childProps.rowKeyValue),
+                  );
                 }
               } else {
                 // No shift/control being held - basic select
@@ -339,11 +369,16 @@ function ExplorerTable({ tableTitle }) {
                 // Set it as the selected item (for preview)
 
                 kaTableDispatch(deselectAllRows());
-                kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
+                kaTableDispatch(
+                  selectRow(extendedEvent.childProps.rowKeyValue),
+                );
               }
 
               if (extendedEvent.childProps.rowData.item_type === 'folder') {
-                prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
+                prefetchExplorerFilesAndFoldersService(
+                  queryClient,
+                  extendedEvent.childProps.rowData.item_id_raw,
+                );
               }
             },
             onDoubleClick: (event, extendedEvent) => {
@@ -355,8 +390,13 @@ function ExplorerTable({ tableTitle }) {
                 dispatch(setSelectedFiles([]));
                 dispatch(setSelectedFolders([]));
 
-                navigate(`/explorer/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
-              } else if (extendedEvent.childProps.rowData.item_type === 'file') {
+                navigate(
+                  `/explorer/${extendedEvent.childProps.rowData.item_id_raw}`,
+                  { replace: false },
+                );
+              } else if (
+                extendedEvent.childProps.rowData.item_type === 'file'
+              ) {
                 onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
               }
             },
