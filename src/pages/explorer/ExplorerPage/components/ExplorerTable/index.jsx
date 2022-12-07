@@ -32,7 +32,7 @@ import {
 } from '../../../../../features/explorer/explorerService';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
-const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
+export const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
   ? b.created_at.localeCompare(a.created_at)
   : sortType === 2
     ? a.created_at.localeCompare(b.created_at)
