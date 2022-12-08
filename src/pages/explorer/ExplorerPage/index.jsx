@@ -8,7 +8,6 @@ import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
-import OldExplorerTable from './components/ExplorerTable';
 import Toolbar from './components/Toolbar';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
@@ -22,6 +21,7 @@ import {
 import FilePreview from '../../../components/FilePreview';
 import FolderPreview from '../../../components/FolderPreview';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
+import ExplorerTable from './components/NewTable';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
@@ -134,7 +134,7 @@ export default function ExplorerPage() {
               && (data?.data?.folders.length !== 0
                 || data?.data?.files.length !== 0) && (
                 <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
-                  <OldExplorerTable />
+                  <ExplorerTable />
                 </div>
             )}
 
