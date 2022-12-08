@@ -31,6 +31,7 @@ function ListIndex({ showHubList, getCurrentHubId }) {
                 className="flex items-center justify-center space-x-1"
               >
                 <p className="text-4xl text-gray-400 mb-2">.</p>
+                {/* <span className="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-gray-400 border-2 border-white dark:border-gray-800 rounded-full"></span> */}
                 <Link
                   to={`/workspace/list/${list.id}`}
                   // to="orkspace/list/list.id"

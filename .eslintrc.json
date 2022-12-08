@@ -13,6 +13,7 @@
   },
   "plugins": ["react"],
   "rules": {
+    "indent": ["error", 2, { "ignoredNodes": ["TemplateLiteral"] }],
     "import/no-extraneous-dependencies": [
       "error",
       {

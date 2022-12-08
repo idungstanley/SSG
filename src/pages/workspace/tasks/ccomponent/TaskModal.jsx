@@ -25,6 +25,7 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
   });
   const defaultListFormState = {
     name: '',
+    description: '',
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
@@ -36,11 +37,12 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
     });
   };
 
-  const { name } = formState;
+  const { name, description } = formState;
 
   const onSubmit = async () => {
     await createTask.mutateAsync({
       name,
+      description,
       getListId,
     });
   };
@@ -93,7 +95,7 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
             />
           </section>
           <section id="textarea">
-            <textarea rows="3" placeholder="Description" />
+            <textarea rows="3" placeholder="Description" name="description" />
           </section>
           <section
             id="attachement"
@@ -123,34 +125,6 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
               />
             </div>
           </section>
-          {/* <section className="header pl-4 pt-4 h-24">
-            <h3 className="font-bold text-xl">Create Task</h3>
-          </section>
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          <section id="listform">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="List Name:"
-                placeholder="Enter List Name"
-                name="name"
-                value={name}
-                type="text"
-                onChange={handleListChange}
-              />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
-                label="Create List"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section> */}
         </div>
       </div>
     </div>
