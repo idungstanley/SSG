@@ -21,7 +21,7 @@ import {
 import FilePreview from '../../../components/FilePreview';
 import FolderPreview from '../../../components/FolderPreview';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
-import ExplorerTable from './components/NewTable';
+import ExplorerTable from './components/ListItems';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
