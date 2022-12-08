@@ -30,6 +30,7 @@ import {
   useGetExplorerFilesAndFolders,
   prefetchExplorerFilesAndFoldersService,
 } from '../../../../../features/explorer/explorerService';
+import { sortItems } from '../Toolbar/SortingItems';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
 function SelectionCell({
@@ -152,9 +153,7 @@ function ExplorerTable({ tableTitle }) {
 
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
 
-  const {
-    selectedFileIds, selectedSorting, selectedFolderIds,
-  } = useSelector(
+  const { selectedFileIds, selectedSorting, selectedFolderIds } = useSelector(
     (state) => state.explorer,
   );
 
@@ -194,8 +193,12 @@ function ExplorerTable({ tableTitle }) {
       ...sortItems(processedFiles, selectedSorting.id),
     ]);
 
-    kaTableDispatch(updateData([...sortItems(processedFolders, selectedSorting),
-      ...sortItems(processedFiles, selectedSorting)]));
+    kaTableDispatch(
+      updateData([
+        ...sortItems(processedFolders, selectedSorting),
+        ...sortItems(processedFiles, selectedSorting),
+      ]),
+    );
 
     return true;
   }, [data, selectedSorting]);
