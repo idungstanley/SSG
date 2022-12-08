@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { FolderFilled } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGetHubService } from '../../../features/hubs/hubService';
 import MenuDropdown from '../hubs/components/MenuDropdown';
 import PlusDropDown from '../hubs/components/PlusDropDown';
@@ -22,6 +22,11 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
     queryFn: useGetHubService,
   });
 
+  const navigate = useNavigate()
+  const handleLocation = (id) => {
+    navigate(`/workspace/wallet/${id}`)
+  }
+
   return hubdataById?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {hubdataById?.data?.wallets.length !== 0 ? (
@@ -33,12 +38,11 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
                 className="flex items-center justify-center space-x-1"
               >
                 <FolderFilled />
-                <Link
-                  // to="/workspace/wallet/ok"
-                  to={`/workspace/wallet/${wallet.id}`}
+                <div
+                 onClick={() => handleLocation(wallet.id)}
                 >
                   <p className="text-sm">{wallet.name}</p>
-                </Link>
+                </div>
               </div>
 
               <div

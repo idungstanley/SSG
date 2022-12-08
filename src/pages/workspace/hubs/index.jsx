@@ -19,8 +19,8 @@ import Modal from './components/Modal';
 import { getHubListService } from '../../../features/hubs/hubService';
 import MenuDropdown from './components/MenuDropdown';
 import PlusDropDown from './components/PlusDropDown';
-import WalletIndex from '../wallet';
-import ListIndex from '../Lists';
+import WalletIndex from '../wallet/WalletIndex';
+import ListIndex from '../Lists/ListIndex';
 
 function Hubs() {
   const [getCurrentHubId, setGetCurrentHubId] = useState(null);

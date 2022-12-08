@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { PlusSquareOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Hyperlink } from '../../../components';
 import { getListService } from '../../../features/list/listService';
 import { useGetHubService } from '../../../features/hubs/hubService';
@@ -15,10 +15,16 @@ import TaskDropdown from '../tasks/ccomponent/TaskDropdown';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
   const [getListId, setGetListId] = useState('');
+  const [currentId, setCurrentId] = useState(false)
   const { data: hubdataById } = useQuery({
     queryKey: ['hubdata_hubByID', getCurrentHubId],
     queryFn: useGetHubService,
   });
+
+  const navigate = useNavigate()
+  const  handleLocation = (id) => {
+    navigate(`/workspace/list/${id}`);
+  }
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
@@ -32,13 +38,15 @@ function ListIndex({ showHubList, getCurrentHubId }) {
               >
                 <p className="text-4xl text-gray-400 mb-2">.</p>
                 {/* <span className="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-gray-400 border-2 border-white dark:border-gray-800 rounded-full"></span> */}
-                <Link
-                  to={`/workspace/list/${list.id}`}
+
+                <div
+                  // href={`/workspace/list/${list.id}`}
                   // to="orkspace/list/list.id"
                   className="text-sm"
+                  onClick={() => handleLocation(list.id)}
                 >
                   {list.name}
-                </Link>
+                </div>
               </div>
 
               <div
