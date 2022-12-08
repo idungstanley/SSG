@@ -164,7 +164,9 @@ function ExplorerTable({ tableTitle }) {
 
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
 
-  const { selectedFileIds, selectedSorting, selectedFolderIds } = useSelector(
+  const {
+    selectedFileIds, selectedSorting, selectedFolderIds,
+  } = useSelector(
     (state) => state.explorer,
   );
 
