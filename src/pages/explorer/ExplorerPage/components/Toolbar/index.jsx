@@ -191,7 +191,8 @@ export default function Toolbar() {
               <div className="flex flex-col justify-center">
                 <div className="px-4 sm:px-6">
                   <div className="py-4 flex justify-between space-x-6">
-                    <div className="space-x-3">
+                    {/* <div className="space-x-3"> */}
+                    <div className="flex flex-wrap gap-4">
                       <Upload />
 
                       <CreateNewSelect />
@@ -210,7 +211,7 @@ export default function Toolbar() {
                                 : i?.isInRight
                                   ? 'rounded-r-md'
                                   : null
-                            } border border-gray-300 bg-white px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
+                            } border border-gray-300 bg-white px-3 sm:px-6 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
                               i.disabled
                                 ? 'border-opacity-40 text-gray-300'
                                 : 'text-gray-400'
@@ -243,13 +244,13 @@ function Upload() {
       <button
         onClick={() => dispatch(setShowUploadModal(true))}
         type="button"
-        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 pr-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0"
+        className="flex justify-center px-4 rounded-md border border-gray-300 shadow-sm py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0"
       >
         <UploadIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
+          className="h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
-        Upload
+        <span className="sm:ml-2.5 hidden sm:block">Upload</span>
       </button>
     </div>
   );

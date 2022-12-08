@@ -100,14 +100,14 @@ export default function Sorting() {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left whitespace-nowrap">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0">
           <SwitchHorizontalIcon
             className="mr-2.5 h-5 w-5 text-gray-400"
             aria-hidden="true"
           />
-          {selectedSorting.title}
+          <span className="hidden sm:block">{selectedSorting.title}</span>
           <ChevronDownIcon
             className="-mr-1 ml-2 h-5 w-5"
             aria-hidden="true"
