@@ -5,7 +5,7 @@ export const useGetFilteredTeamMembers = (currentUserId, activeMembers) => {
   const { data, status } = useQuery(['team-members'], async () => requestNew({
     url: 'settings/team-members',
     method: 'GET',
-  }));
+  }, true));
   const activeMembersWithCurrent = currentUserId ? [currentUserId] : [];
 
   if (activeMembers) {
