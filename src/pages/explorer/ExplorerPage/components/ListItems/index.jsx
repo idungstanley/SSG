@@ -14,7 +14,9 @@ import {
   setShowUploadModal,
 } from '../../../../../features/explorer/explorerSlice';
 import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
-import { sortItems } from '../Toolbar/SortingItems';
+import { sortItems } from '../Toolbar/components/SortingItems';
+import Table from './Table';
+import Grid from './Grid';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
@@ -25,7 +27,8 @@ export default function ExplorerTable() {
   const {
     selectedFileIds,
     selectedFolderIds,
-    selectedSorting,
+    selectedSortingId,
+    selectedViewId,
   } = useSelector((state) => state.explorer);
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
 
@@ -147,14 +150,14 @@ export default function ExplorerTable() {
     () => [
       ...sortItems(
         items?.filter((i) => i.item_type === 'folder'),
-        selectedSorting.id,
+        selectedSortingId,
       ),
       ...sortItems(
         items?.filter((i) => i.item_type === 'file'),
-        selectedSorting.id,
+        selectedSortingId,
       ),
     ],
-    [data, selectedSorting],
+    [data, selectedSortingId],
   );
 
   return !items.length ? (
@@ -170,15 +173,27 @@ export default function ExplorerTable() {
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className="relative overflow-hidden">
-            {/* <Table
-              checkbox={checkbox}
-              checked={checked}
-              toggleAll={toggleAll}
-              sortedItems={sortedItems}
-              selectedItems={selectedItems}
-              handleChangeItem={handleChangeItem}
-              handleClick={handleClick}
-            /> */}
+            {selectedViewId === 1 ? (
+              <Table
+                checkbox={checkbox}
+                checked={checked}
+                toggleAll={toggleAll}
+                sortedItems={sortedItems}
+                selectedItems={selectedItems}
+                handleChangeItem={handleChangeItem}
+                handleClick={handleClick}
+              />
+            ) : (
+              <Grid
+                checkbox={checkbox}
+                checked={checked}
+                toggleAll={toggleAll}
+                sortedItems={sortedItems}
+                selectedItems={selectedItems}
+                handleChangeItem={handleChangeItem}
+                handleClick={handleClick}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -2,42 +2,58 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-export const copyItems = createAsyncThunk('explorer/copyItems', async (data) => {
-  localStorage.setItem('fileIdsToPaste', JSON.stringify(data.fileIds));
-  localStorage.setItem('folderIdsToPaste', JSON.stringify(data.folderIds));
+export const copyItems = createAsyncThunk(
+  'explorer/copyItems',
+  async (data) => {
+    localStorage.setItem('fileIdsToPaste', JSON.stringify(data.fileIds));
+    localStorage.setItem('folderIdsToPaste', JSON.stringify(data.folderIds));
 
-  const totalItemsCount = data.fileIds.length + data.folderIds.length;
+    const totalItemsCount = data.fileIds.length + data.folderIds.length;
 
-  if (totalItemsCount < 1) {
-    return totalItemsCount;
-  }
-
-  return totalItemsCount;
-});
-
-export const previewFileFullPage = createAsyncThunk('explorer/previewFileFullPage', async (data, thunkAPI) => {
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-
-  try {
-    const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-
-    window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
-
-    if (data.cb) {
-      data.cb();
+    if (totalItemsCount < 1) {
+      return totalItemsCount;
     }
 
-    return true;
-  } catch (error) {
-    thunkAPI.dispatch(displayNotification('error', 'Oops! An unknown error has occurred.', null, 8000));
-    return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
-  }
-});
+    return totalItemsCount;
+  },
+);
+
+export const previewFileFullPage = createAsyncThunk(
+  'explorer/previewFileFullPage',
+  async (data, thunkAPI) => {
+    const currentWorkspaceId = JSON.parse(
+      localStorage.getItem('currentWorkspaceId'),
+    );
+    const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+
+    try {
+      const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
+
+      window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
+
+      if (data.cb) {
+        data.cb();
+      }
+
+      return true;
+    } catch (error) {
+      thunkAPI.dispatch(
+        displayNotification(
+          'error',
+          'Oops! An unknown error has occurred.',
+          null,
+          8000,
+        ),
+      );
+      return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
+    }
+  },
+);
 
 const fileIdsToPaste = JSON.parse(localStorage.getItem('fileIdsToPaste'));
 const folderIdsToPaste = JSON.parse(localStorage.getItem('folderIdsToPaste'));
-const selectedSorting = JSON.parse(localStorage.getItem('selectedSorting')) || { id: 1, title: 'Created at (latest)' };
+const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId')) || 1;
+const selectedViewId = JSON.parse(localStorage.getItem('selectedView')) || 1;
 
 const initialState = {
   showUploadModal: false,
@@ -49,7 +65,8 @@ const initialState = {
 
   selectedFileIds: [],
   selectedFolderIds: [],
-  selectedSorting,
+  selectedSortingId,
+  selectedViewId,
 
   fileIdsToPaste: fileIdsToPaste != null ? fileIdsToPaste : [],
   folderIdsToPaste: folderIdsToPaste != null ? folderIdsToPaste : [],
@@ -109,7 +126,10 @@ export const explorerSlice = createSlice({
       state.selectedItemFullDetails = null;
     },
     setSelectedSorting: (state, action) => {
-      state.selectedSorting = action.payload;
+      state.selectedSortingId = action.payload;
+    },
+    setSelectedViewId: (state, action) => {
+      state.selectedViewId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -142,6 +162,7 @@ export const {
   setShowUploadModal,
   resetSelectedFilesAndFolders,
   setSelectedSorting,
+  setSelectedViewId,
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

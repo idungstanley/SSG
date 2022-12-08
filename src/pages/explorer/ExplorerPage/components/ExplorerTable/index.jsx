@@ -33,9 +33,7 @@ import {
 import { sortItems } from '../Toolbar/SortingItems';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
-function SelectionCell({
-  rowKeyValue, dispatch, isSelectedRow, selectedRows,
-}) {
+function SelectionCell({ rowKeyValue, dispatch, isSelectedRow, selectedRows }) {
   return (
     <input
       type="checkbox"
@@ -153,8 +151,8 @@ function ExplorerTable({ tableTitle }) {
 
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
 
-  const { selectedFileIds, selectedSorting, selectedFolderIds } = useSelector(
-    (state) => state.explorer,
+  const { selectedFileIds, selectedSortingId, selectedFolderIds } = useSelector(
+    (state) => state.explorer
   );
 
   const [processedData, setProcessedData] = useState([]);
@@ -189,19 +187,19 @@ function ExplorerTable({ tableTitle }) {
     }));
 
     setProcessedData([
-      ...sortItems(processedFolders, selectedSorting.id),
-      ...sortItems(processedFiles, selectedSorting.id),
+      ...sortItems(processedFolders, selectedSortingId.id),
+      ...sortItems(processedFiles, selectedSortingId.id),
     ]);
 
     kaTableDispatch(
       updateData([
-        ...sortItems(processedFolders, selectedSorting),
-        ...sortItems(processedFiles, selectedSorting),
-      ]),
+        ...sortItems(processedFolders, selectedSortingId),
+        ...sortItems(processedFiles, selectedSortingId),
+      ])
     );
 
     return true;
-  }, [data, selectedSorting]);
+  }, [data, selectedSortingId]);
 
   useEffect(() => {
     var i = 0;
@@ -231,14 +229,14 @@ function ExplorerTable({ tableTitle }) {
         setSelectedItem({
           selectedItemId: selectedFileIds[0],
           selectedItemType: 'file',
-        }),
+        })
       );
     } else if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
       dispatch(
         setSelectedItem({
           selectedItemId: selectedFolderIds[0],
           selectedItemType: 'folder',
-        }),
+        })
       );
     } else {
       // Multiple items selected
@@ -251,7 +249,7 @@ function ExplorerTable({ tableTitle }) {
       previewFileFullPage({
         fileId,
         cb: () => {},
-      }),
+      })
     );
   };
 
@@ -309,7 +307,7 @@ function ExplorerTable({ tableTitle }) {
                 <SelectionHeader
                   {...props}
                   areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(
-                    tableProps,
+                    tableProps
                   )}
                   // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
                 />
@@ -339,8 +337,8 @@ function ExplorerTable({ tableTitle }) {
                 extendedEvent.dispatch(
                   selectRowsRange(
                     extendedEvent.childProps.rowKeyValue,
-                    [...props.selectedRows].pop(),
-                  ),
+                    [...props.selectedRows].pop()
+                  )
                 );
               } else if (event.nativeEvent.metaKey) {
                 // If control/command key is being held (meta key)
@@ -348,11 +346,11 @@ function ExplorerTable({ tableTitle }) {
 
                 if (extendedEvent.childProps.isSelectedRow) {
                   kaTableDispatch(
-                    deselectRow(extendedEvent.childProps.rowKeyValue),
+                    deselectRow(extendedEvent.childProps.rowKeyValue)
                   );
                 } else {
                   kaTableDispatch(
-                    selectRow(extendedEvent.childProps.rowKeyValue),
+                    selectRow(extendedEvent.childProps.rowKeyValue)
                   );
                 }
               } else {
@@ -363,14 +361,14 @@ function ExplorerTable({ tableTitle }) {
 
                 kaTableDispatch(deselectAllRows());
                 kaTableDispatch(
-                  selectRow(extendedEvent.childProps.rowKeyValue),
+                  selectRow(extendedEvent.childProps.rowKeyValue)
                 );
               }
 
               if (extendedEvent.childProps.rowData.item_type === 'folder') {
                 prefetchExplorerFilesAndFoldersService(
                   queryClient,
-                  extendedEvent.childProps.rowData.item_id_raw,
+                  extendedEvent.childProps.rowData.item_id_raw
                 );
               }
             },
@@ -385,7 +383,7 @@ function ExplorerTable({ tableTitle }) {
 
                 navigate(
                   `/explorer/${extendedEvent.childProps.rowData.item_id_raw}`,
-                  { replace: false },
+                  { replace: false }
                 );
               } else if (
                 extendedEvent.childProps.rowData.item_type === 'file'
