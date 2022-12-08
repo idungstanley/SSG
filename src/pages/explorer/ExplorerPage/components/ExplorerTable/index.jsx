@@ -32,18 +32,6 @@ import {
 } from '../../../../../features/explorer/explorerService';
 // import { showExplorerFileContextMenu } from '../../../../../features/general/contextMenu/contextMenuSlice';
 
-export const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
-  ? b.created_at.localeCompare(a.created_at)
-  : sortType === 2
-    ? a.created_at.localeCompare(b.created_at)
-    : sortType === 3
-      ? b.full_object.updated_at.localeCompare(a.full_object.updated_at)
-      : sortType === 4
-        ? a.full_object.updated_at.localeCompare(b.full_object.updated_at)
-        : sortType === 5
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name)));
-
 function SelectionCell({
   rowKeyValue, dispatch, isSelectedRow, selectedRows,
 }) {

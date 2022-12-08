@@ -11,6 +11,18 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedSorting } from '../../../../../features/explorer/explorerSlice';
 
+export const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
+  ? b.created_at.localeCompare(a.created_at)
+  : sortType === 2
+    ? a.created_at.localeCompare(b.created_at)
+    : sortType === 3
+      ? b.updated_at.localeCompare(a.updated_at)
+      : sortType === 4
+        ? a.updated_at.localeCompare(b.updated_at)
+        : sortType === 5
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)));
+
 const sortingItems = [
   {
     id: 1,

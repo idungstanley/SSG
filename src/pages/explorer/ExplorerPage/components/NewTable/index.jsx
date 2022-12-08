@@ -1,7 +1,6 @@
 import React, {
-  // useEffect,
   useLayoutEffect,
-  // useMemo,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -18,7 +17,7 @@ import {
   setShowUploadModal,
 } from '../../../../../features/explorer/explorerSlice';
 import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
-// import { sortItems } from '../ExplorerTable';
+import { sortItems } from '../Toolbar/SortingItems';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -30,7 +29,9 @@ export default function ExplorerTable() {
   const checkbox = useRef();
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const { selectedItemId, selectedFileIds, selectedFolderIds } = useSelector(
+  const {
+    selectedItemId, selectedFileIds, selectedFolderIds, selectedSorting,
+  } = useSelector(
     (state) => state.explorer,
   );
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
@@ -42,19 +43,21 @@ export default function ExplorerTable() {
   data?.data.folders.map((i) => items.push({
     icon: 'folder',
     name: i.name,
-    created_at: OutputDateTime(i.created_at),
+    created_at: i.created_at,
     size: '-',
     item_type: 'folder',
     id: i.id,
+    updated_at: i.updated_at,
   }));
 
   data?.data.files.map((i) => items.push({
     icon: i.file_format.key,
     name: i.display_name,
-    created_at: OutputDateTime(i.created_at),
-    size: OutputFileSize(i.size),
+    created_at: i.created_at,
+    size: i.size,
     item_type: 'file',
     id: i.id,
+    updated_at: i.updated_at,
   }));
 
   useLayoutEffect(() => {
@@ -147,6 +150,8 @@ export default function ExplorerTable() {
     );
   }
 
+  const sortedItems = useMemo(() => [...sortItems(items?.filter((i) => i.item_type === 'folder'), selectedSorting.id), ...sortItems(items?.filter((i) => i.item_type === 'file'), selectedSorting.id)], [data, selectedSorting]);
+
   return !items.length ? (
     <FullScreenMessage
       title="No files or folders in your explorer"
@@ -196,7 +201,7 @@ export default function ExplorerTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {items.map((item) => (
+                {sortedItems.map((item) => (
                   <tr
                     key={item.id}
                     className={`${
@@ -230,10 +235,10 @@ export default function ExplorerTable() {
                       {item.name}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {item.created_at}
+                      {OutputDateTime(item.created_at)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {item.size}
+                      {OutputFileSize(item.size)}
                     </td>
                   </tr>
                 ))}
