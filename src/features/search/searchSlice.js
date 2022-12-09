@@ -34,11 +34,11 @@ export const selectItem = createAsyncThunk('search/selectItem', async (data, thu
 
 const initialState = {
   searchQuery: '',
-  resultsType: 'files',
   searchFileContents: false,
 
   selectedItemId: null,
   selectedItemType: null,
+  selectedItemPath: null,
 };
 
 export const searchSlice = createSlice({
@@ -48,19 +48,18 @@ export const searchSlice = createSlice({
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
-    setResultsType: (state, action) => {
-      state.resultsType = action.payload;
-    },
     setSearchFileContents: (state, action) => {
       state.searchFileContents = action.payload;
     },
     resetSelectedItem: (state) => {
       state.selectedItemId = null;
       state.selectedItemType = null;
+      state.selectedItemPath = null;
     },
     setSelectedItem: (state, action) => {
       state.selectedItemId = action.payload.selectedItemId;
       state.selectedItemType = action.payload.selectedItemType;
+      state.selectedItemPath = action.payload.selectedItemPath;
     },
   },
   extraReducers: (builder) => {
@@ -77,7 +76,6 @@ export const searchSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setSearchQuery,
-  setResultsType,
   setSearchFileContents,
   resetSelectedItem,
   setSelectedItem,
