@@ -1,15 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useSearchEverything } from '../../../../../features/search/searchService';
-import FileListItem from './FileListItem';
+import PropTypes from 'prop-types';
+import Item from '../Item';
 
-function FileResultsList() {
-  const searchQuery = useSelector((state) => state.search.searchQuery);
-  const resultsType = useSelector((state) => state.search.resultsType);
-  const searchFileContents = useSelector((state) => state.search.searchFileContents);
-
-  const { data, status } = useSearchEverything(searchQuery, resultsType, searchFileContents);
-
+function Results({ data }) {
   return (
     <div className="overflow-x-none bg-white h-full">
       <div className="overflow-x-none">
@@ -27,9 +20,16 @@ function FileResultsList() {
 
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 pl-9 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Path
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    From
                   </th>
 
                   <th
@@ -45,12 +45,11 @@ function FileResultsList() {
                   >
                     Size
                   </th>
-
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {status === 'success' && data.data.files.map((file) => (
-                  <FileListItem key={file.id} fileId={file.id} />
+                {data.map((i) => (
+                  <Item key={i.id} data={i} />
                 ))}
               </tbody>
             </table>
@@ -61,4 +60,8 @@ function FileResultsList() {
   );
 }
 
-export default FileResultsList;
+Results.propTypes = {
+  data: PropTypes.array.isRequired,
+};
+
+export default Results;
