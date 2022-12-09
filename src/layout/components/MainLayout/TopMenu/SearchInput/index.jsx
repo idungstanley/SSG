@@ -3,7 +3,7 @@ import { SearchIcon } from '@heroicons/react/solid';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setSearchQuery } from '../../../../../features/search/searchSlice';
-import { useSearchEverything } from '../../../../../features/search/searchService';
+import { useSearch } from '../../../../../features/search/searchService';
 import { Spinner } from '../../../../../common';
 
 export default function SearchInput() {
@@ -12,10 +12,11 @@ export default function SearchInput() {
   const location = useLocation();
 
   const searchQuery = useSelector((state) => state.search.searchQuery);
-  const resultsType = useSelector((state) => state.search.resultsType);
-  const searchFileContents = useSelector((state) => state.search.searchFileContents);
+  // const resultsType = useSelector((state) => state.search.resultsType);
+  // const searchFileContents = useSelector((state) => state.search.searchFileContents);
 
-  const { status } = useSearchEverything(searchQuery, resultsType, searchFileContents);
+  // const {  } = useSearch(searchQuery, searchFileContents);
+  const { explorerStatus, inboxStatus } = useSearch();
 
   const queryInput = useRef(null);
 
@@ -46,7 +47,7 @@ export default function SearchInput() {
       <div className="w-full px-2 lg:px-6">
         <div className="relative text-indigo-200 focus-within:text-gray-400">
           <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-            {status === 'loading' && searchQuery.length >= 2 ? (
+            {(explorerStatus === 'loading' || inboxStatus === 'loading') && searchQuery.length >= 2 ? (
               <div className="-mt-2">
                 <Spinner size={16} color="#9CA3AE" />
               </div>
