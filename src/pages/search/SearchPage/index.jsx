@@ -4,9 +4,13 @@ import SearchResults from '../components/SearchResults';
 import Preview from '../components/Preview';
 import Toolbar from '../components/header/Toolbar';
 import FilterResults from '../components/header/FilterResults';
-import { useSearchEverything } from '../../../features/search/searchService';
-import { EmptyStateSimple } from '../../../components';
+import {
+  useSearch,
+  useSearchEverything,
+} from '../../../features/search/searchService';
+import FullScreenMessage from '../../shared/components/FullScreenMessage';
 import { useDebounce } from '../../../hooks';
+import { Spinner } from '../../../common';
 
 export default function SearchPage() {
   const {
@@ -19,12 +23,22 @@ export default function SearchPage() {
 
   const debouncedValue = useDebounce(searchQuery, 300);
 
-  const { data, status } = useSearchEverything(
+  useSearchEverything(
     searchQuery,
     resultsType,
     searchFileContents,
     debouncedValue === searchQuery,
   );
+
+  const {
+    files, folders, inbox, explorerStatus, inboxStatus,
+  } = useSearch(
+    searchQuery,
+    searchFileContents,
+    debouncedValue === searchQuery,
+  );
+
+  console.log(files, folders, inbox);
 
   return (
     <div className="h-full flex flex-col w-full">
@@ -33,43 +47,34 @@ export default function SearchPage() {
 
       <div className="flex flex-row overflow-hidden bg-gray-50 h-full">
         <div className="flex-1 overflow-y-scroll bg-gray-50">
-          {searchQuery.length < 2 && (
-            <div className="flex flex-1 h-full bg-white">
-              <div className="m-auto">
-                <EmptyStateSimple
-                  title="Enter a search query"
-                  description="Enter at least 2 characters to start searching"
-                />
-              </div>
+          {searchQuery.length < 3 ? (
+            <FullScreenMessage
+              title="Enter a search query"
+              description="Enter at least 2 characters to start searching"
+            />
+
+          // checking error and loading
+          ) : explorerStatus === 'error' || inboxStatus === 'error' ? (
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
+          ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
+            <div className="mx-auto w-6 mt-10 justify-center">
+              <Spinner size={22} color="#0F70B7" />
             </div>
-          )}
 
-          {((status === 'success'
-            && resultsType === 'files'
-            && data.data.files.length === 0
-            && searchQuery.length >= 2)
-            || (status === 'success'
-              && resultsType === 'folders'
-              && data.data.folders.length === 0
-              && searchQuery.length >= 2)) && (
-              <div className="flex flex-1 h-full bg-white">
-                <div className="m-auto">
-                  <EmptyStateSimple
-                    title="No search results"
-                    description="We couldn't find any matching results"
-                  />
-                </div>
-              </div>
-          )}
-
-          {((status === 'success'
-            && resultsType === 'files'
-            && data.data.files.length !== 0
-            && searchQuery.length >= 2)
-            || (status === 'success'
-              && resultsType === 'folders'
-              && data.data.folders.length !== 0
-              && searchQuery.length >= 2)) && <SearchResults />}
+          // main data
+          ) : explorerStatus === 'success' && inboxStatus === 'success' ? (
+            searchQuery.length < 2 ? (
+              <FullScreenMessage
+                title="Enter a search query"
+                description="Enter at least 2 characters to start searching"
+              />
+            ) : (
+              <SearchResults />
+            )
+          ) : null}
         </div>
 
         {/* Details sidebar (separate files and folders) */}
