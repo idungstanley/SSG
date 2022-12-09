@@ -2,16 +2,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Search everything
-export const useSearchEverything = (query, resultsType, searchFileContents) => {
-  var url;
-
+export const useSearchEverything = (query, resultsType, searchFileContents, enabled) => {
   const queryClient = useQueryClient();
 
-  if (resultsType === 'files') {
-    url = '/search/files';
-  } else if (resultsType === 'folders') {
-    url = '/search/folders';
-  }
+  const url = resultsType === 'files' ? '/search/files' : '/search/folders';
 
   return useQuery(
     ['search_everything', { query, resultsType, searchFileContents }],
@@ -24,7 +18,7 @@ export const useSearchEverything = (query, resultsType, searchFileContents) => {
       },
     }),
     {
-      enabled: query.length >= 2,
+      enabled: !!enabled && query.length > 2,
       onSuccess: (data) => {
         if (resultsType === 'files') {
           data.data.files.map((file) => queryClient.setQueryData(['search_everything_file', file.id], file));

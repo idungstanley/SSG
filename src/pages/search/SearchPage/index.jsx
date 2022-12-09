@@ -17,13 +17,13 @@ export default function SearchPage() {
     searchFileContents,
   } = useSelector((state) => state.search);
 
-  const debouncedValue = useDebounce(searchQuery, 300);
-  console.log(debouncedValue);
+  const debouncedValue = useDebounce(searchQuery, 500);
 
   const { data, status } = useSearchEverything(
     searchQuery,
     resultsType,
     searchFileContents,
+    debouncedValue === searchQuery,
   );
 
   return (
