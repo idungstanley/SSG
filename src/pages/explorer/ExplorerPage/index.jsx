@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,11 +15,8 @@ import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver
 import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
 import {
   useGetExplorerFilesAndFolders,
-  useGetFile,
   useGetFolder,
 } from '../../../features/explorer/explorerService';
-import FilePreview from '../../../components/FilePreview';
-import FolderPreview from '../../../components/FolderPreview';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import ExplorerTable from './components/ListItems';
 
@@ -36,7 +33,7 @@ export default function ExplorerPage() {
     (state) => state.slideOver,
   );
 
-  const { selectedItemId, showUploadModal, selectedItemType } = useSelector(
+  const { showUploadModal } = useSelector(
     (state) => state.explorer,
   );
 
@@ -90,9 +87,6 @@ export default function ExplorerPage() {
     }
   });
 
-  const { data: file } = useGetFile(selectedItemId);
-  const { data: folder } = useGetFolder(selectedItemId);
-
   return (
     <>
       <DashboardModal
@@ -133,7 +127,7 @@ export default function ExplorerPage() {
             {status === 'success'
               && (data?.data?.folders.length !== 0
                 || data?.data?.files.length !== 0) && (
-                <div className="overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
+                <div className="relative overflow-x-none bg-gray-50 h-full align-middle inline-block min-w-full">
                   <ExplorerTable />
                 </div>
             )}
@@ -160,13 +154,6 @@ export default function ExplorerPage() {
               </div>
             )}
           </div>
-
-          {selectedItemType === 'file' && selectedItemId && (
-            <FilePreview file={file} />
-          )}
-          {selectedItemType === 'folder' && selectedItemId && (
-            <FolderPreview folder={folder} />
-          )}
         </div>
       </div>
 

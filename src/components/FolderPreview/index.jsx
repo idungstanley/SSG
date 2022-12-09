@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { FileIcon } from '../../common';
 import Toast from '../../common/Toast';
@@ -10,8 +10,10 @@ import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
 import requestNew from '../../app/requestNew';
 import { useGetFilteredTeamMembers } from '../../features/permissions/permissionsService';
+import { resetSelectedFilesAndFolders } from '../../features/explorer/explorerSlice';
 
 function FolderPreview({ folder }) {
+  const dispatch = useDispatch();
   const title = folder.name || folder.folder.name;
   const [showPopup, setShowPopup] = useState(false);
   const { currentUserId } = useSelector((state) => state.auth);
@@ -47,8 +49,27 @@ function FolderPreview({ folder }) {
   };
 
   return folder ? (
-    <aside className="relative hidden min-w-96 w-1/3 bg-white p-6 border-l border-gray-200 lg:block overflow-y-scroll">
-      <PermissionsManagement selectedDataId={folder.id} type="folder" />
+    <aside className="absolute inset-y-0 h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
+      <div className="flex justify-between mb-5 items-center">
+        <svg
+          onClick={() => dispatch(resetSelectedFilesAndFolders())}
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6 p cursor-pointer text-gray-400 hover:text-red-400 transition duration-300"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+
+        <PermissionsManagement selectedDataId={folder.id} type="folder" />
+      </div>
+
       <div className="pb-16 space-y-6">
         <div>
           <div className="block w-24 h-10 overflow-hidden">
