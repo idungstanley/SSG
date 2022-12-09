@@ -60,7 +60,7 @@ export default function Table({
             className={`${
               selectedItems.includes(item.id) ? 'bg-gray-50' : null
             } 
-                    ${selectedItemId === item.id ? 'bg-indigo-100' : null}
+                    ${selectedItemId === item.id ? 'bg-indigo-100' : null} 
                      cursor-pointer`}
             onClick={(e) => handleClick(e, item.id, item.item_type)}
           >

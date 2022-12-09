@@ -3,7 +3,7 @@ import React, {
   useLayoutEffect, useMemo, useRef, useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from '../../../../../common';
 import { useGetExplorerFilesAndFolders } from '../../../../../features/explorer/explorerService';
 import {
@@ -20,6 +20,7 @@ import Grid from './Grid';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { folderId } = useParams();
   const checkbox = useRef();
   const [checked, setChecked] = useState(false);
@@ -94,6 +95,10 @@ export default function ExplorerTable() {
   const handleClick = (e, itemId, type) => {
     if (selectedItems.length && !e.target.value) {
       dispatch(resetSelectedFilesAndFolders());
+    }
+
+    if (!e.target.value && selectedFolderIds.includes(itemId)) {
+      navigate(`${itemId}`, { replace: false });
     }
 
     if (!e.target.value) {
