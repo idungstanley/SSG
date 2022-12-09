@@ -53,18 +53,6 @@ export default function Toolbar() {
     selectedItemType === 'folder',
   );
 
-  // const selectedFileIds = useSelector(
-  //   (state) => state.explorer.selectedFileIds,
-  // );
-  // const selectedFolderIds = useSelector(
-  //   (state) => state.explorer.selectedFolderIds,
-  // );
-
-  // const fileIdsToPaste = useSelector((state) => state.explorer.fileIdsToPaste);
-  // const folderIdsToPaste = useSelector(
-  //   (state) => state.explorer.folderIdsToPaste,
-  // );
-
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
   const deleteMutation = useMutation(deleteService, {

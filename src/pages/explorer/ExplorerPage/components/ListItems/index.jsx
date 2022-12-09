@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
 import React, {
+  useEffect,
   useLayoutEffect, useMemo, useRef, useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,6 +72,12 @@ export default function ExplorerTable() {
       checkbox.current.indeterminate = isIndeterminate;
     }
   }, [selectedItems]);
+
+  useEffect(() => {
+    if (selectedItems.length) {
+      dispatch(resetSelectedFilesAndFolders());
+    }
+  }, []);
 
   function toggleAll() {
     if (checked || indeterminate) {
