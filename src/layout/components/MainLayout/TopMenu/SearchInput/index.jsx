@@ -12,10 +12,7 @@ export default function SearchInput() {
   const location = useLocation();
 
   const searchQuery = useSelector((state) => state.search.searchQuery);
-  // const resultsType = useSelector((state) => state.search.resultsType);
-  // const searchFileContents = useSelector((state) => state.search.searchFileContents);
 
-  // const {  } = useSearch(searchQuery, searchFileContents);
   const { explorerStatus, inboxStatus } = useSearch();
 
   const queryInput = useRef(null);
@@ -58,7 +55,7 @@ export default function SearchInput() {
           <input
             id="search"
             name="search"
-            className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 focus:placeholder-gray-500 sm:text-sm"
+            className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white ring-0 focus:ring-0 focus:text-gray-900 focus:placeholder-gray-500 sm:text-sm"
             placeholder="Search everything..."
             type="search"
             onChange={(e) => onQueryChange(e.target.value)}
