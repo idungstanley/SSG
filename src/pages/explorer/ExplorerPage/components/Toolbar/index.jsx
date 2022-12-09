@@ -40,7 +40,9 @@ export default function Toolbar() {
   const selectedItemType = useSelector(
     (state) => state.explorer.selectedItemType,
   );
-  const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
+  const {
+    selectedItemId, selectedFileIds, selectedFolderIds, fileIdsToPaste, folderIdsToPaste,
+  } = useSelector((state) => state.explorer);
 
   const { data: file } = useGetFile(
     selectedItemId,
@@ -51,17 +53,17 @@ export default function Toolbar() {
     selectedItemType === 'folder',
   );
 
-  const selectedFileIds = useSelector(
-    (state) => state.explorer.selectedFileIds,
-  );
-  const selectedFolderIds = useSelector(
-    (state) => state.explorer.selectedFolderIds,
-  );
+  // const selectedFileIds = useSelector(
+  //   (state) => state.explorer.selectedFileIds,
+  // );
+  // const selectedFolderIds = useSelector(
+  //   (state) => state.explorer.selectedFolderIds,
+  // );
 
-  const fileIdsToPaste = useSelector((state) => state.explorer.fileIdsToPaste);
-  const folderIdsToPaste = useSelector(
-    (state) => state.explorer.folderIdsToPaste,
-  );
+  // const fileIdsToPaste = useSelector((state) => state.explorer.fileIdsToPaste);
+  // const folderIdsToPaste = useSelector(
+  //   (state) => state.explorer.folderIdsToPaste,
+  // );
 
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
@@ -170,7 +172,7 @@ export default function Toolbar() {
     {
       icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: openRename,
-      disabled: !selectedItemId,
+      disabled: selectedFileIds.length + selectedFolderIds.length !== 1,
       title: 'Rename',
       isInRight: true,
     },
