@@ -78,6 +78,7 @@ export default function TableWithSelection() {
           inboxFileIndex: index,
         }),
       );
+      setSelectedFiles([fileId]);
     }
   };
 
