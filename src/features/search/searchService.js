@@ -1,9 +1,7 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 export const useSearch = (query, searchFileContents, enabled) => {
-  // const queryClient = useQueryClient();
-
   const explorer = useQuery(
     ['search_explorer', { query, searchFileContents }],
     async () => requestNew({
@@ -16,13 +14,6 @@ export const useSearch = (query, searchFileContents, enabled) => {
     }),
     {
       enabled: !!enabled && query.length > 2,
-      // onSuccess: (data) => {
-      //   data.data.files?.map((file) => queryClient.setQueryData(['search_everything_file', file.id], file));
-      //   data.data.folders?.map((folder) => queryClient.setQueryData(
-      //     ['search_everything_folder', folder.id],
-      //     folder,
-      //   ));
-      // },
     },
   );
 
@@ -37,15 +28,6 @@ export const useSearch = (query, searchFileContents, enabled) => {
     }),
     {
       enabled: !!enabled && query.length > 2,
-      // onSuccess: (data) => {
-      //   if (resultsType === 'files') {
-      //     data.data.files.map((file) => queryClient.setQueryData(['search_everything_file', file.id], file));
-      //   } else if (resultsType === 'folders') {
-      //     data.data.folders.map((folder) => queryClient.setQueryData(
-      //       ['search_everything_folder', folder.id],
-      //       folder,
-      //     ));
-      //   }
     },
   );
 
@@ -58,67 +40,13 @@ export const useSearch = (query, searchFileContents, enabled) => {
   };
 };
 
-// Search everything
-export const useSearchEverything = (
-  query,
-  resultsType,
-  searchFileContents,
-  enabled,
-) => {
-  const queryClient = useQueryClient();
+export const useGetSearchedItemDetails = (data) => {
+  const { type, id } = data;
 
-  const url = resultsType === 'files' ? '/search/files' : '/search/folders';
+  const url = `/${type}/${id}/details`;
 
-  return useQuery(
-    ['search_everything', { query, resultsType, searchFileContents }],
-    async () => requestNew({
-      url,
-      method: 'GET',
-      params: {
-        content_search: searchFileContents,
-        query,
-      },
-    }),
-    {
-      enabled: !!enabled && query.length > 2,
-      onSuccess: (data) => {
-        if (resultsType === 'files') {
-          data.data.files.map((file) => queryClient.setQueryData(['search_everything_file', file.id], file));
-        } else if (resultsType === 'folders') {
-          data.data.folders.map((folder) => queryClient.setQueryData(
-            ['search_everything_folder', folder.id],
-            folder,
-          ));
-        }
-      },
-    },
-  );
-};
-
-// Get search everything file
-export const useGetSearchEverythingFile = (fileId) => {
-  const queryClient = useQueryClient();
-
-  return useQuery(
-    ['search_everything_file', fileId],
-    () => queryClient.getQueryData(['search_everything_file', fileId]),
-    {
-      enabled: fileId != null,
-      initialData: () => queryClient.getQueryData(['search_everything_file', fileId]),
-    },
-  );
-};
-
-// Get search everything file
-export const useGetSearchEverythingFolder = (folderId) => {
-  const queryClient = useQueryClient();
-
-  return useQuery(
-    ['search_everything_folder', folderId],
-    () => queryClient.getQueryData(['search_everything_folder', folderId]),
-    {
-      enabled: folderId != null,
-      initialData: () => queryClient.getQueryData(['search_everything_folder', folderId]),
-    },
-  );
+  return useQuery(['search-details', id], () => requestNew({
+    url,
+    method: 'GET',
+  }));
 };
