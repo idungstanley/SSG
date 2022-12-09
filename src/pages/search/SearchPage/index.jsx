@@ -17,7 +17,7 @@ export default function SearchPage() {
     searchFileContents,
   } = useSelector((state) => state.search);
 
-  const debouncedValue = useDebounce(searchQuery, 500);
+  const debouncedValue = useDebounce(searchQuery, 300);
 
   const { data, status } = useSearchEverything(
     searchQuery,

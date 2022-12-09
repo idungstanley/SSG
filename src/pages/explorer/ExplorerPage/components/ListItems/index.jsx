@@ -1,12 +1,15 @@
 /* eslint-disable react/jsx-no-bind */
 import React, {
   useEffect,
-  useLayoutEffect, useMemo, useRef, useState,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from '../../../../../common';
-import { useGetExplorerFilesAndFolders } from '../../../../../features/explorer/explorerService';
+import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../../../features/explorer/explorerService';
 import {
   setSelectedFiles,
   setSelectedFolders,
@@ -18,6 +21,8 @@ import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
 import { sortItems } from '../Toolbar/components/SortingItems';
 import Table from './Table';
 import Grid from './Grid';
+import FilePreview from '../../../../../components/FilePreview';
+import FolderPreview from '../../../../../components/FolderPreview';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
@@ -31,6 +36,7 @@ export default function ExplorerTable() {
     selectedFolderIds,
     selectedSortingId,
     selectedViewId,
+    selectedItemId,
   } = useSelector((state) => state.explorer);
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
 
@@ -172,6 +178,9 @@ export default function ExplorerTable() {
     [data, selectedSortingId],
   );
 
+  const { data: file } = useGetFile(selectedItemId);
+  const { data: folder } = useGetFolder(selectedItemId);
+
   return !items.length ? (
     <FullScreenMessage
       title="No files or folders in your explorer"
@@ -181,7 +190,14 @@ export default function ExplorerTable() {
       showCta
     />
   ) : (
-    <div className="flex flex-col px-3 md:px-0">
+    <div className="flex flex-col h-full px-3 md:px-0">
+      {selectedItemId ? (
+        file ? (
+          <FilePreview file={file} />
+        ) : (
+          <FolderPreview folder={folder} />
+        )
+      ) : null}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className="relative overflow-hidden">
