@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  ArrowCircleRightIcon,
-} from '@heroicons/react/outline';
+import { ArrowCircleRightIcon } from '@heroicons/react/outline';
 import {
   useGetInboxFile,
   fileInboxFileService,
@@ -11,6 +9,7 @@ import {
 import { Button } from '../../../../../../components';
 import MinMenu from './components/minMenu';
 import NavigationBetweenFiles from './components/navigationBetweenFiles';
+import DeleteFile from './components/deleteFile';
 
 function Toolbar() {
   const queryClient = useQueryClient();
@@ -66,6 +65,7 @@ function Toolbar() {
                     <NavigationBetweenFiles />
                     <div className="flex gap-4 relative">
                       <MinMenu />
+                      <DeleteFile />
                       <Button
                         buttonStyle="primary"
                         onClick={fileDocument}

@@ -380,3 +380,21 @@ export const useDeleteResponsibleMemberOrGroup = (inboxId, isGroups) => {
     },
   });
 };
+
+const deleteInboxFile = (data) => {
+  const request = requestNew({
+    url: `inbox-files/${data.fileId}/delete`,
+    method: 'POST',
+  });
+  return request;
+};
+
+export const useDeleteInboxFile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteInboxFile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inbox_files']);
+    },
+  });
+};
