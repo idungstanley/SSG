@@ -95,6 +95,7 @@ function AddFolders() {
                 <div className="mt-3">
                   {folderIdsForFiling.map((folderId) => (
                     <SelectedFolderItem
+                      key={folderId}
                       folderId={folderId}
                       handleRemoveFolder={handleRemoveFolder}
                     />
@@ -111,6 +112,7 @@ function AddFolders() {
                 items={(
                   folderSearchStatus === 'success' && folderSearchData.data.folders.map((folder) => (
                     <FolderSearchResultItem
+                      key={folder.id}
                       folderId={folder.id}
                       handleAddFolder={handleAddFolder}
                       handleRemoveFolder={handleRemoveFolder}
