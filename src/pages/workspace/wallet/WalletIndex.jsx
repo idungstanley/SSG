@@ -7,25 +7,43 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { FolderFilled } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetHubService } from '../../../features/hubs/hubService';
 import MenuDropdown from '../hubs/components/MenuDropdown';
 import PlusDropDown from '../hubs/components/PlusDropDown';
 import WalletModal from './components/WalletModal';
 import ListModal from '../Lists/components/ListModal';
+import SubWalletIndex from './components/SubWalletIndex';
+import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 function WalletIndex({ showHubList, getCurrentHubId }) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
+  const [showSubWallet, setShowSubWallet] = useState(false)
+  const [walletId, setGetWalletId] = useState('');
+  const [walletParentId, setWalletParentId] = useState('')
   const { data: hubdataById, status } = useQuery({
     queryKey: ['hubdata_hubByID', getCurrentHubId],
     queryFn: useGetHubService,
   });
 
+  console.log(hubdataById);
   const navigate = useNavigate()
   const handleLocation = (id) => {
+    console.log(id);
     navigate(`/workspace/wallet/${id}`)
   }
+
+  const handleShowSubWallet = (id) => {
+    setWalletParentId(id)
+    setShowSubWallet(!showSubWallet)
+     if (showSubWallet === id) {
+      return setShowSubWallet(null);
+    }
+    setShowSubWallet(id);
+  }
+  console.log(showSubWallet);
+  console.log(walletId);
 
   return hubdataById?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
@@ -37,10 +55,23 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
                 id="walletLeft"
                 className="flex items-center justify-center space-x-1"
               >
+                {/* showsub */}
+                <div onClick={() => handleShowSubWallet(wallet.id)}>
+                  {showSubWallet === wallet.id ? (
+                    <ChevronDownIcon
+                      className="flex-shrink-0 h-3 w-5"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <ChevronRightIcon
+                      className="flex-shrink-0 h-3 w-5"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
+
                 <FolderFilled />
-                <div
-                 onClick={() => handleLocation(wallet.id)}
-                >
+                <div onClick={() => handleLocation(wallet.id)}>
                   <p className="text-sm">{wallet.name}</p>
                 </div>
               </div>
@@ -48,11 +79,28 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
               <div
                 id="walletRight"
                 className="space-x-1 flex items-center justify-end"
+                onClick={() => setGetWalletId(wallet.id)}
               >
                 <MenuDropdown />
-                <PlusDropDown />
+                <PlusDropDown walletId={walletId} />
               </div>
             </section>
+            <div>
+              <WalletModal
+                walletVisible={showWalletModal}
+                onCloseWalletModal={() => setShowWalletModal(false)}
+              />
+              {showSubWallet === wallet.id ? (
+                <SubWalletIndex
+                  walletParentId={walletParentId}
+                  getCurrentHubId={getCurrentHubId}
+                />
+              ) : null}
+              <ListModal
+                listVisible={showListModal}
+                onCloseListModal={() => setShowListModal(false)}
+              />
+            </div>
           </div>
         ))
       ) : (
@@ -67,16 +115,6 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
           </span>
         </div>
       )}
-      <div>
-        <WalletModal
-          walletVisible={showWalletModal}
-          onCloseWalletModal={() => setShowWalletModal(false)}
-        />
-        <ListModal
-          listVisible={showListModal}
-          onCloseListModal={() => setShowListModal(false)}
-        />
-      </div>
     </div>
   ) : null;
 }

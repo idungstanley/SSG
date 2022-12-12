@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
@@ -14,11 +15,12 @@ import {
   PencilAltIcon,
   TemplateIcon,
 } from '@heroicons/react/outline';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../Lists/components/ListModal';
 
-function PlusDropDown() {
+function PlusDropDown({ walletId }) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
   function classNames(...classes) {
@@ -28,10 +30,12 @@ function PlusDropDown() {
     <>
       <WalletModal
         walletVisible={showWalletModal}
+        walletId={walletId}
         onCloseWalletModal={() => setShowWalletModal(false)}
       />
       <ListModal
         listVisible={showListModal}
+        walletId={walletId}
         onCloseListModal={() => setShowListModal(false)}
       />
 
@@ -151,5 +155,13 @@ function PlusDropDown() {
     </>
   );
 }
+
+PlusDropDown.defaultProps = {
+  walletId: '',
+};
+
+PlusDropDown.propTypes = {
+  walletId: PropTypes.string,
+};
 
 export default PlusDropDown;

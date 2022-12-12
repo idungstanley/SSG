@@ -5,9 +5,10 @@ export const createListService = (data) => {
     {
       url: 'at/lists',
       method: 'POST',
-      params: {
-        name: data.name,
-        hub_id: data.hubID,
+      data: {
+        name: data.listName,
+        hub_id: data.hubId,
+        wallet_id: data.parentId,
       },
     },
     true,
@@ -21,7 +22,7 @@ export const getListService = (data) => {
   const response = requestNew({
     url: 'at/lists',
     method: 'GET',
-    params: {
+    data: {
       hub_id: hubID,
     },
   }, true);
@@ -34,7 +35,7 @@ export const getListsListService = (data) => {
     {
       url: 'at/lists',
       method: 'GET',
-      params: {
+      data: {
         wallet_id: walletID,
       },
     },

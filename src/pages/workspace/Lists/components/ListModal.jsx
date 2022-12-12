@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
@@ -6,10 +8,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createListService } from '../../../../features/list/listService';
 import { Button, Input } from '../../../../components';
 
-function ListModal({ listVisible, onCloseListModal }) {
+function ListModal({ listVisible, onCloseListModal, walletId }) {
   const queryClient = useQueryClient();
   const createList = useMutation(createListService, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
       queryClient.invalidateQueries('listData');
       onCloseListModal();
     },
@@ -19,21 +22,23 @@ function ListModal({ listVisible, onCloseListModal }) {
     name: '',
   };
 
-  const hubID = JSON.parse(localStorage.getItem('currentHubId'));
+  const hub_id = JSON.parse(localStorage.getItem('currentHubId'));
 
   const [formState, setFormState] = useState(defaultListFormState);
 
   const handleListChange = (e) => {
     setFormState({
-      ...formState, [e.target.name]: e.target.value,
+      ...formState,
+      [e.target.name]: e.target.value,
     });
   };
 
   const { name } = formState;
-
   const onSubmit = async () => {
     await createList.mutateAsync({
-      name, hubID,
+      listName: name,
+      hubId: hub_id,
+      parentId: walletId,
     });
   };
 
@@ -85,12 +90,14 @@ function ListModal({ listVisible, onCloseListModal }) {
 
 ListModal.defaultProps = {
   listVisible: false,
+  walletId: '',
   // onCloseListModal: false,
 };
 
 ListModal.propTypes = {
   listVisible: PropTypes.bool,
   onCloseListModal: PropTypes.func.isRequired,
+  walletId: PropTypes.string,
 };
 
 export default ListModal;

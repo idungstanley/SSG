@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../features/wallet/walletService';
 import { Button, Input } from '../../../../components';
 
-function WalletModal({ walletVisible, onCloseWalletModal }) {
+function WalletModal({ walletVisible, onCloseWalletModal, walletId }) {
   const queryClient = useQueryClient();
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
@@ -33,7 +33,9 @@ function WalletModal({ walletVisible, onCloseWalletModal }) {
 
   const onSubmit = async () => {
     await createWallet.mutateAsync({
-      name, hubID,
+      name,
+      hubID,
+      walletId,
     });
   };
 
@@ -93,12 +95,13 @@ function WalletModal({ walletVisible, onCloseWalletModal }) {
 
 WalletModal.defaultProps = {
   walletVisible: false,
-  // onCloseWalletModal: false,
+  walletId: '',
 };
 
 WalletModal.propTypes = {
   walletVisible: PropTypes.bool,
   onCloseWalletModal: PropTypes.func.isRequired,
+  walletId: PropTypes.string,
 };
 
 export default WalletModal;

@@ -5,7 +5,7 @@ export const createTaskService = (data) => {
     {
       url: 'at/tasks',
       method: 'POST',
-      params: {
+      data: {
         name: data.name,
         description: data.description,
         list_id: data.getListId,
@@ -22,7 +22,7 @@ export const getTaskListService = (data) => {
     {
       url: 'at/tasks',
       method: 'GET',
-      params: {
+      data: {
         list_id: listId,
       },
     },

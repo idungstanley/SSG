@@ -16,6 +16,8 @@ function RenderWallets() {
     queryKey: ['walletdata', walletId],
     queryFn: getListsListService,
   });
+  console.log(WalletListData);
+
   return (
     <div>
       <section id="nav">

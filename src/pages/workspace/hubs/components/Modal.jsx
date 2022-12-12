@@ -28,10 +28,15 @@ function Modal({ isVisible, onCloseHubModal }) {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
+  const currentWorkspaceId = JSON.parse(
+    localStorage.getItem('currentWorkspaceId'),
+  );
+
   const { name } = formState;
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,
+      currentWorkspaceId,
     });
 
     onCloseHubModal();
