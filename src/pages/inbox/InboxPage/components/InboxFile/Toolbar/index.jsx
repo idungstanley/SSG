@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowCircleRightIcon } from '@heroicons/react/outline';
 import {
@@ -10,9 +10,11 @@ import { Button } from '../../../../../../components';
 import MinMenu from './components/minMenu';
 import NavigationBetweenFiles from './components/navigationBetweenFiles';
 import DeleteFile from './components/deleteFile';
+import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 
 function Toolbar() {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
   const { selectedInboxFileId } = useSelector((state) => state.inbox);
 
@@ -33,16 +35,21 @@ function Toolbar() {
         data.data.inbox_file.inbox_id,
         { isArchived: 0 },
       ]);
-      queryClient.invalidateQueries(['inboxes']);
       queryClient.invalidateQueries(['inboxes_unfiled_count']);
     },
   });
 
-  const fileDocument = () => {
-    fileInboxFileMutation.mutate({
+  const fileDocument = async () => {
+    await fileInboxFileMutation.mutateAsync({
       inboxFileId: inboxFile.id,
       folderIds: folderIdsForFiling,
     });
+    dispatch(
+      setCurrentInboxFile({
+        selectedInboxFileId: null,
+        selectedInboxFileIndex: 1,
+      }),
+    );
   };
 
   return inboxFile ? (
