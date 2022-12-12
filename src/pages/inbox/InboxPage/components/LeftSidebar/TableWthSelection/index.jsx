@@ -5,7 +5,7 @@ import {
   useGetInboxFiles,
   useMultipleArchiveOrUnArchive,
 } from '../../../../../../features/inbox/inboxService';
-import { FileIcon } from '../../../../../../common';
+import { FileIcon, Spinner } from '../../../../../../common';
 import FullScreenMessage from '../../../../../shared/components/FullScreenMessage';
 import {
   setCurrentInboxFile, setShowUploadModal,
@@ -55,7 +55,9 @@ export default function TableWithSelection() {
       setChecked(selectedFiles.length === inboxFiles.length);
     }
     setIndeterminate(isIndeterminate);
-    checkbox.current.indeterminate = isIndeterminate;
+    if (checkbox.current) {
+      checkbox.current.indeterminate = isIndeterminate;
+    }
   }, [selectedFiles]);
 
   function toggleAll() {
@@ -111,7 +113,15 @@ export default function TableWithSelection() {
     );
   }
 
-  return status === 'success' && !inboxFiles.length ? (
+  if (status === 'loading') {
+    return (
+      <div className="mx-auto w-6 mt-10 justify-center">
+        <Spinner size={22} color="#0F70B7" />
+      </div>
+    );
+  }
+
+  return !inboxFiles.length ? (
     <FullScreenMessage
       title={
         selectedInboxTabKey === 'inbox'
