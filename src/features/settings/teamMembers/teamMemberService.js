@@ -17,7 +17,7 @@ export const useGetTeamMembers = (data) => {
           page: data.page,
           search: data.query,
         },
-      });
+      }, true);
     },
     {
       onSuccess: (successData) => {
@@ -37,7 +37,7 @@ export const useGetTeamMember = (teamMemberId) => {
       const data = await requestNew({
         url: `settings/team-members/${teamMemberId}`,
         method: 'GET',
-      });
+      }, true);
       return data.data.team_member;
     },
     {
@@ -52,7 +52,7 @@ export const deactivateTeamMemberService = async (data) => {
   const response = requestNew({
     url: `/settings/team-members/${data.teamMemberId}/deactivate`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
 
@@ -71,7 +71,7 @@ export const reactivateTeamMemberService = async (data) => {
   const response = requestNew({
     url: `/settings/team-members/${data.teamMemberId}/reactivate`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
 
@@ -90,7 +90,7 @@ export const removeTeamMemberService = async (data) => {
   const response = requestNew({
     url: `/settings/team-members/${data.teamMemberId}/remove`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
 

@@ -19,7 +19,7 @@ export const updateInboxSettingsService = async (data) => {
       name: data.name,
       email_username: data.emailUsername,
     },
-  });
+  }, true);
   return response;
 };
 

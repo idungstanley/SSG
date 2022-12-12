@@ -51,7 +51,7 @@ export const deleteTeamMemberInviteService = async (data) => {
   const response = requestNew({
     url: `/settings/team-member-invites/${data.teamMemberId}`,
     method: 'DELETE',
-  });
+  }, true);
   return response;
 };
 
@@ -71,7 +71,7 @@ export const resendTeamMemberInviteService = async (data) => {
   const response = requestNew({
     url: `/settings/team-member-invites/${data.teamMemberId}/resend`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
 
