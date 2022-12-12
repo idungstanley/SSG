@@ -112,6 +112,8 @@ export default function ExplorerTable() {
 
     if (!e.target.value && selectedFolderIds.includes(itemId)) {
       navigate(`${itemId}`, { replace: false });
+      dispatch(resetSelectedFilesAndFolders());
+      setChecked(false);
     }
 
     if (!e.target.value) {
