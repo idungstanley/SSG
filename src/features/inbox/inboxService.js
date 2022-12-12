@@ -395,6 +395,7 @@ export const useDeleteInboxFile = () => {
   return useMutation(deleteInboxFile, {
     onSuccess: () => {
       queryClient.invalidateQueries(['inbox_files']);
+      queryClient.invalidateQueries(['inboxes']);
     },
   });
 };
