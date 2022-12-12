@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
@@ -6,16 +6,14 @@ import {
   OutputDateTime,
   OutputFileSize,
   DownloadFile,
-  GetFileWithHeaders,
 } from '../../app/helpers';
 import requestNew from '../../app/requestNew';
 import Toast from '../../common/Toast';
-import { Spinner } from '../../common';
 import ComboBox from '../comboBox/ComboBoxForTeamMembers';
 import PermissionsManagement from '../PermissionsManagement';
 import { useGetFilteredTeamMembers } from '../../features/permissions/permissionsService';
 import { resetSelectedFilesAndFolders } from '../../features/explorer/explorerSlice';
-import Preview from '../../common/FilePreview';
+import { FileIcon } from '../../common';
 
 function FilePreview({ file }) {
   const dispatch = useDispatch();
@@ -60,17 +58,6 @@ function FilePreview({ file }) {
     }
   };
 
-  const [fileData, setFileData] = useState(null);
-
-  useEffect(async () => {
-    if (file.id == null) {
-      return setFileData(null);
-    }
-
-    const data = await GetFileWithHeaders('file', file.id);
-    return setFileData(data);
-  }, [file.id]);
-
   return file ? (
     <aside className="fixed h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
       <div className="flex justify-between mb-5 items-center">
@@ -95,18 +82,9 @@ function FilePreview({ file }) {
 
       <div className="pb-16 space-y-6">
         <div>
-          <div className="w-full h-52 overflow-y-scroll mx-auto flex items-center justify-center">
-            {fileData ? (
-              <Preview fileData={fileData} fileExtension={extension} />
-            ) : (
-              <div className="mx-auto w-6 mt-10 justify-center">
-                <Spinner size={22} color="#0F70B7" />
-              </div>
-            )}
-          </div>
-          {/* <div className="block w-24 h-10 overflow-hidden">
+          <div className="block w-24 h-10 overflow-hidden">
             <FileIcon extensionKey={extension} size={10} />
-          </div> */}
+          </div>
           <div className="mt-4 flex items-start justify-between">
             <div>
               <h2 className="text-lg font-medium text-gray-900">
