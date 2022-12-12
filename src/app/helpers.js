@@ -4,29 +4,25 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 var fileDownload = require('js-file-download');
 
-export function GetFileWithHeaders(type, id) {
+export async function GetFileWithHeaders(type, id) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId'));
   const endpoint = (type === 'inboxFile' ? `${baseUrl}/inbox-files/${id}/contents` : `${baseUrl}/files/${id}/contents`);
 
-  return axios
+  const response = await axios
     .get(endpoint, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         current_workspace_id: currentWorkspaceId,
       },
       responseType: 'arraybuffer',
-    })
-    .then((response) => {
-      const data = `data:${
-        response.headers['content-type']
-      };base64,${Buffer.from(response.data, 'binary').toString('base64')}`;
-      return data;
     });
+  const data = `data:${response.headers['content-type']};base64,${Buffer.from(response.data, 'binary').toString('base64')}`;
+  return data;
 }
 
-export function DownloadFile(type, id, name) {
+export async function DownloadFile(type, id, name) {
   var endpoint = null;
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
@@ -41,18 +37,16 @@ export function DownloadFile(type, id, name) {
     endpoint = `${baseUrl}/folders/${id}/download`;
   }
 
-  return axios
+  const response = await axios
     .get(endpoint, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         current_workspace_id: currentWorkspaceId,
       },
       responseType: 'blob', // Important
-    })
-    .then((response) => {
-      console.log(response);
-      fileDownload(response.data, name);
     });
+  console.log(response);
+  fileDownload(response.data, name);
 }
 
 export function OutputDateTime(timestamp, format = null, timezone = null) {

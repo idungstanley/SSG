@@ -13,7 +13,7 @@ function FilePreview({ fileData, fileExtension }) {
   };
 
   return (
-    <div className="react-doc-viewer-wrapper h-full w-full overflow-y-scroll flex-1">
+    <div className="h-full w-full overflow-y-scroll">
       {images.includes(fileExtension) ? (
         <img src={fileData} alt="img" />
       ) : docks.includes(fileExtension) ? (
