@@ -5,7 +5,6 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useNavigate } from 'react-router-dom';
 import {
   useArchiveOrUnarchiveInbox,
-  useGetInbox,
   useHideOrUnhideInbox,
   usePinOrUnpinInbox,
   useRestoreOrDeleteInbox,
@@ -18,7 +17,6 @@ function classNames(...classes) {
 export default function Menu({ inboxId, type }) {
   const navigate = useNavigate();
 
-  const { data: inbox } = useGetInbox(inboxId, type);
   const { mutate: pinOrUnpinInbox } = usePinOrUnpinInbox();
   const { mutate: hideOrShowInbox } = useHideOrUnhideInbox();
   const { mutate: archiveInbox } = useArchiveOrUnarchiveInbox();
@@ -55,49 +53,38 @@ export default function Menu({ inboxId, type }) {
 
   const menuItems = [
     {
-      id: 1,
-      onClick: onRestoreInbox,
-      title: type === 'trashed' ? 'Restore' : 'Delete',
-    },
-    {
       id: 2,
       onClick: onViewInbox,
       title: 'View',
+      isVisible: type === 'active' || type === 'archived',
     },
     {
       id: 3,
       onClick: onPinInbox,
       title: 'Pin',
+      isVisible: type === 'active',
     },
     {
       id: 4,
       onClick: onHideInbox,
       title: type === 'hidden' ? 'Unhide' : 'Hide',
+      isVisible: type === 'active' || type === 'hidden',
     },
     {
       id: 5,
       onClick: onArchiveInbox,
       title: type === 'archived' ? 'Unarchive' : 'Archive',
+      isVisible: type === 'active' || type === 'archived',
+    },
+    {
+      id: 1,
+      onClick: onRestoreInbox,
+      title: type === 'trashed' ? 'Restore' : 'Delete',
+      isVisible: true,
     },
   ];
-  const activeMenuItems = [];
 
-  if (type === 'trashed') {
-    activeMenuItems.push(menuItems[0]);
-  } else {
-    activeMenuItems.push(menuItems[1]);
-    if (type === 'active') {
-      activeMenuItems.push(menuItems[2], menuItems[0]);
-    }
-    if (type === 'active' || type === 'hidden') {
-      activeMenuItems.push(menuItems[3]);
-    }
-    if (type === 'active' || type === 'archived') {
-      activeMenuItems.push(menuItems[4]);
-    }
-  }
-
-  return inbox ? (
+  return (
     <HeadlessUIMenu as="div" className="relative inline-block text-left">
       <div>
         <HeadlessUIMenu.Button className="relative top-1 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
@@ -116,7 +103,7 @@ export default function Menu({ inboxId, type }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <HeadlessUIMenu.Items className=" z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
-          {activeMenuItems.map((i) => (
+          {menuItems.map((i) => (i.isVisible ? (
             <div className="py-1" key={i.id}>
               <HeadlessUIMenu.Item>
                 {({ active }) => (
@@ -133,11 +120,11 @@ export default function Menu({ inboxId, type }) {
                 )}
               </HeadlessUIMenu.Item>
             </div>
-          ))}
+          ) : null))}
         </HeadlessUIMenu.Items>
       </Transition>
     </HeadlessUIMenu>
-  ) : null;
+  );
 }
 
 Menu.propTypes = {

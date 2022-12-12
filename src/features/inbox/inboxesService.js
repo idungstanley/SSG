@@ -36,18 +36,6 @@ export const useGetActiveInboxes = () => {
   );
 };
 
-// export const useGetActiveInbox = (inboxId) => {
-//   const queryClient = useQueryClient();
-
-//   return useQuery(
-//     ['active-inbox', inboxId],
-//     () => queryClient.getQueryData(['active-inbox', inboxId]),
-//     {
-//       initialData: () => queryClient.getQueryData(['active-inbox', inboxId]),
-//     },
-//   );
-// };
-
 // trashed
 export const useGetTrashedInboxes = () => {
   const queryClient = useQueryClient();
@@ -65,18 +53,6 @@ export const useGetTrashedInboxes = () => {
     },
   );
 };
-
-// export const useGetTrashedInbox = (inboxId) => {
-//   const queryClient = useQueryClient();
-
-//   return useQuery(
-//     ['trashed-inbox', inboxId],
-//     () => queryClient.getQueryData(['trashed-inbox', inboxId]),
-//     {
-//       initialData: () => queryClient.getQueryData(['trashed-inbox', inboxId]),
-//     },
-//   );
-// };
 
 // Get inbox
 export const useGetInbox = (inboxId, type) => {
@@ -113,21 +89,6 @@ export const useGetArchivedInboxes = () => {
   );
 };
 
-// export const useGetArchivedInbox = (inboxId) => {
-//   // TODO: If not in cache... get from endpoint (hard get)
-//   // Default data should use the previously set data TODO check...
-
-//   const queryClient = useQueryClient();
-
-//   return useQuery(
-//     ['archived-inbox', inboxId],
-//     () => queryClient.getQueryData(['archived-inbox', inboxId]),
-//     {
-//       initialData: () => queryClient.getQueryData(['archived-inbox', inboxId]),
-//     },
-//   );
-// };
-
 // hidden inboxes
 export const useGetHiddenInboxes = () => {
   const queryClient = useQueryClient();
@@ -148,21 +109,6 @@ export const useGetHiddenInboxes = () => {
     },
   );
 };
-
-// export const useGetHiddenInbox = (inboxId) => {
-//   // TODO: If not in cache... get from endpoint (hard get)
-//   // Default data should use the previously set data TODO check...
-
-//   const queryClient = useQueryClient();
-
-//   return useQuery(
-//     ['hidden-inbox', inboxId],
-//     () => queryClient.getQueryData(['hidden-inbox', inboxId]),
-//     {
-//       initialData: () => queryClient.getQueryData(['hidden-inbox', inboxId]),
-//     },
-//   );
-// };
 
 // Get all pinned inboxes
 export const useGetPinnedInboxes = () => {

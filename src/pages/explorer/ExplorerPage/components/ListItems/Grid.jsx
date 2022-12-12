@@ -55,7 +55,7 @@ export default function Grid({
             </div>
             <div className="min-w-0 flex-1 pl-5">
               <p
-                className={`text-sm font-medium text-left text-gray-900 ${
+                className={`text-sm font-medium overflow-hidden overflow-ellipsis text-left text-gray-900 ${
                   selectedItems.includes(item.id)
                     ? 'text-indigo-600'
                     : 'text-gray-900'

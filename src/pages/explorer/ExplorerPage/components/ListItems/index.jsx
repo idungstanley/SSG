@@ -83,7 +83,7 @@ export default function ExplorerTable() {
     if (selectedItems.length) {
       dispatch(resetSelectedFilesAndFolders());
     }
-  }, []);
+  }, [folderId]);
 
   function toggleAll() {
     if (checked || indeterminate) {

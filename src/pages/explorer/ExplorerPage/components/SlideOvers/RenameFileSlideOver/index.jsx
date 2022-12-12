@@ -43,7 +43,7 @@ function RenameItemSlideOver() {
     <SlideOver
       show={showSlideOver}
       onClose={() => dispatch(setRenameFileSlideOverVisibility(false))}
-      headerTitle="Rename file"
+      headerTitle={`Rename ${selectedItemType}`}
       body={(
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
