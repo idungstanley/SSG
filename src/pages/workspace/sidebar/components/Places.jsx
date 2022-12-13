@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
 import Favourites from '../../favourites';
@@ -16,7 +16,7 @@ const secondaryNavigation = [
   { name: 'directory', id: 6, place: <Directory /> },
 ];
 
-export default function Places() {
+function Places() {
   const [activePlaceId, setActivePlaceId] = useState(null);
 
   return (
@@ -27,7 +27,10 @@ export default function Places() {
       >
         Places
       </h3>
-      <ul className="mt-1 space-y-1 divide-y divide-gray-200" aria-labelledby="projects-headline">
+      <ul
+        className="mt-1 space-y-1 divide-y divide-gray-200"
+        aria-labelledby="projects-headline"
+      >
         {secondaryNavigation.map((item) => (
           <li
             key={item.id}
@@ -64,3 +67,5 @@ export default function Places() {
     </div>
   );
 }
+
+export default memo(Places);

@@ -8,7 +8,7 @@ export default function Header() {
   const { showSidebar } = useSelector((state) => state.workspace);
 
   return (
-    <div className="sticky top-0 z-10 flex flex-shrink-0 bg-white shadow">
+    <div className="top-0 flex flex-shrink-0 bg-white shadow">
       {!showSidebar ? (
         <button
           type="button"

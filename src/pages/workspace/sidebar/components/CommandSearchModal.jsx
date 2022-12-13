@@ -9,7 +9,7 @@ function CommandSearchModal({
 }) {
   if (!commandSearchVisible) return null;
   return (
-    <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+    <div className="w-full z-50 fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
       <div className="w-5/12 flex flex-col">
         <div
           className="text-white text-xl place-self-end"
