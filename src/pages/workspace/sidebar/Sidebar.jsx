@@ -95,244 +95,239 @@ function Sidebar() {
   };
 
   return (
-    <main className="w-full relative flex justify-start items-center">
-      <section className="w-full p-3 h-screen border-r-2">
+    <main className="w-full flex justify-start items-center">
+      <section className="w-full h-screen p-3 border-r-2 overflow-y-auto">
         <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
           <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
         </div>
         {/* search */}
-        <div
-          className="mt-3 relative w-full border-2 text-gray-400 border-gray-300 rounded flex justify-start items-center pl-2 space-x-1 hover:border-primary-400 hover:text-primary-400"
-          onClick={() => setCommandSearchModal(true)}
-        >
-          <SearchIcon className="h-4 w-5" aria-hidden="true" />
-          <p>Search</p>
-        </div>
-        <CommandSearchModal
-          commandSearchVisible={commandSearchModal}
-          onCloseCommandSearchModal={() => setCommandSearchModal(false)}
-        />
-        {/* static menu */}
-        <div id="static-menu" className="my-4 text-gray-500">
-          {menuItems.map((val) => (
-            <Link
-              to={val.path}
-              id="home"
-              key={val.path}
-              className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-              onClick={handleMenuClicks}
+        <section id="wrapper">
+          <div
+            className="mt-3 relative w-full border-2 text-gray-400 border-gray-300 rounded flex justify-start items-center pl-2 space-x-1 hover:border-primary-400 hover:text-primary-400"
+            onClick={() => setCommandSearchModal(true)}
+          >
+            <SearchIcon className="h-4 w-5" aria-hidden="true" />
+            <p>Search</p>
+          </div>
+          <CommandSearchModal
+            commandSearchVisible={commandSearchModal}
+            onCloseCommandSearchModal={() => setCommandSearchModal(false)}
+          />
+          {/* static menu */}
+          <div id="static-menu" className="my-4 text-gray-500">
+            {menuItems.map((val) => (
+              <Link
+                to={val.path}
+                id="home"
+                key={val.path}
+                className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
+                onClick={handleMenuClicks}
+              >
+                <span className="flex-shrink-0 h-7 w-5" aria-hidden="true">
+                  {val.icon}
+                </span>
+                <p>{val.name}</p>
+              </Link>
+            ))}
+            <div
+              className={`flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200 ${showMoreActive ? 'block' : 'hidden'
+              }`}
             >
               <span className="flex-shrink-0 h-7 w-5" aria-hidden="true">
-                {val.icon}
+                <TrophyOutlined />
               </span>
-              <p>{val.name}</p>
-            </Link>
-          ))}
-          <div
-            className={`flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200 ${
-              showMoreActive ? 'block' : 'hidden'
-            }`}
-          >
-            <span className="flex-shrink-0 h-7 w-5" aria-hidden="true">
-              <TrophyOutlined />
-            </span>
-            <p>Goals</p>
+              <p>Goals</p>
+            </div>
+            <div
+              className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
+              onClick={handleShowMoreClick}
+            >
+              <span className="flex-shrink-0 h-5 w-5" aria-hidden="true">
+                {showMoreActive ? <ArrowUpIcon /> : <ArrowDownIcon />}
+              </span>
+              {showMoreActive ? <p>Show Less</p> : <p>Show More</p>}
+            </div>
           </div>
-          <div
-            className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-            onClick={handleShowMoreClick}
-          >
-            <span className="flex-shrink-0 h-5 w-5" aria-hidden="true">
-              {showMoreActive ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            </span>
-            {showMoreActive ? <p>Show Less</p> : <p>Show More</p>}
+          {/* dropdown menus */}
+          <div id="dropdown-menu" className="my-4 text-gray-500">
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col   ">
+              <div
+                onClick={() => handleFavClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">FAVOURITE</p>
+                {favClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${favClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Favourites />
+              </div>
+            </section>
+
+            {/* hubs */}
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col">
+              <div
+                onClick={() => handleHubClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">HUBS</p>
+                {hubClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${hubClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Hubs />
+              </div>
+            </section>
+
+            {/* inbox */}
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col">
+              <div
+                onClick={() => handleInboxClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">INBOX</p>
+                {inboxClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${inboxClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Inbox />
+              </div>
+            </section>
+            {/* files */}
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col">
+              <div
+                onClick={() => handleFilesClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">FILES</p>
+                {filesClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${filesClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Files />
+              </div>
+            </section>
+            {/* dashboard */}
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col">
+              <div
+                onClick={() => handleDashClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">DASHBOARD</p>
+                {dashClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${dashClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Dashboard />
+              </div>
+            </section>
+            {/* directory */}
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+            <section id="favorites" className="rounded flex-col">
+              <div
+                onClick={() => handleDirClicks()}
+                className="flex items-stretch justify-between"
+              >
+                <p className="font-bold text-sm">DIRECTORY</p>
+                {dirClicks ? (
+                  <ChevronDownIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className="flex-shrink-0 h-3 w-5"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              <div
+                className={`bg-white mt-2 hover:bg-white ${dirClicks ? 'block' : 'hidden'
+                }`}
+              >
+                <Directory />
+              </div>
+            </section>
+            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
           </div>
-        </div>
-        {/* dropdown menus */}
-        <div id="dropdown-menu" className="my-4 text-gray-500">
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col   ">
-            <div
-              onClick={() => handleFavClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">FAVOURITE</p>
-              {favClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                favClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Favourites />
-            </div>
-          </section>
-
-          {/* hubs */}
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col ">
-            <div
-              onClick={() => handleHubClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">HUBS</p>
-              {hubClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                hubClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Hubs />
-            </div>
-          </section>
-
-          {/* inbox */}
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col">
-            <div
-              onClick={() => handleInboxClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">INBOX</p>
-              {inboxClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                inboxClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Inbox />
-            </div>
-          </section>
-          {/* files */}
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col">
-            <div
-              onClick={() => handleFilesClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">FILES</p>
-              {filesClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                filesClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Files />
-            </div>
-          </section>
-          {/* dashboard */}
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col">
-            <div
-              onClick={() => handleDashClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">DASHBOARD</p>
-              {dashClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                dashClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Dashboard />
-            </div>
-          </section>
-          {/* directory */}
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-          <section id="favorites" className="rounded flex-col">
-            <div
-              onClick={() => handleDirClicks()}
-              className="flex items-stretch justify-between"
-            >
-              <p className="font-bold text-sm">DIRECTORY</p>
-              {dirClicks ? (
-                <ChevronDownIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronRightIcon
-                  className="flex-shrink-0 h-3 w-5"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div
-              className={`bg-white mt-2 hover:bg-white ${
-                dirClicks ? 'block' : 'hidden'
-              }`}
-            >
-              <Directory />
-            </div>
-          </section>
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-        </div>
+        </section>
         {/* dashboard switch and menu */}
         <div className="absolute bottom-14 w-auto left-5 h-px">
           <div className="p-2 flex items-center justify-start space-x-1">

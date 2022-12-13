@@ -29,12 +29,12 @@ function CommandSearchModal({
 
 CommandSearchModal.defaultProps = {
   commandSearchVisible: false,
-  onCloseCommandSearchModal: false,
+  // onCloseCommandSearchModal: false,
 };
 
 CommandSearchModal.propTypes = {
   commandSearchVisible: PropTypes.bool,
-  onCloseCommandSearchModal: PropTypes.bool,
+  onCloseCommandSearchModal: PropTypes.func.isRequired,
 };
 
 export default CommandSearchModal;

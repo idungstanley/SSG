@@ -1,14 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 export const createHubService = (data) => {
-  const response = requestNew({
-    url: 'at/hubs',
-    method: 'POST',
-    params: {
-      name: data.name,
+  const response = requestNew(
+    {
+      url: 'at/hubs',
+      method: 'POST',
+      data: {
+        name: data.name,
+        current_workspace_id: data.currentWorkspaceId,
+      },
     },
-  }, true);
+    true,
+  );
   return response;
 };
 
@@ -38,4 +43,18 @@ export const useCreateHub = () => {
       queryClient.invalidateQueries(['hubs']);
     },
   });
+};
+
+export const useGetHubService = (data) => {
+  const hubID = data.queryKey[1];
+  // console.log(hubID);
+  const response = requestNew(
+    {
+      url: hubID ? `at/hubs/${hubID}` : 'at/hubs',
+      method: 'GET',
+    },
+    true,
+  );
+
+  return response;
 };

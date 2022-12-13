@@ -43,6 +43,7 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bottom-scroll-listener": "^5.0.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^17.0.2",
     "react-file-viewer": "^1.2.1",
     "react-google-login": "^5.2.2",
@@ -51,6 +52,7 @@
     "react-infinite-scroll-hook": "^4.0.3",
     "react-moment": "^1.1.1",
     "react-pdf": "^5.5.0",
+    "react-query": "^3.39.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
@@ -68,7 +70,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "./node_modules/.bin/eslint"
+    "lint": "eslint"
   },
   "browserslist": {
     "production": [
@@ -83,6 +85,8 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/eslint-plugin": "^7.19.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.1",
     "eslint-plugin-import": "^2.25.3",

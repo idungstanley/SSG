@@ -43,6 +43,8 @@ import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/Docs/Docs';
+import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
+import RenderList from './pages/workspace/Lists/components/RenderList';
 
 const routes = (user) => [
   {
@@ -136,6 +138,8 @@ const routes = (user) => [
       { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
       { path: 'docs', element: <Docs /> },
+      { path: 'wallet/:walletId', element: <RenderWallets /> },
+      { path: 'list/:listId', element: <RenderList /> },
     ],
   },
   {

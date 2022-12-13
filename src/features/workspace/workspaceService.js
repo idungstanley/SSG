@@ -6,7 +6,7 @@ export const createWorkspaceService = (data) => {
     {
       url: 'workspace',
       method: 'POST',
-      params: {
+      data: {
         name: data.name,
         company_size: data.companySize,
         emails: data.emails,
