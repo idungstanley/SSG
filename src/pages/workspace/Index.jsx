@@ -1,17 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import NewSidebar from './sidebar/NewSidebar';
+import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
-// import Sidebar from './sidebar/Sidebar';
 
 function Index() {
   const { showSidebar } = useSelector((state) => state.workspace);
 
   return (
     <div>
-      <NewSidebar />
-      {/* <Sidebar /> */}
+      <Sidebar />
       <div className={`flex flex-1 flex-col ${showSidebar ? 'pl-64' : ''}`}>
         <Header />
         <main className="flex-1">

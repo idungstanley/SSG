@@ -7,7 +7,7 @@ function Nav({
   navName, newd, Cleared, Assigned, buttonLabel,
 }) {
   return (
-    <nav className="flex justify-between items-center p-3 h-12 border-b-2 bg-white border-gray-200">
+    <nav className="flex justify-between items-center p-3 bg-white border-gray-200">
       <section className="space-x-5 text-gray-500">
         <span className="font-bold">{navName}</span>
         <span className="rounded-full text-sm px-2 py-1 hover:bg-gray-100">

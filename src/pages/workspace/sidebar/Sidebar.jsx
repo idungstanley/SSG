@@ -1,343 +1,119 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState } from 'react';
-import { PlusOutlined, TrophyOutlined } from '@ant-design/icons';
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
-import { Link } from 'react-router-dom';
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  SearchIcon,
-} from '@heroicons/react/outline';
-import { AvatarWithInitials } from '../../../components';
+import React, { Fragment, useRef } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
+import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
-import { menuItems } from './sidebarData';
-import Hubs from '../hubs';
-import Favourites from '../favourites';
-import Inbox from '../inbox';
-import Files from '../files';
-import Dashboard from '../dashboard';
-import Directory from '../directory';
-import CommandSearchModal from './components/CommandSearchModal';
+import NavigationItems from './components/NavigationItems';
+import Places from './components/Places';
+import { AvatarWithInitials } from '../../../components';
 
-function Sidebar() {
-  const [active, setIsActive] = useState(false);
-  const [hubClicks, setHubClicks] = useState(false);
-  const [favClicks, setFavClicks] = useState(false);
-  const [inboxClicks, setInboxClicks] = useState(false);
-  const [filesClicks, setFilesClicks] = useState(false);
-  const [dashClicks, setDashClicks] = useState(false);
-  const [dirClicks, setDirClicks] = useState(false);
-  const [showMoreActive, setShowMoreIsActive] = useState(false);
-  const [commandSearchModal, setCommandSearchModal] = useState(false);
-
-  const handleMenuClicks = () => {
-    setIsActive(!active);
-  };
-
-  const handleShowMoreClick = () => {
-    setShowMoreIsActive(!showMoreActive);
-  };
-
-  const handleFavClicks = () => {
-    setHubClicks(false);
-    setInboxClicks(false);
-    setFilesClicks(false);
-    setDashClicks(false);
-    setDirClicks(false);
-    setFavClicks(!favClicks);
-  };
-
-  const handleHubClicks = () => {
-    setFavClicks(false);
-    setInboxClicks(false);
-    setFilesClicks(false);
-    setDashClicks(false);
-    setDirClicks(false);
-    setHubClicks(!hubClicks);
-  };
-
-  const handleInboxClicks = () => {
-    setFavClicks(false);
-    setHubClicks(false);
-    setFilesClicks(false);
-    setDashClicks(false);
-    setDirClicks(false);
-    setInboxClicks(!inboxClicks);
-  };
-
-  const handleFilesClicks = () => {
-    setFavClicks(false);
-    setHubClicks(false);
-    setInboxClicks(false);
-    setDashClicks(false);
-    setDirClicks(false);
-    setFilesClicks(!filesClicks);
-  };
-
-  const handleDashClicks = () => {
-    setFavClicks(false);
-    setHubClicks(false);
-    setInboxClicks(false);
-    setFilesClicks(false);
-    setDirClicks(false);
-    setDashClicks(!dashClicks);
-  };
-
-  const handleDirClicks = () => {
-    setFavClicks(false);
-    setHubClicks(false);
-    setInboxClicks(false);
-    setFilesClicks(false);
-    setDashClicks(false);
-    setDirClicks(!dirClicks);
-  };
+export default function Sidebar() {
+  const dispatch = useDispatch();
+  const { showSidebar } = useSelector((state) => state.workspace);
+  const fakeRef = useRef(null);
 
   return (
-    <main className="w-full flex justify-start items-center">
-      <section className="w-full h-screen p-3 border-r-2 overflow-y-auto">
-        <div className="space-x-4 space-y-6 my-2 flex justify-between items-center">
-          <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
-        </div>
-        {/* search */}
-        <section id="wrapper">
-          <div
-            className="mt-3 relative w-full border-2 text-gray-400 border-gray-300 rounded flex justify-start items-center pl-2 space-x-1 hover:border-primary-400 hover:text-primary-400"
-            onClick={() => setCommandSearchModal(true)}
+    <>
+      <Transition.Root show={showSidebar} as={Fragment}>
+        <Dialog initialFocus={fakeRef} as="div" className="relative z-40 lg:hidden" onClose={() => {}}>
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            <SearchIcon className="h-4 w-5" aria-hidden="true" />
-            <p>Search</p>
-          </div>
-          <CommandSearchModal
-            commandSearchVisible={commandSearchModal}
-            onCloseCommandSearchModal={() => setCommandSearchModal(false)}
-          />
-          {/* static menu */}
-          <div id="static-menu" className="my-4 text-gray-500">
-            {menuItems.map((val) => (
-              <Link
-                to={val.path}
-                id="home"
-                key={val.path}
-                className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-                onClick={handleMenuClicks}
-              >
-                <span className="flex-shrink-0 h-7 w-5" aria-hidden="true">
-                  {val.icon}
-                </span>
-                <p>{val.name}</p>
-              </Link>
-            ))}
-            <div
-              className={`flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200 ${showMoreActive ? 'block' : 'hidden'
-              }`}
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-40 flex">
+            <Transition.Child
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
             >
-              <span className="flex-shrink-0 h-7 w-5" aria-hidden="true">
-                <TrophyOutlined />
-              </span>
-              <p>Goals</p>
-            </div>
-            <div
-              className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
-              onClick={handleShowMoreClick}
-            >
-              <span className="flex-shrink-0 h-5 w-5" aria-hidden="true">
-                {showMoreActive ? <ArrowUpIcon /> : <ArrowDownIcon />}
-              </span>
-              {showMoreActive ? <p>Show Less</p> : <p>Show More</p>}
+              <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-in-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-300"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute top-0 right-0 -mr-12 pt-2">
+                    <button
+                      ref={fakeRef}
+                      tabIndex={0}
+                      type="button"
+                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
+                      onClick={() => dispatch(setShowSidebar(false))}
+                    >
+                      <span className="sr-only">Close sidebar</span>
+                      <XIcon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </Transition.Child>
+                <div className="px-4 pb-3">
+                  <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
+                </div>
+                <NavigationItems />
+                <Places />
+                <div className="absolute bottom-14 w-auto h-px">
+                  <div className="p-2 flex items-center justify-start space-x-1">
+                    <AvatarWithInitials initials="AU" />
+                    <PlusOutlined className="text-sm" />
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+            <div className="w-14 flex-shrink-0" aria-hidden="true">
+              {/* Dummy element to force sidebar to shrink to fit close icon */}
             </div>
           </div>
-          {/* dropdown menus */}
-          <div id="dropdown-menu" className="my-4 text-gray-500">
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+        </Dialog>
+      </Transition.Root>
 
-            <section id="favorites" className="rounded flex-col   ">
-              <div
-                onClick={() => handleFavClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">FAVOURITE</p>
-                {favClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
+      {/* Static sidebar for desktop */}
+      {showSidebar ? (
+        <div className="hidden md:fixed md:inset-y-0 lg:flex md:w-64 md:flex-col">
+          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-2">
+            <div className="flex justify-between flex-shrink-0 items-center pl-2">
+              <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
+              <div>
+                <button
+                  type="button"
+                  className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
+                  onClick={() => dispatch(setShowSidebar(false))}
+                >
+                  <span className="sr-only">Close sidebar</span>
+                  <XIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
+                </button>
               </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${favClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Favourites />
+            </div>
+            <NavigationItems />
+            <Places />
+            <div className="absolute bottom-14 w-auto h-px">
+              <div className="p-2 flex items-center justify-start space-x-1">
+                <AvatarWithInitials initials="AU" />
+                <PlusOutlined className="text-sm" />
               </div>
-            </section>
-
-            {/* hubs */}
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <section id="favorites" className="rounded flex-col">
-              <div
-                onClick={() => handleHubClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">HUBS</p>
-                {hubClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${hubClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Hubs />
-              </div>
-            </section>
-
-            {/* inbox */}
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <section id="favorites" className="rounded flex-col">
-              <div
-                onClick={() => handleInboxClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">INBOX</p>
-                {inboxClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${inboxClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Inbox />
-              </div>
-            </section>
-            {/* files */}
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <section id="favorites" className="rounded flex-col">
-              <div
-                onClick={() => handleFilesClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">FILES</p>
-                {filesClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${filesClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Files />
-              </div>
-            </section>
-            {/* dashboard */}
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <section id="favorites" className="rounded flex-col">
-              <div
-                onClick={() => handleDashClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">DASHBOARD</p>
-                {dashClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${dashClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Dashboard />
-              </div>
-            </section>
-            {/* directory */}
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <section id="favorites" className="rounded flex-col">
-              <div
-                onClick={() => handleDirClicks()}
-                className="flex items-stretch justify-between"
-              >
-                <p className="font-bold text-sm">DIRECTORY</p>
-                {dirClicks ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-
-              <div
-                className={`bg-white mt-2 hover:bg-white ${dirClicks ? 'block' : 'hidden'
-                }`}
-              >
-                <Directory />
-              </div>
-            </section>
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          </div>
-        </section>
-        {/* dashboard switch and menu */}
-        <div className="absolute bottom-14 w-auto left-5 h-px">
-          <div className="p-2 flex items-center justify-start space-x-1">
-            <AvatarWithInitials initials="AU" />
-            <PlusOutlined className="text-sm" />
+            </div>
           </div>
         </div>
-      </section>
-    </main>
+      ) : null}
+    </>
   );
 }
-
-export default Sidebar;
