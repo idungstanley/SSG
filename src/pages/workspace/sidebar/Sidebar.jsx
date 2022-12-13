@@ -8,6 +8,7 @@ import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
+import Search from '../Search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -17,7 +18,12 @@ export default function Sidebar() {
   return (
     <>
       <Transition.Root show={showSidebar} as={Fragment}>
-        <Dialog initialFocus={fakeRef} as="div" className="relative z-40 lg:hidden" onClose={() => {}}>
+        <Dialog
+          initialFocus={fakeRef}
+          as="div"
+          className="relative z-40 lg:hidden"
+          onClose={() => {}}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -69,6 +75,7 @@ export default function Sidebar() {
                 <div className="px-4 pb-3">
                   <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
                 </div>
+                <Search />
                 <NavigationItems />
                 <Places />
                 <div className="absolute bottom-14 w-auto h-px">
@@ -103,6 +110,7 @@ export default function Sidebar() {
                 </button>
               </div>
             </div>
+            <Search />
             <NavigationItems />
             <Places />
             <div className="absolute bottom-14 w-auto h-px">
