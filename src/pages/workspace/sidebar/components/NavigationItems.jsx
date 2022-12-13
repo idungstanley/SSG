@@ -48,7 +48,6 @@ function classNames(...classes) {
 export default function NavigationItems() {
   const { pathname } = useLocation();
   const [showMore, setShowMore] = useState(false);
-  console.log(pathname);
 
   return (
     <div className="mt-2 flex flex-col">

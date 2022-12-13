@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,15 +12,12 @@ import { AvatarWithInitials } from '../../../components';
 export default function NewSidebar() {
   const dispatch = useDispatch();
   const { showSidebar } = useSelector((state) => state.workspace);
+  const fakeRef = useRef(null);
 
   return (
     <>
       <Transition.Root show={showSidebar} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-40 lg:hidden"
-          onClose={setShowSidebar}
-        >
+        <Dialog initialFocus={fakeRef} as="div" className="relative z-40 lg:hidden" onClose={() => {}}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -55,6 +52,8 @@ export default function NewSidebar() {
                 >
                   <div className="absolute top-0 right-0 -mr-12 pt-2">
                     <button
+                      ref={fakeRef}
+                      tabIndex={0}
                       type="button"
                       className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
                       onClick={() => dispatch(setShowSidebar(false))}
@@ -67,12 +66,8 @@ export default function NewSidebar() {
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="flex flex-shrink-0 items-center px-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                  />
+                <div className="px-4 pb-3">
+                  <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
                 </div>
                 <NavigationItems />
                 <Places />
