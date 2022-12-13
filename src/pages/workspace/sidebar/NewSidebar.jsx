@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
   HomeIcon,
@@ -7,6 +7,7 @@ import {
   UserGroupIcon,
   // TrophyIcon,
 } from '@heroicons/react/outline';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
@@ -17,21 +18,36 @@ const navigation = [
     name: 'Home',
     href: '/workspace/home',
     icon: <HomeIcon />,
+    alwaysShow: true,
   },
   {
     name: 'Notifications',
     href: '/workspace/notification',
     icon: <BellIcon />,
+    alwaysShow: true,
   },
   {
     name: 'Community',
     href: '/workspace/community',
     icon: <UserGroupIcon />,
+    alwaysShow: false,
   },
   {
     name: 'Goals',
     href: '/workspace/community',
     icon: <UserGroupIcon />,
+    alwaysShow: false,
+  },
+];
+
+const showLessOrMore = [
+  {
+    name: 'Show Less',
+    icon: <ArrowUpIcon />,
+  },
+  {
+    name: 'Show More',
+    icon: <ArrowDownIcon />,
   },
 ];
 
@@ -41,6 +57,7 @@ function classNames(...classes) {
 
 export default function NewSidebar() {
   const dispatch = useDispatch();
+  const [showMore, setShowMore] = useState(false);
   const { pathname } = useLocation();
   const { showSidebar } = useSelector((state) => state.workspace);
 
@@ -133,6 +150,21 @@ export default function NewSidebar() {
                       </Link>
                     ))}
                   </nav>
+                  <button
+                    type="button"
+                    onClick={() => setShowMore((prev) => !prev)}
+                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900
+                      group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  >
+                    <div
+                      className="text-gray-400 group-hover:text-gray-500
+                        mr-4 flex-shrink-0 h-6 w-6"
+                      aria-hidden="true"
+                    >
+                      {showLessOrMore[showMore ? 1 : 0].icon}
+                    </div>
+                    {showLessOrMore[showMore ? 1 : 0].name}
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -162,7 +194,7 @@ export default function NewSidebar() {
             </div>
             <div className="mt-2 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
-                {navigation.map((item) => (
+                {navigation.map((item) => (showMore ? (
                   <Link
                     key={item.name}
                     to={item.href}
@@ -186,7 +218,46 @@ export default function NewSidebar() {
                     </div>
                     {item.name}
                   </Link>
-                ))}
+                ) : item.alwaysShow ? (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={classNames(
+                      item.href === pathname
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                    )}
+                  >
+                    <div
+                      className={classNames(
+                        item.href === pathname
+                          ? 'text-gray-500'
+                          : 'text-gray-400 group-hover:text-gray-500',
+                        'mr-4 flex-shrink-0 h-6 w-6',
+                      )}
+                      aria-hidden="true"
+                    >
+                      {item.icon}
+                    </div>
+                    {item.name}
+                  </Link>
+                ) : null))}
+                <button
+                  type="button"
+                  onClick={() => setShowMore((prev) => !prev)}
+                  className="w-full text-gray-600 hover:bg-gray-50 hover:text-gray-900
+                      group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                >
+                  <div
+                    className="text-gray-400 group-hover:text-gray-500
+                        mr-4 flex-shrink-0 h-6 w-6"
+                    aria-hidden="true"
+                  >
+                    {showLessOrMore[showMore ? 0 : 1].icon}
+                  </div>
+                  {showLessOrMore[showMore ? 0 : 1].name}
+                </button>
               </nav>
             </div>
           </div>
