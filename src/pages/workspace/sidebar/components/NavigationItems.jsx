@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 const navigation = [
   {
     name: 'Home',
-    href: '/workspace/home',
+    href: '/workspace',
     icon: <HomeIcon />,
     alwaysShow: true,
   },
@@ -48,6 +48,7 @@ function classNames(...classes) {
 export default function NavigationItems() {
   const { pathname } = useLocation();
   const [showMore, setShowMore] = useState(false);
+  console.log(pathname);
 
   return (
     <div className="mt-2 flex flex-col">

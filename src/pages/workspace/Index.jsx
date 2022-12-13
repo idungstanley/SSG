@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import Header from './sidebar/Header';
 import NewSidebar from './sidebar/NewSidebar';
+import Header from './sidebar/Header';
 // import Sidebar from './sidebar/Sidebar';
 
 function Index() {

@@ -2,10 +2,12 @@ import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
+import { AvatarWithInitials } from '../../../components';
 
 export default function NewSidebar() {
   const dispatch = useDispatch();
@@ -54,7 +56,7 @@ export default function NewSidebar() {
                   <div className="absolute top-0 right-0 -mr-12 pt-2">
                     <button
                       type="button"
-                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
                       onClick={() => dispatch(setShowSidebar(false))}
                     >
                       <span className="sr-only">Close sidebar</span>
@@ -73,6 +75,13 @@ export default function NewSidebar() {
                   />
                 </div>
                 <NavigationItems />
+                <Places />
+                <div className="absolute bottom-14 w-auto h-px">
+                  <div className="p-2 flex items-center justify-start space-x-1">
+                    <AvatarWithInitials initials="AU" />
+                    <PlusOutlined className="text-sm" />
+                  </div>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
             <div className="w-14 flex-shrink-0" aria-hidden="true">
@@ -101,6 +110,12 @@ export default function NewSidebar() {
             </div>
             <NavigationItems />
             <Places />
+            <div className="absolute bottom-14 w-auto h-px">
+              <div className="p-2 flex items-center justify-start space-x-1">
+                <AvatarWithInitials initials="AU" />
+                <PlusOutlined className="text-sm" />
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

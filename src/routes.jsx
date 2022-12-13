@@ -133,7 +133,7 @@ const routes = (user) => [
       <Navigate to="/auth/login" />
     ),
     children: [
-      { path: 'home', element: <Home /> },
+      { path: '', element: <Home /> },
       { path: 'notification', element: <Notification /> },
       { path: 'community', element: <Community /> },
       { path: 'goals', element: <Home /> },
