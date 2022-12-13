@@ -25,6 +25,7 @@ function Nav({
             padding="py-2 px-4"
             height="h-6"
             width="w-full"
+            onClick={() => {}}
           />
         </span>
         <span className="rounded-full text-sm px-2 py-1 hover:bg-gray-100">
