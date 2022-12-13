@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
   CalendarIcon,
@@ -7,8 +7,10 @@ import {
   HomeIcon,
   InboxIcon,
   UsersIcon,
-  // XMarkIcon,
+  XIcon,
 } from '@heroicons/react/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 
 const navigation = [
   {
@@ -54,15 +56,16 @@ function classNames(...classes) {
 }
 
 export default function NewSidebar() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { showSidebar } = useSelector((state) => state.workspace);
 
   return (
     <>
-      <Transition.Root show={sidebarOpen} as={Fragment}>
+      <Transition.Root show={showSidebar} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-40 md:hidden"
-          onClose={setSidebarOpen}
+          className="relative z-40 lg:hidden"
+          onClose={setShowSidebar}
         >
           <Transition.Child
             as={Fragment}
@@ -100,14 +103,13 @@ export default function NewSidebar() {
                     <button
                       type="button"
                       className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                      onClick={() => setSidebarOpen(false)}
+                      onClick={() => dispatch(setShowSidebar(false))}
                     >
                       <span className="sr-only">Close sidebar</span>
-                      {/* <XMarkIcon
+                      <XIcon
                         className="h-6 w-6 text-white"
                         aria-hidden="true"
-                      /> */}
-                      x
+                      />
                     </button>
                   </div>
                 </Transition.Child>
@@ -155,45 +157,56 @@ export default function NewSidebar() {
       </Transition.Root>
 
       {/* Static sidebar for desktop */}
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-        {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-          <div className="flex flex-shrink-0 items-center px-4">
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Your Company"
-            />
-          </div>
-          <div className="mt-5 flex flex-grow flex-col">
-            <nav className="flex-1 space-y-1 px-2 pb-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-                  )}
+      {showSidebar ? (
+        <div className="hidden md:fixed md:inset-y-0 lg:flex md:w-64 md:flex-col">
+          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-2">
+            <div className="flex justify-between flex-shrink-0 items-center px-4">
+              <img
+                className="h-8 w-auto"
+                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                alt="Your Company"
+              />
+              <div>
+                <button
+                  type="button"
+                  className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
+                  onClick={() => dispatch(setShowSidebar(false))}
                 >
-                  <item.icon
+                  <span className="sr-only">Close sidebar</span>
+                  <XIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <div className="mt-2 flex flex-grow flex-col">
+              <nav className="flex-1 space-y-1 px-2 pb-4">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
                     className={classNames(
                       item.current
-                        ? 'text-gray-500'
-                        : 'text-gray-400 group-hover:text-gray-500',
-                      'mr-3 flex-shrink-0 h-6 w-6',
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                     )}
-                    aria-hidden="true"
-                  />
-                  {item.name}
-                </a>
-              ))}
-            </nav>
+                  >
+                    <item.icon
+                      className={classNames(
+                        item.current
+                          ? 'text-gray-500'
+                          : 'text-gray-400 group-hover:text-gray-500',
+                        'mr-3 flex-shrink-0 h-6 w-6',
+                      )}
+                      aria-hidden="true"
+                    />
+                    {item.name}
+                  </a>
+                ))}
+              </nav>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 }

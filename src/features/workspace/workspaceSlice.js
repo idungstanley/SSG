@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   workspace: [],
+  showSidebar: true,
 };
 
 export const wsSlice = createSlice({
@@ -11,10 +12,13 @@ export const wsSlice = createSlice({
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
+    setShowSidebar(state, action) {
+      state.showSidebar = action.payload;
+    },
     checkIfWs: (state) => state,
   },
 });
 
-export const { createWorkspace, checkIfWs } = wsSlice.actions;
+export const { createWorkspace, checkIfWs, setShowSidebar } = wsSlice.actions;
 
 export default wsSlice.reducer;

@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -12,30 +14,34 @@ const userNavigation = [
 ];
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const { showSidebar } = useSelector((state) => state.workspace);
+
   return (
     <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
-      <button
-        type="button"
-        className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-        // onClick={() => setSidebarOpen(true)}
-        onClick={() => {}}
-      >
-        <span className="sr-only">Open sidebar</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
+      {!showSidebar ? (
+        <button
+          type="button"
+          className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none ring-0 focus:ring-0"
+          onClick={() => dispatch(setShowSidebar(true))}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-          />
-        </svg>
-      </button>
+          <span className="sr-only">Open sidebar</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+            />
+          </svg>
+        </button>
+      ) : null}
       <div className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
           <form className="flex w-full md:ml-0" action="#" method="GET">
