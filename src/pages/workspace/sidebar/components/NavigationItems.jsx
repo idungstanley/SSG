@@ -50,7 +50,7 @@ export default function NavigationItems() {
   const [showMore, setShowMore] = useState(false);
 
   return (
-    <div className="mt-2 flex flex-grow flex-col">
+    <div className="mt-2 flex flex-col">
       <nav className="flex-1 space-y-1 px-2 pb-4">
         {navigation.map((item) => (showMore ? (
           <Link

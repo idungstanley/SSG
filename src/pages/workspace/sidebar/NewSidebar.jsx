@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  XIcon,
-} from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
+import Places from './components/Places';
 
 export default function NewSidebar() {
   const dispatch = useDispatch();
@@ -101,6 +100,7 @@ export default function NewSidebar() {
               </div>
             </div>
             <NavigationItems />
+            <Places />
           </div>
         </div>
       ) : null}
