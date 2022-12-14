@@ -5,13 +5,14 @@ import requestNew from '../../app/requestNew';
 export const createHubService = (data) => {
   const response = requestNew(
     {
-      url: 'at/hubs',
+      url: 'hubs',
       method: 'POST',
       data: {
         name: data.name,
         current_workspace_id: data.currentWorkspaceId,
       },
     },
+    false,
     true,
   );
   return response;
@@ -20,9 +21,9 @@ export const createHubService = (data) => {
 // get all hubs
 export const getHubListService = () => {
   const response = requestNew({
-    url: 'at/hubs',
+    url: 'hubs',
     method: 'GET',
-  }, true);
+  }, false, true);
   return response;
 };
 
@@ -50,9 +51,10 @@ export const useGetHubService = (data) => {
   // console.log(hubID);
   const response = requestNew(
     {
-      url: hubID ? `at/hubs/${hubID}` : 'at/hubs',
+      url: hubID ? `hubs/${hubID}` : 'hubs',
       method: 'GET',
     },
+    false,
     true,
   );
 
