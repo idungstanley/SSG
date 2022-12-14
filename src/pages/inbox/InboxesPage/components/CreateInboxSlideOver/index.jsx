@@ -28,8 +28,6 @@ function CreateInboxSlideOver() {
     (state) => state.slideOver.showCreateInboxSlideOver,
   );
 
-  // Form state
-
   const defaultFormState = {
     name: '',
     emailUsername: '',

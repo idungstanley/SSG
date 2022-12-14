@@ -1,11 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
+import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
+import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
 
 function Inbox() {
+  const dispatch = useDispatch();
   return (
     <>
-      <CreateNewItemBtn onClick={() => {}} title="Create new Inbox" />
+      <CreateNewItemBtn
+        onClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
+        title="Create new Inbox"
+      />
       <Link
         to="/inbox"
         id="home"
@@ -14,6 +21,7 @@ function Inbox() {
       >
         <p>Inbox</p>
       </Link>
+      <CreateInboxSlideOver />
     </>
   );
 }
