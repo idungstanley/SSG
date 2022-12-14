@@ -57,7 +57,7 @@ function Places() {
               )}
             </button>
             {activePlaceId === item.id ? (
-              <div className="bg-white mt-2 hover:bg-white block">
+              <div className="mt-2">
                 {item.place}
               </div>
             ) : null}

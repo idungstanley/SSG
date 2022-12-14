@@ -8,21 +8,19 @@ import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInbox
 function Inbox() {
   const dispatch = useDispatch();
   return (
-    <>
+    <div className="space-y-4">
       <CreateNewItemBtn
         onClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
         title="Create new Inbox"
       />
       <Link
-        to="/inbox"
-        id="home"
-        key=""
-        className="flex items-center justify-start space-x-3 pl-2 h-10 rounded hover:bg-gray-200"
+        to="/workspace/inbox"
+        className="flex justify-center bg-gray-50 hover:bg-gray-100 border transition py-2 rounded-xl w-full"
       >
-        <p>Inbox</p>
+        <p>Go to inboxes</p>
       </Link>
       <CreateInboxSlideOver />
-    </>
+    </div>
   );
 }
 

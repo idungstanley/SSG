@@ -16,9 +16,7 @@ function Index() {
           <div
             className={`py-6 mx-auto px-4 sm:px-6 ${showSidebar ? 'px-8' : ''}`}
           >
-            <div className="py-4">
-              <Outlet />
-            </div>
+            <Outlet />
           </div>
         </main>
       </div>
