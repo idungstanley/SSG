@@ -6,13 +6,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
-  FolderAddOutlined, ImportOutlined, PlusOutlined, WalletOutlined,
+  FolderAddOutlined,
+  ImportOutlined,
+  PlusOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/outline';
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { AvatarWithInitials, Hyperlink } from '../../../components';
 import Modal from './components/Modal';
@@ -21,6 +21,7 @@ import MenuDropdown from './components/MenuDropdown';
 import PlusDropDown from './components/PlusDropDown';
 import WalletIndex from '../wallet/WalletIndex';
 import ListIndex from '../Lists/ListIndex';
+import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
 
 function Hubs() {
   const [getCurrentHubId, setGetCurrentHubId] = useState(null);
@@ -51,14 +52,10 @@ function Hubs() {
 
   return (
     <>
-      <div
-        id="createHubs"
-        className="flex items-center justify-center bg-gray-100 space-x-2 rounded-xl w-full"
+      <CreateNewItemBtn
         onClick={() => setShowModal(true)}
-      >
-        <PlusOutlined />
-        <p>New Hub</p>
-      </div>
+        title="Create new Hub"
+      />
       <Modal
         isVisible={showModal}
         onCloseHubModal={() => setShowModal(false)}
