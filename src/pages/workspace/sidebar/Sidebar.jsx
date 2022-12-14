@@ -99,14 +99,14 @@ export default function Sidebar() {
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-2">
             <div className="flex justify-between flex-shrink-0 items-center pl-2">
               <img className="h-6 w-auto" src={MainLogo} alt="Workflow" />
-              <div>
+              <div className="group">
                 <button
                   type="button"
                   className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none ring-0 focus:ring-0"
                   onClick={() => dispatch(setShowSidebar(false))}
                 >
                   <span className="sr-only">Close sidebar</span>
-                  <XIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-gray-500 transition group-hover:text-red-600" aria-hidden="true" />
                 </button>
               </div>
             </div>

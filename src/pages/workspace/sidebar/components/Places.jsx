@@ -28,13 +28,13 @@ function Places() {
         Places
       </h3>
       <ul
-        className="mt-1 space-y-1 divide-y divide-gray-200"
+        className="space-x-1 divide-y"
         aria-labelledby="projects-headline"
       >
         {secondaryNavigation.map((item) => (
           <li
             key={item.id}
-            className="items-stretch group uppercase flex flex-col rounded-md px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            className="items-stretch group uppercase flex flex-col rounded-md px-3 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           >
             <button
               className="flex justify-between items-center w-full"

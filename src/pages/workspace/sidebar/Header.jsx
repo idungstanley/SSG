@@ -1,11 +1,50 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import Nav from '../nav/Nav';
 
+const config = [
+  {
+    path: '',
+    title: 'Home',
+    newd: null,
+    Cleared: null,
+    Assigned: 'Agenda',
+    buttonLabel: 'Calendar',
+  },
+  {
+    path: '/notification',
+    title: 'Notification',
+    newd: 'New',
+    Cleared: 'Clear',
+    Assigned: 'Assigned to me',
+    buttonLabel: 'All',
+  },
+  {
+    path: '/community',
+    title: 'Community',
+    newd: null,
+    Cleared: null,
+    Assigned: 'Agenda',
+    buttonLabel: 'Calendar',
+  },
+  {
+    path: '/goals',
+    title: '',
+    newd: null,
+    Cleared: null,
+    Assigned: null,
+    buttonLabel: null,
+  },
+];
+
 export default function Header() {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const { showSidebar } = useSelector((state) => state.workspace);
+
+  const headerData = config.find((i) => `/workspace${i.path}` === pathname);
 
   return (
     <div className="top-0 flex flex-shrink-0 bg-white shadow">
@@ -33,7 +72,7 @@ export default function Header() {
         </button>
       ) : null}
       <div className="flex-1">
-        <Nav navName="Home" buttonLabel="Calendar" Assigned="Agenda" />
+        <Nav navName={headerData.title} newd={headerData.newd} Cleared={headerData.Cleared} buttonLabel={headerData.buttonLabel} Assigned={headerData.Assigned} />
       </div>
     </div>
   );
