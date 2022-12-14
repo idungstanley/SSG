@@ -37,6 +37,14 @@ const config = [
     Assigned: null,
     buttonLabel: null,
   },
+  {
+    path: '/inbox',
+    title: 'Inbox',
+    newd: null,
+    Cleared: null,
+    Assigned: 'Agenda',
+    buttonLabel: 'Calendar',
+  },
 ];
 
 export default function Header() {
@@ -71,9 +79,17 @@ export default function Header() {
           </svg>
         </button>
       ) : null}
-      <div className="flex-1">
-        <Nav navName={headerData.title} newd={headerData.newd} Cleared={headerData.Cleared} buttonLabel={headerData.buttonLabel} Assigned={headerData.Assigned} />
-      </div>
+      {headerData ? (
+        <div className="flex-1">
+          <Nav
+            navName={headerData.title}
+            newd={headerData.newd}
+            Cleared={headerData.Cleared}
+            buttonLabel={headerData.buttonLabel}
+            Assigned={headerData.Assigned}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

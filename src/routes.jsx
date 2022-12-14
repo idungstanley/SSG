@@ -46,6 +46,33 @@ import Docs from './pages/workspace/Docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/Lists/components/RenderList';
 
+const inbox = [
+  {
+    path: 'inbox',
+    element: <InboxesPage />,
+    children: [
+      { path: '', element: <Active /> },
+      { path: 'hidden', element: <Hidden /> },
+      { path: 'archived', element: <Archived /> },
+      { path: 'restore', element: <Restore /> },
+    ],
+  },
+  { path: 'inbox/:inboxId', element: <InboxPage /> },
+  { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
+  {
+    path: 'inbox/:inboxId/settings/permissions',
+    element: <PermissionsSettingsPage />,
+  },
+  {
+    path: 'inbox/:inboxId/settings/members',
+    element: <TeamMembersSettingsPage />,
+  },
+  {
+    path: 'inbox/:inboxId/settings/groups',
+    element: <TeamMemberGroupsSettingsPage />,
+  },
+];
+
 const routes = (user) => [
   {
     path: 'workspace/onboarding',
@@ -76,30 +103,7 @@ const routes = (user) => [
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
       { path: 'search', element: <SearchPage /> },
-      {
-        path: 'inbox',
-        element: <InboxesPage />,
-        children: [
-          { path: '', element: <Active /> },
-          { path: 'hidden', element: <Hidden /> },
-          { path: 'archived', element: <Archived /> },
-          { path: 'restore', element: <Restore /> },
-        ],
-      },
-      { path: 'inbox/:inboxId', element: <InboxPage /> },
-      { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
-      {
-        path: 'inbox/:inboxId/settings/permissions',
-        element: <PermissionsSettingsPage />,
-      },
-      {
-        path: 'inbox/:inboxId/settings/members',
-        element: <TeamMembersSettingsPage />,
-      },
-      {
-        path: 'inbox/:inboxId/settings/groups',
-        element: <TeamMemberGroupsSettingsPage />,
-      },
+      ...inbox,
       { path: 'settings/permissions', element: <PermissionsPage /> },
       { path: 'settings/team-members', element: <TeamMembersPage /> },
       {
@@ -140,6 +144,7 @@ const routes = (user) => [
       { path: 'docs', element: <Docs /> },
       { path: 'wallet/:walletId', element: <RenderWallets /> },
       { path: 'list/:listId', element: <RenderList /> },
+      ...inbox,
     ],
   },
   {
