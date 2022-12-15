@@ -12,7 +12,7 @@ import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
 
 export default function Comments({ itemId, type }) {
   const [message, setMessage] = useState('');
-  const isInbox = type === 'inbox';
+  const isInbox = type === 'inbox' || 'inbox_file';
   const [showWindow, setShowWindow] = useState(isInbox);
   const [editId, setEditId] = useState(null);
 

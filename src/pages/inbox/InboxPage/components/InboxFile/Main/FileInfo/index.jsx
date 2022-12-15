@@ -10,7 +10,7 @@ import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
 import Activity from './Activity';
-import Comments from './Comments';
+import Comments from '../../../../../../../components/Comments';
 
 const tabs = [
   {
@@ -116,8 +116,8 @@ function FileInfo() {
                       <Activity id={selectedInboxFileId} />
                     </Tab.Panel>
 
-                    <Tab.Panel className="h-full">
-                      <Comments id={selectedInboxFileId} />
+                    <Tab.Panel className="h-full p-4">
+                      <Comments type="inbox_file" itemId={selectedInboxFileId} />
                     </Tab.Panel>
                   </Tab.Panels>
                 </div>

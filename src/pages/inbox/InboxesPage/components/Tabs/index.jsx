@@ -7,7 +7,7 @@ const tabs = [
   { name: 'Hidden', href: '/inbox/hidden' },
 ];
 
-const rightTabs = [{ name: 'Restore deleted', href: '/inbox/restore' }];
+const rightTabs = [{ name: 'Deleted', href: '/inbox/restore' }];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
