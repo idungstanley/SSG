@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TrashIcon, PencilIcon } from '@heroicons/react/solid';
@@ -97,7 +96,7 @@ function Comments() {
               </div>
             ) : status === 'success' ? (
               comments?.length ? (
-                <ul role="list" className="divide-y divide-gray-200">
+                <ul className="divide-y divide-gray-200">
                   {comments.map((i) => (
                     <li key={i.id} className="py-4 flex justify-between">
                       <p className="pl-1">{i.message}</p>

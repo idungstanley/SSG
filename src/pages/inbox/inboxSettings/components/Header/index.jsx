@@ -26,7 +26,7 @@ function Header() {
         <Button
           buttonStyle="white"
           label="Upload"
-          onClick={() => console.log('')}
+          onClick={() => {}}
           icon={<UploadIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
           iconPosition="center"
           disabled
