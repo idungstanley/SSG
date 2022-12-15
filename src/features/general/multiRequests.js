@@ -71,6 +71,9 @@ const editItemComment = (data) => {
     {
       url: `comments/${data.id}`,
       method: 'PUT',
+      data: {
+        message: data.message,
+      },
     },
     true,
   );

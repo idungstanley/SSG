@@ -1,38 +1,61 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TrashIcon } from '@heroicons/react/solid';
+import { TrashIcon, PencilIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../../../../../../common';
 import {
-  useDeleteInboxFileComment,
-  useGetInboxFileComments,
-  usePostInboxFileComment,
-} from '../../../../../../../../features/inbox/inboxService';
+  useCreateItemComment,
+  useDeleteItemComment,
+  useEditItemComment,
+  useGetItemComments,
+} from '../../../../../../../../features/general/multiRequests';
 import FullScreenMessage from '../../../../../../../shared/components/FullScreenMessage';
 
 function Comments() {
   const fileId = useSelector((state) => state.inbox.selectedInboxFileId);
   const [value, setValue] = useState('');
+  const [editId, setEditId] = useState(null);
 
-  const { mutate: sendComment } = usePostInboxFileComment(fileId, value);
-  const { mutate: deleteComment } = useDeleteInboxFileComment(fileId);
-  const { status, data } = useGetInboxFileComments(fileId);
+  const { mutate: sendComment } = useCreateItemComment(fileId);
+  const { mutate: editComment } = useEditItemComment(fileId);
+  const { mutate: deleteComment } = useDeleteItemComment(fileId);
+  const { status, data } = useGetItemComments({
+    type: 'inbox_file',
+    id: fileId,
+  });
   const comments = data?.data?.comments;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (value.length > 2) {
-      sendComment();
+      if (editId) {
+        editComment({
+          id: editId,
+          message: value,
+        });
+        setEditId(null);
+      } else {
+        sendComment({
+          message: value,
+          type: 'inbox_file',
+          id: fileId,
+        });
+      }
+
       setValue('');
     }
   };
 
   const handleDelete = (id) => {
     deleteComment({
-      fileId,
-      messageId: id,
+      id,
     });
+  };
+
+  const handleEdit = (id, message) => {
+    setValue(message);
+    setEditId(id);
   };
 
   return (
@@ -78,10 +101,18 @@ function Comments() {
                   {comments.map((i) => (
                     <li key={i.id} className="py-4 flex justify-between">
                       <p className="pl-1">{i.message}</p>
-                      <TrashIcon
-                        onClick={() => handleDelete(i.id)}
-                        className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
-                      />
+                      <div className="flex gap-3">
+                        {i.can_modify ? (
+                          <PencilIcon
+                            onClick={() => handleEdit(i.id, i.message)}
+                            className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
+                          />
+                        ) : null}
+                        <TrashIcon
+                          onClick={() => handleDelete(i.id)}
+                          className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+                        />
+                      </div>
                     </li>
                   ))}
                 </ul>
