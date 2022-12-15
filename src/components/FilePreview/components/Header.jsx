@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { resetSelectedFilesAndFolders } from '../../../features/explorer/explorerSlice';
 import PermissionsManagement from '../../PermissionsManagement';
 
-export default function Header({ id }) {
+export default function Header({ id, type }) {
   const dispatch = useDispatch();
 
   return (
@@ -25,11 +25,12 @@ export default function Header({ id }) {
         />
       </svg>
 
-      <PermissionsManagement selectedDataId={id} type="file" />
+      <PermissionsManagement selectedDataId={id} type={type} />
     </div>
   );
 }
 
 Header.propTypes = {
   id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };

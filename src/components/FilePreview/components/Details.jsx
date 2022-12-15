@@ -13,11 +13,11 @@ import { useGetFilteredTeamMembers } from '../../../features/permissions/permiss
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 
-export default function Details({ file }) {
+export default function Details({ item, type }) {
   const [showPopup, setShowPopup] = useState(false);
-  const title = file.display_name ? file.display_name : file.file.display_name;
-  const size = file.size || file.file.size;
-  const extension = title.split('.').at(-1);
+  const title = type === 'file' ? item.display_name : item.name;
+  const size = type === 'file' ? item.size || item.file.size : null;
+  const extension = type === 'file' ? title.split('.').at(-1) : 'folder';
 
   const { currentUserId } = useSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId);
@@ -26,8 +26,8 @@ export default function Details({ file }) {
     if (id) {
       try {
         const request = await requestNew({
-          method: 'post',
-          url: `files/${file.id}/share/${id}`,
+          method: 'POST',
+          url: `${type}s/${item.id}/share/${id}`,
         });
         toast.custom((t) => (
           <Toast
@@ -52,7 +52,7 @@ export default function Details({ file }) {
   };
 
   const onDownload = async () => {
-    DownloadFile('file', file.id, title);
+    DownloadFile(type, item.id, title);
   };
 
   return (
@@ -67,9 +67,11 @@ export default function Details({ file }) {
               <span className="sr-only">Details for </span>
               {title}
             </h2>
-            <p className="text-sm font-medium text-gray-500">
-              {OutputFileSize(size)}
-            </p>
+            {size ? (
+              <p className="text-sm font-medium text-gray-500">
+                {OutputFileSize(size)}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
@@ -102,22 +104,22 @@ export default function Details({ file }) {
         <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
           <div className="py-3 flex justify-between text-sm font-medium">
             <dt className="text-gray-500">Last modified</dt>
-            <dd className="text-gray-900">{OutputDateTime(file.updated_at)}</dd>
+            <dd className="text-gray-900">{OutputDateTime(item.updated_at)}</dd>
           </div>
           <div className="py-3 flex justify-between text-sm font-medium">
             <dt className="text-gray-500">Created</dt>
-            <dd className="text-gray-900">{OutputDateTime(file.created_at)}</dd>
+            <dd className="text-gray-900">{OutputDateTime(item.created_at)}</dd>
           </div>
-          {file.shared_by ? (
+          {item.shared_by ? (
             <>
               <h3 className="font-medium text-gray-900 py-2">Shared by</h3>
               <div className="py-3 flex justify-between text-sm font-medium">
                 <dt className="text-gray-500">User name</dt>
-                <dd className="text-gray-900">{file.shared_by.user.name}</dd>
+                <dd className="text-gray-900">{item.shared_by.user.name}</dd>
               </div>
               <div className="py-3 flex justify-between text-sm font-medium">
                 <dt className="text-gray-500">User email</dt>
-                <dd className="text-gray-900">{file.shared_by.user.email}</dd>
+                <dd className="text-gray-900">{item.shared_by.user.email}</dd>
               </div>
             </>
           ) : null}
@@ -128,5 +130,6 @@ export default function Details({ file }) {
 }
 
 Details.propTypes = {
-  file: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
 };
