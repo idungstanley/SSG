@@ -19,6 +19,7 @@ function CreateInboxSlideOver() {
   const createInboxMutation = useMutation(createInboxService, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(['inboxes']);
+      queryClient.invalidateQueries(['active-inboxes']);
       dispatch(setCreateInboxSlideOverVisibility(false));
       navigate(`/inbox/${data.data.inbox.id}`);
     },
