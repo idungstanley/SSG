@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import { InitialsAvatar } from '../../../../common';
+import { InitialsAvatar } from '../../../../../common';
 
 export default function Activity() {
   const selectedItemFullDetails = useSelector(

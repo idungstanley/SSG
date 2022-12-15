@@ -7,9 +7,9 @@ import Comments from '../Comments';
 function FilePreview({ file }) {
   return file ? (
     <aside className="fixed h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
-      <Header id={file.id} />
+      <Header id={file.id} type="file" />
 
-      <Details file={file} />
+      <Details item={file} type="file" />
 
       <Comments itemId={file.id} type="file" />
     </aside>
