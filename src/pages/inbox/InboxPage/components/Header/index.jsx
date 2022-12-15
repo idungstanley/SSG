@@ -5,6 +5,7 @@ import {
   CogIcon,
   TrashIcon,
   MailOpenIcon,
+  ChatIcon,
 } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
@@ -13,12 +14,14 @@ import { Button } from '../../../../../components';
 import BlackListEmails from '../BlackListEmails';
 import { useRestoreOrDeleteInbox } from '../../../../../features/inbox/inboxesService';
 import MinMenuForResponsible from './MinMenuForResponsible';
+import Comments from '../Comments';
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
   const [showEmailsModal, setShowEmailsModal] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
 
   const upload = () => {
     dispatch(setShowUploadModal(true));
@@ -42,12 +45,20 @@ function Header() {
     {
       buttonStyle: 'white',
       label: 'Blacklist',
-      onClick: () => setShowEmailsModal(!showEmailsModal),
+      onClick: () => setShowEmailsModal((prev) => !prev),
       icon: (
         <MailOpenIcon
           className="mr-2.5 h-5 w-5 text-gray-500"
           aria-hidden="true"
         />
+      ),
+    },
+    {
+      buttonStyle: 'white',
+      label: 'Comments',
+      onClick: () => setShowCommentsModal((prev) => !prev),
+      icon: (
+        <ChatIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
       ),
     },
     {
@@ -103,6 +114,10 @@ function Header() {
             ringOnFocus
           />
         ))}
+
+        {showCommentsModal ? (
+          <Comments setShowModal={setShowCommentsModal} />
+        ) : null}
 
         {showEmailsModal ? (
           <BlackListEmails setShowModal={setShowEmailsModal} />

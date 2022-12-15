@@ -12,7 +12,8 @@ import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
 
 export default function Comments({ itemId, type }) {
   const [message, setMessage] = useState('');
-  const [showWindow, setShowWindow] = useState(false);
+  const isInbox = type === 'inbox';
+  const [showWindow, setShowWindow] = useState(isInbox);
   const [editId, setEditId] = useState(null);
 
   const { mutate: sendComment } = useCreateItemComment(itemId);
@@ -60,13 +61,15 @@ export default function Comments({ itemId, type }) {
 
   return (
     <div className="relative inset-0 flex h-full overflow-hidden flex-col">
-      <button
-        type="button"
-        onClick={() => setShowWindow((prev) => !prev)}
-        className="text-left my-3 text-gray-600 underline cursor-pointer"
-      >
-        {showWindow ? 'Hide Comments' : 'Show Comments'}
-      </button>
+      {!isInbox ? (
+        <button
+          type="button"
+          onClick={() => setShowWindow((prev) => !prev)}
+          className="text-left my-3 text-gray-600 underline cursor-pointer"
+        >
+          {showWindow ? 'Hide Comments' : 'Show Comments'}
+        </button>
+      ) : null}
 
       {showWindow ? (
         <div className="w-full overflow-y-scroll h-full flex-1 space-y-3">
