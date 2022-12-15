@@ -238,69 +238,6 @@ export const previewInboxFile = async (data) => {
   window.open(`${process.env.REACT_APP_API_BASE_URL}/api/af/${url}`, '_blank');
 };
 
-// file comments
-export const getInboxFileComments = async (fileId) => {
-  const request = await requestNew({
-    url: `inbox-files/${fileId}/comments`,
-    method: 'GET',
-  });
-  return request;
-};
-
-export const useGetInboxFileComments = (fileId) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    [`inbox-${fileId}-comments`],
-    () => getInboxFileComments(fileId),
-    {
-      onSuccess: (data) => {
-        // console.log(data);
-        data.data.comments.map((comment) => queryClient.setQueryData(['comment', comment.id], comment));
-      },
-    },
-  );
-};
-
-const postInboxFileComment = async (fileId, message) => {
-  const request = await requestNew({
-    url: `inbox-files/${fileId}/comment`,
-    method: 'POST',
-    data: {
-      message,
-    },
-  });
-  return request;
-};
-
-export const usePostInboxFileComment = (fileId, message) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(() => postInboxFileComment(fileId, message), {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`inbox-${fileId}-comments`]);
-    },
-  });
-};
-
-// delete comments
-const deleteInboxFileComment = (data) => {
-  const request = requestNew({
-    url: `inbox-files/${data.fileId}/comment/${data.messageId}`,
-    method: 'DELETE',
-  });
-  return request;
-};
-
-export const useDeleteInboxFileComment = (fileId) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(deleteInboxFileComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`inbox-${fileId}-comments`]);
-    },
-  });
-};
-
 const fileActivity = (fileId) => {
   const request = requestNew({
     url: `inbox-files/${fileId}/activity-logs`,
