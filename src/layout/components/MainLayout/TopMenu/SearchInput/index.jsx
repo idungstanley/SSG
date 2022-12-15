@@ -3,8 +3,6 @@ import { SearchIcon } from '@heroicons/react/solid';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setSearchQuery } from '../../../../../features/search/searchSlice';
-import { useSearch } from '../../../../../features/search/searchService';
-import { Spinner } from '../../../../../common';
 
 export default function SearchInput() {
   const dispatch = useDispatch();
@@ -12,8 +10,6 @@ export default function SearchInput() {
   const location = useLocation();
 
   const searchQuery = useSelector((state) => state.search.searchQuery);
-
-  const { explorerStatus, inboxStatus } = useSearch();
 
   const queryInput = useRef(null);
 
@@ -44,13 +40,7 @@ export default function SearchInput() {
       <div className="w-full px-2 lg:px-6">
         <div className="relative text-indigo-200 focus-within:text-gray-400">
           <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-            {(explorerStatus === 'loading' || inboxStatus === 'loading') && searchQuery.length >= 2 ? (
-              <div className="-mt-2">
-                <Spinner size={16} color="#9CA3AE" />
-              </div>
-            ) : (
-              <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-            )}
+            <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </div>
           <input
             id="search"

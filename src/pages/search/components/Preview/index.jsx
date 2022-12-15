@@ -40,6 +40,7 @@ function Preview() {
     : isInboxFile
       ? item?.inbox_file_source.file_format.extension
       : 'folder';
+
   const createdAt = item?.created_at;
   const updatedAt = item?.updated_at;
   const size = isInboxFile ? item?.inbox_file_source.size : isExplorerFile ? item?.size : null;
