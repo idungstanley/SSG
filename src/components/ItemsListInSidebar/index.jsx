@@ -63,7 +63,7 @@ export default function ItemsListInSidebar({ items, status, type }) {
     <ul className="w-full divide-y divide-gray-200">
       {items.map((i) => (
         <li key={i.id} className="flex flex-col">
-          <div className="flex  justify-between items-center hover:bg-gray-100">
+          <div className="flex justify-between items-center hover:bg-gray-100">
             <div
               role="button"
               tabIndex={0}

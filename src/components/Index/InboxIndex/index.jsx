@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OutputFileSize } from '../../../app/helpers';
 import { FileIcon, Spinner } from '../../../common';
@@ -17,7 +17,7 @@ export default function InboxIndex() {
     isArchived: 0,
   });
 
-  const data = dt?.pages.flatMap((page) => page.data.inbox_files);
+  const data = useMemo(() => dt?.pages.flatMap((page) => page.data.inbox_files), [dt]);
 
   if (status === 'error') {
     return (
