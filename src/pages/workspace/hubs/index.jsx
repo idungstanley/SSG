@@ -71,63 +71,6 @@ function Hubs() {
         status={status}
         type="hub"
       />
-
-      {/* {hubdata?.data?.hubs.map(({ name, id }) => (
-        <section id="hubList" key={id}>
-          <div
-            className="flex justify-between items-center hover:bg-gray-100 p-0.5 rounded mt-0.5 mb-0.5"
-            onClick={() => toggle(id)}
-          >
-            <div
-              id="hubListLeft"
-              className="flex items-center space-x-1 justify-start text-sm mt-1 overflow-y-hidden"
-            >
-              <div onClick={() => handleShowWallet(id)}>
-                {showHubList === id ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-              <AvatarWithInitials
-                initials={name.substr(0, 1).toUpperCase()}
-                height="h-6"
-                width="w-6"
-                backgroundColour="#cf30cf"
-              />
-              <h4 className="text-sm font-medium">
-                {name.length > 10 ? name.substr(0, 10) : name}
-              </h4>
-            </div>
-            <div
-              id="hubListRight"
-              className="space-x-1 flex items-center justify-end"
-              onClick={() => HandleGetHubId(id)}
-            >
-              <MenuDropdown />
-              <PlusDropDown />
-            </div>
-          </div>
-          {showHubList === id ? (
-            <>
-              <WalletIndex
-                showHubList={showHubList}
-                getCurrentHubId={getCurrentHubId}
-              />
-              <ListIndex
-                showHubList={showHubList}
-                getCurrentHubId={getCurrentHubId}
-              />
-            </>
-          ) : null}
-        </section>
-      ))} */}
     </>
   );
 }
