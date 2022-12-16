@@ -19,23 +19,35 @@ export const createHubService = (data) => {
 };
 
 // get all hubs
-export const getHubListService = () => {
-  const response = requestNew({
-    url: 'hubs',
-    method: 'GET',
-  }, false, true);
-  return response;
-};
-
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(['hubs'], getHubListService, {
-    onSuccess: (data) => {
-      data.data.hubs.map((hub) => queryClient.setQueryData(['hub', hub.id], hub));
+  return useQuery(
+    ['hubs'],
+    () => requestNew(
+      {
+        url: 'hubs',
+        method: 'GET',
+      },
+      false,
+      true,
+    ),
+    {
+      onSuccess: (data) => {
+        data.data.hubs.map((hub) => queryClient.setQueryData(['hub', hub.id], hub));
+      },
     },
-  });
+  );
 };
+
+export const useGetHub = (hubId) => useQuery([`hub-${hubId}`], () => requestNew(
+  {
+    url: `hubs/${hubId}`,
+    method: 'GET',
+  },
+  false,
+  true,
+));
 
 export const useCreateHub = () => {
   const queryClient = useQueryClient();
@@ -44,19 +56,4 @@ export const useCreateHub = () => {
       queryClient.invalidateQueries(['hubs']);
     },
   });
-};
-
-export const useGetHubService = (data) => {
-  const hubID = data.queryKey[1];
-  // console.log(hubID);
-  const response = requestNew(
-    {
-      url: hubID ? `hubs/${hubID}` : 'hubs',
-      method: 'GET',
-    },
-    false,
-    true,
-  );
-
-  return response;
 };

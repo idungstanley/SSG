@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { FolderFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubService } from '../../features/hubs/hubService';
+import { useGetHub } from '../../features/hubs/hubService';
 import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
 import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
@@ -22,10 +22,7 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
   const [showSubWallet, setShowSubWallet] = useState(false);
   const [walletId, setGetWalletId] = useState('');
   const [walletParentId, setWalletParentId] = useState('');
-  const { data: hubdataById, status } = useQuery({
-    queryKey: ['hubdata_hubByID', getCurrentHubId],
-    queryFn: useGetHubService,
-  });
+  const { data: hubdataById } = useGetHub(getCurrentHubId);
 
   console.log(hubdataById);
   const navigate = useNavigate();
@@ -42,8 +39,8 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
     }
     setShowSubWallet(id);
   };
-  console.log(showSubWallet);
-  console.log(walletId);
+  // console.log(showSubWallet);
+  // console.log(walletId);
 
   return hubdataById?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>

@@ -9,16 +9,13 @@ import { PlusSquareOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { Hyperlink } from '..';
 import { getListService } from '../../features/list/listService';
-import { useGetHubService } from '../../features/hubs/hubService';
+import { useGetHub } from '../../features/hubs/hubService';
 import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
 import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
   const [getListId, setGetListId] = useState('');
-  const { data: hubdataById } = useQuery({
-    queryKey: ['hubdata_hubByID', getCurrentHubId],
-    queryFn: useGetHubService,
-  });
+  const { data: hubdataById } = useGetHub(getCurrentHubId);
 
   const navigate = useNavigate();
   const handleLocation = (id) => {
