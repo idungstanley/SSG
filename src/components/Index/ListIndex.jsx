@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useGetHub } from '../../features/hubs/hubService';
-import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
+import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ function ListIndex({ showHubList, getCurrentHubId }) {
                 </button>
               </div>
 
-              <TaskDropdown
+              <MenuDropdown
                 className="space-x-1 flex items-center justify-end"
                 onClick={() => setGetListId(list.id)}
                 getListId={getListId}

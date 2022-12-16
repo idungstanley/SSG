@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { OutputFileSize } from '../../../app/helpers';
 import { FileIcon, Spinner } from '../../../common';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
-import MenuDropdown from '../../../pages/workspace/hubs/components/MenuDropdown';
 import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
-import {
-  setShowUploadModal,
-} from '../../../features/inbox/inboxSlice';
+import { setShowUploadModal } from '../../../features/inbox/inboxSlice';
+import MenuDropdown from '../../Dropdown/DropdownForWorkspace';
 
 export default function InboxIndex() {
   const dispatch = useDispatch();
@@ -17,7 +15,10 @@ export default function InboxIndex() {
     isArchived: 0,
   });
 
-  const data = useMemo(() => dt?.pages.flatMap((page) => page.data.inbox_files), [dt]);
+  const data = useMemo(
+    () => dt?.pages.flatMap((page) => page.data.inbox_files),
+    [dt],
+  );
 
   if (status === 'error') {
     return (

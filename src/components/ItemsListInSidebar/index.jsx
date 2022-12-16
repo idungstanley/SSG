@@ -7,12 +7,12 @@ import { PropTypes } from 'prop-types';
 import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
-import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
 import {
   resetCurrentItem,
   setCurrentItem,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
+import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
 export default function ItemsListInSidebar({ items, status, type }) {
   const dispatch = useDispatch();

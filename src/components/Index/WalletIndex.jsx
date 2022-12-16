@@ -4,11 +4,11 @@ import { FolderFilled } from '@ant-design/icons';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { useGetHub } from '../../features/hubs/hubService';
-import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
 import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
 import ListModal from '../../pages/workspace/Lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/SubWalletIndex';
+import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
 function WalletIndex({ showHubList, getCurrentHubId }) {
   const [showWalletModal, setShowWalletModal] = useState(false);

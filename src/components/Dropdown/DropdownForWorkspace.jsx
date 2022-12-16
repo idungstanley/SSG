@@ -14,6 +14,8 @@ import {
   LinkIcon,
   DotsVerticalIcon,
   ColorSwatchIcon,
+  ArrowDownIcon,
+  PencilAltIcon,
 } from '@heroicons/react/outline';
 // import { useSelector } from 'react-redux';
 
@@ -26,6 +28,7 @@ function MenuDropdown() {
 
   // ! actions here (create, delete, rename)
 
+  // ! (too big!) destructure to different components
   const itemsList = [
     {
       id: 1,
@@ -53,14 +56,14 @@ function MenuDropdown() {
           aria-hidden="true"
         />
       ),
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 4,
       title: 'Copy link',
       onClick: () => {},
       icon: <LinkIcon className="h-4 w-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 5,
@@ -102,24 +105,67 @@ function MenuDropdown() {
       icon: (
         <CogIcon className="h-6 w-5 pt-2 text-gray-700" aria-hidden="true" />
       ),
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 10,
       title: 'Sharing & Permission',
       onClick: () => {},
       icon: <ShareIcon className="h-4 w-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 11,
       title: 'Archive',
       onClick: () => {},
       icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 12,
+      title: 'Import',
+      onClick: () => {},
+      icon: <ArrowDownIcon className="h-4 w-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 13,
+      title: 'Archive',
+      onClick: () => {},
+      icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 14,
+      title: 'Whiteboard',
+      onClick: () => {},
+      icon: <PencilAltIcon className="h-4 w-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 15,
+      title: 'Wallet',
+      onClick: () => {},
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
+          />
+        </svg>
+      ),
+      isVisible: false,
+    },
+    {
+      id: 16,
       title: 'Delete',
       onClick: () => {},
       icon: <TrashIcon className="h-4 w-4" aria-hidden="true" />,
