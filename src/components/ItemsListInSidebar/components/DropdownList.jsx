@@ -2,9 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import WalletIndex from '../../Index/WalletIndex';
 import ListIndex from '../../Index/ListIndex';
+import InboxIndex from '../../Index/InboxIndex';
 
 export default function DropdownList() {
-  const { currentItemId, currentItemType } = useSelector((state) => state.workspace);
+  const { currentItemId, currentItemType } = useSelector(
+    (state) => state.workspace,
+  );
 
   return currentItemType === 'hub' ? (
     <>
@@ -12,8 +15,6 @@ export default function DropdownList() {
       <ListIndex showHubList={!false} getCurrentHubId={currentItemId} />
     </>
   ) : (
-    <div>
-      <p>Inbox</p>
-    </div>
+    <InboxIndex />
   );
 }

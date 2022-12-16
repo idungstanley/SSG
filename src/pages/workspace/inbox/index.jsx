@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { useInboxes } from '../../../features/inbox/inboxesService';
+import { useGetActiveInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
 
 function Inbox() {
   const dispatch = useDispatch();
-  const { data, status } = useInboxes('active');
+  const { data: dt, status } = useGetActiveInboxes();
+
+  const data = dt?.data.inboxes;
 
   return (
     <div className="space-y-4">
