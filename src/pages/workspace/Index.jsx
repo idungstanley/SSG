@@ -3,12 +3,14 @@ import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
+import UploadModal from '../../components/UploadModal';
 
 function Index() {
   const { showSidebar } = useSelector((state) => state.workspace);
 
   return (
-    <div>
+    <>
+      <UploadModal />
       <Sidebar />
       <div className={`flex flex-1 flex-col ${showSidebar ? 'pl-64' : ''}`}>
         <Header />
@@ -20,7 +22,7 @@ function Index() {
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -1,11 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { OutputFileSize } from '../../../app/helpers';
 import { FileIcon, Spinner } from '../../../common';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
+import MenuDropdown from '../../../pages/workspace/hubs/components/MenuDropdown';
 import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
+import {
+  setShowUploadModal,
+} from '../../../features/inbox/inboxSlice';
 
 export default function InboxIndex() {
+  const dispatch = useDispatch();
   const { currentItemId } = useSelector((state) => state.workspace);
   const { status, data: dt } = useGetInboxFiles({
     inboxId: currentItemId,
@@ -34,7 +39,14 @@ export default function InboxIndex() {
   return status === 'success' ? (
     !data.length ? (
       <div className="my-12">
-        <OneThirdScreenMessage title="No files yet" description="Add one." />
+        {/* <OneThirdScreenMessage title="No files yet" description="Add one." /> */}
+        <OneThirdScreenMessage
+          title="No files yet"
+          description="Upload one"
+          ctaText="Upload"
+          ctaOnClick={() => dispatch(setShowUploadModal(true))}
+          showCta
+        />
       </div>
     ) : (
       <ul className="divide-y divide-gray-200">
@@ -45,13 +57,14 @@ export default function InboxIndex() {
               size={8}
             />
             <div className="ml-3">
-              <p className="text-sm w-44 truncate font-medium text-gray-900">
+              <p className="text-sm w-40 truncate font-medium text-gray-900">
                 {item.inbox_file_source.display_name}
               </p>
               <p className="text-sm text-gray-500">
                 {OutputFileSize(item.inbox_file_source.size)}
               </p>
             </div>
+            <MenuDropdown />
           </li>
         ))}
       </ul>
