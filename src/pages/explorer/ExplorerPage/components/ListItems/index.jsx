@@ -82,6 +82,7 @@ export default function ExplorerTable() {
   useEffect(() => {
     if (selectedItems.length) {
       dispatch(resetSelectedFilesAndFolders());
+      setChecked(false);
     }
   }, [folderId]);
 
@@ -111,7 +112,7 @@ export default function ExplorerTable() {
     }
 
     if (!e.target.value && selectedFolderIds.includes(itemId)) {
-      navigate(`${itemId}`, { replace: false });
+      navigate(`/explorer/${itemId}`, { replace: true });
       dispatch(resetSelectedFilesAndFolders());
       setChecked(false);
     }
