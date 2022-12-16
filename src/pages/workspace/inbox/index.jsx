@@ -2,11 +2,15 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
+import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
+import { useInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
 
 function Inbox() {
   const dispatch = useDispatch();
+  const { data, status } = useInboxes('active');
+
   return (
     <div className="space-y-4">
       <CreateNewItemBtn
@@ -20,6 +24,8 @@ function Inbox() {
         <p>Go to inboxes</p>
       </Link>
       <CreateInboxSlideOver />
+
+      <ItemsListInSidebar items={data} status={status} />
     </div>
   );
 }

@@ -30,7 +30,7 @@ function MenuDropdown() {
   return (
     <Menu as="div" className="">
       <div>
-        <Menu.Button className=" text-gray-400 mt-4 flex text-sm">
+        <Menu.Button className="text-gray-400 mt-4 flex text-sm">
           <EllipsisOutlined className="h-6 w-6" aria-hidden="true" />
         </Menu.Button>
       </div>

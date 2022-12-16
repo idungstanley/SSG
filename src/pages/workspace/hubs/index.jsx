@@ -22,12 +22,17 @@ import PlusDropDown from './components/PlusDropDown';
 import WalletIndex from '../wallet/WalletIndex';
 import ListIndex from '../Lists/ListIndex';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
+import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 
 function Hubs() {
   const [getCurrentHubId, setGetCurrentHubId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showHubList, setShowHubList] = useState(false);
-  const { isLoading, data: hubdata } = useQuery({
+  const {
+    isLoading,
+    data: hubdata,
+    status,
+  } = useQuery({
     queryKey: ['hubdata'],
     queryFn: getHubListService,
   });
@@ -61,7 +66,9 @@ function Hubs() {
         onCloseHubModal={() => setShowModal(false)}
       />
 
-      {hubdata?.data?.hubs.map(({ name, id }) => (
+      <ItemsListInSidebar items={hubdata?.data.hubs} status={status} />
+
+      {/* {hubdata?.data?.hubs.map(({ name, id }) => (
         <section id="hubList" key={id}>
           <div
             className="flex justify-between items-center hover:bg-gray-100 p-0.5 rounded mt-0.5 mb-0.5"
@@ -116,7 +123,7 @@ function Hubs() {
             </>
           ) : null}
         </section>
-      ))}
+      ))} */}
     </>
   );
 }
