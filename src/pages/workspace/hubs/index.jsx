@@ -19,8 +19,8 @@ import Modal from './components/Modal';
 import { getHubListService } from '../../../features/hubs/hubService';
 import MenuDropdown from './components/MenuDropdown';
 import PlusDropDown from './components/PlusDropDown';
-import WalletIndex from '../wallet/WalletIndex';
-import ListIndex from '../Lists/ListIndex';
+import WalletIndex from '../../../components/Index/WalletIndex';
+import ListIndex from '../../../components/Index/ListIndex';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 
@@ -66,7 +66,11 @@ function Hubs() {
         onCloseHubModal={() => setShowModal(false)}
       />
 
-      <ItemsListInSidebar items={hubdata?.data.hubs} status={status} />
+      <ItemsListInSidebar
+        items={hubdata?.data.hubs}
+        status={status}
+        type="hub"
+      />
 
       {/* {hubdata?.data?.hubs.map(({ name, id }) => (
         <section id="hubList" key={id}>

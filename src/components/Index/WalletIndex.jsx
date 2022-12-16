@@ -8,40 +8,40 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { FolderFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubService } from '../../../features/hubs/hubService';
-import MenuDropdown from '../hubs/components/MenuDropdown';
-import PlusDropDown from '../hubs/components/PlusDropDown';
-import WalletModal from './components/WalletModal';
-import ListModal from '../Lists/components/ListModal';
-import SubWalletIndex from './components/SubWalletIndex';
+import { useGetHubService } from '../../features/hubs/hubService';
+import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
+import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
+import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
+import ListModal from '../../pages/workspace/Lists/components/ListModal';
+import SubWalletIndex from '../../pages/workspace/wallet/components/SubWalletIndex';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 function WalletIndex({ showHubList, getCurrentHubId }) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [showSubWallet, setShowSubWallet] = useState(false)
+  const [showSubWallet, setShowSubWallet] = useState(false);
   const [walletId, setGetWalletId] = useState('');
-  const [walletParentId, setWalletParentId] = useState('')
+  const [walletParentId, setWalletParentId] = useState('');
   const { data: hubdataById, status } = useQuery({
     queryKey: ['hubdata_hubByID', getCurrentHubId],
     queryFn: useGetHubService,
   });
 
   console.log(hubdataById);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleLocation = (id) => {
     console.log(id);
-    navigate(`/workspace/wallet/${id}`)
-  }
+    navigate(`/workspace/wallet/${id}`);
+  };
 
   const handleShowSubWallet = (id) => {
-    setWalletParentId(id)
-    setShowSubWallet(!showSubWallet)
-     if (showSubWallet === id) {
+    setWalletParentId(id);
+    setShowSubWallet(!showSubWallet);
+    if (showSubWallet === id) {
       return setShowSubWallet(null);
     }
     setShowSubWallet(id);
-  }
+  };
   console.log(showSubWallet);
   console.log(walletId);
 

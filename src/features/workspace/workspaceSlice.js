@@ -4,6 +4,7 @@ const initialState = {
   workspace: [],
   showSidebar: true,
   currentItemId: null,
+  currentItemType: null,
 };
 
 export const wsSlice = createSlice({
@@ -16,15 +17,20 @@ export const wsSlice = createSlice({
     setShowSidebar(state, action) {
       state.showSidebar = action.payload;
     },
-    setCurrentItemId(state, action) {
-      state.currentItemId = action.payload;
+    setCurrentItem(state, action) {
+      state.currentItemId = action.payload.currentItemId;
+      state.currentItemType = action.payload.currentItemType;
+    },
+    resetCurrentItem(state) {
+      state.currentItemId = null;
+      state.currentItemType = null;
     },
     checkIfWs: (state) => state,
   },
 });
 
 export const {
-  createWorkspace, checkIfWs, setShowSidebar, setCurrentItemId,
+  createWorkspace, checkIfWs, setShowSidebar, setCurrentItem, resetCurrentItem,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

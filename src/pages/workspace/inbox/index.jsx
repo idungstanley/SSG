@@ -25,7 +25,7 @@ function Inbox() {
       </Link>
       <CreateInboxSlideOver />
 
-      <ItemsListInSidebar items={data} status={status} />
+      <ItemsListInSidebar items={data} status={status} type="inbox" />
     </div>
   );
 }

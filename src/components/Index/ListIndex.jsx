@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { Hyperlink } from '../../../components';
-import { getListService } from '../../../features/list/listService';
-import { useGetHubService } from '../../../features/hubs/hubService';
-import MenuDropdown from '../hubs/components/MenuDropdown';
-import TaskDropdown from '../tasks/ccomponent/TaskDropdown';
+import { Hyperlink } from '..';
+import { getListService } from '../../features/list/listService';
+import { useGetHubService } from '../../features/hubs/hubService';
+import MenuDropdown from '../../pages/workspace/hubs/components/MenuDropdown';
+import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
   const [getListId, setGetListId] = useState('');
@@ -20,10 +20,10 @@ function ListIndex({ showHubList, getCurrentHubId }) {
     queryFn: useGetHubService,
   });
 
-  const navigate = useNavigate()
-  const  handleLocation = (id) => {
+  const navigate = useNavigate();
+  const handleLocation = (id) => {
     navigate(`/workspace/list/${id}`);
-  }
+  };
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
