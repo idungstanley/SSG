@@ -10,6 +10,8 @@ import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';
 
+const regex = /@[\S]*/g;
+
 export default function Comments({ itemId, type }) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,7 +24,7 @@ export default function Comments({ itemId, type }) {
   const { mutate: sendComment } = useCreateItemComment(itemId);
   const { mutate: editComment } = useEditItemComment(itemId);
   const { mutate: deleteComment } = useDeleteItemComment(itemId);
-  const { status, comments } = useGetItemComments({
+  const { status, data } = useGetItemComments({
     type,
     id: itemId,
   });
@@ -38,14 +40,19 @@ export default function Comments({ itemId, type }) {
         });
         setEditId(null);
       } else {
+        const messageWithUserIds = `${message} ${selectedUsers.map(
+          (user) => `@[${user.id}] `,
+        )}`;
+
         sendComment({
-          message,
+          message: messageWithUserIds,
           type,
           id: itemId,
         });
       }
 
       setMessage('');
+      setSelectedUsers([]);
     }
   };
 
@@ -55,34 +62,11 @@ export default function Comments({ itemId, type }) {
     });
   };
 
-  const onEdit = (id, value) => {
-    setMessage(value);
+  const onEdit = (id, value, users) => {
+    setMessage(value.replaceAll(regex, ''));
     setEditId(id);
+    setSelectedUsers([...users]);
   };
-
-  const onChange = (e) => {
-    setMessage(e.target.value);
-    const regex = /@[\S]*/g;
-    const val = e.target.value.match(regex);
-    if (val) {
-      const start = e.target.value.indexOf(val);
-      // const indexEnd = e.target.value.split(' ').indexOf(val);
-      const end = 15;
-
-      if (e.target.selectionStart > start && e.target.selectionStart < end) {
-        setShowDropdown(true);
-      }
-    } else if (showDropdown) {
-      setShowDropdown(false);
-    }
-  };
-
-  // const setUsers = (user) => {
-  //   // console.log(selectedUserIds);
-  //   setSelectedUsers((prev) => [...prev, user.id]);
-  //   setMessage((prev) => prev + user.name);
-  //   setShowDropdown(false);
-  // };
 
   return (
     <div className="relative inset-0 flex h-full overflow-hidden flex-col">
@@ -99,15 +83,21 @@ export default function Comments({ itemId, type }) {
       {showWindow ? (
         <div className="w-full overflow-y-scroll h-full flex-1 space-y-3">
           <Form
+            setMessage={setMessage}
             handleSubmit={handleSubmit}
-            onChange={onChange}
             message={message}
             setShowDropdown={setShowDropdown}
           />
-          <Dropdown show={showDropdown} setSelectedUsers={setSelectedUsers} selectedUsers={selectedUsers} />
+          <Dropdown
+            isInbox={isInbox}
+            show={showDropdown}
+            setShowDropdown={setShowDropdown}
+            setSelectedUsers={setSelectedUsers}
+            selectedUsers={selectedUsers}
+          />
           <List
             status={status}
-            comments={comments}
+            comments={data}
             onEdit={onEdit}
             onDelete={onDelete}
           />
