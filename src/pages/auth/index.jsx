@@ -18,7 +18,9 @@ const data = [
 
 function Wrapper({ children }) {
   const { pathname } = useLocation();
-  const isSignIn = pathname.split('/')[2] === 'login' ? 0 : 1;
+
+  const isSignInPath = pathname.split('/')[2] === 'login';
+  const selectedData = data[isSignInPath ? 0 : 1];
 
   return (
     <div className="min-h-full relative flex items-center justify-center">
@@ -30,12 +32,12 @@ function Wrapper({ children }) {
           </h2>
         </div>
         <div className="flex items-center gap-3">
-          <p className="hidden sm:block whitespace-nowrap">{data[isSignIn].massage}</p>
+          <p className="hidden sm:block whitespace-nowrap">{selectedData.massage}</p>
           <Link
-            to={data[isSignIn].link}
+            to={selectedData.link}
             className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
           >
-            {data[isSignIn].title}
+            {selectedData.title}
           </Link>
         </div>
       </div>

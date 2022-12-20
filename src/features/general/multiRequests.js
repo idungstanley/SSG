@@ -17,7 +17,9 @@ const getItemComments = (data) => {
   return request;
 };
 
-export const useGetItemComments = (data) => useQuery([`comments-${data.id}`], () => getItemComments(data));
+export const useGetItemComments = (data) => useQuery([`comments-${data.id}`], () => getItemComments(data), {
+  select: (comments) => comments.data.comments,
+});
 
 const createItemComment = (data) => {
   const request = requestNew(
