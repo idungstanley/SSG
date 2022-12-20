@@ -17,7 +17,7 @@ export default function Comments({ setShowModal }) {
       >
         {' '}
       </div>
-      <div className="absolute top-14 -left-4 p-6 rounded-xl border bg-white z-50 w-80">
+      <div className="absolute top-14 -left-4 p-6 h-80 rounded-xl border bg-white z-50 w-96">
         <CommentsT itemId={inboxId} type="inbox" />
       </div>
     </>

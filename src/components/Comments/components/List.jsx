@@ -4,6 +4,8 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
 import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
 
+const regex = /@[\S]*/g;
+
 export default function List({
   status, comments, onEdit, onDelete,
 }) {
@@ -14,20 +16,34 @@ export default function List({
   ) : status === 'success' ? (
     comments?.length ? (
       <ul className="divide-y divide-gray-200">
-        {comments.map((i) => (
-          <li key={i.id} className="py-4 flex justify-between">
-            <p className="pl-1">{i.message}</p>
-            <div className="flex gap-3">
-              {i.can_modify ? (
-                <PencilIcon
-                  onClick={() => onEdit(i.id, i.message)}
-                  className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
-                />
+        {comments.map((item) => (
+          <li key={item.id} className="py-4 flex items-center justify-between">
+            <p>{item.message.replaceAll(regex, '')}</p>
+
+            <div className="flex gap-3 items-center">
+              <div className="flex gap-2">
+                {item.mention_users?.map((user) => (
+                  <div
+                    key={user.id}
+                    className="bg-indigo-100 border text-sm px-3 py-1 border-primary-400 rounded-2xl"
+                  >
+                    {user.name}
+                  </div>
+                ))}
+              </div>
+              {item.can_modify ? (
+                <>
+
+                  <PencilIcon
+                    onClick={() => onEdit(item.id, item.message, item.mention_users)}
+                    className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
+                  />
+                  <TrashIcon
+                    onClick={() => onDelete(item.id)}
+                    className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+                  />
+                </>
               ) : null}
-              <TrashIcon
-                onClick={() => onDelete(i.id)}
-                className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
-              />
             </div>
           </li>
         ))}
