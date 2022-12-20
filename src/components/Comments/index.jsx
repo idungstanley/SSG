@@ -8,11 +8,12 @@ import {
 } from '../../features/general/multiRequests';
 import Form from './components/Form';
 import List from './components/List';
+import Dropdown from './components/Dropdown';
 
 export default function Comments({ itemId, type }) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const isInbox = type === 'inbox' || type === 'inbox_file';
 
   const [showWindow, setShowWindow] = useState(isInbox);
@@ -61,29 +62,27 @@ export default function Comments({ itemId, type }) {
 
   const onChange = (e) => {
     setMessage(e.target.value);
+    const regex = /@[\S]*/g;
+    const val = e.target.value.match(regex);
+    if (val) {
+      const start = e.target.value.indexOf(val);
+      // const indexEnd = e.target.value.split(' ').indexOf(val);
+      const end = 15;
 
-    if (e.target.value.at(-1) === '@' || e.target.selectionStart === '@') {
-      setShowDropdown(true);
+      if (e.target.selectionStart > start && e.target.selectionStart < end) {
+        setShowDropdown(true);
+      }
     } else if (showDropdown) {
       setShowDropdown(false);
     }
-
-    // const regex = /@[\S]+/g;
-    // const config = [];
-
-    // message
-    //   .split(' ')
-    //   .map((i) => config.push({ word: i, isMatch: !!i.match(regex) }));
-
-    console.log(e.target.selectionStart, e.target.value.length);
   };
 
-  const setUsers = (user) => {
-    console.log(selectedUserIds);
-    setSelectedUserIds((prev) => [...prev, user.id]);
-    setMessage((prev) => prev + user.name);
-    setShowDropdown(false);
-  };
+  // const setUsers = (user) => {
+  //   // console.log(selectedUserIds);
+  //   setSelectedUsers((prev) => [...prev, user.id]);
+  //   setMessage((prev) => prev + user.name);
+  //   setShowDropdown(false);
+  // };
 
   return (
     <div className="relative inset-0 flex h-full overflow-hidden flex-col">
@@ -103,9 +102,9 @@ export default function Comments({ itemId, type }) {
             handleSubmit={handleSubmit}
             onChange={onChange}
             message={message}
-            showDropdown={showDropdown}
-            setUsers={setUsers}
+            setShowDropdown={setShowDropdown}
           />
+          <Dropdown show={showDropdown} setSelectedUsers={setSelectedUsers} selectedUsers={selectedUsers} />
           <List
             status={status}
             comments={comments}
