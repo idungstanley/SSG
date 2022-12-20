@@ -8,10 +8,9 @@ import {
 
 export default function Prompt() {
   const dispatch = useDispatch();
-  const show = useSelector((state) => state.prompt.show);
-  const title = useSelector((state) => state.prompt.title);
-  const body = useSelector((state) => state.prompt.body);
-  const options = useSelector((state) => state.prompt.options);
+  const {
+    show, title, body, options,
+  } = useSelector((state) => state.prompt);
 
   const setShow = (state) => {
     dispatch(setVisibility(state));

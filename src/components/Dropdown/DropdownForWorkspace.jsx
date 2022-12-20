@@ -195,7 +195,7 @@ function MenuDropdown() {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-red-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left',
                   )}
                 >
                   <TrashIcon className="h-4 w-4" aria-hidden="true" />
