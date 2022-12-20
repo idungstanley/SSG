@@ -10,7 +10,7 @@ function FolderPreview({ folder }) {
     <aside className="absolute inset-y-0 h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
       <Header id={folder.id} type="folder" />
 
-      <div className="pb-16">
+      <div className="h-full">
         <Details item={folder} type="folder" />
 
         <Comments itemId={folder.id} type="folder" />
