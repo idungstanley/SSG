@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import {
   useCreateItemComment,
   useDeleteItemComment,
   useEditItemComment,
   useGetItemComments,
 } from '../../features/general/multiRequests';
-import { Spinner } from '../../common';
-import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
+import Form from './components/Form';
+import List from './components/List';
 
 export default function Comments({ itemId, type }) {
   const [message, setMessage] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
   const isInbox = type === 'inbox' || type === 'inbox_file';
 
   const [showWindow, setShowWindow] = useState(isInbox);
@@ -58,6 +59,32 @@ export default function Comments({ itemId, type }) {
     setEditId(id);
   };
 
+  const onChange = (e) => {
+    setMessage(e.target.value);
+
+    if (e.target.value.at(-1) === '@' || e.target.selectionStart === '@') {
+      setShowDropdown(true);
+    } else if (showDropdown) {
+      setShowDropdown(false);
+    }
+
+    // const regex = /@[\S]+/g;
+    // const config = [];
+
+    // message
+    //   .split(' ')
+    //   .map((i) => config.push({ word: i, isMatch: !!i.match(regex) }));
+
+    console.log(e.target.selectionStart, e.target.value.length);
+  };
+
+  const setUsers = (user) => {
+    console.log(selectedUserIds);
+    setSelectedUserIds((prev) => [...prev, user.id]);
+    setMessage((prev) => prev + user.name);
+    setShowDropdown(false);
+  };
+
   return (
     <div className="relative inset-0 flex h-full overflow-hidden flex-col">
       {!isInbox ? (
@@ -74,103 +101,22 @@ export default function Comments({ itemId, type }) {
         <div className="w-full overflow-y-scroll h-full flex-1 space-y-3">
           <Form
             handleSubmit={handleSubmit}
-            setMessage={setMessage}
+            onChange={onChange}
             message={message}
+            showDropdown={showDropdown}
+            setUsers={setUsers}
           />
-
-          <CommentsList status={status} comments={comments} onEdit={onEdit} onDelete={onDelete} />
+          <List
+            status={status}
+            comments={comments}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         </div>
       ) : null}
     </div>
   );
 }
-
-function CommentsList({
-  status, comments, onEdit, onDelete,
-}) {
-  return status === 'loading' ? (
-    <div className="mx-auto mt-3 mb-6 w-6 justify-center">
-      <Spinner size={22} color="#0F70B7" />
-    </div>
-  ) : status === 'success' ? (
-    comments?.length ? (
-      <ul className="divide-y divide-gray-200">
-        {comments.map((i) => (
-          <li key={i.id} className="py-4 flex justify-between">
-            <p className="pl-1">{i.message}</p>
-            <div className="flex gap-3">
-              {i.can_modify ? (
-                <PencilIcon
-                  onClick={() => onEdit(i.id, i.message)}
-                  className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
-                />
-              ) : null}
-              <TrashIcon
-                onClick={() => onDelete(i.id)}
-                className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <OneThirdScreenMessage
-        title="No messages yes."
-        description="Create one."
-      />
-    )
-  ) : (
-    <OneThirdScreenMessage
-      title="Oops, an error occurred :("
-      description="Please try again later."
-    />
-  );
-}
-
-function Form({ handleSubmit, setMessage, message }) {
-  return (
-    <form onSubmit={(e) => handleSubmit(e)} className="relative">
-      <input
-        type="text"
-        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-base pr-12"
-        placeholder="Enter comment"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        type="submit"
-        onClick={(e) => handleSubmit(e)}
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className={`w-6 h-6 absolute top-2 right-2 cursor-pointer transition-all duration-300 ${
-          message.length > 2 ? 'stroke-current text-indigo-600' : null
-        } stroke-current hover:text-indigo-600 `}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-        />
-      </svg>
-    </form>
-  );
-}
-
-CommentsList.propTypes = {
-  status: PropTypes.string.isRequired,
-  comments: PropTypes.array.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};
-
-Form.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired,
-};
 
 Comments.propTypes = {
   itemId: PropTypes.string.isRequired,
