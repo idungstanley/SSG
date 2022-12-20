@@ -8,8 +8,5 @@ export {
   default as Spinner,
 } from './Spinner';
 export {
-  default as ContextMenu,
-} from './ContextMenu';
-export {
   default as InitialsAvatar,
 } from './InitialsAvatar';

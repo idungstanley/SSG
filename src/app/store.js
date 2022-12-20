@@ -11,7 +11,6 @@ import inboxSlice from '../features/inbox/inboxSlice';
 import searchSlice from '../features/search/searchSlice';
 import notificationSlice from '../features/general/notification/notificationSlice';
 import slideOverSlice from '../features/general/slideOver/slideOverSlice';
-import contextMenuSlice from '../features/general/contextMenu/contextMenuSlice';
 import promptSlice from '../features/general/prompt/promptSlice';
 import teamMemberSlice from '../features/settings/teamMembers/teamMemberSlice';
 import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMemberInviteSlice';
@@ -23,7 +22,6 @@ export const store = configureStore({
     auth: authSlice,
     notification: notificationSlice,
     slideOver: slideOverSlice,
-    contextMenu: contextMenuSlice,
     prompt: promptSlice,
     explorer: explorerSlice,
     inbox: inboxSlice,
