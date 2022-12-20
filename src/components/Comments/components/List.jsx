@@ -33,7 +33,6 @@ export default function List({
               </div>
               {item.can_modify ? (
                 <>
-
                   <PencilIcon
                     onClick={() => onEdit(item.id, item.message, item.mention_users)}
                     className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"

@@ -79,17 +79,20 @@ export default function Details({ item, type }) {
         <button
           onClick={onDownload}
           type="button"
-          className="flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
         >
           Download
         </button>
-        <button
-          onClick={() => setShowPopup(true)}
-          type="button"
-          className="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Share
-        </button>
+        {users?.length ? (
+          <button
+            onClick={() => setShowPopup(true)}
+            type="button"
+            className="flex-1 ml-3 bg-white
+             py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0"
+          >
+            Share
+          </button>
+        ) : null}
         {showPopup && users ? (
           <ComboBoxForTeamMembers
             setShowPopup={setShowPopup}
