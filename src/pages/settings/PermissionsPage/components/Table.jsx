@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
 import PermissionsCheckbox from './PermissionsCheckbox';
@@ -116,17 +115,12 @@ export default function Table() {
                           <div className="flex flex-row z-50">
                             {permission.name}
                             {permission.description !== null && (
-                              <Tippy
-                                content={<span>{permission.description}</span>}
-                                maxWidth={250}
-                              >
-                                <span>
-                                  <QuestionMarkCircleIcon
-                                    className="ml-2 h-5 w-5 text-gray-400 hover:text-black"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Tippy>
+                              <span title={permission.description}>
+                                <QuestionMarkCircleIcon
+                                  className="ml-2 h-5 w-5 text-gray-400 hover:text-black"
+                                  aria-hidden="true"
+                                />
+                              </span>
                             )}
                           </div>
                         </td>

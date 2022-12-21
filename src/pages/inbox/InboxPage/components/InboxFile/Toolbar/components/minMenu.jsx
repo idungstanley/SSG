@@ -9,7 +9,6 @@ import {
   InboxInIcon,
 } from '@heroicons/react/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import Tippy from '@tippyjs/react';
 import {
   useArchiveOrUnarchiveInboxFile,
   useGetInboxFile,
@@ -144,21 +143,21 @@ export default function MinMenu() {
                   )}
                 </Menu.Item>
               ))}
-              <Tippy content={<span>Download</span>} placement="bottom">
-                <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
-                  <DownloadIcon
-                    className="mr-2.5 h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <button
-                    type="button"
-                    onClick={onDownload}
-                    className="block py-2 text-sm text-gray-700"
-                  >
-                    Download
-                  </button>
-                </div>
-              </Tippy>
+
+              <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
+                <DownloadIcon
+                  className="mr-2.5 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                <button
+                  type="button"
+                  onClick={onDownload}
+                  className="block py-2 text-sm text-gray-700"
+                >
+                  Download
+                </button>
+              </div>
+
             </div>
           </Menu.Items>
         </Transition>
