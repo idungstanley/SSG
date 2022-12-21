@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Preview from '../components/Preview';
 import Toolbar from '../components/header/Toolbar';
 import { useSearch } from '../../../features/search/searchService';
-import FullScreenMessage from '../../shared/components/FullScreenMessage';
 import { useDebounce } from '../../../hooks';
 import { Spinner } from '../../../common';
 import Results from '../components/Results';
 import { resetSelectedItem } from '../../../features/search/searchSlice';
+import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessage';
 
 export default function SearchPage() {
   const dispatch = useDispatch();

@@ -6,10 +6,11 @@ import {
   useMultipleArchiveOrUnArchive,
 } from '../../../../../../features/inbox/inboxService';
 import { FileIcon, Spinner } from '../../../../../../common';
-import FullScreenMessage from '../../../../../shared/components/FullScreenMessage';
 import {
-  setCurrentInboxFile, setShowUploadModal,
+  setCurrentInboxFile,
+  setShowUploadModal,
 } from '../../../../../../features/inbox/inboxSlice';
+import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');

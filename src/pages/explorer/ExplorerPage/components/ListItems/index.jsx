@@ -9,7 +9,11 @@ import React, {
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from '../../../../../common';
-import { useGetExplorerFilesAndFolders, useGetFile, useGetFolder } from '../../../../../features/explorer/explorerService';
+import {
+  useGetExplorerFilesAndFolders,
+  useGetFile,
+  useGetFolder,
+} from '../../../../../features/explorer/explorerService';
 import {
   setSelectedFiles,
   setSelectedFolders,
@@ -17,12 +21,12 @@ import {
   setSelectedItem,
   setShowUploadModal,
 } from '../../../../../features/explorer/explorerSlice';
-import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
 import { sortItems } from '../Toolbar/components/SortingItems';
 import Table from './Table';
 import Grid from './Grid';
 import FilePreview from '../../../../../components/FilePreview';
 import FolderPreview from '../../../../../components/FolderPreview';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
@@ -44,25 +48,31 @@ export default function ExplorerTable() {
 
   const items = useMemo(() => [], [data]);
 
-  useMemo(() => data?.data.folders.map((i) => items.push({
-    icon: 'folder',
-    name: i.name,
-    created_at: i.created_at,
-    size: '-',
-    item_type: 'folder',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () => data?.data.folders.map((i) => items.push({
+      icon: 'folder',
+      name: i.name,
+      created_at: i.created_at,
+      size: '-',
+      item_type: 'folder',
+      id: i.id,
+      updated_at: i.updated_at,
+    })),
+    [data],
+  );
 
-  useMemo(() => data?.data.files.map((i) => items.push({
-    icon: i.file_format.key,
-    name: i.display_name,
-    created_at: i.created_at,
-    size: i.size,
-    item_type: 'file',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () => data?.data.files.map((i) => items.push({
+      icon: i.file_format.key,
+      name: i.display_name,
+      created_at: i.created_at,
+      size: i.size,
+      item_type: 'file',
+      id: i.id,
+      updated_at: i.updated_at,
+    })),
+    [data],
+  );
 
   useLayoutEffect(() => {
     const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;

@@ -9,7 +9,7 @@ import { Spinner } from '../../common';
 import SharedTable from './components/SharedTable';
 import FilePreview from '../../components/FilePreview';
 import FolderPreview from '../../components/FolderPreview';
-import FullScreenMessage from './components/FullScreenMessage';
+import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
 
 export default function SharedPage() {
   const { data, filesStatus, foldersStatus } = useGetSharedFilesAndFolders();

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { EmptyStateSimple } from '../../../../components';
+import EmptyStateSimple from '../emptyState/EmptyStateSimple';
 
 export default function FullScreenMessage(props) {
   return (

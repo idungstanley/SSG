@@ -1,7 +1,7 @@
 import React from 'react';
 import FileViewer from 'react-file-viewer';
 import PropTypes from 'prop-types';
-import FullScreenMessage from '../pages/shared/components/FullScreenMessage';
+import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 
 const docks = ['docx', 'doc', 'pdf'];
 const images = ['jpg', 'png'];

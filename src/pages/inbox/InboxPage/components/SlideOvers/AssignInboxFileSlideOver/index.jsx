@@ -13,7 +13,7 @@ import {
   SlideOver,
 } from '../../../../../../components';
 import InboxResultItem from './InboxResultItem';
-import FullScreenMessage from '../../../../../shared/components/FullScreenMessage';
+import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 
 function AssignInboxFileSlideOver() {
   const dispatch = useDispatch();

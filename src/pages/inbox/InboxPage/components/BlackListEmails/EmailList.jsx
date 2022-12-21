@@ -7,7 +7,7 @@ import {
   useGetEmailList,
 } from '../../../../../features/inbox/inboxesService';
 import { Spinner } from '../../../../../common';
-import FullScreenMessage from '../../../../shared/components/FullScreenMessage';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 
 export default function EmailList() {
   const { currentInboxId } = useSelector((state) => state.inbox);
