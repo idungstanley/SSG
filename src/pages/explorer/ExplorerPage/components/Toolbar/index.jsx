@@ -13,7 +13,6 @@ import {
   PencilIcon,
 } from '@heroicons/react/outline';
 import {
-  setShowUploadModal,
   copyItems,
   resetSelectedFilesAndFolders,
 } from '../../../../../features/explorer/explorerSlice';
@@ -31,6 +30,7 @@ import { DownloadFile } from '../../../../../app/helpers';
 import CreateNewSelect from './components/CreateNewSelect';
 import SortingItems from './components/SortingItems';
 import ChangeView from './components/ChangeView';
+import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 
 export default function Toolbar() {
   const dispatch = useDispatch();
@@ -41,7 +41,11 @@ export default function Toolbar() {
     (state) => state.explorer.selectedItemType,
   );
   const {
-    selectedItemId, selectedFileIds, selectedFolderIds, fileIdsToPaste, folderIdsToPaste,
+    selectedItemId,
+    selectedFileIds,
+    selectedFolderIds,
+    fileIdsToPaste,
+    folderIdsToPaste,
   } = useSelector((state) => state.explorer);
 
   const { data: file } = useGetFile(

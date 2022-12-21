@@ -56,8 +56,6 @@ const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId')) 
 const selectedViewId = JSON.parse(localStorage.getItem('selectedView')) || 1;
 
 const initialState = {
-  showUploadModal: false,
-
   selectedItemId: null,
   selectedItemType: null,
   selectedItemLoadingFullDetails: false,
@@ -114,9 +112,6 @@ export const explorerSlice = createSlice({
     setSelectedFolders: (state, action) => {
       state.selectedFolderIds = action.payload;
     },
-    setShowUploadModal: (state, action) => {
-      state.showUploadModal = action.payload;
-    },
     resetSelectedFilesAndFolders: (state) => {
       state.selectedFileIds = [];
       state.selectedFolderIds = [];
@@ -159,7 +154,6 @@ export const {
   addSelectedFolder,
   setSelectedFiles,
   setSelectedFolders,
-  setShowUploadModal,
   resetSelectedFilesAndFolders,
   setSelectedSorting,
   setSelectedViewId,

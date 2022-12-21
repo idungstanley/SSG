@@ -1,28 +1,24 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useQueryClient } from '@tanstack/react-query';
 import { HomeIcon } from '@heroicons/react/outline';
-import Uppy from '@uppy/core';
-import XHRUpload from '@uppy/xhr-upload';
-import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import Toolbar from './components/Toolbar';
 import { Breadcrumb, EmptyStateSimple } from '../../../components';
 import { Spinner } from '../../../common';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
-import { setShowUploadModal } from '../../../features/explorer/explorerSlice';
 import {
   useGetExplorerFilesAndFolders,
   useGetFolder,
 } from '../../../features/explorer/explorerService';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import ExplorerTable from './components/ListItems';
+import UploadModal from '../../../components/UploadModal';
+import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
 
 export default function ExplorerPage() {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
   const { folderId } = useParams();
 
   const { status, data } = useGetExplorerFilesAndFolders(folderId);
@@ -33,70 +29,9 @@ export default function ExplorerPage() {
     (state) => state.slideOver,
   );
 
-  const { showUploadModal } = useSelector(
-    (state) => state.explorer,
-  );
-
-  const uploadFilesUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/files`;
-
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
-  );
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    current_workspace_id: currentWorkspaceId,
-  };
-
-  const uppy = useUppy(() => new Uppy({
-    debug: true,
-    autoProceed: true,
-    meta: {},
-  }).use(XHRUpload, {
-    endpoint: null,
-    bundle: false,
-    headers,
-  }));
-
-  const { xhrUpload } = uppy.getState();
-
-  useEffect(() => {
-    uppy.setState({
-      xhrUpload: {
-        ...xhrUpload,
-        endpoint:
-          folderId == null ? uploadFilesUrl : `${uploadFilesUrl}/${folderId}`,
-      },
-    });
-  }, [folderId]);
-
-  uppy.on('upload-success', (file, response) => {
-    const httpStatus = response.status;
-    const httpBody = response.body;
-
-    if (httpStatus === 200) {
-      if (httpBody.success === true) {
-        queryClient.invalidateQueries([
-          'explorer_files_and_folders',
-          httpBody.data.uploaded_to_folder_id == null
-            ? 'root-folder'
-            : httpBody.data.uploaded_to_folder_id,
-        ]);
-      }
-    }
-  });
-
   return (
     <>
-      <DashboardModal
-        uppy={uppy}
-        closeModalOnClickOutside
-        proudlyDisplayPoweredByUppy={false}
-        open={showUploadModal}
-        onRequestClose={() => dispatch(setShowUploadModal(false))}
-        showRemoveButtonAfterComplete={false}
-      />
+      <UploadModal />
       <div className="h-full flex flex-col w-full">
         <div className="w-full">
           <Toolbar />

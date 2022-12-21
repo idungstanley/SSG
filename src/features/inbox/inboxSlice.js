@@ -24,8 +24,6 @@ const initialState = {
   selectedInboxFileId: null,
   selectedInboxFileIndex: 1,
 
-  showUploadModal: false,
-
   // Folders for filing
   searchFoldersQuery: '',
   folderIdsForFiling: [],
@@ -56,9 +54,6 @@ export const inboxSlice = createSlice({
       state.assignedInboxIds = [];
       state.processingAssignInboxIds = [];
     },
-    setShowUploadModal: (state, action) => {
-      state.showUploadModal = action.payload;
-    },
     setSelectedInboxTabKey: (state, action) => {
       state.selectedInboxTabKey = action.payload;
     },
@@ -83,7 +78,6 @@ export const inboxSlice = createSlice({
 export const {
   setCurrentInbox,
   setCurrentInboxFile,
-  setShowUploadModal,
   addFolderForFiling,
   removeFolderForFiling,
   setInboxFiles,

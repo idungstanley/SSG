@@ -19,7 +19,6 @@ import {
   setSelectedFolders,
   resetSelectedFilesAndFolders,
   setSelectedItem,
-  setShowUploadModal,
 } from '../../../../../features/explorer/explorerSlice';
 import { sortItems } from '../Toolbar/components/SortingItems';
 import Table from './Table';
@@ -27,6 +26,7 @@ import Grid from './Grid';
 import FilePreview from '../../../../../components/FilePreview';
 import FolderPreview from '../../../../../components/FolderPreview';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
+import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();

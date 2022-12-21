@@ -9,12 +9,12 @@ import {
 } from '@heroicons/react/solid';
 import { UploadIcon } from '@heroicons/react/outline';
 import SelectInboxMenu from './SelectInboxMenu';
-import { setShowUploadModal } from '../../../../../features/inbox/inboxSlice';
 import { Button } from '../../../../../components';
 import BlackListEmails from '../BlackListEmails';
 import { useRestoreOrDeleteInbox } from '../../../../../features/inbox/inboxesService';
 import MinMenuForResponsible from './MinMenuForResponsible';
 import Comments from '../Comments';
+import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 
 function Header() {
   const dispatch = useDispatch();

@@ -16,6 +16,7 @@ import teamMemberSlice from '../features/settings/teamMembers/teamMemberSlice';
 import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import sharedSlice from '../features/shared/sharedSlice';
+import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
 
 export const store = configureStore({
   reducer: {
@@ -35,6 +36,7 @@ export const store = configureStore({
     wallet: walletSlice,
     list: listSlice,
     task: taskSlice,
+    upload: uploadFileSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

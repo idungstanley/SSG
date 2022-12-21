@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OutputFileSize } from '../../../app/helpers';
 import { FileIcon, Spinner } from '../../../common';
+import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
 import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
-import { setShowUploadModal } from '../../../features/inbox/inboxSlice';
 import MenuDropdown from '../../Dropdown/DropdownForWorkspace';
 
 export default function InboxIndex() {

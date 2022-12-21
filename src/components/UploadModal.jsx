@@ -7,30 +7,28 @@ import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  setCurrentInbox,
-  setShowUploadModal,
-} from '../features/inbox/inboxSlice';
+import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSlice';
+
+const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+const currentWorkspaceId = JSON.parse(
+  localStorage.getItem('currentWorkspaceId'),
+);
+
+const headers = {
+  Authorization: `Bearer ${accessToken}`,
+  current_workspace_id: currentWorkspaceId,
+};
 
 export default function UploadModal() {
-  const dispatch = useDispatch();
-  const { inboxId: inboxIdParams } = useParams();
-  const { currentItemId } = useSelector((state) => state.workspace);
-  const inboxId = inboxIdParams || currentItemId;
-
-  const showUploadModal = useSelector((state) => state.inbox.showUploadModal);
-
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { showUploadModal } = useSelector((state) => state.upload);
+  const { inboxId, folderId } = useParams();
+  const { currentItemId } = useSelector((state) => state.workspace);
 
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
-  );
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    current_workspace_id: currentWorkspaceId,
-  };
+  const isExplorerPath = !!folderId;
+  // const inboxId = inboxIdParams || currentItemId;
+  const dataId = isExplorerPath ? folderId : inboxId || currentItemId;
 
   const uppy = useUppy(() => new Uppy({
     debug: true,
@@ -48,36 +46,50 @@ export default function UploadModal() {
     const httpStatus = response.status;
     const httpBody = response.body;
 
-    // console.log(httpBody);
-
     if (httpStatus === 200) {
       if (httpBody.success === true) {
-        queryClient.invalidateQueries([
-          'inbox_files',
-          inboxId,
-          { isArchived: 0 },
-        ]);
-        queryClient.invalidateQueries(['inboxes']);
-        queryClient.invalidateQueries(['inbox_files', inboxId]);
+        if (isExplorerPath) {
+          queryClient.invalidateQueries([
+            'explorer_files_and_folders',
+            httpBody.data.uploaded_to_folder_id == null
+              ? 'root-folder'
+              : httpBody.data.uploaded_to_folder_id,
+          ]);
+        } else {
+          queryClient.invalidateQueries([
+            'inbox_files',
+            inboxId,
+            { isArchived: 0 },
+          ]);
+          queryClient.invalidateQueries(['inboxes']);
+          queryClient.invalidateQueries(['inbox_files', inboxId]);
+        }
       }
     }
   });
 
   useEffect(() => {
-    // Set selected inbox to the current one (and reset anything that is needed)
-    dispatch(
-      setCurrentInbox({
-        inboxId,
-      }),
-    );
+    // dispatch(
+    //   setCurrentInbox({
+    //     inboxId,
+    //   })
+    // );
+    const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${
+      isExplorerPath ? 'files' : 'inboxes'
+    }`;
+    const endpoint = isExplorerPath
+      ? folderId == null
+        ? uploadUrl
+        : `${uploadUrl}/${folderId}`
+      : `${uploadUrl}/${inboxId}/upload-file`;
 
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/af/inboxes/${inboxId}/upload-file`,
+        endpoint,
       },
     });
-  }, [inboxId]);
+  }, [dataId]);
 
   return (
     <DashboardModal
