@@ -48,7 +48,7 @@ export default function ExplorerTable() {
 
   const items = useMemo(() => [], [data]);
 
-  data?.data.folders.map((i) => items.push({
+  useMemo(() => data?.data.folders.map((i) => items.push({
     icon: 'folder',
     name: i.name,
     created_at: i.created_at,
@@ -56,9 +56,9 @@ export default function ExplorerTable() {
     item_type: 'folder',
     id: i.id,
     updated_at: i.updated_at,
-  }));
+  })), [data]);
 
-  data?.data.files.map((i) => items.push({
+  useMemo(() => data?.data.files.map((i) => items.push({
     icon: i.file_format.key,
     name: i.display_name,
     created_at: i.created_at,
@@ -66,7 +66,7 @@ export default function ExplorerTable() {
     item_type: 'file',
     id: i.id,
     updated_at: i.updated_at,
-  }));
+  })), [data]);
 
   useLayoutEffect(() => {
     const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
@@ -181,7 +181,7 @@ export default function ExplorerTable() {
       title="Oops, an error occurred :("
       description="Please try again later."
     />
-  ) : items ? (
+  ) : !items.length ? (
     <FullScreenMessage
       title="No files or folders in your explorer"
       description="Upload one to start working"

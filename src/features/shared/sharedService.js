@@ -118,8 +118,10 @@ export const useGetSharedFilesAndFolders = () => {
 
   return {
     data,
-    filesStatus: files.status,
-    foldersStatus: folders.status,
+    status: {
+      files: files.status,
+      folders: folders.status,
+    },
     refetch,
   };
 };

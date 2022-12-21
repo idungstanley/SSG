@@ -1,389 +1,222 @@
-/* eslint react/prop-types: 0 */
-/* eslint react/jsx-props-no-spreading: 0 */
-/* eslint react/no-unstable-nested-components: 0 */
-/* eslint-disable camelcase */
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { kaReducer, Table } from 'ka-table';
+/* eslint-disable react/jsx-no-bind */
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Spinner } from '../../../../common';
+import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
+import ItemPreviewSidebar from '../../../../components/ItemPreviewSidebar';
 import {
-  deselectAllFilteredRows,
-  deselectRow,
-  deselectAllRows,
-  selectAllFilteredRows,
-  selectRow,
-  selectRowsRange,
-  updateData,
-} from 'ka-table/actionCreators';
-import { DataType } from 'ka-table/enums';
-import { kaPropsUtils } from 'ka-table/utils';
-import { FileIcon } from '../../../../common';
-import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
-import {
+  resetSelectedFilesAndFolders,
   setSelectedFiles,
   setSelectedFolders,
-  selectItem,
-  resetSelectedItem,
-  // previewFileFullPage,
   setSelectedItem,
-} from '../../../../features/shared/sharedSlice';
-import Header from '../Header';
+} from '../../../../features/explorer/explorerSlice';
+import {
+  useGetFile,
+  useGetFolder,
+  useGetSharedFilesAndFolders,
+} from '../../../../features/shared/sharedService';
+import Grid from '../../../explorer/ExplorerPage/components/ListItems/Grid';
+import Table from '../../../explorer/ExplorerPage/components/ListItems/Table';
+import { sortItems } from '../../../explorer/ExplorerPage/components/Toolbar/components/SortingItems';
 
-function SelectionCell({
-  rowKeyValue,
-  dispatch,
-  isSelectedRow,
-  selectedRows,
-}) {
-  return (
-    <input
-      type="checkbox"
-      checked={isSelectedRow}
-      onChange={(event) => {
-        if (event.nativeEvent.shiftKey) {
-          dispatch(selectRowsRange(rowKeyValue, [...selectedRows].pop()));
-        } else if (event.currentTarget.checked) {
-          dispatch(selectRow(rowKeyValue));
-        } else {
-          dispatch(deselectRow(rowKeyValue));
-        }
-      }}
-    />
+export default function SharedTable() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { folderId } = useParams();
+  const checkbox = useRef();
+  const [checked, setChecked] = useState(false);
+  const [indeterminate, setIndeterminate] = useState(false);
+  const {
+    selectedFileIds,
+    selectedFolderIds,
+    selectedSortingId,
+    selectedViewId,
+    selectedItemId,
+    selectedItemType,
+  } = useSelector((state) => state.explorer);
+  const selectedItems = [...selectedFileIds, ...selectedFolderIds];
+
+  const { data, status } = useGetSharedFilesAndFolders();
+
+  const items = useMemo(() => [], [data]);
+
+  useMemo(() => data?.folders.map((i) => items.push({
+    icon: 'folder',
+    name: i.folder.name,
+    created_at: i.created_at,
+    size: '-',
+    item_type: 'folder',
+    id: i.id,
+    updated_at: i.updated_at,
+  })), [data]);
+
+  useMemo(() => data?.files.map((i) => items.push({
+    icon: i.file.display_name.split('.').at(-1),
+    name: i.file.display_name,
+    created_at: i.created_at,
+    size: i.file.size,
+    item_type: 'file',
+    id: i.id,
+    updated_at: i.updated_at,
+  })), [data]);
+
+  useLayoutEffect(() => {
+    const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
+
+    if (
+      selectedItems.length === items.length
+      && +selectedItems.length + +items.length > 0
+    ) {
+      setChecked(selectedItems.length === items.length);
+    }
+    setIndeterminate(isIndeterminate);
+    if (checkbox.current) {
+      checkbox.current.indeterminate = isIndeterminate;
+    }
+  }, [selectedItems]);
+
+  useEffect(() => {
+    if (selectedItems.length) {
+      dispatch(resetSelectedFilesAndFolders());
+      setChecked(false);
+    }
+  }, [folderId]);
+
+  function toggleAll() {
+    if (checked || indeterminate) {
+      dispatch(resetSelectedFilesAndFolders());
+    } else {
+      dispatch(
+        setSelectedFiles([
+          ...items.filter((i) => i.item_type === 'file').map((i) => i.id),
+        ]),
+      );
+      dispatch(
+        setSelectedFolders([
+          ...items.filter((i) => i.item_type === 'folder').map((i) => i.id),
+        ]),
+      );
+    }
+
+    setChecked(!checked && !indeterminate);
+    setIndeterminate(false);
+  }
+
+  const handleClick = (e, itemId, type) => {
+    if (selectedItems.length && !e.target.value) {
+      dispatch(resetSelectedFilesAndFolders());
+    }
+
+    if (!e.target.value && selectedFolderIds.includes(itemId)) {
+      navigate(`/explorer/${itemId}`, { replace: true });
+      dispatch(resetSelectedFilesAndFolders());
+      setChecked(false);
+    }
+
+    if (!e.target.value) {
+      dispatch(
+        setSelectedItem({
+          selectedItemId: itemId,
+          selectedItemType: type,
+        }),
+      );
+      dispatch(
+        type === 'file'
+          ? setSelectedFiles([itemId])
+          : setSelectedFolders([itemId]),
+      );
+    }
+  };
+
+  const handleChangeItem = (e, itemId, type) => {
+    if (!e.target.checked) {
+      dispatch(
+        type === 'file'
+          ? setSelectedFiles([...selectedFileIds.filter((i) => i !== itemId)])
+          : setSelectedFolders([
+            ...selectedFolderIds.filter((i) => i !== itemId),
+          ]),
+      );
+    } else {
+      dispatch(
+        type === 'file'
+          ? setSelectedFiles([...selectedFileIds, itemId])
+          : setSelectedFolders([...selectedFolderIds, itemId]),
+      );
+    }
+  };
+
+  const sortedItems = useMemo(
+    () => [
+      ...sortItems(
+        items?.filter((i) => i.item_type === 'folder'),
+        selectedSortingId,
+      ),
+      ...sortItems(
+        items?.filter((i) => i.item_type === 'file'),
+        selectedSortingId,
+      ),
+    ],
+    [data, selectedSortingId],
   );
-}
 
-function SelectionHeader({ dispatch, areAllRowsSelected }) {
-  return (
-    <input
-      type="checkbox"
-      checked={areAllRowsSelected}
-      onChange={(event) => {
-        if (event.currentTarget.checked) {
-          dispatch(selectAllFilteredRows()); // also available: selectAllVisibleRows(), selectAllRows()
-        } else {
-          dispatch(deselectAllFilteredRows()); // also available: deselectAllVisibleRows(), deselectAllRows()
-        }
-      }}
+  const { data: item } = selectedItemType === 'file'
+    ? useGetFile(selectedItemId)
+    : useGetFolder(selectedItemId);
+
+  return status === 'loading' ? (
+    <div className="mx-auto w-6 mt-10 justify-center">
+      <Spinner size={22} color="#0F70B7" />
+    </div>
+  ) : status === 'error' ? (
+    <FullScreenMessage
+      title="Oops, an error occurred :("
+      description="Please try again later."
     />
-  );
-}
-
-function CustomCell({
-  column,
-  value,
-  rowData,
-}) {
-  if (column.key === 'name') {
-    return (
-      <div className="flex items-center">
-        <div className="flex-shrink-0 h-10 w-10">
-          {rowData.item_type === 'file' ? (
-            <FileIcon extensionKey={rowData.name.split('.').at(-1)} size={10} />
-          ) : (
-            <FileIcon extensionKey="folder" size={10} />
-          )}
+  ) : !items ? (
+    <FullScreenMessage
+      title="No files or folders in your shared items"
+      description="Ask someone to share a file with you"
+    />
+  ) : (
+    <div className="flex flex-col h-full px-3 md:px-0">
+      {selectedItemId ? (
+        <ItemPreviewSidebar item={item} type={selectedItemType} />
+      ) : null}
+      <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div className="relative overflow-hidden">
+            {selectedViewId === 1 ? (
+              <Table
+                checkbox={checkbox}
+                checked={checked}
+                toggleAll={toggleAll}
+                sortedItems={sortedItems}
+                selectedItems={selectedItems}
+                handleChangeItem={handleChangeItem}
+                handleClick={handleClick}
+              />
+            ) : (
+              <Grid
+                checkbox={checkbox}
+                checked={checked}
+                toggleAll={toggleAll}
+                sortedItems={sortedItems}
+                selectedItems={selectedItems}
+                handleChangeItem={handleChangeItem}
+                handleClick={handleClick}
+              />
+            )}
+          </div>
         </div>
-        <div className="ml-4">
-          <div className="text-sm font-medium text-gray-900">{rowData.name}</div>
-        </div>
       </div>
-    );
-  }
-
-  if (column.type === 'dateTime') {
-    return (
-      <div>
-        { OutputDateTime(value) }
-      </div>
-    );
-  }
-
-  if (column.type === 'sizeInBytes') {
-    return (
-      <div>
-        { value === null || value === '-' ? '-' : OutputFileSize(value) }
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      {value}
     </div>
   );
 }
-
-function SharedTable({ data, tableTitle }) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const title = tableTitle === undefined ? 'Name' : tableTitle;
-
-  const tablePropsInit = {
-    columns: [
-      {
-        key: 'selection-cell',
-        type: 'select',
-      },
-      {
-        key: 'name',
-        title,
-        dataType: DataType.String,
-        type: 'text',
-      },
-      {
-        key: 'created_at',
-        title: 'Created at',
-        dataType: DataType.String,
-        type: 'dateTime',
-      },
-      {
-        key: 'shared_by',
-        title: 'Shared by',
-        dataType: DataType.String,
-        type: 'text',
-      },
-    ],
-    paging: {
-      enabled: false,
-    },
-    rowKeyField: 'item_id_with_type',
-    selectedRows: [],
-  };
-
-  const [tableProps, changeTableProps] = useState(tablePropsInit);
-
-  const kaTableDispatch = (action) => {
-    changeTableProps((prevState) => kaReducer(prevState, action));
-  };
-
-  const selectedFileIds = useSelector((state) => state.shared.selectedFileIds);
-  const selectedFolderIds = useSelector((state) => state.shared.selectedFolderIds);
-
-  const [processedData, setProcessedData] = useState([]);
-
-  useEffect(() => {
-    dispatch(resetSelectedItem());
-
-    if (data) {
-      const processedFolders = data.folders.map((folder, index) => ({
-        full_object: folder,
-        name: folder.folder.name,
-        created_at: folder.folder.created_at,
-        shared_by: folder.shared_by.user.name,
-        item_id_raw: folder.id,
-        item_id_with_type: `folder|${folder.id}`,
-        item_type: 'folder',
-        id: index + 1, // Must be index, and not the ID of the folder/file, must be + 1 as otherwise issue with selecting shift from first item...
-      }));
-
-      const processedFiles = data.files.map((file, index) => ({
-        full_object: file,
-        name: file.file.display_name,
-        created_at: file.file.created_at,
-        shared_by: file.shared_by.user.name,
-        item_id_raw: file.id,
-        item_id_with_type: `file|${file.id}`,
-        item_type: 'file',
-        id: processedFolders.length + index + 1, // Must be index, and not the ID of the folder/file, must be + 1 as otherwise issue with selecting shift from first item...
-      }));
-
-      setProcessedData([...processedFolders, ...processedFiles]);
-
-      kaTableDispatch(updateData([...processedFolders, ...processedFiles]));
-    }
-    return true;
-  }, []);
-
-  useEffect(() => {
-    let i = 0;
-    const tempSelectedFileIds = [];
-    const tempSelectedFolderIds = [];
-
-    const selectedRowsRaw = tableProps.selectedRows;
-
-    for (i = 0; i < selectedRowsRaw.length; i += 1) {
-      const split = selectedRowsRaw[i].split('|');
-      if (split[0] === 'file') {
-        tempSelectedFileIds.push(split[1]);
-      } else if (split[0] === 'folder') {
-        tempSelectedFolderIds.push(split[1]);
-      }
-    }
-
-    dispatch(setSelectedFiles(tempSelectedFileIds));
-    dispatch(setSelectedFolders(tempSelectedFolderIds));
-  }, [tableProps]);
-
-  useEffect(() => {
-    // Set selected item for preview
-
-    if (selectedFileIds.length === 1 && selectedFolderIds.length === 0) {
-      dispatch(selectItem({
-        itemId: selectedFileIds[0],
-        itemType: 'file',
-      }));
-    } else if (selectedFolderIds.length === 1 && selectedFileIds.length === 0) {
-      dispatch(selectItem({
-        itemId: selectedFolderIds[0],
-        itemType: 'folder',
-      }));
-    } else {
-      // Multiple items selected
-      dispatch(resetSelectedItem());
-    }
-  }, [selectedFileIds, selectedFolderIds]);
-
-  // const onFullPagePreview = async (fileId) => {
-  //   dispatch(
-  //     previewFileFullPage(
-  //       {
-  //         fileId,
-  //         cb: () => {},
-  //       },
-  //     ),
-  //   );
-  // };
-
-  return (
-    <>
-      <Header />
-      <Table
-        {...tableProps}
-        childComponents={{
-          table: {
-            elementAttributes: () => ({
-              className: 'min-w-full',
-            }),
-          },
-          tableBody: {
-            elementAttributes: () => ({
-              className: 'bg-white divide-y divide-gray-200',
-            }),
-          },
-          cell: {
-            elementAttributes: (props) => ({
-              className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-4 whitespace-nowrap text-sm text-gray-500',
-            }),
-          },
-          cellText: {
-            elementAttributes: () => ({
-            }),
-            content: (props) => {
-              if (props.column.key === 'selection-cell') {
-                return <SelectionCell {...props} />;
-              }
-
-              return <CustomCell {...props} />;
-            },
-          },
-          filterRowCell: {
-            content: (props) => {
-              if (props.column.key === 'selection-cell') {
-                return null;
-              }
-
-              return null;
-            },
-          },
-          headCell: {
-            elementAttributes: (props) => ({
-              className: props.column.key === 'selection-cell' ? 'hidden' : 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
-            }),
-            content: (props) => {
-              if (props.column.key === 'selection-cell') {
-                return (
-                  <SelectionHeader
-                    {...props}
-                    areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
-                    // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
-                  />
-                );
-              }
-
-              return null;
-            },
-          },
-          tableHead: {
-            elementAttributes: () => ({
-              className: 'bg-gray-50 select-none border-b border-gray-200',
-            }),
-          },
-          dataRow: {
-            elementAttributes: (props) => ({
-              className: `select-none cursor-default ${props.isSelectedRow === true ? 'bg-gray-200' : 'hover:bg-gray-100 active:bg-gray-200'}`,
-              onClick: async (event, extendedEvent) => {
-                if (event.nativeEvent.shiftKey) {
-                  // If shift key is being held, select the range of rows
-                  // Deselect the current selected item (for preview)
-
-                  extendedEvent.dispatch(selectRowsRange(extendedEvent.childProps.rowKeyValue, [...props.selectedRows].pop()));
-                } else if (event.nativeEvent.metaKey) {
-                  // If control/command key is being held (meta key)
-                  // Append/remove the current row from the selected rows
-
-                  if (extendedEvent.childProps.isSelectedRow) {
-                    kaTableDispatch(deselectRow(extendedEvent.childProps.rowKeyValue));
-                  } else {
-                    kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
-                  }
-                } else {
-                  // No shift/control being held - basic select
-                  // Deselect all currently selected
-                  // Select just the current row
-                  // Set it as the selected item (for preview)
-                  dispatch(setSelectedItem({
-                    selectedItemId: extendedEvent.childProps.rowData.item_id_raw,
-                    selectedItemType: extendedEvent.childProps.rowData.item_type,
-                  }));
-
-                  kaTableDispatch(deselectAllRows());
-                  kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
-                }
-
-                // if (extendedEvent.childProps.rowData.item_type === 'folder') {
-                //   prefetchExplorerFilesAndFoldersService(queryClient, extendedEvent.childProps.rowData.item_id_raw);
-                // }
-              },
-              onDoubleClick: (event, extendedEvent) => {
-                if (extendedEvent.childProps.rowData.item_type === 'folder') {
-                  // Remove selected files, folders, selected preview item - can cause it to crash as it won't exist
-
-                  kaTableDispatch(deselectAllRows()); // Very important
-                  dispatch(resetSelectedItem());
-                  dispatch(setSelectedFiles([]));
-                  dispatch(setSelectedFolders([]));
-
-                  navigate(`/shared/${extendedEvent.childProps.rowData.item_id_raw}`, { replace: false });
-                }
-                // else if (extendedEvent.childProps.rowData.item_type === 'file') {
-                // onFullPagePreview(extendedEvent.childProps.rowData.item_id_raw);
-                // }
-              },
-              /*
-              onContextMenu: (event, extendedEvent) => {
-                event.preventDefault();
-
-                // If selected item, is not already selected
-                if (extendedEvent.childProps.isSelectedRow === false) {
-                  kaTableDispatch(deselectAllRows());
-                  kaTableDispatch(selectRow(extendedEvent.childProps.rowKeyValue));
-                }
-
-                dispatch(showExplorerFileContextMenu({
-                  x: event.pageX,
-                  y: event.pageY,
-                }));
-              },
-              */
-            }),
-          },
-        }}
-        dispatch={kaTableDispatch}
-        data={processedData}
-      />
-    </>
-  );
-}
-
-export default SharedTable;

@@ -6,7 +6,6 @@ import Comments from '../Comments';
 import Tabs from './Components/Tabs';
 
 function ItemPreviewSidebar({ item, type }) {
-  console.log(item);
   return item ? (
     <aside className="absolute inset-y-0 h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
       <Header id={item.id} type={type} />
