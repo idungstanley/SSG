@@ -27,7 +27,7 @@ export default function UploadModal() {
   const { currentItemId } = useSelector((state) => state.workspace);
 
   const isExplorerPath = !!folderId;
-  // const inboxId = inboxIdParams || currentItemId;
+
   const dataId = isExplorerPath ? folderId : inboxId || currentItemId;
 
   const uppy = useUppy(() => new Uppy({
