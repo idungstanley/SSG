@@ -24,7 +24,7 @@ function Preview() {
     <div className="h-full flex-1 select-none">
       <div className="relative h-full">
 
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col items-center">
           {fileData ? (
             <FilePreview
               fileData={fileData}

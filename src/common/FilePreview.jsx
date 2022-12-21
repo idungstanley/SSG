@@ -13,7 +13,7 @@ function FilePreview({ fileData, fileExtension }) {
   };
 
   return (
-    <div className="h-full w-full overflow-y-scroll">
+    <div className="overflow-y-scroll">
       {images.includes(fileExtension) ? (
         <img className="rounded-lg" src={fileData} alt="img" />
       ) : docks.includes(fileExtension) ? (
