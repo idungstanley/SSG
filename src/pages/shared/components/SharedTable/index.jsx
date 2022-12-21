@@ -180,7 +180,7 @@ export default function SharedTable() {
       title="Oops, an error occurred :("
       description="Please try again later."
     />
-  ) : !items ? (
+  ) : !items.length ? (
     <FullScreenMessage
       title="No files or folders in your shared items"
       description="Ask someone to share a file with you"

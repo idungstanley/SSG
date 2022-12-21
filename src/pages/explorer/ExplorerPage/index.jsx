@@ -51,7 +51,7 @@ export default function ExplorerPage() {
           rootIconHref="/explorer"
         />
 
-        <div className="flex-1 overflow-y-scroll relative overflow-x-none bg-white align-middle min-w-full flex flex-row overflow-hidden h-full">
+        <div className="flex-1 overflow-y-scroll relative overflow-x-none bg-white align-middle min-w-full overflow-hidden h-full">
           <ExplorerTable />
         </div>
       </div>
