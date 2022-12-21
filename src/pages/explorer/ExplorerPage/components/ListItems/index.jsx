@@ -48,31 +48,25 @@ export default function ExplorerTable() {
 
   const items = useMemo(() => [], [data]);
 
-  useMemo(
-    () => data?.data.folders.map((i) => items.push({
-      icon: 'folder',
-      name: i.name,
-      created_at: i.created_at,
-      size: '-',
-      item_type: 'folder',
-      id: i.id,
-      updated_at: i.updated_at,
-    })),
-    [data],
-  );
+  data?.data.folders.map((i) => items.push({
+    icon: 'folder',
+    name: i.name,
+    created_at: i.created_at,
+    size: '-',
+    item_type: 'folder',
+    id: i.id,
+    updated_at: i.updated_at,
+  }));
 
-  useMemo(
-    () => data?.data.files.map((i) => items.push({
-      icon: i.file_format.key,
-      name: i.display_name,
-      created_at: i.created_at,
-      size: i.size,
-      item_type: 'file',
-      id: i.id,
-      updated_at: i.updated_at,
-    })),
-    [data],
-  );
+  data?.data.files.map((i) => items.push({
+    icon: i.file_format.key,
+    name: i.display_name,
+    created_at: i.created_at,
+    size: i.size,
+    item_type: 'file',
+    id: i.id,
+    updated_at: i.updated_at,
+  }));
 
   useLayoutEffect(() => {
     const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
@@ -160,23 +154,6 @@ export default function ExplorerTable() {
     }
   };
 
-  if (status === 'error') {
-    return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-      />
-    );
-  }
-
-  if (status === 'loading') {
-    return (
-      <div className="mx-auto w-6 mt-10 justify-center">
-        <Spinner size={22} color="#0F70B7" />
-      </div>
-    );
-  }
-
   const sortedItems = useMemo(
     () => [
       ...sortItems(
@@ -191,9 +168,20 @@ export default function ExplorerTable() {
     [data, selectedSortingId],
   );
 
-  const { data: item } = selectedItemType === 'file' ? useGetFile(selectedItemId) : useGetFolder(selectedItemId);
+  const { data: item } = selectedItemType === 'file'
+    ? useGetFile(selectedItemId)
+    : useGetFolder(selectedItemId);
 
-  return !items.length ? (
+  return status === 'loading' ? (
+    <div className="mx-auto w-6 mt-10 justify-center">
+      <Spinner size={22} color="#0F70B7" />
+    </div>
+  ) : status === 'error' ? (
+    <FullScreenMessage
+      title="Oops, an error occurred :("
+      description="Please try again later."
+    />
+  ) : items ? (
     <FullScreenMessage
       title="No files or folders in your explorer"
       description="Upload one to start working"
@@ -204,10 +192,7 @@ export default function ExplorerTable() {
   ) : (
     <div className="flex flex-col h-full px-3 md:px-0">
       {selectedItemId ? (
-        <ItemPreviewSidebar
-          item={item}
-          type={selectedItemType}
-        />
+        <ItemPreviewSidebar item={item} type={selectedItemType} />
       ) : null}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
