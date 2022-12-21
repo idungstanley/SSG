@@ -17,7 +17,7 @@ export const useGetTeamMembers = ({ query }) => {
           page: pageParam,
           search: query,
         },
-      });
+      }, true);
     },
     {
       onSuccess: (data) => {

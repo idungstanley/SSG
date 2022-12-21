@@ -10,7 +10,7 @@ export const useGetPermissionsList = () => useQuery(
     const data = await requestNew({
       url,
       method: 'GET',
-    });
+    }, true);
 
     return data.data.permissions;
   },
@@ -28,7 +28,7 @@ export const useGetPermissionsValues = () => {
       const data = await requestNew({
         url,
         method: 'GET',
-      });
+      }, true);
 
       return data.data.values;
     },
@@ -75,6 +75,6 @@ export const changeRolePermissionService = async (data) => {
       workspace_permission_key: data.workspacePermissionKey,
       permission_allowed: data.isPermissionAllowed,
     },
-  });
+  }, true);
   return response;
 };

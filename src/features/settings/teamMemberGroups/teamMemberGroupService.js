@@ -16,7 +16,7 @@ export const useGetTeamMemberGroups = (page) => {
         params: {
           page,
         },
-      });
+      }, true);
     },
     {
       onSuccess: (data) => {
@@ -36,7 +36,7 @@ export const useGetTeamMemberGroup = (teamMemberGroupId) => {
       const data = await requestNew({
         url: `settings/team-member-groups/${teamMemberGroupId}`,
         method: 'GET',
-      });
+      }, true);
       return data.data.team_member_group;
     },
     {
@@ -54,7 +54,7 @@ export const createTeamMemberGroupService = async (data) => {
     params: {
       name: data.name,
     },
-  });
+  }, true);
   return response;
 };
 
@@ -66,7 +66,7 @@ export const updateTeamMemberGroupService = async (data) => {
     params: {
       name: data.name,
     },
-  });
+  }, true);
   return response;
 };
 
@@ -84,7 +84,7 @@ export const removeTeamMemberFromGroupService = async (data) => {
   const response = requestNew({
     url: `settings/team-member-groups/${data.teamMemberGroupId}/remove-team-member/${data.teamMemberId}`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };
 
@@ -93,6 +93,6 @@ export const addTeamMemberToGroupService = async (data) => {
   const response = requestNew({
     url: `settings/team-member-groups/${data.teamMemberGroupId}/add-team-member/${data.teamMemberId}`,
     method: 'POST',
-  });
+  }, true);
   return response;
 };

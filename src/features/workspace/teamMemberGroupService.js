@@ -17,7 +17,7 @@ export const useGetTeamMemberGroups = ({ query }) => {
           page: pageParam,
           search: query,
         },
-      });
+      }, true);
     },
     {
       onSuccess: (data) => {

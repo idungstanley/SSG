@@ -16,7 +16,7 @@ export const useGetTeamMemberInvites = (page) => {
         params: {
           page,
         },
-      });
+      }, true);
     },
     {
       onSuccess: (data) => {
@@ -36,7 +36,7 @@ export const useGetTeamMemberInvite = (teamMemberInviteId) => {
       const data = await requestNew({
         url: `settings/team-member-invites/${teamMemberInviteId}`,
         method: 'GET',
-      });
+      }, true);
       return data.data.team_member_invite;
     },
     {
@@ -88,6 +88,6 @@ export const createTeamMemberInviteService = async (data) => {
       email: data.email,
       team_member_role_key: data.teamMemberRoleKey,
     },
-  });
+  }, true);
   return response;
 };
