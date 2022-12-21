@@ -63,7 +63,7 @@ function AddGroupTeamMemberSlideOver() {
   });
 
   useEffect(() => {
-    var temp = [];
+    const temp = [];
 
     if (status === 'success' && data) {
       const flat = data.pages.flatMap((page) => page.data.team_members);

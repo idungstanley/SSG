@@ -24,8 +24,8 @@ function Button({
   borderRight,
   value,
 }) {
-  var buttonClassName;
-  var hoverBackgroundColor;
+  let buttonClassName;
+  let hoverBackgroundColor;
 
   if (buttonStyle === 'primary') {
     hoverBackgroundColor = 'hover:bg-primary-700';

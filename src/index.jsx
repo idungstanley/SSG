@@ -16,8 +16,8 @@ import { store } from './app/store';
 import Toast from './common/Toast';
 
 const onError = (error) => {
-  var title;
-  var body;
+  let title;
+  let body;
 
   if (!error) {
     title = 'Oops! An internal server error occurred.';
@@ -48,8 +48,8 @@ const onError = (error) => {
 };
 
 const onSuccess = (data) => {
-  var title;
-  var body;
+  let title;
+  let body;
 
   if (!data?.message?.title) {
     return;

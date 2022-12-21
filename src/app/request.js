@@ -41,8 +41,8 @@ const request = async (options) => {
       console.log('Error Message:', error.message);
     }
 
-    var messageTitle = '';
-    var messageBody = null;
+    let messageTitle = '';
+    let messageBody = null;
 
     if (error.response.status === 403) {
       messageTitle = 'Oops! You are not authorized to perform this action.';

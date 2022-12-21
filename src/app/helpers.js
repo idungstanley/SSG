@@ -2,7 +2,7 @@
 import moment from 'moment-timezone';
 import axios from 'axios';
 import { Buffer } from 'buffer';
-var fileDownload = require('js-file-download');
+let fileDownload = require('js-file-download');
 
 export async function GetFileWithHeaders(type, id) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
@@ -23,7 +23,7 @@ export async function GetFileWithHeaders(type, id) {
 }
 
 export async function DownloadFile(type, id, name) {
-  var endpoint = null;
+  let endpoint = null;
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
   const accessToken = JSON.parse(localStorage.getItem('accessToken'));
@@ -73,9 +73,9 @@ export function OutputFileSize(bytes, si=true, dp=3) {
     ++u;
   } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
-  var decimal_points = 0;
+  let decimal_points = 0;
   if (units[u] == 'GB' || units[u] == 'MB'){
-    var decimal_points = 1;
+    let decimal_points = 1;
   }
 
   return bytes.toFixed(decimal_points) + ' ' + units[u];

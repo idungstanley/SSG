@@ -196,9 +196,9 @@ function SharedTable({ data, tableTitle }) {
   }, []);
 
   useEffect(() => {
-    var i = 0;
-    var tempSelectedFileIds = [];
-    var tempSelectedFolderIds = [];
+    let i = 0;
+    const tempSelectedFileIds = [];
+    const tempSelectedFolderIds = [];
 
     const selectedRowsRaw = tableProps.selectedRows;
 

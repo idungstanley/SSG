@@ -21,7 +21,7 @@ function SelectInboxMenu() {
   };
 
   useEffect(() => {
-    var tempInboxes = [];
+    const tempInboxes = [];
 
     if (status === 'success' && data != null) {
       data.data.inboxes.map((inbox) => {

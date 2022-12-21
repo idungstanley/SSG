@@ -22,7 +22,6 @@
         "packageDir": "./"
       }
     ],
-    "no-var": "off",
     "no-loop-func": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "react/forbid-prop-types": "off",
