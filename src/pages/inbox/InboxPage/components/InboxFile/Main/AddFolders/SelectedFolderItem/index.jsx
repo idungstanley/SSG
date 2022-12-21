@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import 'tippy.js/dist/tippy.css';
 import { useGetSearchFoldersForFilingResult } from '../../../../../../../../features/inbox/inboxService';
 
 function SelectedFolderItem({ folderId, handleRemoveFolder }) {

@@ -48,25 +48,31 @@ export default function ExplorerTable() {
 
   const items = useMemo(() => [], [data]);
 
-  useMemo(() => data?.data.folders.map((i) => items.push({
-    icon: 'folder',
-    name: i.name,
-    created_at: i.created_at,
-    size: '-',
-    item_type: 'folder',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () => data?.data.folders.map((i) => items.push({
+      icon: 'folder',
+      name: i.name,
+      created_at: i.created_at,
+      size: '-',
+      item_type: 'folder',
+      id: i.id,
+      updated_at: i.updated_at,
+    })),
+    [data],
+  );
 
-  useMemo(() => data?.data.files.map((i) => items.push({
-    icon: i.file_format.key,
-    name: i.display_name,
-    created_at: i.created_at,
-    size: i.size,
-    item_type: 'file',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () => data?.data.files.map((i) => items.push({
+      icon: i.file_format.key,
+      name: i.display_name,
+      created_at: i.created_at,
+      size: i.size,
+      item_type: 'file',
+      id: i.id,
+      updated_at: i.updated_at,
+    })),
+    [data],
+  );
 
   useLayoutEffect(() => {
     const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;

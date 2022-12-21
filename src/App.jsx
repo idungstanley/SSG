@@ -3,7 +3,6 @@ import { useRoutes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import routes from './routes';
-import 'tippy.js/dist/tippy.css';
 import Prompt from './common/Prompt';
 import { selectCurrentUser } from './features/auth/authSlice';
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import 'tippy.js/dist/tippy.css';
 import toast from 'react-hot-toast';
 import {
   TrashIcon,

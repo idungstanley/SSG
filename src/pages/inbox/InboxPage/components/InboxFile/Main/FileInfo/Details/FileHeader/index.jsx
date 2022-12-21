@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { useGetInboxFile } from '../../../../../../../../../features/inbox/inboxService';
-import 'tippy.js/dist/tippy.css';
 
 function FileHeader() {
   const selectedInboxFileId = useSelector(
