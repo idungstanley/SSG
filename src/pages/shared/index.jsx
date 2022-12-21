@@ -7,19 +7,17 @@ import {
 } from '../../features/shared/sharedService';
 import { Spinner } from '../../common';
 import SharedTable from './components/SharedTable';
-import FilePreview from '../../components/FilePreview';
-import FolderPreview from '../../components/FolderPreview';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
+import ItemPreviewSidebar from '../../components/ItemPreviewSidebar';
 
 export default function SharedPage() {
   const { data, filesStatus, foldersStatus } = useGetSharedFilesAndFolders();
 
-  const selectedItemType = useSelector(
-    (state) => state.shared.selectedItemType,
-  );
-  const { selectedItemId } = useSelector((state) => state.shared);
-  const { data: file } = useGetFile(selectedItemId);
-  const { data: folder } = useGetFolder(selectedItemId);
+  const { selectedItemId, selectedItemType } = useSelector((state) => state.shared);
+
+  const { data: item } = selectedItemType === 'file'
+    ? useGetFile(selectedItemId)
+    : useGetFolder(selectedItemId);
 
   return (
     <div className="h-full flex flex-col w-full">
@@ -30,7 +28,10 @@ export default function SharedPage() {
               <Spinner size={22} color="#0F70B7" />
             </div>
           ) : filesStatus === 'error' || foldersStatus === 'error' ? (
-            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
           ) : data && (data.folders.length === 0 || data.files.length === 0) ? (
             <div className="flex flex-1 h-full bg-white">
               <div className="m-auto">
@@ -45,9 +46,9 @@ export default function SharedPage() {
           )}
         </div>
 
-        {selectedItemType === 'file'
-          ? selectedItemId && <FilePreview file={file} />
-          : selectedItemId && <FolderPreview folder={folder} />}
+        {selectedItemId ? (
+          <ItemPreviewSidebar item={item} type={selectedItemType} />
+        ) : null}
       </div>
     </div>
   );

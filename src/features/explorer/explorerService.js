@@ -71,7 +71,6 @@ export const prefetchExplorerFilesAndFoldersService = (queryClient, folderId) =>
         if (data.data.current_folder != null) {
           queryClient.setQueryData(['explorer_folder', data.data.current_folder.id], data.data.current_folder);
         }
-
         data.data.folders.map((folder) => queryClient.setQueryData(['explorer_folder', folder.id], folder));
         data.data.files.map((file) => queryClient.setQueryData(['explorer_file', file.id], file));
       },

@@ -15,8 +15,8 @@ import Toast from '../../../common/Toast';
 
 export default function Details({ item, type }) {
   const [showPopup, setShowPopup] = useState(false);
-  const title = type === 'file' ? item.display_name : item.name;
-  const size = type === 'file' ? item.size || item.file.size : null;
+  const title = type === 'file' ? (item.display_name || item.file.display_name) : (item.name || item.folder.name);
+  const size = type === 'file' ? (item.size || item.file.size) : null;
   const extension = type === 'file' ? title.split('.').at(-1) : 'folder';
 
   const { currentUserId } = useSelector((state) => state.auth);
@@ -83,7 +83,7 @@ export default function Details({ item, type }) {
         >
           Download
         </button>
-        {users?.length ? (
+        {users?.length && !item.shared_by ? (
           <button
             onClick={() => setShowPopup(true)}
             type="button"

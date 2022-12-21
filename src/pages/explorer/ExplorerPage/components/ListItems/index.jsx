@@ -23,10 +23,9 @@ import {
 import { sortItems } from '../Toolbar/components/SortingItems';
 import Table from './Table';
 import Grid from './Grid';
-import FilePreview from '../../../../../components/FilePreview';
-import FolderPreview from '../../../../../components/FolderPreview';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
+import ItemPreviewSidebar from '../../../../../components/ItemPreviewSidebar';
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
@@ -41,6 +40,7 @@ export default function ExplorerTable() {
     selectedSortingId,
     selectedViewId,
     selectedItemId,
+    selectedItemType,
   } = useSelector((state) => state.explorer);
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
 
@@ -191,8 +191,7 @@ export default function ExplorerTable() {
     [data, selectedSortingId],
   );
 
-  const { data: file } = useGetFile(selectedItemId);
-  const { data: folder } = useGetFolder(selectedItemId);
+  const { data: item } = selectedItemType === 'file' ? useGetFile(selectedItemId) : useGetFolder(selectedItemId);
 
   return !items.length ? (
     <FullScreenMessage
@@ -205,11 +204,10 @@ export default function ExplorerTable() {
   ) : (
     <div className="flex flex-col h-full px-3 md:px-0">
       {selectedItemId ? (
-        file ? (
-          <FilePreview file={file} />
-        ) : (
-          <FolderPreview folder={folder} />
-        )
+        <ItemPreviewSidebar
+          item={item}
+          type={selectedItemType}
+        />
       ) : null}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
