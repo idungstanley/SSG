@@ -1,7 +1,4 @@
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {

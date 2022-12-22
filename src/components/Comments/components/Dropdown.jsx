@@ -25,7 +25,6 @@ export default function Dropdown({
         tabIndex={0}
         role="button"
         onClick={() => setShowDropdown(false)}
-        onKeyDown={() => {}}
       >
         {' '}
       </div>

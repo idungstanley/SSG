@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
-const requestNew = async (options: {}, isMainEndpoint: boolean, isTaskEndpoint: boolean) => {
-  const accessToken = JSON.parse(localStorage.getItem('accessToken')!);
+const accessTokenLS = localStorage.getItem('accessToken') || '';
+const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || '';
+
+const requestNew = async (options: Record<string, unknown>, isMainEndpoint: boolean, isTaskEndpoint: boolean) => {
+  const accessToken = JSON.parse(accessTokenLS);
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId')!,
+    currentWorkspaceIdLS,
   );
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';

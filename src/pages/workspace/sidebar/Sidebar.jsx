@@ -22,7 +22,7 @@ export default function Sidebar() {
           initialFocus={fakeRef}
           as="div"
           className="relative z-40 lg:hidden"
-          onClose={() => {}}
+          onClose={() => ({})}
         >
           <Transition.Child
             as={Fragment}

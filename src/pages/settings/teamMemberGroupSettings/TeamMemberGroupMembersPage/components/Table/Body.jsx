@@ -10,7 +10,7 @@ export default function Body() {
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {status === 'success' && teamMemberGroup.group_team_members.map((groupTeamMember) => (
-        <Row groupTeamMember={groupTeamMember} />
+        <Row key={groupTeamMember.id} groupTeamMember={groupTeamMember} />
       ))}
     </tbody>
   );

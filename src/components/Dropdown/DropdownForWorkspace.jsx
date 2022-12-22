@@ -33,7 +33,7 @@ function MenuDropdown() {
     {
       id: 1,
       title: 'Create new',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: (
         <PlusIcon className="h-7 w-5 pt-2 text-gray-700" aria-hidden="true" />
       ),
@@ -42,14 +42,14 @@ function MenuDropdown() {
     {
       id: 2,
       title: 'Rename',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <PencilIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 3,
       title: 'Color & Avatar',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: (
         <ColorSwatchIcon
           className="h-7 w-5 pt-2 text-gray-700"
@@ -61,35 +61,35 @@ function MenuDropdown() {
     {
       id: 4,
       title: 'Copy link',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <LinkIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 5,
       title: 'Duplicate',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 6,
       title: 'Add to favorites',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <StarIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 7,
       title: 'Hide in sidebar',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <EyeOffIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 8,
       title: 'Templates',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: (
         <SparklesIcon
           className="h-6 w-5 pt-2 text-gray-700"
@@ -101,7 +101,7 @@ function MenuDropdown() {
     {
       id: 9,
       title: 'More settings',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: (
         <CogIcon className="h-6 w-5 pt-2 text-gray-700" aria-hidden="true" />
       ),
@@ -110,42 +110,42 @@ function MenuDropdown() {
     {
       id: 10,
       title: 'Sharing & Permission',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <ShareIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 11,
       title: 'Archive',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 12,
       title: 'Import',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <ArrowDownIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 13,
       title: 'Archive',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 14,
       title: 'Whiteboard',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <PencilAltIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 15,
       title: 'Wallet',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +167,7 @@ function MenuDropdown() {
     {
       id: 16,
       title: 'Delete',
-      onClick: () => {},
+      onClick: () => ({}),
       icon: <TrashIcon className="h-4 w-4" aria-hidden="true" />,
       isVisible: true,
     },

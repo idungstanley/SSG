@@ -10,7 +10,7 @@ export default function Body() {
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {status === 'success' && data.data.inbox_member_groups.map((inboxMemberGroup) => (
-        <Row inboxMemberGroup={inboxMemberGroup} />
+        <Row key={inboxMemberGroup.id} inboxMemberGroup={inboxMemberGroup} />
       ))}
     </tbody>
   );

@@ -29,7 +29,6 @@ function ComboBoxForTeamMembers({
           tabIndex={0}
           role="button"
           onClick={() => setShowPopup(false)}
-          onKeyDown={() => {}}
         >
           {' '}
         </div>
@@ -139,7 +138,7 @@ function ComboBoxForTeamMembers({
 }
 
 ComboBoxForTeamMembers.defaultProps = {
-  setShowPopup: () => {},
+  setShowPopup: () => ({}),
 };
 
 ComboBoxForTeamMembers.propTypes = {

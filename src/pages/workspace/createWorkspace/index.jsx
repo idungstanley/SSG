@@ -141,6 +141,7 @@ function CreateWorkspace() {
               <div className="grid grid-cols-4 pl-16 gap-20">
                 {avatarBg.map(({ colour }) => (
                   <AvatarBg
+                    key={colour}
                     size={10}
                     colour={colour}
                     name="avatarBackgroudColor"
@@ -155,6 +156,7 @@ function CreateWorkspace() {
             <div className="space-x-5">
               {companySizeBtn.map(({ label, value }) => (
                 <Button
+                  key={value}
                   buttonStyle="primary"
                   onClick={() => selectedCompanySize(value)}
                   // loading={loginMutation.status === 'loading'}

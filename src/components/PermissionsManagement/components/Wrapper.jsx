@@ -1,5 +1,3 @@
-/* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
-/* eslint jsx-a11y/click-events-have-key-events: 0 */
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
@@ -21,7 +19,6 @@ function Wrapper({
             tabIndex={0}
             role="button"
             onClick={hidePopup}
-            onKeyDown={() => {}}
           >
             {' '}
           </div>

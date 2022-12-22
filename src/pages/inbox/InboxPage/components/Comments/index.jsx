@@ -13,7 +13,6 @@ export default function Comments({ setShowModal }) {
         tabIndex={0}
         role="button"
         onClick={() => setShowModal(false)}
-        onKeyDown={() => {}}
       >
         {' '}
       </div>

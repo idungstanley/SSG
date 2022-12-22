@@ -10,7 +10,7 @@ export default function Body() {
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {status === 'success' && data.data.inbox_members.map((inboxMember) => (
-        <Row inboxMember={inboxMember} />
+        <Row key={inboxMember.id} inboxMember={inboxMember} />
       ))}
     </tbody>
   );

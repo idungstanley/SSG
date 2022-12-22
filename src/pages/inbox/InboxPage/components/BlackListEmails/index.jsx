@@ -1,4 +1,3 @@
-// /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import AddNewEmail from './AddNewEmail';
@@ -12,7 +11,6 @@ export default function BlackListEmails({ setShowModal }) {
         tabIndex={0}
         role="button"
         onClick={() => setShowModal(false)}
-        onKeyDown={() => {}}
       >
         {' '}
       </div>

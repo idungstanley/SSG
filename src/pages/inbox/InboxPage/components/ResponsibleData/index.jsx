@@ -74,7 +74,6 @@ export default function ResponsibleData({ setShowModal, isGroups }) {
         tabIndex={0}
         role="button"
         onClick={() => setShowModal(false)}
-        onKeyDown={() => {}}
       >
         {' '}
       </div>

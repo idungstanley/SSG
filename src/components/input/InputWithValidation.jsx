@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -75,12 +74,10 @@ export default function InputWithValidation({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={isFocused}
       />
       {type === 'password' ? (
         isNewPassword ? (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <p
             onClick={() => setShowPassword(!showPassword)}
             className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"

@@ -13,7 +13,7 @@ export default function Body() {
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {status === 'success' && data.data.team_member_invites.map((teamMemberInvite) => (
-        <Row teamMemberInviteId={teamMemberInvite.id} />
+        <Row teamMemberInviteId={teamMemberInvite.id} key={teamMemberInvite.id} />
       ))}
     </tbody>
   );

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
@@ -131,7 +130,6 @@ export default function MinMenu() {
                   {() => (
                     <div
                       type="button"
-                      onKeyDown={() => {}}
                       onClick={item.onClick}
                       className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3 cursor-pointer"
                     >

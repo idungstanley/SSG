@@ -11,7 +11,7 @@ export default function Body() {
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {data.data.team_member_groups.map((teamMemberGroup) => (
-        <Row teamMemberGroupId={teamMemberGroup.id} />
+        <Row key={teamMemberGroup.id} teamMemberGroupId={teamMemberGroup.id} />
       ))}
     </tbody>
   );

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Fragment, useState, useRef } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, UserIcon, UsersIcon } from '@heroicons/react/solid';
