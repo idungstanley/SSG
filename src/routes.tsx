@@ -45,6 +45,7 @@ import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/Docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/Lists/components/RenderList';
+import { IUser } from './types';
 
 const inbox = [
   {
@@ -73,7 +74,7 @@ const inbox = [
   },
 ];
 
-const routes = (user) => [
+const routes = (user: IUser) => [
   {
     path: 'workspace/onboarding',
     element: user ? (

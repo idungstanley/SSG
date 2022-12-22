@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const requestNew = async (options, isMainEndpoint, isTaskEndpoint) => {
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+const requestNew = async (options: {}, isMainEndpoint: boolean, isTaskEndpoint: boolean) => {
+  const accessToken = JSON.parse(localStorage.getItem('accessToken')!);
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
+    localStorage.getItem('currentWorkspaceId')!,
   );
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
@@ -17,13 +17,13 @@ const requestNew = async (options, isMainEndpoint, isTaskEndpoint) => {
   });
 
   // request handler
-  const onSuccess = (response) => {
+  const onSuccess = (response: any) => {
     const { data } = response;
     return data;
   };
 
   // error handler
-  function onError(error) {
+  function onError(error: any) {
     return Promise.reject(error.response);
   }
 
