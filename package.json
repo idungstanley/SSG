@@ -52,7 +52,8 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "typescript": "^4.9.4",
     "uppy": "^2.4.1",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "eslint": "^8.30.0"
   },
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
@@ -81,7 +82,6 @@
     "@testing-library/user-event": "^14.4.3",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
-    "eslint": "^8.30.0",
     "eslint-config-airbnb": "^19.0.1",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
