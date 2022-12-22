@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import requestNew from '../../app/requestNew';
+import requestNew from '../../app/requestNew.ts';
 
 // Get folder
 export const useGetFolder = (folderId, enabled = true) => {

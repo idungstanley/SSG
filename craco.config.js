@@ -1,10 +1,9 @@
-module.exports = {
-  style: {
-    postcss: {
-      plugins: [
-        require('tailwindcss'),
-        require('autoprefixer'),
-      ],
-    },
+/* eslint-disable no-undef */
+export const style = {
+  postcss: {
+    plugins: [
+      require('tailwindcss'),
+      require('autoprefixer'),
+    ],
   },
-}
+};
