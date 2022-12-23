@@ -139,6 +139,7 @@ export default function ExplorerTable() {
     type: string
   ) => {
     const target = e.target as HTMLButtonElement;
+
     if (selectedItems.length && !target.value) {
       dispatch(resetSelectedFilesAndFolders());
     }
