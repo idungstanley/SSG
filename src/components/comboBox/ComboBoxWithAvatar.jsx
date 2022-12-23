@@ -4,10 +4,7 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Combobox } from '@headlessui/react';
 import { Spinner } from '../../common';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../utils";
 
 export default function ComboBoxWithAvatar({
   label,

@@ -4,10 +4,7 @@ import { PlusCircleIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
 import { useDispatch } from 'react-redux';
 import { setCreateFolderSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../../../../../utils';
 
 export default function CreateNewSelect() {
   const dispatch = useDispatch();

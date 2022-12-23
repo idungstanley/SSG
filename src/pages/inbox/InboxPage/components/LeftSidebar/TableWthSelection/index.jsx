@@ -9,10 +9,7 @@ import { FileIcon, Spinner } from '../../../../../../common';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 import { setShowUploadModal } from '../../../../../../features/general/uploadFile/uploadFileSlice';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../../../../../utils";
 
 export default function TableWithSelection() {
   const dispatch = useDispatch();

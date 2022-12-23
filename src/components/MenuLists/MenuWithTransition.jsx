@@ -2,10 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../utils";
 
 export default function MenuWithTransition({ icon, menuItems }) {
   return (

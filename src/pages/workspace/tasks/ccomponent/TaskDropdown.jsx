@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
@@ -15,12 +14,10 @@ import {
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TaskModal from './TaskModal';
+import { classNames } from "../../../../utils";
 
 function TaskDropdown({ getListId }) {
   const [showTaskModal, setShowTaskModal] = useState(false);
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-  }
 
   return (
     <>

@@ -2,10 +2,7 @@ import React from 'react';
 import { Switch } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchFileContents } from '../../../../../features/search/searchSlice';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../../../../utils";
 
 export default function Toggle() {
   const dispatch = useDispatch();

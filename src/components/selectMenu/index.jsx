@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { PropTypes } from 'prop-types';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../utils";
 
 export default function SelectMenuTeamMembers({
   teamMembers,

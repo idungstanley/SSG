@@ -7,10 +7,7 @@ import {
   useGetPinnedInbox,
   usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../../../../../utils';
 
 interface PinnedInboxItemProps {
   pinnedInboxId: string

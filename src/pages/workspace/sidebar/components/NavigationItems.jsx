@@ -2,6 +2,7 @@ import { BellIcon, HomeIcon, UserGroupIcon } from '@heroicons/react/outline';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { classNames } from "../../../../utils";
 
 const navigation = [
   {
@@ -56,10 +57,6 @@ const showLessOrMore = [
     icon: <ArrowDownIcon />,
   },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function NavigationItems() {
   const { pathname } = useLocation();

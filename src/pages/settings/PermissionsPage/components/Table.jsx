@@ -2,10 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
 import PermissionsCheckbox from './PermissionsCheckbox';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../../../utils";
 
 export default function Table() {
   const [permissionsByCategory, setPermissionsByCategory] = useState([]);

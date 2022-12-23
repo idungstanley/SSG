@@ -8,6 +8,7 @@ import {
 import { Tab } from '@headlessui/react';
 import People from './People';
 import Activity from './Activity';
+import { classNames } from "../../../../utils";
 
 const tabs = [
   {
@@ -29,10 +30,6 @@ const tabs = [
     current: false,
   },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 function Tabs() {
   return (

@@ -9,10 +9,7 @@ import {
   useRestoreOrDeleteInbox,
 } from '../../../../../../features/inbox/inboxesService';
 import { inboxType } from '../../../../../../features/inbox/inbox.interfaces';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../../../../../utils';
 
 interface MenuProps {
   inboxId: string;

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
@@ -16,13 +15,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../Lists/components/ListModal';
+import { classNames } from "../../../../utils";
 
 function PlusDropDown({ walletId }) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-  }
+
   return (
     <>
       <WalletModal

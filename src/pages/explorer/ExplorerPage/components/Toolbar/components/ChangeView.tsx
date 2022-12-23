@@ -8,6 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { setSelectedViewId } from '../../../../../../features/explorer/explorerSlice';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { classNames } from '../../../../../../utils';
 
 const sortingItems = [
   {
@@ -31,10 +32,6 @@ const sortingItems = [
     ),
   },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function ChangeView() {
   const dispatch = useDispatch();

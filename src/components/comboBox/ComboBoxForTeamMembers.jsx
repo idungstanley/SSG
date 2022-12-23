@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
 import { PropTypes } from 'prop-types';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../utils";
 
 function ComboBoxForTeamMembers({
   setShowPopup,

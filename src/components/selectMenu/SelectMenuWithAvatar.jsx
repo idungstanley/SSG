@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { Listbox, Transition } from '@headlessui/react';
 import { SelectorIcon } from '@heroicons/react/solid';
 import Badge from '../Badge';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from "../../utils";
 
 export default function SelectMenuWithAvatar({
   options,

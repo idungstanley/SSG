@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setSelectedSorting } from '../../../../../../features/explorer/explorerSlice';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { IItem } from '../../ListItems';
+import { classNames } from '../../../../../../utils';
 
 export const sortItems = (items: IItem[], sortType: number) => items.sort((a, b) => (sortType === 1
   ? b.created_at.localeCompare(a.created_at)
@@ -87,10 +88,6 @@ const sortingItems = [
     ),
   },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function Sorting() {
   const dispatch = useDispatch();
