@@ -218,26 +218,6 @@ export const useMultipleArchiveOrUnArchive = () => {
   });
 };
 
-// Download inbox file
-export const downloadInboxFile = async (data) => {
-  const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
-  );
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const url = `/inbox-files/${data.inboxFileId}/download?current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-  window.location.href = `${process.env.REACT_APP_API_BASE_URL}/api${url}`;
-};
-
-// Preview file
-export const previewInboxFile = async (data) => {
-  const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
-  );
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-  const url = `/inbox-files/${data.inboxFileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-  window.open(`${process.env.REACT_APP_API_BASE_URL}/api/af/${url}`, '_blank');
-};
-
 const fileActivity = (fileId) => {
   const request = requestNew({
     url: `inbox-files/${fileId}/activity-logs`,

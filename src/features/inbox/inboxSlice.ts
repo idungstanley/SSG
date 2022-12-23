@@ -1,21 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { displayNotification } from '../general/notification/notificationSlice';
-import {
-  downloadInboxFile as downloadInboxFileService,
-  previewInboxFile as previewInboxFileService,
-} from './inboxService';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../auth/authSlice';
-
-export const downloadInboxFile = createAsyncThunk('inbox/inbox-file/download', async (data, thunkAPI) => {
-  downloadInboxFileService(data);
-  thunkAPI.dispatch(displayNotification('success', 'Starting download...', null, 5000));
-  return true;
-});
-
-export const previewInboxFileFullPage = createAsyncThunk('inbox/inbox-file/preview', async (data) => {
-  previewInboxFileService(data);
-  return true;
-});
 
 interface inboxState {
   currentInboxId: string | null,
