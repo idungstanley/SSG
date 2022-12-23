@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Delete service
-export const deleteService = async (data) => {
+export const deleteService = async (data: { fileIds: string; folderIds: string; }) => {
   const response = requestNew({
     url: 'explorer/multiple-delete',
     method: 'POST',
@@ -15,7 +15,7 @@ export const deleteService = async (data) => {
 };
 
 // Paste service
-export const pasteService = async (data) => {
+export const pasteService = async (data: { copyToFolderId: string; fileIds: string; folderIds: string; }) => {
   const url = data.copyToFolderId == null
     ? '/explorer/copy'
     : `/explorer/copy/${data.copyToFolderId}`;
@@ -31,7 +31,7 @@ export const pasteService = async (data) => {
   return response;
 };
 
-const renameItemService = (data) => {
+const renameItemService = (data: { type: string | null; id: string | null; name: string | null; }) => {
   const url = `${data.type}s/${data.id}/rename`;
   return requestNew({
     url,

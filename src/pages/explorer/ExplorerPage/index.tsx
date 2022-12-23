@@ -1,26 +1,26 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { HomeIcon } from '@heroicons/react/outline';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import Toolbar from './components/Toolbar';
 import { Breadcrumb } from '../../../components';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
-import {
-  useGetFolder,
-} from '../../../features/explorer/explorerService';
+import { useGetFolder } from '../../../features/explorer/explorerService';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import ExplorerTable from './components/ListItems';
 import UploadModal from '../../../components/UploadModal';
+import { useAppSelector } from '../../../app/hooks';
 
 export default function ExplorerPage() {
   const { folderId } = useParams();
 
-  const { data: currentFolder } = useGetFolder(folderId);
+  const { data: currentFolder } = folderId
+    ? useGetFolder(folderId)
+    : { data: null };
 
-  const { showRenameFileSlideOver, showCreateFolderSlideOver } = useSelector(
-    (state) => state.slideOver,
+  const { showRenameFileSlideOver, showCreateFolderSlideOver } = useAppSelector(
+    (state) => state.slideOver
   );
 
   return (
@@ -31,18 +31,17 @@ export default function ExplorerPage() {
           <Toolbar />
         </div>
 
-        {/* Breadcrumb */}
         <Breadcrumb
           pages={
-            currentFolder != null
+            currentFolder?.ancestors
               ? [
-                ...currentFolder.ancestors.map((ancestor) => ({
-                  name: ancestor.name,
-                  current: false,
-                  href: `/explorer/${ancestor.id}`,
-                })),
-                ...[{ name: currentFolder.name, current: true, href: null }],
-              ]
+                  ...currentFolder.ancestors.map((ancestor) => ({
+                    name: ancestor.name,
+                    current: false,
+                    href: `/explorer/${ancestor.id}`,
+                  })),
+                  ...[{ name: currentFolder.name, current: true, href: null }],
+                ]
               : [{ name: 'Home', current: true, href: null }]
           }
           rootIcon={
