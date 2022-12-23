@@ -111,7 +111,6 @@ const routes = (user: IUser) => [
         path: 'settings/team-members/invites',
         element: <TeamMemberInvitesPage />,
       },
-      // Team member group settings
       {
         path: 'settings/team-members/groups',
         element: <TeamMemberGroupsPage />,
