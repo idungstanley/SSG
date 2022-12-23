@@ -1,8 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { IInbox, inboxType } from '../../../../../features/inbox/inbox.interfaces';
 import Row from './Row';
 
-function Body({ data, type }) {
+interface BodyProps {
+  data: IInbox[];
+  type: inboxType;
+}
+
+function Body({ data, type }: BodyProps) {
   return (
     <tbody className="bg-white divide-y divide-gray-100">
       {data.map((inbox) => (
@@ -10,15 +15,11 @@ function Body({ data, type }) {
           key={inbox.id}
           inboxId={inbox.id}
           type={type}
+          inbox={inbox}
         />
       ))}
     </tbody>
   );
 }
-
-Body.propTypes = {
-  data: PropTypes.array.isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 export default Body;

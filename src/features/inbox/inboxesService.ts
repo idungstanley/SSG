@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IResponseInboxes, IPinnedInboxes, inboxType, IInbox } from "./inbox.interfaces";
 
 // Get all inboxes
 export const useGetInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseInboxes>(
     ['inboxes'],
     () => requestNew({
       url: 'inboxes',
@@ -22,7 +23,7 @@ export const useGetInboxes = () => {
 export const useGetActiveInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseInboxes>(
     ['active-inboxes'],
     () => requestNew({
       url: 'inboxes',
@@ -40,7 +41,7 @@ export const useGetActiveInboxes = () => {
 export const useGetTrashedInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseInboxes>(
     ['trashed-inboxes'],
     () => requestNew({
       url: 'inboxes/trashed',
@@ -55,7 +56,7 @@ export const useGetTrashedInboxes = () => {
 };
 
 // Get inbox
-export const useGetInbox = (inboxId, type) => {
+export const useGetInbox = (inboxId: string, type: inboxType) => {
   const queryClient = useQueryClient();
   const queryName = type ? `${type}-inbox` : 'inbox';
 
@@ -72,7 +73,7 @@ export const useGetInbox = (inboxId, type) => {
 export const useGetArchivedInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseInboxes>(
     ['archived-inboxes'],
     () => requestNew({
       url: 'inboxes',
@@ -93,7 +94,7 @@ export const useGetArchivedInboxes = () => {
 export const useGetHiddenInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseInboxes>(
     ['hidden-inboxes'],
     () => requestNew({
       url: 'inboxes',
@@ -114,7 +115,7 @@ export const useGetHiddenInboxes = () => {
 export const useGetPinnedInboxes = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IPinnedInboxes>(
     ['pinned-inboxes'],
     async () => requestNew({
       url: 'inboxes/pinned',
@@ -128,13 +129,13 @@ export const useGetPinnedInboxes = () => {
   );
 };
 
-export const useGetPinnedInbox = (inboxId) => {
+export const useGetPinnedInbox = (inboxId: string) => {
   // TODO: If not in cache... get from endpoint (hard get)
   // Default data should use the previously set data TODO check...
 
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IInbox | undefined>(
     ['pinned-inbox', inboxId],
     () => queryClient.getQueryData(['pinned-inbox', inboxId]),
     {
@@ -144,7 +145,7 @@ export const useGetPinnedInbox = (inboxId) => {
 };
 
 // Create inbox
-export const createInboxService = async (data) => {
+export const createInboxService = async (data: {name: string, emailUsername: string}) => {
   const response = requestNew({
     url: 'inboxes',
     method: 'POST',
@@ -156,7 +157,7 @@ export const createInboxService = async (data) => {
   return response;
 };
 
-const pinOrUnpinInbox = (data) => {
+const pinOrUnpinInbox = (data: {inboxId: string, isPinned: boolean}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/${data.isPinned ? 'unpin' : 'pin'}`,
     method: 'POST',
@@ -183,7 +184,7 @@ export const useGetInboxUnfiledCount = () => useQuery(['inboxes_unfiled_count'],
   return data.data.unfiled_count;
 });
 
-export const markOpenedInbox = (id) => {
+export const markOpenedInbox = (id :string) => {
   const request = requestNew({
     url: `inboxes/${id}/mark-opened`,
     method: 'POST',
@@ -191,7 +192,7 @@ export const markOpenedInbox = (id) => {
   return request;
 };
 
-export const useMarkOpenedInbox = (id) => {
+export const useMarkOpenedInbox = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(() => markOpenedInbox(id), {
@@ -202,7 +203,7 @@ export const useMarkOpenedInbox = (id) => {
 };
 
 // hide inbox
-export const hideOrUnhideInbox = (data) => {
+export const hideOrUnhideInbox = (data: {id: string, isHidden: boolean}) => {
   const request = requestNew({
     url: `inboxes/${data.id}/${data.isHidden ? 'unhide' : 'hide'}`,
     method: 'POST',
@@ -222,7 +223,7 @@ export const useHideOrUnhideInbox = () => {
 };
 
 // archive inbox
-export const archiveOrUnarchiveInbox = (data) => {
+export const archiveOrUnarchiveInbox = (data: {id: string, isArchived: boolean}) => {
   const request = requestNew({
     url: `inboxes/${data.id}/${data.isArchived ? 'unarchive' : 'archive'}`,
     method: 'POST',
@@ -241,7 +242,7 @@ export const useArchiveOrUnarchiveInbox = () => {
   });
 };
 
-const restoreOrDeleteInbox = (data) => {
+const restoreOrDeleteInbox = (data: {inboxId: string, isDeleted: boolean}) => {
   const url = data.isDeleted
     ? `inboxes/${data.inboxId}/restore`
     : `inboxes/${data.inboxId}`;
@@ -292,7 +293,7 @@ export const useGetBlacklistFiles = () =>
     },
   });
 
-const blacklistFile = (data) => {
+const blacklistFile = (data: {type: 'add' | string, fileId: string}) => {
   const url = data.type === 'add'
     ? `inbox-files/${data.fileId}/blacklist`
     : `blacklist-inbox-files/${data.fileId}`;
@@ -315,7 +316,7 @@ export const useBlacklistFile = () => {
 };
 
 // email list
-export const addEmailToList = (data) => {
+export const addEmailToList = (data: {inboxId: string, email: string}) => {
   const request = requestNew({
     url: `inboxes/${data.inboxId}/email-list`,
     method: 'POST',
@@ -326,7 +327,7 @@ export const addEmailToList = (data) => {
   return request;
 };
 
-export const deleteEmailFromList = (data) => {
+export const deleteEmailFromList = (data: {inboxId: string, emailId: string}) => {
   const request = requestNew({
     url: `/inboxes/${data.inboxId}/email-list/${data.emailId}`,
     method: 'DELETE',
@@ -334,12 +335,12 @@ export const deleteEmailFromList = (data) => {
   return request;
 };
 
-export const useGetEmailList = (inboxId) => useQuery([`email-list-${inboxId}`], () => requestNew({
+export const useGetEmailList = (inboxId: string) => useQuery([`email-list-${inboxId}`], () => requestNew({
   url: `inboxes/${inboxId}/email-list`,
   method: 'GET',
 }));
 
-export const useAddEmailToList = (inboxId) => {
+export const useAddEmailToList = (inboxId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(addEmailToList, {
@@ -349,7 +350,7 @@ export const useAddEmailToList = (inboxId) => {
   });
 };
 
-export const useDeleteEmailFromList = (inboxId) => {
+export const useDeleteEmailFromList = (inboxId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteEmailFromList, {
@@ -360,7 +361,7 @@ export const useDeleteEmailFromList = (inboxId) => {
 };
 
 // main hook
-export const useInboxes = (type) => {
+export const useInboxes = (type: inboxType) => {
   const { data: pinned } = useGetPinnedInboxes();
   const { data: active, status: activeStatus } = useGetActiveInboxes();
 

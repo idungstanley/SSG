@@ -1,14 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { OutputDateTime } from '../../../../../../app/helpers';
-import {
-  useMarkOpenedInbox,
-} from '../../../../../../features/inbox/inboxesService';
+import { useMarkOpenedInbox } from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
+import {
+  IInbox,
+  inboxType,
+} from '../../../../../../features/inbox/inbox.interfaces';
 
-function Row({ inboxId, type, inbox }) {
+interface RowProps {
+  inboxId: string;
+  type: inboxType;
+  inbox: IInbox;
+}
+
+function Row({ inboxId, type, inbox }: RowProps) {
   const { mutate: markOpened } = useMarkOpenedInbox(inboxId);
 
   const handleClickInbox = () => {
@@ -61,11 +68,5 @@ function Row({ inboxId, type, inbox }) {
     </tr>
   ) : null;
 }
-
-Row.propTypes = {
-  inboxId: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  inbox: PropTypes.object.isRequired,
-};
 
 export default Row;

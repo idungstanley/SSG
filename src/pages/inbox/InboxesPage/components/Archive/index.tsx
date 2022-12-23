@@ -1,13 +1,12 @@
 import React from 'react';
 import { Spinner } from '../../../../../common';
-import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
-import { useGetTrashedInboxes } from '../../../../../features/inbox/inboxesService';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
+import { useInboxes } from '../../../../../features/inbox/inboxesService';
 import Header from '../Table/Header';
 import Row from '../Table/Row';
 
-export default function Restore() {
-  const { data, status } = useGetTrashedInboxes();
-  const trashed = data?.data.inboxes;
+function Archived() {
+  const { data, status, type } = useInboxes('archived');
 
   if (status === 'loading') {
     return (
@@ -19,28 +18,32 @@ export default function Restore() {
 
   if (status === 'error') {
     return (
-      <HalfScreenMessage
+      <FullScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
+        showHalFScreen
       />
     );
   }
 
-  return trashed.length ? (
+  return data && data.length ? (
     <div className="flex-1 align-middle inline-block min-w-full border-b border-gray-200">
       <table className="min-w-full">
         <Header />
         <tbody className="bg-white divide-y divide-gray-100">
-          {trashed.map((inbox) => (
-            <Row key={inbox.id} inboxId={inbox.id} type="trashed" inbox={inbox} />
+          {data.map((inbox) => (
+            <Row key={inbox.id} inboxId={inbox.id} type={type} inbox={inbox} />
           ))}
         </tbody>
       </table>
     </div>
   ) : (
-    <HalfScreenMessage
-      title="You have no trashed yet"
+    <FullScreenMessage
+      title="You have no archive inboxes yet"
       description="Get started by creating a new inbox"
+      showHalFScreen
     />
   );
 }
+
+export default Archived;

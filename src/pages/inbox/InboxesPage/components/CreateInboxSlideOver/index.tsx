@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createInboxService } from '../../../../../features/inbox/inboxesService';
 import { setCreateInboxSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
@@ -10,6 +10,7 @@ import {
   Input,
   InputWithTrailingAddon,
 } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
 
 function CreateInboxSlideOver() {
   const dispatch = useDispatch();
@@ -25,8 +26,8 @@ function CreateInboxSlideOver() {
     },
   });
 
-  const showCreateInboxSlideOver = useSelector(
-    (state) => state.slideOver.showCreateInboxSlideOver,
+  const { showCreateInboxSlideOver } = useAppSelector(
+    (state) => state.slideOver
   );
 
   const defaultFormState = {
@@ -38,7 +39,7 @@ function CreateInboxSlideOver() {
 
   const { name, emailUsername } = formState;
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -57,7 +58,7 @@ function CreateInboxSlideOver() {
       show={showCreateInboxSlideOver}
       onClose={() => dispatch(setCreateInboxSlideOverVisibility(false))}
       headerTitle="Create a new inbox"
-      body={(
+      body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
@@ -83,8 +84,8 @@ function CreateInboxSlideOver() {
             />
           </div>
         </div>
-      )}
-      footerButtons={(
+      }
+      footerButtons={
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -92,7 +93,7 @@ function CreateInboxSlideOver() {
           label="Create inbox"
           width="w-40"
         />
-      )}
+      }
     />
   );
 }

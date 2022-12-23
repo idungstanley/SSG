@@ -9,13 +9,21 @@ const tabs = [
 
 const rightTabs = [{ name: 'Deleted', href: '/inbox/restore' }];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function Tabs() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const navigateTo = tabs.find((i) => i.name === e.target.value);
+
+    if (navigateTo) {
+      navigate(navigateTo.href);
+    }
+  };
 
   return (
     <div className="m-5">
@@ -27,8 +35,8 @@ export default function Tabs() {
           id="tabs"
           name="tabs"
           className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-          defaultValue={tabs[0]}
-          onChange={(e) => navigate(tabs.find((i) => i.name === e.target.value).href)}
+          defaultValue={tabs[0].name}
+          onChange={(e) => handleChange(e)}
         >
           {[...tabs, ...rightTabs].map((tab) => (
             <option key={tab.name}>{tab.name}</option>

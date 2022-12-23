@@ -8,18 +8,22 @@ import {
   usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-function PinnedInboxItem({ pinnedInboxId }) {
+interface PinnedInboxItemProps {
+  pinnedInboxId: string
+}
+
+function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
   const navigate = useNavigate();
 
   const { data: inbox } = useGetPinnedInbox(pinnedInboxId);
   const { mutate: unpinInbox } = usePinOrUnpinInbox();
 
   const onViewInbox = () => {
-    navigate(`/inbox/${inbox.id}`);
+    navigate(`/inbox/${inbox?.id}`);
   };
 
   const onUnpinInbox = () => {

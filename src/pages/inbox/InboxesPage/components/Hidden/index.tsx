@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spinner } from '../../../../../common';
-import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { useInboxes } from '../../../../../features/inbox/inboxesService';
 import Header from '../Table/Header';
 import Row from '../Table/Row';
@@ -18,14 +18,15 @@ function Hidden() {
 
   if (status === 'error') {
     return (
-      <HalfScreenMessage
+      <FullScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
+        showHalFScreen
       />
     );
   }
 
-  return data.length ? (
+  return data && data.length ? (
     <div className="flex-1 align-middle inline-block min-w-full border-b border-gray-200">
       <table className="min-w-full">
         <Header />
@@ -37,9 +38,10 @@ function Hidden() {
       </table>
     </div>
   ) : (
-    <HalfScreenMessage
+    <FullScreenMessage
       title="You have no hidden inboxes yet"
       description="Get started by creating a new inbox"
+      showHalFScreen
     />
   );
 }

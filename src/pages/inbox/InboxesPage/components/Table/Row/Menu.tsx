@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Menu as HeadlessUIMenu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useNavigate } from 'react-router-dom';
@@ -9,12 +8,18 @@ import {
   usePinOrUnpinInbox,
   useRestoreOrDeleteInbox,
 } from '../../../../../../features/inbox/inboxesService';
+import { inboxType } from '../../../../../../features/inbox/inbox.interfaces';
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Menu({ inboxId, type }) {
+interface MenuProps {
+  inboxId: string;
+  type: inboxType;
+}
+
+export default function Menu({ inboxId, type }: MenuProps) {
   const navigate = useNavigate();
 
   const { mutate: pinOrUnpinInbox } = usePinOrUnpinInbox();
@@ -103,31 +108,28 @@ export default function Menu({ inboxId, type }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <HeadlessUIMenu.Items className=" z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
-          {menuItems.map((i) => (i.isVisible ? (
-            <div className="py-1" key={i.id}>
-              <HeadlessUIMenu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={i.onClick}
-                    type="button"
-                    className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block w-full px-4 py-2 text-sm text-left',
-                    )}
-                  >
-                    {i.title}
-                  </button>
-                )}
-              </HeadlessUIMenu.Item>
-            </div>
-          ) : null))}
+          {menuItems.map((i) =>
+            i.isVisible ? (
+              <div className="py-1" key={i.id}>
+                <HeadlessUIMenu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={i.onClick}
+                      type="button"
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-full px-4 py-2 text-sm text-left'
+                      )}
+                    >
+                      {i.title}
+                    </button>
+                  )}
+                </HeadlessUIMenu.Item>
+              </div>
+            ) : null
+          )}
         </HeadlessUIMenu.Items>
       </Transition>
     </HeadlessUIMenu>
   );
 }
-
-Menu.propTypes = {
-  inboxId: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};
