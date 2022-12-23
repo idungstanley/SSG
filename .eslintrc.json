@@ -22,7 +22,7 @@
     "plugins": [
         "react",
         "@typescript-eslint"
-    ],       
+    ],
     "rules": { 
         "semi": "off",
         "no-multiple-empty-lines":["error", { "max": 1, "maxEOF": 0 }],
