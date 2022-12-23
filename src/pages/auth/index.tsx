@@ -1,6 +1,5 @@
-import React, { memo } from 'react';
+import React, { memo, ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { PropTypes } from 'prop-types';
 import MainLogo from '../../assets/branding/main-logo.png';
 
 const data = [
@@ -16,7 +15,11 @@ const data = [
   },
 ];
 
-function Wrapper({ children }) {
+interface WrapperProps {
+  children: ReactNode;
+}
+
+function Wrapper({ children }: WrapperProps) {
   const { pathname } = useLocation();
 
   const isSignInPath = pathname.split('/')[2] === 'login';
@@ -32,7 +35,9 @@ function Wrapper({ children }) {
           </h2>
         </div>
         <div className="flex items-center gap-3">
-          <p className="hidden sm:block whitespace-nowrap">{selectedData.massage}</p>
+          <p className="hidden sm:block whitespace-nowrap">
+            {selectedData.massage}
+          </p>
           <Link
             to={selectedData.link}
             className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
@@ -47,10 +52,3 @@ function Wrapper({ children }) {
 }
 
 export default memo(Wrapper);
-
-Wrapper.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-};

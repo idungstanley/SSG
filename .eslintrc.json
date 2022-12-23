@@ -25,6 +25,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-console":"warn",
         "semi-spacing": ["error", {"before": false, "after": true}],
         "space-infix-ops":"error",
         "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],

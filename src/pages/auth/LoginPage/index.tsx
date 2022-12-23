@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
   loginService,
@@ -21,15 +21,15 @@ function LoginPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
       localStorage.setItem(
         'currentUserId',
-        JSON.stringify(successData.data.token.token.user_id),
+        JSON.stringify(successData.data.token.token.user_id)
       );
 
       dispatch(
@@ -38,7 +38,7 @@ function LoginPage() {
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
           currentUserId: successData.data.token.token.user_id,
-        }),
+        })
       );
     },
   });
@@ -48,11 +48,11 @@ function LoginPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
 
       dispatch(
@@ -60,12 +60,12 @@ function LoginPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
-        }),
+        })
       );
     },
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: { email: string; password: string }) => {
     loginMutation.mutate({
       email: values.email,
       password: values.password,
@@ -83,7 +83,7 @@ function LoginPage() {
     gapi.load('client:auth2', start);
   }, []);
 
-  const handleGoogleLogin = (response) => {
+  const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     if (response.code) {
       loginGoogleMutation.mutate({
         code: response.code,
@@ -92,10 +92,11 @@ function LoginPage() {
       // error handler
     }
   };
-  const handleGoogleFailure = (response) => {
+
+  const handleGoogleFailure = (error: unknown) => {
     // fail handler: todo delete console log
     // eslint-disable-next-line no-console
-    console.log(response);
+    console.log(error);
   };
 
   const formikConfig = {
@@ -123,7 +124,7 @@ function LoginPage() {
           />
 
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
             onSuccess={handleGoogleLogin}
             onFailure={handleGoogleFailure}
             cookiePolicy="single_host_origin"

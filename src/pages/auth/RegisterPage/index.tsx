@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
   registerService,
@@ -63,7 +63,7 @@ function RegisterPage() {
     },
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: {name: string, email: string, password: string}) => {
     registerMutation.mutate({
       name: values.name,
       email: values.email,
@@ -83,7 +83,7 @@ function RegisterPage() {
     gapi.load('client:auth2', start);
   }, []);
 
-  const handleGoogleLogin = (response) => {
+  const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     if (response.code) {
       loginGoogleMutation.mutate({
         code: response.code,
@@ -93,10 +93,10 @@ function RegisterPage() {
       // error handler
     }
   };
-  const handleGoogleFailure = (response) => {
+  const handleGoogleFailure = (error: unknown) => {
     // fail handler: todo delete console log
     // eslint-disable-next-line no-console
-    console.log(response);
+    console.log(error);
   };
 
   const formikConfig = {
@@ -151,7 +151,7 @@ function RegisterPage() {
           />
 
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
             onSuccess={handleGoogleLogin}
             onFailure={handleGoogleFailure}
             cookiePolicy="single_host_origin"
