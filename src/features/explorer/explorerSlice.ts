@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
 // export const previewFileFullPage = createAsyncThunk(
@@ -34,10 +33,10 @@ import { logout, switchWorkspace } from '../auth/authSlice';
 //   },
 // );
 
-const fileIdsToPaste: string[] = JSON.parse(localStorage.getItem('fileIdsToPaste') || '""') || [];
-const folderIdsToPaste: string[] = JSON.parse(localStorage.getItem('folderIdsToPaste') || '""') || [];
-const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '"1"') || 1;
-const selectedViewId: number = JSON.parse(localStorage.getItem('selectedView') || '"1"') || 1;
+const fileIdsToPaste: string[] = JSON.parse(localStorage.getItem('fileIdsToPaste') || '[]');
+const folderIdsToPaste: string[] = JSON.parse(localStorage.getItem('folderIdsToPaste') || '[]');
+const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '1');
+const selectedViewId: number = JSON.parse(localStorage.getItem('selectedView') || '1');
 
 interface ExplorerState {
   selectedItemId: string | null;
@@ -65,8 +64,8 @@ const initialState: ExplorerState = {
   selectedSortingId,
   selectedViewId,
 
-  fileIdsToPaste: fileIdsToPaste != null ? fileIdsToPaste : [],
-  folderIdsToPaste: folderIdsToPaste != null ? folderIdsToPaste : [],
+  fileIdsToPaste,
+  folderIdsToPaste,
 };
 
 export const explorerSlice = createSlice({
@@ -79,17 +78,11 @@ export const explorerSlice = createSlice({
       state.selectedItemFullDetails = null;
       state.selectedItemLoadingFullDetails = false;
     },
-    setSelectedItem: (state, action) => {
+    setSelectedItem: (state, action: PayloadAction<{ selectedItemId: string, selectedItemType: string }>) => {
       state.selectedItemId = action.payload.selectedItemId;
       state.selectedItemType = action.payload.selectedItemType;
       state.selectedItemFullDetails = null;
       state.selectedItemLoadingFullDetails = false;
-    },
-    setSelectedItemFullDetails: (state, action) => {
-      state.selectedItemFullDetails = action.payload;
-    },
-    setSelectedItemLoadingState: (state, action) => {
-      state.selectedItemLoadingFullDetails = action.payload;
     },
     setSelectedFile: (state, action: PayloadAction<{ file_id: string }>) => {
       state.selectedFolderIds = [];
@@ -111,10 +104,10 @@ export const explorerSlice = createSlice({
     ) => {
       state.selectedFolderIds.push(action.payload.folder_id);
     },
-    setSelectedFiles: (state, action) => {
+    setSelectedFiles: (state, action: PayloadAction<string[]>) => {
       state.selectedFileIds = action.payload;
     },
-    setSelectedFolders: (state, action) => {
+    setSelectedFolders: (state, action: PayloadAction<string[]>) => {
       state.selectedFolderIds = action.payload;
     },
     resetSelectedFilesAndFolders: (state) => {
@@ -125,13 +118,13 @@ export const explorerSlice = createSlice({
       state.selectedItemLoadingFullDetails = false;
       state.selectedItemFullDetails = null;
     },
-    setSelectedSorting: (state, action) => {
+    setSelectedSorting: (state, action: PayloadAction<number>) => {
       state.selectedSortingId = action.payload;
     },
-    setSelectedViewId: (state, action) => {
+    setSelectedViewId: (state, action: PayloadAction<number>) => {
       state.selectedViewId = action.payload;
     },
-    setCopyItems: (state, action) => {
+    setCopyItems: (state, action: PayloadAction<{ fileIdsToPaste: string[], folderIdsToPaste: string[] }>) => {
       state.fileIdsToPaste = action.payload.fileIdsToPaste;
       state.folderIdsToPaste = action.payload.folderIdsToPaste;
     },
@@ -146,8 +139,6 @@ export const explorerSlice = createSlice({
 export const {
   resetSelectedItem,
   setSelectedItem,
-  setSelectedItemFullDetails,
-  setSelectedItemLoadingState,
   setSelectedFile,
   setSelectedFolder,
   addSelectedFile,

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { displayNotification } from '../general/notification/notificationSlice';
 import {
   downloadInboxFile as downloadInboxFileService,
@@ -17,7 +17,19 @@ export const previewInboxFileFullPage = createAsyncThunk('inbox/inbox-file/previ
   return true;
 });
 
-const initialState = {
+interface inboxState {
+  currentInboxId: string | null,
+
+  selectedInboxTabKey: string,
+  selectedInboxFileId: string | null,
+  selectedInboxFileIndex: number | null,
+  searchFoldersQuery: string,
+  folderIdsForFiling: string[],
+  processingAssignInboxIds: string[],
+  assignedInboxIds: string[],
+}
+
+const initialState: inboxState = {
   currentInboxId: null,
 
   selectedInboxTabKey: 'inbox',
@@ -37,7 +49,7 @@ export const inboxSlice = createSlice({
   name: 'inbox',
   initialState,
   reducers: {
-    setCurrentInbox: (state, action) => {
+    setCurrentInbox: (state, action: PayloadAction<{ inboxId: string }>) => {
       state.currentInboxId = action.payload.inboxId;
       state.selectedInboxFileId = null;
       state.selectedInboxFileIndex = null;
@@ -45,7 +57,7 @@ export const inboxSlice = createSlice({
       state.selectedInboxTabKey = 'inbox';
       state.folderIdsForFiling = [];
     },
-    setCurrentInboxFile: (state, action) => {
+    setCurrentInboxFile: (state, action: PayloadAction<{ inboxFileId: string, inboxFileIndex: number }>) => {
       state.selectedInboxFileId = action.payload.inboxFileId;
       state.selectedInboxFileIndex = action.payload.inboxFileIndex;
       state.searchFoldersQuery = '';
@@ -80,8 +92,6 @@ export const {
   setCurrentInboxFile,
   addFolderForFiling,
   removeFolderForFiling,
-  setInboxFiles,
-  removeInboxFile,
   setSelectedInboxTabKey,
   setSearchFoldersQuery,
 } = inboxSlice.actions;
