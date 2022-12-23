@@ -1,54 +1,38 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { displayNotification } from '../general/notification/notificationSlice';
+import { createSlice } from '@reduxjs/toolkit';
+// import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-export const copyItems = createAsyncThunk(
-  'explorer/copyItems',
-  async (data) => {
-    localStorage.setItem('fileIdsToPaste', JSON.stringify(data.fileIds));
-    localStorage.setItem('folderIdsToPaste', JSON.stringify(data.folderIds));
+// export const previewFileFullPage = createAsyncThunk(
+//   'explorer/previewFileFullPage',
+//   async (data, thunkAPI) => {
+//     const currentWorkspaceId = JSON.parse(
+//       localStorage.getItem('currentWorkspaceId'),
+//     );
+//     const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 
-    const totalItemsCount = data.fileIds.length + data.folderIds.length;
+//     try {
+//       const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
 
-    if (totalItemsCount < 1) {
-      return totalItemsCount;
-    }
+//       window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
 
-    return totalItemsCount;
-  },
-);
+//       if (data.cb) {
+//         data.cb();
+//       }
 
-export const previewFileFullPage = createAsyncThunk(
-  'explorer/previewFileFullPage',
-  async (data, thunkAPI) => {
-    const currentWorkspaceId = JSON.parse(
-      localStorage.getItem('currentWorkspaceId'),
-    );
-    const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-
-    try {
-      const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-
-      window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
-
-      if (data.cb) {
-        data.cb();
-      }
-
-      return true;
-    } catch (error) {
-      thunkAPI.dispatch(
-        displayNotification(
-          'error',
-          'Oops! An unknown error has occurred.',
-          null,
-          8000,
-        ),
-      );
-      return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
-    }
-  },
-);
+//       return true;
+//     } catch (error) {
+//       thunkAPI.dispatch(
+//         displayNotification(
+//           'error',
+//           'Oops! An unknown error has occurred.',
+//           null,
+//           8000,
+//         ),
+//       );
+//       return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
+//     }
+//   },
+// );
 
 const fileIdsToPaste = JSON.parse(localStorage.getItem('fileIdsToPaste'));
 const folderIdsToPaste = JSON.parse(localStorage.getItem('folderIdsToPaste'));
@@ -126,17 +110,13 @@ export const explorerSlice = createSlice({
     setSelectedViewId: (state, action) => {
       state.selectedViewId = action.payload;
     },
+    setCopyItems: (state, action) => {
+      state.fileIdsToPaste = action.payload.fileIdsToPaste;
+      state.folderIdsToPaste = action.payload.folderIdsToPaste;
+    }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(copyItems.fulfilled, (state, action) => {
-        state.fileIdsToPaste = action.meta.arg.fileIds;
-        state.folderIdsToPaste = action.meta.arg.folderIds;
-      })
-      .addCase(copyItems.rejected, (state) => {
-        state.fileIdsToPaste = [];
-        state.folderIdsToPaste = [];
-      })
       .addCase(switchWorkspace, () => initialState)
       .addCase(logout, () => initialState);
   },
@@ -157,6 +137,7 @@ export const {
   resetSelectedFilesAndFolders,
   setSelectedSorting,
   setSelectedViewId,
+  setCopyItems,
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

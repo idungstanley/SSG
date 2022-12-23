@@ -12,7 +12,7 @@ import {
   PencilIcon,
 } from '@heroicons/react/outline';
 import {
-  copyItems,
+  setCopyItems,
   resetSelectedFilesAndFolders,
 } from '../../../../../features/explorer/explorerSlice';
 import {
@@ -88,11 +88,15 @@ export default function Toolbar() {
 
   const onCopy = () => {
     dispatch(
-      copyItems({
-        fileIds: selectedFileIds,
-        folderIds: selectedFolderIds,
+      setCopyItems({
+        fileIdsToPaste: selectedFileIds,
+        folderIdsToPaste: selectedFolderIds,
       }),
     );
+
+    localStorage.setItem('fileIdsToPaste', JSON.stringify(selectedFileIds));
+    localStorage.setItem('folderIdsToPaste', JSON.stringify(selectedFolderIds));
+
     queryClient.invalidateQueries([
       'explorer_files_and_folders',
       folderId == null ? 'root-folder' : folderId,
