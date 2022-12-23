@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
-const accessTokenLS = localStorage.getItem('accessToken') || '';
-const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || '';
+const accessTokenLS = localStorage.getItem('accessToken') || '"';
+const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || '"';
 
-const requestNew = async (options: Record<string, unknown>, isMainEndpoint: boolean, isTaskEndpoint: boolean) => {
+const requestNew = async (options: Record<string, unknown>, isMainEndpoint?: boolean, isTaskEndpoint?: boolean) => {
   const accessToken = JSON.parse(accessTokenLS);
   const currentWorkspaceId = JSON.parse(
     currentWorkspaceIdLS,
