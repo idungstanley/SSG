@@ -1,12 +1,24 @@
-/* eslint-disable react/jsx-no-bind */
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { LegacyRef } from 'react';
 import PropTypes from 'prop-types';
 import { FileIcon } from '../../../../../common';
 import { OutputDateTime, OutputFileSize } from '../../../../../app/helpers';
+import { useAppSelector } from '../../../../../app/hooks';
+import { IItem } from '../ListItems';
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
+}
+
+interface TableProps {
+  checkbox: React.RefObject<{
+    indeterminate: boolean;
+  }>;
+  checked: boolean;
+  toggleAll: () => void;
+  sortedItems: IItem[];
+  selectedItems: string[];
+  handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>, itemId: string, type: string) => void;
 }
 
 export default function Table({
@@ -17,8 +29,9 @@ export default function Table({
   selectedItems,
   handleChangeItem,
   handleClick,
-}) {
-  const { selectedItemId } = useSelector((state) => state.explorer);
+}: TableProps) {
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
+  const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
   return (
     <table className="min-w-full table-fixed divide-y divide-gray-300">
@@ -28,7 +41,7 @@ export default function Table({
             <input
               type="checkbox"
               className="absolute cursor-pointer left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0 sm:left-6"
-              ref={checkbox}
+              ref={checkboxRef}
               checked={checked}
               onChange={toggleAll}
             />
@@ -92,7 +105,7 @@ export default function Table({
             </td>
             <td className="whitespace-nowrap pl-10 sm:pl-0 px-3 py-4 text-sm text-gray-500">
               {item.item_type === 'file'
-                ? OutputFileSize(item.size)
+                ? OutputFileSize(+item.size)
                 : item.size}
             </td>
           </tr>

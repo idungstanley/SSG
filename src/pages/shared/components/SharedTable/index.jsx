@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import React, {
   useEffect,
   useLayoutEffect,
@@ -47,32 +46,45 @@ export default function SharedTable() {
 
   const items = useMemo(() => [], [data]);
 
-  useMemo(() => data?.folders.map((i) => items.push({
-    icon: 'folder',
-    name: i.folder.name,
-    created_at: i.created_at,
-    size: '-',
-    item_type: 'folder',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () =>
+      data?.folders.map((i) =>
+        items.push({
+          icon: 'folder',
+          name: i.folder.name,
+          created_at: i.created_at,
+          size: '-',
+          item_type: 'folder',
+          id: i.id,
+          updated_at: i.updated_at,
+        })
+      ),
+    [data]
+  );
 
-  useMemo(() => data?.files.map((i) => items.push({
-    icon: i.file.display_name.split('.').at(-1),
-    name: i.file.display_name,
-    created_at: i.created_at,
-    size: i.file.size,
-    item_type: 'file',
-    id: i.id,
-    updated_at: i.updated_at,
-  })), [data]);
+  useMemo(
+    () =>
+      data?.files.map((i) =>
+        items.push({
+          icon: i.file.display_name.split('.').at(-1),
+          name: i.file.display_name,
+          created_at: i.created_at,
+          size: i.file.size,
+          item_type: 'file',
+          id: i.id,
+          updated_at: i.updated_at,
+        })
+      ),
+    [data]
+  );
 
   useLayoutEffect(() => {
-    const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
+    const isIndeterminate =
+      selectedItems.length > 0 && selectedItems.length < items?.length;
 
     if (
-      selectedItems.length === items.length
-      && +selectedItems.length + +items.length > 0
+      selectedItems.length === items.length &&
+      +selectedItems.length + +items.length > 0
     ) {
       setChecked(selectedItems.length === items.length);
     }
@@ -96,12 +108,12 @@ export default function SharedTable() {
       dispatch(
         setSelectedFiles([
           ...items.filter((i) => i.item_type === 'file').map((i) => i.id),
-        ]),
+        ])
       );
       dispatch(
         setSelectedFolders([
           ...items.filter((i) => i.item_type === 'folder').map((i) => i.id),
-        ]),
+        ])
       );
     }
 
@@ -125,12 +137,12 @@ export default function SharedTable() {
         setSelectedItem({
           selectedItemId: itemId,
           selectedItemType: type,
-        }),
+        })
       );
       dispatch(
         type === 'file'
           ? setSelectedFiles([itemId])
-          : setSelectedFolders([itemId]),
+          : setSelectedFolders([itemId])
       );
     }
   };
@@ -141,14 +153,14 @@ export default function SharedTable() {
         type === 'file'
           ? setSelectedFiles([...selectedFileIds.filter((i) => i !== itemId)])
           : setSelectedFolders([
-            ...selectedFolderIds.filter((i) => i !== itemId),
-          ]),
+              ...selectedFolderIds.filter((i) => i !== itemId),
+            ])
       );
     } else {
       dispatch(
         type === 'file'
           ? setSelectedFiles([...selectedFileIds, itemId])
-          : setSelectedFolders([...selectedFolderIds, itemId]),
+          : setSelectedFolders([...selectedFolderIds, itemId])
       );
     }
   };
@@ -157,19 +169,20 @@ export default function SharedTable() {
     () => [
       ...sortItems(
         items?.filter((i) => i.item_type === 'folder'),
-        selectedSortingId,
+        selectedSortingId
       ),
       ...sortItems(
         items?.filter((i) => i.item_type === 'file'),
-        selectedSortingId,
+        selectedSortingId
       ),
     ],
-    [data, selectedSortingId],
+    [data, selectedSortingId]
   );
 
-  const { data: item } = selectedItemType === 'file'
-    ? useGetFile(selectedItemId)
-    : useGetFolder(selectedItemId);
+  const { data: item } =
+    selectedItemType === 'file'
+      ? useGetFile(selectedItemId)
+      : useGetFolder(selectedItemId);
 
   return status === 'loading' ? (
     <div className="mx-auto w-6 mt-10 justify-center">

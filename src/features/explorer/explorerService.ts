@@ -38,7 +38,7 @@ export const useGetFile = (fileId: string | null, enabled = true) => {
 };
 
 // Get all explorer files and folders (for a specific folder)
-export const useGetExplorerFilesAndFolders = (folderId: string) => {
+export const useGetExplorerFilesAndFolders = (folderId?: string) => {
   const queryClient = useQueryClient();
 
   return useQuery<IExplorerFilesAndFolders>(

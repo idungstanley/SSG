@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import React, {
   useEffect,
   useLayoutEffect,
@@ -6,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from '../../../../../common';
 import {
@@ -26,12 +25,23 @@ import Grid from './Grid';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 import ItemPreviewSidebar from '../../../../../components/ItemPreviewSidebar';
+import { useAppSelector } from '../../../../../app/hooks';
+
+export interface IItem {
+  icon: string;
+  name: string;
+  created_at: string;
+  size: string | number;
+  item_type: string;
+  id: string;
+  updated_at: string;
+}
 
 export default function ExplorerTable() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const checkbox = useRef();
+  const checkbox = useRef<{ indeterminate: boolean }>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const {
@@ -41,45 +51,52 @@ export default function ExplorerTable() {
     selectedViewId,
     selectedItemId,
     selectedItemType,
-  } = useSelector((state) => state.explorer);
+  } = useAppSelector((state) => state.explorer);
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
 
   const { data, status } = useGetExplorerFilesAndFolders(folderId);
 
-  const items = useMemo(() => [], [data]);
+  const items: IItem[] = useMemo(() => [], [data]);
 
   useMemo(
-    () => data?.data.folders.map((i) => items.push({
-      icon: 'folder',
-      name: i.name,
-      created_at: i.created_at,
-      size: '-',
-      item_type: 'folder',
-      id: i.id,
-      updated_at: i.updated_at,
-    })),
-    [data],
+    () =>
+      data?.data.folders.map((i) =>
+        items.push({
+          icon: 'folder',
+          name: i.name,
+          created_at: i.created_at,
+          size: '-',
+          item_type: 'folder',
+          id: i.id,
+          updated_at: i.updated_at,
+        })
+      ),
+    [data]
   );
 
   useMemo(
-    () => data?.data.files.map((i) => items.push({
-      icon: i.file_format.key,
-      name: i.display_name,
-      created_at: i.created_at,
-      size: i.size,
-      item_type: 'file',
-      id: i.id,
-      updated_at: i.updated_at,
-    })),
-    [data],
+    () =>
+      data?.data.files.map((i) =>
+        items.push({
+          icon: i.file_format.key,
+          name: i.display_name,
+          created_at: i.created_at,
+          size: i.size,
+          item_type: 'file',
+          id: i.id,
+          updated_at: i.updated_at,
+        })
+      ),
+    [data]
   );
 
   useLayoutEffect(() => {
-    const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
+    const isIndeterminate =
+      selectedItems.length > 0 && selectedItems.length < items?.length;
 
     if (
-      selectedItems.length === items.length
-      && +selectedItems.length + +items.length > 0
+      selectedItems.length === items.length &&
+      +selectedItems.length + +items.length > 0
     ) {
       setChecked(selectedItems.length === items.length);
     }
@@ -103,12 +120,12 @@ export default function ExplorerTable() {
       dispatch(
         setSelectedFiles([
           ...items.filter((i) => i.item_type === 'file').map((i) => i.id),
-        ]),
+        ])
       );
       dispatch(
         setSelectedFolders([
           ...items.filter((i) => i.item_type === 'folder').map((i) => i.id),
-        ]),
+        ])
       );
     }
 
@@ -116,46 +133,55 @@ export default function ExplorerTable() {
     setIndeterminate(false);
   }
 
-  const handleClick = (e, itemId, type) => {
-    if (selectedItems.length && !e.target.value) {
+  const handleClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    itemId: string,
+    type: string
+  ) => {
+    const target = e.target as HTMLButtonElement;
+    if (selectedItems.length && !target.value) {
       dispatch(resetSelectedFilesAndFolders());
     }
 
-    if (!e.target.value && selectedFolderIds.includes(itemId)) {
+    if (!target.value && selectedFolderIds.includes(itemId)) {
       navigate(`/explorer/${itemId}`, { replace: true });
       dispatch(resetSelectedFilesAndFolders());
       setChecked(false);
     }
 
-    if (!e.target.value) {
+    if (!target.value) {
       dispatch(
         setSelectedItem({
           selectedItemId: itemId,
           selectedItemType: type,
-        }),
+        })
       );
       dispatch(
         type === 'file'
           ? setSelectedFiles([itemId])
-          : setSelectedFolders([itemId]),
+          : setSelectedFolders([itemId])
       );
     }
   };
 
-  const handleChangeItem = (e, itemId, type) => {
+  const handleChangeItem = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    itemId: string,
+    type: string
+  ) => {
     if (!e.target.checked) {
       dispatch(
         type === 'file'
           ? setSelectedFiles([...selectedFileIds.filter((i) => i !== itemId)])
           : setSelectedFolders([
-            ...selectedFolderIds.filter((i) => i !== itemId),
-          ]),
+              ...selectedFolderIds.filter((i) => i !== itemId),
+            ])
       );
     } else {
       dispatch(
         type === 'file'
           ? setSelectedFiles([...selectedFileIds, itemId])
-          : setSelectedFolders([...selectedFolderIds, itemId]),
+          : setSelectedFolders([...selectedFolderIds, itemId])
       );
     }
   };
@@ -164,19 +190,20 @@ export default function ExplorerTable() {
     () => [
       ...sortItems(
         items?.filter((i) => i.item_type === 'folder'),
-        selectedSortingId,
+        selectedSortingId
       ),
       ...sortItems(
         items?.filter((i) => i.item_type === 'file'),
-        selectedSortingId,
+        selectedSortingId
       ),
     ],
-    [data, selectedSortingId],
+    [data, selectedSortingId]
   );
 
-  const { data: item } = selectedItemType === 'file'
-    ? useGetFile(selectedItemId)
-    : useGetFolder(selectedItemId);
+  const { data: item } =
+    selectedItemType === 'file'
+      ? useGetFile(selectedItemId)
+      : useGetFolder(selectedItemId);
 
   return status === 'loading' ? (
     <div className="mx-auto w-6 mt-10 justify-center">

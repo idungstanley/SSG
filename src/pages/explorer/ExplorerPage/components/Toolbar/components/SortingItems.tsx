@@ -8,10 +8,12 @@ import {
   SortDescendingIcon,
   ClockIcon,
 } from '@heroicons/react/outline';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSelectedSorting } from '../../../../../../features/explorer/explorerSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { IItem } from '../../ListItems';
 
-export const sortItems = (items, sortType) => items.sort((a, b) => (sortType === 1
+export const sortItems = (items: IItem[], sortType: number) => items.sort((a, b) => (sortType === 1
   ? b.created_at.localeCompare(a.created_at)
   : sortType === 2
     ? a.created_at.localeCompare(b.created_at)
@@ -86,17 +88,17 @@ const sortingItems = [
   },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function Sorting() {
   const dispatch = useDispatch();
-  const { selectedSortingId } = useSelector((state) => state.explorer);
+  const { selectedSortingId } = useAppSelector((state) => state.explorer);
 
-  const handleClick = (item) => {
-    dispatch(setSelectedSorting(item));
-    localStorage.setItem('selectedSortingId', JSON.stringify(item));
+  const handleClick = (itemId: number) => {
+    dispatch(setSelectedSorting(itemId));
+    localStorage.setItem('selectedSortingId', JSON.stringify(itemId));
   };
 
   const selectedItem = sortingItems.find((i) => i.id === selectedSortingId);
@@ -107,11 +109,11 @@ export default function Sorting() {
       className="relative inline-block text-left whitespace-nowrap"
     >
       <div>
-        <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0">
+        {selectedItem ? <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0">
           {selectedItem.icon}
           <span className="hidden sm:block">{selectedItem.title}</span>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
-        </Menu.Button>
+        </Menu.Button> : null}
       </div>
 
       <Transition
@@ -134,7 +136,7 @@ export default function Sorting() {
                     'group flex items-center px-4 py-2 text-sm w-full',
                     selectedSortingId === i.id
                       ? 'bg-gray-100 text-gray-900'
-                      : null,
+                      : '',
                   )}
                   onClick={() => handleClick(i.id)}
                 >

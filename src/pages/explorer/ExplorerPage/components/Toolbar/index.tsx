@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -30,22 +30,21 @@ import CreateNewSelect from './components/CreateNewSelect';
 import SortingItems from './components/SortingItems';
 import ChangeView from './components/ChangeView';
 import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
+import { useAppSelector } from '../../../../../app/hooks';
 
 export default function Toolbar() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { folderId } = useParams();
 
-  const selectedItemType = useSelector(
-    (state) => state.explorer.selectedItemType,
-  );
   const {
     selectedItemId,
     selectedFileIds,
     selectedFolderIds,
     fileIdsToPaste,
     folderIdsToPaste,
-  } = useSelector((state) => state.explorer);
+    selectedItemType,
+  } = useAppSelector((state) => state.explorer);
 
   const { data: file } = useGetFile(
     selectedItemId,
@@ -131,9 +130,9 @@ export default function Toolbar() {
   };
 
   const onDownload = () => {
-    const itemName = selectedItemType === 'file' ? file.display_name : `${folder.name}.zip`;
+    const itemName = selectedItemType === 'file' ? file?.display_name : `${folder?.name}.zip`;
 
-    if (selectedFileIds.length === 1 || selectedFolderIds.length === 1) {
+    if ((selectedFileIds.length === 1 || selectedFolderIds.length === 1) && selectedItemType && selectedItemId && itemName) {
       DownloadFile(selectedItemType, selectedItemId, itemName);
     }
   };

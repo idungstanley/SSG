@@ -5,8 +5,9 @@ import {
   ViewGridIcon,
   ViewListIcon,
 } from '@heroicons/react/outline';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSelectedViewId } from '../../../../../../features/explorer/explorerSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 const sortingItems = [
   {
@@ -31,22 +32,22 @@ const sortingItems = [
   },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function ChangeView() {
   const dispatch = useDispatch();
-  const { selectedViewId } = useSelector((state) => state.explorer);
+  const { selectedViewId } = useAppSelector((state) => state.explorer);
 
-  const handleClick = (item) => {
-    dispatch(setSelectedViewId(item));
-    localStorage.setItem('selectedView', JSON.stringify(item));
+  const handleClick = (itemId: number) => {
+    dispatch(setSelectedViewId(itemId));
+    localStorage.setItem('selectedView', JSON.stringify(itemId));
   };
 
   const selectedItem = sortingItems.find((i) => i.id === selectedViewId);
 
-  return (
+  return selectedItem ? (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0">
@@ -74,7 +75,7 @@ export default function ChangeView() {
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full',
-                    selectedViewId === i.id ? 'bg-gray-100 text-gray-900' : null,
+                    selectedViewId === i.id ? 'bg-gray-100 text-gray-900' : '',
                   )}
                   onClick={() => handleClick(i.id)}
                 >
@@ -87,5 +88,5 @@ export default function ChangeView() {
         </Menu.Items>
       </Transition>
     </Menu>
-  );
+  ) : null;
 }

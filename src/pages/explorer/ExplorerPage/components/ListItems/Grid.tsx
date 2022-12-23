@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { LegacyRef } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { OutputDateTime } from '../../../../../app/helpers';
 import { FileIcon } from '../../../../../common';
+import { IItem } from '../ListItems';
+import { useAppSelector } from '../../../../../app/hooks';
+
+interface GridProps {
+  checkbox: React.RefObject<{
+    indeterminate: boolean;
+  }>;
+  checked: boolean;
+  toggleAll: () => void;
+  sortedItems: IItem[];
+  selectedItems: string[];
+  handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, itemId: string, type: string) => void;
+}
 
 export default function Grid({
   checkbox,
@@ -12,8 +25,9 @@ export default function Grid({
   selectedItems,
   handleChangeItem,
   handleClick,
-}) {
-  const { selectedItemId } = useSelector((state) => state.explorer);
+}: GridProps) {
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
+  const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
   return (
     <>
@@ -22,7 +36,7 @@ export default function Grid({
           <input
             type="checkbox"
             className="absolute cursor-pointer left-4 top-1/2 mt-3 h-4 w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0 sm:left-6"
-            ref={checkbox}
+            ref={checkboxRef}
             checked={checked}
             onChange={toggleAll}
           />

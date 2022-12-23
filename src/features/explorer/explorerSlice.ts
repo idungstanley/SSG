@@ -36,8 +36,8 @@ import { logout, switchWorkspace } from '../auth/authSlice';
 
 const fileIdsToPaste: string[] = JSON.parse(localStorage.getItem('fileIdsToPaste') || '""') || [];
 const folderIdsToPaste: string[] = JSON.parse(localStorage.getItem('folderIdsToPaste') || '""') || [];
-const selectedSortingId: string = JSON.parse(localStorage.getItem('selectedSortingId') || '""') || 1;
-const selectedViewId: string = JSON.parse(localStorage.getItem('selectedView') || '""') || 1;
+const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '"1"') || 1;
+const selectedViewId: number = JSON.parse(localStorage.getItem('selectedView') || '"1"') || 1;
 
 interface ExplorerState {
   selectedItemId: string | null;
@@ -47,8 +47,8 @@ interface ExplorerState {
 
   selectedFileIds: string[];
   selectedFolderIds: string[];
-  selectedSortingId: string;
-  selectedViewId: string;
+  selectedSortingId: number;
+  selectedViewId: number;
 
   fileIdsToPaste: string[];
   folderIdsToPaste: string[];

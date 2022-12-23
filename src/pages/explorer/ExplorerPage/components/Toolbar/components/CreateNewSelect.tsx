@@ -5,7 +5,7 @@ import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
 import { useDispatch } from 'react-redux';
 import { setCreateFolderSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
