@@ -1,6 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+interface HubState {
+  hub: string[]
+}
+
+const initialState : HubState = {
   hub: [],
 };
 

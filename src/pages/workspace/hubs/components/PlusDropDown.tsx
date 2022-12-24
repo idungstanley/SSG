@@ -11,15 +11,18 @@ import {
   PencilAltIcon,
   TemplateIcon,
 } from '@heroicons/react/outline';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../Lists/components/ListModal';
 import { classNames } from "../../../../utils";
 
-function PlusDropDown({ walletId }) {
-  const [showWalletModal, setShowWalletModal] = useState(false);
-  const [showListModal, setShowListModal] = useState(false);
+interface PlusDropDownProps {
+  walletId: string
+};
+
+function PlusDropDown({ walletId }: PlusDropDownProps) {
+  const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
+  const [showListModal, setShowListModal] = useState<boolean>(false);
 
   return (
     <>
@@ -150,13 +153,5 @@ function PlusDropDown({ walletId }) {
     </>
   );
 }
-
-PlusDropDown.defaultProps = {
-  walletId: '',
-};
-
-PlusDropDown.propTypes = {
-  walletId: PropTypes.string,
-};
 
 export default PlusDropDown;

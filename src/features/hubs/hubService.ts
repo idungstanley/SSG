@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-export const createHubService = (data) => {
+export const createHubService = (data: { name: string; currentWorkspaceId?: string}) => {
   const response = requestNew(
     {
       url: 'hubs',
@@ -13,7 +12,7 @@ export const createHubService = (data) => {
       },
     },
     false,
-    true,
+    true
   );
   return response;
 };
@@ -22,7 +21,7 @@ export const createHubService = (data) => {
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<any>(
     ['hubs'],
     () => requestNew(
       {
@@ -34,13 +33,13 @@ export const useGetHubList = () => {
     ),
     {
       onSuccess: (data) => {
-        data.data.hubs.map((hub) => queryClient.setQueryData(['hub', hub.id], hub));
+        data.data.hubs.map((hub: {type: string | null; id: string | null}) => queryClient.setQueryData(['hub', hub.id], hub));
       },
     },
   );
 };
 
-export const useGetHub = (hubId) => useQuery([`hub-${hubId}`], () => requestNew(
+export const useGetHub = (hubId: string | null ) => useQuery([`hub-${hubId}`], () => requestNew(
   {
     url: `hubs/${hubId}`,
     method: 'GET',
@@ -48,12 +47,3 @@ export const useGetHub = (hubId) => useQuery([`hub-${hubId}`], () => requestNew(
   false,
   true,
 ));
-
-export const useCreateHub = () => {
-  const queryClient = useQueryClient();
-  return useMutation(createHubService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['hubs']);
-    },
-  });
-};

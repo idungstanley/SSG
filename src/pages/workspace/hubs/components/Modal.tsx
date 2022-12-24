@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
 import { createHubService } from '../../../../features/hubs/hubService';
 
-function Modal({ isVisible, onCloseHubModal }) {
+interface ModalProps {
+  isVisible: boolean;
+  onCloseHubModal: any;
+}
+
+function Modal({ isVisible, onCloseHubModal } : ModalProps) {
   const queryClient = useQueryClient();
 
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('hubdata');
+      queryClient.invalidateQueries();
       onCloseHubModal();
     },
   });
@@ -21,12 +25,12 @@ function Modal({ isVisible, onCloseHubModal }) {
 
   const [formState, setFormState] = useState(defaultHubFormState);
 
-  const handleHubChange = (e) => {
+  const handleHubChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId'),
+    localStorage.getItem('currentWorkspaceId') || '"',
   );
 
   const { name } = formState;
@@ -84,8 +88,6 @@ function Modal({ isVisible, onCloseHubModal }) {
               <Button
                 buttonStyle="primary"
                 onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
                 label="Create Hub"
                 padding="py-2 px-4"
                 height="h-10"
@@ -98,14 +100,5 @@ function Modal({ isVisible, onCloseHubModal }) {
     </div>
   );
 }
-
-Modal.defaultProps = {
-  isVisible: false,
-};
-
-Modal.propTypes = {
-  isVisible: PropTypes.bool,
-  onCloseHubModal: PropTypes.func.isRequired,
-};
 
 export default Modal;
