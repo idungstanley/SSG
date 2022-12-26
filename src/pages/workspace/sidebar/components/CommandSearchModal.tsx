@@ -30,14 +30,4 @@ function CommandSearchModal({
   );
 }
 
-CommandSearchModal.defaultProps = {
-  commandSearchVisible: false,
-  // onCloseCommandSearchModal: false,
-};
-
-CommandSearchModal.propTypes = {
-  commandSearchVisible: PropTypes.bool,
-  onCloseCommandSearchModal: PropTypes.func.isRequired,
-};
-
 export default CommandSearchModal;

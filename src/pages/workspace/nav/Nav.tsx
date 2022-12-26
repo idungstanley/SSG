@@ -51,20 +51,4 @@ function Nav({
   );
 }
 
-Nav.defaultProps = {
-  navName: null,
-  newd: null,
-  Cleared: null,
-  Assigned: null,
-  buttonLabel: null,
-};
-
-Nav.propTypes = {
-  navName: PropTypes.string,
-  newd: PropTypes.string,
-  Cleared: PropTypes.string,
-  Assigned: PropTypes.string,
-  buttonLabel: PropTypes.string,
-};
-
 export default Nav;
