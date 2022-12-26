@@ -4,9 +4,9 @@ import { classNames } from "../utils";
 
 interface ButtonProps {
   buttonStyle?: string,
-  onClick?: () => Promise<void> | null;
+  onClick?: () => Promise<void> | void;
   loading? : boolean;
-  label?: string;
+  label?: string | null;
   icon?: string;
   width?: string | number;
   height?: string;
@@ -93,7 +93,7 @@ function Button({
       )}
     >
       {loading ? (
-        <div className="items-center -mt-1 justify-center w-full">
+        <div className="items-center justify-center w-full -mt-1">
           <Spinner
             size={18}
             color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'}

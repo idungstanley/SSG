@@ -1,10 +1,20 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { useAppSelector } from '../../../app/hooks'
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import Nav from '../nav/Nav';
 
-const config = [
+interface configData {
+  path: string
+  title: string
+  newd: string | null
+  Cleared: string | null
+  Assigned: string | null 
+  buttonLabel: string | null
+}
+
+const config: configData[] = [
   {
     path: '',
     title: 'Home',
@@ -50,7 +60,7 @@ const config = [
 export default function Header() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { showSidebar } = useSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.workspace);
 
   const headerData = config.find((i) => `/workspace${i.path}` === pathname);
 
@@ -59,7 +69,7 @@ export default function Header() {
       {!showSidebar ? (
         <button
           type="button"
-          className="border-r px-4 text-gray-500 focus:outline-none ring-0 focus:ring-0"
+          className="px-4 text-gray-500 border-r focus:outline-none ring-0 focus:ring-0"
           onClick={() => dispatch(setShowSidebar(true))}
         >
           <span className="sr-only">Open sidebar</span>

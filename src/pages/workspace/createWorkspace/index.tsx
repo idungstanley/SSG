@@ -18,6 +18,8 @@ import {
   selectCurrentUser,
   setCurrentUser,
 } from '../../../features/auth/authSlice';
+import { string } from 'prop-types';
+
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
@@ -65,13 +67,13 @@ function CreateWorkspace() {
 
   const [formState, setFormState] = useState(defaultFormState);
   const [bgAvatar, setBgAvatart] = useState('red');
-  const [companySize, setCompanySize] = useState(0);
+  const [companySize, setCompanySize] = useState('0');
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const selectedCompanySize = (value:number) => {
+const selectedCompanySize = (value: string) => {
     setCompanySize(value);
   };
 
@@ -158,8 +160,6 @@ function CreateWorkspace() {
                   key={value}
                   buttonStyle="primary"
                   onClick={() => selectedCompanySize(value)}
-                  // loading={loginMutation.status === 'loading'}
-                  type="button"
                   label={label}
                   padding="py-2 px-4"
                   height="h-10"
@@ -183,8 +183,6 @@ function CreateWorkspace() {
             <Button
               buttonStyle="primary"
               onClick={onSubmit}
-              // loading={loginMutation.status === 'loading'}
-              type="submit"
               label="Create Workspace"
               padding="py-2 px-4"
               height="h-10"

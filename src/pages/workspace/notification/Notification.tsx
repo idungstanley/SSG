@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Notification() {
+const Notification: React.FC = ()=> {
   return <p>This is notification page</p>;
 }
 
