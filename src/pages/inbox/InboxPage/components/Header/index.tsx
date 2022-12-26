@@ -96,12 +96,12 @@ function Header() {
         <h1 className="text-lg font-medium leading-6 text-gray-900 sm:truncate mr-5 inline-block align-middle">
           Inbox
         </h1>
-        <div className="w-96 z-40">
+        <div className="w-96 z-40 mr-2">
           <SelectInboxMenu />
         </div>
       </div>
 
-      <div className="relative flex lg:mt-0 lg:ml-4 space-x-3">
+      <div className="relative flex lg:mt-0 space-x-3">
         <MinMenuForResponsible />
         {menuItems.map((i) => (
           <Button

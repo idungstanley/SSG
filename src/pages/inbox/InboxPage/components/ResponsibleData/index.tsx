@@ -52,7 +52,7 @@ export default function ResponsibleData({
 
   if (status === 'loading') {
     return (
-      <div className="absolute top-14 right-52 p-6 rounded-xl border bg-white z-50 w-80">
+      <div className="absolute top-14 p-6 rounded-xl border bg-white z-50 w-80">
         <div className="mx-auto w-6 justify-center">
           <Spinner size={22} color="#0F70B7" />
         </div>
@@ -62,7 +62,7 @@ export default function ResponsibleData({
 
   if (status === 'error') {
     return (
-      <div className="absolute top-14 right-52 p-6 rounded-xl border bg-white z-50 w-80">
+      <div className="absolute top-14 p-6 rounded-xl border bg-white z-50 w-80">
         <FullScreenMessage
           title="Oops, an error occurred :("
           description="Please try again later."

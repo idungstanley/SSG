@@ -83,6 +83,6 @@ export default function NavigationBetweenFiles() {
           />
         ))}
       </div>
-    ) : null
+    ) : <div />
   ) : null;
 }
