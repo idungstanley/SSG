@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -27,31 +33,40 @@ export default function TableWithSelection() {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const { mutate: multipleArchive } = useMultipleArchiveOrUnArchive();
 
-  const { selectedInboxTabKey, selectedInboxFileId } = useAppSelector(
-    (state) => state.inbox
-  );
+  const { selectedInboxTabKey, selectedInboxFileId, selectedInboxFileIndex } =
+    useAppSelector((state) => state.inbox);
 
   const { data, status } = useGetInboxFiles({
     inboxId,
     isArchived: selectedInboxTabKey === 'archived',
   });
 
-  const inboxFiles: IInboxFiles[] = [];
+  const inboxFiles: IInboxFiles[] = useMemo(() => [], [data]);
 
-  data?.pages.flatMap((page) =>
-    page.data.inbox_files.map((i) =>
-      inboxFiles.push({
-        id: i.id,
-        name: (
-          <FileIcon
-            extensionKey={i.inbox_file_source.file_format.key}
-            size={10}
-          />
-        ),
-        title: i.inbox_file_source.display_name,
-      })
-    )
+  useMemo(
+    () =>
+      data?.pages.flatMap((page) =>
+        page.data.inbox_files.map((i) =>
+          inboxFiles.push({
+            id: i.id,
+            name: (
+              <FileIcon
+                extensionKey={i.inbox_file_source.file_format.key}
+                size={10}
+              />
+            ),
+            title: i.inbox_file_source.display_name,
+          })
+        )
+      ),
+    [data]
   );
+
+  useEffect(() => {
+    if (selectedInboxFileId) {
+      setSelectedFiles([selectedInboxFileId]);
+    }
+  }, [selectedInboxFileIndex]);
 
   useLayoutEffect(() => {
     const isIndeterminate =
@@ -77,7 +92,11 @@ export default function TableWithSelection() {
     setIndeterminate(false);
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, fileId: string, index: number) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    fileId: string,
+    index: number
+  ) => {
     const target = e.target as HTMLButtonElement;
 
     if (selectedFiles.length) {
@@ -95,8 +114,10 @@ export default function TableWithSelection() {
     }
   };
 
-  const handleChangeInbox = (e: React.ChangeEvent<HTMLInputElement>, fileId: string) => {
-
+  const handleChangeInbox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fileId: string
+  ) => {
     setSelectedFiles(
       e.target.checked
         ? [...selectedFiles, fileId]

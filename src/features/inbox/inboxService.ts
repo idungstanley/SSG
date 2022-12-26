@@ -197,7 +197,6 @@ const archiveOrUnarchiveInboxFile = (data: {
   inboxFileId: string;
   type: 'archive' | 'unarchive';
 }) => {
-
   const response = requestNew({
     url: `inbox-files/${data.inboxFileId}/${data.type}`,
     method: 'POST',
@@ -261,17 +260,15 @@ export const useMultipleArchiveOrUnArchive = () => {
   });
 };
 
-const fileActivity = (fileId: string) => {
-  const request = requestNew({
-    url: `inbox-files/${fileId}/activity-logs`,
-    method: 'GET',
-  });
-  return request;
-};
-
-export const useGetInboxFileActivity = (fileId: string) =>
-  useQuery<IInboxFileLogsReq>([`inbox-${fileId}-activity`], () =>
-    fileActivity(fileId)
+export const useGetInboxFileActivity = (fileId: string | null) =>
+  useQuery<IInboxFileLogsReq>(
+    [`inbox-${fileId}-activity`],
+    () =>
+      requestNew({
+        url: `inbox-files/${fileId}/activity-logs`,
+        method: 'GET',
+      }),
+    { enabled: !!fileId }
   );
 
 // responsible inbox team members and groups
@@ -386,10 +383,7 @@ export const useDeleteInboxFile = () => {
 };
 
 // email list
-export const addEmailToList = (data: {
-  inboxId?: string;
-  email: string;
-}) => {
+export const addEmailToList = (data: { inboxId?: string; email: string }) => {
   const request = requestNew({
     url: `inboxes/${data.inboxId}/email-list`,
     method: 'POST',
