@@ -12,13 +12,16 @@ import { useAppSelector } from '../../../app/hooks'
 
 interface Idata {
   id: string
-  created_at: string | null
-  size: string | number
+  created_at: string
+  size: number | null
   icon: string
   display_name: string
   name: string
+  file_format: {
+    extension: string
+  }
   inbox_file_source: {
-    size: string | number
+    size: number | null
     file_format: {
       extension: string
     }
@@ -26,7 +29,18 @@ interface Idata {
   }
   ancestor_path: string
   from: string
-  updated_at: string | null
+  updated_at: string
+}
+
+interface allResultData {
+  id: string
+  createdAt:string
+  size: number | null
+  icon:string
+  name: string
+  path: string | null
+  from: string
+  updatedAt: string
 }
 
 interface dataProps {
@@ -59,8 +73,8 @@ export default function SearchPage() {
     }
   }, [debouncedValue]);
 
-  const allResults: any[] = [];
-  files?.map((i:any) => allResults.push({
+  const allResults: allResultData[] = [];
+  files?.map((i) => allResults.push({
     id: i.id,
     createdAt: i.created_at,
     size: i.size,

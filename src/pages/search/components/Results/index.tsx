@@ -2,13 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Item from '../Item';
 
+
 interface data {
   id: string
+  createdAt: string
+  size: number | null
+  icon: string
+  name: string
+  path: string | null
+  from: string
+  updatedAt: string
 }
 interface dataProps {
-  data: data[]
+    data: data[]
 }
-const Results: React.FC<dataProps> =({ data }) => {
+const Results=({ data }: dataProps) => {
   return (
     <div className="h-full bg-white overflow-x-none">
       <div className="overflow-x-none">
@@ -66,8 +74,5 @@ const Results: React.FC<dataProps> =({ data }) => {
   );
 }
 
-Results.propTypes = {
-  data: PropTypes.array.isRequired,
-};
 
 export default Results;

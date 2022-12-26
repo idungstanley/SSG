@@ -7,17 +7,19 @@ import { setSelectedItem } from '../../../../features/search/searchSlice';
 import { useAppSelector } from '../../../../app/hooks'
 
 
-interface Idata {
+interface dataProps {
   data: {
-    id: string,
-    name: string,
-    icon: string | any,
-    createdAt: string | any,
-    size: number,
+    id: string
+    createdAt: string
+    size: number | null
+    icon: string
+    name: string
+    path: string | null
     from: string
-  } | any
+    updatedAt: string
+  }
 }
-const Item: React.FC <Idata> = ({ data }) => {
+const Item = ({ data}: dataProps ) => {
   const dispatch = useDispatch();
   const { selectedItemId } = useAppSelector((state) => state.search);
 
@@ -74,8 +76,5 @@ const Item: React.FC <Idata> = ({ data }) => {
   );
 }
 
-Item.propTypes = {
-  data: PropTypes.object.isRequired,
-};
 
 export default Item;
