@@ -41,7 +41,7 @@ export const inboxSlice = createSlice({
       state.selectedInboxTabKey = 'inbox';
       state.folderIdsForFiling = [];
     },
-    setCurrentInboxFile: (state, action: PayloadAction<{ inboxFileId: string, inboxFileIndex: number }>) => {
+    setCurrentInboxFile: (state, action: PayloadAction<{ inboxFileId: string | null, inboxFileIndex: number }>) => {
       state.selectedInboxFileId = action.payload.inboxFileId;
       state.selectedInboxFileIndex = action.payload.inboxFileIndex;
       state.searchFoldersQuery = '';

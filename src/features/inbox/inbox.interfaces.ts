@@ -37,7 +37,7 @@ interface IFolderAncestor {
   updated_at: string;
 }
 
-interface IFolderForFilling {
+export interface IFolderForFilling {
   id: string;
   name: string;
   parent_id: null | string;
@@ -57,7 +57,7 @@ export interface IFoldersForFillingReq {
   };
 }
 
-interface IInboxFile {
+export interface IInboxFile {
   id: string;
   inbox_file_source: {
     id: string;
@@ -67,7 +67,12 @@ interface IInboxFile {
       name: string;
     };
     sent_from_email: null | string;
-    created_by_team_member: null | string;
+    created_by_team_member: null | {
+      user: {
+        name: string;
+        email: string;
+      };
+    };
     display_name: string;
     size: number;
     file_format: {
@@ -102,12 +107,63 @@ export interface IInboxFilesReq {
 }
 
 interface IEmail {
-  id: string
-  email: string
+  id: string;
+  email: string;
 }
 
 export interface IEmailListReq {
   data: {
-    list: IEmail[]
-  }
+    list: IEmail[];
+  };
+}
+
+interface IResponsibleTeamMemberAndGroup {
+  id: string;
+  team_member_group_id?: string;
+  team_member_id?: string;
+  team_member_group?: {
+    name: string;
+  };
+  team_member?: {
+    user: {
+      name: string;
+      email: string;
+    };
+  };
+}
+
+export interface IResponsibleDataReq {
+  data: {
+    inbox_responsible_team_member_groups?: IResponsibleTeamMemberAndGroup[];
+    inbox_responsible_team_members?: IResponsibleTeamMemberAndGroup[];
+  };
+}
+
+interface IBlacklistFile {
+  id: string;
+  inbox_file: {
+    id: string;
+  };
+}
+
+export interface IBlackListInboxFilesReq {
+  data: {
+    blacklist: IBlacklistFile[];
+  };
+}
+
+interface IInboxFileLog {
+  id: string;
+  type: string;
+  team_member: {
+    colour: string;
+    initials: string;
+    name: string;
+  } | null;
+}
+
+export interface IInboxFileLogsReq {
+  data: {
+    logs: IInboxFileLog[];
+  };
 }
