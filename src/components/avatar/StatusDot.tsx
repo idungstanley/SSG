@@ -1,11 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+interface statusType {
+  on: string
+  colour: string
+  size: number
+  ringSize: number
+  top: boolean
+}
 
 function StatusDot({
   on, colour, size, ringSize, top,
-}) {
+}: statusType) {
   return (
-    <span className="inline-block relative">
+    <span className="relative inline-block">
       {on}
       <span
         className={`absolute ${
@@ -22,14 +29,6 @@ StatusDot.defaultProps = {
   colour: '#4ADE80',
   ringSize: 2,
   top: true,
-};
-
-StatusDot.propTypes = {
-  on: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  colour: PropTypes.string,
-  size: PropTypes.number,
-  ringSize: PropTypes.number,
-  top: PropTypes.bool,
 };
 
 export default StatusDot;
