@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 export const createHubService = (data: { name: string; currentWorkspaceId?: string}) => {
@@ -21,7 +21,7 @@ export const createHubService = (data: { name: string; currentWorkspaceId?: stri
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
 
-  return useQuery<any>(
+  return useQuery(
     ['hubs'],
     () => requestNew(
       {
