@@ -1,20 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { TrashIcon } from '@heroicons/react/solid';
 import {
   useDeleteEmailFromList,
   useGetEmailList,
-} from '../../../../../features/inbox/inboxesService';
+} from '../../../../../features/inbox/inboxService';
 import { Spinner } from '../../../../../common';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../../../../app/hooks';
 
 export default function EmailList() {
-  const { currentInboxId } = useSelector((state) => state.inbox);
-  const { data, status } = useGetEmailList(currentInboxId);
-  const { mutate: deleteEmail } = useDeleteEmailFromList(currentInboxId);
+  const { currentInboxId } = useAppSelector((state) => state.inbox);
+  const { data, status } = useGetEmailList(currentInboxId || '');
+  const { mutate: deleteEmail } = useDeleteEmailFromList(currentInboxId || '');
   const list = data?.data.list;
 
-  const handleDelete = (emailId) => {
+  const handleDelete = (emailId: string) => {
     deleteEmail({
       inboxId: currentInboxId,
       emailId,

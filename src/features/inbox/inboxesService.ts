@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IResponseInboxes, IPinnedInboxes, inboxType, IInbox } from "./inbox.interfaces";
+import { inboxType } from '../../types';
+import { IResponseInboxes, IPinnedInboxes, IInbox } from "./inbox.interfaces";
 
 // Get all inboxes
 export const useGetInboxes = () => {
@@ -311,51 +312,6 @@ export const useBlacklistFile = () => {
   return useMutation(blacklistFile, {
     onSuccess: () => {
       queryClient.invalidateQueries(['blacklist-files']);
-    },
-  });
-};
-
-// email list
-export const addEmailToList = (data: {inboxId: string, email: string}) => {
-  const request = requestNew({
-    url: `inboxes/${data.inboxId}/email-list`,
-    method: 'POST',
-    data: {
-      email: data.email,
-    },
-  });
-  return request;
-};
-
-export const deleteEmailFromList = (data: {inboxId: string, emailId: string}) => {
-  const request = requestNew({
-    url: `/inboxes/${data.inboxId}/email-list/${data.emailId}`,
-    method: 'DELETE',
-  });
-  return request;
-};
-
-export const useGetEmailList = (inboxId: string) => useQuery([`email-list-${inboxId}`], () => requestNew({
-  url: `inboxes/${inboxId}/email-list`,
-  method: 'GET',
-}));
-
-export const useAddEmailToList = (inboxId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(addEmailToList, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`email-list-${inboxId}`]);
-    },
-  });
-};
-
-export const useDeleteEmailFromList = (inboxId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(deleteEmailFromList, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`email-list-${inboxId}`]);
     },
   });
 };

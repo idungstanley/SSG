@@ -5,12 +5,13 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IEmailListReq, IFoldersForFillingReq, IInboxFilesReq } from './inbox.interfaces';
 
 // Get inbox files
-export const useGetInboxFiles = ({ inboxId, isArchived }) => {
+export const useGetInboxFiles = ({ inboxId, isArchived }: {inboxId: string, isArchived: boolean}) => {
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery(
+  return useInfiniteQuery<IInboxFilesReq>(
     ['inbox_files', inboxId, { isArchived }],
     async ({ pageParam = 0 }) => {
       const url = `inboxes/${inboxId}/inbox-files`;
@@ -27,7 +28,11 @@ export const useGetInboxFiles = ({ inboxId, isArchived }) => {
     {
       enabled: inboxId != null && isArchived != null,
       onSuccess: (data) => {
-        data.pages.map((page) => page.data.inbox_files.map((inboxFile) => queryClient.setQueryData(['inbox_file', inboxFile.id], inboxFile)));
+        data.pages.map((page) =>
+          page.data.inbox_files.map((inboxFile) =>
+            queryClient.setQueryData(['inbox_file', inboxFile.id], inboxFile)
+          )
+        );
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.pagination.has_more_pages) {
@@ -36,12 +41,12 @@ export const useGetInboxFiles = ({ inboxId, isArchived }) => {
 
         return false;
       },
-    },
+    }
   );
 };
 
 // Get inbox file
-export const useGetInboxFile = (inboxFileId) => {
+export const useGetInboxFile = (inboxFileId: string) => {
   // TODO: If not in cache... get from endpoint (hard get)
   // Default data should use the previously set data TODO check...
 
@@ -53,32 +58,33 @@ export const useGetInboxFile = (inboxFileId) => {
     {
       initialData: () => queryClient.getQueryData(['inbox_file', inboxFileId]),
       enabled: inboxFileId != null,
-    },
+    }
   );
 };
 
 // Get inbox file full details
-export const useGetInboxFileFullDetails = (inboxFileId) => {
+export const useGetInboxFileFullDetails = (inboxFileId: string) => {
   const url = `inbox-files/${inboxFileId}/details`;
   return useQuery(
     ['inbox_file_full_details', inboxFileId],
-    () => requestNew({
-      url,
-      method: 'GET',
-    }),
+    () =>
+      requestNew({
+        url,
+        method: 'GET',
+      }),
     {
       select: (data) => data.data.inbox_file,
       enabled: inboxFileId != null,
       staleTime: 0, // So it refetches which inboxes the file is assigned to
-    },
+    }
   );
 };
 
 // Search folders for filing
-export const useSearchFoldersForFiling = (query) => {
+export const useSearchFoldersForFiling = (query: string) => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IFoldersForFillingReq>(
     ['inbox_folder_search', query],
     async () => {
       const url = 'search/folders-for-inbox';
@@ -93,23 +99,28 @@ export const useSearchFoldersForFiling = (query) => {
     },
     {
       onSuccess: (data) => {
-        data.data.folders.map((folder) => queryClient.setQueryData(
-          ['inbox_folder_search_result', folder.id],
-          folder,
-        ));
+        data.data.folders.map((folder) =>
+          queryClient.setQueryData(
+            ['inbox_folder_search_result', folder.id],
+            folder
+          )
+        );
       },
-    },
+    }
   );
 };
 
 // Get search folders for filing search result
-export const useGetSearchFoldersForFilingResult = (folderId) => {
+export const useGetSearchFoldersForFilingResult = (folderId: string) => {
   const queryClient = useQueryClient();
   return queryClient.getQueryData(['inbox_folder_search_result', folderId]);
 };
 
 // File inbox file
-export const fileInboxFileService = async (data) => {
+export const fileInboxFileService = async (data: {
+  inboxFileId: string;
+  folderIds: string[];
+}) => {
   const response = requestNew({
     url: `inbox-files/${data.inboxFileId}/file`,
     method: 'POST',
@@ -121,17 +132,21 @@ export const fileInboxFileService = async (data) => {
 };
 
 // Assign / Unassign inbox file
-const assignOrUnassignInboxFile = (data) => {
+const assignOrUnassignInboxFile = (data: {
+  inboxFileId: string;
+  isAssigned: boolean;
+  inboxId: string;
+}) => {
   const url = `inbox-files/${data.inboxFileId}/${
     data.isAssigned ? 'unassign' : 'assign'
   }`;
   const params = data.isAssigned
     ? {
-      unassign_from_inbox_id: data.inboxId,
-    }
+        unassign_from_inbox_id: data.inboxId,
+      }
     : {
-      assign_to_inbox_id: data.inboxId,
-    };
+        assign_to_inbox_id: data.inboxId,
+      };
 
   const response = requestNew({
     url,
@@ -141,7 +156,7 @@ const assignOrUnassignInboxFile = (data) => {
   return response;
 };
 
-export const useAssignOrUnassignInboxFile = (fileId) => {
+export const useAssignOrUnassignInboxFile = (fileId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(assignOrUnassignInboxFile, {
@@ -156,7 +171,10 @@ export const useAssignOrUnassignInboxFile = (fileId) => {
   });
 };
 
-const archiveOrUnarchiveInboxFile = (data) => {
+const archiveOrUnarchiveInboxFile = (data: {
+  inboxFileId: string;
+  type: string;
+}) => {
   // type: archive | unarchive
 
   const response = requestNew({
@@ -174,7 +192,7 @@ export const useArchiveOrUnarchiveInboxFile = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['inbox_file', data.data.inbox_file.id],
-        data.data.inbox_file,
+        data.data.inbox_file
       );
       queryClient.invalidateQueries([
         'inbox_files',
@@ -191,7 +209,11 @@ export const useArchiveOrUnarchiveInboxFile = () => {
 };
 
 // multiple archive / unarchive
-export const multipleArchiveOrUnarchiveInboxFiles = (data) => {
+export const multipleArchiveOrUnarchiveInboxFiles = (data: {
+  inboxId: string;
+  type: string;
+  fileIdsArr: string[];
+}) => {
   // type: archive / unarchive
 
   const request = requestNew({
@@ -212,13 +234,13 @@ export const useMultipleArchiveOrUnArchive = () => {
       queryClient.invalidateQueries(['inbox_files']);
       queryClient.setQueryData(
         ['inbox_file', data.data.inbox_file.id],
-        data.data.inbox_file,
+        data.data.inbox_file
       );
     },
   });
 };
 
-const fileActivity = (fileId) => {
+const fileActivity = (fileId: string) => {
   const request = requestNew({
     url: `inbox-files/${fileId}/activity-logs`,
     method: 'GET',
@@ -226,10 +248,14 @@ const fileActivity = (fileId) => {
   return request;
 };
 
-export const useGetInboxFileActivity = (fileId) => useQuery([`inbox-${fileId}-activity`], () => fileActivity(fileId));
+export const useGetInboxFileActivity = (fileId: string) =>
+  useQuery([`inbox-${fileId}-activity`], () => fileActivity(fileId));
 
 // responsible inbox team members and groups
-export const useGetResponsibleMembersOrGroups = (inboxId, isGroups) => {
+export const useGetResponsibleMembersOrGroups = (
+  inboxId: string,
+  isGroups: boolean
+) => {
   const query = `responsible-team-${
     isGroups ? 'member-groups' : 'members'
   }-${inboxId}`;
@@ -237,20 +263,26 @@ export const useGetResponsibleMembersOrGroups = (inboxId, isGroups) => {
     isGroups ? 'member-groups' : 'members'
   }`;
 
-  return useQuery([query], () => requestNew({
-    url,
-    method: 'GET',
-  }));
+  return useQuery([query], () =>
+    requestNew({
+      url,
+      method: 'GET',
+    })
+  );
 };
 
-const createResponsibleMemberOrGroup = (data) => {
+const createResponsibleMemberOrGroup = (data: {
+  inboxId: string;
+  isGroups: boolean;
+  dataId: string;
+}) => {
   const url = `inboxes/${data.inboxId}/responsible-team-${
     data.isGroups ? 'member-groups' : 'members'
   }`;
   const body = data.isGroups
     ? {
-      team_member_group_id: data.dataId,
-    }
+        team_member_group_id: data.dataId,
+      }
     : { team_member_id: data.dataId };
   const request = requestNew({
     url,
@@ -260,7 +292,10 @@ const createResponsibleMemberOrGroup = (data) => {
   return request;
 };
 
-export const useCreateResponsibleMemberOrGroup = (inboxId, isGroups) => {
+export const useCreateResponsibleMemberOrGroup = (
+  inboxId: string,
+  isGroups: boolean
+) => {
   const queryClient = useQueryClient();
   const query = `responsible-team-${
     isGroups ? 'member-groups' : 'members'
@@ -273,7 +308,11 @@ export const useCreateResponsibleMemberOrGroup = (inboxId, isGroups) => {
   });
 };
 
-const deleteResponsibleTeamMemberOrGroup = (data) => {
+const deleteResponsibleTeamMemberOrGroup = (data: {
+  inboxId: string;
+  dataId: string;
+  isGroups: boolean;
+}) => {
   const url = `inboxes/${data.inboxId}/responsible-team-${
     data.isGroups ? 'member-groups' : 'members'
   }/${data.dataId}`;
@@ -285,7 +324,10 @@ const deleteResponsibleTeamMemberOrGroup = (data) => {
   return request;
 };
 
-export const useDeleteResponsibleMemberOrGroup = (inboxId, isGroups) => {
+export const useDeleteResponsibleMemberOrGroup = (
+  inboxId: string,
+  isGroups: boolean
+) => {
   const queryClient = useQueryClient();
   const query = `responsible-team-${
     isGroups ? 'member-groups' : 'members'
@@ -298,7 +340,7 @@ export const useDeleteResponsibleMemberOrGroup = (inboxId, isGroups) => {
   });
 };
 
-const deleteInboxFile = (data) => {
+const deleteInboxFile = (data: { fileId: string }) => {
   const request = requestNew({
     url: `inbox-files/${data.fileId}/delete`,
     method: 'POST',
@@ -313,6 +355,57 @@ export const useDeleteInboxFile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['inbox_files']);
       queryClient.invalidateQueries(['inboxes']);
+    },
+  });
+};
+
+// email list
+export const addEmailToList = (data: { inboxId: string | null; email: string }) => {
+  const request = requestNew({
+    url: `inboxes/${data.inboxId}/email-list`,
+    method: 'POST',
+    data: {
+      email: data.email,
+    },
+  });
+  return request;
+};
+
+export const deleteEmailFromList = (data: {
+  inboxId: string | null;
+  emailId: string;
+}) => {
+  const request = requestNew({
+    url: `/inboxes/${data.inboxId}/email-list/${data.emailId}`,
+    method: 'DELETE',
+  });
+  return request;
+};
+
+export const useGetEmailList = (inboxId: string) =>
+  useQuery<IEmailListReq>([`email-list-${inboxId}`], () =>
+    requestNew({
+      url: `inboxes/${inboxId}/email-list`,
+      method: 'GET',
+    })
+  );
+
+export const useAddEmailToList = (inboxId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addEmailToList, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`email-list-${inboxId}`]);
+    },
+  });
+};
+
+export const useDeleteEmailFromList = (inboxId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteEmailFromList, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`email-list-${inboxId}`]);
     },
   });
 };

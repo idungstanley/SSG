@@ -1,9 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AddNewEmail from './AddNewEmail';
 import EmailList from './EmailList';
 
-export default function BlackListEmails({ setShowModal }) {
+interface BlackListEmailsProps {
+  setShowModal: (i: boolean) => void;
+}
+
+export default function BlackListEmails({ setShowModal }: BlackListEmailsProps) {
   return (
     <>
       <div
@@ -21,7 +24,3 @@ export default function BlackListEmails({ setShowModal }) {
     </>
   );
 }
-
-BlackListEmails.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-};

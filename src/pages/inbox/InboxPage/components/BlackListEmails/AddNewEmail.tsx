@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useAddEmailToList } from '../../../../../features/inbox/inboxesService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { useAddEmailToList } from '../../../../../features/inbox/inboxService';
 
 export default function AddNewEmail() {
   const [value, setValue] = useState('');
-  const { currentInboxId } = useSelector((state) => state.inbox);
-  const { mutate: addEmail } = useAddEmailToList(currentInboxId);
+  const { currentInboxId } = useAppSelector((state) => state.inbox);
+  const { mutate: addEmail } = useAddEmailToList(currentInboxId || '');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     addEmail({
       inboxId: currentInboxId,
       email: value,
     });
+
     setValue('');
   };
 
