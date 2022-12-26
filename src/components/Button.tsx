@@ -1,41 +1,63 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
 import { classNames } from "../utils";
+
+interface ButtonProps {
+  buttonStyle?: string,
+  onClick: () => Promise<void> | null;
+  loading? : boolean;
+  label?: string;
+  icon?: string;
+  width?: string | number;
+  height?: string;
+  padding?: string;
+  disabled?: boolean;
+  iconPosition?: string;
+  ringOnFocus?: boolean;
+  roundedLeft?: boolean;
+  roundedRight?: boolean;
+  borderLeft?: boolean;
+  borderRight?: boolean;
+  value?: string | number | readonly string[] | undefined;
+}
 
 function Button({
   buttonStyle,
   onClick,
-  loading,
+  loading = false,
   label,
   icon,
-  width,
-  height,
-  padding,
-  disabled,
-  iconPosition,
-  ringOnFocus,
-  roundedLeft,
-  roundedRight,
-  borderLeft,
-  borderRight,
+  width = 'w-auto',
+  height = 'h-10',
+  padding = 'px-4 py-2',
+  disabled = false,
+  iconPosition = 'left',
+  ringOnFocus = false,
+  roundedLeft = true,
+  roundedRight = true,
+  borderLeft = true,
+  borderRight = true,
   value,
-}) {
+}: ButtonProps) {
   let buttonClassName;
   let hoverBackgroundColor;
 
   if (buttonStyle === 'primary') {
     hoverBackgroundColor = 'hover:bg-primary-700';
-    buttonClassName = 'border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none';
+    buttonClassName =
+      'border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none';
   } else if (buttonStyle === 'secondary') {
     hoverBackgroundColor = 'hover:bg-primary-200';
-    buttonClassName = 'border border-transparent text-sm font-medium text-primary-700 bg-primary-100 focus:outline-none';
+    buttonClassName =
+      'border border-transparent text-sm font-medium text-primary-700 bg-primary-100 focus:outline-none';
   } else if (buttonStyle === 'danger') {
     hoverBackgroundColor = 'hover:bg-red-700';
-    buttonClassName = 'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
+    buttonClassName =
+      'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
   } else if (buttonStyle === 'white') {
     hoverBackgroundColor = 'hover:bg-gray-50';
-    buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
+    buttonClassName =
+      'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
   }
 
   if (ringOnFocus === true) {
@@ -66,8 +88,8 @@ function Button({
       type="button"
       disabled={disabled || loading}
       className={classNames(
-        disabled || loading ? 'opacity-50' : hoverBackgroundColor,
-        `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`,
+        disabled || loading ? 'opacity-50' as string : hoverBackgroundColor as string,
+        `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`
       )}
     >
       {loading ? (
@@ -95,40 +117,5 @@ function Button({
   );
 }
 
-Button.defaultProps = {
-  loading: false,
-  label: null,
-  width: 'w-auto',
-  height: 'h-10',
-  padding: 'px-4 py-2',
-  disabled: false,
-  icon: null,
-  iconPosition: 'left',
-  ringOnFocus: false,
-  roundedLeft: true,
-  roundedRight: true,
-  borderLeft: true,
-  borderRight: true,
-  value: null,
-};
-
-Button.propTypes = {
-  buttonStyle: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  label: PropTypes.string,
-  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  value: PropTypes.string,
-  height: PropTypes.string,
-  padding: PropTypes.string,
-  disabled: PropTypes.bool,
-  iconPosition: PropTypes.string,
-  ringOnFocus: PropTypes.bool,
-  roundedLeft: PropTypes.bool,
-  roundedRight: PropTypes.bool,
-  borderLeft: PropTypes.bool,
-  borderRight: PropTypes.bool,
-};
 
 export default Button;

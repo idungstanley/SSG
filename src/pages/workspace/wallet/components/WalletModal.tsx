@@ -6,7 +6,7 @@ import { Button, Input } from '../../../../components';
 
 interface WalletModalProps {
   walletVisible: boolean;
-  onCloseWalletModal: any ;
+  onCloseWalletModal: () => boolean ;
   walletId: string;
 }
 

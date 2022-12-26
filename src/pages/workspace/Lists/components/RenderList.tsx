@@ -101,7 +101,7 @@ function RenderList() {
                     </tr>
                   </thead>
                   <tbody>
-                    {listChildrenData?.data?.tasks?.map((task) => (
+                    {listChildrenData?.data?.tasks?.map((task :{id?: string, name?: string}) => (
                       <tr
                         key={task.id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -145,8 +145,6 @@ function RenderList() {
           </section>
         </div>
       </section>
-
-      <p>this is list of</p>
     </div>
   );
 }
