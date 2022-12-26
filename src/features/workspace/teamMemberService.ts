@@ -2,7 +2,13 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Get team members in the workspace
-export const useGetTeamMembers = ({ query }) => {
+interface Iprops {
+  query: string | number
+}
+interface teamMemberType {
+  id: string
+}
+export const useGetTeamMembers = ({ query }: Iprops) => {
   const queryClient = useQueryClient();
 
   return useInfiniteQuery(
@@ -21,7 +27,7 @@ export const useGetTeamMembers = ({ query }) => {
     },
     {
       onSuccess: (data) => {
-        data.pages.map((page) => page.data.team_members.map((teamMember) => queryClient.setQueryData(['team_member', teamMember.id], teamMember)));
+        data.pages.map((page) => page.data.team_members.map((teamMember: teamMemberType) => queryClient.setQueryData(['team_member', teamMember.id], teamMember)));
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.pagination.has_more_pages) {

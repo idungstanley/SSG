@@ -29,7 +29,7 @@
         "space-infix-ops":"error",
         "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],
         "@typescript-eslint/explicit-module-boundary-types":"off",
-        "linebreak-style":"error",
+        "linebreak-style":0,
         "semi": "error",
         "no-multiple-empty-lines":["error", { "max": 1, "maxEOF": 0 }],
         "no-multi-spaces":"error",

@@ -1,6 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+
+interface workspaceState {
+workspace: string[],
+showSidebar: boolean
+currentItemId?: string | null
+currentItemType?: string | null
+}
+
+const initialState: workspaceState = {
   workspace: [],
   showSidebar: true,
   currentItemId: null,

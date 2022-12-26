@@ -6,12 +6,14 @@ import { useGetSearchedItemDetails } from '../../../../features/search/searchSer
 import { resetSelectedItem, setSearchQuery } from '../../../../features/search/searchSlice';
 import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { Button } from '../../../../components';
+import { useAppSelector } from '../../../../app/hooks'
+
 
 function Preview() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { selectedItemId, selectedItemType, selectedItemPath } = useSelector(
+  const { selectedItemId, selectedItemType, selectedItemPath } = useAppSelector(
     (state) => state.search,
   );
 
@@ -53,7 +55,7 @@ function Preview() {
   };
 
   return data ? (
-    <aside className="fixed top-32 mt-2 h-full right-0 z-10 hidden min-w-96 w-1/3 bg-white px-6 py-4 border-l border-gray-200 lg:block overflow-y-scroll">
+    <aside className="fixed right-0 z-10 hidden w-1/3 h-full px-6 py-4 mt-2 overflow-y-scroll bg-white border-l border-gray-200 top-32 min-w-96 lg:block">
       <div className="pb-16 space-y-6">
         <svg
           onClick={() => dispatch(resetSelectedItem())}
@@ -62,7 +64,7 @@ function Preview() {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6 p cursor-pointer text-gray-400 hover:text-red-400 transition duration-300"
+          className="w-6 h-6 text-gray-400 transition duration-300 cursor-pointer p hover:text-red-400"
         >
           <path
             strokeLinecap="round"
@@ -71,10 +73,10 @@ function Preview() {
           />
         </svg>
         <div>
-          <div className="block w-full rounded-md h-10 overflow-hidden">
+          <div className="block w-full h-10 overflow-hidden rounded-md">
             <FileIcon extensionKey={icon} size={10} />
           </div>
-          <div className="mt-4 flex items-start justify-between">
+          <div className="flex items-start justify-between mt-4">
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 <span className="sr-only">Details for </span>
@@ -98,12 +100,12 @@ function Preview() {
         <div>
           <h3 className="font-medium text-gray-900">Information</h3>
           <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-            <div className="py-3 flex justify-between text-sm font-medium">
+            <div className="flex justify-between py-3 text-sm font-medium">
               <dt className="text-gray-500">Last modified</dt>
               <dd className="text-gray-900">{OutputDateTime(createdAt)}</dd>
             </div>
 
-            <div className="py-3 flex justify-between text-sm font-medium">
+            <div className="flex justify-between py-3 text-sm font-medium">
               <dt className="text-gray-500">Created</dt>
               <dd className="text-gray-900">{OutputDateTime(updatedAt)}</dd>
             </div>

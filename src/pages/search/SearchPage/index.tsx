@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Preview from '../components/Preview';
 import Toolbar from '../components/header/Toolbar';
 import { useSearch } from '../../../features/search/searchService';
@@ -8,10 +8,38 @@ import { Spinner } from '../../../common';
 import Results from '../components/Results';
 import { resetSelectedItem } from '../../../features/search/searchSlice';
 import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../../app/hooks'
+
+interface Idata {
+  id: string
+  created_at: string | null
+  size: string | number
+  icon: string
+  display_name: string
+  name: string
+  inbox_file_source: {
+    size: string | number
+    file_format: {
+      extension: string
+    }
+    display_name: string
+  }
+  ancestor_path: string
+  from: string
+  updated_at: string | null
+}
+
+interface dataProps {
+  files: Idata[],
+  folders: Idata[],
+  inbox: Idata[],
+  explorerStatus: string,
+  inboxStatus: string,
+}
 
 export default function SearchPage() {
   const dispatch = useDispatch();
-  const { selectedItemId, searchQuery, searchFileContents } = useSelector(
+  const { selectedItemId, searchQuery, searchFileContents } = useAppSelector(
     (state) => state.search,
   );
 
@@ -19,7 +47,7 @@ export default function SearchPage() {
 
   const {
     files, folders, inbox, explorerStatus, inboxStatus,
-  } = useSearch(
+  }: dataProps = useSearch(
     searchQuery,
     searchFileContents,
     debouncedValue === searchQuery,
@@ -31,8 +59,8 @@ export default function SearchPage() {
     }
   }, [debouncedValue]);
 
-  const allResults = [];
-  files?.map((i) => allResults.push({
+  const allResults: any[] = [];
+  files?.map((i:any) => allResults.push({
     id: i.id,
     createdAt: i.created_at,
     size: i.size,
@@ -66,10 +94,10 @@ export default function SearchPage() {
   }));
 
   return (
-    <div className="h-full flex flex-col w-full">
+    <div className="flex flex-col w-full h-full">
       <Toolbar />
 
-      <div className="flex flex-row overflow-hidden bg-gray-50 h-full">
+      <div className="flex flex-row h-full overflow-hidden bg-gray-50">
         <div className="flex-1 overflow-y-scroll bg-gray-50">
           {searchQuery.length < 3 ? (
             <FullScreenMessage
@@ -83,7 +111,7 @@ export default function SearchPage() {
                 description="Please try again later."
               />
             ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
-              <div className="mx-auto w-6 mt-10 justify-center">
+              <div className="justify-center w-6 mx-auto mt-10">
                 <Spinner size={22} color="#0F70B7" />
               </div>
             ) : explorerStatus === 'success' && inboxStatus === 'success' ? (

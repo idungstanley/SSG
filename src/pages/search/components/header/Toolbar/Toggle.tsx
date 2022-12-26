@@ -2,16 +2,18 @@ import React from 'react';
 import { Switch } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchFileContents } from '../../../../../features/search/searchSlice';
+import { useAppSelector } from '../../../../../app/hooks'
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
+
 export default function Toggle() {
   const dispatch = useDispatch();
-  const searchFileContents = useSelector((state) => state.search.searchFileContents);
+  const searchFileContents = useAppSelector((state) => state.search.searchFileContents);
 
-  const setState = (state) => {
+  const setState = (state: boolean) => {
     dispatch(setSearchFileContents(state));
   };
 

@@ -67,11 +67,11 @@ function CreateWorkspace() {
   const [bgAvatar, setBgAvatart] = useState('red');
   const [companySize, setCompanySize] = useState(0);
 
-  const handleChange = (e) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const selectedCompanySize = (value) => {
+  const selectedCompanySize = (value:number) => {
     setCompanySize(value);
   };
 
@@ -87,12 +87,12 @@ function CreateWorkspace() {
     });
   };
 
-  const handleBgClick = (colour) => {
+  const handleBgClick = (colour: string) => {
     setBgAvatart(colour);
   };
 
   return (
-    <div className="h-full flex-1 flex flex-col overflow-y-scroll bg-gray-50">
+    <div className="flex flex-col flex-1 h-full overflow-y-scroll bg-gray-50">
       <Breadcrumb
         pages={[
           {
@@ -102,12 +102,12 @@ function CreateWorkspace() {
           },
         ]}
         rootIcon={
-          <PlusIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+          <PlusIcon className="flex-shrink-0 w-5 h-5" aria-hidden="true" />
         }
         rootIconHref="/workspace/onboarding"
       />
 
-      <section className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6 ">
+      <section className="flex-1 h-full px-4 pb-10 overflow-y-scroll sm:px-6 lg:px-6 ">
         <div className="my-5">
           <SimpleSectionHeading
             title="Create your workspace"
@@ -116,7 +116,7 @@ function CreateWorkspace() {
           />
         </div>
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label="Enter workspace name:"
               placeholder="workspace name"
@@ -126,32 +126,31 @@ function CreateWorkspace() {
               onChange={handleChange}
             />
           </div>
-          <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <p className="mb-4 h">Customize your workspace avatar</p>
             <section className="flex items-center justify-start space-x-7">
               <InputAvatar action="Click to upload" upload={null} size={null} />
               <AvatarWithInitials
-                className="pl-3"
                 height="h-52"
                 width="w-52"
                 initials="AU"
                 backgroundColour={bgAvatar}
                 textSize="text-2xl"
               />
-              <div className="grid grid-cols-4 pl-16 gap-20">
+              <div className="grid grid-cols-4 gap-20 pl-16">
                 {avatarBg.map(({ colour }) => (
                   <AvatarBg
                     key={colour}
                     size={10}
                     colour={colour}
-                    name="avatarBackgroudColor"
+                    // name="avatarBackgroudColor"
                     onClick={() => handleBgClick(colour)}
                   />
                 ))}
               </div>
             </section>
           </div>
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <p className="mb-4 h">How many people will you be working with?</p>
             <div className="space-x-5">
               {companySizeBtn.map(({ label, value }) => (
@@ -169,7 +168,7 @@ function CreateWorkspace() {
               ))}
             </div>
           </div>
-          <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             {/* <p className="mb-4 h">Invite people into your workspace</p> */}
             <Input
               label="Invite people into your workspace:"
@@ -180,7 +179,7 @@ function CreateWorkspace() {
               onChange={handleChange}
             />
           </div>
-          <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Button
               buttonStyle="primary"
               onClick={onSubmit}

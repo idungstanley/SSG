@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+interface avatarType {
+  initials: string
+  height: string,
+  width: string 
+  backgroundColour: string
+  roundedStyle: string 
+  textSize: string 
+}
 function AvatarWithInitials({
   initials,
   height,
@@ -8,7 +16,7 @@ function AvatarWithInitials({
   backgroundColour,
   roundedStyle,
   textSize,
-}) {
+}: avatarType) {
   return (
     <span className={`inline-flex items-center justify-center ${height} ${width} ${roundedStyle === 'circular' && 'rounded-full'} ${roundedStyle === 'rounded' && 'rounded-md'}`} style={{ backgroundColor: backgroundColour }}>
       <span className={`font-medium leading-none text-white ${textSize}`}>{initials}</span>

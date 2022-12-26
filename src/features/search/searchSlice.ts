@@ -1,16 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { displayNotification } from '../general/notification/notificationSlice';
 import { logout, switchWorkspace } from '../auth/authSlice';
-import requestNew from '../../app/requestNew.ts';
+import requestNew from '../../app/requestNew';
+// import { string } from 'prop-types';
+
+
+interface Idata {
+  itemType: null,
+  itemId: null,
+}
 
 export const selectItem = createAsyncThunk(
   'search/selectItem',
-  async (data, thunkAPI) => {
+  async (data: Idata, thunkAPI) => {
     if (data.itemType === 'file' && data.itemId !== null) {
       const url = `/files/${data.itemId}/details`;
 
       const currentWorkspaceId = JSON.parse(
-        localStorage.getItem('currentWorkspaceId'),
+        localStorage.getItem('currentWorkspaceId') || "",
       );
 
       try {
@@ -23,7 +30,7 @@ export const selectItem = createAsyncThunk(
         });
 
         return response.data;
-      } catch (error) {
+      } catch (error: any) {
         const message = (error.response
             && error.response.data
             && error.response.data.message)

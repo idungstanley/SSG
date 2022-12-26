@@ -1,4 +1,13 @@
-export const avatarBg = [
+
+interface avatarType {
+  colour: string
+}
+
+interface companyArrayType {
+label: string
+value: string
+}
+export const avatarBg: avatarType[] = [
   { colour: 'red' },
   { colour: 'blue' },
   { colour: 'yellow' },
@@ -12,7 +21,7 @@ export const avatarBg = [
   { colour: 'pink' },
 ];
 
-export const companySizeBtn = [
+export const companySizeBtn: companyArrayType[]  = [
   { label: '1', value: '1' },
   { label: '2-5', value: '2' },
   { label: '6-10', value: '6' },

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Docs() {
+const Docs: React.FC = ()=> {
   return (
     <div><p>this is docs</p></div>
   );
