@@ -12,7 +12,7 @@ export default function InboxIndex() {
   const { currentItemId } = useSelector((state) => state.workspace);
   const { status, data: dt } = useGetInboxFiles({
     inboxId: currentItemId,
-    isArchived: 0,
+    isArchived: false,
   });
 
   const data = useMemo(

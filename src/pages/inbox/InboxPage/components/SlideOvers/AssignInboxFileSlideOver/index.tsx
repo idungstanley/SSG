@@ -31,7 +31,7 @@ function AssignInboxFileSlideOver() {
   const { status, data } = useGetInboxes();
   const inboxes = data?.data.inboxes;
 
-  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId || '');
+  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId || null);
 
   const { mutate: AssignFile } = useAssignOrUnassignInboxFile(selectedInboxFileId);
 

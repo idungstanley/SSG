@@ -5,14 +5,28 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IEmailListReq, IFolderForFilling, IFoldersForFillingReq, IInboxFile, IInboxFileLogsReq, IInboxFilesReq, IResponsibleDataReq } from './inbox.interfaces';
+import {
+  IEmailListReq,
+  IFolderForFilling,
+  IFoldersForFillingReq,
+  IInboxFile,
+  IInboxFileLogsReq,
+  IInboxFilesReq,
+  IResponsibleDataReq,
+} from './inbox.interfaces';
 
 // Get inbox files
-export const useGetInboxFiles = ({ inboxId, isArchived }: {inboxId?: string, isArchived: boolean}) => {
+export const useGetInboxFiles = ({
+  inboxId,
+  isArchived,
+}: {
+  inboxId?: string;
+  isArchived: boolean;
+}) => {
   const queryClient = useQueryClient();
 
   return useInfiniteQuery<IInboxFilesReq>(
-    ['inbox_files', inboxId, { isArchived }],
+    ['inbox_files', inboxId, { isArchived: isArchived ? 1 : 0 }],
     async ({ pageParam = 0 }) => {
       const url = `inboxes/${inboxId}/inbox-files`;
 
@@ -26,7 +40,7 @@ export const useGetInboxFiles = ({ inboxId, isArchived }: {inboxId?: string, isA
       });
     },
     {
-      enabled: inboxId != null && isArchived != null,
+      enabled: !!inboxId,
       onSuccess: (data) => {
         data.pages.map((page) =>
           page.data.inbox_files.map((inboxFile) =>
@@ -57,13 +71,13 @@ export const useGetInboxFile = (inboxFileId: string | null) => {
     () => queryClient.getQueryData(['inbox_file', inboxFileId]),
     {
       initialData: () => queryClient.getQueryData(['inbox_file', inboxFileId]),
-      enabled: inboxFileId != null,
+      enabled: !!inboxFileId,
     }
   );
 };
 
 // Get inbox file full details
-export const useGetInboxFileFullDetails = (inboxFileId: string) => {
+export const useGetInboxFileFullDetails = (inboxFileId: string | null) => {
   const url = `inbox-files/${inboxFileId}/details`;
   return useQuery(
     ['inbox_file_full_details', inboxFileId],
@@ -74,7 +88,7 @@ export const useGetInboxFileFullDetails = (inboxFileId: string) => {
       }),
     {
       select: (data) => data.data.inbox_file,
-      enabled: inboxFileId != null,
+      enabled: !!inboxFileId,
       staleTime: 0, // So it refetches which inboxes the file is assigned to
     }
   );
@@ -118,7 +132,8 @@ export const useGetSearchFoldersForFilingResult = (folderId: string) => {
     ['inbox_folder_search_result', folderId],
     () => queryClient.getQueryData(['inbox_folder_search_result', folderId]),
     {
-      initialData: () => queryClient.getQueryData(['inbox_folder_search_result', folderId]),
+      initialData: () =>
+        queryClient.getQueryData(['inbox_folder_search_result', folderId]),
     }
   );
 };
@@ -256,12 +271,14 @@ const fileActivity = (fileId: string) => {
 };
 
 export const useGetInboxFileActivity = (fileId: string) =>
-  useQuery<IInboxFileLogsReq>([`inbox-${fileId}-activity`], () => fileActivity(fileId));
+  useQuery<IInboxFileLogsReq>([`inbox-${fileId}-activity`], () =>
+    fileActivity(fileId)
+  );
 
 // responsible inbox team members and groups
 export const useGetResponsibleMembersOrGroups = (
   isGroups: boolean,
-  inboxId?: string,
+  inboxId?: string
 ) => {
   const query = `responsible-team-${
     isGroups ? 'member-groups' : 'members'
@@ -270,11 +287,14 @@ export const useGetResponsibleMembersOrGroups = (
     isGroups ? 'member-groups' : 'members'
   }`;
 
-  return useQuery<IResponsibleDataReq>([query], () =>
-    requestNew({
-      url,
-      method: 'GET',
-    })
+  return useQuery<IResponsibleDataReq>(
+    [query],
+    () =>
+      requestNew({
+        url,
+        method: 'GET',
+      }),
+    { enabled: !!inboxId }
   );
 };
 
@@ -367,7 +387,10 @@ export const useDeleteInboxFile = () => {
 };
 
 // email list
-export const addEmailToList = (data: { inboxId: string | null; email: string }) => {
+export const addEmailToList = (data: {
+  inboxId: string | null;
+  email: string;
+}) => {
   const request = requestNew({
     url: `inboxes/${data.inboxId}/email-list`,
     method: 'POST',
@@ -389,12 +412,15 @@ export const deleteEmailFromList = (data: {
   return request;
 };
 
-export const useGetEmailList = (inboxId: string) =>
-  useQuery<IEmailListReq>([`email-list-${inboxId}`], () =>
-    requestNew({
-      url: `inboxes/${inboxId}/email-list`,
-      method: 'GET',
-    })
+export const useGetEmailList = (inboxId: string | null) =>
+  useQuery<IEmailListReq>(
+    [`email-list-${inboxId}`],
+    () =>
+      requestNew({
+        url: `inboxes/${inboxId}/email-list`,
+        method: 'GET',
+      }),
+    { enabled: !!inboxId }
   );
 
 export const useAddEmailToList = (inboxId: string) => {
@@ -407,7 +433,7 @@ export const useAddEmailToList = (inboxId: string) => {
   });
 };
 
-export const useDeleteEmailFromList = (inboxId: string) => {
+export const useDeleteEmailFromList = (inboxId: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteEmailFromList, {

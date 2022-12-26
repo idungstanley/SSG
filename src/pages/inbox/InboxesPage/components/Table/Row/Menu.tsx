@@ -8,8 +8,8 @@ import {
   usePinOrUnpinInbox,
   useRestoreOrDeleteInbox,
 } from '../../../../../../features/inbox/inboxesService';
-import { inboxType } from '../../../../../../features/inbox/inbox.interfaces';
 import { classNames } from '../../../../../../utils';
+import { inboxType } from '../../../../../../types';
 
 interface MenuProps {
   inboxId: string;
