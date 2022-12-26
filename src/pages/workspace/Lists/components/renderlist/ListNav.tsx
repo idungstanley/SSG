@@ -1,6 +1,5 @@
 import React from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
 import { ViewListIcon } from '@heroicons/react/outline';
 import { Button } from '../../../../../components';
 

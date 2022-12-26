@@ -4,7 +4,7 @@ import { classNames } from "../utils";
 
 interface ButtonProps {
   buttonStyle?: string,
-  onClick: () => Promise<void> | null;
+  onClick?: () => Promise<void> | null;
   loading? : boolean;
   label?: string;
   icon?: string;
