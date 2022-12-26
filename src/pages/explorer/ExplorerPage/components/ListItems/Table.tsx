@@ -4,10 +4,7 @@ import { FileIcon } from '../../../../../common';
 import { OutputDateTime, OutputFileSize } from '../../../../../app/helpers';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IItem } from '../ListItems';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../../../../utils';
 
 interface TableProps {
   checkbox: React.RefObject<{

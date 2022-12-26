@@ -11,6 +11,7 @@ import Preview from './Preview';
 import Details from './Details';
 import Activity from './Activity';
 import Comments from '../../../../../../../components/Comments';
+import { classNames } from "../../../../../../../utils";
 
 const tabs = [
   {
@@ -38,10 +39,6 @@ const tabs = [
     current: false,
   },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 function FileInfo() {
   const selectedInboxFileId = useSelector(

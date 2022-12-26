@@ -2,6 +2,7 @@ import React from 'react';
 import {
   CreditCardIcon, OfficeBuildingIcon, UserIcon, UsersIcon,
 } from '@heroicons/react/solid';
+import { classNames } from "../../utils";
 
 const tabs = [
   {
@@ -17,10 +18,6 @@ const tabs = [
     name: 'Billing', href: '#', icon: CreditCardIcon, current: false,
   },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function Example() {
   return (

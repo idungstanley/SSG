@@ -9,6 +9,7 @@ interface FullScreenMessageProps {
   ctaOnClick?: (...args: never[]) => void;
   showCta?: boolean;
   showIcon?: boolean;
+  showHalFScreen?: boolean
 }
 
 export default function FullScreenMessage({
@@ -18,9 +19,10 @@ export default function FullScreenMessage({
   ctaOnClick,
   showCta = false,
   showIcon = true,
+  showHalFScreen,
 }: FullScreenMessageProps) {
   return (
-    <div className="flex flex-1 h-full bg-white">
+    <div className={`flex flex-1 ${showHalFScreen ? 'h-2/4' : 'h-full'} bg-white`}>
       <div className="text-center m-auto">
         {showIcon ? (
           <svg

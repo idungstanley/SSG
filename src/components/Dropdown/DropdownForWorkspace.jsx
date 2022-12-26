@@ -17,11 +17,8 @@ import {
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
+import { classNames } from "../../utils";
 // import { useSelector } from 'react-redux';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 function MenuDropdown() {
   // const { currentItemId, type } = useSelector((state) => state.workspace);

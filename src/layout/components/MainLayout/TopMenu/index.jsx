@@ -22,16 +22,13 @@ import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
+import { classNames } from "../../../../utils";
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
   { name: 'Shared', href: '/shared', current: false },
   { name: 'Inbox', href: '/inbox', current: false },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 function TopMenu() {
   const dispatch = useDispatch();
