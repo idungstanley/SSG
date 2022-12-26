@@ -16,7 +16,11 @@ import PropTypes from 'prop-types';
 import TaskModal from './TaskModal';
 import { classNames } from "../../../../utils";
 
-function TaskDropdown({ getListId }) {
+interface TaskDropDownProps {
+  getListId: string,
+}
+
+function TaskDropdown({ getListId }: TaskDropDownProps) {
   const [showTaskModal, setShowTaskModal] = useState(false);
 
   return (

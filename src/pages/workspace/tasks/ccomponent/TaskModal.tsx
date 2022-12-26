@@ -10,14 +10,23 @@ import {
 } from '@heroicons/react/outline';
 import { createTaskService } from '../../../../features/task/taskService';
 import { Button } from '../../../../components';
-// import { Button, Input } from '../../../../components';
 
-function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
+interface TaskModalProps {
+  taskVisible: boolean;
+  onCloseTaskModal: () => void;
+  getListId: string;
+}
+
+function TaskModal({
+  taskVisible,
+  onCloseTaskModal,
+  getListId,
+}: TaskModalProps) {
   const queryClient = useQueryClient();
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('taskdata');
+      queryClient.invalidateQueries();
       onCloseTaskModal();
     },
   });
@@ -28,7 +37,7 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
 
   const [formState, setFormState] = useState(defaultListFormState);
 
-  const handleTaskChange = (e) => {
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
@@ -93,7 +102,7 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
             />
           </section>
           <section id="textarea">
-            <textarea rows="3" placeholder="Description" name="description" />
+            <textarea placeholder="Description" name="description" />
           </section>
           <section
             id="attachement"
@@ -114,8 +123,6 @@ function TaskModal({ taskVisible, onCloseTaskModal, getListId }) {
               <Button
                 buttonStyle="primary"
                 onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
                 label="Create Task"
                 padding="py-2 px-4"
                 height="h-10"

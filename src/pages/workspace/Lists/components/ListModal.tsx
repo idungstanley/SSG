@@ -6,9 +6,9 @@ import { createListService } from '../../../../features/list/listService';
 import { Button, Input } from '../../../../components';
 
 interface ListModalProps {
-  listVisible: string;
+  listVisible: boolean;
   walletId: string;
-  onCloseListModal: any ;
+  onCloseListModal: () => void ;
 }
 
 function ListModal({
