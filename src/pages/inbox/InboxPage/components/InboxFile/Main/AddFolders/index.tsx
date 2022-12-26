@@ -1,9 +1,12 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LightBulbIcon } from '@heroicons/react/outline';
 import FolderSearchResultItem from './FolderSearchResultItem';
 import SelectedFolderItem from './SelectedFolderItem';
-import { useGetInboxFile, useSearchFoldersForFiling } from '../../../../../../../features/inbox/inboxService';
+import {
+  useGetInboxFile,
+  useSearchFoldersForFiling,
+} from '../../../../../../../features/inbox/inboxService';
 import {
   setSearchFoldersQuery,
   addFolderForFiling,
@@ -14,29 +17,31 @@ import {
   StackListWithHeader,
   Badge,
 } from '../../../../../../../components';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
 function AddFolders() {
   const dispatch = useDispatch();
 
-  const selectedInboxFileId = useSelector((state) => state.inbox.selectedInboxFileId);
+  const { searchFoldersQuery, selectedInboxFileId, folderIdsForFiling } =
+    useAppSelector((state) => state.inbox);
+
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
+  const { data: folderSearchData, status: folderSearchStatus } =
+    useSearchFoldersForFiling(searchFoldersQuery);
 
-  const searchFoldersQuery = useSelector((state) => state.inbox.searchFoldersQuery);
-  const folderIdsForFiling = useSelector((state) => state.inbox.folderIdsForFiling);
-
-  const { data: folderSearchData, status: folderSearchStatus } = useSearchFoldersForFiling(searchFoldersQuery);
-
-  const updateFolderSearchQuery = (query) => {
-    dispatch(setSearchFoldersQuery({
-      query,
-    }));
+  const updateFolderSearchQuery = (query: string) => {
+    dispatch(
+      setSearchFoldersQuery({
+        query,
+      })
+    );
   };
 
-  const handleAddFolder = (folderId) => {
+  const handleAddFolder = (folderId: string) => {
     dispatch(addFolderForFiling(folderId));
   };
 
-  const handleRemoveFolder = (folderId) => {
+  const handleRemoveFolder = (folderId: string) => {
     dispatch(removeFolderForFiling(folderId));
   };
 
@@ -48,7 +53,9 @@ function AddFolders() {
           <div className="mb-5">
             <div className="flex justify-between">
               <div className="text-left">
-                <h2 className="text-lg font-medium text-gray-900">Where would you like to save this file?</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Where would you like to save this file?
+                </h2>
                 <p className="mt-1 text-sm text-gray-500">
                   Search your folders, or use our smart suggestions.
                 </p>
@@ -109,16 +116,20 @@ function AddFolders() {
             <div className="overflow-hidden flex-1 h-full pb-6">
               <StackListWithHeader
                 title={<span>Folders</span>}
-                items={(
-                  folderSearchStatus === 'success' && folderSearchData.data.folders.map((folder) => (
-                    <FolderSearchResultItem
-                      key={folder.id}
-                      folderId={folder.id}
-                      handleAddFolder={handleAddFolder}
-                      handleRemoveFolder={handleRemoveFolder}
-                    />
-                  ))
-                )}
+                items={
+                  folderSearchStatus === 'success' ? (
+                    folderSearchData.data.folders.map((folder) => (
+                      <FolderSearchResultItem
+                        key={folder.id}
+                        folderId={folder.id}
+                        handleAddFolder={handleAddFolder}
+                        handleRemoveFolder={handleRemoveFolder}
+                      />
+                    ))
+                  ) : (
+                    <></>
+                  )
+                }
               />
             </div>
           )}
@@ -126,12 +137,15 @@ function AddFolders() {
           {searchFoldersQuery == null && (
             <div className="overflow-hidden flex-1 h-full pb-6">
               <StackListWithHeader
-                title={(
+                title={
                   <div className="flex">
                     SMART FOLDER SUGGESTIONS
-                    <LightBulbIcon className="h-5 w-5 ml-1 -mt-0.5 text-yellow-400" aria-hidden="true" />
+                    <LightBulbIcon
+                      className="h-5 w-5 ml-1 -mt-0.5 text-yellow-400"
+                      aria-hidden="true"
+                    />
                   </div>
-                )}
+                }
                 items={<span>Test</span>}
               />
             </div>

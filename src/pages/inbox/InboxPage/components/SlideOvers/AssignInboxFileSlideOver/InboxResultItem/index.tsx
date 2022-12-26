@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PlusIcon, CheckCircleIcon } from '@heroicons/react/solid';
 import {
   Button,
@@ -8,14 +7,22 @@ import {
 } from '../../../../../../../components';
 import { useGetInbox } from '../../../../../../../features/inbox/inboxesService';
 
+interface InboxResultItemProps {
+  inboxId: string,
+  isAssigned: boolean,
+  isDisabled: boolean,
+  handleAssignToInbox: (i: string) => void,
+  handleUnassignFromInbox: (i: string) => void,
+}
+
 function InboxResultItem({
   inboxId,
   isAssigned,
   isDisabled,
   handleAssignToInbox,
   handleUnassignFromInbox,
-}) {
-  const { data: inbox } = useGetInbox(inboxId);
+}: InboxResultItemProps) {
+  const { data: inbox } = useGetInbox(inboxId, 'active');
 
   return inbox ? (
     <StackListItemNarrow
@@ -41,13 +48,5 @@ function InboxResultItem({
     />
   ) : null;
 }
-
-InboxResultItem.propTypes = {
-  inboxId: PropTypes.string.isRequired,
-  isAssigned: PropTypes.bool.isRequired,
-  isDisabled: PropTypes.bool.isRequired,
-  handleAssignToInbox: PropTypes.func.isRequired,
-  handleUnassignFromInbox: PropTypes.func.isRequired,
-};
 
 export default InboxResultItem;

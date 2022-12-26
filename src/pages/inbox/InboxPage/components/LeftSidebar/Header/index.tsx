@@ -19,7 +19,7 @@ export default function Tabs() {
 
   const { data } = useGetInboxFiles({
     inboxId,
-    isArchived: 0,
+    isArchived: false,
   });
 
   const activeCount = data?.pages[0].data.not_archived_files_count;

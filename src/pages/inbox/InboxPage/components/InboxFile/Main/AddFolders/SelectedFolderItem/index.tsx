@@ -1,10 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import { useGetSearchFoldersForFilingResult } from '../../../../../../../../features/inbox/inboxService';
 
-function SelectedFolderItem({ folderId, handleRemoveFolder }) {
-  const folder = useGetSearchFoldersForFilingResult(folderId);
+interface SelectedFolderItemProps {
+  folderId: string;
+  handleRemoveFolder: (i: string) => void;
+}
+
+function SelectedFolderItem({
+  folderId,
+  handleRemoveFolder,
+}: SelectedFolderItemProps) {
+  const { data: folder } = useGetSearchFoldersForFilingResult(folderId);
 
   return folder ? (
     <span
@@ -31,10 +37,5 @@ function SelectedFolderItem({ folderId, handleRemoveFolder }) {
     </span>
   ) : null;
 }
-
-SelectedFolderItem.propTypes = {
-  folderId: PropTypes.string.isRequired,
-  handleRemoveFolder: PropTypes.func.isRequired,
-};
 
 export default SelectedFolderItem;

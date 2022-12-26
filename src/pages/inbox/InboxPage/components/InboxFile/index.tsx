@@ -1,13 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Toolbar from './Toolbar';
 import Main from './Main';
 import { useGetInboxFile } from '../../../../../features/inbox/inboxService';
+import { useAppSelector } from '../../../../../app/hooks';
 
 function InboxFile() {
   const { inboxId } = useParams();
-  const selectedInboxFileId = useSelector(
+  const selectedInboxFileId = useAppSelector(
     (state) => state.inbox.selectedInboxFileId,
   );
 

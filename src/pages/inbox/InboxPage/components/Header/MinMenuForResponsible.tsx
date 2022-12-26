@@ -4,7 +4,7 @@ import { ChevronDownIcon, UserIcon, UsersIcon } from '@heroicons/react/solid';
 import ResponsibleData from '../ResponsibleData';
 
 export default function MinMenuForResponsible() {
-  const isGroups = useRef(null);
+  const isGroups = useRef<boolean | null>(null);
   const [showResponsibleModal, setShowResponsibleModal] = useState(false);
 
   const items = [
@@ -35,7 +35,7 @@ export default function MinMenuForResponsible() {
 
   return (
     <>
-      {showResponsibleModal ? (
+      {showResponsibleModal && isGroups.current ? (
         <ResponsibleData
           setShowModal={setShowResponsibleModal}
           isGroups={isGroups.current}
@@ -68,7 +68,7 @@ export default function MinMenuForResponsible() {
                   <Menu.Item key={item.label}>
                     {() => (
                       <div
-                        type="button"
+                        // type="button"
                         onClick={item.onClick}
                         className="flex whitespace-nowrap cursor-pointer items-center hover:bg-gray-100 px-3"
                       >

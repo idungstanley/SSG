@@ -35,8 +35,8 @@ function Header() {
 
   const handleDelete = () => {
     deleteInbox({
-      inboxId,
       isDeleted: false,
+      inboxId,
     });
     navigate('/inbox');
   };

@@ -4,9 +4,10 @@ import FileHeader from './FileHeader';
 import { OutputDateTime } from '../../../../../../../../app/helpers';
 import { useGetInboxFile } from '../../../../../../../../features/inbox/inboxService';
 import { selectCurrentUser } from '../../../../../../../../features/auth/authSlice';
+import { useAppSelector } from '../../../../../../../../app/hooks';
 
 function Details() {
-  const selectedInboxFileId = useSelector((state) => state.inbox.selectedInboxFileId);
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
   const user = useSelector(selectCurrentUser);
@@ -14,22 +15,38 @@ function Details() {
   return inboxFile ? (
     <div className="h-full flex-1">
       <div className="relative h-full">
-
         <div className="absolute inset-0 flex h-full overflow-hidden flex-col">
-
           <FileHeader />
 
           <div className="w-full overflow-y-scroll flex-1 h-full p-6 space-y-6">
             <div className="">
               <h3 className="font-medium text-gray-900">Information</h3>
               <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-                <div key={1} className="py-3 flex justify-between text-sm font-medium">
+                <div
+                  key={1}
+                  className="py-3 flex justify-between text-sm font-medium"
+                >
                   <dt className="text-gray-500">Created at</dt>
-                  <dd className="text-gray-900">{ OutputDateTime(inboxFile.inbox_file_source.created_at, null, user.timezone) }</dd>
+                  <dd className="text-gray-900">
+                    {OutputDateTime(
+                      inboxFile.inbox_file_source.created_at,
+                      null,
+                      user.timezone
+                    )}
+                  </dd>
                 </div>
-                <div key={2} className="py-3 flex justify-between text-sm font-medium">
+                <div
+                  key={2}
+                  className="py-3 flex justify-between text-sm font-medium"
+                >
                   <dt className="text-gray-500">Modified at</dt>
-                  <dd className="text-gray-900">{ OutputDateTime(inboxFile.inbox_file_source.updated_at, null, user.timezone) }</dd>
+                  <dd className="text-gray-900">
+                    {OutputDateTime(
+                      inboxFile.inbox_file_source.updated_at,
+                      null,
+                      user.timezone
+                    )}
+                  </dd>
                 </div>
               </dl>
             </div>

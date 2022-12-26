@@ -7,7 +7,7 @@ import {
   InboxIcon,
   InboxInIcon,
 } from '@heroicons/react/solid';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   useArchiveOrUnarchiveInboxFile,
   useGetInboxFile,
@@ -18,6 +18,7 @@ import {
   useGetBlacklistFiles,
 } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
 const noSymbolIcon = (
   <svg
@@ -39,8 +40,8 @@ const noSymbolIcon = (
 
 export default function MinMenu() {
   const dispatch = useDispatch();
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
+  const selectedInboxFileId = useAppSelector(
+    (state) => state.inbox.selectedInboxFileId
   );
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
   const { mutate: archiveFile } = useArchiveOrUnarchiveInboxFile();
@@ -48,15 +49,17 @@ export default function MinMenu() {
   const { data: bl } = useGetBlacklistFiles();
   const blacklistFiles = bl?.data.blacklist;
 
-  const fileInBlacklist = blacklistFiles?.length > 0
-    ? blacklistFiles?.find((i) => i.inbox_file.id === selectedInboxFileId)
-    : null;
+  const fileInBlacklist =
+    blacklistFiles && blacklistFiles.length > 0
+      ? blacklistFiles?.find((i) => i.inbox_file.id === selectedInboxFileId)
+      : null;
 
   const archive = () => {
-    archiveFile({
-      inboxFileId: inboxFile.id,
-      type: inboxFile.archived_at ? 'unarchive' : 'archive',
-    });
+    inboxFile &&
+      archiveFile({
+        inboxFileId: inboxFile.id,
+        type: inboxFile.archived_at ? 'unarchive' : 'archive',
+      });
   };
 
   const blacklist = () => {
@@ -67,18 +70,18 @@ export default function MinMenu() {
   };
 
   const onDownload = async () => {
-    DownloadFile(
+    inboxFile && DownloadFile(
       'inboxFile',
       inboxFile.id,
-      inboxFile.inbox_file_source.display_name,
+      inboxFile.inbox_file_source.display_name
     );
   };
 
   const items = [
     {
-      label: inboxFile.archived_at ? 'Unarchive' : 'Archive',
+      label: inboxFile?.archived_at ? 'Unarchive' : 'Archive',
       onClick: archive,
-      icon: inboxFile.archived_at ? (
+      icon: inboxFile?.archived_at ? (
         <InboxIcon
           className="mr-2.5 h-5 w-5 text-gray-400"
           aria-hidden="true"
@@ -129,7 +132,7 @@ export default function MinMenu() {
                 <Menu.Item key={item.label}>
                   {() => (
                     <div
-                      type="button"
+                      // type="button"
                       onClick={item.onClick}
                       className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3 cursor-pointer"
                     >
@@ -155,7 +158,6 @@ export default function MinMenu() {
                   Download
                 </button>
               </div>
-
             </div>
           </Menu.Items>
         </Transition>

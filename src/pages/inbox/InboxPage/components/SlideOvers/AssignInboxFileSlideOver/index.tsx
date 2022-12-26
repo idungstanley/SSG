@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../../../common';
 import { setAssignInboxFileSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxes } from '../../../../../../features/inbox/inboxesService';
@@ -14,14 +14,15 @@ import {
 } from '../../../../../../components';
 import InboxResultItem from './InboxResultItem';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 function AssignInboxFileSlideOver() {
   const dispatch = useDispatch();
 
-  const { showAssignInboxFileSlideOver } = useSelector(
+  const { showAssignInboxFileSlideOver } = useAppSelector(
     (state) => state.slideOver,
   );
-  const { selectedInboxFileId, currentInboxId } = useSelector(
+  const { selectedInboxFileId, currentInboxId } = useAppSelector(
     (state) => state.inbox,
   );
 
@@ -30,7 +31,7 @@ function AssignInboxFileSlideOver() {
   const { status, data } = useGetInboxes();
   const inboxes = data?.data.inboxes;
 
-  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId);
+  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId || '');
 
   const { mutate: AssignFile } = useAssignOrUnassignInboxFile(selectedInboxFileId);
 
@@ -44,11 +45,11 @@ function AssignInboxFileSlideOver() {
     [searchQuery, inboxes],
   );
 
-  const assignToInbox = (inboxId, isAssigned) => {
+  const assignToInbox = (inboxId: string, isAssigned: boolean) => {
     AssignFile({
-      inboxFileId: selectedInboxFileId,
       isAssigned,
       inboxId,
+      inboxFileId: selectedInboxFileId,
     });
   };
 
@@ -79,7 +80,7 @@ function AssignInboxFileSlideOver() {
               />
             </div>
             <div className="overflow-hidden flex-1 h-full mt-5">
-              <StackListWithHeader
+              {filteredItems ? <StackListWithHeader
                 title={<span>Inboxes</span>}
                 items={filteredItems.map((inbox) => (
                   <InboxResultItem
@@ -93,7 +94,7 @@ function AssignInboxFileSlideOver() {
                     handleUnassignFromInbox={() => assignToInbox(inbox.id, true)}
                   />
                 ))}
-              />
+              /> : null}
             </div>
           </div>
         ) : null

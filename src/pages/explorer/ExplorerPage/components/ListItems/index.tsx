@@ -41,7 +41,7 @@ export default function ExplorerTable() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const checkbox = useRef<{ indeterminate: boolean }>(null);
+  const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const {

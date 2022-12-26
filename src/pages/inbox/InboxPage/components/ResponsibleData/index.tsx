@@ -1,30 +1,39 @@
-// /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import SelectMenuTeamMembers from '../../../../../components/selectMenu';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import { Spinner } from '../../../../../common';
-import HalfScreenMessage from '../../../../../components/CenterMessage/HalfScreenMessage';
 import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import {
   useCreateResponsibleMemberOrGroup,
   useGetResponsibleMembersOrGroups,
 } from '../../../../../features/inbox/inboxService';
 import ListItems from './ListItems';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 
-export default function ResponsibleData({ setShowModal, isGroups }) {
+interface ResponsibleDataProps {
+  setShowModal: (i: boolean) => void;
+  isGroups: boolean;
+}
+
+export default function ResponsibleData({
+  setShowModal,
+  isGroups,
+}: ResponsibleDataProps) {
   const { inboxId } = useParams();
-  const [selectedData, setSelectedData] = useState(null);
+  const [selectedData, setSelectedData] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
   const { data, status } = isGroups
     ? useGetTeamMemberGroups(0)
     : useGetTeamMembers({ page: 0, query: '' });
   const { mutate: onCreate } = useCreateResponsibleMemberOrGroup(
-    inboxId,
     isGroups,
+    inboxId
   );
 
-  const { data: dt } = useGetResponsibleMembersOrGroups(inboxId, isGroups);
+  const { data: dt } = useGetResponsibleMembersOrGroups(isGroups, inboxId);
 
   const responsibleData = isGroups
     ? dt?.data.inbox_responsible_team_member_groups
@@ -34,8 +43,12 @@ export default function ResponsibleData({ setShowModal, isGroups }) {
     ? data?.data.team_member_groups
     : data?.data.team_members;
 
-  const responsibleDataIds = responsibleData?.map((i) => (isGroups ? i.team_member_group_id : i.team_member_id));
-  const filteredData = selectItems?.filter((i) => !responsibleDataIds?.includes(i.id));
+  const responsibleDataIds = responsibleData?.map((i) =>
+    isGroups ? i.team_member_group_id : i.team_member_id
+  );
+  const filteredData = selectItems?.filter(
+    (i) => !responsibleDataIds?.includes(i.id)
+  );
 
   if (status === 'loading') {
     return (
@@ -50,20 +63,21 @@ export default function ResponsibleData({ setShowModal, isGroups }) {
   if (status === 'error') {
     return (
       <div className="absolute top-14 right-52 p-6 rounded-xl border bg-white z-50 w-80">
-        <HalfScreenMessage
+        <FullScreenMessage
           title="Oops, an error occurred :("
           description="Please try again later."
+          showHalFScreen
         />
       </div>
     );
   }
 
-  const handleChange = (item) => {
+  const handleChange = (item: { name: string; id: string }) => {
     setSelectedData(item);
     onCreate({
-      inboxId,
       dataId: item.id,
       isGroups,
+      inboxId,
     });
   };
 
@@ -82,7 +96,7 @@ export default function ResponsibleData({ setShowModal, isGroups }) {
           <SelectMenuTeamMembers
             teamMembers={filteredData.map((i) => ({
               id: i.id,
-              name: isGroups ? i.name : i.user.name,
+              name: isGroups ? i.name : i.user?.name,
             }))}
             selectedData={selectedData}
             setSelectedData={handleChange}
@@ -96,8 +110,3 @@ export default function ResponsibleData({ setShowModal, isGroups }) {
     </>
   );
 }
-
-ResponsibleData.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-  isGroups: PropTypes.bool.isRequired,
-};

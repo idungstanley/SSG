@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowCircleRightIcon } from '@heroicons/react/outline';
 import {
@@ -11,16 +11,17 @@ import MinMenu from './components/minMenu';
 import NavigationBetweenFiles from './components/navigationBetweenFiles';
 import DeleteFile from './components/deleteFile';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 function Toolbar() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
-  const { selectedInboxFileId } = useSelector((state) => state.inbox);
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
 
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const folderIdsForFiling = useSelector(
+  const folderIdsForFiling = useAppSelector(
     (state) => state.inbox.folderIdsForFiling,
   );
 
@@ -41,13 +42,13 @@ function Toolbar() {
 
   const fileDocument = async () => {
     await fileInboxFileMutation.mutateAsync({
-      inboxFileId: inboxFile.id,
       folderIds: folderIdsForFiling,
+      inboxFileId: inboxFile?.id,
     });
     dispatch(
       setCurrentInboxFile({
-        selectedInboxFileId: null,
-        selectedInboxFileIndex: 1,
+        inboxFileId: null,
+        inboxFileIndex: 1,
       }),
     );
   };

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   useGetInboxFiles,
@@ -9,44 +9,57 @@ import { FileIcon, Spinner } from '../../../../../../common';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 import { setShowUploadModal } from '../../../../../../features/general/uploadFile/uploadFileSlice';
-import { classNames } from "../../../../../../utils";
+import { classNames } from '../../../../../../utils';
+import { useAppSelector } from '../../../../../../app/hooks';
+
+interface IInboxFiles {
+  id: string;
+  name: JSX.Element;
+  title: string;
+}
 
 export default function TableWithSelection() {
   const dispatch = useDispatch();
   const { inboxId } = useParams();
-  const checkbox = useRef();
+  const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const { mutate: multipleArchive } = useMultipleArchiveOrUnArchive();
 
-  const { selectedInboxTabKey, selectedInboxFileId } = useSelector(
-    (state) => state.inbox,
+  const { selectedInboxTabKey, selectedInboxFileId } = useAppSelector(
+    (state) => state.inbox
   );
+
   const { data, status } = useGetInboxFiles({
     inboxId,
-    isArchived: selectedInboxTabKey === 'archived' ? 1 : 0,
+    isArchived: selectedInboxTabKey === 'archived',
   });
 
-  const inboxFiles = [];
+  const inboxFiles: IInboxFiles[] = [];
 
-  data?.pages.flatMap((page) => page.data.inbox_files.map((i) => inboxFiles.push({
-    id: i.id,
-    name: (
-      <FileIcon
-        extensionKey={i.inbox_file_source.file_format.key}
-        size={10}
-      />
-    ),
-    title: i.inbox_file_source.display_name,
-  })));
+  data?.pages.flatMap((page) =>
+    page.data.inbox_files.map((i) =>
+      inboxFiles.push({
+        id: i.id,
+        name: (
+          <FileIcon
+            extensionKey={i.inbox_file_source.file_format.key}
+            size={10}
+          />
+        ),
+        title: i.inbox_file_source.display_name,
+      })
+    )
+  );
 
   useLayoutEffect(() => {
-    const isIndeterminate = selectedFiles.length > 0 && selectedFiles.length < inboxFiles?.length;
+    const isIndeterminate =
+      selectedFiles.length > 0 && selectedFiles.length < inboxFiles?.length;
 
     if (
-      selectedFiles.length === inboxFiles.length
-      && +selectedFiles.length + +inboxFiles.length > 0
+      selectedFiles.length === inboxFiles.length &&
+      +selectedFiles.length + +inboxFiles.length > 0
     ) {
       setChecked(selectedFiles.length === inboxFiles.length);
     }
@@ -58,42 +71,45 @@ export default function TableWithSelection() {
 
   function toggleAll() {
     setSelectedFiles(
-      checked || indeterminate ? [] : inboxFiles.map((i) => i.id),
+      checked || indeterminate ? [] : inboxFiles.map((i) => i.id)
     );
     setChecked(!checked && !indeterminate);
     setIndeterminate(false);
   }
 
-  const handleClick = (e, fileId, index) => {
+  const handleClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, fileId: string, index: number) => {
+    const target = e.target as HTMLButtonElement;
+
     if (selectedFiles.length) {
       setSelectedFiles([]);
     }
 
-    if (!e.target.value) {
+    if (!target.value) {
       dispatch(
         setCurrentInboxFile({
           inboxFileId: fileId,
           inboxFileIndex: index,
-        }),
+        })
       );
       setSelectedFiles([fileId]);
     }
   };
 
-  const handleChangeInbox = (e, fileId) => {
+  const handleChangeInbox = (e: React.ChangeEvent<HTMLInputElement>, fileId: string) => {
+
     setSelectedFiles(
       e.target.checked
         ? [...selectedFiles, fileId]
-        : selectedFiles.filter((p) => p !== fileId),
+        : selectedFiles.filter((p) => p !== fileId)
     );
   };
 
   const onArchive = () => {
     const type = selectedInboxTabKey === 'inbox' ? 'archive' : 'unarchive';
     multipleArchive({
-      inboxId,
       type,
       fileIdsArr: selectedFiles,
+      inboxId,
     });
     setSelectedFiles([]);
     setChecked(false);
@@ -208,7 +224,7 @@ export default function TableWithSelection() {
                         'whitespace-nowrap py-4 pr-3 text-sm font-medium',
                         selectedFiles.includes(item.id)
                           ? 'text-indigo-600'
-                          : 'text-gray-900',
+                          : 'text-gray-900'
                       )}
                     >
                       {item.name}

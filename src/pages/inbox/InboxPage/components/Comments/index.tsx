@@ -1,9 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import CommentsT from '../../../../../components/Comments';
 
-export default function Comments({ setShowModal }) {
+interface CommentsProps {
+  setShowModal: (i: boolean) => void
+}
+
+export default function Comments({ setShowModal }: CommentsProps) {
   const { inboxId } = useParams();
 
   return (
@@ -22,7 +25,3 @@ export default function Comments({ setShowModal }) {
     </>
   );
 }
-
-Comments.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-};

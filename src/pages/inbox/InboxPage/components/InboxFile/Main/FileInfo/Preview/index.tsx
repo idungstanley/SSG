@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useGetInboxFile } from '../../../../../../../../features/inbox/inboxService';
 import { GetFileWithHeaders } from '../../../../../../../../app/helpers';
 import FilePreview from '../../../../../../../../common/FilePreview';
 import { Spinner } from '../../../../../../../../common';
+import { useAppSelector } from '../../../../../../../../app/hooks';
 
 function Preview() {
-  const selectedInboxFileId = useSelector((state) => state.inbox.selectedInboxFileId);
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const [fileData, setFileData] = useState(null);
+  const [fileData, setFileData] = useState<string | null>(null);
 
-  useEffect(async () => {
-    if (selectedInboxFileId == null) {
-      return setFileData(null);
-    }
+  useEffect(() => {
+    const getFIle = async () => {
+      if (selectedInboxFileId == null) {
+        return setFileData(null);
+      }
 
-    const data = await GetFileWithHeaders('inboxFile', selectedInboxFileId);
-    return setFileData(data);
+      const data = await GetFileWithHeaders('inboxFile', selectedInboxFileId);
+
+      return setFileData(data);
+    };
+    getFIle();
   }, [selectedInboxFileId]);
 
   return inboxFile ? (
     <div className="h-full flex-1 select-none">
       <div className="relative h-full">
-
         <div className="flex h-full flex-col items-center">
           {fileData ? (
             <FilePreview

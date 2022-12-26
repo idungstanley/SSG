@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { useGetInboxFile } from '../../../../../../../../../features/inbox/inboxService';
+import { useAppSelector } from '../../../../../../../../../app/hooks';
 
 function FileHeader() {
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
-  );
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const user = inboxFile.inbox_file_source.created_by_team_member
+  const user = inboxFile?.inbox_file_source.created_by_team_member
     ? inboxFile.inbox_file_source.created_by_team_member?.user.name
     : null;
 
@@ -27,7 +25,7 @@ function FileHeader() {
           {inboxFile.inbox_file_source.upload_method.key === 'email' && (
             <p className="mt-1 text-sm text-gray-500 overflow-hidden overflow-ellipsis">
               {`Sent in ${moment(
-                inboxFile.inbox_file_source.created_at,
+                inboxFile.inbox_file_source.created_at
               ).fromNow()} by 
               ${inboxFile.inbox_file_source.sent_from_email} via email`}
             </p>

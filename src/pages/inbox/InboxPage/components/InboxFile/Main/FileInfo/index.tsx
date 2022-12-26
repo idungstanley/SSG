@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
 import {
   EyeIcon,
   InformationCircleIcon,
@@ -11,7 +10,8 @@ import Preview from './Preview';
 import Details from './Details';
 import Activity from './Activity';
 import Comments from '../../../../../../../components/Comments';
-import { classNames } from "../../../../../../../utils";
+import { classNames } from '../../../../../../../utils';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
 const tabs = [
   {
@@ -41,9 +41,7 @@ const tabs = [
 ];
 
 function FileInfo() {
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
-  );
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
 
   return (
     <div className="h-full flex-1">
@@ -59,7 +57,7 @@ function FileInfo() {
                 id="tabs"
                 name="tabs"
                 className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                defaultValue={tabs.find((tab) => tab.current).name}
+                defaultValue={tabs.find((tab) => tab.current)?.name}
               >
                 {tabs.map((tab) => (
                   <option key={tab.name}>{tab.name}</option>
@@ -80,7 +78,7 @@ function FileInfo() {
                             selected
                               ? 'border-indigo-500 text-indigo-600'
                               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                            'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm',
+                            'group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm'
                           )}
                         >
                           <tab.icon
@@ -88,7 +86,7 @@ function FileInfo() {
                               selected
                                 ? 'text-indigo-500'
                                 : 'text-gray-400 group-hover:text-gray-500',
-                              '-ml-0.5 mr-2 h-5 w-5',
+                              '-ml-0.5 mr-2 h-5 w-5'
                             )}
                             aria-hidden="true"
                           />
@@ -102,19 +100,22 @@ function FileInfo() {
                 <div className="h-full flex-1">
                   <Tab.Panels as={Fragment}>
                     <Tab.Panel className="h-full">
-                      <Preview id={selectedInboxFileId} />
+                      <Preview />
                     </Tab.Panel>
 
                     <Tab.Panel className="h-full">
-                      <Details id={selectedInboxFileId} />
+                      <Details />
                     </Tab.Panel>
 
                     <Tab.Panel className="h-full">
-                      <Activity id={selectedInboxFileId} />
+                      <Activity />
                     </Tab.Panel>
 
                     <Tab.Panel className="h-full p-4">
-                      <Comments type="inbox_file" itemId={selectedInboxFileId} />
+                      <Comments
+                        type="inbox_file"
+                        itemId={selectedInboxFileId}
+                      />
                     </Tab.Panel>
                   </Tab.Panels>
                 </div>

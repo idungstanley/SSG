@@ -6,22 +6,29 @@ import {
   SelectMenuWithAvatar,
 } from '../../../../../components';
 
+interface ITempInboxes {
+  id: string;
+  name: string;
+  badge: number | null;
+  avatar: JSX.Element;
+}
+
 function SelectInboxMenu() {
   const navigate = useNavigate();
   const { inboxId } = useParams();
 
-  const [processedInboxes, setProcessedInboxes] = useState([]);
-  const [selectedInboxId, setSelectedInboxId] = useState(null);
+  const [processedInboxes, setProcessedInboxes] = useState<ITempInboxes[]>([]);
+  const [selectedInboxId, setSelectedInboxId] = useState<string | null>(null);
 
   const { status, data } = useGetInboxes();
 
-  const onChangeInbox = (e) => {
+  const onChangeInbox = (e: { id: string }) => {
     setSelectedInboxId(e.id);
     navigate(`/inbox/${e.id}`);
   };
 
   useEffect(() => {
-    const tempInboxes = [];
+    const tempInboxes: ITempInboxes[] = [];
 
     if (status === 'success' && data != null) {
       data.data.inboxes.map((inbox) => {
@@ -45,12 +52,10 @@ function SelectInboxMenu() {
     }
 
     setProcessedInboxes(tempInboxes);
-
-    return true;
   }, [status, data]);
 
   useEffect(() => {
-    setSelectedInboxId(inboxId);
+    setSelectedInboxId(inboxId || null);
   }, [inboxId]);
 
   return status === 'success' && data ? (

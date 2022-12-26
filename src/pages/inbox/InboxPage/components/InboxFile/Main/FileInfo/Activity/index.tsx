@@ -1,13 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../../../../../app/hooks';
 import { InitialsAvatar } from '../../../../../../../../common';
 import { useGetInboxFileActivity } from '../../../../../../../../features/inbox/inboxService';
 
 function Activity() {
-  const selectedInboxFileId = useSelector(
-    (state) => state.inbox.selectedInboxFileId,
-  );
-  const { data } = useGetInboxFileActivity(selectedInboxFileId);
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
+  const { data } = useGetInboxFileActivity(selectedInboxFileId || '');
 
   const logs = data?.data.logs;
 
@@ -22,7 +20,7 @@ function Activity() {
                 className="py-4 flex justify-between items-center"
               >
                 <div className="flex gap-3 justify-center items-center">
-                  {activityLog.team_member !== null ? (
+                  {activityLog.team_member ? (
                     <InitialsAvatar
                       size={6}
                       colour={activityLog.team_member.colour}
@@ -31,9 +29,11 @@ function Activity() {
                   ) : (
                     <InitialsAvatar size={6} colour="#4F46E5" initials="U" />
                   )}
-                  <p className="text-indigo-600 mb-0">
-                    {activityLog.team_member.name}
-                  </p>
+                  {activityLog.team_member ? (
+                    <p className="text-indigo-600 mb-0">
+                      {activityLog.team_member.name}
+                    </p>
+                  ) : null}
                 </div>
 
                 <p className="text-gray-400 mb-0">{activityLog.type}</p>
