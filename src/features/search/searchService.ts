@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-export const useSearch = (query, searchFileContents, enabled) => {
+
+
+
+export const useSearch = (query: string, searchFileContents: string, enabled: boolean) => {
   const explorer = useQuery(
     ['search_explorer', { query, searchFileContents }],
     async () => requestNew({
@@ -40,7 +43,11 @@ export const useSearch = (query, searchFileContents, enabled) => {
   };
 };
 
-export const useGetSearchedItemDetails = (data) => {
+interface Idata {
+  type: string
+  id: string
+}
+export const useGetSearchedItemDetails = (data: Idata) => {
   const { type, id } = data;
 
   const url = `/${type}/${id}/details`;
