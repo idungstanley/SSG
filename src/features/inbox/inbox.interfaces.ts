@@ -167,3 +167,41 @@ export interface IInboxFileLogsReq {
     logs: IInboxFileLog[];
   };
 }
+
+export interface IInboxMember {
+  team_member_id: string;
+  id: string;
+  access_level: {
+    name: string;
+  };
+  team_member_group_id: string;
+  team_member_group: {
+    initials: string;
+    colour: string;
+    name: string;
+  };
+  team_member: {
+    initials: string;
+    colour: string;
+    user: {
+      name: string;
+      email: string;
+    };
+  };
+}
+
+export interface IInboxMembersReq {
+  data: {
+    inbox_members: IInboxMember[];
+    inbox_member_groups: IInboxMember[];
+    inbox_access_level: {
+      key: string;
+    };
+  };
+}
+
+// export interface IInboxMemberGroupsReq {
+//   data: {
+//     inbox_member_groups: IInboxMember[];
+//   };
+// }

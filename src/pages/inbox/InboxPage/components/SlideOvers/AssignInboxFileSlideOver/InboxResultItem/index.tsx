@@ -22,7 +22,7 @@ function InboxResultItem({
   handleAssignToInbox,
   handleUnassignFromInbox,
 }: InboxResultItemProps) {
-  const { data: inbox } = useGetInbox(inboxId, 'active');
+  const { data: inbox } = useGetInbox('active', inboxId);
 
   return inbox ? (
     <StackListItemNarrow

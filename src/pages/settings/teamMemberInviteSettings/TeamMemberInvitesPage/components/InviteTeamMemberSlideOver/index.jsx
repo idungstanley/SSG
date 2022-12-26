@@ -35,7 +35,7 @@ function InviteTeamMemberSlideOver() {
   };
 
   const onChangeRole = (e) => {
-    setSelectedRoleKey(e.id);
+    setSelectedRoleKey(e);
   };
 
   const createTeamMemberInviteMutation = useMutation(createTeamMemberInviteService, {

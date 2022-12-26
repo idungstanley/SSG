@@ -1,14 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { classNames } from "../../utils";
+
+interface SectionHeadingWithTabsProps {
+  title: string,
+  actions?: ReactNode,
+  tabs: {name: string, href: string, current: boolean, count: number | null}[],
+  titleSize: string,
+}
 
 function SectionHeadingWithTabs({
   title,
   actions,
   tabs,
-  titleSize,
-}) {
+  titleSize = 'text-xl',
+}: SectionHeadingWithTabsProps) {
   return (
     <div className="relative pb-5 border-b border-gray-200 sm:pb-0">
       <div className="md:flex md:items-center md:justify-between">
@@ -27,7 +33,7 @@ function SectionHeadingWithTabs({
               id="current-tab"
               name="current-tab"
               className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              defaultValue={tabs.find((tab) => tab.current).name}
+              defaultValue={tabs.find((tab) => tab.current)?.name}
             >
               {tabs.map((tab) => (
                 <option key={tab.name}>{tab.name}</option>
@@ -68,17 +74,5 @@ function SectionHeadingWithTabs({
     </div>
   );
 }
-
-SectionHeadingWithTabs.defaultProps = {
-  actions: null,
-  titleSize: 'text-xl',
-};
-
-SectionHeadingWithTabs.propTypes = {
-  title: PropTypes.string.isRequired,
-  actions: PropTypes.string,
-  tabs: PropTypes.array.isRequired,
-  titleSize: PropTypes.string,
-};
 
 export default SectionHeadingWithTabs;

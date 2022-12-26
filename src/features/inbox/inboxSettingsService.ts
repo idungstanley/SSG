@@ -1,30 +1,44 @@
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IInboxMembersReq } from './inbox.interfaces';
 
 // Get inbox access
-export const useGetInboxAccess = (inboxId) => useQuery(
-  ['inbox_access', inboxId],
-  async () => requestNew({
-    url: `inboxes/${inboxId}/access`,
-    method: 'GET',
-  }),
-);
+export const useGetInboxAccess = (inboxId?: string) =>
+  useQuery<IInboxMembersReq>(
+    ['inbox_access', inboxId],
+    async () =>
+      requestNew({
+        url: `inboxes/${inboxId}/access`,
+        method: 'GET',
+      }),
+    { enabled: !!inboxId }
+  );
 
 // Update inbox settings
-export const updateInboxSettingsService = async (data) => {
-  const response = requestNew({
-    url: `inboxes/${data.inboxId}/update-settings`,
-    method: 'POST',
-    data: {
-      name: data.name,
-      email_username: data.emailUsername,
+export const updateInboxSettingsService = async (data: {
+  inboxId?: string;
+  name: string;
+  emailUsername: string;
+}) => {
+  const response = requestNew(
+    {
+      url: `inboxes/${data.inboxId}/update-settings`,
+      method: 'POST',
+      data: {
+        name: data.name,
+        email_username: data.emailUsername,
+      },
     },
-  }, true);
+    true
+  );
   return response;
 };
 
 // Update permissions settings (workspace access level)
-export const updateInboxWorkspaceAccessLevelService = async (data) => {
+export const updateInboxWorkspaceAccessLevelService = async (data: {
+  inboxId?: string;
+  accessLevelKey: string | null;
+}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/change-workspace-access-level`,
     method: 'POST',
@@ -36,7 +50,10 @@ export const updateInboxWorkspaceAccessLevelService = async (data) => {
 };
 
 // Remove team member access from inbox
-export const removeTeamMemberInboxAccessService = async (data) => {
+export const removeTeamMemberInboxAccessService = async (data: {
+  inboxId?: string;
+  teamMemberId: string;
+}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/remove-access`,
     method: 'POST',
@@ -49,7 +66,10 @@ export const removeTeamMemberInboxAccessService = async (data) => {
 };
 
 // Remove team member group access from inbox
-export const removeTeamMemberGroupInboxAccessService = async (data) => {
+export const removeTeamMemberGroupInboxAccessService = async (data: {
+  inboxId?: string;
+  teamMemberGroupId: string | null;
+}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/remove-access`,
     method: 'POST',
@@ -62,7 +82,11 @@ export const removeTeamMemberGroupInboxAccessService = async (data) => {
 };
 
 // Add team member access to inbox
-export const addTeamMemberInboxAccessService = async (data) => {
+export const addTeamMemberInboxAccessService = async (data: {
+  inboxId?: string;
+  teamMemberId: string | null;
+  accessLevelKey: string | null;
+}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/add-access`,
     method: 'POST',
@@ -76,7 +100,11 @@ export const addTeamMemberInboxAccessService = async (data) => {
 };
 
 // Add team member group access to inbox
-export const addTeamMemberGroupInboxAccessService = async (data) => {
+export const addTeamMemberGroupInboxAccessService = async (data: {
+  inboxId?: string;
+  teamMemberGroupId: string | null;
+  accessLevelKey: string | null;
+}) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/add-access`,
     method: 'POST',

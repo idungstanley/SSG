@@ -1,10 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { SectionHeadingWithTabs } from '../../../../../components';
 import { useGetInboxAccess } from '../../../../../features/inbox/inboxSettingsService';
 
-function TabbedHeading({ selectedTabKey, actions }) {
+interface TabledHeadingProps {
+  selectedTabKey: string;
+  actions?: ReactNode;
+}
+
+function TabbedHeading({ selectedTabKey, actions }: TabledHeadingProps) {
   const { inboxId } = useParams();
   const { data, status } = useGetInboxAccess(inboxId);
 
@@ -33,7 +37,8 @@ function TabbedHeading({ selectedTabKey, actions }) {
         },
         {
           name: 'Groups',
-          count: status === 'success' ? data.data.inbox_member_groups.length : null,
+          count:
+            status === 'success' ? data.data.inbox_member_groups.length : null,
           current: selectedTabKey === 'groups',
           href: `/inbox/${inboxId}/settings/groups`,
         },
@@ -44,12 +49,3 @@ function TabbedHeading({ selectedTabKey, actions }) {
 }
 
 export default TabbedHeading;
-
-TabbedHeading.defaultProps = {
-  actions: null,
-};
-
-TabbedHeading.propTypes = {
-  selectedTabKey: PropTypes.string.isRequired,
-  actions: PropTypes.element,
-};

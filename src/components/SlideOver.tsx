@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { Fragment, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
@@ -6,7 +7,7 @@ import Button from './Button';
 
 interface SlideOverProps {
   show: boolean
-  onClose?: (i: boolean) => void;
+  onClose: (i: boolean) => void;
   body: ReactNode,
   headerTitle: string,
   headerDescription?: string,
@@ -71,7 +72,8 @@ function SlideOver({
                           <button
                             type="button"
                             className="text-gray-400 hover:text-gray-500"
-                            onClick={() => onClose}
+                            // @ts-ignore
+                            onClick={onClose}
                           >
                             <span className="sr-only">Close</span>
                             <XIcon className="h-6 w-6" aria-hidden="true" />

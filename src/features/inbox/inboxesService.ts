@@ -71,7 +71,7 @@ export const useGetTrashedInboxes = () => {
 };
 
 // Get inbox
-export const useGetInbox = (inboxId: string, type: inboxType) => {
+export const useGetInbox = (type: inboxType, inboxId?: string) => {
   const queryClient = useQueryClient();
   const queryName = type ? `${type}-inbox` : 'inbox';
 
@@ -79,6 +79,7 @@ export const useGetInbox = (inboxId: string, type: inboxType) => {
     [queryName, inboxId],
     () => queryClient.getQueryData([queryName, inboxId]),
     {
+      enabled: !!inboxId,
       initialData: () => queryClient.getQueryData([queryName, inboxId]),
     }
   );
@@ -321,7 +322,10 @@ export const getBlacklistFiles = () => {
 export const useGetBlacklistFiles = () =>
   useQuery<IBlackListInboxFilesReq>(['blacklist-files'], getBlacklistFiles);
 
-const blacklistFile = (data: { type: 'add' | string; fileId: string | null }) => {
+const blacklistFile = (data: {
+  type: 'add' | string;
+  fileId: string | null;
+}) => {
   const url =
     data.type === 'add'
       ? `inbox-files/${data.fileId}/blacklist`

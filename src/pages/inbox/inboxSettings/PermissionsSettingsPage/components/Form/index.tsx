@@ -9,9 +9,9 @@ export default function Form() {
   const { inboxId } = useParams();
   const { data, status } = useGetInboxAccess(inboxId);
 
-  const [workspaceAccessLevel, setWorkspaceAccessLevel] = useState(null);
+  const [workspaceAccessLevel, setWorkspaceAccessLevel] = useState<string | null>(null);
 
-  const setSelected = (key) => {
+  const setSelected = (key: string) => {
     setWorkspaceAccessLevel(key);
   };
 
@@ -80,7 +80,7 @@ export default function Form() {
                         key: 'owner',
                       },
                     ]}
-                    selectedKey={workspaceAccessLevel}
+                    selectedKey={workspaceAccessLevel || ''}
                     setSelected={setSelected}
                   />
                 </div>

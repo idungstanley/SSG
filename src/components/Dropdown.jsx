@@ -51,5 +51,5 @@ export default function Dropdown({
 }
 
 Dropdown.propTypes = {
-  items: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
 };

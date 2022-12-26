@@ -8,12 +8,11 @@ import { updateInboxSettingsService } from '../../../../../../features/inbox/inb
 export default function Form() {
   const { inboxId } = useParams();
 
-  const { data: inbox, status: loadingInboxData } = useGetInbox(inboxId);
+  const { data: inbox, status: loadingInboxData } = useGetInbox('active', inboxId);
 
   const updateInboxSettingsMutation = useMutation(updateInboxSettingsService);
 
   // Form state
-
   const defaultFormState = {
     name: '',
     emailUsername: '',
@@ -32,7 +31,7 @@ export default function Form() {
     }
   }, [inbox]);
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,

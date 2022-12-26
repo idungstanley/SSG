@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setAddInboxTeamMemberSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../../../features/workspace/teamMemberService';
@@ -12,39 +12,52 @@ import {
   ComboBoxWithAvatar,
   AvatarWithInitials,
 } from '../../../../../../components';
+import { useAppSelector } from '../../../../../../app/hooks';
+
+export interface ComboboxOption {
+  id: string;
+  name: string;
+  avatar: JSX.Element;
+}
 
 function AddInboxTeamMemberSlideOver() {
   const dispatch = useDispatch();
   const { inboxId } = useParams();
   const queryClient = useQueryClient();
 
-  const showAddInboxTeamMemberSlideOver = useSelector((state) => state.slideOver.showAddInboxTeamMemberSlideOver);
+  const { showAddInboxTeamMemberSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
 
-  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] = useState([]);
-  const [teamMemberId, setTeamMemberId] = useState(null);
+  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] =
+    useState<ComboboxOption[]>([]);
+  const [teamMemberId, setTeamMemberId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
-  const [selectedAccessLevelKey, setSelectedAccessLevelKey] = useState(null);
+  const [selectedAccessLevelKey, setSelectedAccessLevelKey] = useState<string | null>(null);
 
-  const addTeamMemberInboxAccessMutation = useMutation(addTeamMemberInboxAccessService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('inbox_access', inboxId);
-      dispatch(setAddInboxTeamMemberSlideOverVisibility(false));
-      setSelectedAccessLevelKey(null);
-      setQuery('');
-      setTeamMemberId(null);
-    },
-  });
+  const addTeamMemberInboxAccessMutation = useMutation(
+    addTeamMemberInboxAccessService,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['inbox_access', inboxId]);
+        dispatch(setAddInboxTeamMemberSlideOverVisibility(false));
+        setSelectedAccessLevelKey(null);
+        setQuery('');
+        setTeamMemberId(null);
+      },
+    }
+  );
 
-  const onChangeAccessLevel = (e) => {
-    setSelectedAccessLevelKey(e.id);
+  const onChangeAccessLevel = (e: string) => {
+    setSelectedAccessLevelKey(e);
   };
 
-  const onQueryChange = (q) => {
+  const onQueryChange = (q: string) => {
     setQuery(q);
     setTeamMemberId(null);
   };
 
-  const onChange = (key) => {
+  const onChange = (key: string) => {
     setTeamMemberId(key);
   };
 
@@ -56,17 +69,12 @@ function AddInboxTeamMemberSlideOver() {
     });
   };
 
-  const {
-    status,
-    data,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetTeamMembers({
+  const { status, data, fetchNextPage, hasNextPage } = useGetTeamMembers({
     query,
   });
 
   useEffect(() => {
-    const temp = [];
+    const temp: ComboboxOption[] = [];
 
     if (status === 'success' && data) {
       const flat = data.pages.flatMap((page) => page.data.team_members);
@@ -99,7 +107,7 @@ function AddInboxTeamMemberSlideOver() {
       onClose={() => dispatch(setAddInboxTeamMemberSlideOverVisibility(false))}
       headerTitle="Add member to inbox"
       headerDescription="Set a role and select a team member"
-      body={(
+      body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <SelectMenuSimple
@@ -111,16 +119,15 @@ function AddInboxTeamMemberSlideOver() {
                 { id: 'owner', name: 'Owner' },
               ]}
               onChange={onChangeAccessLevel}
-              selectedId={selectedAccessLevelKey}
+              selectedId={selectedAccessLevelKey || ''}
             />
           </div>
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <ComboBoxWithAvatar
               label="Team member"
-              query={query}
               onQueryChange={onQueryChange}
               onChange={onChange}
-              selectedKey={teamMemberId}
+              selectedKey={teamMemberId || ''}
               options={unpaginatedTeamMemberOptions}
               fetchNextPage={fetchNextPage}
               hasNextPage={hasNextPage}
@@ -128,8 +135,8 @@ function AddInboxTeamMemberSlideOver() {
             />
           </div>
         </div>
-      )}
-      footerButtons={(
+      }
+      footerButtons={
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -137,7 +144,7 @@ function AddInboxTeamMemberSlideOver() {
           label="Add member"
           width="w-40"
         />
-      )}
+      }
     />
   );
 }

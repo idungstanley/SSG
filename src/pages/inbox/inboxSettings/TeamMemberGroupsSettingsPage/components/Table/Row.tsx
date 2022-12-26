@@ -1,18 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserRemoveIcon } from '@heroicons/react/outline';
 import { AvatarWithInitials, StatusDot, Dropdown } from '../../../../../../components';
 import { removeTeamMemberGroupInboxAccessService } from '../../../../../../features/inbox/inboxSettingsService';
+import { IInboxMember } from '../../../../../../features/inbox/inbox.interfaces';
 
-export default function Row({ inboxMemberGroup }) {
+interface RowProps {
+  inboxMemberGroup: IInboxMember
+}
+
+export default function Row({ inboxMemberGroup }: RowProps) {
   const { inboxId } = useParams();
   const queryClient = useQueryClient();
 
   const removeTeamMemberGroupInboxAccessMutation = useMutation(removeTeamMemberGroupInboxAccessService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('inbox_access', inboxId);
+      queryClient.invalidateQueries(['inbox_access', inboxId]);
     },
   });
 
@@ -60,7 +64,3 @@ export default function Row({ inboxMemberGroup }) {
     </tr>
   );
 }
-
-Row.propTypes = {
-  inboxMemberGroup: PropTypes.object.isRequired,
-};
