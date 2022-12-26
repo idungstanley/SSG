@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface TaskState {
+  task: string[]
+}
+
+const initialState: TaskState = {
   task: [],
 };
 

@@ -1,6 +1,8 @@
 import requestNew from '../../app/requestNew';
 
-export const createTaskService = (data) => {
+export const createTaskService = (data: {
+  name: string, description: string, getListId: string
+}) => {
   const response = requestNew(
     {
       url: 'at/tasks',
@@ -16,7 +18,7 @@ export const createTaskService = (data) => {
   return response;
 };
 
-export const getTaskListService = (data) => {
+export const getTaskListService = (data : any) => {
   const listId = data.queryKey[1];
   const response = requestNew(
     {
