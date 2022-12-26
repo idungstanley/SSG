@@ -35,7 +35,7 @@ export const useGetInboxFiles = ({
         method: 'GET',
         params: {
           page: pageParam,
-          is_archived: isArchived,
+          is_archived: isArchived ? 1 : 0,
         },
       });
     },
@@ -195,9 +195,8 @@ export const useAssignOrUnassignInboxFile = (fileId: string | null) => {
 
 const archiveOrUnarchiveInboxFile = (data: {
   inboxFileId: string;
-  type: string;
+  type: 'archive' | 'unarchive';
 }) => {
-  // type: archive | unarchive
 
   const response = requestNew({
     url: `inbox-files/${data.inboxFileId}/${data.type}`,
@@ -388,7 +387,7 @@ export const useDeleteInboxFile = () => {
 
 // email list
 export const addEmailToList = (data: {
-  inboxId: string | null;
+  inboxId?: string;
   email: string;
 }) => {
   const request = requestNew({
@@ -402,7 +401,7 @@ export const addEmailToList = (data: {
 };
 
 export const deleteEmailFromList = (data: {
-  inboxId: string | null;
+  inboxId?: string;
   emailId: string;
 }) => {
   const request = requestNew({
@@ -412,7 +411,7 @@ export const deleteEmailFromList = (data: {
   return request;
 };
 
-export const useGetEmailList = (inboxId: string | null) =>
+export const useGetEmailList = (inboxId?: string) =>
   useQuery<IEmailListReq>(
     [`email-list-${inboxId}`],
     () =>
@@ -423,7 +422,7 @@ export const useGetEmailList = (inboxId: string | null) =>
     { enabled: !!inboxId }
   );
 
-export const useAddEmailToList = (inboxId: string) => {
+export const useAddEmailToList = (inboxId?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(addEmailToList, {
@@ -433,7 +432,7 @@ export const useAddEmailToList = (inboxId: string) => {
   });
 };
 
-export const useDeleteEmailFromList = (inboxId: string | null) => {
+export const useDeleteEmailFromList = (inboxId?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteEmailFromList, {

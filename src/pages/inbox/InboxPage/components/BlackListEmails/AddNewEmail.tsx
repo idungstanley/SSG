@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useParams } from 'react-router-dom';
 import { useAddEmailToList } from '../../../../../features/inbox/inboxService';
 
 export default function AddNewEmail() {
   const [value, setValue] = useState('');
-  const { currentInboxId } = useAppSelector((state) => state.inbox);
-  const { mutate: addEmail } = useAddEmailToList(currentInboxId || '');
+  const { inboxId } = useParams();
+  const { mutate: addEmail } = useAddEmailToList(inboxId);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     addEmail({
-      inboxId: currentInboxId,
+      inboxId,
       email: value,
     });
 

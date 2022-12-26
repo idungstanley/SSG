@@ -6,17 +6,18 @@ import {
 } from '../../../../../features/inbox/inboxService';
 import { Spinner } from '../../../../../common';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useParams } from 'react-router-dom';
 
 export default function EmailList() {
-  const { currentInboxId } = useAppSelector((state) => state.inbox);
-  const { data, status } = useGetEmailList(currentInboxId);
-  const { mutate: deleteEmail } = useDeleteEmailFromList(currentInboxId);
+  const { inboxId } = useParams();
+
+  const { data, status } = useGetEmailList(inboxId);
+  const { mutate: deleteEmail } = useDeleteEmailFromList(inboxId);
   const list = data?.data.list;
 
   const handleDelete = (emailId: string) => {
     deleteEmail({
-      inboxId: currentInboxId,
+      inboxId,
       emailId,
     });
   };
@@ -27,7 +28,7 @@ export default function EmailList() {
     </div>
   ) : status === 'success' ? (
     list?.length ? (
-      <ul role="list" className="divide-y divide-gray-200 border-t">
+      <ul role="list" className="divide-y divide-gray-200">
         {list.map((i) => (
           <li key={i.id} className="py-4 flex justify-between">
             <p className="pl-1">{i.email}</p>
