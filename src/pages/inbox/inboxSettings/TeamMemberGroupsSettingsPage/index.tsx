@@ -1,29 +1,33 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setAddInboxTeamMemberGroupSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
-import Header from '../components/Header';
-import TabbedHeading from '../components/TabbedHeading';
-import Table from './components/Table';
-import { Button, EmptyStateSimple } from '../../../../components';
-import { Spinner } from '../../../../common';
-import AddInboxTeamMemberGroupSlideOver from './components/AddInboxTeamMemberGroupSlideOver';
-import { useGetInboxAccess } from '../../../../features/inbox/inboxSettingsService';
+import Layout from '../components/Layout';
+import SideOver from '../components/SideOver';
+// import { useParams } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import { setAddInboxTeamMemberGroupSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+// import Header from '../components/Header';
+// import TabbedHeading from '../components/TabbedHeading';
+// import Table from './components/Table';
+// import { Button, EmptyStateSimple } from '../../../../components';
+// import { Spinner } from '../../../../common';
+// import AddInboxTeamMemberGroupSlideOver from './components/AddInboxTeamMemberGroupSlideOver';
+// import { useGetInboxAccess } from '../../../../features/inbox/inboxSettingsService';
 
 function TeamMemberGroupsSettingsPage() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const { inboxId } = useParams();
+  // const { inboxId } = useParams();
 
-  const { status, data } = useGetInboxAccess(inboxId);
+  // const { status, data } = useGetInboxAccess(inboxId);
 
-  const addGroup = () => {
-    dispatch(setAddInboxTeamMemberGroupSlideOverVisibility(true));
-  };
+  // const addGroup = () => {
+  //   dispatch(setAddInboxTeamMemberGroupSlideOverVisibility(true));
+  // };
 
   return (
     <>
-      <div className="h-full flex flex-col w-full flex-1 bg-white overflow-hidden">
+      <Layout isGroups />
+      <SideOver isGroups />
+      {/* <div className="h-full flex flex-col w-full flex-1 bg-white overflow-hidden">
         <Header />
         <div className="flex-1 h-full flex-col flex overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
           <div className="my-10">
@@ -66,7 +70,7 @@ function TeamMemberGroupsSettingsPage() {
           )}
         </div>
       </div>
-      <AddInboxTeamMemberGroupSlideOver />
+      <AddInboxTeamMemberGroupSlideOver /> */}
     </>
   );
 }

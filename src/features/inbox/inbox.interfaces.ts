@@ -173,6 +173,7 @@ export interface IInboxMember {
   id: string;
   access_level: {
     name: string;
+    key: string
   };
   team_member_group_id: string;
   team_member_group: {
@@ -184,13 +185,14 @@ export interface IInboxMember {
     initials: string;
     colour: string;
     user: {
+      id: string;
       name: string;
       email: string;
     };
   };
 }
 
-export interface IInboxMembersReq {
+export interface IInboxMembersAccess {
   data: {
     inbox_members: IInboxMember[];
     inbox_member_groups: IInboxMember[];

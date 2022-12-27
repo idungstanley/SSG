@@ -1,10 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IInboxMembersReq } from './inbox.interfaces';
+import { ITeamMembersAndGroupsReq } from '../workspace/teamMembers.intrfaces';
+import { IInboxMembersAccess } from './inbox.interfaces';
 
 // Get inbox access
 export const useGetInboxAccess = (inboxId?: string) =>
-  useQuery<IInboxMembersReq>(
+  useQuery<IInboxMembersAccess>(
     ['inbox_access', inboxId],
     async () =>
       requestNew({
@@ -81,6 +87,32 @@ export const removeTeamMemberGroupInboxAccessService = async (data: {
   return response;
 };
 
+const removeTeamMemberOrGroupAccess = (data: {
+  inboxId?: string;
+  accessToId: string;
+  isGroups: boolean;
+}) => {
+  const response = requestNew({
+    url: `inboxes/${data.inboxId}/access/remove-access`,
+    method: 'POST',
+    params: {
+      access_type: data.isGroups ? 'member-group' : 'member',
+      access_to_id: data.accessToId,
+    },
+  });
+  return response;
+};
+
+export const useRemoveTeamMemberOrGroupAccess = (inboxId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(removeTeamMemberOrGroupAccess, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inbox_access', inboxId]);
+    },
+  });
+};
+
 // Add team member access to inbox
 export const addTeamMemberInboxAccessService = async (data: {
   inboxId?: string;
@@ -115,4 +147,86 @@ export const addTeamMemberGroupInboxAccessService = async (data: {
     },
   });
   return response;
+};
+
+const addTeamMemberOrGroupAccess = (data: {
+  inboxId?: string;
+  accessToId: string | null;
+  accessLevelKey: string | null;
+  isGroups: boolean;
+}) => {
+  const response = requestNew({
+    url: `inboxes/${data.inboxId}/access/add-access`,
+    method: 'POST',
+    params: {
+      access_type: data.isGroups ? 'member-group' : 'member',
+      access_to_id: data.accessToId,
+      access_level_key: data.accessLevelKey,
+    },
+  });
+  return response;
+};
+
+export const useAddTeamMemberOrGroupAccess = (inboxId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addTeamMemberOrGroupAccess, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['inbox_access', inboxId]);
+    },
+  });
+};
+
+export const useGetTeamMembersOrGroups = ({
+  query,
+  isGroups,
+}: {
+  query: string;
+  isGroups: boolean;
+}) => {
+  const queryClient = useQueryClient();
+  const title = isGroups ? 'team_member_groups' : 'team_members';
+
+  return useInfiniteQuery<ITeamMembersAndGroupsReq>(
+    [title, { query }],
+    async ({ pageParam = 0 }) => {
+      const url = `settings/team-members`;
+
+      return requestNew(
+        {
+          url,
+          method: 'GET',
+          params: {
+            page: pageParam,
+            search: query,
+          },
+        },
+        true
+      );
+    },
+    {
+      onSuccess: (data) => {
+        if (isGroups) {
+          data.pages.map((page) =>
+            page.data.team_member_groups?.map((item) =>
+              queryClient.setQueryData([title, item.id], item)
+            )
+          );
+        } else {
+          data.pages.map((page) =>
+            page.data.team_members?.map((item) =>
+              queryClient.setQueryData([title, item.id], item)
+            )
+          );
+        }
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.pagination.has_more_pages) {
+          return Number(lastPage.data.pagination.page) + 1;
+        }
+
+        return false;
+      },
+    }
+  );
 };

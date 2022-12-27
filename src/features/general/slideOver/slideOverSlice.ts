@@ -1,24 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  showCreateInboxSlideOver: false,
+  showAssignInboxFileSlideOver: false,
+  showCreateFolderSlideOver: false,
+  showCreateFolderTypeSlideOver: false,
+  showInviteTeamMemberSlideOver: false,
+  showTeamMemberActivityLogSlideOver: false,
+  showInboxSettingsSlideOver: false,
+  showMyWorkspacesSlideOver: false,
+  showTeamMemberGroupMembersSlideOver: false,
+  showCreateTeamMemberGroupSlideOver: false,
+  showAddInboxTeamMemberSlideOver: false,
+  showAddInboxTeamMemberGroupSlideOver: false,
+  showAddGroupTeamMemberSlideOver: false,
+  showRenameFileSlideOver: false,
+  showRenameFolderSlideOver: false,
+  showAddTeamMembersOrGroupsSideOver: false,
+};
+
 export const slideOverSlice = createSlice({
   name: 'slideOver',
-  initialState: {
-    showCreateInboxSlideOver: false,
-    showAssignInboxFileSlideOver: false,
-    showCreateFolderSlideOver: false,
-    showCreateFolderTypeSlideOver: false,
-    showInviteTeamMemberSlideOver: false,
-    showTeamMemberActivityLogSlideOver: false,
-    showInboxSettingsSlideOver: false,
-    showMyWorkspacesSlideOver: false,
-    showTeamMemberGroupMembersSlideOver: false,
-    showCreateTeamMemberGroupSlideOver: false,
-    showAddInboxTeamMemberSlideOver: false,
-    showAddInboxTeamMemberGroupSlideOver: false,
-    showAddGroupTeamMemberSlideOver: false,
-    showRenameFileSlideOver: false,
-    showRenameFolderSlideOver: false,
-  },
+  initialState,
   reducers: {
     setCreateInboxSlideOverVisibility: (state, action) => {
       state.showCreateInboxSlideOver = action.payload;
@@ -65,6 +68,9 @@ export const slideOverSlice = createSlice({
     setRenameFolderSlideOverVisibility: (state, action) => {
       state.showRenameFolderSlideOver = action.payload;
     },
+    setShowAddTeamMembersOrGroupsSideOver: (state, action) => {
+      state.showAddTeamMembersOrGroupsSideOver = action.payload;
+    }
   },
 });
 
@@ -85,6 +91,7 @@ export const {
   setAddGroupTeamMemberSlideOverVisibility,
   setRenameFileSlideOverVisibility,
   setRenameFolderSlideOverVisibility,
+  setShowAddTeamMembersOrGroupsSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

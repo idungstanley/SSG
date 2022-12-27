@@ -1,27 +1,31 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setAddInboxTeamMemberSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
-import { Button, EmptyStateSimple } from '../../../../components';
-import { Spinner } from '../../../../common';
-import Header from '../components/Header';
-import TabbedHeading from '../components/TabbedHeading';
-import Table from './components/Table';
-import AddInboxTeamMemberSlideOver from './components/AddInboxTeamMemberSlideOver';
-import { useGetInboxAccess } from '../../../../features/inbox/inboxSettingsService';
+import Layout from '../components/Layout';
+import SideOver from '../components/SideOver';
+// import { useParams } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import { setAddInboxTeamMemberSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+// import { Button, EmptyStateSimple } from '../../../../components';
+// import { Spinner } from '../../../../common';
+// import Header from '../components/Header';
+// import TabbedHeading from '../components/TabbedHeading';
+// import Table from './components/Table';
+// import AddInboxTeamMemberSlideOver from './components/AddInboxTeamMemberSlideOver';
+// import { useGetInboxAccess } from '../../../../features/inbox/inboxSettingsService';
 
 function TeamMembersSettingsPage() {
-  const dispatch = useDispatch();
-  const { inboxId } = useParams();
-  const { data, status } = useGetInboxAccess(inboxId);
+  // const dispatch = useDispatch();
+  // const { inboxId } = useParams();
+  // const { data, status } = useGetInboxAccess(inboxId);
 
-  const addMember = () => {
-    dispatch(setAddInboxTeamMemberSlideOverVisibility(true));
-  };
+  // const addMember = () => {
+  //   dispatch(setAddInboxTeamMemberSlideOverVisibility(true));
+  // };
 
   return (
     <>
-      <div className="h-full flex flex-col w-full flex-1 bg-white overflow-hidden">
+      <Layout isGroups={false} />
+      <SideOver isGroups={false} />
+      {/* <div className="h-full flex flex-col w-full flex-1 bg-white overflow-hidden">
         <Header />
         <div className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
           <div className="my-10">
@@ -45,7 +49,7 @@ function TeamMembersSettingsPage() {
 
           {status === 'loading' && (
             <div className="mx-auto w-6 justify-center">
-              <Spinner size={22} color="#0F70B7" />
+              <Spinner size={10} color="#0F70B7" />
             </div>
           )}
 
@@ -64,7 +68,7 @@ function TeamMembersSettingsPage() {
           )}
         </div>
       </div>
-      <AddInboxTeamMemberSlideOver />
+      <AddInboxTeamMemberSlideOver /> */}
     </>
   );
 }
