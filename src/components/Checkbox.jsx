@@ -18,8 +18,8 @@ function Checkbox({
     <div className="relative flex items-start">
       <div className="flex items-center">
         {loading ? (
-          <div className="-mt-2">
-            <Spinner size={spinnerSize} color="#4f46e5" />
+          <div>
+            <Spinner size={spinnerSize < 10 ? spinnerSize : 8} color="#4f46e5" />
           </div>
         ) : (
           <input
@@ -57,12 +57,13 @@ Checkbox.defaultProps = {
   checked: false,
   height: 'h-6',
   width: 'w-6',
+  name: 'name'
 };
 
 Checkbox.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   height: PropTypes.string,
   width: PropTypes.string,
   loading: PropTypes.bool,

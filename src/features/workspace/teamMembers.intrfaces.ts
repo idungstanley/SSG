@@ -1,4 +1,4 @@
-interface ITeamMember {
+export interface ITeamMember {
   id: string;
   user: {
     id: string;

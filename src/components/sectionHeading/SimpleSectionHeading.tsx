@@ -1,7 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-function SimpleSectionHeading({ title, description, actions }) {
+interface SimpleSectionHeadingProps {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+}
+
+function SimpleSectionHeading({ title, description, actions }: SimpleSectionHeadingProps) {
   return (
     <div className="pb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
       <div>
@@ -16,16 +21,5 @@ function SimpleSectionHeading({ title, description, actions }) {
     </div>
   );
 }
-
-SimpleSectionHeading.defaultProps = {
-  description: null,
-  actions: null,
-};
-
-SimpleSectionHeading.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  actions: PropTypes.string,
-};
 
 export default SimpleSectionHeading;
