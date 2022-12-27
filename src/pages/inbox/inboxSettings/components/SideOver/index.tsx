@@ -78,17 +78,13 @@ export default function SideOver({ isGroups }: SideOverProps) {
     const temp: ComboboxOption[] = [];
 
     if (status === 'success' && data) {
-      // const flat = data.pages.flatMap((page) => isGroups ? page.data.team_member_groups : page.data.team_members);
-      const flatT = data.pages.flatMap((page) => page.data.team_members);
-      const flatG = data.pages.flatMap((page) => page.data.team_member_groups);
-      const flat = isGroups ? [...flatG].filter(i => i) : [...flatT].filter(i => i);
-      // console.log(flatT, flatG, flat);
-      flat.map((item) => {
+      const flat = data.pages.flatMap((page) => isGroups ? page.data.team_member_groups : page.data.team_members);
+
+      flat.filter(i => i).map((item) => {
         const avatar = (
           <AvatarWithInitials
             height="h-6"
             width="w-6"
-            // initials={item.initials}
             initials={item.initials}
             backgroundColour={item.colour}
             textSize="text-xs"

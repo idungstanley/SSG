@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../../auth/authSlice';
 
-const initialState = {
+interface teamMemberGroupState {
+  teamMemberGroupsPaginationPage: number;
+  selectedTeamMemberGroupId: string | null;
+}
+
+const initialState: teamMemberGroupState = {
   // Pagination
   teamMemberGroupsPaginationPage: 1,
 
