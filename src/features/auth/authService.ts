@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Login
-export const loginService = (data) => {
+export const loginService = (data: { email: string; password: string }) => {
   const response = requestNew(
     {
       url: 'auth/login',
@@ -12,29 +12,37 @@ export const loginService = (data) => {
         password: data.password,
       },
     },
-    true,
+    true
   );
   return response;
 };
 
 // Login by Google
-export const loginGoogleService = (data) => {
+export const loginGoogleService = (data: {
+  code: string;
+  inviteCode?: string;
+}) => {
   const response = requestNew(
     {
       url: 'auth/social/google',
       method: 'POST',
       params: {
         code: data.code,
-        invite_code: data.inviteCode || '',
+        invite_code: data.inviteCode,
       },
     },
-    true,
+    true
   );
   return response;
 };
 
 // Register
-export const registerService = (data) => {
+export const registerService = (data: {
+  name: string;
+  email: string;
+  password: string;
+  inviteCode?: string;
+}) => {
   const response = requestNew(
     {
       url: 'auth/register',
@@ -47,7 +55,7 @@ export const registerService = (data) => {
         invite_code: data.inviteCode,
       },
     },
-    true,
+    true
   );
   return response;
 };
@@ -59,19 +67,21 @@ export const logoutService = () => {
       url: 'auth/logout',
       method: 'GET',
     },
-    true,
+    true
   );
   return response;
 };
 
 // Get invite by code
-export const useGetInviteByCode = (inviteCode) => useQuery(
-  ['team_member_invite_details', inviteCode],
-  async () => requestNew({
-    url: `auth/invite-details/${inviteCode}`,
-    method: 'GET',
-  }),
-  {
-    enabled: inviteCode != null,
-  },
-);
+export const useGetInviteByCode = (inviteCode?: string) =>
+  useQuery(
+    ['team_member_invite_details', inviteCode],
+    async () =>
+      requestNew({
+        url: `auth/invite-details/${inviteCode}`,
+        method: 'GET',
+      }),
+    {
+      enabled: !!inviteCode,
+    }
+  );
