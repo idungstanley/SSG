@@ -15,7 +15,7 @@ import promptSlice from '../features/general/prompt/promptSlice';
 import teamMemberSlice from '../features/settings/teamMembers/teamMemberSlice';
 import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
-import sharedSlice from '../features/shared/sharedSlice';
+import sharedSlice from '../features/shared/sharedSlice.ts';
 import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
 
 export const store = configureStore({

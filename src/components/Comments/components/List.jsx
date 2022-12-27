@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
-import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
+import FullScreenMessage from "../../CenterMessage/FullScreenMessage";
 
 const regex = /@[\S]*/g;
 
@@ -48,13 +48,13 @@ export default function List({
         ))}
       </ul>
     ) : (
-      <OneThirdScreenMessage
+      <FullScreenMessage
         title="No messages yes."
         description="Create one."
       />
     )
   ) : (
-    <OneThirdScreenMessage
+    <FullScreenMessage
       title="Oops, an error occurred :("
       description="Please try again later."
     />
