@@ -24,10 +24,10 @@ interface IUser {
 }
 
 interface AuthState {
-  user: IUser;
-  accessToken: string;
-  currentWorkspaceId: string;
-  currentUserId: string;
+  user: IUser | null;
+  accessToken: string | null;
+  currentWorkspaceId: string | null;
+  currentUserId: string | null;
 }
 
 const initialState: AuthState = {

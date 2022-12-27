@@ -4,9 +4,7 @@ import moment from 'moment';
 import { InitialsAvatar } from '../../../../../common';
 
 export default function Activity() {
-  const selectedItemFullDetails = useSelector(
-    (state) => state.explorer.selectedItemFullDetails,
-  );
+  const { selectedItemFullDetails } = useSelector((state) => state.explorer);
 
   return (
     <ul className="divide-y divide-gray-200">
@@ -22,9 +20,7 @@ export default function Activity() {
               <div className="flex items-center justify-between">
                 <div className="flex">
                   <p className="text-sm text-gray-500">
-                    {activityLog.description}
-                    {' '}
-                    by
+                    {activityLog.description} by
                   </p>
                   <h3 className="text-sm font-medium  ml-1">
                     {activityLog.team_member.user.name}

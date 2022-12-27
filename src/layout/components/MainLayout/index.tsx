@@ -1,22 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useIsFetching, useIsMutating } from '@tanstack/react-query';
-import LoadingBar from 'react-top-loading-bar';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import TopMenu from './TopMenu';
-import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver/index.tsx';
+import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 
 function MainLayout() {
-  const progressBarRef = useRef(null);
+  const progressBarRef = useRef<LoadingBarRef>(null);
 
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
 
   useEffect(() => {
     if (isFetching !== 0 || isMutating !== 0) {
-      progressBarRef.current.staticStart();
-      progressBarRef.current.continuousStart(65, 500);
+      progressBarRef.current?.staticStart();
+      progressBarRef.current?.continuousStart(65, 500);
     } else {
-      progressBarRef.current.complete();
+      progressBarRef.current?.complete();
     }
   }, [isFetching, isMutating]);
 
@@ -28,7 +28,6 @@ function MainLayout() {
         waitingTime={100}
         loaderSpeed={250}
         ref={progressBarRef}
-        continuousStart
       />
       <TopMenu />
       <div className="h-full overflow-hidden">

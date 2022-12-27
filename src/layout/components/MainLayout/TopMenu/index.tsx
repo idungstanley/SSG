@@ -1,8 +1,6 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
-import {
-  MenuIcon, XIcon, CogIcon, BellIcon,
-} from '@heroicons/react/outline';
+import { MenuIcon, XIcon, CogIcon, BellIcon } from '@heroicons/react/outline';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
@@ -22,12 +20,39 @@ import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
-import { classNames } from "../../../../utils";
+import { classNames } from '../../../../utils';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
   { name: 'Shared', href: '/shared', current: false },
   { name: 'Inbox', href: '/inbox', current: false },
+];
+
+const leftMenuItems = [
+  {
+    id: 1,
+    type: 'link',
+    onClick: '/settings/team-members',
+    title: 'Team members',
+  },
+  {
+    id: 2,
+    type: 'link',
+    onClick: '/settings/team-members/invites',
+    title: 'Team member invites',
+  },
+  {
+    id: 3,
+    type: 'link',
+    onClick: '/settings/team-members/groups',
+    title: 'Team member groups',
+  },
+  {
+    id: 4,
+    type: 'link',
+    onClick: '/settings/permissions',
+    title: 'Permissions',
+  },
 ];
 
 function TopMenu() {
@@ -50,7 +75,8 @@ function TopMenu() {
           user: null,
           accessToken: null,
           currentWorkspaceId: null,
-        }),
+          currentUserId: null
+        })
       );
 
       dispatch(logout());
@@ -74,36 +100,9 @@ function TopMenu() {
             dispatch(setVisibility(false));
           },
         },
-      ]),
+      ])
     );
   };
-
-  const leftMenuItems = [
-    {
-      id: 1,
-      type: 'link',
-      onClick: '/settings/team-members',
-      title: 'Team members',
-    },
-    {
-      id: 2,
-      type: 'link',
-      onClick: '/settings/team-members/invites',
-      title: 'Team member invites',
-    },
-    {
-      id: 3,
-      type: 'link',
-      onClick: '/settings/team-members/groups',
-      title: 'Team member groups',
-    },
-    {
-      id: 4,
-      type: 'link',
-      onClick: '/settings/permissions',
-      title: 'Permissions',
-    },
-  ];
 
   const rightMenuItems = [
     {
@@ -162,10 +161,12 @@ function TopMenu() {
                       <NavLink
                         key={item.name}
                         to={item.href}
-                        className={({ isActive }) => (isActive
-                          ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium')}
-                        aria-current={({ isActive }) => (isActive ? 'page' : undefined)}
+                        className={({ isActive }) =>
+                          isActive
+                            ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                        }
+                        aria-current="page"
                       >
                         {item.name}
 
@@ -204,21 +205,21 @@ function TopMenu() {
 
                 {/* Profile dropdown */}
                 <MenuWithTransition
-                  icon={(
+                  icon={
                     <StatusDot
-                      on={(
+                      on={
                         <AvatarWithInitials
                           height="h-8"
                           width="w-8"
-                          initials={user.initials}
-                          backgroundColour={user.colour}
+                          initials={user?.initials || ''}
+                          backgroundColour={user?.colour}
                           textSize="text-xs"
                         />
-                      )}
+                      }
                       top={false}
                       size={2}
                     />
-                  )}
+                  }
                   menuItems={rightMenuItems}
                 />
               </div>
@@ -236,7 +237,7 @@ function TopMenu() {
                     item.current
                       ? 'bg-gray-900 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium',
+                    'block px-3 py-2 rounded-md text-base font-medium'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                 >
