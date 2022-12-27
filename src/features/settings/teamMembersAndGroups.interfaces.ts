@@ -1,16 +1,17 @@
 export interface ITeamMembersAndGroup {
   id: string;
   name?: string;
-  user?: {
+  user: {
     name: string;
     id: string;
+    email: string
   };
 }
 
 export interface ITeamMembersAndGroupsReq {
-  data?: {
-    team_member_groups?: ITeamMembersAndGroup[];
-    team_members?: ITeamMembersAndGroup[];
+  data: {
+    team_member_groups: ITeamMembersAndGroup[];
+    team_members: ITeamMembersAndGroup[];
     pagination: {
       page: number;
       per_page: number;

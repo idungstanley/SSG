@@ -1,32 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { InitialsAvatar } from '../../../../../common';
 import { useAppSelector } from '../../../../../app/hooks';
 
-interface log {
-  id: string;
-  team_member: {
-    colour: string;
-    initials: string;
-    user: {
-      name: string;
-    };
-  };
-  description: string;
-  created_at: string;
-}
-
-interface selectedItemType {
-  folder_activity_logs: log[];
-}
 
 export default function Activity() {
   const { selectedItemFullDetails } = useAppSelector((state) => state.explorer);
 
   return (
     <ul className="divide-y divide-gray-200">
-      {selectedItemFullDetails.folder_activity_logs.map((activityLog: log) => (
+      {selectedItemFullDetails?.folder_activity_logs.map((activityLog) => (
         <li key={activityLog.id} className="py-4">
           <div className="flex space-x-3">
             <InitialsAvatar

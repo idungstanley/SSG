@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface statusType {
-  on: string;
+  on: string | JSX.Element;
   colour: string;
   size: number;
   ringSize: number;

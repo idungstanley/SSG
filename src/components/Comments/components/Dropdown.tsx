@@ -1,6 +1,7 @@
 import React from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { ITeamMembersAndGroupsReq } from '../../../features/settings/teamMembersAndGroups.interfaces';
 
 interface selectedUserType {
   id: string;
@@ -23,13 +24,12 @@ export default function Dropdown({
   selectedUsers,
   isInbox,
 }: DropDownPropTypes) {
-  const { data } = useGetTeamMembers({ page: 0, query: '' });
-
+  const { data } = useGetTeamMembers({
+    page: 0,
+    query: '',
+  });
   const selectedUserIds = selectedUsers.map((i) => i.id);
-
-  const usersWithoutSelected = data?.data.team_members.filter(
-    (i) => !selectedUserIds.includes(i.user.id)
-  );
+  const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
 
   return show ? (
     <>
@@ -72,7 +72,7 @@ export default function Dropdown({
               ))}
             </div>
           ) : null}
-          {usersWithoutSelected.length ? (
+          {usersWithoutSelected?.length ? (
             <div className="w-full py-2 rounded-md max-h-60 focus:outline-none">
               {usersWithoutSelected?.map((user) => (
                 <button

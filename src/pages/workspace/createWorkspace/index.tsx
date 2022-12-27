@@ -18,7 +18,6 @@ import {
   selectCurrentUser,
   setCurrentUser,
 } from '../../../features/auth/authSlice';
-import { string } from 'prop-types';
 
 function CreateWorkspace() {
   const dispatch = useDispatch();
@@ -51,10 +50,7 @@ function CreateWorkspace() {
         JSON.stringify(successData.data.workspace.id)
       );
       dispatch(
-        setCurrentUser({
-          ...user,
-          default_workspace_id: successData.data.workspace.id,
-        })
+        setCurrentUser({...user, default_workspace_id: successData.data.workspace.id,})
       );
     },
   });
