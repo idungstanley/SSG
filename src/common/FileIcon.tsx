@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import FolderIcon from '../assets/icons/fileFormats/folder.svg';
 import PDFIcon from '../assets/icons/fileFormats/pdf.svg';
 import JPGIcon from '../assets/icons/fileFormats/jpg.svg';
@@ -10,10 +8,19 @@ import TXTIcon from '../assets/icons/fileFormats/txt.svg';
 import ExcelIcon from '../assets/icons/fileFormats/xls.svg';
 import PPTIcon from '../assets/icons/fileFormats/ppt.svg';
 
-function FileIcon({ extensionKey, size }) {
+interface FileIconProps {
+  extensionKey: string;
+  size: number
+}
+
+function FileIcon({ extensionKey, size }: FileIconProps) {
   if (extensionKey === 'folder') {
     return (
-      <img className={`h-${size} w-${size}`} src={FolderIcon} alt={extensionKey} />
+      <img
+        className={`h-${size} w-${size}`}
+        src={FolderIcon}
+        alt={extensionKey}
+      />
     );
   }
 
@@ -23,7 +30,12 @@ function FileIcon({ extensionKey, size }) {
     );
   }
 
-  if (extensionKey === 'jpeg' || extensionKey === 'jpg' || extensionKey === 'png' || extensionKey === 'image') {
+  if (
+    extensionKey === 'jpeg' ||
+    extensionKey === 'jpg' ||
+    extensionKey === 'png' ||
+    extensionKey === 'image'
+  ) {
     return (
       <img className={`h-${size} w-${size}`} src={JPGIcon} alt={extensionKey} />
     );
@@ -31,7 +43,11 @@ function FileIcon({ extensionKey, size }) {
 
   if (extensionKey === 'docx') {
     return (
-      <img className={`h-${size} w-${size}`} src={WordIcon} alt={extensionKey} />
+      <img
+        className={`h-${size} w-${size}`}
+        src={WordIcon}
+        alt={extensionKey}
+      />
     );
   }
 
@@ -67,7 +83,11 @@ function FileIcon({ extensionKey, size }) {
 
   if (extensionKey === 'xlsx' || extensionKey === 'xls') {
     return (
-      <img className={`h-${size} w-${size}`} src={ExcelIcon} alt={extensionKey} />
+      <img
+        className={`h-${size} w-${size}`}
+        src={ExcelIcon}
+        alt={extensionKey}
+      />
     );
   }
 
@@ -105,10 +125,4 @@ function FileIcon({ extensionKey, size }) {
     <img className={`h-${size} w-${size}`} src={TXTIcon} alt={extensionKey} />
   );
 }
-
-FileIcon.propTypes = {
-  extensionKey: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
-};
-
 export default FileIcon;

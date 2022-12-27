@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { classNames } from "../utils";
 
+interface DropDownProps {
+  items: [];
+}
+
 export default function Dropdown({
   items,
-}) {
+}: DropDownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -26,7 +29,7 @@ export default function Dropdown({
       >
         <Menu.Items className="origin-top-right absolute right-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {items.map((item) => (
+            {items.map((item : { label: string, onClick: ()=> void, icon: string}) => (
               <Menu.Item key={item.label}>
                 {({ active }) => (
                   <button
@@ -49,7 +52,3 @@ export default function Dropdown({
     </Menu>
   );
 }
-
-Dropdown.propTypes = {
-  items: PropTypes.string.isRequired,
-};

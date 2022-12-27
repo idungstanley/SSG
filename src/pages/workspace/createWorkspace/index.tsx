@@ -20,7 +20,6 @@ import {
 } from '../../../features/auth/authSlice';
 import { string } from 'prop-types';
 
-
 function CreateWorkspace() {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
@@ -29,15 +28,15 @@ function CreateWorkspace() {
     onSuccess: (successData) => {
       localStorage.setItem(
         'currentWorkspacename',
-        JSON.stringify(successData.data.workspace.name),
+        JSON.stringify(successData.data.workspace.name)
       );
       localStorage.setItem(
         'currentWorkspaceSize',
-        JSON.stringify(successData.data.workspace.company_size),
+        JSON.stringify(successData.data.workspace.company_size)
       );
       localStorage.setItem(
         'wsemail',
-        JSON.stringify(successData.data.workspace.emails),
+        JSON.stringify(successData.data.workspace.emails)
       );
 
       localStorage.setItem(
@@ -45,17 +44,17 @@ function CreateWorkspace() {
         JSON.stringify({
           ...user,
           default_workspace_id: successData.data.workspace.id,
-        }),
+        })
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.workspace.id),
+        JSON.stringify(successData.data.workspace.id)
       );
       dispatch(
         setCurrentUser({
           ...user,
           default_workspace_id: successData.data.workspace.id,
-        }),
+        })
       );
     },
   });
@@ -73,7 +72,7 @@ function CreateWorkspace() {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-const selectedCompanySize = (value: string) => {
+  const selectedCompanySize = (value: string) => {
     setCompanySize(value);
   };
 

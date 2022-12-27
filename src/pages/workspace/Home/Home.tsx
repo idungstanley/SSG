@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Home: React.FC = ()=> {
+function Home() {
   return <p>This is home</p>;
 }
 

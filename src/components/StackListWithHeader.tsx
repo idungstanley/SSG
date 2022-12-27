@@ -1,10 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+interface StackListWithHeaderProps {
+  title: string;
+  items: [];
+}
 
 function StackListWithHeader({
   title,
   items,
-}) {
+}: StackListWithHeaderProps) {
   return (
     <div className="h-full">
       <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
@@ -16,13 +20,5 @@ function StackListWithHeader({
     </div>
   );
 }
-
-StackListWithHeader.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
-  items: PropTypes.array.isRequired,
-};
 
 export default StackListWithHeader;

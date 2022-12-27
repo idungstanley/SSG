@@ -2,13 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Item from '../Item';
 
-interface data {
-  id: string
-}
 interface dataProps {
-  data: data[]
+  data: any;
 }
-const Results: React.FC<dataProps> =({ data }) => {
+function Results({ data }: dataProps) {
   return (
     <div className="h-full bg-white overflow-x-none">
       <div className="overflow-x-none">

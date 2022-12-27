@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Directory: React.FC = () => {
+function Directory() {
   return (
     <div>Directory</div>
   );

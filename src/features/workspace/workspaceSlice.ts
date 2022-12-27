@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 interface workspaceState {
-workspace: string[],
-showSidebar: boolean
-currentItemId?: string | null
-currentItemType?: string | null
+  workspace: string[];
+  showSidebar: boolean;
+  currentItemId?: string | null;
+  currentItemType?: string | null;
 }
 
 const initialState: workspaceState = {
@@ -38,7 +37,11 @@ export const wsSlice = createSlice({
 });
 
 export const {
-  createWorkspace, checkIfWs, setShowSidebar, setCurrentItem, resetCurrentItem,
+  createWorkspace,
+  checkIfWs,
+  setShowSidebar,
+  setCurrentItem,
+  resetCurrentItem,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

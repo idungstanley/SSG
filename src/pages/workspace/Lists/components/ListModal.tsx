@@ -8,7 +8,7 @@ import { Button, Input } from '../../../../components';
 interface ListModalProps {
   listVisible: boolean;
   walletId: string;
-  onCloseListModal: () => void ;
+  onCloseListModal: () => void;
 }
 
 function ListModal({
@@ -82,7 +82,8 @@ function ListModal({
                 label="Create List"
                 padding="py-2 px-4"
                 height="h-10"
-                width="w-full"            />
+                width="w-full"
+              />
             </div>
           </section>
         </div>

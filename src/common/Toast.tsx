@@ -1,16 +1,23 @@
 import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { XIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
-import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 
+interface ToastProps {
+  title: string;
+  body: string | null;
+  type: string;
+  showClose?: boolean;
+  toastId?: string;
+}
+
 export default function Toast({
-  type,
+  type = 'success',
   title,
   body,
-  showClose,
+  showClose = true,
   toastId,
-}) {
+}: ToastProps) {
   if (title === 'Query data cannot be undefined' || !title) {
     return null;
   }
@@ -25,15 +32,24 @@ export default function Toast({
           <div className="p-4">
             <div className="flex items-start">
               <div className="flex-shrink-0">
-                {type === 'success'
-                  && <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" /> }
-                {type === 'error'
-                  && <ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" /> }
+                {type === 'success' && (
+                  <CheckCircleIcon
+                    className="h-6 w-6 text-green-400"
+                    aria-hidden="true"
+                  />
+                )}
+                {type === 'error' && (
+                  <ExclamationCircleIcon
+                    className="h-6 w-6 text-red-400"
+                    aria-hidden="true"
+                  />
+                )}
               </div>
               <div className="ml-3 w-0 flex-1 pt-0.5">
                 <p className="text-sm font-medium text-gray-900">{title}</p>
-                {body != null && body !== ''
-                  && <p className="mt-1 text-sm text-gray-500">{body}</p>}
+                {body != null && body !== '' && (
+                  <p className="mt-1 text-sm text-gray-500">{body}</p>
+                )}
               </div>
               {showClose && (
                 <div className="ml-4 flex-shrink-0 flex pt-0.5">
@@ -54,18 +70,3 @@ export default function Toast({
     </div>
   );
 }
-
-Toast.defaultProps = {
-  body: null,
-  type: 'success',
-  showClose: true,
-  toastId: null,
-};
-
-Toast.propTypes = {
-  title: PropTypes.string.isRequired,
-  body: PropTypes.string,
-  type: PropTypes.string,
-  showClose: PropTypes.bool,
-  toastId: PropTypes.string,
-};

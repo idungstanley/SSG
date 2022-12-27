@@ -1,16 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+interface StackListItemNarrowProps {
+  title: string;
+  description: string | null;
+  icon: string | null;
+  button: null;
+  paddingVertical: number;
+  paddingHorizontal: number;
+  onClick: any;
+  selected: boolean;
+}
 
 function StackListItemNarrow({
   title,
   description,
   icon,
   button,
-  paddingVertical,
-  paddingHorizontal,
+  paddingVertical = 4,
+  paddingHorizontal = 0,
   onClick,
-  selected,
-}) {
+  selected = false,
+}: StackListItemNarrowProps) {
   return (
     <li className="bg-white">
       <div
@@ -54,26 +64,5 @@ function StackListItemNarrow({
     </li>
   );
 }
-
-StackListItemNarrow.defaultProps = {
-  description: null,
-  icon: null,
-  button: null,
-  paddingVertical: 4,
-  paddingHorizontal: 0,
-  onClick: null,
-  selected: false,
-};
-
-StackListItemNarrow.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  button: PropTypes.object,
-  paddingVertical: PropTypes.number,
-  paddingHorizontal: PropTypes.number,
-  onClick: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  selected: PropTypes.bool,
-};
 
 export default StackListItemNarrow;

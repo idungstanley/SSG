@@ -1,8 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PlusIcon } from '@heroicons/react/outline';
 
-export default function CreateNewItemBtn({ onClick, title }) {
+interface CreateNewItemBtnProps {
+  onClick: () => void;
+  title: string;
+}
+
+export default function CreateNewItemBtn({
+  onClick,
+  title,
+}: CreateNewItemBtnProps) {
   return (
     <button
       type="button"
@@ -14,8 +21,3 @@ export default function CreateNewItemBtn({ onClick, title }) {
     </button>
   );
 }
-
-CreateNewItemBtn.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-};

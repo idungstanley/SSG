@@ -1,16 +1,16 @@
 import React from 'react';
 import FileViewer from 'react-file-viewer';
-import PropTypes from 'prop-types';
 import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 
 const docks = ['docx', 'doc', 'pdf'];
 const images = ['jpg', 'png'];
 
-function FilePreview({ fileData, fileExtension }) {
-  const onError = (e) => {
-    // eslint-disable-next-line no-console
-    console.error('error in file viewer:', e);
-  };
+interface FilePreviewProps {
+  fileData : string;
+  fileExtension: string;
+}
+
+function FilePreview({ fileData, fileExtension }: FilePreviewProps) {
 
   return (
     <div className="overflow-y-scroll">
@@ -20,7 +20,6 @@ function FilePreview({ fileData, fileExtension }) {
         <FileViewer
           fileType={fileExtension}
           filePath={fileData}
-          onError={onError}
         />
       ) : (
         <FullScreenMessage
@@ -31,10 +30,5 @@ function FilePreview({ fileData, fileExtension }) {
     </div>
   );
 }
-
-FilePreview.propTypes = {
-  fileData: PropTypes.string.isRequired,
-  fileExtension: PropTypes.string.isRequired,
-};
 
 export default FilePreview;

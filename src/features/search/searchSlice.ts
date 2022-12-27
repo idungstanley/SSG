@@ -4,10 +4,9 @@ import { logout, switchWorkspace } from '../auth/authSlice';
 import requestNew from '../../app/requestNew';
 // import { string } from 'prop-types';
 
-
 interface Idata {
-  itemType: null,
-  itemId: null,
+  itemType: null;
+  itemId: null;
 }
 
 export const selectItem = createAsyncThunk(
@@ -17,7 +16,7 @@ export const selectItem = createAsyncThunk(
       const url = `/files/${data.itemId}/details`;
 
       const currentWorkspaceId = JSON.parse(
-        localStorage.getItem('currentWorkspaceId') || "",
+        localStorage.getItem('currentWorkspaceId') || ''
       );
 
       try {
@@ -31,25 +30,26 @@ export const selectItem = createAsyncThunk(
 
         return response.data;
       } catch (error: any) {
-        const message = (error.response
-            && error.response.data
-            && error.response.data.message)
-          || error.message
-          || error.toString();
+        const message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
         thunkAPI.dispatch(
           displayNotification(
             'error',
             'Oops! An unknown error has occurred.',
             null,
-            8000,
-          ),
+            8000
+          )
         );
         return thunkAPI.rejectWithValue(message);
       }
     } else {
       return null;
     }
-  },
+  }
 );
 
 const initialState = {

@@ -3,18 +3,15 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { Button } from '../../../components';
 
-
 interface navProps {
-  navName: string | null
-  newd: string | null
-  Cleared: string | null
-  Assigned: string | null
-  buttonLabel: string | null 
+  navName: string | null;
+  newd: string | null;
+  Cleared: string | null;
+  Assigned: string | null;
+  buttonLabel: string | null;
 }
 
-function Nav({
-  navName, newd, Cleared, Assigned, buttonLabel,
-}: navProps) {
+function Nav({ navName, newd, Cleared, Assigned, buttonLabel }: navProps) {
   return (
     <nav className="flex items-center justify-between p-3 bg-white border-gray-200">
       <section className="space-x-5 text-gray-500">

@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-const Goals: React.FC = () => {
-  return <div>fav</div>
+function Goals() {
+  return <div>fav</div>;
 }
 
-export default Favourites
+export default Goals;

@@ -4,33 +4,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FileIcon, PathBadge } from '../../../../common';
 import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { setSelectedItem } from '../../../../features/search/searchSlice';
-import { useAppSelector } from '../../../../app/hooks'
-
+import { useAppSelector } from '../../../../app/hooks';
 
 interface Idata {
-  data: {
-    id: string,
-    name: string,
-    icon: string | any,
-    createdAt: string | any,
-    size: number,
-    from: string
-  } | any
+  data:
+    | {
+        id: string;
+        name: string;
+        icon: string | any;
+        createdAt: string | any;
+        size: number;
+        from: string;
+      }
+    | any;
 }
-const Item: React.FC <Idata> = ({ data }) => {
+function Item({ data }: Idata) {
   const dispatch = useDispatch();
   const { selectedItemId } = useAppSelector((state) => state.search);
 
-  const {
-    id, name, icon, createdAt, size, from,
-  } = data;
+  const { id, name, icon, createdAt, size, from } = data;
 
   const handleClick = () => {
-    dispatch(setSelectedItem({
-      selectedItemType: icon === 'folder' ? 'folder' : 'file',
-      selectedItemId: id,
-      selectedItemPath: from,
-    }));
+    dispatch(
+      setSelectedItem({
+        selectedItemType: icon === 'folder' ? 'folder' : 'file',
+        selectedItemId: id,
+        selectedItemPath: from,
+      })
+    );
   };
 
   return (

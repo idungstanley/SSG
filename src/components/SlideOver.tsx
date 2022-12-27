@@ -1,8 +1,16 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import Button from './Button';
+
+interface SlideOverProps {
+  show: boolean;
+  onClose: () => void;
+  headerTitle: string;
+  body: any;
+  headerDescription?: string | null;
+  footerButtons: any;
+}
 
 function SlideOver({
   show,
@@ -11,7 +19,7 @@ function SlideOver({
   headerDescription,
   body,
   footerButtons,
-}) {
+}: SlideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog
@@ -83,8 +91,6 @@ function SlideOver({
                         onClick={onClose}
                         loading={false}
                         label="Close"
-                        paddingVertical={2}
-                        paddingHorizontal={4}
                         width={20}
                       />
                       {footerButtons}
@@ -99,20 +105,5 @@ function SlideOver({
     </Transition.Root>
   );
 }
-
-SlideOver.defaultProps = {
-  onClose: null,
-  headerDescription: null,
-  footerButtons: null,
-};
-
-SlideOver.propTypes = {
-  show: PropTypes.bool.isRequired,
-  onClose: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  headerTitle: PropTypes.string.isRequired,
-  headerDescription: PropTypes.string,
-  footerButtons: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-};
 
 export default SlideOver;

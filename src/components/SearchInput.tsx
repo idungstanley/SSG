@@ -1,12 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SearchIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 import { Spinner } from '../common';
 
+interface SearchInputProps {
+  value: string;
+  placeholder: string;
+  loading: boolean;
+  onChange: (value: string) => void;
+}
+
 function SearchInput({
-  onChange, value, placeholder, loading,
-}) {
+  onChange,
+  value,
+  placeholder,
+  loading = false,
+}: SearchInputProps) {
   return (
     <div className="relative flex items-stretch flex-grow focus-within:z-10 rounded-md shadow-sm">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -23,7 +32,9 @@ function SearchInput({
         name="search-input"
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange(e.target.value)
+        }
         placeholder={placeholder}
         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md pl-10 pr-10 sm:text-sm border-gray-300"
       />
@@ -39,16 +50,5 @@ function SearchInput({
     </div>
   );
 }
-
-SearchInput.defaultProps = {
-  loading: false,
-};
-
-SearchInput.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  loading: PropTypes.bool,
-};
 
 export default SearchInput;

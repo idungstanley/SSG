@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 interface SpinnerProps {
   size?: number
@@ -29,9 +28,5 @@ function Spinner({ size = 8, color = '#4f46e5' }: SpinnerProps) {
     </div>
   );
 }
-
-Spinner.propTypes = {
-  size: PropTypes.number.isRequired,
-};
 
 export default Spinner;

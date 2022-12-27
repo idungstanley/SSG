@@ -8,50 +8,45 @@ import { Spinner } from '../../../common';
 import Results from '../components/Results';
 import { resetSelectedItem } from '../../../features/search/searchSlice';
 import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../../app/hooks'
+import { useAppSelector } from '../../../app/hooks';
 
 interface Idata {
-  id: string
-  created_at: string | null
-  size: string | number
-  icon: string
-  display_name: string
-  name: string
+  id: string;
+  created_at: string | null;
+  size: string | number;
+  icon: string;
+  display_name: string;
+  name: string;
   inbox_file_source: {
-    size: string | number
+    size: string | number;
     file_format: {
-      extension: string
-    }
-    display_name: string
-  }
-  ancestor_path: string
-  from: string
-  updated_at: string | null
+      extension: string;
+    };
+    display_name: string;
+  };
+  ancestor_path: string;
+  from: string;
+  updated_at: string | null;
 }
 
 interface dataProps {
-  files: Idata[],
-  folders: Idata[],
-  inbox: Idata[],
-  explorerStatus: string,
-  inboxStatus: string,
+  files: Idata[];
+  folders: Idata[];
+  inbox: Idata[];
+  explorerStatus: string;
+  inboxStatus: string;
 }
 
 export default function SearchPage() {
   const dispatch = useDispatch();
   const { selectedItemId, searchQuery, searchFileContents } = useAppSelector(
-    (state) => state.search,
+    (state) => state.search
   );
 
   const debouncedValue = useDebounce(searchQuery, 300);
 
-  const {
-    files, folders, inbox, explorerStatus, inboxStatus,
-  }: dataProps = useSearch(
-    searchQuery,
-    searchFileContents,
-    debouncedValue === searchQuery,
-  );
+  const { files, folders, inbox, explorerStatus, inboxStatus }: dataProps =
+    useSearch(searchQuery, searchFileContents, debouncedValue === searchQuery);
 
   useEffect(() => {
     if (selectedItemId) {
@@ -60,38 +55,44 @@ export default function SearchPage() {
   }, [debouncedValue]);
 
   const allResults: any[] = [];
-  files?.map((i:any) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: i.size,
-    icon: i.file_format.extension,
-    name: i.display_name,
-    path: i.ancestor_path,
-    from: 'Explorer',
-    updatedAt: i.updated_at,
-  }));
+  files?.map((i: any) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: i.size,
+      icon: i.file_format.extension,
+      name: i.display_name,
+      path: i.ancestor_path,
+      from: 'Explorer',
+      updatedAt: i.updated_at,
+    })
+  );
 
-  folders?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: null,
-    icon: 'folder',
-    name: i.name,
-    path: i.ancestor_path,
-    from: 'Explorer',
-    updatedAt: i.updated_at,
-  }));
+  folders?.map((i) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: null,
+      icon: 'folder',
+      name: i.name,
+      path: i.ancestor_path,
+      from: 'Explorer',
+      updatedAt: i.updated_at,
+    })
+  );
 
-  inbox?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: i.inbox_file_source.size,
-    icon: i.inbox_file_source.file_format.extension,
-    name: i.inbox_file_source.display_name,
-    path: null,
-    from: 'Inbox',
-    updatedAt: i.updated_at,
-  }));
+  inbox?.map((i) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: i.inbox_file_source.size,
+      icon: i.inbox_file_source.file_format.extension,
+      name: i.inbox_file_source.display_name,
+      path: null,
+      from: 'Inbox',
+      updatedAt: i.updated_at,
+    })
+  );
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -104,36 +105,36 @@ export default function SearchPage() {
               title="Enter a search query"
               description="Enter at least 2 characters to start searching"
             />
-          ) // checking error and loading
-            : explorerStatus === 'error' || inboxStatus === 'error' ? (
+          ) : // checking error and loading
+          explorerStatus === 'error' || inboxStatus === 'error' ? (
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
+          ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
+            <div className="justify-center w-6 mx-auto mt-10">
+              <Spinner size={22} color="#0F70B7" />
+            </div>
+          ) : explorerStatus === 'success' && inboxStatus === 'success' ? (
+            searchQuery.length < 2 ? (
               <FullScreenMessage
-                title="Oops, an error occurred :("
-                description="Please try again later."
+                title="Enter a search query"
+                description="Enter at least 2 characters to start searching"
               />
-            ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
-              <div className="justify-center w-6 mx-auto mt-10">
-                <Spinner size={22} color="#0F70B7" />
-              </div>
-            ) : explorerStatus === 'success' && inboxStatus === 'success' ? (
-              searchQuery.length < 2 ? (
-                <FullScreenMessage
-                  title="Enter a search query"
-                  description="Enter at least 2 characters to start searching"
-                />
-              ) : !allResults.length ? (
-                <FullScreenMessage
-                  title="Тo matches found :("
-                  description="Please, try again"
-                />
-              ) : (
-                <div>
-                  <Results data={allResults} />
+            ) : !allResults.length ? (
+              <FullScreenMessage
+                title="Тo matches found :("
+                description="Please, try again"
+              />
+            ) : (
+              <div>
+                <Results data={allResults} />
 
-                  {/* Details sidebar (separate files and folders) */}
-                  {selectedItemId ? <Preview /> : null}
-                </div>
-              )
-            ) : null}
+                {/* Details sidebar (separate files and folders) */}
+                {selectedItemId ? <Preview /> : null}
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </div>

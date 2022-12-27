@@ -1,17 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks'
+import { useAppSelector } from '../../../app/hooks';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import Nav from '../nav/Nav';
 
 interface configData {
-  path: string
-  title: string
-  newd: string | null
-  Cleared: string | null
-  Assigned: string | null 
-  buttonLabel: string | null
+  path: string;
+  title: string;
+  newd: string | null;
+  Cleared: string | null;
+  Assigned: string | null;
+  buttonLabel: string | null;
 }
 
 const config: configData[] = [

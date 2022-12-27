@@ -1,10 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function Breadcrumb({ pages, rootIcon, rootIconHref }) {
+interface BreadcrumbProps {
+  pages: any;
+  rootIcon: any;
+  rootIconHref: string | null;
+}
+
+function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
-    <nav className="bg-white border-b border-gray-200 flex" aria-label="Breadcrumb">
+    <nav
+      className="bg-white border-b border-gray-200 flex"
+      aria-label="Breadcrumb"
+    >
       <ol className="w-full mx-auto px-4 flex space-x-4 sm:px-6 lg:px-6">
         {rootIcon && (
           <li className="flex">
@@ -13,7 +21,9 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }) {
                 <Link to={rootIconHref} className="hover:text-gray-500">
                   {rootIcon}
                 </Link>
-              ) : rootIcon}
+              ) : (
+                rootIcon
+              )}
             </div>
           </li>
         )}
@@ -31,13 +41,13 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }) {
                 <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
               </svg>
               {page.current ? (
-                <span
+                <Link
                   to={page.href}
                   className="ml-4 text-sm font-medium text-gray-800 cursor-none select-none"
                   aria-current="page"
                 >
                   {page.name}
-                </span>
+                </Link>
               ) : (
                 <Link
                   to={page.href}
@@ -55,18 +65,18 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }) {
   );
 }
 
-Breadcrumb.defaultProps = {
-  rootIcon: null,
-  rootIconHref: null,
-};
+// Breadcrumb.defaultProps = {
+//   rootIcon: null,
+//   rootIconHref: null,
+// };
 
-Breadcrumb.propTypes = {
-  pages: PropTypes.array.isRequired,
-  rootIcon: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  rootIconHref: PropTypes.string,
-};
+// Breadcrumb.propTypes = {
+//   pages: PropTypes.array.isRequired,
+//   rootIcon: PropTypes.oneOfType([
+//     PropTypes.string,
+//     PropTypes.object,
+//   ]),
+//   rootIconHref: PropTypes.string,
+// };
 
 export default Breadcrumb;

@@ -4,13 +4,13 @@ import requestNew from '../../app/requestNew';
 // Get team member groups in the workspace
 
 interface Iprops {
-  query:string | number
-} 
+  query: string | number;
+}
 
 interface teamgroupType {
-  id: string
+  id: string;
 }
-export const useGetTeamMemberGroups= ({ query }: Iprops) => {
+export const useGetTeamMemberGroups = ({ query }: Iprops) => {
   const queryClient = useQueryClient();
 
   return useInfiniteQuery(
@@ -18,18 +18,28 @@ export const useGetTeamMemberGroups= ({ query }: Iprops) => {
     async ({ pageParam = 0 }) => {
       const url = 'settings/team-member-groups';
 
-      return requestNew({
-        url,
-        method: 'GET',
-        params: {
-          page: pageParam,
-          search: query,
+      return requestNew(
+        {
+          url,
+          method: 'GET',
+          params: {
+            page: pageParam,
+            search: query,
+          },
         },
-      }, true);
+        true
+      );
     },
     {
       onSuccess: (data) => {
-        data.pages.map((page) => page.data.team_member_groups.map((teamMemberGroup: teamgroupType) => queryClient.setQueryData(['team_member_group', teamMemberGroup.id], teamMemberGroup)));
+        data.pages.map((page) =>
+          page.data.team_member_groups.map((teamMemberGroup: teamgroupType) =>
+            queryClient.setQueryData(
+              ['team_member_group', teamMemberGroup.id],
+              teamMemberGroup
+            )
+          )
+        );
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.pagination.has_more_pages) {
@@ -38,6 +48,6 @@ export const useGetTeamMemberGroups= ({ query }: Iprops) => {
 
         return false;
       },
-    },
+    }
   );
 };

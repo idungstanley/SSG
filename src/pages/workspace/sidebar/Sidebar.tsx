@@ -2,7 +2,7 @@ import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAppSelector } from '../../../app/hooks'
+import { useAppSelector } from '../../../app/hooks';
 import { PlusOutlined } from '@ant-design/icons';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
@@ -107,7 +107,10 @@ export default function Sidebar() {
                   onClick={() => dispatch(setShowSidebar(false))}
                 >
                   <span className="sr-only">Close sidebar</span>
-                  <XIcon className="w-6 h-6 text-gray-500 transition group-hover:text-red-600" aria-hidden="true" />
+                  <XIcon
+                    className="w-6 h-6 text-gray-500 transition group-hover:text-red-600"
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             </div>

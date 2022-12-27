@@ -1,13 +1,14 @@
 import React from 'react';
 import Spinner from '../common/Spinner';
-import { classNames } from "../utils";
+import { classNames } from '../utils';
 
 interface ButtonProps {
-  buttonStyle?: string,
-  onClick?: () => Promise<void> | void;
-  loading? : boolean;
+  buttonStyle?: string;
+  onClick?: () => Promise<void> | void | any;
+  loading?: boolean;
   label?: string | null;
-  icon?: string;
+  // icon?: Record<string, unknown>;
+  icon?: any;
   width?: string | number;
   height?: string;
   padding?: string;
@@ -88,7 +89,9 @@ function Button({
       type="button"
       disabled={disabled || loading}
       className={classNames(
-        disabled || loading ? 'opacity-50' as string : hoverBackgroundColor as string,
+        disabled || loading
+          ? ('opacity-50' as string)
+          : (hoverBackgroundColor as string),
         `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`
       )}
     >
@@ -116,6 +119,5 @@ function Button({
     </button>
   );
 }
-
 
 export default Button;

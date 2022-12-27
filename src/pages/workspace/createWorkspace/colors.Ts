@@ -1,11 +1,10 @@
-
 interface avatarType {
-  colour: string
+  colour: string;
 }
 
 interface companyArrayType {
-label: string
-value: string
+  label: string;
+  value: string;
 }
 export const avatarBg: avatarType[] = [
   { colour: 'red' },
@@ -21,7 +20,7 @@ export const avatarBg: avatarType[] = [
   { colour: 'pink' },
 ];
 
-export const companySizeBtn: companyArrayType[]  = [
+export const companySizeBtn: companyArrayType[] = [
   { label: '1', value: '1' },
   { label: '2-5', value: '2' },
   { label: '6-10', value: '6' },
