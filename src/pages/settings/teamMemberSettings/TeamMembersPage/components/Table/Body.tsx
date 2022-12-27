@@ -1,11 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Row from './Row';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Body() {
-  const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
-  const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
+    (state) => state.teamMember
+  );
 
   const { status, data } = useGetTeamMembers({
     page: teamMembersPaginationPage,
@@ -14,9 +15,10 @@ export default function Body() {
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
-      {status === 'success' && data.data.team_members.map((teamMember) => (
-        <Row key={teamMember.id} teamMemberId={teamMember.id} />
-      ))}
+      {status === 'success' &&
+        data.data.team_members?.map((teamMember) => (
+          <Row key={teamMember.id} teamMemberId={teamMember.id} />
+        ))}
     </tbody>
   );
 }

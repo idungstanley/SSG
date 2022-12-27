@@ -2,7 +2,7 @@ import React from 'react';
 import { Spinner } from '../../../common';
 import { SimpleSectionHeading } from '../../../components';
 import Breadcrumb from '../components/Breadcrumb';
-import Table from './components/Table';
+import Table from './components/Table.jsx';
 import {
   useGetPermissionsList,
   useGetPermissionsValues,

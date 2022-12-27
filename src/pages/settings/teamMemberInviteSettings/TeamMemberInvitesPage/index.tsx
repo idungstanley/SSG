@@ -1,21 +1,28 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
-import { SimpleSectionHeading, Button, EmptyStateSimple } from '../../../../components';
+import {
+  SimpleSectionHeading,
+  Button,
+  EmptyStateSimple,
+} from '../../../../components';
 import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import InviteTeamMemberSlideOver from './components/InviteTeamMemberSlideOver';
 import { setInviteTeamMemberSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMemberInvites } from '../../../../features/settings/teamMemberInvites/teamMemberInviteService';
+import { useAppSelector } from '../../../../app/hooks';
 
 export default function TeamMemberInvitesPage() {
   const dispatch = useDispatch();
 
-  const teamMemberInvitesPaginationPage = useSelector((state) => state.teamMemberInvite.teamMemberInvitesPaginationPage);
+  const { teamMemberInvitesPaginationPage } = useAppSelector(
+    (state) => state.teamMemberInvite
+  );
 
-  const { status, data } = useGetTeamMemberInvites({
-    page: teamMemberInvitesPaginationPage,
-  });
+  const { status, data } = useGetTeamMemberInvites(
+    teamMemberInvitesPaginationPage
+  );
 
   const showInviteTeamMemberSlideOver = () => {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));
@@ -25,8 +32,16 @@ export default function TeamMemberInvitesPage() {
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
       <Breadcrumb
         pages={[
-          { name: 'Team members', href: '/settings/team-members', current: false },
-          { name: 'Invites', href: '/settings/team-members/invites', current: true },
+          {
+            name: 'Team members',
+            href: '/settings/team-members',
+            current: false,
+          },
+          {
+            name: 'Invites',
+            href: '/settings/team-members/invites',
+            current: true,
+          },
         ]}
       />
       <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
@@ -34,17 +49,15 @@ export default function TeamMemberInvitesPage() {
           <SimpleSectionHeading
             title="Team member invites"
             description="Manage all team member invites for your workspace"
-            actions={(
+            actions={
               <Button
                 buttonStyle="primary"
                 onClick={showInviteTeamMemberSlideOver}
                 loading={false}
                 label="Invite team member"
-                paddingVertical={2}
-                paddingHorizontal={4}
                 width={50}
               />
-            )}
+            }
           />
         </div>
 
@@ -61,7 +74,9 @@ export default function TeamMemberInvitesPage() {
                 title="Send your first invite"
                 description="Invite team members to your workspace"
                 ctaText="Invite"
-                ctaOnClick={() => dispatch(setInviteTeamMemberSlideOverVisibility(true))}
+                ctaOnClick={() =>
+                  dispatch(setInviteTeamMemberSlideOverVisibility(true))
+                }
                 showCta
               />
             </div>

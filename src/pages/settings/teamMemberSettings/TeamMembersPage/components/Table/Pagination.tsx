@@ -1,14 +1,19 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../components';
-import { goToPreviousTeamMembersPage, goToNextTeamMembersPage } from '../../../../../../features/settings/teamMembers/teamMemberSlice';
+import {
+  goToPreviousTeamMembersPage,
+  goToNextTeamMembersPage,
+} from '../../../../../../features/settings/teamMembers/teamMemberSlice';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
-  const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
+    (state) => state.teamMember
+  );
 
   const { data: response } = useGetTeamMembers({
     page: teamMembersPaginationPage,
@@ -29,22 +34,20 @@ export default function Pagination() {
     >
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
-          Showing
-          {' '}
-          {response.data.pagination.total !== 0 && (
+          Showing{' '}
+          {response?.data.pagination.total !== 0 && (
             <>
-              <span className="font-medium">{response.data.pagination.first_item}</span>
-              {' '}
-              to
-              {' '}
-              <span className="font-medium">{response.data.pagination.last_item}</span>
-              {' '}
-              of
-              {' '}
+              <span className="font-medium">
+                {response?.data.pagination.first_item}
+              </span>{' '}
+              to{' '}
+              <span className="font-medium">
+                {response?.data.pagination.last_item}
+              </span>{' '}
+              of{' '}
             </>
           )}
-          <span className="font-medium">{response.data.pagination.total}</span>
-          {' '}
+          <span className="font-medium">{response?.data.pagination.total}</span>{' '}
           results
         </p>
       </div>
@@ -53,7 +56,7 @@ export default function Pagination() {
           buttonStyle="white"
           onClick={goToPreviousPage}
           loading={false}
-          disabled={response.data.pagination.on_first_page}
+          disabled={response?.data.pagination.on_first_page}
           label="Previous"
           width={28}
         />
@@ -62,7 +65,7 @@ export default function Pagination() {
           buttonStyle="white"
           onClick={goToNextPage}
           loading={false}
-          disabled={response.data.pagination.on_last_page}
+          disabled={response?.data.pagination.on_last_page}
           label="Next"
           width={28}
         />

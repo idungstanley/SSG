@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setTeamMemberGroupsPage } from '../../../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import { createTeamMemberGroupService } from '../../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../../../../features/general/slideOver/slideOverSlice';
-import {
-  SlideOver,
-  Button,
-  Input,
-} from '../../../../../../../components';
+import { SlideOver, Button, Input } from '../../../../../../../components';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
 function CreateTeamMemberGroupSlideOver() {
   const dispatch = useDispatch();
@@ -16,7 +13,6 @@ function CreateTeamMemberGroupSlideOver() {
   const queryClient = useQueryClient();
 
   // Form state
-
   const defaultFormState = {
     name: '',
   };
@@ -25,23 +21,28 @@ function CreateTeamMemberGroupSlideOver() {
 
   const { name } = formState;
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const createTeamMemberGroupMutation = useMutation(createTeamMemberGroupService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['team_member_groups', { page: 1 }]);
-      dispatch(setTeamMemberGroupsPage(1));
-      dispatch(setCreateTeamMemberGroupSlideOverVisibility(false));
-      setFormState(defaultFormState);
-    },
-  });
+  const createTeamMemberGroupMutation = useMutation(
+    createTeamMemberGroupService,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['team_member_groups', { page: 1 }]);
+        dispatch(setTeamMemberGroupsPage(1));
+        dispatch(setCreateTeamMemberGroupSlideOverVisibility(false));
+        setFormState(defaultFormState);
+      },
+    }
+  );
 
-  const showCreateTeamMemberGroupSlideOver = useSelector((state) => state.slideOver.showCreateTeamMemberGroupSlideOver);
+  const { showCreateTeamMemberGroupSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
 
   const onSubmit = async () => {
     createTeamMemberGroupMutation.mutate({
@@ -52,9 +53,11 @@ function CreateTeamMemberGroupSlideOver() {
   return (
     <SlideOver
       show={showCreateTeamMemberGroupSlideOver}
-      onClose={() => dispatch(setCreateTeamMemberGroupSlideOverVisibility(false))}
+      onClose={() =>
+        dispatch(setCreateTeamMemberGroupSlideOverVisibility(false))
+      }
       headerTitle="Create a new team member group"
-      body={(
+      body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
@@ -67,8 +70,8 @@ function CreateTeamMemberGroupSlideOver() {
             />
           </div>
         </div>
-      )}
-      footerButtons={(
+      }
+      footerButtons={
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -76,7 +79,7 @@ function CreateTeamMemberGroupSlideOver() {
           label="Create group"
           width="w-40"
         />
-      )}
+      }
     />
   );
 }

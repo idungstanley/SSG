@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../../../../features/auth/authSlice';
@@ -7,10 +6,15 @@ import { useGetTeamMemberGroup } from '../../../../../../features/settings/teamM
 import { AvatarWithInitials } from '../../../../../../components';
 import { OutputDateTime } from '../../../../../../app/helpers';
 
-export default function Row({ teamMemberGroupId }) {
+interface RowProps {
+  teamMemberGroupId: string;
+}
+
+export default function Row({ teamMemberGroupId }: RowProps) {
   const user = useSelector(selectCurrentUser);
 
-  const { data: teamMemberGroup, status } = useGetTeamMemberGroup(teamMemberGroupId);
+  const { data: teamMemberGroup, status } =
+    useGetTeamMemberGroup(teamMemberGroupId);
 
   return status === 'success' && teamMemberGroup != null ? (
     <tr key={teamMemberGroup.id}>
@@ -32,11 +36,9 @@ export default function Row({ teamMemberGroupId }) {
           </div>
         </div>
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{OutputDateTime(teamMemberGroup.created_at, null, user.timezone)}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        {OutputDateTime(teamMemberGroup.created_at, null, user.timezone)}
+      </td>
     </tr>
   ) : null;
 }
-
-Row.propTypes = {
-  teamMemberGroupId: PropTypes.string.isRequired,
-};

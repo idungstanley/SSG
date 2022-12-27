@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
 import PermissionsCheckbox from './PermissionsCheckbox';
-import { classNames } from "../../../../utils";
+import { classNames } from '../../../../utils';
 
 export default function Table() {
   const [permissionsByCategory, setPermissionsByCategory] = useState([]);
 
-  const { data: permissionsList, status: permissionsListStatus } = useGetPermissionsList();
+  const { data: permissionsList, status: permissionsListStatus } =
+    useGetPermissionsList();
 
   useEffect(() => {
     if (permissionsListStatus !== 'success') {
@@ -34,7 +35,7 @@ export default function Table() {
         ].permissions.push(currentPermission);
         return permissionsByCategorySoFar;
       },
-      {},
+      {}
     );
     setPermissionsByCategory(permissionsByCategoryTemp);
 
@@ -104,7 +105,7 @@ export default function Table() {
                         key={permission.key}
                         className={classNames(
                           index === 0 ? 'border-gray-300' : 'border-gray-200',
-                          'border-t',
+                          'border-t'
                         )}
                       >
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
@@ -151,7 +152,7 @@ export default function Table() {
                           />
                         </td>
                       </tr>
-                    ),
+                    )
                   )}
                 </Fragment>
               ))}

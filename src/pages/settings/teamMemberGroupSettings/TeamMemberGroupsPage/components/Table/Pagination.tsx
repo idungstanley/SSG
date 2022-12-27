@@ -1,16 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../components';
 import {
   goToPreviousTeamMemberGroupsPage,
   goToNextTeamMemberGroupsPage,
 } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import { useGetTeamMemberGroups } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const teamMemberGroupsPaginationPage = useSelector((state) => state.teamMemberGroup.teamMemberGroupsPaginationPage);
+  const {teamMemberGroupsPaginationPage} = useAppSelector((state) => state.teamMemberGroup);
 
   const { data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 
@@ -31,19 +32,19 @@ export default function Pagination() {
         <p className="text-sm text-gray-700">
           Showing
           {' '}
-          {data.data.pagination.total !== 0 && (
+          {data?.data.pagination.total !== 0 && (
             <>
-              <span className="font-medium">{data.data.pagination.first_item}</span>
+              <span className="font-medium">{data?.data.pagination.first_item}</span>
               {' '}
               to
               {' '}
-              <span className="font-medium">{data.data.pagination.last_item}</span>
+              <span className="font-medium">{data?.data.pagination.last_item}</span>
               {' '}
               of
               {' '}
             </>
           )}
-          <span className="font-medium">{data.data.pagination.total}</span>
+          <span className="font-medium">{data?.data.pagination.total}</span>
           {' '}
           results
         </p>
@@ -53,7 +54,7 @@ export default function Pagination() {
           buttonStyle="white"
           onClick={goToPreviousPage}
           loading={false}
-          disabled={data.data.pagination.on_first_page}
+          disabled={data?.data.pagination.on_first_page}
           label="Previous"
           width="w-28"
         />
@@ -62,7 +63,7 @@ export default function Pagination() {
           buttonStyle="white"
           onClick={goToNextPage}
           loading={false}
-          disabled={data.data.pagination.on_last_page}
+          disabled={data?.data.pagination.on_last_page}
           label="Next"
           width="w-28"
         />

@@ -1,24 +1,26 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
 import { SimpleSectionHeading, SearchInput } from '../../../../components';
 import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import { setTeamMembersSearchQuery } from '../../../../features/settings/teamMembers/teamMemberSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { useAppSelector } from '../../../../app/hooks';
 
 export default function TeamMembersPage() {
   const dispatch = useDispatch();
 
-  const teamMembersPaginationPage = useSelector((state) => state.teamMember.teamMembersPaginationPage);
-  const teamMembersSearchQuery = useSelector((state) => state.teamMember.teamMembersSearchQuery);
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
+    (state) => state.teamMember
+  );
 
   const { status } = useGetTeamMembers({
     page: teamMembersPaginationPage,
     query: teamMembersSearchQuery,
   });
 
-  const onChange = (value) => {
+  const onChange = (value: string) => {
     dispatch(setTeamMembersSearchQuery(value));
   };
 
@@ -26,7 +28,11 @@ export default function TeamMembersPage() {
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
       <Breadcrumb
         pages={[
-          { name: 'Team members', href: '/settings/team-members', current: true },
+          {
+            name: 'Team members',
+            href: '/settings/team-members',
+            current: true,
+          },
         ]}
       />
       <main className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
@@ -34,14 +40,14 @@ export default function TeamMembersPage() {
           <SimpleSectionHeading
             title="Team members"
             description="Manage all team members in your workspace"
-            actions={(
+            actions={
               <SearchInput
                 loading={status === 'loading'}
                 placeholder="Search team members"
                 value={teamMembersSearchQuery}
                 onChange={onChange}
               />
-            )}
+            }
           />
         </div>
 

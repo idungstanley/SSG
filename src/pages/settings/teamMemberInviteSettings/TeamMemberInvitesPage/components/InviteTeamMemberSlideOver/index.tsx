@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setInviteTeamMemberSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import {
@@ -9,49 +9,54 @@ import {
   SelectMenuSimple,
 } from '../../../../../../components';
 import { createTeamMemberInviteService } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 function InviteTeamMemberSlideOver() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   // Form state
-
   const defaultFormState = {
     email: '',
   };
 
   const [formState, setFormState] = useState(defaultFormState);
-  const [selectedRoleKey, setSelectedRoleKey] = useState(null);
+  const [selectedRoleKey, setSelectedRoleKey] = useState<string | null>(null);
 
-  const showInviteTeamMemberSlideOver = useSelector((state) => state.slideOver.showInviteTeamMemberSlideOver);
+  const { showInviteTeamMemberSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
 
   const { email } = formState;
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const onChangeRole = (e) => {
-    setSelectedRoleKey(e);
+  const onChangeRole = (key: string) => {
+    setSelectedRoleKey(key);
   };
 
-  const createTeamMemberInviteMutation = useMutation(createTeamMemberInviteService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['team_member_invites']);
+  const createTeamMemberInviteMutation = useMutation(
+    createTeamMemberInviteService,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['team_member_invites']);
 
-      setFormState(defaultFormState);
-      setSelectedRoleKey(null);
-      dispatch(setInviteTeamMemberSlideOverVisibility(false));
-    },
-  });
+        setFormState(defaultFormState);
+        setSelectedRoleKey(null);
+        dispatch(setInviteTeamMemberSlideOverVisibility(false));
+      },
+    }
+  );
 
   const onSubmit = async () => {
     createTeamMemberInviteMutation.mutate({
       email,
-      teamMemberRoleKey: selectedRoleKey,
+      teamMemberRoleKey: selectedRoleKey || '',
     });
   };
 
@@ -61,7 +66,7 @@ function InviteTeamMemberSlideOver() {
       onClose={() => dispatch(setInviteTeamMemberSlideOverVisibility(false))}
       headerTitle="Invite a team member"
       headerDescription="Select a role and enter their email to send an invite."
-      body={(
+      body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <SelectMenuSimple
@@ -74,7 +79,7 @@ function InviteTeamMemberSlideOver() {
                 { id: 'owner', name: 'Owner' },
               ]}
               onChange={onChangeRole}
-              selectedId={selectedRoleKey}
+              selectedId={selectedRoleKey || ''}
             />
           </div>
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
@@ -89,8 +94,8 @@ function InviteTeamMemberSlideOver() {
             />
           </div>
         </div>
-      )}
-      footerButtons={(
+      }
+      footerButtons={
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -98,7 +103,7 @@ function InviteTeamMemberSlideOver() {
           label="Send invite email"
           width="w-40"
         />
-      )}
+      }
     />
   );
 }

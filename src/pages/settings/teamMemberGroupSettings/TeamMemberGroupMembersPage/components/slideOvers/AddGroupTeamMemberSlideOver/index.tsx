@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setAddGroupTeamMemberSlideOverVisibility } from '../../../../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../../../../features/workspace/teamMemberService';
@@ -11,6 +11,13 @@ import {
   ComboBoxWithAvatar,
   AvatarWithInitials,
 } from '../../../../../../../components';
+import { useAppSelector } from '../../../../../../../app/hooks';
+
+interface IItem {
+  name: string
+  id: string
+  avatar: JSX.Element
+}
 
 function AddGroupTeamMemberSlideOver() {
   const dispatch = useDispatch();
@@ -18,27 +25,33 @@ function AddGroupTeamMemberSlideOver() {
 
   const { teamMemberGroupId } = useParams();
 
-  const showAddGroupTeamMemberSlideOver = useSelector((state) => state.slideOver.showAddGroupTeamMemberSlideOver);
+  const { showAddGroupTeamMemberSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
 
-  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] = useState([]);
-  const [teamMemberId, setTeamMemberId] = useState(null);
-  const [query, setQuery] = useState('');
+  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] =
+    useState<IItem[]>([]);
+  const [teamMemberId, setTeamMemberId] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>('');
 
-  const addTeamMemberToGroupMutation = useMutation(addTeamMemberToGroupService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('team_member_group', teamMemberGroupId);
-      dispatch(setAddGroupTeamMemberSlideOverVisibility(false));
-      setQuery('');
-      setTeamMemberId(null);
-    },
-  });
+  const addTeamMemberToGroupMutation = useMutation(
+    addTeamMemberToGroupService,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['team_member_group', teamMemberGroupId]);
+        dispatch(setAddGroupTeamMemberSlideOverVisibility(false));
+        setQuery('');
+        setTeamMemberId(null);
+      },
+    }
+  );
 
-  const onQueryChange = (q) => {
-    setQuery(q);
+  const onQueryChange = (query: string) => {
+    setQuery(query);
     setTeamMemberId(null);
   };
 
-  const onChange = (key) => {
+  const onChange = (key: string) => {
     setTeamMemberId(key);
   };
 
@@ -53,17 +66,12 @@ function AddGroupTeamMemberSlideOver() {
     });
   };
 
-  const {
-    status,
-    data,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetTeamMembers({
+  const { status, data, fetchNextPage, hasNextPage } = useGetTeamMembers({
     query,
   });
 
   useEffect(() => {
-    const temp = [];
+    const temp: IItem[] = [];
 
     if (status === 'success' && data) {
       const flat = data.pages.flatMap((page) => page.data.team_members);
@@ -96,15 +104,14 @@ function AddGroupTeamMemberSlideOver() {
       onClose={() => dispatch(setAddGroupTeamMemberSlideOverVisibility(false))}
       headerTitle="Add team member to group"
       headerDescription="Select a team member to add"
-      body={(
+      body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <ComboBoxWithAvatar
               label="Team member"
-              query={query}
               onQueryChange={onQueryChange}
               onChange={onChange}
-              selectedKey={teamMemberId}
+              selectedKey={teamMemberId || ''}
               options={unpaginatedTeamMemberOptions}
               fetchNextPage={fetchNextPage}
               hasNextPage={hasNextPage}
@@ -112,8 +119,8 @@ function AddGroupTeamMemberSlideOver() {
             />
           </div>
         </div>
-      )}
-      footerButtons={(
+      }
+      footerButtons={
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -121,7 +128,7 @@ function AddGroupTeamMemberSlideOver() {
           label="Add member"
           width="w-40"
         />
-      )}
+      }
     />
   );
 }

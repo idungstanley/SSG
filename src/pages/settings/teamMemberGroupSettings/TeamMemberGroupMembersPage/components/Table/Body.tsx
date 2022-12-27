@@ -5,13 +5,15 @@ import { useGetTeamMemberGroup } from '../../../../../../features/settings/teamM
 
 export default function Body() {
   const { teamMemberGroupId } = useParams();
-  const { data: teamMemberGroup, status } = useGetTeamMemberGroup(teamMemberGroupId);
+  const { data: teamMemberGroup, status } =
+    useGetTeamMemberGroup(teamMemberGroupId);
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
-      {status === 'success' && teamMemberGroup.group_team_members.map((groupTeamMember) => (
-        <Row key={groupTeamMember.id} groupTeamMember={groupTeamMember} />
-      ))}
+      {status === 'success' &&
+        teamMemberGroup.group_team_members?.map((groupTeamMember) => (
+          <Row key={groupTeamMember.id} groupTeamMember={groupTeamMember} />
+        ))}
     </tbody>
   );
 }
