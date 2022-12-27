@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
 
-const accessTokenLS = localStorage.getItem('accessToken') || '"';
-const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || '"';
+const accessTokenLS = localStorage.getItem('accessToken') || 'null';
+const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || 'null';
 
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;

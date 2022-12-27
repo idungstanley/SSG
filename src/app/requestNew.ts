@@ -1,23 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
-const accessTokenLS = localStorage.getItem('accessToken') || '"';
-const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || '"';
-
-const requestNew = async(options: Record<string, unknown>, isMainEndpoint?: boolean, isTaskEndpoint?: boolean) => {
-  const accessToken = JSON.parse(accessTokenLS);
+const requestNew = async (
+  options: Record<string, unknown>,
+  isMainEndpoint?: boolean,
+  isTaskEndpoint?: boolean
+) => {
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
   const currentWorkspaceId = JSON.parse(
-    currentWorkspaceIdLS,
+    localStorage.getItem('currentWorkspaceId') || 'null'
   );
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
 
-  const client = axios.create({
-    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,
-    headers: {
+  const headers = accessToken &&
+    currentWorkspaceId && {
       Authorization: `Bearer ${accessToken}`,
       current_workspace_id: currentWorkspaceId,
-    },
+    };
+
+  const client = axios.create({
+    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,
+    headers,
   });
 
   // request handler
