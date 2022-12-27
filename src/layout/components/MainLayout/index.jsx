@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import LoadingBar from 'react-top-loading-bar';
 import TopMenu from './TopMenu';
-import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
+import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver/index.tsx';
 
 function MainLayout() {
   const progressBarRef = useRef(null);

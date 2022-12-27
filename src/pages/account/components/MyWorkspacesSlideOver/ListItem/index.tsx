@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -18,8 +17,13 @@ import {
   StackListItemNarrow,
   AvatarWithInitials,
 } from '../../../../../components';
+import { IWorkspace } from '../../../../../features/account/account.interfaces';
 
-function ListItem({ userWorkspace }) {
+interface ListItemProps {
+  userWorkspace: IWorkspace;
+}
+
+function ListItem({ userWorkspace }: ListItemProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -32,13 +36,13 @@ function ListItem({ userWorkspace }) {
 
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(data.data.workspace.id),
+        JSON.stringify(data.data.workspace.id)
       );
 
       dispatch(
         setCurrentWorkspace({
           workspaceId: data.data.workspace.id,
-        }),
+        })
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
@@ -61,15 +65,15 @@ function ListItem({ userWorkspace }) {
       key={userWorkspace.id}
       title={userWorkspace.name}
       description={`Last activity ${moment(
-        userWorkspace.last_activity_at,
+        userWorkspace.last_activity_at
       ).fromNow()}`}
-      icon={(
+      icon={
         <AvatarWithInitials
           backgroundColour={userWorkspace.colour}
           initials={userWorkspace.initials}
         />
-      )}
-      button={(
+      }
+      button={
         <Button
           buttonStyle="white"
           onClick={onSwitchWorkspace}
@@ -91,13 +95,9 @@ function ListItem({ userWorkspace }) {
           }
           width="w-36"
         />
-      )}
+      }
     />
   );
 }
-
-ListItem.propTypes = {
-  userWorkspace: PropTypes.object.isRequired,
-};
 
 export default ListItem;
