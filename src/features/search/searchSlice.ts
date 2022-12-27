@@ -55,7 +55,6 @@ export const selectItem = createAsyncThunk(
 const initialState = {
   searchQuery: '',
   searchFileContents: false,
-
   selectedItemId: null,
   selectedItemType: null,
   selectedItemPath: null,

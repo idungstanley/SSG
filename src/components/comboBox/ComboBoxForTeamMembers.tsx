@@ -1,28 +1,43 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
-import { PropTypes } from 'prop-types';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
+
+interface userDataType {
+  id: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}
+
+interface ComboBoxType {
+  setShowPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  onClickArrow: (value: string) => void;
+  absolute: boolean;
+  users: userDataType[];
+}
 
 function ComboBoxForTeamMembers({
   setShowPopup,
   onClickArrow,
   absolute,
   users,
-}) {
+}: ComboBoxType) {
   const [query, setQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
-  const filteredUsers = (
+  const filteredUsers =
     query === ''
       ? users
-      : users.filter((person) => (
-        person.user.name.toLowerCase().includes(query.toLowerCase()))));
+      : users.filter((person) =>
+          person.user.name.toLowerCase().includes(query.toLowerCase())
+        );
 
   return (
     <>
       {absolute ? (
         <div
-          className="fixed left-0 right-0 bottom-0 top-0 bg-black opacity-0"
+          className="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-0"
           tabIndex={0}
           role="button"
           onClick={() => setShowPopup(false)}
@@ -43,11 +58,11 @@ function ComboBoxForTeamMembers({
         </Combobox.Label>
         <div className="relative mt-1">
           <Combobox.Input
-            className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            className="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
             onChange={(event) => setQuery(event.target.value)}
-            displayValue={(person) => person?.user.name}
+            displayValue={(person: userDataType) => person?.user.name}
           />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -82,19 +97,24 @@ function ComboBoxForTeamMembers({
             />
           </svg>
           {users && filteredUsers.length > 0 && (
-            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredUsers.map((person) => (
                 <Combobox.Option
                   key={person.id}
                   value={person}
-                  className={({ active }) => classNames('relative cursor-pointer select-none py-2 pl-3 pr-9', active ? 'bg-indigo-600 text-white' : 'text-gray-900')}
+                  className={({ active }) =>
+                    classNames(
+                      'relative cursor-pointer select-none py-2 pl-3 pr-9',
+                      active ? 'bg-indigo-600 text-white' : 'text-gray-900'
+                    )
+                  }
                 >
                   {({ active, selected }) => (
                     <>
                       <span
                         className={classNames(
                           'block truncate',
-                          selected && 'font-semibold',
+                          selected ? 'font-semibold' : ''
                         )}
                       >
                         {person.user.name}
@@ -105,7 +125,7 @@ function ComboBoxForTeamMembers({
                         <span
                           className={classNames(
                             'absolute inset-y-0 right-0 flex items-center pr-4',
-                            active ? 'text-white' : 'text-indigo-600',
+                            active ? 'text-white' : 'text-indigo-600'
                           )}
                         >
                           <svg
@@ -136,13 +156,6 @@ function ComboBoxForTeamMembers({
 
 ComboBoxForTeamMembers.defaultProps = {
   setShowPopup: () => ({}),
-};
-
-ComboBoxForTeamMembers.propTypes = {
-  setShowPopup: PropTypes.func,
-  onClickArrow: PropTypes.func.isRequired,
-  absolute: PropTypes.bool.isRequired,
-  users: PropTypes.array.isRequired,
 };
 
 export default ComboBoxForTeamMembers;

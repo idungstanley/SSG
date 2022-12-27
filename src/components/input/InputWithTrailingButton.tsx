@@ -1,6 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+interface inputWithTrailingButtonType {
+  label: string;
+  icon: string;
+  buttonInner: string;
+  buttonOnClick: () => void;
+  placeholder: string;
+  name: string;
+  type: string;
+  value: string;
+  onChange: () => void;
+}
+
 export default function InputWithTrailingButton({
   label,
   icon,
@@ -11,18 +23,21 @@ export default function InputWithTrailingButton({
   type,
   value,
   onChange,
-}) {
+}: inputWithTrailingButtonType) {
   return (
     <div>
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor={name}
+          className="block mb-1 text-sm font-medium text-gray-700"
+        >
           {label}
         </label>
       )}
       <div className="flex rounded-md shadow-sm">
         <div className="relative flex items-stretch flex-grow focus-within:z-10">
           {icon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               {icon}
             </div>
           )}
@@ -30,7 +45,7 @@ export default function InputWithTrailingButton({
             type={type}
             name={name}
             id={name}
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300 placeholder-gray-400"
+            className="block w-full pl-10 placeholder-gray-400 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
             placeholder={placeholder}
             value={value}
             onChange={onChange}
@@ -39,7 +54,7 @@ export default function InputWithTrailingButton({
         <button
           type="button"
           onClick={buttonOnClick}
-          className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+          className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
         >
           {buttonInner}
         </button>
@@ -53,16 +68,4 @@ InputWithTrailingButton.defaultProps = {
   icon: null,
   placeholder: null,
   type: 'text',
-};
-
-InputWithTrailingButton.propTypes = {
-  label: PropTypes.string,
-  icon: PropTypes.string,
-  buttonInner: PropTypes.string.isRequired,
-  buttonOnClick: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.string.isRequired,
 };

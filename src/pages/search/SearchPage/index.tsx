@@ -11,22 +11,36 @@ import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessa
 import { useAppSelector } from '../../../app/hooks';
 
 interface Idata {
-  id: string;
-  created_at: string | null;
-  size: string | number;
-  icon: string;
-  display_name: string;
-  name: string;
+  id: string
+  created_at: string
+  size: number | null
+  icon: string
+  display_name: string
+  name: string
+  file_format: {
+    extension: string
+  }
   inbox_file_source: {
-    size: string | number;
+    size: number | null
     file_format: {
-      extension: string;
-    };
-    display_name: string;
-  };
-  ancestor_path: string;
-  from: string;
-  updated_at: string | null;
+      extension: string
+    }
+    display_name: string
+  }
+  ancestor_path: string
+  from: string
+  updated_at: string
+}
+
+interface allResultData {
+  id: string
+  createdAt:string
+  size: number | null
+  icon:string
+  name: string
+  path: string | null
+  from: string
+  updatedAt: string
 }
 
 interface dataProps {
@@ -54,19 +68,17 @@ export default function SearchPage() {
     }
   }, [debouncedValue]);
 
-  const allResults: any[] = [];
-  files?.map((i: any) =>
-    allResults.push({
-      id: i.id,
-      createdAt: i.created_at,
-      size: i.size,
-      icon: i.file_format.extension,
-      name: i.display_name,
-      path: i.ancestor_path,
-      from: 'Explorer',
-      updatedAt: i.updated_at,
-    })
-  );
+  const allResults: allResultData[] = [];
+  files?.map((i) => allResults.push({
+    id: i.id,
+    createdAt: i.created_at,
+    size: i.size,
+    icon: i.file_format.extension,
+    name: i.display_name,
+    path: i.ancestor_path,
+    from: 'Explorer',
+    updatedAt: i.updated_at,
+  }));
 
   folders?.map((i) =>
     allResults.push({

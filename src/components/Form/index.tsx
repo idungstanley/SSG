@@ -1,9 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import InputWithValidation from '../input/InputWithValidation';
 
-export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
+interface checkboxType {
+  id: string;
+  value: string;
+  onChange: () => void;
+  label: string;
+}
+
+interface formType {
+  onSubmit: (values: { email: string; password: string }) => void;
+  formikConfig: {
+    initValues: {
+      email: string;
+      password: string;
+    };
+    validationSchema: {
+      email: string;
+      password: string;
+    };
+    buttonTitle: string;
+  } | any;
+  checkboxConfig: checkboxType[];
+}
+
+export default function Form({
+  onSubmit,
+  formikConfig,
+  checkboxConfig,
+}: any) {
   const formik = useFormik({
     initialValues: {
       ...formikConfig.initValues,
@@ -37,14 +63,14 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
         <div className="mb-6 space-y-3">
           {checkboxConfig.map((i) => (
             <div key={i.id} className="relative flex items-start">
-              <div className="flex h-5 items-center">
+              <div className="flex items-center h-5">
                 <input
                   id={i.id}
                   name={i.id}
                   type="checkbox"
                   value={i.value}
                   onChange={i.onChange}
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 cursor-pointer ring-0 focus:ring-0"
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded cursor-pointer ring-0 focus:ring-0"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -58,7 +84,7 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
       ) : null}
 
       <button
-        className="border border-transparent shadow-sm text-sm font-medium text-white bg-primary-600 focus:outline-none hover:bg-primary-700 w-full h-10 px-4 py-2 rounded-md transition-all duration-150 hover:ease-in"
+        className="w-full h-10 px-4 py-2 text-sm font-medium text-white transition-all duration-150 border border-transparent rounded-md shadow-sm bg-primary-600 focus:outline-none hover:bg-primary-700 hover:ease-in"
         type="submit"
         // disabled={checkboxConfig ? checkboxConfig.find((i) => i.value !== true) : false}
       >
@@ -70,10 +96,4 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }) {
 
 Form.defaultProps = {
   checkboxConfig: null,
-};
-
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  formikConfig: PropTypes.object.isRequired,
-  checkboxConfig: PropTypes.array,
 };

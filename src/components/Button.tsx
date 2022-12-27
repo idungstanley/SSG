@@ -7,8 +7,7 @@ interface ButtonProps {
   onClick?: () => Promise<void> | void | any;
   loading?: boolean;
   label?: string | null;
-  // icon?: Record<string, unknown>;
-  icon?: any;
+  icon?: string | JSX.Element;
   width?: string | number;
   height?: string;
   padding?: string;

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const icons = [
@@ -17,6 +16,19 @@ const icons = [
   },
 ];
 
+interface inputWithValidation {
+  id: string;
+  type?: string;
+  placeholder?: string;
+  value?: string;
+  onChange?: () => void | any;
+  onBlur?: () => void | any;
+  message?: string;
+  isFocused?: boolean;
+  handleSubmit?: number;
+  isNewPassword?: boolean;
+}
+
 export default function InputWithValidation({
   id,
   type,
@@ -28,7 +40,7 @@ export default function InputWithValidation({
   isFocused,
   handleSubmit,
   isNewPassword,
-}) {
+}: any) {
   const [showPassword, setShowPassword] = useState(type === 'password');
   const newMessage = handleSubmit || value ? message : null;
 
@@ -36,7 +48,7 @@ export default function InputWithValidation({
     <div className="relative">
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-1 ml-1"
+        className="block mb-1 ml-1 text-sm font-medium text-gray-700"
       >
         {id[0].toUpperCase() + id.slice(1)}
       </label>
@@ -66,7 +78,11 @@ export default function InputWithValidation({
         } focus:${
           newMessage ? 'border-red-700' : 'border-gray-300'
         } sm:text-sm ${
-          type === 'password' ? (isNewPassword ? 'pr-14' : 'pr-20 sm:pr-36') : null
+          type === 'password'
+            ? isNewPassword
+              ? 'pr-14'
+              : 'pr-20 sm:pr-36'
+            : null
         }`}
         id={id}
         type={showPassword ? type : 'text'}
@@ -80,23 +96,20 @@ export default function InputWithValidation({
         isNewPassword ? (
           <p
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+            className="absolute text-sm cursor-pointer top-9 right-3 sm:top-8 text-primary-600 border-b-dashed"
           >
             {showPassword ? 'Show' : 'Hide'}
           </p>
         ) : (
           <Link
-            className="absolute top-9 right-3 sm:top-8 text-sm text-primary-600 border-b-dashed cursor-pointer"
+            className="absolute text-sm cursor-pointer top-9 right-3 sm:top-8 text-primary-600 border-b-dashed"
             to="/auth/forgot"
           >
-            Forgot
-            {' '}
-            <span className="hidden sm:inline-block">password</span>
-            ?
+            Forgot <span className="hidden sm:inline-block">password</span>?
           </Link>
         )
       ) : null}
-      <p className="block text-sm font-medium text-red-700 mt-1 h-4 ml-1">
+      <p className="block h-4 mt-1 ml-1 text-sm font-medium text-red-700">
         {newMessage}
       </p>
     </div>
@@ -105,17 +118,4 @@ export default function InputWithValidation({
 
 InputWithValidation.defaultProps = {
   message: '',
-};
-
-InputWithValidation.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
-  message: PropTypes.string,
-  isFocused: PropTypes.bool.isRequired,
-  handleSubmit: PropTypes.number.isRequired,
-  isNewPassword: PropTypes.bool.isRequired,
 };

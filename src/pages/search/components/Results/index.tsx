@@ -2,8 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Item from '../Item';
 
+interface data {
+  id: string;
+  createdAt: string;
+  size: number | null;
+  icon: string;
+  name: string;
+  path: string | null;
+  from: string;
+  updatedAt: string;
+}
 interface dataProps {
-  data: any;
+  data: data[];
 }
 function Results({ data }: dataProps) {
   return (
@@ -62,9 +72,5 @@ function Results({ data }: dataProps) {
     </div>
   );
 }
-
-Results.propTypes = {
-  data: PropTypes.array.isRequired,
-};
 
 export default Results;

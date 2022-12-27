@@ -6,19 +6,19 @@ import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { setSelectedItem } from '../../../../features/search/searchSlice';
 import { useAppSelector } from '../../../../app/hooks';
 
-interface Idata {
-  data:
-    | {
-        id: string;
-        name: string;
-        icon: string | any;
-        createdAt: string | any;
-        size: number;
-        from: string;
-      }
-    | any;
+interface dataProps {
+  data: {
+    id: string;
+    createdAt: string;
+    size: number | null;
+    icon: string;
+    name: string;
+    path: string | null;
+    from: string;
+    updatedAt: string;
+  };
 }
-function Item({ data }: Idata) {
+function Item({ data }: dataProps) {
   const dispatch = useDispatch();
   const { selectedItemId } = useAppSelector((state) => state.search);
 
@@ -74,9 +74,5 @@ function Item({ data }: Idata) {
     </tr>
   );
 }
-
-Item.propTypes = {
-  data: PropTypes.object.isRequired,
-};
 
 export default Item;

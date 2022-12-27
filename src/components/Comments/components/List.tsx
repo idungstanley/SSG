@@ -1,31 +1,44 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
 import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
 
 const regex = /@[\S]*/g;
 
-export default function List({
-  status, comments, onEdit, onDelete,
-}) {
+interface mentionUsersType {
+  id: string;
+  name: string;
+}
+
+interface commentsType {
+  id: string;
+  message: string;
+  can_modify: boolean;
+  mention_users: mentionUsersType[];
+}
+interface ListType {
+  status: string;
+  comments: commentsType[];
+  onEdit: (id: string, message: string, users: mentionUsersType[]) => void;
+  onDelete: (value: string) => void;
+}
+export default function List({ status, comments, onEdit, onDelete }: ListType) {
   return status === 'loading' ? (
-    <div className="mx-auto mt-3 mb-6 w-6 justify-center">
+    <div className="justify-center w-6 mx-auto mt-3 mb-6">
       <Spinner size={22} color="#0F70B7" />
     </div>
   ) : status === 'success' ? (
     comments?.length ? (
       <ul className="divide-y divide-gray-200">
         {comments.map((item) => (
-          <li key={item.id} className="py-4 flex items-center justify-between">
+          <li key={item.id} className="flex items-center justify-between py-4">
             <p>{item.message.replaceAll(regex, '')}</p>
-
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <div className="flex gap-2">
                 {item.mention_users?.map((user) => (
                   <div
                     key={user.id}
-                    className="bg-indigo-100 border text-sm px-3 py-1 border-primary-400 rounded-2xl"
+                    className="px-3 py-1 text-sm bg-indigo-100 border border-primary-400 rounded-2xl"
                   >
                     {user.name}
                   </div>
@@ -34,12 +47,14 @@ export default function List({
               {item.can_modify ? (
                 <>
                   <PencilIcon
-                    onClick={() => onEdit(item.id, item.message, item.mention_users)}
-                    className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
+                    onClick={() =>
+                      onEdit(item.id, item.message, item.mention_users)
+                    }
+                    className="w-6 h-6 text-gray-300 transition-all duration-300 cursor-pointer hover:text-indigo-500"
                   />
                   <TrashIcon
                     onClick={() => onDelete(item.id)}
-                    className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+                    className="w-6 h-6 text-gray-300 transition-all duration-300 cursor-pointer hover:text-red-500"
                   />
                 </>
               ) : null}
@@ -63,11 +78,4 @@ export default function List({
 
 List.defaultProps = {
   comments: [],
-};
-
-List.propTypes = {
-  status: PropTypes.string.isRequired,
-  comments: PropTypes.array,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };

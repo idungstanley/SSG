@@ -2,15 +2,33 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { InitialsAvatar } from '../../../../../common';
+import { useAppSelector } from '../../../../../app/hooks';
+
+interface log {
+  id: string;
+  team_member: {
+    colour: string;
+    initials: string;
+    user: {
+      name: string;
+    };
+  };
+  description: string;
+  created_at: string;
+}
+
+interface selectedItemType {
+  folder_activity_logs: log[];
+}
 
 export default function Activity() {
-  const selectedItemFullDetails = useSelector(
-    (state) => state.explorer.selectedItemFullDetails,
+  const selectedItemFullDetails: any = useAppSelector(
+    (state) => state.explorer.selectedItemFullDetails
   );
 
   return (
     <ul className="divide-y divide-gray-200">
-      {selectedItemFullDetails.folder_activity_logs.map((activityLog) => (
+      {selectedItemFullDetails.folder_activity_logs.map((activityLog: log) => (
         <li key={activityLog.id} className="py-4">
           <div className="flex space-x-3">
             <InitialsAvatar
@@ -22,11 +40,9 @@ export default function Activity() {
               <div className="flex items-center justify-between">
                 <div className="flex">
                   <p className="text-sm text-gray-500">
-                    {activityLog.description}
-                    {' '}
-                    by
+                    {activityLog.description} by
                   </p>
-                  <h3 className="text-sm font-medium  ml-1">
+                  <h3 className="ml-1 text-sm font-medium">
                     {activityLog.team_member.user.name}
                   </h3>
                 </div>

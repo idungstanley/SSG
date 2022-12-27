@@ -17,8 +17,16 @@ import {
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
 // import { useSelector } from 'react-redux';
+
+interface itemsType {
+  id: number;
+  title: string;
+  icon: JSX.Element;
+  handleClick: () => void;
+  isVisible: boolean;
+}
 
 function MenuDropdown() {
   // const { currentItemId, type } = useSelector((state) => state.workspace);
@@ -26,30 +34,30 @@ function MenuDropdown() {
   // ! actions here (create, delete, rename)
 
   // ! (too big!) destructure to different components
-  const itemsList = [
+  const itemsList: itemsType[] = [
     {
       id: 1,
       title: 'Create new',
-      onClick: () => ({}),
+      handleClick: () => ({}),
       icon: (
-        <PlusIcon className="h-7 w-5 pt-2 text-gray-700" aria-hidden="true" />
+        <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
       isVisible: true,
     },
     {
       id: 2,
       title: 'Rename',
-      onClick: () => ({}),
-      icon: <PencilIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 3,
       title: 'Color & Avatar',
-      onClick: () => ({}),
+      handleClick: () => ({}),
       icon: (
         <ColorSwatchIcon
-          className="h-7 w-5 pt-2 text-gray-700"
+          className="w-5 pt-2 text-gray-700 h-7"
           aria-hidden="true"
         />
       ),
@@ -58,38 +66,38 @@ function MenuDropdown() {
     {
       id: 4,
       title: 'Copy link',
-      onClick: () => ({}),
-      icon: <LinkIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 5,
       title: 'Duplicate',
-      onClick: () => ({}),
-      icon: <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 6,
       title: 'Add to favorites',
-      onClick: () => ({}),
-      icon: <StarIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 7,
       title: 'Hide in sidebar',
-      onClick: () => ({}),
-      icon: <EyeOffIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <EyeOffIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 8,
       title: 'Templates',
-      onClick: () => ({}),
+      handleClick: () => ({}),
       icon: (
         <SparklesIcon
-          className="h-6 w-5 pt-2 text-gray-700"
+          className="w-5 h-6 pt-2 text-gray-700"
           aria-hidden="true"
         />
       ),
@@ -98,51 +106,51 @@ function MenuDropdown() {
     {
       id: 9,
       title: 'More settings',
-      onClick: () => ({}),
+      handleClick: () => ({}),
       icon: (
-        <CogIcon className="h-6 w-5 pt-2 text-gray-700" aria-hidden="true" />
+        <CogIcon className="w-5 h-6 pt-2 text-gray-700" aria-hidden="true" />
       ),
       isVisible: false,
     },
     {
       id: 10,
       title: 'Sharing & Permission',
-      onClick: () => ({}),
-      icon: <ShareIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <ShareIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 11,
       title: 'Archive',
-      onClick: () => ({}),
-      icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 12,
       title: 'Import',
-      onClick: () => ({}),
-      icon: <ArrowDownIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <ArrowDownIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 13,
       title: 'Archive',
-      onClick: () => ({}),
-      icon: <ArchiveIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 14,
       title: 'Whiteboard',
-      onClick: () => ({}),
-      icon: <PencilAltIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <PencilAltIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 15,
       title: 'Wallet',
-      onClick: () => ({}),
+      handleClick: () => ({}),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -164,16 +172,16 @@ function MenuDropdown() {
     {
       id: 16,
       title: 'Delete',
-      onClick: () => ({}),
-      icon: <TrashIcon className="h-4 w-4" aria-hidden="true" />,
+      handleClick: () => ({}),
+      icon: <TrashIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
   ];
 
   return (
     <Menu as="div">
-      <Menu.Button className="text-gray-400 flex text-sm">
-        <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+      <Menu.Button className="flex text-sm text-gray-400">
+        <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
       </Menu.Button>
 
       <Transition
@@ -185,22 +193,25 @@ function MenuDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute bottom-20 left-50 z-10 -mt-28 w-56 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {itemsList.map((item) => (item.isVisible ? (
-            <Menu.Item key={item.id} onClick={item.onClick}>
-              {({ active }) => (
-                <div
-                  className={classNames(
-                    active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left',
-                  )}
-                >
-                  <TrashIcon className="h-4 w-4" aria-hidden="true" />
-                  <p>{item.title}</p>
-                </div>
-              )}
-            </Menu.Item>
-          ) : null))}
+        <Menu.Items className="absolute z-10 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-50 -mt-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {itemsList.map((item) =>
+            item.isVisible ? (
+              <Menu.Item key={item.id}>
+                {({ active }) => (
+                  <div
+                    className={classNames(
+                      active ? 'bg-gray-100' : '',
+                      'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left'
+                    )}
+                    onClick={() => item.handleClick}
+                  >
+                    <TrashIcon className="w-4 h-4" aria-hidden="true" />
+                    <p>{item.title}</p>
+                  </div>
+                )}
+              </Menu.Item>
+            ) : null
+          )}
         </Menu.Items>
       </Transition>
     </Menu>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../app/hooks';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
 import UploadModal from '../../components/UploadModal';
 
 function Index() {
-  const { showSidebar } = useSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.workspace);
 
   return (
     <>
