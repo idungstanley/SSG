@@ -1,3 +1,4 @@
+import { ITeamMemberGroupsReq } from './teamMemberGroups.interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
@@ -36,10 +37,10 @@ export const useGetTeamMemberGroups = (page: number) => {
 };
 
 // Get team member group
-export const useGetTeamMemberGroup = (teamMemberGroupId: string) => {
+export const useGetTeamMemberGroup = (teamMemberGroupId?: string) => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<ITeamMemberGroupsReq>(
     ['team_member_group', teamMemberGroupId],
     async () => {
       const data = await requestNew(
@@ -56,7 +57,7 @@ export const useGetTeamMemberGroup = (teamMemberGroupId: string) => {
         'team_member_group',
         teamMemberGroupId,
       ]),
-      enabled: teamMemberGroupId != null,
+      enabled: !!teamMemberGroupId,
     }
   );
 };
@@ -79,7 +80,7 @@ export const createTeamMemberGroupService = async (data: { name: string }) => {
 // Update team member group service
 export const updateTeamMemberGroupService = async (data: {
   name: string;
-  teamMemberGroupId: string;
+  teamMemberGroupId?: string;
 }) => {
   const response = requestNew(
     {
@@ -96,7 +97,7 @@ export const updateTeamMemberGroupService = async (data: {
 
 // Delete team member group service
 export const deleteTeamMemberGroupService = async (data: {
-  teamMemberGroupId: string;
+  teamMemberGroupId?: string;
 }) => {
   const response = requestNew({
     url: `settings/team-member-groups/${data.teamMemberGroupId}`,
@@ -122,7 +123,7 @@ export const removeTeamMemberFromGroupService = async (data: {
 
 // Add team member to group service
 export const addTeamMemberToGroupService = async (data: {
-  teamMemberGroupId: string;
+  teamMemberGroupId?: string;
   teamMemberId: string;
 }) => {
   const response = requestNew(

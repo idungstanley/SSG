@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
+import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
@@ -37,7 +38,7 @@ export const useGetTeamMembers = (data: { page: number; query: string }) => {
 export const useGetTeamMember = (teamMemberId: string) => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<ITeamMember>(
     ['team_member', teamMemberId],
     async () => {
       const data = await requestNew(
