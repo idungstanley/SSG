@@ -20,7 +20,7 @@ function Activity() {
           />
         ) : status === 'loading' ? (
           <div className="mx-auto w-6 justify-center mt-12">
-            <Spinner size={22} color="#0F70B7" />
+            <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
           <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col px-5 pt-2">

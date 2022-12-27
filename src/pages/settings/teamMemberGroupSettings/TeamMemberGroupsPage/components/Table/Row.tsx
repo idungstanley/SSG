@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../../../../features/auth/authSlice';
 import { useGetTeamMemberGroup } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { AvatarWithInitials } from '../../../../../../components';
 import { OutputDateTime } from '../../../../../../app/helpers';
@@ -11,8 +9,6 @@ interface RowProps {
 }
 
 export default function Row({ teamMemberGroupId }: RowProps) {
-  const user = useSelector(selectCurrentUser);
-
   const { data: teamMemberGroup, status } =
     useGetTeamMemberGroup(teamMemberGroupId);
 
@@ -37,7 +33,7 @@ export default function Row({ teamMemberGroupId }: RowProps) {
         </div>
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        {OutputDateTime(teamMemberGroup.created_at, null, user.timezone)}
+        {OutputDateTime(teamMemberGroup.created_at, null)}
       </td>
     </tr>
   ) : null;

@@ -3,9 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../../common';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { setCreateInboxSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import {
-  useInboxes,
-} from '../../../../../features/inbox/inboxesService';
+import { useInboxes } from '../../../../../features/inbox/inboxesService';
 import Header from '../Table/Header';
 import Row from '../Table/Row';
 
@@ -17,7 +15,7 @@ function Active() {
   if (status === 'loading') {
     return (
       <div className="mx-auto w-6 mt-10 justify-center">
-        <Spinner size={22} color="#0F70B7" />
+        <Spinner size={8} color="#0F70B7" />
       </div>
     );
   }

@@ -20,7 +20,7 @@ function PermissionsSettingsPage() {
 
         {status === 'loading' ? (
           <div className="mx-auto w-6 justify-center">
-            <Spinner size={22} color="#0F70B7" />
+            <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
           <Form />

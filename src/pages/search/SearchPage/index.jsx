@@ -12,17 +12,15 @@ import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessa
 export default function SearchPage() {
   const dispatch = useDispatch();
   const { selectedItemId, searchQuery, searchFileContents } = useSelector(
-    (state) => state.search,
+    (state) => state.search
   );
 
   const debouncedValue = useDebounce(searchQuery, 300);
 
-  const {
-    files, folders, inbox, explorerStatus, inboxStatus,
-  } = useSearch(
+  const { files, folders, inbox, explorerStatus, inboxStatus } = useSearch(
     searchQuery,
     searchFileContents,
-    debouncedValue === searchQuery,
+    debouncedValue === searchQuery
   );
 
   useEffect(() => {
@@ -32,38 +30,44 @@ export default function SearchPage() {
   }, [debouncedValue]);
 
   const allResults = [];
-  files?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: i.size,
-    icon: i.file_format.extension,
-    name: i.display_name,
-    path: i.ancestor_path,
-    from: 'Explorer',
-    updatedAt: i.updated_at,
-  }));
+  files?.map((i) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: i.size,
+      icon: i.file_format.extension,
+      name: i.display_name,
+      path: i.ancestor_path,
+      from: 'Explorer',
+      updatedAt: i.updated_at,
+    })
+  );
 
-  folders?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: null,
-    icon: 'folder',
-    name: i.name,
-    path: i.ancestor_path,
-    from: 'Explorer',
-    updatedAt: i.updated_at,
-  }));
+  folders?.map((i) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: null,
+      icon: 'folder',
+      name: i.name,
+      path: i.ancestor_path,
+      from: 'Explorer',
+      updatedAt: i.updated_at,
+    })
+  );
 
-  inbox?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: i.inbox_file_source.size,
-    icon: i.inbox_file_source.file_format.extension,
-    name: i.inbox_file_source.display_name,
-    path: null,
-    from: 'Inbox',
-    updatedAt: i.updated_at,
-  }));
+  inbox?.map((i) =>
+    allResults.push({
+      id: i.id,
+      createdAt: i.created_at,
+      size: i.inbox_file_source.size,
+      icon: i.inbox_file_source.file_format.extension,
+      name: i.inbox_file_source.display_name,
+      path: null,
+      from: 'Inbox',
+      updatedAt: i.updated_at,
+    })
+  );
 
   return (
     <div className="h-full flex flex-col w-full">
@@ -76,36 +80,36 @@ export default function SearchPage() {
               title="Enter a search query"
               description="Enter at least 2 characters to start searching"
             />
-          ) // checking error and loading
-            : explorerStatus === 'error' || inboxStatus === 'error' ? (
+          ) : // checking error and loading
+          explorerStatus === 'error' || inboxStatus === 'error' ? (
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
+          ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
+            <div className="mx-auto w-6 mt-10 justify-center">
+              <Spinner size={8} color="#0F70B7" />
+            </div>
+          ) : explorerStatus === 'success' && inboxStatus === 'success' ? (
+            searchQuery.length < 2 ? (
               <FullScreenMessage
-                title="Oops, an error occurred :("
-                description="Please try again later."
+                title="Enter a search query"
+                description="Enter at least 2 characters to start searching"
               />
-            ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
-              <div className="mx-auto w-6 mt-10 justify-center">
-                <Spinner size={22} color="#0F70B7" />
-              </div>
-            ) : explorerStatus === 'success' && inboxStatus === 'success' ? (
-              searchQuery.length < 2 ? (
-                <FullScreenMessage
-                  title="Enter a search query"
-                  description="Enter at least 2 characters to start searching"
-                />
-              ) : !allResults.length ? (
-                <FullScreenMessage
-                  title="Тo matches found :("
-                  description="Please, try again"
-                />
-              ) : (
-                <div>
-                  <Results data={allResults} />
+            ) : !allResults.length ? (
+              <FullScreenMessage
+                title="Тo matches found :("
+                description="Please, try again"
+              />
+            ) : (
+              <div>
+                <Results data={allResults} />
 
-                  {/* Details sidebar (separate files and folders) */}
-                  {selectedItemId ? <Preview /> : null}
-                </div>
-              )
-            ) : null}
+                {/* Details sidebar (separate files and folders) */}
+                {selectedItemId ? <Preview /> : null}
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </div>

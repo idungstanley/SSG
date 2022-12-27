@@ -12,7 +12,7 @@ function SearchInput({
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         {loading ? (
           <div className="-mt-2">
-            <Spinner size={16} color="#9CA3AE" />
+            <Spinner size={8} color="#9CA3AE" />
           </div>
         ) : (
           <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

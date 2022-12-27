@@ -124,7 +124,9 @@ export default function SharedTable() {
   }
 
   const handleClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
     type: string
   ) => {
@@ -196,11 +198,11 @@ export default function SharedTable() {
       ? useGetFile(selectedItemId)
       : useGetFolder(selectedItemId);
 
-  return (status.files === 'loading' || status.folders === 'loading') ? (
+  return status.files === 'loading' || status.folders === 'loading' ? (
     <div className="mx-auto w-6 mt-10 justify-center">
-      <Spinner size={22} color="#0F70B7" />
+      <Spinner size={8} color="#0F70B7" />
     </div>
-  ) : (status.files === 'error' || status.folders) ? (
+  ) : status.files === 'error' || status.folders ? (
     <FullScreenMessage
       title="Oops, an error occurred :("
       description="Please try again later."

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { UserRemoveIcon, RefreshIcon } from '@heroicons/react/outline';
-import { selectCurrentUser } from '../../../../../../features/auth/authSlice';
 import {
   useGetTeamMemberInvite,
   useDeleteTeamMemberInvite,
@@ -27,8 +26,6 @@ interface DropDownItem {
 
 export default function Row({ teamMemberInviteId }: RowProps) {
   const dispatch = useDispatch();
-
-  const user = useSelector(selectCurrentUser);
 
   const { data: teamMemberInvite, status } =
     useGetTeamMemberInvite(teamMemberInviteId);
@@ -148,12 +145,12 @@ export default function Row({ teamMemberInviteId }: RowProps) {
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {teamMemberInvite.created_at
-          ? OutputDateTime(teamMemberInvite.created_at, null, user.timezone)
+          ? OutputDateTime(teamMemberInvite.created_at, null)
           : '-'}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {teamMemberInvite.expires_at
-          ? OutputDateTime(teamMemberInvite.expires_at, null, user.timezone)
+          ? OutputDateTime(teamMemberInvite.expires_at, null)
           : '-'}
       </td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 z-100 justify-center align-center items-center">

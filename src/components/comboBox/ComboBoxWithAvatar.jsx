@@ -70,7 +70,7 @@ export default function ComboBoxWithAvatar({
 
               {(isFetching || hasNextPage) && (
                 <div className="mx-auto mt-3 mb-6 w-6 justify-center" ref={sentryRef}>
-                  <Spinner size={22} color="#0F70B7" />
+                  <Spinner size={8} color="#0F70B7" />
                 </div>
               )}
             </>

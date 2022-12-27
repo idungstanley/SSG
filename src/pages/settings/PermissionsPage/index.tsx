@@ -16,7 +16,11 @@ export default function PermissionsPage() {
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
       <Breadcrumb
         pages={[
-          { name: 'Team members', href: '/settings/team-members', current: false },
+          {
+            name: 'Team members',
+            href: '/settings/team-members',
+            current: false,
+          },
           { name: 'Permissions', href: '/settings/permissions', current: true },
         ]}
       />
@@ -28,9 +32,10 @@ export default function PermissionsPage() {
           />
         </div>
 
-        {(permissionsValuesStatus === 'loading' || permissionsListStatus === 'loading') ? (
+        {permissionsValuesStatus === 'loading' ||
+        permissionsListStatus === 'loading' ? (
           <div className="mx-auto w-6 justify-center">
-            <Spinner size={22} color="#0F70B7" />
+            <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
           <Table />

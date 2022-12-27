@@ -77,7 +77,7 @@ export default function PermissionsCheckbox({
         currentPermissionStatus !== 'success' ||
         currentPermissionValue?.can_be_changed !== true
       }
-      spinnerSize={20}
+      spinnerSize={8}
     />
   );
 }

@@ -20,10 +20,10 @@ function AssignInboxFileSlideOver() {
   const dispatch = useDispatch();
 
   const { showAssignInboxFileSlideOver } = useAppSelector(
-    (state) => state.slideOver,
+    (state) => state.slideOver
   );
   const { selectedInboxFileId, currentInboxId } = useAppSelector(
-    (state) => state.inbox,
+    (state) => state.inbox
   );
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,18 +31,22 @@ function AssignInboxFileSlideOver() {
   const { status, data } = useGetInboxes();
   const inboxes = data?.data.inboxes;
 
-  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId || null);
+  const { status: detailsStatus, data: inboxFileFullDetails } =
+    useGetInboxFileFullDetails(selectedInboxFileId || null);
 
-  const { mutate: AssignFile } = useAssignOrUnassignInboxFile(selectedInboxFileId);
+  const { mutate: AssignFile } =
+    useAssignOrUnassignInboxFile(selectedInboxFileId);
 
   const filteredItems = useMemo(
-    () => (searchQuery.length > 1
-      ? inboxes?.filter(
-        (inbox) => inbox.name.match(new RegExp(searchQuery, 'i'))
-              || inbox.email_key.match(new RegExp(searchQuery, 'i')),
-      )
-      : inboxes),
-    [searchQuery, inboxes],
+    () =>
+      searchQuery.length > 1
+        ? inboxes?.filter(
+            (inbox) =>
+              inbox.name.match(new RegExp(searchQuery, 'i')) ||
+              inbox.email_key.match(new RegExp(searchQuery, 'i'))
+          )
+        : inboxes,
+    [searchQuery, inboxes]
   );
 
   const assignToInbox = (inboxId: string, isAssigned: boolean) => {
@@ -61,7 +65,7 @@ function AssignInboxFileSlideOver() {
       body={
         status === 'loading' || detailsStatus === 'loading' ? (
           <div className="mx-auto w-6 mt-10 justify-center">
-            <Spinner size={22} color="#0F70B7" />
+            <Spinner size={8} color="#0F70B7" />
           </div>
         ) : status === 'error' || detailsStatus === 'error' ? (
           <div className=" mt-72">
@@ -80,21 +84,25 @@ function AssignInboxFileSlideOver() {
               />
             </div>
             <div className="overflow-hidden flex-1 h-full mt-5">
-              {filteredItems ? <StackListWithHeader
-                title={<span>Inboxes</span>}
-                items={filteredItems.map((inbox) => (
-                  <InboxResultItem
-                    key={inbox.id}
-                    inboxId={inbox.id}
-                    isAssigned={inboxFileFullDetails.inbox_file_source.in_inbox_ids.includes(
-                      inbox.id,
-                    )}
-                    isDisabled={inbox.id === currentInboxId}
-                    handleAssignToInbox={() => assignToInbox(inbox.id, false)}
-                    handleUnassignFromInbox={() => assignToInbox(inbox.id, true)}
-                  />
-                ))}
-              /> : null}
+              {filteredItems ? (
+                <StackListWithHeader
+                  title={<span>Inboxes</span>}
+                  items={filteredItems.map((inbox) => (
+                    <InboxResultItem
+                      key={inbox.id}
+                      inboxId={inbox.id}
+                      isAssigned={inboxFileFullDetails.inbox_file_source.in_inbox_ids.includes(
+                        inbox.id
+                      )}
+                      isDisabled={inbox.id === currentInboxId}
+                      handleAssignToInbox={() => assignToInbox(inbox.id, false)}
+                      handleUnassignFromInbox={() =>
+                        assignToInbox(inbox.id, true)
+                      }
+                    />
+                  ))}
+                />
+              ) : null}
             </div>
           </div>
         ) : null

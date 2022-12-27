@@ -13,7 +13,7 @@ export default function InviteDetails() {
   }
 
   return status === 'loading' ? (
-    <Spinner size={16} color="#0F70B7" />
+    <Spinner size={8} color="#0F70B7" />
   ) : (status === 'success' ? (
     <div className="rounded-md bg-blue-50 p-4 mt-6">
       <div className="flex">

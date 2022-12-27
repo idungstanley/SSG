@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   BanIcon,
   UserRemoveIcon,
   CheckCircleIcon,
 } from '@heroicons/react/outline';
-import { selectCurrentUser } from '../../../../../../features/auth/authSlice';
 import {
   useGetTeamMember,
   useDeactivateTeamMember,
@@ -29,7 +28,6 @@ interface RowProps {
 
 export default function Row({ teamMemberId }: RowProps) {
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser);
 
   const { data: teamMember } = useGetTeamMember(teamMemberId);
   const { mutate: deactivateTeamMember } =
@@ -154,14 +152,14 @@ export default function Row({ teamMemberId }: RowProps) {
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {teamMember.last_activity_at
-          ? OutputDateTime(teamMember.last_activity_at, null, user.timezone)
+          ? OutputDateTime(teamMember.last_activity_at, null)
           : '-'}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        {OutputDateTime(teamMember.accepted_invite_at, null, user.timezone)}
+        {OutputDateTime(teamMember.accepted_invite_at, null)}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        {OutputDateTime(teamMember.invited_at, null, user.timezone)}
+        {OutputDateTime(teamMember.invited_at, null)}
       </td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 z-100 justify-center align-center items-center">
         <div className="mt-1.5">

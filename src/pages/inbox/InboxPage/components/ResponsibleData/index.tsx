@@ -54,7 +54,7 @@ export default function ResponsibleData({
     return (
       <div className="absolute top-14 p-6 rounded-xl border bg-white z-50 w-80">
         <div className="mx-auto w-6 justify-center">
-          <Spinner size={22} color="#0F70B7" />
+          <Spinner size={8} color="#0F70B7" />
         </div>
       </div>
     );

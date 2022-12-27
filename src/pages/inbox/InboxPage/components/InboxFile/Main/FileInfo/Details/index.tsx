@@ -1,16 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import FileHeader from './FileHeader';
 import { OutputDateTime } from '../../../../../../../../app/helpers';
 import { useGetInboxFile } from '../../../../../../../../features/inbox/inboxService';
-import { selectCurrentUser } from '../../../../../../../../features/auth/authSlice';
 import { useAppSelector } from '../../../../../../../../app/hooks';
 
 function Details() {
   const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
-
-  const user = useSelector(selectCurrentUser);
 
   return inboxFile ? (
     <div className="h-full flex-1">
@@ -30,8 +26,7 @@ function Details() {
                   <dd className="text-gray-900">
                     {OutputDateTime(
                       inboxFile.inbox_file_source.created_at,
-                      null,
-                      user.timezone
+                      null
                     )}
                   </dd>
                 </div>
@@ -43,8 +38,7 @@ function Details() {
                   <dd className="text-gray-900">
                     {OutputDateTime(
                       inboxFile.inbox_file_source.updated_at,
-                      null,
-                      user.timezone
+                      null
                     )}
                   </dd>
                 </div>
