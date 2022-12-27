@@ -8,9 +8,6 @@ import {
   QueryClient,
   QueryCache,
   MutationCache,
-  Query,
-  QueryKey,
-  Mutation,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
@@ -21,7 +18,6 @@ import { IErrorRequest, ISuccessRequest } from './types';
 
 const onError = (
   error: unknown,
-  query: Query<unknown, unknown, unknown, QueryKey>
 ): unknown => {
   const typedError = error as IErrorRequest;
   let title: string;
@@ -58,9 +54,6 @@ const onError = (
 
 const onErrorMutation = (
   error: unknown,
-  variables: unknown,
-  context: unknown,
-  mutation: Mutation<unknown, unknown, unknown, unknown>
 ): unknown => {
   const typedError = error as IErrorRequest;
   let title: string;
@@ -97,9 +90,6 @@ const onErrorMutation = (
 
 const onSuccess = (
   data: unknown,
-  variables: unknown,
-  context: unknown,
-  mutation: Mutation<unknown, unknown, unknown, unknown>
 ): unknown => {
   let title: string;
   let body: string;
@@ -147,6 +137,8 @@ ReactDOM.render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <App />
+
+          {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
           <ReactQueryDevtools position="bottom-right" />
         </BrowserRouter>
       </QueryClientProvider>

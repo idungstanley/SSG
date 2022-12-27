@@ -41,7 +41,7 @@ export default function ExplorerTable() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const checkbox = useRef<{ indeterminate: boolean }>(null);
+  const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const {
@@ -134,7 +134,9 @@ export default function ExplorerTable() {
   }
 
   const handleClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
     type: string
   ) => {
@@ -208,7 +210,7 @@ export default function ExplorerTable() {
 
   return status === 'loading' ? (
     <div className="mx-auto w-6 mt-10 justify-center">
-      <Spinner size={22} color="#0F70B7" />
+      <Spinner size={8} color="#0F70B7" />
     </div>
   ) : status === 'error' ? (
     <FullScreenMessage

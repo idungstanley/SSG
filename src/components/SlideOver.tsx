@@ -1,15 +1,16 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, ReactNode } from 'react';
+import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import Button from './Button';
 
 interface SlideOverProps {
-  show: boolean;
+  show: boolean
   onClose: () => void;
-  headerTitle: string;
-  body: any;
-  headerDescription?: string | null;
-  footerButtons: any;
+  body: ReactNode,
+  headerTitle: string,
+  headerDescription?: string,
+  footerButtons?: ReactNode,
 }
 
 function SlideOver({
@@ -22,7 +23,7 @@ function SlideOver({
 }: SlideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog
+      {onClose ? <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden z-40"
         onClose={onClose}
@@ -70,6 +71,7 @@ function SlideOver({
                           <button
                             type="button"
                             className="text-gray-400 hover:text-gray-500"
+
                             onClick={onClose}
                           >
                             <span className="sr-only">Close</span>
@@ -101,7 +103,7 @@ function SlideOver({
             </Transition.Child>
           </div>
         </div>
-      </Dialog>
+      </Dialog> : null}
     </Transition.Root>
   );
 }

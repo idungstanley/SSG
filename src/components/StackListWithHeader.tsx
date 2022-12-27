@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface StackListWithHeaderProps {
-  title: string;
-  items: [];
+  title: JSX.Element;
+  items: ReactNode;
 }
 
-function StackListWithHeader({
-  title,
-  items,
-}: StackListWithHeaderProps) {
+function StackListWithHeader({ title, items }: StackListWithHeaderProps) {
   return (
     <div className="h-full">
       <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">

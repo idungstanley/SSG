@@ -1,6 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IResponseInboxes, IPinnedInboxes, inboxType, IInbox } from "./inbox.interfaces";
+import { inboxType } from '../../types';
+import {
+  IResponseInboxes,
+  IPinnedInboxes,
+  IInbox,
+  IBlackListInboxFilesReq,
+} from './inbox.interfaces';
 
 // Get all inboxes
 export const useGetInboxes = () => {
@@ -8,15 +14,18 @@ export const useGetInboxes = () => {
 
   return useQuery<IResponseInboxes>(
     ['inboxes'],
-    () => requestNew({
-      url: 'inboxes',
-      method: 'GET',
-    }),
+    () =>
+      requestNew({
+        url: 'inboxes',
+        method: 'GET',
+      }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) =>
+          queryClient.setQueryData(['inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
@@ -25,15 +34,18 @@ export const useGetActiveInboxes = () => {
 
   return useQuery<IResponseInboxes>(
     ['active-inboxes'],
-    () => requestNew({
-      url: 'inboxes',
-      method: 'GET',
-    }),
+    () =>
+      requestNew({
+        url: 'inboxes',
+        method: 'GET',
+      }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['active-inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) =>
+          queryClient.setQueryData(['active-inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
@@ -43,29 +55,33 @@ export const useGetTrashedInboxes = () => {
 
   return useQuery<IResponseInboxes>(
     ['trashed-inboxes'],
-    () => requestNew({
-      url: 'inboxes/trashed',
-      method: 'GET',
-    }),
+    () =>
+      requestNew({
+        url: 'inboxes/trashed',
+        method: 'GET',
+      }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['trashed-inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) =>
+          queryClient.setQueryData(['trashed-inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
 // Get inbox
-export const useGetInbox = (inboxId: string, type: inboxType) => {
+export const useGetInbox = (type: inboxType, inboxId?: string) => {
   const queryClient = useQueryClient();
   const queryName = type ? `${type}-inbox` : 'inbox';
 
-  return useQuery(
+  return useQuery<IInbox | undefined>(
     [queryName, inboxId],
     () => queryClient.getQueryData([queryName, inboxId]),
     {
+      enabled: !!inboxId,
       initialData: () => queryClient.getQueryData([queryName, inboxId]),
-    },
+    }
   );
 };
 
@@ -75,18 +91,21 @@ export const useGetArchivedInboxes = () => {
 
   return useQuery<IResponseInboxes>(
     ['archived-inboxes'],
-    () => requestNew({
-      url: 'inboxes',
-      method: 'GET',
-      params: {
-        is_archived: 1,
-      },
-    }),
+    () =>
+      requestNew({
+        url: 'inboxes',
+        method: 'GET',
+        params: {
+          is_archived: 1,
+        },
+      }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['archived-inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) =>
+          queryClient.setQueryData(['archived-inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
@@ -96,18 +115,21 @@ export const useGetHiddenInboxes = () => {
 
   return useQuery<IResponseInboxes>(
     ['hidden-inboxes'],
-    () => requestNew({
-      url: 'inboxes',
-      method: 'GET',
-      params: {
-        show_hidden: 1,
-      },
-    }),
+    () =>
+      requestNew({
+        url: 'inboxes',
+        method: 'GET',
+        params: {
+          show_hidden: 1,
+        },
+      }),
     {
       onSuccess: (data) => {
-        data.data.inboxes.map((inbox) => queryClient.setQueryData(['hidden-inbox', inbox.id], inbox));
+        data.data.inboxes.map((inbox) =>
+          queryClient.setQueryData(['hidden-inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
@@ -117,15 +139,18 @@ export const useGetPinnedInboxes = () => {
 
   return useQuery<IPinnedInboxes>(
     ['pinned-inboxes'],
-    async () => requestNew({
-      url: 'inboxes/pinned',
-      method: 'GET',
-    }),
+    async () =>
+      requestNew({
+        url: 'inboxes/pinned',
+        method: 'GET',
+      }),
     {
       onSuccess: (data) => {
-        data.data.pinned_inboxes.map((inbox) => queryClient.setQueryData(['pinned-inbox', inbox.id], inbox));
+        data.data.pinned_inboxes.map((inbox) =>
+          queryClient.setQueryData(['pinned-inbox', inbox.id], inbox)
+        );
       },
-    },
+    }
   );
 };
 
@@ -140,12 +165,15 @@ export const useGetPinnedInbox = (inboxId: string) => {
     () => queryClient.getQueryData(['pinned-inbox', inboxId]),
     {
       initialData: () => queryClient.getQueryData(['pinned-inbox', inboxId]),
-    },
+    }
   );
 };
 
 // Create inbox
-export const createInboxService = async (data: {name: string, emailUsername: string}) => {
+export const createInboxService = async (data: {
+  name: string;
+  emailUsername: string;
+}) => {
   const response = requestNew({
     url: 'inboxes',
     method: 'POST',
@@ -157,7 +185,7 @@ export const createInboxService = async (data: {name: string, emailUsername: str
   return response;
 };
 
-const pinOrUnpinInbox = (data: {inboxId: string, isPinned: boolean}) => {
+const pinOrUnpinInbox = (data: { inboxId: string; isPinned: boolean }) => {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/${data.isPinned ? 'unpin' : 'pin'}`,
     method: 'POST',
@@ -176,15 +204,16 @@ export function usePinOrUnpinInbox() {
 }
 
 // Get total inbox unfiled account
-export const useGetInboxUnfiledCount = () => useQuery(['inboxes_unfiled_count'], async () => {
-  const data = await requestNew({
-    url: 'inboxes/unfiled-count',
-    method: 'GET',
+export const useGetInboxUnfiledCount = () =>
+  useQuery(['inboxes_unfiled_count'], async () => {
+    const data = await requestNew({
+      url: 'inboxes/unfiled-count',
+      method: 'GET',
+    });
+    return data.data.unfiled_count;
   });
-  return data.data.unfiled_count;
-});
 
-export const markOpenedInbox = (id :string) => {
+export const markOpenedInbox = (id: string) => {
   const request = requestNew({
     url: `inboxes/${id}/mark-opened`,
     method: 'POST',
@@ -203,7 +232,7 @@ export const useMarkOpenedInbox = (id: string) => {
 };
 
 // hide inbox
-export const hideOrUnhideInbox = (data: {id: string, isHidden: boolean}) => {
+export const hideOrUnhideInbox = (data: { id: string; isHidden: boolean }) => {
   const request = requestNew({
     url: `inboxes/${data.id}/${data.isHidden ? 'unhide' : 'hide'}`,
     method: 'POST',
@@ -223,7 +252,10 @@ export const useHideOrUnhideInbox = () => {
 };
 
 // archive inbox
-export const archiveOrUnarchiveInbox = (data: {id: string, isArchived: boolean}) => {
+export const archiveOrUnarchiveInbox = (data: {
+  id: string;
+  isArchived: boolean;
+}) => {
   const request = requestNew({
     url: `inboxes/${data.id}/${data.isArchived ? 'unarchive' : 'archive'}`,
     method: 'POST',
@@ -242,7 +274,10 @@ export const useArchiveOrUnarchiveInbox = () => {
   });
 };
 
-const restoreOrDeleteInbox = (data: {inboxId: string, isDeleted: boolean}) => {
+const restoreOrDeleteInbox = (data: {
+  isDeleted: boolean;
+  inboxId?: string;
+}) => {
   const url = data.isDeleted
     ? `inboxes/${data.inboxId}/restore`
     : `inboxes/${data.inboxId}`;
@@ -267,10 +302,12 @@ export const useRestoreOrDeleteInbox = () => {
 
 // responsible inboxes
 export const useGetResponsibleInboxes = () => {
-  useQuery(['responsible-inbox'], () => requestNew({
-    url: 'inboxes/responsible',
-    method: 'GET',
-  }));
+  useQuery(['responsible-inbox'], () =>
+    requestNew({
+      url: 'inboxes/responsible',
+      method: 'GET',
+    })
+  );
 };
 
 // blacklist
@@ -283,20 +320,16 @@ export const getBlacklistFiles = () => {
 };
 
 export const useGetBlacklistFiles = () =>
-// const queryClient = useQueryClient();
+  useQuery<IBlackListInboxFilesReq>(['blacklist-files'], getBlacklistFiles);
 
-  // eslint-disable-next-line implicit-arrow-linebreak
-  useQuery(['blacklist-files'], () => getBlacklistFiles(), {
-    onSuccess: () => {
-      // eslint-disable-next-line no-console
-      // ! set blacklist files
-    },
-  });
-
-const blacklistFile = (data: {type: 'add' | string, fileId: string}) => {
-  const url = data.type === 'add'
-    ? `inbox-files/${data.fileId}/blacklist`
-    : `blacklist-inbox-files/${data.fileId}`;
+const blacklistFile = (data: {
+  type: 'add' | string;
+  fileId: string | null;
+}) => {
+  const url =
+    data.type === 'add'
+      ? `inbox-files/${data.fileId}/blacklist`
+      : `blacklist-inbox-files/${data.fileId}`;
   const method = data.type === 'add' ? 'POST' : 'DELETE';
   const request = requestNew({
     url,
@@ -315,51 +348,6 @@ export const useBlacklistFile = () => {
   });
 };
 
-// email list
-export const addEmailToList = (data: {inboxId: string, email: string}) => {
-  const request = requestNew({
-    url: `inboxes/${data.inboxId}/email-list`,
-    method: 'POST',
-    data: {
-      email: data.email,
-    },
-  });
-  return request;
-};
-
-export const deleteEmailFromList = (data: {inboxId: string, emailId: string}) => {
-  const request = requestNew({
-    url: `/inboxes/${data.inboxId}/email-list/${data.emailId}`,
-    method: 'DELETE',
-  });
-  return request;
-};
-
-export const useGetEmailList = (inboxId: string) => useQuery([`email-list-${inboxId}`], () => requestNew({
-  url: `inboxes/${inboxId}/email-list`,
-  method: 'GET',
-}));
-
-export const useAddEmailToList = (inboxId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(addEmailToList, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`email-list-${inboxId}`]);
-    },
-  });
-};
-
-export const useDeleteEmailFromList = (inboxId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(deleteEmailFromList, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([`email-list-${inboxId}`]);
-    },
-  });
-};
-
 // main hook
 export const useInboxes = (type: inboxType) => {
   const { data: pinned } = useGetPinnedInboxes();
@@ -370,7 +358,7 @@ export const useInboxes = (type: inboxType) => {
 
   if (type === 'active') {
     const activeWithoutPinned = active?.data.inboxes.filter(
-      (i) => !pinnedIds?.includes(i.id),
+      (i) => !pinnedIds?.includes(i.id)
     );
 
     return { data: activeWithoutPinned, status: activeStatus, type };
@@ -379,7 +367,7 @@ export const useInboxes = (type: inboxType) => {
     const { data: hidden, status: hiddenStatus } = useGetHiddenInboxes();
 
     const hiddenWithoutActive = hidden?.data.inboxes.filter(
-      (i) => !activeIds?.includes(i.id),
+      (i) => !activeIds?.includes(i.id)
     );
 
     return { data: hiddenWithoutActive, status: hiddenStatus, type };
@@ -388,7 +376,7 @@ export const useInboxes = (type: inboxType) => {
     const { data: archived, status: archivedStatus } = useGetArchivedInboxes();
 
     const archivedWithoutActive = archived?.data.inboxes.filter(
-      (i) => !activeIds?.includes(i.id),
+      (i) => !activeIds?.includes(i.id)
     );
 
     return { data: archivedWithoutActive, status: archivedStatus, type };

@@ -74,7 +74,7 @@ const inbox = [
   },
 ];
 
-const routes = (user: IUser) => [
+const routes = (user: IUser | null) => [
   {
     path: 'workspace/onboarding',
     element: user ? (

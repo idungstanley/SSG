@@ -1,7 +1,7 @@
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
-import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
+import FullScreenMessage from "../../CenterMessage/FullScreenMessage";
 
 const regex = /@[\S]*/g;
 
@@ -24,8 +24,8 @@ interface ListType {
 }
 export default function List({ status, comments, onEdit, onDelete }: ListType) {
   return status === 'loading' ? (
-    <div className="justify-center w-6 mx-auto mt-3 mb-6">
-      <Spinner size={22} color="#0F70B7" />
+    <div className="mx-auto mt-3 mb-6 w-6 justify-center">
+      <Spinner size={8} color="#0F70B7" />
     </div>
   ) : status === 'success' ? (
     comments?.length ? (
@@ -63,13 +63,13 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
         ))}
       </ul>
     ) : (
-      <OneThirdScreenMessage
+      <FullScreenMessage
         title="No messages yes."
         description="Create one."
       />
     )
   ) : (
-    <OneThirdScreenMessage
+    <FullScreenMessage
       title="Oops, an error occurred :("
       description="Please try again later."
     />

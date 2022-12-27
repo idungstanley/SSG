@@ -108,11 +108,8 @@ export default function ComboBoxWithAvatar({
               ))}
 
               {(isFetching || hasNextPage) && (
-                <div
-                  className="justify-center w-6 mx-auto mt-3 mb-6"
-                  ref={sentryRef}
-                >
-                  <Spinner size={22} color="#0F70B7" />
+                <div className="mx-auto mt-3 mb-6 w-6 justify-center" ref={sentryRef}>
+                  <Spinner size={8} color="#0F70B7" />
                 </div>
               )}
             </>
@@ -122,10 +119,3 @@ export default function ComboBoxWithAvatar({
     </Combobox>
   );
 }
-
-ComboBoxWithAvatar.defaultProps = {
-  options: [],
-  hasNextPage: false,
-  fetchNextPage: null,
-  isFetching: false,
-};

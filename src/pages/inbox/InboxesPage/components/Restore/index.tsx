@@ -12,7 +12,7 @@ export default function Restore() {
   if (status === 'loading') {
     return (
       <div className="mx-auto w-6 mt-10 justify-center">
-        <Spinner size={22} color="#0F70B7" />
+        <Spinner size={8} color="#0F70B7" />
       </div>
     );
   }
@@ -33,7 +33,12 @@ export default function Restore() {
         <Header />
         <tbody className="bg-white divide-y divide-gray-100">
           {trashed.map((inbox) => (
-            <Row key={inbox.id} inboxId={inbox.id} type="trashed" inbox={inbox} />
+            <Row
+              key={inbox.id}
+              inboxId={inbox.id}
+              type="trashed"
+              inbox={inbox}
+            />
           ))}
         </tbody>
       </table>

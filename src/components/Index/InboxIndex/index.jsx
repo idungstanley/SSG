@@ -12,7 +12,7 @@ export default function InboxIndex() {
   const { currentItemId } = useSelector((state) => state.workspace);
   const { status, data: dt } = useGetInboxFiles({
     inboxId: currentItemId,
-    isArchived: 0,
+    isArchived: false,
   });
 
   const data = useMemo(
@@ -32,7 +32,7 @@ export default function InboxIndex() {
   if (status === 'loading') {
     return (
       <div className="mx-auto w-6 mt-5 justify-center">
-        <Spinner size={22} color="#0F70B7" />
+        <Spinner size={8} color="#0F70B7" />
       </div>
     );
   }

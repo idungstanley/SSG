@@ -20,3 +20,5 @@ export interface ISuccessRequest {
     body: string;
   };
 }
+
+export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';

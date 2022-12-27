@@ -3,8 +3,8 @@ import Header from './Header';
 import Body from './Body';
 import {
   IInbox,
-  inboxType,
 } from '../../../../../features/inbox/inbox.interfaces';
+import { inboxType } from '../../../../../types';
 
 interface TableProps {
   data: IInbox[];

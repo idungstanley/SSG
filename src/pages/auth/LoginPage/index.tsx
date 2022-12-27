@@ -60,6 +60,7 @@ function LoginPage() {
           user: successData.data.user,
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
+          currentUserId: successData.data.token.token.user_id,
         })
       );
     },

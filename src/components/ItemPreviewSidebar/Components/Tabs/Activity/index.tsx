@@ -22,9 +22,7 @@ interface selectedItemType {
 }
 
 export default function Activity() {
-  const selectedItemFullDetails: any = useAppSelector(
-    (state) => state.explorer.selectedItemFullDetails
-  );
+  const { selectedItemFullDetails } = useAppSelector((state) => state.explorer);
 
   return (
     <ul className="divide-y divide-gray-200">

@@ -1,5 +1,6 @@
 import React from 'react';
-import { IInbox, inboxType } from '../../../../../features/inbox/inbox.interfaces';
+import { IInbox } from '../../../../../features/inbox/inbox.interfaces';
+import { inboxType } from '../../../../../types';
 import Row from './Row';
 
 interface BodyProps {

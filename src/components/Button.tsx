@@ -97,7 +97,7 @@ function Button({
       {loading ? (
         <div className="items-center justify-center w-full -mt-1">
           <Spinner
-            size={18}
+            size={10}
             color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'}
           />
         </div>

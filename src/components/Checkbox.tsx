@@ -30,8 +30,8 @@ function Checkbox({
     <div className="relative flex items-start">
       <div className="flex items-center">
         {loading ? (
-          <div className="-mt-2">
-            <Spinner size={spinnerSize} color="#4f46e5" />
+          <div>
+            <Spinner size={spinnerSize < 10 ? spinnerSize : 8} color="#4f46e5" />
           </div>
         ) : (
           <input

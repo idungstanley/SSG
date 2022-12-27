@@ -4,10 +4,8 @@ import { OutputDateTime } from '../../../../../../app/helpers';
 import { useMarkOpenedInbox } from '../../../../../../features/inbox/inboxesService';
 import Menu from './Menu';
 import { Badge } from '../../../../../../components';
-import {
-  IInbox,
-  inboxType,
-} from '../../../../../../features/inbox/inbox.interfaces';
+import { IInbox } from '../../../../../../features/inbox/inbox.interfaces';
+import { inboxType } from '../../../../../../types';
 
 interface RowProps {
   inboxId: string;
