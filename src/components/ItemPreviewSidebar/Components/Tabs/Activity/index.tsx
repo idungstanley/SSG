@@ -5,10 +5,10 @@ import { InitialsAvatar } from '../../../../../common';
 import { useAppSelector } from '../../../../../app/hooks';
 
 interface log {
-  id: string
+  id: string;
   team_member: {
     colour: string;
-    initials: string;
+    initials: string; 
     user: {
       name: string;
     };

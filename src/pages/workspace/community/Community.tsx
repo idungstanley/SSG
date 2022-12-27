@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Community: React.FC = () => {
+function Community() {
   return <p>This is community</p>;
 }
 

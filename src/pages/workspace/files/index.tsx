@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Files: React.FC = () => {
+function Files() {
   return (
     <Link
       to="/explorer"

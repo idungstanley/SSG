@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Goals: React.FC = () => {
+function Goals() {
   return <div>fav</div>
 }
 
-export default Favourites
+export default Goals
