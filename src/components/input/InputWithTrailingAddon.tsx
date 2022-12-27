@@ -1,6 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
+
+interface inputWithTrailingAddonTypes {
+  label: string;
+  icon: string;
+  addOn: string;
+  placeholder: string;
+  name: string;
+  type: string;
+  value: string;
+  onChange: ()=> void;
+  hint: string;
+  cornerHint: string;
+}
 export default function InputWithTrailingAddon({
   label,
   icon,
@@ -12,7 +24,7 @@ export default function InputWithTrailingAddon({
   onChange,
   hint,
   cornerHint,
-}) {
+}: inputWithTrailingAddonTypes) {
   return (
     <div>
       {label && (
@@ -24,7 +36,7 @@ export default function InputWithTrailingAddon({
       <div className="flex rounded-md shadow-sm">
         <div className="relative flex items-stretch flex-grow focus-within:z-10">
           {icon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               {icon}
             </div>
           )}
@@ -38,7 +50,7 @@ export default function InputWithTrailingAddon({
             onChange={onChange}
           />
         </div>
-        <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">{addOn}</span>
+        <span className="inline-flex items-center px-3 text-gray-500 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 sm:text-sm">{addOn}</span>
       </div>
       {hint && <p className="mt-2 text-sm text-gray-500">{hint}</p>}
     </div>
@@ -54,18 +66,3 @@ InputWithTrailingAddon.defaultProps = {
   cornerHint: null,
 };
 
-InputWithTrailingAddon.propTypes = {
-  label: PropTypes.string,
-  icon: PropTypes.string,
-  addOn: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
-  hint: PropTypes.string,
-  cornerHint: PropTypes.string,
-};

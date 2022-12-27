@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 interface avatarType {
-  initials: string
-  height: string,
-  width: string 
-  backgroundColour: string
-  roundedStyle: string 
-  textSize: string 
+  initials: string;
+  height: string;
+  width: string ;
+  backgroundColour: string;
+  roundedStyle: string ;
+  textSize: string ;
 }
 function AvatarWithInitials({
   initials,

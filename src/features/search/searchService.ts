@@ -4,7 +4,7 @@ import requestNew from '../../app/requestNew';
 
 
 
-export const useSearch = (query: string, searchFileContents: string, enabled: boolean) => {
+export const useSearch = (query: string, searchFileContents: boolean, enabled: boolean) => {
   const explorer = useQuery(
     ['search_explorer', { query, searchFileContents }],
     async () => requestNew({

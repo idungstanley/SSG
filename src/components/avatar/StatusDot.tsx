@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface statusType {
-  on: string
-  colour: string
-  size: number
-  ringSize: number
-  top: boolean
+  on: string;
+  colour: string;
+  size: number;
+  ringSize: number;
+  top: boolean;
 }
 
 function StatusDot({

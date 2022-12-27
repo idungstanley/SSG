@@ -1,27 +1,35 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+import React, { MouseEvent } from 'react';
 import { AtSymbolIcon } from '@heroicons/react/outline';
+
+interface FormType {
+  handleSubmit: (
+    e: React.FormEvent<HTMLFormElement> | MouseEvent<SVGSVGElement>
+  ) => void;
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export default function Form({
   handleSubmit,
   message,
   setMessage,
   setShowDropdown,
-}) {
+}: FormType) {
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="relative">
       <input
         type="text"
-        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-base pr-20"
+        className="block w-full pr-20 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-base"
         placeholder="Enter comment"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
 
-      <div className="absolute top-2 right-2 flex gap-4">
+      <div className="absolute flex gap-4 top-2 right-2">
         <AtSymbolIcon
           onClick={() => setShowDropdown((prev) => !prev)}
-          className="w-6 h-6 text-gray-300 cursor-pointer hover:text-indigo-500 transition-all duration-300"
+          className="w-6 h-6 text-gray-300 transition-all duration-300 cursor-pointer hover:text-indigo-500"
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -46,9 +54,3 @@ export default function Form({
   );
 }
 
-Form.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired,
-  setShowDropdown: PropTypes.func.isRequired,
-};

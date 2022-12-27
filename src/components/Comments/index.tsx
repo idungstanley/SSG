@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PropTypes } from 'prop-types';
 import {
   useCreateItemComment,
   useDeleteItemComment,
@@ -12,15 +11,24 @@ import Dropdown from './components/Dropdown';
 
 const regex = /@[\S]*/g;
 
-export default function Comments({ itemId, type }) {
+interface commentsType {
+  itemId: string;
+  type: string;
+}
+
+interface userType {
+  id: string;
+}
+
+let onEdit: (id: string, value: string, user: userType[]) => void;
+
+export default function Comments({ itemId, type }: commentsType) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState<userType[]>([]);
   const isInbox = type === 'inbox' || type === 'inbox_file';
-
   const [showWindow, setShowWindow] = useState(isInbox);
-  const [editId, setEditId] = useState(null);
-
+  const [editId, setEditId] = useState<null | string>(null)
   const { mutate: sendComment } = useCreateItemComment(itemId);
   const { mutate: editComment } = useEditItemComment(itemId);
   const { mutate: deleteComment } = useDeleteItemComment(itemId);
@@ -29,59 +37,58 @@ export default function Comments({ itemId, type }) {
     id: itemId,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
     if (message.length > 2) {
       if (editId) {
         editComment({
           id: editId,
           message,
-        });
-        setEditId(null);
+        })
+        setEditId(null)
       } else {
         const messageWithUserIds = `${message} ${selectedUsers.map(
-          (user) => `@[${user.id}] `,
-        )}`;
+          (user) => `@[${user.id}] `
+        )}`
 
         sendComment({
           message: messageWithUserIds,
           type,
           id: itemId,
-        });
+        })
       }
-
-      setMessage('');
-      setSelectedUsers([]);
+      setMessage('')
+      setSelectedUsers([])
     }
-  };
+  }
 
-  const onDelete = (id) => {
+  const onDelete = (id: string) => {
     deleteComment({
       id,
     });
   };
 
-  const onEdit = (id, value, users) => {
+  onEdit = (id, value, users) => {
     setMessage(value.replaceAll(regex, ''));
     setEditId(id);
     setSelectedUsers([...users]);
   };
 
   return (
-    <div className="relative inset-0 flex h-full overflow-hidden flex-col">
+    <div className="relative inset-0 flex flex-col h-full overflow-hidden">
       {!isInbox ? (
         <button
           type="button"
           onClick={() => setShowWindow((prev) => !prev)}
-          className="text-left my-3 text-gray-600 underline cursor-pointer"
+          className="my-3 text-left text-gray-600 underline cursor-pointer"
         >
           {showWindow ? 'Hide Comments' : 'Show Comments'}
         </button>
       ) : null}
 
       {showWindow ? (
-        <div className="w-full overflow-y-scroll h-full flex-1 space-y-3">
+        <div className="flex-1 w-full h-full space-y-3 overflow-y-scroll">
           <Form
             setMessage={setMessage}
             handleSubmit={handleSubmit}
@@ -107,7 +114,4 @@ export default function Comments({ itemId, type }) {
   );
 }
 
-Comments.propTypes = {
-  itemId: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};
+

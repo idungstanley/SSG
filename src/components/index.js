@@ -24,4 +24,4 @@ export { default as SelectMenuWithAvatar } from './selectMenu/SelectMenuWithAvat
 export { default as EmptyStateSimple } from './emptyState/EmptyStateSimple';
 export { default as TabsWithUnderline } from './tabs/TabsWithUnderline';
 export { default as RadioGroupInPanel } from './radioGroup/RadioGroupInPanel';
-export { default as ComboBoxWithAvatar } from './comboBox/ComboBoxWithAvatar';
+export { default as ComboBoxWithAvatar } from './comboBox/ComboBoxWithAvatar.tsx';

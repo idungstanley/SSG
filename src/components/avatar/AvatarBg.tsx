@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 
 interface avatarType {
-  colour: string
-  size: number
-  onClick: () => void
+  colour: string;
+  size: number;
+  onClick: () => void;
 }
 
 function AvatarBg({ colour, size, onClick }: avatarType) {

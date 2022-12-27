@@ -1,6 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
+
+interface InputDataTypes {
+  label: string ;
+  placeholder: string ;
+  hint: string;
+  name: string;
+  cornerHint: string;
+  type: string;
+  autoComplete: string;
+  value: string;
+  leadingIcon: string;
+  trailingIcon: string;
+  onChange: ()=> void;
+}
 function Input({
   label,
   placeholder,
@@ -13,7 +26,7 @@ function Input({
   onChange,
   leadingIcon,
   trailingIcon,
-}) {
+}: InputDataTypes) {
   return (
     <div className="w-full">
       {label && (
@@ -24,7 +37,7 @@ function Input({
       )}
       <div className="relative">
 
-        {leadingIcon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{leadingIcon}</div>}
+        {leadingIcon && <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">{leadingIcon}</div>}
 
         <input
           type={type}
@@ -37,7 +50,7 @@ function Input({
           onChange={onChange}
         />
 
-        {trailingIcon && <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">{trailingIcon}</div>}
+        {trailingIcon && <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">{trailingIcon}</div>}
 
       </div>
       {hint && <p className="mt-2 text-sm text-gray-500">{hint}</p>}
@@ -55,23 +68,6 @@ Input.defaultProps = {
   value: null,
   leadingIcon: null,
   trailingIcon: null,
-};
-
-Input.propTypes = {
-  label: PropTypes.string,
-  placeholder: PropTypes.string,
-  hint: PropTypes.string,
-  cornerHint: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  autoComplete: PropTypes.string,
-  value: PropTypes.string,
-  onChange: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
-  leadingIcon: PropTypes.string,
-  trailingIcon: PropTypes.string,
 };
 
 export default Input;

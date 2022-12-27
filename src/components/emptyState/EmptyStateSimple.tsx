@@ -1,7 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PlusIcon } from '@heroicons/react/solid';
 import Button from '../Button';
+
+
+interface Iprops {
+  title: string;
+  description: string;
+  ctaText: string;
+  ctaOnClick: () => void;
+  showCta: boolean;
+  showIcon: boolean;
+}
 
 export default function EmptyStateSimple({
   title,
@@ -10,12 +19,12 @@ export default function EmptyStateSimple({
   ctaOnClick,
   showCta,
   showIcon,
-}) {
+}: Iprops) {
   return (
     <div className="text-center">
       {showIcon ? (
         <svg
-          className="mx-auto h-12 w-12 text-gray-400"
+          className="w-12 h-12 mx-auto text-gray-400"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -40,7 +49,7 @@ export default function EmptyStateSimple({
             label={ctaText}
             width="w-40"
             icon={
-              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              <PlusIcon className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" />
             }
           />
         </div>
@@ -56,11 +65,3 @@ EmptyStateSimple.defaultProps = {
   showIcon: true,
 };
 
-EmptyStateSimple.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  ctaText: PropTypes.string,
-  ctaOnClick: PropTypes.func,
-  showCta: PropTypes.bool,
-  showIcon: PropTypes.bool,
-};
