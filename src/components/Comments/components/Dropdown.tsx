@@ -1,19 +1,19 @@
 import React from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import { ITeamMembersAndGroupsReq } from '../../../features/settings/teamMembersAndGroups.interfaces';
+// import { ITeamMembersAndGroupsReq } from '../../../features/settings/teamMembersAndGroups.interfaces';
 
 interface selectedUserType {
   id: string;
-  name: string;
+  name?: string;
 }
 interface DropDownPropTypes {
   show: boolean;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  // setSelectedUsers: React.Dispatch<React.SetStateAction<selectedUserType[]>>;
-  setSelectedUsers: any;
-  // selectedUsers: selectedUserType[];
-  selectedUsers: any;
+  setSelectedUsers: React.Dispatch<React.SetStateAction<selectedUserType[]>>;
+  // setSelectedUsers: any;
+  selectedUsers: selectedUserType[];
+  // selectedUsers: any;
   isInbox: boolean;
 }
 

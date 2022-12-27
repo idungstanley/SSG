@@ -3,12 +3,12 @@ import React from 'react';
 interface StackListItemNarrowProps {
   title: string;
   description: string | null;
-  icon: string | null;
-  button: null;
-  paddingVertical: number;
-  paddingHorizontal: number;
-  onClick: any;
-  selected: boolean;
+  icon: string | JSX.Element;
+  button: JSX.Element | null;
+  paddingVertical?: number;
+  paddingHorizontal?: number;
+  onClick?: ()=>void;
+  selected?: boolean;
 }
 
 function StackListItemNarrow({
@@ -29,7 +29,7 @@ function StackListItemNarrow({
         } ${onClick && 'hover:bg-gray-50'}`}
       >
         {icon && <div className="flex-shrink-0">{icon}</div>}
-        <div className="min-w-0 flex-1">
+        <div className="flex-1 min-w-0">
           {onClick ? (
             <button
               type="button"
@@ -40,7 +40,7 @@ function StackListItemNarrow({
               <span className="absolute inset-0" aria-hidden="true" />
 
               <div className="flex flex-col text-left">
-                <p className="text-sm font-medium text-gray-900 inline-flex break-all">
+                <p className="inline-flex text-sm font-medium text-gray-900 break-all">
                   {title}
                 </p>
                 <p className="text-sm font-normal text-gray-500 truncate">

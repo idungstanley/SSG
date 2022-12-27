@@ -12,7 +12,7 @@ import Dropdown from './components/Dropdown';
 const regex = /@[\S]*/g;
 
 interface commentsType {
-  itemId: string;
+  itemId: string | undefined | null;
   type: string;
 }
 

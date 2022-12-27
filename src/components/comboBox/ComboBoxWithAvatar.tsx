@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Combobox } from '@headlessui/react';
@@ -9,13 +8,13 @@ import { classNames } from '../../utils';
 interface optionsDataType {
   id: string;
   name: string;
-  avatar: string;
+  avatar: string | JSX.Element;
 }
 
 interface ComboBoxWithAvatarTypes {
   label: string;
   onQueryChange: (value: string) => void;
-  onChange: () => void;
+  onChange: (value: string) => void;
   selectedKey: string;
   options: optionsDataType[];
   hasNextPage: boolean;
@@ -108,7 +107,7 @@ export default function ComboBoxWithAvatar({
               ))}
 
               {(isFetching || hasNextPage) && (
-                <div className="mx-auto mt-3 mb-6 w-6 justify-center" ref={sentryRef}>
+                <div className="justify-center w-6 mx-auto mt-3 mb-6" ref={sentryRef}>
                   <Spinner size={8} color="#0F70B7" />
                 </div>
               )}

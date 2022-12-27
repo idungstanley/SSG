@@ -114,7 +114,7 @@ export default function SideOver({ isGroups }: SideOverProps) {
       headerDescription={`Set a role and select a team member${isGroups ? ' group' : ''}`}
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <SelectMenuSimple
               label="Role"
               options={[
@@ -127,7 +127,7 @@ export default function SideOver({ isGroups }: SideOverProps) {
               selectedId={selectedAccessLevelKey || ''}
             />
           </div>
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <ComboBoxWithAvatar
               label={`Team member ${keyWord}`}
               onQueryChange={onQueryChange}
