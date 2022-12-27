@@ -6,7 +6,6 @@ import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 export const useGetTeamMemberGroups = (page: number) => {
   const queryClient = useQueryClient();
 
-  // ! change me
   return useQuery<ITeamMembersAndGroupsReq>(
     ['team_member_groups', { page }],
     async () => {
