@@ -23,7 +23,6 @@ export default function PermissionManagement() {
   const { data, status } = useGetDataAccess(selectedItemId, type);
 
   const [selectedData, setSelectedData] = useState<ISelectedData | null>(null);
-
   const [showPopup, setShowPopup] = useState(false);
 
   const managePopup = (type: 'show' | 'hide') => {
