@@ -21,7 +21,7 @@ interface formType {
       password: string;
     };
     buttonTitle: string;
-  } | any;
+  }
   checkboxConfig: checkboxType[];
 }
 
@@ -29,7 +29,7 @@ export default function Form({
   onSubmit,
   formikConfig,
   checkboxConfig,
-}: any) {
+}: formType) {
   const formik = useFormik({
     initialValues: {
       ...formikConfig.initValues,

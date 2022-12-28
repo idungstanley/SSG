@@ -11,7 +11,7 @@ interface InputDataTypes {
   value: string;
   leadingIcon: string;
   trailingIcon: string;
-  onChange: any;
+  onChange: ()=>void;
 }
 function Input({
   label,

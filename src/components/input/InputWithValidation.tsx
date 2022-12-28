@@ -17,16 +17,16 @@ const icons = [
 ];
 
 interface inputWithValidation {
-  id: string;
-  type?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: () => void | any;
-  onBlur?: () => void | any;
-  message?: string;
-  isFocused?: boolean;
-  handleSubmit?: number;
-  isNewPassword?: boolean;
+  id: string
+  type?: string
+  placeholder?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (e: string) => void
+  message: string
+  isFocused: boolean
+  handleSubmit?: number
+  isNewPassword?: boolean
 }
 
 export default function InputWithValidation({
@@ -40,7 +40,7 @@ export default function InputWithValidation({
   isFocused,
   handleSubmit,
   isNewPassword,
-}: any) {
+}: inputWithValidation) {
   const [showPassword, setShowPassword] = useState(type === 'password');
   const newMessage = handleSubmit || value ? message : null;
 
@@ -88,8 +88,8 @@ export default function InputWithValidation({
         type={showPassword ? type : 'text'}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        onChange={()=> onChange}
+        onBlur={()=>onBlur}
         autoFocus={isFocused}
       />
       {type === 'password' ? (
