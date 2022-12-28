@@ -1,17 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+interface NotificationStore {
+  show: boolean;
+  duration: number | null;
+  type: 'success' | 'error';
+  title: string;
+  body: string;
+  center: boolean;
+  top: boolean;
+  show_close: boolean;
+}
+
+const initialState: NotificationStore = {
+  show: false,
+  duration: null,
+  type: 'success',
+  title: '-',
+  body: '-',
+  center: false,
+  top: true,
+  show_close: true,
+};
+
 export const notificationSlice = createSlice({
   name: 'notification',
-  initialState: {
-    show: false,
-    duration: null,
-    type: 'success',
-    title: '-',
-    body: '-',
-    center: false,
-    top: true,
-    show_close: true,
-  },
+  initialState,
   reducers: {
     setVisibility: (state, action) => {
       state.show = action.payload.show;
@@ -28,25 +41,6 @@ export const notificationSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {
-  setVisibility,
-  setContent,
-} = notificationSlice.actions;
-
-export const displayNotification = (type, title, body, duration = 5000, center = false, top = true, show_close = true) => async (dispatch) => {
-  dispatch(setContent({
-    type,
-    title,
-    body,
-    center,
-    top,
-    show_close,
-  }));
-  dispatch(setVisibility({
-    show: true,
-    duration,
-  }));
-};
+export const { setVisibility, setContent } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

@@ -1,38 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-// export const previewFileFullPage = createAsyncThunk(
-//   'explorer/previewFileFullPage',
-//   async (data, thunkAPI) => {
-//     const currentWorkspaceId = JSON.parse(
-//       localStorage.getItem('currentWorkspaceId'),
-//     );
-//     const accessToken = JSON.parse(localStorage.getItem('accessToken'));
-
-//     try {
-//       const url = `/files/${data.fileId}/contents?full_screen=true&current_workspace_id=${currentWorkspaceId}&access_token=${accessToken}`;
-
-//       window.open(`${process.env.REACT_APP_API_BASE_URL}/api${url}`, '_blank');
-
-//       if (data.cb) {
-//         data.cb();
-//       }
-
-//       return true;
-//     } catch (error) {
-//       thunkAPI.dispatch(
-//         displayNotification(
-//           'error',
-//           'Oops! An unknown error has occurred.',
-//           null,
-//           8000,
-//         ),
-//       );
-//       return thunkAPI.rejectWithValue('Oops! An unknown error has occurred.');
-//     }
-//   },
-// );
-
 const fileIdsToPaste: string[] = JSON.parse(localStorage.getItem('fileIdsToPaste') || '[]');
 const folderIdsToPaste: string[] = JSON.parse(localStorage.getItem('folderIdsToPaste') || '[]');
 const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '1');
