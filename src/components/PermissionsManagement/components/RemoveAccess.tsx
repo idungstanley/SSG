@@ -6,13 +6,13 @@ import { useGetFilteredTeamMembers } from '../../../features/permissions/permiss
 import { useGetExplorerFilesAndFolders } from '../../../features/explorer/explorerService';
 import { useGetSharedFilesAndFolders } from '../../../features/shared/sharedService';
 import { useAppSelector } from '../../../app/hooks';
-import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
+import { ISelectedUser } from '..';
 
 interface RemoveAccessProps {
   type: 'folder' | 'file';
   refetch: () => void;
-  selectedUser: IInboxMember | null;
-  setSelectedUser: (i: IInboxMember | null) => void;
+  selectedUser: ISelectedUser | null;
+  setSelectedUser: (i: ISelectedUser | null) => void;
 }
 
 function RemoveAccess({
@@ -29,11 +29,11 @@ function RemoveAccess({
   const sharedId = useAppSelector((state) => state.shared.selectedItemId);
   const { currentUserId } = useAppSelector((state) => state.auth);
 
-  const selectedUserId = selectedUser?.team_member.user.id;
+  const selectedUserId = selectedUser?.id;
   const userId = users?.find((i) => i.user.id === selectedUserId)?.id;
   const selectedDataId = explorerId !== null ? explorerId : sharedId;
   const isActiveUser = selectedUserId === currentUserId;
-  const isOwner = selectedUser?.access_level.key === 'owner';
+  const isOwner = selectedUser?.accessLevel === 'owner';
 
   const removeAccess = async () => {
     const url = `${type}s/${selectedDataId}/access/${

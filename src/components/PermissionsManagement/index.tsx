@@ -12,28 +12,36 @@ interface PermissionsManagementProps {
   type: 'folder' | 'file';
 }
 
+export interface ISelectedUser {
+  name: string
+  value: string
+  accessLevel: string
+  id: string
+}
+
 function PermissionsManagement({ selectedDataId, type }: PermissionsManagementProps) {
   const [showPopup, setShowPopup] = useState(false);
   const { data, status, refetch } = useGetDataPermissions(selectedDataId, type);
-  const [selectedUser, setSelectedUser] = useState<IInboxMember | null>(null);
-  const [selectedGroup, setSelectedGroup] = useState<IInboxMember | null>(null);
+
+  const [selectedUser, setSelectedUser] = useState<ISelectedUser | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<ISelectedUser | null>(null);
 
   const teamMemberData = selectedUser
     ? [
         {
           id: 1,
           title: 'Name:',
-          value: selectedUser.team_member.user.name,
+          value: selectedUser.name,
         },
         {
           id: 2,
           title: 'Email:',
-          value: selectedUser.team_member.user.email,
+          value: selectedUser.value,
         },
         {
           id: 3,
           title: 'Access level:',
-          value: selectedUser.access_level.name,
+          value: selectedUser.accessLevel,
         },
       ]
     : null;
@@ -43,17 +51,17 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
         {
           id: 1,
           title: 'Name:',
-          value: selectedGroup.team_member_group.name,
+          value: selectedGroup.name,
         },
         {
           id: 2,
           title: 'Initials:',
-          value: selectedGroup.team_member_group.initials,
+          value: selectedGroup.value,
         },
         {
           id: 3,
           title: 'Access level:',
-          value: selectedGroup.access_level.name,
+          value: selectedGroup.accessLevel,
         },
       ]
     : null;
@@ -89,7 +97,7 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
     );
   }
 
-  const teamMembers =
+  const teamMembers: IInboxMember[] =
     type === 'folder' ? data?.folder_team_members : data?.file_members;
 
   return (
@@ -145,9 +153,9 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
                           type={type}
                           selectedDataId={selectedDataId}
                           refetch={refetch}
-                          selectedUserId={selectedUser.team_member.user.id}
+                          selectedUserId={selectedUser.id}
                           setSelectedUser={setSelectedUser}
-                          actualAccess={selectedUser.access_level.key}
+                          actualAccess={selectedUser.accessLevel}
                         />
                       </>
                     )}
@@ -186,9 +194,9 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
                     type={type}
                     selectedDataId={selectedDataId}
                     refetch={refetch}
-                    selectedUserId={selectedUser.team_member.user.id}
+                    selectedUserId={selectedUser.id}
                     setSelectedUser={setSelectedUser}
-                    actualAccess={selectedUser.access_level.key}
+                    actualAccess={selectedUser.accessLevel}
                   />
                 ) : null}
               </SelectAndDisplayData>

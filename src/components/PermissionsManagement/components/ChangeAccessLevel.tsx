@@ -5,14 +5,14 @@ import Toast from '../../../common/Toast';
 import SelectMenuSimple from '../../selectMenu/SelectMenuSimple';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
 import { useAppSelector } from '../../../app/hooks';
-import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
+import { ISelectedUser } from '..';
 
 interface ChangeAccessLevelProps {
   type: 'folder' | 'file';
   refetch: () => void;
   selectedDataId: string;
   selectedUserId: string;
-  setSelectedUser: (i: IInboxMember | null) => void;
+  setSelectedUser: (i: ISelectedUser | null) => void;
   actualAccess: string;
 }
 

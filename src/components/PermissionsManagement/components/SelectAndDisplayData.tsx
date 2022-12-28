@@ -1,16 +1,17 @@
 import React, { ReactNode } from 'react';
+import { ISelectedUser } from '..';
 import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
 import SelectMenuTeamMembers from '../../selectMenu';
 import Columns from './DisplaySelectedData';
 
 interface SelectAndDisplayDataProps {
   usersList: IInboxMember[];
-  selectedData?: IInboxMember | null;
+  selectedData?: ISelectedUser | null;
   columnsData?: { id: number; title: string; value: string }[] | null;
   type: string;
   title: string;
   children?: ReactNode;
-  setSelectedData: (i: IInboxMember | null) => void;
+  setSelectedData: (i: ISelectedUser | null) => void;
 }
 
 function SelectAndDisplayData({
@@ -25,6 +26,8 @@ function SelectAndDisplayData({
   const users = usersList.map((i) => ({
     id: i.id,
     name: type === 'user' ? i.team_member.user.name : i.team_member_group.name,
+    accessLevel: i.access_level.key,
+    value: i.team_member?.user.email || i.team_member_group?.initials,
   }));
 
   return (
