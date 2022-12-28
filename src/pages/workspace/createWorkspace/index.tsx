@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import {
   Breadcrumb,
@@ -12,15 +12,14 @@ import {
   AvatarBg,
   Button,
 } from '../../../components';
-import { avatarBg, companySizeBtn } from './colors';
+// import { avatarBg, companySizeBtn } from './colors';
 import { createWorkspaceService } from '../../../features/workspace/workspaceService';
 import {
   selectCurrentUser,
-  setCurrentUser,
 } from '../../../features/auth/authSlice';
+import { avatarBg, companySizeBtn } from './colors';
 
 function CreateWorkspace() {
-  const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
 
   const createWSMutation = useMutation(createWorkspaceService, {
