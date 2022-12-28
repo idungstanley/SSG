@@ -1,6 +1,6 @@
 import requestNew from '../../app/requestNew';
 
-export const createWalletService = (data) => {
+export const createWalletService = (data: {name: string; hubID: string; walletId: string }) => {
   const response = requestNew(
     {
       url: 'at/wallets',
@@ -17,16 +17,14 @@ export const createWalletService = (data) => {
 };
 
 // get wallets
-export const getWalletService = (data) => {
+export const getWalletService = (data: any) => {
   const parentId = data.queryKey[1][0];
-  // const currentHubId = data.queryKey[1][1];
   const response = requestNew(
     {
       url: 'at/wallets',
       method: 'GET',
       data: {
         parent_id: parentId,
-        // hub_id: currentHubId,
       },
     },
     true,

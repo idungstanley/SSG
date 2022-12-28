@@ -1,6 +1,6 @@
 import requestNew from '../../app/requestNew';
 
-export const createListService = (data) => {
+export const createListService = (data: {listName: string, hubId?: string, parentId?: string}) => {
   const response = requestNew(
     {
       url: 'at/lists',
@@ -17,19 +17,22 @@ export const createListService = (data) => {
 };
 
 // get lists
-export const getListService = (data) => {
+export const getListService = (data: any) => {
   const hubID = data.queryKey[1];
-  const response = requestNew({
-    url: 'at/lists',
-    method: 'GET',
-    data: {
-      hub_id: hubID,
+  const response = requestNew(
+    {
+      url: 'at/lists',
+      method: 'GET',
+      data: {
+        hub_id: hubID,
+      },
     },
-  }, true);
+    true
+  );
   return response;
 };
 
-export const getListsListService = (data) => {
+export const getListsListService = (data : any) => {
   const walletID = data.queryKey[1];
   const response = requestNew(
     {

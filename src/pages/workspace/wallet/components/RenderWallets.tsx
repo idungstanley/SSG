@@ -16,7 +16,6 @@ function RenderWallets() {
     queryKey: ['walletdata', walletId],
     queryFn: getListsListService,
   });
-  console.log(WalletListData);
 
   return (
     <div>
@@ -99,7 +98,7 @@ function RenderWallets() {
                     </tr>
                   </thead>
                   <tbody>
-                    {WalletListData?.data?.tasks?.map((list) => (
+                    {WalletListData?.data?.tasks?.map((list : {type: string, id: string, name: string}) => (
                       <tr
                         key={list.id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -148,13 +147,5 @@ function RenderWallets() {
     </div>
   );
 }
-
-// RenderWallets.defaultProps = {
-//   walletId: null,
-// };
-
-// RenderWallets.propTypes = {
-//   walletId: PropTypes.string,
-// };
 
 export default RenderWallets;

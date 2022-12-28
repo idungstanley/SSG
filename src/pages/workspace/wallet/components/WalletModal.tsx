@@ -1,16 +1,20 @@
 /* eslint-disable camelcase */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../features/wallet/walletService';
 import { Button, Input } from '../../../../components';
 
-function WalletModal({ walletVisible, onCloseWalletModal, walletId }) {
+interface WalletModalProps {
+  walletVisible: boolean;
+  onCloseWalletModal: () => boolean ;
+  walletId: string;
+}
+
+function WalletModal({ walletVisible, onCloseWalletModal, walletId }: WalletModalProps) {
   const queryClient = useQueryClient();
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
-      // console.log(data);
-      queryClient.invalidateQueries('walletData');
+      queryClient.invalidateQueries();
       onCloseWalletModal();
     },
   });
@@ -19,11 +23,11 @@ function WalletModal({ walletVisible, onCloseWalletModal, walletId }) {
     name: '',
   };
 
-  const hubID = JSON.parse(localStorage.getItem('currentHubId'));
+  const hubID = JSON.parse(localStorage.getItem('currentHubId') || '"' );
 
   const [formState, setFormState] = useState(defaultWalletFormState);
 
-  const handleWalletChange = (e) => {
+  const handleWalletChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
@@ -76,8 +80,6 @@ function WalletModal({ walletVisible, onCloseWalletModal, walletId }) {
               <Button
                 buttonStyle="primary"
                 onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
                 label="Create List"
                 padding="py-2 px-4"
                 height="h-10"
@@ -90,16 +92,5 @@ function WalletModal({ walletVisible, onCloseWalletModal, walletId }) {
     </div>
   );
 }
-
-WalletModal.defaultProps = {
-  walletVisible: false,
-  walletId: '',
-};
-
-WalletModal.propTypes = {
-  walletVisible: PropTypes.bool,
-  onCloseWalletModal: PropTypes.func.isRequired,
-  walletId: PropTypes.string,
-};
 
 export default WalletModal;

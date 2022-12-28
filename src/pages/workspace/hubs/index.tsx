@@ -7,7 +7,7 @@ import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 
 function Hubs() {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const { data, status } = useGetHubList();
 
   return (

@@ -1,17 +1,25 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable camelcase */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createListService } from '../../../../features/list/listService';
 import { Button, Input } from '../../../../components';
 
-function ListModal({ listVisible, onCloseListModal, walletId }) {
+interface ListModalProps {
+  listVisible: string;
+  walletId: string;
+  onCloseListModal: any ;
+}
+
+function ListModal({
+  listVisible,
+  onCloseListModal,
+  walletId,
+}: ListModalProps) {
   const queryClient = useQueryClient();
   const createList = useMutation(createListService, {
-    onSuccess: (data) => {
-      console.log(data);
-      queryClient.invalidateQueries('listData');
+    onSuccess: () => {
+      queryClient.invalidateQueries();
       onCloseListModal();
     },
   });
@@ -20,11 +28,11 @@ function ListModal({ listVisible, onCloseListModal, walletId }) {
     name: '',
   };
 
-  const hub_id = JSON.parse(localStorage.getItem('currentHubId'));
+  const hub_id = JSON.parse(localStorage.getItem('currentHubId') || '"');
 
   const [formState, setFormState] = useState(defaultListFormState);
 
-  const handleListChange = (e) => {
+  const handleListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
@@ -71,13 +79,10 @@ function ListModal({ listVisible, onCloseListModal, walletId }) {
               <Button
                 buttonStyle="primary"
                 onClick={onSubmit}
-                // loading={loginMutation.status === 'loading'}
-                type="submit"
                 label="Create List"
                 padding="py-2 px-4"
                 height="h-10"
-                width="w-full"
-              />
+                width="w-full"            />
             </div>
           </section>
         </div>
@@ -85,17 +90,5 @@ function ListModal({ listVisible, onCloseListModal, walletId }) {
     </div>
   );
 }
-
-ListModal.defaultProps = {
-  listVisible: false,
-  walletId: '',
-  // onCloseListModal: false,
-};
-
-ListModal.propTypes = {
-  listVisible: PropTypes.bool,
-  onCloseListModal: PropTypes.func.isRequired,
-  walletId: PropTypes.string,
-};
 
 export default ListModal;

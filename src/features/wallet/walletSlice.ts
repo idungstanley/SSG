@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface WalletState {
+  wallet: string[]
+}
+
+const initialState: WalletState = {
   wallet: [],
 };
 

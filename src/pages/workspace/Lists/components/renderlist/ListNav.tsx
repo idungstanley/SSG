@@ -1,12 +1,20 @@
 import React from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
 import { ViewListIcon } from '@heroicons/react/outline';
 import { Button } from '../../../../../components';
 
+interface ListNavProps {
+  navName?: string;
+  viewsList?: string;
+  viewsList2?: string;
+  changeViews?: string;
+  Assigned?: string;
+  buttonLabel?: string;
+}
+
 function ListNav({
   navName, viewsList, viewsList2, changeViews, Assigned, buttonLabel,
-}) {
+}: ListNavProps) {
   return (
     <nav className="flex justify-between items-center p-3 h-12 border-b-2 bg-white border-gray-200">
       <section className="space-x-2 text-gray-500 flex justify-start items-center">
@@ -84,22 +92,5 @@ function ListNav({
   );
 }
 
-ListNav.defaultProps = {
-  navName: null,
-  viewsList: null,
-  viewsList2: null,
-  changeViews: null,
-  Assigned: null,
-  buttonLabel: null,
-};
-
-ListNav.propTypes = {
-  navName: PropTypes.string,
-  viewsList: PropTypes.string,
-  viewsList2: PropTypes.string,
-  changeViews: PropTypes.string,
-  Assigned: PropTypes.string,
-  buttonLabel: PropTypes.string,
-};
 
 export default ListNav;
