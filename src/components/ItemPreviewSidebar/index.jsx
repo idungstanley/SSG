@@ -13,7 +13,7 @@ function ItemPreviewSidebar({ item, type }) {
       <div className="h-full">
         <Details item={item} type={type} />
 
-        <Comments itemId={item.id} type={type} />
+        {item.id ? <Comments itemId={item.id} type={type} /> : null}
 
         {/* Loaded after API call to fetch full folder data */}
         {item === 'something that wont be the case' && (

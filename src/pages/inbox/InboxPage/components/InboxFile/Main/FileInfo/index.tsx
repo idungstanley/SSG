@@ -112,10 +112,12 @@ function FileInfo() {
                     </Tab.Panel>
 
                     <Tab.Panel className="h-full p-4">
-                      <Comments
-                        type="inbox_file"
-                        itemId={selectedInboxFileId}
-                      />
+                      {selectedInboxFileId ? (
+                        <Comments
+                          type="inbox_file"
+                          itemId={selectedInboxFileId}
+                        />
+                      ) : null}
                     </Tab.Panel>
                   </Tab.Panels>
                 </div>
