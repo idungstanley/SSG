@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-// ! comments
 const getItemComments = (data) => {
   const request = requestNew(
     {

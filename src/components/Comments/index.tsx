@@ -20,8 +20,6 @@ interface userType {
   id: string;
 }
 
-let onEdit: (id: string, value: string, user: userType[]) => void;
-
 export default function Comments({ itemId, type }: commentsType) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -37,7 +35,7 @@ export default function Comments({ itemId, type }: commentsType) {
     id: itemId,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();
 
     if (message.length > 2) {
@@ -69,10 +67,10 @@ export default function Comments({ itemId, type }: commentsType) {
     });
   };
 
-  onEdit = (id, value, users) => {
+  const onEdit = (id: string, value: string, user: userType[]) => {
     setMessage(value.replaceAll(regex, ''));
     setEditId(id);
-    setSelectedUsers([...users]);
+    setSelectedUsers([...user]);
   };
 
   return (
