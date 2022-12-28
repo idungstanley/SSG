@@ -20,7 +20,7 @@ interface log {
 }
 interface ExplorerState {
   selectedItemId: string | null;
-  selectedItemType: string | null;
+  selectedItemType: 'folder' | 'file' | null;
   selectedItemLoadingFullDetails: never | false;
   selectedItemFullDetails: {
     folder_activity_logs: log[]
@@ -59,7 +59,7 @@ export const explorerSlice = createSlice({
       state.selectedItemFullDetails = null;
       state.selectedItemLoadingFullDetails = false;
     },
-    setSelectedItem: (state, action: PayloadAction<{ selectedItemId: string, selectedItemType: string }>) => {
+    setSelectedItem: (state, action: PayloadAction<{ selectedItemId: string, selectedItemType: 'folder' | 'file' }>) => {
       state.selectedItemId = action.payload.selectedItemId;
       state.selectedItemType = action.payload.selectedItemType;
       state.selectedItemFullDetails = null;

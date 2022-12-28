@@ -1,10 +1,9 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { resetSelectedFilesAndFolders } from '../../../features/explorer/explorerSlice';
-import PermissionsManagement from '../../PermissionsManagement';
+import PermissionManagement from '../../PermissionManagement';
 
-export default function Header({ type }) {
+export default function Header() {
   const dispatch = useDispatch();
 
   return (
@@ -25,12 +24,7 @@ export default function Header({ type }) {
         />
       </svg>
 
-      <PermissionsManagement type={type} />
+      <PermissionManagement />
     </div>
   );
 }
-
-Header.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};

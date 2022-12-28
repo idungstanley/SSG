@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { ITeamMembersAndGroupsReq } from '../workspace/teamMembers.intrfaces';
+import { IDataAccessReq } from './permissions.interfaces';
 
 export const useGetFilteredTeamMembers = (
   currentUserId?: string | null,
@@ -34,21 +35,21 @@ export const useGetFilteredTeamMembers = (
   return { users: teamMembers, status };
 };
 
-export const useGetDataPermissions = (
+export const useGetDataAccess = (
   id: string | null,
-  type: 'folder' | 'file'
+  type: 'folder' | 'file' | null
 ) => {
   const url = `${type}s/${id}/access`;
   const queryKey = [`${type}-permissions-${id}`];
 
-  const { data, status, refetch } = useQuery(
+  const { data, status, refetch } = useQuery<IDataAccessReq>(
     queryKey,
     async () =>
       requestNew({
         url,
         method: 'GET',
       }),
-    { enabled: !!id }
+    { enabled: !!id && !!type }
   );
 
   return { data: data?.data, status, refetch };

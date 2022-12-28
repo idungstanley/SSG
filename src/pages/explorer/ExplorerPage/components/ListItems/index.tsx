@@ -32,7 +32,7 @@ export interface IItem {
   name: string;
   created_at: string;
   size: string | number;
-  item_type: string;
+  item_type: 'folder' | 'file';
   id: string;
   updated_at: string;
 }
@@ -138,7 +138,7 @@ export default function ExplorerTable() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
       | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
-    type: string
+    type: 'folder' | 'file'
   ) => {
     const target = e.target as HTMLButtonElement;
 

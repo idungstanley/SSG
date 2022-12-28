@@ -87,7 +87,7 @@ SelectMenuTeamMembers.defaultProps = {
 
 SelectMenuTeamMembers.propTypes = {
   teamMembers: PropTypes.array.isRequired,
-  selectedData: PropTypes.object,
+  selectedData: PropTypes.oneOfType(PropTypes.object, PropTypes.string),
   title: PropTypes.string.isRequired,
   setSelectedData: PropTypes.func.isRequired,
 };
