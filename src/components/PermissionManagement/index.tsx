@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useGetDataAccess } from '../../features/permissions/permissionsService';
 import SelectMenuTeamMembers from '../selectMenu';
+import RemoveAccess from './components/RemoveAccess';
 import Wrapper from './components/Wrapper';
 
-interface ISelectedData {
+export interface ISelectedData {
   id: string;
   name: string;
   email?: string;
   accessLevel: string;
-  type: 'member' | 'memberGroup'
+  type: 'member' | 'member-group'
 }
 
 export default function PermissionManagement() {
@@ -31,7 +32,7 @@ export default function PermissionManagement() {
   // members from data.file_members || data.folder_team_members
   const membersList = data?.file_members || data?.folder_team_members;
   const selectMembersList = membersList?.map((member) => ({
-    id: member.id,
+    id: member.team_member.id,
     name: member.team_member.user.name,
     email: member.team_member.user.email,
     accessLevel: member.access_level.key,
@@ -41,10 +42,10 @@ export default function PermissionManagement() {
   // groups from data.folder_team_member_groups
   const groupsList = data?.folder_team_member_groups;
   const selectGroupsList = groupsList?.map((group) => ({
-    id: group.id,
+    id: group.team_member_group.id,
     name: group.team_member_group.name,
     accessLevel: group.access_level.key,
-    type: 'memberGroup',
+    type: 'member-group',
   }));
 
   return (
@@ -69,7 +70,7 @@ export default function PermissionManagement() {
           {/* select menus */}
           <SelectMenuTeamMembers
             teamMembers={selectMembersList}
-            selectedData={selectedData?.type !== 'memberGroup' ? selectedData : ''}
+            selectedData={selectedData?.type !== 'member-group' ? selectedData : ''}
             setSelectedData={setSelectedData}
             title="Select team member:"
           />
@@ -90,6 +91,9 @@ export default function PermissionManagement() {
                 <Column title="Email" value={selectedData.email} />
               ) : null}
               <Column title="Access level" value={selectedData.accessLevel} />
+              <div className="flex flex-col justify-between content-center text-sm mt-3 gap-3">
+                <RemoveAccess accessLevel={selectedData.accessLevel} setSelectedData={setSelectedData} itemType={selectedData.type} accessToId={selectedData.id} />
+              </div>
             </div>
           ) : null}
 
