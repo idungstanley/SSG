@@ -3,7 +3,7 @@ import SelectAndDisplayData from './components/SelectAndDisplayData';
 import AddAccess from './components/AddAccess';
 import RemoveAccess from './components/RemoveAccess';
 import ChangeAccessLevel from './components/ChangeAccessLevel';
-import { useGetDataPermissions } from '../../features/permissions/permissionsService';
+import { useGetDataAccess } from '../../features/permissions/permissionsService';
 import Wrapper from './components/Wrapper';
 import { IInboxMember } from '../../features/inbox/inbox.interfaces';
 import { useAppSelector } from '../../app/hooks';
@@ -25,7 +25,7 @@ function PermissionsManagement({
   const { selectedItemId } = useAppSelector((state) => state.explorer);
 
   const [showPopup, setShowPopup] = useState(false);
-  const { data, status, refetch } = useGetDataPermissions(selectedItemId, type);
+  const { data, status, refetch } = useGetDataAccess(selectedItemId, type);
 
   const [selectedUser, setSelectedUser] = useState<ISelectedUser | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<ISelectedUser | null>(
@@ -103,7 +103,7 @@ function PermissionsManagement({
     );
   }
 
-  const teamMembers: IInboxMember[] =
+  const teamMembers =
     type === 'folder' ? data?.folder_team_members : data?.file_members;
 
   return (
@@ -112,7 +112,7 @@ function PermissionsManagement({
       showPopup={showPopup}
       hidePopup={hidePopup}
     >
-      {status === 'success' ? (
+      {/* {status === 'success' ? (
         <>
           <button
             type="button"
@@ -213,7 +213,7 @@ function PermissionsManagement({
             activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]}
           />
         </>
-      ) : null}
+      ) : null} */}
     </Wrapper>
   );
 }
