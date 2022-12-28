@@ -6,25 +6,31 @@ import ChangeAccessLevel from './components/ChangeAccessLevel';
 import { useGetDataPermissions } from '../../features/permissions/permissionsService';
 import Wrapper from './components/Wrapper';
 import { IInboxMember } from '../../features/inbox/inbox.interfaces';
+import { useAppSelector } from '../../app/hooks';
 
 interface PermissionsManagementProps {
-  selectedDataId: string;
   type: 'folder' | 'file';
 }
 
 export interface ISelectedUser {
-  name: string
-  value: string
-  accessLevel: string
-  id: string
+  name: string;
+  value: string;
+  accessLevel: string;
+  id: string;
 }
 
-function PermissionsManagement({ selectedDataId, type }: PermissionsManagementProps) {
+function PermissionsManagement({
+  type,
+}: PermissionsManagementProps) {
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
+
   const [showPopup, setShowPopup] = useState(false);
-  const { data, status, refetch } = useGetDataPermissions(selectedDataId, type);
+  const { data, status, refetch } = useGetDataPermissions(selectedItemId, type);
 
   const [selectedUser, setSelectedUser] = useState<ISelectedUser | null>(null);
-  const [selectedGroup, setSelectedGroup] = useState<ISelectedUser | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<ISelectedUser | null>(
+    null
+  );
 
   const teamMemberData = selectedUser
     ? [
@@ -151,7 +157,6 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
                         />
                         <ChangeAccessLevel
                           type={type}
-                          selectedDataId={selectedDataId}
                           refetch={refetch}
                           selectedUserId={selectedUser.id}
                           setSelectedUser={setSelectedUser}
@@ -192,7 +197,6 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
                 {selectedUser ? (
                   <ChangeAccessLevel
                     type={type}
-                    selectedDataId={selectedDataId}
                     refetch={refetch}
                     selectedUserId={selectedUser.id}
                     setSelectedUser={setSelectedUser}
@@ -205,7 +209,6 @@ function PermissionsManagement({ selectedDataId, type }: PermissionsManagementPr
           <AddAccess
             type={type}
             setShowPopup={setShowPopup}
-            selectedDataId={selectedDataId}
             refetch={refetch}
             activeMembers={[...teamMembers.map((i) => i.team_member.user.id)]}
           />

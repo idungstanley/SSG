@@ -9,7 +9,6 @@ import { useAppSelector } from '../../../app/hooks';
 interface AddAccessProps {
   type: 'folder' | 'file';
   setShowPopup: (i: boolean) => void;
-  selectedDataId: string;
   refetch: () => void;
   activeMembers: string[];
 }
@@ -17,16 +16,16 @@ interface AddAccessProps {
 function AddAccess({
   type,
   setShowPopup,
-  selectedDataId,
   refetch,
   activeMembers,
 }: AddAccessProps) {
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId, activeMembers);
 
   const onClickUser = async (id: string) => {
     if (id) {
-      const url = `${type}s/${selectedDataId}/access/add-access`;
+      const url = `${type}s/${selectedItemId}/access/add-access`;
       try {
         const request = await requestNew({
           method: 'post',

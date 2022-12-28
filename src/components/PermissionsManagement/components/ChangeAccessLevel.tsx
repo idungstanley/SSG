@@ -10,7 +10,6 @@ import { ISelectedUser } from '..';
 interface ChangeAccessLevelProps {
   type: 'folder' | 'file';
   refetch: () => void;
-  selectedDataId: string;
   selectedUserId: string;
   setSelectedUser: (i: ISelectedUser | null) => void;
   actualAccess: string;
@@ -18,18 +17,18 @@ interface ChangeAccessLevelProps {
 
 function ChangeAccessLevel({
   type,
-  selectedDataId,
   refetch,
   selectedUserId,
   setSelectedUser,
   actualAccess,
 }: ChangeAccessLevelProps) {
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers();
   const userId = users?.find((i) => i.user.id === selectedUserId)?.id;
 
-  const onChangeAccessLevel = async (e) => {
-    const url = `${type}s/${selectedDataId}/access/change-access-level`;
+  const onChangeAccessLevel = async (id: string) => {
+    const url = `${type}s/${selectedItemId}/access/change-access-level`;
 
     try {
       const request = await requestNew({
@@ -38,7 +37,7 @@ function ChangeAccessLevel({
         data: {
           access_type: 'member',
           access_to_id: userId,
-          access_level_key: e.id,
+          access_level_key: id,
         },
       });
       toast.custom((t) => (

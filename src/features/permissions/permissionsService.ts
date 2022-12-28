@@ -34,15 +34,21 @@ export const useGetFilteredTeamMembers = (
   return { users: teamMembers, status };
 };
 
-export const useGetDataPermissions = (id: string, type: 'folder' | 'file') => {
+export const useGetDataPermissions = (
+  id: string | null,
+  type: 'folder' | 'file'
+) => {
   const url = `${type}s/${id}/access`;
   const queryKey = [`${type}-permissions-${id}`];
 
-  const { data, status, refetch } = useQuery(queryKey, async () =>
-    requestNew({
-      url,
-      method: 'GET',
-    })
+  const { data, status, refetch } = useQuery(
+    queryKey,
+    async () =>
+      requestNew({
+        url,
+        method: 'GET',
+      }),
+    { enabled: !!id }
   );
 
   return { data: data?.data, status, refetch };
