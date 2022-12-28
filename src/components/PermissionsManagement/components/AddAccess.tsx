@@ -1,11 +1,18 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { PropTypes } from 'prop-types';
-import { useSelector } from 'react-redux';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import ComboBoxForTeamMembers from '../../comboBox/ComboBoxForTeamMembers';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../app/hooks';
+
+interface AddAccessProps {
+  type: 'folder' | 'file';
+  setShowPopup: (i: boolean) => void;
+  selectedDataId: string;
+  refetch: () => void;
+  activeMembers: string[];
+}
 
 function AddAccess({
   type,
@@ -13,11 +20,11 @@ function AddAccess({
   selectedDataId,
   refetch,
   activeMembers,
-}) {
-  const { currentUserId } = useSelector((state) => state.auth);
+}: AddAccessProps) {
+  const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId, activeMembers);
 
-  const onClickUser = async (id) => {
+  const onClickUser = async (id: string) => {
     if (id) {
       const url = `${type}s/${selectedDataId}/access/add-access`;
       try {
@@ -39,11 +46,13 @@ function AddAccess({
           />
         ));
         refetch();
-      } catch (e) {
+      } catch (e: unknown) {
+        const error = e as { data: { message: { title: string } } };
+
         toast.custom((t) => (
           <Toast
             type="error"
-            title={e.data.message.title}
+            title={error.data.message.title}
             body={null}
             toastId={t.id}
           />
@@ -70,13 +79,5 @@ function AddAccess({
     </>
   );
 }
-
-AddAccess.propTypes = {
-  setShowPopup: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  selectedDataId: PropTypes.string.isRequired,
-  refetch: PropTypes.func.isRequired,
-  activeMembers: PropTypes.array.isRequired,
-};
 
 export default AddAccess;

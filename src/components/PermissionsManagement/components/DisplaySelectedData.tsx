@@ -1,9 +1,16 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 
-function Columns({ data }) {
+interface ColumnsProps {
+  data?: {
+    id: number;
+    title: string;
+    value: string;
+  }[];
+}
+
+function Columns({ data }: ColumnsProps) {
   if (!data) {
-    return <> </>;
+    return null;
   }
 
   return (
@@ -17,9 +24,5 @@ function Columns({ data }) {
     </div>
   );
 }
-
-Columns.propTypes = {
-  data: PropTypes.array.isRequired,
-};
 
 export default Columns;

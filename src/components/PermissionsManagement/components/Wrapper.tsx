@@ -1,9 +1,18 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+import React, { ReactNode } from 'react';
+
+interface WrapperProps {
+  children?: ReactNode;
+  setShowPopup: (i: boolean) => void;
+  showPopup: boolean;
+  hidePopup: () => void;
+}
 
 function Wrapper({
-  children, setShowPopup, showPopup, hidePopup,
-}) {
+  children,
+  setShowPopup,
+  showPopup,
+  hidePopup,
+}: WrapperProps) {
   return (
     <>
       <p
@@ -33,19 +42,5 @@ function Wrapper({
     </>
   );
 }
-
-Wrapper.defaultProps = {
-  children: null,
-};
-
-Wrapper.propTypes = {
-  setShowPopup: PropTypes.func.isRequired,
-  showPopup: PropTypes.bool.isRequired,
-  hidePopup: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-};
 
 export default Wrapper;

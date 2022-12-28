@@ -3,7 +3,6 @@ import moment from 'moment';
 import { InitialsAvatar } from '../../../../../common';
 import { useAppSelector } from '../../../../../app/hooks';
 
-
 export default function Activity() {
   const { selectedItemFullDetails } = useAppSelector((state) => state.explorer);
 

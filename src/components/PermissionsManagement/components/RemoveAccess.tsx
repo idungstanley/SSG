@@ -1,29 +1,39 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
-import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
 import { useGetExplorerFilesAndFolders } from '../../../features/explorer/explorerService';
 import { useGetSharedFilesAndFolders } from '../../../features/shared/sharedService';
+import { useAppSelector } from '../../../app/hooks';
+import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
+
+interface RemoveAccessProps {
+  type: 'folder' | 'file';
+  refetch: () => void;
+  selectedUser: IInboxMember | null;
+  setSelectedUser: (i: IInboxMember | null) => void;
+}
 
 function RemoveAccess({
-  type, refetch, selectedUser, setSelectedUser,
-}) {
+  type,
+  refetch,
+  selectedUser,
+  setSelectedUser,
+}: RemoveAccessProps) {
   const { refetch: refetchShared } = useGetSharedFilesAndFolders();
   const { refetch: refetchExplorer } = useGetExplorerFilesAndFolders();
   const { users } = useGetFilteredTeamMembers();
 
-  const explorerId = useSelector((state) => state.explorer.selectedItemId);
-  const sharedId = useSelector((state) => state.shared.selectedItemId);
-  const { currentUserId } = useSelector((state) => state.auth);
+  const explorerId = useAppSelector((state) => state.explorer.selectedItemId);
+  const sharedId = useAppSelector((state) => state.shared.selectedItemId);
+  const { currentUserId } = useAppSelector((state) => state.auth);
 
-  const selectedUserId = selectedUser.team_member.user.id;
-  const userId = users.find((i) => i.user.id === selectedUserId).id;
+  const selectedUserId = selectedUser?.team_member.user.id;
+  const userId = users?.find((i) => i.user.id === selectedUserId)?.id;
   const selectedDataId = explorerId !== null ? explorerId : sharedId;
   const isActiveUser = selectedUserId === currentUserId;
-  const isOwner = selectedUser.access_level.key === 'owner';
+  const isOwner = selectedUser?.access_level.key === 'owner';
 
   const removeAccess = async () => {
     const url = `${type}s/${selectedDataId}/access/${
@@ -56,11 +66,13 @@ function RemoveAccess({
         refetchShared();
       }
       setSelectedUser(null);
-    } catch (e) {
+    } catch (e: unknown) {
+      const error = e as { data: { message: { title: string } } };
+
       toast.custom((t) => (
         <Toast
           type="error"
-          title={e.data.message.title}
+          title={error.data.message.title}
           body={null}
           toastId={t.id}
         />
@@ -82,12 +94,5 @@ function RemoveAccess({
     </button>
   );
 }
-
-RemoveAccess.propTypes = {
-  type: PropTypes.string.isRequired,
-  refetch: PropTypes.func.isRequired,
-  selectedUser: PropTypes.object.isRequired,
-  setSelectedUser: PropTypes.func.isRequired,
-};
 
 export default RemoveAccess;

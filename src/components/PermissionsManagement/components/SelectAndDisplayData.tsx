@@ -1,7 +1,17 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+import React, { ReactNode } from 'react';
+import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
 import SelectMenuTeamMembers from '../../selectMenu';
 import Columns from './DisplaySelectedData';
+
+interface SelectAndDisplayDataProps {
+  usersList: IInboxMember[];
+  selectedData?: IInboxMember | null;
+  columnsData?: { id: number; title: string; value: string }[] | null;
+  type: string;
+  title: string;
+  children?: ReactNode;
+  setSelectedData: (i: IInboxMember | null) => void;
+}
 
 function SelectAndDisplayData({
   usersList,
@@ -11,7 +21,7 @@ function SelectAndDisplayData({
   type,
   title,
   children,
-}) {
+}: SelectAndDisplayDataProps) {
   const users = usersList.map((i) => ({
     id: i.id,
     name: type === 'user' ? i.team_member.user.name : i.team_member_group.name,
@@ -27,7 +37,7 @@ function SelectAndDisplayData({
       />
       {selectedData ? (
         <div className="border border-indigo-400 rounded-xl p-2 mt-2 font-medium">
-          <Columns data={columnsData} />
+          {columnsData ? <Columns data={columnsData} /> : null}
           {children ? (
             <div className="flex flex-col justify-between content-center text-sm mt-3 gap-3">
               {children}
@@ -38,24 +48,5 @@ function SelectAndDisplayData({
     </>
   );
 }
-
-SelectAndDisplayData.defaultProps = {
-  selectedData: null,
-  columnsData: null,
-  children: null,
-};
-
-SelectAndDisplayData.propTypes = {
-  usersList: PropTypes.array.isRequired,
-  selectedData: PropTypes.object,
-  setSelectedData: PropTypes.func.isRequired,
-  columnsData: PropTypes.array,
-  type: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-};
 
 export default SelectAndDisplayData;

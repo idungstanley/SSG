@@ -1,13 +1,20 @@
-/* eslint array-bracket-spacing: 0 */
-/* eslint react/jsx-closing-bracket-location: 0 */
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import toast from 'react-hot-toast';
-import { useSelector } from 'react-redux';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import SelectMenuSimple from '../../selectMenu/SelectMenuSimple';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../app/hooks';
+import { IInboxMember } from '../../../features/inbox/inbox.interfaces';
+
+interface ChangeAccessLevelProps {
+  type: 'folder' | 'file';
+  refetch: () => void;
+  selectedDataId: string;
+  selectedUserId: string;
+  setSelectedUser: (i: IInboxMember | null) => void;
+  actualAccess: string;
+}
 
 function ChangeAccessLevel({
   type,
@@ -16,10 +23,10 @@ function ChangeAccessLevel({
   selectedUserId,
   setSelectedUser,
   actualAccess,
-}) {
-  const { currentUserId } = useSelector((state) => state.auth);
+}: ChangeAccessLevelProps) {
+  const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers();
-  const userId = users.find((i) => i.user.id === selectedUserId).id;
+  const userId = users?.find((i) => i.user.id === selectedUserId)?.id;
 
   const onChangeAccessLevel = async (e) => {
     const url = `${type}s/${selectedDataId}/access/change-access-level`;
@@ -44,7 +51,8 @@ function ChangeAccessLevel({
       ));
       refetch();
       setSelectedUser(null);
-    } catch (error) {
+    } catch (e: unknown) {
+      const error = e as { data: { message: { title: string } } };
       toast.custom((t) => (
         <Toast
           type="error"
@@ -76,14 +84,5 @@ function ChangeAccessLevel({
     </div>
   );
 }
-
-ChangeAccessLevel.propTypes = {
-  type: PropTypes.string.isRequired,
-  selectedDataId: PropTypes.string.isRequired,
-  refetch: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.string.isRequired,
-  setSelectedUser: PropTypes.func.isRequired,
-  actualAccess: PropTypes.string.isRequired,
-};
 
 export default ChangeAccessLevel;

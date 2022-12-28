@@ -1,56 +1,61 @@
 import React, { useState } from 'react';
-import { PropTypes } from 'prop-types';
 import SelectAndDisplayData from './components/SelectAndDisplayData';
 import AddAccess from './components/AddAccess';
 import RemoveAccess from './components/RemoveAccess';
 import ChangeAccessLevel from './components/ChangeAccessLevel';
 import { useGetDataPermissions } from '../../features/permissions/permissionsService';
 import Wrapper from './components/Wrapper';
+import { IInboxMember } from '../../features/inbox/inbox.interfaces';
 
-function PermissionsManagement({ selectedDataId, type }) {
+interface PermissionsManagementProps {
+  selectedDataId: string;
+  type: 'folder' | 'file';
+}
+
+function PermissionsManagement({ selectedDataId, type }: PermissionsManagementProps) {
   const [showPopup, setShowPopup] = useState(false);
   const { data, status, refetch } = useGetDataPermissions(selectedDataId, type);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<IInboxMember | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<IInboxMember | null>(null);
 
   const teamMemberData = selectedUser
     ? [
-      {
-        id: 1,
-        title: 'Name:',
-        value: selectedUser.team_member.user.name,
-      },
-      {
-        id: 2,
-        title: 'Email:',
-        value: selectedUser.team_member.user.email,
-      },
-      {
-        id: 3,
-        title: 'Access level:',
-        value: selectedUser.access_level.name,
-      },
-    ]
+        {
+          id: 1,
+          title: 'Name:',
+          value: selectedUser.team_member.user.name,
+        },
+        {
+          id: 2,
+          title: 'Email:',
+          value: selectedUser.team_member.user.email,
+        },
+        {
+          id: 3,
+          title: 'Access level:',
+          value: selectedUser.access_level.name,
+        },
+      ]
     : null;
 
   const groupData = selectedGroup
     ? [
-      {
-        id: 1,
-        title: 'Name:',
-        value: selectedGroup.team_member_group.name,
-      },
-      {
-        id: 2,
-        title: 'Initials:',
-        value: selectedGroup.team_member_group.initials,
-      },
-      {
-        id: 3,
-        title: 'Access level:',
-        value: selectedGroup.access_level.name,
-      },
-    ]
+        {
+          id: 1,
+          title: 'Name:',
+          value: selectedGroup.team_member_group.name,
+        },
+        {
+          id: 2,
+          title: 'Initials:',
+          value: selectedGroup.team_member_group.initials,
+        },
+        {
+          id: 3,
+          title: 'Access level:',
+          value: selectedGroup.access_level.name,
+        },
+      ]
     : null;
 
   const hidePopup = () => {
@@ -84,7 +89,8 @@ function PermissionsManagement({ selectedDataId, type }) {
     );
   }
 
-  const teamMembers = type === 'folder' ? data?.folder_team_members : data?.file_members;
+  const teamMembers =
+    type === 'folder' ? data?.folder_team_members : data?.file_members;
 
   return (
     <Wrapper
@@ -200,10 +206,5 @@ function PermissionsManagement({ selectedDataId, type }) {
     </Wrapper>
   );
 }
-
-PermissionsManagement.propTypes = {
-  selectedDataId: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 export default PermissionsManagement;
