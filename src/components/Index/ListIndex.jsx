@@ -3,45 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useGetHub } from '../../features/hubs/hubService';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
+import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
 function ListIndex({ showHubList, getCurrentHubId }) {
   const navigate = useNavigate();
   const [getListId, setGetListId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
-  const handleLocation = (id) => {
-    navigate(`/workspace/list/${id}`);
-  };
+ const handleListLocation = (id) => {
+   navigate(`/workspace/list/${id}`);
+ };
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data?.lists
-        && data?.data?.lists.map((list) => (
+      {data?.data?.lists &&
+        data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-14 hover:bg-gray-100">
-              <div
-                id="walletLeft"
-                className="flex items-center justify-center space-x-1"
-              >
-                <p className="text-4xl text-gray-400 mb-2">.</p>
-                <span className="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-gray-400 border-2 border-white dark:border-gray-800 rounded-full" />
-
+            <section className="flex justify-between items-center text-sm pl-16 space-x-1 hover:bg-gray-100">
+              <div className="flex items-center">
+                <DotsCircleHorizontalIcon
+                  className="flex-shrink-0 h-3 w-5"
+                  aria-hidden="true"
+                />
                 <button
                   type="button"
-                  // href={`/workspace/list/${list.id}`}
-                  // to="orkspace/list/list.id"
-                  className="text-sm"
-                  onClick={() => handleLocation(list.id)}
+                  onClick={() => handleListLocation(list.id)}
                 >
                   {list.name}
                 </button>
               </div>
-
-              <MenuDropdown
+              {/* ends here */}
+              <button
+                type="button"
+                id="listright"
                 className="space-x-1 flex items-center justify-end"
                 onClick={() => setGetListId(list.id)}
-                getListId={getListId}
-              />
+              >
+                <TaskDropdown getListId={getListId} />
+              </button>
             </section>
           </div>
         ))}

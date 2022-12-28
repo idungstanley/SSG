@@ -13,7 +13,12 @@ interface ListNavProps {
 }
 
 function ListNav({
-  navName, viewsList, viewsList2, changeViews, Assigned, buttonLabel,
+  navName,
+  viewsList,
+  viewsList2,
+  changeViews,
+  Assigned,
+  buttonLabel,
 }: ListNavProps) {
   return (
     <nav className="flex justify-between items-center p-3 h-12 border-b-2 bg-white border-gray-200">
@@ -28,13 +33,9 @@ function ListNav({
             <ViewListIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
-            />
-            {' '}
+            />{' '}
           </span>
-          <span className="text-sm hover:bg-gray-100">
-            {' '}
-            {viewsList}
-          </span>
+          <span className="text-sm hover:bg-gray-100"> {viewsList}</span>
           <span>|</span>
         </span>
         <span className="space-x-1 flex items-center justify-start">
@@ -43,13 +44,9 @@ function ListNav({
             <ViewListIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
-            />
-            {' '}
+            />{' '}
           </span>
-          <span className="text-sm hover:bg-gray-100">
-            {' '}
-            {viewsList2}
-          </span>
+          <span className="text-sm hover:bg-gray-100"> {viewsList2}</span>
           <span>|</span>
         </span>
         <span className="space-x-1 flex items-center justify-start">
@@ -58,13 +55,9 @@ function ListNav({
             <ViewListIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
-            />
-            {' '}
+            />{' '}
           </span>
-          <span className="text-sm hover:bg-gray-100">
-            {' '}
-            {changeViews}
-          </span>
+          <span className="text-sm hover:bg-gray-100"> {changeViews}</span>
         </span>
       </section>
       <section className="flex items-center space-x-5 text-gray-500">
@@ -91,6 +84,5 @@ function ListNav({
     </nav>
   );
 }
-
 
 export default ListNav;

@@ -8,10 +8,11 @@ import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { useQueryClient } from '@tanstack/react-query';
 import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSlice';
+import { useAppSelector } from '../app/hooks';
 
-const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+const accessToken = JSON.parse(localStorage.getItem('accessToken') || '"');
 const currentWorkspaceId = JSON.parse(
-  localStorage.getItem('currentWorkspaceId'),
+  localStorage.getItem('currentWorkspaceId') || '"',
 );
 
 const headers = {
@@ -22,9 +23,9 @@ const headers = {
 export default function UploadModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showUploadModal } = useSelector((state) => state.upload);
+  const { showUploadModal } = useAppSelector((state) => state.upload);
   const { inboxId, folderId } = useParams();
-  const { currentItemId } = useSelector((state) => state.workspace);
+  const { currentItemId } = useAppSelector((state) => state.workspace);
 
   const isExplorerPath = !inboxId;
 

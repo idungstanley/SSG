@@ -38,12 +38,25 @@ const folderIdsToPaste: string[] = JSON.parse(localStorage.getItem('folderIdsToP
 const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '1');
 const selectedViewId: number = JSON.parse(localStorage.getItem('selectedView') || '1');
 
+interface log {
+  id: string;
+  team_member: {
+    colour: string;
+    initials: string;
+    user: {
+      name: string;
+    };
+  };
+  description: string;
+  created_at: string;
+}
 interface ExplorerState {
   selectedItemId: string | null;
   selectedItemType: string | null;
   selectedItemLoadingFullDetails: never | false;
-  selectedItemFullDetails: never | null;
-
+  selectedItemFullDetails: {
+    folder_activity_logs: log[]
+  } | null
   selectedFileIds: string[];
   selectedFolderIds: string[];
   selectedSortingId: number;

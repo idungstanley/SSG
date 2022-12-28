@@ -2,15 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
 // Get user credentials from localStorage
-const UserFromLS = JSON.parse(localStorage.getItem('user') || "null");
+const UserFromLS = JSON.parse(localStorage.getItem('user') || 'null');
 const AccessTokenFromLS = JSON.parse(
-  localStorage.getItem('accessToken') || "null"
+  localStorage.getItem('accessToken') || 'null'
 );
 const CurrentWorkspaceIdFromLS = JSON.parse(
-  localStorage.getItem('currentWorkspaceId') || "null"
+  localStorage.getItem('currentWorkspaceId') || 'null'
 );
 const CurrentUserIdFromLS = JSON.parse(
-  localStorage.getItem('currentUserId') || "null"
+  localStorage.getItem('currentUserId') || 'null'
 );
 
 interface IUser {

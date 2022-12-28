@@ -14,11 +14,11 @@ import {
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../Lists/components/ListModal';
-import { classNames } from "../../../../utils";
+import { classNames } from '../../../../utils';
 
 interface PlusDropDownProps {
-  walletId: string
-};
+  walletId: string;
+}
 
 function PlusDropDown({ walletId }: PlusDropDownProps) {
   const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
@@ -58,7 +58,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2',
+                    'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2'
                   )}
                   onClick={() => setShowListModal(true)}
                 >
@@ -77,7 +77,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                   to="/workspace/docs"
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <DocumentAddIcon className="h-4 w-4" aria-hidden="true" />
@@ -91,7 +91,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                   to="/workspace/docs"
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <PencilAltIcon className="h-4 w-4" aria-hidden="true" />
@@ -106,7 +106,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                   onClick={() => setShowWalletModal(true)}
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <WalletOutlined
@@ -123,7 +123,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <TemplateIcon className="h-4 w-4" aria-hidden="true" />
@@ -136,7 +136,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <ImportOutlined

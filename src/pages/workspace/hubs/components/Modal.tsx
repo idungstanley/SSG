@@ -6,7 +6,7 @@ import { createHubService } from '../../../../features/hubs/hubService';
 
 interface ModalProps {
   isVisible: boolean;
-  onCloseHubModal: any;
+  onCloseHubModal: () => void;
 }
 
 function Modal({ isVisible, onCloseHubModal } : ModalProps) {

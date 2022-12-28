@@ -6,11 +6,15 @@ import { Button, Input } from '../../../../components';
 
 interface WalletModalProps {
   walletVisible: boolean;
-  onCloseWalletModal: () => boolean ;
+  onCloseWalletModal: () => void;
   walletId: string;
 }
 
-function WalletModal({ walletVisible, onCloseWalletModal, walletId }: WalletModalProps) {
+function WalletModal({
+  walletVisible,
+  onCloseWalletModal,
+  walletId,
+}: WalletModalProps) {
   const queryClient = useQueryClient();
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
@@ -23,7 +27,7 @@ function WalletModal({ walletVisible, onCloseWalletModal, walletId }: WalletModa
     name: '',
   };
 
-  const hubID = JSON.parse(localStorage.getItem('currentHubId') || '"' );
+  const hubID = JSON.parse(localStorage.getItem('currentHubId') || '"');
 
   const [formState, setFormState] = useState(defaultWalletFormState);
 

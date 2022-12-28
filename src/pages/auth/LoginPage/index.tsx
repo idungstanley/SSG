@@ -116,9 +116,9 @@ function LoginPage() {
 
   return (
     <Wrapper>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative">
-        <div className="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 flex flex-col gap-7">
-          <h2 className="text-center text-2xl font-bold">Welcome back!</h2>
+      <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex flex-col px-4 py-8 bg-white shadow-lg sm:rounded-lg sm:px-10 gap-7">
+          <h2 className="text-2xl font-bold text-center">Welcome back!</h2>
           <Form
             onSubmit={(values) => onSubmit(values)}
             formikConfig={formikConfig}
@@ -135,7 +135,7 @@ function LoginPage() {
               <button
                 type="button"
                 onClick={renderProps.onClick}
-                className="text-center w-full text-sm mt-5 text-gray-500 hover:text-gray-600"
+                className="w-full mt-5 text-sm text-center text-gray-500 hover:text-gray-600"
               >
                 Or sign in with Google
               </button>

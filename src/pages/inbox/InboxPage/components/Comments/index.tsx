@@ -12,14 +12,14 @@ export default function Comments({ setShowModal }: CommentsProps) {
   return (
     <>
       <div
-        className="fixed left-0 right-0 bottom-0 top-0 opacity-0 z-40"
+        className="fixed top-0 bottom-0 left-0 right-0 z-40 opacity-0"
         tabIndex={0}
         role="button"
         onClick={() => setShowModal(false)}
       >
         {' '}
       </div>
-      <div className="absolute top-14 -left-4 p-6 h-80 rounded-xl border bg-white z-50 w-96">
+      <div className="absolute z-50 p-6 bg-white border top-14 -left-4 h-80 rounded-xl w-96">
         <CommentsT itemId={inboxId} type="inbox" />
       </div>
     </>

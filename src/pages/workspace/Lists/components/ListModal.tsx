@@ -6,9 +6,9 @@ import { createListService } from '../../../../features/list/listService';
 import { Button, Input } from '../../../../components';
 
 interface ListModalProps {
-  listVisible: string;
+  listVisible: boolean;
   walletId: string;
-  onCloseListModal: any ;
+  onCloseListModal: () => void;
 }
 
 function ListModal({
@@ -82,7 +82,8 @@ function ListModal({
                 label="Create List"
                 padding="py-2 px-4"
                 height="h-10"
-                width="w-full"            />
+                width="w-full"
+              />
             </div>
           </section>
         </div>

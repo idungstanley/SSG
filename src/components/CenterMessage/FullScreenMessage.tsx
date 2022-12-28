@@ -9,7 +9,7 @@ interface FullScreenMessageProps {
   ctaOnClick?: (...args: never[]) => void;
   showCta?: boolean;
   showIcon?: boolean;
-  showHalFScreen?: boolean
+  showHalFScreen?: boolean;
 }
 
 export default function FullScreenMessage({
@@ -23,10 +23,10 @@ export default function FullScreenMessage({
 }: FullScreenMessageProps) {
   return (
     <div className={`flex flex-1 ${showHalFScreen ? 'h-2/4' : 'h-full'} bg-white`}>
-      <div className="text-center m-auto">
+      <div className="m-auto text-center">
         {showIcon ? (
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="w-12 h-12 mx-auto text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -51,7 +51,7 @@ export default function FullScreenMessage({
               label={ctaText}
               width="w-40"
               icon={
-                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                <PlusIcon className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" />
               }
             />
           </div>

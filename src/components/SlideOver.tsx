@@ -108,19 +108,4 @@ function SlideOver({
   );
 }
 
-SlideOver.defaultProps = {
-  onClose: null,
-  headerDescription: null,
-  footerButtons: null,
-};
-
-SlideOver.propTypes = {
-  show: PropTypes.bool.isRequired,
-  onClose: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  headerTitle: PropTypes.string.isRequired,
-  headerDescription: PropTypes.string,
-  footerButtons: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-};
-
 export default SlideOver;

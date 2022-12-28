@@ -7,7 +7,7 @@ import { useGetHub } from '../../features/hubs/hubService';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
 import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
 import ListModal from '../../pages/workspace/Lists/components/ListModal';
-import SubWalletIndex from '../../pages/workspace/wallet/components/SubWalletIndex';
+import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
 function WalletIndex({ showHubList, getCurrentHubId }) {
@@ -37,7 +37,7 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
       {data?.data?.wallets.length !== 0 ? (
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
-            <section className="flex justify-between items-center text-sm pl-14 hover:bg-gray-100">
+            <section className="flex justify-between items-center text-sm pl-5 hover:bg-gray-100">
               <div
                 id="walletLeft"
                 className="flex items-center justify-center space-x-1"
@@ -82,7 +82,7 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
               {showSubWallet === wallet.id ? (
                 <SubWalletIndex
                   walletParentId={walletParentId}
-                  getCurrentHubId={getCurrentHubId}
+                  // getCurrentHubId={getCurrentHubId}
                 />
               ) : null}
               <ListModal
