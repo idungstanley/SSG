@@ -8,19 +8,20 @@ import {
 import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';
+import { commentsType } from '../../types';
 
 const regex = /@[\S]*/g;
 
-interface commentsType {
-  itemId: string | undefined | null;
-  type: string;
+interface CommentsProps {
+  itemId: string;
+  type: commentsType;
 }
 
 interface userType {
   id: string;
 }
 
-export default function Comments({ itemId, type }: commentsType) {
+export default function Comments({ itemId, type }: CommentsProps) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<userType[]>([]);
