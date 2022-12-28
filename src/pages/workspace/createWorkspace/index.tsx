@@ -49,9 +49,12 @@ function CreateWorkspace() {
         'currentWorkspaceId',
         JSON.stringify(successData.data.workspace.id)
       );
-      dispatch(
-        setCurrentUser({...user, default_workspace_id: successData.data.workspace.id,})
-      );
+      // dispatch(
+      //   setCurrentUser({
+      //     ...user,
+      //     default_workspace_id: successData.data.workspace.id,
+      //   })
+      // );
     },
   });
 

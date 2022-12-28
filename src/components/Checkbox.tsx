@@ -4,14 +4,14 @@ import Spinner from '../common/Spinner';
 interface CheckboxProps {
   checked: boolean;
   onChange: () => void;
-  name: string;
+  name?: string;
   height: string;
   width: string;
   loading: boolean;
   disabled: boolean;
   spinnerSize: number;
-  label: string | null;
-  description: string | null;
+  label?: string | null;
+  description?: string | null;
 }
 
 function Checkbox({

@@ -46,6 +46,7 @@ import Docs from './pages/workspace/Docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/Lists/components/RenderList';
 import { IUser } from './types';
+import RenderTaskModal from './pages/workspace/tasks/ccomponent/RenderTaskModal';
 
 const inbox = [
   {
@@ -144,6 +145,7 @@ const routes = (user: IUser | null) => [
       { path: 'docs', element: <Docs /> },
       { path: 'wallet/:walletId', element: <RenderWallets /> },
       { path: 'list/:listId', element: <RenderList /> },
+      { path: 't/:taskId', element: <RenderTaskModal /> },
       ...inbox,
     ],
   },

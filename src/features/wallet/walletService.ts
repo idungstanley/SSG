@@ -17,13 +17,13 @@ export const createWalletService = (data: {name: string; hubID: string; walletId
 };
 
 // get wallets
-export const getWalletService = (data: any) => {
+export const getWalletService = (data) => {
   const parentId = data.queryKey[1][0];
   const response = requestNew(
     {
       url: 'at/wallets',
       method: 'GET',
-      data: {
+      params: {
         parent_id: parentId,
       },
     },

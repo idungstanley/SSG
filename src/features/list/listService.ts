@@ -17,13 +17,13 @@ export const createListService = (data: {listName: string, hubId?: string, paren
 };
 
 // get lists
-export const getListService = (data: any) => {
+export const getListService = (data) => {
   const hubID = data.queryKey[1];
   const response = requestNew(
     {
       url: 'at/lists',
       method: 'GET',
-      data: {
+      params: {
         hub_id: hubID,
       },
     },
@@ -32,15 +32,28 @@ export const getListService = (data: any) => {
   return response;
 };
 
-export const getListsListService = (data : any) => {
+export const getListsListService = (data) => {
   const walletID = data.queryKey[1];
   const response = requestNew(
     {
       url: 'at/lists',
       method: 'GET',
-      data: {
+      params: {
         wallet_id: walletID,
       },
+    },
+    true,
+  );
+  return response;
+};
+
+// get list details
+export const getListsDetailsService = (data) => {
+  const listID = data.queryKey[1];
+  const response = requestNew(
+    {
+      url: `at/lists/${listID}`,
+      method: 'GET',
     },
     true,
   );

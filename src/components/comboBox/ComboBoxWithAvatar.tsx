@@ -17,7 +17,7 @@ interface ComboBoxWithAvatarTypes {
   onChange: (value: string) => void;
   selectedKey: string;
   options: optionsDataType[];
-  hasNextPage: boolean;
+  hasNextPage: any;
   fetchNextPage: () => void;
   isFetching: boolean;
 }

@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
-import { classNames } from "../utils";
+import { classNames } from '../utils';
 
 interface DropDownProps {
-  items: [];
+  // items: [{ label: string; onClick: () => void; icon: JSX.Element }];
+  items: any;
 }
 
-export default function Dropdown({
-  items,
-}: DropDownProps) {
+export default function Dropdown({ items }: DropDownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -29,14 +28,14 @@ export default function Dropdown({
       >
         <Menu.Items className="origin-top-right absolute right-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {items.map((item : { label: string, onClick: ()=> void, icon: string}) => (
+            {items.map((item) => (
               <Menu.Item key={item.label}>
                 {({ active }) => (
                   <button
                     type="button"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'group flex items-center font-medium px-4 py-2 text-sm w-full',
+                      'group flex items-center font-medium px-4 py-2 text-sm w-full'
                     )}
                     onClick={item.onClick}
                   >
