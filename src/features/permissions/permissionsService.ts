@@ -80,10 +80,83 @@ const removeAccessForData = (dat: {
   return response;
 };
 
-export const useRemoveAccessForData = (type: 'folder' | 'file' | null, id: string | null) => {
+export const useRemoveAccessForData = (
+  type: 'folder' | 'file' | null,
+  id: string | null
+) => {
   const queryClient = useQueryClient();
 
   return useMutation(removeAccessForData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`${type}-permissions-${id}`]);
+    },
+  });
+};
+
+const changeAccessForData = (data: {
+  dataId: string | null;
+  key: string;
+  accessToId: string;
+  type: 'folder' | 'file' | null;
+  itemType: 'member' | 'member-group';
+}) => {
+  const { key, accessToId, type, dataId, itemType } = data;
+  const url = `${type}s/${dataId}/access/change-access-level`;
+
+  const response = requestNew({
+    method: 'POST',
+    url,
+    data: {
+      access_type: itemType,
+      access_to_id: accessToId,
+      access_level_key: key,
+    },
+  });
+  return response;
+};
+
+export const useChangeAccessForData = (
+  type: 'folder' | 'file' | null,
+  id: string | null
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(changeAccessForData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`${type}-permissions-${id}`]);
+    },
+  });
+};
+
+const addAccessForData = (data: {
+  dataId: string | null;
+  accessToId: string;
+  type: 'folder' | 'file' | null;
+  itemType: 'member' | 'member-group';
+}) => {
+  const { type, dataId, itemType, accessToId } = data;
+
+  const url = `${type}s/${dataId}/access/add-access`;
+
+  const response = requestNew({
+    method: 'POST',
+    url,
+    data: {
+      access_type: itemType,
+      access_to_id: accessToId,
+      access_level_key: 'read',
+    },
+  });
+  return response;
+};
+
+export const useAddAccessForData = (
+  type: 'folder' | 'file' | null,
+  id: string | null
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addAccessForData, {
     onSuccess: () => {
       queryClient.invalidateQueries([`${type}-permissions-${id}`]);
     },

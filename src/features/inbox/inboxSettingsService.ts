@@ -190,7 +190,7 @@ export const useGetTeamMembersOrGroups = ({
   return useInfiniteQuery<ITeamMembersAndGroupsReq>(
     [title, { query }],
     async ({ pageParam = 0 }) => {
-      const url = `settings/team-members`;
+      const url = `settings/${title.replaceAll('_', '-')}`;
 
       return requestNew(
         {
