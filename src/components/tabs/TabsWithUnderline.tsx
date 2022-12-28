@@ -1,14 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { classNames } from "../../utils";
+import { useAppSelector } from '../../app/hooks';
 
-export default function TabsWithUnderline({ tabs }) {
-  const selectedTab = useSelector(
+interface tabArrayType {
+  name: string;
+  onClick: ()=> void;
+  key: string;
+  badge: string;
+}
+interface TabsType {
+  tabs: tabArrayType[]
+}
+export default function TabsWithUnderline({ tabs }: TabsType) {
+  const selectedTab = useAppSelector(
     (state) => state.inbox.selectedInboxTabKey,
   );
   return (
-    <nav className="-mb-px flex w-full bg-white border-b border-gray-200" aria-label="Tabs">
+    <nav className="flex w-full -mb-px bg-white border-b border-gray-200" aria-label="Tabs">
       {tabs.map((tab) => (
         <button
           key={tab.name}
@@ -22,7 +31,7 @@ export default function TabsWithUnderline({ tabs }) {
           )}
           aria-current={tab.key === selectedTab ? 'page' : undefined}
         >
-          <div className="m-auto block">
+          <div className="block m-auto">
             {tab.name}
             {tab.badge !== null && (
               <span

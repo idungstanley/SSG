@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useGetHub } from '../../features/hubs/hubService';
-import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+// import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
-function ListIndex({ showHubList, getCurrentHubId }) {
+
+interface listIndexType {
+  showHubList: boolean
+  getCurrentHubId: string
+}
+
+function ListIndex({ showHubList, getCurrentHubId }: listIndexType) {
   const navigate = useNavigate();
   const [getListId, setGetListId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
@@ -20,10 +25,10 @@ function ListIndex({ showHubList, getCurrentHubId }) {
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-16 space-x-1 hover:bg-gray-100">
+            <section className="flex items-center justify-between pl-16 space-x-1 text-sm hover:bg-gray-100">
               <div className="flex items-center">
                 <DotsCircleHorizontalIcon
-                  className="flex-shrink-0 h-3 w-5"
+                  className="flex-shrink-0 w-5 h-3"
                   aria-hidden="true"
                 />
                 <button
@@ -37,7 +42,7 @@ function ListIndex({ showHubList, getCurrentHubId }) {
               <button
                 type="button"
                 id="listright"
-                className="space-x-1 flex items-center justify-end"
+                className="flex items-center justify-end space-x-1"
                 onClick={() => setGetListId(list.id)}
               >
                 <TaskDropdown getListId={getListId} />
@@ -49,9 +54,5 @@ function ListIndex({ showHubList, getCurrentHubId }) {
   );
 }
 
-ListIndex.propTypes = {
-  showHubList: PropTypes.bool.isRequired,
-  getCurrentHubId: PropTypes.string.isRequired,
-};
 
 export default ListIndex;

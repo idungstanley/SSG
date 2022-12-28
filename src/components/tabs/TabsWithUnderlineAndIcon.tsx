@@ -4,7 +4,16 @@ import {
 } from '@heroicons/react/solid';
 import { classNames } from "../../utils";
 
-const tabs = [
+
+
+interface tabArrayType {
+  name: string
+  href: string
+  current: boolean
+  icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+}
+
+const tabs: tabArrayType[] = [
   {
     name: 'My Account', href: '#', icon: UserIcon, current: false,
   },
@@ -30,8 +39,8 @@ export default function Example() {
         <select
           id="tabs"
           name="tabs"
-          className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          defaultValue={tabs.find((tab) => tab.current).name}
+          className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue={tabs?.find((tab) => tab?.current)?.name}
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -40,7 +49,7 @@ export default function Example() {
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav className="flex -mb-px space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
               <a
                 key={tab.name}

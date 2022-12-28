@@ -11,9 +11,7 @@ interface DropDownPropTypes {
   show: boolean;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedUsers: React.Dispatch<React.SetStateAction<selectedUserType[]>>;
-  // setSelectedUsers: any;
   selectedUsers: selectedUserType[];
-  // selectedUsers: any;
   isInbox: boolean;
 }
 

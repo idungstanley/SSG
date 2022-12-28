@@ -1,14 +1,18 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { resetSelectedFilesAndFolders } from '../../../features/explorer/explorerSlice';
 import PermissionsManagement from '../../PermissionsManagement';
 
-export default function Header({ id, type }) {
+
+interface HeaderType {
+  id: string;
+  type: string;
+}
+export default function Header({ id, type }: HeaderType) {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex justify-between mb-5 items-center">
+    <div className="flex items-center justify-between mb-5">
       <svg
         onClick={() => dispatch(resetSelectedFilesAndFolders())}
         xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +20,7 @@ export default function Header({ id, type }) {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-6 p cursor-pointer text-gray-400 hover:text-red-400 transition duration-300"
+        className="w-6 h-6 text-gray-400 transition duration-300 cursor-pointer p hover:text-red-400"
       >
         <path
           strokeLinecap="round"
@@ -29,8 +33,3 @@ export default function Header({ id, type }) {
     </div>
   );
 }
-
-Header.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};

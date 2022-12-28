@@ -10,6 +10,10 @@ interface userDataType {
   };
 }
 
+interface selectedType {
+  id: string
+}
+
 interface ComboBoxType {
   setShowPopup: React.Dispatch<React.SetStateAction<boolean>>;
   onClickArrow: (value: string) => void;
@@ -24,15 +28,13 @@ function ComboBoxForTeamMembers({
   users,
 }: ComboBoxType) {
   const [query, setQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-
+  const [selectedUser, setSelectedUser] = useState(null);
   const filteredUsers =
     query === ''
       ? users
       : users.filter((person) =>
           person.user.name.toLowerCase().includes(query.toLowerCase())
         );
-
   return (
     <>
       {absolute ? (

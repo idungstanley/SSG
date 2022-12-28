@@ -1,27 +1,37 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { PropTypes } from 'prop-types';
 import { classNames } from "../../utils";
 
+interface itemType {
+  name: string;
+  id: string;
+}
+interface MultipleSelectMenuType {
+  data: itemType[];
+  selectedData: {
+    name: string;
+  };
+  title: string;
+  setSelectedData: (value: {name: string})=>void
+}
 export default function MultipleSelectMenu({
   data,
   selectedData,
   setSelectedData,
   title,
-}) {
+}: MultipleSelectMenuType) {
   if (!data.length) {
     return <> </>;
   }
-
   return (
     <Listbox value={selectedData} onChange={setSelectedData}>
       {({ open }) => (
         <div>
           <Listbox.Label className="block text-sm font-medium text-gray-700">{title}</Listbox.Label>
           <div className="relative mt-1">
-            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-              {/* <span className="block truncate h-5">{selectedData ? (type === 'user' ? selectedData.team_member.user.name : selectedData.team_member_group.name) : null}</span> */}
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+              {/* <span className="block h-5 truncate">{selectedData ? (type === 'user' ? selectedData.team_member.user.name : selectedData.team_member_group.name) : null}</span> */}
+              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                 </svg>
@@ -35,7 +45,7 @@ export default function MultipleSelectMenu({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {data.map((item) => (
                   <Listbox.Option
                     key={item.id}
@@ -73,12 +83,4 @@ export default function MultipleSelectMenu({
 
 MultipleSelectMenu.defaultProps = {
   selectedData: null,
-};
-
-MultipleSelectMenu.propTypes = {
-  data: PropTypes.array.isRequired,
-  selectedData: PropTypes.object,
-  // type: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  setSelectedData: PropTypes.func.isRequired,
 };

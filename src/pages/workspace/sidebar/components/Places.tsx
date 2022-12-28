@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import React, { useState, memo } from 'react';
-import Item from '../../../search/components/Item';
+// import Item from '../../../search/components/Item';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
 import Favourites from '../../favourites';
@@ -8,9 +8,6 @@ import Files from '../../files';
 import Hubs from '../../hubs';
 import Inbox from '../../inbox';
 
-interface activeData {
-  setActivePlaceId: () => boolean;
-}
 
 const secondaryNavigation = [
   { name: 'favourite', id: 1, place: <Favourites /> },
@@ -22,16 +19,10 @@ const secondaryNavigation = [
 ];
 
 function Places() {
-  const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
+  const [activePlaceId, setActivePlaceId] = useState<number | boolean | null>(null);
 
   const handleActive = (id: number) => {
-    setActivePlaceId((prev) => {
-      if (prev === id) {
-        return id;
-      } else {
-        return id;
-      }
-    });
+    setActivePlaceId((prev) => prev === id || id);
   };
 
   return (

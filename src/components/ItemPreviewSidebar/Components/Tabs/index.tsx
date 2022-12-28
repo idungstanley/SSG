@@ -10,7 +10,14 @@ import People from './People';
 import Activity from './Activity';
 import { classNames } from "../../../../utils";
 
-const tabs = [
+interface tabsType {
+  key: string
+  name: string
+  icon: JSX.Element;
+  current: boolean
+}
+
+const tabs: tabsType[] = [
   {
     key: 'people',
     name: 'People',
@@ -33,10 +40,10 @@ const tabs = [
 
 function Tabs() {
   return (
-    <div className="h-full flex-1">
+    <div className="flex-1 h-full">
       <div className="relative h-full">
-        <div className="absolute inset-0 h-full w-full overflow-hidden flex-col">
-          <div className="h-full flex-1">
+        <div className="absolute inset-0 flex-col w-full h-full overflow-hidden">
+          <div className="flex-1 h-full">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
                 Select a tab
@@ -45,7 +52,7 @@ function Tabs() {
               <select
                 id="tabs"
                 name="tabs"
-                className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 defaultValue={tabs.find((tab) => tab.current).name}
               >
                 {tabs.map((tab) => (
@@ -53,11 +60,11 @@ function Tabs() {
                 ))}
               </select>
             </div>
-            <div className="hidden sm:block h-full w-full">
-              <Tab.Group as="div" className="h-full w-full flex flex-col">
+            <div className="hidden w-full h-full sm:block">
+              <Tab.Group as="div" className="flex flex-col w-full h-full">
                 <Tab.List
                   as="nav"
-                  className="flex space-x-8 border-b border-gray-200 w-full"
+                  className="flex w-full space-x-8 border-b border-gray-200"
                 >
                   {tabs.map((tab) => (
                     <Tab key={tab.name}>
@@ -86,7 +93,7 @@ function Tabs() {
                   ))}
                 </Tab.List>
 
-                <div className="h-full flex-1">
+                <div className="flex-1 h-full">
                   <Tab.Panels as={Fragment}>
                     <Tab.Panel className="h-full">
                       <People />
