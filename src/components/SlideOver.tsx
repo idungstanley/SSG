@@ -1,5 +1,4 @@
 import React, { Fragment, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import Button from './Button';

@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
@@ -118,9 +117,5 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
     </li>
   ) : null;
 }
-
-PinnedInboxItem.propTypes = {
-  pinnedInboxId: PropTypes.string.isRequired,
-};
 
 export default PinnedInboxItem;

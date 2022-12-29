@@ -1,9 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SearchIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 
-function Search({ placeholder }) {
+interface SearchProps {
+  placeholder: string;
+}
+
+function Search({ placeholder }: SearchProps) {
   return (
     <div className="relative bg-gray-500 flex items-stretch flex-grow rounded-md shadow-sm">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -28,9 +31,5 @@ function Search({ placeholder }) {
     </div>
   );
 }
-
-Search.propTypes = {
-  placeholder: PropTypes.string.isRequired,
-};
 
 export default Search;

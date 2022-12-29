@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserRemoveIcon } from '@heroicons/react/outline';
 import { removeTeamMemberFromGroupService } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
@@ -81,7 +80,3 @@ export default function Row({ groupTeamMember }: RowProps) {
     </tr>
   );
 }
-
-Row.propTypes = {
-  groupTeamMember: PropTypes.object.isRequired,
-};

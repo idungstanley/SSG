@@ -1,22 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-interface avatarType {
+interface AvatarWithInitialsProps {
   initials: string;
-  height: string;
-  width: string;
-  backgroundColour: string;
-  roundedStyle: string;
-  textSize: string;
+  height?: string;
+  width?: string;
+  backgroundColour?: string;
+  roundedStyle?: string;
+  textSize?: string;
 }
 function AvatarWithInitials({
   initials,
-  height,
-  width,
-  backgroundColour,
-  roundedStyle,
-  textSize,
-}: avatarType) {
+  height = 'h-10',
+  width = 'w-10',
+  backgroundColour = '#6B7280',
+  roundedStyle = 'circular',
+  textSize = 'text-sm',
+}: AvatarWithInitialsProps) {
   return (
     <span
       className={`inline-flex items-center justify-center ${height} ${width} ${
@@ -30,22 +29,5 @@ function AvatarWithInitials({
     </span>
   );
 }
-
-AvatarWithInitials.defaultProps = {
-  height: 'h-10',
-  width: 'w-10',
-  backgroundColour: '#6B7280',
-  roundedStyle: 'circular',
-  textSize: 'text-sm',
-};
-
-AvatarWithInitials.propTypes = {
-  initials: PropTypes.string.isRequired,
-  height: PropTypes.string,
-  width: PropTypes.string,
-  backgroundColour: PropTypes.string,
-  roundedStyle: PropTypes.string,
-  textSize: PropTypes.string,
-};
 
 export default AvatarWithInitials;

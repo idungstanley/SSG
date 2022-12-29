@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { FolderFilled } from '@ant-design/icons';
 import {
   ChevronDownIcon,
@@ -14,7 +13,11 @@ import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
 
-function SubWalletIndex({ walletParentId }) {
+interface SubWalletIndexProps {
+  walletParentId?: string
+}
+
+function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
   const [wallet2ParentId, setWallet2ParentId] = useState('');
   const [walletId, setGetWalletId] = useState('');
   const [getListId, setGetListId] = useState('');
@@ -109,13 +112,5 @@ function SubWalletIndex({ walletParentId }) {
     </div>
   );
 }
-
-SubWalletIndex.defaultProps = {
-  walletParentId: '',
-};
-
-SubWalletIndex.propTypes = {
-  walletParentId: PropTypes.string,
-};
 
 export default SubWalletIndex;

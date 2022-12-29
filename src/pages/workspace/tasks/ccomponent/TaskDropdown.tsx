@@ -12,12 +12,11 @@ import {
   TemplateIcon,
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import TaskModal from './TaskModal';
 import { classNames } from "../../../../utils";
 
 interface TaskDropDownProps {
-  getListId: string,
+  getListId?: string,
 }
 
 function TaskDropdown({ getListId }: TaskDropDownProps) {
@@ -146,13 +145,5 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
     </>
   );
 }
-
-TaskDropdown.defaultProps = {
-  getListId: '',
-};
-
-TaskDropdown.propTypes = {
-  getListId: PropTypes.string,
-};
 
 export default TaskDropdown;

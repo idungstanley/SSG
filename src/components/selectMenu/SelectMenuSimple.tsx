@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { classNames } from '../../utils';
@@ -11,8 +10,8 @@ interface IOption {
 
 interface SelectMenuSimpleProps {
   options: IOption[];
-  selectedId: string;
-  label: string;
+  selectedId?: string;
+  label?: string;
   onChange: (value: string) => void;
 }
 
@@ -114,15 +113,3 @@ export default function SelectMenuSimple({
     </Listbox>
   );
 }
-
-SelectMenuSimple.defaultProps = {
-  selectedId: null,
-  label: null,
-};
-
-SelectMenuSimple.propTypes = {
-  options: PropTypes.array.isRequired,
-  selectedId: PropTypes.string,
-  label: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-};

@@ -1,18 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+interface CustomStatusDropdownProps {
+  title?: string;
+  listItems: { id: string; color: string; status: string }[];
+  clickAction: (i: string) => void;
+}
 
 export default function CustomStatusDropdown({
   title,
   listItems,
   clickAction,
-}) {
+}: CustomStatusDropdownProps) {
   return (
     <div className="">
       <div className="origin-top-right absolute bottom-20 left-10 right-50 z-10 -mt-3 w-fit min:w-48 rounded-md shadow-lg py-1 px-2 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
         <input
           type="text"
-          name=""
-          id=""
           placeholder="Search statuses"
           className="p-2 w-full border-0  focus:outline-none"
         />
@@ -37,13 +40,3 @@ export default function CustomStatusDropdown({
     </div>
   );
 }
-
-CustomStatusDropdown.defaultProps = {
-  title: '',
-};
-
-CustomStatusDropdown.propTypes = {
-  title: PropTypes.string,
-  listItems: PropTypes.array.isRequired,
-  clickAction: PropTypes.func.isRequired,
-};

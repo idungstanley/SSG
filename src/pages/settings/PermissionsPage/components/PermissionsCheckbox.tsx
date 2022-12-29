@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   changeRolePermissionService,
@@ -81,8 +80,3 @@ export default function PermissionsCheckbox({
     />
   );
 }
-
-PermissionsCheckbox.propTypes = {
-  teamMemberRoleKey: PropTypes.string.isRequired,
-  workspacePermissionKey: PropTypes.string.isRequired,
-};

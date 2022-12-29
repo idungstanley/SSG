@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import PropTypes from 'prop-types';
 import {
   CalendarOutlined,
   FlagOutlined,
@@ -9,11 +8,15 @@ import {
 import { Button } from '../../../../components';
 import { createTaskService } from '../../../../features/task/taskService';
 
-function SubTask({ parentTaskId }) {
+interface SubTaskProps {
+  parentTaskId?: string;
+}
+
+function SubTask({ parentTaskId }: SubTaskProps) {
   const queryClient = useQueryClient();
   const createSubTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('subTaskData');
+      queryClient.invalidateQueries(['subTaskData']);
     },
   });
 
@@ -23,7 +26,7 @@ function SubTask({ parentTaskId }) {
 
   const [taskFormState, setTaskFormState] = useState(defaultTaskFormState);
 
-  const handleTaskChange = (e) => {
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskFormState({
       ...taskFormState,
       [e.target.name]: e.target.value,
@@ -49,7 +52,7 @@ function SubTask({ parentTaskId }) {
             <input
               type="text"
               name="name"
-              onChange={handleTaskChange}
+              onChange={(e) => handleTaskChange(e)}
               placeholder="Click to add subtask"
               className="outline-none border-0"
             />
@@ -80,7 +83,6 @@ function SubTask({ parentTaskId }) {
             buttonStyle="primary"
             onClick={onSubmit}
             // loading={loginMutation.status === 'loading'}
-            type="submit"
             label="Save"
             padding="py-2 px-4"
             height="h-7"
@@ -94,13 +96,5 @@ function SubTask({ parentTaskId }) {
     </>
   );
 }
-
-SubTask.defaultProps = {
-  parentTaskId: '',
-};
-
-SubTask.propTypes = {
-  parentTaskId: PropTypes.string,
-};
 
 export default SubTask;

@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 interface inputWithTrailingButtonType {
-  label: string;
-  icon: string;
+  label?: string;
+  icon?: string;
   buttonInner: string;
   buttonOnClick: () => void;
-  placeholder: string;
+  placeholder?: string;
   name: string;
   type: string;
   value: string;
@@ -20,7 +19,7 @@ export default function InputWithTrailingButton({
   buttonOnClick,
   placeholder,
   name,
-  type,
+  type = 'text',
   value,
   onChange,
 }: inputWithTrailingButtonType) {
@@ -62,10 +61,3 @@ export default function InputWithTrailingButton({
     </div>
   );
 }
-
-InputWithTrailingButton.defaultProps = {
-  label: null,
-  icon: null,
-  placeholder: null,
-  type: 'text',
-};
