@@ -38,7 +38,7 @@ export default function PermissionManagement() {
     () => data?.file_members || data?.folder_team_members,
     [data]
   );
-  const selectMembersList = useMemo(
+  const selectMembersList: ISelectedData[] | undefined = useMemo(
     () =>
       membersList?.map((member) => ({
         id: member.team_member.id,
@@ -52,7 +52,7 @@ export default function PermissionManagement() {
 
   // groups from data.folder_team_member_groups
   const groupsList = useMemo(() => data?.folder_team_member_groups, [data]);
-  const selectGroupsList = useMemo(
+  const selectGroupsList: ISelectedData[] | undefined = useMemo(
     () =>
       groupsList?.map((group) => ({
         id: group.team_member_group.id,
@@ -88,18 +88,23 @@ export default function PermissionManagement() {
           <h2>{`View ${type} member access`}</h2>
 
           {/* select menus */}
-          <SelectMenuTeamMembers
-            teamMembers={selectMembersList}
-            selectedData={
-              selectedData?.type !== 'member-group' ? selectedData : ''
-            }
-            setSelectedData={setSelectedData}
-            title="Select team member:"
-          />
+          {selectMembersList ? (
+            <SelectMenuTeamMembers
+              teamMembers={selectMembersList}
+              selectedData={
+                selectedData?.type !== 'member-group' ? selectedData : null
+              }
+              setSelectedData={setSelectedData}
+              title="Select team member:"
+            />
+          ) : null}
+
           {selectGroupsList ? (
             <SelectMenuTeamMembers
               teamMembers={selectGroupsList}
-              selectedData={selectedData?.type !== 'member' ? selectedData : ''}
+              selectedData={
+                selectedData?.type !== 'member' ? selectedData : null
+              }
               setSelectedData={setSelectedData}
               title="Select team member group:"
             />

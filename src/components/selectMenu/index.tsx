@@ -1,20 +1,12 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { classNames } from '../../utils';
+import { ISelectedData } from '../PermissionManagement';
 
 interface SelectMenuTeamMembersProps {
-  teamMembers: {
-    id: string;
-    name: string;
-  }[];
-  selectedData?: {
-    id: string;
-    name: string;
-  };
-  setSelectedData: (value: {
-    id: string;
-    name: string;
-  }) => void;
+  teamMembers: ISelectedData[];
+  selectedData: ISelectedData | null;
+  setSelectedData: (value: ISelectedData | null) => void;
   title: string;
 }
 
@@ -28,16 +20,8 @@ export default function SelectMenuTeamMembers({
     return null;
   }
 
-  const handleClick = (e: {
-    id: string;
-    name: string;
-  }) => {
-    const value = JSON.parse(JSON.stringify(e));
-    setSelectedData(value);
-  };
-
   return (
-    <Listbox value={selectedData} onChange={(e) => handleClick(e)}>
+    <Listbox value={selectedData} onChange={(e) => setSelectedData(e)}>
       {({ open }) => (
         <div>
           <Listbox.Label className="block text-sm font-medium text-gray-700">
