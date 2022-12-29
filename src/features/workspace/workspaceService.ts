@@ -1,9 +1,9 @@
 import requestNew from '../../app/requestNew';
 
 interface IData {
-  name: string | number
-  companySize: string | number
-  emails: string[] | null
+  name: string | number;
+  companySize: string | number;
+  emails: string[] | null;
 }
 
 export const createWorkspaceService = (data: IData) => {
@@ -17,16 +17,19 @@ export const createWorkspaceService = (data: IData) => {
         emails: data.emails,
       },
     },
-    true,
+    true
   );
   return response;
 };
 
 export const getWorkspaceService = async () => {
-  const response = requestNew({
-    url: 'workspace',
-    method: 'GET',
-  }, true);
+  const response = requestNew(
+    {
+      url: 'workspace',
+      method: 'GET',
+    },
+    true
+  );
   return response;
 };
 
@@ -36,7 +39,7 @@ export const checkIfWorkspaceService = async () => {
       url: 'user/self',
       method: 'GET',
     },
-    true,
+    true
   );
   return response;
 };
