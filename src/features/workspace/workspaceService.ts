@@ -1,13 +1,12 @@
-// import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-interface Idata {
+interface IData {
   name: string | number
   companySize: string | number
   emails: string[]
 }
 
-export const createWorkspaceService = (data: Idata) => {
+export const createWorkspaceService = (data: IData) => {
   const response = requestNew(
     {
       url: 'workspace',

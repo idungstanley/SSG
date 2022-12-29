@@ -6,7 +6,7 @@ import { classNames } from '../../utils';
 interface MenuWithTransitionProps {
   icon: JSX.Element;
   menuItems: {
-    id: string;
+    id: number;
     type: string;
     title: string;
     onClick: (() => void) | string;

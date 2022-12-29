@@ -17,7 +17,7 @@ interface ComboBoxWithAvatarTypes {
   onChange: (value: string) => void;
   selectedKey: string;
   options: optionsDataType[];
-  hasNextPage: boolean;
+  hasNextPage?: boolean;
   fetchNextPage: () => void;
   isFetching: boolean;
 }
@@ -34,7 +34,7 @@ export default function ComboBoxWithAvatar({
 }: ComboBoxWithAvatarTypes) {
   const [sentryRef] = useInfiniteScroll({
     loading: isFetching,
-    hasNextPage,
+    hasNextPage: hasNextPage || false,
     onLoadMore: fetchNextPage,
     disabled: false,
     rootMargin: '0px 0px 800px 0px',

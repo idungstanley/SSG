@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useSelector } from 'react-redux';
@@ -16,6 +15,7 @@ import { createWorkspaceService } from '../../../features/workspace/workspaceSer
 import {
   selectCurrentUser,
   setCurrentUser,
+  setCurrentWorkspace,
 } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
@@ -26,19 +26,6 @@ function CreateWorkspace() {
 
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: (successData) => {
-      localStorage.setItem(
-        'currentWorkspacename',
-        JSON.stringify(successData.data.workspace.name)
-      );
-      localStorage.setItem(
-        'currentWorkspaceSize',
-        JSON.stringify(successData.data.workspace.company_size)
-      );
-      localStorage.setItem(
-        'wsemail',
-        JSON.stringify(successData.data.workspace.emails)
-      );
-
       localStorage.setItem(
         'user',
         JSON.stringify({
@@ -51,6 +38,11 @@ function CreateWorkspace() {
         JSON.stringify(successData.data.workspace.id)
       );
 
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: successData.data.workspace.id,
+        })
+      );
       if (user) {
         dispatch(
           setCurrentUser({
@@ -83,8 +75,8 @@ function CreateWorkspace() {
 
   const emails = email.split(' ');
 
-  const onSubmit = async () => {
-    await createWSMutation.mutateAsync({
+  const onSubmit = () => {
+    createWSMutation.mutate({
       name,
       emails,
       companySize,

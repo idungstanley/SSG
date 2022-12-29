@@ -13,11 +13,10 @@ const requestNew = async (
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
 
-  const headers = accessToken &&
-    currentWorkspaceId && {
-      Authorization: `Bearer ${accessToken}`,
-      current_workspace_id: currentWorkspaceId,
-    };
+  const headers = accessToken && {
+    Authorization: `Bearer ${accessToken}`,
+    current_workspace_id: currentWorkspaceId,
+  };
 
   const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,

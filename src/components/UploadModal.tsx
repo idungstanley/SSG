@@ -10,9 +10,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSlice';
 import { useAppSelector } from '../app/hooks';
 
-const accessToken = JSON.parse(localStorage.getItem('accessToken') || '"');
+const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
 const currentWorkspaceId = JSON.parse(
-  localStorage.getItem('currentWorkspaceId') || '"',
+  localStorage.getItem('currentWorkspaceId') || 'null',
 );
 
 const headers = {
