@@ -1,20 +1,43 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { PropTypes } from 'prop-types';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
+
+interface SelectMenuTeamMembersProps {
+  teamMembers: {
+    id: string;
+    name: string;
+  }[];
+  selectedData?: {
+    id: string;
+    name: string;
+  };
+  setSelectedData: (value: {
+    id: string;
+    name: string;
+  }) => void;
+  title: string;
+}
 
 export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,
   setSelectedData,
   title,
-}) {
+}: SelectMenuTeamMembersProps) {
   if (!teamMembers.length) {
     return null;
   }
 
+  const handleClick = (e: {
+    id: string;
+    name: string;
+  }) => {
+    const value = JSON.parse(JSON.stringify(e));
+    setSelectedData(value);
+  };
+
   return (
-    <Listbox value={selectedData} onChange={setSelectedData}>
+    <Listbox value={selectedData} onChange={(e) => handleClick(e)}>
       {({ open }) => (
         <div>
           <Listbox.Label className="block text-sm font-medium text-gray-700">
@@ -54,17 +77,19 @@ export default function SelectMenuTeamMembers({
                 {teamMembers.map((person) => (
                   <Listbox.Option
                     key={person.id}
-                    className={({ active }) => classNames(
-                      active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                      'relative cursor-default select-none py-2 pl-3 pr-9',
-                    )}
+                    className={({ active }) =>
+                      classNames(
+                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                      )
+                    }
                     value={person}
                   >
-                    {({ selectedId }) => (
+                    {({ selected }) => (
                       <span
                         className={classNames(
-                          selectedId ? 'font-semibold' : 'font-normal',
-                          'block truncate',
+                          selected ? 'font-semibold' : 'font-normal',
+                          'block truncate'
                         )}
                       >
                         {person.name}
@@ -80,14 +105,3 @@ export default function SelectMenuTeamMembers({
     </Listbox>
   );
 }
-
-SelectMenuTeamMembers.defaultProps = {
-  selectedData: null,
-};
-
-SelectMenuTeamMembers.propTypes = {
-  teamMembers: PropTypes.array.isRequired,
-  selectedData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  title: PropTypes.string.isRequired,
-  setSelectedData: PropTypes.func.isRequired,
-};

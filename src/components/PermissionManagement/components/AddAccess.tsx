@@ -32,7 +32,10 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
     (i) => !actualDataIds.includes(i.id)
   );
 
-  const onAddAccess = (value: { id: string; name: string }) => {
+  const onAddAccess = (value: {
+    id: string;
+    name: string;
+  }) => {
     onAdd({
       dataId: selectedItemId,
       accessToId: value.id,
@@ -47,7 +50,6 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
 
       <SelectMenuTeamMembers
         teamMembers={dataListWithoutActual}
-        selectedData={''}
         setSelectedData={onAddAccess}
         title={`Select team ${itemType.replace('-', ' ')}:`}
       />
