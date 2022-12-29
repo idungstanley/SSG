@@ -2,7 +2,6 @@ import React from 'react';
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
@@ -11,6 +10,7 @@ import {
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import FullScreenMessage from "../CenterMessage/FullScreenMessage";
 
 export default function ItemsListInSidebar({ items, status, type }) {
   const dispatch = useDispatch();
@@ -18,9 +18,10 @@ export default function ItemsListInSidebar({ items, status, type }) {
 
   if (status === 'error') {
     return (
-      <OneThirdScreenMessage
+      <FullScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
+        showOneThirdMessage
       />
     );
   }

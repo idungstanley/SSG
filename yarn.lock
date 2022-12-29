@@ -10657,7 +10657,7 @@ react-fast-compare@^2.0.1:
 
 react-file-viewer@^1.2.1:
   version "1.2.1"
-  resolved "https://registry.npmjs.org/react-file-viewer/-/react-file-viewer-1.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-file-viewer/-/react-file-viewer-1.2.1.tgz#051d29df7077fbf160b582e56ec25dab8e13bc7a"
   integrity sha512-Hq9irsKkmXNGUOk7FBH/z/Lph4mpp3R4ySnGzhs3UEFVvHExuKhp9qPfoXUJjt/kQI5Qtrj1Y5r/fpDGkSrFyQ==
   dependencies:
     comma-separated-values "^3.6.4"

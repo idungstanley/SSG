@@ -25,21 +25,17 @@ function Preview() {
   }, [selectedInboxFileId]);
 
   return inboxFile ? (
-    <div className="h-full flex-1 select-none">
-      <div className="relative h-full">
-        <div className="flex h-full flex-col items-center">
-          {fileData ? (
-            <FilePreview
-              fileData={fileData}
-              fileExtension={inboxFile.inbox_file_source.file_format.extension}
-            />
-          ) : (
-            <div className="mx-auto w-6 mt-10 justify-center">
-              <Spinner size={8} color="#0F70B7" />
-            </div>
-          )}
+    <div className="w-full h-full overflow-y-scroll mx-px">
+      {fileData ? (
+        <FilePreview
+          fileData={fileData}
+          fileExtension={inboxFile.inbox_file_source.file_format.extension}
+        />
+      ) : (
+        <div className="mx-auto w-6 mt-10 justify-center">
+          <Spinner size={8} color="#0F70B7" />
         </div>
-      </div>
+      )}
     </div>
   ) : null;
 }
