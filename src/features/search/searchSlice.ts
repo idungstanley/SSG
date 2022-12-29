@@ -1,58 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { displayNotification } from '../general/notification/notificationSlice';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { logout, switchWorkspace } from '../auth/authSlice';
-import requestNew from '../../app/requestNew';
-// import { string } from 'prop-types';
 
-interface Idata {
-  itemType: null;
-  itemId: null;
+interface SearchState {
+  searchQuery: string;
+  searchFileContents: boolean;
+  selectedItemId: null | string;
+  selectedItemType: null | string;
+  selectedItemPath: null | string;
 }
 
-export const selectItem = createAsyncThunk(
-  'search/selectItem',
-  async (data: Idata, thunkAPI) => {
-    if (data.itemType === 'file' && data.itemId !== null) {
-      const url = `/files/${data.itemId}/details`;
-
-      const currentWorkspaceId = JSON.parse(
-        localStorage.getItem('currentWorkspaceId') || ''
-      );
-
-      try {
-        const response = await requestNew({
-          url,
-          method: 'GET',
-          params: {
-            current_workspace_id: currentWorkspaceId,
-          },
-        });
-
-        return response.data;
-      } catch (error: any) {
-        const message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        thunkAPI.dispatch(
-          displayNotification(
-            'error',
-            'Oops! An unknown error has occurred.',
-            null,
-            8000
-          )
-        );
-        return thunkAPI.rejectWithValue(message);
-      }
-    } else {
-      return null;
-    }
-  }
-);
-
-const initialState = {
+const initialState: SearchState = {
   searchQuery: '',
   searchFileContents: false,
   selectedItemId: null,
@@ -64,10 +21,10 @@ export const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    setSearchQuery: (state, action) => {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
-    setSearchFileContents: (state, action) => {
+    setSearchFileContents: (state, action: PayloadAction<boolean>) => {
       state.searchFileContents = action.payload;
     },
     resetSelectedItem: (state) => {
@@ -83,16 +40,11 @@ export const searchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(selectItem.pending, (state, action) => {
-        state.selectedItemId = action.meta.arg.itemId;
-        state.selectedItemType = action.meta.arg.itemType;
-      })
       .addCase(switchWorkspace, () => initialState)
       .addCase(logout, () => initialState);
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
   setSearchQuery,
   setSearchFileContents,

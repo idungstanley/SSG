@@ -1,12 +1,9 @@
 import React from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { selectedUserType } from './componentType';
 // import { ITeamMembersAndGroupsReq } from '../../../features/settings/teamMembersAndGroups.interfaces';
 
-interface selectedUserType {
-  id: string;
-  name?: string;
-}
 interface DropDownPropTypes {
   show: boolean;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;

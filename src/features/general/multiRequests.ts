@@ -1,27 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { commentsType } from '../../types';
 
-// ! comments
-const getItemComments = (data) => {
-  const request = requestNew(
+export const useGetItemComments = (data: { type: commentsType | string; id: string }) =>
+  useQuery(
+    [`comments-${data.id}`],
+    () =>
+      requestNew(
+        {
+          url: 'comments',
+          method: 'GET',
+          params: {
+            type: data.type,
+            id: data.id,
+          },
+        },
+        true
+      ),
     {
-      url: 'comments',
-      method: 'GET',
-      params: {
-        type: data.type,
-        id: data.id,
-      },
-    },
-    true,
+      select: (comments) => comments.data.comments,
+    }
   );
-  return request;
-};
 
-export const useGetItemComments = (data) => useQuery([`comments-${data.id}`], () => getItemComments(data), {
-  select: (comments) => comments.data.comments,
-});
-
-const createItemComment = (data) => {
+const createItemComment = (data: {
+  id: string;
+  message: string;
+  type: commentsType | string;
+}) => {
   const request = requestNew(
     {
       url: 'comments',
@@ -32,12 +37,12 @@ const createItemComment = (data) => {
         id: data.id,
       },
     },
-    true,
+    true
   );
   return request;
 };
 
-export const useCreateItemComment = (id) => {
+export const useCreateItemComment = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(createItemComment, {
@@ -47,18 +52,18 @@ export const useCreateItemComment = (id) => {
   });
 };
 
-const deleteItemComment = (data) => {
+const deleteItemComment = (data: { id: string }) => {
   const request = requestNew(
     {
       url: `comments/${data.id}`,
       method: 'DELETE',
     },
-    true,
+    true
   );
   return request;
 };
 
-export const useDeleteItemComment = (id) => {
+export const useDeleteItemComment = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteItemComment, {
@@ -68,7 +73,7 @@ export const useDeleteItemComment = (id) => {
   });
 };
 
-const editItemComment = (data) => {
+const editItemComment = (data: { id: string; message: string }) => {
   const request = requestNew(
     {
       url: `comments/${data.id}`,
@@ -77,12 +82,12 @@ const editItemComment = (data) => {
         message: data.message,
       },
     },
-    true,
+    true
   );
   return request;
 };
 
-export const useEditItemComment = (id) => {
+export const useEditItemComment = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(editItemComment, {

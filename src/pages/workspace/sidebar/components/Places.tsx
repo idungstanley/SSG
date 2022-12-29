@@ -8,7 +8,6 @@ import Files from '../../files';
 import Hubs from '../../hubs';
 import Inbox from '../../inbox';
 
-
 const secondaryNavigation = [
   { name: 'favourite', id: 1, place: <Favourites /> },
   { name: 'hubs', id: 2, place: <Hubs /> },

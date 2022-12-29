@@ -33,7 +33,7 @@ interface ItemPreviewType {
 function ItemPreviewSidebar({ item, type }: ItemPreviewType) {
   return item ? (
     <aside className="absolute inset-y-0 right-0 z-10 hidden w-1/3 h-full px-6 py-4 overflow-y-scroll bg-white border-l border-gray-200 min-w-96 lg:block">
-      <Header id={item.id} type={type} />
+      <Header />
 
       <div className="h-full">
         <Details item={item} type={type} />

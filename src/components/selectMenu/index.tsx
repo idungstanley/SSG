@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { classNames } from "../../utils";
 
-
 interface teamMembersType {
   id: string;
   name: string;
@@ -73,10 +72,10 @@ export default function SelectMenuTeamMembers({
                     )}
                     value={person}
                   >
-                    {({ selectedId }) => (
+                    {( { selected }) => (
                       <span
                         className={classNames(
-                          selectedId ? 'font-semibold' : 'font-normal',
+                          selected ? 'font-semibold' : 'font-normal',
                           'block truncate',
                         )}
                       >
@@ -93,7 +92,3 @@ export default function SelectMenuTeamMembers({
     </Listbox>
   );
 }
-
-SelectMenuTeamMembers.defaultProps = {
-  selectedData: null,
-};

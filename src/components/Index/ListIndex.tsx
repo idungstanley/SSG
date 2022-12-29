@@ -5,10 +5,9 @@ import { useGetHub } from '../../features/hubs/hubService';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
-
 interface listIndexType {
-  showHubList: boolean
-  getCurrentHubId: string
+  showHubList: boolean;
+  getCurrentHubId: string | null;
 }
 
 function ListIndex({ showHubList, getCurrentHubId }: listIndexType) {
@@ -53,6 +52,5 @@ function ListIndex({ showHubList, getCurrentHubId }: listIndexType) {
     </div>
   );
 }
-
 
 export default ListIndex;

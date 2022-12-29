@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { FolderFilled } from '@ant-design/icons';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
@@ -10,10 +9,9 @@ import ListModal from '../../pages/workspace/Lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
-
 interface walletIndexType {
   showHubList: boolean;
-  getCurrentHubId: string;
+  getCurrentHubId: string | null;
 }
 function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
   const [showWalletModal, setShowWalletModal] = useState(false);
@@ -32,7 +30,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
     setWalletParentId(id);
     setShowSubWallet(!showSubWallet);
     if (showSubWallet === id) {
-      setShowSubWallet(null);
+      setShowSubWallet(false);
     }
     setShowSubWallet(id);
   };
@@ -83,6 +81,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
               <WalletModal
                 walletVisible={showWalletModal}
                 onCloseWalletModal={() => setShowWalletModal(false)}
+                walletId={walletId}
               />
               {showSubWallet === wallet.id ? (
                 <SubWalletIndex
@@ -116,10 +115,5 @@ function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
     </div>
   ) : null;
 }
-
-WalletIndex.propTypes = {
-  showHubList: PropTypes.bool.isRequired,
-  getCurrentHubId: PropTypes.string.isRequired,
-};
 
 export default WalletIndex;

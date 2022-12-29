@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
@@ -36,7 +36,7 @@ export default function UploadModal() {
     autoProceed: true,
     meta: {},
   }).use(XHRUpload, {
-    endpoint: null,
+    endpoint: '',
     bundle: false,
     headers,
   }));

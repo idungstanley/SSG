@@ -10,6 +10,7 @@ interface FullScreenMessageProps {
   showCta?: boolean;
   showIcon?: boolean;
   showHalFScreen?: boolean;
+  showOneThirdMessage?: boolean;
 }
 
 export default function FullScreenMessage({
@@ -20,9 +21,12 @@ export default function FullScreenMessage({
   showCta = false,
   showIcon = true,
   showHalFScreen,
+  showOneThirdMessage,
 }: FullScreenMessageProps) {
   return (
-    <div className={`flex flex-1 ${showHalFScreen ? 'h-2/4' : 'h-full'} bg-white`}>
+    <div
+      className={`flex flex-1 ${showHalFScreen ? 'h-2/4' : showOneThirdMessage ? 'h-1/3' : 'h-full'} bg-white`}
+    >
       <div className="m-auto text-center">
         {showIcon ? (
           <svg

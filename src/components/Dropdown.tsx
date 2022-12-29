@@ -3,15 +3,13 @@ import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { classNames } from '../utils';
 
-
 interface itemType {
-  label: string;
-  onClick: ()=> void;
-  icon: string | JSX.Element;
+  label: string
+  onClick: () => void
+  icon: string | JSX.Element
 }
 interface DropDownProps {
-  // items: [{ label: string; onClick: () => void; icon: JSX.Element }];
-  items: itemType[];
+  items: itemType[]
 }
 
 export default function Dropdown({ items }: DropDownProps) {

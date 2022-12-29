@@ -13,7 +13,7 @@ import { classNames } from "../../../../utils";
 interface tabsType {
   key: string
   name: string
-  icon: JSX.Element;
+  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
   current: boolean
 }
 
@@ -53,7 +53,7 @@ function Tabs() {
                 id="tabs"
                 name="tabs"
                 className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                defaultValue={tabs.find((tab) => tab.current).name}
+                defaultValue={tabs?.find((tab) => tab?.current)?.name}
               >
                 {tabs.map((tab) => (
                   <option key={tab.name}>{tab.name}</option>

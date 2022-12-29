@@ -75,7 +75,3 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
     />
   );
 }
-
-List.defaultProps = {
-  comments: [],
-};

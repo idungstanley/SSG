@@ -128,7 +128,7 @@ export default function SharedTable() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
       | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
-    type: string
+    type: 'folder' | 'file'
   ) => {
     const target = e.target as HTMLButtonElement;
 

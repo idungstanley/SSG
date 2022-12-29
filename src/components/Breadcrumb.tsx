@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 interface pageType {
-  name: string;
-  current: boolean;
-  href: string | null;
+  name: string
+  current: boolean
+  href: string | null
 }
 interface BreadcrumbProps {
-  pages: pageType[];
-  rootIcon: JSX.Element | string;
-  rootIconHref: string | null;
+  pages: pageType[]
+  rootIcon: JSX.Element | string
+  rootIconHref: string | null
 }
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
@@ -70,19 +69,4 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
     </nav>
   );
 }
-
-// Breadcrumb.defaultProps = {
-//   rootIcon: null,
-//   rootIconHref: null,
-// };
-
-// Breadcrumb.propTypes = {
-//   pages: PropTypes.array.isRequired,
-//   rootIcon: PropTypes.oneOfType([
-//     PropTypes.string,
-//     PropTypes.object,
-//   ]),
-//   rootIconHref: PropTypes.string,
-// };
-
 export default Breadcrumb;
