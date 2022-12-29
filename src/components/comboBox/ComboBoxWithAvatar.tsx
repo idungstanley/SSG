@@ -51,7 +51,7 @@ export default function ComboBoxWithAvatar({
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             onQueryChange(event.target.value)
           }
-          displayValue={(selected: string) =>selected ? options?.find((option) => option?.id === selected)?.name : null
+          displayValue={(selected) =>selected ? options.find((option) => option.id === selected).name : null
           }
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none">

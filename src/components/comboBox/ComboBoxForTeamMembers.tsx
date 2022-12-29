@@ -28,7 +28,7 @@ function ComboBoxForTeamMembers({
   users,
 }: ComboBoxType) {
   const [query, setQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
   const filteredUsers =
     query === ''
       ? users

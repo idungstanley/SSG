@@ -3,7 +3,6 @@ import { AtSymbolIcon } from '@heroicons/react/outline';
 
 interface FormType {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | MouseEvent) => void;
-  // handleSubmit: any;
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
