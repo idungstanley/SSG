@@ -15,9 +15,7 @@ import { useAppSelector } from '../../../app/hooks';
 export default function ExplorerPage() {
   const { folderId } = useParams();
 
-  const { data: currentFolder } = folderId
-    ? useGetFolder(folderId)
-    : { data: null };
+  const { data: currentFolder } = useGetFolder(folderId);
 
   const { showRenameFileSlideOver, showCreateFolderSlideOver } = useAppSelector(
     (state) => state.slideOver

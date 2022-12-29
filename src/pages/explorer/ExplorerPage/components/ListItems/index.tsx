@@ -141,15 +141,13 @@ export default function ExplorerTable() {
     type: 'folder' | 'file'
   ) => {
     const target = e.target as HTMLButtonElement;
-
-    if (selectedItems.length && !target.value) {
-      dispatch(resetSelectedFilesAndFolders());
-    }
-
     if (!target.value && selectedFolderIds.includes(itemId)) {
       navigate(`/explorer/${itemId}`, { replace: true });
       dispatch(resetSelectedFilesAndFolders());
       setChecked(false);
+    }
+    if (selectedItems.length && !target.value) {
+      dispatch(resetSelectedFilesAndFolders());
     }
 
     if (!target.value) {
