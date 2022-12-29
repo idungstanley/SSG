@@ -5,19 +5,13 @@ import {
   AvatarWithInitials,
   SelectMenuWithAvatar,
 } from '../../../../../components';
-
-interface IInbox {
-  id: string;
-  name: string;
-  badge: number | null;
-  avatar: JSX.Element;
-}
+import { IOption } from '../../../../../components/selectMenu/SelectMenuWithAvatar';
 
 function SelectInboxMenu() {
   const navigate = useNavigate();
   const { inboxId } = useParams();
 
-  const [processedInboxes, setProcessedInboxes] = useState<IInbox[]>([]);
+  const [processedInboxes, setProcessedInboxes] = useState<IOption[]>([]);
   const [selectedInboxId, setSelectedInboxId] = useState<string | null>(null);
 
   const { status, data } = useGetInboxes();
@@ -28,7 +22,7 @@ function SelectInboxMenu() {
   };
 
   useEffect(() => {
-    const tempInboxes: IInbox[] = [];
+    const tempInboxes: IOption[] = [];
 
     if (status === 'success' && data != null) {
       data.data.inboxes.map((inbox) => {

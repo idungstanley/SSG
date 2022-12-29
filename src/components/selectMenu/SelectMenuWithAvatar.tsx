@@ -4,18 +4,18 @@ import { SelectorIcon } from '@heroicons/react/solid';
 import Badge from '../Badge';
 import { classNames } from '../../utils';
 
-interface IOption {
+export interface IOption {
   id: string | null;
   name: string;
   avatar?: JSX.Element;
-  badge?: string;
+  badge?: number | null;
 }
 
 interface SelectMenuWithAvatarProps {
   options: IOption[];
-  selectedId?: string;
+  selectedId: string | null;
   label?: string;
-  onChange: () => void;
+  onChange: (e: { id: string }) => void;
   showSelectPlaceholder?: boolean;
 }
 
@@ -38,8 +38,13 @@ export default function SelectMenuWithAvatar({
 
   const item = processedOptions.find((item) => item.id === selectedId);
 
+  const handleChange = (e: string) => {
+    const value = JSON.parse(JSON.stringify(e));
+    onChange(value.id);
+  };
+
   return (
-    <Listbox value={selectedId} onChange={onChange}>
+    <Listbox value={selectedId} onChange={handleChange}>
       {({ open }) => (
         <>
           {label && (
