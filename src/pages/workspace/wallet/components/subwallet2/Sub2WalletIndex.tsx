@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { FolderFilled } from '@ant-design/icons';
 import {
@@ -10,20 +9,26 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
-import MenuDropdown from '../../../hubs/components/Modal';
 import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
+import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
+import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
 
-function Sub2WalletIndex({ wallet2ParentId }) {
+interface Sub2WalletIndexProps {
+  wallet2ParentId?: string;
+}
+
+function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
   const [walletId, setGetWalletId] = useState('');
-  const [showSubWallet3, setShowSubWallet3] = useState(false);
+  const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [getListId, setGetListId] = useState('');
-  const { data: subwallet } = useQuery({
+  const { data: subwallet } = useQuery<{
+    data: { wallets: IWallet[]; lists: IList[] };
+  }>({
     queryKey: ['sub2walletlist', [wallet2ParentId]],
     queryFn: getWalletService,
   });
 
-  const handleShowSubWallet = (id) => {
-    setShowSubWallet3(!showSubWallet3);
+  const handleShowSubWallet = (id: string) => {
     if (showSubWallet3 === id) {
       return setShowSubWallet3(null);
     }
@@ -31,11 +36,11 @@ function Sub2WalletIndex({ wallet2ParentId }) {
   };
 
   const navigate = useNavigate();
-  const handleListLocation = (id) => {
+  const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);
   };
 
-  const handleLocation = (id) => {
+  const handleLocation = (id: string) => {
     navigate(`/workspace/wallet/${id}`);
   };
 
@@ -110,13 +115,5 @@ function Sub2WalletIndex({ wallet2ParentId }) {
     </div>
   );
 }
-
-Sub2WalletIndex.defaultProps = {
-  wallet2ParentId: '',
-};
-
-Sub2WalletIndex.propTypes = {
-  wallet2ParentId: PropTypes.string,
-};
 
 export default Sub2WalletIndex;

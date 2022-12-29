@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useGetHub } from '../../features/hubs/hubService';
-import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+// import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
-function ListIndex({ showHubList, getCurrentHubId }) {
+interface ListIndexProps {
+  showHubList: boolean
+  getCurrentHubId: string | null
+}
+
+function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
   const [getListId, setGetListId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
- const handleListLocation = (id) => {
+ const handleListLocation = (id: string) => {
    navigate(`/workspace/list/${id}`);
  };
 
@@ -48,10 +52,5 @@ function ListIndex({ showHubList, getCurrentHubId }) {
     </div>
   );
 }
-
-ListIndex.propTypes = {
-  showHubList: PropTypes.bool.isRequired,
-  getCurrentHubId: PropTypes.string.isRequired,
-};
 
 export default ListIndex;

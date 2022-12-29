@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 interface workspaceState {
   workspace: string[];
   showSidebar: boolean;
-  currentItemId?: string | null;
+  currentItemId: string | null;
   currentItemType?: string | null;
 }
 

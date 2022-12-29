@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { FolderFilled } from '@ant-design/icons';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
@@ -10,24 +9,29 @@ import ListModal from '../../pages/workspace/Lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
-function WalletIndex({ showHubList, getCurrentHubId }) {
+interface WalletIndexProps {
+  showHubList: boolean;
+  getCurrentHubId: string | null;
+}
+
+function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [showSubWallet, setShowSubWallet] = useState(false);
+  const [showSubWallet, setShowSubWallet] = useState<boolean | string>(false);
   const [walletId, setGetWalletId] = useState('');
   const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
   const navigate = useNavigate();
-  const handleLocation = (id) => {
+  const handleLocation = (id: string) => {
     navigate(`/workspace/wallet/${id}`);
   };
 
-  const handleShowSubWallet = (id) => {
+  const handleShowSubWallet = (id: string) => {
     setWalletParentId(id);
     setShowSubWallet(!showSubWallet);
     if (showSubWallet === id) {
-      setShowSubWallet(null);
+      setShowSubWallet(false);
     }
     setShowSubWallet(id);
   };
@@ -69,13 +73,14 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
               <div className="space-x-1 flex items-center justify-end">
                 <MenuDropdown />
                 <PlusDropDown
-                  onClick={() => setGetWalletId(wallet.id)}
+                  // onClick={() => setGetWalletId(wallet.id)}
                   walletId={walletId}
                 />
               </div>
             </section>
             <div>
               <WalletModal
+                walletId={wallet.id}
                 walletVisible={showWalletModal}
                 onCloseWalletModal={() => setShowWalletModal(false)}
               />
@@ -86,6 +91,7 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
                 />
               ) : null}
               <ListModal
+                walletId={wallet.id}
                 listVisible={showListModal}
                 onCloseListModal={() => setShowListModal(false)}
               />
@@ -111,10 +117,5 @@ function WalletIndex({ showHubList, getCurrentHubId }) {
     </div>
   ) : null;
 }
-
-WalletIndex.propTypes = {
-  showHubList: PropTypes.bool.isRequired,
-  getCurrentHubId: PropTypes.string.isRequired,
-};
 
 export default WalletIndex;

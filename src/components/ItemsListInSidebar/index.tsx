@@ -1,7 +1,6 @@
 import React from 'react';
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
-import { useSelector, useDispatch } from 'react-redux';
-import { PropTypes } from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
@@ -10,11 +9,20 @@ import {
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
-import FullScreenMessage from "../CenterMessage/FullScreenMessage";
+import FullScreenMessage from '../CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../app/hooks';
+import { IInbox } from '../../features/inbox/inbox.interfaces';
+import { IHub } from '../../features/hubs/hubs.interfaces';
 
-export default function ItemsListInSidebar({ items, status, type }) {
+interface ItemsListInSidebarProps {
+  status: string;
+  type: string;
+  items?: IInbox[] | IHub[]
+}
+
+export default function ItemsListInSidebar({ items, status, type }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
-  const { currentItemId } = useSelector((state) => state.workspace);
+  const { currentItemId } = useAppSelector((state) => state.workspace);
 
   if (status === 'error') {
     return (
@@ -34,7 +42,7 @@ export default function ItemsListInSidebar({ items, status, type }) {
     );
   }
 
-  const handleClick = (id) => {
+  const handleClick = (id: string) => {
     const isMatch = id === currentItemId;
 
     if (isMatch) {
@@ -43,7 +51,7 @@ export default function ItemsListInSidebar({ items, status, type }) {
           setCurrentItem({
             currentItemId: id,
             currentItemType: type,
-          }),
+          })
         );
       } else {
         dispatch(resetCurrentItem());
@@ -53,14 +61,14 @@ export default function ItemsListInSidebar({ items, status, type }) {
         setCurrentItem({
           currentItemId: id,
           currentItemType: type,
-        }),
+        })
       );
     }
   };
 
   return status === 'success' ? (
     <ul className="w-full divide-y divide-gray-200">
-      {items.map((i) => (
+      {items?.map((i: { id: string, name: string }) => (
         <li key={i.id} className="flex flex-col">
           <div className="flex justify-between items-center hover:bg-gray-100">
             <div
@@ -100,19 +108,9 @@ export default function ItemsListInSidebar({ items, status, type }) {
             <MenuDropdown />
           </div>
 
-          {currentItemId === i.id ? <DropdownList type={type} /> : null}
+          {currentItemId === i.id ? <DropdownList /> : null}
         </li>
       ))}
     </ul>
   ) : null;
 }
-
-ItemsListInSidebar.defaultProps = {
-  items: [],
-};
-
-ItemsListInSidebar.propTypes = {
-  items: PropTypes.array,
-  status: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};

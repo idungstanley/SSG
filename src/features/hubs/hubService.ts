@@ -1,7 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
 
-export const createHubService = (data: { name: string; currentWorkspaceId?: string}) => {
+export const createHubService = (data: {
+  name: string;
+  currentWorkspaceId?: string;
+}) => {
   const response = requestNew(
     {
       url: 'hubs',
@@ -21,29 +25,35 @@ export const createHubService = (data: { name: string; currentWorkspaceId?: stri
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IResponseGetHubs>(
     ['hubs'],
-    () => requestNew(
-      {
-        url: 'hubs',
-        method: 'GET',
-      },
-      false,
-      true,
-    ),
+    () =>
+      requestNew(
+        {
+          url: 'hubs',
+          method: 'GET',
+        },
+        false,
+        true
+      ),
     {
       onSuccess: (data) => {
-        data.data.hubs.map((hub: {type: string | null; id: string | null}) => queryClient.setQueryData(['hub', hub.id], hub));
+        data.data.hubs.map((hub) =>
+          queryClient.setQueryData(['hub', hub.id], hub)
+        );
       },
-    },
+    }
   );
 };
 
-export const useGetHub = (hubId: string | null ) => useQuery([`hub-${hubId}`], () => requestNew(
-  {
-    url: `hubs/${hubId}`,
-    method: 'GET',
-  },
-  false,
-  true,
-));
+export const useGetHub = (hubId: string | null) =>
+  useQuery<IHubReq>([`hub-${hubId}`], () =>
+    requestNew(
+      {
+        url: `hubs/${hubId}`,
+        method: 'GET',
+      },
+      false,
+      true
+    )
+  );
