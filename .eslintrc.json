@@ -39,7 +39,7 @@
         "@typescript-eslint/semi": "error",
         "@typescript-eslint/comma-dangle": 0,
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/space-before-function-paren": ["error", {"asyncArrow": "ignore"}],
+        "@typescript-eslint/space-before-function-paren": ["error", {"named": "ignore", "asyncArrow": "ignore"}],
         "@typescript-eslint/strict-boolean-expressions": 0,
         "no-var": 2,
         "no-loop-func": "off",
