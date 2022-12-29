@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
 import { classNames } from '../../utils';
+import { ITeamMember } from '../../features/workspace/teamMembers.intrfaces';
 
 interface userDataType {
   id: string;
@@ -10,8 +11,12 @@ interface userDataType {
   };
 }
 
+interface selectedType {
+  id: string
+}
+
 interface ComboBoxType {
-  setShowPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowPopup: (i: boolean) => void;
   onClickArrow: (value: string) => void;
   absolute: boolean;
   users: userDataType[];
@@ -24,7 +29,7 @@ function ComboBoxForTeamMembers({
   users,
 }: ComboBoxType) {
   const [query, setQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<ITeamMember | null>(null);
 
   const filteredUsers =
     query === ''
@@ -32,7 +37,6 @@ function ComboBoxForTeamMembers({
       : users.filter((person) =>
           person.user.name.toLowerCase().includes(query.toLowerCase())
         );
-
   return (
     <>
       {absolute ? (
@@ -79,7 +83,7 @@ function ComboBoxForTeamMembers({
             </svg>
           </Combobox.Button>
           <svg
-            onClick={() => onClickArrow(selectedUser.id)}
+            onClick={() => onClickArrow(selectedUser?.id || '')}
             role="button"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

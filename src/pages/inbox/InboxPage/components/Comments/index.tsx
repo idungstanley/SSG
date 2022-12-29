@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import CommentsT from '../../../../../components/Comments';
 
 interface CommentsProps {
-  setShowModal: (i: boolean) => void
+  setShowModal: (i: boolean) => void;
 }
 
 export default function Comments({ setShowModal }: CommentsProps) {
@@ -20,7 +20,7 @@ export default function Comments({ setShowModal }: CommentsProps) {
         {' '}
       </div>
       <div className="absolute z-50 p-6 bg-white border top-14 -left-4 h-80 rounded-xl w-96">
-        <CommentsT itemId={inboxId} type="inbox" />
+        {inboxId ? <CommentsT itemId={inboxId} type="inbox" /> : null}
       </div>
     </>
   );

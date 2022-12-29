@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes, { any } from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FileIcon, PathBadge } from '../../../../common';
 import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { setSelectedItem } from '../../../../features/search/searchSlice';

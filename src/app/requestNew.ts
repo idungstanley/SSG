@@ -25,13 +25,13 @@ const requestNew = async (
   });
 
   // request handler
-  const onSuccess = (response: any) => {
+  const onSuccess = (response) => {
     const { data } = response;
     return data;
   };
 
   // error handler
-  function onError(error: any) {
+  function onError(error) {
     return Promise.reject(error.response);
   }
 

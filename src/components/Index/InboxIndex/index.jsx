@@ -4,7 +4,7 @@ import { OutputFileSize } from '../../../app/helpers';
 import { FileIcon, Spinner } from '../../../common';
 import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
-import OneThirdScreenMessage from '../../CenterMessage/OneThirdScreenMessage';
+import FullScreenMessage from "../../CenterMessage/FullScreenMessage";
 import MenuDropdown from '../../Dropdown/DropdownForWorkspace';
 
 export default function InboxIndex() {
@@ -22,9 +22,10 @@ export default function InboxIndex() {
 
   if (status === 'error') {
     return (
-      <OneThirdScreenMessage
+      <FullScreenMessage
         title="Oops, an error occurred :("
         description="Please try again later."
+        showOneThirdMessage
       />
     );
   }
@@ -40,13 +41,13 @@ export default function InboxIndex() {
   return status === 'success' ? (
     !data.length ? (
       <div className="my-12">
-        {/* <OneThirdScreenMessage title="No files yet" description="Add one." /> */}
-        <OneThirdScreenMessage
+        <FullScreenMessage
           title="No files yet"
           description="Upload one"
           ctaText="Upload"
           ctaOnClick={() => dispatch(setShowUploadModal(true))}
           showCta
+          showOneThirdMessage
         />
       </div>
     ) : (

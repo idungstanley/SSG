@@ -1,19 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+interface pageType {
+  name: string
+  current: boolean
+  href: string | null
+}
 interface BreadcrumbProps {
-  pages: any;
-  rootIcon: any;
-  rootIconHref: string | null;
+  pages: pageType[]
+  rootIcon: JSX.Element | string
+  rootIconHref: string | null
 }
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
     <nav
-      className="bg-white border-b border-gray-200 flex"
+      className="flex bg-white border-b border-gray-200"
       aria-label="Breadcrumb"
     >
-      <ol className="w-full mx-auto px-4 flex space-x-4 sm:px-6 lg:px-6">
+      <ol className="flex w-full px-4 mx-auto space-x-4 sm:px-6 lg:px-6">
         {rootIcon && (
           <li className="flex">
             <div className="flex items-center text-gray-400">
@@ -43,7 +48,7 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
               {page.current ? (
                 <Link
                   to={page.href}
-                  className="ml-4 text-sm font-medium text-gray-800 cursor-none select-none"
+                  className="ml-4 text-sm font-medium text-gray-800 select-none cursor-none"
                   aria-current="page"
                 >
                   {page.name}
@@ -64,19 +69,4 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
     </nav>
   );
 }
-
-// Breadcrumb.defaultProps = {
-//   rootIcon: null,
-//   rootIconHref: null,
-// };
-
-// Breadcrumb.propTypes = {
-//   pages: PropTypes.array.isRequired,
-//   rootIcon: PropTypes.oneOfType([
-//     PropTypes.string,
-//     PropTypes.object,
-//   ]),
-//   rootIconHref: PropTypes.string,
-// };
-
 export default Breadcrumb;

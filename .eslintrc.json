@@ -25,14 +25,14 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "linebreak-style": 0,
         "no-console":"warn",
         "semi-spacing": ["error", {"before": false, "after": true}],
         "space-infix-ops":"error",
         "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],
         "@typescript-eslint/explicit-module-boundary-types":"off",
-        "linebreak-style":0,
         "semi": "error",
-        "no-multiple-empty-lines":["error", { "max": 9999, "maxEOF": 0 }],
+        "no-multiple-empty-lines":["error", { "max": 1, "maxEOF": 0 }],
         "no-multi-spaces":"error",
         "no-trailing-spaces":"error",
         "@typescript-eslint/semi": "error",

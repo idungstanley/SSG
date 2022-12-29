@@ -27,11 +27,7 @@ interface itemsType {
   isVisible: boolean;
 }
 
-interface MenuDropdownProps {
-  currentItemId: string;
-}
-
-function MenuDropdown({ currentItemId }: MenuDropdownProps) {
+function MenuDropdown() {
   // const { currentItemId, type } = useSelector((state) => state.workspace);
 
   // ! actions here (create, delete, rename)
@@ -42,7 +38,7 @@ function MenuDropdown({ currentItemId }: MenuDropdownProps) {
     {
       id: 1,
       title: 'Create new',
-      handleClick: () => (console.log(currentItemId)),
+      handleClick: () => ({}),
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),

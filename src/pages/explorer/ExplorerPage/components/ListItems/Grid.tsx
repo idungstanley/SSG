@@ -14,7 +14,7 @@ interface GridProps {
   sortedItems: IItem[];
   selectedItems: string[];
   handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, itemId: string, type: string) => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, itemId: string, type: 'folder' | 'file') => void;
 }
 
 export default function Grid({

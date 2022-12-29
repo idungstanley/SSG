@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { classNames } from '../../utils';
@@ -43,18 +42,18 @@ export default function SelectMenuSimple({
       {({ open }) => (
         <>
           {label && (
-            <Listbox.Label className="block text-sm font-medium text-gray-700 mb-1">
+            <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">
               {label}
             </Listbox.Label>
           )}
           <div className="relative">
-            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-              <span className="block truncate h-4">
+            <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              <span className="block h-4 truncate">
                 {processedOptions.find((item) => item.id === selectedId)?.name}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
-                  className="h-5 w-5 text-gray-400"
+                  className="w-5 h-5 text-gray-400"
                   aria-hidden="true"
                 />
               </span>
@@ -67,7 +66,7 @@ export default function SelectMenuSimple({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {processedOptions.map((option) => (
                   <Listbox.Option
                     key={option.id}
@@ -99,7 +98,7 @@ export default function SelectMenuSimple({
                               'absolute inset-y-0 left-0 flex items-center pl-1.5'
                             )}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            <CheckIcon className="w-5 h-5" aria-hidden="true" />
                           </span>
                         ) : null}
                       </>
@@ -118,11 +117,4 @@ export default function SelectMenuSimple({
 SelectMenuSimple.defaultProps = {
   selectedId: null,
   label: null,
-};
-
-SelectMenuSimple.propTypes = {
-  options: PropTypes.array.isRequired,
-  selectedId: PropTypes.string,
-  label: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
 };

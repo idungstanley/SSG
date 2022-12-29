@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from '@headlessui/react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSearchFileContents } from '../../../../../features/search/searchSlice';
 import { useAppSelector } from '../../../../../app/hooks';
 

@@ -9,7 +9,7 @@ import ExcelIcon from '../assets/icons/fileFormats/xls.svg';
 import PPTIcon from '../assets/icons/fileFormats/ppt.svg';
 
 interface FileIconProps {
-  extensionKey: string;
+  extensionKey: string | undefined;
   size: number
 }
 

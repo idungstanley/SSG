@@ -22,3 +22,5 @@ export interface ISuccessRequest {
 }
 
 export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';
+
+export type commentsType = 'inbox_file' | 'inbox' | 'folder' | 'file';

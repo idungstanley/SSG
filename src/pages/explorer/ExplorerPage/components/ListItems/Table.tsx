@@ -15,7 +15,7 @@ interface TableProps {
   sortedItems: IItem[];
   selectedItems: string[];
   handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>, itemId: string, type: string) => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>, itemId: string, type: 'folder' | 'file') => void;
 }
 
 export default function Table({
