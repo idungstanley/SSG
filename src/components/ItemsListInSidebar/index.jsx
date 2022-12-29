@@ -1,5 +1,9 @@
-import React from 'react';
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
+import React, { useState } from 'react';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  PlusIcon,
+} from '@heroicons/react/outline';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import OneThirdScreenMessage from '../CenterMessage/OneThirdScreenMessage';
@@ -11,8 +15,10 @@ import {
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import WsDropdown from '../Dropdown/WsDropdown';
 
 export default function ItemsListInSidebar({ items, status, type }) {
+  const [wsId, setWsId] = useState(false);
   const dispatch = useDispatch();
   const { currentItemId } = useSelector((state) => state.workspace);
 
@@ -42,7 +48,7 @@ export default function ItemsListInSidebar({ items, status, type }) {
           setCurrentItem({
             currentItemId: id,
             currentItemType: type,
-          }),
+          })
         );
       } else {
         dispatch(resetCurrentItem());
@@ -52,8 +58,17 @@ export default function ItemsListInSidebar({ items, status, type }) {
         setCurrentItem({
           currentItemId: id,
           currentItemType: type,
-        }),
+        })
       );
+    }
+  };
+
+  const handleWSDD = (id) => {
+    setWsId(!wsId);
+    if (wsId === id) {
+      setWsId(false);
+    } else {
+      setWsId(id);
     }
   };
 
@@ -96,7 +111,16 @@ export default function ItemsListInSidebar({ items, status, type }) {
                 </div>
               </div>
             </div>
-            <MenuDropdown />
+            <MenuDropdown currentItemId={currentItemId} />
+            <div className="relative">
+              <button type="button" onClick={() => handleWSDD(i.id)}>
+                <PlusIcon
+                  className="w-4 h-4 text-gray-400"
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+            {wsId === i.id ? <WsDropdown id={i.id} /> : null}
           </div>
 
           {currentItemId === i.id ? <DropdownList type={type} /> : null}

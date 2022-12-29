@@ -18,7 +18,6 @@ import {
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import { classNames } from '../../utils';
-// import { useSelector } from 'react-redux';
 
 interface itemsType {
   id: number;
@@ -28,17 +27,22 @@ interface itemsType {
   isVisible: boolean;
 }
 
-function MenuDropdown() {
+interface MenuDropdownProps {
+  currentItemId: string;
+}
+
+function MenuDropdown({ currentItemId }: MenuDropdownProps) {
   // const { currentItemId, type } = useSelector((state) => state.workspace);
 
   // ! actions here (create, delete, rename)
 
   // ! (too big!) destructure to different components
+
   const itemsList: itemsType[] = [
     {
       id: 1,
       title: 'Create new',
-      handleClick: () => ({}),
+      handleClick: () => (console.log(currentItemId)),
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
@@ -205,7 +209,7 @@ function MenuDropdown() {
                     )}
                     onClick={() => item.handleClick}
                   >
-                    <TrashIcon className="w-4 h-4" aria-hidden="true" />
+                    {item.icon}
                     <p>{item.title}</p>
                   </div>
                 )}
