@@ -20,7 +20,7 @@ export const useGetInboxFiles = ({
   inboxId,
   isArchived,
 }: {
-  inboxId?: string;
+  inboxId?: string | null;
   isArchived: boolean;
 }) => {
   const queryClient = useQueryClient();

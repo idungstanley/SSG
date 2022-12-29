@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { FolderFilled } from '@ant-design/icons';
 import {
   ChevronDownIcon,
@@ -9,13 +8,16 @@ import {
 } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
-import MenuDropdown from '../../../hubs/components/Modal';
+import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
 
-function SubWalletIndex({ walletParentId }) {
-  const [showSubWallet2, setShowSubWallet2] = useState(false);
+interface SubWalletIndexProps {
+  walletParentId?: string
+}
+
+function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
   const [wallet2ParentId, setWallet2ParentId] = useState('');
   const [walletId, setGetWalletId] = useState('');
   const [getListId, setGetListId] = useState('');
@@ -24,9 +26,10 @@ function SubWalletIndex({ walletParentId }) {
     queryFn: getWalletService,
   });
 
-  const handleShowSubWallet = (id) => {
+  const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
+
+  const handleShowSubWallet = (id: string) => {
     setWallet2ParentId(id);
-    setShowSubWallet2(!showSubWallet2);
     if (showSubWallet2 === id) {
       return setShowSubWallet2(null);
     }
@@ -34,11 +37,11 @@ function SubWalletIndex({ walletParentId }) {
   };
 
   const navigate = useNavigate();
-  const handleLocation = (id) => {
+  const handleLocation = (id: string) => {
     navigate(`/workspace/wallet/${id}`);
   };
 
-  const handleListLocation = (id) => {
+  const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);
   };
 
@@ -109,13 +112,5 @@ function SubWalletIndex({ walletParentId }) {
     </div>
   );
 }
-
-SubWalletIndex.defaultProps = {
-  walletParentId: '',
-};
-
-SubWalletIndex.propTypes = {
-  walletParentId: PropTypes.string,
-};
 
 export default SubWalletIndex;

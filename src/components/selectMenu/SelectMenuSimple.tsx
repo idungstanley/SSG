@@ -10,8 +10,8 @@ interface IOption {
 
 interface SelectMenuSimpleProps {
   options: IOption[];
-  selectedId: string;
-  label: string;
+  selectedId?: string;
+  label?: string;
   onChange: (value: string) => void;
 }
 
@@ -113,8 +113,3 @@ export default function SelectMenuSimple({
     </Listbox>
   );
 }
-
-SelectMenuSimple.defaultProps = {
-  selectedId: null,
-  label: null,
-};

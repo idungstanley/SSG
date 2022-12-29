@@ -17,7 +17,7 @@ interface ComboBoxWithAvatarTypes {
   onChange: (value: string) => void;
   selectedKey: string;
   options: optionsDataType[];
-  hasNextPage: boolean;
+  hasNextPage?: boolean;
   fetchNextPage: () => void;
   isFetching: boolean;
 }
@@ -34,7 +34,7 @@ export default function ComboBoxWithAvatar({
 }: ComboBoxWithAvatarTypes) {
   const [sentryRef] = useInfiniteScroll({
     loading: isFetching,
-    hasNextPage,
+    hasNextPage: hasNextPage || false,
     onLoadMore: fetchNextPage,
     disabled: false,
     rootMargin: '0px 0px 800px 0px',
@@ -51,7 +51,9 @@ export default function ComboBoxWithAvatar({
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             onQueryChange(event.target.value)
           }
-          displayValue={(selected: string) => options.find((option) => option.id === selected)?.name || ''}
+          displayValue={(selected: string) =>
+            options.find((option) => option.id === selected)?.name || ''
+          }
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none">
           <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />

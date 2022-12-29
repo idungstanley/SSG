@@ -9,20 +9,18 @@ import {
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
-import FullScreenMessage from "../CenterMessage/FullScreenMessage";
+import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
+import { IInbox } from '../../features/inbox/inbox.interfaces';
+import { IHub } from '../../features/hubs/hubs.interfaces';
 
-interface itemsType {
-  id: string;
-  name: string;
-}
-
-interface itemsListType {
+interface ItemsListInSidebarProps {
   status: string;
   type: string;
-  items: itemsType[];
+  items?: IInbox[] | IHub[]
 }
-export default function ItemsListInSidebar({ items, status, type }: itemsListType) {
+
+export default function ItemsListInSidebar({ items, status, type }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
 
@@ -44,7 +42,7 @@ export default function ItemsListInSidebar({ items, status, type }: itemsListTyp
     );
   }
 
-  const handleClick = (id) => {
+  const handleClick = (id: string) => {
     const isMatch = id === currentItemId;
 
     if (isMatch) {
@@ -53,7 +51,7 @@ export default function ItemsListInSidebar({ items, status, type }: itemsListTyp
           setCurrentItem({
             currentItemId: id,
             currentItemType: type,
-          }),
+          })
         );
       } else {
         dispatch(resetCurrentItem());
@@ -63,14 +61,14 @@ export default function ItemsListInSidebar({ items, status, type }: itemsListTyp
         setCurrentItem({
           currentItemId: id,
           currentItemType: type,
-        }),
+        })
       );
     }
   };
 
   return status === 'success' ? (
     <ul className="w-full divide-y divide-gray-200">
-      {items.map((i) => (
+      {items?.map((i: { id: string, name: string }) => (
         <li key={i.id} className="flex flex-col">
           <div className="flex items-center justify-between hover:bg-gray-100">
             <div
@@ -116,7 +114,3 @@ export default function ItemsListInSidebar({ items, status, type }: itemsListTyp
     </ul>
   ) : null;
 }
-
-ItemsListInSidebar.defaultProps = {
-  items: [],
-};

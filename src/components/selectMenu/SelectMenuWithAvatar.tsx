@@ -2,7 +2,22 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { SelectorIcon } from '@heroicons/react/solid';
 import Badge from '../Badge';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
+
+export interface IOption {
+  id: string | null;
+  name: string;
+  avatar?: JSX.Element;
+  badge?: number | null;
+}
+
+interface SelectMenuWithAvatarProps {
+  options: IOption[];
+  selectedId: string | null;
+  label?: string;
+  onChange: (e: { id: string }) => void;
+  showSelectPlaceholder?: boolean;
+}
 
 interface OptionsType {
   id: string | null;
@@ -23,9 +38,9 @@ export default function SelectMenuWithAvatar({
   selectedId,
   label,
   onChange,
-  showSelectPlaceholder,
-}: withAvatarType) {
-  const [processedOptions, setProcessedOptions] = useState<OptionsType[]>([]);
+  showSelectPlaceholder = false,
+}: SelectMenuWithAvatarProps) {
+  const [processedOptions, setProcessedOptions] = useState<IOption[]>([]);
 
   useEffect(() => {
     if (showSelectPlaceholder) {
@@ -35,20 +50,31 @@ export default function SelectMenuWithAvatar({
     }
   }, [options]);
 
+  const item = processedOptions.find((item) => item.id === selectedId);
+
+  const handleChange = (e: string) => {
+    const value = JSON.parse(JSON.stringify(e));
+    onChange(value.id);
+  };
+
   return (
-    <Listbox value={selectedId} onChange={onChange}>
+    <Listbox value={selectedId} onChange={handleChange}>
       {({ open }) => (
         <>
-          {label && <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">{label}</Listbox.Label>}
+          {label && (
+            <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">
+              {label}
+            </Listbox.Label>
+          )}
           <div className="relative">
-            {processedOptions.find((item) => item.id === selectedId) && (
+            {item && (
               <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <span className="flex items-center">
-                  {processedOptions?.find((item) => item?.id === selectedId)?.avatar}
-                  <span className="block mx-3 truncate">{processedOptions?.find((item) => item?.id === selectedId)?.name}</span>
-                  {processedOptions?.find((item) => item?.id === selectedId)?.badge != null && (
+                  {item?.avatar}
+                  <span className="block mx-3 truncate">{item?.name}</span>
+                  {item?.badge != null && (
                     <Badge
-                      value={processedOptions?.find((item) => item?.id === selectedId)?.badge}
+                      value={item.badge}
                       textColour="text-red-800"
                       backgroundColour="bg-red-100"
                       textSize="text-xs"
@@ -57,7 +83,10 @@ export default function SelectMenuWithAvatar({
                   )}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 ml-3 pointer-events-none">
-                  <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                  <SelectorIcon
+                    className="w-5 h-5 text-gray-400"
+                    aria-hidden="true"
+                  />
                 </span>
               </Listbox.Button>
             )}
@@ -73,7 +102,12 @@ export default function SelectMenuWithAvatar({
                 {processedOptions.map((option) => (
                   <Listbox.Option
                     key={option.id}
-                    className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-6 w-full flex-1')}
+                    className={({ active }) =>
+                      classNames(
+                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        'cursor-default select-none relative py-2 pl-3 pr-6 w-full flex-1'
+                      )
+                    }
                     value={option}
                   >
                     {() => (
@@ -81,11 +115,15 @@ export default function SelectMenuWithAvatar({
                         <div className="flex">
                           {option.avatar}
                           <span
-                            className={classNames((selectedId === option.id) ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                            className={classNames(
+                              selectedId === option.id
+                                ? 'font-semibold'
+                                : 'font-normal',
+                              'ml-3 block truncate'
+                            )}
                           >
                             {option.name}
                           </span>
-
                         </div>
 
                         {option.badge != null && (
@@ -109,9 +147,3 @@ export default function SelectMenuWithAvatar({
     </Listbox>
   );
 }
-
-SelectMenuWithAvatar.defaultProps = {
-  selectedId: null,
-  label: null,
-  showSelectPlaceholder: false,
-};

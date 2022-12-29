@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import InputWithValidation from '../input/InputWithValidation';
+import { formikConfig } from '../Comments/components/componentType';
 
 interface checkboxType {
   id: string;
@@ -10,19 +11,9 @@ interface checkboxType {
 }
 
 interface formType {
-  onSubmit: (values: { email: string; password: string }) => void;
-  formikConfig: {
-    initValues: {
-      email: string;
-      password: string;
-    };
-    validationSchema: {
-      email: string;
-      password: string;
-    };
-    buttonTitle: string;
-  }
-  checkboxConfig: checkboxType[];
+  onSubmit: (values: { email: string; password: string }) => void
+  formikConfig: formikConfig
+  checkboxConfig: checkboxType[]
 }
 
 export default function Form({

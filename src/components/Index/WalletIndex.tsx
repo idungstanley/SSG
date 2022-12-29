@@ -9,24 +9,25 @@ import ListModal from '../../pages/workspace/Lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 
-interface walletIndexType {
+interface WalletIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
 }
-function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
+
+function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [showSubWallet, setShowSubWallet] = useState(false);
+  const [showSubWallet, setShowSubWallet] = useState<boolean | string>(false);
   const [walletId, setGetWalletId] = useState('');
   const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
   const navigate = useNavigate();
-  const handleLocation = (id) => {
+  const handleLocation = (id: string) => {
     navigate(`/workspace/wallet/${id}`);
   };
 
-  const handleShowSubWallet = (id) => {
+  const handleShowSubWallet = (id: string) => {
     setWalletParentId(id);
     setShowSubWallet(!showSubWallet);
     if (showSubWallet === id) {
@@ -72,16 +73,15 @@ function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
               <div className="flex items-center justify-end space-x-1">
                 <MenuDropdown />
                 <PlusDropDown
-                  onClick={() => setGetWalletId(wallet.id)}
-                  walletId={walletId}
+                  walletId={wallet.id}
                 />
               </div>
             </section>
             <div>
               <WalletModal
+                walletId={wallet.id}
                 walletVisible={showWalletModal}
                 onCloseWalletModal={() => setShowWalletModal(false)}
-                walletId={walletId}
               />
               {showSubWallet === wallet.id ? (
                 <SubWalletIndex
@@ -90,6 +90,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: walletIndexType) {
                 />
               ) : null}
               <ListModal
+                walletId={wallet.id}
                 listVisible={showListModal}
                 onCloseListModal={() => setShowListModal(false)}
               />

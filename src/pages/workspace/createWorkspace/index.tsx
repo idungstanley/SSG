@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
 import { useSelector } from 'react-redux';
@@ -12,33 +11,21 @@ import {
   AvatarBg,
   Button,
 } from '../../../components';
-// import { avatarBg, companySizeBtn } from './colors';
 import { createWorkspaceService } from '../../../features/workspace/workspaceService';
 import {
-  selectCurrentUser, setCurrentUser
+  selectCurrentUser,
+  setCurrentUser,
+  setCurrentWorkspace,
 } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
 
 function CreateWorkspace() {
-  const dispatch = useAppDispatch();
   const user = useSelector(selectCurrentUser);
+  const dispatch = useAppDispatch();
 
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: (successData) => {
-      localStorage.setItem(
-        'currentWorkspacename',
-        JSON.stringify(successData.data.workspace.name)
-      );
-      localStorage.setItem(
-        'currentWorkspaceSize',
-        JSON.stringify(successData.data.workspace.company_size)
-      );
-      localStorage.setItem(
-        'wsemail',
-        JSON.stringify(successData.data.workspace.emails)
-      );
-
       localStorage.setItem(
         'user',
         JSON.stringify({
@@ -50,13 +37,19 @@ function CreateWorkspace() {
         'currentWorkspaceId',
         JSON.stringify(successData.data.workspace.id)
       );
-      if(user){
-        dispatch(
-        setCurrentUser({
-          ...user,
-          default_workspace_id: successData?.data?.workspace?.id,
+
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: successData.data.workspace.id,
         })
       );
+      if (user) {
+        dispatch(
+          setCurrentUser({
+            ...user,
+            default_workspace_id: successData.data.workspace.id,
+          })
+        );
       }
     },
   });
@@ -80,10 +73,10 @@ function CreateWorkspace() {
 
   const { name, email } = formState;
 
-  const emails = email.split(' ');
+  const emails = email.length ? email.split(' ') : null;
 
-  const onSubmit = async () => {
-    await createWSMutation.mutateAsync({
+  const onSubmit = () => {
+    createWSMutation.mutate({
       name,
       emails,
       companySize,

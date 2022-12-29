@@ -2,11 +2,11 @@ import React from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 
-interface Iprops {
-  placeholder: string
+interface SearchProps {
+  placeholder: string;
 }
 
-function Search({ placeholder}: Iprops) {
+function Search({ placeholder }: SearchProps) {
   return (
     <div className="relative flex items-stretch flex-grow bg-gray-500 rounded-md shadow-sm">
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

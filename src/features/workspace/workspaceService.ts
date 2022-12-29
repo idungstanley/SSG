@@ -1,13 +1,12 @@
-// import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-interface Idata {
-  name: string | number
-  companySize: string | number
-  emails: string[]
+interface IData {
+  name: string | number;
+  companySize: string | number;
+  emails: string[] | null;
 }
 
-export const createWorkspaceService = (data: Idata) => {
+export const createWorkspaceService = (data: IData) => {
   const response = requestNew(
     {
       url: 'workspace',
@@ -18,16 +17,19 @@ export const createWorkspaceService = (data: Idata) => {
         emails: data.emails,
       },
     },
-    true,
+    true
   );
   return response;
 };
 
 export const getWorkspaceService = async () => {
-  const response = requestNew({
-    url: 'workspace',
-    method: 'GET',
-  }, true);
+  const response = requestNew(
+    {
+      url: 'workspace',
+      method: 'GET',
+    },
+    true
+  );
   return response;
 };
 
@@ -37,7 +39,7 @@ export const checkIfWorkspaceService = async () => {
       url: 'user/self',
       method: 'GET',
     },
-    true,
+    true
   );
   return response;
 };

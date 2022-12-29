@@ -1,20 +1,22 @@
 import { Menu, Transition } from '@headlessui/react';
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
 
-interface menuItemsType {
-  id: string;
-  title: string;
-  type: string;
-  onClick: string | React.MouseEventHandler<HTMLButtonElement>;
+interface MenuWithTransitionProps {
+  icon: JSX.Element;
+  menuItems: {
+    id: number;
+    type: string;
+    title: string;
+    onClick: (() => void) | string;
+  }[];
 }
-interface MenuWithTransitionType {
-  icon: JSX.Element | string;
-  menuItems: menuItemsType[];
-}
-export default function MenuWithTransition({ icon, menuItems }: MenuWithTransitionType) {
+
+export default function MenuWithTransition({
+  icon,
+  menuItems,
+}: MenuWithTransitionProps) {
   return (
     <Menu as="div" className="relative">
       <div>
@@ -34,28 +36,32 @@ export default function MenuWithTransition({ icon, menuItems }: MenuWithTransiti
         <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {menuItems.map((i) => (
             <Menu.Item key={i.id}>
-              {({ active }) => (i.type === 'button' ? (
-                <button
-                  type="button"
-                  onClick={i.onClick}
-                  className={classNames(
-                    active ? 'bg-gray-100' : '',
-                    'block px-4 py-2 text-sm text-left text-gray-700 w-full',
-                  )}
-                >
-                  {i.title}
-                </button>
-              ) : (
-                <Link
-                  to={i.onClick}
-                  className={classNames(
-                    active ? 'bg-gray-100' : '',
-                    'block px-4 py-2 text-sm text-gray-700 text-left',
-                  )}
-                >
-                  {i.title}
-                </Link>
-              ))}
+              {({ active }) =>
+                i.type === 'button' && typeof i.onClick !== 'string' ? (
+                  <button
+                    type="button"
+                    onClick={i.onClick}
+                    className={classNames(
+                      active ? 'bg-gray-100' : '',
+                      'block px-4 py-2 text-sm text-left text-gray-700 w-full'
+                    )}
+                  >
+                    {i.title}
+                  </button>
+                ) : typeof i.onClick === 'string' ? (
+                  <Link
+                    to={i.onClick}
+                    className={classNames(
+                      active ? 'bg-gray-100' : '',
+                      'block px-4 py-2 text-sm text-gray-700 text-left'
+                    )}
+                  >
+                    {i.title}
+                  </Link>
+                ) : (
+                  <></>
+                )
+              }
             </Menu.Item>
           ))}
         </Menu.Items>
@@ -63,8 +69,3 @@ export default function MenuWithTransition({ icon, menuItems }: MenuWithTransiti
     </Menu>
   );
 }
-
-MenuWithTransition.propTypes = {
-  icon: PropTypes.object.isRequired,
-  menuItems: PropTypes.array.isRequired,
-};

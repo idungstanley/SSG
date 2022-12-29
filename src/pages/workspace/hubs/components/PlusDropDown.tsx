@@ -18,10 +18,9 @@ import { classNames } from '../../../../utils';
 
 interface PlusDropDownProps {
   walletId: string;
-  onClick: ()=> void;
 }
 
-function PlusDropDown({ walletId, onClick }: PlusDropDownProps) {
+function PlusDropDown({ walletId}: PlusDropDownProps) {
   const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
   const [showListModal, setShowListModal] = useState<boolean>(false);
 
@@ -41,7 +40,7 @@ function PlusDropDown({ walletId, onClick }: PlusDropDownProps) {
       <Menu as="div" className="">
         <div>
           <Menu.Button className="flex mt-4 text-sm text-gray-400 ">
-            <PlusOutlined className="w-6 h-6" aria-hidden="true" onClick= {onClick} />
+            <PlusOutlined className="w-6 h-6" aria-hidden="true" />
           </Menu.Button>
         </div>
         <Transition

@@ -1,5 +1,4 @@
 import React, { LegacyRef } from 'react';
-import PropTypes from 'prop-types';
 import { FileIcon } from '../../../../../common';
 import { OutputDateTime, OutputFileSize } from '../../../../../app/helpers';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -111,13 +110,3 @@ export default function Table({
     </table>
   );
 }
-
-Table.propTypes = {
-  checkbox: PropTypes.object.isRequired,
-  checked: PropTypes.bool.isRequired,
-  toggleAll: PropTypes.func.isRequired,
-  sortedItems: PropTypes.array.isRequired,
-  selectedItems: PropTypes.array.isRequired,
-  handleChangeItem: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired,
-};

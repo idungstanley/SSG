@@ -1,6 +1,5 @@
 import React from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
 import { Button } from '../../../components';
 
 interface navProps {

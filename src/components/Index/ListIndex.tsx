@@ -5,17 +5,17 @@ import { useGetHub } from '../../features/hubs/hubService';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
 
-interface listIndexType {
-  showHubList: boolean;
-  getCurrentHubId: string | null;
+interface ListIndexProps {
+  showHubList: boolean
+  getCurrentHubId: string | null
 }
 
-function ListIndex({ showHubList, getCurrentHubId }: listIndexType) {
+function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
   const [getListId, setGetListId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
- const handleListLocation = (id) => {
+ const handleListLocation = (id: string) => {
    navigate(`/workspace/list/${id}`);
  };
 

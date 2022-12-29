@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const requestNew = async (
   options: Record<string, unknown>,
@@ -13,11 +12,10 @@ const requestNew = async (
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
 
-  const headers = accessToken &&
-    currentWorkspaceId && {
-      Authorization: `Bearer ${accessToken}`,
-      current_workspace_id: currentWorkspaceId,
-    };
+  const headers = accessToken && {
+    Authorization: `Bearer ${accessToken}`,
+    current_workspace_id: currentWorkspaceId,
+  };
 
   const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,
@@ -25,13 +23,13 @@ const requestNew = async (
   });
 
   // request handler
-  const onSuccess = (response) => {
+  const onSuccess = (response: AxiosResponse) => {
     const { data } = response;
     return data;
   };
 
   // error handler
-  function onError(error) {
+  function onError(error: AxiosError) {
     return Promise.reject(error.response);
   }
 

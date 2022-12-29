@@ -20,23 +20,25 @@ import {
 } from '../../../../features/task/taskService';
 import { getListsDetailsService } from '../../../../features/list/listService';
 import SubTask from '../../subtasks/subtask1/SubTask';
-import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
+// import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
 import ListNav from './renderlist/ListNav';
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
   const [parentTaskId, setParentTaskId] = useState('');
-  const [subTaskOne, setSubTaskOne] = useState(false);
+  const [subTaskOne, setSubTaskOne] = useState<boolean | string>(false);
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('taskdata');
+      queryClient.invalidateQueries(['taskdata']);
       setAddNewItem(!addNewItem);
     },
   });
-  const { data: listChildrenData } = useQuery({
+  const { data: listChildrenData } = useQuery<{
+    data: { tasks: { id: string; name: string }[] };
+  }>({
     queryKey: ['listData_bylistId', listId],
     queryFn: getTaskListService,
   });
@@ -52,7 +54,7 @@ function RenderList() {
 
   const [formState, setFormState] = useState(defaultTaskFormState);
 
-  const handleTaskChange = (e) => {
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
@@ -68,17 +70,17 @@ function RenderList() {
     });
   };
 
-  const handleSubTask = (id) => {
+  const handleSubTask = (id: string) => {
     setParentTaskId(id);
     setSubTaskOne(!subTaskOne);
     if (subTaskOne === id) {
-      return setSubTaskOne(null);
+      return setSubTaskOne(false);
     }
     setSubTaskOne(id);
   };
 
   const navigate = useNavigate();
-  const handleTaskModal = (id) => {
+  const handleTaskModal = (id: string) => {
     setOpenTaskModal(true);
     navigate(`/workspace/t/${id}`);
   };
@@ -93,7 +95,7 @@ function RenderList() {
           changeViews="View"
         />
       </section>
-      <section id="listcard" className="mt-3 p-3">
+      <section className="mt-3 p-3">
         <div className="block p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <div id="listTitle" className="flex justify-between items-center">
             <div className="flex items-center justify-center space-x-2 text-gray-400">
@@ -130,7 +132,7 @@ function RenderList() {
           </section>
           {/* card */}
           {listChildrenData?.data?.tasks?.map((task) => (
-            <>
+            <div key={task.id}>
               <div className="bg-white border border-gray-100 rounded-lg px-2 py-1 flex  items-center">
                 <div className="flex items-center w-6/12">
                   {/* data and input */}
@@ -192,7 +194,7 @@ function RenderList() {
                   <SubTask parentTaskId={parentTaskId} />
                 </div>
               ) : null}
-            </>
+            </div>
           ))}
           {/* toggle */}
           {addNewItem && (
@@ -203,7 +205,7 @@ function RenderList() {
                   <input
                     type="text"
                     name="name"
-                    onChange={handleTaskChange}
+                    onChange={(e) => handleTaskChange(e)}
                     placeholder="Click to add task"
                     className="outline-none border-0"
                   />
@@ -234,7 +236,6 @@ function RenderList() {
                   buttonStyle="primary"
                   onClick={onSubmit}
                   // loading={loginMutation.status === 'loading'}
-                  type="submit"
                   label="Save"
                   padding="py-2 px-4"
                   height="h-7"

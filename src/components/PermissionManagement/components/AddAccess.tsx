@@ -1,4 +1,5 @@
 import React from 'react';
+import { ISelectedData } from '..';
 import { useAppSelector } from '../../../app/hooks';
 import { useGetTeamMembersOrGroups } from '../../../features/inbox/inboxSettingsService';
 import { useAddAccessForData } from '../../../features/permissions/permissionsService';
@@ -21,9 +22,12 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
   const data = dt?.pages.flatMap(
     (page) => page.data.team_members || page.data.team_member_groups
   );
-  const dataList = data?.map((i) => ({
+  const dataList: ISelectedData[] | undefined = data?.map((i) => ({
     id: i.id,
     name: i.name || i.user.name,
+    email: i.user?.email,
+    accessLevel: i.id,
+    type: itemType,
   }));
 
   const { mutate: onAdd } = useAddAccessForData(type, selectedItemId);
@@ -32,13 +36,15 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
     (i) => !actualDataIds.includes(i.id)
   );
 
-  const onAddAccess = (value: { id: string; name: string }) => {
-    onAdd({
-      dataId: selectedItemId,
-      accessToId: value.id,
-      type,
-      itemType,
-    });
+  const onAddAccess = (value: ISelectedData | null) => {
+    if (value) {
+      onAdd({
+        dataId: selectedItemId,
+        accessToId: value.id,
+        type,
+        itemType,
+      });
+    }
   };
 
   return dataListWithoutActual?.length ? (
@@ -47,8 +53,8 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
 
       <SelectMenuTeamMembers
         teamMembers={dataListWithoutActual}
-        selectedData={''}
         setSelectedData={onAddAccess}
+        selectedData={null}
         title={`Select team ${itemType.replace('-', ' ')}:`}
       />
     </>

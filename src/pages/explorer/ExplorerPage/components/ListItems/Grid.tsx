@@ -1,5 +1,4 @@
 import React, { LegacyRef } from 'react';
-import PropTypes from 'prop-types';
 import { OutputDateTime } from '../../../../../app/helpers';
 import { FileIcon } from '../../../../../common';
 import { IItem } from '../ListItems';
@@ -87,13 +86,3 @@ export default function Grid({
     </>
   );
 }
-
-Grid.propTypes = {
-  checkbox: PropTypes.object.isRequired,
-  checked: PropTypes.bool.isRequired,
-  toggleAll: PropTypes.func.isRequired,
-  sortedItems: PropTypes.array.isRequired,
-  selectedItems: PropTypes.array.isRequired,
-  handleChangeItem: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired,
-};

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { OutputFileSize } from '../../../app/helpers';
+import { useAppSelector } from '../../../app/hooks';
 import { FileIcon, Spinner } from '../../../common';
 import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
@@ -9,7 +10,7 @@ import MenuDropdown from '../../Dropdown/DropdownForWorkspace';
 
 export default function InboxIndex() {
   const dispatch = useDispatch();
-  const { currentItemId } = useSelector((state) => state.workspace);
+  const { currentItemId } = useAppSelector((state) => state.workspace);
   const { status, data: dt } = useGetInboxFiles({
     inboxId: currentItemId,
     isArchived: false,
@@ -39,7 +40,7 @@ export default function InboxIndex() {
   }
 
   return status === 'success' ? (
-    !data.length ? (
+    !data?.length ? (
       <div className="my-12">
         <FullScreenMessage
           title="No files yet"

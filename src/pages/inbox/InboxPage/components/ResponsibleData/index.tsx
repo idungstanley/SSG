@@ -10,6 +10,7 @@ import {
 } from '../../../../../features/inbox/inboxService';
 import ListItems from './ListItems';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
+import { ISelectedData } from '../../../../../components/PermissionManagement';
 
 interface ResponsibleDataProps {
   setShowModal: (i: boolean) => void;
@@ -21,10 +22,7 @@ export default function ResponsibleData({
   isGroups,
 }: ResponsibleDataProps) {
   const { inboxId } = useParams();
-  const [selectedData, setSelectedData] = useState<{
-    name: string;
-    id: string;
-  } | null>(null);
+  const [selectedData, setSelectedData] = useState<ISelectedData | null>(null);
   const { data, status } = isGroups
     ? useGetTeamMemberGroups(0)
     : useGetTeamMembers({ page: 0, query: '' });
@@ -72,13 +70,15 @@ export default function ResponsibleData({
     );
   }
 
-  const handleChange = (item: { name: string; id: string }) => {
+  const handleChange = (item: ISelectedData | null) => {
     setSelectedData(item);
-    onCreate({
-      dataId: item.id,
-      isGroups,
-      inboxId,
-    });
+    if (item) {
+      onCreate({
+        dataId: item.id,
+        isGroups,
+        inboxId,
+      });
+    }
   };
 
   return (
@@ -96,7 +96,10 @@ export default function ResponsibleData({
           <SelectMenuTeamMembers
             teamMembers={filteredData.map((i) => ({
               id: i.id,
-              name: isGroups ? i.name : i.user?.name,
+              name: i.name || i.user.name,
+              email: i.user?.email,
+              accessLevel: i.id,
+              type: isGroups ? 'member-group' : 'member',
             }))}
             selectedData={selectedData}
             setSelectedData={handleChange}

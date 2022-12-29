@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 interface avatarType {
-  colour: string;
-  size: number;
+  colour?: string;
+  size?: number;
   onClick: () => void;
 }
 
-function AvatarBg({ colour, size, onClick }: avatarType) {
+function AvatarBg({ colour = '#4ADE80', size = 2.5, onClick }: avatarType) {
   return (
     <button
       type="button"
@@ -17,16 +16,5 @@ function AvatarBg({ colour, size, onClick }: avatarType) {
     />
   );
 }
-
-AvatarBg.defaultProps = {
-  size: 2.5,
-  colour: '#4ADE80',
-};
-
-AvatarBg.propTypes = {
-  colour: PropTypes.string,
-  size: PropTypes.number,
-  onClick: PropTypes.func.isRequired,
-};
 
 export default AvatarBg;

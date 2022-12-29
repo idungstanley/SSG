@@ -1,6 +1,14 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { classNames } from "../../utils";
+import { classNames } from '../../utils';
+import { ISelectedData } from '../PermissionManagement';
+
+interface SelectMenuTeamMembersProps {
+  teamMembers: ISelectedData[];
+  selectedData: ISelectedData | null;
+  setSelectedData: (value: ISelectedData | null) => void;
+  title: string;
+}
 
 interface teamMembersType {
   id: string;
@@ -21,13 +29,13 @@ export default function SelectMenuTeamMembers({
   selectedData,
   setSelectedData,
   title,
-}: SelectMenuTeamMembersType) {
+}: SelectMenuTeamMembersProps) {
   if (!teamMembers.length) {
     return null;
   }
 
   return (
-    <Listbox value={selectedData} onChange={setSelectedData}>
+    <Listbox value={selectedData} onChange={(e) => setSelectedData(e)}>
       {({ open }) => (
         <div>
           <Listbox.Label className="block text-sm font-medium text-gray-700">
@@ -66,17 +74,19 @@ export default function SelectMenuTeamMembers({
                 {teamMembers.map((person) => (
                   <Listbox.Option
                     key={person.id}
-                    className={({ active }) => classNames(
-                      active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                      'relative cursor-default select-none py-2 pl-3 pr-9',
-                    )}
+                    className={({ active }) =>
+                      classNames(
+                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                      )
+                    }
                     value={person}
                   >
-                    {( { selected }) => (
+                    {({ selected }) => (
                       <span
                         className={classNames(
                           selected ? 'font-semibold' : 'font-normal',
-                          'block truncate',
+                          'block truncate'
                         )}
                       >
                         {person.name}
