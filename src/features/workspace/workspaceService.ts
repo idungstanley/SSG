@@ -3,7 +3,7 @@ import requestNew from '../../app/requestNew';
 interface IData {
   name: string | number
   companySize: string | number
-  emails: string[]
+  emails: string[] | null
 }
 
 export const createWorkspaceService = (data: IData) => {

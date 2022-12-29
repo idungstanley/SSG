@@ -73,7 +73,7 @@ function CreateWorkspace() {
 
   const { name, email } = formState;
 
-  const emails = email.split(' ');
+  const emails = email.length ? email.split(' ') : null;
 
   const onSubmit = () => {
     createWSMutation.mutate({

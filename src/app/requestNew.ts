@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const requestNew = async (
   options: Record<string, unknown>,
@@ -24,13 +23,13 @@ const requestNew = async (
   });
 
   // request handler
-  const onSuccess = (response: any) => {
+  const onSuccess = (response: AxiosResponse) => {
     const { data } = response;
     return data;
   };
 
   // error handler
-  function onError(error: any) {
+  function onError(error: AxiosError) {
     return Promise.reject(error.response);
   }
 
