@@ -22,7 +22,7 @@ import {
   AddTaskWatcherService,
   GetTaskWatcherService,
 } from '../../../../features/task/taskService';
-import TimeEntriesDropdown from './DropDown/TimeEntriesDropdown';
+import TimeEntriesDropdown from './dropdown/TimeEntriesDropdown';
 
 function RenderTaskModal() {
   const { taskId } = useParams();
@@ -76,16 +76,16 @@ function RenderTaskModal() {
 
   const endClockTimer = useMutation(EndTimeEntriesService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('timeclock');
+      queryClient.invalidateQueries();
     },
   });
 
-  const onSubmit = async () => {
-    await endClockTimer.mutateAsync({
-      description,
-      isBillable: isBillable === false ? 0 : 1,
-    });
-  };
+  // const onSubmit = async () => {
+  //   await endClockTimer.mutateAsync({
+  //     description,
+  //     isBillable: isBillable === false ? 0 : 1,
+  //   });
+  // };
 
   const navigate = useNavigate();
   const closeTaskModal = () => {
@@ -235,7 +235,7 @@ function RenderTaskModal() {
                             setIsBillable={setIsBillable}
                             setFormState={setFormState}
                             formState={formState}
-                            onSubmit={onSubmit}
+                            // onSubmit={onSubmit}
                             handleTimeTracker={handleTimeTracker}
                           />
                         )}
@@ -281,13 +281,7 @@ function RenderTaskModal() {
                 <p>{taskData?.data?.task?.name.toUpperCase()}</p>
               </div>
               <section id="description">
-                <textarea
-                  name="taskdesc"
-                  id=""
-                  cols="75"
-                  rows="10"
-                  className="h-56"
-                />
+                <textarea name="taskdesc" id="" className="h-56" />
               </section>
               <div className="h-64 invisible">
                 <p>testing</p>

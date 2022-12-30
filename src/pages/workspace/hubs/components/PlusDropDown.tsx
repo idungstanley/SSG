@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
-import ListModal from '../../Lists/components/ListModal';
+import ListModal from '../../lists/components/ListModal';
 import { classNames } from '../../../../utils';
 
 interface PlusDropDownProps {

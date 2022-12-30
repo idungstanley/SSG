@@ -15,6 +15,18 @@ import { GetTimeEntriesService } from '../../../../../features/task/taskService'
 import { AvatarWithInitials } from '../../../../../components';
 import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
 
+interface TimeEntriesDropdownProps {
+  taskId: string | undefined;
+  startTimeClicked: boolean;
+  showEntries: boolean;
+  setShowEntries: (value: boolean) => void;
+  isBillable: boolean;
+  setIsBillable: (value: boolean) => void;
+  setFormState: any;
+  formState: Record<string, unknown>;
+  handleTimeTracker: () => void;
+}
+
 function TimeEntriesDropdown({
   taskId,
   startTimeClicked,
@@ -25,14 +37,14 @@ function TimeEntriesDropdown({
   setFormState,
   formState,
   handleTimeTracker,
-}) {
+}: TimeEntriesDropdownProps) {
   const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
   const { data: getEntries } = useQuery({
     queryKey: ['getTimeEntries', taskId],
     queryFn: GetTimeEntriesService,
   });
 
-  const handleEndTimeChange = (e) => {
+  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
@@ -42,9 +54,10 @@ function TimeEntriesDropdown({
   const handleUpdateEntry = (id) => {
     setOpenUpdateEntry(!openUpdateEntry);
     if (openUpdateEntry === id) {
-      setOpenUpdateEntry(null);
+      setOpenUpdateEntry(false);
+    } else {
+      setOpenUpdateEntry(id);
     }
-    setOpenUpdateEntry(id);
   };
 
   const totalDuration = getEntries?.data?.total_duration;
