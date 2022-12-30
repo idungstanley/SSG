@@ -21,7 +21,7 @@ interface DetailsProps {
 export default function Details({ item, type }: DetailsProps) {
   const [showPopup, setShowPopup] = useState(false);
 
-  const title = item.name || item.file.name || item.display_name || item.folder.name;
+  const title = item.display_name || item.name || item.file.name || item.folder.name;
   const size = type === 'file' ? item.size : null;
   const extension = type === 'file' ? title.split('.').at(-1) : 'folder';
 

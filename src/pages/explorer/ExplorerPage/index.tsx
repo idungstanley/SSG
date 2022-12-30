@@ -6,7 +6,10 @@ import '@uppy/dashboard/dist/style.css';
 import Toolbar from './components/Toolbar';
 import { Breadcrumb } from '../../../components';
 import CreateFolderSlideOver from './components/SlideOvers/CreateFolderSlideOver';
-import { useGetFolder } from '../../../features/explorer/explorerService';
+import {
+  useGetExplorerFilesAndFolders,
+  useGetFolder,
+} from '../../../features/explorer/explorerService';
 import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import ExplorerTable from './components/ListItems';
 import UploadModal from '../../../components/UploadModal';
@@ -15,7 +18,8 @@ import { useAppSelector } from '../../../app/hooks';
 export default function ExplorerPage() {
   const { folderId } = useParams();
 
-  const { data: currentFolder } = useGetFolder(folderId);
+  const { isSuccess } = useGetExplorerFilesAndFolders();
+  const { data } = useGetFolder(folderId, isSuccess);
 
   const { showRenameFileSlideOver, showCreateFolderSlideOver } = useAppSelector(
     (state) => state.slideOver
@@ -29,24 +33,26 @@ export default function ExplorerPage() {
           <Toolbar />
         </div>
 
-        <Breadcrumb
-          pages={
-            currentFolder?.ancestors
-              ? [
-                  ...currentFolder.ancestors.map((ancestor) => ({
-                    name: ancestor.name,
-                    current: false,
-                    href: `/explorer/${ancestor.id}`,
-                  })),
-                  ...[{ name: currentFolder.name, current: true, href: null }],
-                ]
-              : [{ name: 'Home', current: true, href: null }]
-          }
-          rootIcon={
-            <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
-          }
-          rootIconHref="/explorer"
-        />
+        {data ? (
+          <Breadcrumb
+            pages={
+              data?.ancestors
+                ? [
+                    ...data.ancestors.map((ancestor) => ({
+                      name: ancestor.name,
+                      current: false,
+                      href: `/explorer/${ancestor.id}`,
+                    })),
+                    ...[{ name: data.name, current: true, href: null }],
+                  ]
+                : [{ name: 'Home', current: true, href: null }]
+            }
+            rootIcon={
+              <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+            }
+            rootIconHref="/explorer"
+          />
+        ) : null}
 
         <div className="flex-1 overflow-y-scroll relative overflow-x-none bg-white align-middle min-w-full overflow-hidden h-full">
           <ExplorerTable />
