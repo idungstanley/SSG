@@ -1,16 +1,15 @@
 import {
-  IExplorerFile,
   IExplorerFilesAndFolders,
-  IExplorerFolder,
 } from './explorer.interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IExplorerAndSharedData } from '../shared/shared.interfaces';
 
 // Get folder
 export const useGetFolder = (folderId?: string | null) => {
   const queryClient = useQueryClient();
 
-  return useQuery<IExplorerFolder | undefined>(
+  return useQuery<IExplorerAndSharedData | undefined>(
     ['explorer_folder', folderId],
     () => queryClient.getQueryData(['explorer_folder', folderId]),
     {
@@ -25,7 +24,7 @@ export const useGetFolder = (folderId?: string | null) => {
 export const useGetFile = (fileId?: string | null) => {
   const queryClient = useQueryClient();
 
-  return useQuery<IExplorerFile | undefined>(
+  return useQuery<IExplorerAndSharedData | undefined>(
     ['explorer_file', fileId],
     () => queryClient.getQueryData(['explorer_file', fileId]),
     {

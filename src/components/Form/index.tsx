@@ -5,15 +5,19 @@ import { formikConfig } from '../Comments/components/componentType';
 
 interface checkboxType {
   id: string;
-  value: string;
+  value: boolean;
   onChange: () => void;
   label: string;
 }
 
 interface formType {
-  onSubmit: (values: { email: string; password: string }) => void
-  formikConfig: formikConfig
-  checkboxConfig: checkboxType[]
+  onSubmit: (values: {
+    email: string;
+    password: string;
+    name?: string;
+  }) => void;
+  formikConfig: formikConfig;
+  checkboxConfig: checkboxType[];
 }
 
 export default function Form({
@@ -59,7 +63,7 @@ export default function Form({
                   id={i.id}
                   name={i.id}
                   type="checkbox"
-                  value={i.value}
+                  value={String(i.value)}
                   onChange={i.onChange}
                   className="w-4 h-4 text-indigo-600 border-gray-300 rounded cursor-pointer ring-0 focus:ring-0"
                 />

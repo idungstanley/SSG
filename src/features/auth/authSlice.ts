@@ -13,7 +13,7 @@ const CurrentUserIdFromLS = JSON.parse(
   localStorage.getItem('currentUserId') || 'null'
 );
 
-interface IUser {
+export interface IUser {
   avatar_path: null | string;
   colour: string;
   default_workspace_id: string;

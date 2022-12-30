@@ -225,7 +225,7 @@ export default function ExplorerTable() {
     />
   ) : (
     <div className="flex flex-col h-full px-3 md:px-0">
-      {selectedItemId ? (
+      {(selectedItemId && item && selectedItemType) ? (
         <ItemPreviewSidebar item={item} type={selectedItemType} />
       ) : null}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">

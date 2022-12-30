@@ -27,7 +27,8 @@ function RenameItemSlideOver() {
     : useGetFolder(selectedItemId);
 
   const [itemName, setItemName] = useState(
-    item ? ('display_name' in item ? item.display_name.split('.').slice(0, -1).join('') : 'name' in item ? item.name : '') : ''
+    item?.name || item?.display_name.split('.').slice(0, -1).join('')
+    // item ? ('display_name' in item ? item.display_name.split('.').slice(0, -1).join('') : 'name' in item ? item.name : '') : ''
   );
 
   const { mutateAsync: onRename } = useRenameItem();

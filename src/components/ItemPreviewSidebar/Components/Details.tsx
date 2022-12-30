@@ -11,44 +11,24 @@ import { useGetFilteredTeamMembers } from '../../../features/permissions/permiss
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import { useAppSelector } from '../../../app/hooks';
+import { IExplorerAndSharedData} from '../../../features/shared/shared.interfaces';
 
-interface itemType {
-  id: string;
-  display_name: string;
-  name: string;
-  shared_by: {
-    user: {
-      name: string;
-      email: string;
-    };
-  };
-  updated_at: string;
-  created_at: string;
-  size: number | null;
-  file: {
-    display_name: string;
-    name: string;
-    size: number | null;
-  };
-  folder: {
-    name: string;
-  };
-}
-interface detailsType {
-  item: itemType;
-  type: string;
+interface DetailsProps {
+  item: IExplorerAndSharedData;
+  type: 'folder' | 'file';
 }
 
-export default function Details({ item, type }: detailsType) {
+export default function Details({ item, type }: DetailsProps) {
   const [showPopup, setShowPopup] = useState(false);
-  const title = type === 'file' ? (item.display_name || item.file.display_name) : (item.name || item.folder.name);
-  const size = type === 'file' ? (item.size || item.file.size) : null;
-  const extension: string | undefined = type === 'file' ? title.split('.').at(-1) : 'folder';
+
+  const title = item.name || item.file.name || item.display_name || item.folder.name;
+  const size = type === 'file' ? item.size : null;
+  const extension = type === 'file' ? title.split('.').at(-1) : 'folder';
 
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId);
 
-  const onClickUser = async (id) => {
+  const onClickUser = async (id: string) => {
     if (id) {
       try {
         const request = await requestNew({

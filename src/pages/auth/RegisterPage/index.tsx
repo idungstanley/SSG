@@ -14,6 +14,7 @@ import InviteDetails from './components/InviteDetails';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
+import { formikConfig } from '../../../components/Comments/components/componentType';
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -65,9 +66,9 @@ function RegisterPage() {
     },
   });
 
-  const onSubmit = (values: {name: string, email: string, password: string}) => {
+  const onSubmit = (values: {name?: string, email: string, password: string}) => {
     registerMutation.mutate({
-      name: values.name,
+      name: values.name || '',
       email: values.email,
       password: values.password,
       // inviteCode
@@ -101,7 +102,7 @@ function RegisterPage() {
     console.log(error);
   };
 
-  const formikConfig = {
+  const formikConfig: formikConfig = {
     initValues: {
       name: '',
       email: '',

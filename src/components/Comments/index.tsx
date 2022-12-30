@@ -15,7 +15,7 @@ const regex = /@[\S]*/g;
 
 interface CommentsProps {
   itemId: string;
-  type: commentsType | string;
+  type: commentsType;
 }
 
 export default function Comments({ itemId, type }: CommentsProps) {

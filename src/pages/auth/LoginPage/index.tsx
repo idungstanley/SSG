@@ -2,13 +2,17 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
   loginService,
   loginGoogleService,
 } from '../../../features/auth/authService';
-import { setAuthData } from '../../../features/auth/authSlice';
+import { IUser, setAuthData } from '../../../features/auth/authSlice';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
@@ -17,53 +21,75 @@ import { formikConfig } from '../../../components/Comments/components/componentT
 function LoginPage() {
   const dispatch = useDispatch();
 
+  const saveUserData = (data: {
+    user: IUser;
+    token: { accessToken: string; token: { user_id: string } };
+  }) => {
+    localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem('accessToken', JSON.stringify(data.token.accessToken));
+    localStorage.setItem('currentWorkspaceId', JSON.stringify(data.user));
+    localStorage.setItem(
+      'currentUserId',
+      JSON.stringify(data.token.token.user_id)
+    );
+
+    dispatch(
+      setAuthData({
+        user: data.user,
+        accessToken: data.token.accessToken,
+        currentWorkspaceId: data.user.default_workspace_id,
+        currentUserId: data.token.token.user_id,
+      })
+    );
+  };
+
   const loginMutation = useMutation(loginService, {
     onSuccess: (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
-      );
-      localStorage.setItem(
-        'currentUserId',
-        JSON.stringify(successData.data.token.token.user_id)
-      );
-
-      dispatch(
-        setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
-        })
-      );
+      saveUserData(successData.data);
+      // localStorage.setItem('user', JSON.stringify(successData.data.user));
+      // localStorage.setItem(
+      //   'accessToken',
+      //   JSON.stringify(successData.data.token.accessToken)
+      // );
+      // localStorage.setItem(
+      //   'currentWorkspaceId',
+      //   JSON.stringify(successData.data.user.default_workspace_id)
+      // );
+      // localStorage.setItem(
+      //   'currentUserId',
+      //   JSON.stringify(successData.data.token.token.user_id)
+      // );
+      // dispatch(
+      //   setAuthData({
+      //     user: successData.data.user,
+      //     accessToken: successData.data.token.accessToken,
+      //     currentWorkspaceId: successData.data.user.default_workspace_id,
+      //     currentUserId: successData.data.token.token.user_id,
+      //   })
+      // );
     },
   });
 
   const loginGoogleMutation = useMutation(loginGoogleService, {
     onSuccess: (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
-      );
-
-      dispatch(
-        setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
-        })
-      );
+      saveUserData(successData.data);
+      // localStorage.setItem('user', JSON.stringify(successData.data.user));
+      // localStorage.setItem(
+      //   'accessToken',
+      //   JSON.stringify(successData.data.token.accessToken)
+      // );
+      // localStorage.setItem(
+      //   'currentWorkspaceId',
+      //   JSON.stringify(successData.data.user.default_workspace_id)
+      // );
+      // dispatch(
+      //   setAuthData({
+      //     user: successData.data.user,
+      //     accessToken: successData.data.token.accessToken,
+      //     currentWorkspaceId: successData.data.user.default_workspace_id,
+      //     currentUserId: successData.data.token.token.user_id,
+      //   })
+      // );
     },
   });
 
@@ -85,7 +111,9 @@ function LoginPage() {
     gapi.load('client:auth2', start);
   }, []);
 
-  const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+  const handleGoogleLogin = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
     if (response.code) {
       loginGoogleMutation.mutate({
         code: response.code,

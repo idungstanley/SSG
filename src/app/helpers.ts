@@ -29,7 +29,7 @@ export async function GetFileWithHeaders(type: string, id: string) {
   return data;
 }
 
-export async function DownloadFile(type: string, id: string, name: string) {
+export async function DownloadFile(type: 'folder' | 'file' | 'inbox' | string, id: string, name: string) {
   let endpoint = '';
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
