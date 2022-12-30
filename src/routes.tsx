@@ -42,7 +42,7 @@ import Active from './pages/inbox/InboxesPage/components/Active';
 import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
-import Docs from './pages/workspace/docs/Docs';
+import Docs from './pages/workspace/Docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/Lists/components/RenderList';
 import { IUser } from './types';
