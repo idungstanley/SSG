@@ -1,15 +1,16 @@
 import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
-import { useDispatch, useSelector } from 'react-redux';
-import { useAppSelector } from '../../../app/hooks';
-import { PlusOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { HiChevronDoubleLeft } from 'react-icons/hi';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
 import Search from '../Search';
+import Setting from '../../../assets/branding/setting.png';
+import { useAppSelector } from '../../../app/hooks';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ export default function Sidebar() {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <div className="absolute top-0 right-0 pt-2 -mr-12">
+                  <div className="absolute top-0 left-0 pt-2 mr-12">
                     <button
                       ref={fakeRef}
                       tabIndex={0}
@@ -73,18 +74,28 @@ export default function Sidebar() {
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="px-4 pb-3">
-                  <img className="w-auto h-6" src={MainLogo} alt="Workflow" />
+                <div className="sticky top-0 left-0 z-10 flex items-center justify-between w-full pl-3 pr-4 bg-white w-inherit h-30">
+                  <img className="w-10 h-10" src={MainLogo} alt="Workflow" />
+                  <div className="flex items-center justify-between space-x-1">
+                    <img className="w-auto h-6" src={Setting} alt="Workflow" />
+                    <AvatarWithInitials
+                      initials="SS"
+                      height="h-5"
+                      width="w-5"
+                      textSize="8px"
+                      backgroundColour="blue"
+                      roundedStyle="rounded-full"
+                    />
+                    <HiChevronDoubleLeft
+                      color="blue"
+                      className="cursor-pointer"
+                      onClick={() => dispatch(setShowSidebar(false))}
+                    />
+                  </div>
                 </div>
                 <Search />
                 <NavigationItems />
                 <Places />
-                <div className="absolute w-auto h-px bottom-14">
-                  <div className="flex items-center justify-start p-2 space-x-1">
-                    <AvatarWithInitials initials="AU" />
-                    <PlusOutlined className="text-sm" />
-                  </div>
-                </div>
               </Dialog.Panel>
             </Transition.Child>
             <div className="flex-shrink-0 w-14" aria-hidden="true">
@@ -97,32 +108,29 @@ export default function Sidebar() {
       {/* Static sidebar for desktop */}
       {showSidebar ? (
         <div className="hidden md:fixed md:inset-y-0 lg:flex md:w-64 md:flex-col">
-          <div className="flex flex-col flex-grow pt-2 overflow-y-auto bg-white border-r border-gray-200">
-            <div className="flex items-center justify-between flex-shrink-0 pl-2">
-              <img className="w-auto h-6" src={MainLogo} alt="Workflow" />
-              <div className="group">
-                <button
-                  type="button"
-                  className="flex items-center justify-center w-10 h-10 ml-1 rounded-full focus:outline-none ring-0 focus:ring-0"
-                  onClick={() => dispatch(setShowSidebar(false))}
-                >
-                  <span className="sr-only">Close sidebar</span>
-                  <XIcon
-                    className="w-6 h-6 text-gray-500 transition group-hover:text-red-600"
-                    aria-hidden="true"
+          <div className="flex flex-col flex-grow overflow-y-auto bg-white border-r border-gray-200">
+            <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
+              <div className="flex items-center justify-between w-full py-2 pl-3 pr-4 bg-white w-inherit h-30">
+                <img className="w-10 h-10" src={MainLogo} alt="Workflow" />
+                <div className="flex items-center justify-between space-x-1">
+                  <img className="w-auto h-6" src={Setting} alt="Workflow" />
+                  <AvatarWithInitials
+                    initials="SS"
+                    height="h-5"
+                    width="w-5"
+                    backgroundColour="blue"
                   />
-                </button>
+                  <HiChevronDoubleLeft
+                    color="blue"
+                    className="cursor-pointer"
+                    onClick={() => dispatch(setShowSidebar(false))}
+                  />
+                </div>
               </div>
             </div>
             <Search />
             <NavigationItems />
             <Places />
-            <div className="absolute w-auto h-px bottom-14">
-              <div className="flex items-center justify-start p-2 space-x-1">
-                <AvatarWithInitials initials="AU" />
-                <PlusOutlined className="text-sm" />
-              </div>
-            </div>
           </div>
         </div>
       ) : null}
