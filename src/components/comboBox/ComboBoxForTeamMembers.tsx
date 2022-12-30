@@ -11,6 +11,10 @@ interface userDataType {
   };
 }
 
+interface selectedType {
+  id: string
+}
+
 interface ComboBoxType {
   setShowPopup: (i: boolean) => void;
   onClickArrow: (value: string) => void;
@@ -33,7 +37,6 @@ function ComboBoxForTeamMembers({
       : users.filter((person) =>
           person.user.name.toLowerCase().includes(query.toLowerCase())
         );
-
   return (
     <>
       {absolute ? (

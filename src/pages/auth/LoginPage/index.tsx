@@ -12,6 +12,7 @@ import { setAuthData } from '../../../features/auth/authSlice';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
+import { formikConfig } from '../../../components/Comments/components/componentType';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -100,7 +101,7 @@ function LoginPage() {
     console.log(error);
   };
 
-  const formikConfig = {
+  const formikConfig: formikConfig = {
     initValues: {
       email: '',
       password: '',

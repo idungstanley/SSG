@@ -19,6 +19,20 @@ interface SelectMenuWithAvatarProps {
   showSelectPlaceholder?: boolean;
 }
 
+interface OptionsType {
+  id: string | null;
+  name: string;
+  avatar?: string;
+  badge?: string;
+}
+
+interface withAvatarType {
+  options: OptionsType[];
+  selectedId: string;
+  label: string;
+  onChange: ()=> void;
+  showSelectPlaceholder: boolean;
+}
 export default function SelectMenuWithAvatar({
   options,
   selectedId,
@@ -48,16 +62,16 @@ export default function SelectMenuWithAvatar({
       {({ open }) => (
         <>
           {label && (
-            <Listbox.Label className="block text-sm font-medium text-gray-700 mb-1">
+            <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">
               {label}
             </Listbox.Label>
           )}
           <div className="relative">
             {item && (
-              <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <span className="flex items-center">
                   {item?.avatar}
-                  <span className="mx-3 block truncate">{item?.name}</span>
+                  <span className="block mx-3 truncate">{item?.name}</span>
                   {item?.badge != null && (
                     <Badge
                       value={item.badge}
@@ -68,9 +82,9 @@ export default function SelectMenuWithAvatar({
                     />
                   )}
                 </span>
-                <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                <span className="absolute inset-y-0 right-0 flex items-center pr-2 ml-3 pointer-events-none">
                   <SelectorIcon
-                    className="h-5 w-5 text-gray-400"
+                    className="w-5 h-5 text-gray-400"
                     aria-hidden="true"
                   />
                 </span>
@@ -84,7 +98,7 @@ export default function SelectMenuWithAvatar({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {processedOptions.map((option) => (
                   <Listbox.Option
                     key={option.id}
@@ -97,7 +111,7 @@ export default function SelectMenuWithAvatar({
                     value={option}
                   >
                     {() => (
-                      <div className="flex flex-1 w-full justify-between">
+                      <div className="flex justify-between flex-1 w-full">
                         <div className="flex">
                           {option.avatar}
                           <span

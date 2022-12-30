@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+interface pageType {
+  name: string
+  current: boolean
+  href: string | null
+}
+
 interface BreadcrumbProps {
   pages: {
     name: string;
@@ -14,10 +20,10 @@ interface BreadcrumbProps {
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
     <nav
-      className="bg-white border-b border-gray-200 flex"
+      className="flex bg-white border-b border-gray-200"
       aria-label="Breadcrumb"
     >
-      <ol className="w-full mx-auto px-4 flex space-x-4 sm:px-6 lg:px-6">
+      <ol className="flex w-full px-4 mx-auto space-x-4 sm:px-6 lg:px-6">
         {rootIcon && (
           <li className="flex">
             <div className="flex items-center text-gray-400">
@@ -68,5 +74,4 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
     </nav>
   );
 }
-
 export default Breadcrumb;

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { commentsType } from '../../types';
 
-export const useGetItemComments = (data: { type: commentsType; id: string }) =>
+export const useGetItemComments = (data: { type: commentsType | string; id: string }) =>
   useQuery(
     [`comments-${data.id}`],
     () =>
@@ -25,7 +25,7 @@ export const useGetItemComments = (data: { type: commentsType; id: string }) =>
 const createItemComment = (data: {
   id: string;
   message: string;
-  type: commentsType;
+  type: commentsType | string;
 }) => {
   const request = requestNew(
     {

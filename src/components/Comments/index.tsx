@@ -9,22 +9,19 @@ import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';
 import { commentsType } from '../../types';
+import { selectedUserType } from './components/componentType';
 
 const regex = /@[\S]*/g;
 
 interface CommentsProps {
   itemId: string;
-  type: commentsType;
-}
-
-interface userType {
-  id: string;
+  type: commentsType | string;
 }
 
 export default function Comments({ itemId, type }: CommentsProps) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<userType[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<selectedUserType[]>([]);
   const isInbox = type === 'inbox' || type === 'inbox_file';
   const [showWindow, setShowWindow] = useState(isInbox);
   const [editId, setEditId] = useState<null | string>(null);
@@ -68,7 +65,7 @@ export default function Comments({ itemId, type }: CommentsProps) {
     });
   };
 
-  const onEdit = (id: string, value: string, user: userType[]) => {
+  const onEdit = (id: string, value: string, user: selectedUserType[]) => {
     setMessage(value.replaceAll(regex, ''));
     setEditId(id);
     setSelectedUsers([...user]);
