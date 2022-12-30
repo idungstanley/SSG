@@ -12,6 +12,7 @@ export interface IExplorerFile {
   folder_id: string | null;
   folder: string | null;
   size: number;
+  name: string;
   display_name: string;
   file_format: {
     key: string;
@@ -28,6 +29,7 @@ export interface IExplorerFile {
 export interface IExplorerFolder {
   id: string;
   name: string;
+  display_name: string;
   parent_id: string | null;
   full_path: string;
   ancestor_path: string | null;

@@ -46,14 +46,10 @@ export default function Toolbar() {
     selectedItemType,
   } = useAppSelector((state) => state.explorer);
 
-  const { data: file } = useGetFile(
-    selectedItemId,
-    selectedItemType === 'file',
-  );
-  const { data: folder } = useGetFolder(
-    selectedItemId,
-    selectedItemType === 'folder',
-  );
+  const { data } =
+    selectedItemType === 'file'
+      ? useGetFile(selectedItemId)
+      : useGetFolder(selectedItemId);
 
   const [totalSelectedItems, setTotalSelectedItems] = useState(0);
 
@@ -90,7 +86,7 @@ export default function Toolbar() {
       setCopyItems({
         fileIdsToPaste: selectedFileIds,
         folderIdsToPaste: selectedFolderIds,
-      }),
+      })
     );
 
     localStorage.setItem('fileIdsToPaste', JSON.stringify(selectedFileIds));
@@ -130,9 +126,15 @@ export default function Toolbar() {
   };
 
   const onDownload = () => {
-    const itemName = selectedItemType === 'file' ? file?.display_name : `${folder?.name}.zip`;
+    const itemName =
+      selectedItemType === 'file' ? data?.display_name : `${data?.name}.zip`;
 
-    if ((selectedFileIds.length === 1 || selectedFolderIds.length === 1) && selectedItemType && selectedItemId && itemName) {
+    if (
+      (selectedFileIds.length === 1 || selectedFolderIds.length === 1) &&
+      selectedItemType &&
+      selectedItemId &&
+      itemName
+    ) {
       DownloadFile(selectedItemType, selectedItemId, itemName);
     }
   };
@@ -207,8 +209,8 @@ export default function Toolbar() {
                               i?.isInLeft
                                 ? 'rounded-l-md'
                                 : i?.isInRight
-                                  ? 'rounded-r-md'
-                                  : null
+                                ? 'rounded-r-md'
+                                : null
                             } border border-gray-300 justify-center bg-white px-3 sm:px-6 flex-grow lg:flex-grow-0 py-2 text-sm font-medium hover:bg-gray-50 focus:z-10 ring-0 focus:ring-0 ${
                               i.disabled
                                 ? 'border-opacity-40 text-gray-300'

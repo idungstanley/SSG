@@ -17,7 +17,6 @@ export default function Breadcrumb({ pages }: BreadcrumbProps) {
       rootIcon={
         <CogIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
       }
-      rootIconHref={null}
     />
   );
 }

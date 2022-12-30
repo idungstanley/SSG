@@ -2,9 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface BreadcrumbProps {
-  pages: any;
-  rootIcon: any;
-  rootIconHref: string | null;
+  pages: {
+    name: string;
+    current: boolean;
+    href: string | null;
+  }[];
+  rootIcon?: JSX.Element;
+  rootIconHref?: string;
 }
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
@@ -42,7 +46,7 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
               </svg>
               {page.current ? (
                 <Link
-                  to={page.href}
+                  to={page.href || '/'}
                   className="ml-4 text-sm font-medium text-gray-800 cursor-none select-none"
                   aria-current="page"
                 >
@@ -50,7 +54,7 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
                 </Link>
               ) : (
                 <Link
-                  to={page.href}
+                  to={page.href || '/'}
                   className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
                   aria-current={undefined}
                 >
@@ -64,19 +68,5 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
     </nav>
   );
 }
-
-// Breadcrumb.defaultProps = {
-//   rootIcon: null,
-//   rootIconHref: null,
-// };
-
-// Breadcrumb.propTypes = {
-//   pages: PropTypes.array.isRequired,
-//   rootIcon: PropTypes.oneOfType([
-//     PropTypes.string,
-//     PropTypes.object,
-//   ]),
-//   rootIconHref: PropTypes.string,
-// };
 
 export default Breadcrumb;

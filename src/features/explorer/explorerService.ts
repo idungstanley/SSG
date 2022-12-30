@@ -1,19 +1,20 @@
-import { IExplorerFile, IExplorerFilesAndFolders, IExplorerFolder } from './explorer.interfaces';
+import {
+  IExplorerFile,
+  IExplorerFilesAndFolders,
+  IExplorerFolder,
+} from './explorer.interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Get folder
-export const useGetFolder = (folderId: string | null, enabled = true) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
+export const useGetFolder = (folderId?: string | null) => {
   const queryClient = useQueryClient();
 
   return useQuery<IExplorerFolder | undefined>(
     ['explorer_folder', folderId],
     () => queryClient.getQueryData(['explorer_folder', folderId]),
     {
-      enabled: folderId != null && enabled,
+      enabled: !!folderId,
       initialData: () =>
         queryClient.getQueryData(['explorer_folder', folderId]),
     }
@@ -21,17 +22,14 @@ export const useGetFolder = (folderId: string | null, enabled = true) => {
 };
 
 // Get file
-export const useGetFile = (fileId: string | null, enabled = true) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
+export const useGetFile = (fileId?: string | null) => {
   const queryClient = useQueryClient();
 
   return useQuery<IExplorerFile | undefined>(
     ['explorer_file', fileId],
     () => queryClient.getQueryData(['explorer_file', fileId]),
     {
-      enabled: fileId != null && enabled,
+      enabled: !!fileId,
       initialData: () => queryClient.getQueryData(['explorer_file', fileId]),
     }
   );

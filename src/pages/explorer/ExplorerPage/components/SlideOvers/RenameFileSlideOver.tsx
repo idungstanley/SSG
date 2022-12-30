@@ -27,13 +27,20 @@ function RenameItemSlideOver() {
     : useGetFolder(selectedItemId);
 
   const [itemName, setItemName] = useState(
-    item ? ('display_name' in item ? item.display_name.split('.').slice(0, -1).join('') : 'name' in item ? item.name : '') : ''
+    item
+      ? 'display_name' in item
+        ? item.display_name.split('.').slice(0, -1).join('')
+        : 'name' in item
+        ? item
+        : ''
+      : ''
   );
 
   const { mutateAsync: onRename } = useRenameItem();
 
   const onSubmit = async () => {
-    const extension = item && 'file_format' in item ? item.file_format.extension : '';
+    const extension =
+      item && 'file_format' in item ? item.file_format.extension : '';
     await onRename({
       type: selectedItemType,
       id: selectedItemId,
