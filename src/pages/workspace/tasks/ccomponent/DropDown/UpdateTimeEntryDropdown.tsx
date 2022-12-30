@@ -6,14 +6,17 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
 import { UpdateTimeEntriesService } from '../../../../../features/task/taskService';
 
-function UpdateTimeEntryDropdown({ id }) {
+interface UpdateTimeEntryDropdownProps {
+  id: string;
+}
+
+function UpdateTimeEntryDropdown({ id }: UpdateTimeEntryDropdownProps) {
   const [isBillable, setIsBillable] = useState(false);
   const queryClient = useQueryClient();
 
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
-    onSuccess: (data) => {
-      console.log(data);
-      queryClient.invalidateQueries('timeclock');
+    onSuccess: () => {
+      queryClient.invalidateQueries();
     },
   });
 
@@ -103,8 +106,6 @@ function UpdateTimeEntryDropdown({ id }) {
           <Button
             buttonStyle="primary"
             onClick={onSubmit}
-            // loading={loginMutation.status === 'loading'}
-            type="submit"
             label="Update"
             padding="py-2 px-4"
             height="h-10"

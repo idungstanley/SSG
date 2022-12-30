@@ -34,7 +34,8 @@ function RenameItemSlideOver() {
   const { mutateAsync: onRename } = useRenameItem();
 
   const onSubmit = async () => {
-    const extension = item && 'file_format' in item ? item.file_format.extension : '';
+    const extension =
+      item && 'file_format' in item ? item.file_format.extension : '';
     await onRename({
       type: selectedItemType,
       id: selectedItemId,

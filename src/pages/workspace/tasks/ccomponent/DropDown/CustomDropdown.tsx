@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function CustomDropdown({ title, listItems, clickAction }) {
+interface CustomDropdownProps {
+  title: string;
+  listItems: [];
+  clickAction: (value: string) => void;
+}
+
+export default function CustomDropdown({
+  title,
+  listItems,
+  clickAction,
+}: CustomDropdownProps) {
   return (
     <div className="">
       <div className="origin-top-right absolute bottom-20 top-12 right-5 z-10 -mt-3 w-48 rounded-md shadow-lg py-1 bg-gray-300 h-full">

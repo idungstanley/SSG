@@ -9,7 +9,7 @@ import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
-import Search from '../Search';
+import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();

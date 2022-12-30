@@ -34,7 +34,7 @@ import SharedPage from './pages/shared';
 
 // At workspace
 import Index from './pages/workspace/Index';
-import Home from './pages/workspace/Home/Home';
+import Home from './pages/workspace/home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community/Community';
@@ -42,7 +42,7 @@ import Active from './pages/inbox/InboxesPage/components/Active';
 import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
-import Docs from './pages/workspace/Docs/Docs';
+import Docs from './pages/workspace/docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/Lists/components/RenderList';
 import RenderTaskModal from './pages/workspace/tasks/ccomponent/RenderTaskModal';
