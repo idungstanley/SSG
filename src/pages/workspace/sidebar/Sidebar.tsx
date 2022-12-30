@@ -1,7 +1,7 @@
 import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import { PlusOutlined } from '@ant-design/icons';
 import { setShowSidebar } from '../../../features/workspace/workspaceSlice';
@@ -9,7 +9,7 @@ import MainLogo from '../../../assets/branding/main-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
-import Search from '../search';
+import Search from '../Search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
