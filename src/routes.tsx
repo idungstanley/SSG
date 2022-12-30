@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // Layouts
 import MainLayout from './layout/components/MainLayout';
@@ -47,6 +47,7 @@ import { IUser } from './features/auth/authSlice';
 import Home from './pages/workspace/Home/Home';
 import Docs from './pages/workspace/Docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
+import NotFoundPage from './pages/NotFoundPage';
 
 const inbox = [
   {
@@ -75,89 +76,91 @@ const inbox = [
   },
 ];
 
-const routes = (user: IUser | null) => [
-  {
-    path: 'workspace/onboarding',
-    element: user ? (
-      user.default_workspace_id ? (
-        <Navigate to="/workspace" />
+export const routes = (user: IUser | null) =>
+  createBrowserRouter([
+    {
+      path: 'workspace/onboarding',
+      element: user ? (
+        user.default_workspace_id ? (
+          <Navigate to="/workspace" />
+        ) : (
+          <CreateWorkspace />
+        )
       ) : (
-        <CreateWorkspace />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-  },
-  {
-    path: '/',
-    element: user ? (
-      user.default_workspace_id ? (
-        <MainLayout />
+        <Navigate to="/auth/login" />
+      ),
+    },
+    {
+      path: '/',
+      element: user ? (
+        user.default_workspace_id ? (
+          <MainLayout />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        )
       ) : (
-        <Navigate to="/workspace/onboarding" />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-    children: [
-      { path: '/', element: <Navigate to="/workspace" /> },
-      { path: 'explorer', element: <ExplorerPage /> },
-      { path: 'explorer/:folderId', element: <ExplorerPage /> },
-      { path: 'shared', element: <SharedPage /> },
-      { path: 'search', element: <SearchPage /> },
-      ...inbox,
-      { path: 'settings/permissions', element: <PermissionsPage /> },
-      { path: 'settings/team-members', element: <TeamMembersPage /> },
-      {
-        path: 'settings/team-members/invites',
-        element: <TeamMemberInvitesPage />,
-      },
-      {
-        path: 'settings/team-members/groups',
-        element: <TeamMemberGroupsPage />,
-      },
-      {
-        path: 'settings/team-members/groups/:teamMemberGroupId',
-        element: <TeamMemberGroupGeneralSettingsPage />,
-      },
-      {
-        path: 'settings/team-members/groups/:teamMemberGroupId/members',
-        element: <TeamMemberGroupMembersPage />,
-      },
-    ],
-  },
-  {
-    path: 'workspace',
-    element: user ? (
-      user.default_workspace_id ? (
-        <Index />
+        <Navigate to="/auth/login" />
+      ),
+      children: [
+        { path: '/', element: <Navigate to="/workspace" /> },
+        { path: 'explorer', element: <ExplorerPage /> },
+        { path: 'explorer/:folderId', element: <ExplorerPage /> },
+        { path: 'shared', element: <SharedPage /> },
+        { path: 'search', element: <SearchPage /> },
+        ...inbox,
+        { path: 'settings/permissions', element: <PermissionsPage /> },
+        { path: 'settings/team-members', element: <TeamMembersPage /> },
+        {
+          path: 'settings/team-members/invites',
+          element: <TeamMemberInvitesPage />,
+        },
+        {
+          path: 'settings/team-members/groups',
+          element: <TeamMemberGroupsPage />,
+        },
+        {
+          path: 'settings/team-members/groups/:teamMemberGroupId',
+          element: <TeamMemberGroupGeneralSettingsPage />,
+        },
+        {
+          path: 'settings/team-members/groups/:teamMemberGroupId/members',
+          element: <TeamMemberGroupMembersPage />,
+        },
+      ],
+    },
+    {
+      path: 'workspace',
+      element: user ? (
+        user.default_workspace_id ? (
+          <Index />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        )
       ) : (
-        <Navigate to="/workspace/onboarding" />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-    children: [
-      { path: '', element: <Home /> },
-      { path: 'notification', element: <Notification /> },
-      { path: 'community', element: <Community /> },
-      { path: 'goals', element: <Home /> },
-      { path: 'docs', element: <Docs /> },
-      { path: 'wallet/:walletId', element: <RenderWallets /> },
-      { path: 'list/:listId', element: <RenderList /> },
-      { path: 't/:taskId', element: <RenderTaskModal /> },
-      ...inbox,
-    ],
-  },
-  {
-    path: '/auth',
-    element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
-    children: [
-      { path: 'login', element: <LoginPage /> },
-      { path: 'register', element: <RegisterPage /> },
-      { path: 'register/:inviteCode', element: <RegisterPage /> },
-    ],
-  },
-];
+        <Navigate to="/auth/login" />
+      ),
+      children: [
+        { path: '', element: <Home /> },
+        { path: 'notification', element: <Notification /> },
+        { path: 'community', element: <Community /> },
+        { path: 'goals', element: <Home /> },
+        { path: 'docs', element: <Docs /> },
+        { path: 'wallet/:walletId', element: <RenderWallets /> },
+        { path: 'list/:listId', element: <RenderList /> },
+        { path: 't/:taskId', element: <RenderTaskModal /> },
+        ...inbox,
+      ],
+    },
+    {
+      path: '/auth',
+      element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
+      children: [
+        { path: 'login', element: <LoginPage /> },
+        { path: 'register', element: <RegisterPage /> },
+        { path: 'register/:inviteCode', element: <RegisterPage /> },
+      ],
+    },
+    { path: '*', element: <NotFoundPage /> },
+  ]);
 
 export default routes;

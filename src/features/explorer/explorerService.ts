@@ -1,6 +1,4 @@
-import {
-  IExplorerFilesAndFolders,
-} from './explorer.interfaces';
+import { IExplorerFilesAndFolders } from './explorer.interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
@@ -46,6 +44,7 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
         method: 'GET',
       }),
     {
+      enabled: !!folderId,
       onSuccess: (data) => {
         if (data.data.current_folder) {
           queryClient.setQueryData(
