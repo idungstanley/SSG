@@ -3,7 +3,11 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
   registerService,
@@ -25,11 +29,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
 
       dispatch(
@@ -38,7 +42,7 @@ function RegisterPage() {
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
           currentUserId: successData.data.token.token.user_id,
-        }),
+        })
       );
     },
   });
@@ -48,11 +52,11 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(successData.data.user));
       localStorage.setItem(
         'accessToken',
-        JSON.stringify(successData.data.token.accessToken),
+        JSON.stringify(successData.data.token.accessToken)
       );
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id),
+        JSON.stringify(successData.data.user.default_workspace_id)
       );
 
       dispatch(
@@ -61,12 +65,16 @@ function RegisterPage() {
           accessToken: successData.data.token.accessToken,
           currentWorkspaceId: successData.data.user.default_workspace_id,
           currentUserId: successData.data.token.token.user_id,
-        }),
+        })
       );
     },
   });
 
-  const onSubmit = (values: {name?: string, email: string, password: string}) => {
+  const onSubmit = (values: {
+    name?: string;
+    email: string;
+    password: string;
+  }) => {
     registerMutation.mutate({
       name: values.name || '',
       email: values.email,
@@ -86,7 +94,9 @@ function RegisterPage() {
     gapi.load('client:auth2', start);
   }, []);
 
-  const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+  const handleGoogleLogin = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
     if (response.code) {
       loginGoogleMutation.mutate({
         code: response.code,

@@ -17,7 +17,7 @@ interface formType {
     name?: string;
   }) => void;
   formikConfig: formikConfig;
-  checkboxConfig: checkboxType[];
+  checkboxConfig?: checkboxType[];
 }
 
 export default function Form({
@@ -48,7 +48,7 @@ export default function Form({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...formik.getFieldProps(i)}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
-          message={formik.touched[i] && formik.errors[i] && formik.errors[i]}
+          message={(formik.touched[i] && formik.errors[i]) ? formik.errors[i] : null}
           handleSubmit={formik.submitCount}
           isNewPassword={formikConfig.buttonTitle === 'Sign Up'}
         />
@@ -88,7 +88,3 @@ export default function Form({
     </form>
   );
 }
-
-Form.defaultProps = {
-  checkboxConfig: null,
-};
