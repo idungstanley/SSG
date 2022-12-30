@@ -1,18 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-interface pageType {
+interface IBreadcrumbItem {
   name: string
   current: boolean
   href: string | null
 }
 
 interface BreadcrumbProps {
-  pages: {
-    name: string;
-    current: boolean;
-    href: string | null;
-  }[];
+  pages: IBreadcrumbItem[];
   rootIcon?: JSX.Element;
   rootIconHref?: string;
 }
