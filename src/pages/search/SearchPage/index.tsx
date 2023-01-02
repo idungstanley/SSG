@@ -124,7 +124,7 @@ export default function SearchPage() {
               description="Please try again later."
             />
           ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
-            <div className="justify-center w-6 mx-auto mt-10">
+            <div className="flex justify-center mx-auto mt-10">
               <Spinner size={22} color="#0F70B7" />
             </div>
           ) : explorerStatus === 'success' && inboxStatus === 'success' ? (

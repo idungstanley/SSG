@@ -23,6 +23,7 @@ import { formikConfig } from '../../../components/Comments/components/componentT
 function RegisterPage() {
   const dispatch = useDispatch();
   const { inviteCode } = useParams();
+  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const registerMutation = useMutation(registerService, {
     onSuccess: async (successData) => {
@@ -163,23 +164,25 @@ function RegisterPage() {
             checkboxConfig={checkboxConfig}
           />
 
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
-            onSuccess={handleGoogleLogin}
-            onFailure={handleGoogleFailure}
-            cookiePolicy="single_host_origin"
-            responseType="code"
-            redirectUri="postmessage"
-            render={(renderProps) => (
-              <button
-                type="button"
-                onClick={renderProps.onClick}
-                className="text-center w-full text-sm mt-5 text-gray-500 hover:text-gray-600"
-              >
-                Or sign up with Google
-              </button>
-            )}
-          />
+          {GOOGLE_CLIENT_ID ? (
+            <GoogleLogin
+              clientId={GOOGLE_CLIENT_ID}
+              onSuccess={handleGoogleLogin}
+              onFailure={handleGoogleFailure}
+              cookiePolicy="single_host_origin"
+              responseType="code"
+              redirectUri="postmessage"
+              render={(renderProps) => (
+                <button
+                  type="button"
+                  onClick={renderProps.onClick}
+                  className="text-center w-full text-sm mt-5 text-gray-500 hover:text-gray-600"
+                >
+                  Or sign up with Google
+                </button>
+              )}
+            />
+          ) : null}
         </div>
         <Help />
       </div>
