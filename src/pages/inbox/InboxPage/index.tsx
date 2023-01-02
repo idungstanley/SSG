@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import InboxFile from './components/InboxFile';
@@ -6,6 +6,8 @@ import LeftSidebar from './components/LeftSidebar';
 import Header from './components/Header';
 import AssignInboxFileSlideOver from './components/SlideOvers/AssignInboxFileSlideOver';
 import UploadModal from '../../../components/UploadModal';
+
+const Watchers = React.lazy(() => import('../../../components/Watchers'));
 
 function InboxPage() {
   return (
@@ -24,7 +26,11 @@ function InboxPage() {
             <InboxFile />
           </div>
         </div>
+
         {/* Slide Overs */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <Watchers />
+        </Suspense>
         <AssignInboxFileSlideOver />
       </div>
     </>

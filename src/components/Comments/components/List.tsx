@@ -1,7 +1,7 @@
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
-import FullScreenMessage from "../../CenterMessage/FullScreenMessage";
+import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 
 const regex = /@[\S]*/g;
 
@@ -10,7 +10,7 @@ interface mentionUsersType {
   name: string;
 }
 
-interface commentsType {
+interface itemType {
   id: string;
   message: string;
   can_modify: boolean;
@@ -18,7 +18,7 @@ interface commentsType {
 }
 interface ListType {
   status: string;
-  comments: commentsType[];
+  comments: itemType[];
   onEdit: (id: string, message: string, users: mentionUsersType[]) => void;
   onDelete: (value: string) => void;
 }
@@ -63,10 +63,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
         ))}
       </ul>
     ) : (
-      <FullScreenMessage
-        title="No messages yes."
-        description="Create one."
-      />
+      <FullScreenMessage title="No messages yes." description="Create one." />
     )
   ) : (
     <FullScreenMessage
