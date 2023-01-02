@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
@@ -16,6 +16,41 @@ export default function Sidebar() {
   const dispatch = useDispatch();
   const { showSidebar } = useAppSelector((state) => state.workspace);
   const fakeRef = useRef(null);
+  const sidebarRef = useRef<HTMLInputElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(360);
+  // const rect = sidebarRef?.current?.getBoundingClientRect().left;
+
+  const startResizing = React.useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = React.useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  const resize = React.useCallback(
+    (mouseMoveEvent) => {
+      if (sidebarRef !== undefined) {
+        if (sidebarRef.current !== undefined && sidebarRef.current !== null)
+          if (isResizing) {
+            setSidebarWidth(
+              mouseMoveEvent.clientX -
+                sidebarRef?.current?.getBoundingClientRect().left
+            );
+          }
+      }
+    },
+    [isResizing]
+  );
+  React.useEffect(() => {
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resize, stopResizing]);
 
   return (
     <>
@@ -82,9 +117,7 @@ export default function Sidebar() {
                       initials="SS"
                       height="h-5"
                       width="w-5"
-                      textSize="8px"
                       backgroundColour="blue"
-                      roundedStyle="rounded-full"
                     />
                     <HiChevronDoubleLeft
                       color="blue"
@@ -93,9 +126,11 @@ export default function Sidebar() {
                     />
                   </div>
                 </div>
-                <Search />
-                <NavigationItems />
-                <Places />
+                <div className="overflow-y-auto">
+                  <Search />
+                  <NavigationItems />
+                  <Places />
+                </div>
               </Dialog.Panel>
             </Transition.Child>
             <div className="flex-shrink-0 w-14" aria-hidden="true">
@@ -107,8 +142,13 @@ export default function Sidebar() {
 
       {/* Static sidebar for desktop */}
       {showSidebar ? (
-        <div className="hidden md:fixed md:inset-y-0 lg:flex md:w-64 md:flex-col">
-          <div className="flex flex-col flex-grow overflow-y-auto bg-white border-r border-gray-200">
+        <div
+          className="hidden md:fixed md:inset-y-0 lg:flex md:w-64 md:flex-col relative"
+          ref={sidebarRef}
+          style={{ maxWidth: sidebarWidth }}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <div className="flex flex-col flex-grow bg-white border-r overflow-y-auto border-gray-200">
             <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
               <div className="flex items-center justify-between w-full py-2 pl-3 pr-4 bg-white w-inherit h-30">
                 <img className="w-10 h-10" src={MainLogo} alt="Workflow" />
@@ -128,9 +168,16 @@ export default function Sidebar() {
                 </div>
               </div>
             </div>
-            <Search />
-            <NavigationItems />
-            <Places />
+            <div className="overflow-y-auto overflow-x-hidden">
+              <Search />
+              <NavigationItems />
+              <Places />
+            </div>
+            <div
+              className="justify-self-end absolute shrink-0 grow-0 w-1 h-full cursor-all-scroll hover:bg-gray-300 right-0 bottom-0 top-0"
+              onMouseDown={startResizing}
+              style={{ cursor: 'col-resize' }}
+            ></div>
           </div>
         </div>
       ) : null}

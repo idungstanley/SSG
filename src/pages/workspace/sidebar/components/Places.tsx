@@ -61,37 +61,38 @@ const secondaryNavigation = [
 ];
 
 function Places() {
-  const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
-    const handleActive = (id: number) => {
-      setActivePlaceId((prev) => {
-        if (prev === id) {
-          return id;
-        } else {
-          return id;
-        }
-      });
-    };
+  const [activePlaceId, setActivePlaceId] = useState<number | boolean>(0);
+    // const handleActive = (id: number) => {
+    //   setActivePlaceId((prev) => {
+    //     if (prev === id) {
+    //       return prev;
+    //     } else {
+    //       return id;
+    //     }
+    //   });
+    // };
 
   return (
     <div className="mt-2">
-      <ul aria-labelledby="projects-headline">
+      <ul aria-labelledby="projects-headline relative">
         {secondaryNavigation.map((item) => (
           <>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <li
               key={item.id}
-              className={`relative flex px-4 items-center ${
+              className={`relative flex px-4 items-center hover:bg-gray-100 ${
                 activePlaceId === item.id && 'ml-0 bg-gray-200'
-              } text-gray-600 cursor-pointer h-14  `}
+              } text-gray-600 cursor-pointer h-14 fixed top-0`}
             >
               <button
-                className="flex items-center justify-between w-full"
+                className="flex items-center justify-between w-full "
                 type="button"
-                onClick={() => handleActive(item.id)
+                onClick={() =>
+                  setActivePlaceId((prev) => prev === item.id || item.id)
                 }
               >
                 {activePlaceId === item.id && (
-                  <span className="absolute top-0 bottom-0 left-0 w-1 bg-blue-800" />
+                  <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500" />
                 )}
                 <span
                   className={`flex items-center content-center self-center ${

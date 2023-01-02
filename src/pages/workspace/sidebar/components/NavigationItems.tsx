@@ -82,7 +82,7 @@ export default function NavigationItems() {
                 item.href === pathname
                   ? 'bg-green-50 text-gray-900'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center pl-4 py-1 text-base relative font-medium hover:bg-green-50'
+                'flex items-center pl-4 py-1 text-base relative font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
@@ -100,7 +100,13 @@ export default function NavigationItems() {
                 >
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
-                <p style={{ fontSize: '10px' }} className="tracking-wider">
+                <p
+                  style={{ fontSize: '10px' }}
+                  className={classNames(
+                    item.href === pathname ? 'text-green-500' : 'text-gray-500',
+                    'tracking-wider truncate'
+                  )}
+                >
                   {item.name}
                 </p>
               </div>
@@ -113,7 +119,7 @@ export default function NavigationItems() {
                 item.href === pathname
                   ? 'bg-green-50 text-gray-900 mr-0'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center relative pl-4 py-1 text-base font-medium hover:bg-green-50'
+                'flex items-center relative pl-4 py-1 text-base font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
@@ -131,7 +137,13 @@ export default function NavigationItems() {
                 >
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
-                <p style={{ fontSize: '10px' }} className="tracking-wider">
+                <p
+                  style={{ fontSize: '10px' }}
+                  className={classNames(
+                    item.href === pathname ? 'text-green-500' : 'text-gray-500',
+                    'tracking-wider truncate'
+                  )}
+                >
                   {item.name}
                 </p>
               </div>

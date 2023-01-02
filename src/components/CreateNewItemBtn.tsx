@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon } from '@heroicons/react/outline';
+import { BsPlusLg } from 'react-icons/bs';
 
 interface CreateNewItemBtnProps {
   onClick: () => void;
@@ -11,13 +11,17 @@ export default function CreateNewItemBtn({
   title,
 }: CreateNewItemBtnProps) {
   return (
-    <button
-      type="button"
-      className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 border transition py-2 space-x-2 rounded-xl w-full"
-      onClick={onClick}
-    >
-      <PlusIcon className="h-5 w-4" aria-hidden="true" />
-      <p>{title}</p>
-    </button>
+    <div className="flex justify-center mb-1.5">
+      <button
+        type="button"
+        className="flex items-center self-center justify-center w-4/6 py-1 space-x-1 bg-gray-100 rounded"
+        onClick={onClick}
+      >
+        <BsPlusLg className="w-3.5 h-3.5" aria-hidden="true" />
+        <p className="font-md" style={{ fontSize: '10px' }}>
+          {title}
+        </p>
+      </button>
+    </div>
   );
 }
