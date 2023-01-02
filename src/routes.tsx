@@ -45,8 +45,8 @@ import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs/Docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
 import RenderList from './pages/workspace/lists/components/RenderList';
-import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/ccomponent/RenderTaskModal';
+import { IUser } from './features/auth/authSlice';
 
 const inbox = [
   {

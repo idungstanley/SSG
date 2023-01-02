@@ -5,19 +5,19 @@ interface HyperLinkProps {
   label: string;
   href: string;
   internal?: boolean;
-  openInNewTab?:any;
+  openInNewTab?: boolean;
 }
 
 function Hyperlink({
   label,
   href,
   internal = true,
-  openInNewTab = false,
 }: HyperLinkProps) {
   return !internal ? (
     <a
       href={href}
-      target={openInNewTab && '_blank'}
+      rel="noreferrer"
+      target="_blank"
       className="text-sm font-medium text-primary-600 hover:text-primary-700"
     >
       {label}

@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import { gapi } from 'gapi-script';
 import {
   loginService,
@@ -12,6 +16,7 @@ import { setAuthData } from '../../../features/auth/authSlice';
 import Form from '../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
+import { formikConfig } from '../../../components/Comments/components/componentType';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -31,7 +36,6 @@ function LoginPage() {
         'currentUserId',
         JSON.stringify(successData.data.token.token.user_id)
       );
-
       dispatch(
         setAuthData({
           user: successData.data.user,
@@ -54,7 +58,6 @@ function LoginPage() {
         'currentWorkspaceId',
         JSON.stringify(successData.data.user.default_workspace_id)
       );
-
       dispatch(
         setAuthData({
           user: successData.data.user,
@@ -84,7 +87,9 @@ function LoginPage() {
     gapi.load('client:auth2', start);
   }, []);
 
-  const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+  const handleGoogleLogin = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
     if (response.code) {
       loginGoogleMutation.mutate({
         code: response.code,
@@ -100,7 +105,7 @@ function LoginPage() {
     console.log(error);
   };
 
-  const formikConfig = {
+  const formikConfig: formikConfig = {
     initValues: {
       email: '',
       password: '',

@@ -41,7 +41,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       {data?.data?.wallets.length !== 0 ? (
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
-            <section className="flex justify-between items-center text-sm pl-5 hover:bg-gray-100">
+            <section className="flex items-center justify-between pl-5 text-sm hover:bg-gray-100">
               <div
                 id="walletLeft"
                 className="flex items-center justify-center space-x-1"
@@ -53,12 +53,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 >
                   {showSubWallet === wallet.id ? (
                     <ChevronDownIcon
-                      className="flex-shrink-0 h-3 w-5"
+                      className="flex-shrink-0 w-5 h-3"
                       aria-hidden="true"
                     />
                   ) : (
                     <ChevronRightIcon
-                      className="flex-shrink-0 h-3 w-5"
+                      className="flex-shrink-0 w-5 h-3"
                       aria-hidden="true"
                     />
                   )}
@@ -70,11 +70,10 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 </button>
               </div>
 
-              <div className="space-x-1 flex items-center justify-end">
+              <div className="flex items-center justify-end space-x-1">
                 <MenuDropdown />
                 <PlusDropDown
-                  // onClick={() => setGetWalletId(wallet.id)}
-                  walletId={walletId}
+                  walletId={wallet.id}
                 />
               </div>
             </section>
@@ -99,15 +98,15 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
           </div>
         ))
       ) : (
-        <div className="text-sm pl-7 flex space-x-1">
+        <div className="flex space-x-1 text-sm pl-7">
           Create a
-          <span className="underline text-gray-600">
+          <span className="text-gray-600 underline">
             <button type="button" onClick={() => setShowWalletModal(true)}>
               Wallet
             </button>
           </span>
           ,
-          <span className="underline text-gray-600">
+          <span className="text-gray-600 underline">
             <button type="button" onClick={() => setShowListModal(true)}>
               List
             </button>

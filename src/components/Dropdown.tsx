@@ -3,17 +3,21 @@ import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { classNames } from '../utils';
 
+interface itemType {
+  label: string
+  onClick: () => void
+  icon: string | JSX.Element
+}
 interface DropDownProps {
-  // items: [{ label: string; onClick: () => void; icon: JSX.Element }];
-  items: any;
+  items: itemType[]
 }
 
 export default function Dropdown({ items }: DropDownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-          <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+        <Menu.Button className="flex items-center text-gray-400 rounded-full hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+          <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
         </Menu.Button>
       </div>
 
@@ -26,7 +30,7 @@ export default function Dropdown({ items }: DropDownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {items.map((item) => (
               <Menu.Item key={item.label}>

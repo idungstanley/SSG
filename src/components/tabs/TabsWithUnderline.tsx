@@ -10,7 +10,7 @@ export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
   const { selectedInboxTabKey } = useAppSelector((state) => state.inbox);
   return (
     <nav
-      className="-mb-px flex w-full bg-white border-b border-gray-200"
+      className="flex w-full -mb-px bg-white border-b border-gray-200"
       aria-label="Tabs"
     >
       {tabs.map((tab) => (
@@ -26,7 +26,7 @@ export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
           )}
           aria-current={tab.key === selectedInboxTabKey ? 'page' : undefined}
         >
-          <div className="m-auto block">
+          <div className="block m-auto">
             {tab.name}
             {tab.badge !== null && (
               <span

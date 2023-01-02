@@ -24,10 +24,10 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-16 space-x-1 hover:bg-gray-100">
+            <section className="flex items-center justify-between pl-16 space-x-1 text-sm hover:bg-gray-100">
               <div className="flex items-center">
                 <DotsCircleHorizontalIcon
-                  className="flex-shrink-0 h-3 w-5"
+                  className="flex-shrink-0 w-5 h-3"
                   aria-hidden="true"
                 />
                 <button
@@ -41,7 +41,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
               <button
                 type="button"
                 id="listright"
-                className="space-x-1 flex items-center justify-end"
+                className="flex items-center justify-end space-x-1"
                 onClick={() => setGetListId(list.id)}
               >
                 <TaskDropdown getListId={getListId} />

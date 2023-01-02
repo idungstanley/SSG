@@ -1,14 +1,11 @@
-import { ISharedFiles, ISharedFolders } from './shared.interfaces';
+import { ISharedFiles, ISharedFolders, IExplorerAndSharedData } from "./shared.interfaces";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 export const useGetFolder = (folderId: string | null, enabled = true) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IExplorerAndSharedData | undefined>(
     ['shared_folder', folderId],
     () => queryClient.getQueryData(['shared_folder', folderId]),
     {
@@ -20,12 +17,9 @@ export const useGetFolder = (folderId: string | null, enabled = true) => {
 
 // Get file
 export const useGetFile = (fileId: string | null, enabled = true) => {
-  // TODO: If not in cache... get from endpoint (hard get)
-  // Default data should use the previously set data TODO check...
-
   const queryClient = useQueryClient();
 
-  return useQuery(
+  return useQuery<IExplorerAndSharedData | undefined>(
     ['shared_file', fileId],
     () => queryClient.getQueryData(['shared_file', fileId]),
     {
