@@ -45,38 +45,41 @@ export default function List({ item }: ListProps) {
 
   return watchers ? (
     watchers.length ? (
-      <ul role="list" className="divide-y divide-gray-200">
-        {watchers.map((watcher) => (
-          <li
-            key={watcher.team_member.user.id}
-            className="flex py-4 w-full items-center justify-between"
-          >
-            <div>
-              <AvatarWithInitials
-                initials={watcher.team_member.initials}
-                height="h-4"
-                width="w-4"
-                backgroundColour={watcher.team_member.colour}
-                roundedStyle="rounded"
-              />
+      <>
+        <h3>Watchers:</h3>
+        <ul role="list" className="divide-y divide-gray-200">
+          {watchers.map((watcher) => (
+            <li
+              key={watcher.id}
+              className="flex py-4 w-full items-center justify-between"
+            >
+              <div>
+                <AvatarWithInitials
+                  initials={watcher.team_member.initials}
+                  height="h-4"
+                  width="w-4"
+                  backgroundColour={watcher.team_member.colour}
+                  roundedStyle="rounded"
+                />
 
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">
-                  {watcher.team_member.user.name}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {watcher.team_member.user.email}
-                </p>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">
+                    {watcher.team_member.user.name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {watcher.team_member.user.email}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <TrashIcon
-              onClick={() => handleRemove(watcher.id)}
-              className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
-            />
-          </li>
-        ))}
-      </ul>
+              <TrashIcon
+                onClick={() => handleRemove(watcher.team_member_id)}
+                className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+              />
+            </li>
+          ))}
+        </ul>
+      </>
     ) : (
       <FullScreenMessage
         title="You have no watchers yet"

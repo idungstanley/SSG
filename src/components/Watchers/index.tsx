@@ -64,7 +64,7 @@ export default function Watchers() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex gap-6 px-4 sm:px-6">
+                    <div className="relative mt-6 flex gap-6 px-4 sm:px-6 h-full">
                       <AddNew item={item} />
                       <List item={item} />
                     </div>
