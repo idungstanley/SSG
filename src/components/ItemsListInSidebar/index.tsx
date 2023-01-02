@@ -120,7 +120,7 @@ export default function ItemsListInSidebar({
                   backgroundColour="blue"
                   roundedStyle="rounded"
                 />
-                <span className="ml-2 overflow-hidden">
+                <span className="ml-4 overflow-hidden">
                   <h4
                     className="font-medium tracking-wider capitalize truncate"
                     style={{ fontSize: '10px' }}
@@ -131,7 +131,7 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             <div
-              className={`flex items-center justify-end space-x-1 ${
+              className={`flex items-center justify-end pr-2 ${
                 isHovering === index ? 'block' : 'hidden'
               }`}
             >
