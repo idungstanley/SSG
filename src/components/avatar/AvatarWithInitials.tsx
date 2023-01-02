@@ -14,16 +14,19 @@ function AvatarWithInitials({
   width = 'w-10',
   backgroundColour = '#6B7280',
   roundedStyle = 'circular',
-  textSize = 'text-sm',
+  textSize = '8px ',
 }: AvatarWithInitialsProps) {
   return (
     <span
-      className={`inline-flex items-center justify-center ${height} ${width} ${
+      className={`inline-flex p-1 items-center justify-center ${height} ${width} ${
         roundedStyle === 'circular' && 'rounded-full'
-      } ${roundedStyle === 'rounded' && 'rounded-md'}`}
+      } ${roundedStyle === 'rounded' && 'rounded'}`}
       style={{ backgroundColor: backgroundColour }}
     >
-      <span className={`font-medium leading-none text-white ${textSize}`}>
+      <span
+        className="font-medium leading-none text-white"
+        style={{ fontSize: textSize }}
+      >
         {initials}
       </span>
     </span>

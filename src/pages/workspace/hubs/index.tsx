@@ -15,14 +15,12 @@ function Hubs() {
     <>
       <CreateNewItemBtn
         onClick={() => setShowModal(true)}
-        title="Create new Hub"
+        title="NEW HUB"
       />
-
       <Modal
         isVisible={showModal}
         onCloseHubModal={() => setShowModal(false)}
       />
-
       <ItemsListInSidebar
         items={data?.data.hubs}
         status={status}

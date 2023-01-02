@@ -12,12 +12,13 @@ import {
   StarIcon,
   PlusIcon,
   LinkIcon,
-  DotsVerticalIcon,
   ColorSwatchIcon,
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import { classNames } from '../../utils';
+import { VscEllipsis } from 'react-icons/vsc';
+// import { useSelector } from 'react-redux';
 
 interface itemsType {
   id: number;
@@ -181,9 +182,8 @@ function MenuDropdown() {
   return (
     <Menu as="div">
       <Menu.Button className="flex text-sm text-gray-400">
-        <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
+          <VscEllipsis className="w-2.5 h-2.5" aria-hidden="true" color="black" />
       </Menu.Button>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

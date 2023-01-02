@@ -12,9 +12,11 @@ import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspac
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 
 interface SubWalletIndexProps {
-  walletParentId?: string
+  walletParentId?: string;
 }
 
 function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
@@ -27,6 +29,7 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
   });
 
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
+  const [isHovering, setIsHovering] = useState<number>(-1);
 
   const handleShowSubWallet = (id: string) => {
     setWallet2ParentId(id);
@@ -35,6 +38,13 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
     }
     setShowSubWallet2(id);
   };
+
+   const handleMouseOver = (i: number) => {
+     setIsHovering(i);
+   };
+   const handleMouseOut = () => {
+     setIsHovering(-1);
+   };
 
   const navigate = useNavigate();
   const handleLocation = (id: string) => {
@@ -47,34 +57,50 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
 
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet) => (
+      {subwallet?.data?.wallets.map((wallet, index) => (
         <div key={wallet.id}>
-          <section className="flex justify-between items-center text-sm pl-10 space-x-1 hover:bg-gray-100">
+          <section
+            className="flex items-center justify-between pl-8 text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100"
+            onMouseEnter={() => handleMouseOver(index)}
+            onMouseLeave={handleMouseOut}
+          >
             {/* showsub2 */}
             <div className="flex items-center">
               <div onClick={() => handleShowSubWallet(wallet.id)}>
                 {showSubWallet2 === wallet.id ? (
-                  <ChevronDownIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
+                  <div className="flex items-center">
+                    <VscTriangleDown
+                      className="flex-shrink-0 h-3"
+                      aria-hidden="true"
+                      color="rgba(72, 67, 67, 0.64)"
+                    />
+                    <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
+                  </div>
                 ) : (
-                  <ChevronRightIcon
-                    className="flex-shrink-0 h-3 w-5"
-                    aria-hidden="true"
-                  />
+                  <div className="flex items-center">
+                    <VscTriangleRight
+                      className="flex-shrink-0 h-3"
+                      aria-hidden="true"
+                      color="rgba(72, 67, 67, 0.64)"
+                    />
+                    <FaFolder color="rgba(72, 67, 67, 0.64)" />
+                  </div>
                 )}
               </div>
-              <FolderFilled
-                className="flex-shrink-0 h-3 w-5"
-                aria-hidden="true"
-              />
-              <div onClick={() => handleLocation(wallet.id)}>{wallet.name}</div>
+              <div onClick={() => handleLocation(wallet.id)}>
+                <p className="ml-2" style={{ fontSize: '10px' }}>
+                  {wallet.name.length > 10
+                    ? wallet.name.substr(0, 10) + '...'
+                    : wallet.name}
+                </p>
+              </div>
             </div>
             {/* ends here */}
             <div
               id="walletRight"
-              className="space-x-1 flex items-center"
+              className={`flex items-center justify-end space-x-1 ${
+                isHovering === index ? 'block' : 'hidden'
+              }`}
               onClick={() => setGetWalletId(wallet.id)}
             >
               <MenuDropdown />
@@ -90,10 +116,10 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex justify-between items-center text-sm pl-16 space-x-1 hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-16 space-x-1 text-sm hover:bg-gray-100">
             <div className="flex items-center">
               <DotsCircleHorizontalIcon
-                className="flex-shrink-0 h-3 w-5"
+                className="flex-shrink-0 w-5 h-3"
                 aria-hidden="true"
               />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
@@ -101,7 +127,7 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
             {/* ends here */}
             <div
               id="listright"
-              className="space-x-1 flex items-center justify-end"
+              className="flex items-center justify-end space-x-1"
               onClick={() => setGetListId(list.id)}
             >
               <TaskDropdown getListId={getListId} />

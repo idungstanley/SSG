@@ -1,5 +1,5 @@
-import React from 'react';
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
+import React, { useState } from 'react';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
@@ -17,12 +17,23 @@ import { IHub } from '../../features/hubs/hubs.interfaces';
 interface ItemsListInSidebarProps {
   status: string;
   type: string;
-  items?: IInbox[] | IHub[]
+  items?: IInbox[] | IHub[];
 }
 
-export default function ItemsListInSidebar({ items, status, type }: ItemsListInSidebarProps) {
+export default function ItemsListInSidebar({
+  items,
+  status,
+  type,
+}: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
+  const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId } = useAppSelector((state) => state.workspace);
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   if (status === 'error') {
     return (
@@ -67,45 +78,65 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   };
 
   return status === 'success' ? (
-    <ul className="w-full divide-y divide-gray-200">
-      {items?.map((i: { id: string, name: string }) => (
+    <ul className="w-full">
+      {items?.map((i: { id: string; name: string }, index) => (
         <li key={i.id} className="flex flex-col">
-          <div className="flex items-center justify-between hover:bg-gray-100">
+          <div
+            className="flex justify-between items-center hover:bg-gray-100"
+            onMouseEnter={() => handleMouseOver(index)}
+            onMouseLeave={handleMouseOut}
+          >
             <div
               role="button"
               tabIndex={0}
               onClick={() => handleClick(i.id)}
-              className="flex items-center py-4"
+              className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
             >
-              <div className="mr-3">
+              <div className="mr-0.5">
                 {i.id === currentItemId ? (
-                  <ChevronDownIcon
-                    className="w-5 h-5 text-gray-400"
+                  <VscTriangleDown
+                    className="flex-shrink-0 h-3"
                     aria-hidden="true"
+                    color="rgba(72, 67, 67, 0.64)"
                   />
                 ) : (
-                  <ChevronRightIcon
-                    className="w-5 h-5 text-gray-400"
+                  <VscTriangleRight
+                    className="flex-shrink-0 h-3"
                     aria-hidden="true"
+                    color="rgba(72, 67, 67, 0.64)"
                   />
                 )}
               </div>
-
-              <div className="flex items-center flex-1 min-w-0">
-                <div className="flex-shrink-0">
-                  <AvatarWithInitials
-                    initials={i.name.substr(0, 1).toUpperCase()}
-                    height="h-6"
-                    width="w-6"
-                    backgroundColour="#cf30cf"
-                  />
-                </div>
-                <div className="min-w-0 px-4">
-                  <p className="text-sm font-medium truncate">{i.name}</p>
-                </div>
+              <div className="flex min-w-0 flex-1 items-center">
+                <AvatarWithInitials
+                  initials={i.name
+                    .split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()}
+                  height="h-4"
+                  width="w-4"
+                  backgroundColour="blue"
+                  roundedStyle="rounded"
+                />
+                <span className="ml-4 overflow-hidden">
+                  <h4
+                    className="font-medium tracking-wider capitalize truncate"
+                    style={{ fontSize: '10px' }}
+                  >
+                    {i.name}
+                  </h4>
+                </span>
               </div>
             </div>
-            <MenuDropdown />
+            <div
+              className={`flex items-center justify-end pr-2 ${
+                isHovering === index ? 'block' : 'hidden'
+              }`}
+            >
+              <MenuDropdown />
+            </div>
           </div>
 
           {currentItemId === i.id ? <DropdownList /> : null}
