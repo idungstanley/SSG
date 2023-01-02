@@ -1,6 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks';
 import { Spinner } from '../../../common';
 import {
   useGetItemWatchers,
@@ -11,22 +9,11 @@ import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { TrashIcon } from '@heroicons/react/outline';
 
-export default function List() {
-  const { inboxId } = useParams();
-  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
-  const { selectedItemId, selectedItemType } = useAppSelector(
-    (state) => state.explorer
-  );
+interface ListProps {
+  item: { type: itemType; id: string };
+}
 
-  const isInboxFile = !!selectedInboxFileId;
-  const isInbox = !!inboxId;
-
-  const item: { type: itemType; id: string } = isInboxFile
-    ? { type: 'inbox', id: inboxId || '' }
-    : isInbox
-    ? { type: 'inbox_file', id: selectedInboxFileId || '' }
-    : { type: selectedItemType || 'file', id: selectedItemId || '' };
-
+export default function List({ item }: ListProps) {
   const { data, status } = useGetItemWatchers(item);
   const watchers = data?.data.watchers;
 

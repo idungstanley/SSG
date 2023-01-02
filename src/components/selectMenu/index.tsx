@@ -8,27 +8,29 @@ interface SelectMenuTeamMembersProps {
   selectedData: ISelectedData | null;
   setSelectedData: (value: ISelectedData | null) => void;
   title: string;
+  showEmail?: boolean;
 }
 
-interface teamMembersType {
-  id: string;
-  name: string;
-}
+// interface teamMembersType {
+//   id: string;
+//   name: string;
+// }
 
-interface SelectMenuTeamMembersType {
-  teamMembers: teamMembersType[];
-  selectedData: {
-     name: string;
-    id: string;
-  }
-  setSelectedData: ()=> void;
-  title: string;
-}
+// interface SelectMenuTeamMembersType {
+//   teamMembers: teamMembersType[];
+//   selectedData: {
+//      name: string;
+//     id: string;
+//   }
+//   setSelectedData: ()=> void;
+//   title: string;
+// }
 export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,
   setSelectedData,
   title,
+  showEmail,
 }: SelectMenuTeamMembersProps) {
   if (!teamMembers.length) {
     return null;
@@ -83,14 +85,34 @@ export default function SelectMenuTeamMembers({
                     value={person}
                   >
                     {({ selected }) => (
-                      <span
-                        className={classNames(
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate'
-                        )}
-                      >
-                        {person.name}
-                      </span>
+                      <div className="flex items-center">
+                        <span
+                          className={classNames(
+                            selected ? 'font-semibold' : 'font-normal',
+                            'truncate'
+                          )}
+                        >
+                          {person.name}
+                        </span>
+                        {showEmail ? (
+                          <span
+                            className={classNames(
+                              selected ? 'text-indigo-200' : 'text-gray-500',
+                              'ml-2 truncate text-xs'
+                            )}
+                          >
+                            {person.email}
+                          </span>
+                        ) : null}
+                      </div>
+                      // <span
+                      //   className={classNames(
+                      //     selected ? 'font-semibold' : 'font-normal',
+                      //     'block truncate'
+                      //   )}
+                      // >
+                      //   {person.name}
+                      // </span>
                     )}
                   </Listbox.Option>
                 ))}

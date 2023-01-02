@@ -3,12 +3,30 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowWatchersSideOver } from '../../features/general/slideOver/slideOverSlice';
-import List from './comments/List';
+import List from './components/List';
+import AddNew from './components/AddNew';
+import { useParams } from 'react-router-dom';
+import { itemType } from '../../types';
 
 export default function Watchers() {
   const dispatch = useAppDispatch();
   const { showWatchersSideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowWatchersSideOver(false));
+
+  const { inboxId } = useParams();
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
+  const { selectedItemId, selectedItemType } = useAppSelector(
+    (state) => state.explorer
+  );
+
+  const isInboxFile = !!selectedInboxFileId;
+  const isInbox = !!inboxId;
+
+  const item: { type: itemType; id: string } = isInboxFile
+    ? { type: 'inbox', id: inboxId || '' }
+    : isInbox
+    ? { type: 'inbox_file', id: selectedInboxFileId || '' }
+    : { type: selectedItemType || 'file', id: selectedItemId || '' };
 
   return (
     <Transition.Root show={showWatchersSideOver} as={Fragment}>
@@ -46,8 +64,9 @@ export default function Watchers() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      <List />
+                    <div className="relative mt-6 flex gap-6 px-4 sm:px-6">
+                      <AddNew item={item} />
+                      <List item={item} />
                     </div>
                   </div>
                 </Dialog.Panel>
