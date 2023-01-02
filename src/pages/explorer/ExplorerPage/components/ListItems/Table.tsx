@@ -4,6 +4,7 @@ import { OutputDateTime, OutputFileSize } from '../../../../../app/helpers';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IItem } from '../ListItems';
 import { classNames } from '../../../../../utils';
+import { explorerItemType } from '../../../../../types';
 
 interface TableProps {
   checkbox: React.RefObject<{
@@ -13,8 +14,18 @@ interface TableProps {
   toggleAll: () => void;
   sortedItems: IItem[];
   selectedItems: string[];
-  handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLTableRowElement, MouseEvent>, itemId: string, type: 'folder' | 'file') => void;
+  handleChangeItem: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    itemId: string,
+    type: string
+  ) => void;
+  handleClick: (
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    itemId: string,
+    type: explorerItemType
+  ) => void;
 }
 
 export default function Table({
@@ -90,7 +101,7 @@ export default function Table({
                 'whitespace-nowrap py-4 pr-12 sm:pr-0 text-sm font-medium flex gap-4 items-center',
                 selectedItems.includes(item.id)
                   ? 'text-indigo-600'
-                  : 'text-gray-900',
+                  : 'text-gray-900'
               )}
             >
               <FileIcon extensionKey={item.icon} size={10} />

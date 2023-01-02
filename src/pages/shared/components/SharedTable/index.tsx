@@ -22,6 +22,7 @@ import {
   useGetFolder,
   useGetSharedFilesAndFolders,
 } from '../../../../features/shared/sharedService';
+import { explorerItemType } from '../../../../types';
 import { IItem } from '../../../explorer/ExplorerPage/components/ListItems';
 import Grid from '../../../explorer/ExplorerPage/components/ListItems/Grid';
 import Table from '../../../explorer/ExplorerPage/components/ListItems/Table';
@@ -128,7 +129,7 @@ export default function SharedTable() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
       | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
-    type: 'folder' | 'file'
+    type: explorerItemType
   ) => {
     const target = e.target as HTMLButtonElement;
 

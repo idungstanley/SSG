@@ -4,10 +4,11 @@ import Details from './Components/Details';
 import Comments from '../Comments';
 
 import { IExplorerAndSharedData } from '../../features/shared/shared.interfaces';
+import { explorerItemType } from '../../types';
 
 interface ItemPreviewProps {
   item?: IExplorerAndSharedData;
-  type: 'folder' | 'file' | null;
+  type: explorerItemType | null;
 }
 
 function ItemPreviewSidebar({ item, type }: ItemPreviewProps) {

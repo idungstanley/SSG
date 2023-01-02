@@ -12,10 +12,11 @@ import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
 import { useAppSelector } from '../../../app/hooks';
 import { IExplorerAndSharedData} from '../../../features/shared/shared.interfaces';
+import { explorerItemType } from '../../../types';
 
 interface DetailsProps {
   item: IExplorerAndSharedData;
-  type: 'folder' | 'file';
+  type: explorerItemType;
 }
 
 export default function Details({ item, type }: DetailsProps) {

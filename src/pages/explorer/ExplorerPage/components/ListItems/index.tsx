@@ -26,13 +26,14 @@ import FullScreenMessage from '../../../../../components/CenterMessage/FullScree
 import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 import ItemPreviewSidebar from '../../../../../components/ItemPreviewSidebar';
 import { useAppSelector } from '../../../../../app/hooks';
+import { explorerItemType } from '../../../../../types';
 
 export interface IItem {
   icon: string;
   name: string;
   created_at: string;
   size: string | number;
-  item_type: 'folder' | 'file';
+  item_type: explorerItemType;
   id: string;
   updated_at: string;
 }
@@ -138,7 +139,7 @@ export default function ExplorerTable() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
       | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     itemId: string,
-    type: 'folder' | 'file'
+    type: explorerItemType
   ) => {
     const target = e.target as HTMLButtonElement;
     if (!target.value && selectedFolderIds.includes(itemId)) {
@@ -225,7 +226,7 @@ export default function ExplorerTable() {
     />
   ) : (
     <div className="flex flex-col h-full px-3 md:px-0">
-      {(selectedItemId && item && selectedItemType) ? (
+      {selectedItemId && item && selectedItemType ? (
         <ItemPreviewSidebar item={item} type={selectedItemType} />
       ) : null}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
