@@ -10,9 +10,10 @@ import ComboBoxForTeamMembers from '../../comboBox/ComboBoxForTeamMembers';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
 import requestNew from '../../../app/requestNew';
 import Toast from '../../../common/Toast';
-import { useAppSelector } from '../../../app/hooks';
-import { IExplorerAndSharedData} from '../../../features/shared/shared.interfaces';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { IExplorerAndSharedData } from '../../../features/shared/shared.interfaces';
 import { explorerItemType } from '../../../types';
+import { setShowWatchersSideOver } from '../../../features/general/slideOver/slideOverSlice';
 
 interface DetailsProps {
   item: IExplorerAndSharedData;
@@ -20,9 +21,12 @@ interface DetailsProps {
 }
 
 export default function Details({ item, type }: DetailsProps) {
+  const dispatch = useAppDispatch();
+  const onShowWatchers = () => dispatch(setShowWatchersSideOver(true));
   const [showPopup, setShowPopup] = useState(false);
 
-  const title = item.display_name || item.name || item.file.name || item.folder.name;
+  const title =
+    item.display_name || item.name || item.file.name || item.folder.name;
   const size = type === 'file' ? item.size : null;
   const extension = type === 'file' ? title.split('.').at(-1) : 'folder';
 
@@ -107,6 +111,13 @@ export default function Details({ item, type }: DetailsProps) {
             users={users}
           />
         ) : null}
+        <button
+          onClick={onShowWatchers}
+          type="button"
+          className="flex-1 px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0"
+        >
+          Watchers
+        </button>
       </div>
       <div>
         <h3 className="font-medium text-gray-900">Information</h3>

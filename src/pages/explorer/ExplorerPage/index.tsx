@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { HomeIcon } from '@heroicons/react/outline';
 import '@uppy/core/dist/style.css';
@@ -14,6 +14,8 @@ import RenameItemSlideOver from './components/SlideOvers/RenameFileSlideOver';
 import ExplorerTable from './components/ListItems';
 import UploadModal from '../../../components/UploadModal';
 import { useAppSelector } from '../../../app/hooks';
+
+const Watchers = React.lazy(() => import('../../../components/Watchers'));
 
 export default function ExplorerPage() {
   const { folderId } = useParams();
@@ -60,6 +62,9 @@ export default function ExplorerPage() {
       </div>
 
       {/* Slide Overs */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Watchers />
+      </Suspense>
       {showCreateFolderSlideOver ? <CreateFolderSlideOver /> : null}
       {showRenameFileSlideOver ? <RenameItemSlideOver /> : null}
     </>
