@@ -1,3 +1,7 @@
+export interface IUser {
+  default_workspace_id: string;
+}
+
 export interface IErrorRequest {
   status: number;
   data: {

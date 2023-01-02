@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { FolderFilled } from '@ant-design/icons';
-import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { useGetHub } from '../../features/hubs/hubService';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
@@ -8,6 +6,8 @@ import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
 import ListModal from '../../pages/workspace/lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -17,8 +17,9 @@ interface WalletIndexProps {
 function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [showSubWallet, setShowSubWallet] = useState<boolean | string>(false);
+  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const [walletId, setGetWalletId] = useState('');
+  const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
@@ -26,68 +27,100 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const handleLocation = (id: string) => {
     navigate(`/workspace/wallet/${id}`);
   };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   const handleShowSubWallet = (id: string) => {
     setWalletParentId(id);
-    setShowSubWallet(!showSubWallet);
     if (showSubWallet === id) {
-      setShowSubWallet(false);
+      return setShowSubWallet(null);
     }
     setShowSubWallet(id);
   };
 
   return data?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data?.wallets.length !== 0 ? (
-        data?.data?.wallets.map((wallet) => (
+      {data?.data?.wallets.length == 0 && data?.data?.lists.length == 0 && (
+        <div className="flex space-x-1 text-sm pl-7">
+          Create a
+          <span className="text-gray-600 underline">
+            <p onClick={() => setShowWalletModal(true)}>Wallet</p>
+          </span>
+          ,
+          <span className="text-gray-600 underline">
+            <p onClick={() => setShowListModal(true)}>List</p>
+          </span>
+        </div>
+      )}
+      {data?.data?.wallets.length !== 0 &&
+        data?.data?.wallets.map((wallet, i) => (
           <div key={wallet.id}>
-            <section className="flex items-center justify-between pl-5 text-sm hover:bg-gray-100">
-              <div
-                id="walletLeft"
-                className="flex items-center justify-center space-x-1"
-              >
-                {/* showsub */}
-                <button
-                  type="button"
+            <section
+              className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8"
+              onMouseEnter={() => handleMouseOver(i)}
+              onMouseLeave={handleMouseOut}
+            >
+              <div id="walletLeft" className="flex items-center justify-center">
+                {/* showsub1 */}
+                <div
                   onClick={() => handleShowSubWallet(wallet.id)}
+                  className="flex items-center"
                 >
                   {showSubWallet === wallet.id ? (
-                    <ChevronDownIcon
-                      className="flex-shrink-0 w-5 h-3"
-                      aria-hidden="true"
-                    />
+                    <>
+                      <VscTriangleDown
+                        className="flex-shrink-0 h-3"
+                        aria-hidden="true"
+                        color="rgba(72, 67, 67, 0.64)"
+                      />
+                      <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
+                    </>
                   ) : (
-                    <ChevronRightIcon
-                      className="flex-shrink-0 w-5 h-3"
-                      aria-hidden="true"
-                    />
+                    <>
+                      <VscTriangleRight
+                        className="flex-shrink-0 h-3"
+                        aria-hidden="true"
+                        color="rgba(72, 67, 67, 0.64)"
+                      />
+                      <FaFolder color="rgba(72, 67, 67, 0.64)" />
+                    </>
                   )}
-                </button>
-
-                <FolderFilled />
-                <button type="button" onClick={() => handleLocation(wallet.id)}>
-                  <p className="text-sm">{wallet.name}</p>
-                </button>
+                </div>
+                <div
+                  onClick={() => handleLocation(wallet.id)}
+                  className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
+                >
+                  <p
+                    className="tracking-wider capitalize"
+                    style={{ fontSize: '10px' }}
+                  >
+                    {wallet.name}
+                  </p>
+                </div>
               </div>
-
-              <div className="flex items-center justify-end space-x-1">
+              <div
+                id="walletRight"
+                className={`flex items-center justify-end space-x-1 ${
+                  isHovering === i ? 'block' : 'hidden'
+                }`}
+                onClick={() => setGetWalletId(wallet.id)}
+              >
                 <MenuDropdown />
-                <PlusDropDown
-                  walletId={wallet.id}
-                />
+                <PlusDropDown walletId={walletId} />
               </div>
             </section>
             <div>
               <WalletModal
-                walletId={wallet.id}
                 walletVisible={showWalletModal}
                 onCloseWalletModal={() => setShowWalletModal(false)}
+                walletId={wallet.id}
               />
               {showSubWallet === wallet.id ? (
-                <SubWalletIndex
-                  walletParentId={walletParentId}
-                  // getCurrentHubId={getCurrentHubId}
-                />
+                <SubWalletIndex walletParentId={walletParentId} />
               ) : null}
               <ListModal
                 walletId={wallet.id}
@@ -96,23 +129,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               />
             </div>
           </div>
-        ))
-      ) : (
-        <div className="flex space-x-1 text-sm pl-7">
-          Create a
-          <span className="text-gray-600 underline">
-            <button type="button" onClick={() => setShowWalletModal(true)}>
-              Wallet
-            </button>
-          </span>
-          ,
-          <span className="text-gray-600 underline">
-            <button type="button" onClick={() => setShowListModal(true)}>
-              List
-            </button>
-          </span>
-        </div>
-      )}
+        ))}
     </div>
   ) : null;
 }

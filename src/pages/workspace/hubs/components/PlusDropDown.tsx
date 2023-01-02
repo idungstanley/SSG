@@ -15,12 +15,13 @@ import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../lists/components/ListModal';
 import { classNames } from '../../../../utils';
+import { BsPlusLg } from 'react-icons/bs';
 
 interface PlusDropDownProps {
   walletId: string;
 }
 
-function PlusDropDown({ walletId}: PlusDropDownProps) {
+function PlusDropDown({ walletId }: PlusDropDownProps) {
   const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
   const [showListModal, setShowListModal] = useState<boolean>(false);
 
@@ -39,8 +40,12 @@ function PlusDropDown({ walletId}: PlusDropDownProps) {
 
       <Menu as="div" className="">
         <div>
-          <Menu.Button className="flex mt-4 text-sm text-gray-400 ">
-            <PlusOutlined className="w-6 h-6" aria-hidden="true" />
+          <Menu.Button className=" text-gray-400 flex text-sm">
+            <BsPlusLg
+              className="w-2.5 h-2.5"
+              aria-hidden="true"
+              color="black"
+            />
           </Menu.Button>
         </div>
         <Transition
