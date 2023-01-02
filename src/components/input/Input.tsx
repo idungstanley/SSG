@@ -1,17 +1,17 @@
 import React from 'react';
 
 interface InputDataTypes {
-  label: string
-  placeholder: string
-  hint: string
-  name: string
-  cornerHint: string
-  type: string
-  autoComplete: string
-  value: string
-  leadingIcon: string
-  trailingIcon: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  label?: string;
+  placeholder?: string;
+  hint?: string;
+  name: string;
+  cornerHint?: string;
+  type?: string;
+  autoComplete?: string;
+  value?: string;
+  leadingIcon?: string | JSX.Element;
+  trailingIcon?: string | JSX.Element;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 function Input({
   label,
@@ -19,7 +19,7 @@ function Input({
   hint,
   cornerHint,
   name,
-  type,
+  type = 'text',
   autoComplete,
   value,
   onChange,
@@ -73,17 +73,5 @@ function Input({
     </div>
   );
 }
-
-Input.defaultProps = {
-  label: null,
-  placeholder: null,
-  hint: null,
-  cornerHint: null,
-  type: 'text',
-  autoComplete: null,
-  value: null,
-  leadingIcon: null,
-  trailingIcon: null,
-};
 
 export default Input;
