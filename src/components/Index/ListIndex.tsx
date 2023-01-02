@@ -24,7 +24,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-5 ml-0.5 hover:bg-gray-100">
+            <section className="flex justify-between items-center text-sm pl-6 ml-0.5 hover:bg-gray-100">
               <div className="flex items-center justify-center space-x-1">
                 <BsListUl
                   className="flex-shrink-0 h-3 w-5"
