@@ -108,6 +108,17 @@ export const UpdateTimeEntriesService = (data) => {
   return response;
 };
 
+export const DeleteTimeEntriesService = (data) => {
+  const response = requestNew(
+    {
+      url: `time-entries/${data.id}`,
+      method: 'DELETE',
+    },
+    true
+  );
+  return response;
+};
+
 export const AddTaskWatcherService = (data) => {
   const taskID = data.queryKey[1];
   const response = requestNew(

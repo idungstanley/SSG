@@ -60,6 +60,10 @@ function TimeEntriesDropdown({
     }
   };
 
+  const handleDeleteEntry = (id) => {
+    console.log(id);
+  };
+
   const totalDuration = getEntries?.data?.total_duration;
   return (
     <div className="">
@@ -116,10 +120,12 @@ function TimeEntriesDropdown({
                         taskId={taskId}
                       />
                     ) : null}
-                    <TrashIcon
-                      className="flex-shrink-0 h-3 w-5 text-red-400"
-                      aria-hidden="true"
-                    />
+                    <button type="button" onClick={() => handleDeleteEntry(id)}>
+                      <TrashIcon
+                        className="flex-shrink-0 h-3 w-5 text-red-400"
+                        aria-hidden="true"
+                      />
+                    </button>
                   </div>
                 </section>
               )
