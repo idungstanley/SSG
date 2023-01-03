@@ -110,7 +110,11 @@ function TimeEntriesDropdown({
                       />
                     </button>
                     {openUpdateEntry === id ? (
-                      <UpdateTimeEntryDropdown id={id} />
+                      <UpdateTimeEntryDropdown
+                        id={id}
+                        setOpenUpdateEntry={setOpenUpdateEntry}
+                        taskId={taskId}
+                      />
                     ) : null}
                     <TrashIcon
                       className="flex-shrink-0 h-3 w-5 text-red-400"

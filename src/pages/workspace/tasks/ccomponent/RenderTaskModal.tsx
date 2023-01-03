@@ -22,7 +22,7 @@ import {
   AddTaskWatcherService,
   GetTaskWatcherService,
 } from '../../../../features/task/taskService';
-import TimeEntriesDropdown from './dropdown/TimeEntriesDropdown';
+import TimeEntriesDropdown from './dropDown/TimeEntriesDropdown';
 
 function RenderTaskModal() {
   const { taskId } = useParams();

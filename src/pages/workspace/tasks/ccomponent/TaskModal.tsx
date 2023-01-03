@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BorderOutlined, CalendarTwoTone, CloseOutlined, EyeInvisibleTwoTone, FlagTwoTone, PlusOutlined, PlusSquareTwoTone, TagTwoTone } from '@ant-design/icons';
+import {
+  BorderOutlined,
+  CalendarTwoTone,
+  CloseOutlined,
+  EyeInvisibleTwoTone,
+  FlagTwoTone,
+  PlusOutlined,
+  PlusSquareTwoTone,
+  TagTwoTone,
+} from '@ant-design/icons';
 import {
   ArrowDownIcon,
   PaperClipIcon,
@@ -25,7 +34,7 @@ function TaskModal({
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries('createtask' as any);
       onCloseTaskModal();
     },
   });
@@ -58,7 +67,7 @@ function TaskModal({
   return (
     <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 z-10 backdrop-blur-sm flex justify-center items-center">
       <div className="absolute right-10 w-5/12 bottom-5 flex flex-col">
-        <div className="bg-white p-4 shadow">
+        <div className="bg-red-400 p-4 shadow">
           <section className="mb-3">
             <div
               id="taskformheader"
@@ -69,7 +78,7 @@ function TaskModal({
                 <input
                   type="text"
                   placeholder="Enter Task Name"
-                  className="w-96 border-0 border-transparent focus:border-transparent focus:ring-0"
+                  className="w-96 border-0 text-red-500 border-transparent focus:border-transparent focus:ring-0"
                   name="name"
                   onChange={handleTaskChange}
                 />

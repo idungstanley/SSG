@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface TaskState {
-  task: string[]
+  task: string[];
 }
 
 const initialState: TaskState = {
@@ -12,12 +12,13 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    createTask(state, action) {
+    createTaskSlice(state, action) {
       state.task.push(action.payload);
     },
+    // timeEntries(state, action: PayloadAction<>) {},
     checkIfTask: (state) => state,
   },
 });
 
-export const { createTask, checkIfTask } = taskSlice.actions;
+export const { createTaskSlice, checkIfTask } = taskSlice.actions;
 export default taskSlice.reducer;

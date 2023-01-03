@@ -9,7 +9,6 @@ import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 function Hubs() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { data, status } = useGetHubList();
-  console.log(data);
 
   return (
     <>

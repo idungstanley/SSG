@@ -32,7 +32,7 @@ function RenderList() {
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['taskdata']);
+      queryClient.invalidateQueries('createtask' as any);
       setAddNewItem(!addNewItem);
     },
   });
