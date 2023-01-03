@@ -13,10 +13,10 @@ import {
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
-import { classNames } from "../../../../utils";
+import { classNames } from '../../../../utils';
 
 interface TaskDropDownProps {
-  getListId?: string,
+  getListId?: string;
 }
 
 function TaskDropdown({ getListId }: TaskDropDownProps) {
@@ -51,7 +51,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2',
+                    'px-4 py-2 text-sm text-gray-700 text-left flex items-center space-x-2'
                   )}
                   onClick={() => setShowTaskModal(true)}
                 >
@@ -70,7 +70,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                   to="/workspace/docs"
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <DocumentAddIcon className="h-4 w-4" aria-hidden="true" />
@@ -84,7 +84,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                   to="/workspace/docs"
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <PencilAltIcon className="h-4 w-4" aria-hidden="true" />
@@ -98,7 +98,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <WalletOutlined
@@ -115,7 +115,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <TemplateIcon className="h-4 w-4" aria-hidden="true" />
@@ -128,7 +128,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                 <div
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left',
+                    'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
                   <ImportOutlined
