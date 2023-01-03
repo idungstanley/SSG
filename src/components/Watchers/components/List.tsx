@@ -45,21 +45,18 @@ export default function List({ item }: ListProps) {
 
   return watchers ? (
     watchers.length ? (
-      <>
-        <h3>Watchers:</h3>
+      <div>
+        <h3>Watchers list:</h3>
         <ul role="list" className="divide-y divide-gray-200">
           {watchers.map((watcher) => (
             <li
               key={watcher.id}
               className="flex py-4 w-full items-center justify-between"
             >
-              <div>
+              <div className="flex">
                 <AvatarWithInitials
                   initials={watcher.team_member.initials}
-                  height="h-4"
-                  width="w-4"
                   backgroundColour={watcher.team_member.colour}
-                  roundedStyle="rounded"
                 />
 
                 <div className="ml-3">
@@ -79,7 +76,7 @@ export default function List({ item }: ListProps) {
             </li>
           ))}
         </ul>
-      </>
+      </div>
     ) : (
       <FullScreenMessage
         title="You have no watchers yet"

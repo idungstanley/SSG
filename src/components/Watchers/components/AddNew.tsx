@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Spinner } from '../../../common';
-import { useCreateWatcher } from '../../../features/general/watchers/watchersService';
+import {
+  useCreateWatcher,
+  useGetItemWatchers,
+} from '../../../features/general/watchers/watchersService';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { itemType } from '../../../types';
 import { ISelectedData } from '../../PermissionManagement';
@@ -11,11 +14,16 @@ interface AddNewProps {
 }
 
 export default function AddNew({ item }: AddNewProps) {
-  const [selectedMember] = useState<ISelectedData | null>(
-    null
-  );
   const { data, status } = useGetTeamMembers({ page: 0, query: '' });
   const teamMembers = data?.data.team_members;
+
+  const { data: dt } = useGetItemWatchers(item);
+  const watcherIds = dt?.data.watchers.map((watcher) => watcher.team_member_id);
+
+  // get unique members that are not in watchers list
+  const membersWithoutWatchers = teamMembers?.filter(
+    (member) => !watcherIds?.includes(member.id)
+  );
 
   const { mutate: onCreate } = useCreateWatcher(item.id);
 
@@ -36,18 +44,21 @@ export default function AddNew({ item }: AddNewProps) {
     );
   }
 
-  return teamMembers ? (
-    <SelectMenuTeamMembers
-      teamMembers={data?.data.team_members.map((i) => ({
-        id: i.id,
-        name: i.name || i.user.name,
-        email: i.user?.email,
-        accessLevel: i.id,
-        type: 'member',
-      }))}
-      selectedData={selectedMember}
-      setSelectedData={handleChange}
-      title="Add new watcher:"
-    />
+  return membersWithoutWatchers ? (
+    membersWithoutWatchers.length ? (
+      <SelectMenuTeamMembers
+        teamMembers={membersWithoutWatchers.map((i) => ({
+          id: i.id,
+          name: i.name || i.user.name,
+          email: i.user?.email,
+          accessLevel: i.id,
+          type: 'member',
+        }))}
+        selectedData={null}
+        setSelectedData={handleChange}
+        title="Add new watcher:"
+        showEmail
+      />
+    ) : null
   ) : null;
 }

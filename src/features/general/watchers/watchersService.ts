@@ -37,9 +37,7 @@ const createWatcher = (data: {
       url: 'watch',
       method: 'POST',
       data: {
-        message: data.team_member_ids,
-        type: data.type,
-        id: data.id,
+        ...data,
       },
     },
     true
@@ -67,9 +65,7 @@ const removeWatcher = (data: {
       url: 'watch/remove',
       method: 'POST',
       data: {
-        message: data.team_member_ids,
-        type: data.type,
-        id: data.id,
+        ...data,
       },
     },
     true
