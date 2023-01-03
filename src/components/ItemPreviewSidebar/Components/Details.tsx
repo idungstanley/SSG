@@ -22,7 +22,8 @@ interface DetailsProps {
 
 export default function Details({ item, type }: DetailsProps) {
   const dispatch = useAppDispatch();
-  const onShowWatchers = () => dispatch(setShowWatchersSideOver(true));
+  const onShowWatchers = () =>
+    dispatch(setShowWatchersSideOver({ show: true, type }));
   const [showPopup, setShowPopup] = useState(false);
 
   const title =

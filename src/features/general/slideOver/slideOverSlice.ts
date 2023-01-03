@@ -1,6 +1,21 @@
+import { itemType } from './../../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+interface SideOverState {
+  showCreateInboxSlideOver: boolean;
+  showAssignInboxFileSlideOver: boolean;
+  showCreateFolderSlideOver: boolean;
+  showInviteTeamMemberSlideOver: boolean;
+  showMyWorkspacesSlideOver: boolean;
+  showCreateTeamMemberGroupSlideOver: boolean;
+  showAddGroupTeamMemberSlideOver: boolean;
+  showRenameFileSlideOver: boolean;
+  showAddTeamMembersOrGroupsSideOver: boolean;
+  showWatchersSideOver: boolean;
+  itemTypeSideOver: itemType;
+}
+
+const initialState: SideOverState = {
   showCreateInboxSlideOver: false,
   showAssignInboxFileSlideOver: false,
   showCreateFolderSlideOver: false,
@@ -11,6 +26,7 @@ const initialState = {
   showRenameFileSlideOver: false,
   showAddTeamMembersOrGroupsSideOver: false,
   showWatchersSideOver: false,
+  itemTypeSideOver: 'file',
 };
 
 export const slideOverSlice = createSlice({
@@ -71,8 +87,16 @@ export const slideOverSlice = createSlice({
     ) => {
       state.showAddTeamMembersOrGroupsSideOver = action.payload;
     },
-    setShowWatchersSideOver: (state, action: PayloadAction<boolean>) => {
-      state.showWatchersSideOver = action.payload;
+    setShowWatchersSideOver: (
+      state,
+      action: PayloadAction<{ type?: itemType; show: boolean }>
+    ) => {
+      if (action.payload.type) {
+        state.showWatchersSideOver = action.payload.show;
+        state.itemTypeSideOver = action.payload.type;
+      } else {
+        state.showWatchersSideOver = action.payload.show;
+      }
     },
   },
 });

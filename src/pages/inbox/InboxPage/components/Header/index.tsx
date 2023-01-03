@@ -77,7 +77,8 @@ function Header() {
     {
       buttonStyle: 'white',
       label: 'Watchers',
-      onClick: () => dispatch(setShowWatchersSideOver(true)),
+      onClick: () =>
+        dispatch(setShowWatchersSideOver({ show: true, type: 'inbox' })),
       icon: (
         <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
       ),

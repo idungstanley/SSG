@@ -8,7 +8,7 @@ interface SpinnerProps {
 
 function Spinner({ size = 8, color = '#4f46e5' }: SpinnerProps) {
   return (
-    <div className="dot-spinner">
+    <div className={`dot-spinner ${size + color}`}>
       <div className="dot-spinner__dot"></div>
       <div className="dot-spinner__dot"></div>
       <div className="dot-spinner__dot"></div>

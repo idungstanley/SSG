@@ -27,6 +27,10 @@ export default function ExplorerPage() {
     (state) => state.slideOver
   );
 
+  const { selectedItemId, selectedItemType } = useAppSelector(
+    (state) => state.explorer
+  );
+
   return (
     <>
       <UploadModal />
@@ -63,7 +67,9 @@ export default function ExplorerPage() {
 
       {/* Slide Overs */}
       <Suspense fallback={<div>Loading...</div>}>
-        <Watchers />
+        {selectedItemType && selectedItemId ? (
+          <Watchers type={selectedItemType} itemId={selectedItemId} />
+        ) : null}
       </Suspense>
       {showCreateFolderSlideOver ? <CreateFolderSlideOver /> : null}
       {showRenameFileSlideOver ? <RenameItemSlideOver /> : null}

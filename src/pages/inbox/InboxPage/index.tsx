@@ -6,10 +6,16 @@ import LeftSidebar from './components/LeftSidebar';
 import Header from './components/Header';
 import AssignInboxFileSlideOver from './components/SlideOvers/AssignInboxFileSlideOver';
 import UploadModal from '../../../components/UploadModal';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../app/hooks';
 
 const Watchers = React.lazy(() => import('../../../components/Watchers'));
 
 function InboxPage() {
+  const { inboxId } = useParams();
+  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
+  const { itemTypeSideOver } = useAppSelector((state) => state.slideOver);
+
   return (
     <>
       <UploadModal />
@@ -29,7 +35,15 @@ function InboxPage() {
 
         {/* Slide Overs */}
         <Suspense fallback={<div>Loading...</div>}>
-          <Watchers />
+          {inboxId ? (
+            <Watchers
+              itemId={
+                itemTypeSideOver === 'inbox'
+                  ? inboxId
+                  : selectedInboxFileId || ''
+              }
+            />
+          ) : null}
         </Suspense>
         <AssignInboxFileSlideOver />
       </div>

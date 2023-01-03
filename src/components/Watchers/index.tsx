@@ -5,37 +5,28 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowWatchersSideOver } from '../../features/general/slideOver/slideOverSlice';
 import List from './components/List';
 import AddNew from './components/AddNew';
-import { useParams } from 'react-router-dom';
-import { itemType } from '../../types';
 
-export default function Watchers() {
+interface WatchersProps {
+  itemId: string;
+}
+
+export default function Watchers({ itemId }: WatchersProps) {
   const dispatch = useAppDispatch();
-  const { showWatchersSideOver } = useAppSelector((state) => state.slideOver);
-  const onClose = () => dispatch(setShowWatchersSideOver(false));
-
-  const { inboxId } = useParams();
-  const { selectedInboxFileId } = useAppSelector((state) => state.inbox);
-  const { selectedItemId, selectedItemType } = useAppSelector(
-    (state) => state.explorer
+  const { showWatchersSideOver, itemTypeSideOver } = useAppSelector(
+    (state) => state.slideOver
   );
+  const onClose = () => dispatch(setShowWatchersSideOver({ show: false }));
 
-  const isInboxFile = !!selectedInboxFileId;
-  const isInbox = !!inboxId;
-
-  const item: { type: itemType; id: string } = isInboxFile
-    ? { type: 'inbox', id: inboxId || '' }
-    : isInbox
-    ? { type: 'inbox_file', id: selectedInboxFileId || '' }
-    : { type: selectedItemType || 'file', id: selectedItemId || '' };
+  const item = { type: itemTypeSideOver, id: itemId };
 
   return (
     <Transition.Root show={showWatchersSideOver} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <div className="absolute inset-0" />
+        <div className="absolute inset-0 top-20" />
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 top-20 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -46,7 +37,7 @@ export default function Watchers() {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-2 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
@@ -64,7 +55,7 @@ export default function Watchers() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex gap-6 px-4 sm:px-6 h-full">
+                    <div className="relative mt-6 flex flex-col gap-6 px-4 sm:px-6 h-full">
                       <AddNew item={item} />
                       <List item={item} />
                     </div>

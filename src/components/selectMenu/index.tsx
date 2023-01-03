@@ -79,41 +79,21 @@ export default function SelectMenuTeamMembers({
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                        'relative group cursor-default select-none py-2 pl-3 pr-9'
                       )
                     }
                     value={person}
                   >
-                    {({ selected }) => (
-                      <div className="flex items-center">
-                        <span
-                          className={classNames(
-                            selected ? 'font-semibold' : 'font-normal',
-                            'truncate'
-                          )}
-                        >
-                          {person.name}
+                    <div className="flex items-center gap-3">
+                      <span className="font-normal truncate">
+                        {person.name}
+                      </span>
+                      {showEmail ? (
+                        <span className="ml-2 group-hover:text-white truncate text-sm text-gray-500">
+                          {person.email}
                         </span>
-                        {showEmail ? (
-                          <span
-                            className={classNames(
-                              selected ? 'text-indigo-200' : 'text-gray-500',
-                              'ml-2 truncate text-xs'
-                            )}
-                          >
-                            {person.email}
-                          </span>
-                        ) : null}
-                      </div>
-                      // <span
-                      //   className={classNames(
-                      //     selected ? 'font-semibold' : 'font-normal',
-                      //     'block truncate'
-                      //   )}
-                      // >
-                      //   {person.name}
-                      // </span>
-                    )}
+                      ) : null}
+                    </div>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
