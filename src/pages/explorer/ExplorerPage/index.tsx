@@ -60,7 +60,7 @@ export default function ExplorerPage() {
           />
         ) : null}
 
-        <div className="flex-1 overflow-y-scroll relative overflow-x-none bg-white align-middle min-w-full overflow-hidden h-full">
+        <div className="flex overflow-y-scroll relative overflow-x-none bg-white w-full overflow-hidden h-full">
           <ExplorerTable />
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function ExplorerPage() {
       {/* Slide Overs */}
       <Suspense fallback={<div>Loading...</div>}>
         {selectedItemType && selectedItemId ? (
-          <Watchers type={selectedItemType} itemId={selectedItemId} />
+          <Watchers itemId={selectedItemId} />
         ) : null}
       </Suspense>
       {showCreateFolderSlideOver ? <CreateFolderSlideOver /> : null}

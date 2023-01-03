@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Input from '../input/Input';
 import { SearchIcon } from '@heroicons/react/outline';
+import { useAppSelector } from '../../app/hooks';
+import { useGetChat, useGetChats } from '../../features/chat/chatService';
+import CreateChatSideOver from './components/CreateChatSideOver';
+import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 
 const BarsIcon = (
   <svg
@@ -19,80 +23,28 @@ const BarsIcon = (
   </svg>
 );
 
-const people = [
-  {
-    name: 'Calvin Hawkins',
-    email: 'calvin.hawkins@example.com',
-    image:
-      'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    time: '11.21AM',
-  },
-  {
-    name: 'Kristen Ramos',
-    time: '11.61AM',
-    email: 'kristen.ramos@example.com',
-    image:
-      'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Ted Fox',
-    time: '11.31AM',
-    email: 'ted.fox@example.com',
-    image:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-];
-
 export default function Chat() {
   const [searchValue, setSearchValue] = useState('');
-  // const [messages, setMessages] = useState<{ sender: string; body: string }[]>(
-  //   []
-  // );
-  // const [isConnectionOpen, setConnectionOpen] = useState(false);
-  // const [messageBody, setMessageBody] = useState('test');
+  const [showSideOver, setShowSideOver] = useState(false);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const { selectedItemId, selectedItemType } = useAppSelector(
+    (state) => state.explorer
+  );
 
-  // const ws = useRef<WebSocket | null>(null);
+  const { data } = useGetChats({ type: selectedItemType, id: selectedItemId });
 
-  // const sendMessage = () => {
-  //   if (messageBody) {
-  //     if (ws.current) {
-  //       ws.current.send(
-  //         JSON.stringify({
-  //           sender: 'username',
-  //           body: messageBody,
-  //         })
-  //       );
-  //     }
-  //     setMessageBody('');
-  //   }
-  // };
-
-  // React.useEffect(() => {
-  //   ws.current = new WebSocket(
-  //     'wss://socket.alsoworkspace.com/app/alsoworkspace'
-  //   );
-
-  //   // Opening the ws connection
-
-  //   ws.current.onopen = () => {
-  //     console.log('Connection opened');
-  //     setConnectionOpen(true);
-  //   };
-
-  //   ws.current.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     setMessages((_messages) => [..._messages, data]);
-  //   };
-
-  //   return () => {
-  //     console.log('Cleaning up...');
-  //     ws.current?.close();
-  //   };
-  // }, []);
+  const { data: chat } = useGetChat(selectedChatId);
 
   return (
-    <div className="p-4 flex flex-col gap-4 w-80 h-full justify-between">
-      <div>
+    <>
+      <div className="p-4 flex flex-col gap-4 w-80 h-full border-l">
+        <button
+          onClick={() => setShowSideOver(true)}
+          type="button"
+          className="px-3.5 py-2 border border-transparent w-full mb-4 text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
+        >
+          Create new chat
+        </button>
         <Input
           leadingIcon={
             <SearchIcon className="w-5 h-5 stroke-current text-gray-600" />
@@ -103,37 +55,95 @@ export default function Chat() {
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Enter search value..."
         />
-        <ul role="list" className="divide-y divide-gray-200">
-          {people.map((person) => (
-            <li
-              key={person.email}
-              className="flex py-4 cursor-pointer hover:bg-gray-100"
-            >
-              <img
-                className="h-10 w-10 rounded-full"
-                src={person.image}
-                alt=""
-              />
-              <div className="flex justify-between items-start w-full">
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">
-                    {person.name}
+        {!data?.length ? (
+          <FullScreenMessage
+            title="No chats yet."
+            description="Create one."
+            showHalFScreen
+          />
+        ) : (
+          <ul role="list" className="divide-y divide-gray-200">
+            {data?.map((chat) => (
+              <li
+                onClick={() =>
+                  setSelectedChatId((prev) =>
+                    prev === chat.id ? null : chat.id
+                  )
+                }
+                key={chat.id}
+                className="flex group py-4 cursor-pointer"
+              >
+                <div className="flex justify-between items-center w-full">
+                  <p className="text-sm group-hover:text-gray-900 font-medium text-gray-700">
+                    {chat.name}
                   </p>
-                  <p className="text-sm text-gray-500">{person.email}</p>
+
+                  <p className="text-xs group-hover:text-gray-700 text-gray-500">
+                    {chat.new_messages_count}
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500">{person.time}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+        {chat ? (
+          <div>
+            <p>
+              Chat{' '}
+              <span className="font-semibold text-indigo-600">{chat.name}</span>
+            </p>
+          </div>
+        ) : null}
       </div>
-      <button
-        // onClick={sendMessage}
-        type="button"
-        className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
-      >
-        Create new chat
-      </button>
-    </div>
+      <CreateChatSideOver
+        showSideOver={showSideOver}
+        setShowSideOver={setShowSideOver}
+      />
+    </>
   );
 }
+
+// const [messages, setMessages] = useState<{ sender: string; body: string }[]>(
+//   []
+// );
+// const [isConnectionOpen, setConnectionOpen] = useState(false);
+// const [messageBody, setMessageBody] = useState('test');
+
+// const ws = useRef<WebSocket | null>(null);
+
+// const sendMessage = () => {
+//   if (messageBody) {
+//     if (ws.current) {
+//       ws.current.send(
+//         JSON.stringify({
+//           sender: 'username',
+//           body: messageBody,
+//         })
+//       );
+//     }
+//     setMessageBody('');
+//   }
+// };
+
+// React.useEffect(() => {
+//   ws.current = new WebSocket(
+//     'wss://socket.alsoworkspace.com/app/alsoworkspace'
+//   );
+
+//   // Opening the ws connection
+
+//   ws.current.onopen = () => {
+//     console.log('Connection opened');
+//     setConnectionOpen(true);
+//   };
+
+//   ws.current.onmessage = (event) => {
+//     const data = JSON.parse(event.data);
+//     setMessages((_messages) => [..._messages, data]);
+//   };
+
+//   return () => {
+//     console.log('Cleaning up...');
+//     ws.current?.close();
+//   };
+// }, []);

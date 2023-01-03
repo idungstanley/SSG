@@ -4,6 +4,7 @@ import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import TopMenu from './TopMenu';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
+import Chat from '../../../components/Chat';
 
 function MainLayout() {
   const progressBarRef = useRef<LoadingBarRef>(null);
@@ -30,9 +31,13 @@ function MainLayout() {
         ref={progressBarRef}
       />
       <TopMenu />
-      <div className="h-full overflow-hidden">
-        <Outlet />
+      <div className="flex">
+        <div className="flex-1 w-full h-full overflow-hidden">
+          <Outlet />
+        </div>
+        <Chat />
       </div>
+
       <MyWorkspacesSlideOver />
     </div>
   );

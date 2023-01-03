@@ -225,7 +225,7 @@ export default function ExplorerTable() {
       showCta
     />
   ) : (
-    <div className="flex flex-col h-full px-3 md:px-0">
+    <div className="flex flex-col h-full px-3 md:px-0 w-full">
       {selectedItemId && item && selectedItemType ? (
         <ItemPreviewSidebar item={item} type={selectedItemType} />
       ) : null}

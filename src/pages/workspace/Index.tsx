@@ -4,7 +4,6 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
 import UploadModal from '../../components/UploadModal';
-// import Chat from '../../components/Chat';
 
 function Index() {
   const { showSidebar } = useAppSelector((state) => state.workspace);
@@ -26,7 +25,6 @@ function Index() {
             </div>
           </main>
         </div>
-        {/* <Chat /> */}
       </div>
     </>
   );
