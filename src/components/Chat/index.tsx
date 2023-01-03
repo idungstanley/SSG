@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Input from '../input/Input';
 import { SearchIcon } from '@heroicons/react/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useGetChat, useGetChats } from '../../features/chat/chatService';
 import CreateChatSideOver from './components/CreateChatSideOver';
 import FullScreenMessage from '../CenterMessage/FullScreenMessage';
+import AvatarWithInitials from '../avatar/AvatarWithInitials';
 
 const BarsIcon = (
   <svg
@@ -33,7 +34,58 @@ export default function Chat() {
 
   const { data } = useGetChats({ type: selectedItemType, id: selectedItemId });
 
-  const { data: chat } = useGetChat(selectedChatId);
+  const { data: dt } = useGetChat(selectedChatId);
+
+  const chat = dt?.chat;
+  const messages = dt?.messages;
+
+  // const [isConnectionOpen, setConnectionOpen] = useState(false);
+  // const ws = useRef<WebSocket | null>(null);
+
+  // const connect = (id: string) => {
+  //   ws.current = new WebSocket(
+  //     'wss://socket.alsoworkspace.com/app/alsoworkspace'
+  //   );
+
+  //   ws.current.onopen = () => {
+  //     setConnectionOpen(true);
+  //     ws.current?.send(
+  //       JSON.stringify({
+  //         command: 'subscribe',
+  //         identifier: `{"channel":"SendMessageEvent-${id}"}`,
+  //       })
+  //     );
+  //     console.log('opened');
+  //   };
+
+  //   ws.current.onmessage = (e: MessageEvent<any>) => {
+  //     const message = JSON.parse(e.data);
+  //     console.log({ message });
+  //   };
+
+  //   ws.current.onclose = () => {
+  //     setConnectionOpen(false);
+  //     console.log('closed');
+  //   };
+
+  //   ws.current.onerror = () => {
+  //     console.log('error');
+  //   };
+  // };
+
+  const handleClick = (id: string) => {
+    setSelectedChatId((prev) => (prev === id ? null : id));
+    // connect(id);
+  };
+
+  // const sendMessage = () => {
+  //   ws.current?.send(
+  //     JSON.stringify({
+  //       command: 'subscribe',
+  //       identifier: `{"channel":"SendMessageEvent-${selectedChatId}"}`,
+  //     })
+  //   );
+  // };
 
   return (
     <>
@@ -65,11 +117,7 @@ export default function Chat() {
           <ul role="list" className="divide-y divide-gray-200">
             {data?.map((chat) => (
               <li
-                onClick={() =>
-                  setSelectedChatId((prev) =>
-                    prev === chat.id ? null : chat.id
-                  )
-                }
+                onClick={() => handleClick(chat.id)}
                 key={chat.id}
                 className="flex group py-4 cursor-pointer"
               >
@@ -86,12 +134,28 @@ export default function Chat() {
             ))}
           </ul>
         )}
-        {chat ? (
+        {messages && chat ? (
           <div>
             <p>
               Chat{' '}
               <span className="font-semibold text-indigo-600">{chat.name}</span>
             </p>
+            <div className="flex flex-col gap-4">
+              {messages.map((message) => (
+                <div className="flex gap-3 items-center" key={message.id}>
+                  <AvatarWithInitials
+                    initials={message.team_member.initials}
+                    backgroundColour={message.team_member.colour}
+                  />
+                  <div className="flex flex-col justify-start gap-1 p-2 rounded-xl border">
+                    <p className="text-sm text-gray-600">
+                      {message.team_member.user.name}
+                    </p>
+                    <p className="text-gray-600">{message.message}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
       </div>

@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { itemType } from '../../types';
-import { IChatsRes, IChatFromList, IChatRes, IChat } from './chat.interfaces';
+import {
+  IChatsRes,
+  IChatFromList,
+  IChatRes,
+  IChat,
+  IMessage,
+} from './chat.interfaces';
 
 export const useGetChats = (data: {
   type: itemType | null;
@@ -28,7 +34,7 @@ export const useGetChats = (data: {
   );
 
 export const useGetChat = (id: string | null) =>
-  useQuery<IChatRes, unknown, IChat>(
+  useQuery<IChatRes, unknown, { chat: IChat; messages: IMessage[] }>(
     ['chat', id],
     () =>
       requestNew(
@@ -40,7 +46,7 @@ export const useGetChat = (id: string | null) =>
       ),
     {
       enabled: !!id,
-      select: (chat) => chat.data.chat,
+      select: (chat) => chat.data,
     }
   );
 
