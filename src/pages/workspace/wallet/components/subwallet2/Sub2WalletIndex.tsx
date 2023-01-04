@@ -9,7 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
-import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
+import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
@@ -23,7 +23,7 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
   const [walletId, setGetWalletId] = useState('');
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [getListId, setGetListId] = useState('');
-    const [isHovering, setIsHovering] = useState<number>(-1);
+  const [isHovering, setIsHovering] = useState<number>(-1);
 
   const { data: subwallet } = useQuery<{
     data: { wallets: IWallet[]; lists: IList[] };
@@ -32,12 +32,12 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
     queryFn: getWalletService,
   });
 
-   const handleMouseOver = (i: number) => {
-     setIsHovering(i);
-   };
-   const handleMouseOut = () => {
-     setIsHovering(-1);
-   };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet3 === id) {

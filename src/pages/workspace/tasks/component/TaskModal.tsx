@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BorderOutlined,
@@ -22,7 +21,7 @@ import { Button } from '../../../../components';
 interface TaskModalProps {
   taskVisible: boolean;
   onCloseTaskModal: () => void;
-  getListId: string;
+  getListId: string | undefined;
 }
 
 function TaskModal({
@@ -168,17 +167,5 @@ function TaskModal({
     </div>
   );
 }
-
-TaskModal.defaultProps = {
-  taskVisible: false,
-  getListId: '',
-  // onCloseListModal: false,
-};
-
-TaskModal.propTypes = {
-  taskVisible: PropTypes.bool,
-  onCloseTaskModal: PropTypes.func.isRequired,
-  getListId: PropTypes.string,
-};
 
 export default TaskModal;

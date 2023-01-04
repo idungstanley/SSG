@@ -11,7 +11,7 @@ import { getWalletService } from '../../../../../features/wallet/walletService';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
-import TaskDropdown from '../../../tasks/ccomponent/TaskDropdown';
+import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 
@@ -39,12 +39,12 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
     setShowSubWallet2(id);
   };
 
-   const handleMouseOver = (i: number) => {
-     setIsHovering(i);
-   };
-   const handleMouseOut = () => {
-     setIsHovering(-1);
-   };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   const navigate = useNavigate();
   const handleLocation = (id: string) => {

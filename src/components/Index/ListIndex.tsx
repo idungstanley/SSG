@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetHub } from '../../features/hubs/hubService';
-import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
+import TaskDropdown from '../../pages/workspace/tasks/component/TaskDropdown';
 import { BsListUl } from 'react-icons/bs';
 
 interface ListIndexProps {

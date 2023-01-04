@@ -19,19 +19,15 @@ import {
   getOneTaskService,
   createTimeEntriesService,
   EndTimeEntriesService,
-  AddTaskWatcherService,
-  GetTaskWatcherService,
 } from '../../../../features/task/taskService';
-import TimeEntriesDropdown from './dropDown/TimeEntriesDropdown';
+import TimeEntriesDropdown from './timeEntriesDropdown/TimeEntriesDropdown';
+import Watcher from '../watchers/index';
 
 function RenderTaskModal() {
   const { taskId } = useParams();
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [showTimeEntries, setShowTimeEntries] = useState(false);
-  const [watcherList, setWatcherList] = useState(false);
-  const [getWatchList, setGetWatchList] = useState(false);
-  const [watchersCount, setWatchersCount] = useState(0);
   const [showEntries, setShowEntries] = useState(false);
   const [isBillable, setIsBillable] = useState(false);
 
@@ -52,18 +48,6 @@ function RenderTaskModal() {
     queryKey: ['endTimeClock', taskId],
     queryFn: EndTimeEntriesService,
     enabled: stopTimer,
-  });
-
-  const { data: watcher } = useQuery({
-    queryKey: ['watcher', taskId],
-    queryFn: AddTaskWatcherService,
-    enabled: watcherList,
-  });
-
-  const { data: getWatcher } = useQuery({
-    queryKey: ['watcher', taskId],
-    queryFn: GetTaskWatcherService,
-    enabled: getWatchList,
   });
 
   const defaultEndTimeClockFormState = {
@@ -96,14 +80,6 @@ function RenderTaskModal() {
     setStartTimeClicked(!startTimeClicked);
     if (startTimeClicked) {
       setStopTimer(!stopTimer);
-    }
-  };
-
-  const handleWatcher = () => {
-    setWatcherList(!watcherList);
-    setGetWatchList(!getWatchList);
-    if (getWatcher?.data?.is_watching === true) {
-      setWatchersCount(watchersCount + 1);
     }
   };
 
@@ -255,16 +231,7 @@ function RenderTaskModal() {
                     />
                   </span>
                 </div>
-                <div className="relative">
-                  <EyeOutlined
-                    className="flex-shrink-0 h-5 w-5 text-indigo-400 text-2xl cursor-pointer"
-                    aria-hidden="true"
-                    onClick={() => handleWatcher()}
-                  />
-                  <p className="absolute bottom-1 left-4 bg-indigo-500 rounded text-xs text-white px-0.5 h-4 w-3 text-center ">
-                    {watchersCount}
-                  </p>
-                </div>
+                <Watcher taskId={taskId} />
               </div>
             </section>
           </section>

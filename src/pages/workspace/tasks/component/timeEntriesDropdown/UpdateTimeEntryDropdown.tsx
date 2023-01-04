@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { CalendarOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
@@ -72,7 +71,9 @@ function UpdateTimeEntryDropdown({
 
   console.log(currEntry);
 
-  useEffect(() => getCurrTimeClockData() as any);
+  useEffect(() => {
+    getCurrTimeClockData() as any;
+  }, []);
 
   return (
     <div className="">
@@ -87,7 +88,6 @@ function UpdateTimeEntryDropdown({
           <input
             type="text"
             name="description"
-            onChange={handleUpdateTimeChange}
             value={currEntry?.description}
             placeholder="Enter a note"
             className="border-0 shadow-sm rounded text-gray-600"
@@ -148,9 +148,5 @@ function UpdateTimeEntryDropdown({
     </div>
   );
 }
-
-UpdateTimeEntryDropdown.propTypes = {
-  id: PropTypes.string.isRequired,
-};
 
 export default UpdateTimeEntryDropdown;

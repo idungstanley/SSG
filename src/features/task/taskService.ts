@@ -109,9 +109,10 @@ export const UpdateTimeEntriesService = (data) => {
 };
 
 export const DeleteTimeEntriesService = (data) => {
+  const id = data.queryKey[1];
   const response = requestNew(
     {
-      url: `time-entries/${data.id}`,
+      url: `time-entries/${id}`,
       method: 'DELETE',
     },
     true

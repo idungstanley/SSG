@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   EditOutlined,
   PlayCircleFilled,
   StopFilled,
   TagOutlined,
 } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/outline';
 import moment from 'moment';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
-import { GetTimeEntriesService } from '../../../../../features/task/taskService';
+import {
+  GetTimeEntriesService,
+  DeleteTimeEntriesService,
+} from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
 import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
 
@@ -38,10 +40,22 @@ function TimeEntriesDropdown({
   formState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
+  const queryClient = useQueryClient();
   const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
+  const [getTEId, setTEId] = useState('');
+  const [triggerDel, setTriggerDel] = useState(false);
+
+  queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
+
   const { data: getEntries } = useQuery({
     queryKey: ['getTimeEntries', taskId],
     queryFn: GetTimeEntriesService,
+  });
+
+  useQuery({
+    queryKey: ['delTE', getTEId],
+    queryFn: DeleteTimeEntriesService,
+    enabled: triggerDel,
   });
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,10 +75,11 @@ function TimeEntriesDropdown({
   };
 
   const handleDeleteEntry = (id) => {
-    console.log(id);
+    setTEId(id);
+    setTriggerDel(true);
   };
 
-  const totalDuration = getEntries?.data?.total_duration;
+  const totalDuration = getEntries?.data.total_duration;
   return (
     <div className="">
       <div className="absolute -left-44 top-10 z-10 -mt-3 w-80 rounded-md shadow-lg bg-gray-100">
@@ -198,21 +213,5 @@ function TimeEntriesDropdown({
     </div>
   );
 }
-
-TimeEntriesDropdown.defaultProps = {
-  formState: {},
-};
-
-TimeEntriesDropdown.propTypes = {
-  taskId: PropTypes.string.isRequired,
-  formState: PropTypes.object,
-  setFormState: PropTypes.func.isRequired,
-  startTimeClicked: PropTypes.bool.isRequired,
-  showEntries: PropTypes.bool.isRequired,
-  isBillable: PropTypes.bool.isRequired,
-  setShowEntries: PropTypes.func.isRequired,
-  setIsBillable: PropTypes.func.isRequired,
-  handleTimeTracker: PropTypes.func.isRequired,
-};
 
 export default TimeEntriesDropdown;
