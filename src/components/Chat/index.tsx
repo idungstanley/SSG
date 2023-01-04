@@ -20,6 +20,7 @@ export default function Chat() {
   const dispatch = useAppDispatch();
   const [showSideOver, setShowSideOver] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
 
   const { showChat } = useAppSelector((state) => state.chat);
 
@@ -123,13 +124,15 @@ export default function Chat() {
       >
         <div className="p-4 flex flex-col gap-4 w-80 h-3/4 border-l">
           <div className="flex justify-between items-center">
-            <button
-              onClick={() => setShowSideOver(true)}
-              type="button"
-              className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
-            >
-              Create new chat
-            </button>
+            {selectedItemId ? (
+              <button
+                onClick={() => setShowSideOver(true)}
+                type="button"
+                className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
+              >
+                Create new chat
+              </button>
+            ) : <div></div>}
 
             <XIcon
               onClick={handleHideChat}
