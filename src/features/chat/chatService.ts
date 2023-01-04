@@ -113,3 +113,51 @@ const sendMessageToChat = (data: {
 export const useSendMessageToChat = () => {
   return useMutation(sendMessageToChat);
 };
+
+const addTeamMemberToChat = (data: {
+  chatId: string | null;
+  teamMemberId: string;
+}) => {
+  const request = requestNew(
+    {
+      url: `chats/${data.chatId}/${data.teamMemberId}`,
+      method: 'POST',
+    },
+    true
+  );
+  return request;
+};
+
+export const useAddTeamMemberToChat = (id: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addTeamMemberToChat, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['chats', id]);
+    },
+  });
+};
+
+const deleteTeamMemberFromChat = (data: {
+  chatId: string | null;
+  teamMemberId: string;
+}) => {
+  const request = requestNew(
+    {
+      url: `chats/${data.chatId}/team-member/${data.teamMemberId}`,
+      method: 'DELETE',
+    },
+    true
+  );
+  return request;
+};
+
+export const useDeleteTeamMemberFromChat = (id: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteTeamMemberFromChat, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['chats', id]);
+    },
+  });
+};
