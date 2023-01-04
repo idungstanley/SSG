@@ -41,16 +41,23 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
       {data?.map((chat) => (
         <li
           key={chat.id}
-          className="inline-flex gap-3 items-center rounded-full bg-indigo-100 px-3 py-2 text-xs font-medium text-indigo-800 cursor-pointer"
+          className="inline-flex gap-3 items-center rounded-full bg-indigo-100 px-3 font-medium text-indigo-800 cursor-pointer"
         >
-          <p onClick={() => selectChat(chat.id)}>{chat.name}</p>
-          <span className="flex bg-indigo-600 text-white w-6 h-6 justify-center items-center rounded-full">
-            {chat.new_messages_count}
-          </span>
+          <div
+            onClick={() => selectChat(chat.id)}
+            className="flex gap-3 items-center py-2"
+          >
+            <p className="text-sm">{chat.name}</p>
+            <span className="flex bg-indigo-600 text-xs text-white w-6 h-6 justify-center items-center rounded-full">
+              {chat.new_messages_count}
+            </span>
+          </div>
+
           <TrashIcon
             onClick={() => handleDelete(chat.id)}
             className="h-5 w-5 cursor-pointer"
             aria-hidden="true"
+            id="trashIcon"
           />
         </li>
       ))}

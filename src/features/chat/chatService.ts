@@ -111,11 +111,5 @@ const sendMessageToChat = (data: {
 };
 
 export const useSendMessageToChat = () => {
-  // const queryClient = useQueryClient();
-
-  return useMutation(sendMessageToChat, {
-    onSuccess: () => {
-      // queryClient.invalidateQueries(['chat', id]);
-    },
-  });
+  return useMutation(sendMessageToChat);
 };

@@ -132,7 +132,9 @@ export default function Chat() {
               >
                 Create new chat
               </button>
-            ) : <div></div>}
+            ) : (
+              <div></div>
+            )}
 
             <XIcon
               onClick={handleHideChat}
