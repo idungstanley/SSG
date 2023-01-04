@@ -71,3 +71,30 @@ export const useCreateChat = (id: string | null) => {
     },
   });
 };
+
+const sendMessageToChat = (data: {
+  chatId: string | null;
+  message: string;
+}) => {
+  const request = requestNew(
+    {
+      url: `chats/${data.chatId}/message`,
+      method: 'POST',
+      data: {
+        message: data.message,
+      },
+    },
+    true
+  );
+  return request;
+};
+
+export const useSendMessageToChat = () => {
+  // const queryClient = useQueryClient();
+
+  return useMutation(sendMessageToChat, {
+    onSuccess: () => {
+      // queryClient.invalidateQueries(['chat', id]);
+    },
+  });
+};
