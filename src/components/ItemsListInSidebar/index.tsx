@@ -6,6 +6,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
   resetCurrentItem,
   setCurrentItem,
+  setShowHub,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
@@ -55,8 +56,10 @@ export default function ItemsListInSidebar({
 
   const handleClick = (id: string) => {
     const isMatch = id === currentItemId;
-
+    console.log(id);
+    console.log(currentItemId);
     if (isMatch) {
+      dispatch(setShowHub(false));
       if (!currentItemId) {
         dispatch(
           setCurrentItem({
@@ -68,6 +71,7 @@ export default function ItemsListInSidebar({
         dispatch(resetCurrentItem());
       }
     } else {
+      dispatch(setShowHub(true));
       dispatch(
         setCurrentItem({
           currentItemId: id,

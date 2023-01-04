@@ -3,14 +3,14 @@ import React from 'react';
 interface InputDataTypes {
   label: string;
   placeholder: string;
-  hint: string;
+  hint?: string;
   name: string;
-  cornerHint: string;
+  cornerHint?: string;
   type: string;
-  autoComplete: string;
-  value: string;
-  leadingIcon: string;
-  trailingIcon: string;
+  autoComplete?: string;
+  value?: string;
+  leadingIcon?: string;
+  trailingIcon?: string;
   onChange: any;
 }
 function Input({
@@ -73,17 +73,5 @@ function Input({
     </div>
   );
 }
-
-Input.defaultProps = {
-  label: null,
-  placeholder: null,
-  hint: null,
-  cornerHint: null,
-  type: 'text',
-  autoComplete: null,
-  value: null,
-  leadingIcon: null,
-  trailingIcon: null,
-};
 
 export default Input;

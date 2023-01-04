@@ -8,6 +8,7 @@ import { Button, Input } from '../../../../components';
 interface ListModalProps {
   listVisible: boolean;
   walletId: string;
+  getCurrentHubId?: string
   onCloseListModal: () => void;
 }
 
@@ -15,6 +16,7 @@ function ListModal({
   listVisible,
   onCloseListModal,
   walletId,
+  getCurrentHubId,
 }: ListModalProps) {
   const queryClient = useQueryClient();
   const createList = useMutation(createListService, {
@@ -28,7 +30,7 @@ function ListModal({
     name: '',
   };
 
-  const hub_id = JSON.parse(localStorage.getItem('currentHubId') || '"');
+  // const hub_id = JSON.parse(localStorage.getItem('currentHubId') || '"');
 
   const [formState, setFormState] = useState(defaultListFormState);
 
@@ -43,7 +45,7 @@ function ListModal({
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
-      hubId: hub_id,
+      hubId: getCurrentHubId,
       parentId: walletId,
     });
   };

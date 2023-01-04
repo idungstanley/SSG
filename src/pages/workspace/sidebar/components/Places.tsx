@@ -1,6 +1,7 @@
 // import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import React, { useState, memo } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
+import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
@@ -14,6 +15,8 @@ import inboxIcon from '../../../../assets/branding/inbox.png';
 import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
+import { useAppSelector } from '../../../../app/hooks';
+import { useDispatch } from 'react-redux';
 
 const secondaryNavigation = [
   {
@@ -61,17 +64,11 @@ const secondaryNavigation = [
 ];
 
 function Places() {
-  const [activePlaceId, setActivePlaceId] = useState<number | boolean>(0);
-    // const handleActive = (id: number) => {
-    //   setActivePlaceId((prev) => {
-    //     if (prev === id) {
-    //       return prev;
-    //     } else {
-    //       return id;
-    //     }
-    //   });
-    // };
-
+  const { activePlaceId, showSidebar } = useAppSelector(
+    (state) => state.workspace
+  );
+  const dispatch = useDispatch();
+  // const [activePlaceId, setActivePlaceId] = useState<number | boolean>(0);
   return (
     <div className="mt-2">
       <ul aria-labelledby="projects-headline relative">
@@ -87,16 +84,14 @@ function Places() {
               <button
                 className="flex items-center justify-between w-full "
                 type="button"
-                onClick={() =>
-                  setActivePlaceId((prev) => prev === item.id || item.id)
-                }
+                onClick={() => dispatch(setActivePlaceId(item.id))}
               >
                 {activePlaceId === item.id && (
                   <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500" />
                 )}
                 <span
                   className={`flex items-center content-center self-center ${
-                    activePlaceId === item.id && 'ml-16'
+                    showSidebar && activePlaceId === item.id && 'ml-16'
                   }`}
                 >
                   {item.icon ? (
@@ -130,7 +125,7 @@ function Places() {
                 )}
               </button>
             </li>
-            {activePlaceId === item.id ? (
+            {showSidebar && activePlaceId === item.id ? (
               <div className="mt-2">{item.place}</div>
             ) : null}
           </>

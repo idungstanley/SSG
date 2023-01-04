@@ -46,7 +46,6 @@ export const inboxSlice = createSlice({
       state.selectedInboxFileIndex = action.payload.inboxFileIndex;
       state.searchFoldersQuery = '';
       state.folderIdsForFiling = [];
-
       state.assignedInboxIds = [];
       state.processingAssignInboxIds = [];
     },

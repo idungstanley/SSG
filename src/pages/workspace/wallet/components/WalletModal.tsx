@@ -8,12 +8,14 @@ interface WalletModalProps {
   walletVisible: boolean;
   onCloseWalletModal: () => void;
   walletId: string;
+  getCurrentHubId?: string;
 }
 
 function WalletModal({
   walletVisible,
   onCloseWalletModal,
   walletId,
+  getCurrentHubId,
 }: WalletModalProps) {
   const queryClient = useQueryClient();
   const createWallet = useMutation(createWalletService, {
@@ -27,7 +29,7 @@ function WalletModal({
     name: '',
   };
 
-  const hubID = JSON.parse(localStorage.getItem('currentHubId') || '"');
+  // const hubID = JSON.parse(localStorage.getItem('currentHubId') || `"`);
 
   const [formState, setFormState] = useState(defaultWalletFormState);
 
@@ -40,7 +42,7 @@ function WalletModal({
   const onSubmit = async () => {
     await createWallet.mutateAsync({
       name,
-      hubID,
+      hubID: getCurrentHubId,
       walletId,
     });
   };

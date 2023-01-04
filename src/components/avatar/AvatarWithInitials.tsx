@@ -7,9 +7,11 @@ interface AvatarWithInitialsProps {
   backgroundColour?: string;
   roundedStyle?: string;
   textSize?: string;
+  textColor?: string;
 }
 function AvatarWithInitials({
   initials,
+  textColor = 'white',
   height = 'h-10',
   width = 'w-10',
   backgroundColour = '#6B7280',
@@ -24,8 +26,8 @@ function AvatarWithInitials({
       style={{ backgroundColor: backgroundColour }}
     >
       <span
-        className="font-medium leading-none text-white"
-        style={{ fontSize: textSize }}
+        className="font-medium leading-none"
+        style={{ fontSize: textSize, color: textColor }}
       >
         {initials}
       </span>
