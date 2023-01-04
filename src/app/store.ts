@@ -17,6 +17,7 @@ import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMe
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import sharedSlice from '../features/shared/sharedSlice';
 import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
+import chatSlice from '../features/chat/chatSlice';
 
 export const store = configureStore({
   reducer: {
@@ -37,10 +38,12 @@ export const store = configureStore({
     list: listSlice,
     task: taskSlice,
     upload: uploadFileSlice,
+    chat: chatSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: false,
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 setupListeners(store.dispatch);
