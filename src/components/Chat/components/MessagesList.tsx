@@ -1,19 +1,10 @@
 import React from 'react';
 import { IMessage } from '../../../features/chat/chat.interfaces';
+import { useChatScroll } from '../../../hooks';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 
 interface MessagesListProps {
   messages: IMessage[];
-}
-
-function useChatScroll<T>(dep: T) {
-  const ref = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollTop = ref.current.scrollHeight;
-    }
-  }, [dep]);
-  return ref;
 }
 
 export default function MessagesList({ messages }: MessagesListProps) {
