@@ -84,7 +84,13 @@ const deleteChat = (id: string) => {
 };
 
 export const useDeleteChat = () => {
-  return useMutation(deleteChat);
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteChat, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['chats']);
+    },
+  });
 };
 
 const sendMessageToChat = (data: {
