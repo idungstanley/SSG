@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  showChat: true,
+  showChat: false,
   showMembersInChatSideOver: false,
   showCreateChatSideOver: false,
 };

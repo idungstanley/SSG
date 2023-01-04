@@ -120,7 +120,7 @@ const addTeamMemberToChat = (data: {
 }) => {
   const request = requestNew(
     {
-      url: `chats/${data.chatId}/${data.teamMemberId}`,
+      url: `chats/${data.chatId}/team-member/${data.teamMemberId}`,
       method: 'POST',
     },
     true
@@ -133,7 +133,7 @@ export const useAddTeamMemberToChat = (id: string | null) => {
 
   return useMutation(addTeamMemberToChat, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['chats', id]);
+      queryClient.invalidateQueries(['chat', id]);
     },
   });
 };
@@ -157,7 +157,7 @@ export const useDeleteTeamMemberFromChat = (id: string | null) => {
 
   return useMutation(deleteTeamMemberFromChat, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['chats', id]);
+      queryClient.invalidateQueries(['chat', id]);
     },
   });
 };

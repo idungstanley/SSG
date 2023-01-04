@@ -2,18 +2,13 @@ import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import Input from '../../input/Input';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useCreateChat } from '../../../features/chat/chatService';
+import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 
-interface CreateChatSideOverProps {
-  showSideOver: boolean;
-  setShowSideOver: (i: boolean) => void;
-}
-
-export default function CreateChatSideOver({
-  showSideOver,
-  setShowSideOver,
-}: CreateChatSideOverProps) {
+export default function CreateChatSideOver() {
+  const dispatch = useAppDispatch();
+  const { showCreateChatSideOver } = useAppSelector((state) => state.chat);
   const [name, setName] = useState('');
   const { selectedItemId, selectedItemType } = useAppSelector(
     (state) => state.explorer
@@ -32,13 +27,17 @@ export default function CreateChatSideOver({
       });
     }
 
-    setShowSideOver(false);
+    dispatch(setShowCreateChatSideOver(false));
     setName('');
   };
 
   return (
-    <Transition.Root show={showSideOver} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setShowSideOver}>
+    <Transition.Root show={showCreateChatSideOver} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={setShowCreateChatSideOver}
+      >
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -64,7 +63,9 @@ export default function CreateChatSideOver({
                           <button
                             type="button"
                             className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            onClick={() => setShowSideOver(false)}
+                            onClick={() =>
+                              dispatch(setShowCreateChatSideOver(false))
+                            }
                           >
                             <span className="sr-only">Close panel</span>
                             <XIcon className="h-6 w-6" aria-hidden="true" />
@@ -90,7 +91,7 @@ export default function CreateChatSideOver({
                         />
                         <button
                           type="submit"
-                          className="inline-flex w-full items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="w-full rounded-xl border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
                         >
                           Create
                         </button>
