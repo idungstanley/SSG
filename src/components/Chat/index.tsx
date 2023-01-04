@@ -10,15 +10,19 @@ import CreateChatSideOver from './components/CreateChatSideOver';
 import Pusher from 'pusher-js';
 import { IMessage } from '../../features/chat/chat.interfaces';
 import { Transition } from '@headlessui/react';
-import { setShowChat } from '../../features/chat/chatSlice';
+import {
+  setShowChat,
+  setShowCreateChatSideOver,
+  setShowMembersInChatSideOver,
+} from '../../features/chat/chatSlice';
 import Badge from './components/Badge';
 import CreateMessage from './components/CreateMessage';
 import MessagesList from './components/MessagesList';
 import ChatsList from './components/ChatList';
+import TeamMembersInChat from './components/TeamMembersInChat';
 
 export default function Chat() {
   const dispatch = useAppDispatch();
-  const [showSideOver, setShowSideOver] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const { selectedItemId } = useAppSelector((state) => state.explorer);
 
@@ -75,15 +79,9 @@ export default function Chat() {
       socket.current
         .subscribe(channelName)
         .bind('send-chat-message', (data: { data: { message: IMessage } }) => {
-          // console.log(data.data.message);
           const message = data.data.message;
           setIncomingData((prev) => [...prev, message]);
         });
-
-      // channel1.bind('message', function (data: unknown) {
-      //   console.log(data);
-      //   // Code that runs when channel1 listens to a new message
-      // });
     }
   };
 
@@ -126,7 +124,7 @@ export default function Chat() {
           <div className="flex justify-between items-center">
             {selectedItemId ? (
               <button
-                onClick={() => setShowSideOver(true)}
+                onClick={() => dispatch(setShowCreateChatSideOver(true))}
                 type="button"
                 className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
               >
@@ -147,12 +145,22 @@ export default function Chat() {
 
           {messages && chat ? (
             <div className="h-full">
-              <p className="text-center mb-4">
-                Chat{' '}
-                <span className="font-semibold text-indigo-600">
-                  {chat.name}
-                </span>
-              </p>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-center">
+                  Chat{' '}
+                  <span className="font-semibold text-indigo-600">
+                    {chat.name}
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => dispatch(setShowMembersInChatSideOver(true))}
+                  className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Members
+                </button>
+              </div>
+
               <div className="flex flex-col h-full justify-between">
                 <MessagesList messages={allMessages} />
 
@@ -169,10 +177,8 @@ export default function Chat() {
 
       <Badge />
 
-      <CreateChatSideOver
-        showSideOver={showSideOver}
-        setShowSideOver={setShowSideOver}
-      />
+      {selectedChatId ? <TeamMembersInChat chatId={selectedChatId} /> : null}
+      <CreateChatSideOver />
     </>
   );
 }
