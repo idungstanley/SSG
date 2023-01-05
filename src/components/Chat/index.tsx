@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { XIcon } from '@heroicons/react/outline';
 import {
@@ -23,26 +23,27 @@ import TeamMembersInChat from './components/TeamMembersInChat';
 
 export default function Chat() {
   const dispatch = useAppDispatch();
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const { selectedItemId } = useAppSelector((state) => state.explorer);
-
-  const { showChat } = useAppSelector((state) => state.chat);
-
-  const [message, setMessage] = useState('');
-
-  const { data } = useGetChat(selectedChatId);
-
-  const { mutate: onSendMessage } = useSendMessageToChat();
-
   const socket = useRef<Pusher | null>(null);
+  const { selectedItemId } = useAppSelector((state) => state.explorer);
+  const { showChat } = useAppSelector((state) => state.chat);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const { data } = useGetChat(selectedChatId);
 
   const chat = data?.chat;
   const messages = data?.messages;
 
   const [incomingData, setIncomingData] = useState<IMessage[]>([]);
+  const [message, setMessage] = useState('');
+
+  const { mutate: onSendMessage } = useSendMessageToChat();
+
+  useEffect(() => {
+    socket.current?.disconnect();
+    setSelectedChatId(null);
+  }, [selectedItemId]);
 
   const connect = (id: string) => {
-    Pusher.logToConsole = true;
+    // Pusher.logToConsole = true;
 
     if (id === selectedChatId) {
       socket.current?.disconnect();
@@ -102,6 +103,7 @@ export default function Chat() {
   const handleHideChat = () => {
     socket.current?.disconnect();
     dispatch(setShowChat(false));
+    setSelectedChatId(null);
   };
 
   const allMessages = messages
@@ -120,7 +122,7 @@ export default function Chat() {
         leaveFrom="translate-x-0"
         leaveTo="translate-x-full"
       >
-        <div className="p-4 flex flex-col gap-4 w-80 h-3/4 border-l">
+        <div className="p-4 flex flex-col gap-4 w-80 h-full border-l">
           <div className="flex justify-between items-center">
             {selectedItemId ? (
               <button
@@ -144,7 +146,7 @@ export default function Chat() {
           <ChatsList selectChat={handleClickChat} />
 
           {messages && chat ? (
-            <div className="h-full">
+            <div className="h-3/4">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-center">
                   Chat{' '}
@@ -161,7 +163,7 @@ export default function Chat() {
                 </button>
               </div>
 
-              <div className="flex flex-col h-full justify-between">
+              <div className="flex flex-col h-3/4 justify-between">
                 <MessagesList messages={allMessages} />
 
                 <CreateMessage
@@ -178,6 +180,7 @@ export default function Chat() {
       <Badge />
 
       {selectedChatId ? <TeamMembersInChat chatId={selectedChatId} /> : null}
+
       <CreateChatSideOver />
     </>
   );

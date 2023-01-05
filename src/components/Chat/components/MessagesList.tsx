@@ -11,7 +11,10 @@ export default function MessagesList({ messages }: MessagesListProps) {
   const ref = useChatScroll(messages);
 
   return (
-    <div ref={ref} className="flex flex-col h-96 border rounded-xl overflow-y-scroll">
+    <div
+      ref={ref}
+      className="flex flex-col h-96 border rounded-xl overflow-y-scroll"
+    >
       {messages.map((message) => (
         <div className="flex gap-3 items-center p-2" key={message.id}>
           <AvatarWithInitials
