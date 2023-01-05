@@ -86,13 +86,13 @@ export const useGetSavedSearches = () => {
   );
 };
 
-const saveSearchValue = (value: string) => {
+const saveSearchValue = (data: { key: string; value: string }[]) => {
   const request = requestNew(
     {
       url: 'settings',
       method: 'PUT',
       data: {
-        keys: [{ key: 'task_search', value }],
+        keys: [...data],
       },
     },
     true
