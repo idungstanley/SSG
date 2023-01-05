@@ -3,6 +3,7 @@ import requestNew from '../../app/requestNew';
 import {
   IExplorerSearchRes,
   IInboxSearchRes,
+  ISavedSearch,
   ISavedSearchesRes,
 } from './search.interfaces';
 
@@ -68,17 +69,20 @@ export const useGetSearchedItemDetails = (data: {
 };
 
 export const useGetSavedSearches = () => {
-  return useQuery<ISavedSearchesRes>(['savedSearches'], () =>
-    requestNew(
-      {
-        url: 'settings',
-        method: 'GET',
-        params: {
-          keys: 'task_search',
+  return useQuery<ISavedSearchesRes, unknown, ISavedSearch[]>(
+    ['savedSearches'],
+    () =>
+      requestNew(
+        {
+          url: 'settings',
+          method: 'GET',
+          params: {
+            keys: 'task_search',
+          },
         },
-      },
-      true
-    )
+        true
+      ),
+    { select: (saved) => saved.data.settings }
   );
 };
 

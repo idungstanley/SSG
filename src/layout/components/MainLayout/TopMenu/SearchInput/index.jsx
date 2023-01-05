@@ -3,6 +3,7 @@ import { SearchIcon } from '@heroicons/react/solid';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setSearchQuery } from '../../../../../features/search/searchSlice';
+import SavedSearches from './components';
 
 export default function SearchInput() {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ export default function SearchInput() {
   return (
     <div className="flex-1 flex justify-center lg:justify-end">
       <div className="w-full px-2 lg:px-6">
-        <div className="relative text-indigo-200 focus-within:text-gray-400">
+        <div className="relative text-indigo-200 focus-within:text-gray-400 flex items-center">
           <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
             <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </div>
@@ -53,6 +54,7 @@ export default function SearchInput() {
             ref={queryInput}
             onFocus={onFocus}
           />
+          <SavedSearches />
         </div>
       </div>
     </div>

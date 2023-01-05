@@ -44,7 +44,7 @@ export interface IInboxSearchRes {
   };
 }
 
-interface ISavedSearch {
+export interface ISavedSearch {
   key: string;
   is_json: boolean;
   value: string;
