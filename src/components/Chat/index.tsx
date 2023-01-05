@@ -39,8 +39,10 @@ export default function Chat() {
 
   // disconnect and clear chat id when selectedItem changes
   useEffect(() => {
-    socket.current?.disconnect();
-    setSelectedChatId(null);
+    if (socket.current?.connection.state === 'connected') {
+      socket.current?.disconnect();
+      setSelectedChatId(null);
+    }
   }, [selectedItemId]);
 
   const connect = (id: string) => {
@@ -52,9 +54,9 @@ export default function Chat() {
     } else {
       socket.current = new Pusher('alsoworkspace', {
         cluster: `SendMessageExampleEvent-${id}`,
-        wsHost: process.env.WEBSOCKET_HOST || '',
-        wsPort: Number(process.env.WEBSOCKET_PORT || ''),
-        wssPort: Number(process.env.WEBSOCKET_PORT || ''),
+        wsHost: process.env.REACT_APP_WEBSOCKET_HOST,
+        wsPort: Number(process.env.REACT_APP_WEBSOCKET_PORT),
+        wssPort: Number(process.env.REACT_APP_WEBSOCKET_PORT),
         disableStats: true,
         authEndpoint: '/api/sockets/connect',
         forceTLS: true,
@@ -150,7 +152,7 @@ export default function Chat() {
           <ChatsList selectChat={handleClickChat} />
 
           {messages && chat ? (
-            <div className="h-3/4">
+            <div className="h-2/3 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-center">
                   Chat{' '}
@@ -167,15 +169,13 @@ export default function Chat() {
                 </button>
               </div>
 
-              <div className="flex flex-col h-3/4 justify-between">
-                <MessagesList messages={allMessages} />
+              <MessagesList messages={allMessages} />
 
-                <CreateMessage
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                />
-              </div>
+              <CreateMessage
+                message={message}
+                setMessage={setMessage}
+                sendMessage={sendMessage}
+              />
             </div>
           ) : null}
         </div>

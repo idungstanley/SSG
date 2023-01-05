@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { IMessage } from '../../../features/chat/chat.interfaces';
 import { useChatScroll } from '../../../hooks';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
@@ -22,9 +23,13 @@ export default function MessagesList({ messages }: MessagesListProps) {
             backgroundColour={message.team_member.colour}
           />
           <div className="flex flex-col justify-start gap-1 p-2 rounded-xl border w-1/2">
-            <p className="text-sm text-gray-600">
-              {message.team_member.user.name}
-            </p>
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <p>{message.team_member.user.name}</p>
+              <p>
+                {moment(message.created_at).format('HH:mm')}
+              </p>
+            </div>
+
             <p className="text-gray-600">{message.message}</p>
           </div>
         </div>
