@@ -43,3 +43,17 @@ export interface IInboxSearchRes {
     inbox_files: IInboxFile[];
   };
 }
+
+interface ISavedSearch {
+  key: string;
+  is_json: boolean;
+  value: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ISavedSearchesRes {
+  data: {
+    settings: ISavedSearch[];
+  };
+}
