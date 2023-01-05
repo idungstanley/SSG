@@ -2,24 +2,20 @@ import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
+import { IMentionUser } from '../../../features/chat/chat.interfaces';
 
 const regex = /@[\S]*/g;
-
-interface mentionUsersType {
-  id: string;
-  name: string;
-}
 
 interface itemType {
   id: string;
   message: string;
   can_modify: boolean;
-  mention_users: mentionUsersType[];
+  mention_users: IMentionUser[];
 }
 interface ListType {
   status: string;
   comments: itemType[];
-  onEdit: (id: string, message: string, users: mentionUsersType[]) => void;
+  onEdit: (id: string, message: string, users: IMentionUser[]) => void;
   onDelete: (value: string) => void;
 }
 export default function List({ status, comments, onEdit, onDelete }: ListType) {
