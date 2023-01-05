@@ -127,7 +127,7 @@ export default function Chat() {
         leaveFrom="translate-x-0"
         leaveTo="translate-x-full"
       >
-        <div className="p-4 flex flex-col gap-4 w-80 h-full border-l">
+        <div className="p-4 flex flex-col gap-4 w-96 h-full border-l">
           {/* header */}
           <div className="flex justify-between items-center">
             {selectedItemId ? (
