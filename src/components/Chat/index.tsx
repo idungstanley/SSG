@@ -50,9 +50,9 @@ export default function Chat() {
     } else {
       socket.current = new Pusher('alsoworkspace', {
         cluster: `SendMessageExampleEvent-${id}`,
-        wsHost: 'socket.alsoworkspace.com',
-        wsPort: 443,
-        wssPort: 443,
+        wsHost: process.env.WEBSOCKET_HOST || '',
+        wsPort: Number(process.env.WEBSOCKET_PORT || ''),
+        wssPort: Number(process.env.WEBSOCKET_PORT || ''),
         disableStats: true,
         authEndpoint: '/api/sockets/connect',
         forceTLS: true,
