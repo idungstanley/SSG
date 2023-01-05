@@ -21,16 +21,7 @@ export default function SavedSearches() {
   };
 
   const handleSaveValue = () => {
-    const previousSaved = data?.map((i) => ({ key: i.key, value: i.value }));
-
-    if (previousSaved) {
-      const newArray: { key: string; value: string }[] = [
-        ...previousSaved,
-        { key: 'task_search', value: searchQuery },
-      ];
-
-      onSaveValue(newArray);
-    }
+    onSaveValue(searchQuery);
   };
 
   return (

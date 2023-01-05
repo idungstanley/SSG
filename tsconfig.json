@@ -22,6 +22,6 @@
     "noImplicitAny": false
   },
   "include": [
-    "src", "craco.config.js", "postcss.config.js", "tailwind.config.js"
+    "src", "craco.config.js", "postcss.config.js", "tailwind.config.js", ".eslintrc.json"
   ]
 }

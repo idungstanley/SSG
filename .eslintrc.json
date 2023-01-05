@@ -17,7 +17,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module",
         "parser": "@typescript-eslint/parser",
-        "project": "./tsconfig.json",
+        // "project": "./tsconfig.json",
         "allowImportExportEverywhere": true
     },
     "plugins": [
