@@ -57,7 +57,7 @@ export default function CreateChatSideOver() {
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Panel title
+                          Create new Chat
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -74,15 +74,10 @@ export default function CreateChatSideOver() {
                       </div>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Replace with your content */}
                       <form
                         onSubmit={(e) => handleSubmit(e)}
                         className="absolute inset-0 px-4 sm:px-6 flex flex-col gap-5"
                       >
-                        {/* <div
-                          className="h-full border-2 border-dashed border-gray-200"
-                          aria-hidden="true"
-                        /> */}
                         <Input
                           name="name"
                           value={name}
@@ -96,7 +91,6 @@ export default function CreateChatSideOver() {
                           Create
                         </button>
                       </form>
-                      {/* /End replace */}
                     </div>
                   </div>
                 </Dialog.Panel>

@@ -165,8 +165,3 @@ code {
     opacity: 1;
   }
 }
-
-.rotatedElement {
-  display: inline-block;
-  rotate: 90deg;
-}

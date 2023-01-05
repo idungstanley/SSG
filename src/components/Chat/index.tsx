@@ -37,12 +37,14 @@ export default function Chat() {
 
   const { mutate: onSendMessage } = useSendMessageToChat();
 
+  // disconnect and clear chat id when selectedItem changes
   useEffect(() => {
     socket.current?.disconnect();
     setSelectedChatId(null);
   }, [selectedItemId]);
 
   const connect = (id: string) => {
+    // * show / hide pusher logs
     // Pusher.logToConsole = true;
 
     if (id === selectedChatId) {
@@ -106,6 +108,7 @@ export default function Chat() {
     setSelectedChatId(null);
   };
 
+  // old messages with new from websocket
   const allMessages = messages
     ? [...messages, ...incomingData]
     : [...incomingData];
@@ -123,6 +126,7 @@ export default function Chat() {
         leaveTo="translate-x-full"
       >
         <div className="p-4 flex flex-col gap-4 w-80 h-full border-l">
+          {/* header */}
           <div className="flex justify-between items-center">
             {selectedItemId ? (
               <button
