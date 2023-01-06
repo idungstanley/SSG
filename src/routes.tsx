@@ -6,8 +6,8 @@ import MainLayout from './layout/components/MainLayout';
 import UnauthenticatedLayout from './layout/components/UnauthenticatedLayout';
 
 // Authentication
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
+import LoginPage from './pages/workspace/createWorkspace/auth/LoginPage';
+import RegisterPage from './pages/workspace/createWorkspace/auth/RegisterPage';
 
 // Main
 import ExplorerPage from './pages/explorer/ExplorerPage';

@@ -13,13 +13,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   registerService,
   loginGoogleService,
-} from '../../../features/auth/authService';
-import { setAuthData } from '../../../features/auth/authSlice';
+} from '../../../../../features/auth/authService';
+import { setAuthData } from '../../../../../features/auth/authSlice';
 import InviteDetails from './components/InviteDetails';
-import Form from '../../../components/Form';
+import Form from '../../../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
-import { formikConfig } from '../../../components/Comments/components/componentType';
+import { formikConfig } from '../../../../../components/Comments/components/componentType';
 
 function RegisterPage() {
   const dispatch = useDispatch();

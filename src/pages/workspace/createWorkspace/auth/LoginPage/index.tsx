@@ -11,12 +11,12 @@ import { gapi } from 'gapi-script';
 import {
   loginService,
   loginGoogleService,
-} from '../../../features/auth/authService';
-import { setAuthData } from '../../../features/auth/authSlice';
-import Form from '../../../components/Form';
+} from '../../../../../features/auth/authService';
+import { setAuthData } from '../../../../../features/auth/authSlice';
+import Form from '../../../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
-import { formikConfig } from '../../../components/Comments/components/componentType';
+import { formikConfig } from '../../../../../components/Comments/components/componentType';
 
 function LoginPage() {
   const dispatch = useDispatch();
