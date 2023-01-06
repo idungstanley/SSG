@@ -4,18 +4,9 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
 import UploadModal from '../../components/UploadModal';
-// import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-// import { useDispatch } from 'react-redux';
-// import {
-//   setShowExtendedBar,
-//   setShowSidebar,
-// } from '../../features/workspace/workspaceSlice';
 import ExpandedNav from '../../views/ExpandedNav';
-import { useDispatch } from 'react-redux';
-import { setShowSidebar } from '../../features/workspace/workspaceSlice';
 
 function Index() {
-  const dispatch = useDispatch();
   const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(
     (state) => state.workspace
   );

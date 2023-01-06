@@ -1,9 +1,7 @@
-// import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
-import React, { useState, memo } from 'react';
+import React, { memo } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import {
   setActivePlaceId,
-  setShowMenuDropDown,
 } from '../../../../features/workspace/workspaceSlice';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
@@ -72,14 +70,7 @@ function Places() {
   );
   const dispatch = useDispatch();
   const handleClick = (id: number) => {
-    const isMatch = id === activePlaceId;
     dispatch(setActivePlaceId(id));
-    // if (isMatch) {
-    //   // dispatch(setShowMenuDropDown(false));
-    // } else {
-    //   // dispatch(setShowMenuDropDown(true));
-    //   setActivePlaceId(id);
-    // }
   };
   return (
     <div className="mt-2">
