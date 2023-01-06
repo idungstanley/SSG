@@ -87,7 +87,7 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }, index) => (
         <li key={i.id} className="flex flex-col">
           <div
-            className={`flex justify-between items-center hover:bg-gray-100 relative ${
+            className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'

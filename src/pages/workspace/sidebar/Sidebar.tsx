@@ -107,7 +107,7 @@ export default function Sidebar() {
               <HiChevronDoubleLeft
                 color="blue"
                 className={`cursor-pointer mt-1 ${
-                  showSidebar ? 'ml-2' : 'ml-0'
+                  showSidebar ? 'ml-2' : 'ml-0 rotateimg180'
                 }`}
                 onClick={() => dispatch(setShowSidebar('CHANGE'))}
               />

@@ -4,7 +4,6 @@ import Dashboard from '../pages/workspace/dashboard';
 import Directory from '../pages/workspace/directory';
 import Favourites from '../pages/workspace/favourites';
 import Files from '../pages/workspace/files';
-import Hubs from '../pages/workspace/hubs';
 import Inbox from '../pages/workspace/inbox';
 import {
   setActivePlaceId,
@@ -21,8 +20,6 @@ import { useAppSelector } from '../app/hooks';
 import { SearchIcon } from '@heroicons/react/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
-import { useGetHubList } from '../features/hubs/hubService';
-import { getHub } from '../features/hubs/hubSlice';
 import ActiveHub from './ActiveHub';
 
 const secondaryNavigation = [
@@ -82,7 +79,7 @@ function ExpandedNav() {
           (item) =>
             activePlaceId === item.id && (
               <div key={item.id}>
-                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6  top-0 border-b border-gray">
+                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6 top-0 border-b border-gray">
                   <span className="absolute -right-5 top z-20 bg-green-400 rounded-full border-2 border-green-400">
                     {showExtendedBar && (
                       <RiArrowLeftSLine
