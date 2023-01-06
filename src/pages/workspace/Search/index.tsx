@@ -12,7 +12,7 @@ export default function Search() {
       <button
         type="button"
         className={`relative p-1.5 mb-1 transition duration-300 flex items-center w-full cursor-pointer group ${
-          !showSidebar ? 'rounded-sm' : 'rounded-md'
+          !showSidebar ? 'rounded-sm mb-2' : 'rounded-md'
         }`}
         onClick={() => setCommandSearchModal(true)}
       >

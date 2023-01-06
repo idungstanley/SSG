@@ -12,13 +12,14 @@ import {
   StarIcon,
   PlusIcon,
   LinkIcon,
-  DotsVerticalIcon,
   ColorSwatchIcon,
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import { classNames } from '../../utils';
 import { VscEllipsis } from 'react-icons/vsc';
+import { useDispatch } from 'react-redux';
+import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
 // import { useSelector } from 'react-redux';
 
 interface itemsType {
@@ -30,6 +31,7 @@ interface itemsType {
 }
 
 function MenuDropdown() {
+  const dispatch = useDispatch();
   // const { currentItemId, type } = useSelector((state) => state.workspace);
 
   // ! actions here (create, delete, rename)
@@ -182,7 +184,12 @@ function MenuDropdown() {
   return (
     <Menu as="div">
       <Menu.Button className="flex text-sm text-gray-400">
-          <VscEllipsis className="w-2.5 h-2.5" aria-hidden="true" color="black" />
+        <VscEllipsis
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => dispatch(setShowMenuDropDown(true))}
+        />
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -193,7 +200,7 @@ function MenuDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-10 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-50 -mt-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-50 -mt-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
           {itemsList.map((item) =>
             item.isVisible ? (
               <Menu.Item key={item.id}>

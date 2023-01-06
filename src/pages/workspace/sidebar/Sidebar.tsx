@@ -1,6 +1,4 @@
 import React, { Fragment, useRef, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
 import { HiChevronDoubleLeft } from 'react-icons/hi';
 import {
@@ -14,20 +12,16 @@ import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
 import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
-import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+import { RiArrowRightSLine } from 'react-icons/ri';
 import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(
-    (state) => state.workspace
-  );
-  // const fakeRef = useRef(null);
+  const { showSidebar, showExtendedBar, sidebarWidth, activePlaceId } =
+    useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  // const [sidebarWidth, setSidebarWidth] = useState(380);
-
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -41,10 +35,12 @@ export default function Sidebar() {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
-            dispatch(setSidebarWidth(
-              mouseMoveEvent.clientX -
-                sidebarRef?.current?.getBoundingClientRect().left
-            ));
+            dispatch(
+              setSidebarWidth(
+                mouseMoveEvent.clientX -
+                  sidebarRef?.current?.getBoundingClientRect().left
+              )
+            );
           }
       }
     },
@@ -63,12 +59,20 @@ export default function Sidebar() {
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="md:fixed relative md:inset-y-0 lg:flex md:w-72 max-w-xs md:flex-col"
+        className="md:fixed relative md:inset-y-0 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
         ref={sidebarRef}
-        style={showSidebar ? { maxWidth: sidebarWidth } : { width: '50px' }}
+        style={
+          showSidebar
+            ? { maxWidth: 321, width: sidebarWidth, minWidth: '54px' }
+            : { width: '54px', minWidth: '54px' }
+        }
         onMouseDown={(e) => e.preventDefault()}
       >
-        <span className="absolute -right-2 top-6 z-20 bg-white rounded-full border-2 border-inherit">
+        <span
+          className={`absolute -right-2 top-6 z-20 bg-white rounded-full border-2 border-inherit ${
+            activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
+          }`}
+        >
           {!showExtendedBar && (
             <RiArrowRightSLine
               className="text-xs"
@@ -76,14 +80,20 @@ export default function Sidebar() {
             />
           )}
         </span>
-        <div className="flex flex-col flex-grow bg-white border-r overflow-y-auto border-gray-200">
+        <div className="flex flex-col flex-grow bg-white overflow-y-auto mr-1">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
-            <div className="flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-30">
+            <div
+              className={`flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-30 ${
+                showSidebar ? 'flex-row' : 'flex-col space-y-1'
+              }`}
+            >
               <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
               <WorkSpaceSelection />
               <div
-                className={`items-center justify-between space-x-1 mt-1 ${
-                  showSidebar ? 'flex' : 'hidden'
+                className={`flex items-center mt-1 ${
+                  showSidebar
+                    ? 'flex-row space-x-1 justify-between'
+                    : 'flex-col space-y-1 justify-center'
                 }`}
               >
                 <img className="w-auto h-6" src={Setting} alt="Workflow" />
@@ -96,8 +106,10 @@ export default function Sidebar() {
               </div>
               <HiChevronDoubleLeft
                 color="blue"
-                className="cursor-pointer ml-2 mt-1"
-                onClick={() => dispatch(setShowSidebar(false))}
+                className={`cursor-pointer mt-1 ${
+                  showSidebar ? 'ml-2' : 'ml-0 rotate-180'
+                }`}
+                onClick={() => dispatch(setShowSidebar('CHANGE'))}
               />
             </div>
           </div>
@@ -108,7 +120,7 @@ export default function Sidebar() {
           </div>
         </div>
         <div
-          className="justify-self-end hover:ml-1 absolute shrink-0 grow-0 w-1 h-full cursor-all-scroll hover:bg-green-50 right-0 bottom-0 top-0"
+          className="justify-self-end absolute shrink-0 grow-0 w-0.5 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
           onMouseDown={startResizing}
           style={{ cursor: 'col-resize' }}
         ></div>

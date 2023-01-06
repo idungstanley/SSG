@@ -14,6 +14,7 @@ import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
+import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -28,7 +29,9 @@ export default function ItemsListInSidebar({
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showMenuDropDown } = useAppSelector(
+    (state) => state.workspace
+  );
   const handleMouseOver = (i: number) => {
     setIsHovering(i);
   };
@@ -56,8 +59,6 @@ export default function ItemsListInSidebar({
 
   const handleClick = (id: string) => {
     const isMatch = id === currentItemId;
-    console.log(id);
-    console.log(currentItemId);
     if (isMatch) {
       dispatch(setShowHub(false));
       if (!currentItemId) {
@@ -86,10 +87,17 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }, index) => (
         <li key={i.id} className="flex flex-col">
           <div
-            className="flex justify-between items-center hover:bg-gray-100"
+            className={`flex justify-between items-center hover:bg-gray-100 relative ${
+              i.id === currentItemId
+                ? 'bg-green-50 text-green-500'
+                : 'text-black-500'
+            }`}
             onMouseEnter={() => handleMouseOver(index)}
             onMouseLeave={handleMouseOut}
           >
+            {i.id === currentItemId && (
+              <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+            )}
             <div
               role="button"
               tabIndex={0}
@@ -99,7 +107,7 @@ export default function ItemsListInSidebar({
               <div className="mr-0.5">
                 {i.id === currentItemId ? (
                   <VscTriangleDown
-                    className="flex-shrink-0 h-3"
+                    className="flex-shrink-0 h-3 ml-1"
                     aria-hidden="true"
                     color="rgba(72, 67, 67, 0.64)"
                   />
@@ -134,15 +142,13 @@ export default function ItemsListInSidebar({
                 </span>
               </div>
             </div>
-            <div
-              className={`flex items-center justify-end pr-2 ${
-                isHovering === index ? 'block' : 'hidden'
-              }`}
-            >
-              <MenuDropdown />
-            </div>
+            {index === isHovering && (
+              <div className="flex items-center space-x-1 pr-1">
+                <MenuDropdown />
+                <PlusDropDown walletId={i.id} />
+              </div>
+            )}
           </div>
-
           {currentItemId === i.id ? <DropdownList /> : null}
         </li>
       ))}
