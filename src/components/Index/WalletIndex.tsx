@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetHub } from '../../features/hubs/hubService';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
 import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
-import ListModal from '../../pages/workspace/lists/components/ListModal';
+import ListModal from '../../pages/workspace/Lists/components/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
