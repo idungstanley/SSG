@@ -99,12 +99,12 @@ export default function NavigationItems() {
                   aria-hidden="true"
                 >
                   {item.name === 'Notifications' && (
-                    <div
-                      className="inline py-px float-right  text-center px-0.5 absolute right-0 top-0.5 bg-red-500 text-white"
-                      style={{ fontSize: '6px', borderRadius: '50px' }}
+                    <p
+                      className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
+                      style={{ fontSize: '8px', borderRadius: '50px' }}
                     >
                       24
-                    </div>
+                    </p>
                   )}
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
@@ -139,10 +139,18 @@ export default function NavigationItems() {
                     item.href === pathname
                       ? 'text-gray-500'
                       : 'text-gray-400 hover:text-gray-500 hover:bg-gray-50',
-                    'mr-4 flex-shrink-0 h-4 w-4'
+                    'mr-4 flex-shrink-0 h-4 w-4 relative'
                   )}
                   aria-hidden="true"
                 >
+                  {item.name === 'Notifications' && (
+                    <p
+                      className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
+                      style={{ fontSize: '8px', borderRadius: '50px' }}
+                    >
+                      24
+                    </p>
+                  )}
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
                 <p
@@ -158,21 +166,20 @@ export default function NavigationItems() {
             </Link>
           ) : null
         )}
-        <button
-          type="button"
+        <div
           onClick={() => setShowMore((prev) => !prev)}
-          className="flex items-center w-full px-2 py-2 ml-2 text-base font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+          className="flex items-center w-full pl-4 cursor-pointer py-1 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
         >
           <div
-            className="flex-shrink-0 w-4 h-4 mr-4 text-gray-400 hover:text-gray-500"
+            className="flex-shrink-0 w-4 h-4 mr-4 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             aria-hidden="true"
           >
             {showLessOrMore[showMore ? 0 : 1].icon}
           </div>
-          <p style={{ fontSize: '10px' }} className="tracking-wider">
+          <p style={{ fontSize: '10px' }} className="tracking-wider truncate">
             {showLessOrMore[showMore ? 0 : 1].name}
           </p>
-        </button>
+        </div>
       </nav>
     </div>
   );

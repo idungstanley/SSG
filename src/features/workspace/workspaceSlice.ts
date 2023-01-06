@@ -10,6 +10,7 @@ interface workspaceState {
   sidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
+  showMenuDropDown: boolean;
 }
 
 const initialState: workspaceState = {
@@ -19,9 +20,10 @@ const initialState: workspaceState = {
   currentItemType: null,
   activePlaceId: 0,
   showExtendedBar: false,
-  sidebarWidth: 270,
+  sidebarWidth: 300,
   showHub: false,
   showWallet: false,
+  showMenuDropDown: false,
 };
 
 export const wsSlice = createSlice({
@@ -32,18 +34,27 @@ export const wsSlice = createSlice({
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      state.showSidebar = action.payload;
+      if (action.payload === 'CHANGE') {
+        return {
+          ...state,
+          showSidebar: !state.showSidebar,
+        };
+      }
+      state.showSidebar;
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
     },
+    setShowMenuDropDown(state, action) {
+      state.showMenuDropDown = action.payload;
+    },
     setShowExtendedBar(state, action) {
       state.showExtendedBar = action.payload;
     },
-    setShowHub(state, action){
+    setShowHub(state, action) {
       state.showHub = action.payload;
     },
-    setShowWallet(state, action){
+    setShowWallet(state, action) {
       state.showWallet = action.payload;
     },
     setActivePlaceId: (state, action) => {
@@ -75,6 +86,7 @@ export const {
   setShowHub,
   setShowWallet,
   setSidebarWidth,
+  setShowMenuDropDown,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

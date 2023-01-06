@@ -21,6 +21,9 @@ import { useAppSelector } from '../app/hooks';
 import { SearchIcon } from '@heroicons/react/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
+import { useGetHubList } from '../features/hubs/hubService';
+import { getHub } from '../features/hubs/hubSlice';
+import ActiveHub from './ActiveHub';
 
 const secondaryNavigation = [
   {
@@ -32,7 +35,7 @@ const secondaryNavigation = [
   {
     name: 'hubs',
     id: 2,
-    place: <Hubs />,
+    place: <ActiveHub />,
     source: hubIcon,
   },
   {
@@ -73,14 +76,14 @@ function ExpandedNav() {
     (state) => state.workspace
   );
   return (
-    <section className="mt-2 border-r border-gray w-60">
+    <section className="mt-2 border-r border-gray w-60 pr-2">
       <div aria-labelledby="projects-headline relative overflow-y-auto ">
         {secondaryNavigation.map(
           (item) =>
             activePlaceId === item.id && (
               <div key={item.id}>
-                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6 top-0 border-b border-gray">
-                  <span className="absolute -right-2.5 top z-20 bg-green-400 rounded-full border-2 border-green-400">
+                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6  top-0 border-b border-gray">
+                  <span className="absolute -right-5 top z-20 bg-green-400 rounded-full border-2 border-green-400">
                     {showExtendedBar && (
                       <RiArrowLeftSLine
                         className="text-sm text-white"

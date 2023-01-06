@@ -1,6 +1,8 @@
-import React, { useState, memo } from 'react';
+import React, { memo } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
+import {
+  setActivePlaceId,
+} from '../../../../features/workspace/workspaceSlice';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
@@ -44,30 +46,32 @@ const secondaryNavigation = [
   },
   {
     name: 'forms',
-    id: 4,
+    id: 5,
     place: <Files />,
     icon: <FaWpforms className="h-4 mr-4" />,
   },
   {
     name: 'time clock',
-    id: 5,
+    id: 6,
     place: <Dashboard />,
     source: timeClockIcon,
   },
   {
     name: 'tracker',
-    id: 6,
+    id: 7,
     place: <Directory />,
     source: trackerIcon,
   },
 ];
 
 function Places() {
-  const { activePlaceId, showSidebar } = useAppSelector(
+  const { activePlaceId, showSidebar, showHub } = useAppSelector(
     (state) => state.workspace
   );
   const dispatch = useDispatch();
-  // const [activePlaceId, setActivePlaceId] = useState<number | boolean>(0);
+  const handleClick = (id: number) => {
+    dispatch(setActivePlaceId(id));
+  };
   return (
     <div className="mt-2">
       <ul aria-labelledby="projects-headline relative">
@@ -76,16 +80,16 @@ function Places() {
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <li
               key={item.id}
-              className={`relative flex px-4 items-center hover:bg-gray-100 ${
+              className={`relative flex pl-4  pr-2 items-center hover:bg-gray-100 ${
                 activePlaceId === item.id && 'ml-0 bg-gray-200'
               } text-gray-600 cursor-pointer h-14 fixed top-0`}
             >
               <button
                 className="flex items-center justify-between w-full "
                 type="button"
-                onClick={() => dispatch(setActivePlaceId(item.id))}
+                onClick={() => handleClick(item.id)}
               >
-                {activePlaceId === item.id && (
+                {activePlaceId === item.id && !showHub && (
                   <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500" />
                 )}
                 <span
