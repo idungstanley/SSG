@@ -13,15 +13,15 @@ import { CheckIcon } from '@heroicons/react/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../../../../components';
+import { Button } from '../../../components';
 import {
   createTaskService,
   getTaskListService,
-} from '../../../../features/task/taskService';
-import { getListsDetailsService } from '../../../../features/list/listService';
-import SubTask from '../../subtasks/subtask1/SubTask';
+} from '../../../features/task/taskService';
+import { getListsDetailsService } from '../../../features/list/listService';
+import SubTask from '../subtasks/subtask1/SubTask';
 // import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
-import ListNav from './renderlist/ListNav';
+import ListNav from './components/renderlist/ListNav';
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);

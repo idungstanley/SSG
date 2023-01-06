@@ -1,6 +1,6 @@
 import React, { memo, ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import MainLogo from '../../assets/branding/main-logo.png';
+import MainLogo from '../../../../assets/branding/main-logo.png';
 
 const data = [
   {
