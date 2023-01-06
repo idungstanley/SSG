@@ -9,6 +9,7 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login';
 import { gapi } from 'gapi-script';
+import { useNavigate } from 'react-router-dom';
 import {
   registerService,
   loginGoogleService,
@@ -44,6 +45,15 @@ function RegisterPage() {
           currentUserId: successData.data.token.token.user_id,
         })
       );
+
+      const workspaceInvite = JSON.parse(
+        localStorage.getItem('teamMemberInviteCode') as string
+      );
+
+      if (workspaceInvite) {
+        window.location.href = `/accept-invite/${workspaceInvite}`;
+        localStorage.removeItem('teamMemberInviteCode');
+      }
     },
   });
 

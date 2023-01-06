@@ -4,8 +4,10 @@ export interface ITeamMembersAndGroup {
   user: {
     name: string;
     id: string;
-    email: string
+    email: string;
   };
+  initials: string;
+  colour: string;
 }
 
 export interface ITeamMembersAndGroupsReq {

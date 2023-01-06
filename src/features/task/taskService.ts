@@ -1,4 +1,5 @@
 import requestNew from '../../app/requestNew';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -145,6 +146,52 @@ export const GetTaskWatcherService = (data) => {
       params: {
         type: 'task',
         id: taskID,
+      },
+    },
+    true
+  );
+  return response;
+};
+
+//Add watcher to task
+export const AddWatcherService = ({ query }) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['add_watcher', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'watch',
+          method: 'POST',
+          params: {
+            type: 'task',
+            id: query[1],
+            team_member_ids: [query[0]],
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['add_watcher', query]),
+      enabled: query[0] != null,
+    }
+  );
+};
+
+export const RemoveWatcherService = (data) => {
+  const bodyData = data.queryKey[1];
+  const ids = [] as any;
+  ids.push(bodyData[1]);
+  const response = requestNew(
+    {
+      url: 'watch/remove',
+      method: 'POST',
+      params: {
+        type: 'task',
+        id: bodyData[0],
+        team_member_ids: ids,
       },
     },
     true

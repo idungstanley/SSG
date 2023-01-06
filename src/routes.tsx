@@ -30,6 +30,7 @@ import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/Tea
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
+import TeamMemberAcceptInvite from './pages/settings/teamMemberGroupSettings/TeamMemberAcceptInvitePage';
 import SharedPage from './pages/shared';
 
 // At workspace
@@ -89,6 +90,14 @@ const routes = (user: IUser | null) => [
     ),
   },
   {
+    path: 'accept-invite/:inviteCode',
+    element: user ? (
+      <TeamMemberAcceptInvite />
+    ) : (
+      <Navigate to="/auth/register" />
+    ),
+  },
+  {
     path: '/',
     element: user ? (
       user.default_workspace_id ? (
@@ -102,6 +111,7 @@ const routes = (user: IUser | null) => [
     children: [
       { path: '/', element: <Navigate to="/workspace" /> },
       { path: 'explorer', element: <ExplorerPage /> },
+
       { path: 'explorer/:folderId', element: <ExplorerPage /> },
       { path: 'shared', element: <SharedPage /> },
       { path: 'search', element: <SearchPage /> },
@@ -126,6 +136,7 @@ const routes = (user: IUser | null) => [
       },
     ],
   },
+
   {
     path: 'workspace',
     element: user ? (

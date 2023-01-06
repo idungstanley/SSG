@@ -1,30 +1,41 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
+import { useAppSelector } from '../../../app/hooks';
 import CommandSearchModal from '../sidebar/components/CommandSearchModal';
 
 export default function Search() {
   const [commandSearchModal, setCommandSearchModal] = useState(false);
+  const { showSidebar } = useAppSelector((state) => state.workspace);
 
   return (
     <>
       <button
         type="button"
-        className="relative p-1.5 mb-2 transition duration-300 rounded-md cursor-pointer group"
+        className={`relative p-1.5 mb-1 transition duration-300 flex items-center w-full cursor-pointer group ${
+          !showSidebar ? 'rounded-sm' : 'rounded-md'
+        }`}
         onClick={() => setCommandSearchModal(true)}
       >
         <div
-          className="absolute right-0 flex items-center justify-between w-auto tracking-wider text-gray-400 left-4 top-3 hover:text-green-500"
+          className={`absolute flex items-center left-4 justify-between w-auto tracking-wider text-gray-400 hover:text-green-500 ${
+            showSidebar ? 'right-0 top-3' : 'top-1'
+          }`}
           style={{ fontSize: '9px' }}
         >
           <div className="flex items-center justify-between ">
-            <SearchIcon className="w-2.5 h-2.5 mr-1" aria-hidden="true" />
-            <p>Search</p>
+            <SearchIcon
+              className={`${showSidebar ? 'w-2.5 h-2.5 mr-1' : 'h-4'}`}
+              aria-hidden="true"
+            />
+            <p className={`${!showSidebar && 'hidden'}`}>Search</p>
           </div>
-          <p className="mr-5">Ctrl+k</p>
+          <p className={`mr-5 ${!showSidebar && 'hidden'}`}>Ctrl+k</p>
         </div>
         <input
           placeholder=""
-          className="w-full pl-8 border-gray-400 rounded-2xl h-7 group-hover:border-green-500 group-hover:text-primary-400"
+          className={`w-full pl-8 border-gray-400 h-7 rounded-2xl group-hover:border-green-500 group-hover:text-primary-400  ${
+            !showSidebar && 'hidden'
+          }`}
           disabled
           type="text"
         />

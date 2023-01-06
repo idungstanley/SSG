@@ -71,7 +71,7 @@ export default function NavigationItems() {
   const [showMore, setShowMore] = useState(false);
 
   return (
-    <div className="flex flex-col mt-2">
+    <div className="flex flex-col mt-1">
       <nav className="flex-1">
         {navigation.map((item) =>
           showMore ? (
@@ -94,10 +94,18 @@ export default function NavigationItems() {
                     item.href === pathname
                       ? 'text-gray-500'
                       : 'text-gray-400 hover:text-gray-500 hover:bg-gray-50',
-                    'mr-4 flex-shrink-0 h-4 w-4'
+                    'mr-4 flex-shrink-0 h-4 w-4 relative'
                   )}
                   aria-hidden="true"
                 >
+                  {item.name === 'Notifications' && (
+                    <div
+                      className="inline py-px float-right  text-center px-0.5 absolute right-0 top-0.5 bg-red-500 text-white"
+                      style={{ fontSize: '6px', borderRadius: '50px' }}
+                    >
+                      24
+                    </div>
+                  )}
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
                 <p

@@ -1,5 +1,3 @@
-/* eslint-disable object-shorthand */
-/* eslint-disable camelcase */
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createListService } from '../../../../features/list/listService';
@@ -7,7 +5,8 @@ import { Button, Input } from '../../../../components';
 
 interface ListModalProps {
   listVisible: boolean;
-  walletId?: string;
+  walletId: string;
+  getCurrentHubId?: string;
   onCloseListModal: () => void;
 }
 
@@ -15,6 +14,7 @@ function ListModal({
   listVisible,
   onCloseListModal,
   walletId,
+  getCurrentHubId,
 }: ListModalProps) {
   const queryClient = useQueryClient();
   const createList = useMutation(createListService, {
@@ -27,8 +27,6 @@ function ListModal({
   const defaultListFormState = {
     name: '',
   };
-
-  const hub_id = JSON.parse(localStorage.getItem('currentHubId') || '"');
 
   const [formState, setFormState] = useState(defaultListFormState);
 
@@ -43,7 +41,7 @@ function ListModal({
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
-      hubId: hub_id,
+      hubId: getCurrentHubId,
       parentId: walletId,
     });
   };

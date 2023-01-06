@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { FolderFilled } from '@ant-design/icons';
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  DotsCircleHorizontalIcon,
-} from '@heroicons/react/outline';
+import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';

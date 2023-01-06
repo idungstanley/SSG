@@ -1,6 +1,6 @@
 import requestNew from '../../app/requestNew';
 
-export const createWalletService = (data: {name: string; hubID: string; walletId: string }) => {
+export const createWalletService = (data: {name: string; hubID?: string; walletId?: string }) => {
   const response = requestNew(
     {
       url: 'at/wallets',

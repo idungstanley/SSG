@@ -4,9 +4,6 @@ import { useParams } from 'react-router-dom';
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-  CalendarIcon,
-  FlagIcon,
-  UserAddIcon,
 } from '@heroicons/react/outline';
 import { CheckIcon } from '@heroicons/react/solid';
 import {
@@ -15,7 +12,6 @@ import {
   UserAddOutlined,
 } from '@ant-design/icons';
 import { getListsListService } from '../../../../features/list/listService';
-import { getTaskListService } from '../../../../features/task/taskService';
 import ListNav from '../../lists/components/renderlist/ListNav';
 
 function RenderWallets() {

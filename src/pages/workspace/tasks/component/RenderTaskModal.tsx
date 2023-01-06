@@ -3,7 +3,6 @@ import {
   CaretDownFilled,
   CloudUploadOutlined,
   EllipsisOutlined,
-  EyeOutlined,
   FlagOutlined,
   UserAddOutlined,
   VideoCameraOutlined,
@@ -38,13 +37,13 @@ function RenderTaskModal() {
     queryFn: getOneTaskService,
   });
 
-  const { data: startEntry } = useQuery({
+  useQuery({
     queryKey: ['startTimeClock', taskId],
     queryFn: createTimeEntriesService,
     enabled: startTimeClicked,
   });
 
-  const { data: stopEntry } = useQuery({
+  useQuery({
     queryKey: ['endTimeClock', taskId],
     queryFn: EndTimeEntriesService,
     enabled: stopTimer,
@@ -56,9 +55,8 @@ function RenderTaskModal() {
 
   const [formState, setFormState] = useState(defaultEndTimeClockFormState);
 
-  const { description } = formState;
-
-  const endClockTimer = useMutation(EndTimeEntriesService, {
+  // const { description } = formState;
+  useMutation(EndTimeEntriesService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

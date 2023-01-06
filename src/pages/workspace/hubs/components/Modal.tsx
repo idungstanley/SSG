@@ -9,7 +9,7 @@ interface ModalProps {
   onCloseHubModal: () => void;
 }
 
-function Modal({ isVisible, onCloseHubModal } : ModalProps) {
+function Modal({ isVisible, onCloseHubModal }: ModalProps) {
   const queryClient = useQueryClient();
 
   const createHub = useMutation(createHubService, {
@@ -30,10 +30,11 @@ function Modal({ isVisible, onCloseHubModal } : ModalProps) {
   };
 
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId') || '"',
+    localStorage.getItem('currentWorkspaceId') || '"'
   );
 
   const { name } = formState;
+
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,

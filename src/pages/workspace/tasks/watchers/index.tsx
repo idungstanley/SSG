@@ -2,19 +2,30 @@ import React, { useState } from 'react';
 import { EyeOutlined } from '@ant-design/icons';
 import Dropdown from './watcherDropdown/Dropdown';
 import { GetTaskWatcherService } from '../../../../features/task/taskService';
-import { useQuery } from '@tanstack/react-query';
-
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { setWatchersData } from '../../../../features/task/taskSlice';
 interface WatcherProps {
   taskId: string | undefined;
 }
 
 export default function Watcher({ taskId }: WatcherProps) {
   const [showWatchers, setShowWatcher] = useState(false);
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
-  const { data: getWatchers } = useQuery({
+  queryClient.invalidateQueries({ queryKey: ['getwatcher'] });
+
+  const { data: getWatchers, status } = useQuery({
     queryKey: ['getwatcher', taskId],
     queryFn: GetTaskWatcherService,
   });
+
+  if (status == 'success') {
+    dispatch(setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id)));
+  }
+
+  // console.log(getWatchers?.data.watchers);
 
   return (
     <div className="relative">
@@ -28,7 +39,7 @@ export default function Watcher({ taskId }: WatcherProps) {
           ? '0'
           : getWatchers?.data.watchers.length}
       </p>
-      {showWatchers && <Dropdown />}
+      {showWatchers && <Dropdown taskId={taskId} />}
     </div>
   );
 }
