@@ -83,7 +83,7 @@ function ExpandedNav() {
           (item) =>
             activePlaceId === item.id && (
               <div key={item.id}>
-                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6 fixed top-0 border-b border-gray">
+                <div className="relative flex px-4 items-center text-gray-600 cursor-pointer h-6 top-0 border-b border-gray">
                   <span className="absolute -right-5 top z-20 bg-green-400 rounded-full border-2 border-green-400">
                     {showExtendedBar && (
                       <RiArrowLeftSLine
