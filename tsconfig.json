@@ -21,6 +21,7 @@
     "src",
     "craco.config.js",
     "postcss.config.js",
-    "tailwind.config.js"
+    "tailwind.config.js",
+    ".eslintrc.json"
   ]
 }

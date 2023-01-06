@@ -20,6 +20,7 @@ import { formikConfig } from '../../../components/Comments/components/componentT
 
 function LoginPage() {
   const dispatch = useDispatch();
+  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const loginMutation = useMutation(loginService, {
     onSuccess: (successData) => {
@@ -129,23 +130,25 @@ function LoginPage() {
             formikConfig={formikConfig}
           />
 
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
-            onSuccess={handleGoogleLogin}
-            onFailure={handleGoogleFailure}
-            cookiePolicy="single_host_origin"
-            responseType="code"
-            redirectUri="postmessage"
-            render={(renderProps) => (
-              <button
-                type="button"
-                onClick={renderProps.onClick}
-                className="w-full mt-5 text-sm text-center text-gray-500 hover:text-gray-600"
-              >
-                Or sign in with Google
-              </button>
-            )}
-          />
+          {GOOGLE_CLIENT_ID ? (
+            <GoogleLogin
+              clientId={GOOGLE_CLIENT_ID}
+              onSuccess={handleGoogleLogin}
+              onFailure={handleGoogleFailure}
+              cookiePolicy="single_host_origin"
+              responseType="code"
+              redirectUri="postmessage"
+              render={(renderProps) => (
+                <button
+                  type="button"
+                  onClick={renderProps.onClick}
+                  className="w-full mt-5 text-sm text-center text-gray-500 hover:text-gray-600"
+                >
+                  Or sign in with Google
+                </button>
+              )}
+            />
+          ) : null}
         </div>
         <Help />
       </div>

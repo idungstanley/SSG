@@ -3,10 +3,7 @@ import { Switch } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { setSearchFileContents } from '../../../../../features/search/searchSlice';
 import { useAppSelector } from '../../../../../app/hooks';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../../../../utils';
 
 export default function Toggle() {
   const dispatch = useDispatch();

@@ -4,18 +4,18 @@ import {
   useDeleteItemComment,
   useEditItemComment,
   useGetItemComments,
-} from '../../features/general/multiRequests';
+} from '../../features/general/commentsService';
 import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';
-import { commentsType } from '../../types';
+import { itemType } from '../../types';
 import { selectedUserType } from './components/componentType';
 
 const regex = /@[\S]*/g;
 
 interface CommentsProps {
   itemId: string;
-  type: commentsType;
+  type: itemType;
 }
 
 export default function Comments({ itemId, type }: CommentsProps) {
@@ -33,7 +33,11 @@ export default function Comments({ itemId, type }: CommentsProps) {
     id: itemId,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const handleSubmit = (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     if (message.length > 2) {

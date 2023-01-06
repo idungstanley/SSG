@@ -14,7 +14,7 @@ import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
 import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
-import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+import { RiArrowRightSLine } from 'react-icons/ri';
 import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 
@@ -41,10 +41,12 @@ export default function Sidebar() {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
-            dispatch(setSidebarWidth(
-              mouseMoveEvent.clientX -
-                sidebarRef?.current?.getBoundingClientRect().left
-            ));
+            dispatch(
+              setSidebarWidth(
+                mouseMoveEvent.clientX -
+                  sidebarRef?.current?.getBoundingClientRect().left
+              )
+            );
           }
       }
     },

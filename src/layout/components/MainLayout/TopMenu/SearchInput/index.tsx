@@ -1,17 +1,19 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SearchIcon } from '@heroicons/react/solid';
-import { useSelector, useDispatch } from 'react-redux';
+import { XIcon } from '@heroicons/react/outline';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setSearchQuery } from '../../../../../features/search/searchSlice';
+import SavedSearches from './components';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 
 export default function SearchInput() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const searchQuery = useSelector((state) => state.search.searchQuery);
+  const { searchQuery } = useAppSelector((state) => state.search);
 
-  const queryInput = useRef(null);
+  const queryInput = useRef<HTMLInputElement>(null);
 
   const onQueryChange = (query) => {
     dispatch(setSearchQuery(query));
@@ -30,29 +32,43 @@ export default function SearchInput() {
   useEffect(() => {
     if (location.pathname === '/search') {
       if (queryInput !== null) {
-        queryInput.current.focus();
+        queryInput.current?.focus();
       }
     }
-  }, [queryInput]);
+  }, []);
+
+  const handleReset = () => {
+    dispatch(setSearchQuery(''));
+    queryInput.current?.focus();
+  };
 
   return (
     <div className="flex-1 flex justify-center lg:justify-end">
       <div className="w-full px-2 lg:px-6">
-        <div className="relative text-indigo-200 focus-within:text-gray-400">
+        <div className="relative text-indigo-200 focus-within:text-gray-400 flex items-center">
           <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
             <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </div>
           <input
             id="search"
             name="search"
-            className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white ring-0 focus:ring-0 focus:text-gray-900 focus:placeholder-gray-500 sm:text-sm"
             placeholder="Search everything..."
-            type="search"
+            className="block w-full bg-gray-700 rounded-md py-2 pl-10 pr-3 text-sm text-gray-300 placeholder-gray-400 focus:outline-none ring-0 focus:ring-0 sm:text-sm"
             onChange={(e) => onQueryChange(e.target.value)}
             value={searchQuery}
             ref={queryInput}
             onFocus={onFocus}
           />
+
+          {searchQuery.length ? (
+            <XIcon
+              onClick={handleReset}
+              className="h-5 w-5 text-gray-400 absolute right-9 cursor-pointer"
+              aria-hidden="true"
+            />
+          ) : null}
+
+          <SavedSearches />
         </div>
       </div>
     </div>

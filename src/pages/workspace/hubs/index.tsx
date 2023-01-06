@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Modal from './components/Modal';
-import {
-  useGetHubList,
-} from '../../../features/hubs/hubService';
+import { useGetHubList } from '../../../features/hubs/hubService';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 
@@ -12,19 +10,12 @@ function Hubs() {
 
   return (
     <>
-      <CreateNewItemBtn
-        onClick={() => setShowModal(true)}
-        title="NEW HUB"
-      />
+      <CreateNewItemBtn onClick={() => setShowModal(true)} title="NEW HUB" />
       <Modal
         isVisible={showModal}
         onCloseHubModal={() => setShowModal(false)}
       />
-      <ItemsListInSidebar
-        items={data?.data.hubs}
-        status={status}
-        type="hub"
-      />
+      <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
     </>
   );
 }

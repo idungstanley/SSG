@@ -2,23 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import {
   QueryClientProvider,
   QueryClient,
   QueryCache,
   MutationCache,
 } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
 import App from './App';
 import { store } from './app/store';
 import Toast from './common/Toast';
 import { IErrorRequest, ISuccessRequest } from './types';
 
-const onError = (
-  error: unknown,
-): unknown => {
+const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
   let title: string;
   let body: string;
@@ -52,9 +49,7 @@ const onError = (
   ));
 };
 
-const onErrorMutation = (
-  error: unknown,
-): unknown => {
+const onErrorMutation = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
   let title: string;
   let body: string;
@@ -88,9 +83,7 @@ const onErrorMutation = (
   ));
 };
 
-const onSuccess = (
-  data: unknown,
-): unknown => {
+const onSuccess = (data: unknown): unknown => {
   let title: string;
   let body: string;
 
@@ -135,12 +128,10 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
+        <App />
 
-          {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
-          <ReactQueryDevtools position="bottom-right" />
-        </BrowserRouter>
+        {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
+        {/* <ReactQueryDevtools position="bottom-right" /> */}
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,

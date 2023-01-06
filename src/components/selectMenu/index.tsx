@@ -8,27 +8,29 @@ interface SelectMenuTeamMembersProps {
   selectedData: ISelectedData | null;
   setSelectedData: (value: ISelectedData | null) => void;
   title: string;
+  showEmail?: boolean;
 }
 
-interface teamMembersType {
-  id: string;
-  name: string;
-}
+// interface teamMembersType {
+//   id: string;
+//   name: string;
+// }
 
-interface SelectMenuTeamMembersType {
-  teamMembers: teamMembersType[];
-  selectedData: {
-     name: string;
-    id: string;
-  }
-  setSelectedData: ()=> void;
-  title: string;
-}
+// interface SelectMenuTeamMembersType {
+//   teamMembers: teamMembersType[];
+//   selectedData: {
+//      name: string;
+//     id: string;
+//   }
+//   setSelectedData: ()=> void;
+//   title: string;
+// }
 export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,
   setSelectedData,
   title,
+  showEmail,
 }: SelectMenuTeamMembersProps) {
   if (!teamMembers.length) {
     return null;
@@ -77,21 +79,21 @@ export default function SelectMenuTeamMembers({
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                        'relative group cursor-default select-none py-2 pl-3 pr-9'
                       )
                     }
                     value={person}
                   >
-                    {({ selected }) => (
-                      <span
-                        className={classNames(
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate'
-                        )}
-                      >
+                    <div className="flex items-center gap-3">
+                      <span className="font-normal truncate">
                         {person.name}
                       </span>
-                    )}
+                      {showEmail ? (
+                        <span className="ml-2 group-hover:text-white truncate text-sm text-gray-500">
+                          {person.email}
+                        </span>
+                      ) : null}
+                    </div>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

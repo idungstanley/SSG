@@ -23,4 +23,6 @@ export interface ISuccessRequest {
 
 export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';
 
-export type commentsType = 'inbox_file' | 'inbox' | 'folder' | 'file';
+export type explorerItemType = 'folder' | 'file';
+
+export type itemType = 'inbox_file' | 'inbox' | explorerItemType;

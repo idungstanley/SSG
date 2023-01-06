@@ -2,13 +2,13 @@ import React from 'react';
 import Header from './Components/Header';
 import Details from './Components/Details';
 import Comments from '../Comments';
-// import Tabs from './Components/Tabs';
 
 import { IExplorerAndSharedData } from '../../features/shared/shared.interfaces';
+import { explorerItemType } from '../../types';
 
 interface ItemPreviewProps {
   item?: IExplorerAndSharedData;
-  type: 'folder' | 'file' | null;
+  type: explorerItemType | null;
 }
 
 function ItemPreviewSidebar({ item, type }: ItemPreviewProps) {
@@ -23,13 +23,6 @@ function ItemPreviewSidebar({ item, type }: ItemPreviewProps) {
             <Comments itemId={item.id} type={type} />
           </>
         ) : null}
-
-        {/* Loaded after API call to fetch full folder data */}
-        {/* {item.folder.name === 'something that wont be the case' && (
-          <div className="h-96">
-            <Tabs />
-          </div>
-        )} */}
       </div>
     </aside>
   ) : null;

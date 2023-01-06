@@ -48,7 +48,7 @@ export default function ItemsListInSidebar({
 
   if (status === 'loading') {
     return (
-      <div className="justify-center w-6 mx-auto mt-10">
+      <div className="flex justify-center mx-auto mt-10">
         <Spinner size={8} color="#0F70B7" />
       </div>
     );

@@ -2,9 +2,11 @@ import moment from 'moment-timezone';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
+import { explorerItemType } from '../types';
 
 const accessTokenLS = localStorage.getItem('accessToken') || 'null';
-const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || 'null';
+const currentWorkspaceIdLS =
+  localStorage.getItem('currentWorkspaceId') || 'null';
 
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
@@ -29,7 +31,11 @@ export async function GetFileWithHeaders(type: string, id: string) {
   return data;
 }
 
-export async function DownloadFile(type: 'folder' | 'file' | 'inbox' | string, id: string, name: string) {
+export async function DownloadFile(
+  type: explorerItemType | 'inbox' | string,
+  id: string,
+  name: string
+) {
   let endpoint = '';
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
