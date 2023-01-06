@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { EyeOutlined } from '@ant-design/icons';
 import Dropdown from './watcherDropdown/Dropdown';
-import { GetTaskWatcherService } from '../../../../features/task/taskService';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { UseGetWatcherService } from '../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { setWatchersData } from '../../../../features/task/taskSlice';
 interface WatcherProps {
@@ -12,20 +11,15 @@ interface WatcherProps {
 export default function Watcher({ taskId }: WatcherProps) {
   const [showWatchers, setShowWatcher] = useState(false);
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
 
-  queryClient.invalidateQueries({ queryKey: ['getwatcher'] });
-
-  const { data: getWatchers, status } = useQuery({
-    queryKey: ['getwatcher', taskId],
-    queryFn: GetTaskWatcherService,
+  const { data: getWatchers, status } = UseGetWatcherService({
+    query: taskId,
   });
-
   if (status == 'success') {
-    dispatch(setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id)));
+    dispatch(
+      setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id))
+    );
   }
-
-  // console.log(getWatchers?.data.watchers);
 
   return (
     <div className="relative">

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 interface TaskState {
   task: string[];
   watchersData: string[];
-
+  removeWatcherId: null;
   currTeamMemberId: null;
 }
 
@@ -11,6 +11,7 @@ const initialState: TaskState = {
   task: [],
   watchersData: [],
   currTeamMemberId: null,
+  removeWatcherId: null,
 };
 
 export const taskSlice = createSlice({
@@ -22,6 +23,9 @@ export const taskSlice = createSlice({
     },
     setWatchersData(state, action) {
       state.watchersData.push(action.payload);
+    },
+    setRmWatcher(state, action) {
+      state.removeWatcherId = action.payload;
     },
 
     setCurrTeamMemId(state, action) {
@@ -36,5 +40,6 @@ export const {
   checkIfTask,
   setWatchersData,
   setCurrTeamMemId,
+  setRmWatcher,
 } = taskSlice.actions;
 export default taskSlice.reducer;

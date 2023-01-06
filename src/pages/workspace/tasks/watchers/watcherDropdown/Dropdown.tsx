@@ -2,11 +2,18 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import React from 'react';
 import { AvatarWithInitials, StatusDot } from '../../../../../components';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
-import { setCurrTeamMemId } from '../../../../../features/task/taskSlice';
+import {
+  setCurrTeamMemId,
+  setRmWatcher,
+} from '../../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
-import { AddWatcherService } from '../../../../../features/task/taskService';
+import {
+  AddWatcherService,
+  RemoveWatcherService,
+} from '../../../../../features/task/taskService';
 
 import { useAppSelector } from '../../../../../app/hooks';
+import { TrashIcon } from '@heroicons/react/outline';
 
 interface DropdownProps {
   taskId: string | undefined;
@@ -20,15 +27,26 @@ export default function Dropdown({ taskId }: DropdownProps) {
     query: '',
   });
 
-  const currTeamMemberId: string | null = useAppSelector(
+  const currTeamMemberId: any = useAppSelector(
     (state) => state.task.currTeamMemberId
   );
-  const watcherList = useAppSelector((state) => state.task.watchersData);
-  console.log({ watcherList });
+  const currTeamMemberDelId: any = useAppSelector(
+    (state) => state.task.removeWatcherId
+  );
+
+  const watcherList = useAppSelector((state) => state.task.watchersData[0]);
+
   AddWatcherService({
     query: [currTeamMemberId, taskId],
   });
 
+  const { status } = RemoveWatcherService({
+    query: [currTeamMemberDelId, taskId],
+  });
+
+  if (status === 'success') {
+    dispatch(setRmWatcher(null));
+  }
   return (
     <div className="">
       <section className="absolute -left-56 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
@@ -47,12 +65,14 @@ export default function Dropdown({ taskId }: DropdownProps) {
           </section>
           {data?.data.team_members.map((item) => (
             <section
-              className="flex justify-between items-center space-x-2 hover:bg-gray-300 p-3 "
+              className="space-x-2 hover:bg-gray-300 p-3 "
               key={item?.id}
-              onClick={() => dispatch(setCurrTeamMemId(item.id))}
             >
-              <div className="flex items-center space-x-2">
-                <div className="relative">
+              <div className="flex items-center justify-between ">
+                <div
+                  className="relative flex items-center cursor-pointer  space-x-2"
+                  onClick={() => dispatch(setCurrTeamMemId(item.id))}
+                >
                   <AvatarWithInitials
                     initials={item.initials}
                     backgroundColour={item.colour}
@@ -60,8 +80,8 @@ export default function Dropdown({ taskId }: DropdownProps) {
                     width="w-5"
                   />
 
-                  {item.id == currTeamMemberId ? (
-                    <div className="absolute -top-3 left-1">
+                  {watcherList.includes(item.id) ? (
+                    <div className="absolute -top-4 left-0">
                       <StatusDot
                         size={2.5}
                         colour="#4ADE80"
@@ -70,8 +90,19 @@ export default function Dropdown({ taskId }: DropdownProps) {
                       />
                     </div>
                   ) : null}
+                  <p className="text-xs">
+                    {item.user.name.toLocaleUpperCase()}
+                  </p>
                 </div>
-                <p className="text-xs">{item.user.name.toLocaleUpperCase()}</p>
+
+                {watcherList.includes(item.id) ? (
+                  <button
+                    type="button"
+                    onClick={() => dispatch(setRmWatcher(item.id))}
+                  >
+                    <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                  </button>
+                ) : null}
               </div>
             </section>
           ))}
