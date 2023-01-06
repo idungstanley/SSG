@@ -55,6 +55,10 @@ code {
   width: 5px;
   height: 5px;
 }
+::-webkit-scrollbar:hover {
+  width: 10px;
+  height: 10px;
+}
 
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -67,5 +71,4 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(153, 153, 153, 0.493);
-  width: 10px;
 }

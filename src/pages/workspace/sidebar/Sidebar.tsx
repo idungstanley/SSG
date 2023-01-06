@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { HiChevronDoubleLeft } from 'react-icons/hi';
 import {
   setShowExtendedBar,
+  setShowModal,
   setShowSidebar,
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
@@ -15,11 +16,17 @@ import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
+import Modal from '../hubs/components/Modal';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const { showSidebar, showExtendedBar, sidebarWidth, activePlaceId } =
-    useAppSelector((state) => state.workspace);
+  const {
+    showSidebar,
+    showExtendedBar,
+    showModal,
+    sidebarWidth,
+    activePlaceId,
+  } = useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const startResizing = React.useCallback(() => {
@@ -68,6 +75,10 @@ export default function Sidebar() {
         }
         onMouseDown={(e) => e.preventDefault()}
       >
+        <Modal
+          isVisible={showModal}
+          onCloseHubModal={() => dispatch(setShowModal(false))}
+        />
         <span
           className={`absolute -right-2 top-6 z-20 bg-white rounded-full border-2 border-inherit ${
             activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
@@ -83,7 +94,7 @@ export default function Sidebar() {
         <div className="flex flex-col flex-grow bg-white overflow-y-auto mr-1">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
-              className={`flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-30 ${
+              className={`flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-16 ${
                 showSidebar ? 'flex-row' : 'flex-col space-y-1'
               }`}
             >

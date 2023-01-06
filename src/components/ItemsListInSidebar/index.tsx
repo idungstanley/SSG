@@ -85,7 +85,12 @@ export default function ItemsListInSidebar({
   return status === 'success' ? (
     <ul className="w-full">
       {items?.map((i: { id: string; name: string }, index) => (
-        <li key={i.id} className="flex flex-col">
+        <li
+          key={i.id}
+          className={`flex flex-col ${
+            i.id === currentItemId
+          }`}
+        >
           <div
             className={`flex justify-between items-center hover:bg-gray-100 relative ${
               i.id === currentItemId

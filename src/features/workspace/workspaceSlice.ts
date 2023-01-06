@@ -11,6 +11,8 @@ interface workspaceState {
   showHub: boolean;
   showWallet: boolean;
   showMenuDropDown: boolean;
+  showModal: boolean;
+  searchIsActive: boolean;
 }
 
 const initialState: workspaceState = {
@@ -24,6 +26,8 @@ const initialState: workspaceState = {
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
+  showModal: false,
+  searchIsActive: false,
 };
 
 export const wsSlice = createSlice({
@@ -44,6 +48,17 @@ export const wsSlice = createSlice({
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setSearchIsActive(state, action) {
+      if (action.payload === 'TOGGLE') {
+        return {
+          ...state,
+          searchIsActive: !state.searchIsActive,
+        };
+      }
+    },
+    setShowModal(state, action) {
+      state.showModal = action.payload;
     },
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
@@ -87,6 +102,8 @@ export const {
   setShowWallet,
   setSidebarWidth,
   setShowMenuDropDown,
+  setShowModal,
+  setSearchIsActive,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

@@ -62,7 +62,7 @@ export default function Header() {
   const { pathname } = useLocation();
   const headerData = config.find((i) => `/workspace${i.path}` === pathname);
   return (
-    <div className="top-0 flex flex-shrink-0 bg-white shadow">
+    <div className="top-0 flex flex-shrink-0 bg-white shadow h-16">
       {headerData ? (
         <div className="flex-1">
           <Nav
