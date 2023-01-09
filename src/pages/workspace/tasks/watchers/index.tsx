@@ -9,7 +9,7 @@ interface WatcherProps {
 }
 
 export default function Watcher({ taskId }: WatcherProps) {
-  const [showWatchers, setShowWatcher] = useState(false);
+  const [showWatchers, setShowWatcher] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const { data: getWatchers, status } = UseGetWatcherService({

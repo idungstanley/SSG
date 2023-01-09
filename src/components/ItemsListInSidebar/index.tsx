@@ -15,6 +15,8 @@ import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
+import { FaEllipsisH } from 'react-icons/fa';
+import HubDropdown from '../Dropdown/HubDropdown';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -92,8 +94,8 @@ export default function ItemsListInSidebar({
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'
             }`}
-            onMouseEnter={() => handleMouseOver(index)}
-            onMouseLeave={handleMouseOut}
+            // onMouseEnter={() => handleMouseOver(index)}
+            // onMouseLeave={handleMouseOut}
           >
             {i.id === currentItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
@@ -142,12 +144,13 @@ export default function ItemsListInSidebar({
                 </span>
               </div>
             </div>
-            {index === isHovering && (
-              <div className="flex items-center space-x-1 pr-1">
+            {
+              <div className="relative flex items-center space-x-1 pr-1">
                 <MenuDropdown />
+                <HubDropdown />
                 <PlusDropDown walletId={i.id} />
               </div>
-            )}
+            }
           </div>
           {currentItemId === i.id ? <DropdownList /> : null}
         </li>

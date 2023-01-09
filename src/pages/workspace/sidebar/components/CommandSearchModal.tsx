@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface commandProps {
-  commandSearchVisible: boolean
+  commandSearchVisible: boolean;
   onCloseCommandSearchModal: () => void;
 }
 
