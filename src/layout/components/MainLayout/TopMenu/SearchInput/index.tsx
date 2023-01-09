@@ -9,28 +9,30 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 export default function SearchInput() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { searchQuery } = useAppSelector((state) => state.search);
 
   const queryInput = useRef<HTMLInputElement>(null);
 
-  const onQueryChange = (query) => {
+  const isSearchRoute = pathname === '/search';
+
+  const onQueryChange = (query: string) => {
     dispatch(setSearchQuery(query));
 
-    if (location.pathname !== '/search') {
+    if (!isSearchRoute) {
       navigate('/search');
     }
   };
 
   const onFocus = () => {
-    if (location.pathname !== '/search') {
+    if (!isSearchRoute) {
       navigate('/search');
     }
   };
 
   useEffect(() => {
-    if (location.pathname === '/search') {
+    if (isSearchRoute) {
       if (queryInput !== null) {
         queryInput.current?.focus();
       }
@@ -67,7 +69,7 @@ export default function SearchInput() {
           />
         ) : null}
 
-        <SavedSearches />
+        {isSearchRoute ? <SavedSearches /> : null}
       </div>
     </div>
   );

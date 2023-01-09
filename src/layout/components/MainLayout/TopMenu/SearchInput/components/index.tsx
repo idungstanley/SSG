@@ -80,7 +80,7 @@ export default function SavedSearches() {
                     <button
                       title="Paste this"
                       onClick={() => handlePasteValue(saved)}
-                      className="block p-2 text-left text-sm text-gray-700"
+                      className="block p-2 text-left text-sm text-gray-700 w-full"
                     >
                       {saved}
                     </button>
