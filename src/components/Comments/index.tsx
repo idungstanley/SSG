@@ -10,8 +10,7 @@ import List from './components/List';
 import Dropdown from './components/Dropdown';
 import { itemType } from '../../types';
 import { selectedUserType } from './components/componentType';
-
-const regex = /@[\S]*/g;
+import { mentionTeamMemberInMessageReg } from '../../regex';
 
 interface CommentsProps {
   itemId: string;
@@ -70,7 +69,7 @@ export default function Comments({ itemId, type }: CommentsProps) {
   };
 
   const onEdit = (id: string, value: string, user: selectedUserType[]) => {
-    setMessage(value.replaceAll(regex, ''));
+    setMessage(value.replaceAll(mentionTeamMemberInMessageReg, ''));
     setEditId(id);
     setSelectedUsers([...user]);
   };

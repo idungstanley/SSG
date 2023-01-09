@@ -19,6 +19,7 @@ interface ITeamMember {
 export interface IMentionUser {
   id: string;
   name: string;
+  email: string;
 }
 
 interface IAttachment {

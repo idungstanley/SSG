@@ -3,8 +3,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { Spinner } from '../../../common';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { IMentionUser } from '../../../features/chat/chat.interfaces';
-
-const regex = /@[\S]*/g;
+import { mentionTeamMemberInMessageReg } from '../../../regex';
 
 interface itemType {
   id: string;
@@ -18,6 +17,7 @@ interface ListType {
   onEdit: (id: string, message: string, users: IMentionUser[]) => void;
   onDelete: (value: string) => void;
 }
+
 export default function List({ status, comments, onEdit, onDelete }: ListType) {
   return status === 'loading' ? (
     <div className="mx-auto mt-3 mb-6 w-6 justify-center">
@@ -28,7 +28,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
       <ul className="divide-y divide-gray-200">
         {comments.map((item) => (
           <li key={item.id} className="flex items-center justify-between py-4">
-            <p>{item.message.replaceAll(regex, '')}</p>
+            <p>{item.message.replaceAll(mentionTeamMemberInMessageReg, '')}</p>
             <div className="flex items-center gap-3">
               <div className="flex gap-2">
                 {item.mention_users?.map((user) => (
