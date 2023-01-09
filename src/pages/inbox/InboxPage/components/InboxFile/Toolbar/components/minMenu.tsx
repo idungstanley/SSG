@@ -12,13 +12,17 @@ import {
   useArchiveOrUnarchiveInboxFile,
   useGetInboxFile,
 } from '../../../../../../../features/inbox/inboxService';
-import { setAssignInboxFileSlideOverVisibility } from '../../../../../../../features/general/slideOver/slideOverSlice';
+import {
+  setAssignInboxFileSlideOverVisibility,
+  setShowWatchersSideOver,
+} from '../../../../../../../features/general/slideOver/slideOverSlice';
 import {
   useBlacklistFile,
   useGetBlacklistFiles,
 } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
 import { useAppSelector } from '../../../../../../../app/hooks';
+import { EyeIcon } from '@heroicons/react/outline';
 
 const noSymbolIcon = (
   <svg
@@ -70,11 +74,12 @@ export default function MinMenu() {
   };
 
   const onDownload = async () => {
-    inboxFile && DownloadFile(
-      'inboxFile',
-      inboxFile.id,
-      inboxFile.inbox_file_source.display_name
-    );
+    inboxFile &&
+      DownloadFile(
+        'inboxFile',
+        inboxFile.id,
+        inboxFile.inbox_file_source.display_name
+      );
   };
 
   const items = [
@@ -91,6 +96,14 @@ export default function MinMenu() {
           className="mr-2.5 h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
+      ),
+    },
+    {
+      label: 'Watchers',
+      onClick: () =>
+        dispatch(setShowWatchersSideOver({ show: true, type: 'inbox_file' })),
+      icon: (
+        <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
       ),
     },
     {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRoutes } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import routes from './routes';
@@ -8,11 +8,11 @@ import { selectCurrentUser } from './features/auth/authSlice';
 
 function App() {
   const user = useSelector(selectCurrentUser);
-  const routing = useRoutes(routes(user));
 
   return (
     <div className="h-full flex flex-col">
-      {routing}
+      <RouterProvider router={routes(user)} />
+
       <Toaster
         position="top-right"
         toastOptions={{
@@ -21,6 +21,7 @@ function App() {
           },
         }}
       />
+
       <Prompt />
     </div>
   );

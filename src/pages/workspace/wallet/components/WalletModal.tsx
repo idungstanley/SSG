@@ -50,29 +50,29 @@ function WalletModal({
   if (!walletVisible) return null;
 
   return (
-    <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-      <div className="w-5/12 flex flex-col">
+    <div className="fixed top-0 bottom-0 right-0 flex items-center justify-center w-full bg-black bg-opacity-50 backdrop-blur-sm">
+      <div className="flex flex-col w-5/12">
         <div
-          className="text-white text-xl place-self-end"
+          className="text-xl text-white place-self-end"
           onClick={() => onCloseWalletModal()}
         >
           X
         </div>
-        <div className="bg-white p-2 rounded">
-          <section className="header pl-4 pt-4 h-24">
-            <h3 className="font-bold text-xl">Create Wallet</h3>
+        <div className="p-2 bg-white rounded">
+          <section className="h-24 pt-4 pl-4 header">
+            <h3 className="text-xl font-bold">Create Wallet</h3>
           </section>
-          <div className="selectors mt-4 space-x-4  flex justify-start ml-6">
-            <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
+          <div className="flex justify-start mt-4 ml-6 space-x-4 selectors">
+            <h3 className="p-1 font-bold rounded hover:bg-gray-300 hover:rounded">
               New
             </h3>
-            <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
+            <h3 className="p-1 font-bold rounded hover:bg-gray-300 hover:rounded">
               Template
             </h3>
           </div>
-          <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+          <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
           <section id="listform">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
               <Input
                 label="Wallet Name:"
                 placeholder="Enter Wallet Name"
@@ -82,7 +82,7 @@ function WalletModal({
                 onChange={handleWalletChange}
               />
             </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
+            <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
               <Button
                 buttonStyle="primary"
                 onClick={onSubmit}

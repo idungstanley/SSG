@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { explorerItemType } from '../../types';
 import { ITeamMembersAndGroupsReq } from '../workspace/teamMembers.intrfaces';
 import { IDataAccessReq } from './permissions.interfaces';
 
@@ -37,7 +38,7 @@ export const useGetFilteredTeamMembers = (
 
 export const useGetDataAccess = (
   id: string | null,
-  type: 'folder' | 'file' | null
+  type: explorerItemType | null
 ) => {
   const url = `${type}s/${id}/access`;
   const queryKey = [`${type}-permissions-${id}`];
@@ -56,7 +57,7 @@ export const useGetDataAccess = (
 };
 
 const removeAccessForData = (dat: {
-  type: 'folder' | 'file' | null;
+  type: explorerItemType | null;
   itemType: 'member' | 'member-group';
   dataId: string | null;
   isActiveUser: boolean;
@@ -81,7 +82,7 @@ const removeAccessForData = (dat: {
 };
 
 export const useRemoveAccessForData = (
-  type: 'folder' | 'file' | null,
+  type: explorerItemType | null,
   id: string | null
 ) => {
   const queryClient = useQueryClient();
@@ -97,7 +98,7 @@ const changeAccessForData = (data: {
   dataId: string | null;
   key: string;
   accessToId: string;
-  type: 'folder' | 'file' | null;
+  type: explorerItemType | null;
   itemType: 'member' | 'member-group';
 }) => {
   const { key, accessToId, type, dataId, itemType } = data;
@@ -116,7 +117,7 @@ const changeAccessForData = (data: {
 };
 
 export const useChangeAccessForData = (
-  type: 'folder' | 'file' | null,
+  type: explorerItemType | null,
   id: string | null
 ) => {
   const queryClient = useQueryClient();
@@ -131,7 +132,7 @@ export const useChangeAccessForData = (
 const addAccessForData = (data: {
   dataId: string | null;
   accessToId: string;
-  type: 'folder' | 'file' | null;
+  type: explorerItemType | null;
   itemType: 'member' | 'member-group';
 }) => {
   const { type, dataId, itemType, accessToId } = data;
@@ -151,7 +152,7 @@ const addAccessForData = (data: {
 };
 
 export const useAddAccessForData = (
-  type: 'folder' | 'file' | null,
+  type: explorerItemType | null,
   id: string | null
 ) => {
   const queryClient = useQueryClient();

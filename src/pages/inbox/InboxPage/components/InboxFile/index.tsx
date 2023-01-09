@@ -8,7 +8,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 function InboxFile() {
   const { inboxId } = useParams();
   const selectedInboxFileId = useAppSelector(
-    (state) => state.inbox.selectedInboxFileId,
+    (state) => state.inbox.selectedInboxFileId
   );
 
   const { status, data: inboxFile } = useGetInboxFile(selectedInboxFileId);

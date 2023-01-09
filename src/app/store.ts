@@ -1,5 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+// import storage from 'redux-persist/lib/storage';
+// import { persistReducer } from 'redux-persist';
+import { combineReducers } from '@reduxjs/toolkit';
 import authSlice from '../features/auth/authSlice';
 import wsSlice from '../features/workspace/workspaceSlice';
 import hubSlice from '../features/hubs/hubSlice';
@@ -17,6 +20,19 @@ import teamMemberInviteSlice from '../features/settings/teamMemberInvites/teamMe
 import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import sharedSlice from '../features/shared/sharedSlice';
 import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
+import chatSlice from '../features/chat/chatSlice';
+
+// const persistConfig = {
+//   key: 'root',
+//   version: 1,
+//   storage,
+// };
+
+// const reducer = combineReducers({
+//   task: taskSlice,
+// });
+
+// const persistReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: {
@@ -37,10 +53,12 @@ export const store = configureStore({
     list: listSlice,
     task: taskSlice,
     upload: uploadFileSlice,
+    chat: chatSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: false,
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 setupListeners(store.dispatch);

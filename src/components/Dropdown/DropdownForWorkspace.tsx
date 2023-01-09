@@ -37,6 +37,7 @@ function MenuDropdown() {
   // ! actions here (create, delete, rename)
 
   // ! (too big!) destructure to different components
+
   const itemsList: itemsType[] = [
     {
       id: 1,
@@ -212,7 +213,7 @@ function MenuDropdown() {
                     )}
                     onClick={() => item.handleClick}
                   >
-                    <TrashIcon className="w-4 h-4" aria-hidden="true" />
+                    {item.icon}
                     <p>{item.title}</p>
                   </div>
                 )}

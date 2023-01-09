@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetHub } from '../../features/hubs/hubService';
-// import MenuDropdown from '../Dropdown/DropdownForWorkspace';
-import TaskDropdown from '../../pages/workspace/tasks/ccomponent/TaskDropdown';
+import TaskDropdown from '../../pages/workspace/tasks/component/TaskDropdown';
 import { BsListUl } from 'react-icons/bs';
 
 interface ListIndexProps {
-  showHubList: boolean
-  getCurrentHubId: string | null
+  showHubList: boolean;
+  getCurrentHubId: string | null;
 }
 
 function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
@@ -15,9 +14,9 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const [getListId, setGetListId] = useState('');
   const { data } = useGetHub(getCurrentHubId);
 
- const handleListLocation = (id: string) => {
-   navigate(`/workspace/list/${id}`);
- };
+  const handleListLocation = (id: string) => {
+    navigate(`/workspace/list/${id}`);
+  };
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
@@ -36,14 +35,16 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                   className="tracking-wider capitalize ml-2"
                   style={{ fontSize: '10px' }}
                 >
-                  {list.name.length > 10 ? list.name.substr(0, 10) + '...' : list.name}
+                  {list.name.length > 10
+                    ? list.name.substr(0, 10) + '...'
+                    : list.name}
                 </button>
               </div>
               {/* ends here */}
               <button
                 type="button"
                 id="listright"
-                className="space-x-1 flex items-center justify-end"
+                className="flex items-center justify-end space-x-1"
                 onClick={() => setGetListId(list.id)}
               >
                 <TaskDropdown getListId={getListId} />

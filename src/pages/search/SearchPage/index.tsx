@@ -10,45 +10,15 @@ import { resetSelectedItem } from '../../../features/search/searchSlice';
 import FullScreenMessage from '../../../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../../app/hooks';
 
-interface Idata {
-  id: string
-  created_at: string
-  size: number | null
-  icon: string
-  display_name: string
-  name: string
-  file_format: {
-    extension: string
-  }
-  inbox_file_source: {
-    size: number | null
-    file_format: {
-      extension: string
-    }
-    display_name: string
-  }
-  ancestor_path: string
-  from: string
-  updated_at: string
-}
-
-interface allResultData {
-  id: string
-  createdAt:string
-  size: number | null
-  icon:string
-  name: string
-  path: string | null
-  from: string
-  updatedAt: string
-}
-
-interface dataProps {
-  files: Idata[];
-  folders: Idata[];
-  inbox: Idata[];
-  explorerStatus: string;
-  inboxStatus: string;
+interface IResultItem {
+  id: string;
+  createdAt: string;
+  size: number | null;
+  icon: string;
+  name: string;
+  path: string | null;
+  from: string;
+  updatedAt: string;
 }
 
 export default function SearchPage() {
@@ -59,8 +29,11 @@ export default function SearchPage() {
 
   const debouncedValue = useDebounce(searchQuery, 300);
 
-  const { files, folders, inbox, explorerStatus, inboxStatus }: dataProps =
-    useSearch(searchQuery, searchFileContents, debouncedValue === searchQuery);
+  const { files, folders, inbox, explorerStatus, inboxStatus } = useSearch(
+    searchQuery,
+    searchFileContents,
+    debouncedValue === searchQuery
+  );
 
   useEffect(() => {
     if (selectedItemId) {
@@ -68,30 +41,33 @@ export default function SearchPage() {
     }
   }, [debouncedValue]);
 
-  const allResults: allResultData[] = [];
-  files?.map((i) => allResults.push({
-    id: i.id,
-    createdAt: i.created_at,
-    size: i.size,
-    icon: i.file_format.extension,
-    name: i.display_name,
-    path: i.ancestor_path,
-    from: 'Explorer',
-    updatedAt: i.updated_at,
-  }));
+  const allResults: IResultItem[] = [];
 
-  folders?.map((i) =>
+  // TODO: wrap this using useCallback
+  files?.map((i) =>
     allResults.push({
       id: i.id,
       createdAt: i.created_at,
-      size: null,
-      icon: 'folder',
-      name: i.name,
+      size: i.size,
+      icon: i.file_format.extension,
+      name: i.display_name,
       path: i.ancestor_path,
       from: 'Explorer',
       updatedAt: i.updated_at,
     })
-  );
+  ),
+    folders?.map((i) =>
+      allResults.push({
+        id: i.id,
+        createdAt: i.created_at,
+        size: null,
+        icon: 'folder',
+        name: i.name,
+        path: i.ancestor_path,
+        from: 'Explorer',
+        updatedAt: i.updated_at,
+      })
+    );
 
   inbox?.map((i) =>
     allResults.push({
@@ -124,7 +100,7 @@ export default function SearchPage() {
               description="Please try again later."
             />
           ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
-            <div className="justify-center w-6 mx-auto mt-10">
+            <div className="flex justify-center mx-auto mt-10">
               <Spinner size={22} color="#0F70B7" />
             </div>
           ) : explorerStatus === 'success' && inboxStatus === 'success' ? (

@@ -51,7 +51,7 @@ export default function ItemsListInSidebar({
 
   if (status === 'loading') {
     return (
-      <div className="mx-auto w-6 mt-10 justify-center">
+      <div className="flex justify-center mx-auto mt-10">
         <Spinner size={8} color="#0F70B7" />
       </div>
     );
@@ -92,7 +92,7 @@ export default function ItemsListInSidebar({
           }`}
         >
           <div
-            className={`flex justify-between items-center hover:bg-gray-100 relative ${
+            className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'

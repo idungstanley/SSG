@@ -24,12 +24,20 @@ export interface IExplorerFile {
   also_saved_in_files: never[];
   created_at: string;
   updated_at: string;
+  shared_by: {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+    };
+  };
 }
 
 export interface IExplorerFolder {
   id: string;
   name: string;
   display_name: string;
+  size: number;
   parent_id: string | null;
   full_path: string;
   ancestor_path: string | null;
@@ -43,6 +51,13 @@ export interface IExplorerFolder {
   tailwind_colour: string;
   created_at: string;
   updated_at: string;
+  shared_by: {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+    };
+  };
 }
 
 export interface IExplorerFilesAndFolders extends IResponseData {

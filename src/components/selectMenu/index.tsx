@@ -8,13 +8,29 @@ interface SelectMenuTeamMembersProps {
   selectedData: ISelectedData | null;
   setSelectedData: (value: ISelectedData | null) => void;
   title: string;
+  showEmail?: boolean;
 }
 
+// interface teamMembersType {
+//   id: string;
+//   name: string;
+// }
+
+// interface SelectMenuTeamMembersType {
+//   teamMembers: teamMembersType[];
+//   selectedData: {
+//      name: string;
+//     id: string;
+//   }
+//   setSelectedData: ()=> void;
+//   title: string;
+// }
 export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,
   setSelectedData,
   title,
+  showEmail,
 }: SelectMenuTeamMembersProps) {
   if (!teamMembers.length) {
     return null;
@@ -28,11 +44,11 @@ export default function SelectMenuTeamMembers({
             {title}
           </Listbox.Label>
           <div className="relative mt-1">
-            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-              <span className="block truncate h-5">
+            <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+              <span className="block h-5 truncate">
                 {selectedData ? selectedData.name : null}
               </span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -49,7 +65,6 @@ export default function SelectMenuTeamMembers({
                 </svg>
               </span>
             </Listbox.Button>
-
             <Transition
               show={open}
               as={Fragment}
@@ -57,28 +72,28 @@ export default function SelectMenuTeamMembers({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {teamMembers.map((person) => (
                   <Listbox.Option
                     key={person.id}
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                        'relative group cursor-default select-none py-2 pl-3 pr-9'
                       )
                     }
                     value={person}
                   >
-                    {({ selected }) => (
-                      <span
-                        className={classNames(
-                          selected ? 'font-semibold' : 'font-normal',
-                          'block truncate'
-                        )}
-                      >
+                    <div className="flex items-center gap-3">
+                      <span className="font-normal truncate">
                         {person.name}
                       </span>
-                    )}
+                      {showEmail ? (
+                        <span className="ml-2 group-hover:text-white truncate text-sm text-gray-500">
+                          {person.email}
+                        </span>
+                      ) : null}
+                    </div>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

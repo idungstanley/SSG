@@ -3,6 +3,7 @@ import { OutputDateTime } from '../../../../../app/helpers';
 import { FileIcon } from '../../../../../common';
 import { IItem } from '../ListItems';
 import { useAppSelector } from '../../../../../app/hooks';
+import { explorerItemType } from '../../../../../types';
 
 interface GridProps {
   checkbox: React.RefObject<{
@@ -12,8 +13,16 @@ interface GridProps {
   toggleAll: () => void;
   sortedItems: IItem[];
   selectedItems: string[];
-  handleChangeItem: (e: React.ChangeEvent<HTMLInputElement>, itemId: string, type: string) => void;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, itemId: string, type: 'folder' | 'file') => void;
+  handleChangeItem: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    itemId: string,
+    type: string
+  ) => void;
+  handleClick: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    itemId: string,
+    type: explorerItemType
+  ) => void;
 }
 
 export default function Grid({

@@ -2,6 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { ITeamMemberInvitesReq } from './teamMemberInvites.interface';
 
+const inviteCode: string = JSON.parse(
+  localStorage.getItem('teamMemberInviteCode') as string
+);
+
 // Get team member invites
 export const useGetTeamMemberInvites = (page: number) => {
   const queryClient = useQueryClient();
@@ -57,6 +61,29 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
         teamMemberInviteId,
       ]),
       enabled: teamMemberInviteId != null,
+    }
+  );
+};
+
+//Accept team member invite
+export const useAcceptTeamMemberInvite = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['team_member_invite', inviteCode],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `workspace/accept-invite/${inviteCode}`,
+          method: 'POST',
+        },
+        true
+      );
+      return data.data;
+    },
+    {
+      initialData: queryClient.getQueryData(['team_member_invite', inviteCode]),
+      enabled: inviteCode != null,
     }
   );
 };

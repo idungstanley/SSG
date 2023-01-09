@@ -1,4 +1,3 @@
-// import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import React, { memo, useRef, useState } from 'react';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../pages/workspace/dashboard';

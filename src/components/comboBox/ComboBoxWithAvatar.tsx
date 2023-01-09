@@ -105,7 +105,7 @@ export default function ComboBoxWithAvatar({
 
               {(isFetching || hasNextPage) && (
                 <div
-                  className="justify-center w-6 mx-auto mt-3 mb-6"
+                  className="flex justify-center mx-auto mt-3 mb-6"
                   ref={sentryRef}
                 >
                   <Spinner size={8} color="#0F70B7" />

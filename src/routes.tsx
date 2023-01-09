@@ -1,13 +1,13 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // Layouts
 import MainLayout from './layout/components/MainLayout';
 import UnauthenticatedLayout from './layout/components/UnauthenticatedLayout';
 
 // Authentication
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
+import LoginPage from './pages/workspace/createWorkspace/auth/LoginPage';
+import RegisterPage from './pages/workspace/createWorkspace/auth/RegisterPage';
 
 // Main
 import ExplorerPage from './pages/explorer/ExplorerPage';
@@ -30,11 +30,12 @@ import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/Tea
 import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
 import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
 import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
+import TeamMemberAcceptInvite from './pages/settings/teamMemberGroupSettings/TeamMemberAcceptInvitePage';
 import SharedPage from './pages/shared';
 
 // At workspace
 import Index from './pages/workspace/Index';
-import Home from './pages/workspace/Home/Home';
+import Home from './pages/workspace/home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community';
@@ -44,9 +45,10 @@ import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
-import RenderList from './pages/workspace/Lists/components/RenderList';
+import RenderList from './pages/workspace/Lists/RenderList';
 import { IUser } from './types';
-import RenderTaskModal from './pages/workspace/tasks/ccomponent/RenderTaskModal';
+import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
+import NotFoundPage from './pages/NotFoundPage';
 
 const inbox = [
   {
@@ -75,89 +77,99 @@ const inbox = [
   },
 ];
 
-const routes = (user: IUser | null) => [
-  {
-    path: 'workspace/onboarding',
-    element: user ? (
-      user.default_workspace_id ? (
-        <Navigate to="/workspace" />
+export const routes = (user: IUser | null) =>
+  createBrowserRouter([
+    {
+      path: 'workspace/onboarding',
+      element: user ? (
+        user.default_workspace_id ? (
+          <Navigate to="/workspace" />
+        ) : (
+          <CreateWorkspace />
+        )
       ) : (
-        <CreateWorkspace />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-  },
-  {
-    path: '/',
-    element: user ? (
-      user.default_workspace_id ? (
-        <MainLayout />
+        <Navigate to="/auth/login" />
+      ),
+    },
+    {
+      path: 'accept-invite/:inviteCode',
+      element: user ? (
+        <TeamMemberAcceptInvite />
       ) : (
-        <Navigate to="/workspace/onboarding" />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-    children: [
-      { path: '/', element: <Navigate to="/workspace" /> },
-      { path: 'explorer', element: <ExplorerPage /> },
-      { path: 'explorer/:folderId', element: <ExplorerPage /> },
-      { path: 'shared', element: <SharedPage /> },
-      { path: 'search', element: <SearchPage /> },
-      ...inbox,
-      { path: 'settings/permissions', element: <PermissionsPage /> },
-      { path: 'settings/team-members', element: <TeamMembersPage /> },
-      {
-        path: 'settings/team-members/invites',
-        element: <TeamMemberInvitesPage />,
-      },
-      {
-        path: 'settings/team-members/groups',
-        element: <TeamMemberGroupsPage />,
-      },
-      {
-        path: 'settings/team-members/groups/:teamMemberGroupId',
-        element: <TeamMemberGroupGeneralSettingsPage />,
-      },
-      {
-        path: 'settings/team-members/groups/:teamMemberGroupId/members',
-        element: <TeamMemberGroupMembersPage />,
-      },
-    ],
-  },
-  {
-    path: 'workspace',
-    element: user ? (
-      user.default_workspace_id ? (
-        <Index />
+        <Navigate to="/auth/register" />
+      ),
+    },
+    {
+      path: '/',
+      element: user ? (
+        user.default_workspace_id ? (
+          <MainLayout />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        )
       ) : (
-        <Navigate to="/workspace/onboarding" />
-      )
-    ) : (
-      <Navigate to="/auth/login" />
-    ),
-    children: [
-      { path: '', element: <Home /> },
-      { path: 'notification', element: <Notification /> },
-      { path: 'community', element: <Community /> },
-      { path: 'goals', element: <Home /> },
-      { path: 'docs', element: <Docs /> },
-      { path: 'wallet/:walletId', element: <RenderWallets /> },
-      { path: 'list/:listId', element: <RenderList /> },
-      { path: 't/:taskId', element: <RenderTaskModal /> },
-      ...inbox,
-    ],
-  },
-  {
-    path: '/auth',
-    element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
-    children: [
-      { path: 'login', element: <LoginPage /> },
-      { path: 'register', element: <RegisterPage /> },
-      { path: 'register/:inviteCode', element: <RegisterPage /> },
-    ],
-  },
-];
+        <Navigate to="/auth/login" />
+      ),
+      children: [
+        { path: '/', element: <Navigate to="/workspace" /> },
+        { path: 'explorer', element: <ExplorerPage /> },
+        { path: 'explorer/:folderId', element: <ExplorerPage /> },
+        { path: 'shared', element: <SharedPage /> },
+        { path: 'search', element: <SearchPage /> },
+        ...inbox,
+        { path: 'settings/permissions', element: <PermissionsPage /> },
+        { path: 'settings/team-members', element: <TeamMembersPage /> },
+        {
+          path: 'settings/team-members/invites',
+          element: <TeamMemberInvitesPage />,
+        },
+        {
+          path: 'settings/team-members/groups',
+          element: <TeamMemberGroupsPage />,
+        },
+        {
+          path: 'settings/team-members/groups/:teamMemberGroupId',
+          element: <TeamMemberGroupGeneralSettingsPage />,
+        },
+        {
+          path: 'settings/team-members/groups/:teamMemberGroupId/members',
+          element: <TeamMemberGroupMembersPage />,
+        },
+      ],
+    },
+    {
+      path: 'workspace',
+      element: user ? (
+        user.default_workspace_id ? (
+          <Index />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        )
+      ) : (
+        <Navigate to="/auth/login" />
+      ),
+      children: [
+        { path: '', element: <Home /> },
+        { path: 'notification', element: <Notification /> },
+        { path: 'community', element: <Community /> },
+        { path: 'goals', element: <Home /> },
+        { path: 'docs', element: <Docs /> },
+        { path: 'wallet/:walletId', element: <RenderWallets /> },
+        { path: 'list/:listId', element: <RenderList /> },
+        { path: 't/:taskId', element: <RenderTaskModal /> },
+        ...inbox,
+      ],
+    },
+    {
+      path: '/auth',
+      element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
+      children: [
+        { path: 'login', element: <LoginPage /> },
+        { path: 'register', element: <RegisterPage /> },
+        { path: 'register/:inviteCode', element: <RegisterPage /> },
+      ],
+    },
+    { path: '*', element: <NotFoundPage /> },
+  ]);
 
 export default routes;
