@@ -13,8 +13,8 @@ import { AvatarWithInitials } from '../../../components';
 import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
+import Search from '../Search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
