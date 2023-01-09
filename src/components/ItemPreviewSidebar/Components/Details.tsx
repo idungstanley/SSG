@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { FileIcon } from '../../../common';
 import {
   DownloadFile,
@@ -8,12 +7,11 @@ import {
 } from '../../../app/helpers';
 import ComboBoxForTeamMembers from '../../comboBox/ComboBoxForTeamMembers';
 import { useGetFilteredTeamMembers } from '../../../features/permissions/permissionsService';
-import requestNew from '../../../app/requestNew';
-import Toast from '../../../common/Toast';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { IExplorerAndSharedData } from '../../../features/shared/shared.interfaces';
 import { explorerItemType } from '../../../types';
 import { setShowWatchersSideOver } from '../../../features/general/slideOver/slideOverSlice';
+import { useShareItem } from '../../../features/shared/sharedService';
 
 interface DetailsProps {
   item: IExplorerAndSharedData;
@@ -33,39 +31,49 @@ export default function Details({ item, type }: DetailsProps) {
 
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { users } = useGetFilteredTeamMembers(currentUserId);
+  const { mutate: onShare } = useShareItem();
 
-  const onClickUser = async (id: string) => {
-    if (id) {
-      try {
-        const request = await requestNew({
-          method: 'POST',
-          url: `${type}s/${item.id}/share/${id}`,
-        });
-        toast.custom((t) => (
-          <Toast
-            type="success"
-            title={request.message.title}
-            body={null}
-            toastId={t.id}
-          />
-        ));
-      } catch (e) {
-        toast.custom((t) => (
-          <Toast
-            type="error"
-            title="You don't have permission to share this."
-            body={null}
-            toastId={t.id}
-          />
-        ));
-      }
-      setShowPopup(false);
+  const onClickUser = (userId: string) => {
+    if (userId) {
+      onShare({
+        type,
+        itemId: item.id,
+        userId,
+      });
     }
+    setShowPopup(false);
   };
 
   const onDownload = async () => {
     DownloadFile(type, item.id, title);
   };
+
+  const buttonsArr = [
+    {
+      id: 1,
+      label: 'Download',
+      onClick: onDownload,
+      isVisible: true,
+    },
+    {
+      id: 2,
+      label: 'Share',
+      onClick: () => setShowPopup(true),
+      isVisible: users?.length && !item.shared_by,
+    },
+    {
+      id: 3,
+      label: 'Watchers',
+      onClick: onShowWatchers,
+      isVisible: true,
+    },
+    {
+      id: 4,
+      label: 'Chat',
+      onClick: () => ({}),
+      isVisible: true,
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -87,23 +95,19 @@ export default function Details({ item, type }: DetailsProps) {
           </div>
         </div>
       </div>
-      <div className="relative flex">
-        <button
-          onClick={onDownload}
-          type="button"
-          className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
-        >
-          Download
-        </button>
-        {users?.length && !item.shared_by ? (
-          <button
-            onClick={() => setShowPopup(true)}
-            type="button"
-            className="flex-1 px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0"
-          >
-            Share
-          </button>
-        ) : null}
+      <div className="relative flex flex-wrap gap-3">
+        {buttonsArr.map((button) =>
+          button.isVisible ? (
+            <button
+              key={button.id}
+              onClick={button.onClick}
+              type="button"
+              className="flex-1 px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0"
+            >
+              {button.label}
+            </button>
+          ) : null
+        )}
         {showPopup && users ? (
           <ComboBoxForTeamMembers
             setShowPopup={setShowPopup}
@@ -112,13 +116,6 @@ export default function Details({ item, type }: DetailsProps) {
             users={users}
           />
         ) : null}
-        <button
-          onClick={onShowWatchers}
-          type="button"
-          className="flex-1 px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0"
-        >
-          Watchers
-        </button>
       </div>
       <div>
         <h3 className="font-medium text-gray-900">Information</h3>
