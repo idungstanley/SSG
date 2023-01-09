@@ -1,8 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-// import storage from 'redux-persist/lib/storage';
-// import { persistReducer } from 'redux-persist';
-import { combineReducers } from '@reduxjs/toolkit';
 import authSlice from '../features/auth/authSlice';
 import wsSlice from '../features/workspace/workspaceSlice';
 import hubSlice from '../features/hubs/hubSlice';
@@ -21,18 +18,6 @@ import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemb
 import sharedSlice from '../features/shared/sharedSlice';
 import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
 import chatSlice from '../features/chat/chatSlice';
-
-// const persistConfig = {
-//   key: 'root',
-//   version: 1,
-//   storage,
-// };
-
-// const reducer = combineReducers({
-//   task: taskSlice,
-// });
-
-// const persistReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: {

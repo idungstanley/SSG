@@ -47,7 +47,7 @@ export interface IInboxSearchRes {
 export interface ISavedSearch {
   key: string;
   is_json: boolean;
-  value: string;
+  value: string[];
   created_at: string;
   updated_at: string;
 }
