@@ -12,7 +12,6 @@ function App() {
   return (
     <div className="h-full flex flex-col">
       <RouterProvider router={routes(user)} />
-
       <Toaster
         position="top-right"
         toastOptions={{

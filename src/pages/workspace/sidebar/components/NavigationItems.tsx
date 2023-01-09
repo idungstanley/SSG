@@ -49,7 +49,7 @@ const navigation = [
   },
   {
     name: 'Favorites',
-    href: '/workspace/favorite',
+    href: '/workspace/favorites',
     source: favoriteIcon,
     alwaysShow: false,
   },

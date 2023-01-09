@@ -85,6 +85,9 @@ code {
   width: var(--uib-size);
 }
 
+.place::placeholder {
+  font-size: 16px;
+}
 .dot-spinner__dot {
   position: absolute;
   top: 0;

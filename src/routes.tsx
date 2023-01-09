@@ -35,10 +35,11 @@ import SharedPage from './pages/shared';
 
 // At workspace
 import Index from './pages/workspace/Index';
-import Home from './pages/workspace/home/Home';
+import Home from './pages/workspace/Home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community';
+import Dashboard from './pages/workspace/dashboard';
 import Active from './pages/inbox/InboxesPage/components/Active';
 import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
@@ -49,6 +50,9 @@ import RenderList from './pages/workspace/Lists/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage';
+import Calendar from './pages/workspace/calendar';
+import Goals from './pages/workspace/goals';
+import Favorites from './pages/workspace/favorites';
 
 const inbox = [
   {
@@ -152,7 +156,10 @@ export const routes = (user: IUser | null) =>
         { path: '', element: <Home /> },
         { path: 'notification', element: <Notification /> },
         { path: 'community', element: <Community /> },
-        { path: 'goals', element: <Home /> },
+        { path: 'calendar', element: <Calendar /> },
+        { path: 'dashboard', element: <Dashboard /> },
+        { path: 'favorites', element: <Favorites /> },
+        { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
         { path: 'wallet/:walletId', element: <RenderWallets /> },
         { path: 'list/:listId', element: <RenderList /> },

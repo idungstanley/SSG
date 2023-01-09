@@ -8,7 +8,7 @@ import {
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
-import Favourites from '../../favourites';
+import Favourites from '../../favorites';
 import Files from '../../files';
 import Hubs from '../../hubs';
 import Inbox from '../../inbox';
@@ -87,9 +87,7 @@ function Places() {
     <div className="mt-2">
       <ul aria-labelledby="projects-headline relative">
         {secondaryNavigation.map((item, index) => (
-          <div
-            key={item.id}
-          >
+          <div key={item.id}>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <li
               key={item.id}
@@ -126,7 +124,7 @@ function Places() {
                     />
                   )}
                   <span
-                    className={` font-semibold leading-3 uppercase truncate tracking-wider ${
+                    className={`font-semibold leading-3 uppercase truncate tracking-wider ${
                       activePlaceId === item.id && 'text-black font-bold'
                     }`}
                     style={{ fontSize: '11px' }}
@@ -146,14 +144,14 @@ function Places() {
                     name=""
                     id=""
                     placeholder="Filter List, Hubs, & Wallets"
-                    className="w-full h-14 pl-5 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
+                    className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
                     className="absolute w-6 top-5 h-4 right-0 text-green-500"
                     onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                   />
                   <SearchIcon
-                    className="left-0 top-5  absolute w-6 h-4 text-green-500"
+                    className="left-0 top-5 absolute w-6 h-4 text-green-500"
                     aria-hidden="true"
                   />
                 </div>

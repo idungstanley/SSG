@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Favourites() {
+function Favorites() {
   return (
     <div>fav</div>
   );
 }
 
-export default Favourites;
+export default Favorites;

@@ -8,7 +8,7 @@ interface InputDataTypes {
   cornerHint?: string;
   type?: string;
   autoComplete?: string;
-  value: string;
+  value?: string;
   leadingIcon?: string;
   trailingIcon?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

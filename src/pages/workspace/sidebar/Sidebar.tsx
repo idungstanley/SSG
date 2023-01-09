@@ -68,7 +68,6 @@ export default function Sidebar() {
             ? { maxWidth: 321, width: sidebarWidth, minWidth: '54px' }
             : { width: '54px', minWidth: '54px' }
         }
-        onMouseDown={(e) => e.preventDefault()}
       >
         <Modal
           isVisible={showModal}
