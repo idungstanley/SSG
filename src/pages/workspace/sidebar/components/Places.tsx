@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
 import { SearchIcon } from '@heroicons/react/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { GiSettingsKnobs } from 'react-icons/gi';
 
 const secondaryNavigation = [
   {
@@ -143,14 +144,14 @@ function Places() {
                     type="text"
                     name=""
                     id=""
-                    placeholder="Filter List, Hubs, & Wallets"
+                    placeholder="Search for List, Hubs, & Wallets"
                     className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
                     className="absolute w-6 top-5 h-4 right-0 text-green-500"
                     onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                   />
-                  <SearchIcon
+                  <GiSettingsKnobs
                     className="left-0 top-5 absolute w-6 h-4 text-green-500"
                     aria-hidden="true"
                   />

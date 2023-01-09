@@ -92,7 +92,7 @@ export default function ItemsListInSidebar({
           }`}
         >
           <div
-            className={`flex justify-between relative items-center hover:bg-gray-100 ${
+            className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'
