@@ -2,10 +2,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { XIcon } from '@heroicons/react/outline';
-import {
-  useGetChat,
-  useSendMessageToChat,
-} from '../../features/chat/chatService';
+import { useGetChat } from '../../features/chat/chatService';
 import CreateChatSideOver from './components/CreateChatSideOver';
 import Pusher from 'pusher-js';
 import { IMessage } from '../../features/chat/chat.interfaces';
@@ -33,9 +30,6 @@ export default function Chat() {
   const messages = data?.messages;
 
   const [incomingData, setIncomingData] = useState<IMessage[]>([]);
-  const [message, setMessage] = useState('');
-
-  const { mutate: onSendMessage } = useSendMessageToChat();
 
   // disconnect and clear chat id when selectedItem changes
   useEffect(() => {
@@ -93,15 +87,6 @@ export default function Chat() {
   const handleClickChat = (id: string) => {
     setSelectedChatId((prev) => (prev === id ? null : id));
     connect(id);
-  };
-
-  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSendMessage({
-      message,
-      chatId: selectedChatId,
-    });
-    setMessage('');
   };
 
   const handleHideChat = () => {
@@ -171,11 +156,7 @@ export default function Chat() {
 
               <MessagesList messages={allMessages} />
 
-              <CreateMessage
-                message={message}
-                setMessage={setMessage}
-                sendMessage={sendMessage}
-              />
+              <CreateMessage chatId={selectedChatId} />
             </div>
           ) : null}
         </div>
