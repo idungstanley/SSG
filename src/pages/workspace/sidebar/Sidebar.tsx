@@ -20,13 +20,8 @@ import Modal from '../hubs/components/Modal';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const {
-    showSidebar,
-    showExtendedBar,
-    showModal,
-    sidebarWidth,
-    activePlaceId,
-  } = useAppSelector((state) => state.workspace);
+  const { showSidebar, showExtendedBar, showModal, sidebarWidth, showHub, activePlaceId } =
+    useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const startResizing = React.useCallback(() => {
@@ -80,8 +75,8 @@ export default function Sidebar() {
           onCloseHubModal={() => dispatch(setShowModal(false))}
         />
         <span
-          className={`absolute -right-2 top-6 z-20 bg-white rounded-full border-2 border-inherit ${
-            activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
+          className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
+            showHub && !(activePlaceId === true || activePlaceId === 0) ? 'block' : 'hidden'
           }`}
         >
           {!showExtendedBar && (
@@ -94,7 +89,7 @@ export default function Sidebar() {
         <div className="flex flex-col flex-grow bg-white overflow-y-auto mr-1">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
-              className={`flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-16 ${
+              className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${
                 showSidebar ? 'flex-row' : 'flex-col space-y-1'
               }`}
             >
@@ -103,7 +98,7 @@ export default function Sidebar() {
               <div
                 className={`flex items-center mt-1 ${
                   showSidebar
-                    ? 'flex-row space-x-1 justify-between'
+                    ? 'flex-row justify-between'
                     : 'flex-col space-y-1 justify-center'
                 }`}
               >
@@ -118,7 +113,7 @@ export default function Sidebar() {
               <HiChevronDoubleLeft
                 color="blue"
                 className={`cursor-pointer mt-1 ${
-                  showSidebar ? 'ml-2' : 'ml-0 rotateimg180'
+                  showSidebar ? 'ml-1' : 'ml-0 rotateimg180'
                 }`}
                 onClick={() => dispatch(setShowSidebar('CHANGE'))}
               />
@@ -131,9 +126,9 @@ export default function Sidebar() {
           </div>
         </div>
         <div
-          className="justify-self-end absolute shrink-0 grow-0 w-0.5 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
+          className="justify-self-end absolute shrink-0 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
           onMouseDown={startResizing}
-          style={{ cursor: 'col-resize' }}
+          style={{ cursor: 'col-resize', width: '3px' }}
         ></div>
       </div>
     </>

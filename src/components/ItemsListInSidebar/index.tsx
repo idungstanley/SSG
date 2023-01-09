@@ -29,7 +29,7 @@ export default function ItemsListInSidebar({
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, showMenuDropDown } = useAppSelector(
+  const { currentItemId } = useAppSelector(
     (state) => state.workspace
   );
   const handleMouseOver = (i: number) => {

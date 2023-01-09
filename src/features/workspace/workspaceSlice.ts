@@ -8,11 +8,13 @@ interface workspaceState {
   activePlaceId: number | boolean;
   showExtendedBar: boolean;
   sidebarWidth: number;
+  extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
   showMenuDropDown: boolean;
   showModal: boolean;
   searchIsActive: boolean;
+  isExtSearchActive: boolean;
 }
 
 const initialState: workspaceState = {
@@ -28,6 +30,8 @@ const initialState: workspaceState = {
   showMenuDropDown: false,
   showModal: false,
   searchIsActive: false,
+  extendedSidebarWidth: 240,
+  isExtSearchActive: false,
 };
 
 export const wsSlice = createSlice({
@@ -49,11 +53,22 @@ export const wsSlice = createSlice({
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
     },
+    setExtendedSidebarWidth(state, action) {
+      state.extendedSidebarWidth = action.payload;
+    },
     setSearchIsActive(state, action) {
       if (action.payload === 'TOGGLE') {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
+        };
+      }
+    },
+    setIsExtSearchActive(state, action) {
+      if (action.payload === 'TOGGLE') {
+        return {
+          ...state,
+          isExtSearchActive: !state.isExtSearchActive,
         };
       }
     },
@@ -104,6 +119,8 @@ export const {
   setShowMenuDropDown,
   setShowModal,
   setSearchIsActive,
+  setExtendedSidebarWidth,
+  setIsExtSearchActive,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

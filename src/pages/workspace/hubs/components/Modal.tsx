@@ -26,7 +26,10 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
   const [formState, setFormState] = useState(defaultHubFormState);
 
   const handleHubChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    setFormState((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const currentWorkspaceId = JSON.parse(

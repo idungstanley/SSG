@@ -8,10 +8,10 @@ interface InputDataTypes {
   cornerHint?: string;
   type: string;
   autoComplete?: string;
-  value?: string;
+  value: string;
   leadingIcon?: string;
   trailingIcon?: string;
-  onChange: any;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 function Input({
   label,
@@ -60,7 +60,7 @@ function Input({
           } border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
           placeholder={placeholder}
           value={value}
-          onChange={onChange}
+          onChange={(e)=> onChange(e)}
         />
 
         {trailingIcon && (

@@ -19,7 +19,6 @@ function Inbox() {
         title="Create new Inbox"
       />
       <CreateInboxSlideOver />
-
       <ItemsListInSidebar items={data} status={status} type="inbox" />
     </div>
   );

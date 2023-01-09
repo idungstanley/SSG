@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import {
   setActivePlaceId,
@@ -73,15 +73,21 @@ function Places() {
   const { activePlaceId, showSidebar, showHub, searchIsActive } =
     useAppSelector((state) => state.workspace);
   const dispatch = useDispatch();
+  const [isHovering, setIsHovering] = useState<number>(-1);
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
   };
   return (
     <div className="mt-2">
       <ul aria-labelledby="projects-headline relative">
-        {secondaryNavigation.map((item) => (
+        {secondaryNavigation.map((item, index) => (
           <div
-            className={`${activePlaceId === item.id && 'sticky top-0'}`}
             key={item.id}
           >
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
@@ -90,6 +96,8 @@ function Places() {
               className={`relative flex pl-4  pr-2 items-center hover:bg-gray-100 ${
                 activePlaceId === item.id && 'ml-0 bg-gray-200'
               } text-gray-600 cursor-pointer h-14 fixed top-0`}
+              onMouseEnter={() => handleMouseOver(index)}
+              onMouseLeave={handleMouseOut}
             >
               <button
                 className={`${
@@ -157,17 +165,19 @@ function Places() {
               >
                 {activePlaceId === item.id && (
                   <span className="flex items-center space-x-1">
-                    <BsPlusLg
-                      className="w-2.5 h-2.5"
-                      aria-hidden="true"
-                      color="black"
-                      onClick={() => dispatch(setShowModal(true))}
-                    />
                     <SearchIcon
                       className="w-3 h-4"
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                     />
+                    {isHovering === index && (
+                      <BsPlusLg
+                        className="w-2.5 h-2.5"
+                        aria-hidden="true"
+                        color="black"
+                        onClick={() => dispatch(setShowModal(true))}
+                      />
+                    )}
                   </span>
                 )}
                 {activePlaceId === item.id ? (
