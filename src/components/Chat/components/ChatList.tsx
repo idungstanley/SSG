@@ -9,22 +9,22 @@ interface ChatsListProps {
 }
 
 export default function ChatsList({ selectChat }: ChatsListProps) {
-  const { selectedItemId, selectedItemType } = useAppSelector(
-    (state) => state.explorer
+  const { selectedItem } = useAppSelector(
+    (state) => state.chat
   );
 
   const { mutate: onDelete } = useDeleteChat();
 
   const { data } = useGetChats({
-    type: selectedItemType,
-    id: selectedItemId,
+    type: selectedItem?.type,
+    id: selectedItem?.id,
   });
 
   const handleDelete = (id: string) => {
     onDelete(id);
   };
 
-  return !selectedItemId ? (
+  return !selectedItem ? (
     <FullScreenMessage
       title="No selected data."
       description="Select one file, folder, etc."

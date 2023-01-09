@@ -12,7 +12,6 @@ import {
   setShowCreateChatSideOver,
   setShowMembersInChatSideOver,
 } from '../../features/chat/chatSlice';
-import Badge from './components/Badge';
 import CreateMessage from './components/CreateMessage';
 import MessagesList from './components/MessagesList';
 import ChatsList from './components/ChatList';
@@ -21,8 +20,8 @@ import TeamMembersInChat from './components/TeamMembersInChat';
 export default function Chat() {
   const dispatch = useAppDispatch();
   const socket = useRef<Pusher | null>(null);
-  const { selectedItemId } = useAppSelector((state) => state.explorer);
-  const { showChat } = useAppSelector((state) => state.chat);
+  const { showChat, selectedItem } = useAppSelector((state) => state.chat);
+
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const { data } = useGetChat(selectedChatId);
 
@@ -37,7 +36,7 @@ export default function Chat() {
       socket.current?.disconnect();
       setSelectedChatId(null);
     }
-  }, [selectedItemId]);
+  }, [selectedItem?.id]);
 
   const connect = (id: string) => {
     // * show / hide pusher logs
@@ -115,7 +114,7 @@ export default function Chat() {
         <div className="p-4 flex flex-col gap-4 w-96 h-full border-l">
           {/* header */}
           <div className="flex justify-between items-center">
-            {selectedItemId ? (
+            {selectedItem?.id ? (
               <button
                 onClick={() => dispatch(setShowCreateChatSideOver(true))}
                 type="button"
@@ -161,8 +160,6 @@ export default function Chat() {
           ) : null}
         </div>
       </Transition.Root>
-
-      <Badge />
 
       {selectedChatId ? <TeamMembersInChat chatId={selectedChatId} /> : null}
 
