@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './components/Modal';
 import { useGetHubList } from '../../../features/hubs/hubService';
-import ItemsListInSidebar from '../../../components/ItemsListInSidebar-sub';
+import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
 import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';

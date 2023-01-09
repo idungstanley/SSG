@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import CreateNewItemBtn from '../../../components/CreateNewItemBtn';
-import ItemsListInSidebar from '../../../components/ItemsListInSidebar-sub';
+import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { setCreateInboxSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useGetActiveInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';

@@ -6,7 +6,7 @@ import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../app/hooks';
 import { IHub } from '../features/hubs/hubs.interfaces';
 import { IInbox } from '../features/inbox/inbox.interfaces';
-import DropdownList from '../components/ItemsListInSidebar-sub/components/DropdownList';
+import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
 import { resetCurrentItem, setCurrentItem, setShowHub } from '../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../components';
 import MenuDropdown from '../components/Dropdown/DropdownForWorkspace';
