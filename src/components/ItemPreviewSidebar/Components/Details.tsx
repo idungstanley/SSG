@@ -12,6 +12,7 @@ import { IExplorerAndSharedData } from '../../../features/shared/shared.interfac
 import { explorerItemType } from '../../../types';
 import { setShowWatchersSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { useShareItem } from '../../../features/shared/sharedService';
+import { setSelectedItem } from '../../../features/chat/chatSlice';
 
 interface DetailsProps {
   item: IExplorerAndSharedData;
@@ -70,7 +71,7 @@ export default function Details({ item, type }: DetailsProps) {
     {
       id: 4,
       label: 'Chat',
-      onClick: () => ({}),
+      onClick: () => dispatch(setSelectedItem({ id: item.id, type })),
       isVisible: true,
     },
   ];
@@ -95,6 +96,7 @@ export default function Details({ item, type }: DetailsProps) {
           </div>
         </div>
       </div>
+
       <div className="relative flex flex-wrap gap-3">
         {buttonsArr.map((button) =>
           button.isVisible ? (
@@ -117,6 +119,7 @@ export default function Details({ item, type }: DetailsProps) {
           />
         ) : null}
       </div>
+
       <div>
         <h3 className="font-medium text-gray-900">Information</h3>
         <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
