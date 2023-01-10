@@ -140,6 +140,7 @@ export const AddTaskWatcherService = (data) => {
 //Get watcher
 export const UseGetWatcherService = (taskId) => {
   const queryClient = useQueryClient();
+  // queryClient.invalidateQueries({ queryKey: ['watcher'] });
   return useQuery(
     ['watcher', taskId],
     async () => {
@@ -182,6 +183,7 @@ export const GetTaskWatcherService = (data) => {
 //Add watcher to task
 export const AddWatcherService = ({ query }) => {
   const queryClient = useQueryClient();
+  queryClient.invalidateQueries({ queryKey: ['watcher'] });
   return useQuery(
     ['watcher', query],
     async () => {

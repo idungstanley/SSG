@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import React from 'react';
 import {
   ArchiveIcon,
   CogIcon,
@@ -16,14 +15,6 @@ import {
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
-import SubDd from './SubDd';
-import { classNames } from '../../utils';
-import { VscEllipsis } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
-import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
-import { useAppSelector } from '../../app/hooks';
-import { UseDeleteHubService } from '../../features/hubs/hubService';
-import { setDelHub, setShowSubItems } from '../../features/hubs/hubSlice';
 
 interface itemsType {
   id: number;
@@ -32,34 +23,13 @@ interface itemsType {
   handleClick: () => void;
   isVisible: boolean;
 }
-
-function MenuDropdown() {
-  const dispatch = useDispatch();
-  const { currHubId } = useAppSelector((state) => state.hub);
-  const { delHub } = useAppSelector((state) => state.hub);
-  const { showSubItems } = useAppSelector((state) => state.hub);
-
-  // ! actions here (create, delete, rename)
-
-  //deleteHubs
-  const { status } = UseDeleteHubService({
-    query: currHubId,
-    delHub,
-  });
-
-  if (status == 'success') {
-    dispatch(setDelHub(false));
-    // dispatch(currHubId(null));
-  }
-
-  // ! (too big!) destructure to different components
-
+export default function MenuList() {
   const itemsList: itemsType[] = [
     {
       id: 1,
       title: 'Create new',
       handleClick: () => {
-        dispatch(setShowSubItems(!showSubItems));
+        // setIsShowSub(!showSub);
       },
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
@@ -195,66 +165,11 @@ function MenuDropdown() {
       id: 16,
       title: 'Delete',
       handleClick: () => {
-        dispatch(setDelHub(true));
+        // setDelHub(currentItemId as string);
+        // console.log(data);
       },
       icon: <TrashIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
   ];
-
-  return (
-    <>
-      <Menu as="div">
-        {({ open }) => (
-          <Fragment>
-            <Menu.Button className="flex text-sm text-gray-400">
-              <VscEllipsis
-                className="w-2.5 h-2.5"
-                aria-hidden="true"
-                color="black"
-                // onClick={() => dispatch(setShowMenuDropDown(true))}
-              />
-            </Menu.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-              show={open}
-            >
-              <Menu.Items
-                className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-48 z-10 ring-1 ring-black ring-opacity-5 focus:outline-none"
-                static
-              >
-                {itemsList.map((item) =>
-                  item.isVisible ? (
-                    <Menu.Item key={item.id}>
-                      {({ active }) => (
-                        <div
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left'
-                          )}
-                          onClick={item.handleClick}
-                        >
-                          {item.icon}
-                          <p>{item.title}</p>
-                        </div>
-                      )}
-                    </Menu.Item>
-                  ) : null
-                )}
-              </Menu.Items>
-            </Transition>
-          </Fragment>
-        )}
-      </Menu>
-      {showSubItems && <SubDd />}
-    </>
-  );
 }
-
-export default MenuDropdown;

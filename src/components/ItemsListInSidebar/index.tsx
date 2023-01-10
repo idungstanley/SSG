@@ -15,8 +15,7 @@ import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-import { FaEllipsisH } from 'react-icons/fa';
-import HubDropdown from '../Dropdown/HubDropdown';
+import { getCurrHubId } from '../../features/hubs/hubSlice';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -31,9 +30,7 @@ export default function ItemsListInSidebar({
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, showMenuDropDown } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { currentItemId } = useAppSelector((state) => state.workspace);
   const handleMouseOver = (i: number) => {
     setIsHovering(i);
   };
@@ -84,10 +81,29 @@ export default function ItemsListInSidebar({
     }
   };
 
+  const handleDropDownClick = (id: string) => {
+    const isMatch = id === currentItemId;
+    if (isMatch) {
+      dispatch(setShowHub(false));
+      // if (!currentItemId) {
+      //   dispatch(
+      //     setCurrentItem({
+      //       currentItemId: id,
+      //       currentItemType: type,
+      //     })
+      //   );
+      // } else {
+      //   dispatch(resetCurrentItem());
+      // }
+    } else {
+      dispatch(getCurrHubId(id));
+    }
+  };
+
   return status === 'success' ? (
     <ul className="w-full">
       {items?.map((i: { id: string; name: string }, index) => (
-        <li key={i.id} className="flex flex-col">
+        <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId
@@ -145,9 +161,11 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {
-              <div className="relative flex items-center space-x-1 pr-1">
+              <div
+                className="flex items-center space-x-1 pr-1"
+                onClick={() => handleDropDownClick(i.id)}
+              >
                 <MenuDropdown />
-                <HubDropdown />
                 <PlusDropDown walletId={i.id} />
               </div>
             }

@@ -46,6 +46,29 @@ export const useGetHubList = () => {
   );
 };
 
+//Delete a Hub
+export const UseDeleteHubService = (hub) => {
+  const hubid = hub.query;
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['hubs', hubid],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/hubs/${hubid}`,
+          method: 'DELETE',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['hubs', hubid]),
+      enabled: hub.delHub
+    }
+  );
+};
+
 export const useGetHub = (hubId: string | null) =>
   useQuery<IHubReq>([`hub-${hubId}`], () =>
     requestNew(
