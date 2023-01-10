@@ -1,4 +1,8 @@
-import { IExplorerFilesAndFolders } from './explorer.interfaces';
+import {
+  IExplorerFilesAndFolders,
+  IExplorerFolder,
+  IExplorerFoldersRes,
+} from './explorer.interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
@@ -82,3 +86,25 @@ export const createFolderService = async (data: {
   });
   return response;
 };
+
+export const useGetExplorerFolders = () =>
+  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+    ['explorer-folders'],
+    () =>
+      requestNew({
+        url: 'explorer-folders',
+        method: 'GET',
+      }),
+    { select: (res) => res.data.folders }
+  );
+
+export const useGetExplorerFolder = (folderId?: string) =>
+  useQuery<IExplorerFoldersRes>(
+    ['explorer-folder', folderId],
+    () =>
+      requestNew({
+        url: `explorer-folders/${folderId}`,
+        method: 'GET',
+      }),
+    { enabled: !!folderId }
+  );

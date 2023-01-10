@@ -45,6 +45,7 @@ export interface IExplorerFolder {
     | {
         name: string;
         id: string;
+        parent_id: string | null;
       }[]
     | null;
   hex_colour: string;
@@ -67,5 +68,12 @@ export interface IExplorerFilesAndFolders extends IResponseData {
     current_folder: {
       id: string;
     } | null;
+  };
+}
+
+export interface IExplorerFoldersRes {
+  data: {
+    folders: IExplorerFolder[];
+    current_folder: IExplorerFolder;
   };
 }
