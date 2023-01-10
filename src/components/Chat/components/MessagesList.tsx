@@ -23,7 +23,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
   return (
     <div
       ref={ref}
-      className="flex flex-col h-96 border rounded-xl overflow-y-scroll"
+      className="flex flex-col h-full border rounded-xl overflow-y-scroll"
     >
       {sortedByTime.map((message) => (
         <div className="flex gap-3 items-center px-2 py-1" key={message.id}>

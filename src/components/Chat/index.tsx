@@ -111,53 +111,55 @@ export default function Chat() {
         leaveFrom="translate-x-0"
         leaveTo="translate-x-full"
       >
-        <div className="p-4 flex flex-col gap-4 w-96 h-full border-l">
+        <div className="p-4 flex flex-col gap-4 w-96 h-full border-l justify-between">
           {/* header */}
-          <div className="flex justify-between items-center">
-            {selectedItem?.id ? (
-              <button
-                onClick={() => dispatch(setShowCreateChatSideOver(true))}
-                type="button"
-                className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
-              >
-                Create new chat
-              </button>
-            ) : (
-              <div></div>
-            )}
+          <div className="h-full">
+            <div className="flex justify-between items-center mb-3">
+              {selectedItem?.id ? (
+                <button
+                  onClick={() => dispatch(setShowCreateChatSideOver(true))}
+                  type="button"
+                  className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
+                >
+                  Create new chat
+                </button>
+              ) : (
+                <div></div>
+              )}
 
-            <XIcon
-              onClick={handleHideChat}
-              className="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-            />
+              <XIcon
+                onClick={handleHideChat}
+                className="h-6 w-6 cursor-pointer"
+                aria-hidden="true"
+              />
+            </div>
+
+            <ChatsList selectChat={handleClickChat} />
+
+            {messages && chat ? (
+              <div className="h-2/3 flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-center">
+                    Chat{' '}
+                    <span className="font-semibold text-indigo-600">
+                      {chat.name}
+                    </span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(setShowMembersInChatSideOver(true))}
+                    className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Members
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
 
-          <ChatsList selectChat={handleClickChat} />
+          {selectedChatId ? <MessagesList messages={allMessages} /> : null}
 
-          {messages && chat ? (
-            <div className="h-2/3 flex flex-col justify-between">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-center">
-                  Chat{' '}
-                  <span className="font-semibold text-indigo-600">
-                    {chat.name}
-                  </span>
-                </p>
-                <button
-                  type="button"
-                  onClick={() => dispatch(setShowMembersInChatSideOver(true))}
-                  className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Members
-                </button>
-              </div>
-
-              <MessagesList messages={allMessages} />
-
-              <CreateMessage chatId={selectedChatId} />
-            </div>
-          ) : null}
+          {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
         </div>
       </Transition.Root>
 

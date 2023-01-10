@@ -28,13 +28,11 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
     <FullScreenMessage
       title="No selected data."
       description="Select one file, folder, etc."
-      showHalFScreen
     />
   ) : !data?.length ? (
     <FullScreenMessage
       title="No chats."
       description="Create one."
-      showHalFScreen
     />
   ) : (
     <ul role="list" className="divide-y divide-gray-200 flex flex-wrap gap-3">
