@@ -32,10 +32,6 @@ interface itemsType {
 
 function MenuDropdown() {
   const dispatch = useDispatch();
-  // const { currentItemId, type } = useSelector((state) => state.workspace);
-
-  // ! actions here (create, delete, rename)
-
   // ! (too big!) destructure to different components
 
   const itemsList: itemsType[] = [

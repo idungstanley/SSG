@@ -19,6 +19,7 @@ import {
 } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
+import { totalmem } from 'os';
 
 function CreateWorkspace() {
   const user = useSelector(selectCurrentUser);
@@ -163,12 +164,10 @@ function CreateWorkspace() {
             </div>
           </div>
           <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-            {/* <p className="mb-4 h">Invite people into your workspace</p> */}
             <Input
               label="Invite people into your workspace:"
               placeholder="Enter email"
               name="email"
-              // value={null}
               type="email"
               onChange={handleChange}
             />

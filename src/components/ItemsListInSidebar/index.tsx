@@ -15,6 +15,8 @@ import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
+import { FaEllipsisH } from 'react-icons/fa';
+import HubDropdown from '../Dropdown/HubDropdown';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -29,7 +31,7 @@ export default function ItemsListInSidebar({
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId } = useAppSelector(
+  const { currentItemId, showMenuDropDown } = useAppSelector(
     (state) => state.workspace
   );
   const handleMouseOver = (i: number) => {
@@ -92,11 +94,11 @@ export default function ItemsListInSidebar({
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'
             }`}
-            onMouseEnter={() => handleMouseOver(index)}
-            onMouseLeave={handleMouseOut}
+            // onMouseEnter={() => handleMouseOver(index)}
+            // onMouseLeave={handleMouseOut}
           >
             {i.id === currentItemId && (
-              <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+              <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
             )}
             <div
               role="button"
@@ -140,15 +142,15 @@ export default function ItemsListInSidebar({
                     {i.name}
                   </h4>
                 </span>
-                4
               </div>
             </div>
-            {index === isHovering && (
-              <div className="flex items-center space-x-1 pr-1">
+            {
+              <div className="relative flex items-center space-x-1 pr-1">
                 <MenuDropdown />
+                <HubDropdown />
                 <PlusDropDown walletId={i.id} />
               </div>
-            )}
+            }
           </div>
           {currentItemId === i.id ? <DropdownList /> : null}
         </li>
