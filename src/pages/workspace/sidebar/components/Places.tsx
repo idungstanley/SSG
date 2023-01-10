@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
 import { SearchIcon } from '@heroicons/react/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
-import { GiSettingsKnobs } from 'react-icons/gi';
+import { GoSettings } from 'react-icons/go';
 
 const secondaryNavigation = [
   {
@@ -98,6 +98,9 @@ function Places() {
               onMouseEnter={() => handleMouseOver(index)}
               onMouseLeave={handleMouseOut}
             >
+              {activePlaceId === item.id && !showHub && (
+                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500" />
+              )}
               <button
                 className={`${
                   searchIsActive && activePlaceId === item.id
@@ -107,9 +110,6 @@ function Places() {
                 type="button"
                 onClick={() => handleClick(item.id)}
               >
-                {activePlaceId === item.id && !showHub && (
-                  <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500" />
-                )}
                 <span
                   className={`flex items-center content-center self-center ${
                     showSidebar && activePlaceId === item.id && 'ml-16'
@@ -151,7 +151,7 @@ function Places() {
                     className="absolute w-6 top-5 h-4 right-0 text-green-500"
                     onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                   />
-                  <GiSettingsKnobs
+                  <GoSettings
                     className="left-0 top-5 absolute w-6 h-4 text-green-500"
                     aria-hidden="true"
                   />

@@ -82,11 +82,11 @@ export default function NavigationItems() {
                 item.href === pathname
                   ? 'bg-green-50 text-gray-900'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center pl-4 py-1 text-base relative font-medium hover:bg-gray-100'
+                'flex items-center pl-4 py-2 text-base relative font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
               )}
               <div className="flex items-center">
                 <div
@@ -112,7 +112,7 @@ export default function NavigationItems() {
                   style={{ fontSize: '10px' }}
                   className={classNames(
                     item.href === pathname ? 'text-green-500' : 'text-gray-500',
-                    'tracking-wider truncate'
+                    'tracking-wider leading-3 truncate'
                   )}
                 >
                   {item.name}
@@ -127,11 +127,11 @@ export default function NavigationItems() {
                 item.href === pathname
                   ? 'bg-green-50 text-gray-900 mr-0'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center relative pl-4 py-1 text-base font-medium hover:bg-gray-100'
+                'flex items-center relative pl-4 py-2 text-base font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
               )}
               <div className="flex items-center">
                 <div
@@ -157,7 +157,7 @@ export default function NavigationItems() {
                   style={{ fontSize: '10px' }}
                   className={classNames(
                     item.href === pathname ? 'text-green-500' : 'text-gray-500',
-                    'tracking-wider truncate'
+                    'tracking-wider truncate leading-3'
                   )}
                 >
                   {item.name}

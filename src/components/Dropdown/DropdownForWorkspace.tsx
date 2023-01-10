@@ -201,7 +201,7 @@ function MenuDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-50 -mt-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="w-56 absolute z-auto py-1 bg-white rounded-md shadow-lg -top-10 left-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
           {itemsList.map((item) =>
             item.isVisible ? (
               <Menu.Item key={item.id}>

@@ -83,16 +83,11 @@ export default function ItemsListInSidebar({
   };
 
   return status === 'success' ? (
-    <ul className="w-full">
+    <ul>
       {items?.map((i: { id: string; name: string }, index) => (
-        <li
-          key={i.id}
-          className={`flex flex-col ${
-            i.id === currentItemId
-          }`}
-        >
+        <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
           <div
-            className={`flex justify-between items-center hover:bg-gray-100 ${
+            className={`flex justify-between relative items-center hover:bg-gray-100 ${
               i.id === currentItemId
                 ? 'bg-green-50 text-green-500'
                 : 'text-black-500'
@@ -101,7 +96,7 @@ export default function ItemsListInSidebar({
             onMouseLeave={handleMouseOut}
           >
             {i.id === currentItemId && (
-              <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+              <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-0.5 bg-green-500" />
             )}
             <div
               role="button"
@@ -145,6 +140,7 @@ export default function ItemsListInSidebar({
                     {i.name}
                   </h4>
                 </span>
+                4
               </div>
             </div>
             {index === isHovering && (
