@@ -43,46 +43,64 @@ export default function FoldersList({
     [sub]
   );
 
+  const selectedFolder = sub?.data.current_folder;
+
   return (
     <div>
-      {folders.map((folder) => (
-        <div key={folder.id}>
+      {folders.map((rootFolder) => (
+        <div key={rootFolder.id}>
+          {/* root folders list */}
           <FolderItem
-            key={folder.id}
-            id={folder.id}
-            parentId={folder.parentId}
-            name={folder.name}
+            key={rootFolder.id}
+            id={rootFolder.id}
+            parentId={rootFolder.parentId}
+            name={rootFolder.name}
             handleClickFolder={handleClickFolder}
-            isActiveFolder={folder.id === selectedFolderId}
+            isActiveFolder={rootFolder.id === selectedFolderId}
           />
-          {(sub?.data.current_folder.ancestors
+
+          {selectedFolder?.ancestors
             ?.map((i) => i.id)
-            .includes(folder.id) ||
-            sub?.data.current_folder.id === folder.id) &&
-            subFolders?.map((sub) => (
-              <div key={sub.id}>
-                {sub.ancestors
-                  ?.filter((i) => !folders?.map((j) => j.id)?.includes(i.id))
-                  .map((fol) => (
-                    <FolderItem
-                      key={fol.id}
-                      id={fol.id}
-                      name={fol.name}
-                      parentId={fol.parent_id}
-                      handleClickFolder={handleClickFolder}
-                      isActiveFolder={fol.id === selectedFolderId}
-                    />
-                  ))}
+            .includes(rootFolder.id) || selectedFolder?.id === rootFolder.id ? (
+            <>
+              {/* ancestors without root  */}
+              {selectedFolder.ancestors
+                ?.filter((i) => !folders?.map((j) => j.id)?.includes(i.id))
+                .map((fol) => (
+                  <FolderItem
+                    key={fol.id}
+                    id={fol.id}
+                    name={fol.name}
+                    parentId={fol.parent_id}
+                    handleClickFolder={handleClickFolder}
+                    isActiveFolder={fol.id === selectedFolderId}
+                  />
+                ))}
+
+              {/* selected folder (only if child, not root) */}
+              {rootFolder.id !== selectedFolder.id ? (
                 <FolderItem
-                  key={sub.id}
-                  id={sub.id}
-                  parentId={sub.parentId}
-                  name={sub.name}
+                  id={selectedFolder.id}
+                  name={selectedFolder.name}
+                  parentId={selectedFolder.parent_id}
                   handleClickFolder={handleClickFolder}
-                  isActiveFolder={sub.id === selectedFolderId}
+                  isActiveFolder={selectedFolder.id === selectedFolderId}
                 />
-              </div>
-            ))}
+              ) : null}
+
+              {/* children */}
+              {subFolders?.map((subFolder) => (
+                <FolderItem
+                  key={subFolder.id}
+                  id={subFolder.id}
+                  parentId={subFolder.parentId}
+                  name={subFolder.name}
+                  handleClickFolder={handleClickFolder}
+                  isActiveFolder={subFolder.id === selectedFolderId}
+                />
+              ))}
+            </>
+          ) : null}
         </div>
       ))}
     </div>
