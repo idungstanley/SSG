@@ -49,6 +49,7 @@ import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage';
 import Home from './pages/workspace/Home/Home';
+import NewExplorerPage from './pages/newExplorer';
 
 const inbox = [
   {
@@ -112,6 +113,8 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: '/', element: <Navigate to="/workspace" /> },
+        { path: 'new-explorer', element: <NewExplorerPage /> },
+        { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
         { path: 'explorer', element: <ExplorerPage /> },
         { path: 'explorer/:folderId', element: <ExplorerPage /> },
         { path: 'shared', element: <SharedPage /> },
