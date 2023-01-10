@@ -12,6 +12,7 @@ interface FolderItemProps {
   parentId: string | null;
   handleClickFolder: (i: string, parentId: string | null) => void;
   isActiveFolder: boolean;
+  haveAncestors: boolean;
 }
 
 export default function FolderItem({
@@ -20,6 +21,7 @@ export default function FolderItem({
   parentId,
   handleClickFolder,
   isActiveFolder,
+  haveAncestors,
 }: FolderItemProps) {
   return (
     <div
@@ -30,7 +32,7 @@ export default function FolderItem({
         isActiveFolder ? 'text-primary-600 bg-primary-50' : ''
       )}
     >
-      {isActiveFolder ? (
+      {isActiveFolder || haveAncestors ? (
         <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
       ) : (
         <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

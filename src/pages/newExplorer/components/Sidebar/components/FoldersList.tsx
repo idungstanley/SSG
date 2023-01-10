@@ -45,6 +45,13 @@ export default function FoldersList({
 
   const selectedFolder = sub?.data.current_folder;
 
+  // const ancestorsLength =
+  //   selectedFolder?.ancestors?.filter(
+  //     (i) => !folders?.map((j) => j.id)?.includes(i.id)
+  //   ).length || 0;
+
+  // const val1 = Math.max(subFolders?.length || 0, ancestorsLength);
+
   return (
     <div>
       {folders.map((rootFolder) => (
@@ -53,6 +60,10 @@ export default function FoldersList({
           <FolderItem
             key={rootFolder.id}
             id={rootFolder.id}
+            haveAncestors={
+              !!subFolders?.length &&
+              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
+            }
             parentId={rootFolder.parentId}
             name={rootFolder.name}
             handleClickFolder={handleClickFolder}
@@ -66,38 +77,53 @@ export default function FoldersList({
               {/* ancestors without root  */}
               {selectedFolder.ancestors
                 ?.filter((i) => !folders?.map((j) => j.id)?.includes(i.id))
-                .map((fol) => (
-                  <FolderItem
-                    key={fol.id}
-                    id={fol.id}
-                    name={fol.name}
-                    parentId={fol.parent_id}
-                    handleClickFolder={handleClickFolder}
-                    isActiveFolder={fol.id === selectedFolderId}
-                  />
+                .map((ancestor) => (
+                  <div
+                    key={ancestor.id}
+                    // style={{ marginLeft: 10 * val1 }}
+                  >
+                    <FolderItem
+                      id={ancestor.id}
+                      name={ancestor.name}
+                      parentId={ancestor.parent_id}
+                      haveAncestors={!!ancestor.parent_id}
+                      handleClickFolder={handleClickFolder}
+                      isActiveFolder={ancestor.id === selectedFolderId}
+                    />
+                  </div>
                 ))}
 
               {/* selected folder (only if child, not root) */}
-              {rootFolder.id !== selectedFolder.id ? (
-                <FolderItem
-                  id={selectedFolder.id}
-                  name={selectedFolder.name}
-                  parentId={selectedFolder.parent_id}
-                  handleClickFolder={handleClickFolder}
-                  isActiveFolder={selectedFolder.id === selectedFolderId}
-                />
-              ) : null}
+              <div
+              // style={{ marginLeft: 10 * (val1 + 1) }}
+              >
+                {rootFolder.id !== selectedFolder.id ? (
+                  <FolderItem
+                    id={selectedFolder.id}
+                    name={selectedFolder.name}
+                    haveAncestors={!!selectedFolder.ancestors?.length}
+                    parentId={selectedFolder.parent_id}
+                    handleClickFolder={handleClickFolder}
+                    isActiveFolder={selectedFolder.id === selectedFolderId}
+                  />
+                ) : null}
+              </div>
 
               {/* children */}
               {subFolders?.map((subFolder) => (
-                <FolderItem
+                <div
                   key={subFolder.id}
-                  id={subFolder.id}
-                  parentId={subFolder.parentId}
-                  name={subFolder.name}
-                  handleClickFolder={handleClickFolder}
-                  isActiveFolder={subFolder.id === selectedFolderId}
-                />
+                  // style={{ marginLeft: 10 * (ancestorsLength < 2 ? (val1 + 2) : 1) }}
+                >
+                  <FolderItem
+                    id={subFolder.id}
+                    parentId={subFolder.parentId}
+                    name={subFolder.name}
+                    haveAncestors={false}
+                    handleClickFolder={handleClickFolder}
+                    isActiveFolder={subFolder.id === selectedFolderId}
+                  />
+                </div>
               ))}
             </>
           ) : null}
