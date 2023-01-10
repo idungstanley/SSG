@@ -45,12 +45,7 @@ export default function FoldersList({
 
   const selectedFolder = sub?.data.current_folder;
 
-  // const ancestorsLength =
-  //   selectedFolder?.ancestors?.filter(
-  //     (i) => !folders?.map((j) => j.id)?.includes(i.id)
-  //   ).length || 0;
-
-  // const val1 = Math.max(subFolders?.length || 0, ancestorsLength);
+  const ancestorsLength = selectedFolder?.ancestors?.length || 0;
 
   return (
     <div>
@@ -77,10 +72,12 @@ export default function FoldersList({
               {/* ancestors without root  */}
               {selectedFolder.ancestors
                 ?.filter((i) => !folders?.map((j) => j.id)?.includes(i.id))
-                .map((ancestor) => (
+                .map((ancestor, index) => (
                   <div
                     key={ancestor.id}
-                    // style={{ marginLeft: 10 * val1 }}
+                    style={{
+                      marginLeft: (index + 1) * 10,
+                    }}
                   >
                     <FolderItem
                       id={ancestor.id}
@@ -94,9 +91,7 @@ export default function FoldersList({
                 ))}
 
               {/* selected folder (only if child, not root) */}
-              <div
-              // style={{ marginLeft: 10 * (val1 + 1) }}
-              >
+              <div style={{ marginLeft: (ancestorsLength) * 10 }}>
                 {rootFolder.id !== selectedFolder.id ? (
                   <FolderItem
                     id={selectedFolder.id}
@@ -113,7 +108,11 @@ export default function FoldersList({
               {subFolders?.map((subFolder) => (
                 <div
                   key={subFolder.id}
-                  // style={{ marginLeft: 10 * (ancestorsLength < 2 ? (val1 + 2) : 1) }}
+                  style={{
+                    marginLeft: ancestorsLength
+                      ? (ancestorsLength + 1) * 10
+                      : 10,
+                  }}
                 >
                   <FolderItem
                     id={subFolder.id}
