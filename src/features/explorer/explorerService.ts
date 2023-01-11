@@ -71,22 +71,6 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
   );
 };
 
-// Create a folder
-export const createFolderService = async (data: {
-  folderName: string;
-  parentId?: string;
-}) => {
-  const response = requestNew({
-    url: 'folders',
-    method: 'POST',
-    params: {
-      name: data.folderName,
-      parent_id: data.parentId,
-    },
-  });
-  return response;
-};
-
 export const useGetExplorerFolders = () =>
   useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
     ['explorer-folders'],

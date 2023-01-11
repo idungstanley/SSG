@@ -13,6 +13,7 @@ interface SideOverState {
   showAddTeamMembersOrGroupsSideOver: boolean;
   showWatchersSideOver: boolean;
   itemTypeSideOver: itemType;
+  itemActionForSideOver: 'rename' | 'create' | null;
 }
 
 const initialState: SideOverState = {
@@ -27,12 +28,19 @@ const initialState: SideOverState = {
   showAddTeamMembersOrGroupsSideOver: false,
   showWatchersSideOver: false,
   itemTypeSideOver: 'file',
+  itemActionForSideOver: null,
 };
 
 export const slideOverSlice = createSlice({
   name: 'slideOver',
   initialState,
   reducers: {
+    setItemActionForSideOver: (
+      state,
+      action: PayloadAction<'rename' | 'create' | null>
+    ) => {
+      state.itemActionForSideOver = action.payload;
+    },
     setCreateInboxSlideOverVisibility: (
       state,
       action: PayloadAction<boolean>
@@ -112,6 +120,7 @@ export const {
   setRenameFileSlideOverVisibility,
   setShowAddTeamMembersOrGroupsSideOver,
   setShowWatchersSideOver,
+  setItemActionForSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

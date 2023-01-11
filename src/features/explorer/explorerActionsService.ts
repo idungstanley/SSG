@@ -2,7 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Delete service
-export const deleteService = async (data: { fileIds: string[]; folderIds: string[]; }) => {
+export const deleteService = async (data: {
+  fileIds: string[];
+  folderIds: string[];
+}) => {
   const response = requestNew({
     url: 'explorer/multiple-delete',
     method: 'POST',
@@ -15,10 +18,15 @@ export const deleteService = async (data: { fileIds: string[]; folderIds: string
 };
 
 // Paste service
-export const pasteService = async (data: { copyToFolderId?: string; fileIds: string[]; folderIds: string[]; }) => {
-  const url = data.copyToFolderId == null
-    ? '/explorer/copy'
-    : `/explorer/copy/${data.copyToFolderId}`;
+export const pasteService = async (data: {
+  copyToFolderId?: string;
+  fileIds: string[];
+  folderIds: string[];
+}) => {
+  const url =
+    data.copyToFolderId == null
+      ? '/explorer/copy'
+      : `/explorer/copy/${data.copyToFolderId}`;
 
   const response = requestNew({
     url,
@@ -31,7 +39,11 @@ export const pasteService = async (data: { copyToFolderId?: string; fileIds: str
   return response;
 };
 
-const renameItemService = (data: { type: string | null; id: string | null; name: string | null; }) => {
+const renameItemService = (data: {
+  type: string | null;
+  id: string | null;
+  name: string | null;
+}) => {
   const url = `${data.type}s/${data.id}/rename`;
   return requestNew({
     url,
@@ -47,7 +59,32 @@ export const useRenameItem = () => {
 
   return useMutation(renameItemService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer_files_and_folders']);
+      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+      queryClient.invalidateQueries(['explorer-folders']);
+    },
+  });
+};
+
+// Create a folder
+const createFolder = (data: { folderName: string; parentId?: string }) => {
+  const response = requestNew({
+    url: 'folders',
+    method: 'POST',
+    params: {
+      name: data.folderName,
+      parent_id: data.parentId,
+    },
+  });
+  return response;
+};
+
+export const useCreateFolder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createFolder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+      queryClient.invalidateQueries(['explorer-folders']);
     },
   });
 };
