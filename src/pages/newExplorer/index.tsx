@@ -12,14 +12,14 @@ export default function NewExplorerPage() {
         <Sidebar />
 
         {/* header */}
-        <section className="grid grid-rows-mainContent border">
+        <section className="grid grid-rows-mainContent">
           <Header />
 
-          <div className="grid grid-rows-mainContent border">
+          <div className="grid grid-rows-mainContent">
             {/* Breadcrumb */}
             <BreadcrumbSection />
 
-            <div className="grid grid-cols-2 border">
+            <div className="grid grid-cols-2">
               <div className="grid grid-rows-mainContent border">
                 {/* toolbar */}
                 <div className="border">
