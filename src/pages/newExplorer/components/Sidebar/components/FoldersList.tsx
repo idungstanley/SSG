@@ -14,12 +14,14 @@ interface FoldersListProps {
   }[];
   selectedFolderId: string | null;
   setSelectedFolderId: (i: string | null) => void;
+  isSearchedResults: boolean;
 }
 
 export default function FoldersList({
   folders,
   selectedFolderId,
   setSelectedFolderId,
+  isSearchedResults,
 }: FoldersListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -55,7 +57,10 @@ export default function FoldersList({
 
   const selectedFolder = sub?.data.current_folder;
 
-  const ancestorsLength = selectedFolder?.ancestors?.length || 0;
+  const ancestorsLength =
+    (isSearchedResults
+      ? selectedFolder?.ancestors?.filter((i) => i.parent_id).length
+      : selectedFolder?.ancestors?.length) || 0;
 
   return (
     <>
@@ -82,6 +87,7 @@ export default function FoldersList({
               {/* ancestors without root  */}
               {selectedFolder.ancestors
                 ?.filter((i) => !folders?.map((j) => j.id)?.includes(i.id))
+                .filter((i) => i.parent_id)
                 .map((ancestor, index) => (
                   <div
                     key={ancestor.id}

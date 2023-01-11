@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { useGetExplorerFolders } from '../../../../features/explorer/explorerService';
-import { FolderAddIcon } from '@heroicons/react/outline';
+import {
+  useGetExplorerFolders,
+  useGetSearchFolders,
+} from '../../../../features/explorer/explorerService';
+import { FolderAddIcon, XIcon } from '@heroicons/react/outline';
 import { Input } from '../../../../components';
 import FoldersList from './components/FoldersList';
 import { useParams } from 'react-router-dom';
@@ -9,16 +12,27 @@ import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMe
 import { useAppDispatch } from '../../../../app/hooks';
 import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../../components/Dropdown/index';
+import { useDebounce } from '../../../../hooks';
 
 export default function Sidebar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, status } = useGetExplorerFolders();
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 500);
+  const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
+
+  const filteredSearchedFolders = searchedFolders?.filter((i) =>
+    i.name.includes(query)
+  );
+
+  const { data: allFolders, status } = useGetExplorerFolders();
 
   const [selectedFolderId, setSelectedFolderId] = useState<null | string>(
     folderId || null
   );
+
+  const data = debouncedQuery.length > 2 ? filteredSearchedFolders : allFolders;
 
   const folders = useMemo(
     () =>
@@ -28,7 +42,7 @@ export default function Sidebar() {
         ancestors: i.ancestors,
         parentId: i.parent_id,
       })),
-    [data]
+    [data, searchedFolders]
   );
 
   const configForDropdown = [
@@ -54,13 +68,7 @@ export default function Sidebar() {
           <Dropdown config={configForDropdown} iconType="plus" />
         </div>
         {/* search  */}
-        <div>
-          <Input
-            name="explorer-folder-search"
-            onChange={() => ({})}
-            placeholder="enter folder name"
-          />
-        </div>
+        <Search query={query} setQuery={setQuery} />
       </div>
 
       {/* checking status */}
@@ -80,6 +88,7 @@ export default function Sidebar() {
         folders.length ? (
           <FoldersList
             folders={folders}
+            isSearchedResults={!!filteredSearchedFolders?.length}
             setSelectedFolderId={setSelectedFolderId}
             selectedFolderId={selectedFolderId}
           />
@@ -91,5 +100,30 @@ export default function Sidebar() {
         )
       ) : null}
     </aside>
+  );
+}
+
+interface SearchProps {
+  query: string;
+  setQuery: (i: string) => void;
+}
+
+function Search({ query, setQuery }: SearchProps) {
+  return (
+    <div className="relative">
+      <Input
+        name="explorer-folder-search"
+        onChange={(e) => setQuery(e.target.value)}
+        value={query}
+        placeholder="enter folder name"
+      />
+      {query.length ? (
+        <XIcon
+          onClick={() => setQuery('')}
+          className="h-5 w-5 cursor-pointer stroke-current text-gray-500 absolute right-2 top-2.5"
+          aria-hidden="true"
+        />
+      ) : null}
+    </div>
   );
 }
