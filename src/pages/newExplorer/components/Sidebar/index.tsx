@@ -62,7 +62,7 @@ export default function Sidebar() {
   return (
     <aside className="border-r p-2">
       {/* header */}
-      <div className="border-b p-2 w-full flex flex-col gap-2">
+      <div className="p-2 w-full flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h1>Explorer</h1>
           <Dropdown config={configForDropdown} iconType="plus" />

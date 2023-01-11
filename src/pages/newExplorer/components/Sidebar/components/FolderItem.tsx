@@ -6,6 +6,7 @@ import {
   TrashIcon,
   PlusIcon,
   PencilIcon,
+  DownloadIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -14,6 +15,7 @@ import { setItemActionForSideOver } from '../../../../../features/general/slideO
 import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useNavigate } from 'react-router-dom';
+import { DownloadFile } from '../../../../../app/helpers';
 
 interface FolderItemProps {
   id: string;
@@ -49,12 +51,18 @@ export default function FolderItem({
     }
   };
 
+  const handleDownload = () => {
+    const itemName = `${name}.zip`;
+
+    DownloadFile('folder', id, itemName);
+  };
+
   const configForDropdown = [
-    // {
-    //   label: 'Create new',
-    //   onClick: () => ({}),
-    //   icon: <PlusIcon className="h-5 w-5" aria-hidden="true" />,
-    // },
+    {
+      label: 'Download',
+      onClick: handleDownload,
+      icon: <DownloadIcon className="h-5 w-5" aria-hidden="true" />,
+    },
     {
       label: 'Rename',
       onClick: () =>
