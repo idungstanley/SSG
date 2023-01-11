@@ -1,14 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import { useGetExplorerFolders } from '../../../../features/explorer/explorerService';
-import { PlusIcon } from '@heroicons/react/outline';
+import { FolderAddIcon } from '@heroicons/react/outline';
 import { Input } from '../../../../components';
 import FoldersList from './components/FoldersList';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
+import { useAppDispatch } from '../../../../app/hooks';
+import {
+  setItemActionForSideOver,
+} from '../../../../features/general/slideOver/slideOverSlice';
+import Dropdown from '../../../../components/Dropdown/index';
 
 export default function Sidebar() {
   const { folderId } = useParams();
+  const dispatch = useAppDispatch();
 
   const { data, status } = useGetExplorerFolders();
 
@@ -27,13 +33,21 @@ export default function Sidebar() {
     [data]
   );
 
+  const configForDropdown = [
+    {
+      label: 'Folder',
+      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      onClick: () => dispatch(setItemActionForSideOver('create')),
+    },
+  ];
+
   return (
     <aside className="border-r p-2">
       {/* header */}
       <div className="border-b p-2 w-full flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h1>Explorer</h1>
-          <PlusIcon className="h-5 w-5" aria-hidden="true" />
+          <Dropdown config={configForDropdown} iconType="plus" />
         </div>
         {/* search  */}
         <div>

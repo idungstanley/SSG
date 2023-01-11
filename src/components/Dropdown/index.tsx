@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { PlusIcon } from '@heroicons/react/outline';
 
 interface IDropdownItem {
   label: string;
@@ -13,25 +14,23 @@ interface IDropdownItem {
 
 interface DropdownProps {
   config: IDropdownItem[];
+  iconType: 'dots' | 'plus';
 }
 
-export default function Dropdown({ config }: DropdownProps) {
+export default function Dropdown({ config, iconType }: DropdownProps) {
   const navigate = useNavigate();
-
-  const handleClick = (link?: string, onClick?: () => void) => {
-    if (link) {
-      navigate(link);
-    } else {
-      onClick;
-    }
-  };
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-500 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
-          <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+
+          {iconType === 'dots' ? (
+            <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+          )}
         </Menu.Button>
       </div>
 
@@ -49,7 +48,7 @@ export default function Dropdown({ config }: DropdownProps) {
             <Menu.Item key={i.label}>
               {({ active }) => (
                 <button
-                  onClick={() => handleClick(i.link, i.onClick)}
+                  onClick={i.link ? () => navigate(i.link || '') : i.onClick}
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'px-4 py-2 text-sm flex w-full items-center gap-3'

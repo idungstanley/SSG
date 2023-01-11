@@ -63,7 +63,7 @@ export default function FolderItem({
       </div>
 
       <div className="flex opacity-0 group-hover:opacity-100 gap-2 items-center">
-        <Dropdown config={configForDropdown} />
+        <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500"
           aria-hidden="true"

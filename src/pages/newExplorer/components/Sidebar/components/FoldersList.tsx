@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { useGetExplorerFolder } from '../../../../../features/explorer/explorerService';
 import { useNavigate, useParams } from 'react-router-dom';
 import FolderItem from './FolderItem';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { setSelectedItem } from '../../../../../features/explorer/explorerSlice';
 
 interface FoldersListProps {
   folders: {
@@ -19,6 +21,7 @@ export default function FoldersList({
   selectedFolderId,
   setSelectedFolderId,
 }: FoldersListProps) {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
   const { data: sub } = useGetExplorerFolder(folderId);
@@ -30,6 +33,13 @@ export default function FoldersList({
     navigate(`/new-explorer/${isActiveFolder ? parentId || '' : folderId}`, {
       replace: true,
     });
+
+    dispatch(
+      setSelectedItem({
+        selectedItemId: folderId,
+        selectedItemType: 'folder',
+      })
+    );
   };
 
   const subFolders = useMemo(
@@ -91,7 +101,7 @@ export default function FoldersList({
                 ))}
 
               {/* selected folder (only if child, not root) */}
-              <div style={{ marginLeft: (ancestorsLength) * 10 }}>
+              <div style={{ marginLeft: ancestorsLength * 10 }}>
                 {rootFolder.id !== selectedFolder.id ? (
                   <FolderItem
                     id={selectedFolder.id}
