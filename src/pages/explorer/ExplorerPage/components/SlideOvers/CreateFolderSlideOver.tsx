@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { useParams } from 'react-router-dom';
+// import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { setCreateFolderSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { createFolderService } from '../../../../../features/explorer/explorerService';
+// import { createFolderService } from '../../../../../features/explorer/explorerService';
 import { SlideOver, Button, Input } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 
 function CreateFolderSlideOver() {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const { folderId } = useParams();
+  // const queryClient = useQueryClient();
+  // const { folderId } = useParams();
 
   const { showCreateFolderSlideOver } = useAppSelector(
     (state) => state.slideOver
@@ -18,22 +18,22 @@ function CreateFolderSlideOver() {
 
   const [folderName, setFolderName] = useState('');
 
-  const createFolderMutation = useMutation(createFolderService, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries([
-        'explorer_files_and_folders',
-        data.data.parent_folder == null
-          ? 'root-folder'
-          : data.data.parent_folder.id,
-      ]);
-    },
-  });
+  // const createFolderMutation = useMutation(createFolderService, {
+  //   onSuccess: (data) => {
+  //     queryClient.invalidateQueries([
+  //       'explorer_files_and_folders',
+  //       data.data.parent_folder == null
+  //         ? 'root-folder'
+  //         : data.data.parent_folder.id,
+  //     ]);
+  //   },
+  // });
 
   const onSubmit = async () => {
-    await createFolderMutation.mutateAsync({
-      folderName,
-      parentId: folderId,
-    });
+    // await createFolderMutation.mutateAsync({
+    //   folderName,
+    //   parentId: folderId,
+    // });
     dispatch(setCreateFolderSlideOverVisibility(false));
   };
 
@@ -60,7 +60,7 @@ function CreateFolderSlideOver() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          loading={createFolderMutation.status === 'loading'}
+          // loading={createFolderMutation.status === 'loading'}
           label="Create folder"
           width="w-40"
         />
