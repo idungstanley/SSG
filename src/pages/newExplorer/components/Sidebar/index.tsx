@@ -4,11 +4,13 @@ import { PlusIcon } from '@heroicons/react/outline';
 import { Input } from '../../../../components';
 import FoldersList from './components/FoldersList';
 import { useParams } from 'react-router-dom';
+import { Spinner } from '../../../../common';
+import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 
 export default function Sidebar() {
   const { folderId } = useParams();
 
-  const { data } = useGetExplorerFolders();
+  const { data, status } = useGetExplorerFolders();
 
   const [selectedFolderId, setSelectedFolderId] = useState<null | string>(
     folderId || null
@@ -43,13 +45,32 @@ export default function Sidebar() {
         </div>
       </div>
 
+      {/* checking status */}
+      {status === 'loading' ? (
+        <div className="mx-auto w-6 mt-8 justify-center">
+          <Spinner size={8} color="#0F70B7" />
+        </div>
+      ) : status === 'error' ? (
+        <FullScreenMessage
+          title="Oops, an error occurred :("
+          description="Please try again later."
+        />
+      ) : null}
+
       {/* folder list */}
       {folders ? (
-        <FoldersList
-          folders={folders}
-          setSelectedFolderId={setSelectedFolderId}
-          selectedFolderId={selectedFolderId}
-        />
+        folders.length ? (
+          <FoldersList
+            folders={folders}
+            setSelectedFolderId={setSelectedFolderId}
+            selectedFolderId={selectedFolderId}
+          />
+        ) : (
+          <FullScreenMessage
+            title="No folders yet."
+            description="Create one."
+          />
+        )
       ) : null}
     </aside>
   );

@@ -48,7 +48,7 @@ export default function FoldersList({
   const ancestorsLength = selectedFolder?.ancestors?.length || 0;
 
   return (
-    <div>
+    <>
       {folders.map((rootFolder) => (
         <div key={rootFolder.id}>
           {/* root folders list */}
@@ -128,6 +128,6 @@ export default function FoldersList({
           ) : null}
         </div>
       ))}
-    </div>
+    </>
   );
 }
