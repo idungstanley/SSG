@@ -13,6 +13,26 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 import { useDebounce } from '../../../../hooks';
+import { IExplorerFolder } from '../../../../features/explorer/explorer.interfaces';
+
+const stringifyFolders = (
+  query: string,
+  allFolders?: IExplorerFolder[],
+  searchedFolders?: IExplorerFolder[]
+) => {
+  const data = query.length > 2 ? searchedFolders : allFolders;
+
+  return useMemo(
+    () =>
+      data?.map((i) => ({
+        name: i.name,
+        id: i.id,
+        ancestors: i.ancestors,
+        parentId: i.parent_id,
+      })),
+    [data, searchedFolders]
+  );
+};
 
 export default function Sidebar() {
   const { folderId } = useParams();
@@ -22,6 +42,7 @@ export default function Sidebar() {
   const debouncedQuery = useDebounce(query, 500);
   const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
 
+  // ? results includes children for some reason, this value remove unsuitable folders
   const filteredSearchedFolders = searchedFolders?.filter((i) =>
     i.name.includes(query)
   );
@@ -32,17 +53,10 @@ export default function Sidebar() {
     folderId || null
   );
 
-  const data = debouncedQuery.length > 2 ? filteredSearchedFolders : allFolders;
-
-  const folders = useMemo(
-    () =>
-      data?.map((i) => ({
-        name: i.name,
-        id: i.id,
-        ancestors: i.ancestors,
-        parentId: i.parent_id,
-      })),
-    [data, searchedFolders]
+  const folders = stringifyFolders(
+    debouncedQuery,
+    allFolders,
+    filteredSearchedFolders
   );
 
   const configForDropdown = [
