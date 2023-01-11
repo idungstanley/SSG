@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   useGetExplorerFolders,
   useGetSearchFolders,
@@ -49,9 +49,11 @@ export default function Sidebar() {
 
   const { data: allFolders, status } = useGetExplorerFolders();
 
-  const [selectedFolderId, setSelectedFolderId] = useState<null | string>(
-    folderId || null
-  );
+  const [selectedFolderId, setSelectedFolderId] = useState<null | string>(null);
+
+  useEffect(() => {
+    setSelectedFolderId(folderId || null);
+  }, [folderId]);
 
   const folders = stringifyFolders(
     debouncedQuery,

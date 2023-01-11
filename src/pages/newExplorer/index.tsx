@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import Breadcrumb from './components/Breadcrumb';
+import BreadcrumbSection from './components/Breadcrumb';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
 
 export default function NewExplorerPage() {
@@ -17,7 +17,7 @@ export default function NewExplorerPage() {
 
           <div className="grid grid-rows-mainContent border">
             {/* Breadcrumb */}
-            <Breadcrumb />
+            <BreadcrumbSection />
 
             <div className="grid grid-cols-2 border">
               <div className="grid grid-rows-mainContent border">
