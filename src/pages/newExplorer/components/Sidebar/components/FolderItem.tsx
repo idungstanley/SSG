@@ -11,6 +11,9 @@ import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { setItemActionForSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
+import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface FolderItemProps {
   id: string;
@@ -30,12 +33,28 @@ export default function FolderItem({
   haveAncestors,
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
+
+  const handleDelete = () => {
+    onDelete({
+      type: 'folder',
+      id,
+    });
+
+    if (isActiveFolder) {
+      dispatch(resetSelectedItem());
+      navigate('/new-explorer', { replace: true });
+    }
+  };
+
   const configForDropdown = [
-    {
-      label: 'Create new',
-      onClick: () => ({}),
-      icon: <PlusIcon className="h-5 w-5" aria-hidden="true" />,
-    },
+    // {
+    //   label: 'Create new',
+    //   onClick: () => ({}),
+    //   icon: <PlusIcon className="h-5 w-5" aria-hidden="true" />,
+    // },
     {
       label: 'Rename',
       onClick: () =>
@@ -44,7 +63,7 @@ export default function FolderItem({
     },
     {
       label: 'Delete',
-      onClick: () => ({}),
+      onClick: handleDelete,
       icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
     },
   ];

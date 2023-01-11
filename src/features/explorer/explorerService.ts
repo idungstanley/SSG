@@ -92,3 +92,20 @@ export const useGetExplorerFolder = (folderId?: string) =>
       }),
     { enabled: !!folderId }
   );
+
+export const useGetSearchFolders = (query: string) =>
+  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+    ['folders-search', query],
+    () =>
+      requestNew({
+        url: 'search/folders',
+        method: 'GET',
+        params: {
+          query,
+        },
+      }),
+    {
+      enabled: query.length > 2,
+      select: (res) => res.data.folders,
+    }
+  );

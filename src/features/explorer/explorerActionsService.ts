@@ -1,3 +1,4 @@
+import { explorerItemType } from './../../types/index';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
@@ -86,6 +87,28 @@ export const useCreateFolder = (id: string) => {
       queryClient.invalidateQueries(['explorer-folder', id]);
       queryClient.invalidateQueries(['explorer-folders']);
       queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+    },
+  });
+};
+
+const deleteExplorerItem = (data: { type: explorerItemType; id: string }) => {
+  const response = requestNew({
+    url: `${data.type}s/${data.id}`,
+    method: 'DELETE',
+  });
+  return response;
+};
+
+export const useDeleteExplorerItem = (id: string, type: explorerItemType) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteExplorerItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-folder', id]);
+
+      if (type === 'folder') {
+        queryClient.invalidateQueries(['explorer-folders']);
+      }
     },
   });
 };
