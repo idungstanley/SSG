@@ -5,9 +5,12 @@ import {
   FolderIcon,
   TrashIcon,
   PlusIcon,
+  PencilIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { setItemActionForSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 interface FolderItemProps {
   id: string;
@@ -26,11 +29,18 @@ export default function FolderItem({
   isActiveFolder,
   haveAncestors,
 }: FolderItemProps) {
+  const dispatch = useAppDispatch();
   const configForDropdown = [
     {
-      label: 'Create new file',
+      label: 'Create new',
       onClick: () => ({}),
       icon: <PlusIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Rename',
+      onClick: () =>
+        dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
+      icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
     },
     {
       label: 'Delete',
@@ -65,6 +75,9 @@ export default function FolderItem({
       <div className="flex opacity-0 group-hover:opacity-100 gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
+          onClick={() =>
+            dispatch(setItemActionForSideOver({ action: 'create', id }))
+          }
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500"
           aria-hidden="true"
         />

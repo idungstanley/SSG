@@ -7,9 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 import { useAppDispatch } from '../../../../app/hooks';
-import {
-  setItemActionForSideOver,
-} from '../../../../features/general/slideOver/slideOverSlice';
+import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 
 export default function Sidebar() {
@@ -37,7 +35,13 @@ export default function Sidebar() {
     {
       label: 'Folder',
       icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
-      onClick: () => dispatch(setItemActionForSideOver('create')),
+      onClick: () =>
+        dispatch(
+          setItemActionForSideOver({
+            action: 'create',
+            id: folderId || '',
+          })
+        ),
     },
   ];
 

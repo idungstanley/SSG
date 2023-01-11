@@ -1,5 +1,4 @@
-import React, { Fragment, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { Input } from '../../../../components';
@@ -13,32 +12,36 @@ import {
 
 export default function CreateOrRenameItemSlideOver() {
   const dispatch = useDispatch();
-  const { folderId } = useParams();
 
   const { itemActionForSideOver } = useAppSelector((state) => state.slideOver);
-  const { selectedItemId, selectedItemType } = useAppSelector(
-    (state) => state.explorer
-  );
 
-  const isCreateAction = itemActionForSideOver === 'create';
+  const isCreateAction = itemActionForSideOver?.action === 'create';
 
-  const [itemName, setItemName] = useState('');
+  const [itemName, setItemName] = useState(itemActionForSideOver?.name || '');
+
+  useEffect(() => {
+    setItemName(itemActionForSideOver?.name || '');
+  }, [itemActionForSideOver]);
 
   const { mutate: onRename } = useRenameItem();
-  const { mutate: onCreate } = useCreateFolder();
+  const { mutate: onCreate } = useCreateFolder(itemActionForSideOver?.id || '');
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (isCreateAction) {
       onCreate({
         folderName: itemName,
-        parentId: folderId,
+        parentId: itemActionForSideOver.id,
       });
     } else {
-      onRename({
-        type: selectedItemType,
-        id: selectedItemId,
-        name: itemName,
-      });
+      if (itemActionForSideOver) {
+        onRename({
+          type: 'folder',
+          id: itemActionForSideOver.id,
+          name: itemName,
+        });
+      }
     }
     onClose();
   };
@@ -69,7 +72,7 @@ export default function CreateOrRenameItemSlideOver() {
                         <Dialog.Title className="text-lg font-medium text-gray-900">
                           {isCreateAction
                             ? 'Create new folder'
-                            : `Rename ${selectedItemType}`}
+                            : `Rename folder`}
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -85,16 +88,12 @@ export default function CreateOrRenameItemSlideOver() {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       <form
-                        onSubmit={handleSubmit}
+                        onSubmit={(e) => handleSubmit(e)}
                         className="py-6 w-full space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200 space-y-1 h-full flex flex-col justify-between sm:space-y-0"
                       >
                         <Input
-                          label={`${
-                            isCreateAction ? 'folder' : selectedItemType
-                          } name`}
-                          placeholder={`${
-                            isCreateAction ? 'folder' : selectedItemType
-                          } name`}
+                          label={`Folder name`}
+                          placeholder={`Folder name`}
                           name="name"
                           value={itemName}
                           type="text"

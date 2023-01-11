@@ -78,13 +78,14 @@ const createFolder = (data: { folderName: string; parentId?: string }) => {
   return response;
 };
 
-export const useCreateFolder = () => {
+export const useCreateFolder = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(createFolder, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+      queryClient.invalidateQueries(['explorer-folder', id]);
       queryClient.invalidateQueries(['explorer-folders']);
+      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
     },
   });
 };

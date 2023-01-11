@@ -1,6 +1,12 @@
 import { itemType } from './../../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+type itemAction = {
+  action: 'rename' | 'create';
+  id: string;
+  name?: string;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
@@ -13,7 +19,7 @@ interface SideOverState {
   showAddTeamMembersOrGroupsSideOver: boolean;
   showWatchersSideOver: boolean;
   itemTypeSideOver: itemType;
-  itemActionForSideOver: 'rename' | 'create' | null;
+  itemActionForSideOver: itemAction | null;
 }
 
 const initialState: SideOverState = {
@@ -37,7 +43,7 @@ export const slideOverSlice = createSlice({
   reducers: {
     setItemActionForSideOver: (
       state,
-      action: PayloadAction<'rename' | 'create' | null>
+      action: PayloadAction<itemAction | null>
     ) => {
       state.itemActionForSideOver = action.payload;
     },
