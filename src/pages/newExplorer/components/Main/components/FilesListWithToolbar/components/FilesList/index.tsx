@@ -38,26 +38,32 @@ export default function FilesList({ data }: FilesListProps) {
   const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const { selectedFileIds } = useAppSelector((state) => state.explorer);
+  const { selectedFileIds, selectedFileId } = useAppSelector(
+    (state) => state.explorer
+  );
+
+  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
+    (i) => i
+  );
 
   useLayoutEffect(() => {
     const isIndeterminate =
-      selectedFileIds.length > 0 && selectedFileIds.length < data?.length;
+      selectedIds.length > 0 && selectedIds.length < data?.length;
 
     if (
-      selectedFileIds.length === data.length &&
-      +selectedFileIds.length + +data.length > 0
+      selectedIds.length === data.length &&
+      +selectedIds.length + +data.length > 0
     ) {
-      setChecked(selectedFileIds.length === data.length);
+      setChecked(selectedIds.length === data.length);
     }
     setIndeterminate(isIndeterminate);
     if (checkbox.current) {
       checkbox.current.indeterminate = isIndeterminate;
     }
-  }, [selectedFileIds]);
+  }, [selectedIds]);
 
   useEffect(() => {
-    if (selectedFileIds.length) {
+    if (selectedIds.length) {
       dispatch(setSelectedFiles([]));
       setChecked(false);
     }

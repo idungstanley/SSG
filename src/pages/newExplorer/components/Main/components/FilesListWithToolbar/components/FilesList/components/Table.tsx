@@ -43,7 +43,7 @@ export default function Table({
 
   const onClickRow = (
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    fileId: string,
+    fileId: string
   ) => {
     const isCheckboxTarget = (e.target as HTMLButtonElement).value;
 
@@ -65,6 +65,9 @@ export default function Table({
       dispatch(
         setSelectedFiles([...selectedFileIds.filter((i) => i !== fileId)])
       );
+      if (selectedFileId === fileId) {
+        dispatch(setSelectedFileId(null));
+      }
     } else {
       // if selected one, clear and paste into selectedFileIds, otherwise paste only fileId
       if (selectedFileId) {
@@ -116,7 +119,11 @@ export default function Table({
           <tr
             key={file.id}
             className={`${selectedIds.includes(file.id) ? 'bg-gray-50' : null}
-                ${selectedFileId === file.id ? 'bg-indigo-100' : null} 
+                ${
+                  selectedFileId === file.id
+                    ? 'bg-indigo-100 hover:bg-indigo-100'
+                    : null
+                } 
                  cursor-pointer hover:bg-gray-50`}
             onClick={(e) => onClickRow(e, file.id)}
           >
