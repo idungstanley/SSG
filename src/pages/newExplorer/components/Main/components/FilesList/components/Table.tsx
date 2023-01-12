@@ -3,8 +3,12 @@ import {
   OutputDateTime,
   OutputFileSize,
 } from '../../../../../../../app/helpers';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { FileIcon } from '../../../../../../../common';
+import {
+  setSelectedFileId,
+  setSelectedFiles,
+} from '../../../../../../../features/explorer/explorerSlice';
 import { classNames } from '../../../../../../../utils';
 import { IStringifiedFile } from '../index';
 
@@ -23,19 +27,62 @@ export default function Table({
   toggleAll,
   items,
 }: TableProps) {
+  const dispatch = useAppDispatch();
   const { selectedFileIds, selectedFileId } = useAppSelector(
     (state) => state.explorer
   );
+
+  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
+    (i) => i
+  );
+
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
+
+  const onClickRow = (
+    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    fileId: string
+  ) => {
+    const isCheckboxTarget = (e.target as HTMLButtonElement).value;
+
+    // clear multiple selected files and choose one
+    if (!isCheckboxTarget) {
+      if (selectedFileIds.length) {
+        dispatch(setSelectedFiles([]));
+      }
+
+      dispatch(setSelectedFileId(fileId));
+    }
+  };
+
+  const onClickCheckbox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fileId: string
+  ) => {
+    if (!e.target.checked) {
+      dispatch(
+        setSelectedFiles([...selectedFileIds.filter((i) => i !== fileId)])
+      );
+    } else {
+      // if selected one, clear and paste into selectedFileIds, otherwise paste only fileId
+      if (selectedFileId) {
+        dispatch(
+          setSelectedFiles([...selectedFileIds, fileId, selectedFileId])
+        );
+        dispatch(setSelectedFileId(null));
+      } else {
+        dispatch(setSelectedFiles([...selectedFileIds, fileId]));
+      }
+    }
+  };
 
   return (
     <table className="min-w-full table-fixed divide-y divide-gray-300 overflow-x-scroll">
       <thead className="bg-white">
         <tr>
-          <th scope="col" className="relative w-12 px-5 sm:w-16">
+          <th scope="col" className="relative px-2 pr-6">
             <input
               type="checkbox"
-              className="absolute cursor-pointer left-3 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0"
+              className="absolute cursor-pointer left-3 -mt-2 top-1/2 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0"
               ref={checkboxRef}
               checked={checked}
               onChange={toggleAll}
@@ -62,44 +109,45 @@ export default function Table({
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200 bg-white">
-        {items.map((item) => (
+        {items.map((file) => (
           <tr
-            key={item.id}
-            className={`${
-              selectedFileIds.includes(item.id) ? 'bg-gray-50' : null
-            }
-                ${selectedFileId === item.id ? 'bg-indigo-100' : null} 
+            key={file.id}
+            className={`${selectedIds.includes(file.id) ? 'bg-gray-50' : null}
+                ${selectedFileId === file.id ? 'bg-indigo-100' : null} 
                  cursor-pointer`}
             // onClick={(e) => handleClick(e, item.id, item.item_type)}
+            onClick={(e) => onClickRow(e, file.id)}
           >
-            <td className="relative sm:w-16 px-2">
-              {selectedFileIds.includes(item.id) && (
+            <td className="relative w-8 px-2">
+              {selectedIds.includes(file.id) && (
                 <div className="absolute inset-y-0 left-0 w-0.5 bg-indigo-600" />
               )}
               <input
                 type="checkbox"
                 className="absolute left-3 top-1/2 -mt-2 h-4 cursor-pointer w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0"
-                value={item.id}
-                checked={selectedFileIds.includes(item.id)}
+                value={file.id}
+                checked={selectedIds.includes(file.id)}
                 // onChange={(e) => handleChangeItem(e, item.id, item.fileType)}
+                onChange={(e) => onClickCheckbox(e, file.id)}
               />
             </td>
+
             <td
               className={classNames(
                 'py-4 text-sm font-medium flex gap-4 items-center px-2',
-                selectedFileIds.includes(item.id)
+                selectedIds.includes(file.id)
                   ? 'text-indigo-600'
                   : 'text-gray-900'
               )}
             >
-              <FileIcon extensionKey={item.fileType} size={6} />
-              <span className="truncate w-48">{item.name}</span>
+              <FileIcon extensionKey={file.fileType} size={6} />
+              <span className="truncate w-48">{file.name}</span>
             </td>
             <td className="whitespace-nowrap py-4 px-2 text-sm text-gray-500">
-              {OutputDateTime(item.created_at)}
+              {OutputDateTime(file.created_at)}
             </td>
             <td className="whitespace-nowrap py-4 px-2 text-sm text-gray-500">
-              {OutputFileSize(item.size)}
+              {OutputFileSize(file.size)}
             </td>
           </tr>
         ))}

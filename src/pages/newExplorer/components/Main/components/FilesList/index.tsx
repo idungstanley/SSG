@@ -47,8 +47,6 @@ export default function FilesList() {
       [data]
     ) || [];
 
-  // console.log(data);
-
   useLayoutEffect(() => {
     const isIndeterminate =
       selectedFileIds.length > 0 && selectedFileIds.length < items?.length;
@@ -76,11 +74,7 @@ export default function FilesList() {
     if (checked || indeterminate) {
       dispatch(setSelectedFiles([]));
     } else {
-      dispatch(
-        setSelectedFiles([
-          ...items.map((i) => i.id),
-        ])
-      );
+      dispatch(setSelectedFiles([...items.map((i) => i.id)]));
     }
 
     setChecked(!checked && !indeterminate);
@@ -112,7 +106,7 @@ export default function FilesList() {
       ) : null}
 
       {/* table */}
-      {!items.length ? (
+      {status == 'success' && !items.length ? (
         <FullScreenMessage
           title="No files in your folder"
           description="Upload one to start working"
@@ -127,9 +121,6 @@ export default function FilesList() {
             checked={checked}
             toggleAll={toggleAll}
             items={items}
-            // selectedItems={selectedItems}
-            // handleChangeItem={handleChangeItem}
-            // handleClick={handleClick}
           />
         </div>
       )}
