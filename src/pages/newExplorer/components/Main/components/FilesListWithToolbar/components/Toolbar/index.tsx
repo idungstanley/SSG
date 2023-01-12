@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   TrashIcon,
-  UploadIcon,
   ShareIcon,
   ClipboardCopyIcon,
   PrinterIcon,
-  ArchiveIcon,
+  DownloadIcon,
 } from '@heroicons/react/outline';
 import { useAppSelector } from '../../../../../../../../app/hooks';
 import { IStringifiedFile } from '../FilesList';
+import Tooltip from '../../../../../../../../components/Tooltip';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -19,70 +19,55 @@ const stringifyNumber = (number: number) => {
 };
 
 export default function Toolbar({ data }: ToolbarProps) {
-  const { selectedFileId } = useAppSelector((state) => state.explorer);
+  const { selectedFileId, selectedFileIds } = useAppSelector(
+    (state) => state.explorer
+  );
+
+  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
+    (i) => i
+  );
 
   const currentFileIndex = data.findIndex((i) => i.id === selectedFileId) + 1;
 
   const menuItems = [
     {
       icon: (
-        <UploadIcon
-          className="h-5 w-5 stroke-current text-gray-500"
-          aria-hidden="true"
-        />
+        <DownloadIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
       onClick: () => ({}),
-      label: 'Upload',
+      label: 'Download',
+      disabled: selectedIds.length === 0,
     },
     {
-      icon: (
-        <TrashIcon
-          className="h-5 w-5 stroke-current text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
       onClick: () => ({}),
       label: 'Delete',
+      disabled: selectedIds.length === 0,
     },
     {
-      icon: (
-        <ShareIcon
-          className="h-5 w-5 stroke-current text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
       onClick: () => ({}),
       label: 'Share',
+      disabled: !selectedFileId,
     },
     {
       icon: (
         <ClipboardCopyIcon
-          className="h-5 w-5 stroke-current text-gray-500"
+          className="h-5 w-5 stroke-current"
           aria-hidden="true"
         />
       ),
       onClick: () => ({}),
       label: 'Copy',
+      disabled: selectedIds.length === 0,
     },
     {
       icon: (
-        <PrinterIcon
-          className="h-5 w-5 stroke-current text-gray-500"
-          aria-hidden="true"
-        />
+        <PrinterIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
       onClick: () => ({}),
       label: 'Print',
-    },
-    {
-      icon: (
-        <ArchiveIcon
-          className="h-5 w-5 stroke-current text-gray-500"
-          aria-hidden="true"
-        />
-      ),
-      onClick: () => ({}),
-      label: 'Archive',
+      disabled: !selectedFileId,
     },
   ];
 
@@ -91,9 +76,16 @@ export default function Toolbar({ data }: ToolbarProps) {
       {/* file actions */}
       <div className="flex gap-4">
         {menuItems.map((button) => (
-          <button key={button.label} onClick={button.onClick} type="button">
-            {button.icon}
-          </button>
+          <Tooltip key={button.label} tooltip={button.label}>
+            <button
+              disabled={button.disabled}
+              className={button.disabled ? 'text-gray-300' : 'text-gray-500'}
+              onClick={button.onClick}
+              type="button"
+            >
+              {button.icon}
+            </button>
+          </Tooltip>
         ))}
       </div>
 
