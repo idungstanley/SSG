@@ -7,6 +7,7 @@ import Search from '../../../Search';
 import { useDebounce } from '../../../../../../hooks';
 import Sorting, { sortItems } from './components/FilesList/components/Sorting';
 import { useAppSelector } from '../../../../../../app/hooks';
+import UploadModal from '../../../../../../components/UploadModal';
 
 export default function FilesListWithToolbar() {
   const { folderId } = useParams();
@@ -45,6 +46,7 @@ export default function FilesListWithToolbar() {
 
   return (
     <div className="flex flex-col gap-2 border-t h-full">
+      <UploadModal />
       {/* toolbar */}
       <Toolbar data={sortedItems} />
 

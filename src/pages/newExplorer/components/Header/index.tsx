@@ -7,6 +7,8 @@ import {
 } from '@heroicons/react/outline';
 import { Switch } from '@headlessui/react';
 import { classNames } from '../../../../utils';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 
 const SquareStackIcon = (
   <svg
@@ -26,6 +28,7 @@ const SquareStackIcon = (
 );
 
 export default function Header() {
+  const dispatch = useAppDispatch();
   // ! move to redux
   const [showPreview, setShowPreview] = useState(false);
 
@@ -71,7 +74,7 @@ export default function Header() {
           aria-hidden="true"
         />
       ),
-      onClick: () => ({}),
+      onClick: () => dispatch(setShowUploadModal(true)),
     },
     {
       label: 'Layout',
