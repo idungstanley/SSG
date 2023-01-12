@@ -3,9 +3,9 @@ import {
   useGetExplorerFolders,
   useGetSearchFolders,
 } from '../../../../features/explorer/explorerService';
-import { FolderAddIcon, XIcon } from '@heroicons/react/outline';
-import { Input } from '../../../../components';
+import { FolderAddIcon } from '@heroicons/react/outline';
 import FoldersList from './components/FoldersList';
+import Search from '../Search';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
@@ -83,7 +83,7 @@ export default function Sidebar() {
           <Dropdown config={configForDropdown} iconType="plus" />
         </div>
         {/* search  */}
-        <Search query={query} setQuery={setQuery} />
+        <Search query={query} setQuery={setQuery} type="folder" />
       </div>
 
       {/* checking status */}
@@ -113,30 +113,5 @@ export default function Sidebar() {
         )
       ) : null}
     </aside>
-  );
-}
-
-interface SearchProps {
-  query: string;
-  setQuery: (i: string) => void;
-}
-
-function Search({ query, setQuery }: SearchProps) {
-  return (
-    <div className="relative">
-      <Input
-        name="explorer-folder-search"
-        onChange={(e) => setQuery(e.target.value)}
-        value={query}
-        placeholder="enter folder name"
-      />
-      {query.length ? (
-        <XIcon
-          onClick={() => setQuery('')}
-          className="h-5 w-5 cursor-pointer stroke-current text-gray-500 absolute right-2 top-2.5"
-          aria-hidden="true"
-        />
-      ) : null}
-    </div>
   );
 }

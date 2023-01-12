@@ -76,8 +76,8 @@ export default function Table({
   };
 
   return (
-    <table className="min-w-full table-fixed divide-y divide-gray-300 overflow-x-scroll">
-      <thead className="bg-white">
+    <table className="min-w-full table-fixed divide-y divide-gray-300 overflow-x-scroll bg-white">
+      <thead>
         <tr>
           <th scope="col" className="relative px-2 pr-6">
             <input
@@ -102,20 +102,19 @@ export default function Table({
           </th>
           <th
             scope="col"
-            className="px-3 py-3.5 uppercase pl-9 : sm:pl-0 text-left text-sm font-normal text-gray-400"
+            className="px-3 py-3.5 uppercase text-left text-sm font-normal text-gray-400"
           >
             Size
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-200 bg-white">
+      <tbody className="divide-y divide-gray-200">
         {items.map((file) => (
           <tr
             key={file.id}
             className={`${selectedIds.includes(file.id) ? 'bg-gray-50' : null}
                 ${selectedFileId === file.id ? 'bg-indigo-100' : null} 
-                 cursor-pointer`}
-            // onClick={(e) => handleClick(e, item.id, item.item_type)}
+                 cursor-pointer hover:bg-gray-50`}
             onClick={(e) => onClickRow(e, file.id)}
           >
             <td className="relative w-8 px-2">
@@ -127,7 +126,6 @@ export default function Table({
                 className="absolute left-3 top-1/2 -mt-2 h-4 cursor-pointer w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0"
                 value={file.id}
                 checked={selectedIds.includes(file.id)}
-                // onChange={(e) => handleChangeItem(e, item.id, item.fileType)}
                 onChange={(e) => onClickCheckbox(e, file.id)}
               />
             </td>

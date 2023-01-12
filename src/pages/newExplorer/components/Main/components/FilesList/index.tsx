@@ -8,11 +8,12 @@ import React, {
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { Spinner } from '../../../../../../common';
-import { Input } from '../../../../../../components';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 import { useGetExplorerFiles } from '../../../../../../features/explorer/explorerService';
 import { setSelectedFiles } from '../../../../../../features/explorer/explorerSlice';
 import { setShowUploadModal } from '../../../../../../features/general/uploadFile/uploadFileSlice';
+import { useDebounce } from '../../../../../../hooks';
+import Search from '../../../Search';
 import Table from './components/Table';
 
 export interface IStringifiedFile {
@@ -34,6 +35,9 @@ export default function FilesList() {
   const [indeterminate, setIndeterminate] = useState(false);
   const { selectedFileIds } = useAppSelector((state) => state.explorer);
 
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 500);
+
   const items: IStringifiedFile[] =
     useMemo(
       () =>
@@ -46,6 +50,14 @@ export default function FilesList() {
         })),
       [data]
     ) || [];
+
+  const searchedItems = useMemo(
+    () =>
+      debouncedQuery.length
+        ? items.filter((i) => i.name.includes(debouncedQuery))
+        : items,
+    [debouncedQuery, items]
+  );
 
   useLayoutEffect(() => {
     const isIndeterminate =
@@ -84,11 +96,8 @@ export default function FilesList() {
   return (
     <div className="flex flex-col w-full overflow-x-scroll gap-2 p-2">
       {/* Search */}
-      <Input
-        name="file-search"
-        placeholder="Enter file name"
-        onChange={() => ({})}
-      />
+      <Search query={query} setQuery={setQuery} type="file" />
+
       {/* sorting */}
       <div>Sorting</div>
 
@@ -106,24 +115,26 @@ export default function FilesList() {
       ) : null}
 
       {/* table */}
-      {status == 'success' && !items.length ? (
-        <FullScreenMessage
-          title="No files in your folder"
-          description="Upload one to start working"
-          ctaText="Upload"
-          ctaOnClick={() => dispatch(setShowUploadModal(true))}
-          showCta
-        />
-      ) : (
-        <div className="flex flex-col h-full w-full">
-          <Table
-            checkbox={checkbox}
-            checked={checked}
-            toggleAll={toggleAll}
-            items={items}
+      {status == 'success' ? (
+        !searchedItems.length ? (
+          <FullScreenMessage
+            title="No files in your folder"
+            description="Upload one to start working"
+            ctaText="Upload"
+            ctaOnClick={() => dispatch(setShowUploadModal(true))}
+            showCta
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col h-full w-full">
+            <Table
+              checkbox={checkbox}
+              checked={checked}
+              toggleAll={toggleAll}
+              items={searchedItems}
+            />
+          </div>
+        )
+      ) : null}
     </div>
   );
 }
