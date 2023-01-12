@@ -10,7 +10,7 @@ export interface IExplorerFile {
   id: string;
   physical_file_id: string;
   folder_id: string | null;
-  folder: string | null;
+  folder: IExplorerFolder;
   size: number;
   name: string;
   display_name: string;
@@ -21,23 +21,22 @@ export interface IExplorerFile {
     mime: string;
     icon_name: string;
   };
-  also_saved_in_files: never[];
+  also_saved_in_files: string[];
   created_at: string;
   updated_at: string;
-  shared_by: {
-    user: {
-      id: string;
-      email: string;
-      name: string;
-    };
-  };
+  // shared_by: {
+  //   user: {
+  //     id: string;
+  //     email: string;
+  //     name: string;
+  //   };
+  // };
 }
 
 export interface IExplorerFolder {
   id: string;
   name: string;
   display_name: string;
-  size: number;
   parent_id: string | null;
   full_path: string;
   ancestor_path: string | null;
@@ -74,6 +73,13 @@ export interface IExplorerFilesAndFolders extends IResponseData {
 export interface IExplorerFoldersRes {
   data: {
     folders: IExplorerFolder[];
+    current_folder: IExplorerFolder;
+  };
+}
+
+export interface IExplorerFilesRes {
+  data: {
+    files: IExplorerFile[];
     current_folder: IExplorerFolder;
   };
 }

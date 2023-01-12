@@ -1,5 +1,7 @@
 import {
+  IExplorerFile,
   IExplorerFilesAndFolders,
+  IExplorerFilesRes,
   IExplorerFolder,
   IExplorerFoldersRes,
 } from './explorer.interfaces';
@@ -71,6 +73,7 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
   );
 };
 
+// folders
 export const useGetExplorerFolders = () =>
   useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
     ['explorer-folders'],
@@ -108,4 +111,16 @@ export const useGetSearchFolders = (query: string) =>
       enabled: query.length > 2,
       select: (res) => res.data.folders,
     }
+  );
+
+// files
+export const useGetExplorerFiles = (folderId?: string) =>
+  useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+    ['explorer-files', folderId || 'root'],
+    () =>
+      requestNew({
+        url: `explorer-files${folderId ? `/${folderId}` : ''}`,
+        method: 'GET',
+      }),
+    { select: (res) => res.data.files }
   );

@@ -39,6 +39,7 @@ interface ExplorerState {
   selectedSortingId: number;
   selectedViewId: number;
   selectedFolderId: string | null;
+  selectedFileId: string | null;
 
   fileIdsToPaste: string[];
   folderIdsToPaste: string[];
@@ -53,6 +54,7 @@ const initialState: ExplorerState = {
   selectedFileIds: [],
   selectedFolderIds: [],
   selectedFolderId: null,
+  selectedFileId: null,
   selectedSortingId,
   selectedViewId,
 
@@ -66,6 +68,9 @@ export const explorerSlice = createSlice({
   reducers: {
     setSelectedFolderId: (state, action: PayloadAction<string | null>) => {
       state.selectedFolderId = action.payload;
+    },
+    setSelectedFileId: (state, action: PayloadAction<string | null>) => {
+      state.selectedFileId = action.payload;
     },
     resetSelectedItem: (state) => {
       state.selectedItemId = null;
@@ -144,6 +149,7 @@ export const explorerSlice = createSlice({
 });
 
 export const {
+  setSelectedFileId,
   setSelectedFolderId,
   resetSelectedItem,
   setSelectedItem,

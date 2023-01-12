@@ -2,6 +2,7 @@ import React from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BreadcrumbSection from './components/Breadcrumb';
+import Main from './components/Main';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
 
 export default function NewExplorerPage() {
@@ -19,24 +20,8 @@ export default function NewExplorerPage() {
             {/* Breadcrumb */}
             <BreadcrumbSection />
 
-            <div className="grid grid-cols-2">
-              <div className="grid grid-rows-mainContent border">
-                {/* toolbar */}
-                <div className="border">
-                  <h1>toolbar</h1>
-                </div>
-
-                {/* file list */}
-                <div className="border">
-                  <h1>file list</h1>
-                </div>
-              </div>
-
-              {/* file preview */}
-              <div className="border">
-                <h1>file preview</h1>
-              </div>
-            </div>
+            {/* files list & file preview */}
+            <Main />
           </div>
         </section>
       </main>
