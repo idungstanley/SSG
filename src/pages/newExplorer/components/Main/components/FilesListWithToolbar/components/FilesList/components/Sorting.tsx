@@ -10,9 +10,9 @@ import {
 } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
 import { IStringifiedFile } from '../index';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import { setSelectedSorting } from '../../../../../../../features/explorer/explorerSlice';
-import { classNames } from '../../../../../../../utils';
+import { useAppSelector } from '../../../../../../../../../app/hooks';
+import { setSelectedSorting } from '../../../../../../../../../features/explorer/explorerSlice';
+import { classNames } from '../../../../../../../../../utils';
 
 export const sortItems = (items: IStringifiedFile[], sortType: number) =>
   items.sort((a, b) =>

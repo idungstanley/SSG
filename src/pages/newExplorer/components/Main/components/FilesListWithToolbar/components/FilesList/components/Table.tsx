@@ -2,14 +2,17 @@ import React, { LegacyRef } from 'react';
 import {
   OutputDateTime,
   OutputFileSize,
-} from '../../../../../../../app/helpers';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { FileIcon } from '../../../../../../../common';
+} from '../../../../../../../../../app/helpers';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../../../../../../app/hooks';
+import { FileIcon } from '../../../../../../../../../common';
 import {
   setSelectedFileId,
   setSelectedFiles,
-} from '../../../../../../../features/explorer/explorerSlice';
-import { classNames } from '../../../../../../../utils';
+} from '../../../../../../../../../features/explorer/explorerSlice';
+import { classNames } from '../../../../../../../../../utils';
 import { IStringifiedFile } from '../index';
 
 interface TableProps {
@@ -40,7 +43,7 @@ export default function Table({
 
   const onClickRow = (
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    fileId: string
+    fileId: string,
   ) => {
     const isCheckboxTarget = (e.target as HTMLButtonElement).value;
 
