@@ -14,6 +14,7 @@ import { setItemActionForSideOver } from '../../../../features/general/slideOver
 import Dropdown from '../../../../components/Dropdown/index';
 import { useDebounce } from '../../../../hooks';
 import { IExplorerFolder } from '../../../../features/explorer/explorer.interfaces';
+import { setSelectedFolderId } from '../../../../features/explorer/explorerSlice';
 
 const stringifyFolders = (
   query: string,
@@ -49,10 +50,8 @@ export default function Sidebar() {
 
   const { data: allFolders, status } = useGetExplorerFolders();
 
-  const [selectedFolderId, setSelectedFolderId] = useState<null | string>(null);
-
   useEffect(() => {
-    setSelectedFolderId(folderId || null);
+    dispatch(setSelectedFolderId(folderId || null));
   }, [folderId]);
 
   const folders = stringifyFolders(
@@ -105,8 +104,6 @@ export default function Sidebar() {
           <FoldersList
             folders={folders}
             isSearchedResults={!!filteredSearchedFolders?.length}
-            setSelectedFolderId={setSelectedFolderId}
-            selectedFolderId={selectedFolderId}
           />
         ) : (
           <FullScreenMessage

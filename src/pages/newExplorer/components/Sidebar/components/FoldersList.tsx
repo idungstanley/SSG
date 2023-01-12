@@ -2,8 +2,11 @@ import React, { useMemo } from 'react';
 import { useGetExplorerFolder } from '../../../../../features/explorer/explorerService';
 import { useNavigate, useParams } from 'react-router-dom';
 import FolderItem from './FolderItem';
-import { useAppDispatch } from '../../../../../app/hooks';
-import { setSelectedItem } from '../../../../../features/explorer/explorerSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import {
+  setSelectedFolderId,
+  setSelectedItem,
+} from '../../../../../features/explorer/explorerSlice';
 
 interface FoldersListProps {
   folders: {
@@ -12,26 +15,23 @@ interface FoldersListProps {
     id: string;
     parentId: string | null;
   }[];
-  selectedFolderId: string | null;
-  setSelectedFolderId: (i: string | null) => void;
   isSearchedResults: boolean;
 }
 
 export default function FoldersList({
   folders,
-  selectedFolderId,
-  setSelectedFolderId,
   isSearchedResults,
 }: FoldersListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
+  const { selectedFolderId } = useAppSelector((state) => state.explorer);
   const { data: sub } = useGetExplorerFolder(folderId);
 
   const handleClickFolder = (folderId: string, parentId: string | null) => {
     const isActiveFolder = selectedFolderId === folderId;
 
-    setSelectedFolderId(isActiveFolder ? parentId : folderId);
+    dispatch(setSelectedFolderId(isActiveFolder ? parentId : folderId));
     navigate(`/new-explorer/${isActiveFolder ? parentId || '' : folderId}`, {
       replace: true,
     });
