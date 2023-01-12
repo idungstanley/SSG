@@ -72,6 +72,10 @@ export const explorerSlice = createSlice({
     setSelectedFileId: (state, action: PayloadAction<string | null>) => {
       state.selectedFileId = action.payload;
     },
+    resetSelectedFiles: (state) => {
+      state.selectedFileId = null;
+      state.selectedFileIds = [];
+    },
     resetSelectedItem: (state) => {
       state.selectedItemId = null;
       state.selectedItemType = null;
@@ -151,6 +155,7 @@ export const explorerSlice = createSlice({
 export const {
   setSelectedFileId,
   setSelectedFolderId,
+  resetSelectedFiles,
   resetSelectedItem,
   setSelectedItem,
   setSelectedFile,

@@ -6,9 +6,15 @@ import {
   PrinterIcon,
   DownloadIcon,
 } from '@heroicons/react/outline';
-import { useAppSelector } from '../../../../../../../../app/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../../../../../app/hooks';
 import { IStringifiedFile } from '../FilesList';
 import Tooltip from '../../../../../../../../components/Tooltip';
+import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
+import { useParams } from 'react-router-dom';
+import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -19,6 +25,8 @@ const stringifyNumber = (number: number) => {
 };
 
 export default function Toolbar({ data }: ToolbarProps) {
+  const { folderId } = useParams();
+  const dispatch = useAppDispatch();
   const { selectedFileId, selectedFileIds } = useAppSelector(
     (state) => state.explorer
   );
@@ -28,6 +36,13 @@ export default function Toolbar({ data }: ToolbarProps) {
   );
 
   const currentFileIndex = data.findIndex((i) => i.id === selectedFileId) + 1;
+
+  const { mutate: onDelete } = useMultipleDeleteFiles(folderId);
+
+  const handleDelete = () => {
+    onDelete(selectedIds);
+    dispatch(resetSelectedFiles());
+  };
 
   const menuItems = [
     {
@@ -40,7 +55,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
-      onClick: () => ({}),
+      onClick: handleDelete,
       label: 'Delete',
       disabled: selectedIds.length === 0,
     },

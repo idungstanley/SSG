@@ -5,7 +5,7 @@ import {
   IExplorerFolder,
   IExplorerFoldersRes,
 } from './explorer.interfaces';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
 
@@ -124,3 +124,24 @@ export const useGetExplorerFiles = (folderId?: string) =>
       }),
     { select: (res) => res.data.files }
   );
+
+const multipleDeleteFiles = (fileIds: string[]) => {
+  const response = requestNew({
+    url: 'explorer/multiple-delete',
+    method: 'POST',
+    params: {
+      file_ids: fileIds,
+    },
+  });
+  return response;
+};
+
+export const useMultipleDeleteFiles = (folderId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleDeleteFiles, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+    },
+  });
+};
