@@ -72,25 +72,24 @@ export function OutputDateTime(
     .format(format || 'DD MMM YYYY, HH:mm');
 }
 
-export function OutputFileSize(bytes: number, si = true, dp = 3) {
-  const thresh = si ? 1000 : 1024;
+export function OutputFileSize(bytes: number) {
+  const thresh = 1000;
+  let tmpBytes = bytes;
 
-  if (Math.abs(bytes) < thresh) {
-    return `${bytes} B`;
+  if (Math.abs(tmpBytes) < thresh) {
+    return bytes + ' B';
   }
 
-  const units = si
-    ? ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  const units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
   let u = -1;
-  const r = 10 ** dp;
-  let copyBytes = bytes;
+  const r = 10 ** 3;
 
   do {
-    copyBytes /= thresh;
-    u++;
+    tmpBytes /= thresh;
+    ++u;
   } while (
-    Math.round(Math.abs(copyBytes) * r) / r >= thresh &&
+    Math.round(Math.abs(tmpBytes) * r) / r >= thresh &&
     u < units.length - 1
   );
 
@@ -99,5 +98,5 @@ export function OutputFileSize(bytes: number, si = true, dp = 3) {
     decimal_points = 1;
   }
 
-  return `${bytes.toFixed(decimal_points)} ${units[u]}`;
+  return tmpBytes.toFixed(decimal_points) + ' ' + units[u];
 }
