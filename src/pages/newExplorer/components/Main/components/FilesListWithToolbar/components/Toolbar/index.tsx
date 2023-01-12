@@ -87,7 +87,7 @@ export default function Toolbar({ data }: ToolbarProps) {
   ];
 
   return (
-    <div className="flex items-center justify-between p-2 pt-4">
+    <div className="flex items-center justify-between p-2">
       {/* file actions */}
       <div className="flex gap-4">
         {menuItems.map((button) => (

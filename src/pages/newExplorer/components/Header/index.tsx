@@ -7,8 +7,9 @@ import {
 } from '@heroicons/react/outline';
 import { Switch } from '@headlessui/react';
 import { classNames } from '../../../../utils';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
+import { setAccountSettings } from '../../../../features/account/accountSlice';
 
 const SquareStackIcon = (
   <svg
@@ -30,7 +31,9 @@ const SquareStackIcon = (
 export default function Header() {
   const dispatch = useAppDispatch();
   // ! move to redux
-  const [showPreview, setShowPreview] = useState(false);
+  const { settings } = useAppSelector((state) => state.account);
+
+  const { showPreview } = settings;
 
   const navigationButtons = [
     {
@@ -86,7 +89,9 @@ export default function Header() {
       icon: (
         <Switch
           checked={showPreview}
-          onChange={setShowPreview}
+          onChange={(e) =>
+            dispatch(setAccountSettings({ ...settings, showPreview: e }))
+          }
           className={classNames(
             showPreview ? 'bg-gray-500' : 'bg-gray-200',
             'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ring-0 focus:ring-0'
