@@ -24,6 +24,7 @@ export async function GetFileWithHeaders(type: string, id: string) {
     },
     responseType: 'arraybuffer',
   });
+
   const data = `data:${response.headers['content-type']};base64,${Buffer.from(
     response.data,
     'binary'

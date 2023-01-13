@@ -7,6 +7,7 @@ import {
 } from './explorer.interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import requestForBuffer from '../../app/requestForBuffer';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
 
 // Get folder
@@ -114,16 +115,38 @@ export const useGetSearchFolders = (query: string) =>
   );
 
 // files
-export const useGetExplorerFiles = (folderId?: string) =>
-  useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+export const useGetExplorerFiles = (folderId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
     ['explorer-files', folderId || 'root'],
     () =>
       requestNew({
         url: `explorer-files${folderId ? `/${folderId}` : ''}`,
         method: 'GET',
       }),
-    { select: (res) => res.data.files }
+    {
+      select: (res) => res.data.files,
+      onSuccess: (res) =>
+        res.map((file) =>
+          queryClient.setQueryData(['explorer-file', file.id], file)
+        ),
+    }
   );
+};
+
+export const useGetExplorerFile = (fileId: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFile | undefined>(
+    ['explorer-file', fileId],
+    () => queryClient.getQueryData(['explorer-file', fileId]),
+    {
+      initialData: () => queryClient.getQueryData(['explorer-file', fileId]),
+      enabled: !!fileId,
+    }
+  );
+};
 
 const multipleDeleteFiles = (fileIds: string[]) => {
   const response = requestNew({
@@ -144,4 +167,24 @@ export const useMultipleDeleteFiles = (folderId?: string) => {
       queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
     },
   });
+};
+
+export const useGetFileBuffers = (id: string | null, contentType: string) => {
+  const response = useQuery(
+    ['test', id],
+    () =>
+      requestForBuffer({
+        url: `files/${id}/contents`,
+        method: 'GET',
+      }),
+    { enabled: !!id }
+  );
+
+  return {
+    data: `data:${contentType};base64,${Buffer.from(
+      response.data || '',
+      'binary'
+    ).toString('base64')}`,
+    status: response.status,
+  };
 };
