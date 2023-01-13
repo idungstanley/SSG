@@ -17,12 +17,12 @@ export default function TeamMembersInChat({ chatId }: TeamMembersInChatProps) {
 
   return (
     <Transition.Root show={showMembersInChatSideOver} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <div className="absolute inset-0 top-20" />
+      <Dialog as="div" className="relative z-20" onClose={onClose}>
+        <div className="absolute inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 top-20 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 top-14 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"

@@ -6,7 +6,7 @@ import { useGetChat } from '../../features/chat/chatService';
 import CreateChatSideOver from './components/CreateChatSideOver';
 import Pusher from 'pusher-js';
 import { IMessage } from '../../features/chat/chat.interfaces';
-import { Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import {
   setShowChat,
   setShowCreateChatSideOver,
@@ -101,71 +101,93 @@ export default function Chat() {
 
   return (
     <>
-      <Transition.Root
-        show={showChat}
-        as={Fragment}
-        enter="transform transition ease-in-out duration-500 sm:duration-700"
-        enterFrom="translate-x-full"
-        enterTo="translate-x-0"
-        leave="transform transition ease-in-out duration-500 sm:duration-700"
-        leaveFrom="translate-x-0"
-        leaveTo="translate-x-full"
-      >
-        <div className="p-4 flex flex-col gap-4 w-96 h-full border-l justify-between">
-          {/* header */}
-          <div className="h-full">
-            <div className="flex justify-between items-center mb-3">
-              {selectedItem?.id ? (
-                <button
-                  onClick={() => dispatch(setShowCreateChatSideOver(true))}
-                  type="button"
-                  className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
+      <Transition.Root show={showChat} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={handleHideChat}>
+          <div className="fixed inset-0" />
+
+          <div className="fixed inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="pointer-events-none fixed inset-y-0 right-0 top-14 flex max-w-full pl-10">
+                <Transition.Child
+                  as={Fragment}
+                  enter="transform transition ease-in-out duration-500 sm:duration-700"
+                  enterFrom="translate-x-full"
+                  enterTo="translate-x-0"
+                  leave="transform transition ease-in-out duration-500 sm:duration-700"
+                  leaveFrom="translate-x-0"
+                  leaveTo="translate-x-full"
                 >
-                  Create new chat
-                </button>
-              ) : (
-                <div></div>
-              )}
+                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md h-full">
+                    {/* header */}
+                    <div className="flex h-full p-2 flex-col overflow-y-scroll bg-white shadow-xl">
+                      <div className="flex justify-between items-center mb-3">
+                        {selectedItem?.id ? (
+                          <button
+                            onClick={() =>
+                              dispatch(setShowCreateChatSideOver(true))
+                            }
+                            type="button"
+                            className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
+                          >
+                            Create new chat
+                          </button>
+                        ) : (
+                          <div></div>
+                        )}
 
-              <XIcon
-                onClick={handleHideChat}
-                className="h-6 w-6 cursor-pointer"
-                aria-hidden="true"
-              />
-            </div>
+                        <XIcon
+                          onClick={handleHideChat}
+                          className="h-6 w-6 cursor-pointer"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <ChatsList selectChat={handleClickChat} />
 
-            <ChatsList selectChat={handleClickChat} />
+                      {messages && chat ? (
+                        <div className="flex flex-col justify-between mt-3">
+                          <div className="flex items-center justify-between">
+                            <p className="text-center">
+                              Chat{' '}
+                              <span className="font-semibold text-indigo-600">
+                                {chat.name}
+                              </span>
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                dispatch(setShowMembersInChatSideOver(true))
+                              }
+                              className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Members
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
 
-            {messages && chat ? (
-              <div className="h-2/3 flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-4">
-                  <p className="text-center">
-                    Chat{' '}
-                    <span className="font-semibold text-indigo-600">
-                      {chat.name}
-                    </span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => dispatch(setShowMembersInChatSideOver(true))}
-                    className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Members
-                  </button>
-                </div>
+                      {selectedChatId ? (
+                        <MessagesList messages={allMessages} />
+                      ) : null}
+
+                      {selectedChatId ? (
+                        <CreateMessage chatId={selectedChatId} />
+                      ) : null}
+                    </div>
+
+                    {/* </div> */}
+                  </Dialog.Panel>
+                </Transition.Child>
               </div>
-            ) : null}
+            </div>
           </div>
 
-          {selectedChatId ? <MessagesList messages={allMessages} /> : null}
+          <CreateChatSideOver />
 
-          {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
-        </div>
+          {selectedChatId ? (
+            <TeamMembersInChat chatId={selectedChatId} />
+          ) : null}
+        </Dialog>
       </Transition.Root>
-
-      {selectedChatId ? <TeamMembersInChat chatId={selectedChatId} /> : null}
-
-      <CreateChatSideOver />
     </>
   );
 }

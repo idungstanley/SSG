@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Input from '../../input/Input';
-import { AiOutlineSend } from 'react-icons/ai';
 import DropdownForMention from './DropdownForMention';
 import { useSendMessageToChat } from '../../../features/chat/chatService';
+import { PaperAirplaneIcon } from '@heroicons/react/outline';
 
 interface CreateMessageProps {
   chatId: string | null;
@@ -33,7 +33,10 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
   };
 
   return (
-    <form className="relative flex gap-3 items-center" onSubmit={(e) => sendMessage(e)}>
+    <form
+      className="relative flex gap-3 items-center"
+      onSubmit={(e) => sendMessage(e)}
+    >
       <Input
         name="message"
         value={message}
@@ -45,7 +48,8 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         setSelectedUsers={setSelectedMembers}
       />
       <button type="submit" className="inline-flex items-center cursor-pointer">
-        <AiOutlineSend
+        <PaperAirplaneIcon
+          style={{ rotate: '90deg' }}
           className="h-6 w-6 stroke-current text-indigo-600 inline-block"
           aria-hidden="true"
         />
