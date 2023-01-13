@@ -100,6 +100,8 @@ export const routes = (user: IUser | null) =>
         <Navigate to="/auth/register" />
       ),
     },
+    { path: 'new-explorer', element: <NewExplorerPage /> },
+    { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
     {
       path: '/',
       element: user ? (

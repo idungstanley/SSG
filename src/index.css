@@ -26,7 +26,7 @@ code {
     monospace;
 }
 
-#PDF_PREVIEW canvas{
+#PDF_PREVIEW canvas {
   width: 100% !important;
   height: auto !important;
 }
@@ -35,16 +35,24 @@ code {
 } */
 
 .menu {
-/* use absolute positioning  */
+  /* use absolute positioning  */
   position: absolute;
 }
 
-.react-doc-viewer-wrapper #header-bar{
+.react-doc-viewer-wrapper #header-bar {
   display: none;
 }
 
+.pg-viewer-wrapper .pg-viewer #docx .document-container {
+  padding: 0;
+  width: auto;
+  margin: 0;
+  height: auto;
+  overflow-y: scroll;
+}
+
 .rotateimg180 {
-  -webkit-transform:rotate(180deg);
+  -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
