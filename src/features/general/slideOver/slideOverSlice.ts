@@ -13,6 +13,12 @@ type Watchers = {
   type?: itemType;
 };
 
+type Comments = {
+  show: boolean;
+  id?: string;
+  type?: itemType;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
@@ -24,6 +30,7 @@ interface SideOverState {
   showRenameFileSlideOver: boolean;
   showAddTeamMembersOrGroupsSideOver: boolean;
   watchersSideOver: Watchers;
+  commentsSideOver: Comments;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -37,10 +44,8 @@ const initialState: SideOverState = {
   showAddGroupTeamMemberSlideOver: false,
   showRenameFileSlideOver: false,
   showAddTeamMembersOrGroupsSideOver: false,
-  // showWatchersSideOver: false,
-  // itemTypeSideOver: 'file',
-  // itemId: null,
   watchersSideOver: { show: false },
+  commentsSideOver: { show: false },
   itemActionForSideOver: null,
 };
 
@@ -110,13 +115,9 @@ export const slideOverSlice = createSlice({
     },
     setShowWatchersSideOver: (state, action: PayloadAction<Watchers>) => {
       state.watchersSideOver = action.payload;
-      // if (action.payload.type) {
-      //   state.showWatchersSideOver = action.payload.show;
-      //   state.itemTypeSideOver = action.payload.type;
-      //   state.itemTypeSideOver = action.payload.type;
-      // } else {
-      //   state.showWatchersSideOver = action.payload.show;
-      // }
+    },
+    setShowCommentsSideOver: (state, action: PayloadAction<Comments>) => {
+      state.commentsSideOver = action.payload;
     },
   },
 });
@@ -133,6 +134,7 @@ export const {
   setShowAddTeamMembersOrGroupsSideOver,
   setShowWatchersSideOver,
   setItemActionForSideOver,
+  setShowCommentsSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;
