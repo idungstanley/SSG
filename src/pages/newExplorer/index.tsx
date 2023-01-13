@@ -5,8 +5,10 @@ import BreadcrumbSection from './components/Breadcrumb';
 import Main from './components/Main';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
 import Chat from '../../components/Chat';
+import Watchers from '../../components/Watchers';
 
 export default function NewExplorerPage() {
+
   return (
     <>
       <main className="grid grid-cols-mainLayout w-full h-full">
@@ -29,6 +31,7 @@ export default function NewExplorerPage() {
 
       <CreateOrRenameItemSlideOver />
       <Chat />
+      <Watchers />
     </>
   );
 }
