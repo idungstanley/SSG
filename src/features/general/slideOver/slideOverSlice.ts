@@ -7,6 +7,12 @@ type itemAction = {
   name?: string;
 };
 
+type Watchers = {
+  show: boolean;
+  id?: string;
+  type?: itemType;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
@@ -17,8 +23,7 @@ interface SideOverState {
   showAddGroupTeamMemberSlideOver: boolean;
   showRenameFileSlideOver: boolean;
   showAddTeamMembersOrGroupsSideOver: boolean;
-  showWatchersSideOver: boolean;
-  itemTypeSideOver: itemType;
+  watchersSideOver: Watchers;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -32,8 +37,10 @@ const initialState: SideOverState = {
   showAddGroupTeamMemberSlideOver: false,
   showRenameFileSlideOver: false,
   showAddTeamMembersOrGroupsSideOver: false,
-  showWatchersSideOver: false,
-  itemTypeSideOver: 'file',
+  // showWatchersSideOver: false,
+  // itemTypeSideOver: 'file',
+  // itemId: null,
+  watchersSideOver: { show: false },
   itemActionForSideOver: null,
 };
 
@@ -101,16 +108,15 @@ export const slideOverSlice = createSlice({
     ) => {
       state.showAddTeamMembersOrGroupsSideOver = action.payload;
     },
-    setShowWatchersSideOver: (
-      state,
-      action: PayloadAction<{ type?: itemType; show: boolean }>
-    ) => {
-      if (action.payload.type) {
-        state.showWatchersSideOver = action.payload.show;
-        state.itemTypeSideOver = action.payload.type;
-      } else {
-        state.showWatchersSideOver = action.payload.show;
-      }
+    setShowWatchersSideOver: (state, action: PayloadAction<Watchers>) => {
+      state.watchersSideOver = action.payload;
+      // if (action.payload.type) {
+      //   state.showWatchersSideOver = action.payload.show;
+      //   state.itemTypeSideOver = action.payload.type;
+      //   state.itemTypeSideOver = action.payload.type;
+      // } else {
+      //   state.showWatchersSideOver = action.payload.show;
+      // }
     },
   },
 });

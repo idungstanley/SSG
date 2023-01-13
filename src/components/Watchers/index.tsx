@@ -6,21 +6,18 @@ import { setShowWatchersSideOver } from '../../features/general/slideOver/slideO
 import List from './components/List';
 import AddNew from './components/AddNew';
 
-interface WatchersProps {
-  itemId: string;
-}
-
-export default function Watchers({ itemId }: WatchersProps) {
+export default function Watchers() {
   const dispatch = useAppDispatch();
-  const { showWatchersSideOver, itemTypeSideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { watchersSideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowWatchersSideOver({ show: false }));
 
-  const item = { type: itemTypeSideOver, id: itemId };
+  const item =
+    watchersSideOver?.type && watchersSideOver?.id
+      ? { type: watchersSideOver.type, id: watchersSideOver.id }
+      : null;
 
   return (
-    <Transition.Root show={showWatchersSideOver} as={Fragment}>
+    <Transition.Root show={watchersSideOver.show} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
         <div className="absolute inset-0 top-20" />
 
@@ -46,7 +43,7 @@ export default function Watchers({ itemId }: WatchersProps) {
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none ring-0 focus:ring-0"
                             onClick={onClose}
                           >
                             <span className="sr-only">Close panel</span>
@@ -56,8 +53,12 @@ export default function Watchers({ itemId }: WatchersProps) {
                       </div>
                     </div>
                     <div className="relative mt-6 flex flex-col gap-6 px-4 sm:px-6 h-full">
-                      <AddNew item={item} />
-                      <List item={item} />
+                      {item ? (
+                        <>
+                          <AddNew item={item} />
+                          <List item={item} />
+                        </>
+                      ) : null}
                     </div>
                   </div>
                 </Dialog.Panel>
