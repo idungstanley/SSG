@@ -59,7 +59,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
         ))}
       </ul>
     ) : (
-      <FullScreenMessage title="No messages yes." description="Create one." />
+      <FullScreenMessage title="No comments yet." description="Create one." />
     )
   ) : (
     <FullScreenMessage

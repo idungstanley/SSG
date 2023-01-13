@@ -7,6 +7,7 @@ import {
   DownloadIcon,
   ChatIcon,
   EyeIcon,
+  ChatAlt2Icon,
 } from '@heroicons/react/outline';
 import {
   useAppDispatch,
@@ -19,7 +20,10 @@ import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
-import { setShowWatchersSideOver } from '../../../../../../../../features/general/slideOver/slideOverSlice';
+import {
+  setShowCommentsSideOver,
+  setShowWatchersSideOver,
+} from '../../../../../../../../features/general/slideOver/slideOverSlice';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -56,6 +60,15 @@ export default function Toolbar({ data }: ToolbarProps) {
   const handleShowWatchers = () =>
     dispatch(
       setShowWatchersSideOver({
+        show: true,
+        type: 'file',
+        id: selectedFileId || '',
+      })
+    );
+
+  const handleShowComments = () =>
+    dispatch(
+      setShowCommentsSideOver({
         show: true,
         type: 'file',
         id: selectedFileId || '',
@@ -109,11 +122,17 @@ export default function Toolbar({ data }: ToolbarProps) {
       disabled: !selectedFileId,
     },
     {
+      label: 'Comments',
+      onClick: handleShowComments,
+      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
+      disabled: !selectedFileId,
+    },
+    {
       label: 'Chat',
       onClick: () =>
         dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
       icon: (
-        <ChatIcon
+        <ChatAlt2Icon
           className="mr-2.5 h-5 w-5 stroke-current"
           aria-hidden="true"
         />

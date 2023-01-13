@@ -8,6 +8,7 @@ import {
   PencilIcon,
   DownloadIcon,
   ChatIcon,
+  ChatAlt2Icon,
   EyeIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
@@ -15,6 +16,7 @@ import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
+  setShowCommentsSideOver,
   setShowWatchersSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
@@ -66,6 +68,9 @@ export default function FolderItem({
   const handleShowWatchers = () =>
     dispatch(setShowWatchersSideOver({ show: true, type: 'folder', id }));
 
+  const handleShowComments = () =>
+    dispatch(setShowCommentsSideOver({ show: true, type: 'folder', id }));
+
   const configForDropdown = [
     {
       label: 'Download',
@@ -89,9 +94,14 @@ export default function FolderItem({
       icon: <EyeIcon className="h-5 w-5" aria-hidden="true" />,
     },
     {
+      label: 'Comments',
+      onClick: handleShowComments,
+      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
       label: 'Chat',
       onClick: () => dispatch(setSelectedItem({ id, type: 'folder' })),
-      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <ChatAlt2Icon className="h-5 w-5" aria-hidden="true" />,
     },
   ];
 
