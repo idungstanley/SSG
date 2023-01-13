@@ -9,12 +9,15 @@ import Search from '../Search';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 import { useDebounce } from '../../../../hooks';
 import { IExplorerFolder } from '../../../../features/explorer/explorer.interfaces';
-import { setSelectedFolderId } from '../../../../features/explorer/explorerSlice';
+import {
+  setSelectedFileId,
+  setSelectedFolderId,
+} from '../../../../features/explorer/explorerSlice';
 
 const stringifyFolders = (
   query: string,
@@ -39,6 +42,8 @@ export default function Sidebar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
 
+  const { selectedFileId } = useAppSelector((state) => state.explorer);
+
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
   const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
@@ -52,6 +57,10 @@ export default function Sidebar() {
 
   useEffect(() => {
     dispatch(setSelectedFolderId(folderId || null));
+
+    if (selectedFileId) {
+      dispatch(setSelectedFileId(null));
+    }
   }, [folderId]);
 
   const folders = stringifyFolders(

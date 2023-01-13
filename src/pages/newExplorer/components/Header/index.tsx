@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ArrowCircleRightIcon,
   ArrowCircleLeftIcon,
@@ -30,7 +30,7 @@ const SquareStackIcon = (
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  // ! move to redux
+
   const { settings } = useAppSelector((state) => state.account);
 
   const { showPreview } = settings;
