@@ -7,6 +7,7 @@ import {
   PlusIcon,
   PencilIcon,
   DownloadIcon,
+  ChatIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -16,6 +17,7 @@ import { useDeleteExplorerItem } from '../../../../../features/explorer/explorer
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
+import { setSelectedItem } from '../../../../../features/chat/chatSlice';
 
 interface FolderItemProps {
   id: string;
@@ -73,6 +75,11 @@ export default function FolderItem({
       label: 'Delete',
       onClick: handleDelete,
       icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Chat',
+      onClick: () => dispatch(setSelectedItem({ id, type: 'folder' })),
+      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
     },
   ];
 

@@ -4,6 +4,7 @@ import Header from './components/Header';
 import BreadcrumbSection from './components/Breadcrumb';
 import Main from './components/Main';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
+import Chat from '../../components/Chat';
 
 export default function NewExplorerPage() {
   return (
@@ -27,6 +28,7 @@ export default function NewExplorerPage() {
       </main>
 
       <CreateOrRenameItemSlideOver />
+      <Chat />
     </>
   );
 }

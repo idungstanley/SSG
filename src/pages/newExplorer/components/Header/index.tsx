@@ -112,7 +112,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-2 border-b">
+    <header className="flex items-center justify-between p-2 border-b h-14">
       {/* move between files */}
       <div className="flex items-center">
         {navigationButtons.map((button) => (

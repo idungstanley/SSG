@@ -5,6 +5,7 @@ import {
   ClipboardCopyIcon,
   PrinterIcon,
   DownloadIcon,
+  ChatIcon,
 } from '@heroicons/react/outline';
 import {
   useAppDispatch,
@@ -15,6 +16,8 @@ import Tooltip from '../../../../../../../../components/Tooltip';
 import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
+import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice';
+import { DownloadFile } from '../../../../../../../../app/helpers';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -44,12 +47,16 @@ export default function Toolbar({ data }: ToolbarProps) {
     dispatch(resetSelectedFiles());
   };
 
+  const handleDownload = async () => {
+    DownloadFile('file', selectedFileId || '', selectedFileId || '');
+  };
+
   const menuItems = [
     {
       icon: (
         <DownloadIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
-      onClick: () => ({}),
+      onClick: handleDownload,
       label: 'Download',
       disabled: selectedIds.length === 0,
     },
@@ -82,6 +89,15 @@ export default function Toolbar({ data }: ToolbarProps) {
       ),
       onClick: () => ({}),
       label: 'Print',
+      disabled: !selectedFileId,
+    },
+    {
+      label: 'Chat',
+      onClick: () =>
+        dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
+      icon: (
+        <ChatIcon className="mr-2.5 h-5 w-5 stroke-current" aria-hidden="true" />
+      ),
       disabled: !selectedFileId,
     },
   ];
