@@ -23,7 +23,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
   return (
     <div
       ref={ref}
-      className="flex flex-col h-full border rounded-xl overflow-y-scroll"
+      className="flex flex-col h-full border rounded-xl overflow-y-scroll my-3"
     >
       {sortedByTime.map((message) => (
         <div className="flex gap-3 items-center px-2 py-1" key={message.id}>
@@ -37,26 +37,23 @@ export default function MessagesList({ messages }: MessagesListProps) {
                 <p>{message.team_member.user.name}</p>
                 <DropdownMenuForMessage />
               </div>
+              <p className="text-black">
+                {message.message.replaceAll(mentionTeamMemberInMessageReg, '')}
+              </p>
               <div className="flex items-center justify-between">
-                <p className="text-black">
-                  {message.message.replaceAll(
-                    mentionTeamMemberInMessageReg,
-                    ''
-                  )}
-                </p>
+                <div className="flex gap-2">
+                  {message.mention_users?.map((user) => (
+                    <div
+                      key={user.id}
+                      className="px-3 py-1 text-xs bg-indigo-100 border border-primary-400 rounded-2xl"
+                    >
+                      {user.name}
+                    </div>
+                  ))}
+                </div>
                 <p className="text-sm text-gray-500">
                   {moment(message.created_at).format('HH:mm')}
                 </p>
-              </div>
-              <div className="flex gap-2">
-                {message.mention_users?.map((user) => (
-                  <div
-                    key={user.id}
-                    className="px-3 py-1 text-xs bg-indigo-100 border border-primary-400 rounded-2xl"
-                  >
-                    {user.name}
-                  </div>
-                ))}
               </div>
             </div>
           </div>
