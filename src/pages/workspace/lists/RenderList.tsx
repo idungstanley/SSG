@@ -89,7 +89,7 @@ function RenderList() {
     <div>
       <section id="nav">
         <ListNav
-          navName="ListName"
+          navName={listDetailsData?.data?.list?.name}
           viewsList="List"
           viewsList2="Board"
           changeViews="View"

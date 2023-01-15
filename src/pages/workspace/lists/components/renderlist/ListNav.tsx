@@ -4,7 +4,7 @@ import { ViewListIcon } from '@heroicons/react/outline';
 import { Button } from '../../../../../components';
 
 interface ListNavProps {
-  navName?: string;
+  navName?: string | null;
   viewsList?: string;
   viewsList2?: string;
   changeViews?: string;

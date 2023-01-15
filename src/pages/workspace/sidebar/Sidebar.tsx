@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HiChevronDoubleLeft } from 'react-icons/hi';
+import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi';
 import {
   setShowExtendedBar,
   setShowModal,
@@ -8,6 +8,7 @@ import {
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
@@ -30,6 +31,7 @@ export default function Sidebar() {
   } = useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [scrollTop, setScrollTop] = useState<string>('');
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -62,12 +64,22 @@ export default function Sidebar() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
+  const handleScroll = (event) => {
+    setScrollTop(event.currentTarget.scrollTop);
+  };
+  if (sidebarWidth < 240) {
+    dispatch(setShowSidebar(false));
+  }
+  const handleShowSidebar = () => {
+    dispatch(setSidebarWidth(300));
+    dispatch(setShowSidebar(true));
+  };
 
   return (
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="md:fixed relative md:inset-y-0 z-10 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
+        className="md:fixed relative transition ease-in-out duration-300 delay-700 md:inset-y-0 z-10 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
         ref={sidebarRef}
         style={
           showSidebar
@@ -109,6 +121,18 @@ export default function Sidebar() {
                     : 'flex-col space-y-1 justify-center'
                 }`}
               >
+                {scrollTop > '108' ? (
+                  <span className="relative h-4 w-4 mr-0.5 cursor-pointer">
+                    <p
+                      className="flex items-center justify-center px-0.5 h-2.5 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
+                      style={{ fontSize: '7px', borderRadius: '50px' }}
+                    >
+                      24
+                    </p>
+                    <img src={notificationIcon} alt="a" className="h-4 w-4" />
+                  </span>
+                ) : null}
+
                 <img className="w-auto h-6" src={Setting} alt="Workflow" />
                 <AvatarWithInitials
                   initials="SS"
@@ -117,16 +141,25 @@ export default function Sidebar() {
                   backgroundColour="blue"
                 />
               </div>
-              <HiChevronDoubleLeft
-                color="blue"
-                className={`cursor-pointer mt-1 ${
-                  showSidebar ? 'ml-1' : 'ml-0 rotateimg180'
-                }`}
-                onClick={() => dispatch(setShowSidebar('CHANGE'))}
-              />
+              {showSidebar ? (
+                <HiChevronDoubleLeft
+                  color="blue"
+                  className="cursor-pointer mt-1 ml-1"
+                  onClick={() => dispatch(setShowSidebar(false))}
+                />
+              ) : (
+                <HiChevronDoubleRight
+                  color="blue"
+                  className="cursor-pointer mt-1 ml-0"
+                  onClick={() => handleShowSidebar()}
+                />
+              )}
             </div>
           </div>
-          <div className="overflow-y-auto overflow-x-hidden relative">
+          <div
+            className="overflow-y-auto overflow-x-hidden relative"
+            onScroll={(e) => handleScroll(e)}
+          >
             <Search />
             <NavigationItems />
             <Places />

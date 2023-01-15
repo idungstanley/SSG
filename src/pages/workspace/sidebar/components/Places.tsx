@@ -18,6 +18,10 @@ import inboxIcon from '../../../../assets/branding/inbox.png';
 import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
+import routePlanner from '../../../../assets/branding/gis_route.png';
+import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
+import formsIcon from '../../../../assets/branding/forms-icon.png';
+import commerceIcon from '../../../../assets/branding/commerce.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
@@ -68,6 +72,30 @@ const secondaryNavigation = [
     place: <Directory />,
     source: trackerIcon,
   },
+  {
+    name: 'Route Planner',
+    id: 8,
+    place: <Directory />,
+    source: routePlanner,
+  },
+  {
+    name: 'Also HR',
+    id: 9,
+    place: <Directory />,
+    source: alsoHRIcon,
+  },
+  {
+    name: 'Commerce',
+    id: 10,
+    place: <Directory />,
+    source: commerceIcon,
+  },
+  {
+    name: 'Forms',
+    id: 11,
+    place: <Directory />,
+    source: formsIcon,
+  },
 ];
 
 function Places() {
@@ -92,15 +120,12 @@ function Places() {
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <li
               key={item.id}
-              className={`relative flex pl-4  pr-2 items-center hover:bg-gray-100 ${
-                activePlaceId === item.id && 'ml-0 bg-gray-200'
-              } text-gray-600 cursor-pointer h-14 fixed top-0`}
+              className={`flex pl-4 z-20 pr-2 items-center hover:bg-gray-100 ${
+                activePlaceId === item.id && 'ml-0 bg-gray-200 sticky top-0'
+              } text-gray-600 cursor-pointer h-14 relative top-0`}
               onMouseEnter={() => handleMouseOver(index)}
               onMouseLeave={handleMouseOut}
             >
-              {activePlaceId === item.id && !showHub && (
-                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500" />
-              )}
               <button
                 className={`${
                   searchIsActive && activePlaceId === item.id
@@ -125,7 +150,9 @@ function Places() {
                     />
                   )}
                   <span
-                    className={`font-semibold leading-3 uppercase truncate tracking-wider ${
+                    className={`font-semibold ${
+                      showSidebar ? 'block' : 'hidden'
+                    } leading-3 uppercase truncate tracking-wider ${
                       activePlaceId === item.id && 'text-black font-bold'
                     }`}
                     style={{ fontSize: '11px' }}
@@ -179,19 +206,21 @@ function Places() {
                     )}
                   </span>
                 )}
-                {activePlaceId === item.id ? (
-                  <FiChevronDown
-                    className="flex-shrink-0 w-5 h-5"
-                    aria-hidden="true"
-                    onClick={() => handleClick(item.id)}
-                  />
-                ) : (
-                  <FiChevronRight
-                    className="flex-shrink-0 w-5 h-5"
-                    aria-hidden="true"
-                    onClick={() => handleClick(item.id)}
-                  />
-                )}
+                <span className={`${showSidebar ? 'block' : 'hidden'}`}>
+                  {activePlaceId === item.id ? (
+                    <FiChevronDown
+                      className="flex-shrink-0 w-5 h-5"
+                      aria-hidden="true"
+                      onClick={() => handleClick(item.id)}
+                    />
+                  ) : (
+                    <FiChevronRight
+                      className="flex-shrink-0 w-5 h-5"
+                      aria-hidden="true"
+                      onClick={() => handleClick(item.id)}
+                    />
+                  )}
+                </span>
               </div>
             </li>
             {showSidebar && activePlaceId === item.id ? (

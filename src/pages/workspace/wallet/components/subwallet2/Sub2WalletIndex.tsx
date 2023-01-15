@@ -9,17 +9,22 @@ import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspac
 import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { useAppSelector } from '../../../../../app/hooks';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { useDispatch } from 'react-redux';
 
 interface Sub2WalletIndexProps {
-  wallet2ParentId?: string;
+  wallet2ParentId?: string | null;
+  padding?: string;
 }
 
-function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
+function Sub2WalletIndex({ wallet2ParentId, padding }: Sub2WalletIndexProps) {
+  const dispatch = useDispatch();
   const [walletId, setGetWalletId] = useState('');
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [getListId, setGetListId] = useState('');
   const [isHovering, setIsHovering] = useState<number>(-1);
-
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const { data: subwallet } = useQuery<{
     data: { wallets: IWallet[]; lists: IList[] };
   }>({
@@ -46,8 +51,9 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
     navigate(`/workspace/list/${id}`);
   };
 
-  const handleLocation = (id: string) => {
+  const handleLocation = (id: string, type = 'sub2wallet') => {
     navigate(`/workspace/wallet/${id}`);
+    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 
   return (
@@ -55,10 +61,15 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
       {subwallet?.data?.wallets.map((wallet, i) => (
         <div key={wallet.id}>
           <section
-            className="flex items-center justify-between space-x-1 text-sm h-8 pl-14 py-1.5 hover:bg-gray-100"
+            className={`flex relative items-center justify-between space-x-1 text-sm h-8 ${padding} py-1.5 hover:bg-gray-100 ${
+              wallet.id === activeItemId && 'bg-green-50 text-green-500'
+            }`}
             onMouseEnter={() => handleMouseOver(i)}
             onMouseLeave={handleMouseOut}
           >
+            {wallet.id === activeItemId && (
+              <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+            )}
             <div className="flex items-center">
               <div onClick={() => handleShowSubWallet(wallet.id)}>
                 {showSubWallet3 === wallet.id ? (
@@ -133,4 +144,7 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
   );
 }
 
+Sub2WalletIndex.defaultProps = {
+  padding: 'pl-14',
+};
 export default Sub2WalletIndex;

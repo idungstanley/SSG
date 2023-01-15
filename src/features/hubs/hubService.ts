@@ -1,6 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
+import { getWallet } from '../wallet/walletSlice';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
+import { getHub } from './hubSlice';
 
 export const createHubService = (data: {
   name: string;
@@ -23,6 +26,7 @@ export const createHubService = (data: {
 
 // get all hubs
 export const useGetHubList = () => {
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   return useQuery<IResponseGetHubs>(
@@ -38,22 +42,38 @@ export const useGetHubList = () => {
       ),
     {
       onSuccess: (data) => {
-        data.data.hubs.map((hub) =>
-          queryClient.setQueryData(['hub', hub.id], hub)
-        );
+        const hubData = data.data.hubs.map((hub) => {
+          queryClient.setQueryData(['hub', hub.id], hub);
+          return { ...hub, isOpen: false };
+        });
+        dispatch(getHub(hubData));
       },
     }
   );
 };
 
-export const useGetHub = (hubId: string | null) =>
-  useQuery<IHubReq>([`hub-${hubId}`], () =>
-    requestNew(
-      {
-        url: `hubs/${hubId}`,
-        method: 'GET',
+export const useGetHub = (hubId: string | null) => {
+  const dispatch = useDispatch();
+  return useQuery<IHubReq>(
+    [`hub-${hubId}`],
+    () =>
+      requestNew(
+        {
+          url: `hubs/${hubId}`,
+          method: 'GET',
+        },
+        false,
+        true
+      ),
+    {
+      enabled: hubId != null,
+      onSuccess: (data) => {
+        const WalletData = data.data.wallets.map((hub) => ({
+          ...hub,
+          isOpen: false,
+        }));
+        dispatch(getWallet(WalletData));
       },
-      false,
-      true
-    )
+    }
   );
+};

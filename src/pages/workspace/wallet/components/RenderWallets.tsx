@@ -12,10 +12,12 @@ import {
   UserAddOutlined,
 } from '@ant-design/icons';
 import { getListsListService } from '../../../../features/list/listService';
-import ListNav from '../../lists/components/renderlist/ListNav';
+import ListNav from '../../Lists/components/renderlist/ListNav';
+import { useAppSelector } from '../../../../app/hooks';
 
 function RenderWallets() {
   const { walletId } = useParams();
+  const { currentWalletName } = useAppSelector((state) => state.workspace);
 
   const { data: WalletListData } = useQuery({
     queryKey: ['walletdata', walletId],
@@ -26,7 +28,7 @@ function RenderWallets() {
     <div className="overflow-auto h-screen">
       <section id="nav">
         <ListNav
-          navName="ListName"
+          navName={currentWalletName}
           viewsList="List"
           viewsList2="Board"
           changeViews="View"

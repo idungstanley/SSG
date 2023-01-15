@@ -8,8 +8,10 @@ function WorkSpaceSelection() {
   return (
     <>
       {showSidebar ? (
-        <div className="rounded border border-gray-400 p-0.5 w-8/12 mt-1 cursor-pointer">
-          <div className="flex justify-between items-center space-x-20">
+        <div className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
+        style={{width: 'calc(100% - 120px)'}}
+        >
+          <div className="flex justify-between items-center">
             <div className="flex justify-between items-center space-x-1">
             <AvatarWithInitials
               initials="EG"

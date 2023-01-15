@@ -3,7 +3,6 @@ import { Menu, Transition } from '@headlessui/react';
 import {
   FolderAddOutlined,
   ImportOutlined,
-  PlusOutlined,
   WalletOutlined,
 } from '@ant-design/icons';
 import {
@@ -13,7 +12,7 @@ import {
 } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
-import ListModal from '../../lists/components/ListModal';
+import ListModal from '../../Lists/components/ListModal';
 import { classNames } from '../../../../utils';
 import { BsPlusLg } from 'react-icons/bs';
 
@@ -24,7 +23,6 @@ interface PlusDropDownProps {
 function PlusDropDown({ walletId }: PlusDropDownProps) {
   const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
   const [showListModal, setShowListModal] = useState<boolean>(false);
-
   return (
     <>
       <WalletModal

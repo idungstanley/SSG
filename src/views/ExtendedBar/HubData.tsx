@@ -1,10 +1,10 @@
 import React from 'react';
-import WalletIndex from '../../Index/WalletIndex';
-import ListIndex from '../../Index/ListIndex';
-import InboxIndex from '../../Index/InboxIndex';
-import { useAppSelector } from '../../../app/hooks';
+import WalletIndex from '../../components/Index/WalletIndex';
+import ListIndex from '../../components/Index/ListIndex';
+import InboxIndex from '../../components/Index/InboxIndex';
+import { useAppSelector } from '../../app/hooks';
 
-export default function DropdownList() {
+export default function HubData() {
   const { currentItemId, currentItemType, showExtendedBar } = useAppSelector(
     (state) => state.workspace
   );
@@ -12,9 +12,7 @@ export default function DropdownList() {
   return currentItemType === 'hub' ? (
     <>
       <WalletIndex showHubList={!false} getCurrentHubId={currentItemId} />
-      {!showExtendedBar && (
         <ListIndex showHubList={!false} getCurrentHubId={currentItemId} />
-      )}
     </>
   ) : (
     <InboxIndex />

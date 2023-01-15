@@ -15,6 +15,11 @@ interface workspaceState {
   showModal: boolean;
   searchIsActive: boolean;
   isExtSearchActive: boolean;
+  activeItemId: string | null;
+  activeItemType: string | null;
+  currentWalletId: string | null;
+  currentSubWalletId: string | null;
+  currentWalletName: string | null;
 }
 
 const initialState: workspaceState = {
@@ -32,6 +37,11 @@ const initialState: workspaceState = {
   searchIsActive: false,
   extendedSidebarWidth: 240,
   isExtSearchActive: false,
+  activeItemId: null,
+  activeItemType: null,
+  currentSubWalletId: null,
+  currentWalletId: null,
+  currentWalletName: null,
 };
 
 export const wsSlice = createSlice({
@@ -47,6 +57,10 @@ export const wsSlice = createSlice({
           ...state,
           showSidebar: !state.showSidebar,
         };
+      } else if (action.payload === true) {
+        state.showSidebar = action.payload;
+      } else if (action.payload === false) {
+        state.showSidebar = action.payload;
       }
       state.showSidebar;
     },
@@ -97,6 +111,19 @@ export const wsSlice = createSlice({
       state.currentItemId = action.payload.currentItemId;
       state.currentItemType = action.payload.currentItemType;
     },
+    setActiveItem(state, action) {
+      state.activeItemId = action.payload.activeItemId;
+      state.activeItemType = action.payload.activeItemType;
+    },
+    setCurrentWalletId(state, action) {
+      state.currentWalletId = action.payload;
+    },
+    setCurrentWalletName(state, action) {
+      state.currentWalletName = action.payload;
+    },
+    setCurrenSubtWalletId(state, action) {
+      state.currentSubWalletId = action.payload;
+    },
     resetCurrentItem(state) {
       state.currentItemId = null;
       state.currentItemType = null;
@@ -121,6 +148,10 @@ export const {
   setSearchIsActive,
   setExtendedSidebarWidth,
   setIsExtSearchActive,
+  setActiveItem,
+  setCurrentWalletId,
+  setCurrenSubtWalletId,
+  setCurrentWalletName,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
