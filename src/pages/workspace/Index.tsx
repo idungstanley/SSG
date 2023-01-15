@@ -19,21 +19,24 @@ function Index() {
       return { paddingLeft: `${54}px` };
     }
   };
-
   return (
-    <div className="flex  flex-row">
+    <div className="flex flex-row">
       <UploadModal />
       <Sidebar />
-      <div className="flex flex-1 flex-row" style={paddingStyles()}>
+      <div className="flex flex-row w-full" style={paddingStyles()}>
         {showExtendedBar && <ExpandedNav />}
-        <Header />
-        <main className="flex-1">
-          <div
-            className={`py-6 mx-auto px-4 sm:px-6 ${showSidebar ? 'px-8' : ''}`}
-          >
-            <Outlet />
-          </div>
-        </main>
+        <div className="grow flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <div
+              className={`py-6 mx-auto px-4 sm:px-6 ${
+                showSidebar ? 'px-8' : ''
+              }`}
+            >
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

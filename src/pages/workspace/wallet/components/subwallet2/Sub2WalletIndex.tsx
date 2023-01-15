@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
-import PlusDropDown from '../../../hubs/components/PlusDropDown';
+// import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
@@ -98,7 +98,7 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
               onClick={() => setGetWalletId(wallet.id)}
             >
               <MenuDropdown />
-              <PlusDropDown walletId={walletId} />
+              {/* <PlusDropDown walletId={walletId} /> */}
             </div>
           </section>
         </div>

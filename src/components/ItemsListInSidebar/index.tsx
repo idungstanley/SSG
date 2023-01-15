@@ -9,13 +9,18 @@ import {
   setShowHub,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import MenuDropdown from '../Dropdown/MenuDropdown';
 import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
-import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-import { getCurrHubId } from '../../features/hubs/hubSlice';
+import {
+  getCurrHubId,
+  setshowMenuDropdown,
+  resetCurrHubId,
+} from '../../features/hubs/hubSlice';
+import CustomStatusDropdown from '../../pages/workspace/tasks/dropdown/CustomStatusDropdown';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -31,6 +36,7 @@ export default function ItemsListInSidebar({
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, currHubId } = useAppSelector((state) => state.hub);
   const handleMouseOver = (i: number) => {
     setIsHovering(i);
   };
@@ -81,23 +87,14 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleDropDownClick = (id: string) => {
-    const isMatch = id === currentItemId;
-    if (isMatch) {
-      dispatch(setShowHub(false));
-      // if (!currentItemId) {
-      //   dispatch(
-      //     setCurrentItem({
-      //       currentItemId: id,
-      //       currentItemType: type,
-      //     })
-      //   );
-      // } else {
-      //   dispatch(resetCurrentItem());
-      // }
-    } else {
-      dispatch(getCurrHubId(id));
-    }
+  const handleHubSettings = (id) => {
+    dispatch(getCurrHubId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'hubs',
+      })
+    );
   };
 
   return status === 'success' ? (
@@ -161,16 +158,16 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {
-              <div
-                className="flex items-center space-x-1 pr-1"
-                onClick={() => handleDropDownClick(i.id)}
-              >
-                <MenuDropdown />
-                <PlusDropDown walletId={i.id} />
+              <div className="flex items-center space-x-1 pr-1">
+                <AiOutlineEllipsis onClick={() => handleHubSettings(i.id)} />
+                <AiOutlinePlus />
+                {/*  <MenuDropdown /> }
+                {/* <PlusDropDown walletId={i.id} /> */}
               </div>
             }
           </div>
           {currentItemId === i.id ? <DropdownList /> : null}
+          {showMenuDropdown === i.id ? <MenuDropdown /> : null}
         </li>
       ))}
     </ul>

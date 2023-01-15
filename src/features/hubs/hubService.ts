@@ -1,9 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
+import { setArchiveHub, setDelHub } from './hubSlice';
+import { useDispatch } from 'react-redux';
 
 export const createHubService = (data: {
   name: string;
+  currHubId?: string;
   currentWorkspaceId?: string;
 }) => {
   const response = requestNew(
@@ -13,6 +16,7 @@ export const createHubService = (data: {
       data: {
         name: data.name,
         current_workspace_id: data.currentWorkspaceId,
+        parent_id: data.currHubId,
       },
     },
     false,
@@ -22,16 +26,19 @@ export const createHubService = (data: {
 };
 
 // get all hubs
-export const useGetHubList = () => {
+export const useGetHubList = ({ query }) => {
   const queryClient = useQueryClient();
 
   return useQuery<IResponseGetHubs>(
-    ['hubs'],
+    ['hubs', { isArchived: query ? 1 : 0 }],
     () =>
       requestNew(
         {
           url: 'hubs',
           method: 'GET',
+          params: {
+            is_archived: query ? 1 : 0,
+          },
         },
         false,
         true
@@ -46,8 +53,56 @@ export const useGetHubList = () => {
   );
 };
 
+//get subhub
+export const useGetSubHub = ({ parentId }) => {
+  const queryClient = useQueryClient();
+  console.log(parentId);
+  return useQuery<IResponseGetHubs>(
+    ['hubs', { parentId: parentId }],
+    () =>
+      requestNew(
+        {
+          url: `hubs/${parentId}`,
+          method: 'GET',
+        },
+        false,
+        true
+      ),
+    {
+      enabled: parentId != null,
+      // onSuccess: (data) => {
+      //   data.data.hubs.map((hub) =>
+      //     queryClient.setQueryData(['hub', hub.id], hub)
+      //   );
+      // },
+    }
+  );
+};
+
+//edit a hub
+export const useEditHubService = (data: {
+  name: string;
+  currentWorkspaceId?: string;
+  currHubId?: string | null;
+}) => {
+  const response = requestNew(
+    {
+      url: `hubs/${data.currHubId}`,
+      method: 'PUT',
+      params: {
+        name: data.name,
+        current_workspace_id: data.currentWorkspaceId,
+      },
+    },
+    false,
+    true
+  );
+  return response;
+};
+
 //Delete a Hub
 export const UseDeleteHubService = (hub) => {
+  const dispatch = useDispatch();
   const hubid = hub.query;
   const queryClient = useQueryClient();
   return useQuery(
@@ -64,7 +119,38 @@ export const UseDeleteHubService = (hub) => {
     },
     {
       initialData: queryClient.getQueryData(['hubs', hubid]),
-      enabled: hub.delHub
+      enabled: hub.delHub,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['hubs']);
+        dispatch(setDelHub(false));
+      },
+    }
+  );
+};
+
+//archive hub
+export const ArchiveHubService = (hub) => {
+  const hubid = hub.query;
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  return useQuery(
+    ['hubs', hubid],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/hubs/${hubid}/archive`,
+          method: 'POST',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['hubs', hubid]),
+      enabled: hub.archiveHub,
+      onSuccess: () => {
+        dispatch(setArchiveHub(false));
+      },
     }
   );
 };
@@ -80,3 +166,29 @@ export const useGetHub = (hubId: string | null) =>
       true
     )
   );
+
+// export const useGetSharedFilesAndFolders = () => {
+// const queryClient = useQueryClient();
+
+// const folders = useQuery<ISharedFolders>(
+//   ['shared_folders', 'root-folder'],
+//   async () =>
+//     requestNew({
+//       url: 'folders/shared',
+//       method: 'GET',
+//     }),
+//   {
+//     onSuccess: (data) => {
+//       if (data.data.current_folder != null) {
+//         queryClient.setQueryData(
+//           ['shared_folder', data.data.current_folder.id],
+//           data.data.current_folder
+//         );
+//       }
+
+//       data.data.folders.map((folder) =>
+//         queryClient.setQueryData(['shared_folder', folder.id], folder)
+//       );
+//     },
+//   }
+// );

@@ -4,7 +4,7 @@ import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
-import PlusDropDown from '../../../hubs/components/PlusDropDown';
+// import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
@@ -98,8 +98,8 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
               }`}
               onClick={() => setGetWalletId(wallet.id)}
             >
-              <MenuDropdown />
-              <PlusDropDown walletId={walletId} />
+              {/* <MenuDropdown /> */}
+              {/* <PlusDropDown walletId={walletId} /> */}
             </div>
           </section>
           <div>

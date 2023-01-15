@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
-import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
+// import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
 import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../app/hooks';
-import { IHub } from '../features/hubs/hubs.interfaces';
-import { IInbox } from '../features/inbox/inbox.interfaces';
 import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
-import { resetCurrentItem, setCurrentItem, setShowHub } from '../features/workspace/workspaceSlice';
+import {
+  resetCurrentItem,
+  setCurrentItem,
+  setShowHub,
+} from '../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../components';
 import MenuDropdown from '../components/Dropdown/DropdownForWorkspace';
 import { Spinner } from '../common';
 import { useGetHubList } from '../features/hubs/hubService';
 import { getHub } from '../features/hubs/hubSlice';
 
-interface ItemsListInSidebarProps {
-  status: string;
-  type: string;
-  items?: IInbox[] | IHub[];
-}
+// interface ItemsListInSidebarProps {
+//   status: string;
+//   type: string;
+//   items?: IInbox[] | IHub[];
+// }
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, showHub } = useAppSelector((state) => state.workspace);
-  const { data, status } = useGetHubList();
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { data, status } = useGetHubList({ query: null });
   const items = data?.data.hubs;
   if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
@@ -80,7 +81,7 @@ export default function ActiveHub() {
   };
 
   return status === 'success' ? (
-    <ul className="w-full ml-1">
+    <ul className="w-full">
       {items?.map(
         (i: { id: string; name: string }, index) =>
           i.id === currentItemId && (
@@ -91,6 +92,7 @@ export default function ActiveHub() {
                     ? 'bg-green-50 text-green-500'
                     : 'text-black-500'
                 }`}
+                style={{ height: '28px' }}
                 onMouseEnter={() => handleMouseOver(index)}
                 onMouseLeave={handleMouseOut}
               >
@@ -132,11 +134,11 @@ export default function ActiveHub() {
                   }`}
                 >
                   <MenuDropdown />
-                  <PlusDropDown walletId={i.id} />
+                  {/* <PlusDropDown walletId={i.id} /> */}
                 </div>
               </div>
-
-              {currentItemId === i.id ? <DropdownList /> : null}
+              <hr />
+              <div>{currentItemId === i.id ? <DropdownList /> : null}</div>
             </li>
           )
       )}

@@ -2,30 +2,34 @@ import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import { Button, Input } from '../../../../components';
-import { createHubService } from '../../../../features/hubs/hubService';
+import { useEditHubService } from '../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../app/hooks';
-import {
-  setshowMenuDropdown,
-  setSubDropdownMenu,
-} from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
+import {
+  getCurrHubId,
+  setshowMenuDropdown,
+} from '../../../../features/hubs/hubSlice';
 
 interface ModalProps {
-  isVisible: boolean;
-  onCloseHubModal: () => void;
+  isEditVisible: boolean;
+  onCloseEditHubModal: () => void;
 }
-
-function Modal({ isVisible, onCloseHubModal }: ModalProps) {
+export default function EditHubModal({
+  isEditVisible,
+  onCloseEditHubModal,
+}: ModalProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currHubId } = useAppSelector((state) => state.hub);
-
-  const createHub = useMutation(createHubService, {
+  const createHub = useMutation(useEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      onCloseHubModal();
-      dispatch(setSubDropdownMenu(false));
-      dispatch(setshowMenuDropdown(null));
+      onCloseEditHubModal();
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: null,
+        })
+      );
     },
   });
 
@@ -55,16 +59,24 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
       currHubId,
     });
 
-    onCloseHubModal();
+    onCloseEditHubModal();
   };
 
-  if (!isVisible) return null;
+  const handleCloseEditModal = (e) => {
+    if (e.target.id === 'wrapper') onCloseEditHubModal();
+  };
+
+  if (!isEditVisible) return null;
   return (
-    <div className="w-full m-auto z-50 overflow-x-hidden overflow-y-auto inset-0 left-0 fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+    <div
+      className="w-full m-auto z-50 overflow-x-hidden overflow-y-auto inset-0 left-0 fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
+      id="wrapper"
+      onClick={handleCloseEditModal}
+    >
       <div className="w-5/12 flex flex-col">
         <div
           className="text-white text-xl place-self-end"
-          onClick={() => onCloseHubModal()}
+          onClick={() => onCloseEditHubModal()}
         >
           X
         </div>
@@ -75,24 +87,13 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
               src={MainLogo}
               alt="Workflow"
             />
-            <h3 className="font-bold">Create a Hub</h3>
-          </section>
-          <section>
-            <div className="selectors mt-4 space-x-4  flex justify-start ml-6">
-              <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
-                New
-              </h3>
-              <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
-                Template
-              </h3>
-            </div>
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+            <h3 className="font-bold">Edit Hub name</h3>
           </section>
           <section id="input" className="mt-5 ml-2">
             <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
               <Input
                 label="Hub Name:"
-                placeholder="Enter Hub Name"
+                placeholder="Enter New Hub Name"
                 name="name"
                 value={name}
                 type="text"
@@ -115,5 +116,3 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
     </div>
   );
 }
-
-export default Modal;
