@@ -7,11 +7,7 @@ import {
   setSelectedFolderId,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
-import {
-  DndContext,
-  DragEndEvent,
-  useDroppable,
-} from '@dnd-kit/core';
+import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core';
 import { useMoveExplorerItems } from '../../../../../features/explorer/explorerActionsService';
 import { classNames } from '../../../../../utils';
 import { resetSelectedItem } from '../../../../../features/search/searchSlice';

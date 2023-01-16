@@ -171,7 +171,7 @@ export default function FolderItem({
         </div>
       </div>
 
-      <div className="flex group-hover:opacity-100 gap-2 items-center">
+      <div className="flex opacity-40 group-hover:opacity-100 gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>

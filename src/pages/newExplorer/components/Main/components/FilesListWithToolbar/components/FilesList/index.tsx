@@ -60,6 +60,10 @@ export default function FilesList({ data }: FilesListProps) {
     if (checkbox.current) {
       checkbox.current.indeterminate = isIndeterminate;
     }
+
+    if (!selectedIds.length && checked) {
+      setChecked(false);
+    }
   }, [selectedIds]);
 
   useEffect(() => {
