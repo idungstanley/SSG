@@ -3,7 +3,6 @@ import {
   TrashIcon,
   ShareIcon,
   ClipboardCopyIcon,
-  PrinterIcon,
   DownloadIcon,
   ChatIcon,
   EyeIcon,
@@ -106,14 +105,6 @@ export default function Toolbar({ data }: ToolbarProps) {
       onClick: () => ({}),
       label: 'Copy',
       disabled: selectedIds.length === 0,
-    },
-    {
-      icon: (
-        <PrinterIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
-      ),
-      onClick: () => ({}),
-      label: 'Print',
-      disabled: !selectedFileId,
     },
     {
       label: 'Watchers',

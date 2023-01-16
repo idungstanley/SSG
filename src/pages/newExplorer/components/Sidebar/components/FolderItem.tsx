@@ -165,7 +165,9 @@ export default function FolderItem({
 
         <div className="flex gap-2 items-center">
           <FolderIcon className="h-5 w-5" aria-hidden="true" />
-          <p className="w-32 overflow-hidden whitespace-nowrap">{name}</p>
+          <p className="whitespace-nowrap max-w-34 truncate overflow-hidden">
+            {name}
+          </p>
         </div>
       </div>
 

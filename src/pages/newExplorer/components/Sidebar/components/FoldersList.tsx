@@ -209,7 +209,6 @@ function DragOverRoot() {
     <div
       className={classNames(
         'mt-2 w-full border text-center py-1 px-1 hover:bg-gray-100',
-
         isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
