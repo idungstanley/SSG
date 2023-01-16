@@ -131,13 +131,22 @@ const moveExplorerItems = (data: {
   return response;
 };
 
-export const useMoveExplorerItems = (targetFolderId: string) => {
+export const useMoveExplorerItems = (
+  targetFolderId: { parentId: string; overId: string } | null
+) => {
   const queryClient = useQueryClient();
 
   return useMutation(moveExplorerItems, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer-folder', targetFolderId]);
       queryClient.invalidateQueries(['explorer-folders']);
+      queryClient.invalidateQueries([
+        'explorer-folder',
+        targetFolderId?.overId,
+      ]);
+      queryClient.invalidateQueries([
+        'explorer-folder',
+        targetFolderId?.parentId,
+      ]);
     },
   });
 };

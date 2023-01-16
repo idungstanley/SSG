@@ -24,6 +24,26 @@ import { resetSelectedItem } from '../../../../../features/explorer/explorerSlic
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
 import { setSelectedItem } from '../../../../../features/chat/chatSlice';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+
+function ArrowsUpDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5 cursor-pointer stroke-current text-gray-500"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
+      />
+    </svg>
+  );
+}
 
 interface FolderItemProps {
   id: string;
@@ -44,6 +64,24 @@ export default function FolderItem({
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform,
+  } = useDraggable({ id, data: { parentId } });
+
+  const { isOver, setNodeRef: droppableRef } = useDroppable({
+    id,
+    data: { parentId },
+  });
+
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+  };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
 
@@ -108,9 +146,12 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex justify-between w-full items-center py-1 hover:bg-gray-100',
-        isActiveFolder ? 'text-primary-600 bg-primary-50' : ''
+        'group flex justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
+        isActiveFolder ? 'text-primary-600 bg-primary-50' : '',
+        !transform && isOver ? 'bg-primary-100' : ''
       )}
+      ref={droppableRef}
+      style={style}
     >
       <div
         onClick={() => handleClickFolder(id, parentId)}
@@ -124,11 +165,11 @@ export default function FolderItem({
 
         <div className="flex gap-2 items-center">
           <FolderIcon className="h-5 w-5" aria-hidden="true" />
-          <p>{name}</p>
+          <p className="w-32 overflow-hidden whitespace-nowrap">{name}</p>
         </div>
       </div>
 
-      <div className="flex opacity-0 group-hover:opacity-100 gap-2 items-center">
+      <div className="flex group-hover:opacity-100 gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
@@ -137,6 +178,9 @@ export default function FolderItem({
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500"
           aria-hidden="true"
         />
+        <div ref={draggableRef} {...listeners} {...attributes}>
+          <ArrowsUpDownIcon />
+        </div>
       </div>
     </div>
   );
