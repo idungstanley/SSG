@@ -112,3 +112,32 @@ export const useDeleteExplorerItem = (id: string, type: explorerItemType) => {
     },
   });
 };
+
+const moveExplorerItems = (data: {
+  targetFolderId: string;
+  fileIds?: string[];
+  folderIds?: string[];
+}) => {
+  const { targetFolderId, fileIds, folderIds } = data;
+
+  const response = requestNew({
+    url: `explorer/move/${targetFolderId}`,
+    method: 'POST',
+    data: {
+      file_ids: fileIds,
+      folder_ids: folderIds,
+    },
+  });
+  return response;
+};
+
+export const useMoveExplorerItems = (targetFolderId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(moveExplorerItems, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-folder', targetFolderId]);
+      queryClient.invalidateQueries(['explorer-folders']);
+    },
+  });
+};
