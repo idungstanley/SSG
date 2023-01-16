@@ -10,6 +10,7 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/outline";
 import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
+import { RiCheckboxBlankFill } from "react-icons/ri";
 import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -86,7 +87,7 @@ function RenderList() {
   };
 
   return (
-    <div className="bg-slate-200">
+    <div className="h-screen" style={{ backgroundColor: "#eee" }}>
       <section id="nav">
         <ListNav
           navName="ListName"
@@ -96,7 +97,10 @@ function RenderList() {
         />
       </section>
       <section className="mt-3 p-3">
-        <div className="block p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div
+          className=" block p-2border border-gray-200"
+          style={{ backgroundColor: "#eee" }}
+        >
           <div id="listTitle" className="flex justify-between items-center">
             <div className="flex items-center justify-center space-x-2 text-gray-400">
               <ChevronDownIcon
@@ -125,7 +129,10 @@ function RenderList() {
           <section id="border">
             <div className="inline-flex justify-center items-center w-full p-3">
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
-              <span className="absolute px-3 font-sm text-gray-400 bg-white -translate-x-1/2 dark:text-white dark:bg-gray-900">
+              <span
+                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900"
+                style={{ backgroundColor: "#eee" }}
+              >
                 Add New Status
               </span>
             </div>
@@ -160,11 +167,15 @@ function RenderList() {
           </div>
           {listChildrenData?.data?.tasks?.map((task) => (
             <div key={task.id}>
-              <div className="bg-white border border-gray-100 rounded-lg px-2 py-1 flex  items-center">
+              <div className="bg-white border border-gray-100  flex  items-center ml-5 pl-3">
+                <RiCheckboxBlankFill
+                  className="pl-5"
+                  style={{ backgroundColor: "#eee" }}
+                />
                 <div className="flex items-center w-6/12">
                   {/* data and input */}
                   <div onClick={() => handleTaskModal(task.id)}>
-                    <p className="capitalize text-xs font-semibold leading-8	">
+                    <p className="capitalize text-xs font-semibold leading-8 pl-5	">
                       {task.name}
                     </p>
                   </div>
