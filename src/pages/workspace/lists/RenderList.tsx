@@ -169,7 +169,7 @@ function RenderList() {
             <div key={task.id}>
               <div className="bg-white border border-gray-100  flex  items-center ml-5 pl-3">
                 <RiCheckboxBlankFill
-                  className="pl-5"
+                  className="bg-white text-xs"
                   style={{ backgroundColor: "#eee" }}
                 />
                 <div className="flex items-center w-6/12">
@@ -187,7 +187,7 @@ function RenderList() {
                   >
                     <div
                       id="wrapper"
-                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
+                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100 "
                     >
                       <PlusOutlined
                         className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
@@ -209,9 +209,12 @@ function RenderList() {
                 {/* icons */}
 
                 <div className="flex items-center space-x-10">
-                  <span className="border-dotted border-gray-300 border-2 rounded-full ml-2">
+                  <span
+                    className="border-dotted border-gray-300 border-2 rounded-full text-xs"
+                    style={{ marginLeft: "-20px" }}
+                  >
                     <UserAddOutlined
-                      className="h-5 w-7 text-gray-400"
+                      className="h-5 w-5 text-gray-400 text-xs"
                       aria-hidden="true"
                     />
                   </span>
