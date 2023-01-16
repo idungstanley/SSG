@@ -3,10 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
-// import PlusDropDown from '../../../hubs/components/PlusDropDown';
+
 import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
-import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 
@@ -20,9 +19,7 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
   const [getListId, setGetListId] = useState('');
   const [isHovering, setIsHovering] = useState<number>(-1);
 
-  const { data: subwallet } = useQuery<{
-    data: { wallets: IWallet[]; lists: IList[] };
-  }>({
+  const { data: subwallet } = useQuery({
     queryKey: ['sub2walletlist', [wallet2ParentId]],
     queryFn: getWalletService,
   });

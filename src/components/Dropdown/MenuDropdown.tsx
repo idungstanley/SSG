@@ -20,9 +20,7 @@ import {
 import {
   setArchiveHub,
   setDelHub,
-  setShowSubItems,
   setShowEditHubModal,
-  setshowMenuDropdown,
   setSubDropdownMenu,
 } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
@@ -31,7 +29,6 @@ import {
   ArchiveHubService,
   UseDeleteHubService,
 } from '../../features/hubs/hubService';
-import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
 
 interface itemsType {
   id: number;
@@ -218,21 +215,11 @@ export default function MenuDropdown() {
       isVisible: true,
     },
   ];
-
-  // const handleShowMenuSettings = (e) => {
-  //   if (e.target.id == 'menusettings')
-  //     dispatch(
-  //       setshowMenuDropdown({
-  //         showMenuDropdown: null,
-  //       })
-  //     );
-  // };
   return (
     <div className="">
       <div
         className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-20 ring-1 ring-black ring-opacity-5 focus:outline-none"
         id="menusettings"
-        // onClick={handleShowMenuSettings}
       >
         {itemsList.map((item) =>
           item.isVisible ? (

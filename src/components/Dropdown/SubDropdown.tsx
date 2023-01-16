@@ -26,10 +26,7 @@ export default function SubDropdown() {
   const dispatch = useDispatch();
   const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
   const [showHubListModal, setShowHubListModal] = useState(false);
-  const [showWalletListModal, setShowWalletListModal] = useState(false);
-  const { showMenuDropdown, showMenuDropdownType } = useAppSelector(
-    (state) => state.hub
-  );
+  const { showMenuDropdownType } = useAppSelector((state) => state.hub);
   const itemsList: itemsType[] = [
     {
       id: 1,
@@ -40,13 +37,13 @@ export default function SubDropdown() {
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
-      isVisible:
-        (showMenuDropdownType == 'subhub' ? false : true) &&
-        (showMenuDropdownType == 'wallet' ? false : true),
+      isVisible: showMenuDropdownType == 'hubs' ? true : false,
     },
     {
       id: 2,
-      title: showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet',
+      title:
+        (showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet') &&
+        (showMenuDropdownType == 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
         setShowWalletModal(true);
       },
@@ -57,13 +54,6 @@ export default function SubDropdown() {
       id: 3,
       title: 'List',
       handleClick: () => {
-        // if (showMenuDropdownType == 'hubs') {
-        //   setShowHubListModal(true); //use hubtype list modal
-        // } else if (showMenuDropdownType == 'subhub') {
-        //   setShowHubListModal(true); //use hubtype list modal
-        // } else {
-        //   setShowWalletListModal(true); //use wallet-type list modal
-        // }
         setShowHubListModal(true);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,

@@ -159,29 +159,3 @@ export const useGetHubWallet = (hubId: string | null) =>
       true
     )
   );
-
-// export const useGetSharedFilesAndFolders = () => {
-// const queryClient = useQueryClient();
-
-// const folders = useQuery<ISharedFolders>(
-//   ['shared_folders', 'root-folder'],
-//   async () =>
-//     requestNew({
-//       url: 'folders/shared',
-//       method: 'GET',
-//     }),
-//   {
-//     onSuccess: (data) => {
-//       if (data.data.current_folder != null) {
-//         queryClient.setQueryData(
-//           ['shared_folder', data.data.current_folder.id],
-//           data.data.current_folder
-//         );
-//       }
-
-//       data.data.folders.map((folder) =>
-//         queryClient.setQueryData(['shared_folder', folder.id], folder)
-//       );
-//     },
-//   }
-// );
