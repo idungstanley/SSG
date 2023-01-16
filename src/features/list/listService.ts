@@ -1,6 +1,10 @@
 import requestNew from '../../app/requestNew';
 
-export const createListService = (data: {listName: string, hubId?: string, parentId?: string}) => {
+export const createListService = (data: {
+  listName: string;
+  hubId?: string;
+  walletId?: string;
+}) => {
   const response = requestNew(
     {
       url: 'at/lists',
@@ -8,10 +12,10 @@ export const createListService = (data: {listName: string, hubId?: string, paren
       data: {
         name: data.listName,
         hub_id: data.hubId,
-        wallet_id: data.parentId,
+        wallet_id: data.walletId,
       },
     },
-    true,
+    true
   );
   return response;
 };
@@ -42,7 +46,7 @@ export const getListsListService = (data) => {
         wallet_id: walletID,
       },
     },
-    true,
+    true
   );
   return response;
 };
@@ -55,7 +59,7 @@ export const getListsDetailsService = (data) => {
       url: `at/lists/${listID}`,
       method: 'GET',
     },
-    true,
+    true
   );
   return response;
 };

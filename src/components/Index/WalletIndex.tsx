@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHub } from '../../features/hubs/hubService';
-import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
-import ListModal from '../../pages/workspace/Lists/components/ListModal';
+import { useGetHubWallet } from '../../features/hubs/hubService';
+// import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
+// import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
+// import ListModal from '../../pages/workspace/lists/components/modals/WalletListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
-import MenuDropdown from '../Dropdown/DropdownForWorkspace';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { getWallet, showWallet } from '../../features/wallet/walletSlice';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import {
+  getCurrHubId,
+  setshowMenuDropdown,
+} from '../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
 import {
@@ -16,6 +19,8 @@ import {
   setCurrentWalletId,
   setCurrentWalletName,
 } from '../../features/workspace/workspaceSlice';
+import MenuDropdown from '../Dropdown/MenuDropdown';
+import { setWalletId } from '../../features/wallet/walletSlice';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -30,8 +35,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [walletId, setGetWalletId] = useState('');
   const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
-  const { data } = useGetHub(getCurrentHubId);
+  const { data } = useGetHubWallet(getCurrentHubId);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { hubParentId, showMenuDropdown } = useAppSelector(
+    (state) => state.hub
+  );
+  const { currentWalletId } = useAppSelector((state) => state.wallet);
 
   const navigate = useNavigate();
   const handleLocation = (id: string, name, type = 'wallet') => {
@@ -50,11 +59,21 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const handleShowSubWallet = (id: string) => {
     dispatch(setCurrentWalletId(id));
     setWalletParentId(id);
-    dispatch(showWallet(id));
+    // dispatch(showWallet(id));
     if (showSubWallet === id) {
       return setShowSubWallet(null);
     }
     setShowSubWallet(id);
+  };
+
+  const handleWalletSettings = (id) => {
+    dispatch(setWalletId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'wallet',
+      })
+    );
   };
 
   return data?.data?.wallets != null ? (
@@ -82,11 +101,9 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
         data?.data?.wallets.map((wallet, i) => (
           <div key={wallet.id}>
             <section
-              className={`flex relative items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 ${
-                wallet.id === activeItemId && 'bg-green-50 text-green-500'
-              }`}
-              onMouseEnter={() => handleMouseOver(i)}
-              onMouseLeave={handleMouseOut}
+              className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8"
+              // onMouseEnter={() => handleMouseOver(i)}
+              // onMouseLeave={handleMouseOut}
             >
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
@@ -131,30 +148,37 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               </div>
               <div
                 id="walletRight"
-                className={`flex mr-2 items-center justify-end space-x-1 ${
-                  isHovering === i ? 'block' : 'hidden'
-                }`}
-                onClick={() => setGetWalletId(wallet.id)}
+                className="flex items-center space-x-1"
+                // className={`flex items-center justify-end space-x-1 ${
+                //   isHovering === i ? 'block' : 'hidden'
+                // }`}
+                // onClick={() => setGetWalletId(wallet.id)}
               >
-                <MenuDropdown />
-                <PlusDropDown walletId={walletId} />
+                {/* <MenuDropdown />
+                <PlusDropDown walletId={walletId} /> */}
+                <AiOutlineEllipsis
+                  className="cursor-pointer"
+                  onClick={() => handleWalletSettings(wallet.id)}
+                />
+                <AiOutlinePlus />
               </div>
             </section>
             <div>
-              <WalletModal
+              {/* <WalletModal
                 walletVisible={showWalletModal}
                 onCloseWalletModal={() => setShowWalletModal(false)}
                 walletId={wallet.id}
-              />
+              /> */}
               {showSubWallet === wallet.id ? (
                 <SubWalletIndex walletParentId={walletParentId} />
               ) : null}
-              <ListModal
-                walletId={wallet.id}
+              {/* <ListModal
+                // walletId={wallet.id}
                 listVisible={showListModal}
                 onCloseListModal={() => setShowListModal(false)}
-              />
+              /> */}
             </div>
+            {currentWalletId === wallet.id ? <MenuDropdown /> : null}
           </div>
         ))}
     </div>

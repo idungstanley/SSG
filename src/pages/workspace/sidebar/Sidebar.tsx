@@ -7,6 +7,7 @@ import {
   setShowSidebar,
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
+import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
@@ -18,6 +19,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 import Modal from '../hubs/components/Modal';
+import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ export default function Sidebar() {
     showHub,
     activePlaceId,
   } = useAppSelector((state) => state.workspace);
+  const { sidebarSettings } = useAppSelector((state) => state.hub);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [scrollTop, setScrollTop] = useState<string>('');
@@ -75,6 +78,9 @@ export default function Sidebar() {
     dispatch(setShowSidebar(true));
   };
 
+  const workspaceName = JSON.parse(
+    localStorage.getItem('currentWorkspacename') as string
+  );
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -134,8 +140,22 @@ export default function Sidebar() {
                 ) : null}
 
                 <img className="w-auto h-6" src={Setting} alt="Workflow" />
+                <div
+                  className="mt-2"
+                  onClick={() =>
+                    dispatch(setShowSidebarSettings(!sidebarSettings))
+                  }
+                >
+                  <ArchiveMenu />
+                </div>
+
                 <AvatarWithInitials
-                  initials="SS"
+                  initials={workspaceName
+                    .split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()}
                   height="h-5"
                   width="w-5"
                   backgroundColour="blue"

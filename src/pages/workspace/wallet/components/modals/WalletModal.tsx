@@ -1,23 +1,20 @@
-/* eslint-disable camelcase */
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createWalletService } from '../../../../features/wallet/walletService';
-import { Button, Input } from '../../../../components';
+import { createWalletService } from '../../../../../features/wallet/walletService';
+import { Button, Input } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface WalletModalProps {
   walletVisible: boolean;
   onCloseWalletModal: () => void;
-  walletId: string;
-  getCurrentHubId?: string;
+  walletId?: string;
 }
 
-function WalletModal({
-  walletVisible,
-  onCloseWalletModal,
-  walletId,
-  getCurrentHubId,
-}: WalletModalProps) {
+function WalletModal({ walletVisible, onCloseWalletModal }: WalletModalProps) {
   const queryClient = useQueryClient();
+  const { showMenuDropdownType, showMenuDropdown } = useAppSelector(
+    (state) => state.hub
+  );
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -28,8 +25,6 @@ function WalletModal({
   const defaultWalletFormState = {
     name: '',
   };
-
-  // const hubID = JSON.parse(localStorage.getItem('currentHubId') || `"`);
 
   const [formState, setFormState] = useState(defaultWalletFormState);
 
@@ -42,8 +37,10 @@ function WalletModal({
   const onSubmit = async () => {
     await createWallet.mutateAsync({
       name,
-      hubID: getCurrentHubId,
-      walletId,
+      hubID:
+        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
+      walletId: showMenuDropdownType == 'wallet' ? showMenuDropdown : null,
     });
   };
 

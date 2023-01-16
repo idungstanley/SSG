@@ -1,0 +1,175 @@
+import React from 'react';
+import {
+  ArchiveIcon,
+  CogIcon,
+  DocumentDuplicateIcon,
+  EyeOffIcon,
+  PencilIcon,
+  ShareIcon,
+  SparklesIcon,
+  TrashIcon,
+  StarIcon,
+  PlusIcon,
+  LinkIcon,
+  ColorSwatchIcon,
+  ArrowDownIcon,
+  PencilAltIcon,
+} from '@heroicons/react/outline';
+
+interface itemsType {
+  id: number;
+  title: string;
+  icon: JSX.Element;
+  handleClick: () => void;
+  isVisible: boolean;
+}
+export default function MenuList() {
+  const itemsList: itemsType[] = [
+    {
+      id: 1,
+      title: 'Create new',
+      handleClick: () => {
+        // setIsShowSub(!showSub);
+      },
+      icon: (
+        <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
+      ),
+      isVisible: true,
+    },
+    {
+      id: 2,
+      title: 'Rename',
+      handleClick: () => ({}),
+      icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 3,
+      title: 'Color & Avatar',
+      handleClick: () => ({}),
+      icon: (
+        <ColorSwatchIcon
+          className="w-5 pt-2 text-gray-700 h-7"
+          aria-hidden="true"
+        />
+      ),
+      isVisible: true,
+    },
+    {
+      id: 4,
+      title: 'Copy link',
+      handleClick: () => ({}),
+      icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 5,
+      title: 'Duplicate',
+      handleClick: () => ({}),
+      icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 6,
+      title: 'Add to favorites',
+      handleClick: () => ({}),
+      icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 7,
+      title: 'Hide in sidebar',
+      handleClick: () => ({}),
+      icon: <EyeOffIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 8,
+      title: 'Templates',
+      handleClick: () => ({}),
+      icon: (
+        <SparklesIcon
+          className="w-5 h-6 pt-2 text-gray-700"
+          aria-hidden="true"
+        />
+      ),
+      isVisible: true,
+    },
+    {
+      id: 9,
+      title: 'More settings',
+      handleClick: () => ({}),
+      icon: (
+        <CogIcon className="w-5 h-6 pt-2 text-gray-700" aria-hidden="true" />
+      ),
+      isVisible: false,
+    },
+    {
+      id: 10,
+      title: 'Sharing & Permission',
+      handleClick: () => ({}),
+      icon: <ShareIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 11,
+      title: 'Archive',
+      handleClick: () => ({}),
+      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 12,
+      title: 'Import',
+      handleClick: () => ({}),
+      icon: <ArrowDownIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 13,
+      title: 'Archive',
+      handleClick: () => ({}),
+      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+    {
+      id: 14,
+      title: 'Whiteboard',
+      handleClick: () => ({}),
+      icon: <PencilAltIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: false,
+    },
+    {
+      id: 15,
+      title: 'Wallet',
+      handleClick: () => ({}),
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
+          />
+        </svg>
+      ),
+      isVisible: false,
+    },
+    {
+      id: 16,
+      title: 'Delete',
+      handleClick: () => {
+        // setDelHub(currentItemId as string);
+        // console.log(data);
+      },
+      icon: <TrashIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+    },
+  ];
+}

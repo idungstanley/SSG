@@ -10,13 +10,16 @@ import {
   setShowHub,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/DropdownForWorkspace';
+import MenuDropdown from '../Dropdown/MenuDropdown';
 import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
-import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-import { useGetHubList } from '../../views/ExtendedBar/Index';
+import {
+  getCurrHubId,
+  setshowMenuDropdown,
+} from '../../features/hubs/hubSlice';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -30,17 +33,16 @@ export default function ItemsListInSidebar({
   type,
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
-  const { currentItemId, activeItemId } = useAppSelector(
-    (state) => state.workspace
-  );
-  // const [isHovering, setIsHovering] = useState<number>(-1);
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
+  const [isHovering, setIsHovering] = useState<number>(-1);
+  const { currentItemId, activeItemId } = useAppSelector((state) => state.workspace);
 
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
+  const { showMenuDropdown, currHubId } = useAppSelector((state) => state.hub);
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   if (status === 'error') {
     return (
@@ -86,16 +88,32 @@ export default function ItemsListInSidebar({
     }
   };
 
+  const handleHubSettings = (id) => {
+    dispatch(getCurrHubId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'hubs',
+      })
+    );
+  };
+
   return status === 'success' ? (
-    <ul>
+    <ul className="w-full">
       {items?.map((i: { id: string; name: string }, index) => (
-        <div
-          key={i.id}
-          className={`overflow-auto ${
-            i.id === currentItemId
-          }`}
-        >
-          <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
+        <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
+          <div
+            className={`flex justify-between items-center hover:bg-gray-100 ${
+              i.id === currentItemId
+                ? 'bg-green-50 text-green-500'
+                : 'text-black-500'
+            }`}
+            // onMouseEnter={() => handleMouseOver(index)}
+            // onMouseLeave={handleMouseOut}
+          >
+            {i.id === currentItemId && (
+              <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+            )}
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
                 i.id === activeItemId
@@ -159,13 +177,20 @@ export default function ItemsListInSidebar({
                 style={{marginRight: "30px"}}
                 >
                   <MenuDropdown />
-                  <PlusDropDown walletId={i.id} />
+                  {/* <PlusDropDown walletId={i.id} /> */}
                 </div>
               }
             </div>
-            {currentItemId === i.id ? <DropdownList /> : null}
-          </li>
-        </div>
+            {
+              <div className="flex items-center space-x-1 pr-1">
+                <AiOutlineEllipsis onClick={() => handleHubSettings(i.id)} />
+                <AiOutlinePlus />
+              </div>
+            }
+          </div>
+          {currentItemId === i.id ? <DropdownList /> : null}
+          {showMenuDropdown === i.id ? <MenuDropdown /> : null}
+        </li>
       ))}
     </ul>
   ) : null;

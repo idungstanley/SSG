@@ -2,8 +2,8 @@ import requestNew from '../../app/requestNew';
 
 export const createWalletService = (data: {
   name: string;
-  hubID?: string;
-  walletId?: string;
+  hubID?: string | null;
+  walletId?: string | null;
 }) => {
   const response = requestNew(
     {

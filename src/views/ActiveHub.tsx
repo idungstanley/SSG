@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
+// import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
 import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../app/hooks';
 import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
@@ -25,7 +25,6 @@ export default function ActiveHub() {
   const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId, activeItemType, currentWalletId } =
     useAppSelector((state) => state.workspace);
-  const { data, status } = useGetHubList();
   const walletD = useGetHub(currentItemId);
   const walletData = walletD?.data?.data.wallets;
   const { data: subwallet } = useQuery({
@@ -33,6 +32,7 @@ export default function ActiveHub() {
     queryFn: getWalletService,
   });
   const subWalletData = subwallet?.data?.wallets;
+  const { data, status } = useGetHubList({ query: null });
 
   const items = data?.data.hubs;
   if (status === 'success') {
@@ -131,8 +131,20 @@ export default function ActiveHub() {
       {items?.map(
         (i: { id: string; name: string }, index) =>
           i.id === currentItemId && (
-            <>
-              <li key={i.id} className="flex flex-col">
+            <li key={i.id} className="flex flex-col">
+              <div
+                className={`flex justify-between items-center hover:bg-gray-100 relative ${
+                  i.id === currentItemId
+                    ? 'bg-green-50 text-green-500'
+                    : 'text-black-500'
+                }`}
+                style={{ height: '28px' }}
+                onMouseEnter={() => handleMouseOver(index)}
+                onMouseLeave={handleMouseOut}
+              >
+                {i.id === currentItemId && (
+                  <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                )}
                 <div
                   className={`flex justify-between items-center hover:bg-gray-100 relative ${
                     i.id === currentItemId
@@ -175,19 +187,19 @@ export default function ActiveHub() {
                       </span>
                     </div>
                   </div>
-                  <div
-                    className={`flex items-center space-x-1 justify-end pr-1 ${
-                      isHovering === index ? 'block' : 'hidden'
-                    }`}
-                  >
-                    <MenuDropdown />
-                    <PlusDropDown walletId={i.id} />
-                  </div>
                 </div>
-                <hr />
-              </li>
+                <div
+                  className={`flex items-center space-x-1 justify-end pr-1 ${
+                    isHovering === index ? 'block' : 'hidden'
+                  }`}
+                >
+                  <MenuDropdown />
+                  {/* <PlusDropDown walletId={i.id} /> */}
+                </div>
+              </div>
+              <hr />
               <div>{displayActiveItem()}</div>
-            </>
+            </li>
           )
       )}
     </ul>

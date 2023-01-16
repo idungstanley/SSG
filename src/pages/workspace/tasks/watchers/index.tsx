@@ -15,6 +15,7 @@ export default function Watcher({ taskId }: WatcherProps) {
   const { data: getWatchers, status } = UseGetWatcherService({
     query: taskId,
   });
+
   if (status == 'success') {
     dispatch(
       setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id))

@@ -114,7 +114,7 @@ function Places() {
   };
   return (
     <div className="mt-2">
-      <ul aria-labelledby="projects-headline relative">
+      <ul aria-labelledby="projects-headline ">
         {secondaryNavigation.map((item, index) => (
           <div key={item.id}>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />

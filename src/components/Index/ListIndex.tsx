@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHub } from '../../features/hubs/hubService';
+import { useGetHubWallet } from '../../features/hubs/hubService';
 import TaskDropdown from '../../pages/workspace/tasks/component/TaskDropdown';
 import { BsListUl } from 'react-icons/bs';
 
@@ -12,7 +12,7 @@ interface ListIndexProps {
 function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
   const [getListId, setGetListId] = useState('');
-  const { data } = useGetHub(getCurrentHubId);
+  const { data } = useGetHubWallet(getCurrentHubId);
 
   const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);

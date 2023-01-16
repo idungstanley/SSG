@@ -1,5 +1,7 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { setWatchersData } from './taskSlice';
+import { useDispatch } from 'react-redux';
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -140,8 +142,9 @@ export const AddTaskWatcherService = (data) => {
 //Get watcher
 export const UseGetWatcherService = (taskId) => {
   const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
   return useQuery(
-    ['watcher', taskId],
+    ['watcher', { taskId: taskId }],
     async () => {
       const data = await requestNew(
         {
@@ -161,22 +164,6 @@ export const UseGetWatcherService = (taskId) => {
       enabled: taskId != null,
     }
   );
-};
-
-export const GetTaskWatcherService = (data) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'watch',
-      method: 'GET',
-      params: {
-        type: 'task',
-        id: taskID,
-      },
-    },
-    true
-  );
-  return response;
 };
 
 //Add watcher to task
@@ -200,11 +187,15 @@ export const AddWatcherService = ({ query }) => {
       return data;
     },
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['watcher']);
+      },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null,
     }
   );
 };
+
 //Remove watcher to task
 export const RemoveWatcherService = ({ query }) => {
   const queryClient = useQueryClient();
@@ -226,27 +217,11 @@ export const RemoveWatcherService = ({ query }) => {
       return data;
     },
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['watcher']);
+      },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null,
     }
   );
 };
-
-// export const RemoveWatcherService = (data) => {
-//   const bodyData = data.queryKey[1];
-//   const ids = [] as any;
-//   ids.push(bodyData[1]);
-//   const response = requestNew(
-//     {
-//       url: 'watch/remove',
-//       method: 'POST',
-//       params: {
-//         type: 'task',
-//         id: bodyData[0],
-//         team_member_ids: ids,
-//       },
-//     },
-//     true
-//   );
-//   return response;
-// };

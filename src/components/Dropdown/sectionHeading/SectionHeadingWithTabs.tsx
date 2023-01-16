@@ -1,12 +1,17 @@
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { classNames } from "../../utils";
+import { classNames } from '../../../utils';
 
 interface SectionHeadingWithTabsProps {
-  title: string,
-  actions?: ReactNode,
-  tabs: {name: string, href: string, current: boolean, count: number | null}[],
-  titleSize: string,
+  title: string;
+  actions?: ReactNode;
+  tabs: {
+    name: string;
+    href: string;
+    current: boolean;
+    count: number | null;
+  }[];
+  titleSize: string;
 }
 
 function SectionHeadingWithTabs({
@@ -18,9 +23,13 @@ function SectionHeadingWithTabs({
   return (
     <div className="relative pb-5 border-b border-gray-200 sm:pb-0">
       <div className="md:flex md:items-center md:justify-between">
-        <h3 className={`${titleSize} leading-6 font-medium text-gray-900`}>{title}</h3>
+        <h3 className={`${titleSize} leading-6 font-medium text-gray-900`}>
+          {title}
+        </h3>
         {actions && (
-          <div className="mt-3 flex md:mt-0 md:absolute md:top-8 md:right-0">{actions}</div>
+          <div className="mt-3 flex md:mt-0 md:absolute md:top-8 md:right-0">
+            {actions}
+          </div>
         )}
       </div>
       {tabs && (
@@ -50,7 +59,7 @@ function SectionHeadingWithTabs({
                     tab.current
                       ? 'border-indigo-500 text-indigo-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200',
-                    'whitespace-nowrap flex py-4 px-1 border-b-2 font-medium text-sm',
+                    'whitespace-nowrap flex py-4 px-1 border-b-2 font-medium text-sm'
                   )}
                   aria-current={tab.current ? 'page' : undefined}
                 >
@@ -58,8 +67,10 @@ function SectionHeadingWithTabs({
                   {tab.count !== null ? (
                     <span
                       className={classNames(
-                        tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900',
-                        'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block',
+                        tab.current
+                          ? 'bg-indigo-100 text-indigo-600'
+                          : 'bg-gray-100 text-gray-900',
+                        'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block'
                       )}
                     >
                       {tab.count}

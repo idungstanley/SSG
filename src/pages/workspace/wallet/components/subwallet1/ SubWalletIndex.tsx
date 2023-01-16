@@ -3,14 +3,17 @@ import React, { useState } from 'react';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
-import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
-import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import { setWalletId } from '../../../../../features/wallet/walletSlice';
+import { setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { BsListUl } from 'react-icons/bs';
+import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
 
 interface SubWalletIndexProps {
@@ -21,7 +24,6 @@ interface SubWalletIndexProps {
 function SubWalletIndex({ walletParentId, padding }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const [wallet2ParentId, setWallet2ParentId] = useState('');
-  const [walletId, setGetWalletId] = useState('');
   const [getListId, setGetListId] = useState('');
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState<number>(-1);
@@ -30,6 +32,7 @@ function SubWalletIndex({ walletParentId, padding }: SubWalletIndexProps) {
     queryFn: getWalletService,
   });
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
     setWallet2ParentId(id);
@@ -54,6 +57,16 @@ function SubWalletIndex({ walletParentId, padding }: SubWalletIndexProps) {
 
   const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);
+  };
+
+  const handleWalletSettings = (id: string) => {
+    dispatch(setWalletId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'subwallet',
+      })
+    );
   };
 
   return (
@@ -104,30 +117,31 @@ function SubWalletIndex({ walletParentId, padding }: SubWalletIndexProps) {
             {/* ends here */}
             <div
               id="walletRight"
-              className={`flex items-center justify-end space-x-1 ${
-                isHovering === index ? 'block' : 'hidden'
-              }`}
-              onClick={() => setGetWalletId(wallet.id)}
+              // className={`flex items-center justify-end space-x-1 ${
+              //   isHovering === index ? 'block' : 'hidden'
+              // }`}
+              className="flex items-center space-x-2"
             >
-              <MenuDropdown />
-              <PlusDropDown walletId={walletId} />
+              <AiOutlineEllipsis
+                className="cursor-pointer"
+                onClick={() => handleWalletSettings(wallet.id)}
+              />
+              <AiOutlinePlus />
             </div>
           </section>
           <div>
             {showSubWallet2 === wallet.id ? (
               <Sub2WalletIndex wallet2ParentId={wallet2ParentId} />
             ) : null}
+            {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
           </div>
         </div>
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-16 space-x-1 text-sm hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-8 space-x-1 text-sm hover:bg-gray-100">
             <div className="flex items-center">
-              <DotsCircleHorizontalIcon
-                className="flex-shrink-0 w-5 h-3"
-                aria-hidden="true"
-              />
+              <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
             </div>
             {/* ends here */}

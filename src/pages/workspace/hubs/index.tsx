@@ -1,10 +1,20 @@
 import React from 'react';
 import { useGetHubList } from '../../../features/hubs/hubService';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
+import { useDispatch } from 'react-redux';
+import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
+import { useAppSelector } from '../../../app/hooks';
 
 function Hubs() {
-  const { data, status } = useGetHubList();
+  const dispatch = useDispatch();
+  const { toggleArchive } = useAppSelector((state) => state.hub);
+  const { data, status } = useGetHubList({
+    query: toggleArchive,
+  });
+  if (status === 'success') {
+    dispatch(getHub(data?.data.hubs));
+  }
   return (
     <>
       <div className="pl-4 hover:bg-gray-100 flex justify-between items-center">
