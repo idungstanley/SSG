@@ -4,52 +4,52 @@ import {
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/outline';
-import { CheckIcon } from '@heroicons/react/solid';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../../../components';
+} from "@heroicons/react/outline";
+import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
+import { CheckIcon } from "@heroicons/react/solid";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "../../../components";
 import {
   createTaskService,
   getTaskListService,
-} from '../../../features/task/taskService';
-import { getListsDetailsService } from '../../../features/list/listService';
-import SubTask from '../subtasks/subtask1/SubTask';
+} from "../../../features/task/taskService";
+import { getListsDetailsService } from "../../../features/list/listService";
+import SubTask from "../subtasks/subtask1/SubTask";
 // import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
-import ListNav from './components/renderlist/ListNav';
+import ListNav from "./components/renderlist/ListNav";
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
-  const [parentTaskId, setParentTaskId] = useState('');
+  const [parentTaskId, setParentTaskId] = useState("");
   const [subTaskOne, setSubTaskOne] = useState<boolean | string>(false);
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('createtask' as any);
+      queryClient.invalidateQueries("createtask" as any);
       setAddNewItem(!addNewItem);
     },
   });
   const { data: listChildrenData } = useQuery<{
     data: { tasks: { id: string; name: string }[] };
   }>({
-    queryKey: ['listData_bylistId', listId],
+    queryKey: ["listData_bylistId", listId],
     queryFn: getTaskListService,
   });
 
   const { data: listDetailsData } = useQuery({
-    queryKey: ['listDetails', listId],
+    queryKey: ["listDetails", listId],
     queryFn: getListsDetailsService,
   });
-
   const defaultTaskFormState = {
-    name: '',
+    name: "",
   };
 
   const [formState, setFormState] = useState(defaultTaskFormState);
@@ -131,6 +131,29 @@ function RenderList() {
             </div>
           </section>
           {/* card */}
+          <div className="flex w-full">
+            <div className=" flex w-6/12 items-center gap-2">
+              <FiArrowDownCircle />
+              <span>OPEN</span> {listChildrenData?.data?.tasks.length} TASK
+            </div>
+            <div className="flex items-center space-x-8">
+              <p className="h-5  text-gray-400 text-xs  rounded-full p-1 ml-1">
+                USER
+              </p>
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+                DUE DATE
+              </p>
+              <p className="h-5 text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+                PRIORITY
+              </p>
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+                CREATED AT
+              </p>
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+                <FiPlusCircle />
+              </p>
+            </div>
+          </div>
           {listChildrenData?.data?.tasks?.map((task) => (
             <div key={task.id}>
               <div className="bg-white border border-gray-100 rounded-lg px-2 py-1 flex  items-center">
@@ -189,6 +212,7 @@ function RenderList() {
                   </span>
                 </div>
               </div>
+
               {subTaskOne === task.id ? (
                 <div>
                   <SubTask parentTaskId={parentTaskId} />
@@ -196,6 +220,7 @@ function RenderList() {
               ) : null}
             </div>
           ))}
+
           {/* toggle */}
           {addNewItem && (
             <div className="bg-white border border-gray-100 rounded-lg px-2 py-1 flex  items-center">
@@ -212,7 +237,6 @@ function RenderList() {
                 </div>
               </div>
               {/* icons */}
-
               <div className="flex items-center space-x-10">
                 <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
                   <UserAddOutlined
@@ -247,7 +271,6 @@ function RenderList() {
               </div>
             </div>
           )}
-
           <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
             <p className="pl-2 text-xs rounded bg-gray-100 w-20 mt-1 cursor-pointer">
               + New Task
