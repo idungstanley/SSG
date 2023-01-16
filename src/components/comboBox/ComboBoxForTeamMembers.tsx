@@ -11,10 +11,6 @@ interface userDataType {
   };
 }
 
-interface selectedType {
-  id: string
-}
-
 interface ComboBoxType {
   setShowPopup: (i: boolean) => void;
   onClickArrow: (value: string) => void;

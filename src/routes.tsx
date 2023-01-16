@@ -35,7 +35,6 @@ import SharedPage from './pages/shared';
 
 // At workspace
 import Index from './pages/workspace/Index';
-import Home from './pages/workspace/home/Home';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community';
@@ -53,6 +52,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import Calendar from './pages/workspace/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
+import Home from './pages/workspace/home/Home';
+import NewExplorerPage from './pages/newExplorer';
 
 const inbox = [
   {
@@ -103,6 +104,8 @@ export const routes = (user: IUser | null) =>
         <Navigate to="/auth/register" />
       ),
     },
+    { path: 'new-explorer', element: <NewExplorerPage /> },
+    { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
     {
       path: '/',
       element: user ? (
@@ -116,6 +119,8 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: '/', element: <Navigate to="/workspace" /> },
+        { path: 'new-explorer', element: <NewExplorerPage /> },
+        { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
         { path: 'explorer', element: <ExplorerPage /> },
         { path: 'explorer/:folderId', element: <ExplorerPage /> },
         { path: 'shared', element: <SharedPage /> },

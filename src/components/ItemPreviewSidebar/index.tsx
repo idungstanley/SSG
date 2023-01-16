@@ -19,7 +19,7 @@ function ItemPreviewSidebar({ item, type }: ItemPreviewProps) {
         {type ? (
           <>
             <Details item={item} type={type} />
-            <Comments itemId={item.id} type={type} />
+            <Comments />
           </>
         ) : null}
       </div>

@@ -13,13 +13,13 @@ import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
-import Setting from '../../../assets/branding/setting.png';
+// import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 import Modal from '../hubs/components/Modal';
 import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
+import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();

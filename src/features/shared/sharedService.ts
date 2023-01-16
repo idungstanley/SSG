@@ -1,6 +1,11 @@
-import { ISharedFiles, ISharedFolders, IExplorerAndSharedData } from "./shared.interfaces";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  ISharedFiles,
+  ISharedFolders,
+  IExplorerAndSharedData,
+} from './shared.interfaces';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { explorerItemType } from '../../types';
 
 export const useGetFolder = (folderId: string | null, enabled = true) => {
   const queryClient = useQueryClient();
@@ -148,4 +153,22 @@ export const useGetSharedFilesAndFolders = () => {
     },
     refetch,
   };
+};
+
+const shareItem = (data: {
+  type: explorerItemType;
+  itemId: string;
+  userId: string;
+}) => {
+  const { type, itemId, userId } = data;
+
+  const request = requestNew({
+    method: 'POST',
+    url: `${type}s/${itemId}/share/${userId}`,
+  });
+  return request;
+};
+
+export const useShareItem = () => {
+  return useMutation(shareItem);
 };

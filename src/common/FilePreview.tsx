@@ -11,7 +11,6 @@ interface FilePreviewProps {
 }
 
 function FilePreview({ fileData, fileExtension }: FilePreviewProps) {
-
   return (
     <div className="overflow-y-scroll">
       {images.includes(fileExtension) ? (

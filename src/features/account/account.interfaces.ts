@@ -11,3 +11,17 @@ export interface IAccountReq {
     workspaces: IWorkspace[];
   };
 }
+
+export interface IUserSettings {
+  key: string;
+  is_json: boolean;
+  value: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IUserSettingsRes {
+  data: {
+    settings: IUserSettings[];
+  };
+}

@@ -45,6 +45,14 @@ code {
   display: none;
 }
 
+.pg-viewer-wrapper .pg-viewer #docx .document-container {
+  padding: 0;
+  width: auto;
+  margin: 0;
+  height: auto;
+  overflow-y: scroll;
+}
+
 .rotateimg180 {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
