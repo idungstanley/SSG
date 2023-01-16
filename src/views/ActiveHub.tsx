@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 // import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
 import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../app/hooks';
-import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
+// import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
 import {
   resetCurrentItem,
   setCurrentItem,
@@ -12,7 +12,7 @@ import {
 import { AvatarWithInitials } from '../components';
 import MenuDropdown from '../components/Dropdown/DropdownForWorkspace';
 import { Spinner } from '../common';
-import { useGetHub, useGetHubList } from '../features/hubs/hubService';
+import { useGetHubList, useGetHubWallet } from '../features/hubs/hubService';
 import { getHub } from '../features/hubs/hubSlice';
 import HubData from './ExtendedBar/HubData';
 import SubWalletIndex from '../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
@@ -25,7 +25,7 @@ export default function ActiveHub() {
   const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId, activeItemType, currentWalletId } =
     useAppSelector((state) => state.workspace);
-  const walletD = useGetHub(currentItemId);
+  const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
   const { data: subwallet } = useQuery({
     queryKey: ['subwalletlist', [currentWalletId]],

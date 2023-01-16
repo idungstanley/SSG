@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setShowModal } from '../../features/workspace/workspaceSlice';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
+import ListModal from '../../pages/workspace/Lists/components/modals/ListModal';
 
 interface itemsType {
   id: number;

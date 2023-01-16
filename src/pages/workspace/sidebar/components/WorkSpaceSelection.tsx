@@ -5,9 +5,11 @@ import { AvatarWithInitials } from '../../../../components';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.workspace);
-  const workspaceName = JSON.parse(
-    localStorage.getItem('currentWorkspacename') as string
-  );
+const getLocalWSName = JSON.parse(
+  localStorage.getItem('currentWorkspacename') as string
+);
+const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
+
   return (
     <>
       {showSidebar ? (
@@ -30,7 +32,7 @@ function WorkSpaceSelection() {
                 textColor="black"
               />
               <p className="truncate" style={{ fontSize: '8px' }}>
-                {workspaceName.split(' ').slice(0, 1).join('').toUpperCase()}
+                {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
               </p>
             </div>
             <VscTriangleDown className="text-xs text-gray-400" />

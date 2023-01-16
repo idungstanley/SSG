@@ -46,7 +46,7 @@ import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
-import RenderList from './pages/workspace/lists/RenderList';
+import RenderList from './pages/workspace/Lists/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage';

@@ -78,9 +78,13 @@ export default function Sidebar() {
     dispatch(setShowSidebar(true));
   };
 
-  const workspaceName = JSON.parse(
+  const getLocalWSName = JSON.parse(
     localStorage.getItem('currentWorkspacename') as string
   );
+
+  const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
+  console.log(workspaceName);
+
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -138,8 +142,6 @@ export default function Sidebar() {
                     <img src={notificationIcon} alt="a" className="h-4 w-4" />
                   </span>
                 ) : null}
-
-                <img className="w-auto h-6" src={Setting} alt="Workflow" />
                 <div
                   className="mt-2"
                   onClick={() =>
