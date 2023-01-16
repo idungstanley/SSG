@@ -7,7 +7,11 @@ import {
   setSelectedFolderId,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
-import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  useDroppable,
+} from '@dnd-kit/core';
 import { useMoveExplorerItems } from '../../../../../features/explorer/explorerActionsService';
 import { classNames } from '../../../../../utils';
 import { resetSelectedItem } from '../../../../../features/search/searchSlice';
@@ -37,6 +41,8 @@ export default function FoldersList({
     parentId: string;
     overId: string;
   } | null>(null);
+
+  const [showDragToRoot, setShowDragToRoot] = useState(false);
 
   const { mutate: onMove } = useMoveExplorerItems(parentOfDraggable);
 
@@ -75,7 +81,10 @@ export default function FoldersList({
       : selectedFolder?.ancestors?.length) || 0;
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext
+      onDragStart={() => setShowDragToRoot(true)}
+      onDragEnd={handleDragEnd}
+    >
       {folders.map((rootFolder) => (
         <div key={rootFolder.id}>
           {/* root folders list */}
@@ -156,7 +165,8 @@ export default function FoldersList({
           ) : null}
         </div>
       ))}
-      <DragOverRoot />
+
+      {showDragToRoot ? <DragOverRoot /> : null}
     </DndContext>
   );
 
@@ -168,21 +178,24 @@ export default function FoldersList({
 
     if (overId && activeId) {
       if (overId !== activeId) {
+        setParentOfDraggable({
+          parentId: active.data.current?.parentId as string,
+          overId: overId === 'root' ? '' : (overId as string),
+        });
+
         if (activeId === selectedFolderId) {
           dispatch(resetSelectedItem());
           navigate('/new-explorer');
         }
 
-        setParentOfDraggable({
-          parentId: active.data.current?.parentId as string,
-          overId: overId === 'root' ? '' : (overId as string),
-        });
         onMove({
           targetFolderId: overId === 'root' ? '' : (overId as string),
           folderIds: [activeId as string],
         });
       }
     }
+
+    setShowDragToRoot(false);
   }
 }
 
