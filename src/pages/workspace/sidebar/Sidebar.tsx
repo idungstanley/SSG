@@ -83,7 +83,6 @@ export default function Sidebar() {
   );
 
   const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
-  console.log(workspaceName);
 
   return (
     <>

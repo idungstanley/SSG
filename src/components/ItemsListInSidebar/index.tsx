@@ -172,14 +172,6 @@ export default function ItemsListInSidebar({
                   </span>
                 </div>
               </div>
-              {
-                <div className="relative flex items-center space-x-1 pr-1"
-                style={{marginRight: "30px"}}
-                >
-                  <MenuDropdown />
-                  {/* <PlusDropDown walletId={i.id} /> */}
-                </div>
-              }
             </div>
             {
               <div className="flex items-center space-x-1 pr-1">
