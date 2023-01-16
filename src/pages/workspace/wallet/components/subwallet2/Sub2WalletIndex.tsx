@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 
@@ -8,6 +7,7 @@ import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { BsListUl } from 'react-icons/bs';
 
 interface Sub2WalletIndexProps {
   wallet2ParentId?: string;
@@ -102,12 +102,9 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-20 space-x-1 text-sm hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-14 space-x-1 text-sm hover:bg-gray-100">
             <div className="flex items-center">
-              <DotsCircleHorizontalIcon
-                className="flex-shrink-0 w-5 h-3"
-                aria-hidden="true"
-              />
+              <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div
                 className="text-sm"
                 onClick={() => handleListLocation(list.id)}
