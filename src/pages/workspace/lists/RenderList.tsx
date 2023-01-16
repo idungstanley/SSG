@@ -86,7 +86,7 @@ function RenderList() {
   };
 
   return (
-    <div>
+    <div className="bg-slate-200">
       <section id="nav">
         <ListNav
           navName="ListName"
@@ -125,7 +125,7 @@ function RenderList() {
           <section id="border">
             <div className="inline-flex justify-center items-center w-full p-3">
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
-              <span className="fixed left-1/2 px-3 font-sm text-gray-400 bg-white -translate-x-1/2 dark:text-white dark:bg-gray-900">
+              <span className="absolute px-3 font-sm text-gray-400 bg-white -translate-x-1/2 dark:text-white dark:bg-gray-900">
                 Add New Status
               </span>
             </div>
@@ -134,23 +134,27 @@ function RenderList() {
           <div className="flex w-full">
             <div className=" flex w-6/12 items-center gap-2">
               <FiArrowDownCircle />
-              <span>OPEN</span> {listChildrenData?.data?.tasks.length} TASK
+              <span className="text-xs font-semibold text-gray-400	">
+                OPEN
+              </span>{" "}
+              {listChildrenData?.data?.tasks.length}
+              <span className="text-xs font-semibold text-gray-400	">TASK</span>
             </div>
             <div className="flex items-center space-x-8">
-              <p className="h-5  text-gray-400 text-xs  rounded-full p-1 ml-1">
+              <p className="h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
                 USER
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-md  rounded-full p-1 ml-1 font-semibold">
                 DUE DATE
               </p>
-              <p className="h-5 text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+              <p className="h-5 text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
                 PRIORITY
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
                 CREATED AT
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1">
-                <FiPlusCircle />
+              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
+                <FiPlusCircle className="font-black	" />
               </p>
             </div>
           </div>
@@ -160,7 +164,9 @@ function RenderList() {
                 <div className="flex items-center w-6/12">
                   {/* data and input */}
                   <div onClick={() => handleTaskModal(task.id)}>
-                    <p>{task.name}</p>
+                    <p className="capitalize text-xs font-semibold leading-8	">
+                      {task.name}
+                    </p>
                   </div>
 
                   {/* iconstask */}
@@ -192,21 +198,21 @@ function RenderList() {
                 {/* icons */}
 
                 <div className="flex items-center space-x-10">
-                  <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                  <span className="border-dotted border-gray-300 border-2 rounded-full ml-2">
                     <UserAddOutlined
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
-                  <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                  <span className="border-dotted border-gray-300 pl-3">
                     <CalendarOutlined
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
-                  <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                  <span className="border-dotted border-gray-300">
                     <FlagOutlined
-                      className="h-5 w-7 text-gray-400"
+                      className="h-5 w-7 pl-10 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
@@ -237,7 +243,7 @@ function RenderList() {
                 </div>
               </div>
               {/* icons */}
-              <div className="flex items-center space-x-10">
+              {/* <div className="flex items-center space-x-10">
                 <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
                   <UserAddOutlined
                     className="h-5 w-7 text-gray-400"
@@ -268,7 +274,7 @@ function RenderList() {
                 <div onClick={() => setAddNewItem(!addNewItem)}>
                   <p className="text-xl text-gray-400 cursor-pointer">X</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
