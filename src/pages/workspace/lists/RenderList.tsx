@@ -84,7 +84,6 @@ function RenderList() {
     setOpenTaskModal(true);
     navigate(`/workspace/t/${id}`);
   };
-
   return (
     <div>
       <section id="nav">
@@ -139,7 +138,6 @@ function RenderList() {
                   <div onClick={() => handleTaskModal(task.id)}>
                     <p>{task.name}</p>
                   </div>
-
                   {/* iconstask */}
                   <div
                     id="iconWrapper"
@@ -167,7 +165,6 @@ function RenderList() {
                   </div>
                 </div>
                 {/* icons */}
-
                 <div className="flex items-center space-x-10">
                   <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
                     <UserAddOutlined
@@ -212,7 +209,6 @@ function RenderList() {
                 </div>
               </div>
               {/* icons */}
-
               <div className="flex items-center space-x-10">
                 <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
                   <UserAddOutlined
@@ -247,7 +243,6 @@ function RenderList() {
               </div>
             </div>
           )}
-
           <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
             <p className="pl-2 text-xs rounded bg-gray-100 w-20 mt-1 cursor-pointer">
               + New Task

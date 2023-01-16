@@ -92,7 +92,7 @@ export default function ItemsListInSidebar({
         <div
           key={i.id}
           className={`overflow-auto ${
-            i.id === currentItemId && 'sticky top-14'
+            i.id === currentItemId
           }`}
         >
           <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
