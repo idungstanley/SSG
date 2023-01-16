@@ -17,9 +17,7 @@ import { IHub } from '../../features/hubs/hubs.interfaces';
 import {
   getCurrHubId,
   setshowMenuDropdown,
-  resetCurrHubId,
 } from '../../features/hubs/hubSlice';
-import CustomStatusDropdown from '../../pages/workspace/tasks/dropdown/CustomStatusDropdown';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 
 interface ItemsListInSidebarProps {
@@ -161,8 +159,6 @@ export default function ItemsListInSidebar({
               <div className="flex items-center space-x-1 pr-1">
                 <AiOutlineEllipsis onClick={() => handleHubSettings(i.id)} />
                 <AiOutlinePlus />
-                {/*  <MenuDropdown /> }
-                {/* <PlusDropDown walletId={i.id} /> */}
               </div>
             }
           </div>

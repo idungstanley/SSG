@@ -65,7 +65,7 @@ export default function ArchiveMenu() {
                   type="button"
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left w-full'
+                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}
                 >

@@ -3,20 +3,26 @@ import React, { useState } from 'react';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
-import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
-// import PlusDropDown from '../../../hubs/components/PlusDropDown';
 import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import TaskDropdown from '../../../tasks/component/TaskDropdown';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import { setWalletId } from '../../../../../features/wallet/walletSlice';
+import { setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import { classNames } from '../../../../../utils/index';
+import { BsListUl } from 'react-icons/bs';
+import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface SubWalletIndexProps {
   walletParentId?: string;
 }
 
 function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
+  const dispatch = useDispatch();
   const [wallet2ParentId, setWallet2ParentId] = useState('');
-  const [walletId, setGetWalletId] = useState('');
   const [getListId, setGetListId] = useState('');
   const { data: subwallet } = useQuery({
     queryKey: ['subwalletlist', [walletParentId]],
@@ -24,6 +30,7 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
   });
 
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const [isHovering, setIsHovering] = useState<number>(-1);
 
   const handleShowSubWallet = (id: string) => {
@@ -50,14 +57,24 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
     navigate(`/workspace/list/${id}`);
   };
 
+  const handleWalletSettings = (id: string) => {
+    dispatch(setWalletId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'subwallet',
+      })
+    );
+  };
+
   return (
     <div>
       {subwallet?.data?.wallets.map((wallet, index) => (
         <div key={wallet.id}>
           <section
             className="flex items-center justify-between pl-8 text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100"
-            onMouseEnter={() => handleMouseOver(index)}
-            onMouseLeave={handleMouseOut}
+            // onMouseEnter={() => handleMouseOver(index)}
+            // onMouseLeave={handleMouseOut}
           >
             {/* showsub2 */}
             <div className="flex items-center">
@@ -93,30 +110,31 @@ function SubWalletIndex({ walletParentId }: SubWalletIndexProps) {
             {/* ends here */}
             <div
               id="walletRight"
-              className={`flex items-center justify-end space-x-1 ${
-                isHovering === index ? 'block' : 'hidden'
-              }`}
-              onClick={() => setGetWalletId(wallet.id)}
+              // className={`flex items-center justify-end space-x-1 ${
+              //   isHovering === index ? 'block' : 'hidden'
+              // }`}
+              className="flex items-center space-x-2"
             >
-              {/* <MenuDropdown /> */}
-              {/* <PlusDropDown walletId={walletId} /> */}
+              <AiOutlineEllipsis
+                className="cursor-pointer"
+                onClick={() => handleWalletSettings(wallet.id)}
+              />
+              <AiOutlinePlus />
             </div>
           </section>
           <div>
             {showSubWallet2 === wallet.id ? (
               <Sub2WalletIndex wallet2ParentId={wallet2ParentId} />
             ) : null}
+            {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
           </div>
         </div>
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-16 space-x-1 text-sm hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-8 space-x-1 text-sm hover:bg-gray-100">
             <div className="flex items-center">
-              <DotsCircleHorizontalIcon
-                className="flex-shrink-0 w-5 h-3"
-                aria-hidden="true"
-              />
+              <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
             </div>
             {/* ends here */}

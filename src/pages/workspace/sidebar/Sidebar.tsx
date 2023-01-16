@@ -66,6 +66,9 @@ export default function Sidebar() {
     };
   }, [resize, stopResizing]);
 
+  const workspaceName = JSON.parse(
+    localStorage.getItem('currentWorkspacename') as string
+  );
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -120,8 +123,14 @@ export default function Sidebar() {
                 >
                   <ArchiveMenu />
                 </div>
+
                 <AvatarWithInitials
-                  initials="SS"
+                  initials={workspaceName
+                    .split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()}
                   height="h-5"
                   width="w-5"
                   backgroundColour="blue"

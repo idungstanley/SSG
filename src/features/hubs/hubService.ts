@@ -55,8 +55,6 @@ export const useGetHubList = ({ query }) => {
 
 //get subhub
 export const useGetSubHub = ({ parentId }) => {
-  const queryClient = useQueryClient();
-  console.log(parentId);
   return useQuery<IResponseGetHubs>(
     ['hubs', { parentId: parentId }],
     () =>
@@ -70,11 +68,6 @@ export const useGetSubHub = ({ parentId }) => {
       ),
     {
       enabled: parentId != null,
-      // onSuccess: (data) => {
-      //   data.data.hubs.map((hub) =>
-      //     queryClient.setQueryData(['hub', hub.id], hub)
-      //   );
-      // },
     }
   );
 };
@@ -155,7 +148,7 @@ export const ArchiveHubService = (hub) => {
   );
 };
 
-export const useGetHub = (hubId: string | null) =>
+export const useGetHubWallet = (hubId: string | null) =>
   useQuery<IHubReq>([`hub-${hubId}`], () =>
     requestNew(
       {

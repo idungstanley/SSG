@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHub } from '../../features/hubs/hubService';
-
-import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
-
+import { useGetHubWallet } from '../../features/hubs/hubService';
+// import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
+// import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
+// import ListModal from '../../pages/workspace/lists/components/modals/WalletListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -29,7 +29,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [walletId, setGetWalletId] = useState('');
   const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
-  const { data } = useGetHub(getCurrentHubId);
+  const { data } = useGetHubWallet(getCurrentHubId);
   const dispatch = useDispatch();
   const { hubParentId, showMenuDropdown } = useAppSelector(
     (state) => state.hub

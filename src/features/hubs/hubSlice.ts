@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 interface HubState {
   hub: string[];
   currHubId: any;
+  currSubHubId: null;
+  currSubHubIdType: null;
   delHub: boolean;
   showSubItems: boolean;
   showEditHubModal: boolean;
@@ -18,6 +20,8 @@ interface HubState {
 const initialState: HubState = {
   hub: [],
   currHubId: null,
+  currSubHubId: null,
+  currSubHubIdType: null,
   delHub: false,
   showEditHubModal: false,
   showSubItems: false,
@@ -49,8 +53,9 @@ export const hubSlice = createSlice({
     getCurrHubId(state, action) {
       state.currHubId = action.payload;
     },
-    resetCurrHubId(state) {
-      state.currHubId = null;
+    getCurrSubHubId(state, action) {
+      state.currSubHubId = action.payload.currSubHubId;
+      state.currSubHubIdType = action.payload.currSubHubIdType;
     },
     setShowSubItems(state, action) {
       state.showSubItems = action.payload;
@@ -83,13 +88,13 @@ export const {
   getHub,
   chechIfHub,
   getCurrHubId,
+  getCurrSubHubId,
   setDelHub,
   setShowSubItems,
   setArchiveHub,
   setShowSidebarSettings,
   setToggleArchive,
   setShowEditHubModal,
-  resetCurrHubId,
   setshowMenuDropdown,
   setSubDropdownMenu,
   setHubParentId,

@@ -50,7 +50,6 @@ function MenuDropdownt() {
   const { archiveHub } = useAppSelector((state) => state.hub);
   const { showSubItems } = useAppSelector((state) => state.hub);
   const { showEditHubModal } = useAppSelector((state) => state.hub);
-  console.log(currentItemId);
   // ! actions here (create, delete, rename)
   //archiveHub
   ArchiveHubService({
