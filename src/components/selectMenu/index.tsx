@@ -39,11 +39,11 @@ export default function SelectMenuTeamMembers({
   return (
     <Listbox value={selectedData} onChange={(e) => setSelectedData(e)}>
       {({ open }) => (
-        <div>
+        <div className="w-full">
           <Listbox.Label className="block text-sm font-medium text-gray-700">
             {title}
           </Listbox.Label>
-          <div className="relative mt-1">
+          <div className="relative mt-1 z-20">
             <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
               <span className="block h-5 truncate">
                 {selectedData ? selectedData.name : null}
@@ -72,7 +72,7 @@ export default function SelectMenuTeamMembers({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {teamMembers.map((person) => (
                   <Listbox.Option
                     key={person.id}

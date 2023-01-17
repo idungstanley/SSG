@@ -7,6 +7,7 @@ import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameIt
 import Chat from '../../components/Chat';
 import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
+import ShareItemModal from '../../components/ShareItemModal';
 
 export default function NewExplorerPage() {
   return (
@@ -33,6 +34,7 @@ export default function NewExplorerPage() {
       <Chat />
       <Watchers />
       <Comments />
+      <ShareItemModal />
     </>
   );
 }
