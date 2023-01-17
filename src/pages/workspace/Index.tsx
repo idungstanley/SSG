@@ -1,10 +1,10 @@
-import React from 'react';
-import { useAppSelector } from '../../app/hooks';
-import { Outlet } from 'react-router-dom';
-import Sidebar from './sidebar/Sidebar';
-import Header from './sidebar/Header';
-import UploadModal from '../../components/UploadModal';
-import ExpandedNav from '../../views/ExpandedNav';
+import React from "react";
+import { useAppSelector } from "../../app/hooks";
+import { Outlet } from "react-router-dom";
+import Sidebar from "./sidebar/Sidebar";
+import Header from "./sidebar/Header";
+import UploadModal from "../../components/UploadModal";
+import ExpandedNav from "../../views/ExpandedNav";
 
 function Index() {
   const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(
@@ -29,7 +29,9 @@ function Index() {
         <Header />
         <main className="flex-1">
           <div
-            className={`py-6 mx-auto px-4 sm:px-6 ${showSidebar ? 'px-8' : ''}`}
+            className={`py-3.5 mx-auto sm:px-0 ${
+              showSidebar ? "px-8" : "px-0"
+            }`}
           >
             <Outlet />
           </div>

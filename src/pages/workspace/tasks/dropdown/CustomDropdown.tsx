@@ -1,31 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
+
+interface Icolumn {
+  name: string;
+  icons: JSX.Element;
+  onclick: () => void;
+}
 
 interface CustomDropdownProps {
   title: string;
-  listItems: [];
-  clickAction: (value: string) => void;
+  listItems: Icolumn[];
 }
 
 export default function CustomDropdown({
   title,
   listItems,
-  clickAction,
 }: CustomDropdownProps) {
   return (
     <div className="">
-      <div className="origin-top-right absolute bottom-20 top-12 right-5 z-10 -mt-3 w-48 rounded-md shadow-lg py-1 bg-gray-300 h-full">
+      <div className=" absolute bottom-20 h-screen top-5 mt-3 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white ">
         <button type="button">{title}</button>
         {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
         {listItems.map((listItem) => (
           <>
             <button
               type="button"
-              className="capitalize cursor-pointer p-2 hover:bg-gray-300"
-              onClick={() => clickAction(listItem)}
-              key={listItem}
+              className="capitalize flex cursor-pointer p-2 hover:bg-gray-300"
+              onClick={() => listItem.onclick}
+              key={listItem.name}
             >
-              {listItem}
+              {listItem.icons}
+              {listItem.name}
             </button>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           </>
@@ -36,11 +41,5 @@ export default function CustomDropdown({
 }
 
 CustomDropdown.defaultProps = {
-  title: '',
-};
-
-CustomDropdown.propTypes = {
-  title: PropTypes.string,
-  listItems: PropTypes.array.isRequired,
-  clickAction: PropTypes.func.isRequired,
+  title: "",
 };

@@ -55,7 +55,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
               name="name"
               onChange={(e) => handleTaskChange(e)}
               placeholder="Click to add subtask"
-              className="outline-none border-0"
+              className="border-transparent focus:border-transparent focus:ring-0"
             />
           </div>
         </div>
