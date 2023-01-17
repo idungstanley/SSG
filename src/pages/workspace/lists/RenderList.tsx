@@ -185,7 +185,7 @@ function RenderList() {
           </div>
           {listChildrenData?.data?.tasks?.map((task) => (
             <div key={task.id}>
-              <div className="bg-white border border-gray-100  flex  items-center ml-5 pl-3">
+              <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
                 <RiCheckboxBlankFill
                   className=" text-gray-400 text-xs"
                   aria-hidden="true"
