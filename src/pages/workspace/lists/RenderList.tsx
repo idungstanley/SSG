@@ -17,7 +17,7 @@ import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../../../components";
+import { Button, Dropdown } from "../../../components";
 import {
   createTaskService,
   getTaskListService,
@@ -26,6 +26,8 @@ import { getListsDetailsService } from "../../../features/list/listService";
 import SubTask from "../subtasks/subtask1/SubTask";
 // import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
 import ListNav from "./components/renderlist/ListNav";
+import CustomDropdown from "../tasks/dropdown/CustomDropdown";
+import addColumns from "./components/renderlist/listDetails/listDetails";
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
@@ -81,7 +83,16 @@ function RenderList() {
     }
     setSubTaskOne(id);
   };
+  const [dropDown, setdropDown] = useState(false);
 
+  const handleDropDown = () => {
+    console.log(dropDown);
+
+    setdropDown((prev) => !prev);
+  };
+  // {dropDown ? (<>
+  // <div></div>
+  // </>) : null}
   const navigate = useNavigate();
   const handleTaskModal = (id: string) => {
     setOpenTaskModal(true);
@@ -178,9 +189,15 @@ function RenderList() {
                 </span>
                 CREATED AT
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+              <span
+                className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
+                onClick={() => handleDropDown()}
+              >
                 <FiPlusCircle className="font-black	" />
-              </p>
+                {dropDown && (
+                  <CustomDropdown title="Add task" listItems={addColumns} />
+                )}
+              </span>
             </div>
           </div>
           {listChildrenData?.data?.tasks?.map((task) => (
@@ -270,7 +287,7 @@ function RenderList() {
                     name="name"
                     onChange={(e) => handleTaskChange(e)}
                     placeholder="Click to add task"
-                    className="outline-none border-0"
+                    className=" border-transparent focus:border-transparent focus:ring-0"
                   />
                 </div>
               </div>
