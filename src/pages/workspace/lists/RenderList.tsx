@@ -139,33 +139,45 @@ function RenderList() {
             </div>
           </section>
           {/* card */}
-          <div className="flex w-full">
-            <div className=" flex w-6/12 items-center gap-2">
+          <div className=" flex  items-center ml-3 pl-3">
+            <div className=" flex w-6/12 items-center gap-2 shrink-0">
               <FiArrowDownCircle
                 className=" text-gray-400 text-xs"
                 aria-hidden="true"
               />
-              <span className="text-xs font-semibold text-gray-400	">OPEN</span>{" "}
-              {listChildrenData?.data?.tasks.length}
+              <span className="text-xs font-semibold text-gray-400	">OPEN</span>
+              <span className="text-xs font-semibold text-gray-400	">
+                {listChildrenData?.data?.tasks.length}
+              </span>
+
               <span className="text-xs font-semibold text-gray-400	">TASK</span>
             </div>
-            <div className="flex items-center space-x-8">
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
-                <span>
+            <div className="flex items-center w-6/12">
+              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold group">
+                <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
                 <span>USER</span>
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-md  rounded-full p-1 ml-1 font-semibold">
-                DUE DATE
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
+                <span>DUE DATE</span>
               </p>
-              <p className="h-5 text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
                 PRIORITY
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
                 CREATED AT
               </p>
-              <p className="h-5  text-gray-400 text-xs text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
                 <FiPlusCircle className="font-black	" />
               </p>
             </div>
@@ -177,7 +189,7 @@ function RenderList() {
                   className=" text-gray-400 text-xs"
                   aria-hidden="true"
                 />
-                <div className="flex items-center w-6/12">
+                <div className="flex items-center w-6/12 group">
                   {/* data and input */}
                   <div onClick={() => handleTaskModal(task.id)}>
                     <p className="capitalize text-xs font-semibold leading-8 pl-5	">
@@ -188,7 +200,7 @@ function RenderList() {
                   {/* iconstask */}
                   <div
                     id="iconWrapper"
-                    className="flex items-center space-x-1 ml-1 opacity-0  hover:opacity-100"
+                    className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
                   >
                     <div
                       id="wrapper"
@@ -215,23 +227,23 @@ function RenderList() {
 
                 <div className="flex items-center space-x-10">
                   <span
-                    className="border-dotted border-gray-300 border-2 rounded-full text-xs"
-                    style={{ marginLeft: "-20px" }}
+                    className=" rounded-full text-xs text-center"
+                    // style={{ marginLeft: "-20px" }}
                   >
                     <UserAddOutlined
-                      className="h-5 w-5 text-gray-400 text-xs"
+                      className="h-5 w-5 text-gray-400 text-xl "
                       aria-hidden="true"
                     />
                   </span>
-                  <span className="border-dotted border-gray-300 pl-3">
+                  <span className="border-dotted border-gray-300 pl-3 ml-5">
                     <CalendarOutlined
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
-                  <span className="border-dotted border-gray-300">
+                  <span className="border-dotted border-gray-300 ml-5">
                     <FlagOutlined
-                      className="h-5 w-7 pl-10 text-gray-400"
+                      className="h-5 w-7  text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
@@ -262,7 +274,7 @@ function RenderList() {
                 </div>
               </div>
               {/* icons */}
-              {/* <div className="flex items-center space-x-10">
+              <div className="flex items-center space-x-10">
                 <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
                   <UserAddOutlined
                     className="h-5 w-7 text-gray-400"
@@ -293,7 +305,7 @@ function RenderList() {
                 <div onClick={() => setAddNewItem(!addNewItem)}>
                   <p className="text-xl text-gray-400 cursor-pointer">X</p>
                 </div>
-              </div> */}
+              </div>
             </div>
           )}
           <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
