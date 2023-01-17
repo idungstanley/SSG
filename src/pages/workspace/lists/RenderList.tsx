@@ -12,6 +12,7 @@ import {
 import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
 import { RiCheckboxBlankFill } from "react-icons/ri";
 import { MdOutlineDragIndicator } from "react-icons/md";
+import { FaTimes } from "react-icons/fa";
 import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -204,10 +205,10 @@ function RenderList() {
                   >
                     <div
                       id="wrapper"
-                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100  "
+                      className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
                     >
                       <PlusOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                        className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
                         aria-hidden="true"
                         onClick={() => handleSubTask(task.id)}
                       />
@@ -225,7 +226,7 @@ function RenderList() {
                 </div>
                 {/* icons */}
 
-                <div className="flex items-center space-x-10">
+                <div className="flex  space-x-10">
                   <span
                     className=" rounded-full text-xs text-center"
                     // style={{ marginLeft: "-20px" }}
@@ -260,8 +261,8 @@ function RenderList() {
 
           {/* toggle */}
           {addNewItem && (
-            <div className="bg-white border border-gray-100 rounded-lg px-2 py-1 flex  items-center">
-              <div className="flex items-center w-8/12">
+            <div className="bg-white border border-sky-500  ml-5 flex  items-center">
+              <div className="flex items-center w-10/12">
                 {/* data and input */}
                 <div>
                   <input
@@ -274,22 +275,34 @@ function RenderList() {
                 </div>
               </div>
               {/* icons */}
-              <div className="flex items-center space-x-10">
-                <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+              <div className="flex items-center space-x-1">
+                <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
                   <UserAddOutlined
-                    className="h-5 w-7 text-gray-400"
+                    className="text-xs h-6 w-6 text-gray-400"
                     aria-hidden="true"
                   />
                 </span>
-                <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
+                  <UserAddOutlined
+                    className="text-xs h-6 w-6 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
+                  <UserAddOutlined
+                    className="text-xs h-6 w-6 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
                   <CalendarOutlined
-                    className="h-5 w-7 text-gray-400"
+                    className="text-xs h-6 w-6 text-gray-400"
                     aria-hidden="true"
                   />
                 </span>
-                <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
                   <FlagOutlined
-                    className="h-5 w-7 text-gray-400"
+                    className="text-xs h-6 w-6 text-gray-400"
                     aria-hidden="true"
                   />
                 </span>
@@ -297,19 +310,25 @@ function RenderList() {
                   buttonStyle="primary"
                   onClick={onSubmit}
                   // loading={loginMutation.status === 'loading'}
-                  label="Save"
-                  padding="py-2 px-4"
-                  height="h-7"
-                  width="w-20"
+                  label="SAVE"
+                  padding="py-3 px-4"
+                  height="h-5"
+                  width="w-15"
+                  roundedLeft={false}
+                  roundedRight={false}
                 />
                 <div onClick={() => setAddNewItem(!addNewItem)}>
-                  <p className="text-xl text-gray-400 cursor-pointer">X</p>
+                  <FaTimes className="text-xl text-gray-400 cursor-pointer" />
                 </div>
               </div>
             </div>
           )}
-          <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
-            <p className="pl-2 text-xs rounded  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+          <div
+            className=""
+            id="newItem"
+            onClick={() => setAddNewItem(!addNewItem)}
+          >
+            <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
               + New Task
             </p>
           </div>
