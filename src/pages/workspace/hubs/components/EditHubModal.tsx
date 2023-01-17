@@ -1,30 +1,20 @@
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import MainLogo from '../../../../assets/branding/main-logo.png';
-import { Button, Input } from '../../../../components';
+import { Button, Input, SlideOver } from '../../../../components';
 import { useEditHubService } from '../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  getCurrHubId,
-  setshowMenuDropdown,
-} from '../../../../features/hubs/hubSlice';
+import { setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
+import { setEditHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
-interface ModalProps {
-  isEditVisible: boolean;
-  onCloseEditHubModal: () => void;
-}
-export default function EditHubModal({
-  isEditVisible,
-  onCloseEditHubModal,
-}: ModalProps) {
+export default function EditHubModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currHubId } = useAppSelector((state) => state.hub);
   const createHub = useMutation(useEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      onCloseEditHubModal();
+      dispatch(setEditHubSlideOverVisibility(false));
       dispatch(
         setshowMenuDropdown({
           showMenuDropdown: null,
@@ -58,61 +48,56 @@ export default function EditHubModal({
       currentWorkspaceId,
       currHubId,
     });
-
-    onCloseEditHubModal();
   };
 
-  const handleCloseEditModal = (e) => {
-    if (e.target.id === 'wrapper') onCloseEditHubModal();
+  const handleCloseSlider = () => {
+    dispatch(setEditHubSlideOverVisibility(false));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+      })
+    );
   };
 
-  if (!isEditVisible) return null;
+  const { showEditHubSlideOver } = useAppSelector((state) => state.slideOver);
+  const { showMenuDropdownType } = useAppSelector((state) => state.hub);
   return (
-    <div
-      className="w-full m-auto z-50 overflow-x-hidden overflow-y-auto inset-0 left-0 fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
-      id="wrapper"
-      onClick={handleCloseEditModal}
-    >
-      <div className="w-5/12 flex flex-col">
-        <div
-          className="text-white text-xl place-self-end"
-          onClick={() => onCloseEditHubModal()}
-        >
-          X
-        </div>
-        <div className="bg-white p-2 rounded">
-          <section className="header h-36 flex justify-center items-center flex-col">
-            <img
-              className="mx-auto h-12 w-auto"
-              src={MainLogo}
-              alt="Workflow"
+    <SlideOver
+      show={showEditHubSlideOver}
+      onClose={() => handleCloseSlider()}
+      headerTitle={
+        showMenuDropdownType === 'hubs' ? ' Edit hub' : 'Edit subhub'
+      }
+      body={
+        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
+          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <Input
+              label={
+                showMenuDropdownType === 'hubs' ? 'Hub Name:' : 'Subhub Name:'
+              }
+              placeholder={
+                showMenuDropdownType === 'hubs'
+                  ? 'Enter hub Name'
+                  : 'Enter SubHub Name'
+              }
+              name="name"
+              value={name}
+              type="text"
+              onChange={handleHubChange}
             />
-            <h3 className="font-bold">Edit Hub name</h3>
-          </section>
-          <section id="input" className="mt-5 ml-2">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="Hub Name:"
-                placeholder="Enter New Hub Name"
-                name="name"
-                value={name}
-                type="text"
-                onChange={handleHubChange}
-              />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                label="Create Hub"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+      footerButtons={
+        <Button
+          buttonStyle="primary"
+          onClick={onSubmit}
+          label={showMenuDropdownType === 'hubs' ? 'Edit hub' : 'Edit  Subhub'}
+          padding="py-2 px-4"
+          height="h-10"
+          width="w-40"
+        />
+      }
+    />
   );
 }

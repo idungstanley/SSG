@@ -33,6 +33,5 @@ export const getWalletService = (data) => {
     },
     true
   );
-
   return response;
 };

@@ -1,8 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
-import { setArchiveHub, setDelHub } from './hubSlice';
 import { useDispatch } from 'react-redux';
+import requestNew from '../../app/requestNew';
+import { getWallet } from '../wallet/walletSlice';
+import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
+import { getHub } from './hubSlice';
+import { setArchiveHub, setDelHub } from './hubSlice';
 
 export const createHubService = (data: {
   name: string;
@@ -28,6 +30,7 @@ export const createHubService = (data: {
 // get all hubs
 export const useGetHubList = ({ query }) => {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
   return useQuery<IResponseGetHubs>(
     ['hubs', { isArchived: query ? 1 : 0 }],
@@ -45,9 +48,11 @@ export const useGetHubList = ({ query }) => {
       ),
     {
       onSuccess: (data) => {
-        data.data.hubs.map((hub) =>
-          queryClient.setQueryData(['hub', hub.id], hub)
-        );
+        const hubData = data.data.hubs.map((hub) => {
+          queryClient.setQueryData(['hub', hub.id], hub);
+          return { ...hub, isOpen: false };
+        });
+        dispatch(getHub(hubData));
       },
     }
   );

@@ -8,11 +8,11 @@ export const createTaskService = (data) => {
     {
       url: 'at/tasks',
       method: 'POST',
-      data: {
+      params: {
         name: data.name,
         description: data.description,
-        list_id: data.getListId,
-        parent_id: data.parentTaskId,
+        list_id: data.showMenuDropdown,
+        // parent_id: data.parentTaskId,
       },
     },
     true
@@ -36,8 +36,8 @@ export const getTaskListService = (data) => {
   const listId = data.queryKey[1];
   const response = requestNew(
     {
-      url: 'at/tasks',
-      method: 'GET',
+      url: 'at/tasks/list',
+      method: 'POST',
       params: {
         list_id: listId,
       },

@@ -15,20 +15,12 @@ import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
 import { classNames } from '../../../../utils';
 
-interface TaskDropDownProps {
-  getListId?: string;
-}
-
-function TaskDropdown({ getListId }: TaskDropDownProps) {
+function TaskDropdown() {
   const [showTaskModal, setShowTaskModal] = useState(false);
 
   return (
     <>
-      <TaskModal
-        taskVisible={showTaskModal}
-        getListId={getListId}
-        onCloseTaskModal={() => setShowTaskModal(false)}
-      />
+      <TaskModal />
 
       <Menu as="div" className="">
         <div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import WalletIndex from '../../Index/WalletIndex';
-import ListIndex from '../../Index/ListIndex';
+import WalletIndex from '../../Index/walletIndex/WalletIndex';
+import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
 import { useAppSelector } from '../../../app/hooks';
 

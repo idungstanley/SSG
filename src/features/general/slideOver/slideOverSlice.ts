@@ -3,6 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
+  showCreateHubSlideOver: boolean;
+  showEditHubSlideOver: boolean;
+  showCreateWalletSlideOver: boolean;
+  showCreateListSlideOver: boolean;
+  showCreateTaskSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
   showCreateFolderSlideOver: boolean;
   showInviteTeamMemberSlideOver: boolean;
@@ -17,6 +22,11 @@ interface SideOverState {
 
 const initialState: SideOverState = {
   showCreateInboxSlideOver: false,
+  showCreateHubSlideOver: false,
+  showEditHubSlideOver: false,
+  showCreateWalletSlideOver: false,
+  showCreateListSlideOver: false,
+  showCreateTaskSlideOver: false,
   showAssignInboxFileSlideOver: false,
   showCreateFolderSlideOver: false,
   showInviteTeamMemberSlideOver: false,
@@ -38,6 +48,33 @@ export const slideOverSlice = createSlice({
       action: PayloadAction<boolean>
     ) => {
       state.showCreateInboxSlideOver = action.payload;
+    },
+    setCreateHubSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateHubSlideOver = action.payload;
+    },
+    setEditHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
+      state.showEditHubSlideOver = action.payload;
+    },
+    setCreateWalletSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateWalletSlideOver = action.payload;
+    },
+    setCreateListSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateListSlideOver = action.payload;
+    },
+    setCreateTaskSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateTaskSlideOver = action.payload;
     },
     setAssignInboxFileSlideOverVisibility: (
       state,
@@ -103,6 +140,11 @@ export const slideOverSlice = createSlice({
 
 export const {
   setCreateInboxSlideOverVisibility,
+  setCreateHubSlideOverVisibility,
+  setEditHubSlideOverVisibility,
+  setCreateWalletSlideOverVisibility,
+  setCreateListSlideOverVisibility,
+  setCreateTaskSlideOverVisibility,
   setAssignInboxFileSlideOverVisibility,
   setCreateFolderSlideOverVisibility,
   setInviteTeamMemberSlideOverVisibility,

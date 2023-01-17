@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubWallet } from '../../features/hubs/hubService';
-import TaskDropdown from '../../pages/workspace/tasks/component/TaskDropdown';
+import { useGetHubWallet } from '../../../features/hubs/hubService';
+import TaskDropdown from '../../../pages/workspace/tasks/component/TaskDropdown';
 import { BsListUl } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import { setshowMenuDropdown } from '../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { setCurrentListId } from '../../../features/list/listSlice';
+import { useAppSelector } from '../../../app/hooks';
 
 interface ListIndexProps {
   showHubList: boolean;
@@ -11,11 +17,21 @@ interface ListIndexProps {
 
 function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
-  const [getListId, setGetListId] = useState('');
+  const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
+  const { currentListId } = useAppSelector((state) => state.list);
 
   const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);
+  };
+  const handleListSettings = (id: string) => {
+    dispatch(setCurrentListId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'list',
+      })
+    );
   };
 
   return (
@@ -44,12 +60,16 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
               <button
                 type="button"
                 id="listright"
-                className="flex items-center justify-end space-x-1"
-                onClick={() => setGetListId(list.id)}
+                className="flex items-center justify-end space-x-1 mr-6"
               >
-                <TaskDropdown getListId={getListId} />
+                {/* <TaskDropdown getListId={getListId} /> */}
+                <AiOutlineEllipsis
+                  className="cursor-pointer"
+                  onClick={() => handleListSettings(list.id)}
+                />
               </button>
             </section>
+            {currentListId === list.id ? <MenuDropdown /> : null}
           </div>
         ))}
     </div>

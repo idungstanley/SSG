@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../../features/wallet/walletService';
-import { Button, Input } from '../../../../../components';
+import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
+import { setCreateWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import {
+  setSubDropdownMenu,
+  setshowMenuDropdown,
+} from '../../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
 
-interface WalletModalProps {
-  walletVisible: boolean;
-  onCloseWalletModal: () => void;
-  walletId?: string;
-}
-
-function WalletModal({ walletVisible, onCloseWalletModal }: WalletModalProps) {
+function WalletModal() {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const { showMenuDropdownType, showMenuDropdown } = useAppSelector(
     (state) => state.hub
+  );
+  const { showCreateWalletSlideOver } = useAppSelector(
+    (state) => state.slideOver
   );
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      onCloseWalletModal();
+      dispatch(setCreateWalletSlideOverVisibility(false));
+      dispatch(setSubDropdownMenu(false));
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: null,
+        })
+      );
     },
   });
 
@@ -44,55 +54,61 @@ function WalletModal({ walletVisible, onCloseWalletModal }: WalletModalProps) {
     });
   };
 
-  if (!walletVisible) return null;
-
+  const handleCloseSlider = () => {
+    dispatch(setCreateWalletSlideOverVisibility(false));
+    dispatch(setSubDropdownMenu(false));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+      })
+    );
+  };
   return (
-    <div className="fixed top-0 bottom-0 right-0 flex items-center justify-center w-full bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="flex flex-col w-5/12">
-        <div
-          className="text-xl text-white place-self-end"
-          onClick={() => onCloseWalletModal()}
-        >
-          X
-        </div>
-        <div className="p-2 bg-white rounded">
-          <section className="h-24 pt-4 pl-4 header">
-            <h3 className="text-xl font-bold">Create Wallet</h3>
-          </section>
-          <div className="flex justify-start mt-4 ml-6 space-x-4 selectors">
-            <h3 className="p-1 font-bold rounded hover:bg-gray-300 hover:rounded">
-              New
-            </h3>
-            <h3 className="p-1 font-bold rounded hover:bg-gray-300 hover:rounded">
-              Template
-            </h3>
+    <SlideOver
+      show={showCreateWalletSlideOver}
+      onClose={() => handleCloseSlider()}
+      headerTitle={
+        showMenuDropdownType === 'wallet'
+          ? ' Create wallet'
+          : 'Create subwallet'
+      }
+      body={
+        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
+          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <Input
+              label={
+                showMenuDropdownType === 'wallet'
+                  ? 'Wallet Name:'
+                  : 'Subwallet Name:'
+              }
+              placeholder={
+                showMenuDropdownType === 'wallet'
+                  ? 'Enter wallet Name'
+                  : 'Enter Subwallet Name'
+              }
+              name="name"
+              value={name}
+              type="text"
+              onChange={handleWalletChange}
+            />
           </div>
-          <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-          <section id="listform">
-            <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="Wallet Name:"
-                placeholder="Enter Wallet Name"
-                name="name"
-                value={name}
-                type="text"
-                onChange={handleWalletChange}
-              />
-            </div>
-            <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                label="Create List"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section>
         </div>
-      </div>
-    </div>
+      }
+      footerButtons={
+        <Button
+          buttonStyle="primary"
+          onClick={onSubmit}
+          label={
+            showMenuDropdownType === 'wallet'
+              ? 'Create Wallet'
+              : 'Create Subwallet'
+          }
+          padding="py-2 px-4"
+          height="h-10"
+          width="w-40"
+        />
+      }
+    />
   );
 }
 

@@ -272,12 +272,7 @@ function MenuDropdownt() {
         )}
       </Menu>
       {showSubItems && <SubDd />}
-      {showEditHubModal && (
-        <EditHubModal
-          isEditVisible={showEditHubModal}
-          onCloseEditHubModal={() => dispatch(setShowEditHubModal(false))}
-        />
-      )}
+      {showEditHubModal && <EditHubModal />}
     </>
   );
 }
