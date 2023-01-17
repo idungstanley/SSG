@@ -169,6 +169,4 @@ const shareItem = (data: {
   return request;
 };
 
-export const useShareItem = () => {
-  return useMutation(shareItem);
-};
+export const useShareItem = () => useMutation(shareItem);
