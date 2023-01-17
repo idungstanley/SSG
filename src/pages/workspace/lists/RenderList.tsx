@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/outline";
 import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
 import { RiCheckboxBlankFill } from "react-icons/ri";
+import { MdOutlineDragIndicator } from "react-icons/md";
 import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -140,16 +141,20 @@ function RenderList() {
           {/* card */}
           <div className="flex w-full">
             <div className=" flex w-6/12 items-center gap-2">
-              <FiArrowDownCircle />
-              <span className="text-xs font-semibold text-gray-400	">
-                OPEN
-              </span>{" "}
+              <FiArrowDownCircle
+                className=" text-gray-400 text-xs"
+                aria-hidden="true"
+              />
+              <span className="text-xs font-semibold text-gray-400	">OPEN</span>{" "}
               {listChildrenData?.data?.tasks.length}
               <span className="text-xs font-semibold text-gray-400	">TASK</span>
             </div>
             <div className="flex items-center space-x-8">
-              <p className="h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
-                USER
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold">
+                <span>
+                  <MdOutlineDragIndicator />
+                </span>
+                <span>USER</span>
               </p>
               <p className="h-5  text-gray-400 text-xs text-gray-400 text-md  rounded-full p-1 ml-1 font-semibold">
                 DUE DATE
@@ -169,8 +174,8 @@ function RenderList() {
             <div key={task.id}>
               <div className="bg-white border border-gray-100  flex  items-center ml-5 pl-3">
                 <RiCheckboxBlankFill
-                  className="bg-white text-xs"
-                  style={{ backgroundColor: "#eee" }}
+                  className=" text-gray-400 text-xs"
+                  aria-hidden="true"
                 />
                 <div className="flex items-center w-6/12">
                   {/* data and input */}
@@ -183,11 +188,11 @@ function RenderList() {
                   {/* iconstask */}
                   <div
                     id="iconWrapper"
-                    className="flex items-center space-x-1 ml-1"
+                    className="flex items-center space-x-1 ml-1 opacity-0  hover:opacity-100"
                   >
                     <div
                       id="wrapper"
-                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100 "
+                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100  "
                     >
                       <PlusOutlined
                         className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
@@ -292,7 +297,7 @@ function RenderList() {
             </div>
           )}
           <div id="newItem" onClick={() => setAddNewItem(!addNewItem)}>
-            <p className="pl-2 text-xs rounded bg-gray-100 w-20 mt-1 cursor-pointer">
+            <p className="pl-2 text-xs rounded  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
               + New Task
             </p>
           </div>
