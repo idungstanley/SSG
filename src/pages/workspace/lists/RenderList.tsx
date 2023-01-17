@@ -12,7 +12,7 @@ import {
 import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
 import { RiCheckboxBlankFill } from "react-icons/ri";
 import { MdOutlineDragIndicator } from "react-icons/md";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaSort } from "react-icons/fa";
 import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -104,7 +104,7 @@ function RenderList() {
           style={{ backgroundColor: "#eee" }}
         >
           <div id="listTitle" className="flex justify-between items-center">
-            <div className="flex items-center justify-center space-x-2 text-gray-400">
+            <div className="flex items-center justify-center space-x-2 text-gray-400 group">
               <ChevronDownIcon
                 className="flex-shrink-0 h-4 w-5"
                 aria-hidden="true"
@@ -117,8 +117,12 @@ function RenderList() {
                 aria-hidden="true"
               />
               <p> + New Task</p>
-              <p>Add Description</p>
-              <p>Add Comment</p>
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+                Add Description
+              </p>
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+                Add Comment
+              </p>
             </div>
             <div className="flex items-center justify-center space-x-1 text-gray-400">
               <CheckIcon
@@ -129,10 +133,10 @@ function RenderList() {
             </div>
           </div>
           <section id="border">
-            <div className="inline-flex justify-center items-center w-full p-3">
+            <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
               <span
-                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900"
+                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer"
                 style={{ backgroundColor: "#eee" }}
               >
                 Add New Status
@@ -154,29 +158,41 @@ function RenderList() {
               <span className="text-xs font-semibold text-gray-400	">TASK</span>
             </div>
             <div className="flex items-center w-6/12">
-              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold group">
+              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-green-600 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
                 <span>USER</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
                 <span>DUE DATE</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
-                PRIORITY
+                <span>PRIORITY</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
-                CREATED AT
+                <span>CREATED AT</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
               </p>
               <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
                 <FiPlusCircle className="font-black	" />
@@ -244,7 +260,7 @@ function RenderList() {
                   </span>
                   <span className="border-dotted border-gray-300 ml-5">
                     <FlagOutlined
-                      className="h-5 w-7  text-gray-400"
+                      className="h-5 w-7  text-gray-400 ml-8"
                       aria-hidden="true"
                     />
                   </span>
