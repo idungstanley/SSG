@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+const showPreviewFromLS = localStorage.getItem('showPreview');
+
 interface ISettings {
   showPreview: boolean;
   showArchived: boolean;
@@ -11,7 +13,7 @@ interface AccountState {
 
 const initialState: AccountState = {
   settings: {
-    showPreview: false,
+    showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false,
     showArchived: false,
   },
 };

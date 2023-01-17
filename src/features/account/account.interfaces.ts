@@ -12,10 +12,14 @@ export interface IAccountReq {
   };
 }
 
+export interface IUserParams {
+  showPreview: string;
+}
+
 export interface IUserSettings {
   key: string;
   is_json: boolean;
-  value: boolean;
+  value: IUserParams;
   created_at: string;
   updated_at: string;
 }
