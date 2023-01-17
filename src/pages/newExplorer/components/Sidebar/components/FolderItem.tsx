@@ -10,6 +10,7 @@ import {
   ChatIcon,
   ChatAlt2Icon,
   EyeIcon,
+  ShareIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -17,6 +18,7 @@ import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
   setShowCommentsSideOver,
+  setShowShareSideOver,
   setShowWatchersSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
@@ -109,6 +111,9 @@ export default function FolderItem({
   const handleShowComments = () =>
     dispatch(setShowCommentsSideOver({ show: true, type: 'folder', id }));
 
+  const handleShowShare = () =>
+    dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
+
   const configForDropdown = [
     {
       label: 'Download',
@@ -120,6 +125,11 @@ export default function FolderItem({
       onClick: () =>
         dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
       icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Share',
+      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      onClick: handleShowShare,
     },
     {
       label: 'Delete',

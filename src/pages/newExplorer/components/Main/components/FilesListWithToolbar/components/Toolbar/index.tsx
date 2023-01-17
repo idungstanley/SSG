@@ -21,6 +21,7 @@ import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
   setShowCommentsSideOver,
+  setShowShareSideOver,
   setShowWatchersSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 
@@ -91,7 +92,14 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
-      onClick: () => ({}),
+      onClick: () =>
+        dispatch(
+          setShowShareSideOver({
+            show: true,
+            id: selectedFileId || '',
+            type: 'file',
+          })
+        ),
       label: 'Share',
       disabled: !selectedFileId,
     },
