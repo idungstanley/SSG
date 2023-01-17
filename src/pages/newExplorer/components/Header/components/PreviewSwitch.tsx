@@ -15,9 +15,11 @@ function PreviewSwitch() {
 
   const { mutate: onChangeKeys } = useSetUserSettingsKeys();
 
+  // request will be send only of showPreview from localStorage is null
   const { data } = useGetUserSettingsKeys(!showPreviewFromLS);
 
   useEffect(() => {
+    // if request sended, add values from it to localStorage and store
     if (data) {
       const value = JSON.parse(data?.value.showPreview || 'false');
       dispatch(setAccountSettings({ ...settings, showPreview: value }));
@@ -26,15 +28,16 @@ function PreviewSwitch() {
     }
   }, [data]);
 
-  const { settings } = useAppSelector((state) => state.account);
-
   const onSwitch = (value: boolean) => {
+    // update backend, localStorage and store
     onChangeKeys({ showPreview: JSON.stringify(value) });
 
     localStorage.setItem('showPreview', JSON.stringify(value));
 
     dispatch(setAccountSettings({ ...settings, showPreview: value }));
   };
+
+  const { settings } = useAppSelector((state) => state.account);
 
   const { showPreview } = settings;
 

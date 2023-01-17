@@ -13,7 +13,13 @@ export interface IAccountReq {
 }
 
 export interface IUserParams {
+  // add darkTheme or showArchived values
   showPreview: string;
+}
+
+export interface IUserState {
+  // add darkTheme or showArchived values
+  showPreview: boolean;
 }
 
 export interface IUserSettings {
