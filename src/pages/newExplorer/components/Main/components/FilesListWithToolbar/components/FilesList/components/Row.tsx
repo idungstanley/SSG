@@ -43,7 +43,6 @@ export default function Row({ fileId }: RowProps) {
   const dispatch = useAppDispatch();
 
   const { data: file } = useGetExplorerFile(fileId);
-
   const { selectedFileIds, selectedFileId } = useAppSelector(
     (state) => state.explorer
   );
@@ -96,6 +95,7 @@ export default function Row({ fileId }: RowProps) {
     id: file?.id || '',
     data: {
       isFile: true,
+      fileFolderId: file?.folder_id,
     },
   });
 

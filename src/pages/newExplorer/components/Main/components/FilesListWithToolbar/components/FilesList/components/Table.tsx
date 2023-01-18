@@ -19,7 +19,7 @@ export default function Table({
   toggleAll,
   items,
 }: TableProps) {
-  const { draggableId } = useAppSelector((state) => state.explorer);
+  const { draggableItem } = useAppSelector((state) => state.explorer);
 
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
@@ -62,9 +62,9 @@ export default function Table({
       </thead>
 
       {/* draggable item */}
-      {draggableId ? (
+      {draggableItem?.isFile ? (
         <DragOverlay wrapperElement="tbody">
-          <Row fileId={draggableId} />
+          <Row fileId={draggableItem.id} />
         </DragOverlay>
       ) : null}
 

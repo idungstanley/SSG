@@ -72,11 +72,11 @@ export default function FolderItem({
     listeners,
     setNodeRef: draggableRef,
     transform,
-  } = useDraggable({ id, data: { parentId } });
+  } = useDraggable({ id, data: { parentId, isFolder: true } });
 
   const { isOver, setNodeRef: droppableRef } = useDroppable({
     id,
-    data: { parentId },
+    data: { parentId, isFolder: true },
   });
 
   const style = {
