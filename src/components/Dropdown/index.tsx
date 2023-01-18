@@ -4,6 +4,7 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/outline';
+import { BsPlusLg } from 'react-icons/bs';
 
 interface IDropdownItem {
   label: string;
@@ -29,7 +30,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           {iconType === 'dots' ? (
             <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
           ) : (
-            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>

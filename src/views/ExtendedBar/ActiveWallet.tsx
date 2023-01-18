@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHub } from '../../features/hubs/hubService';
-import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
-import ListModal from '../../pages/workspace/Lists/components/ListModal';
+// import { useGetHub } from '../../features/hubs/hubService';
+import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
+import ListModal from '../../pages/workspace/Lists/components/modals/ListModal';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import MenuDropdown from '../../components/Dropdown/DropdownForWorkspace';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
@@ -12,6 +11,7 @@ import { getWallet, showWallet } from '../../features/wallet/walletSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { useGetHubWallet } from '../../features/hubs/hubService';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -26,7 +26,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [walletId, setGetWalletId] = useState('');
   const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
-  const { data } = useGetHub(getCurrentHubId);
+  const { data } = useGetHubWallet(getCurrentHubId);
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'wallet') => {
@@ -120,7 +120,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 onClick={() => setGetWalletId(wallet.id)}
               >
                 <MenuDropdown />
-                <PlusDropDown walletId={walletId} />
+                {/* <PlusDropDown walletId={walletId} /> */}
               </div>
             </section>
             <div>
@@ -133,7 +133,6 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 <SubWalletIndex walletParentId={walletParentId} />
               ) : null}
               <ListModal
-                walletId={wallet.id}
                 listVisible={showListModal}
                 onCloseListModal={() => setShowListModal(false)}
               />

@@ -24,6 +24,8 @@ import { resetSelectedItem } from '../../../../../features/explorer/explorerSlic
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
 import { setSelectedItem } from '../../../../../features/chat/chatSlice';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 
 interface FolderItemProps {
   id: string;
@@ -108,23 +110,36 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex justify-between w-full items-center py-1 hover:bg-gray-100',
-        isActiveFolder ? 'text-primary-600 bg-primary-50' : ''
+        'group flex justify-between w-full items-center py-1.5 hover:bg-gray-100',
+        isActiveFolder ? 'bg-green-50 text-green-500' : ''
       )}
     >
       <div
         onClick={() => handleClickFolder(id, parentId)}
-        className="flex gap-2 items-center cursor-pointer"
+        className="flex items-center cursor-pointer"
       >
         {isActiveFolder || haveAncestors ? (
-          <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+          <>
+            <VscTriangleDown
+              className="flex-shrink-0 h-3"
+              color="rgba(72, 67, 67, 0.64)"
+              aria-hidden="true"
+            />
+            <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
+          </>
         ) : (
-          <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+          <>
+            <VscTriangleRight
+              className="flex-shrink-0 h-3"
+              color="rgba(72, 67, 67, 0.64)"
+              aria-hidden="true"
+            />
+            <FaFolder color="rgba(72, 67, 67, 0.64)" />
+          </>
         )}
 
-        <div className="flex gap-2 items-center">
-          <FolderIcon className="h-5 w-5" aria-hidden="true" />
-          <p>{name}</p>
+        <div className="tracking-wider capitalize ml-2" style={{ fontSize: '10px' }}>
+          <p>{name.length > 10 ? name.substring(0,10) : name }</p>
         </div>
       </div>
 

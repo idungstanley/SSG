@@ -8,6 +8,7 @@ import {
   ChatIcon,
   EyeIcon,
   ChatAlt2Icon,
+  SearchIcon,
 } from '@heroicons/react/outline';
 import {
   useAppDispatch,
@@ -24,6 +25,7 @@ import {
   setShowCommentsSideOver,
   setShowWatchersSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -78,20 +80,14 @@ export default function Toolbar({ data }: ToolbarProps) {
   const menuItems = [
     {
       icon: (
-        <DownloadIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <DownloadIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
       ),
       onClick: handleDownload,
       label: 'Download',
       disabled: selectedIds.length === 0,
     },
     {
-      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
-      onClick: handleDelete,
-      label: 'Delete',
-      disabled: selectedIds.length === 0,
-    },
-    {
-      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      icon: <ShareIcon className="h-4 w-4 stroke-current" aria-hidden="true" />,
       onClick: () => ({}),
       label: 'Share',
       disabled: !selectedFileId,
@@ -99,7 +95,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     {
       icon: (
         <ClipboardCopyIcon
-          className="h-5 w-5 stroke-current"
+          className="h-4 w-4 stroke-current"
           aria-hidden="true"
         />
       ),
@@ -109,7 +105,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: (
-        <PrinterIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <PrinterIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
       ),
       onClick: () => ({}),
       label: 'Print',
@@ -118,13 +114,13 @@ export default function Toolbar({ data }: ToolbarProps) {
     {
       label: 'Watchers',
       onClick: handleShowWatchers,
-      icon: <EyeIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <EyeIcon className="h-4 w-4" aria-hidden="true" />,
       disabled: !selectedFileId,
     },
     {
       label: 'Comments',
       onClick: handleShowComments,
-      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <ChatIcon className="h-4 w-4" aria-hidden="true" />,
       disabled: !selectedFileId,
     },
     {
@@ -133,7 +129,7 @@ export default function Toolbar({ data }: ToolbarProps) {
         dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
       icon: (
         <ChatAlt2Icon
-          className="mr-2.5 h-5 w-5 stroke-current"
+          className="mr-2.5 h-4 w-4 stroke-current"
           aria-hidden="true"
         />
       ),
@@ -142,14 +138,18 @@ export default function Toolbar({ data }: ToolbarProps) {
   ];
 
   return (
-    <div className="flex items-center justify-between p-2">
+    <div className="flex items-center justify-between px-2 py-1">
       {/* file actions */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center pt-1">
         {menuItems.map((button) => (
           <Tooltip key={button.label} tooltip={button.label}>
             <button
               disabled={button.disabled}
-              className={button.disabled ? 'text-gray-300' : 'text-gray-500'}
+              className={
+                button.disabled
+                  ? 'text-gray-300'
+                  : 'text-gray-500'
+              }
               onClick={button.onClick}
               type="button"
             >
@@ -160,16 +160,32 @@ export default function Toolbar({ data }: ToolbarProps) {
       </div>
 
       {/* badge (items length and current index) */}
-      <div className="flex gap-1.5 items-center rounded-full bg-indigo-100 px-2.5 py-0.5 font-semibold text-gray-800">
-        {currentFileIndex ? (
-          <>
-            <span className="text-primary-700">
-              {stringifyNumber(currentFileIndex)}
-            </span>
-            <span>/</span>
-          </>
-        ) : null}
-        <span>{stringifyNumber(data.length)}</span>
+      <div className="flex items-center">
+        <div className="flex w-6 items-center cursor-pointer">
+          <SearchIcon className="h-4 w-4" />
+          <BiDotsVerticalRounded className="h-4 w-4" />
+        </div>
+        <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
+          {currentFileIndex ? (
+            <>
+              <span className="text-primary-500">
+                {stringifyNumber(currentFileIndex)}
+              </span>
+              <span>/</span>
+            </>
+          ) : null}
+          <span>{stringifyNumber(data.length)}</span>
+        </div>
+        <button
+          disabled={selectedIds.length === 0}
+          className={
+            selectedIds.length === 0 ? 'text-gray-300' : 'text-gray-500'
+          }
+          onClick={handleDelete}
+          type="button"
+        >
+          <TrashIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
+        </button>
       </div>
     </div>
   );

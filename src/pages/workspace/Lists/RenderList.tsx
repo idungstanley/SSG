@@ -36,12 +36,7 @@ function RenderList() {
       setAddNewItem(!addNewItem);
     },
   });
-  const { data: listChildrenData } = useQuery<{
-    data: { tasks: { id: string; name: string }[] };
-  }>({
-    queryKey: ['listData_bylistId', listId],
-    queryFn: getTaskListService,
-  });
+  const { data: listChildrenData } = getTaskListService({listId});
 
   const { data: listDetailsData } = useQuery({
     queryKey: ['listDetails', listId],

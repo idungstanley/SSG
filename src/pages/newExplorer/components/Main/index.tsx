@@ -4,7 +4,7 @@ import FilesListWithToolbar from './components/FilesListWithToolbar';
 
 export default function Main() {
   return (
-    <div className="grid grid-cols-2 border-t">
+    <div className="flex flex-row border-t">
       <FilesListWithToolbar />
 
       {/* file preview */}

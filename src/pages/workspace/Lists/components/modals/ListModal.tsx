@@ -5,11 +5,11 @@ import { Button, Input } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 
 interface ListModalProps {
-  hublistVisible: boolean;
-  onCloseHubListModal: () => void;
+  listVisible: boolean;
+  onCloseListModal: () => void;
 }
 
-function ListModal({ hublistVisible, onCloseHubListModal }: ListModalProps) {
+function ListModal({ listVisible, onCloseListModal }: ListModalProps) {
   const queryClient = useQueryClient();
   const { showMenuDropdown, showMenuDropdownType }: any = useAppSelector(
     (state) => state.hub
@@ -17,7 +17,7 @@ function ListModal({ hublistVisible, onCloseHubListModal }: ListModalProps) {
   const createList = useMutation(createListService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      onCloseHubListModal();
+      onCloseListModal();
     },
   });
 
@@ -53,14 +53,14 @@ function ListModal({ hublistVisible, onCloseHubListModal }: ListModalProps) {
     });
   };
 
-  if (!hublistVisible) return null;
+  if (!listVisible) return null;
 
   return (
     <div className="fixed top-0 bottom-0 right-0 flex items-center justify-center w-full bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="flex flex-col w-5/12">
         <div
           className="text-xl text-white place-self-end"
-          onClick={() => onCloseHubListModal()}
+          onClick={() => onCloseListModal()}
         >
           X
         </div>

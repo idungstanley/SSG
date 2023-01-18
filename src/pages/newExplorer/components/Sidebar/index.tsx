@@ -5,7 +5,7 @@ import {
 } from '../../../../features/explorer/explorerService';
 import { FolderAddIcon } from '@heroicons/react/outline';
 import FoldersList from './components/FoldersList';
-import Search from '../Search';
+// import Search from '../Search';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
@@ -14,10 +14,13 @@ import { setItemActionForSideOver } from '../../../../features/general/slideOver
 import Dropdown from '../../../../components/Dropdown/index';
 import { useDebounce } from '../../../../hooks';
 import { IExplorerFolder } from '../../../../features/explorer/explorer.interfaces';
+import ExplorerIcon from '../../../../assets/branding/file.png';
 import {
+  setQuery,
   setSelectedFileId,
   setSelectedFolderId,
 } from '../../../../features/explorer/explorerSlice';
+import { Link } from 'react-router-dom';
 
 const stringifyFolders = (
   query: string,
@@ -38,13 +41,13 @@ const stringifyFolders = (
   );
 };
 
-export default function Sidebar() {
+export default function Extendedbar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { selectedFileId } = useAppSelector((state) => state.explorer);
+  const { selectedFileId, query } = useAppSelector((state) => state.explorer);
 
-  const [query, setQuery] = useState('');
+  // const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
   const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
 
@@ -57,7 +60,6 @@ export default function Sidebar() {
 
   useEffect(() => {
     dispatch(setSelectedFolderId(folderId || null));
-
     if (selectedFileId) {
       dispatch(setSelectedFileId(null));
     }
@@ -84,17 +86,12 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="border-r p-2">
+    <aside className="border-r py-2">
       {/* header */}
-      <div className="p-2 w-full flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h1>Explorer</h1>
-          <Dropdown config={configForDropdown} iconType="plus" />
-        </div>
-        {/* search  */}
-        <Search query={query} setQuery={setQuery} type="folder" />
-      </div>
-
+      {/* <div className="flex items-center p-2 text-gray-600  text-xs cursor-pointer h-6 top-0 border-b border-gray justify-between font-semibold leading-3 uppercase truncate tracking-wider">
+        <p>Explorer</p>
+        <img src={ExplorerIcon} alt="" className="w-4 h-4" />
+      </div> */}
       {/* checking status */}
       {status === 'loading' ? (
         <div className="mx-auto w-6 mt-8 justify-center">

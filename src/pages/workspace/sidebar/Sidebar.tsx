@@ -102,9 +102,7 @@ export default function Sidebar() {
         />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
-            showHub && !(activePlaceId === true || activePlaceId === 0)
-              ? 'block'
-              : 'hidden'
+            (activePlaceId === true || activePlaceId === 0) ? 'hidden' : 'block'
           }`}
         >
           {!showExtendedBar && (

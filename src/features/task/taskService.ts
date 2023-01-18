@@ -32,19 +32,33 @@ export const getOneTaskService = (data) => {
   return response;
 };
 
-export const getTaskListService = (data) => {
-  const listId = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'at/tasks',
-      method: 'GET',
-      params: {
-        list_id: listId,
-      },
+export const getTaskListService = ({listId}) => {
+  // const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task'],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'at/tasks/list',
+          method: 'POST',
+          params: {
+            list_id: listId,
+          },
+        },
+        true
+      );
+      return data;
     },
-    true
+    {
+      onSuccess: (data) => {
+        const taskData = data.data.tasks.map((task) => {
+          queryClient.setQueryData(['task', task.id], task);
+          return { ...task };
+        });
+      },
+    }
   );
-  return response;
 };
 
 export const createTimeEntriesService = (data) => {

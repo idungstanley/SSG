@@ -18,7 +18,7 @@ const SquareStackIcon = (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="w-6 h-6 stroke-current text-gray-500"
+    className="w-4 h-4 stroke-current text-gray-500"
   >
     <path
       strokeLinecap="round"
@@ -35,35 +35,12 @@ export default function Header() {
 
   const { showPreview } = settings;
 
-  const navigationButtons = [
-    {
-      id: 1,
-      onClick: () => ({}),
-      icon: (
-        <ArrowCircleLeftIcon
-          className="h-8 w-8 stroke-current text-gray-400"
-          aria-hidden="true"
-        />
-      ),
-    },
-    {
-      id: 2,
-      onClick: () => ({}),
-      icon: (
-        <ArrowCircleRightIcon
-          className="h-8 w-8 stroke-current text-gray-400"
-          aria-hidden="true"
-        />
-      ),
-    },
-  ];
-
   const rightItems = [
     {
       label: 'New',
       icon: (
         <PlusIcon
-          className="h-6 w-6 stroke-current text-gray-500"
+          className="h-4 w-4 stroke-current text-gray-500"
           aria-hidden="true"
         />
       ),
@@ -73,7 +50,7 @@ export default function Header() {
       label: 'Upload',
       icon: (
         <UploadIcon
-          className="h-6 w-6 stroke-current text-gray-500"
+          className="h-4 w-4 stroke-current text-gray-500"
           aria-hidden="true"
         />
       ),
@@ -94,7 +71,7 @@ export default function Header() {
           }
           className={classNames(
             showPreview ? 'bg-gray-500' : 'bg-gray-200',
-            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ring-0 focus:ring-0'
+            'relative inline-flex h-4 w-6 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ring-0 focus:ring-0'
           )}
         >
           <span className="sr-only">Use setting</span>
@@ -102,7 +79,7 @@ export default function Header() {
             aria-hidden="true"
             className={classNames(
               showPreview ? 'translate-x-5' : 'translate-x-0',
-              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+              'pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
             )}
           />
         </Switch>
@@ -112,21 +89,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-2 border-b h-14">
-      {/* move between files */}
-      <div className="flex items-center">
-        {navigationButtons.map((button) => (
-          <button
-            onClick={button.onClick}
-            key={button.id}
-            type="button"
-            className="inline-flex items-center rounded-full border border-transparent text-white shadow-sm focus:outline-none ring-0 focus:ring-0"
-          >
-            {button.icon}
-          </button>
-        ))}
-      </div>
-
+    <header className="flex items-center justify-end p-2 border-b h-8">
       {/* right items */}
       <div className="flex items-center gap-4">
         {rightItems.map((button) => (
@@ -136,7 +99,7 @@ export default function Header() {
             key={button.label}
           >
             {button.icon}
-            <p className="text-gray-600 text-sm">{button.label}</p>
+            {/* <p className="text-gray-600 text-xs">{button.label}</p> */}
           </div>
         ))}
       </div>
