@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAppSelector } from '../../../../app/hooks';
 
 interface CustomStatusDropdownProps {
   title?: string;

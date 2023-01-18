@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface HubState {
   hub: string[];
-  currHubId: any;
+  currHubId: null;
   currSubHubId: null;
   currSubHubIdType: null;
   delHub: boolean;
@@ -14,7 +14,10 @@ interface HubState {
   showMenuDropdown: null;
   showMenuDropdownType: null;
   SubDropdownMenu: boolean;
+  SubMenuId: null;
+  SubMenuType: null;
   hubParentId: null;
+  refType: null;
 }
 
 const initialState: HubState = {
@@ -31,7 +34,10 @@ const initialState: HubState = {
   showMenuDropdown: null,
   showMenuDropdownType: null,
   SubDropdownMenu: false,
+  SubMenuId: null,
+  SubMenuType: null,
   hubParentId: null,
+  refType: null,
 };
 
 export const hubSlice = createSlice({
@@ -57,6 +63,10 @@ export const hubSlice = createSlice({
       state.currSubHubId = action.payload.currSubHubId;
       state.currSubHubIdType = action.payload.currSubHubIdType;
     },
+    getSubMenu(state, action) {
+      state.SubMenuId = action.payload.SubMenuId;
+      state.SubMenuType = action.payload.SubMenuType;
+    },
     setShowSubItems(state, action) {
       state.showSubItems = action.payload;
     },
@@ -73,11 +83,18 @@ export const hubSlice = createSlice({
       state.showMenuDropdown = action.payload.showMenuDropdown;
       state.showMenuDropdownType = action.payload.showMenuDropdownType;
     },
+    closeMenu(state) {
+      state.showMenuDropdown = null;
+      state.showMenuDropdownType = null;
+    },
     setSubDropdownMenu(state, action) {
       state.SubDropdownMenu = action.payload;
     },
     setHubParentId(state, action) {
       state.hubParentId = action.payload;
+    },
+    getMenuRef(state, action) {
+      state.refType = action.payload;
     },
     chechIfHub: (state) => state,
   },
@@ -90,6 +107,7 @@ export const {
   getCurrHubId,
   getCurrSubHubId,
   setDelHub,
+  getSubMenu,
   setShowSubItems,
   setArchiveHub,
   setShowSidebarSettings,
@@ -98,5 +116,7 @@ export const {
   setshowMenuDropdown,
   setSubDropdownMenu,
   setHubParentId,
+  closeMenu,
+  getMenuRef,
 } = hubSlice.actions;
 export default hubSlice.reducer;

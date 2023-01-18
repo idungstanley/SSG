@@ -3,7 +3,6 @@ import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import {
   setActivePlaceId,
   setSearchIsActive,
-  setShowModal,
 } from '../../../../features/workspace/workspaceSlice';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
@@ -33,6 +32,7 @@ import Extendedbar from '../../../newExplorer/components/Sidebar';
 import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
 function Places() {
   const { activePlaceId, showSidebar, showHub, searchIsActive } =
@@ -76,7 +76,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -90,7 +90,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => dispatch(setCreateHubSlideOverVisibility(true))}
         />
       ),
     },
@@ -104,7 +104,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -125,7 +125,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -139,7 +139,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -153,7 +153,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -167,7 +167,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -181,7 +181,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -195,7 +195,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },
@@ -209,7 +209,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => dispatch(setShowModal(true))}
+          onClick={() => console.log('stan')}
         />
       ),
     },

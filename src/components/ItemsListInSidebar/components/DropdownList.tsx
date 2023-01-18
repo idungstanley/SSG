@@ -1,9 +1,9 @@
 import React from 'react';
-import WalletIndex from '../../Index/WalletIndex';
-import ListIndex from '../../Index/ListIndex';
+import WalletIndex from '../../Index/walletIndex/WalletIndex';
+import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
 import { useAppSelector } from '../../../app/hooks';
-import SubHubIndex from '../../Index/subIndex/SubHubIndex';
+import SubHubIndex from '../../Index/subHubIndex/SubHubIndex';
 
 export default function DropdownList() {
   const { currentItemId, currentItemType, showExtendedBar } = useAppSelector(

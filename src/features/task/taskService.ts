@@ -1,18 +1,16 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { setWatchersData } from './taskSlice';
-import { useDispatch } from 'react-redux';
 
 export const createTaskService = (data) => {
   const response = requestNew(
     {
       url: 'at/tasks',
       method: 'POST',
-      data: {
+      params: {
         name: data.name,
         description: data.description,
-        list_id: data.getListId,
-        parent_id: data.parentTaskId,
+        list_id: data.showMenuDropdown,
+        // parent_id: data.parentTaskId,
       },
     },
     true
@@ -52,7 +50,7 @@ export const getTaskListService = ({listId}) => {
     },
     {
       onSuccess: (data) => {
-        const taskData = data.data.tasks.map((task) => {
+        data.data.tasks.map((task) => {
           queryClient.setQueryData(['task', task.id], task);
           return { ...task };
         });

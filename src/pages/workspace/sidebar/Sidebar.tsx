@@ -3,17 +3,17 @@ import { useDispatch } from 'react-redux';
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi';
 import {
   setShowExtendedBar,
-  setShowModal,
   setShowSidebar,
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
-import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
+import {
+  setShowSidebarSettings
+} from '../../../features/hubs/hubSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
-// import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
@@ -23,14 +23,8 @@ import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const {
-    showSidebar,
-    showExtendedBar,
-    showModal,
-    sidebarWidth,
-    showHub,
-    activePlaceId,
-  } = useAppSelector((state) => state.workspace);
+  const { showSidebar, showExtendedBar, sidebarWidth, showHub, activePlaceId } =
+    useAppSelector((state) => state.workspace);
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
@@ -96,10 +90,7 @@ export default function Sidebar() {
             : { width: '54px', minWidth: '54px' }
         }
       >
-        <Modal
-          isVisible={showModal}
-          onCloseHubModal={() => dispatch(setShowModal(false))}
-        />
+        <Modal />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
             (activePlaceId === true || activePlaceId === 0) ? 'hidden' : 'block'

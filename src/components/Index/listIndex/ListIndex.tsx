@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubWallet } from '../../features/hubs/hubService';
-import TaskDropdown from '../../pages/workspace/tasks/component/TaskDropdown';
+import { useGetHubWallet } from '../../../features/hubs/hubService';
 import { BsListUl } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import {
+  closeMenu,
+  setshowMenuDropdown,
+} from '../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { setCurrentListId } from '../../../features/list/listSlice';
+import { useAppSelector } from '../../../app/hooks';
 
 interface ListIndexProps {
   showHubList: boolean;
@@ -11,11 +19,27 @@ interface ListIndexProps {
 
 function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
-  const [getListId, setGetListId] = useState('');
+  const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
+  const { currentListId } = useAppSelector((state) => state.list);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleListLocation = (id: string) => {
     navigate(`/workspace/list/${id}`);
+  };
+  const handleListSettings = (id: string, e) => {
+    dispatch(setCurrentListId(id));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'list',
+      })
+    );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
   };
 
   return (
@@ -23,7 +47,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-6 ml-0.5 hover:bg-gray-100">
+            <section className="flex justify-between items-center text-sm pl-6 ml-0.5 h-8 hover:bg-gray-100">
               <div className="flex items-center justify-center space-x-1">
                 <BsListUl
                   className="flex-shrink-0 h-3 w-5"
@@ -44,12 +68,17 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
               <button
                 type="button"
                 id="listright"
-                className="flex items-center justify-end space-x-1"
-                onClick={() => setGetListId(list.id)}
+                className="flex items-center justify-end space-x-1 mr-6"
               >
-                <TaskDropdown getListId={getListId} />
+                {/* <TaskDropdown getListId={getListId} /> */}
+                <AiOutlineEllipsis
+                  className="cursor-pointer"
+                  onClick={(e) => handleListSettings(list.id, e)}
+                  id="menusettings"
+                />
               </button>
             </section>
+            {showMenuDropdown === list.id ? <MenuDropdown /> : null}
           </div>
         ))}
     </div>

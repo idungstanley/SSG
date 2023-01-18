@@ -4,8 +4,10 @@ import { useAppSelector } from '../../../app/hooks';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import {
+  closeMenu,
   getCurrHubId,
   getCurrSubHubId,
+  getSubMenu,
   setHubParentId,
   setshowMenuDropdown,
 } from '../../../features/hubs/hubSlice';
@@ -13,6 +15,7 @@ import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
+import SubDropdown from '../../Dropdown/SubDropdown';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -26,9 +29,8 @@ export default function SubHubIndex() {
       dispatch(setHubParentId(parent_id))
     );
   }
-  const { hubParentId, showMenuDropdown, currSubHubId } = useAppSelector(
-    (state) => state.hub
-  );
+  const { hubParentId, showMenuDropdown, currSubHubId, SubMenuId } =
+    useAppSelector((state) => state.hub);
 
   const handleClick = (id: string) => {
     dispatch(
@@ -47,12 +49,26 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string) => {
+  const handleShowMenu = (id: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
         showMenuDropdownType: 'subhub',
+      })
+    );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
+  };
+
+  const handleItemAction = (id: string) => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: 'subhub',
       })
     );
   };
@@ -108,23 +124,21 @@ export default function SubHubIndex() {
                   </span>
                 </div>
               </div>
-              <div
-                id="subhubRight"
-                className="flex items-center space-x-1"
-                // className={`flex items-center justify-end space-x-1 ${
-                //   isHovering === i ? 'block' : 'hidden'
-                // }`}
-                // onClick={() => setGetWalletId(wallet.id)}
-              >
+              <div id="subhubRight" className="flex items-center space-x-1">
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={() => handleShowMenu(subhub.id)}
+                  onClick={(e) => handleShowMenu(subhub.id, e)}
+                  id="menusettings"
                 />
-                <AiOutlinePlus className="cursor-pointer" />
+                <AiOutlinePlus
+                  onClick={() => handleItemAction(subhub.id)}
+                  className="cursor-pointer"
+                />
               </div>
             </section>
             {currSubHubId === subhub.id ? <SHubDropdownList /> : null}
             {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
+            {SubMenuId === subhub.id ? <SubDropdown /> : null}
           </div>
         ))}
     </div>

@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface ListState {
   list: string[];
+  currentListId: null;
 }
 
 const initialState: ListState = {
   list: [],
+  currentListId: null,
 };
 
 export const listSlice = createSlice({
@@ -18,9 +20,13 @@ export const listSlice = createSlice({
     getList(state, action) {
       state.list = action.payload;
     },
+    setCurrentListId(state, action) {
+      state.currentListId = action.payload;
+    },
     checkIfList: (state) => state,
   },
 });
 
-export const { createList, checkIfList, getList } = listSlice.actions;
+export const { createList, checkIfList, getList, setCurrentListId } =
+  listSlice.actions;
 export default listSlice.reducer;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -18,11 +18,9 @@ import {
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import {
+  getMenuRef,
   setArchiveHub,
   setDelHub,
-  setShowSubItems,
-  setShowEditHubModal,
-  setshowMenuDropdown,
   setSubDropdownMenu,
 } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
@@ -31,7 +29,7 @@ import {
   ArchiveHubService,
   UseDeleteHubService,
 } from '../../features/hubs/hubService';
-import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
+import { setEditHubSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 
 interface itemsType {
   id: number;
@@ -45,7 +43,6 @@ export default function MenuDropdown() {
   const dispatch = useDispatch();
   const {
     currHubId,
-    showEditHubModal,
     SubDropdownMenu,
     delHub,
     archiveHub,
@@ -81,9 +78,7 @@ export default function MenuDropdown() {
       id: 2,
       title: 'Rename',
       handleClick: () => {
-        // console.log(currHubId);
-        dispatch(setShowEditHubModal(true));
-        // dispatch(setshowMenuDropdown(null));
+        dispatch(setEditHubSlideOverVisibility(true));
       },
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
@@ -219,21 +214,9 @@ export default function MenuDropdown() {
     },
   ];
 
-  // const handleShowMenuSettings = (e) => {
-  //   if (e.target.id == 'menusettings')
-  //     dispatch(
-  //       setshowMenuDropdown({
-  //         showMenuDropdown: null,
-  //       })
-  //     );
-  // };
   return (
     <div className="">
-      <div
-        className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-20 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        id="menusettings"
-        // onClick={handleShowMenuSettings}
-      >
+      <div className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
@@ -249,13 +232,7 @@ export default function MenuDropdown() {
         )}
       </div>
       {SubDropdownMenu && <SubDropdown />}
-
-      {showEditHubModal && (
-        <EditHubModal
-          isEditVisible={showEditHubModal}
-          onCloseEditHubModal={() => dispatch(setShowEditHubModal(false))}
-        />
-      )}
+      <EditHubModal />
     </div>
   );
 }
