@@ -41,13 +41,13 @@ const secondaryNavigation = [
     source: hubIcon,
   },
   {
-    name: 'inbox',
+    name: 'intrail',
     id: 3,
     place: <Inbox />,
     source: inboxIcon,
   },
   {
-    name: 'files',
+    name: 'Cabinet',
     id: 4,
     place: <Extendedbar />,
     source: filesIcon,

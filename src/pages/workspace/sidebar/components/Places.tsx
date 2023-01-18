@@ -35,7 +35,7 @@ import { setItemActionForSideOver } from '../../../../features/general/slideOver
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
 function Places() {
-  const { activePlaceId, showSidebar, showHub, searchIsActive } =
+  const { activePlaceId, showSidebar, searchIsActive } =
     useAppSelector((state) => state.workspace);
   const { folderId } = useParams();
   const { query } = useAppSelector((state) => state.explorer);
@@ -95,7 +95,7 @@ function Places() {
       ),
     },
     {
-      name: 'inbox',
+      name: 'intrail',
       id: 3,
       place: <Inbox />,
       source: inboxIcon,
@@ -109,7 +109,7 @@ function Places() {
       ),
     },
     {
-      name: 'files',
+      name: 'Cabinet',
       id: 4,
       place: <Extendedbar />,
       source: filesIcon,
