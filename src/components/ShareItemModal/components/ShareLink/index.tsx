@@ -5,11 +5,12 @@ import FoldersFromLink from './components/FoldersFromLink';
 import AddFileToLink from './components/AddFileToLink';
 import FilesFromLink from './components/FilesFromLink';
 import Publish from './components/Publish';
+import { Spinner } from '../../../../common';
 
 export default function ShareLink() {
   const [shareLinkId, setShareLinkId] = useState<string | null>(null);
 
-  const { data } = useGetShareLink(shareLinkId);
+  const { data, status } = useGetShareLink(shareLinkId);
 
   useEffect(() => {
     if (!shareLinkId && data?.id) {
@@ -19,6 +20,12 @@ export default function ShareLink() {
 
   return (
     <div className="w-full">
+      {status === 'loading' ? (
+        <div className="mx-auto w-6 mt-5 justify-center">
+          <Spinner size={8} color="#0F70B7" />
+        </div>
+      ) : null}
+
       {shareLinkId ? (
         <>
           {/* search folder to add to link */}
@@ -30,7 +37,7 @@ export default function ShareLink() {
           {/* search file to add to link */}
           <AddFileToLink shareLinkId={shareLinkId} />
 
-          {/* list of selected folder */}
+          {/* list of selected file */}
           <FilesFromLink shareLinkId={shareLinkId} />
 
           {/* publish and copy link */}

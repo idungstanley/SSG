@@ -13,10 +13,6 @@ interface PublishProps {
 
 const options: { id: string; name: expiresIn }[] = [
   {
-    id: '1',
-    name: '5-mins',
-  },
-  {
     id: '2',
     name: '1-hour',
   },
@@ -54,8 +50,13 @@ export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
 
   useEffect(() => {
     if (data?.data) {
+      // save link to clipboard
       onCopy(data.data[0].temporary_url);
+
+      // reset selected linkId
       setShareLinkId(null);
+
+      // show toast with message
       toast.custom((t) => (
         <Toast
           type="success"
@@ -76,7 +77,7 @@ export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
   };
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center mt-6">
       <SelectMenuSimple
         label="Select expires time"
         options={options}
@@ -88,11 +89,7 @@ export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
         type="button"
         onClick={handlePublish}
         disabled={!selectedOption}
-        className={`rounded mt-3 border border-transparent px-2.5 py-1.5 text-sm font-medium ${
-          !selectedOption
-            ? 'bg-indigo-50 text-indigo-400'
-            : 'bg-indigo-100 text-indigo-700'
-        } text-indigo-700 hover:bg-indigo-200 focus:outline-none ring-0 focus:ring-0`}
+        className="rounded mt-3 border border-transparent px-2.5 py-1.5 text-sm font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 focus:outline-none ring-0 focus:ring-0"
       >
         Copy link
       </button>

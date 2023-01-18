@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrashIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 import {
   useAddOrRemoveItemToOrFromLink,
   useGetShareLink,
@@ -30,16 +30,17 @@ export default function FoldersFromLink({ shareLinkId }: FoldersFromLinkProps) {
         ? !selectedFolders.length
           ? null
           : selectedFolders.map((folder) => (
-              <div
+              <span
                 key={folder.id}
-                className="flex items-center gap-2 border rounded-lg p-2 px-3"
+                className="rounded-full flex py-1 px-2 items-center bg-indigo-100 text-sm font-medium text-indigo-700"
               >
-                <p>{folder.folder.name}</p>
-                <TrashIcon
+                {folder.folder.name}
+                <XIcon
                   onClick={() => handleRemove(folder.id)}
-                  className="w-6 h-6 text-gray-300 cursor-pointer hover:text-red-500 transition-all duration-300"
+                  className="h-4 w-4 mt-0.5 ml-2 cursor-pointer"
+                  aria-hidden="true"
                 />
-              </div>
+              </span>
             ))
         : null}
     </div>

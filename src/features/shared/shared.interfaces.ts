@@ -110,13 +110,7 @@ export interface IShareLinkRes {
   };
 }
 
-export type expiresIn =
-  | '5-mins'
-  | '1-hour'
-  | '3-hours'
-  | '24-hours'
-  | '3-days'
-  | '7-days';
+export type expiresIn = '1-hour' | '3-hours' | '24-hours' | '3-days' | '7-days';
 
 export interface IPublishRes {
   data: {
