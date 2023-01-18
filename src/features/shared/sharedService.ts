@@ -2,6 +2,10 @@ import {
   ISharedFiles,
   ISharedFolders,
   IExplorerAndSharedData,
+  IShareLinkRes,
+  IShareLink,
+  expiresIn,
+  IPublishRes,
 } from './shared.interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
@@ -170,3 +174,68 @@ const shareItem = (data: {
 };
 
 export const useShareItem = () => useMutation(shareItem);
+
+export const useGetShareLink = (id: string | null) =>
+  useQuery<IShareLinkRes, unknown, IShareLink>(
+    ['share-link', id || 'root'],
+    () =>
+      requestNew({
+        url: `share-documents-links${id ? '/' + id : ''}`,
+        method: 'GET',
+      }),
+    {
+      select: (res) => res.data.share_documents_link,
+    }
+  );
+
+const addOrRemoveItemToOrFromLink = (data: {
+  linkId: string;
+  itemId: string;
+  type: explorerItemType;
+  action: 'add' | 'remove';
+}) => {
+  const { linkId, action, type, itemId } = data;
+
+  const response = requestNew({
+    url: `share-documents-links/${linkId}/${action}-${type}/${itemId}`,
+    method: 'POST',
+  });
+  return response;
+};
+
+export const useAddOrRemoveItemToOrFromLink = (linkId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addOrRemoveItemToOrFromLink, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['share-link', linkId || 'root']);
+    },
+  });
+};
+
+const getPublishLink = (data: {
+  linkId: string;
+  expiresIn: expiresIn;
+}): Promise<IPublishRes> => {
+  const { linkId, expiresIn } = data;
+
+  const response = requestNew({
+    url: `share-documents-links/${linkId}/publish`,
+    method: 'POST',
+    data: {
+      expires_in: expiresIn,
+    },
+  });
+  return response;
+};
+
+export const useGetPublishLink = (linkId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(getPublishLink, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['share-link', 'root']);
+      queryClient.invalidateQueries(['share-link', linkId]);
+    },
+  });
+};

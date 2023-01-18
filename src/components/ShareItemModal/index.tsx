@@ -1,41 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
-import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import SelectMenuTeamMembers from '../selectMenu';
-import { ISelectedData } from '../PermissionManagement';
-import { Spinner } from '../../common';
-import { useShareItem } from '../../features/shared/sharedService';
 import { setShowShareSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { classNames } from '../../utils';
+import ShareItem from './components/ShareItem';
+import ShareLink from './components/ShareLink';
+
+const tabs = [
+  { name: 'Share selected item', id: 1 },
+  { name: 'Create sharing link', id: 2 },
+];
 
 export default function ShareItemModal() {
   const dispatch = useAppDispatch();
 
+  const [selectedTabId, setSelectedTabId] = useState(1);
+
   const { shareSideOver } = useAppSelector((state) => state.slideOver);
-  const { type, id, show } = shareSideOver;
-
-  const { data, status } = useGetTeamMembers({ page: 0, query: '' });
-  const teamMembers = data?.data.team_members;
-
-  const { mutate: onShare } = useShareItem();
-
-  const { currentUserId } = useAppSelector((state) => state.auth);
-
-  const membersWithoutActive = teamMembers?.filter(
-    (member) => member.user.id !== currentUserId
-  );
-
-  const handleShare = (member: ISelectedData | null) => {
-    if (member && type && id) {
-      onShare({
-        type,
-        userId: member.id,
-        itemId: id,
-      });
-    }
-  };
-
+  const { type, show } = shareSideOver;
   const onClose = () => {
     dispatch(setShowShareSideOver({ show: false }));
   };
@@ -85,26 +68,32 @@ export default function ShareItemModal() {
                   Share {type}
                 </Dialog.Title>
 
-                <div className="w-full h-full flex flex-row items-center gap-3">
-                  {status === 'loading' ? (
-                    <div className="mx-auto w-6 mt-5 justify-center">
-                      <Spinner size={8} color="#0F70B7" />
-                    </div>
-                  ) : membersWithoutActive ? (
-                    <SelectMenuTeamMembers
-                      teamMembers={membersWithoutActive.map((i) => ({
-                        id: i.id,
-                        name: i.name || i.user.name,
-                        email: i.user?.email,
-                        accessLevel: i.id,
-                        type: 'member',
-                      }))}
-                      selectedData={null}
-                      setSelectedData={handleShare}
-                      title="Select member to share"
-                      showEmail
-                    />
-                  ) : null}
+                <div className="w-full h-full flex flex-col items-center gap-3">
+                  <nav className="flex space-x-4 w-full" aria-label="Tabs">
+                    {tabs.map((tab) => (
+                      <span
+                        onClick={() =>
+                          setSelectedTabId((prev) =>
+                            prev !== tab.id ? tab.id : prev
+                          )
+                        }
+                        key={tab.name}
+                        className={classNames(
+                          tab.id === selectedTabId
+                            ? 'bg-indigo-100 text-indigo-700'
+                            : 'text-gray-500 hover:text-gray-700 border',
+                          'px-3 py-1.5 font-medium cursor-pointer text-sm rounded-md flex flex-grow justify-center'
+                        )}
+                        aria-current={
+                          tab.id === selectedTabId ? 'page' : undefined
+                        }
+                      >
+                        {tab.name}
+                      </span>
+                    ))}
+                  </nav>
+
+                  {selectedTabId === 1 ? <ShareItem /> : <ShareLink />}
                 </div>
               </Dialog.Panel>
             </Transition.Child>
