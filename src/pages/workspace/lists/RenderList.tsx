@@ -204,7 +204,7 @@ function RenderList() {
               <span className="text-xs font-semibold text-gray-400	">TASK</span>
             </div>
             <div className="flex items-center w-6/12">
-              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-green-600 hover:text-gray-50 group">
+              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
@@ -213,7 +213,7 @@ function RenderList() {
                   <FaSort />
                 </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
@@ -222,7 +222,7 @@ function RenderList() {
                   <FaSort />
                 </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
@@ -231,7 +231,7 @@ function RenderList() {
                   <FaSort />
                 </span>
               </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-green-600 hover:text-gray-50 group">
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
                 <span className="opacity-0 group-hover:opacity-100">
                   <MdOutlineDragIndicator />
                 </span>
@@ -261,6 +261,8 @@ function RenderList() {
                 <div className="flex items-center w-6/12 group">
                   {/* data and input */}
                   <div onClick={() => handleTaskModal(task.id)}>
+                    {/* {i == 0 && <h1>Tasks</h1>} */}
+
                     <p className="capitalize text-xs font-semibold leading-8 pl-5	">
                       {task.name}
                     </p>

@@ -42,7 +42,13 @@ export const taskSlice = createSlice({
       state.task.push(action.payload);
     },
     getTaskData(state, action) {
-      state.myTaskData = action.payload;
+      const myObj = {
+        id: "ewt22222",
+        name: "",
+      };
+      const taskDataArray = action.payload;
+      // taskDataArray.unshift(myObj);
+      state.myTaskData = taskDataArray;
     },
     setWatchersData(state, action) {
       state.watchersData.push(action.payload);
