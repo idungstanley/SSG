@@ -16,28 +16,49 @@ const addColumns: Icolumn[] = [
     },
   },
   {
-    name: "Dropdown",
+    name: "Text",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
     },
   },
   {
-    name: "Dropdown",
+    name: "Text area (Long text)",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
     },
   },
   {
-    name: "Dropdown",
+    name: "Date",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
     },
   },
   {
-    name: "Dropdown",
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Number",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
