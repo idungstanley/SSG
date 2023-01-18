@@ -28,6 +28,7 @@ import SubTask from "../subtasks/subtask1/SubTask";
 import ListNav from "./components/renderlist/ListNav";
 import CustomDropdown from "../tasks/dropdown/CustomDropdown";
 import addColumns from "./components/renderlist/listDetails/listDetails";
+import { useAppSelector } from "../../../app/hooks";
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
@@ -36,18 +37,25 @@ function RenderList() {
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
+  const { myTaskData } = useAppSelector((state) => state.task);
+
+  console.log("myTaskData", myTaskData);
+
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries("createtask" as any);
       setAddNewItem(!addNewItem);
     },
   });
-  const { data: listChildrenData } = useQuery<{
-    data: { tasks: { id: string; name: string }[] };
-  }>({
-    queryKey: ["listData_bylistId", listId],
-    queryFn: getTaskListService,
-  });
+
+  const { data: listChildrenData } = getTaskListService({ listId });
+
+  // const { data: listChildrenData } = useQuery<{
+  //   data: { tasks: { id: string; name: string }[] };
+  // }>({
+  //   queryKey: ["listData_bylistId", listId],
+  //   queryFn: getTaskListService,
+  // });
 
   const { data: listDetailsData } = useQuery({
     queryKey: ["listDetails", listId],
@@ -99,6 +107,33 @@ function RenderList() {
     navigate(`/workspace/t/${id}`);
   };
 
+  // const columns: any = listChildrenData?.data?.tasks[0];
+
+  // console.log(columns);
+
+  // console.log(Object.keys(listChildrenData?.data?.tasks[0]));
+
+  // listChildrenData?.data?.tasks.map((child) => {
+  //   // console.log(child);
+
+  //   const headerKey = Object.keys(child);
+
+  //   // console.log(headerKey);
+
+  //   // headerKey.forEach((key, index) => {
+  //   //   if (!columns.key) {
+  //   //     columns.push(key);
+  //   //   }
+
+  //     // console.log(key);
+  //     // console.log(`${key}: ${child[key]}`);
+
+  //     // // console.log(index);
+  //   });
+  // });
+
+  // console.log(columns);
+
   return (
     <div className="h-screen" style={{ backgroundColor: "#eee" }}>
       <section id="nav">
@@ -111,7 +146,7 @@ function RenderList() {
       </section>
       <section className="mt-3 p-3">
         <div
-          className=" block p-2border border-gray-200"
+          className=" block p-2 border-2 border-gray-200"
           style={{ backgroundColor: "#eee" }}
         >
           <div id="listTitle" className="flex justify-between items-center">
@@ -163,7 +198,7 @@ function RenderList() {
               />
               <span className="text-xs font-semibold text-gray-400	">OPEN</span>
               <span className="text-xs font-semibold text-gray-400	">
-                {listChildrenData?.data?.tasks.length}
+                {myTaskData?.length}
               </span>
 
               <span className="text-xs font-semibold text-gray-400	">TASK</span>
@@ -216,7 +251,7 @@ function RenderList() {
               </span>
             </div>
           </div>
-          {listChildrenData?.data?.tasks?.map((task) => (
+          {myTaskData?.map((task, i) => (
             <div key={task.id}>
               <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
                 <RiCheckboxBlankFill
@@ -260,10 +295,7 @@ function RenderList() {
                 {/* icons */}
 
                 <div className="flex  space-x-10">
-                  <span
-                    className=" rounded-full text-xs text-center"
-                    // style={{ marginLeft: "-20px" }}
-                  >
+                  <span className=" rounded-full text-xs text-center">
                     <UserAddOutlined
                       className="h-5 w-5 text-gray-400 text-xl "
                       aria-hidden="true"

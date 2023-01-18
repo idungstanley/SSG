@@ -1,5 +1,7 @@
 import requestNew from "../../app/requestNew";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAppDispatch } from "../../app/hooks";
+import { getTaskData } from "./taskSlice";
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -30,20 +32,37 @@ export const getOneTaskService = (data) => {
   return response;
 };
 
-export const getTaskListService = (data) => {
-  const listId = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: "at/tasks/list",
-      method: "POST",
-      params: {
-        list_id: listId,
-      },
+export const getTaskListService = ({ listId }) => {
+  const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["task"],
+    async () => {
+      const data = await requestNew(
+        {
+          url: "at/tasks/list",
+          method: "POST",
+          params: {
+            list_id: listId,
+          },
+        },
+        true
+      );
+      return data;
     },
-    true
+    {
+      onSuccess: (data) => {
+        const taskData = data.data.tasks.map((task) => {
+          queryClient.setQueryData(["task", task.id], task);
+          return { ...task };
+        });
+        dispatch(getTaskData(taskData));
+      },
+    }
   );
-  return response;
 };
+// getTaskListService();
 
 export const createTimeEntriesService = (data) => {
   const taskID = data.queryKey[1];
