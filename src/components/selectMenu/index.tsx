@@ -11,20 +11,6 @@ interface SelectMenuTeamMembersProps {
   showEmail?: boolean;
 }
 
-// interface teamMembersType {
-//   id: string;
-//   name: string;
-// }
-
-// interface SelectMenuTeamMembersType {
-//   teamMembers: teamMembersType[];
-//   selectedData: {
-//      name: string;
-//     id: string;
-//   }
-//   setSelectedData: ()=> void;
-//   title: string;
-// }
 export default function SelectMenuTeamMembers({
   teamMembers,
   selectedData,

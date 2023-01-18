@@ -1,5 +1,5 @@
-import { XIcon } from '@heroicons/react/solid';
 import React from 'react';
+import { XIcon } from '@heroicons/react/solid';
 import { Input } from '../../../components';
 
 interface SearchProps {
