@@ -10,8 +10,8 @@ import {
 } from './chat.interfaces';
 
 export const useGetChats = (data: {
-  type: itemType | null;
-  id: string | null;
+  type?: itemType;
+  id?: string;
 }) =>
   useQuery<IChatsRes, unknown, IChatFromList[]>(
     ['chats', data.id],
@@ -62,7 +62,7 @@ const createChat = (data: { id: string; name: string; type: itemType }) => {
   return request;
 };
 
-export const useCreateChat = (id: string | null) => {
+export const useCreateChat = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(createChat, {

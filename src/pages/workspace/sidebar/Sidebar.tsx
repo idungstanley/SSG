@@ -16,10 +16,10 @@ import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import Search from '../search';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 import Modal from '../hubs/components/Modal';
 import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
+import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -93,9 +93,7 @@ export default function Sidebar() {
         <Modal />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
-            showHub && !(activePlaceId === true || activePlaceId === 0)
-              ? 'block'
-              : 'hidden'
+            (activePlaceId === true || activePlaceId === 0) ? 'hidden' : 'block'
           }`}
         >
           {!showExtendedBar && (

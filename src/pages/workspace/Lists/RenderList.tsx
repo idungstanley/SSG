@@ -32,16 +32,11 @@ function RenderList() {
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('createtask' as any);
+      queryClient.invalidateQueries();
       setAddNewItem(!addNewItem);
     },
   });
-  const { data: listChildrenData } = useQuery<{
-    data: { tasks: { id: string; name: string }[] };
-  }>({
-    queryKey: ['listData_bylistId', listId],
-    queryFn: getTaskListService,
-  });
+  const { data: listChildrenData } = getTaskListService({listId});
 
   const { data: listDetailsData } = useQuery({
     queryKey: ['listDetails', listId],

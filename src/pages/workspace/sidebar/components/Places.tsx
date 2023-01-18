@@ -24,86 +24,21 @@ import commerceIcon from '../../../../assets/branding/commerce.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
-import { SearchIcon } from '@heroicons/react/outline';
+import { FolderAddIcon, SearchIcon } from '@heroicons/react/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
+import { useParams } from 'react-router-dom';
+import Extendedbar from '../../../newExplorer/components/Sidebar';
+import { setQuery } from '../../../../features/explorer/explorerSlice';
+import Dropdown from '../../../../components/Dropdown/index';
+import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
-import { closeMenu } from '../../../../features/hubs/hubSlice';
-import e from 'cors';
-
-const secondaryNavigation = [
-  {
-    name: 'email',
-    id: 1,
-    place: <Favourites />,
-    source: emailIcon,
-  },
-  {
-    name: 'hubs',
-    id: 2,
-    place: <Hubs />,
-    source: hubIcon,
-  },
-  {
-    name: 'inbox',
-    id: 3,
-    place: <Inbox />,
-    source: inboxIcon,
-  },
-  {
-    name: 'files',
-    id: 4,
-    place: <Files />,
-    source: filesIcon,
-  },
-  {
-    name: 'forms',
-    id: 5,
-    place: <Files />,
-    icon: <FaWpforms className="h-4 mr-4" />,
-  },
-  {
-    name: 'time clock',
-    id: 6,
-    place: <Dashboard />,
-    source: timeClockIcon,
-  },
-  {
-    name: 'tracker',
-    id: 7,
-    place: <Directory />,
-    source: trackerIcon,
-  },
-  {
-    name: 'Route Planner',
-    id: 8,
-    place: <Directory />,
-    source: routePlanner,
-  },
-  {
-    name: 'Also HR',
-    id: 9,
-    place: <Directory />,
-    source: alsoHRIcon,
-  },
-  {
-    name: 'Commerce',
-    id: 10,
-    place: <Directory />,
-    source: commerceIcon,
-  },
-  {
-    name: 'Forms',
-    id: 11,
-    place: <Directory />,
-    source: formsIcon,
-  },
-];
 
 function Places() {
-  const { activePlaceId, showSidebar, searchIsActive } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activePlaceId, showSidebar, showHub, searchIsActive } =
+    useAppSelector((state) => state.workspace);
+  const { folderId } = useParams();
+  const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
   const handleMouseOver = (i: number) => {
@@ -115,6 +50,170 @@ function Places() {
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
   };
+
+  const configForDropdown = [
+    {
+      label: 'Folder',
+      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      onClick: () =>
+        dispatch(
+          setItemActionForSideOver({
+            action: 'create',
+            id: folderId || '',
+          })
+        ),
+    },
+  ];
+
+  const secondaryNavigation = [
+    {
+      name: 'email',
+      id: 1,
+      place: <Favourites />,
+      source: emailIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'hubs',
+      id: 2,
+      place: <Hubs />,
+      source: hubIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => dispatch(setCreateHubSlideOverVisibility(true))}
+        />
+      ),
+    },
+    {
+      name: 'inbox',
+      id: 3,
+      place: <Inbox />,
+      source: inboxIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'files',
+      id: 4,
+      place: <Extendedbar />,
+      source: filesIcon,
+      plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
+    },
+    {
+      name: 'forms',
+      id: 5,
+      place: <Files />,
+      icon: <FaWpforms className="h-4 mr-4" />,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'time clock',
+      id: 6,
+      place: <Dashboard />,
+      source: timeClockIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'tracker',
+      id: 7,
+      place: <Directory />,
+      source: trackerIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'Route Planner',
+      id: 8,
+      place: <Directory />,
+      source: routePlanner,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'Also HR',
+      id: 9,
+      place: <Directory />,
+      source: alsoHRIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'Commerce',
+      id: 10,
+      place: <Directory />,
+      source: commerceIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+    {
+      name: 'Forms',
+      id: 11,
+      place: <Directory />,
+      source: formsIcon,
+      plusIcon: (
+        <BsPlusLg
+          className="w-2.5 h-2.5"
+          aria-hidden="true"
+          color="black"
+          onClick={() => console.log('stan')}
+        />
+      ),
+    },
+  ];
 
   return (
     <div className="mt-2">
@@ -176,6 +275,8 @@ function Places() {
                     name=""
                     id=""
                     placeholder="Search for List, Hubs, & Wallets"
+                    onChange={(e) => dispatch(setQuery(e.target.value))}
+                    value={query}
                     className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
@@ -200,16 +301,7 @@ function Places() {
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                     />
-                    {isHovering === index && (
-                      <BsPlusLg
-                        className="w-2.5 h-2.5"
-                        aria-hidden="true"
-                        color="black"
-                        onClick={() =>
-                          dispatch(setCreateHubSlideOverVisibility(true))
-                        }
-                      />
-                    )}
+                    {isHovering === index && item.plusIcon}
                   </span>
                 )}
                 <span className={`${showSidebar ? 'block' : 'hidden'}`}>

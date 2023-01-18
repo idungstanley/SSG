@@ -1,6 +1,24 @@
 import { itemType } from './../../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+type itemAction = {
+  action: 'rename' | 'create';
+  id: string;
+  name?: string;
+};
+
+type Watchers = {
+  show: boolean;
+  id?: string;
+  type?: itemType;
+};
+
+type Comments = {
+  show: boolean;
+  id?: string;
+  type?: itemType;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showCreateHubSlideOver: boolean;
@@ -16,8 +34,9 @@ interface SideOverState {
   showAddGroupTeamMemberSlideOver: boolean;
   showRenameFileSlideOver: boolean;
   showAddTeamMembersOrGroupsSideOver: boolean;
-  showWatchersSideOver: boolean;
-  itemTypeSideOver: itemType;
+  watchersSideOver: Watchers;
+  commentsSideOver: Comments;
+  itemActionForSideOver: itemAction | null;
 }
 
 const initialState: SideOverState = {
@@ -35,14 +54,21 @@ const initialState: SideOverState = {
   showAddGroupTeamMemberSlideOver: false,
   showRenameFileSlideOver: false,
   showAddTeamMembersOrGroupsSideOver: false,
-  showWatchersSideOver: false,
-  itemTypeSideOver: 'file',
+  watchersSideOver: { show: false },
+  commentsSideOver: { show: false },
+  itemActionForSideOver: null,
 };
 
 export const slideOverSlice = createSlice({
   name: 'slideOver',
   initialState,
   reducers: {
+    setItemActionForSideOver: (
+      state,
+      action: PayloadAction<itemAction | null>
+    ) => {
+      state.itemActionForSideOver = action.payload;
+    },
     setCreateInboxSlideOverVisibility: (
       state,
       action: PayloadAction<boolean>
@@ -124,16 +150,11 @@ export const slideOverSlice = createSlice({
     ) => {
       state.showAddTeamMembersOrGroupsSideOver = action.payload;
     },
-    setShowWatchersSideOver: (
-      state,
-      action: PayloadAction<{ type?: itemType; show: boolean }>
-    ) => {
-      if (action.payload.type) {
-        state.showWatchersSideOver = action.payload.show;
-        state.itemTypeSideOver = action.payload.type;
-      } else {
-        state.showWatchersSideOver = action.payload.show;
-      }
+    setShowWatchersSideOver: (state, action: PayloadAction<Watchers>) => {
+      state.watchersSideOver = action.payload;
+    },
+    setShowCommentsSideOver: (state, action: PayloadAction<Comments>) => {
+      state.commentsSideOver = action.payload;
     },
   },
 });
@@ -154,6 +175,8 @@ export const {
   setRenameFileSlideOverVisibility,
   setShowAddTeamMembersOrGroupsSideOver,
   setShowWatchersSideOver,
+  setItemActionForSideOver,
+  setShowCommentsSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

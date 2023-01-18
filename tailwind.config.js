@@ -15,12 +15,22 @@ module.exports = {
         'blue-gray': colors.blueGray,
         sky: colors.sky,
       },
+      gridTemplateColumns: {
+        mainLayout: '300px 1fr',
+      },
+      gridTemplateRows: {
+        mainContent: 'auto 1fr',
+      },
+      height: {
+        204: '51rem',
+      },
+      maxHeight: {
+        204: '51rem',
+      },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 };

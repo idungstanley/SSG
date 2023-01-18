@@ -25,6 +25,7 @@ import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 import ActiveHub from './ActiveHub';
 import { IoMdCloseCircle } from 'react-icons/io';
+import Extendedbar from '../pages/newExplorer/components/Sidebar';
 
 const secondaryNavigation = [
   {
@@ -48,7 +49,7 @@ const secondaryNavigation = [
   {
     name: 'files',
     id: 4,
-    place: <Files />,
+    place: <Extendedbar />,
     source: filesIcon,
   },
   {
@@ -124,9 +125,9 @@ function ExpandedNav() {
           ? { maxWidth: 321, width: extendedSidebarWidth, minWidth: '100px' }
           : { width: '1px', minWidth: '1px' }
       }
-      onMouseDown={(e) => e.preventDefault()}
+      // onMouseDown={(e) => e.preventDefault()}
     >
-      <span className="absolute -right-2 top-2 z-20 bg-green-400 rounded-full border-2 border-green-400">
+      <span className="absolute -right-2 cursor-pointer top-2 z-20 bg-green-400 rounded-full border-2 border-green-400">
         {showExtendedBar && (
           <RiArrowLeftSLine
             className="text-sm text-white"
