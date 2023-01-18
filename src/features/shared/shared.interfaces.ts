@@ -77,3 +77,49 @@ export interface ISharedFolders {
     };
   };
 }
+
+export interface IShareLink {
+  id: string;
+  temporary_url: null | string;
+  created_by: {
+    id: string;
+    name: string;
+    email: string;
+    avatar_path: null | string;
+  };
+  created_at: string;
+  shared_files?: {
+    id: string;
+    file: {
+      id: string;
+      display_name: string;
+    };
+  }[];
+  shared_folders?: {
+    id: string;
+    folder: {
+      id: string;
+      name: string;
+    };
+  }[];
+}
+
+export interface IShareLinkRes {
+  data: {
+    share_documents_link: IShareLink;
+  };
+}
+
+export type expiresIn =
+  | '5-mins'
+  | '1-hour'
+  | '3-hours'
+  | '24-hours'
+  | '3-days'
+  | '7-days';
+
+export interface IPublishRes {
+  data: {
+    temporary_url: string;
+  }[];
+}

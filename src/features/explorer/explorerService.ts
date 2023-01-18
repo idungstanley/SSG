@@ -114,6 +114,23 @@ export const useGetSearchFolders = (query: string) =>
     }
   );
 
+export const useGetSearchFiles = (query: string) =>
+  useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+    ['folders-search', query],
+    () =>
+      requestNew({
+        url: 'search/files',
+        method: 'GET',
+        params: {
+          query,
+        },
+      }),
+    {
+      enabled: query.length > 2,
+      select: (res) => res.data.files,
+    }
+  );
+
 // files
 export const useGetExplorerFiles = (folderId?: string) => {
   const queryClient = useQueryClient();
