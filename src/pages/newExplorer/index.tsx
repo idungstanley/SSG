@@ -6,10 +6,10 @@ import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameIt
 import Chat from '../../components/Chat';
 import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
-import Extendedbar from './components/Sidebar';
 import Sidebar from '../workspace/sidebar/Sidebar';
 import { useAppSelector } from '../../app/hooks';
 import ExpandedNav from '../../views/ExpandedNav';
+import ShareItemModal from '../../components/ShareItemModal';
 
 export default function NewExplorerPage() {
   const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
@@ -50,6 +50,7 @@ export default function NewExplorerPage() {
       <Chat />
       <Watchers />
       <Comments />
+      <ShareItemModal />
     </>
   );
 }

@@ -3,12 +3,12 @@ import {
   TrashIcon,
   ShareIcon,
   ClipboardCopyIcon,
-  PrinterIcon,
   DownloadIcon,
   ChatIcon,
   EyeIcon,
   ChatAlt2Icon,
   SearchIcon,
+  PrinterIcon,
 } from '@heroicons/react/outline';
 import {
   useAppDispatch,
@@ -23,6 +23,7 @@ import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
   setShowCommentsSideOver,
+  setShowShareSideOver,
   setShowWatchersSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import { BiDotsVerticalRounded } from 'react-icons/bi';

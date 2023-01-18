@@ -1,4 +1,4 @@
-import { itemType } from './../../../types/index';
+import { itemType, explorerItemType } from './../../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type itemAction = {
@@ -19,6 +19,12 @@ type Comments = {
   type?: itemType;
 };
 
+type Share = {
+  show: boolean;
+  id?: string;
+  type?: explorerItemType;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showCreateHubSlideOver: boolean;
@@ -36,6 +42,7 @@ interface SideOverState {
   showAddTeamMembersOrGroupsSideOver: boolean;
   watchersSideOver: Watchers;
   commentsSideOver: Comments;
+  shareSideOver: Share;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -56,6 +63,7 @@ const initialState: SideOverState = {
   showAddTeamMembersOrGroupsSideOver: false,
   watchersSideOver: { show: false },
   commentsSideOver: { show: false },
+  shareSideOver: { show: false },
   itemActionForSideOver: null,
 };
 
@@ -156,6 +164,9 @@ export const slideOverSlice = createSlice({
     setShowCommentsSideOver: (state, action: PayloadAction<Comments>) => {
       state.commentsSideOver = action.payload;
     },
+    setShowShareSideOver: (state, action: PayloadAction<Share>) => {
+      state.shareSideOver = action.payload;
+    },
   },
 });
 
@@ -177,6 +188,7 @@ export const {
   setShowWatchersSideOver,
   setItemActionForSideOver,
   setShowCommentsSideOver,
+  setShowShareSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

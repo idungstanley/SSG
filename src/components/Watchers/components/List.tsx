@@ -1,5 +1,4 @@
 import React from 'react';
-import { Spinner } from '../../../common';
 import {
   useGetItemWatchers,
   useRemoveWatcher,
@@ -25,14 +24,6 @@ export default function List({ item }: ListProps) {
         title="Oops, an error occurred :("
         description="Please try again later."
       />
-    );
-  }
-
-  if (status === 'loading') {
-    return (
-      <div className="mx-auto w-6 mt-5 justify-center">
-        <Spinner size={8} color="#0F70B7" />
-      </div>
     );
   }
 

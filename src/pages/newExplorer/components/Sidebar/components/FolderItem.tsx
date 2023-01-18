@@ -10,6 +10,7 @@ import {
   ChatIcon,
   ChatAlt2Icon,
   EyeIcon,
+  ShareIcon,
 } from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -17,6 +18,7 @@ import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
   setShowCommentsSideOver,
+  setShowShareSideOver,
   setShowWatchersSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
@@ -26,6 +28,26 @@ import { DownloadFile } from '../../../../../app/helpers';
 import { setSelectedItem } from '../../../../../features/chat/chatSlice';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+
+function ArrowsUpDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5 cursor-pointer stroke-current text-gray-500"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
+      />
+    </svg>
+  );
+}
 
 interface FolderItemProps {
   id: string;
@@ -46,6 +68,24 @@ export default function FolderItem({
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform,
+  } = useDraggable({ id, data: { parentId } });
+
+  const { isOver, setNodeRef: droppableRef } = useDroppable({
+    id,
+    data: { parentId },
+  });
+
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+  };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
 
@@ -73,6 +113,9 @@ export default function FolderItem({
   const handleShowComments = () =>
     dispatch(setShowCommentsSideOver({ show: true, type: 'folder', id }));
 
+  const handleShowShare = () =>
+    dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
+
   const configForDropdown = [
     {
       label: 'Download',
@@ -84,6 +127,11 @@ export default function FolderItem({
       onClick: () =>
         dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
       icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Share',
+      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      onClick: handleShowShare,
     },
     {
       label: 'Delete',
@@ -111,8 +159,11 @@ export default function FolderItem({
     <div
       className={classNames(
         'group flex justify-between w-full items-center py-1.5 hover:bg-gray-100',
-        isActiveFolder ? 'bg-green-50 text-green-500' : ''
+        isActiveFolder ? 'bg-green-50 text-green-500' : '',
+        !transform && isOver ? 'bg-primary-100' : ''
       )}
+      ref={droppableRef}
+      style={style}
     >
       <div
         onClick={() => handleClickFolder(id, parentId)}
@@ -143,7 +194,7 @@ export default function FolderItem({
         </div>
       </div>
 
-      <div className="flex opacity-0 group-hover:opacity-100 gap-2 items-center">
+      <div className="flex opacity-40 group-hover:opacity-100 gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
@@ -152,6 +203,9 @@ export default function FolderItem({
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500"
           aria-hidden="true"
         />
+        <div ref={draggableRef} {...listeners} {...attributes}>
+          <ArrowsUpDownIcon />
+        </div>
       </div>
     </div>
   );

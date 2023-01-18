@@ -5,11 +5,9 @@ import {
   PlusIcon,
   UploadIcon,
 } from '@heroicons/react/outline';
-import { Switch } from '@headlessui/react';
-import { classNames } from '../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
-import { setAccountSettings } from '../../../../features/account/accountSlice';
+import PreviewSwitch from './components/PreviewSwitch';
 
 const SquareStackIcon = (
   <svg
@@ -63,27 +61,7 @@ export default function Header() {
     },
     {
       label: 'Preview',
-      icon: (
-        <Switch
-          checked={showPreview}
-          onChange={(e) =>
-            dispatch(setAccountSettings({ ...settings, showPreview: e }))
-          }
-          className={classNames(
-            showPreview ? 'bg-gray-500' : 'bg-gray-200',
-            'relative inline-flex h-4 w-6 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ring-0 focus:ring-0'
-          )}
-        >
-          <span className="sr-only">Use setting</span>
-          <span
-            aria-hidden="true"
-            className={classNames(
-              showPreview ? 'translate-x-2' : 'translate-x-0',
-              'pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-            )}
-          />
-        </Switch>
-      ),
+      icon: <PreviewSwitch />,
       onClick: () => ({}),
     },
   ];
