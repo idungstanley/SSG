@@ -26,8 +26,8 @@ import { getListsDetailsService } from "../../../features/list/listService";
 import SubTask from "../subtasks/subtask1/SubTask";
 // import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
 import ListNav from "./components/renderlist/ListNav";
-import CustomDropdown from "../tasks/dropdown/CustomDropdown";
 import addColumns from "./components/renderlist/listDetails/listDetails";
+import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
@@ -194,9 +194,11 @@ function RenderList() {
                 onClick={() => handleDropDown()}
               >
                 <FiPlusCircle className="font-black	" />
-                {dropDown && (
-                  <CustomDropdown title="Add task" listItems={addColumns} />
-                )}
+                <span className="text-sm">
+                  {dropDown && (
+                    <AddColumnDropdown title="" listItems={addColumns} />
+                  )}
+                </span>
               </span>
             </div>
           </div>
