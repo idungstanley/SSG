@@ -64,6 +64,69 @@ const addColumns: Icolumn[] = [
       console.log("great");
     },
   },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress (Auto)",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
+  {
+    name: "Progress",
+    icons: <MdArrowDropDownCircle />,
+    onclick: () => {
+      console.log("great");
+    },
+  },
 ];
 
 export default addColumns;
