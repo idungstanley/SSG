@@ -77,10 +77,11 @@ export default function FoldersList({
       : selectedFolder?.ancestors?.length) || 0;
 
   return (
-    <DndContext
-      onDragStart={() => setShowDragToRoot(true)}
-      onDragEnd={handleDragEnd}
-    >
+    // <DndContext
+    //   onDragStart={() => setShowDragToRoot(true)}
+    //   onDragEnd={handleDragEnd}
+    // >
+    <>
       {folders.map((rootFolder) => (
         <div key={rootFolder.id}>
           {/* root folders list */}
@@ -163,7 +164,8 @@ export default function FoldersList({
       ))}
 
       {showDragToRoot ? <DragOverRoot /> : null}
-    </DndContext>
+      {/* </DndContext> */}
+    </>
   );
 
   function handleDragEnd(event: DragEndEvent) {
