@@ -8,41 +8,12 @@ import Chat from '../../components/Chat';
 import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
 import ShareItemModal from '../../components/ShareItemModal';
-import {
-  DndContext,
-  DragEndEvent,
-  DragStartEvent,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import { useAppDispatch } from '../../app/hooks';
-import { setDraggableId } from '../../features/explorer/explorerSlice';
+import DragContext from './components/DragContext';
 
 export default function NewExplorerPage() {
-  const dispatch = useAppDispatch();
-  const mouseSensor = useSensor(MouseSensor);
-  const touchSensor = useSensor(TouchSensor);
-  const sensors = useSensors(mouseSensor, touchSensor);
-
-  const onDragStart = (e: DragStartEvent) => {
-    dispatch(setDraggableId(e.active.id as string));
-  };
-
-  const onDragEnd = (e: DragEndEvent) => {
-    dispatch(setDraggableId(null));
-
-    console.log(e);
-  };
-
   return (
     <>
-      <DndContext
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      >
+      <DragContext>
         <main className="grid grid-cols-mainLayout w-full h-full">
           {/* sidebar */}
           <Sidebar />
@@ -60,7 +31,7 @@ export default function NewExplorerPage() {
             </div>
           </section>
         </main>
-      </DndContext>
+      </DragContext>
       <CreateOrRenameItemSlideOver />
       <Chat />
       <Watchers />

@@ -7,7 +7,7 @@ import {
   setSelectedFolderId,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
-import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core';
+import { DragEndEvent, useDroppable } from '@dnd-kit/core';
 import { useMoveExplorerItems } from '../../../../../features/explorer/explorerActionsService';
 import { classNames } from '../../../../../utils';
 import { resetSelectedItem } from '../../../../../features/search/searchSlice';
@@ -77,10 +77,6 @@ export default function FoldersList({
       : selectedFolder?.ancestors?.length) || 0;
 
   return (
-    // <DndContext
-    //   onDragStart={() => setShowDragToRoot(true)}
-    //   onDragEnd={handleDragEnd}
-    // >
     <>
       {folders.map((rootFolder) => (
         <div key={rootFolder.id}>
@@ -164,7 +160,6 @@ export default function FoldersList({
       ))}
 
       {showDragToRoot ? <DragOverRoot /> : null}
-      {/* </DndContext> */}
     </>
   );
 

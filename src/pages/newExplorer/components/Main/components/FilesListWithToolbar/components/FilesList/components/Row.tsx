@@ -16,6 +16,25 @@ import {
 } from '../../../../../../../../../features/explorer/explorerSlice';
 import { useGetExplorerFile } from '../../../../../../../../../features/explorer/explorerService';
 
+function ArrowsUpDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5 cursor-pointer stroke-current text-gray-300"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
+      />
+    </svg>
+  );
+}
+
 interface RowProps {
   fileId: string;
 }
@@ -80,15 +99,13 @@ export default function Row({ fileId }: RowProps) {
     },
   });
 
+  // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0 : 100,
   };
 
   return file ? (
     <tr
-      {...listeners}
-      {...attributes}
-      ref={setNodeRef}
       style={style}
       key={file.id}
       className={`${selectedIds.includes(file.id) ? 'bg-gray-50' : null}
@@ -111,6 +128,15 @@ export default function Row({ fileId }: RowProps) {
           checked={selectedIds.includes(file.id)}
           onChange={(e) => onClickCheckbox(e, file.id)}
         />
+      </td>
+
+      <td
+        {...listeners}
+        {...attributes}
+        ref={setNodeRef}
+        className="whitespace-nowrap py-4 px-2 text-sm text-gray-500"
+      >
+        <ArrowsUpDownIcon />
       </td>
 
       <td
