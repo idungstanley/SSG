@@ -63,7 +63,7 @@ export default function ActiveHub() {
     );
   }
 
-  const displayActiveItem: any = () => {
+  const displayActiveItem = () => {
     if (activeItemType === 'hub') {
       return items?.map((hub) => {
         if (hub.id === activeItemId) {

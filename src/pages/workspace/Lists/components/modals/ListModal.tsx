@@ -13,7 +13,7 @@ import { setCreateListSlideOverVisibility } from '../../../../../features/genera
 function ListModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown, showMenuDropdownType }: any = useAppSelector(
+  const { showMenuDropdown, showMenuDropdownType } = useAppSelector(
     (state) => state.hub
   );
   const { showCreateListSlideOver } = useAppSelector(

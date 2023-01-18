@@ -2,8 +2,8 @@ import requestNew from '../../app/requestNew';
 
 export const createListService = (data: {
   listName: string;
-  hubId?: string;
-  walletId?: string;
+  hubId?: string | null;
+  walletId?: string | null;
 }) => {
   const response = requestNew(
     {

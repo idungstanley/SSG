@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
 import {
   DocumentDuplicateIcon,
@@ -30,7 +30,9 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType } = useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, SubMenuType } = useAppSelector(
+    (state) => state.hub
+  );
   const itemsList: itemsType[] = [
     {
       id: 1,
@@ -41,12 +43,18 @@ export default function SubDropdown() {
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
-      isVisible: showMenuDropdownType == 'hubs' ? true : false,
+      isVisible:
+        showMenuDropdownType == 'hubs'
+          ? true
+          : false || SubMenuType == 'hubs'
+          ? true
+          : false,
     },
     {
       id: 2,
       title:
-        (showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet') &&
+        ((showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet') ||
+          (SubMenuType == 'wallet' ? 'Sub Wallet' : '')) &&
         (showMenuDropdownType == 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
         dispatch(setCreateWalletSlideOverVisibility(true));

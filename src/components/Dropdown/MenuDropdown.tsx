@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -18,9 +18,9 @@ import {
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import {
+  getMenuRef,
   setArchiveHub,
   setDelHub,
-  setShowEditHubModal,
   setSubDropdownMenu,
 } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
@@ -213,12 +213,10 @@ export default function MenuDropdown() {
       isVisible: true,
     },
   ];
+
   return (
     <div className="">
-      <div
-        className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-40 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        id="menusettings"
-      >
+      <div className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>

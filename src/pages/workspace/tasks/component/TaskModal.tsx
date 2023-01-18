@@ -19,7 +19,7 @@ import { useAppSelector } from '../../../../app/hooks';
 function TaskModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown }: any = useAppSelector((state) => state.hub);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector(
     (state) => state.slideOver
   );

@@ -1,7 +1,5 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { setWatchersData } from './taskSlice';
-import { useDispatch } from 'react-redux';
 
 export const createTaskService = (data) => {
   const response = requestNew(

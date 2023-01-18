@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
@@ -16,10 +16,13 @@ import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import {
+  closeMenu,
   getCurrHubId,
+  getSubMenu,
   setshowMenuDropdown,
 } from '../../features/hubs/hubSlice';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import SubDropdown from '../Dropdown/SubDropdown';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -33,18 +36,18 @@ export default function ItemsListInSidebar({
   type,
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
-  const [isHovering, setIsHovering] = useState<number>(-1);
+  // const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
   );
 
-  const { showMenuDropdown, currHubId } = useAppSelector((state) => state.hub);
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  // const handleMouseOver = (i: number) => {
+  //   setIsHovering(i);
+  // };
+  // const handleMouseOut = () => {
+  //   setIsHovering(-1);
+  // };
 
   if (status === 'error') {
     return (
@@ -90,7 +93,7 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id) => {
+  const handleHubSettings = (id: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -98,11 +101,25 @@ export default function ItemsListInSidebar({
         showMenuDropdownType: 'hubs',
       })
     );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
+  };
+
+  const handleItemAction = (id: string) => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: 'hubs',
+      })
+    );
   };
 
   return status === 'success' ? (
     <ul className="w-full">
-      {items?.map((i: { id: string; name: string }, index) => (
+      {items?.map((i: { id: string; name: string }) => (
         <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
@@ -176,14 +193,23 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {
-              <div className="flex items-center space-x-1 pr-1">
-                <AiOutlineEllipsis onClick={() => handleHubSettings(i.id)} />
-                <AiOutlinePlus />
+              <div className="flex relative items-center space-x-1 pr-1">
+                <AiOutlineEllipsis
+                  onClick={(e) => handleHubSettings(i.id, e)}
+                  className="cursor-pointer"
+                  id="menusettings"
+                />
+                <AiOutlinePlus
+                  onClick={() => handleItemAction(i.id)}
+                  className="cursor-pointer"
+                  // id="menusettings"
+                />
               </div>
             }
           </div>
           {currentItemId === i.id ? <DropdownList /> : null}
           {showMenuDropdown === i.id ? <MenuDropdown /> : null}
+          {SubMenuId === i.id ? <SubDropdown /> : null}
         </li>
       ))}
     </ul>

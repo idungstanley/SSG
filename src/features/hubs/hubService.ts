@@ -1,14 +1,13 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
-import { getWallet } from '../wallet/walletSlice';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
 import { getHub } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
 export const createHubService = (data: {
   name: string;
-  currHubId?: string;
+  currHubId?: string | null;
   currentWorkspaceId?: string;
 }) => {
   const response = requestNew(

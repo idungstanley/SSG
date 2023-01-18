@@ -10,7 +10,7 @@ function Index() {
   const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(
     (state) => state.workspace
   );
-  const paddingStyles: any = () => {
+  const paddingStyles = () => {
     if (showSidebar && sidebarWidth > 54) {
       return { paddingLeft: `min(${sidebarWidth}px, 321px)` };
     } else if (sidebarWidth < 55) {
@@ -19,6 +19,7 @@ function Index() {
       return { paddingLeft: `${54}px` };
     }
   };
+
   return (
     <div className="flex flex-row">
       <UploadModal />

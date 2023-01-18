@@ -28,6 +28,8 @@ import { SearchIcon } from '@heroicons/react/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { closeMenu } from '../../../../features/hubs/hubSlice';
+import e from 'cors';
 
 const secondaryNavigation = [
   {
@@ -99,8 +101,9 @@ const secondaryNavigation = [
 ];
 
 function Places() {
-  const { activePlaceId, showSidebar, showHub, searchIsActive } =
-    useAppSelector((state) => state.workspace);
+  const { activePlaceId, showSidebar, searchIsActive } = useAppSelector(
+    (state) => state.workspace
+  );
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
   const handleMouseOver = (i: number) => {
@@ -112,6 +115,7 @@ function Places() {
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
   };
+
   return (
     <div className="mt-2">
       <ul aria-labelledby="projects-headline ">

@@ -5,10 +5,7 @@ import { classNames } from '../../../../../utils';
 import { BsArchive } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  setShowSidebarSettings,
-  setToggleArchive,
-} from '../../../../../features/hubs/hubSlice';
+import { setToggleArchive } from '../../../../../features/hubs/hubSlice';
 
 interface itemsType {
   id: number;

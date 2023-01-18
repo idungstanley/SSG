@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
-// import PlusDropDown from '../../pages/workspace/hubs/components/PlusDropDown';
-// import WalletModal from '../../pages/workspace/wallet/components/WalletModal';
-// import ListModal from '../../pages/workspace/lists/components/modals/WalletListModal';
 import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import {
-  getCurrHubId,
+  closeMenu,
+  getSubMenu,
   setshowMenuDropdown,
 } from '../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
@@ -21,6 +19,11 @@ import {
 } from '../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import { setWalletId } from '../../../features/wallet/walletSlice';
+import SubDropdown from '../../Dropdown/SubDropdown';
+import {
+  setCreateListSlideOverVisibility,
+  setCreateWalletSlideOverVisibility,
+} from '../../../features/general/slideOver/slideOverSlice';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -29,14 +32,13 @@ interface WalletIndexProps {
 
 function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
-  const [showWalletModal, setShowWalletModal] = useState(false);
-  const [showListModal, setShowListModal] = useState(false);
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  const [isHovering, setIsHovering] = useState<number>(-1);
+  // const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHubWallet(getCurrentHubId);
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { currentWalletId } = useAppSelector((state) => state.wallet);
+  // const { currentWalletId } = useAppSelector((state) => state.wallet);
+  const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const navigate = useNavigate();
   const handleLocation = (id: string, name, type = 'wallet') => {
@@ -45,12 +47,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
+  // const handleMouseOver = (i: number) => {
+  //   setIsHovering(i);
+  // };
+  // const handleMouseOut = () => {
+  //   setIsHovering(-1);
+  // };
 
   const handleShowSubWallet = (id: string) => {
     dispatch(setCurrentWalletId(id));
@@ -62,12 +64,26 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     setShowSubWallet(id);
   };
 
-  const handleWalletSettings = (id: string) => {
+  const handleWalletSettings = (id: string, e) => {
     dispatch(setWalletId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
         showMenuDropdownType: 'wallet',
+      })
+    );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
+  };
+
+  const handleItemAction = (id: string) => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: 'wallet',
       })
     );
   };
@@ -79,13 +95,13 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
           <span className="text-gray-600">
             Create a
             <span
-              onClick={() => setShowWalletModal(true)}
+              onClick={() => dispatch(setCreateWalletSlideOverVisibility(true))}
               className="underline mx-1 text-black"
             >
               Wallet,
             </span>
             <span
-              onClick={() => setShowListModal(true)}
+              onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
               className="underline text-black"
             >
               List
@@ -94,7 +110,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
         </div>
       )}
       {data?.data?.wallets.length !== 0 &&
-        data?.data?.wallets.map((wallet, i) => (
+        data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
             <section
               className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8"
@@ -142,21 +158,16 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   </p>
                 </div>
               </div>
-              <div
-                id="walletRight"
-                className="flex items-center space-x-1"
-                // className={`flex items-center justify-end space-x-1 ${
-                //   isHovering === i ? 'block' : 'hidden'
-                // }`}
-                // onClick={() => setGetWalletId(wallet.id)}
-              >
-                {/* <MenuDropdown />
-                <PlusDropDown walletId={walletId} /> */}
+              <div id="walletRight" className="flex items-center space-x-1">
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={() => handleWalletSettings(wallet.id)}
+                  onClick={(e) => handleWalletSettings(wallet.id, e)}
+                  id="menusettings"
                 />
-                <AiOutlinePlus />
+                <AiOutlinePlus
+                  onClick={() => handleItemAction(wallet.id)}
+                  className="cursor-pointer"
+                />
               </div>
             </section>
             <div>
@@ -174,7 +185,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 onCloseListModal={() => setShowListModal(false)}
               /> */}
             </div>
-            {currentWalletId === wallet.id ? <MenuDropdown /> : null}
+            {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+            {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>
         ))}
     </div>

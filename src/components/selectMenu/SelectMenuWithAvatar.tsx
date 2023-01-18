@@ -19,20 +19,20 @@ interface SelectMenuWithAvatarProps {
   showSelectPlaceholder?: boolean;
 }
 
-interface OptionsType {
-  id: string | null;
-  name: string;
-  avatar?: string;
-  badge?: string;
-}
+// interface OptionsType {
+//   id: string | null;
+//   name: string;
+//   avatar?: string;
+//   badge?: string;
+// }
 
-interface withAvatarType {
-  options: OptionsType[];
-  selectedId: string;
-  label: string;
-  onChange: ()=> void;
-  showSelectPlaceholder: boolean;
-}
+// interface withAvatarType {
+//   options: OptionsType[];
+//   selectedId: string;
+//   label: string;
+//   onChange: ()=> void;
+//   showSelectPlaceholder: boolean;
+// }
 export default function SelectMenuWithAvatar({
   options,
   selectedId,
