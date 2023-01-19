@@ -32,6 +32,7 @@ export default function NewExplorerPage() {
           </section>
         </main>
       </DragContext>
+
       <CreateOrRenameItemSlideOver />
       <Chat />
       <Watchers />
