@@ -62,7 +62,7 @@ const initialState: ExplorerState = {
   selectedSortingId,
   selectedViewId,
   query: '',
-  fileSelectWidth: 450,
+  fileSelectWidth: 490,
 
   fileIdsToPaste,
   folderIdsToPaste,

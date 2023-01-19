@@ -31,12 +31,17 @@ import { useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
 import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
-import { setCreateInboxSlideOverVisibility, setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import {
+  setCreateInboxSlideOverVisibility,
+  setItemActionForSideOver,
+} from '../../../../features/general/slideOver/slideOverSlice';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { BiCabinet } from 'react-icons/bi';
 
 function Places() {
-  const { activePlaceId, showSidebar, searchIsActive } =
-    useAppSelector((state) => state.workspace);
+  const { activePlaceId, showSidebar, searchIsActive } = useAppSelector(
+    (state) => state.workspace
+  );
   const { folderId } = useParams();
   const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
@@ -112,7 +117,7 @@ function Places() {
       name: 'Cabinet',
       id: 4,
       place: <Extendedbar />,
-      source: filesIcon,
+      icon: <BiCabinet className="h-5 text-lg mr-4" />,
       plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
     },
     {

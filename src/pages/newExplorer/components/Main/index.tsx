@@ -10,7 +10,12 @@ export default function Main() {
   const { showPreview } = settings;
 
   return (
-    <div className={classNames('border-t', showPreview ? 'flex flex-row' : '')}>
+    <div
+      className={classNames(
+        'border-t',
+        showPreview ? 'flex flex-row' : ''
+      )}
+    >
       <FilesListWithToolbar />
 
       {/* file preview */}

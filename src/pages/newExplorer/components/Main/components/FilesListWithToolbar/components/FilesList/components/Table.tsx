@@ -69,7 +69,7 @@ export default function Table({
       ) : null}
 
       {/* all items */}
-      <tbody className="divide-y divide-gray-200 group">
+      <tbody className="group">
         {items.map((file) => (
           <Row key={file.id} fileId={file.id} />
         ))}

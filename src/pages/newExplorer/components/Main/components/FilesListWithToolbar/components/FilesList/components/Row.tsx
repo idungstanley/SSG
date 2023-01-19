@@ -108,10 +108,10 @@ export default function Row({ fileId }: RowProps) {
     <tr
       style={style}
       key={file.id}
-      className={`${selectedIds.includes(file.id) ? 'bg-gray-50' : null}
+      className={`${selectedIds.includes(file.id) ? 'bg-green-100' : null}
         ${
           selectedFileId === file.id
-            ? 'bg-indigo-100 hover:bg-indigo-100'
+            ? 'bg-green-100 hover:bg-green-100'
             : null
         } 
          cursor-pointer hover:bg-gray-50`}
@@ -119,11 +119,11 @@ export default function Row({ fileId }: RowProps) {
     >
       <td className="relative w-8 px-2">
         {selectedIds.includes(file.id) && (
-          <div className="absolute inset-y-0 left-0 w-0.5 bg-indigo-600" />
+          <div className="absolute inset-y-0 left-0 w-0.5 bg-green-500" />
         )}
         <input
           type="checkbox"
-          className="absolute left-3 top-1/2 -mt-2 h-4 cursor-pointer w-4 rounded border-gray-300 text-indigo-600 ring-0 focus:ring-0"
+          className="absolute left-3 top-1/2 -mt-2 h-4 cursor-pointer w-4 rounded border-gray-300 text-green-500 ring-0 focus:ring-0"
           value={file.id}
           checked={selectedIds.includes(file.id)}
           onChange={(e) => onClickCheckbox(e, file.id)}
@@ -134,24 +134,24 @@ export default function Row({ fileId }: RowProps) {
         {...listeners}
         {...attributes}
         ref={setNodeRef}
-        className="whitespace-nowrap py-4 px-2 text-sm text-gray-500"
+        className="whitespace-nowrap py-2 px-2 text-sm text-gray-500"
       >
         <ArrowsUpDownIcon />
       </td>
 
       <td
         className={classNames(
-          'py-4 text-sm font-medium flex gap-4 items-center px-2',
+          'py-2 text-sm font-medium flex gap-4 items-center px-2',
           selectedIds.includes(file.id) ? 'text-indigo-600' : 'text-gray-900'
         )}
       >
-        <FileIcon extensionKey={file.file_format.extension} size={6} />
-        <span className="truncate w-48">{file.display_name}</span>
+        <FileIcon extensionKey={file.file_format.extension} size={4} />
+        <span className="truncate w-48 text-xs pt-0.5">{file.display_name}</span>
       </td>
-      <td className="whitespace-nowrap py-4 px-2 text-sm text-gray-500">
+      <td className="whitespace-nowrap py-2 px-2 text-xs text-gray-500">
         {OutputDateTime(file.created_at)}
       </td>
-      <td className="whitespace-nowrap py-4 px-2 text-sm text-gray-500">
+      <td className="whitespace-nowrap py-2 px-2 text-xs text-gray-500">
         {OutputFileSize(file.size)}
       </td>
     </tr>

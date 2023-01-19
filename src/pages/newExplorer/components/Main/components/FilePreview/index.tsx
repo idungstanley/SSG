@@ -31,7 +31,7 @@ export default function FilePreview() {
   );
 
   return (
-    <div className="h-full overflow-y-scroll p-2 pr-1 flex justify-center items-start border">
+    <div className="h-full w-72 overflow-y-scroll p-2 pr-1 flex justify-center items-start border">
       {/* checking selected file and loading */}
       {!selectedFileId ? (
         <FullScreenMessage
