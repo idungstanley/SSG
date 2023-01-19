@@ -31,7 +31,11 @@ export default function FilePreview() {
   );
 
   return (
-    <div className="w-full h-full overflow-y-scroll p-2 pr-1 flex justify-center items-start">
+    <div
+      className={`w-full h-full overflow-y-scroll p-2 pr-1 ${
+        extension === 'word' ? '' : 'flex justify-center items-start'
+      }`}
+    >
       {/* checking selected file and loading */}
       {!selectedFileId ? (
         <FullScreenMessage

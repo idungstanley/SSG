@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './styles/index.css';
 import { Provider } from 'react-redux';
 import {
   QueryClientProvider,
@@ -8,7 +8,7 @@ import {
   QueryCache,
   MutationCache,
 } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
 import App from './App';
 import { store } from './app/store';
@@ -131,7 +131,7 @@ ReactDOM.render(
         <App />
 
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
-        <ReactQueryDevtools position="bottom-right" />
+        {/* <ReactQueryDevtools position="bottom-right" /> */}
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,
