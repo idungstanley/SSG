@@ -34,34 +34,36 @@ export default function DragContext({ children }: DragContextProps) {
   // const touchSensor = useSensor(TouchSensor);
   // const sensors = useSensors(mouseSensor, touchSensor);
 
-  // parent id for invalidate active query
-  const [parentOfDraggable, setParentOfDraggable] = useState<{
+  // invalidate active query data
+  const [dataForInvalidation, setDataForInvalidation] = useState<{
     isTargetFile: boolean;
-    overId: string;
-    targetId: string;
+    dropId: string; // fileId
+    dragId: string; // fileId
   } | null>(null);
 
   const { mutate: onMove, isSuccess } = useMoveExplorerItems();
 
   useEffect(() => {
-    if (isSuccess && parentOfDraggable) {
+    if (isSuccess && dataForInvalidation) {
       const invalidate = (query: string, value?: string) =>
         queryClient.invalidateQueries([query, value]);
 
-      const { overId, targetId, isTargetFile } = parentOfDraggable;
+      const { dropId, dragId, isTargetFile } = dataForInvalidation;
 
-      // invalidate for files
       if (isTargetFile) {
-        invalidate('explorer-files', targetId);
+        // invalidate for files
+        invalidate('explorer-files', dragId);
 
-        invalidate('explorer-files', overId);
+        invalidate('explorer-files', dropId);
       } else {
-        invalidate('explorer-folder', targetId);
+        // invalidate for folders
+        invalidate('explorer-folder', dragId);
 
-        invalidate('explorer-folder', overId);
+        invalidate('explorer-folder', dropId);
       }
 
-      if (overId === 'root' || targetId === 'root' || !isTargetFile) {
+      // invalidate main request for root folders and files
+      if (dropId === 'root' || dragId === 'root' || !isTargetFile) {
         invalidate('explorer-folders');
       }
     }
@@ -83,17 +85,20 @@ export default function DragContext({ children }: DragContextProps) {
     const overId = over?.id;
     const activeId = active?.id;
 
-    if (overId && activeId) {
-      if (selectedFolderId && draggableItem) {
-        setParentOfDraggable({
-          isTargetFile: draggableItem.isFile,
-          targetId:
-            active.data.current?.fileFolderId ||
-            active.data.current?.parentId ||
-            'root',
-          overId: (overId as string) || over.data.current?.parentId || 'root',
-        });
-      }
+    if (overId && activeId && draggableItem) {
+      const isTargetFile = draggableItem.isFile;
+      const dragId =
+        active.data.current?.fileFolderId ||
+        active.data.current?.parentId ||
+        'root'; // if draggable is file - get folderId, else - parentId of folder
+      const dropId =
+        (overId as string) || over.data.current?.parentId || 'root'; // always folderId
+
+      setDataForInvalidation({
+        isTargetFile,
+        dragId,
+        dropId,
+      });
 
       // reset selected folder if it moved to root
       if (activeId === selectedFolderId) {
@@ -101,7 +106,7 @@ export default function DragContext({ children }: DragContextProps) {
         navigate('/new-explorer');
       }
 
-      // moving file / folder request
+      // moving file / folder request data
       const moveData = draggableItem?.isFile
         ? { fileIds: [activeId as string] }
         : { folderIds: [activeId as string] };
