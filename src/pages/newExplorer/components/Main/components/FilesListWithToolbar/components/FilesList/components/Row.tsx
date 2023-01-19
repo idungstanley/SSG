@@ -94,7 +94,6 @@ export default function Row({ fileId }: RowProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: file?.id || '',
     data: {
-      isFile: true,
       fileFolderId: file?.folder_id || 'root',
     },
   });
