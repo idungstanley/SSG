@@ -98,6 +98,11 @@ function RenderList() {
 
     setdropDown((prev) => !prev);
   };
+
+  const [close, setClose] = useState(false);
+  const handleClose = () => {
+    setClose((prev) => !prev);
+  };
   // {dropDown ? (<>
   // <div></div>
   // </>) : null}
@@ -195,6 +200,7 @@ function RenderList() {
               <FiArrowDownCircle
                 className=" text-gray-400 text-xs"
                 aria-hidden="true"
+                onClick={() => handleClose()}
               />
               <span className="text-xs font-semibold text-gray-400	">OPEN</span>
               <span className="text-xs font-semibold text-gray-400	">
@@ -253,72 +259,75 @@ function RenderList() {
               </span>
             </div>
           </div>
+
           {myTaskData?.map((task, i) => (
             <div key={task.id}>
-              <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
-                <RiCheckboxBlankFill
-                  className=" text-gray-400 text-xs"
-                  aria-hidden="true"
-                />
-                <div className="flex items-center w-6/12 group">
-                  {/* data and input */}
-                  <div onClick={() => handleTaskModal(task.id)}>
-                    {/* {i == 0 && <h1>Tasks</h1>} */}
+              {close && (
+                <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
+                  <RiCheckboxBlankFill
+                    className=" text-gray-400 text-xs"
+                    aria-hidden="true"
+                  />
+                  <div className="flex items-center w-6/12 group">
+                    {/* data and input */}
+                    <div onClick={() => handleTaskModal(task.id)}>
+                      {/* {i == 0 && <h1>Tasks</h1>} */}
 
-                    <p className="capitalize text-xs font-semibold leading-8 pl-5	">
-                      {task.name}
-                    </p>
+                      <p className="capitalize text-xs font-semibold leading-8 pl-5	">
+                        {task.name}
+                      </p>
+                    </div>
+
+                    {/* iconstask */}
+                    <div
+                      id="iconWrapper"
+                      className="flex items-start space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+                    >
+                      <div
+                        id="wrapper"
+                        className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
+                      >
+                        <PlusOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+                          aria-hidden="true"
+                          onClick={() => handleSubTask(task.id)}
+                        />
+                      </div>
+                      <div
+                        id="wrapper"
+                        className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
+                      >
+                        <EditOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
                   </div>
+                  {/* icons */}
 
-                  {/* iconstask */}
-                  <div
-                    id="iconWrapper"
-                    className="flex items-start space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-                  >
-                    <div
-                      id="wrapper"
-                      className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
-                    >
-                      <PlusOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-                        aria-hidden="true"
-                        onClick={() => handleSubTask(task.id)}
-                      />
-                    </div>
-                    <div
-                      id="wrapper"
-                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
-                    >
-                      <EditOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                  <div className="flex  space-x-10">
+                    <span className=" rounded-full text-xs text-center">
+                      <UserAddOutlined
+                        className="h-5 w-5 text-gray-400 text-xl "
                         aria-hidden="true"
                       />
-                    </div>
+                    </span>
+                    <span className="border-dotted border-gray-300 pl-3 ml-5">
+                      <CalendarOutlined
+                        className="h-5 w-7 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="border-dotted border-gray-300 ml-5">
+                      <FlagOutlined
+                        className="h-5 w-7  text-gray-400 ml-8"
+                        aria-hidden="true"
+                      />
+                    </span>
                   </div>
                 </div>
-                {/* icons */}
-
-                <div className="flex  space-x-10">
-                  <span className=" rounded-full text-xs text-center">
-                    <UserAddOutlined
-                      className="h-5 w-5 text-gray-400 text-xl "
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="border-dotted border-gray-300 pl-3 ml-5">
-                    <CalendarOutlined
-                      className="h-5 w-7 text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="border-dotted border-gray-300 ml-5">
-                    <FlagOutlined
-                      className="h-5 w-7  text-gray-400 ml-8"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </div>
-              </div>
+              )}
 
               {subTaskOne === task.id ? (
                 <div>
