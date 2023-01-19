@@ -121,7 +121,7 @@ const moveExplorerItems = (data: {
   const { targetFolderId, fileIds, folderIds } = data;
 
   const response = requestNew({
-    url: `explorer/move/${targetFolderId}`,
+    url: `explorer/move${targetFolderId ? '/' + targetFolderId : ''}`,
     method: 'POST',
     data: {
       file_ids: fileIds,
@@ -132,7 +132,11 @@ const moveExplorerItems = (data: {
 };
 
 export const useMoveExplorerItems = (
-  targetFolderId: { parentId: string; overId: string } | null
+  targetFolderId: {
+    parentId: string;
+    overId: string;
+    fileFolderId: string | null;
+  } | null
 ) => {
   const queryClient = useQueryClient();
 
@@ -147,6 +151,17 @@ export const useMoveExplorerItems = (
         'explorer-folder',
         targetFolderId?.parentId,
       ]);
+      queryClient.invalidateQueries([
+        'explorer-files',
+        targetFolderId?.parentId,
+      ]);
+
+      if (targetFolderId?.fileFolderId) {
+        queryClient.invalidateQueries([
+          'explorer-files',
+          targetFolderId?.fileFolderId,
+        ]);
+      }
     },
   });
 };
