@@ -87,13 +87,13 @@ export default function Sidebar() {
         style={
           showSidebar
             ? { maxWidth: 321, width: sidebarWidth, minWidth: '54px' }
-            : { width: '54px', minWidth: '54px' }
+            : { width: '54px', minWidth: '54px', maxWidth: 321 }
         }
       >
         <Modal />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
-            (activePlaceId === true || activePlaceId === 0) ? 'hidden' : 'block'
+            activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
           }`}
         >
           {!showExtendedBar && (

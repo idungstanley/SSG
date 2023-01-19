@@ -94,7 +94,6 @@ export default function FolderItem({
       type: 'folder',
       id,
     });
-
     if (isActiveFolder) {
       dispatch(resetSelectedItem());
       navigate('/new-explorer', { replace: true });
@@ -103,7 +102,6 @@ export default function FolderItem({
 
   const handleDownload = () => {
     const itemName = `${name}.zip`;
-
     DownloadFile('folder', id, itemName);
   };
 
@@ -188,12 +186,10 @@ export default function FolderItem({
             <FaFolder color="rgba(72, 67, 67, 0.64)" />
           </>
         )}
-
         <div className="tracking-wider capitalize ml-2" style={{ fontSize: '10px' }}>
           <p>{name.length > 10 ? name.substring(0,10) : name }</p>
         </div>
       </div>
-
       <div className="flex opacity-40 group-hover:opacity-100 gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon

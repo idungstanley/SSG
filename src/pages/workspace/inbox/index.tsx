@@ -14,10 +14,6 @@ function Inbox() {
 
   return (
     <div className="space-y-4">
-      <CreateNewItemBtn
-        onClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
-        title="Create new Inbox"
-      />
       <CreateInboxSlideOver />
       <ItemsListInSidebar items={data} status={status} type="inbox" />
     </div>

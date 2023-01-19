@@ -31,7 +31,7 @@ import { useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
 import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
-import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { setCreateInboxSlideOverVisibility, setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
 function Places() {
@@ -104,7 +104,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
         />
       ),
     },
@@ -295,7 +295,11 @@ function Places() {
                 } flex-end space-x-2`}
               >
                 {activePlaceId === item.id && (
-                  <span className="flex items-center space-x-1">
+                  <span
+                    className={`${
+                      showSidebar ? 'block' : 'hidden'
+                    } flex items-center space-x-1`}
+                  >
                     <SearchIcon
                       className="w-3 h-4"
                       aria-hidden="true"

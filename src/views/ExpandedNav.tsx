@@ -23,7 +23,7 @@ import { useAppSelector } from '../app/hooks';
 import { SearchIcon } from '@heroicons/react/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
-import ActiveHub from './ActiveHub';
+import ActiveHub from './ActiveParents/ActiveHub';
 import { IoMdCloseCircle } from 'react-icons/io';
 import Extendedbar from '../pages/newExplorer/components/Sidebar';
 
