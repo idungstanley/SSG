@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -10,11 +10,12 @@ import {
 } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
-  resetSelectedItem,
+  // resetSelectedItem,
   setDraggableItem,
 } from '../../../features/explorer/explorerSlice';
 import { useMoveExplorerItems } from '../../../features/explorer/explorerActionsService';
-import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+// import { useNavigate } from 'react-router-dom';
 
 interface DragContextProps {
   children: ReactNode;
@@ -22,9 +23,12 @@ interface DragContextProps {
 
 export default function DragContext({ children }: DragContextProps) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  // const navigate = useNavigate();
 
-  const { draggableItem } = useAppSelector((state) => state.explorer);
+  const { draggableItem, selectedFolderId } = useAppSelector(
+    (state) => state.explorer
+  );
 
   // const mouseSensor = useSensor(MouseSensor);
   // const touchSensor = useSensor(TouchSensor);
@@ -37,7 +41,29 @@ export default function DragContext({ children }: DragContextProps) {
     targetId: string;
   } | null>(null);
 
-  const { mutate: onMove } = useMoveExplorerItems(parentOfDraggable);
+  const { mutate: onMove, isSuccess } = useMoveExplorerItems();
+
+  useEffect(() => {
+    if (isSuccess && parentOfDraggable) {
+      // setParentOfDraggable(null);
+      queryClient.invalidateQueries([
+        'explorer-files',
+        parentOfDraggable.targetId,
+      ]);
+      queryClient.invalidateQueries([
+        'explorer-files',
+        parentOfDraggable.overId,
+      ]);
+
+      if (
+        parentOfDraggable.overId === 'root' ||
+        parentOfDraggable.targetId === 'root'
+      ) {
+        queryClient.invalidateQueries(['explorer-folders']);
+      }
+      // setParentOfDraggable(null);
+    }
+  }, [isSuccess]);
 
   const onDragStart = (e: DragStartEvent) => {
     const isFolder = e.active.data.current?.isFolder;
@@ -49,8 +75,6 @@ export default function DragContext({ children }: DragContextProps) {
 
   const onDragEnd = (e: DragEndEvent) => {
     dispatch(setDraggableItem(null));
-
-    console.log(e.active, e.over);
 
     const { over, active } = e;
 
@@ -71,6 +95,20 @@ export default function DragContext({ children }: DragContextProps) {
       //   //   overId: overId === 'root' ? '' : (overId as string),
       //   //   fileFolderId: active.data.current?.fileFolderId,
       //   // });
+
+      if (selectedFolderId && draggableItem) {
+        setParentOfDraggable({
+          isTargetFile: draggableItem.isFile,
+          targetId: active.data.current?.fileFolderId || 'root',
+          overId: (overId as string) || 'root',
+        });
+      }
+
+      // setParentOfDraggable({
+      //   isTargetFile: draggableItem?.isFile || false,
+      //   targetId: draggableItem?.id,
+      //   overId: '',
+      // });
 
       //   setParentOfDraggable({
       //     isTargetFile: true,
