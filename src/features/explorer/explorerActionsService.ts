@@ -132,36 +132,50 @@ const moveExplorerItems = (data: {
 };
 
 export const useMoveExplorerItems = (
-  targetFolderId: {
-    parentId: string;
+  data: {
+    isTargetFile: boolean;
+    targetId: string;
     overId: string;
-    fileFolderId: string | null;
+    // parentId: string;
+    // overId: string;
+    // fileFolderId: string | null;
   } | null
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation(moveExplorerItems, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer-folders']);
-      queryClient.invalidateQueries([
-        'explorer-folder',
-        targetFolderId?.overId,
-      ]);
-      queryClient.invalidateQueries([
-        'explorer-folder',
-        targetFolderId?.parentId,
-      ]);
-      queryClient.invalidateQueries([
-        'explorer-files',
-        targetFolderId?.parentId,
-      ]);
+      if (data) {
+        const { isTargetFile, targetId, overId } = data;
 
-      if (targetFolderId?.fileFolderId) {
-        queryClient.invalidateQueries([
-          'explorer-files',
-          targetFolderId?.fileFolderId,
-        ]);
+        if (isTargetFile) {
+          queryClient.invalidateQueries(['explorer-files', targetId]);
+          queryClient.invalidateQueries(['explorer-files', overId]);
+        } else {
+          queryClient.invalidateQueries(['explorer-folders']);
+          queryClient.invalidateQueries(['explorer-folder', targetId]);
+          queryClient.invalidateQueries(['explorer-folder', overId]);
+        }
       }
+      // queryClient.invalidateQueries(['explorer-folders']);
+      // queryClient.invalidateQueries([
+      //   'explorer-folder',
+      //   targetFolderId?.overId,
+      // ]);
+      // queryClient.invalidateQueries([
+      //   'explorer-folder',
+      //   targetFolderId?.parentId,
+      // ]);
+      // queryClient.invalidateQueries([
+      //   'explorer-files',
+      //   targetFolderId?.parentId,
+      // ]);
+      // if (targetFolderId?.fileFolderId) {
+      //   queryClient.invalidateQueries([
+      //     'explorer-files',
+      //     targetFolderId?.fileFolderId,
+      //   ]);
+      // }
     },
   });
 };

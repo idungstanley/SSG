@@ -95,7 +95,7 @@ export default function Row({ fileId }: RowProps) {
     id: file?.id || '',
     data: {
       isFile: true,
-      fileFolderId: file?.folder_id,
+      fileFolderId: file?.folder_id || 'root',
     },
   });
 

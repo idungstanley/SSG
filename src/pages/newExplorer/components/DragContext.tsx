@@ -24,7 +24,7 @@ export default function DragContext({ children }: DragContextProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { selectedFolderId } = useAppSelector((state) => state.explorer);
+  const { draggableItem } = useAppSelector((state) => state.explorer);
 
   // const mouseSensor = useSensor(MouseSensor);
   // const touchSensor = useSensor(TouchSensor);
@@ -32,9 +32,9 @@ export default function DragContext({ children }: DragContextProps) {
 
   // parent id for invalidate active query
   const [parentOfDraggable, setParentOfDraggable] = useState<{
-    parentId: string;
+    isTargetFile: boolean;
     overId: string;
-    fileFolderId: string | null;
+    targetId: string;
   } | null>(null);
 
   const { mutate: onMove } = useMoveExplorerItems(parentOfDraggable);
@@ -43,37 +43,51 @@ export default function DragContext({ children }: DragContextProps) {
     const isFolder = e.active.data.current?.isFolder;
 
     const id = e.active.id as string;
-    // if (e.active.data.current?.isFolder) {
+
     dispatch(setDraggableItem({ id, isFile: !isFolder }));
-    // }
   };
 
   const onDragEnd = (e: DragEndEvent) => {
     dispatch(setDraggableItem(null));
+
+    console.log(e.active, e.over);
 
     const { over, active } = e;
 
     const overId = over?.id;
     const activeId = active?.id;
 
+    // const isFile = active.data.current?.isFile;
+    // const parentId = isFile
+    //   ? selectedFolderId
+    //   : (active.data.current?.parentId as string);
+
+    // const targetId = isFile ? active.data.current?.fileFolderId : activeId;
+
     if (overId && activeId) {
-      const isFile = active.data.current?.isFile;
+      //   console.log({ overId, activeId, targetId });
+      //   // setParentOfDraggable({
+      //   //   parentId: parentId || '',
+      //   //   overId: overId === 'root' ? '' : (overId as string),
+      //   //   fileFolderId: active.data.current?.fileFolderId,
+      //   // });
 
-      const parentId = isFile
-        ? selectedFolderId
-        : (active.data.current?.parentId as string);
-      setParentOfDraggable({
-        parentId: parentId || '',
-        overId: overId === 'root' ? '' : (overId as string),
-        fileFolderId: active.data.current?.fileFolderId,
-      });
+      //   setParentOfDraggable({
+      //     isTargetFile: true,
+      //     overId: overId as string,
+      //     targetId: active.data.current?.fileFolderId,
+      //     // targetId: isFile
+      //     //   ? active.data.current?.fileFolderId
+      //     //   : active.data.current?.parentId,
+      //   });
 
-      if (activeId === selectedFolderId) {
-        dispatch(resetSelectedItem());
-        navigate('/new-explorer');
-      }
+      //   if (activeId === selectedFolderId) {
+      //     dispatch(resetSelectedItem());
+      //     navigate('/new-explorer');
+      //   }
 
-      const moveData = isFile
+      // moving file / folder request
+      const moveData = draggableItem?.isFile
         ? { fileIds: [activeId as string] }
         : { folderIds: [activeId as string] };
 
@@ -82,8 +96,6 @@ export default function DragContext({ children }: DragContextProps) {
         ...moveData,
       });
     }
-
-    // console.log(e);
   };
 
   return (
