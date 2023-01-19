@@ -188,7 +188,7 @@ export const useMultipleDeleteFiles = (folderId?: string) => {
 
 export const useGetFileBuffers = (id: string | null, contentType: string) => {
   const response = useQuery(
-    ['test', id],
+    ['buffers', id],
     () =>
       requestForBuffer({
         url: `files/${id}/contents`,
