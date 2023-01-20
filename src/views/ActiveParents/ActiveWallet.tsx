@@ -106,62 +106,23 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
           (wallet) =>
             wallet.id === activeItemId && (
               <div key={wallet.id}>
-                <section className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8">
-                  {wallet.id === activeItemId && (
-                    <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
-                  )}
+                <section className="flex items-center relative justify-between py-1.5 mt-0.5 text-sm hover:bg-gray-100 h-8">
                   <div
                     id="walletLeft"
                     className="flex items-center justify-center"
                   >
-                    {/* showsub1 */}
-                    {/* <div
-                      onClick={() => handleShowSubWallet(wallet.id)}
-                      className="flex items-center"
-                    >
-                      {showSubWallet === wallet.id ? (
-                        <>
-                          <VscTriangleDown
-                            className="flex-shrink-0 h-3"
-                            aria-hidden="true"
-                            color="rgba(72, 67, 67, 0.64)"
-                          />
-                          <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
-                        </>
-                      ) : (
-                        <>
-                          <VscTriangleRight
-                            className="flex-shrink-0 h-3"
-                            aria-hidden="true"
-                            color="rgba(72, 67, 67, 0.64)"
-                          />
-                          <FaFolder color="rgba(72, 67, 67, 0.64)" />
-                        </>
-                      )}
-                    </div> */}
                     <div
                       onClick={() => handleLocation(wallet.id, wallet.name)}
-                      className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
+                      className="ml-2 flex cursor-pointer hover:underline hover:decoration-dashed"
                     >
                       <p
-                        className="tracking-wider capitalize"
+                        className="font-medium tracking-wider capitalize truncate"
                         style={{ fontSize: '10px' }}
                       >
                         {wallet.name}
                       </p>
                     </div>
                   </div>
-                  {/* <div id="walletRight" className="flex items-center space-x-1">
-                    <AiOutlineEllipsis
-                      className="cursor-pointer"
-                      onClick={(e) => handleWalletSettings(wallet.id, e)}
-                      id="menusettings"
-                    />
-                    <AiOutlinePlus
-                      onClick={() => handleItemAction(wallet.id)}
-                      className="cursor-pointer"
-                    />
-                  </div> */}
                 </section>
                 <div>
                   {showSubWallet === wallet.id ? (
