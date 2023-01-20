@@ -99,7 +99,7 @@ function RenderList() {
     setdropDown((prev) => !prev);
   };
 
-  const [close, setClose] = useState(false);
+  const [close, setClose] = useState(true);
   const handleClose = () => {
     setClose((prev) => !prev);
   };
@@ -167,11 +167,14 @@ function RenderList() {
                 className="flex-shrink-0 h-4 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              <p> + New Task</p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+              <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
+                {" "}
+                + New Task
+              </p>
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs">
                 Add Description
               </p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs">
                 Add Comment
               </p>
             </div>
@@ -187,7 +190,7 @@ function RenderList() {
             <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
               <span
-                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer"
+                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
                 style={{ backgroundColor: "#eee" }}
               >
                 Add New Status
