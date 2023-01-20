@@ -7,25 +7,22 @@ interface FormType {
       | React.FormEvent<HTMLFormElement>
       | React.MouseEvent<SVGSVGElement, MouseEvent>
   ) => void;
-  message: string;
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  messageRef: React.RefObject<HTMLInputElement>;
 }
 
 export default function Form({
   handleSubmit,
-  message,
-  setMessage,
   setShowDropdown,
+  messageRef,
 }: FormType) {
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="relative">
       <input
+        ref={messageRef}
         type="text"
         className="block w-full pr-20 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-base"
         placeholder="Enter comment"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
       />
 
       <div className="absolute flex gap-4 top-2 right-2">
@@ -42,7 +39,9 @@ export default function Form({
           strokeWidth={1.5}
           stroke="currentColor"
           className={`w-6 h-6 cursor-pointer transition-all duration-300 ${
-            message.length > 2 ? 'stroke-current text-indigo-600' : null
+            (messageRef.current?.value.length || 0) > 2
+              ? 'stroke-current text-indigo-600'
+              : null
           } stroke-current hover:text-indigo-600 `}
         >
           <path
