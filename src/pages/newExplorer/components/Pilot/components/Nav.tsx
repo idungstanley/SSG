@@ -16,29 +16,29 @@ const tabs = [
     icon: <SignalIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
   },
   {
-    id: 2,
+    id: 1,
     label: 'History',
     icon: <ClockIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
   },
   {
-    id: 3,
+    id: 2,
     label: 'Permissions',
     icon: <LockClosedIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
   },
   {
-    id: 4,
+    id: 3,
     label: 'Information',
     icon: (
       <InformationCircleIcon className="w-6 h-6 text-gray-300 cursor-pointer" />
     ),
   },
   {
-    id: 5,
+    id: 4,
     label: 'Watchers',
     icon: <EyeIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
   },
   {
-    id: 6,
+    id: 5,
     label: 'Comments',
     icon: (
       <ChatBubbleLeftEllipsisIcon className="w-6 h-6 text-gray-300 cursor-pointer" />

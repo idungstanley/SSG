@@ -5,7 +5,9 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import Nav from './components/Nav';
 import History from './components/History';
 import Information from './components/Information';
+import Permissions from './components/Permissions';
 import CommentsForPilot from '../../../../components/Comments/CommentsForPilot';
+import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
 
 const sections = [
   {
@@ -14,26 +16,22 @@ const sections = [
   },
   {
     id: 1,
-    element: <div></div>,
-  },
-  {
-    id: 2,
     element: <History />,
   },
   {
-    id: 3,
-    element: <div></div>,
+    id: 2,
+    element: <Permissions />,
   },
   {
-    id: 4,
+    id: 3,
     element: <Information />,
   },
   {
-    id: 5,
-    element: <div></div>,
+    id: 4,
+    element: <WatchersForPilot />,
   },
   {
-    id: 6,
+    id: 5,
     element: <CommentsForPilot />,
   },
 ];
