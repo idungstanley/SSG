@@ -45,14 +45,14 @@ import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
-import RenderList from './pages/workspace/lists/RenderList';
+import RenderList from './pages/workspace/Loader/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage';
 import Calendar from './pages/workspace/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
-import Home from './pages/workspace/home/Home';
+import Home from './pages/workspace/Homer/Home';
 import NewExplorerPage from './pages/newExplorer';
 
 const inbox = [

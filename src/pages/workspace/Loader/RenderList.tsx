@@ -17,7 +17,7 @@ import { CheckIcon } from '@heroicons/react/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Dropdown } from '../../../components';
+import { Button } from '../../../components';
 import {
   createTaskService,
   getTaskListService,
@@ -39,8 +39,6 @@ function RenderList() {
   const queryClient = useQueryClient();
   const { myTaskData } = useAppSelector((state) => state.task);
 
-  console.log('myTaskData', myTaskData);
-
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -48,7 +46,7 @@ function RenderList() {
     },
   });
 
-  const { data: listChildrenData } = getTaskListService({ listId });
+  // const { data: listChildrenData } = getTaskListService({ listId });
 
   const { data: listDetailsData } = useQuery({
     queryKey: ['listDetails', listId],
