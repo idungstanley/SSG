@@ -17,6 +17,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         mainLayout: '300px 1fr',
+        sidebarItem: 'auto 1fr auto',
       },
       gridTemplateRows: {
         mainContent: 'auto 1fr',

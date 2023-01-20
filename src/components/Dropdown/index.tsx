@@ -23,7 +23,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-500 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (

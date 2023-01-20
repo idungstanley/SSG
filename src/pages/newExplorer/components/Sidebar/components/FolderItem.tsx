@@ -128,7 +128,7 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
+        ' grid grid-cols-sidebarItem justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
         isActiveFolder ? 'text-primary-600 bg-primary-50' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
@@ -137,33 +137,37 @@ export default function FolderItem({
     >
       <div
         onClick={() => handleClickFolder(id, parentId)}
-        className="flex gap-2 items-center cursor-pointer"
+        className="flex gap-2 mr-2 items-center cursor-pointer"
       >
         {isActiveFolder || haveAncestors ? (
           <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
         ) : (
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
         )}
-
-        <div className="flex gap-2 items-center">
-          <FolderIcon className="h-5 w-5" aria-hidden="true" />
-          <p className="whitespace-nowrap max-w-34 truncate overflow-hidden">
-            {name}
-          </p>
-        </div>
       </div>
 
-      <div className="flex opacity-40 group-hover:opacity-100 gap-2 items-center">
+      <div className="space-x-2 whitespace-nowrap overflow-x-hidden truncate">
+        <FolderIcon
+          className="h-5 w-5 mb-1 inline-flex items-center"
+          aria-hidden="true"
+        />
+        <p className="inline">{name}</p>
+      </div>
+
+      <div className="flex gap-2 items-center">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
             dispatch(setItemActionForSideOver({ action: 'create', id }))
           }
-          className="h-5 w-5 cursor-pointer stroke-current text-gray-500"
+          className="h-5 w-5 cursor-pointer stroke-current text-gray-400"
           aria-hidden="true"
         />
         <div ref={draggableRef} {...listeners} {...attributes}>
-          <ArrowsUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+          <ArrowsUpDownIcon
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
         </div>
       </div>
     </div>
