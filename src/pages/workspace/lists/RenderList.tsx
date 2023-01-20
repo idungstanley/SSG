@@ -43,7 +43,7 @@ function RenderList() {
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('createtask' as any);
+      queryClient.invalidateQueries();
       setAddNewItem(!addNewItem);
     },
   });
@@ -87,8 +87,6 @@ function RenderList() {
   const [dropDown, setdropDown] = useState(false);
 
   const handleDropDown = () => {
-    console.log(dropDown);
-
     setdropDown((prev) => !prev);
   };
 
@@ -96,9 +94,7 @@ function RenderList() {
   const handleClose = () => {
     setClose((prev) => !prev);
   };
-  // {dropDown ? (<>
-  // <div></div>
-  // </>) : null}
+
   const navigate = useNavigate();
   const handleTaskModal = (id: string) => {
     setOpenTaskModal(true);

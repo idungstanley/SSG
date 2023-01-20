@@ -11,7 +11,7 @@ export const createTaskService = (data) => {
       data: {
         name: data.name,
         description: data.description,
-        list_id: data.showMenuDropdown,
+        list_id: data.showMenuDropdown || data.getListId,
         // parent_id: data.parentTaskId,
       },
     },
@@ -37,7 +37,7 @@ export const getTaskListService = ({ listId }) => {
 
   const queryClient = useQueryClient();
   return useQuery(
-    ['task'],
+    ['task', { listId: listId }],
     async () => {
       const data = await requestNew(
         {
