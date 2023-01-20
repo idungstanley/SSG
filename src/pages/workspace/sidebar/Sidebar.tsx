@@ -17,7 +17,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 import Modal from '../hubs/components/Modal';
 import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
-import Search from '../search';
+import Search from '../Somwde';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
