@@ -169,7 +169,8 @@ function RenderList() {
               />
               <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
                 {" "}
-                {/* <span onClick={() => handleNewTask()}>+ New Task </span> */}
+                + New Task
+                {/* <span onClick={() => handleNewTask()}></span> */}
               </p>
               <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
                 Add Description
