@@ -1,12 +1,14 @@
 import React, { Fragment, ReactNode } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { classNames } from '../../utils';
 
 interface SideOverProps {
   show: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  disableGapForChildren?: boolean;
 }
 
 export default function SideOver({
@@ -14,6 +16,7 @@ export default function SideOver({
   onClose,
   title,
   children,
+  disableGapForChildren = false,
 }: SideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -51,7 +54,12 @@ export default function SideOver({
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex flex-col gap-6 px-4 sm:px-6 h-full">
+                    <div
+                      className={classNames(
+                        'relative mt-6 flex flex-col  px-4 sm:px-6 h-full',
+                        disableGapForChildren ? '' : 'gap-6'
+                      )}
+                    >
                       {children}
                     </div>
                   </div>

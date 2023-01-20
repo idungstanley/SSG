@@ -1,3 +1,4 @@
+import { explorerItemType } from './../../types/index';
 import {
   IExplorerFile,
   IExplorerFilesAndFolders,
@@ -75,16 +76,42 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
 };
 
 // folders
-export const useGetExplorerFolders = () =>
-  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+export const useGetExplorerFolders = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
     ['explorer-folders'],
     () =>
       requestNew({
         url: 'explorer-folders',
         method: 'GET',
       }),
-    { select: (res) => res.data.folders }
+    {
+      select: (res) => res.data.folders,
+      onSuccess: (res) =>
+        res.map((folder) =>
+          queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
+        ),
+    }
   );
+};
+
+export const useGetExplorerFileOrFolder = (
+  type?: explorerItemType,
+  itemId?: string
+) => {
+  const queryClient = useQueryClient();
+  const query = type === 'folder' ? 'explorer-folder-1' : 'explorer-file';
+
+  return useQuery<IExplorerFile | undefined>(
+    [query, itemId],
+    () => queryClient.getQueryData([query, itemId]),
+    {
+      initialData: () => queryClient.getQueryData([query, itemId]),
+      enabled: !!itemId && !!type,
+    }
+  );
+};
 
 export const useGetExplorerFolder = (folderId?: string) =>
   useQuery<IExplorerFoldersRes>(
@@ -152,7 +179,7 @@ export const useGetExplorerFiles = (folderId?: string) => {
   );
 };
 
-export const useGetExplorerFile = (fileId: string | null) => {
+export const useGetExplorerFile = (fileId?: string | null) => {
   const queryClient = useQueryClient();
 
   return useQuery<IExplorerFile | undefined>(
