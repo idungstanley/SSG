@@ -46,7 +46,7 @@ function RenderList() {
     },
   });
 
-  // const { data: listChildrenData } = getTaskListService({ listId });
+  const { data: listChildrenData } = getTaskListService({ listId });
 
   const { data: listDetailsData } = useQuery({
     queryKey: ['listDetails', listId],
