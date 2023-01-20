@@ -23,7 +23,7 @@ const navigation = [
   {
     name: 'Notifications',
     href: '/workspace/notification',
-    icon: <IoMdNotificationsOutline className="text-gray-700 text-l" />,
+    source: notificationIcon,
     alwaysShow: true,
   },
   {

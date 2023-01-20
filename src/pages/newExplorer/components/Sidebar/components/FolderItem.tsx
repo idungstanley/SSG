@@ -154,14 +154,14 @@ export default function FolderItem({
     <div
       className={classNames(
         'group flex relative justify-between w-full items-center py-1.5 hover:bg-gray-100',
-        isActiveFolder ? 'bg-green-100 text-green-800' : '',
+        isActiveFolder ? 'bg-green-50 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
       style={style}
     >
       {isActiveFolder && (
-        <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+        <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
       )}
       <div
         onClick={() => handleClickFolder(id, parentId)}
@@ -170,16 +170,19 @@ export default function FolderItem({
         {isActiveFolder || haveAncestors ? (
           <>
             <VscTriangleDown
-              className="flex-shrink-0 h-2 text-xs"
-              color="rgba(19, 19, 13, 0.64)"
+              className="flex-shrink-0 h-3 text-xs mr-0.5"
+              color="rgb(95,99,104)"
               aria-hidden="true"
             />
-            <FaFolderOpen color="rgba(19, 19, 13, 0.64)" />
+            <FaFolderOpen
+              // color="rgba(19, 19, 13, 0.64)"
+              className="text-green-500"
+            />
           </>
         ) : (
           <>
             <VscTriangleRight
-              className="flex-shrink-0 h-2 text-xs"
+              className="flex-shrink-0 h-3 text-xs"
               color="rgb(95,99,104)"
               aria-hidden="true"
             />
@@ -187,7 +190,7 @@ export default function FolderItem({
           </>
         )}
         <div
-          className="tracking-wider capitalize ml-2"
+          className="tracking-wider font-semibold capitalize ml-2"
           style={{ fontSize: '10px' }}
         >
           <p>{name.length > 10 ? name.substring(0, 10) : name}</p>
