@@ -30,9 +30,7 @@ function Index() {
           <Header />
           <main className="flex-1">
             <div
-              className={`py-3.5 mx-auto sm:px-0 ${
-                showSidebar ? 'px-8' : ''
-              }`}
+              className={`py-3.5 mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}
             >
               <Outlet />
             </div>

@@ -1,12 +1,14 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../../app/hooks';
+import { getTaskData } from './taskSlice';
 
 export const createTaskService = (data) => {
   const response = requestNew(
     {
       url: 'at/tasks',
       method: 'POST',
-      params: {
+      data: {
         name: data.name,
         description: data.description,
         list_id: data.showMenuDropdown,
@@ -30,8 +32,9 @@ export const getOneTaskService = (data) => {
   return response;
 };
 
-export const getTaskListService = ({listId}) => {
-  // const dispatch = useDispatch();
+export const getTaskListService = ({ listId }) => {
+  const dispatch = useAppDispatch();
+
   const queryClient = useQueryClient();
   return useQuery(
     ['task'],
@@ -50,14 +53,16 @@ export const getTaskListService = ({listId}) => {
     },
     {
       onSuccess: (data) => {
-        data.data.tasks.map((task) => {
+        const taskData = data.data.tasks.map((task) => {
           queryClient.setQueryData(['task', task.id], task);
           return { ...task };
         });
+        dispatch(getTaskData(taskData));
       },
     }
   );
 };
+// getTaskListService();
 
 export const createTimeEntriesService = (data) => {
   const taskID = data.queryKey[1];
@@ -156,7 +161,7 @@ export const UseGetWatcherService = (taskId) => {
   const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
-    ['watcher', { taskId: taskId }],
+    ['watcher', taskId],
     async () => {
       const data = await requestNew(
         {

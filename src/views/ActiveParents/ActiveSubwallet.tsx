@@ -6,7 +6,6 @@ import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import { setWalletId } from '../../features/wallet/walletSlice';
 import { closeMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
@@ -69,9 +68,7 @@ function ActiveSubWallet({
                 </div>
               </section>
               <div>
-                {showSubWallet2 === wallet.id ? (
-                  <Sub2WalletIndex wallet2ParentId={wallet2ParentId} />
-                ) : null}
+                {showSubWallet2 === wallet.id ? <Sub2WalletIndex /> : null}
                 {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
               </div>
             </div>

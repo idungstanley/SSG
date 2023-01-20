@@ -98,7 +98,7 @@ function Sub2WalletIndex({
       {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
-            className={`flex relative items-center justify-between space-x-1 text-sm h-8 ${padding} py-1.5 hover:bg-gray-100 ${
+            className={`flex relative items-center justify-between space-x-1 text-sm h-8 group ${padding} py-1.5 hover:bg-gray-100 ${
               wallet.id === activeItemId && 'bg-green-50 text-green-500'
             }`}
           >
@@ -136,7 +136,10 @@ function Sub2WalletIndex({
               </div>
             </div>
             {/* ends here */}
-            <div id="walletRight" className="flex items-center space-x-2">
+            <div
+              id="walletRight"
+              className="flex items-center space-x-2 opacity-0 group-hover:opacity-100"
+            >
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 onClick={(e) => handleWalletSettings(wallet.id, e)}
@@ -157,7 +160,7 @@ function Sub2WalletIndex({
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100 group">
             <div className="flex items-center space-x-1">
               <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
@@ -166,7 +169,7 @@ function Sub2WalletIndex({
             <button
               type="button"
               id="listright"
-              className="flex items-center justify-end space-x-1 "
+              className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"

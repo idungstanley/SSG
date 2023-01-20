@@ -93,7 +93,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
       {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
-            className={`flex relative items-center justify-between ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
+            className={`flex relative items-center justify-between group ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
               wallet.id === activeItemId && 'bg-green-100 text-black'
             }`}
           >
@@ -164,7 +164,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-8 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-8 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100 group">
             <div className="flex items-center space-x-1">
               <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
@@ -173,7 +173,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
             <button
               type="button"
               id="listright"
-              className="flex items-center justify-end space-x-1 "
+              className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
             >
               {/* <TaskDropdown /> */}
               <AiOutlineEllipsis

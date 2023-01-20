@@ -78,7 +78,7 @@ export default function SubHubIndex() {
       {data?.data?.hubs.length !== 0 &&
         data?.data?.hubs.map((subhub) => (
           <div key={subhub.id}>
-            <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8">
+            <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
               <div id="subhubleft" className="flex items-center justify-center">
                 {/* showsub1 */}
                 <div
@@ -125,7 +125,10 @@ export default function SubHubIndex() {
                   </span>
                 </div>
               </div>
-              <div id="subhubRight" className="flex items-center space-x-1">
+              <div
+                id="subhubRight"
+                className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+              >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
                   onClick={(e) => handleShowMenu(subhub.id, e)}
