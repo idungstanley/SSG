@@ -167,14 +167,14 @@ function RenderList() {
                 className="flex-shrink-0 h-4 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
+              <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
                 {" "}
-                + New Task
+                {/* <span onClick={() => handleNewTask()}>+ New Task </span> */}
               </p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs">
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
                 Add Description
               </p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs">
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
                 Add Comment
               </p>
             </div>
@@ -198,19 +198,44 @@ function RenderList() {
             </div>
           </section>
           {/* card */}
-          <div className=" flex  items-center ml-3 pl-3">
+          <div className=" flex  items-center  ">
             <div className=" flex w-6/12 items-center gap-2 shrink-0">
-              <FiArrowDownCircle
-                className=" text-gray-400 text-xs"
-                aria-hidden="true"
-                onClick={() => handleClose()}
-              />
-              <span className="text-xs font-semibold text-gray-400	">OPEN</span>
-              <span className="text-xs font-semibold text-gray-400	">
-                {myTaskData?.length}
+              <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
+                <FiArrowDownCircle
+                  className={`text-gray-400 text-sm hover:text-gray-200  ${
+                    close === false && "rotateimg90"
+                  }`}
+                  aria-hidden="true"
+                  onClick={() => handleClose()}
+                />
               </span>
+              <div className="flex items-center justify-center cursor-pointer relative">
+                <div className="group flex items-center">
+                  <span className="text-xs text-black p-1 bg-gray-300">
+                    OPEN
+                  </span>
+                  {/* <EditOutlined
+                    className=" text-xs text-black opacity-0 transition duration-200 group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                  <EditOutlined
+                    className=" text-xs text-black opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-300"
+                    aria-hidden="true"
+                  />
+                  <EditOutlined
+                    className=" text-xs text-black opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-300"
+                    aria-hidden="true"
+                  /> */}
+                </div>
+                <span
+                  className="text-xs text-gray-400 mt-1	"
+                  // style={{ marginLeft: "-5px" }}
+                >
+                  {myTaskData?.length}
+                </span>
 
-              <span className="text-xs font-semibold text-gray-400	">TASK</span>
+                <span className="text-xs text-gray-400 mt-1	">TASK</span>
+              </div>
             </div>
             <div className="flex items-center w-6/12">
               <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
@@ -266,7 +291,7 @@ function RenderList() {
           {myTaskData?.map((task, i) => (
             <div key={task.id}>
               {close && (
-                <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
+                <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
                   <RiCheckboxBlankFill
                     className=" text-gray-400 text-xs"
                     aria-hidden="true"
