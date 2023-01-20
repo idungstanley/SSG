@@ -1,43 +1,48 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
-import { getWalletService } from '../../../../../features/wallet/walletService';
-import PlusDropDown from '../../../hubs/components/PlusDropDown';
-import TaskDropdown from '../../../tasks/component/TaskDropdown';
+import { getWalletServices } from '../../../../../features/wallet/walletService';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
-import { IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { BsListUl } from 'react-icons/bs';
+import { useAppSelector } from '../../../../../app/hooks';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { useDispatch } from 'react-redux';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import {
+  closeMenu,
+  getSubMenu,
+  setshowMenuDropdown,
+} from '../../../../../features/hubs/hubSlice';
+import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
+import LastListIndex from './LastListIndex';
 
 interface Sub2WalletIndexProps {
-  wallet2ParentId?: string;
+  padding?: string;
+  currWalId?: string;
 }
 
-function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
-  const [walletId, setGetWalletId] = useState('');
+function Sub2WalletIndex({
+  padding = 'pl-14',
+  currWalId,
+}: Sub2WalletIndexProps) {
+  const dispatch = useDispatch();
+
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
-  const [getListId, setGetListId] = useState('');
-  const [isHovering, setIsHovering] = useState<number>(-1);
-
-  const { data: subwallet } = useQuery<{
-    data: { wallets: IWallet[]; lists: IList[] };
-  }>({
-    queryKey: ['sub2walletlist', [wallet2ParentId]],
-    queryFn: getWalletService,
+  const [finalParentId, setFinalWalletParentId] = useState('');
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { data: subwallet } = getWalletServices({
+    Archived: toggleArchiveWallet,
+    parentId: currWalId,
   });
-
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet3 === id) {
       return setShowSubWallet3(null);
     }
+    setFinalWalletParentId(id);
     setShowSubWallet3(id);
   };
 
@@ -46,19 +51,60 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
     navigate(`/workspace/list/${id}`);
   };
 
-  const handleLocation = (id: string) => {
+  const handleLocation = (id: string, type = 'sub2wallet') => {
     navigate(`/workspace/wallet/${id}`);
+    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+  };
+
+  const handleWalletSettings = (id: string, e) => {
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'subwallet3',
+      })
+    );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
+  };
+
+  const handleItemAction = (id: string) => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: 'subwallet3',
+      })
+    );
+  };
+
+  const handleListSettings = (id: string, e) => {
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: 'list',
+      })
+    );
+    if (showMenuDropdown != null) {
+      if (e.target.id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
   };
 
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet, i) => (
+      {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
-            className="flex items-center justify-between space-x-1 text-sm h-8 pl-14 py-1.5 hover:bg-gray-100"
-            onMouseEnter={() => handleMouseOver(i)}
-            onMouseLeave={handleMouseOut}
+            className={`flex relative items-center justify-between space-x-1 text-sm h-8 group ${padding} py-1.5 hover:bg-gray-100 ${
+              wallet.id === activeItemId && 'bg-green-50 text-green-500'
+            }`}
           >
+            {wallet.id === activeItemId && (
+              <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+            )}
             <div className="flex items-center">
               <div onClick={() => handleShowSubWallet(wallet.id)}>
                 {showSubWallet3 === wallet.id ? (
@@ -92,45 +138,50 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
             {/* ends here */}
             <div
               id="walletRight"
-              className={`flex items-center justify-end space-x-1 ${
-                isHovering === i ? 'block' : 'hidden'
-              }`}
-              onClick={() => setGetWalletId(wallet.id)}
+              className="flex items-center space-x-2 opacity-0 group-hover:opacity-100"
             >
-              <MenuDropdown />
-              <PlusDropDown walletId={walletId} />
+              <AiOutlineEllipsis
+                className="cursor-pointer"
+                onClick={(e) => handleWalletSettings(wallet.id, e)}
+                id="menusettings"
+              />
+              <AiOutlinePlus
+                onClick={() => handleItemAction(wallet.id)}
+                className="cursor-pointer"
+              />
             </div>
           </section>
+          {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+          {SubMenuId === wallet.id ? <SubDropdown /> : null}
+          {showSubWallet3 === wallet.id ? (
+            <LastListIndex finalParentId={finalParentId} />
+          ) : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-20 space-x-1 text-sm hover:bg-gray-100">
-            <div className="flex items-center">
-              <DotsCircleHorizontalIcon
-                className="flex-shrink-0 w-5 h-3"
-                aria-hidden="true"
-              />
-              <div
-                className="text-sm"
-                onClick={() => handleListLocation(list.id)}
-              >
-                {list.name}
-              </div>
+          <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100 group">
+            <div className="flex items-center space-x-1">
+              <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
+              <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
             </div>
             {/* ends here */}
-            <div
+            <button
+              type="button"
               id="listright"
-              className="flex items-center justify-end space-x-1"
-              onClick={() => setGetListId(list.id)}
+              className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
             >
-              <TaskDropdown getListId={getListId} />
-            </div>
+              <AiOutlineEllipsis
+                className="cursor-pointer"
+                id="menusettings"
+                onClick={(e) => handleListSettings(list.id, e)}
+              />
+            </button>
           </section>
+          {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}
     </div>
   );
 }
-
 export default Sub2WalletIndex;

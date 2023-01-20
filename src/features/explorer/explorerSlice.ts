@@ -38,9 +38,15 @@ interface ExplorerState {
   selectedFolderIds: string[];
   selectedSortingId: number;
   selectedViewId: number;
+  selectedFolderId: string | null;
+  selectedFileId: string | null;
 
   fileIdsToPaste: string[];
   folderIdsToPaste: string[];
+  query: string;
+  fileSelectWidth:number;
+
+  draggableItem: { id: string; isFile: boolean } | null;
 }
 
 const initialState: ExplorerState = {
@@ -51,17 +57,39 @@ const initialState: ExplorerState = {
 
   selectedFileIds: [],
   selectedFolderIds: [],
+  selectedFolderId: null,
+  selectedFileId: null,
   selectedSortingId,
   selectedViewId,
+  query: '',
+  fileSelectWidth: 490,
 
   fileIdsToPaste,
   folderIdsToPaste,
+
+  draggableItem: null,
 };
 
 export const explorerSlice = createSlice({
   name: 'explorer',
   initialState,
   reducers: {
+    setDraggableItem: (
+      state,
+      action: PayloadAction<{ id: string; isFile: boolean } | null>
+    ) => {
+      state.draggableItem = action.payload;
+    },
+    setSelectedFolderId: (state, action: PayloadAction<string | null>) => {
+      state.selectedFolderId = action.payload;
+    },
+    setSelectedFileId: (state, action: PayloadAction<string | null>) => {
+      state.selectedFileId = action.payload;
+    },
+    resetSelectedFiles: (state) => {
+      state.selectedFileId = null;
+      state.selectedFileIds = [];
+    },
     resetSelectedItem: (state) => {
       state.selectedItemId = null;
       state.selectedItemType = null;
@@ -117,8 +145,14 @@ export const explorerSlice = createSlice({
     setSelectedSorting: (state, action: PayloadAction<number>) => {
       state.selectedSortingId = action.payload;
     },
+    setQuery: (state, action: PayloadAction<string>) => {
+      state.query = action.payload;
+    },
     setSelectedViewId: (state, action: PayloadAction<number>) => {
       state.selectedViewId = action.payload;
+    },
+    setFileSelectWidth(state, action) {
+      state.fileSelectWidth = action.payload;
     },
     setCopyItems: (
       state,
@@ -139,6 +173,10 @@ export const explorerSlice = createSlice({
 });
 
 export const {
+  setDraggableItem,
+  setSelectedFileId,
+  setSelectedFolderId,
+  resetSelectedFiles,
   resetSelectedItem,
   setSelectedItem,
   setSelectedFile,
@@ -151,6 +189,8 @@ export const {
   setSelectedSorting,
   setSelectedViewId,
   setCopyItems,
+  setQuery,
+  setFileSelectWidth,
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

@@ -12,7 +12,7 @@ import { useAppSelector } from '../app/hooks';
 
 const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
 const currentWorkspaceId = JSON.parse(
-  localStorage.getItem('currentWorkspaceId') || 'null',
+  localStorage.getItem('currentWorkspaceId') || 'null'
 );
 
 const headers = {
@@ -31,15 +31,17 @@ export default function UploadModal() {
 
   const dataId = isExplorerPath ? folderId : inboxId || currentItemId;
 
-  const uppy = useUppy(() => new Uppy({
-    debug: true,
-    autoProceed: true,
-    meta: {},
-  }).use(XHRUpload, {
-    endpoint: '',
-    bundle: false,
-    headers,
-  }));
+  const uppy = useUppy(() =>
+    new Uppy({
+      debug: true,
+      autoProceed: true,
+      meta: {},
+    }).use(XHRUpload, {
+      endpoint: '',
+      bundle: false,
+      headers,
+    })
+  );
 
   const { xhrUpload } = uppy.getState();
 
@@ -50,12 +52,13 @@ export default function UploadModal() {
     if (httpStatus === 200) {
       if (httpBody.success === true) {
         if (isExplorerPath) {
-          queryClient.invalidateQueries([
-            'explorer_files_and_folders',
-            httpBody.data.uploaded_to_folder_id == null
-              ? 'root-folder'
-              : httpBody.data.uploaded_to_folder_id,
-          ]);
+          queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+          // queryClient.invalidateQueries([
+          //   'explorer_files_and_folders',
+          //   httpBody.data.uploaded_to_folder_id == null
+          //     ? 'root-folder'
+          //     : httpBody.data.uploaded_to_folder_id,
+          // ]);
         } else {
           queryClient.invalidateQueries([
             'inbox_files',
@@ -70,11 +73,6 @@ export default function UploadModal() {
   });
 
   useEffect(() => {
-    // dispatch(
-    //   setCurrentInbox({
-    //     inboxId,
-    //   })
-    // );
     const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${
       isExplorerPath ? 'files' : 'inboxes'
     }`;

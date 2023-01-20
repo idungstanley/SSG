@@ -2,10 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { classNames } from '../../utils';
+import { expiresIn } from '../../features/shared/shared.interfaces';
 
 interface IOption {
   id: string;
-  name: string;
+  name: string | expiresIn;
 }
 
 interface SelectMenuSimpleProps {
@@ -31,14 +32,13 @@ export default function SelectMenuSimple({
     return null;
   }
 
-  const onC = (val: string) => {
-    const val2 = JSON.parse(JSON.stringify(val));
-
-    onChange(val2.id);
+  const onSelect = (val: string | IOption) => {
+    const value = val as IOption;
+    onChange(value.id);
   };
 
   return (
-    <Listbox value={selectedId} onChange={onC}>
+    <Listbox value={selectedId} onChange={onSelect}>
       {({ open }) => (
         <>
           {label && (
@@ -48,7 +48,7 @@ export default function SelectMenuSimple({
           )}
           <div className="relative">
             <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-              <span className="block h-4 truncate">
+              <span className="block truncate">
                 {processedOptions.find((item) => item.id === selectedId)?.name}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

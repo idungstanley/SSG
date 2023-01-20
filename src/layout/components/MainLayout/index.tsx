@@ -31,7 +31,7 @@ function MainLayout() {
         ref={progressBarRef}
       />
       <TopMenu />
-      <div className="flex">
+      <div className="flex h-full">
         <div className="flex-1 w-full h-full overflow-hidden">
           <Outlet />
         </div>

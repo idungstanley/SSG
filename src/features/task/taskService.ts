@@ -1,5 +1,7 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../../app/hooks';
+import { getTaskData } from './taskSlice';
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -9,8 +11,8 @@ export const createTaskService = (data) => {
       data: {
         name: data.name,
         description: data.description,
-        list_id: data.getListId,
-        parent_id: data.parentTaskId,
+        list_id: data.showMenuDropdown || data.getListId,
+        // parent_id: data.parentTaskId,
       },
     },
     true
@@ -30,20 +32,37 @@ export const getOneTaskService = (data) => {
   return response;
 };
 
-export const getTaskListService = (data) => {
-  const listId = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'at/tasks',
-      method: 'GET',
-      params: {
-        list_id: listId,
-      },
+export const getTaskListService = ({ listId }) => {
+  const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { listId: listId }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'at/tasks/list',
+          method: 'POST',
+          params: {
+            list_id: listId,
+          },
+        },
+        true
+      );
+      return data;
     },
-    true
+    {
+      onSuccess: (data) => {
+        const taskData = data.data.tasks.map((task) => {
+          queryClient.setQueryData(['task', task.id], task);
+          return { ...task };
+        });
+        dispatch(getTaskData(taskData));
+      },
+    }
   );
-  return response;
 };
+// getTaskListService();
 
 export const createTimeEntriesService = (data) => {
   const taskID = data.queryKey[1];
@@ -140,6 +159,7 @@ export const AddTaskWatcherService = (data) => {
 //Get watcher
 export const UseGetWatcherService = (taskId) => {
   const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
   return useQuery(
     ['watcher', taskId],
     async () => {
@@ -163,22 +183,6 @@ export const UseGetWatcherService = (taskId) => {
   );
 };
 
-export const GetTaskWatcherService = (data) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'watch',
-      method: 'GET',
-      params: {
-        type: 'task',
-        id: taskID,
-      },
-    },
-    true
-  );
-  return response;
-};
-
 //Add watcher to task
 export const AddWatcherService = ({ query }) => {
   const queryClient = useQueryClient();
@@ -200,11 +204,15 @@ export const AddWatcherService = ({ query }) => {
       return data;
     },
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['watcher']);
+      },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null,
     }
   );
 };
+
 //Remove watcher to task
 export const RemoveWatcherService = ({ query }) => {
   const queryClient = useQueryClient();
@@ -226,27 +234,11 @@ export const RemoveWatcherService = ({ query }) => {
       return data;
     },
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['watcher']);
+      },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null,
     }
   );
 };
-
-// export const RemoveWatcherService = (data) => {
-//   const bodyData = data.queryKey[1];
-//   const ids = [] as any;
-//   ids.push(bodyData[1]);
-//   const response = requestNew(
-//     {
-//       url: 'watch/remove',
-//       method: 'POST',
-//       params: {
-//         type: 'task',
-//         id: bodyData[0],
-//         team_member_ids: ids,
-//       },
-//     },
-//     true
-//   );
-//   return response;
-// };

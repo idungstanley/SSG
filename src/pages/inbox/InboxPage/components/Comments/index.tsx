@@ -20,7 +20,7 @@ export default function Comments({ setShowModal }: CommentsProps) {
         {' '}
       </div>
       <div className="absolute z-50 p-6 bg-white border top-14 -left-4 h-80 rounded-xl w-96">
-        {inboxId ? <CommentsT itemId={inboxId} type="inbox" /> : null}
+        {inboxId ? <CommentsT /> : null}
       </div>
     </>
   );

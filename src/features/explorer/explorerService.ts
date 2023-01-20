@@ -1,6 +1,13 @@
-import { IExplorerFilesAndFolders } from './explorer.interfaces';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  IExplorerFile,
+  IExplorerFilesAndFolders,
+  IExplorerFilesRes,
+  IExplorerFolder,
+  IExplorerFoldersRes,
+} from './explorer.interfaces';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import requestForBuffer from '../../app/requestForBuffer';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
 
 // Get folder
@@ -67,18 +74,134 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
   );
 };
 
-// Create a folder
-export const createFolderService = async (data: {
-  folderName: string;
-  parentId?: string;
-}) => {
+// folders
+export const useGetExplorerFolders = () =>
+  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+    ['explorer-folders'],
+    () =>
+      requestNew({
+        url: 'explorer-folders',
+        method: 'GET',
+      }),
+    { select: (res) => res.data.folders }
+  );
+
+export const useGetExplorerFolder = (folderId?: string) =>
+  useQuery<IExplorerFoldersRes>(
+    ['explorer-folder', folderId],
+    () =>
+      requestNew({
+        url: `explorer-folders/${folderId}`,
+        method: 'GET',
+      }),
+    { enabled: !!folderId }
+  );
+
+export const useGetSearchFolders = (query: string) =>
+  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+    ['folders-search', query],
+    () =>
+      requestNew({
+        url: 'search/folders',
+        method: 'GET',
+        params: {
+          query,
+        },
+      }),
+    {
+      enabled: query.length > 2,
+      select: (res) => res.data.folders,
+    }
+  );
+
+export const useGetSearchFiles = (query: string) =>
+  useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+    ['folders-search', query],
+    () =>
+      requestNew({
+        url: 'search/files',
+        method: 'GET',
+        params: {
+          query,
+        },
+      }),
+    {
+      enabled: query.length > 2,
+      select: (res) => res.data.files,
+    }
+  );
+
+// files
+export const useGetExplorerFiles = (folderId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+    ['explorer-files', folderId || 'root'],
+    () =>
+      requestNew({
+        url: `explorer-files${folderId ? `/${folderId}` : ''}`,
+        method: 'GET',
+      }),
+    {
+      select: (res) => res.data.files,
+      onSuccess: (res) =>
+        res.map((file) =>
+          queryClient.setQueryData(['explorer-file', file.id], file)
+        ),
+    }
+  );
+};
+
+export const useGetExplorerFile = (fileId: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFile | undefined>(
+    ['explorer-file', fileId],
+    () => queryClient.getQueryData(['explorer-file', fileId]),
+    {
+      initialData: () => queryClient.getQueryData(['explorer-file', fileId]),
+      enabled: !!fileId,
+    }
+  );
+};
+
+const multipleDeleteFiles = (fileIds: string[]) => {
   const response = requestNew({
-    url: 'folders',
+    url: 'explorer/multiple-delete',
     method: 'POST',
     params: {
-      name: data.folderName,
-      parent_id: data.parentId,
+      file_ids: fileIds,
     },
   });
   return response;
+};
+
+export const useMultipleDeleteFiles = (folderId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleDeleteFiles, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+    },
+  });
+};
+
+export const useGetFileBuffers = (id: string | null, contentType: string) => {
+  const response = useQuery(
+    ['buffers', id],
+    () =>
+      requestForBuffer({
+        url: `files/${id}/contents`,
+        method: 'GET',
+      }),
+    { enabled: !!id }
+  );
+
+  return {
+    data: `data:${contentType};base64,${Buffer.from(
+      response.data || '',
+      'binary'
+    ).toString('base64')}`,
+    status: response.status,
+  };
 };

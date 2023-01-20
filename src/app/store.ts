@@ -18,6 +18,7 @@ import teamMemberGroupSlice from '../features/settings/teamMemberGroups/teamMemb
 import sharedSlice from '../features/shared/sharedSlice';
 import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
 import chatSlice from '../features/chat/chatSlice';
+import accountSlice from '../features/account/accountSlice';
 
 export const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
     task: taskSlice,
     upload: uploadFileSlice,
     chat: chatSlice,
+    account: accountSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

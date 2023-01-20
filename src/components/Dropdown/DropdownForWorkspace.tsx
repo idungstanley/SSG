@@ -16,11 +16,23 @@ import {
   ArrowDownIcon,
   PencilAltIcon,
 } from '@heroicons/react/outline';
+import SubDd from './SubDropdown';
 import { classNames } from '../../utils';
 import { VscEllipsis } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
-import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
-// import { useSelector } from 'react-redux';
+// import { setShowMenuDropDown } from '../../features/workspace/workspaceSlice';
+import { useAppSelector } from '../../app/hooks';
+import {
+  ArchiveHubService,
+  UseDeleteHubService,
+} from '../../features/hubs/hubService';
+import {
+  setArchiveHub,
+  setDelHub,
+  setShowSubItems,
+  setShowEditHubModal,
+} from '../../features/hubs/hubSlice';
+import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 
 interface itemsType {
   id: number;
@@ -30,11 +42,30 @@ interface itemsType {
   isVisible: boolean;
 }
 
-function MenuDropdown() {
+function MenuDropdownt() {
   const dispatch = useDispatch();
-  // const { currentItemId, type } = useSelector((state) => state.workspace);
-
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  // const { currHubId } = useAppSelector((state) => state.hub);
+  const { delHub } = useAppSelector((state) => state.hub);
+  const { archiveHub } = useAppSelector((state) => state.hub);
+  const { showSubItems } = useAppSelector((state) => state.hub);
+  const { showEditHubModal } = useAppSelector((state) => state.hub);
   // ! actions here (create, delete, rename)
+  //archiveHub
+  ArchiveHubService({
+    query: currentItemId,
+    archiveHub,
+  });
+
+  //deleteHubs
+  const { status } = UseDeleteHubService({
+    query: currentItemId,
+    delHub,
+  });
+
+  if (status == 'success') {
+    dispatch(setDelHub(false));
+  }
 
   // ! (too big!) destructure to different components
 
@@ -42,7 +73,9 @@ function MenuDropdown() {
     {
       id: 1,
       title: 'Create new',
-      handleClick: () => ({}),
+      handleClick: () => {
+        dispatch(setShowSubItems(!showSubItems));
+      },
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
@@ -51,7 +84,9 @@ function MenuDropdown() {
     {
       id: 2,
       title: 'Rename',
-      handleClick: () => ({}),
+      handleClick: () => {
+        dispatch(setShowEditHubModal(true));
+      },
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
@@ -79,7 +114,7 @@ function MenuDropdown() {
       title: 'Duplicate',
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: false,
     },
     {
       id: 6,
@@ -140,7 +175,9 @@ function MenuDropdown() {
     {
       id: 13,
       title: 'Archive',
-      handleClick: () => ({}),
+      handleClick: () => {
+        dispatch(setArchiveHub(true));
+      },
       icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
@@ -176,54 +213,68 @@ function MenuDropdown() {
     {
       id: 16,
       title: 'Delete',
-      handleClick: () => ({}),
-      icon: <TrashIcon className="w-4 h-4" aria-hidden="true" />,
+      handleClick: () => {
+        dispatch(setDelHub(true));
+      },
+      icon: <TrashIcon className="w-4 h-4 text-red-500" aria-hidden="true" />,
       isVisible: true,
     },
   ];
 
   return (
-    <Menu as="div">
-      <Menu.Button className="flex text-sm text-gray-400">
-        <VscEllipsis
-          className="w-2.5 h-2.5"
-          aria-hidden="true"
-          color="black"
-          onClick={() => dispatch(setShowMenuDropDown(true))}
-        />
-      </Menu.Button>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-50 -mt-28 ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {itemsList.map((item) =>
-            item.isVisible ? (
-              <Menu.Item key={item.id}>
-                {({ active }) => (
-                  <div
-                    className={classNames(
-                      active ? 'bg-gray-100' : '',
-                      'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left'
-                    )}
-                    onClick={() => item.handleClick}
-                  >
-                    {item.icon}
-                    <p>{item.title}</p>
-                  </div>
+    <>
+      <Menu as="div">
+        {({ open }) => (
+          <Fragment>
+            <Menu.Button className="flex text-sm text-gray-400">
+              <VscEllipsis
+                className="w-2.5 h-2.5"
+                aria-hidden="true"
+                color="black"
+                // onClick={() => dispatch(setShowMenuDropDown(true))}
+              />
+            </Menu.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+              show={open}
+            >
+              <Menu.Items
+                className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-0 z-20 ring-1 ring-black ring-opacity-5 focus:outline-none"
+                static
+              >
+                {itemsList.map((item) =>
+                  item.isVisible ? (
+                    <Menu.Item key={item.id}>
+                      {({ active }) => (
+                        <div
+                          className={classNames(
+                            active ? 'bg-gray-100' : '',
+                            'flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left'
+                          )}
+                          onClick={item.handleClick}
+                        >
+                          {item.icon}
+                          <p>{item.title}</p>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  ) : null
                 )}
-              </Menu.Item>
-            ) : null
-          )}
-        </Menu.Items>
-      </Transition>
-    </Menu>
+              </Menu.Items>
+            </Transition>
+          </Fragment>
+        )}
+      </Menu>
+      {showSubItems && <SubDd />}
+      {showEditHubModal && <EditHubModal />}
+    </>
   );
 }
 
-export default MenuDropdown;
+export default MenuDropdownt;

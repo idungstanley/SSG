@@ -1,23 +1,42 @@
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import MainLogo from '../../../../assets/branding/main-logo.png';
-import { Button, Input } from '../../../../components';
+import { Button, Input, SlideOver } from '../../../../components';
 import { createHubService } from '../../../../features/hubs/hubService';
+import { useAppSelector } from '../../../../app/hooks';
+import {
+  setshowMenuDropdown,
+  setSubDropdownMenu,
+} from '../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
-interface ModalProps {
-  isVisible: boolean;
-  onCloseHubModal: () => void;
-}
-
-function Modal({ isVisible, onCloseHubModal }: ModalProps) {
+function Modal() {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { currHubId } = useAppSelector((state) => state.hub);
 
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      onCloseHubModal();
+      dispatch(setCreateHubSlideOverVisibility(false));
+      dispatch(setSubDropdownMenu(false));
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: null,
+        })
+      );
     },
   });
+
+  const handleCloseSlider = () => {
+    dispatch(setCreateHubSlideOverVisibility(false));
+    dispatch(setSubDropdownMenu(false));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+      })
+    );
+  };
 
   const defaultHubFormState = {
     name: '',
@@ -26,7 +45,10 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
   const [formState, setFormState] = useState(defaultHubFormState);
 
   const handleHubChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    setFormState((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const currentWorkspaceId = JSON.parse(
@@ -39,66 +61,54 @@ function Modal({ isVisible, onCloseHubModal }: ModalProps) {
     await createHub.mutateAsync({
       name,
       currentWorkspaceId,
+      currHubId,
     });
-
-    onCloseHubModal();
   };
 
-  if (!isVisible) return null;
+  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
+  const { showMenuDropdownType } = useAppSelector((state) => state.hub);
   return (
-    <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-      <div className="w-5/12 flex flex-col">
-        <div
-          className="text-white text-xl place-self-end"
-          onClick={() => onCloseHubModal()}
-        >
-          X
-        </div>
-        <div className="bg-white p-2 rounded">
-          <section className="header h-36 flex justify-center items-center flex-col">
-            <img
-              className="mx-auto h-12 w-auto"
-              src={MainLogo}
-              alt="Workflow"
+    <SlideOver
+      show={showCreateHubSlideOver}
+      onClose={() => handleCloseSlider()}
+      headerTitle={
+        showMenuDropdownType === 'hubs'
+          ? 'Create a new subhub'
+          : 'Create a new hub'
+      }
+      body={
+        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
+          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <Input
+              label={
+                showMenuDropdownType === 'hubs' ? 'Sub Hub Name:' : 'Hub Name:'
+              }
+              placeholder={
+                showMenuDropdownType === 'hubs'
+                  ? 'Enter Subhub Name'
+                  : 'Enter Hub Name'
+              }
+              name="name"
+              value={name}
+              type="text"
+              onChange={handleHubChange}
             />
-            <h3 className="font-bold">Create a Hub</h3>
-          </section>
-          <section>
-            <div className="selectors mt-4 space-x-4  flex justify-start ml-6">
-              <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
-                New
-              </h3>
-              <h3 className="font-bold rounded p-1 hover:bg-gray-300 hover:rounded">
-                Template
-              </h3>
-            </div>
-            <hr className="my-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          </section>
-          <section id="input" className="mt-5 ml-2">
-            <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-              <Input
-                label="Hub Name:"
-                placeholder="Enter Hub Name"
-                name="name"
-                value={name}
-                type="text"
-                onChange={handleHubChange}
-              />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                label="Create Hub"
-                padding="py-2 px-4"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </section>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+      footerButtons={
+        <Button
+          buttonStyle="primary"
+          onClick={onSubmit}
+          label={
+            showMenuDropdownType === 'hubs' ? 'Create Subhub' : 'Create  Hub'
+          }
+          padding="py-2 px-4"
+          height="h-10"
+          width="w-40"
+        />
+      }
+    />
   );
 }
 

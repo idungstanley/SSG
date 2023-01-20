@@ -8,9 +8,18 @@ interface workspaceState {
   activePlaceId: number | boolean;
   showExtendedBar: boolean;
   sidebarWidth: number;
+  extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
   showMenuDropDown: boolean;
+  showModal: boolean;
+  searchIsActive: boolean;
+  isExtSearchActive: boolean;
+  activeItemId: string | null;
+  activeItemType: string | null;
+  currentWalletId: string | null;
+  currentSubWalletId: string | null;
+  currentWalletName: string | null;
 }
 
 const initialState: workspaceState = {
@@ -24,6 +33,15 @@ const initialState: workspaceState = {
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
+  showModal: false,
+  searchIsActive: false,
+  extendedSidebarWidth: 240,
+  isExtSearchActive: false,
+  activeItemId: null,
+  activeItemType: null,
+  currentSubWalletId: null,
+  currentWalletId: null,
+  currentWalletName: null,
 };
 
 export const wsSlice = createSlice({
@@ -39,11 +57,37 @@ export const wsSlice = createSlice({
           ...state,
           showSidebar: !state.showSidebar,
         };
+      } else if (action.payload === true) {
+        state.showSidebar = action.payload;
+      } else if (action.payload === false) {
+        state.showSidebar = action.payload;
       }
       state.showSidebar;
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setExtendedSidebarWidth(state, action) {
+      state.extendedSidebarWidth = action.payload;
+    },
+    setSearchIsActive(state, action) {
+      if (action.payload === 'TOGGLE') {
+        return {
+          ...state,
+          searchIsActive: !state.searchIsActive,
+        };
+      }
+    },
+    setIsExtSearchActive(state, action) {
+      if (action.payload === 'TOGGLE') {
+        return {
+          ...state,
+          isExtSearchActive: !state.isExtSearchActive,
+        };
+      }
+    },
+    setShowModal(state, action) {
+      state.showModal = action.payload;
     },
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
@@ -67,6 +111,19 @@ export const wsSlice = createSlice({
       state.currentItemId = action.payload.currentItemId;
       state.currentItemType = action.payload.currentItemType;
     },
+    setActiveItem(state, action) {
+      state.activeItemId = action.payload.activeItemId;
+      state.activeItemType = action.payload.activeItemType;
+    },
+    setCurrentWalletId(state, action) {
+      state.currentWalletId = action.payload;
+    },
+    setCurrentWalletName(state, action) {
+      state.currentWalletName = action.payload;
+    },
+    setCurrenSubtWalletId(state, action) {
+      state.currentSubWalletId = action.payload;
+    },
     resetCurrentItem(state) {
       state.currentItemId = null;
       state.currentItemType = null;
@@ -87,6 +144,14 @@ export const {
   setShowWallet,
   setSidebarWidth,
   setShowMenuDropDown,
+  setShowModal,
+  setSearchIsActive,
+  setExtendedSidebarWidth,
+  setIsExtSearchActive,
+  setActiveItem,
+  setCurrentWalletId,
+  setCurrenSubtWalletId,
+  setCurrentWalletName,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
