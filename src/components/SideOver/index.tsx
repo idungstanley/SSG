@@ -56,7 +56,7 @@ export default function SideOver({
                     </div>
                     <div
                       className={classNames(
-                        'relative mt-6 flex flex-col  px-4 sm:px-6 h-full',
+                        'relative my-6 flex flex-col  px-4 sm:px-6 h-full',
                         disableGapForChildren ? '' : 'gap-6'
                       )}
                     >
