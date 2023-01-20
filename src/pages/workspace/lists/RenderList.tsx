@@ -211,7 +211,7 @@ function RenderList() {
               </span>
               <div className="flex items-center justify-center cursor-pointer relative">
                 <div className="group flex items-center">
-                  <span className="text-xs text-black p-1 bg-gray-300">
+                  <span className="text-xs text-black p-1 bg-gray-300 pr-2">
                     OPEN
                   </span>
                   {/* <EditOutlined
@@ -228,7 +228,7 @@ function RenderList() {
                   /> */}
                 </div>
                 <span
-                  className="text-xs text-gray-400 mt-1	"
+                  className="text-xs text-gray-400 mt-1	ml-1"
                   // style={{ marginLeft: "-5px" }}
                 >
                   {myTaskData?.length}
