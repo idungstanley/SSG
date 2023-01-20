@@ -1,6 +1,6 @@
 import React from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { ViewListIcon } from '@heroicons/react/outline';
+import { ListBulletIcon } from '@heroicons/react/24/outline';
 import { Button } from '../../../../../components';
 
 interface ListNavProps {
@@ -30,7 +30,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <ListBulletIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}
@@ -41,7 +41,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <ListBulletIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}
@@ -52,7 +52,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <ListBulletIcon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}

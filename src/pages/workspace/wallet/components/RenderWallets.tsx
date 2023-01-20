@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/outline';
-import { CheckIcon } from '@heroicons/react/solid';
+} from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/solid';
 import {
   CalendarOutlined,
   FlagOutlined,

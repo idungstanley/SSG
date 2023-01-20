@@ -1,5 +1,5 @@
 import React from 'react';
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Spinner } from '../../../common';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { IMentionUser } from '../../../features/chat/chat.interfaces';

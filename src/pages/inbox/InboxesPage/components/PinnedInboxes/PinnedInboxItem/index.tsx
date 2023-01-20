@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import {
   useGetPinnedInbox,
   usePinOrUnpinInbox,
@@ -9,7 +9,7 @@ import {
 import { classNames } from '../../../../../../utils';
 
 interface PinnedInboxItemProps {
-  pinnedInboxId: string
+  pinnedInboxId: string;
 }
 
 function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
@@ -66,7 +66,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
         <Menu as="div" className="flex-shrink-0 pr-2">
           <Menu.Button className="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
             <span className="sr-only">Open options</span>
-            <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
+            <EllipsisVerticalIcon className="w-5 h-5" aria-hidden="true" />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -86,7 +86,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
                       type="button"
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block w-full px-4 py-2 text-sm text-left',
+                        'block w-full px-4 py-2 text-sm text-left'
                       )}
                     >
                       View
@@ -102,7 +102,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
                       type="button"
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block w-full px-4 py-2 text-sm text-left',
+                        'block w-full px-4 py-2 text-sm text-left'
                       )}
                     >
                       Unpin

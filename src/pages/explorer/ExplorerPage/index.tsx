@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { HomeIcon } from '@heroicons/react/outline';
+import { HomeIcon } from '@heroicons/react/24/outline';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import Toolbar from './components/Toolbar';

@@ -8,8 +8,8 @@ import {
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/outline';
-import { CheckIcon } from '@heroicons/react/solid';
+} from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

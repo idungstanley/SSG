@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserRemoveIcon } from '@heroicons/react/outline';
+import { UserMinusIcon } from '@heroicons/react/24/outline';
 import { removeTeamMemberFromGroupService } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import {
   AvatarWithInitials,
@@ -67,7 +67,7 @@ export default function Row({ groupTeamMember }: RowProps) {
                 label: 'Remove from group',
                 onClick: removeTeamMemberFromGroup,
                 icon: (
-                  <UserRemoveIcon
+                  <UserMinusIcon
                     className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

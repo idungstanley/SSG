@@ -25,6 +25,12 @@ type Share = {
   type?: explorerItemType;
 };
 
+type Pilot = {
+  show: boolean;
+  id?: string;
+  type?: explorerItemType;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
@@ -38,6 +44,7 @@ interface SideOverState {
   watchersSideOver: Watchers;
   commentsSideOver: Comments;
   shareSideOver: Share;
+  pilotSideOver: Pilot;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -54,6 +61,7 @@ const initialState: SideOverState = {
   watchersSideOver: { show: false },
   commentsSideOver: { show: false },
   shareSideOver: { show: false },
+  pilotSideOver: { show: false },
   itemActionForSideOver: null,
 };
 
@@ -130,6 +138,9 @@ export const slideOverSlice = createSlice({
     setShowShareSideOver: (state, action: PayloadAction<Share>) => {
       state.shareSideOver = action.payload;
     },
+    setShowPilotSideOver: (state, action: PayloadAction<Pilot>) => {
+      state.pilotSideOver = action.payload;
+    },
   },
 });
 
@@ -147,6 +158,7 @@ export const {
   setItemActionForSideOver,
   setShowCommentsSideOver,
   setShowShareSideOver,
+  setShowPilotSideOver,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

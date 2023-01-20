@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Input from '../../input/Input';
 import DropdownForMention from './DropdownForMention';
 import { useSendMessageToChat } from '../../../features/chat/chatService';
-import { PaperAirplaneIcon } from '@heroicons/react/outline';
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 interface CreateMessageProps {
   chatId: string | null;

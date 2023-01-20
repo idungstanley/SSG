@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import {
-  setActivePlaceId,
-} from '../../../../features/workspace/workspaceSlice';
+import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../dashboard';
 import Directory from '../../directory';
@@ -12,7 +10,7 @@ import Hubs from '../../hubs';
 import Inbox from '../../inbox';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
-import inboxIcon from '../../../../assets/branding/inbox.png';
+import InboxIcon from '../../../../assets/branding/inbox.png';
 import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
@@ -36,7 +34,7 @@ const secondaryNavigation = [
     name: 'inbox',
     id: 3,
     place: <Inbox />,
-    source: inboxIcon,
+    source: InboxIcon,
   },
   {
     name: 'files',
@@ -76,7 +74,7 @@ function Places() {
     <div className="mt-2">
       <ul aria-labelledby="projects-headline relative">
         {secondaryNavigation.map((item) => (
-          <>
+          <div key={item.id}>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <li
               key={item.id}
@@ -131,7 +129,7 @@ function Places() {
             {showSidebar && activePlaceId === item.id ? (
               <div className="mt-2">{item.place}</div>
             ) : null}
-          </>
+          </div>
         ))}
       </ul>
     </div>

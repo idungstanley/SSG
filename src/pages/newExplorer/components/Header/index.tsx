@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  ArrowCircleRightIcon,
-  ArrowCircleLeftIcon,
+  ArrowRightCircleIcon,
+  ArrowLeftCircleIcon,
   PlusIcon,
-  UploadIcon,
-} from '@heroicons/react/outline';
+  ArrowUpTrayIcon,
+} from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
@@ -34,7 +34,7 @@ export default function Header() {
       id: 1,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleLeftIcon
+        <ArrowLeftCircleIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -44,7 +44,7 @@ export default function Header() {
       id: 2,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleRightIcon
+        <ArrowRightCircleIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -66,7 +66,7 @@ export default function Header() {
     {
       label: 'Upload',
       icon: (
-        <UploadIcon
+        <ArrowUpTrayIcon
           className="h-6 w-6 stroke-current text-gray-500"
           aria-hidden="true"
         />

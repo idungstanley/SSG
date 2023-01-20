@@ -3,18 +3,12 @@ import { Menu } from '@headlessui/react';
 import {
   CogIcon,
   DocumentDuplicateIcon,
-  EyeOffIcon,
   PencilIcon,
-  ShareIcon,
-  SparklesIcon,
   StarIcon,
   PlusIcon,
   LinkIcon,
-  DotsVerticalIcon,
-  ColorSwatchIcon,
-  ArrowDownIcon,
-  PencilAltIcon,
-} from '@heroicons/react/outline';
+  SwatchIcon,
+} from '@heroicons/react/24/outline';
 import { classNames } from '../../utils';
 
 interface itemsType {
@@ -54,10 +48,7 @@ const itemsList: itemsType[] = [
     title: 'Sprint',
     handleClick: () => ({}),
     icon: (
-      <ColorSwatchIcon
-        className="w-5 pt-2 text-gray-700 h-7"
-        aria-hidden="true"
-      />
+      <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
     ),
     isVisible: false,
   },

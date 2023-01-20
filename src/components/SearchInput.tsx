@@ -1,6 +1,6 @@
 import React from 'react';
-import { SearchIcon } from '@heroicons/react/outline';
-import { XIcon } from '@heroicons/react/solid';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Spinner } from '../common';
 
 interface SearchInputProps {
@@ -24,7 +24,10 @@ function SearchInput({
             <Spinner size={8} color="#9CA3AE" />
           </div>
         ) : (
-          <SearchIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+          <MagnifyingGlassIcon
+            className="w-5 h-5 text-gray-400"
+            aria-hidden="true"
+          />
         )}
       </div>
       <input
@@ -44,7 +47,10 @@ function SearchInput({
           type="button"
           className="absolute inset-y-0 right-0 flex items-center pr-3 transition duration-1000 ease-in-out hover:opacity-80"
         >
-          <XIcon className="h-4 w-4 mt-0.4 text-gray-400" aria-hidden="true" />
+          <XMarkIcon
+            className="h-4 w-4 mt-0.4 text-gray-400"
+            aria-hidden="true"
+          />
         </button>
       ) : null}
     </div>

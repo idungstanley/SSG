@@ -1,6 +1,6 @@
 import React from 'react';
-import { CheckCircleIcon } from '@heroicons/react/outline';
-import { XIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
 interface ToastProps {
@@ -59,7 +59,7 @@ export default function Toast({
                     className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     <span className="sr-only">Close</span>
-                    <XIcon className="h-5 w-5" aria-hidden="true" />
+                    <XMarkIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
               )}

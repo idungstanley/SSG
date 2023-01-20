@@ -11,13 +11,13 @@ import {
 } from '../features/workspace/workspaceSlice';
 import emailIcon from '../assets/branding/email-icon.png';
 import hubIcon from '../assets/branding/hub.png';
-import inboxIcon from '../assets/branding/inbox.png';
+import InboxIcon from '../assets/branding/inbox.png';
 import filesIcon from '../assets/branding/file.png';
 import timeClockIcon from '../assets/branding/timeclock.png';
 import trackerIcon from '../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../app/hooks';
-import { SearchIcon } from '@heroicons/react/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 import ActiveHub from './ActiveHub';
@@ -39,7 +39,7 @@ const secondaryNavigation = [
     name: 'inbox',
     id: 3,
     place: <Inbox />,
-    source: inboxIcon,
+    source: InboxIcon,
   },
   {
     name: 'files',
@@ -118,7 +118,7 @@ function ExpandedNav() {
                         aria-hidden="true"
                         color="black"
                       />
-                      <SearchIcon
+                      <MagnifyingGlassIcon
                         className="w-2.5 mr-1 h-4"
                         aria-hidden="true"
                       />

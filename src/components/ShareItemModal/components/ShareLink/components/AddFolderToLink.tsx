@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/outline';
+import { CheckIcon } from '@heroicons/react/24/outline';
 import { IExplorerFolder } from '../../../../../features/explorer/explorer.interfaces';
 import { useGetSearchFolders } from '../../../../../features/explorer/explorerService';
 import {

@@ -3,11 +3,11 @@ import { Menu, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
   PencilIcon,
-  SortAscendingIcon,
-  SortDescendingIcon,
+  BarsArrowUpIcon,
+  BarsArrowDownIcon,
   ClockIcon,
   PaperClipIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { IStringifiedFile } from '../index';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
@@ -82,7 +82,7 @@ const sortingItems = [
     id: 5,
     title: 'Name (A-Z)',
     icon: (
-      <SortAscendingIcon
+      <BarsArrowUpIcon
         className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
@@ -92,7 +92,7 @@ const sortingItems = [
     id: 6,
     title: 'Name (Z-A)',
     icon: (
-      <SortDescendingIcon
+      <BarsArrowDownIcon
         className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />

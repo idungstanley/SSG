@@ -7,6 +7,7 @@ import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameIt
 import Chat from '../../components/Chat';
 import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
+import Pilot from './components/Pilot';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
 
@@ -38,6 +39,7 @@ export default function NewExplorerPage() {
       <Watchers />
       <Comments />
       <ShareItemModal />
+      <Pilot />
     </>
   );
 }

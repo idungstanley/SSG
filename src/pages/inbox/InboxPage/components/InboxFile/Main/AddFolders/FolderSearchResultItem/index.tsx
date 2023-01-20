@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PlusIcon, CheckCircleIcon } from '@heroicons/react/solid';
+import { PlusIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useGetSearchFoldersForFilingResult } from '../../../../../../../../features/inbox/inboxService';
 import { FileIcon } from '../../../../../../../../common';
 import {

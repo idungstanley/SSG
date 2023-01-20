@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import Button from '../Button';
 
 interface Iprops {

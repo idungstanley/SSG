@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { BookmarkIcon, TrashIcon } from '@heroicons/react/outline';
+import { BookmarkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import {
   useGetSavedSearches,
   useSaveSearchValue,

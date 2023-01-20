@@ -1,4 +1,4 @@
-import { SearchIcon } from '@heroicons/react/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import CommandSearchModal from '../sidebar/components/CommandSearchModal';
@@ -23,7 +23,7 @@ export default function Search() {
           style={{ fontSize: '9px' }}
         >
           <div className="flex items-center justify-between ">
-            <SearchIcon
+            <MagnifyingGlassIcon
               className={`${showSidebar ? 'w-2.5 h-2.5 mr-1' : 'h-4'}`}
               aria-hidden="true"
             />

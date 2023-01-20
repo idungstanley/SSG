@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { classNames } from '../../../utils';
 
@@ -24,7 +24,7 @@ export default function DropdownMenuForMessage() {
       <div>
         <Menu.Button className="flex opacity-0 group-hover:opacity-100 transition-all duration-150 items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
-          <DotsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+          <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>
 

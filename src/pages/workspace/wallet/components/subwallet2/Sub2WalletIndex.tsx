@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
+import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import PlusDropDown from '../../../hubs/components/PlusDropDown';
@@ -107,7 +107,7 @@ function Sub2WalletIndex({ wallet2ParentId }: Sub2WalletIndexProps) {
         <div key={list.id}>
           <section className="flex items-center justify-between pl-20 space-x-1 text-sm hover:bg-gray-100">
             <div className="flex items-center">
-              <DotsCircleHorizontalIcon
+              <EllipsisHorizontalCircleIcon
                 className="flex-shrink-0 w-5 h-3"
                 aria-hidden="true"
               />

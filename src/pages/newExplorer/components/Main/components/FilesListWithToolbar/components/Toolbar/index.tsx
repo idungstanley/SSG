@@ -2,12 +2,11 @@ import React from 'react';
 import {
   TrashIcon,
   ShareIcon,
-  ClipboardCopyIcon,
-  DownloadIcon,
-  ChatIcon,
+  ClipboardIcon,
+  ArrowDownTrayIcon,
+  ChatBubbleBottomCenterIcon,
   EyeIcon,
-  ChatAlt2Icon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import {
   useAppDispatch,
   useAppSelector,
@@ -78,7 +77,10 @@ export default function Toolbar({ data }: ToolbarProps) {
   const menuItems = [
     {
       icon: (
-        <DownloadIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <ArrowDownTrayIcon
+          className="h-5 w-5 stroke-current"
+          aria-hidden="true"
+        />
       ),
       onClick: handleDownload,
       label: 'Download',
@@ -105,10 +107,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: (
-        <ClipboardCopyIcon
-          className="h-5 w-5 stroke-current"
-          aria-hidden="true"
-        />
+        <ClipboardIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
       onClick: () => ({}),
       label: 'Copy',
@@ -123,7 +122,9 @@ export default function Toolbar({ data }: ToolbarProps) {
     {
       label: 'Comments',
       onClick: handleShowComments,
-      icon: <ChatIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: (
+        <ChatBubbleBottomCenterIcon className="h-5 w-5" aria-hidden="true" />
+      ),
       disabled: !selectedFileId,
     },
     {
@@ -131,7 +132,7 @@ export default function Toolbar({ data }: ToolbarProps) {
       onClick: () =>
         dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
       icon: (
-        <ChatAlt2Icon
+        <ChatBubbleBottomCenterIcon
           className="mr-2.5 h-5 w-5 stroke-current"
           aria-hidden="true"
         />

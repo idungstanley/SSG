@@ -1,8 +1,12 @@
 import React from 'react';
-import { AtSymbolIcon } from '@heroicons/react/outline';
+import { AtSymbolIcon } from '@heroicons/react/24/outline';
 
 interface FormType {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  handleSubmit: (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => void;
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrashIcon } from '@heroicons/react/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../../components';
 import { useDeleteInboxFile } from '../../../../../../../features/inbox/inboxService';

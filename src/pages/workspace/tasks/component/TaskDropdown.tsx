@@ -7,10 +7,10 @@ import {
   WalletOutlined,
 } from '@ant-design/icons';
 import {
-  DocumentAddIcon,
-  PencilAltIcon,
-  TemplateIcon,
-} from '@heroicons/react/outline';
+  DocumentPlusIcon,
+  PencilIcon,
+  DocumentTextIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
 import { classNames } from '../../../../utils';
@@ -73,7 +73,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <DocumentAddIcon className="h-4 w-4" aria-hidden="true" />
+                  <DocumentPlusIcon className="h-4 w-4" aria-hidden="true" />
                   <p>Doc</p>
                 </Link>
               )}
@@ -87,7 +87,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <PencilAltIcon className="h-4 w-4" aria-hidden="true" />
+                  <PencilIcon className="h-4 w-4" aria-hidden="true" />
                   <p>Whiteboard</p>
                 </Link>
               )}
@@ -118,7 +118,7 @@ function TaskDropdown({ getListId }: TaskDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <TemplateIcon className="h-4 w-4" aria-hidden="true" />
+                  <DocumentTextIcon className="h-4 w-4" aria-hidden="true" />
                   <p>From template</p>
                 </div>
               )}

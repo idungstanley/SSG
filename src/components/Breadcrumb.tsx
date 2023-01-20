@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRightIcon, FolderIcon } from '@heroicons/react/outline';
+import { ChevronRightIcon, FolderIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 interface IBreadcrumbItem {
@@ -16,10 +16,7 @@ interface BreadcrumbProps {
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
-    <nav
-      className="flex bg-white py-3"
-      aria-label="Breadcrumb"
-    >
+    <nav className="flex bg-white py-3" aria-label="Breadcrumb">
       <ol className="flex w-full pl-2">
         {rootIcon && (
           <li className="flex pl-2">

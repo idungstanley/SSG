@@ -7,10 +7,10 @@ import {
   WalletOutlined,
 } from '@ant-design/icons';
 import {
-  DocumentAddIcon,
-  PencilAltIcon,
-  TemplateIcon,
-} from '@heroicons/react/outline';
+  DocumentPlusIcon,
+  PencilIcon,
+  DocumentTextIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import WalletModal from '../../wallet/components/WalletModal';
 import ListModal from '../../Lists/components/ListModal';
@@ -85,7 +85,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <DocumentAddIcon className="w-4 h-4" aria-hidden="true" />
+                  <DocumentPlusIcon className="w-4 h-4" aria-hidden="true" />
                   <p>Doc</p>
                 </Link>
               )}
@@ -99,7 +99,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <PencilAltIcon className="w-4 h-4" aria-hidden="true" />
+                  <PencilIcon className="w-4 h-4" aria-hidden="true" />
                   <p>Whiteboard</p>
                 </Link>
               )}
@@ -131,7 +131,7 @@ function PlusDropDown({ walletId }: PlusDropDownProps) {
                     'flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 text-left'
                   )}
                 >
-                  <TemplateIcon className="w-4 h-4" aria-hidden="true" />
+                  <DocumentTextIcon className="w-4 h-4" aria-hidden="true" />
                   <p>From template</p>
                 </div>
               )}

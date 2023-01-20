@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
-  ArchiveIcon,
+  ArchiveBoxXMarkIcon,
   CogIcon,
   DocumentDuplicateIcon,
-  EyeOffIcon,
+  EyeSlashIcon,
   PencilIcon,
   ShareIcon,
   SparklesIcon,
@@ -12,10 +12,10 @@ import {
   StarIcon,
   PlusIcon,
   LinkIcon,
-  ColorSwatchIcon,
+  SwatchIcon,
   ArrowDownIcon,
-  PencilAltIcon,
-} from '@heroicons/react/outline';
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline';
 import { classNames } from '../../utils';
 import { VscEllipsis } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
@@ -60,10 +60,7 @@ function MenuDropdown() {
       title: 'Color & Avatar',
       handleClick: () => ({}),
       icon: (
-        <ColorSwatchIcon
-          className="w-5 pt-2 text-gray-700 h-7"
-          aria-hidden="true"
-        />
+        <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
       isVisible: false,
     },
@@ -78,7 +75,9 @@ function MenuDropdown() {
       id: 5,
       title: 'Duplicate',
       handleClick: () => ({}),
-      icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: (
+        <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />
+      ),
       isVisible: true,
     },
     {
@@ -92,7 +91,7 @@ function MenuDropdown() {
       id: 7,
       title: 'Hide in sidebar',
       handleClick: () => ({}),
-      icon: <EyeOffIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
@@ -127,7 +126,7 @@ function MenuDropdown() {
       id: 11,
       title: 'Archive',
       handleClick: () => ({}),
-      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <ArchiveBoxXMarkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
@@ -141,14 +140,14 @@ function MenuDropdown() {
       id: 13,
       title: 'Archive',
       handleClick: () => ({}),
-      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <ArchiveBoxXMarkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 14,
       title: 'Whiteboard',
       handleClick: () => ({}),
-      icon: <PencilAltIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <PencilSquareIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import {
-  ArchiveIcon,
   CogIcon,
   DocumentDuplicateIcon,
-  EyeOffIcon,
   PencilIcon,
   ShareIcon,
   SparklesIcon,
@@ -12,11 +10,11 @@ import {
   StarIcon,
   PlusIcon,
   LinkIcon,
-  DotsVerticalIcon,
-  ColorSwatchIcon,
+  SwatchIcon,
   ArrowDownIcon,
-  PencilAltIcon,
-} from '@heroicons/react/outline';
+  EyeSlashIcon,
+  ArchiveBoxIcon,
+} from '@heroicons/react/24/outline';
 import { classNames } from '../../utils';
 import SubDd from './SubDd';
 
@@ -56,10 +54,7 @@ const itemsList: itemsType[] = [
     title: 'Color & Avatar',
     handleClick: () => ({}),
     icon: (
-      <ColorSwatchIcon
-        className="w-5 pt-2 text-gray-700 h-7"
-        aria-hidden="true"
-      />
+      <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
     ),
     isVisible: false,
   },
@@ -88,7 +83,7 @@ const itemsList: itemsType[] = [
     id: 7,
     title: 'Hide in sidebar',
     handleClick: () => ({}),
-    icon: <EyeOffIcon className="w-4 h-4" aria-hidden="true" />,
+    icon: <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />,
     isVisible: true,
   },
   {
@@ -118,7 +113,7 @@ const itemsList: itemsType[] = [
     id: 11,
     title: 'Archive',
     handleClick: () => ({}),
-    icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+    icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
     isVisible: false,
   },
   {
@@ -132,14 +127,14 @@ const itemsList: itemsType[] = [
     id: 13,
     title: 'Archive',
     handleClick: () => ({}),
-    icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+    icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
     isVisible: true,
   },
   {
     id: 14,
     title: 'Whiteboard',
     handleClick: () => ({}),
-    icon: <PencilAltIcon className="w-4 h-4" aria-hidden="true" />,
+    icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
     isVisible: false,
   },
   {

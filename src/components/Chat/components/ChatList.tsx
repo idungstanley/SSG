@@ -2,16 +2,14 @@ import React from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { useDeleteChat, useGetChats } from '../../../features/chat/chatService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
-import { TrashIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 interface ChatsListProps {
   selectChat: (i: string) => void;
 }
 
 export default function ChatsList({ selectChat }: ChatsListProps) {
-  const { selectedItem } = useAppSelector(
-    (state) => state.chat
-  );
+  const { selectedItem } = useAppSelector((state) => state.chat);
 
   const { mutate: onDelete } = useDeleteChat();
 
@@ -30,10 +28,7 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
       description="Select one file, folder, etc."
     />
   ) : !data?.length ? (
-    <FullScreenMessage
-      title="No chats."
-      description="Create one."
-    />
+    <FullScreenMessage title="No chats." description="Create one." />
   ) : (
     <ul role="list" className="divide-y divide-gray-200 flex flex-wrap gap-3">
       {data?.map((chat) => (
