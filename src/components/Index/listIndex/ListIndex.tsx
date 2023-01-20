@@ -21,7 +21,6 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
-  const { currentListId } = useAppSelector((state) => state.list);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleListLocation = (id: string) => {

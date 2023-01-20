@@ -128,9 +128,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
             </section>
             <div>
               <WalletModal />
-              {showSubWallet === wallet.id ? (
-                <SubWalletIndex walletParentId={walletParentId} />
-              ) : null}
+              {showSubWallet === wallet.id ? <SubWalletIndex /> : null}
               <ListModal />
             </div>
           </div>

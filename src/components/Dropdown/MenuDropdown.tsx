@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -18,7 +18,6 @@ import {
   PencilAltIcon,
 } from '@heroicons/react/outline';
 import {
-  getMenuRef,
   setArchiveHub,
   setDelHub,
   setSubDropdownMenu,
@@ -29,7 +28,26 @@ import {
   ArchiveHubService,
   UseDeleteHubService,
 } from '../../features/hubs/hubService';
-import { setEditHubSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
+import {
+  setEditHubSlideOverVisibility,
+  setEditListSlideOverVisibility,
+  setEditWalletSlideOverVisibility,
+} from '../../features/general/slideOver/slideOverSlice';
+import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
+import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
+import {
+  setArchiveWallet,
+  setDeleteWallet,
+} from '../../features/wallet/walletSlice';
+import {
+  UseArchiveWalletService,
+  UseDeleteWalletService,
+} from '../../features/wallet/walletService';
+import { setArchiveList, setDeleteList } from '../../features/list/listSlice';
+import {
+  UseArchiveListService,
+  UseDeleteListService,
+} from '../../features/list/listService';
 
 interface itemsType {
   id: number;
@@ -42,24 +60,52 @@ interface itemsType {
 export default function MenuDropdown() {
   const dispatch = useDispatch();
   const {
-    currHubId,
     SubDropdownMenu,
     delHub,
     archiveHub,
     showMenuDropdown,
     showMenuDropdownType,
   } = useAppSelector((state) => state.hub);
-  console.log(showMenuDropdown, showMenuDropdownType);
-  //deleteHubs
+  const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
+  const { delList, archiveList } = useAppSelector((state) => state.list);
+  // console.log(showMenuDropdown, showMenuDropdownType);
+
+  //delete-entity
+  //hubs and subhubs
   UseDeleteHubService({
-    query: currHubId,
+    query: showMenuDropdown,
     delHub,
   });
 
-  //archive hubs
+  //wallets and subwallets
+  UseDeleteWalletService({
+    query: showMenuDropdown,
+    delWallet,
+  });
+
+  //lists
+  UseDeleteListService({
+    query: showMenuDropdown,
+    delList,
+  });
+
+  //archive entities
+  //hubs and subhub
   ArchiveHubService({
-    query: currHubId,
+    query: showMenuDropdown,
     archiveHub,
+  });
+
+  //wallets and subwallet
+  UseArchiveWalletService({
+    query: showMenuDropdown,
+    archiveWallet,
+  });
+
+  //list
+  UseArchiveListService({
+    query: showMenuDropdown,
+    archiveList,
   });
 
   const itemsList: itemsType[] = [
@@ -78,7 +124,19 @@ export default function MenuDropdown() {
       id: 2,
       title: 'Rename',
       handleClick: () => {
-        dispatch(setEditHubSlideOverVisibility(true));
+        if (
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhub'
+        ) {
+          dispatch(setEditHubSlideOverVisibility(true));
+        } else if (
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
+        ) {
+          dispatch(setEditWalletSlideOverVisibility(true));
+        } else {
+          dispatch(setEditListSlideOverVisibility(true));
+        }
       },
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
@@ -169,7 +227,19 @@ export default function MenuDropdown() {
       id: 13,
       title: 'Archive',
       handleClick: () => {
-        dispatch(setArchiveHub(true));
+        if (
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhubs'
+        ) {
+          dispatch(setArchiveHub(true));
+        } else if (
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
+        ) {
+          dispatch(setArchiveWallet(true));
+        } else {
+          dispatch(setArchiveList(true));
+        }
       },
       icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
@@ -207,7 +277,19 @@ export default function MenuDropdown() {
       id: 16,
       title: 'Delete',
       handleClick: () => {
-        dispatch(setDelHub(true));
+        if (
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhub'
+        ) {
+          dispatch(setDelHub(true));
+        } else if (
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
+        ) {
+          dispatch(setDeleteWallet(true));
+        } else {
+          dispatch(setDeleteList(true));
+        }
       },
       icon: <TrashIcon className="w-4 h-4 text-red-500" aria-hidden="true" />,
       isVisible: true,
@@ -233,6 +315,8 @@ export default function MenuDropdown() {
       </div>
       {SubDropdownMenu && <SubDropdown />}
       <EditHubModal />
+      <EditListModal />
+      <EditWalletModal />
     </div>
   );
 }

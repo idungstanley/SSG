@@ -60,7 +60,10 @@ export default function SubDropdown() {
         dispatch(setCreateWalletSlideOverVisibility(true));
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === 'list' ? false : true,
+      isVisible:
+        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3'
+          ? false
+          : true,
     },
     {
       id: 3,
@@ -92,7 +95,7 @@ export default function SubDropdown() {
           aria-hidden="true"
         />
       ),
-      isVisible: false,
+      isVisible: true,
     },
     {
       id: 6,

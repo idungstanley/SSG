@@ -77,7 +77,6 @@ export default function ActiveHub() {
           return (
             <SubWalletIndex
               key={wallet.id}
-              walletParentId={wallet.id}
               padding="pl-0"
             />
           );
@@ -90,7 +89,6 @@ export default function ActiveHub() {
           return (
             <Sub2WalletIndex
               key={subWallet.id}
-              wallet2ParentId={subWallet.id}
               padding="pl-0"
             />
           );

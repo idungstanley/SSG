@@ -6,6 +6,10 @@ import { BsArchive } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setToggleArchive } from '../../../../../features/hubs/hubSlice';
+import { BiWallet } from 'react-icons/bi';
+import { RiListSettingsFill } from 'react-icons/ri';
+import { setToggleArchiveWallet } from '../../../../../features/wallet/walletSlice';
+import { setToggleArchiveList } from '../../../../../features/list/listSlice';
 
 interface itemsType {
   id: number;
@@ -19,11 +23,13 @@ export default function ArchiveMenu() {
   const dispatch = useDispatch();
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const { toggleArchive } = useAppSelector((state) => state.hub);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { toggleArchiveList } = useAppSelector((state) => state.list);
 
   const itemsList: itemsType[] = [
     {
       id: 1,
-      title: 'Show archived',
+      title: 'Show archived Hubs',
       handleClick: () => {
         if (toggleArchive === 0) {
           dispatch(setToggleArchive(1));
@@ -32,6 +38,24 @@ export default function ArchiveMenu() {
         }
       },
       icon: <BsArchive />,
+      isVisible: true,
+    },
+    {
+      id: 2,
+      title: 'Show archived Wallet',
+      handleClick: () => {
+        dispatch(setToggleArchiveWallet(!toggleArchiveWallet));
+      },
+      icon: <BiWallet />,
+      isVisible: true,
+    },
+    {
+      id: 3,
+      title: 'Show archived Lists',
+      handleClick: () => {
+        dispatch(setToggleArchiveList(!toggleArchiveList));
+      },
+      icon: <RiListSettingsFill />,
       isVisible: true,
     },
   ];
@@ -54,7 +78,7 @@ export default function ArchiveMenu() {
         leaveTo="transform opacity-0 scale-95"
         show={sidebarSettings}
       >
-        <Menu.Items className="origin-top-right absolute z-20  -right-10 mt-2 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+        <Menu.Items className="origin-top-right absolute z-20  -right-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
           {itemsList.map((i) => (
             <Menu.Item key={i.id}>
               {({ active }) => (

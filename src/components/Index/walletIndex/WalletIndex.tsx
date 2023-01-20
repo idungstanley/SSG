@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubWallet } from '../../../features/hubs/hubService';
 import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -18,12 +17,13 @@ import {
   setCurrentWalletName,
 } from '../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
-import { setWalletId } from '../../../features/wallet/walletSlice';
+import { setWalletItem } from '../../../features/wallet/walletSlice';
 import SubDropdown from '../../Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
 } from '../../../features/general/slideOver/slideOverSlice';
+import { getWalletServices } from '../../../features/wallet/walletService';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -33,12 +33,14 @@ interface WalletIndexProps {
 function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  // const [isHovering, setIsHovering] = useState<number>(-1);
-  const [walletParentId, setWalletParentId] = useState('');
-  const { data } = useGetHubWallet(getCurrentHubId);
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  // const { currentWalletId } = useAppSelector((state) => state.wallet);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
+    const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+
+  const { data } = getWalletServices({
+    hubId: getCurrentHubId,
+    Archived: toggleArchiveWallet,
+  });
 
   const navigate = useNavigate();
   const handleLocation = (id: string, name, type = 'wallet') => {
@@ -47,25 +49,22 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
 
   const handleShowSubWallet = (id: string) => {
-    dispatch(setCurrentWalletId(id));
-    setWalletParentId(id);
-    // dispatch(showWallet(id));
     if (showSubWallet === id) {
-      return setShowSubWallet(null);
+      setShowSubWallet(null);
+    } else {
+      dispatch(setCurrentWalletId(id));
+      setShowSubWallet(id);
+      dispatch(
+        setWalletItem({
+          currentWalletParentId: id,
+          currentWalletParentType: 'wallet',
+        })
+      );
     }
-    setShowSubWallet(id);
   };
-
   const handleWalletSettings = (id: string, e) => {
-    dispatch(setWalletId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -112,11 +111,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       {data?.data?.wallets.length !== 0 &&
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
-            <section
-              className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8"
-              // onMouseEnter={() => handleMouseOver(i)}
-              // onMouseLeave={handleMouseOut}
-            >
+            <section className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8">
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
               )}
@@ -170,21 +165,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 />
               </div>
             </section>
-            <div>
-              {/* <WalletModal
-                walletVisible={showWalletModal}
-                onCloseWalletModal={() => setShowWalletModal(false)}
-                walletId={wallet.id}
-              /> */}
-              {showSubWallet === wallet.id ? (
-                <SubWalletIndex walletParentId={walletParentId} />
-              ) : null}
-              {/* <ListModal
-                // walletId={wallet.id}
-                listVisible={showListModal}
-                onCloseListModal={() => setShowListModal(false)}
-              /> */}
-            </div>
+            <div>{showSubWallet === wallet.id ? <SubWalletIndex /> : null}</div>
             {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
             {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>

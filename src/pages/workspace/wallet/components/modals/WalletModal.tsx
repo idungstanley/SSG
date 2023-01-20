@@ -50,7 +50,9 @@ function WalletModal() {
       hubID:
         (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
-      walletId: showMenuDropdownType == 'wallet' ? showMenuDropdown : null,
+      walletId:
+        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null),
     });
   };
 

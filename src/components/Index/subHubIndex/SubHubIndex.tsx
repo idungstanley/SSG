@@ -114,6 +114,7 @@ export default function SubHubIndex() {
                     backgroundColour="orange"
                     roundedStyle="rounded"
                   />
+
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"

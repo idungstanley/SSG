@@ -60,6 +60,8 @@ function ListModal() {
           ? showMenuDropdown
           : null || showMenuDropdownType == 'subwallet'
           ? showMenuDropdown
+          : null || showMenuDropdownType == 'subwallet3'
+          ? showMenuDropdown
           : null,
     });
   };

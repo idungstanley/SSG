@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { getWalletService } from '../../../../../features/wallet/walletService';
+import { getWalletServices } from '../../../../../features/wallet/walletService';
 import MenuDropdown from '../../../../../components/Dropdown/DropdownForWorkspace';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -15,38 +14,35 @@ import {
   getSubMenu,
   setshowMenuDropdown,
 } from '../../../../../features/hubs/hubSlice';
+import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
+import LastListIndex from './LastListIndex';
 
 interface Sub2WalletIndexProps {
-  wallet2ParentId?: string | null;
   padding?: string;
+  currWalId?: string;
 }
 
 function Sub2WalletIndex({
-  wallet2ParentId,
   padding = 'pl-14',
+  currWalId,
 }: Sub2WalletIndexProps) {
   const dispatch = useDispatch();
+
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
-  const [isHovering, setIsHovering] = useState<number>(-1);
+  const [finalParentId, setFinalWalletParentId] = useState('');
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
-
-  const { data: subwallet } = useQuery({
-    queryKey: ['sub2walletlist', [wallet2ParentId]],
-    queryFn: getWalletService,
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { data: subwallet } = getWalletServices({
+    Archived: toggleArchiveWallet,
+    parentId: currWalId,
   });
-
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet3 === id) {
       return setShowSubWallet3(null);
     }
+    setFinalWalletParentId(id);
     setShowSubWallet3(id);
   };
 
@@ -64,7 +60,7 @@ function Sub2WalletIndex({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'wallet',
+        showMenuDropdownType: 'subwallet3',
       })
     );
     if (showMenuDropdown != null) {
@@ -78,7 +74,7 @@ function Sub2WalletIndex({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'wallet',
+        SubMenuType: 'subwallet3',
       })
     );
   };
@@ -99,14 +95,12 @@ function Sub2WalletIndex({
 
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet, i) => (
+      {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between space-x-1 text-sm h-8 ${padding} py-1.5 hover:bg-gray-100 ${
               wallet.id === activeItemId && 'bg-green-50 text-green-500'
             }`}
-            onMouseEnter={() => handleMouseOver(i)}
-            onMouseLeave={handleMouseOut}
           >
             {wallet.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
@@ -142,12 +136,7 @@ function Sub2WalletIndex({
               </div>
             </div>
             {/* ends here */}
-            <div
-              id="walletRight"
-              className={`flex items-center justify-end space-x-1 ${
-                isHovering === i ? 'block' : 'hidden'
-              }`}
-            >
+            <div id="walletRight" className="flex items-center space-x-2">
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 onClick={(e) => handleWalletSettings(wallet.id, e)}
@@ -160,11 +149,15 @@ function Sub2WalletIndex({
             </div>
           </section>
           {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+          {SubMenuId === wallet.id ? <SubDropdown /> : null}
+          {showSubWallet3 === wallet.id ? (
+            <LastListIndex finalParentId={finalParentId} />
+          ) : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-8 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100">
+          <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100">
             <div className="flex items-center space-x-1">
               <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>

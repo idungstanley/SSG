@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
-import { getHub } from './hubSlice';
+import { closeMenu, getHub } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
 export const createHubService = (data: {
@@ -98,12 +98,12 @@ export const useEditHubService = (data: {
 };
 
 //Delete a Hub
-export const UseDeleteHubService = (hub) => {
+export const UseDeleteHubService = (data) => {
   const dispatch = useDispatch();
-  const hubid = hub.query;
+  const hubid = data.query;
   const queryClient = useQueryClient();
   return useQuery(
-    ['hubs', hubid],
+    ['hubs'],
     async () => {
       const data = await requestNew(
         {
@@ -115,10 +115,11 @@ export const UseDeleteHubService = (hub) => {
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['hubs', hubid]),
-      enabled: hub.delHub,
+      // initialData: queryClient.getQueryData(['hubs', hubid]),
+      enabled: data.delHub,
+      // retry: false,
       onSuccess: () => {
-        queryClient.invalidateQueries(['hubs']);
+        queryClient.invalidateQueries();
         dispatch(setDelHub(false));
       },
     }
@@ -147,6 +148,8 @@ export const ArchiveHubService = (hub) => {
       enabled: hub.archiveHub,
       onSuccess: () => {
         dispatch(setArchiveHub(false));
+        dispatch(closeMenu());
+        queryClient.invalidateQueries();
       },
     }
   );

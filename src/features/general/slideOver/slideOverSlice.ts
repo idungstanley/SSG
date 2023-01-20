@@ -23,7 +23,9 @@ interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showCreateHubSlideOver: boolean;
   showEditHubSlideOver: boolean;
+  showEditListSlideOver: boolean;
   showCreateWalletSlideOver: boolean;
+  showEditWalletSlideOver: boolean;
   showCreateListSlideOver: boolean;
   showCreateTaskSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
@@ -43,7 +45,9 @@ const initialState: SideOverState = {
   showCreateInboxSlideOver: false,
   showCreateHubSlideOver: false,
   showEditHubSlideOver: false,
+  showEditListSlideOver: false,
   showCreateWalletSlideOver: false,
+  showEditWalletSlideOver: false,
   showCreateListSlideOver: false,
   showCreateTaskSlideOver: false,
   showAssignInboxFileSlideOver: false,
@@ -81,6 +85,9 @@ export const slideOverSlice = createSlice({
     ) => {
       state.showCreateHubSlideOver = action.payload;
     },
+    setEditListSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
+      state.showEditListSlideOver = action.payload;
+    },
     setEditHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showEditHubSlideOver = action.payload;
     },
@@ -89,6 +96,12 @@ export const slideOverSlice = createSlice({
       action: PayloadAction<boolean>
     ) => {
       state.showCreateWalletSlideOver = action.payload;
+    },
+    setEditWalletSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showEditWalletSlideOver = action.payload;
     },
     setCreateListSlideOverVisibility: (
       state,
@@ -164,6 +177,7 @@ export const {
   setCreateHubSlideOverVisibility,
   setEditHubSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
+  setEditWalletSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
   setAssignInboxFileSlideOverVisibility,
@@ -176,6 +190,7 @@ export const {
   setShowAddTeamMembersOrGroupsSideOver,
   setShowWatchersSideOver,
   setItemActionForSideOver,
+  setEditListSlideOverVisibility,
   setShowCommentsSideOver,
 } = slideOverSlice.actions;
 
