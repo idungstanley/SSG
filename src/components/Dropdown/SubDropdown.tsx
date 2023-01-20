@@ -11,7 +11,7 @@ import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import ListModal from '../../pages/workspace/Loader/components/modals/ListModal';
+import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
 import {
   setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,

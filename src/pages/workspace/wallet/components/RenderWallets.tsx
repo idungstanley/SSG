@@ -12,7 +12,7 @@ import {
   UserAddOutlined,
 } from '@ant-design/icons';
 import { getListsListService } from '../../../../features/list/listService';
-import ListNav from '../../Loader/components/renderlist/ListNav';
+import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
 
 function RenderWallets() {

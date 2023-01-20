@@ -33,7 +33,7 @@ import {
   setEditListSlideOverVisibility,
   setEditWalletSlideOverVisibility,
 } from '../../features/general/slideOver/slideOverSlice';
-import EditListModal from '../../pages/workspace/Loader/components/modals/EditListModal';
+import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
 import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
 import {
   setArchiveWallet,
