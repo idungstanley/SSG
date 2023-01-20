@@ -48,6 +48,7 @@ export default function NewExplorerPage() {
           </div>
         </main>
       </DragContext>
+
       <CreateOrRenameItemSlideOver />
       <Chat />
       <Watchers />
