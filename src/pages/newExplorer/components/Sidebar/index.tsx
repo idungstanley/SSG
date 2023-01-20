@@ -86,13 +86,8 @@ export default function Extendedbar() {
   ];
 
   return (
-    <aside className="border-r py-2">
+    <aside className="border-r">
       {/* header */}
-      {/* <div className="flex items-center p-2 text-gray-600  text-xs cursor-pointer h-6 top-0 border-b border-gray justify-between font-semibold leading-3 uppercase truncate tracking-wider">
-        <p>Explorer</p>
-        <img src={ExplorerIcon} alt="" className="w-4 h-4" />
-      </div> */}
-      {/* checking status */}
       {status === 'loading' ? (
         <div className="mx-auto w-6 mt-8 justify-center">
           <Spinner size={8} color="#0F70B7" />

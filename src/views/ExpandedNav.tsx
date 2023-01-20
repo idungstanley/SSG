@@ -23,9 +23,10 @@ import { useAppSelector } from '../app/hooks';
 import { SearchIcon } from '@heroicons/react/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
-import ActiveHub from './ActiveHub';
+import ActiveHub from './ActiveParents/ActiveHub';
 import { IoMdCloseCircle } from 'react-icons/io';
 import Extendedbar from '../pages/newExplorer/components/Sidebar';
+import { BiCabinet } from 'react-icons/bi';
 
 const secondaryNavigation = [
   {
@@ -41,16 +42,16 @@ const secondaryNavigation = [
     source: hubIcon,
   },
   {
-    name: 'inbox',
+    name: 'intrail',
     id: 3,
     place: <Inbox />,
     source: inboxIcon,
   },
   {
-    name: 'files',
+    name: 'Cabinet',
     id: 4,
     place: <Extendedbar />,
-    source: filesIcon,
+    icon: <BiCabinet className="h-4 mr-4" />,
   },
   {
     name: 'forms',
@@ -135,7 +136,7 @@ function ExpandedNav() {
           />
         )}
       </span>
-      <section className="border-r h-screen border-gray overflow-y-auto overflow-x-hidden">
+      <section className="border-r h-screen border-gray-400 z-10 overflow-y-auto overflow-x-hidden">
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
@@ -216,9 +217,9 @@ function ExpandedNav() {
           )}
         </div>
         <div
-          className="justify-self-end absolute shrink-0 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
+          className="justify-self-end absolute shrink-0 border-transparent hover:border-gray-600 border-r-2 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
           onMouseDown={startResizing}
-          style={{ cursor: 'col-resize', width: '3px' }}
+          style={{ cursor: 'col-resize', width: '4px' }}
         ></div>
       </section>
     </div>

@@ -7,6 +7,8 @@ import {
   setSelectedFolderId,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
+import { useDroppable } from '@dnd-kit/core';
+import { classNames } from '../../../../../utils';
 
 interface FoldersListProps {
   folders: {
@@ -25,7 +27,9 @@ export default function FoldersList({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const { selectedFolderId } = useAppSelector((state) => state.explorer);
+  const { selectedFolderId, draggableItem } = useAppSelector(
+    (state) => state.explorer
+  );
   const { data: sub } = useGetExplorerFolder(folderId);
 
   const handleClickFolder = (folderId: string, parentId: string | null) => {
@@ -143,6 +147,27 @@ export default function FoldersList({
           ) : null}
         </div>
       ))}
+
+      {draggableItem?.id ? <DragOverRoot /> : null}
     </>
+  );
+}
+
+function DragOverRoot() {
+  const { isOver, setNodeRef: droppableRef } = useDroppable({
+    id: 'root',
+    data: { parentId: null },
+  });
+
+  return (
+    <div
+      className={classNames(
+        'mt-2 w-full border text-center py-1 px-1 hover:bg-gray-100',
+        isOver ? 'bg-primary-100' : ''
+      )}
+      ref={droppableRef}
+    >
+      Drag here to move to root folder
+    </div>
   );
 }

@@ -35,7 +35,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
-    const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
   const { data } = getWalletServices({
     hubId: getCurrentHubId,
@@ -153,7 +153,11 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   </p>
                 </div>
               </div>
-              <div id="walletRight" className="flex items-center space-x-1">
+
+              <div
+                id="walletRight"
+                className="flex items-center space-x-1 text-black opacity-0 group-hover:opacity-100"
+              >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
                   onClick={(e) => handleWalletSettings(wallet.id, e)}

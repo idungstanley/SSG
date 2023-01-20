@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import {
   IAccountReq,
+  IUserParams,
   IUserSettings,
   IUserSettingsRes,
 } from './account.interfaces';
@@ -42,8 +43,8 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
   return response;
 };
 
-export const useGetUserSettingsKeys = () =>
-  useQuery<IUserSettingsRes, unknown, IUserSettings[]>(
+export const useGetUserSettingsKeys = (enabled: boolean) =>
+  useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
       requestNew(
@@ -57,17 +58,16 @@ export const useGetUserSettingsKeys = () =>
         true
       ),
     {
-      select: (res) => res.data.settings,
+      enabled,
+      select: (res) => res.data.settings[0],
     }
   );
 
-export const setUserSettingsKeys = (data: { value: boolean }) => {
-  const { value } = data;
-
+export const setUserSettingsKeys = (value: IUserParams) => {
   const request = requestNew(
     {
       url: 'user/settings',
-      method: 'POST',
+      method: 'PUT',
       data: {
         keys: [{ key: 'sidebar', value }],
       },

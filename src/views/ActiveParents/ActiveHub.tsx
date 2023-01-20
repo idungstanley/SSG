@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 // import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
-import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../app/hooks';
+import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../app/hooks';
 // import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
 import {
   resetCurrentItem,
   setCurrentItem,
   setShowHub,
-} from '../features/workspace/workspaceSlice';
-import { AvatarWithInitials } from '../components';
-import MenuDropdown from '../components/Dropdown/DropdownForWorkspace';
-import { Spinner } from '../common';
-import { useGetHubList, useGetHubWallet } from '../features/hubs/hubService';
-import { getHub } from '../features/hubs/hubSlice';
-import HubData from './ExtendedBar/HubData';
-import SubWalletIndex from '../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
-import { getWalletService } from '../features/wallet/walletService';
+} from '../../features/workspace/workspaceSlice';
+import { AvatarWithInitials } from '../../components';
+import MenuDropdown from '../../components/Dropdown/DropdownForWorkspace';
+import { Spinner } from '../../common';
+import { useGetHubList, useGetHubWallet } from '../../features/hubs/hubService';
+import { getHub } from '../../features/hubs/hubSlice';
+import HubData from '../ExtendedBar/HubData';
+import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
+import { getWalletService } from '../../features/wallet/walletService';
 import { useQuery } from '@tanstack/react-query';
-import Sub2WalletIndex from '../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
+import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
+import ActiveWallet from './ActiveWallet';
+import ActiveSubWallet from './ActiveSubwallet';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
@@ -74,21 +76,41 @@ export default function ActiveHub() {
     } else if (activeItemType === 'wallet') {
       return walletData?.map((wallet) => {
         if (wallet.id === activeItemId) {
-          return (
-            <SubWalletIndex
-              key={wallet.id}
-              padding="pl-0"
-            />
-          );
+          return <SubWalletIndex key={wallet.id} padding="pl-0" />;
         }
         return null;
       });
     } else if (activeItemType === 'subWallet') {
       return subWalletData?.map((subWallet) => {
         if (subWallet.id === activeItemId) {
+          return <Sub2WalletIndex key={subWallet.id} padding="pl-0" />;
+        }
+        return null;
+      });
+    }
+    return null;
+  };
+
+  const displayClickedParent = () => {
+    if (activeItemType === 'wallet') {
+      return walletData?.map((wallet) => {
+        if (wallet.id === activeItemId) {
           return (
-            <Sub2WalletIndex
+            <ActiveWallet
+              key={wallet.id}
+              showHubList={!false}
+              getCurrentHubId={currentItemId}
+            />
+          );
+        }
+      });
+    } else if (activeItemType === 'subWallet') {
+      return subWalletData?.map((subWallet) => {
+        if (subWallet.id === activeItemId) {
+          return (
+            <ActiveSubWallet
               key={subWallet.id}
+              walletParentId={currentWalletId}
               padding="pl-0"
             />
           );
@@ -96,7 +118,6 @@ export default function ActiveHub() {
         return null;
       });
     }
-    return null;
   };
 
   const handleClick = (id: string) => {
@@ -131,10 +152,8 @@ export default function ActiveHub() {
           i.id === currentItemId && (
             <li key={i.id} className="flex flex-col">
               <div
-                className={`flex justify-between items-center hover:bg-gray-100 relative ${
-                  i.id === currentItemId
-                    ? 'bg-green-50 text-green-500'
-                    : 'text-black-500'
+                className={`flex justify-between  items-center hover:bg-gray-100 relative ${
+                  i.id === currentItemId && 'bg-green-100 text-black-500'
                 }`}
                 style={{ height: '28px' }}
                 onMouseEnter={() => handleMouseOver(index)}
@@ -144,11 +163,7 @@ export default function ActiveHub() {
                   <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
                 )}
                 <div
-                  className={`flex justify-between items-center hover:bg-gray-100 relative ${
-                    i.id === currentItemId
-                      ? 'bg-green-50 text-green-500'
-                      : 'text-black-500'
-                  }`}
+                  className="flex justify-between gap-2 items-center hover:bg-gray-100 relative"
                   style={{ height: '28px' }}
                   onMouseEnter={() => handleMouseOver(index)}
                   onMouseLeave={handleMouseOut}
@@ -185,6 +200,10 @@ export default function ActiveHub() {
                       </span>
                     </div>
                   </div>
+                  <div className="flex items-center">
+                    {currentWalletId && <span className="">/</span>}
+                    <span>{displayClickedParent()}</span>
+                  </div>
                 </div>
                 <div
                   className={`flex items-center space-x-1 justify-end pr-1 ${
@@ -192,7 +211,6 @@ export default function ActiveHub() {
                   }`}
                 >
                   <MenuDropdown />
-                  {/* <PlusDropDown walletId={i.id} /> */}
                 </div>
               </div>
               <hr />

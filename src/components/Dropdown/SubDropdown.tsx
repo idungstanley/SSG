@@ -121,7 +121,7 @@ export default function SubDropdown() {
   ];
   return (
     <div className="">
-      <div className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-32 left-32 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <div className="fixed w-56 py-1 origin-top-right bg-white rounded-md shadow-lg top-auto left-32 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>

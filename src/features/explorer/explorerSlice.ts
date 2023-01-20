@@ -45,6 +45,8 @@ interface ExplorerState {
   folderIdsToPaste: string[];
   query: string;
   fileSelectWidth:number;
+
+  draggableItem: { id: string; isFile: boolean } | null;
 }
 
 const initialState: ExplorerState = {
@@ -60,16 +62,24 @@ const initialState: ExplorerState = {
   selectedSortingId,
   selectedViewId,
   query: '',
-  fileSelectWidth: 450,
+  fileSelectWidth: 490,
 
   fileIdsToPaste,
   folderIdsToPaste,
+
+  draggableItem: null,
 };
 
 export const explorerSlice = createSlice({
   name: 'explorer',
   initialState,
   reducers: {
+    setDraggableItem: (
+      state,
+      action: PayloadAction<{ id: string; isFile: boolean } | null>
+    ) => {
+      state.draggableItem = action.payload;
+    },
     setSelectedFolderId: (state, action: PayloadAction<string | null>) => {
       state.selectedFolderId = action.payload;
     },
@@ -163,6 +173,7 @@ export const explorerSlice = createSlice({
 });
 
 export const {
+  setDraggableItem,
   setSelectedFileId,
   setSelectedFolderId,
   resetSelectedFiles,

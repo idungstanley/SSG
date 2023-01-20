@@ -93,7 +93,7 @@ export default function FilesListWithToolbar() {
       }}
       onMouseDown={(e) => e.preventDefault()}
     >
-      <section className="border-r overflow-y-auto overflow-x-hidden border-gray">
+      <section className="border-r h-full overflow-y-auto overflow-x-hidden border-gray">
         <div className="flex flex-col w-full ">
           <UploadModal />
           {/* toolbar */}

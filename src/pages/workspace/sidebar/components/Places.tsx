@@ -31,12 +31,17 @@ import { useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
 import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
-import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import {
+  setCreateInboxSlideOverVisibility,
+  setItemActionForSideOver,
+} from '../../../../features/general/slideOver/slideOverSlice';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { BiCabinet } from 'react-icons/bi';
 
 function Places() {
-  const { activePlaceId, showSidebar, showHub, searchIsActive } =
-    useAppSelector((state) => state.workspace);
+  const { activePlaceId, showSidebar, searchIsActive } = useAppSelector(
+    (state) => state.workspace
+  );
   const { folderId } = useParams();
   const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
@@ -95,7 +100,7 @@ function Places() {
       ),
     },
     {
-      name: 'inbox',
+      name: 'intrail',
       id: 3,
       place: <Inbox />,
       source: inboxIcon,
@@ -104,15 +109,15 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => dispatch(setCreateInboxSlideOverVisibility(true))}
         />
       ),
     },
     {
-      name: 'files',
+      name: 'Cabinet',
       id: 4,
       place: <Extendedbar />,
-      source: filesIcon,
+      icon: <BiCabinet className="h-5 text-lg mr-4" />,
       plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
     },
     {
@@ -295,7 +300,11 @@ function Places() {
                 } flex-end space-x-2`}
               >
                 {activePlaceId === item.id && (
-                  <span className="flex items-center space-x-1">
+                  <span
+                    className={`${
+                      showSidebar ? 'block' : 'hidden'
+                    } flex items-center space-x-1`}
+                  >
                     <SearchIcon
                       className="w-3 h-4"
                       aria-hidden="true"

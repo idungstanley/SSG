@@ -1,6 +1,6 @@
-import { XIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { XIcon } from '@heroicons/react/solid';
 import { Input } from '../../../components';
 
 interface SearchProps {

@@ -112,3 +112,23 @@ export const useDeleteExplorerItem = (id: string, type: explorerItemType) => {
     },
   });
 };
+
+const moveExplorerItems = (data: {
+  targetFolderId: string;
+  fileIds?: string[];
+  folderIds?: string[];
+}) => {
+  const { targetFolderId, fileIds, folderIds } = data;
+
+  const response = requestNew({
+    url: `explorer/move${targetFolderId ? '/' + targetFolderId : ''}`,
+    method: 'POST',
+    data: {
+      file_ids: fileIds,
+      folder_ids: folderIds,
+    },
+  });
+  return response;
+};
+
+export const useMoveExplorerItems = () => useMutation(moveExplorerItems);

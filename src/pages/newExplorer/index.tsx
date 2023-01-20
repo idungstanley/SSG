@@ -6,10 +6,11 @@ import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameIt
 import Chat from '../../components/Chat';
 import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
-import Extendedbar from './components/Sidebar';
 import Sidebar from '../workspace/sidebar/Sidebar';
 import { useAppSelector } from '../../app/hooks';
 import ExpandedNav from '../../views/ExpandedNav';
+import ShareItemModal from '../../components/ShareItemModal';
+import DragContext from './components/DragContext';
 
 export default function NewExplorerPage() {
   const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
@@ -26,30 +27,33 @@ export default function NewExplorerPage() {
   };
   return (
     <>
-      <main className="flex w-full h-full">
-        {/* sidebar */}
-        <Sidebar />
+      <DragContext>
+        <main className="flex w-full h-full">
+          {/* sidebar */}
+          <Sidebar />
 
-        {/* header */}
-        <div className="flex w-full flex-row" style={paddingStyles()}>
-          {showExtendedBar && <ExpandedNav />}
-          <section className="grid w-full grid-rows-mainContent">
-            <Header />
+          {/* header */}
+          <div className="flex w-full flex-row" style={paddingStyles()}>
+            {showExtendedBar && <ExpandedNav />}
+            <section className="grid w-full grid-rows-mainContent">
+              <Header />
 
-            <div className="grid grid-rows-mainContent">
-              {/* Breadcrumb */}
-              <BreadcrumbSection />
-              {/* files list & file preview */}
-              <Main />
-            </div>
-          </section>
-        </div>
-      </main>
+              <div className="grid grid-rows-mainContent">
+                {/* Breadcrumb */}
+                <BreadcrumbSection />
+                {/* files list & file preview */}
+                <Main />
+              </div>
+            </section>
+          </div>
+        </main>
+      </DragContext>
 
       <CreateOrRenameItemSlideOver />
       <Chat />
       <Watchers />
       <Comments />
+      <ShareItemModal />
     </>
   );
 }

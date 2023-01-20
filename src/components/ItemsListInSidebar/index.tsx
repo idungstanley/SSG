@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
@@ -36,18 +36,18 @@ export default function ItemsListInSidebar({
   type,
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
-  // const [isHovering, setIsHovering] = useState<number>(-1);
+  const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
   );
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   if (status === 'error') {
     return (
@@ -118,31 +118,29 @@ export default function ItemsListInSidebar({
   };
 
   return status === 'success' ? (
-    <ul className="w-full">
-      {items?.map((i: { id: string; name: string }) => (
-        <li key={i.id} className={`flex flex-col ${i.id === currentItemId}`}>
+    <ul className="w-full z-20">
+      {items?.map((i: { id: string; name: string }, index) => (
+        <li
+          key={i.id}
+          className={`flex relative flex-col ${i.id === currentItemId}`}
+          onMouseEnter={() => handleMouseOver(index)}
+          onMouseLeave={handleMouseOut}
+        >
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
-              i.id === currentItemId
-                ? 'bg-green-50 text-green-500'
+              i.id === currentItemId && i.id === activeItemId
+                ? 'bg-green-100 text-green-500'
                 : 'text-black-500'
             }`}
-            // onMouseEnter={() => handleMouseOver(index)}
-            // onMouseLeave={handleMouseOut}
           >
-            {i.id === currentItemId && (
-              <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
-            )}
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
-                i.id === activeItemId
-                  ? 'bg-green-50 text-green-500'
+                i.id === currentItemId && i.id === activeItemId
+                  ? 'text-green-500'
                   : 'text-black-500'
               }`}
-              // onMouseEnter={() => handleMouseOver(index)}
-              // onMouseLeave={handleMouseOut}
             >
-              {i.id === activeItemId && (
+              {i.id === currentItemId && i.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
               )}
               <div
@@ -192,20 +190,19 @@ export default function ItemsListInSidebar({
                 </div>
               </div>
             </div>
-            {
-              <div className="flex relative items-center space-x-1 pr-1">
+            {isHovering === index && (
+              <div className="flex items-center space-x-1 pr-1">
                 <AiOutlineEllipsis
                   onClick={(e) => handleHubSettings(i.id, e)}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-black"
                   id="menusettings"
                 />
                 <AiOutlinePlus
                   onClick={() => handleItemAction(i.id)}
-                  className="cursor-pointer"
-                  // id="menusettings"
+                  className="cursor-pointer text-black"
                 />
               </div>
-            }
+            )}
           </div>
           {currentItemId === i.id ? <DropdownList /> : null}
           {showMenuDropdown === i.id ? <MenuDropdown /> : null}

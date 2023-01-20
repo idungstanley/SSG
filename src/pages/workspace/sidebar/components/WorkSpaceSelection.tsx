@@ -40,8 +40,8 @@ const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
         </div>
       ) : (
         <p
-          className="truncate rounded-full p-1"
-          style={{ fontSize: '7px', backgroundColor: '#D2AAF0' }}
+          className="truncate rounded p-1 ml-1"
+          style={{ fontSize: '5px', backgroundColor: '#D2AAF0' }}
         >
           {workspaceName}
         </p>

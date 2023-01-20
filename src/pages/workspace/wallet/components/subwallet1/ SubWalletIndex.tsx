@@ -94,7 +94,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
-              wallet.id === activeItemId && 'bg-green-50 text-green-500'
+              wallet.id === activeItemId && 'bg-green-100 text-black'
             }`}
           >
             {wallet.id === activeItemId && (
@@ -123,8 +123,14 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
                   </div>
                 )}
               </div>
-              <div onClick={() => handleLocation(wallet.id)}>
-                <p className="ml-2" style={{ fontSize: '10px' }}>
+              <div
+                onClick={() => handleLocation(wallet.id)}
+                className="cursor-pointer hover:underline hover:decoration-dashed"
+              >
+                <p
+                  className="ml-2 font-medium tracking-wider capitalize truncate"
+                  style={{ fontSize: '10px' }}
+                >
                   {wallet.name.length > 10
                     ? wallet.name.substr(0, 10) + '...'
                     : wallet.name}
@@ -132,7 +138,10 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
               </div>
             </div>
             {/* ends here */}
-            <div id="walletRight" className="flex items-center space-x-2">
+            <div
+              id="walletRight"
+              className="flex items-center space-x-2 opacity-0 group-hover:opacity-100"
+            >
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 onClick={(e) => handleWalletSettings(wallet.id, e)}
