@@ -25,7 +25,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
     </div>
   ) : status === 'success' ? (
     comments?.length ? (
-      <ul className="divide-y divide-gray-200">
+      <ul className="divide-y divide-gray-200 border-b">
         {comments.map((item) => (
           <li key={item.id} className="flex items-center justify-between py-4">
             <p>{item.message.replaceAll(mentionTeamMemberInMessageReg, '')}</p>

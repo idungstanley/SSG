@@ -52,6 +52,10 @@ interface NavProps {
 }
 
 export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
+  const handleClick = (tabId: number) => {
+    setActiveTabId(tabId);
+  };
+
   return (
     <nav
       className="flex gap-4 flex-wrap w-full border-b pb-5"
@@ -60,7 +64,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
       {tabs.map((tab) => (
         <span
           key={tab.id}
-          onClick={() => setActiveTabId(tab.id)}
+          onClick={() => handleClick(tab.id)}
           className={classNames(
             tab.id === activeTabId
               ? 'bg-indigo-100 text-indigo-700'
