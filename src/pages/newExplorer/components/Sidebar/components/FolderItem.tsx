@@ -7,21 +7,18 @@ import {
   PlusIcon,
   PencilIcon,
   ArrowDownTrayIcon,
-  ChatBubbleBottomCenterIcon,
   ChatBubbleLeftEllipsisIcon,
-  EyeIcon,
   ShareIcon,
   AdjustmentsVerticalIcon,
+  ArrowsUpDownIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
-  setShowCommentsSideOver,
   setShowPilotSideOver,
   setShowShareSideOver,
-  setShowWatchersSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
@@ -29,25 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
 import { setSelectedItem } from '../../../../../features/chat/chatSlice';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
-
-function ArrowsUpDownIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-5 h-5 cursor-pointer stroke-current text-gray-500"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-      />
-    </svg>
-  );
-}
 
 interface FolderItemProps {
   id: string;
@@ -107,12 +85,6 @@ export default function FolderItem({
     DownloadFile('folder', id, itemName);
   };
 
-  const handleShowWatchers = () =>
-    dispatch(setShowWatchersSideOver({ show: true, type: 'folder', id }));
-
-  const handleShowComments = () =>
-    dispatch(setShowCommentsSideOver({ show: true, type: 'folder', id }));
-
   const handleShowShare = () =>
     dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
 
@@ -137,18 +109,6 @@ export default function FolderItem({
       label: 'Delete',
       onClick: handleDelete,
       icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
-    },
-    {
-      label: 'Watchers',
-      onClick: handleShowWatchers,
-      icon: <EyeIcon className="h-5 w-5" aria-hidden="true" />,
-    },
-    {
-      label: 'Comments',
-      onClick: handleShowComments,
-      icon: (
-        <ChatBubbleBottomCenterIcon className="h-5 w-5" aria-hidden="true" />
-      ),
     },
     {
       label: 'Chat',
@@ -203,7 +163,7 @@ export default function FolderItem({
           aria-hidden="true"
         />
         <div ref={draggableRef} {...listeners} {...attributes}>
-          <ArrowsUpDownIcon />
+          <ArrowsUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
         </div>
       </div>
     </div>

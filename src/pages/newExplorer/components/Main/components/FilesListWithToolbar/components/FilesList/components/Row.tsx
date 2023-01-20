@@ -15,25 +15,7 @@ import {
   setSelectedFiles,
 } from '../../../../../../../../../features/explorer/explorerSlice';
 import { useGetExplorerFile } from '../../../../../../../../../features/explorer/explorerService';
-
-function ArrowsUpDownIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-5 h-5 cursor-pointer stroke-current text-gray-300"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-      />
-    </svg>
-  );
-}
+import { ArrowsUpDownIcon } from '@heroicons/react/24/outline';
 
 interface RowProps {
   fileId: string;
@@ -135,7 +117,10 @@ export default function Row({ fileId }: RowProps) {
         ref={setNodeRef}
         className="whitespace-nowrap py-4 px-2 text-sm text-gray-500"
       >
-        <ArrowsUpDownIcon />
+        <ArrowsUpDownIcon
+          className="h-5 w-5 text-gray-300"
+          aria-hidden="true"
+        />
       </td>
 
       <td

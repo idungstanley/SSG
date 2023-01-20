@@ -17,8 +17,6 @@ export default function Permissions() {
   const folderMembers = data?.folder_team_members;
   const folderGroupMembers = data?.folder_team_member_groups;
 
-  // console.log(fileMembers, folderMembers, folderGroupMembers);
-
   return (
     <div>
       {status === 'error' ? (
@@ -32,6 +30,14 @@ export default function Permissions() {
         </div>
       ) : (
         <div className="mt-3 w-full">
+          {/* in all lists no members */}
+          {!fileMembers?.length &&
+          !folderMembers?.length &&
+          !folderGroupMembers?.length ? (
+            <p className="text-center">No active permission members</p>
+          ) : null}
+
+          {/* if includes */}
           {fileMembers?.length ? (
             <MembersList title="Members:" membersList={fileMembers} />
           ) : null}

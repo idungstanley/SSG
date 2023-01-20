@@ -5,7 +5,6 @@ import {
   ClipboardIcon,
   ArrowDownTrayIcon,
   ChatBubbleBottomCenterIcon,
-  EyeIcon,
   AdjustmentsVerticalIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -20,10 +19,8 @@ import { resetSelectedFiles } from '../../../../../../../../features/explorer/ex
 import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
-  setShowCommentsSideOver,
   setShowPilotSideOver,
   setShowShareSideOver,
-  setShowWatchersSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 
 interface ToolbarProps {
@@ -57,24 +54,6 @@ export default function Toolbar({ data }: ToolbarProps) {
   const handleDownload = async () => {
     DownloadFile('file', selectedFileId || '', selectedFileId || '');
   };
-
-  const handleShowWatchers = () =>
-    dispatch(
-      setShowWatchersSideOver({
-        show: true,
-        type: 'file',
-        id: selectedFileId || '',
-      })
-    );
-
-  const handleShowComments = () =>
-    dispatch(
-      setShowCommentsSideOver({
-        show: true,
-        type: 'file',
-        id: selectedFileId || '',
-      })
-    );
 
   const menuItems = [
     {
@@ -114,20 +93,6 @@ export default function Toolbar({ data }: ToolbarProps) {
       onClick: () => ({}),
       label: 'Copy',
       disabled: selectedIds.length === 0,
-    },
-    {
-      label: 'Watchers',
-      onClick: handleShowWatchers,
-      icon: <EyeIcon className="h-5 w-5" aria-hidden="true" />,
-      disabled: !selectedFileId,
-    },
-    {
-      label: 'Comments',
-      onClick: handleShowComments,
-      icon: (
-        <ChatBubbleBottomCenterIcon className="h-5 w-5" aria-hidden="true" />
-      ),
-      disabled: !selectedFileId,
     },
     {
       label: 'Chat',
