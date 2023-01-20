@@ -27,30 +27,29 @@ export default function History() {
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
-          <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col pt-2">
+          <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col">
             <ul className="divide-y divide-gray-200 h-full flex-1">
               {logs?.map((activityLog) => (
                 <li
                   key={activityLog.id}
                   className="py-2 flex justify-between items-center"
                 >
-                  <div className="space-y-2">
-                    <div className="flex gap-3 justify-center items-center">
-                      <InitialsAvatar
-                        size={6}
-                        colour={activityLog.team_member.colour}
-                        initials={activityLog.team_member.initials}
-                      />
+                  <div className="flex items-center">
+                    <InitialsAvatar
+                      size={10}
+                      colour={activityLog.team_member.colour}
+                      initials={activityLog.team_member.initials}
+                    />
 
-                      <p className="text-indigo-600 mb-0">
+                    <div className="ml-3">
+                      <p className="text-indigo-600">
                         {activityLog.team_member.name}
                       </p>
+                      <p className="text-gray-400">{activityLog.category}</p>
                     </div>
-
-                    <p className="text-gray-400 mb-0">{activityLog.category}</p>
                   </div>
 
-                  <p className="text-gray-400 mb-0">
+                  <p className="text-gray-400 text-sm">
                     {OutputDateTime(activityLog.created_at)}
                   </p>
                 </li>
