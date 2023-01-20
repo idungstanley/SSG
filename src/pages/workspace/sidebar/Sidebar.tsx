@@ -103,7 +103,7 @@ export default function Sidebar() {
             />
           )}
         </span>
-        <div className="flex flex-col bg-white overflow-y-auto mr-1">
+        <div className="flex flex-col overflow-y-scroll overflow-x-hidden bg-white relative">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
               className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${

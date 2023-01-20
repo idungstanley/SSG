@@ -29,7 +29,7 @@ function SubWalletIndex({
   const dispatch = useDispatch();
   const [wallet2ParentId, setWallet2ParentId] = useState('');
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
-  // const [isHovering, setIsHovering] = useState<number>(-1);
+  const [isHovering, setIsHovering] = useState<number>(-1);
   const { data: subwallet } = useQuery({
     queryKey: ['subwalletlist', [walletParentId]],
     queryFn: getWalletService,
@@ -45,12 +45,12 @@ function SubWalletIndex({
     setShowSubWallet2(id);
   };
 
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
@@ -91,14 +91,14 @@ function SubWalletIndex({
   };
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet) => (
+      {subwallet?.data?.wallets.map((wallet, index) => (
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
-              wallet.id === activeItemId && 'bg-green-50 text-green-500'
+              wallet.id === activeItemId && 'bg-green-100 text-green-500'
             }`}
-            // onMouseEnter={() => handleMouseOver(index)}
-            // onMouseLeave={handleMouseOut}
+            onMouseEnter={() => handleMouseOver(index)}
+            onMouseLeave={handleMouseOut}
           >
             {wallet.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
@@ -137,10 +137,9 @@ function SubWalletIndex({
             {/* ends here */}
             <div
               id="walletRight"
-              // className={`flex items-center justify-end space-x-1 ${
-              //   isHovering === index ? 'block' : 'hidden'
-              // }`}
-              className="flex items-center space-x-2"
+              className={`flex items-center justify-end space-x-2 ${
+                isHovering === index ? 'block' : 'hidden'
+              }`}
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"

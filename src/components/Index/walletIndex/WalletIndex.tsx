@@ -33,7 +33,7 @@ interface WalletIndexProps {
 function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  // const [isHovering, setIsHovering] = useState<number>(-1);
+  const [isHovering, setIsHovering] = useState<number>(-1);
   const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHubWallet(getCurrentHubId);
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -47,12 +47,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
+  const handleMouseOver = (i: number) => {
+    setIsHovering(i);
+  };
+  const handleMouseOut = () => {
+    setIsHovering(-1);
+  };
 
   const handleShowSubWallet = (id: string) => {
     dispatch(setCurrentWalletId(id));
@@ -110,12 +110,14 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
         </div>
       )}
       {data?.data?.wallets.length !== 0 &&
-        data?.data?.wallets.map((wallet) => (
+        data?.data?.wallets.map((wallet, i) => (
           <div key={wallet.id}>
             <section
-              className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8"
-              // onMouseEnter={() => handleMouseOver(i)}
-              // onMouseLeave={handleMouseOut}
+              className={`flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 ${
+                wallet.id === activeItemId && 'bg-green-100 text-green-500'
+              } `}
+              onMouseEnter={() => handleMouseOver(i)}
+              onMouseLeave={handleMouseOut}
             >
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
@@ -158,17 +160,22 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   </p>
                 </div>
               </div>
-              <div id="walletRight" className="flex items-center space-x-1">
-                <AiOutlineEllipsis
-                  className="cursor-pointer"
-                  onClick={(e) => handleWalletSettings(wallet.id, e)}
-                  id="menusettings"
-                />
-                <AiOutlinePlus
-                  onClick={() => handleItemAction(wallet.id)}
-                  className="cursor-pointer"
-                />
-              </div>
+              {isHovering === i && (
+                <div
+                  id="walletRight"
+                  className="flex items-center space-x-1 text-black"
+                >
+                  <AiOutlineEllipsis
+                    className="cursor-pointer"
+                    onClick={(e) => handleWalletSettings(wallet.id, e)}
+                    id="menusettings"
+                  />
+                  <AiOutlinePlus
+                    onClick={() => handleItemAction(wallet.id)}
+                    className="cursor-pointer"
+                  />
+                </div>
+              )}
             </section>
             <div>
               {/* <WalletModal
