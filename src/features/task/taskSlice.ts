@@ -24,6 +24,8 @@ interface TaskState {
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
+  listView: boolean;
+  tableView: boolean;
 }
 
 const initialState: TaskState = {
@@ -32,6 +34,8 @@ const initialState: TaskState = {
   currTeamMemberId: null,
   removeWatcherId: null,
   myTaskData: [],
+  listView: true,
+  tableView: false,
 };
 
 export const taskSlice = createSlice({
@@ -42,14 +46,19 @@ export const taskSlice = createSlice({
       state.task.push(action.payload);
     },
     getTaskData(state, action) {
-      const myObj = {
-        id: "ewt22222",
-        name: "",
-      };
       const taskDataArray = action.payload;
       // taskDataArray.unshift(myObj);
-      state.myTaskData = taskDataArray;
+      if (taskDataArray) {
+        state.myTaskData = taskDataArray;
+      }
     },
+    getListView(state, action) {
+      state.listView = action.payload;
+    },
+    getTableView(state, action) {
+      state.tableView = action.payload;
+    },
+
     setWatchersData(state, action) {
       state.watchersData.push(action.payload);
     },
@@ -70,6 +79,8 @@ export const {
   setWatchersData,
   setCurrTeamMemId,
   getTaskData,
+  getListView,
+  getTableView,
   setRmWatcher,
 } = taskSlice.actions;
 export default taskSlice.reducer;

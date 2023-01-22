@@ -29,6 +29,9 @@ import ListNav from "./components/renderlist/ListNav";
 import addColumns from "./components/renderlist/listDetails/listDetails";
 import { useAppSelector } from "../../../app/hooks";
 import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
+import TaskTableView from "../tasks/component/TaskTableView";
+import CollapsibleTable from "../tasks/component/TaskTableView";
+import Example from "../tasks/component/TaskTableView";
 
 function RenderList() {
   const [addNewItem, setAddNewItem] = useState(false);
@@ -37,9 +40,9 @@ function RenderList() {
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
-  const { myTaskData } = useAppSelector((state) => state.task);
-
-  console.log("myTaskData", myTaskData);
+  const { myTaskData, tableView, listView } = useAppSelector(
+    (state) => state.task
+  );
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
@@ -94,8 +97,6 @@ function RenderList() {
   const [dropDown, setdropDown] = useState(false);
 
   const handleDropDown = () => {
-    console.log(dropDown);
-
     setdropDown((prev) => !prev);
   };
   // {dropDown ? (<>
@@ -107,32 +108,14 @@ function RenderList() {
     navigate(`/workspace/t/${id}`);
   };
 
-  // const columns: any = listChildrenData?.data?.tasks[0];
+  const columnsObj: any = myTaskData[0];
+  const columnsArray: string[] = [];
+  columnsObj &&
+    Object.keys(columnsObj).map((columnsHead, key) => {
+      columnsArray.push(columnsHead);
+    });
 
-  // console.log(columns);
-
-  // console.log(Object.keys(listChildrenData?.data?.tasks[0]));
-
-  // listChildrenData?.data?.tasks.map((child) => {
-  //   // console.log(child);
-
-  //   const headerKey = Object.keys(child);
-
-  //   // console.log(headerKey);
-
-  //   // headerKey.forEach((key, index) => {
-  //   //   if (!columns.key) {
-  //   //     columns.push(key);
-  //   //   }
-
-  //     // console.log(key);
-  //     // console.log(`${key}: ${child[key]}`);
-
-  //     // // console.log(index);
-  //   });
-  // });
-
-  // console.log(columns);
+  //console.log("db datas", myTaskData);
 
   return (
     <div className="h-screen" style={{ backgroundColor: "#eee" }}>
@@ -140,7 +123,8 @@ function RenderList() {
         <ListNav
           navName="ListName"
           viewsList="List"
-          viewsList2="Board"
+          viewsList3="Board"
+          viewsList2="Table"
           changeViews="View"
         />
       </section>
@@ -189,144 +173,198 @@ function RenderList() {
               </span>
             </div>
           </section>
-          {/* card */}
-          <div className=" flex  items-center ml-3 pl-3">
-            <div className=" flex w-6/12 items-center gap-2 shrink-0">
-              <FiArrowDownCircle
-                className=" text-gray-400 text-xs"
-                aria-hidden="true"
-              />
-              <span className="text-xs font-semibold text-gray-400	">OPEN</span>
-              <span className="text-xs font-semibold text-gray-400	">
-                {myTaskData?.length}
-              </span>
 
-              <span className="text-xs font-semibold text-gray-400	">TASK</span>
+          {tableView && (
+            <div>
+              <TaskTableView />
             </div>
-            <div className="flex items-center w-6/12">
-              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>USER</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>DUE DATE</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>PRIORITY</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>CREATED AT</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <span
-                className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
-                onClick={() => handleDropDown()}
-              >
-                <FiPlusCircle className="font-black	" />
-                <span className="text-sm">
-                  {dropDown && (
-                    <AddColumnDropdown title="" listItems={addColumns} />
-                  )}
-                </span>
-              </span>
-            </div>
-          </div>
-          {myTaskData?.map((task, i) => (
-            <div key={task.id}>
-              <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
-                <RiCheckboxBlankFill
+          )}
+
+          {/* <main>
+            <section>
+              <div className="w-full overflow-x-scroll">
+                {columnsArray.map((item, key) => {
+                  if (item != "id") {
+                    return (
+                      <span className="px-20" key={item}>
+                        {item}
+                      </span>
+                    );
+                  }
+                })}
+                <div className="flex">
+                  {columnsArray.map((item, key) => {
+                    if (item != "id") {
+                      return (
+                        <div className="px-4" key={key}>
+                          {myTaskData?.map((body, index) => {
+                            return (
+                              <div className="" key={index}>
+                                <div className="px-10">
+                                  {myTaskData[index][item] == null ||
+                                  myTaskData[index][item].length == 0
+                                    ? "EMPTY"
+                                    : myTaskData[index][item]}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </div>
+            </section>
+          </main> */}
+
+          {/* card */}
+
+          {listView && (
+            <div className=" flex  items-center ml-3 pl-3">
+              <div className=" flex w-6/12 items-center gap-2 shrink-0">
+                <FiArrowDownCircle
                   className=" text-gray-400 text-xs"
                   aria-hidden="true"
                 />
-                <div className="flex items-center w-6/12 group">
-                  {/* data and input */}
-                  <div onClick={() => handleTaskModal(task.id)}>
-                    {/* {i == 0 && <h1>Tasks</h1>} */}
+                <span className="text-xs font-semibold text-gray-400	">
+                  OPEN
+                </span>
+                <span className="text-xs font-semibold text-gray-400	">
+                  {myTaskData?.length}
+                </span>
 
-                    <p className="capitalize text-xs font-semibold leading-8 pl-5	">
-                      {task.name}
-                    </p>
-                  </div>
-
-                  {/* iconstask */}
-                  <div
-                    id="iconWrapper"
-                    className="flex items-start space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-                  >
-                    <div
-                      id="wrapper"
-                      className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
-                    >
-                      <PlusOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-                        aria-hidden="true"
-                        onClick={() => handleSubTask(task.id)}
-                      />
-                    </div>
-                    <div
-                      id="wrapper"
-                      className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
-                    >
-                      <EditOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* icons */}
-
-                <div className="flex  space-x-10">
-                  <span className=" rounded-full text-xs text-center">
-                    <UserAddOutlined
-                      className="h-5 w-5 text-gray-400 text-xl "
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="border-dotted border-gray-300 pl-3 ml-5">
-                    <CalendarOutlined
-                      className="h-5 w-7 text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="border-dotted border-gray-300 ml-5">
-                    <FlagOutlined
-                      className="h-5 w-7  text-gray-400 ml-8"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </div>
+                <span className="text-xs font-semibold text-gray-400	">
+                  TASK
+                </span>
               </div>
-
-              {subTaskOne === task.id ? (
-                <div>
-                  <SubTask parentTaskId={parentTaskId} />
-                </div>
-              ) : null}
+              <div className="flex items-center w-6/12">
+                <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>USER</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>DUE DATE</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>PRIORITY</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>CREATED AT</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <span className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+                  <FiPlusCircle
+                    className="font-black	"
+                    onClick={() => handleDropDown()}
+                  />
+                  <span className="text-sm">
+                    {dropDown && (
+                      <AddColumnDropdown title="" listItems={addColumns} />
+                    )}
+                  </span>
+                </span>
+              </div>
             </div>
-          ))}
+          )}
+
+          {listView &&
+            myTaskData?.map((task, i) => (
+              <div key={task.id}>
+                <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
+                  <RiCheckboxBlankFill
+                    className=" text-gray-400 text-xs"
+                    aria-hidden="true"
+                  />
+                  <div className="flex items-center w-6/12 group">
+                    {/* data and input */}
+                    <div onClick={() => handleTaskModal(task.id)}>
+                      {/* {i == 0 && <h1>Tasks</h1>} */}
+
+                      <p className="capitalize text-xs font-semibold leading-8 pl-5	">
+                        {task.name}
+                      </p>
+                    </div>
+
+                    {/* iconstask */}
+                    <div
+                      id="iconWrapper"
+                      className="flex items-start space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+                    >
+                      <div
+                        id="wrapper"
+                        className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
+                      >
+                        <PlusOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+                          aria-hidden="true"
+                          onClick={() => handleSubTask(task.id)}
+                        />
+                      </div>
+                      <div
+                        id="wrapper"
+                        className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
+                      >
+                        <EditOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* icons */}
+
+                  <div className="flex  space-x-10">
+                    <span className=" rounded-full text-xs text-center">
+                      <UserAddOutlined
+                        className="h-5 w-5 text-gray-400 text-xl "
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="border-dotted border-gray-300 pl-3 ml-5">
+                      <CalendarOutlined
+                        className="h-5 w-7 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="border-dotted border-gray-300 ml-5">
+                      <FlagOutlined
+                        className="h-5 w-7  text-gray-400 ml-8"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </div>
+
+                {subTaskOne === task.id ? (
+                  <div>
+                    <SubTask parentTaskId={parentTaskId} />
+                  </div>
+                ) : null}
+              </div>
+            ))}
 
           {/* toggle */}
           {addNewItem && (
@@ -397,7 +435,7 @@ function RenderList() {
             id="newItem"
             onClick={() => setAddNewItem(!addNewItem)}
           >
-            <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+            <p className="pl-2 text-xs w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
               + New Task
             </p>
           </div>
