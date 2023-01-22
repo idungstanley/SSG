@@ -59,7 +59,7 @@ export default function FilesListWithToolbar() {
       </div>
 
       {/* file list */}
-      <FilesList data={sortedItems} query={query} setQuery={setQuery} />
+      <FilesList data={sortedItems} />
     </div>
   );
 }

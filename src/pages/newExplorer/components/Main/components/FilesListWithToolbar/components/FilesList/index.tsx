@@ -25,8 +25,6 @@ export interface IStringifiedFile {
 
 interface FilesListProps {
   data: IStringifiedFile[];
-  query: string;
-  setQuery: (i: string) => void;
 }
 
 export default function FilesList({ data }: FilesListProps) {
