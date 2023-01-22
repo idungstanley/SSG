@@ -30,8 +30,12 @@ import ListNav from "./components/renderlist/ListNav";
 import addColumns from "./components/renderlist/listDetails/listDetails";
 import { useAppSelector } from "../../../app/hooks";
 import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
+import { useDispatch } from "react-redux";
+import { setCurrentTaskId } from "../../../features/task/taskSlice";
+import TaskMenu from "../tasks/component/taskMenu/TaskMenu";
 
 function RenderList() {
+  const dispatch = useDispatch();
   const [addNewItem, setAddNewItem] = useState(false);
   const [parentTaskId, setParentTaskId] = useState("");
   const [subTaskOne, setSubTaskOne] = useState<boolean | string>(false);
@@ -97,6 +101,17 @@ function RenderList() {
   const handleClose = () => {
     setClose((prev) => !prev);
   };
+
+  const { current_task_id } = useAppSelector((state) => state.task);
+  console.log(current_task_id);
+
+  const [nav, setNav] = useState(false);
+  const displayNav: any = (id) => {
+    setNav((prev) => !prev);
+    dispatch(setCurrentTaskId(id));
+    console.log(id);
+  };
+
   // {dropDown ? (<>
   // <div></div>
   // </>) : null}
@@ -107,7 +122,12 @@ function RenderList() {
   };
 
   return (
-    <div className="h-screen" style={{ backgroundColor: "#eee" }}>
+    <div className="h-screen " style={{ backgroundColor: "#eee" }}>
+      {nav && (
+        <span className="transition	duration-300 ease-in-out ">
+          <TaskMenu />
+        </span>
+      )}
       <section id="nav">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
@@ -251,9 +271,10 @@ function RenderList() {
                   >
                     <input
                       type="checkbox"
-                      className="opacity-0 transition duration-200 group-hover:opacity-100"
+                      className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer"
+                      onClick={(e) => displayNav(task.id)}
                     />
-                    <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 " />
+                    <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
                   </span>
 
                   <RiCheckboxBlankFill

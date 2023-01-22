@@ -24,6 +24,7 @@ interface TaskState {
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
+  current_task_id: null;
 }
 
 const initialState: TaskState = {
@@ -32,6 +33,7 @@ const initialState: TaskState = {
   currTeamMemberId: null,
   removeWatcherId: null,
   myTaskData: [],
+  current_task_id: null,
 };
 
 export const taskSlice = createSlice({
@@ -60,6 +62,11 @@ export const taskSlice = createSlice({
     setCurrTeamMemId(state, action) {
       state.currTeamMemberId = action.payload;
     },
+
+    setCurrentTaskId(state, action) {
+      state.current_task_id = action.payload;
+    },
+
     checkIfTask: (state) => state,
   },
 });
@@ -71,5 +78,6 @@ export const {
   setCurrTeamMemId,
   getTaskData,
   setRmWatcher,
+  setCurrentTaskId,
 } = taskSlice.actions;
 export default taskSlice.reducer;
