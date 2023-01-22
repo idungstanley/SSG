@@ -122,9 +122,12 @@ function RenderList() {
   };
 
   return (
-    <div className="h-screen " style={{ backgroundColor: "#eee" }}>
+    <div
+      className="h-screen overflow-hidden relative"
+      style={{ backgroundColor: "#eee" }}
+    >
       {nav && (
-        <span className="transition	duration-300 ease-in-out ">
+        <span className="transition	duration-300 ease-in-out absolute w-full">
           <TaskMenu />
         </span>
       )}
