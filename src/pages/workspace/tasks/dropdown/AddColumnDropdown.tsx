@@ -25,12 +25,12 @@ export default function AddColumnDropdown({
         style={{ left: "-40px", height: "500px" }}
       >
         <div className="flex py-2 px-2 justify-around">
-          <p>Show/Hide</p>
+          <p onClick={() => setColumn(!column)}>Show/Hide</p>
           <p onClick={() => setColumn(!column)}>New Column</p>
         </div>
         <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
         <div className="flex items-center justify-around px-4">
-          <BiSearch className="text-lg" />
+          <BiSearch className="text-lg" />.
           <input
             type="text"
             placeholder="Search..."
@@ -50,6 +50,15 @@ export default function AddColumnDropdown({
                 key={listItem.name}
               >
                 {listItem.icons}
+                {listItem.name}
+              </p>
+            )}
+            {!column && (
+              <p
+                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full"
+                onClick={() => listItem.onclick}
+                key={listItem.name}
+              >
                 {listItem.name}
               </p>
             )}

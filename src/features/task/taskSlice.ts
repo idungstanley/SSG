@@ -24,6 +24,10 @@ interface TaskState {
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
+  current_task_id: null;
+  listView: boolean;
+  tableView: boolean;
+  showTaskNavigation: boolean;
 }
 
 const initialState: TaskState = {
@@ -32,6 +36,10 @@ const initialState: TaskState = {
   currTeamMemberId: null,
   removeWatcherId: null,
   myTaskData: [],
+  current_task_id: null,
+  listView: true,
+  tableView: false,
+  showTaskNavigation: false,
 };
 
 export const taskSlice = createSlice({
@@ -42,14 +50,23 @@ export const taskSlice = createSlice({
       state.task.push(action.payload);
     },
     getTaskData(state, action) {
-      const myObj = {
-        id: "ewt22222",
-        name: "",
-      };
       const taskDataArray = action.payload;
       // taskDataArray.unshift(myObj);
-      state.myTaskData = taskDataArray;
+      if (taskDataArray) {
+        state.myTaskData = taskDataArray;
+      }
     },
+    getListView(state, action) {
+      state.listView = action.payload;
+    },
+    getTableView(state, action) {
+      state.tableView = action.payload;
+    },
+
+    setShowTaskNavigation(state, action) {
+      state.showTaskNavigation = action.payload;
+    },
+
     setWatchersData(state, action) {
       state.watchersData.push(action.payload);
     },
@@ -60,6 +77,11 @@ export const taskSlice = createSlice({
     setCurrTeamMemId(state, action) {
       state.currTeamMemberId = action.payload;
     },
+
+    setCurrentTaskId(state, action) {
+      state.current_task_id = action.payload;
+    },
+
     checkIfTask: (state) => state,
   },
 });
@@ -70,6 +92,10 @@ export const {
   setWatchersData,
   setCurrTeamMemId,
   getTaskData,
+  getListView,
+  getTableView,
+  setShowTaskNavigation,
   setRmWatcher,
+  setCurrentTaskId,
 } = taskSlice.actions;
 export default taskSlice.reducer;
