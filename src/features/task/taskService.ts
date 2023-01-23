@@ -32,6 +32,36 @@ export const getOneTaskService = (data) => {
   return response;
 };
 
+//getOneTask
+export const getOneTaskServices = ({ task_id }) => {
+  const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task'],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      // enabled: getterTrigger,
+      // onSuccess: (data) => {
+      //   const taskData = data.data.tasks.map((task) => {
+      //     queryClient.setQueryData(['task', task.id], task);
+      //     return { ...task };
+      //   });
+      //   dispatch(getTaskData(taskData));
+      // },
+    }
+  );
+};
+
 export const getTaskListService = ({ listId }) => {
   const dispatch = useAppDispatch();
 
@@ -247,7 +277,7 @@ export const RemoveWatcherService = ({ query }) => {
 export const UseAssignTaskService = ({ task_id, team_member_id }) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['assign', { task_id: task_id, team_member_id: team_member_id }],
+    ['assign'],
     async () => {
       const data = await requestNew(
         {
@@ -260,10 +290,36 @@ export const UseAssignTaskService = ({ task_id, team_member_id }) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries();
+        // queryClient.invalidateQueries();
       },
       initialData: queryClient.getQueryData(['assign', team_member_id]),
       enabled: (team_member_id & task_id) != null,
+    }
+  );
+};
+
+//Unassign task from team member
+export const UseUnAssignTaskService = ({
+  task_id,
+  team_member_id,
+  unAssignTrigger,
+}) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['unassign'],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
+          method: 'POST',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['unassign', team_member_id]),
+      enabled: unAssignTrigger,
     }
   );
 };

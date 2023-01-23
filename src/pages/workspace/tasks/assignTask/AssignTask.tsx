@@ -5,10 +5,17 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { useAppSelector } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
-import { UseAssignTaskService } from '../../../../features/task/taskService';
+import { TrashIcon } from '@heroicons/react/outline';
+import {
+  UseAssignTaskService,
+  UseUnAssignTaskService,
+  getOneTaskService,
+  getOneTaskServices,
+} from '../../../../features/task/taskService';
 
 export default function AssignTask() {
   const dispatch = useDispatch();
+  const [unAssignTrigger, setUnAssignTrigger] = React.useState(false);
   const { data } = useGetTeamMembers({
     page: 0,
     query: '',
@@ -17,12 +24,29 @@ export default function AssignTask() {
     (state) => state.task
   );
 
-  const { data: value } = UseAssignTaskService({
+  UseAssignTaskService({
     task_id: current_task_id,
     team_member_id: currTeamMemberId,
   });
 
-  console.log(value);
+  UseUnAssignTaskService({
+    task_id: current_task_id,
+    team_member_id: currTeamMemberId,
+    unAssignTrigger,
+  });
+
+  const { data: getTaskAssignees } = getOneTaskServices({
+    task_id: current_task_id,
+  });
+
+  const assignedUser = getTaskAssignees?.data.task.assignees.map(
+    ({ id }) => id
+  );
+
+  const handleUnAssign = (id) => {
+    dispatch(setCurrTeamMemId(id));
+    setUnAssignTrigger(true);
+  };
   return (
     <div className="">
       <section className="absolute top-10 z-20 -mt-12 w-60 rounded-md shadow-lg bg-gray-100">
@@ -36,9 +60,6 @@ export default function AssignTask() {
             />
           </section>
           <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-          <section className="p-3">
-            <p>People</p>
-          </section>
           {data?.data.team_members.map((item) => (
             <section
               className="space-x-2 hover:bg-gray-300 p-3 "
@@ -59,6 +80,11 @@ export default function AssignTask() {
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>
+                {assignedUser?.includes(item.id) ? (
+                  <button type="button" onClick={() => handleUnAssign(item.id)}>
+                    <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                  </button>
+                ) : null}
               </div>
             </section>
           ))}

@@ -119,18 +119,17 @@ function RenderList() {
     navigate(`/workspace/t/${id}`);
   };
 
-  const groupAssignee: any = (...data) => {
-    return data.map((newData, i) => (
+  const groupAssignee = (data) => {
+    return data?.map((newData) => (
       <>
-        {console.log(newData[i])}
-        {/* <div key={newData.id}> */}
-        <AvatarWithInitials
-          initials={newData[i].initials}
-          backgroundColour={newData[i].colour}
-          height="h-5"
-          width="w-5"
-        />
-        {/* </div> */}
+        <span key={newData.id} className="flex-1">
+          <AvatarWithInitials
+            initials={newData.initials}
+            backgroundColour={newData.colour}
+            height="h-5"
+            width="w-5"
+          />
+        </span>
       </>
     ));
   };
