@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import {
   setCurrentTaskId,
   setShowTaskNavigation,
+  setToggleAssignCurrentTaskId,
 } from '../../../../../features/task/taskSlice';
 import { MdDragIndicator } from 'react-icons/md';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
@@ -25,9 +26,8 @@ interface TaskDataProps {
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { showTaskNavigation, current_task_id } = useAppSelector(
-    (state) => state.task
-  );
+  const { showTaskNavigation, current_task_id, toggleAssignCurrentTaskId } =
+    useAppSelector((state) => state.task);
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
   const displayNav = (id: string) => {
@@ -48,6 +48,14 @@ export default function TaskData({ task }: TaskDataProps) {
   //   }
   //   setSubTaskOne(id);
   // };
+
+  const handleAssigneeModal = (id: string) => {
+    if (toggleAssignCurrentTaskId == id) {
+      dispatch(setToggleAssignCurrentTaskId(null));
+    } else {
+      dispatch(setToggleAssignCurrentTaskId(id));
+    }
+  };
 
   const groupAssignee = (data) => {
     return data?.map((newData) => (
@@ -117,10 +125,10 @@ export default function TaskData({ task }: TaskDataProps) {
             <UserAddOutlined
               className=" h-5 w-5 text-gray-400 text-xl "
               aria-hidden="true"
-              onClick={() => dispatch(setCurrentTaskId(task.id))}
+              onClick={() => handleAssigneeModal(task.id)}
             />
           ) : (
-            <div onClick={() => dispatch(setCurrentTaskId(task.id))}>
+            <div onClick={() => handleAssigneeModal(task.id)}>
               {groupAssignee(task.assignees)}
             </div>
           )}
@@ -137,7 +145,7 @@ export default function TaskData({ task }: TaskDataProps) {
             aria-hidden="true"
           />
         </span>
-        {current_task_id == task.id ? <AssignTask /> : null}
+        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
       </div>
     </div>
   );

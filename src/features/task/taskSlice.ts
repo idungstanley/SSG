@@ -30,6 +30,7 @@ interface TaskState {
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
+  toggleAssignCurrentTaskId: null;
 }
 
 const initialState: TaskState = {
@@ -44,6 +45,7 @@ const initialState: TaskState = {
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
+  toggleAssignCurrentTaskId: null,
 };
 
 export const taskSlice = createSlice({
@@ -91,6 +93,9 @@ export const taskSlice = createSlice({
     setCloseTaskListView(state, action) {
       state.closeTaskListView = action.payload;
     },
+    setToggleAssignCurrentTaskId(state, action) {
+      state.toggleAssignCurrentTaskId = action.payload;
+    },
 
     checkIfTask: (state) => state,
   },
@@ -109,5 +114,6 @@ export const {
   setCurrentTaskId,
   setAddNewTaskItem,
   setCloseTaskListView,
+  setToggleAssignCurrentTaskId,
 } = taskSlice.actions;
 export default taskSlice.reducer;

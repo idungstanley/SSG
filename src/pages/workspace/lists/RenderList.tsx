@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getTaskListService } from '../../../features/task/taskService';
 // import SubTask from '../subtasks/subtask1/SubTask';
@@ -29,11 +29,11 @@ function RenderList() {
 
   const { data: listDetailsData } = getTaskListService({ listId });
 
-  const [dropDown, setdropDown] = useState(false);
+  // const [dropDown, setdropDown] = useState(false);
 
-  const handleDropDown = () => {
-    setdropDown((prev) => !prev);
-  };
+  // const handleDropDown = () => {
+  //   setdropDown((prev) => !prev);
+  // };
 
   return (
     <div
