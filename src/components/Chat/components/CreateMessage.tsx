@@ -21,7 +21,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
     if (message.length > 2) {
       const messageWithUserIds = `${message} ${selectedMembers.map(
         (user) => `@[${user.id}] `
-      )}`;
+      )}`.trim();
 
       onSendMessage({
         message: messageWithUserIds,
@@ -34,7 +34,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
 
   return (
     <form
-      className="relative flex gap-3 items-center"
+      className="relative flex gap-3 items-center p-2"
       onSubmit={(e) => sendMessage(e)}
     >
       <Input
@@ -49,7 +49,6 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
       />
       <button type="submit" className="inline-flex items-center cursor-pointer">
         <PaperAirplaneIcon
-          style={{ rotate: '90deg' }}
           className="h-6 w-6 stroke-current text-indigo-600 inline-block"
           aria-hidden="true"
         />

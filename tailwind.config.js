@@ -21,6 +21,7 @@ module.exports = {
       },
       gridTemplateRows: {
         mainContent: 'auto 1fr',
+        autoFrAuto: 'auto 1fr auto',
       },
       height: {
         204: '51rem',

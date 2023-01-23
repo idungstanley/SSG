@@ -41,11 +41,16 @@ export default function ChatForPilot() {
       socket.current?.disconnect();
       setSelectedChatId(null);
     }
+
+    return () => {
+      socket.current?.disconnect();
+      setSelectedChatId(null);
+    };
   }, [id]);
 
   const connect = (id: string) => {
     // * show / hide pusher logs
-    // Pusher.logToConsole = true;
+    Pusher.logToConsole = true;
 
     if (id === selectedChatId) {
       socket.current?.disconnect();
@@ -122,9 +127,9 @@ export default function ChatForPilot() {
 
   return (
     <>
-      <div className="h-full w-full flex">
+      <div className="h-full w-full flex border-r border-l border-b">
         {/* nav */}
-        <div className="h-full flex flex-col items-center border-r border-l w-20 p-2 gap-10">
+        <div className="h-full flex flex-col items-center border-r w-20 p-2 gap-10">
           <ToolTip tooltip="Create chat">
             <button
               onClick={() => dispatch(setShowCreateChatSideOver(true))}
@@ -148,8 +153,35 @@ export default function ChatForPilot() {
             ))}
           </div>
         </div>
+
+        {/* main section */}
         <div className="h-full w-full">
-          <ChatsList selectChat={handleClickChat} />
+          {!selectedChatId ? (
+            <ChatsList selectChat={handleClickChat} />
+          ) : messages && chat ? (
+            <div className="grid grid-rows-autoFrAuto h-full gap-1">
+              {/* header */}
+              <div className="flex flex-col justify-between p-2 border-b">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-indigo-600">
+                    {chat.name}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => dispatch(setShowMembersInChatSideOver(true))}
+                    className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Members
+                  </button>
+                </div>
+              </div>
+
+              <MessagesList messages={allMessages} />
+
+              <CreateMessage chatId={selectedChatId} />
+            </div>
+          ) : null}
         </div>
       </div>
       {/* <div className="flex h-full pt-2 flex-col overflow-y-scroll">
