@@ -43,9 +43,11 @@ function RenderList() {
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
-  const { myTaskData } = useAppSelector((state) => state.task);
+  const { myTaskData, listView, tableView } = useAppSelector(
+    (state) => state.task
+  );
 
-  console.log("myTaskData", myTaskData);
+  console.log(listView);
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
@@ -104,7 +106,6 @@ function RenderList() {
   };
 
   const { current_task_id } = useAppSelector((state) => state.task);
-  console.log(current_task_id);
 
   const [nav, setNav] = useState(false);
   const displayNav: any = (id) => {
@@ -136,6 +137,7 @@ function RenderList() {
         <ListNav
           navName={listDetailsData?.data?.list?.name}
           viewsList="List"
+          viewsList1="Table"
           viewsList2="Board"
           changeViews="View"
         />
@@ -191,162 +193,167 @@ function RenderList() {
           </section>
           {/* card */}
 
-          <div>
-            <TaskTableView />
-          </div>
+          {tableView && (
+            <div>
+              <TaskTableView />
+            </div>
+          )}
 
-          <div className=" flex  items-center  ">
-            <div className=" flex w-6/12 items-center gap-2 shrink-0">
-              <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
-                <FiArrowDownCircle
-                  className={`text-gray-400 text-sm hover:text-gray-200  ${
-                    close === false && "rotateimg90"
-                  }`}
-                  aria-hidden="true"
-                  onClick={() => handleClose()}
-                />
-              </span>
-              <div className="flex items-center justify-center cursor-pointer relative">
-                <div className="group flex items-center">
-                  <span className="text-xs text-black p-1 bg-gray-300 pr-2">
-                    OPEN
-                  </span>
-                </div>
-                <span className="text-xs text-gray-400 mt-1	ml-1">
-                  {myTaskData?.length}
+          {listView && (
+            <div className=" flex  items-center  ">
+              <div className=" flex w-6/12 items-center gap-2 shrink-0">
+                <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
+                  <FiArrowDownCircle
+                    className={`text-gray-400 text-sm hover:text-gray-200  ${
+                      close === false && "rotateimg90"
+                    }`}
+                    aria-hidden="true"
+                    onClick={() => handleClose()}
+                  />
                 </span>
+                <div className="flex items-center justify-center cursor-pointer relative">
+                  <div className="group flex items-center">
+                    <span className="text-xs text-black p-1 bg-gray-300 pr-2">
+                      OPEN
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-400 mt-1	ml-1">
+                    {myTaskData?.length}
+                  </span>
 
-                <span className="text-xs text-gray-400 mt-1	">TASK</span>
+                  <span className="text-xs text-gray-400 mt-1	">TASK</span>
+                </div>
+              </div>
+              <div className="flex items-center w-6/12">
+                <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>USER</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>DUE DATE</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>PRIORITY</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <MdOutlineDragIndicator />
+                  </span>
+                  <span>CREATED AT</span>
+                  <span className="opacity-0 group-hover:opacity-100">
+                    <FaSort />
+                  </span>
+                </p>
+                <span
+                  className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
+                  onClick={() => handleDropDown()}
+                >
+                  <FiPlusCircle className="font-black	" />
+                  <span className="text-sm">
+                    {dropDown && (
+                      <AddColumnDropdown title="" listItems={addColumns} />
+                    )}
+                  </span>
+                </span>
               </div>
             </div>
-            <div className="flex items-center w-6/12">
-              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>USER</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>DUE DATE</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>PRIORITY</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                <span className="opacity-0 group-hover:opacity-100">
-                  <MdOutlineDragIndicator />
-                </span>
-                <span>CREATED AT</span>
-                <span className="opacity-0 group-hover:opacity-100">
-                  <FaSort />
-                </span>
-              </p>
-              <span
-                className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
-                onClick={() => handleDropDown()}
-              >
-                <FiPlusCircle className="font-black	" />
-                <span className="text-sm">
-                  {dropDown && (
-                    <AddColumnDropdown title="" listItems={addColumns} />
-                  )}
-                </span>
-              </span>
-            </div>
-          </div>
+          )}
 
-          {myTaskData?.map((task, i) => (
-            <div key={task.id}>
-              {close && (
-                <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3 	">
-                  <span
-                    className="flex items-center absolute  "
-                    style={{ left: "-30px" }}
-                  >
-                    <input
-                      type="checkbox"
-                      className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer"
-                      onClick={(e) => displayNav(task.id)}
-                    />
-                    <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
-                  </span>
-
-                  <RiCheckboxBlankFill
-                    className=" text-gray-400 text-xs"
-                    aria-hidden="true"
-                  />
-                  <div className="flex items-center w-6/12 group">
-                    {/* data and input */}
-                    <div onClick={() => handleTaskModal(task.id)}>
-                      {/* {i == 0 && <h1>Tasks</h1>} */}
-
-                      <p className="capitalize text-xs font-semibold leading-8 pl-5	">
-                        {task.name}
-                      </p>
-                    </div>
-
-                    {/* iconstask */}
-                    <div
-                      id="iconWrapper"
-                      className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+          {listView &&
+            myTaskData?.map((task, i) => (
+              <div key={task.id}>
+                {close && (
+                  <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3 	">
+                    <span
+                      className="flex items-center absolute  "
+                      style={{ left: "-30px" }}
                     >
-                      <PlusOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-                        aria-hidden="true"
-                        onClick={() => handleSubTask(task.id)}
+                      <input
+                        type="checkbox"
+                        className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer"
+                        onClick={(e) => displayNav(task.id)}
                       />
-                      <EditOutlined
-                        className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-                        aria-hidden="true"
-                      />
+                      <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
+                    </span>
+
+                    <RiCheckboxBlankFill
+                      className=" text-gray-400 text-xs"
+                      aria-hidden="true"
+                    />
+                    <div className="flex items-center w-6/12 group">
+                      {/* data and input */}
+                      <div onClick={() => handleTaskModal(task.id)}>
+                        {/* {i == 0 && <h1>Tasks</h1>} */}
+
+                        <p className="capitalize text-xs font-semibold leading-8 pl-5	">
+                          {task.name}
+                        </p>
+                      </div>
+
+                      {/* iconstask */}
+                      <div
+                        id="iconWrapper"
+                        className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+                      >
+                        <PlusOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+                          aria-hidden="true"
+                          onClick={() => handleSubTask(task.id)}
+                        />
+                        <EditOutlined
+                          className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                    {/* icons */}
+
+                    <div className="flex  space-x-10">
+                      <span className=" rounded-full text-xs text-center">
+                        <UserAddOutlined
+                          className="h-5 w-5 text-gray-400 text-xl "
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="border-dotted border-gray-300 pl-3 ml-5">
+                        <CalendarOutlined
+                          className="h-5 w-7 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="border-dotted border-gray-300 ml-5">
+                        <FlagOutlined
+                          className="h-5 w-7  text-gray-400 ml-8"
+                          aria-hidden="true"
+                        />
+                      </span>
                     </div>
                   </div>
-                  {/* icons */}
-
-                  <div className="flex  space-x-10">
-                    <span className=" rounded-full text-xs text-center">
-                      <UserAddOutlined
-                        className="h-5 w-5 text-gray-400 text-xl "
-                        aria-hidden="true"
-                      />
-                    </span>
-                    <span className="border-dotted border-gray-300 pl-3 ml-5">
-                      <CalendarOutlined
-                        className="h-5 w-7 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </span>
-                    <span className="border-dotted border-gray-300 ml-5">
-                      <FlagOutlined
-                        className="h-5 w-7  text-gray-400 ml-8"
-                        aria-hidden="true"
-                      />
-                    </span>
+                )}
+                {subTaskOne === task.id ? (
+                  <div>
+                    <SubTask parentTaskId={parentTaskId} />
                   </div>
-                </div>
-              )}
-              {subTaskOne === task.id ? (
-                <div>
-                  <SubTask parentTaskId={parentTaskId} />
-                </div>
-              ) : null}
-            </div>
-          ))}
+                ) : null}
+              </div>
+            ))}
 
           {/* toggle */}
           {addNewItem && (
