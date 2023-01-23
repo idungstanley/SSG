@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface ImyTaskData {
   id: string;
@@ -28,6 +28,8 @@ interface TaskState {
   listView: boolean;
   tableView: boolean;
   showTaskNavigation: boolean;
+  addNewTaskItem: boolean;
+  closeTaskListView: boolean;
 }
 
 const initialState: TaskState = {
@@ -40,10 +42,12 @@ const initialState: TaskState = {
   listView: true,
   tableView: false,
   showTaskNavigation: false,
+  addNewTaskItem: false,
+  closeTaskListView: true,
 };
 
 export const taskSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -58,6 +62,9 @@ export const taskSlice = createSlice({
     },
     getListView(state, action) {
       state.listView = action.payload;
+    },
+    setAddNewTaskItem(state, action) {
+      state.addNewTaskItem = action.payload;
     },
     getTableView(state, action) {
       state.tableView = action.payload;
@@ -81,6 +88,9 @@ export const taskSlice = createSlice({
     setCurrentTaskId(state, action) {
       state.current_task_id = action.payload;
     },
+    setCloseTaskListView(state, action) {
+      state.closeTaskListView = action.payload;
+    },
 
     checkIfTask: (state) => state,
   },
@@ -97,5 +107,7 @@ export const {
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
+  setAddNewTaskItem,
+  setCloseTaskListView,
 } = taskSlice.actions;
 export default taskSlice.reducer;
