@@ -29,7 +29,6 @@ type Pilot = {
   show: boolean;
   id?: string;
   type?: explorerItemType;
-  isRootFolder?: boolean;
 };
 
 interface SideOverState {

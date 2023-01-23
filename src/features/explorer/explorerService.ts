@@ -98,39 +98,21 @@ export const useGetExplorerFolders = () => {
   );
 };
 
-export const useGetExplorerFileOrFolder = (
-  type?: explorerItemType,
-  itemId?: string,
-  isRootFolder?: boolean
-) => {
-  const queryClient = useQueryClient();
-  const query =
-    type === 'folder'
-      ? isRootFolder
-        ? 'explorer-folder-1'
-        : 'explorer-folder'
-      : 'explorer-file';
+export const useGetExplorerFolder = (folderId?: string, isFolder?: boolean) => {
+  // isFolder - needed only for Pilot/Information
 
-  return useQuery<IExplorerFile | undefined>(
-    [query, itemId],
-    () => queryClient.getQueryData([query, itemId]),
-    {
-      initialData: () => queryClient.getQueryData([query, itemId]),
-      enabled: !!itemId && !!type,
-    }
-  );
-};
+  const enabled = isFolder ? !!folderId : !!folderId && isFolder;
 
-export const useGetExplorerFolder = (folderId?: string) =>
-  useQuery<IExplorerFoldersRes>(
+  return useQuery<IExplorerFoldersRes>(
     ['explorer-folder', folderId],
     () =>
       requestNew({
         url: `explorer-folders/${folderId}`,
         method: 'GET',
       }),
-    { enabled: !!folderId }
+    { enabled }
   );
+};
 
 export const useGetSearchFolders = (query: string) =>
   useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
@@ -187,15 +169,21 @@ export const useGetExplorerFiles = (folderId?: string) => {
   );
 };
 
-export const useGetExplorerFile = (fileId?: string | null) => {
+export const useGetExplorerFile = (
+  fileId?: string | null,
+  isFile?: boolean
+) => {
+  // isFile - needed only for Pilot/Information
+
   const queryClient = useQueryClient();
+  const enabled = isFile ? !!fileId : !!fileId && isFile;
 
   return useQuery<IExplorerFile | undefined>(
     ['explorer-file', fileId],
     () => queryClient.getQueryData(['explorer-file', fileId]),
     {
       initialData: () => queryClient.getQueryData(['explorer-file', fileId]),
-      enabled: !!fileId,
+      enabled,
     }
   );
 };

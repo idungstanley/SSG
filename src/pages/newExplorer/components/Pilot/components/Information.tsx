@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
-import { useGetExplorerFileOrFolder } from '../../../../../features/explorer/explorerService';
+import {
+  useGetExplorerFile,
+  useGetExplorerFolder,
+} from '../../../../../features/explorer/explorerService';
 import { OutputDateTime } from '../../../../../app/helpers';
 
 export default function Information() {
@@ -8,9 +11,12 @@ export default function Information() {
 
   const id = pilotSideOver.id;
   const type = pilotSideOver.type;
-  const isRootFolder = pilotSideOver.isRootFolder;
 
-  const { data } = useGetExplorerFileOrFolder(type, id, isRootFolder);
+  const { data: folder } = useGetExplorerFolder(id, type === 'folder');
+
+  const { data: file } = useGetExplorerFile(id, type === 'file');
+
+  const data = folder?.data.current_folder || file;
 
   const info = [
     {
