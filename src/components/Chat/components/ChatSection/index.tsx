@@ -25,7 +25,7 @@ export default function ChatSection() {
 
   const [incomingData, setIncomingData] = useState<IMessage[]>([]);
 
-  // disconnect and clear chat id
+  // disconnect and clear chat id on unmount
   useEffect(() => {
     return handleDisconnect;
   }, []);
