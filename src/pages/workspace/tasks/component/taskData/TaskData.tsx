@@ -26,8 +26,9 @@ interface TaskDataProps {
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { showTaskNavigation, current_task_id, toggleAssignCurrentTaskId } =
-    useAppSelector((state) => state.task);
+  const { showTaskNavigation, toggleAssignCurrentTaskId } = useAppSelector(
+    (state) => state.task
+  );
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
   const displayNav = (id: string) => {
