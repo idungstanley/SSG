@@ -51,6 +51,39 @@ function TaskTableView() {
     ));
   };
 
+  const hidden = (col) => {
+    if (col == "id") {
+      return true;
+    }
+    if (col == "list_id") {
+      return true;
+    }
+    if (col == "parent_id") {
+      return true;
+    }
+    if (col == "archived_at") {
+      return true;
+    }
+    if (col == "deleted_at") {
+      return true;
+    }
+    if (col == "updated_at") {
+      return true;
+    }
+    if (col == "group_assignees") {
+      return true;
+    }
+    if (col == "description") {
+      return true;
+    }
+    if (col == "end_date") {
+      return true;
+    }
+    if (col == "start_date") {
+      return true;
+    }
+  };
+
   columnHead[0].map((column) => {
     const singleColumn = {
       title:
@@ -59,6 +92,7 @@ function TaskTableView() {
           : column.split("_").join(" ").toUpperCase(),
       field: column,
       emptyValue: () => <p>-</p>,
+      hidden: hidden(column),
 
       render:
         column == "assignees"
