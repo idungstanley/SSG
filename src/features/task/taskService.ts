@@ -242,3 +242,28 @@ export const RemoveWatcherService = ({ query }) => {
     }
   );
 };
+
+//Assign task to team member
+export const UseAssignTaskService = ({ task_id, team_member_id }) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['assign', { task_id: task_id, team_member_id: team_member_id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
+          method: 'POST',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
+      initialData: queryClient.getQueryData(['assign', team_member_id]),
+      enabled: (team_member_id & task_id) != null,
+    }
+  );
+};

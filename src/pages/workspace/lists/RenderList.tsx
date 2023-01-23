@@ -17,7 +17,7 @@ import { CheckIcon } from '@heroicons/react/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../../../components';
+import { AvatarWithInitials, Button } from '../../../components';
 import {
   createTaskService,
   getTaskListService,
@@ -36,6 +36,7 @@ import {
 } from '../../../features/task/taskSlice';
 import TaskMenu from '../tasks/component/taskMenu/TaskMenu';
 import TaskTableView from '../tasks/component/TaskTableView';
+import AssignTask from '../tasks/assignTask/AssignTask';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -65,7 +66,7 @@ function RenderList() {
   const defaultTaskFormState = {
     name: '',
   };
-
+  console.log(listChildrenData);
   const [formState, setFormState] = useState(defaultTaskFormState);
 
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +108,7 @@ function RenderList() {
     (state) => state.task
   );
 
-  const displayNav = (id) => {
+  const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
@@ -116,6 +117,22 @@ function RenderList() {
   const handleTaskModal = (id: string) => {
     setOpenTaskModal(true);
     navigate(`/workspace/t/${id}`);
+  };
+
+  const groupAssignee: any = (...data) => {
+    return data.map((newData, i) => (
+      <>
+        {console.log(newData[i])}
+        {/* <div key={newData.id}> */}
+        <AvatarWithInitials
+          initials={newData[i].initials}
+          backgroundColour={newData[i].colour}
+          height="h-5"
+          width="w-5"
+        />
+        {/* </div> */}
+      </>
+    ));
   };
 
   return (
@@ -195,7 +212,7 @@ function RenderList() {
           )}
 
           {listView && (
-            <div className=" flex  items-center  ">
+            <div className=" flex items-center  ">
               <div className=" flex w-6/12 items-center gap-2 shrink-0">
                 <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
                   <FiArrowDownCircle
@@ -272,7 +289,7 @@ function RenderList() {
           )}
 
           {listView &&
-            myTaskData?.map((task, i) => (
+            myTaskData?.map((task) => (
               <div key={task.id}>
                 {close && (
                   <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3 	">
@@ -321,11 +338,22 @@ function RenderList() {
                     {/* icons */}
 
                     <div className="flex  space-x-10">
-                      <span className=" rounded-full text-xs text-center">
-                        <UserAddOutlined
-                          className="h-5 w-5 text-gray-400 text-xl "
-                          aria-hidden="true"
-                        />
+                      <span className="relative rounded-full text-xs text-center">
+                        {/* assignees here */}
+
+                        {task.assignees.length == 0 ? (
+                          <UserAddOutlined
+                            className=" h-5 w-5 text-gray-400 text-xl "
+                            aria-hidden="true"
+                            onClick={() => dispatch(setCurrentTaskId(task.id))}
+                          />
+                        ) : (
+                          <div
+                            onClick={() => dispatch(setCurrentTaskId(task.id))}
+                          >
+                            {groupAssignee(task.assignees)}
+                          </div>
+                        )}
                       </span>
                       <span className="border-dotted border-gray-300 pl-3 ml-5">
                         <CalendarOutlined
@@ -339,6 +367,7 @@ function RenderList() {
                           aria-hidden="true"
                         />
                       </span>
+                      {current_task_id == task.id ? <AssignTask /> : null}
                     </div>
                   </div>
                 )}
