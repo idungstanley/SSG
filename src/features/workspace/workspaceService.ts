@@ -19,6 +19,7 @@ export const createWorkspaceService = (data: IData) => {
     },
     true
   );
+  console.log(response);
   return response;
 };
 
