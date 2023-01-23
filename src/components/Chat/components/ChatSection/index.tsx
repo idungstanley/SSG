@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/hooks';
 import Pusher from 'pusher-js';
 import { useGetChat } from '../../../../features/chat/chatService';
 import ChatsList from '../ChatList';
@@ -16,8 +16,6 @@ import TeamMembersInChat from '../TeamMembersInChat';
 export default function ChatSection() {
   const dispatch = useAppDispatch();
   const socket = useRef<Pusher | null>(null);
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { id } = pilotSideOver;
 
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const { data, status } = useGetChat(selectedChatId);
@@ -27,14 +25,10 @@ export default function ChatSection() {
 
   const [incomingData, setIncomingData] = useState<IMessage[]>([]);
 
-  // disconnect and clear chat id when selectedItem changes
+  // disconnect and clear chat id
   useEffect(() => {
-    if (socket.current?.connection.state === 'connected') {
-      handleDisconnect();
-    }
-
     return handleDisconnect;
-  }, [id]);
+  }, []);
 
   const handleDisconnect = () => {
     socket.current?.disconnect();

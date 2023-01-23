@@ -103,7 +103,7 @@ export const useGetExplorerFileOrFolder = (
   itemId?: string
 ) => {
   const queryClient = useQueryClient();
-  const query = type === 'folder' ? 'explorer-folder' : 'explorer-file';
+  const query = type === 'folder' ? 'explorer-folder-1' : 'explorer-file';
 
   return useQuery<IExplorerFile | undefined>(
     [query, itemId],
