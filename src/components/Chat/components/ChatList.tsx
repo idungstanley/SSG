@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { useDeleteChat, useGetChats } from '../../../features/chat/chatService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { Spinner } from '../../../common';
 
 interface ChatsListProps {
   selectChat: (i: string) => void;
@@ -14,7 +15,7 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
 
   const { mutate: onDelete } = useDeleteChat();
 
-  const { data } = useGetChats({
+  const { data, status } = useGetChats({
     type,
     id,
   });
@@ -23,36 +24,43 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
     onDelete(id);
   };
 
-  return !pilotSideOver ? (
-    <FullScreenMessage
-      title="No selected data."
-      description="Select one file, folder, etc."
-    />
+  return status === 'loading' ? (
+    <div className="mx-auto w-6 mt-5 justify-center">
+      <Spinner size={8} color="#0F70B7" />
+    </div>
   ) : !data?.length ? (
     <FullScreenMessage title="No chats." description="Create one." />
   ) : (
-    <ul role="list" className="divide-y divide-gray-200 flex flex-wrap gap-3">
+    <ul role="list" className="divide-y divide-gray-200 flex flex-wrap">
       {data?.map((chat) => (
         <li
           key={chat.id}
-          className="inline-flex gap-3 items-center rounded-full bg-indigo-100 px-3 font-medium text-indigo-800 cursor-pointer"
+          className="flex items-center justify-between w-full hover:bg-gray-100 p-2"
         >
           <div
             onClick={() => selectChat(chat.id)}
-            className="flex gap-3 items-center py-2"
+            className="flex items-center cursor-pointer"
           >
-            <p className="text-sm">{chat.name}</p>
+            <span className="flex items-center justify-center p-1 rounded-full w-12 h-12 bg-indigo-600 text-white pb-1 uppercase font-medium text-xl">
+              {chat.name.slice(0, 2)}
+            </span>
+            <div className="ml-3">
+              <p className="font-medium text-gray-900">{chat.name}</p>
+              <p className="text-sm text-gray-500">message</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
             <span className="flex bg-indigo-600 text-xs text-white w-6 h-6 justify-center items-center rounded-full">
               {chat.new_messages_count}
             </span>
+            <TrashIcon
+              onClick={() => handleDelete(chat.id)}
+              className="h-5 w-5 cursor-pointer"
+              aria-hidden="true"
+              id="trashIcon"
+            />
           </div>
-
-          <TrashIcon
-            onClick={() => handleDelete(chat.id)}
-            className="h-5 w-5 cursor-pointer"
-            aria-hidden="true"
-            id="trashIcon"
-          />
         </li>
       ))}
     </ul>

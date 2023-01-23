@@ -99,8 +99,6 @@ export default function ChatForPilot() {
   //   setSelectedChatId(null);
   // };
 
-  console.log(id);
-
   // old messages with new from websocket
   const allMessages = messages
     ? [...messages, ...incomingData]
@@ -150,7 +148,9 @@ export default function ChatForPilot() {
             ))}
           </div>
         </div>
-        <div className="h-full w-full bg-gray-100"> d</div>
+        <div className="h-full w-full">
+          <ChatsList selectChat={handleClickChat} />
+        </div>
       </div>
       {/* <div className="flex h-full pt-2 flex-col overflow-y-scroll">
         {id ? (
