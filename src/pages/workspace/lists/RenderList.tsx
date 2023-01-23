@@ -66,7 +66,7 @@ function RenderList() {
   const defaultTaskFormState = {
     name: "",
   };
-  console.log(listChildrenData);
+
   const [formState, setFormState] = useState(defaultTaskFormState);
 
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -7,12 +7,14 @@ import { BiHide } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
-import TaskMenu from "./taskMenu/TaskMenu";
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
   const { myTaskData } = useAppSelector((state) => state.task);
-  const tableRef = React.createRef;
+
+  const editable = myTaskData.map((o) => ({ ...o }));
+
+  console.log(editable);
 
   const icons: any = {
     Export: () => <BiExport />,
@@ -25,67 +27,86 @@ function TaskTableView() {
     LastPage: () => null,
     NextPage: () => null,
     PreviousPage: () => null,
-    // Clear: () => null,
   };
 
-  const columns: any = [
-    {
-      title: "TASKS",
-      field: "name",
-    },
-    { title: "DESCRIPTION", field: "description", emptyValue: () => <p>-</p> },
-    {
-      columnsButton: true,
-      title: "ARCHIVED AT",
-      field: "archived_at",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    { title: "CREATED AT", field: " created_at", emptyValue: () => <p>-</p> },
-    { title: "DELETED AT", field: " deleted_at", emptyValue: () => <p>-</p> },
-    {
-      title: "END DATE",
-      field: "end_date",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    {
-      title: "GROUP ASSIGNEES",
-      field: "group_assignees",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    {
-      title: "PRIORITY",
-      field: "priority",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    {
-      title: "UPDATED AT",
-      field: "updated_at",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    {
-      title: "STARTED DATE",
-      field: "start_date",
-      hidden: true,
-      emptyValue: () => <p>-</p>,
-    },
-    { title: "ASSIGNEES", field: "assignees", emptyValue: () => <p>-</p> },
-  ];
+  const columnHead: any = [];
+  const singleObj: any = editable[0];
+  columnHead.push(Object.keys(singleObj));
 
-  const editable = myTaskData.map((o) => ({ ...o }));
+  const dynamicColum: any = [];
+
+  // console.log("columnHead", columnHead);
+
+  columnHead[0].map((column) => {
+    const singleColumn = {
+      title:
+        column.split("_").join(" ").toUpperCase() == "NAME"
+          ? "TASKS"
+          : column.split("_").join(" ").toUpperCase(),
+      field: column,
+      emptyValue: () => <p>-</p>,
+    };
+    dynamicColum.push(singleColumn);
+  });
+
+  // const columns: any = [
+  //   {
+  //     title: "TASKS",
+  //     field: "name",
+  //   },
+  //   { title: "DESCRIPTION", field: "description", emptyValue: () => <p>-</p> },
+  //   {
+  //     columnsButton: true,
+  //     title: "ARCHIVED AT",
+  //     field: "archived_at",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   { title: "CREATED AT", field: " created_at", emptyValue: () => <p>-</p> },
+  //   { title: "DELETED AT", field: " deleted_at", emptyValue: () => <p>-</p> },
+  //   {
+  //     title: "END DATE",
+  //     field: "end_date",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   {
+  //     title: "GROUP ASSIGNEES",
+  //     field: "group_assignees",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   {
+  //     title: "PRIORITY",
+  //     field: "priority",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   {
+  //     title: "UPDATED AT",
+  //     field: "updated_at",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   {
+  //     title: "STARTED DATE",
+  //     field: "start_date",
+  //     hidden: true,
+  //     emptyValue: () => <p>-</p>,
+  //   },
+  //   { title: "ASSIGNEES", field: "assignees", emptyValue: () => <p>-</p> },
+  // ];
+
+  // const tableRef = React.createRef;
 
   return (
     <>
       <div>
         <ThemeProvider theme={defaultMaterialTheme}>
           <MaterialTable
-            tableRef={tableRef}
+            // tableRef={tableRef}
             title="{SSG}"
-            columns={columns}
+            columns={dynamicColum}
             data={editable ?? []}
             options={{
               searchFieldAlignment: "right",
