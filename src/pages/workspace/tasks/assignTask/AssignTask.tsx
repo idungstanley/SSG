@@ -40,17 +40,6 @@ export default function AssignTask() {
                     height="h-5"
                     width="w-5"
                   />
-                  {/* 
-                  {watcherList.includes(item.id) ? (
-                    <div className="absolute -top-4 left-0">
-                      <StatusDot
-                        size={2.5}
-                        colour="#4ADE80"
-                        ringSize={2}
-                        top={true}
-                      />
-                    </div>
-                  ) : null} */}
                   <p className="text-xs">
                     {item.user.name.toLocaleUpperCase()}
                   </p>
