@@ -12,8 +12,8 @@ import {
   setShowCreateChatSideOver,
   setShowMembersInChatSideOver,
 } from '../../features/chat/chatSlice';
-import CreateMessage from './components/CreateMessage';
-import MessagesList from './components/MessagesList';
+import CreateMessage from './components/ChatSection/components/CreateMessage';
+import MessagesList from './components/ChatSection/components/MessagesList';
 import ChatsList from './components/ChatList';
 import TeamMembersInChat from './components/TeamMembersInChat';
 
