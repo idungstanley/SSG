@@ -7,7 +7,6 @@ import {
   PlusIcon,
   PencilIcon,
   ArrowDownTrayIcon,
-  ChatBubbleLeftEllipsisIcon,
   ShareIcon,
   AdjustmentsVerticalIcon,
   ArrowsUpDownIcon,
@@ -24,7 +23,6 @@ import { useDeleteExplorerItem } from '../../../../../features/explorer/explorer
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
-import { setSelectedItem } from '../../../../../features/chat/chatSlice';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 
 interface FolderItemProps {
@@ -106,22 +104,15 @@ export default function FolderItem({
       onClick: handleShowShare,
     },
     {
-      label: 'Delete',
-      onClick: handleDelete,
-      icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
-    },
-    {
-      label: 'Chat',
-      onClick: () => dispatch(setSelectedItem({ id, type: 'folder' })),
-      icon: (
-        <ChatBubbleLeftEllipsisIcon className="h-5 w-5" aria-hidden="true" />
-      ),
-    },
-    {
       label: 'Pilot',
       onClick: () =>
         dispatch(setShowPilotSideOver({ id, type: 'folder', show: true })),
       icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Delete',
+      onClick: handleDelete,
+      icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
     },
   ];
 

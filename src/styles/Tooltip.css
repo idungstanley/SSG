@@ -8,7 +8,6 @@
   --scale: 0;
   --arrow-size: 10px;
   --tooltip-color: #333;
-
   position: absolute;
   top: -0.25rem;
   left: 50%;
@@ -23,6 +22,7 @@
   --translate-y: calc(-100% - var(--arrow-size));
   content: attr(data-tooltip);
   color: white;
+  white-space: nowrap;
   padding: 0.5rem;
   border-radius: 0.3rem;
   text-align: center;

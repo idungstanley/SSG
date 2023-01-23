@@ -14,6 +14,12 @@ import CreateMessage from './components/CreateMessage';
 import MessagesList from './components/MessagesList';
 import ChatsList from './components/ChatList';
 import TeamMembersInChat from './components/TeamMembersInChat';
+import {
+  PlusIcon,
+  ChatBubbleBottomCenterTextIcon,
+  UsersIcon,
+} from '@heroicons/react/24/outline';
+import ToolTip from '../Tooltip';
 
 export default function ChatForPilot() {
   const dispatch = useAppDispatch();
@@ -100,10 +106,53 @@ export default function ChatForPilot() {
     ? [...messages, ...incomingData]
     : [...incomingData];
 
+  const navItems = [
+    {
+      label: 'Chats',
+      icon: (
+        <ChatBubbleBottomCenterTextIcon
+          className="h-7 w-7 stroke-current"
+          aria-hidden="true"
+        />
+      ),
+    },
+    {
+      label: 'Contacts',
+      icon: <UsersIcon className="h-7 w-7 stroke-current" aria-hidden="true" />,
+    },
+  ];
+
   return (
     <>
-      <div className="flex h-full pt-2 flex-col overflow-y-scroll">
-        {/* header */}
+      <div className="h-full w-full flex">
+        {/* nav */}
+        <div className="h-full flex flex-col items-center border-r border-l w-20 p-2 gap-10">
+          <ToolTip tooltip="Create chat">
+            <button
+              onClick={() => dispatch(setShowCreateChatSideOver(true))}
+              type="button"
+              className="inline-flex text-gray-500 hover:text-gray-700 items-center rounded-full focus:outline-none ring-0 focus:ring-0"
+            >
+              <PlusIcon className="h-7 w-7" aria-hidden="true" />
+            </button>
+          </ToolTip>
+
+          <div className="flex flex-col items-center gap-2">
+            {navItems.map((item) => (
+              <ToolTip key={item.label} tooltip={item.label}>
+                <button
+                  type="button"
+                  className="inline-flex text-gray-500 hover:text-gray-700 items-center p-1 focus:outline-none ring-0 focus:ring-0"
+                >
+                  {item.icon}
+                </button>
+              </ToolTip>
+            ))}
+          </div>
+        </div>
+        <div className="h-full w-full bg-gray-100"> d</div>
+      </div>
+      {/* <div className="flex h-full pt-2 flex-col overflow-y-scroll">
         {id ? (
           <button
             onClick={() => dispatch(setShowCreateChatSideOver(true))}
@@ -141,7 +190,7 @@ export default function ChatForPilot() {
         {selectedChatId ? <MessagesList messages={allMessages} /> : null}
 
         {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
-      </div>
+      </div> */}
 
       <CreateChatSideOver />
 

@@ -4,7 +4,6 @@ import {
   ShareIcon,
   ClipboardIcon,
   ArrowDownTrayIcon,
-  ChatBubbleBottomCenterIcon,
   AdjustmentsVerticalIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -16,7 +15,6 @@ import Tooltip from '../../../../../../../../components/Tooltip';
 import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
-import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
   setShowPilotSideOver,
@@ -68,12 +66,6 @@ export default function Toolbar({ data }: ToolbarProps) {
       disabled: selectedIds.length === 0,
     },
     {
-      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
-      onClick: handleDelete,
-      label: 'Delete',
-      disabled: selectedIds.length === 0,
-    },
-    {
       icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
       onClick: () =>
         dispatch(
@@ -95,18 +87,6 @@ export default function Toolbar({ data }: ToolbarProps) {
       disabled: selectedIds.length === 0,
     },
     {
-      label: 'Chat',
-      onClick: () =>
-        dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
-      icon: (
-        <ChatBubbleBottomCenterIcon
-          className="h-5 w-5 stroke-current"
-          aria-hidden="true"
-        />
-      ),
-      disabled: !selectedFileId,
-    },
-    {
       label: 'Pilot',
       onClick: () =>
         dispatch(
@@ -118,6 +98,12 @@ export default function Toolbar({ data }: ToolbarProps) {
         ),
       icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
       disabled: !selectedFileId,
+    },
+    {
+      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      onClick: handleDelete,
+      label: 'Delete',
+      disabled: selectedIds.length === 0,
     },
   ];
 
