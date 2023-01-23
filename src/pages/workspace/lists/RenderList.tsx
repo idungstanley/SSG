@@ -30,12 +30,10 @@ import ListNav from "./components/renderlist/ListNav";
 import addColumns from "./components/renderlist/listDetails/listDetails";
 import { useAppSelector } from "../../../app/hooks";
 import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
-import TaskTableView from "../tasks/component/TaskTableView";
-import CollapsibleTable from "../tasks/component/TaskTableView";
-import Example from "../tasks/component/TaskTableView";
 import { useDispatch } from "react-redux";
 import { setCurrentTaskId } from "../../../features/task/taskSlice";
 import TaskMenu from "../tasks/component/taskMenu/TaskMenu";
+import TaskTableView from "../tasks/component/TaskTableView";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -45,9 +43,9 @@ function RenderList() {
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
   const queryClient = useQueryClient();
-  const { myTaskData, tableView, listView } = useAppSelector(
-    (state) => state.task
-  );
+  const { myTaskData } = useAppSelector((state) => state.task);
+
+  console.log("myTaskData", myTaskData);
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
@@ -95,6 +93,8 @@ function RenderList() {
   const [dropDown, setdropDown] = useState(false);
 
   const handleDropDown = () => {
+    console.log(dropDown);
+
     setdropDown((prev) => !prev);
   };
 
@@ -122,33 +122,6 @@ function RenderList() {
     navigate(`/workspace/t/${id}`);
   };
 
-  // const columns: any = listChildrenData?.data?.tasks[0];
-
-  // console.log(columns);
-
-  // console.log(Object.keys(listChildrenData?.data?.tasks[0]));
-
-  // listChildrenData?.data?.tasks.map((child) => {
-  //   // console.log(child);
-
-  //   const headerKey = Object.keys(child);
-
-  //   // console.log(headerKey);
-
-  //   // headerKey.forEach((key, index) => {
-  //   //   if (!columns.key) {
-  //   //     columns.push(key);
-  //   //   }
-
-  //     // console.log(key);
-  //     // console.log(`${key}: ${child[key]}`);
-
-  //     // // console.log(index);
-  //   });
-  // });
-
-  // console.log(columns);
-
   return (
     <div
       className="h-screen overflow-hidden relative"
@@ -163,8 +136,7 @@ function RenderList() {
         <ListNav
           navName={listDetailsData?.data?.list?.name}
           viewsList="List"
-          viewsList3="Board"
-          viewsList2="Table"
+          viewsList2="Board"
           changeViews="View"
         />
       </section>
@@ -217,52 +189,12 @@ function RenderList() {
               </span>
             </div>
           </section>
-
-          {tableView && (
-            <div>
-              <TaskTableView />
-            </div>
-          )}
-
-          {/* <main>
-            <section>
-              <div className="w-full overflow-x-scroll">
-                {columnsArray.map((item, key) => {
-                  if (item != "id") {
-                    return (
-                      <span className="px-20" key={item}>
-                        {item}
-                      </span>
-                    );
-                  }
-                })}
-                <div className="flex">
-                  {columnsArray.map((item, key) => {
-                    if (item != "id") {
-                      return (
-                        <div className="px-4" key={key}>
-                          {myTaskData?.map((body, index) => {
-                            return (
-                              <div className="" key={index}>
-                                <div className="px-10">
-                                  {myTaskData[index][item] == null ||
-                                  myTaskData[index][item].length == 0
-                                    ? "EMPTY"
-                                    : myTaskData[index][item]}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              </div>
-            </section>
-          </main> */}
-
           {/* card */}
+
+          <div>
+            <TaskTableView />
+          </div>
+
           <div className=" flex  items-center  ">
             <div className=" flex w-6/12 items-center gap-2 shrink-0">
               <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
@@ -284,60 +216,57 @@ function RenderList() {
                   {myTaskData?.length}
                 </span>
 
-                  <span className="text-xs text-gray-400 mt-1	">
-                  TASK
+                <span className="text-xs text-gray-400 mt-1	">TASK</span>
+              </div>
+            </div>
+            <div className="flex items-center w-6/12">
+              <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
                 </span>
-              </div>
-              </div>
-              <div className="flex items-center w-6/12">
-                <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <MdOutlineDragIndicator />
-                  </span>
-                  <span>USER</span>
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <FaSort />
-                  </span>
-                </p>
-                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <MdOutlineDragIndicator />
-                  </span>
-                  <span>DUE DATE</span>
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <FaSort />
-                  </span>
-                </p>
-                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <MdOutlineDragIndicator />
-                  </span>
-                  <span>PRIORITY</span>
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <FaSort />
-                  </span>
-                </p>
-                <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <MdOutlineDragIndicator />
-                  </span>
-                  <span>CREATED AT</span>
-                  <span className="opacity-0 group-hover:opacity-100">
-                    <FaSort />
-                  </span>
-                </p>
-                <span className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
-                  <FiPlusCircle
-                    className="font-black	"
-                    onClick={() => handleDropDown()}
-                  />
-                  <span className="text-sm">
-                    {dropDown && (
-                      <AddColumnDropdown title="" listItems={addColumns} />
-                    )}
-                  </span>
+                <span>USER</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
                 </span>
-              </div>
+              </p>
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
+                <span>DUE DATE</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
+              </p>
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
+                <span>PRIORITY</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
+              </p>
+              <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+                <span className="opacity-0 group-hover:opacity-100">
+                  <MdOutlineDragIndicator />
+                </span>
+                <span>CREATED AT</span>
+                <span className="opacity-0 group-hover:opacity-100">
+                  <FaSort />
+                </span>
+              </p>
+              <span
+                className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
+                onClick={() => handleDropDown()}
+              >
+                <FiPlusCircle className="font-black	" />
+                <span className="text-sm">
+                  {dropDown && (
+                    <AddColumnDropdown title="" listItems={addColumns} />
+                  )}
+                </span>
+              </span>
             </div>
           </div>
 
@@ -488,7 +417,7 @@ function RenderList() {
             id="newItem"
             onClick={() => setAddNewItem(!addNewItem)}
           >
-            <p className="pl-2 text-xs w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+            <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
               + New Task
             </p>
           </div>
