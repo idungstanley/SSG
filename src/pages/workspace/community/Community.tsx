@@ -1,7 +1,11 @@
 import React from 'react';
 
 function Community() {
-  return <p>This is community</p>;
+  return (
+    <div>
+      <p>this is community</p>
+    </div>
+  );
 }
 
 export default Community;

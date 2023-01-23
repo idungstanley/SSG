@@ -19,7 +19,6 @@ import {
 } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
-import { totalmem } from 'os';
 
 function CreateWorkspace() {
   const user = useSelector(selectCurrentUser);

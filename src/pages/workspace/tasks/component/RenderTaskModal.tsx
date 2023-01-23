@@ -82,12 +82,12 @@ function RenderTaskModal() {
   };
 
   return (
-    <div className="w-full h-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+    <div className="w-full h-full z-50 fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
       <div className="w-full h-full flex flex-col p-3 pb-12">
         <div className="bg-white h-full rounded-2xl">
           <section
             id="breadcrum"
-            className="flex p-3  items-center justify-between h-11 bg-gray-200 rounded-t-2xl"
+            className="flex p-3 items-center justify-between h-11 bg-gray-200 rounded-t-2xl"
           >
             <div className="flex items-center justify-center h-5 w-auto p-3 bg-white rounded">
               <p className="text-gray-400">Breadcrum</p>

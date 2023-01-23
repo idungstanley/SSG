@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   CogIcon,
@@ -17,9 +16,11 @@ import MinMenuForResponsible from './MinMenuForResponsible';
 import Comments from '../Comments';
 import { setShowUploadModal } from '../../../../../features/general/uploadFile/uploadFileSlice';
 import { setShowWatchersSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setSelectedItem } from '../../../../../features/chat/chatSlice';
+import { useAppDispatch } from '../../../../../app/hooks';
 
 function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { inboxId } = useParams();
   const [showEmailsModal, setShowEmailsModal] = useState(false);
@@ -81,6 +82,15 @@ function Header() {
         dispatch(setShowWatchersSideOver({ show: true, type: 'inbox' })),
       icon: (
         <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
+      ),
+    },
+    {
+      buttonStyle: 'white',
+      label: 'Chat',
+      onClick: () =>
+        dispatch(setSelectedItem({ id: inboxId || '', type: 'inbox' })),
+      icon: (
+        <ChatIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
       ),
     },
     {

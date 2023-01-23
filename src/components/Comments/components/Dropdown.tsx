@@ -2,14 +2,12 @@ import React from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { selectedUserType } from './componentType';
-// import { ITeamMembersAndGroupsReq } from '../../../features/settings/teamMembersAndGroups.interfaces';
 
 interface DropDownPropTypes {
   show: boolean;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedUsers: React.Dispatch<React.SetStateAction<selectedUserType[]>>;
   selectedUsers: selectedUserType[];
-  isInbox: boolean;
 }
 
 export default function Dropdown({
@@ -17,14 +15,15 @@ export default function Dropdown({
   setShowDropdown,
   setSelectedUsers,
   selectedUsers,
-  isInbox,
 }: DropDownPropTypes) {
   const { data } = useGetTeamMembers({
     page: 0,
     query: '',
   });
   const selectedUserIds = selectedUsers.map((i) => i.id);
-  const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
+  const usersWithoutSelected = data?.data.team_members.filter(
+    (i) => !selectedUserIds.includes(i.user.id)
+  );
 
   return show ? (
     <>
@@ -37,11 +36,7 @@ export default function Dropdown({
         {' '}
       </div>
 
-      <div
-        className={`absolute z-10 mt-0 w-48 overflow-x-scroll top-${
-          isInbox ? '10' : '20'
-        } right-0 border bg-white rounded-xl`}
-      >
+      <div className="absolute z-10 mt-0 w-48 overflow-x-scroll top-20 right-0 border bg-white rounded-xl">
         <XIcon
           onClick={() => setShowDropdown(false)}
           className="absolute w-6 h-6 text-black transition-all duration-300 rounded-full cursor-pointer top-1 right-1"

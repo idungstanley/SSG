@@ -9,12 +9,13 @@ interface WatcherProps {
 }
 
 export default function Watcher({ taskId }: WatcherProps) {
-  const [showWatchers, setShowWatcher] = useState(false);
+  const [showWatchers, setShowWatcher] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const { data: getWatchers, status } = UseGetWatcherService({
     query: taskId,
   });
+
   if (status == 'success') {
     dispatch(
       setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id))

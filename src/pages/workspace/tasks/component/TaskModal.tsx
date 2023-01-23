@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  BorderOutlined,
-  CalendarTwoTone,
-  CloseOutlined,
-  EyeInvisibleTwoTone,
-  FlagTwoTone,
-  PlusOutlined,
-  PlusSquareTwoTone,
-  TagTwoTone,
-} from '@ant-design/icons';
-import {
-  ArrowDownIcon,
-  PaperClipIcon,
-  UserGroupIcon,
-} from '@heroicons/react/outline';
+  AiOutlinePaperClip,
+  AiOutlineFlag,
+  AiOutlineEye,
+} from 'react-icons/ai';
+import { BsTags, BsCalendar3 } from 'react-icons/bs';
 import { createTaskService } from '../../../../features/task/taskService';
-import { Button } from '../../../../components';
+import { Button, Input, SlideOver } from '../../../../components';
+import {
+  setSubDropdownMenu,
+  setshowMenuDropdown,
+} from '../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import { setCreateTaskSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { useAppSelector } from '../../../../app/hooks';
 
-interface TaskModalProps {
-  taskVisible: boolean;
-  onCloseTaskModal: () => void;
-  getListId: string | undefined;
-}
-
-function TaskModal({
-  taskVisible,
-  onCloseTaskModal,
-  getListId,
-}: TaskModalProps) {
+function TaskModal() {
   const queryClient = useQueryClient();
-
+  const dispatch = useDispatch();
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showCreateTaskSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('createtask' as any);
-      onCloseTaskModal();
+      queryClient.invalidateQueries();
+      dispatch(setCreateTaskSlideOverVisibility(false));
+      dispatch(setSubDropdownMenu(false));
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: null,
+        })
+      );
     },
   });
   const defaultListFormState = {
@@ -57,114 +55,87 @@ function TaskModal({
     await createTask.mutateAsync({
       name,
       description,
-      getListId,
+      showMenuDropdown,
     });
   };
 
-  if (!taskVisible) return null;
+  const handleCloseSlider = () => {
+    dispatch(setCreateTaskSlideOverVisibility(false));
+    dispatch(setSubDropdownMenu(false));
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+      })
+    );
+  };
 
   return (
-    <div className="w-full fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 z-10 backdrop-blur-sm flex justify-center items-center">
-      <div className="absolute right-10 w-5/12 bottom-5 flex flex-col">
-        <div className="bg-red-400 p-4 shadow">
-          <section className="mb-3">
-            <div
-              id="taskformheader"
-              className="flex justify-between items-center space-x-1"
-            >
-              <div>
-                <BorderOutlined />
-                <input
-                  type="text"
-                  placeholder="Enter Task Name"
-                  className="w-96 border-0 text-red-500 border-transparent focus:border-transparent focus:ring-0"
-                  name="name"
-                  onChange={handleTaskChange}
-                />
-              </div>
-
-              <div className="flex items-center justify-center space-x-2">
-                <ArrowDownIcon
-                  className="h-7 w-5 pt-2 text-gray-700 rounded-full p-0.5"
-                  aria-hidden="true"
-                />
-                <CloseOutlined
-                  className="h-7 w-5 pt-2 text-gray-700"
-                  aria-hidden="true"
-                  onClick={() => onCloseTaskModal()}
-                />
-              </div>
-            </div>
-          </section>
-          <section
-            id="assign"
-            className="flex justify-start items-center space-x-2 mb-3"
-          >
-            <p>In</p>
-            <input type="text" className="rounded-full h-5 border-gray-300" />
-            <p>For</p>
-            <span className="border-dotted border-gray-300 border-2 rounded-full p-1">
-              <UserGroupIcon
-                className="h-7 w-7 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          </section>
-          <section id="textarea" className="mb-3 w-full ">
+    <SlideOver
+      show={showCreateTaskSlideOver}
+      onClose={() => handleCloseSlider()}
+      headerTitle="Create Task"
+      body={
+        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
+          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <Input
+              label="Task Name"
+              placeholder="Enter Task name"
+              name="name"
+              value={name}
+              type="text"
+              onChange={handleTaskChange}
+            />
+          </div>
+          <div className=" mt-5 space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5 ">
             <textarea
               placeholder="Description"
               name="description"
-              className="w-full rounded border-gray-300 relative"
+              className="w-full h-32 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             />
-            <PlusOutlined className="absolute left-2.5 top-32" />
-            <div className="flex w-full justify-between">
-              <span className="flex justify-center space-x-0.5 items-center">
-                <PlusSquareTwoTone twoToneColor="#858585" />
-                <small>Add subtask</small>
+          </div>
+          <div className=" mt-5 space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5  flex justify-between items-center">
+            <section
+              id="attachement"
+              className="flex items-center justify-start space-x-1 text-sm"
+            >
+              <AiOutlinePaperClip className="text-gray-500" />
+              <input type="file" name="file" id="file" className="hidden" />
+              <label htmlFor="file" className="italic">
+                Drag & Drop files to attach or
+                <span className="decoration-dotted text-blue-400 cursor-pointer">
+                  {' '}
+                  Browse
+                </span>
+              </label>
+            </section>
+            <section className="flex space-x-2 text-gray-500">
+              <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <AiOutlineFlag className="cursor-pointer" />
               </span>
-              <span className="flex justify-center space-x-0.5 items-center">
-                <PlusSquareTwoTone twoToneColor="#858585" />
-                <small>Add checklist</small>
+              <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <BsTags className="cursor-pointer" />
               </span>
-            </div>
-          </section>
-          <section
-            id="attachement"
-            className="flex items-center justify-start space-x-1 mb-3"
-          >
-            <PaperClipIcon
-              className="h-7 w-5 pt-2 text-gray-700 rounded-full p-0.5"
-              aria-hidden="true"
-            />
-            <input type="file" name="file" id="file" className="hidden" />
-            <label htmlFor="file" className="italic">
-              Drag & Drop files to attach or
-              <span className="decoration-dotted text-blue-400"> Browse</span>
-            </label>
-          </section>
-          <section
-            id="submittask"
-            className="flex w-full items-center justify-between"
-          >
-            <div className="flex justify-between w-3/6 mb-10">
-              <FlagTwoTone twoToneColor="rgb(209 213 219)" />
-              <TagTwoTone twoToneColor="rgb(209 213 219)" />
-              <CalendarTwoTone twoToneColor="rgb(209 213 219)" />
-              <EyeInvisibleTwoTone twoToneColor="rgb(209 213 219)" />
-            </div>
-            <div className="space-y-1 px-4 mb-8 sm:space-y-0 sm:px-6 sm:py-5">
-              <Button
-                buttonStyle="primary"
-                onClick={onSubmit}
-                label="Create Task"
-                padding="py-2 px-4"
-                height="h-10"
-              />
-            </div>
-          </section>
+              <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <BsCalendar3 className="cursor-pointer" />
+              </span>
+              <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
+                <AiOutlineEye className="cursor-pointer text-purple-500" />
+              </span>
+            </section>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+      footerButtons={
+        <Button
+          buttonStyle="primary"
+          onClick={onSubmit}
+          label="Create Task"
+          padding="py-2 px-4"
+          height="h-10"
+          width="w-40"
+        />
+      }
+    />
   );
 }
 

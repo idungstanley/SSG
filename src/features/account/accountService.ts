@@ -1,6 +1,11 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IAccountReq } from './account.interfaces';
+import {
+  IAccountReq,
+  IUserParams,
+  IUserSettings,
+  IUserSettingsRes,
+} from './account.interfaces';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -36,4 +41,48 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
     true
   );
   return response;
+};
+
+export const useGetUserSettingsKeys = (enabled: boolean) =>
+  useQuery<IUserSettingsRes, unknown, IUserSettings>(
+    ['user-settings'],
+    () =>
+      requestNew(
+        {
+          url: 'user/settings',
+          method: 'GET',
+          params: {
+            keys: 'sidebar',
+          },
+        },
+        true
+      ),
+    {
+      enabled,
+      select: (res) => res.data.settings[0],
+    }
+  );
+
+export const setUserSettingsKeys = (value: IUserParams) => {
+  const request = requestNew(
+    {
+      url: 'user/settings',
+      method: 'PUT',
+      data: {
+        keys: [{ key: 'sidebar', value }],
+      },
+    },
+    true
+  );
+  return request;
+};
+
+export const useSetUserSettingsKeys = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(setUserSettingsKeys, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user-settings']);
+    },
+  });
 };

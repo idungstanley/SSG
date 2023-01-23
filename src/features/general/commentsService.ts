@@ -3,11 +3,11 @@ import requestNew from '../../app/requestNew';
 import { itemType } from '../../types';
 
 export const useGetItemComments = (data: {
-  type: itemType | string;
-  id: string;
+  type?: itemType | string;
+  id?: string;
 }) =>
   useQuery(
-    [`comments-${data.id}`],
+    ['comments', data.id],
     () =>
       requestNew(
         {
@@ -21,6 +21,7 @@ export const useGetItemComments = (data: {
         true
       ),
     {
+      enabled: !!data.type && !!data.id,
       select: (comments) => comments.data.comments,
     }
   );
@@ -45,12 +46,12 @@ const createItemComment = (data: {
   return request;
 };
 
-export const useCreateItemComment = (id: string) => {
+export const useCreateItemComment = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(createItemComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`comments-${id}`]);
+      queryClient.invalidateQueries(['comments', id]);
     },
   });
 };
@@ -66,12 +67,12 @@ const deleteItemComment = (data: { id: string }) => {
   return request;
 };
 
-export const useDeleteItemComment = (id: string) => {
+export const useDeleteItemComment = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteItemComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`comments-${id}`]);
+      queryClient.invalidateQueries(['comments', id]);
     },
   });
 };
@@ -90,12 +91,12 @@ const editItemComment = (data: { id: string; message: string }) => {
   return request;
 };
 
-export const useEditItemComment = (id: string) => {
+export const useEditItemComment = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(editItemComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`comments-${id}`]);
+      queryClient.invalidateQueries(['comments', id]);
     },
   });
 };

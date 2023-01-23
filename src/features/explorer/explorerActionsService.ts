@@ -1,8 +1,12 @@
+import { explorerItemType } from './../../types/index';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
 // Delete service
-export const deleteService = async (data: { fileIds: string[]; folderIds: string[]; }) => {
+export const deleteService = async (data: {
+  fileIds: string[];
+  folderIds: string[];
+}) => {
   const response = requestNew({
     url: 'explorer/multiple-delete',
     method: 'POST',
@@ -15,10 +19,15 @@ export const deleteService = async (data: { fileIds: string[]; folderIds: string
 };
 
 // Paste service
-export const pasteService = async (data: { copyToFolderId?: string; fileIds: string[]; folderIds: string[]; }) => {
-  const url = data.copyToFolderId == null
-    ? '/explorer/copy'
-    : `/explorer/copy/${data.copyToFolderId}`;
+export const pasteService = async (data: {
+  copyToFolderId?: string;
+  fileIds: string[];
+  folderIds: string[];
+}) => {
+  const url =
+    data.copyToFolderId == null
+      ? '/explorer/copy'
+      : `/explorer/copy/${data.copyToFolderId}`;
 
   const response = requestNew({
     url,
@@ -31,7 +40,11 @@ export const pasteService = async (data: { copyToFolderId?: string; fileIds: str
   return response;
 };
 
-const renameItemService = (data: { type: string | null; id: string | null; name: string | null; }) => {
+const renameItemService = (data: {
+  type: string | null;
+  id: string | null;
+  name: string | null;
+}) => {
   const url = `${data.type}s/${data.id}/rename`;
   return requestNew({
     url,
@@ -47,7 +60,75 @@ export const useRenameItem = () => {
 
   return useMutation(renameItemService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer_files_and_folders']);
+      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+      queryClient.invalidateQueries(['explorer-folders']);
     },
   });
 };
+
+// Create a folder
+const createFolder = (data: { folderName: string; parentId?: string }) => {
+  const response = requestNew({
+    url: 'folders',
+    method: 'POST',
+    params: {
+      name: data.folderName,
+      parent_id: data.parentId,
+    },
+  });
+  return response;
+};
+
+export const useCreateFolder = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createFolder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-folder', id]);
+      queryClient.invalidateQueries(['explorer-folders']);
+      queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
+    },
+  });
+};
+
+const deleteExplorerItem = (data: { type: explorerItemType; id: string }) => {
+  const response = requestNew({
+    url: `${data.type}s/${data.id}`,
+    method: 'DELETE',
+  });
+  return response;
+};
+
+export const useDeleteExplorerItem = (id: string, type: explorerItemType) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteExplorerItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-folder', id]);
+
+      if (type === 'folder') {
+        queryClient.invalidateQueries(['explorer-folders']);
+      }
+    },
+  });
+};
+
+const moveExplorerItems = (data: {
+  targetFolderId: string;
+  fileIds?: string[];
+  folderIds?: string[];
+}) => {
+  const { targetFolderId, fileIds, folderIds } = data;
+
+  const response = requestNew({
+    url: `explorer/move${targetFolderId ? '/' + targetFolderId : ''}`,
+    method: 'POST',
+    data: {
+      file_ids: fileIds,
+      folder_ids: folderIds,
+    },
+  });
+  return response;
+};
+
+export const useMoveExplorerItems = () => useMutation(moveExplorerItems);

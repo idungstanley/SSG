@@ -11,8 +11,9 @@ import {
 } from "@heroicons/react/outline";
 import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
 import { RiCheckboxBlankFill } from "react-icons/ri";
-import { MdOutlineDragIndicator } from "react-icons/md";
+import { MdOutlineDragIndicator, MdDragIndicator } from "react-icons/md";
 import { FaTimes, FaSort } from "react-icons/fa";
+import { IoIosRadioButtonOn } from "react-icons/io";
 import { CheckIcon } from "@heroicons/react/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -32,8 +33,12 @@ import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
 import TaskTableView from "../tasks/component/TaskTableView";
 import CollapsibleTable from "../tasks/component/TaskTableView";
 import Example from "../tasks/component/TaskTableView";
+import { useDispatch } from "react-redux";
+import { setCurrentTaskId } from "../../../features/task/taskSlice";
+import TaskMenu from "../tasks/component/taskMenu/TaskMenu";
 
 function RenderList() {
+  const dispatch = useDispatch();
   const [addNewItem, setAddNewItem] = useState(false);
   const [parentTaskId, setParentTaskId] = useState("");
   const [subTaskOne, setSubTaskOne] = useState<boolean | string>(false);
@@ -52,13 +57,6 @@ function RenderList() {
   });
 
   const { data: listChildrenData } = getTaskListService({ listId });
-
-  // const { data: listChildrenData } = useQuery<{
-  //   data: { tasks: { id: string; name: string }[] };
-  // }>({
-  //   queryKey: ["listData_bylistId", listId],
-  //   queryFn: getTaskListService,
-  // });
 
   const { data: listDetailsData } = useQuery({
     queryKey: ["listDetails", listId],
@@ -99,6 +97,22 @@ function RenderList() {
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
   };
+
+  const [close, setClose] = useState(true);
+  const handleClose = () => {
+    setClose((prev) => !prev);
+  };
+
+  const { current_task_id } = useAppSelector((state) => state.task);
+  console.log(current_task_id);
+
+  const [nav, setNav] = useState(false);
+  const displayNav: any = (id) => {
+    setNav((prev) => !prev);
+    dispatch(setCurrentTaskId(id));
+    console.log(id);
+  };
+
   // {dropDown ? (<>
   // <div></div>
   // </>) : null}
@@ -108,20 +122,46 @@ function RenderList() {
     navigate(`/workspace/t/${id}`);
   };
 
-  const columnsObj: any = myTaskData[0];
-  const columnsArray: string[] = [];
-  columnsObj &&
-    Object.keys(columnsObj).map((columnsHead, key) => {
-      columnsArray.push(columnsHead);
-    });
+  // const columns: any = listChildrenData?.data?.tasks[0];
 
-  //console.log("db datas", myTaskData);
+  // console.log(columns);
+
+  // console.log(Object.keys(listChildrenData?.data?.tasks[0]));
+
+  // listChildrenData?.data?.tasks.map((child) => {
+  //   // console.log(child);
+
+  //   const headerKey = Object.keys(child);
+
+  //   // console.log(headerKey);
+
+  //   // headerKey.forEach((key, index) => {
+  //   //   if (!columns.key) {
+  //   //     columns.push(key);
+  //   //   }
+
+  //     // console.log(key);
+  //     // console.log(`${key}: ${child[key]}`);
+
+  //     // // console.log(index);
+  //   });
+  // });
+
+  // console.log(columns);
 
   return (
-    <div className="h-screen" style={{ backgroundColor: "#eee" }}>
+    <div
+      className="h-screen overflow-hidden relative"
+      style={{ backgroundColor: "#eee" }}
+    >
+      {nav && (
+        <span className="transition	duration-300 ease-in-out absolute w-full">
+          <TaskMenu />
+        </span>
+      )}
       <section id="nav">
         <ListNav
-          navName="ListName"
+          navName={listDetailsData?.data?.list?.name}
           viewsList="List"
           viewsList3="Board"
           viewsList2="Table"
@@ -146,11 +186,15 @@ function RenderList() {
                 className="flex-shrink-0 h-4 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              <p> + New Task</p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+              <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
+                {" "}
+                + New Task
+                {/* <span onClick={() => handleNewTask()}></span> */}
+              </p>
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
                 Add Description
               </p>
-              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 rounded-lg p-1 cursor-pointer">
+              <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
                 Add Comment
               </p>
             </div>
@@ -166,7 +210,7 @@ function RenderList() {
             <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
               <span
-                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer"
+                className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
                 style={{ backgroundColor: "#eee" }}
               >
                 Add New Status
@@ -219,24 +263,31 @@ function RenderList() {
           </main> */}
 
           {/* card */}
-
-          {listView && (
-            <div className=" flex  items-center ml-3 pl-3">
-              <div className=" flex w-6/12 items-center gap-2 shrink-0">
+          <div className=" flex  items-center  ">
+            <div className=" flex w-6/12 items-center gap-2 shrink-0">
+              <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
                 <FiArrowDownCircle
-                  className=" text-gray-400 text-xs"
+                  className={`text-gray-400 text-sm hover:text-gray-200  ${
+                    close === false && "rotateimg90"
+                  }`}
                   aria-hidden="true"
+                  onClick={() => handleClose()}
                 />
-                <span className="text-xs font-semibold text-gray-400	">
-                  OPEN
-                </span>
-                <span className="text-xs font-semibold text-gray-400	">
+              </span>
+              <div className="flex items-center justify-center cursor-pointer relative">
+                <div className="group flex items-center">
+                  <span className="text-xs text-black p-1 bg-gray-300 pr-2">
+                    OPEN
+                  </span>
+                </div>
+                <span className="text-xs text-gray-400 mt-1	ml-1">
                   {myTaskData?.length}
                 </span>
 
-                <span className="text-xs font-semibold text-gray-400	">
+                  <span className="text-xs text-gray-400 mt-1	">
                   TASK
                 </span>
+              </div>
               </div>
               <div className="flex items-center w-6/12">
                 <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
@@ -288,12 +339,24 @@ function RenderList() {
                 </span>
               </div>
             </div>
-          )}
+          </div>
 
-          {listView &&
-            myTaskData?.map((task, i) => (
-              <div key={task.id}>
-                <div className="bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-5 pl-3">
+          {myTaskData?.map((task, i) => (
+            <div key={task.id}>
+              {close && (
+                <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3 	">
+                  <span
+                    className="flex items-center absolute  "
+                    style={{ left: "-30px" }}
+                  >
+                    <input
+                      type="checkbox"
+                      className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer"
+                      onClick={(e) => displayNav(task.id)}
+                    />
+                    <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
+                  </span>
+
                   <RiCheckboxBlankFill
                     className=" text-gray-400 text-xs"
                     aria-hidden="true"
@@ -311,27 +374,17 @@ function RenderList() {
                     {/* iconstask */}
                     <div
                       id="iconWrapper"
-                      className="flex items-start space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+                      className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
                     >
-                      <div
-                        id="wrapper"
-                        className="flex items-center justify-center h-6 w-6 rounded bg-gray-100  "
-                      >
-                        <PlusOutlined
-                          className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-                          aria-hidden="true"
-                          onClick={() => handleSubTask(task.id)}
-                        />
-                      </div>
-                      <div
-                        id="wrapper"
-                        className="flex items-center justify-center h-5 w-5 rounded bg-gray-100"
-                      >
-                        <EditOutlined
-                          className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-                          aria-hidden="true"
-                        />
-                      </div>
+                      <PlusOutlined
+                        className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+                        aria-hidden="true"
+                        onClick={() => handleSubTask(task.id)}
+                      />
+                      <EditOutlined
+                        className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                        aria-hidden="true"
+                      />
                     </div>
                   </div>
                   {/* icons */}
@@ -357,14 +410,14 @@ function RenderList() {
                     </span>
                   </div>
                 </div>
-
-                {subTaskOne === task.id ? (
-                  <div>
-                    <SubTask parentTaskId={parentTaskId} />
-                  </div>
-                ) : null}
-              </div>
-            ))}
+              )}
+              {subTaskOne === task.id ? (
+                <div>
+                  <SubTask parentTaskId={parentTaskId} />
+                </div>
+              ) : null}
+            </div>
+          ))}
 
           {/* toggle */}
           {addNewItem && (

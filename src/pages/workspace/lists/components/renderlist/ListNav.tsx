@@ -10,7 +10,7 @@ import {
 } from "../../../../../features/task/taskSlice";
 
 interface ListNavProps {
-  navName?: string;
+  navName?: string | null;
   viewsList?: string;
   viewsList2?: string;
   viewsList3?: string;

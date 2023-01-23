@@ -88,7 +88,7 @@ function UpdateTimeEntryDropdown({
           <input
             type="text"
             name="description"
-            value={currEntry?.description}
+            // value={currEntry?.description}
             placeholder="Enter a note"
             className="border-0 shadow-sm rounded text-gray-600"
           />
@@ -117,7 +117,7 @@ function UpdateTimeEntryDropdown({
             type="text"
             name="start_date"
             placeholder="HH:MM"
-            value={moment(currEntry?.start_date).format('YYYY-MM-D h:mm:ss')}
+            // value={moment(currEntry?.start_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>
@@ -130,7 +130,7 @@ function UpdateTimeEntryDropdown({
             type="text"
             placeholder="HH:MM"
             name="end_date"
-            value={moment(currEntry?.end_date).format('YYYY-MM-D h:mm:ss')}
+            // value={moment(currEntry?.end_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>

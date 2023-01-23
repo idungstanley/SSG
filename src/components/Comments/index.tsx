@@ -8,29 +8,31 @@ import {
 import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';
-import { itemType } from '../../types';
 import { selectedUserType } from './components/componentType';
+import { mentionTeamMemberInMessageReg } from '../../regex';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setShowCommentsSideOver } from '../../features/general/slideOver/slideOverSlice';
+import SideOver from '../SideOver';
 
-const regex = /@[\S]*/g;
+export default function Comments() {
+  const { commentsSideOver } = useAppSelector((state) => state.slideOver);
+  const dispatch = useAppDispatch();
+  const { type, id, show } = commentsSideOver;
 
-interface CommentsProps {
-  itemId: string;
-  type: itemType;
-}
-
-export default function Comments({ itemId, type }: CommentsProps) {
   const [message, setMessage] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<selectedUserType[]>([]);
-  const isInbox = type === 'inbox' || type === 'inbox_file';
-  const [showWindow, setShowWindow] = useState(isInbox);
+  const onClose = () => dispatch(setShowCommentsSideOver({ show: false }));
+
   const [editId, setEditId] = useState<null | string>(null);
-  const { mutate: sendComment } = useCreateItemComment(itemId);
-  const { mutate: editComment } = useEditItemComment(itemId);
-  const { mutate: deleteComment } = useDeleteItemComment(itemId);
+
+  const { mutate: sendComment } = useCreateItemComment(id);
+  const { mutate: editComment } = useEditItemComment(id);
+  const { mutate: deleteComment } = useDeleteItemComment(id);
+
   const { status, data } = useGetItemComments({
     type,
-    id: itemId,
+    id,
   });
 
   const handleSubmit = (
@@ -54,8 +56,8 @@ export default function Comments({ itemId, type }: CommentsProps) {
 
         sendComment({
           message: messageWithUserIds,
-          type,
-          id: itemId,
+          type: type || 'file',
+          id: id || '',
         });
       }
       setMessage('');
@@ -70,46 +72,31 @@ export default function Comments({ itemId, type }: CommentsProps) {
   };
 
   const onEdit = (id: string, value: string, user: selectedUserType[]) => {
-    setMessage(value.replaceAll(regex, ''));
+    setMessage(value.replaceAll(mentionTeamMemberInMessageReg, ''));
     setEditId(id);
     setSelectedUsers([...user]);
   };
 
   return (
-    <div className="relative inset-0 flex flex-col h-full overflow-hidden">
-      {!isInbox ? (
-        <button
-          type="button"
-          onClick={() => setShowWindow((prev) => !prev)}
-          className="my-3 text-left text-gray-600 underline cursor-pointer"
-        >
-          {showWindow ? 'Hide Comments' : 'Show Comments'}
-        </button>
-      ) : null}
-
-      {showWindow ? (
-        <div className="flex-1 w-full h-full space-y-3 overflow-y-scroll">
-          <Form
-            setMessage={setMessage}
-            handleSubmit={handleSubmit}
-            message={message}
-            setShowDropdown={setShowDropdown}
-          />
-          <Dropdown
-            isInbox={isInbox}
-            show={showDropdown}
-            setShowDropdown={setShowDropdown}
-            setSelectedUsers={setSelectedUsers}
-            selectedUsers={selectedUsers}
-          />
-          <List
-            status={status}
-            comments={data}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        </div>
-      ) : null}
-    </div>
+    <SideOver show={show} onClose={onClose} title="Comments">
+      <Form
+        setMessage={setMessage}
+        handleSubmit={handleSubmit}
+        message={message}
+        setShowDropdown={setShowDropdown}
+      />
+      <Dropdown
+        show={showDropdown}
+        setShowDropdown={setShowDropdown}
+        setSelectedUsers={setSelectedUsers}
+        selectedUsers={selectedUsers}
+      />
+      <List
+        status={status}
+        comments={data}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    </SideOver>
   );
 }

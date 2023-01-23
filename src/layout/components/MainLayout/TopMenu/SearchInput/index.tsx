@@ -9,28 +9,30 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 export default function SearchInput() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { searchQuery } = useAppSelector((state) => state.search);
 
   const queryInput = useRef<HTMLInputElement>(null);
 
-  const onQueryChange = (query) => {
+  const isSearchRoute = pathname === '/search';
+
+  const onQueryChange = (query: string) => {
     dispatch(setSearchQuery(query));
 
-    if (location.pathname !== '/search') {
+    if (!isSearchRoute) {
       navigate('/search');
     }
   };
 
   const onFocus = () => {
-    if (location.pathname !== '/search') {
+    if (!isSearchRoute) {
       navigate('/search');
     }
   };
 
   useEffect(() => {
-    if (location.pathname === '/search') {
+    if (isSearchRoute) {
       if (queryInput !== null) {
         queryInput.current?.focus();
       }
@@ -43,33 +45,31 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="flex-1 flex justify-center lg:justify-end">
-      <div className="w-full px-2 lg:px-6">
-        <div className="relative text-indigo-200 focus-within:text-gray-400 flex items-center">
-          <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-            <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </div>
-          <input
-            id="search"
-            name="search"
-            placeholder="Search everything..."
-            className="block w-full bg-gray-700 rounded-md py-2 pl-10 pr-3 text-sm text-gray-300 placeholder-gray-400 focus:outline-none ring-0 focus:ring-0 sm:text-sm"
-            onChange={(e) => onQueryChange(e.target.value)}
-            value={searchQuery}
-            ref={queryInput}
-            onFocus={onFocus}
-          />
-
-          {searchQuery.length ? (
-            <XIcon
-              onClick={handleReset}
-              className="h-5 w-5 text-gray-400 absolute right-9 cursor-pointer"
-              aria-hidden="true"
-            />
-          ) : null}
-
-          <SavedSearches />
+    <div className="flex-1 flex justify-center lg:justify-end w-full px-2 lg:px-6">
+      <div className="relative text-indigo-200 focus-within:text-gray-400 flex items-center w-full">
+        <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </div>
+        <input
+          id="search"
+          name="search"
+          placeholder="Search everything..."
+          className="block w-full bg-gray-700 rounded-md py-2 pl-10 pr-3 text-sm text-gray-300 placeholder-gray-400 focus:outline-none ring-0 focus:ring-0 sm:text-sm"
+          onChange={(e) => onQueryChange(e.target.value)}
+          value={searchQuery}
+          ref={queryInput}
+          onFocus={onFocus}
+        />
+
+        {searchQuery.length ? (
+          <XIcon
+            onClick={handleReset}
+            className="h-5 w-5 text-gray-400 absolute right-9 cursor-pointer"
+            aria-hidden="true"
+          />
+        ) : null}
+
+        {isSearchRoute ? <SavedSearches /> : null}
       </div>
     </div>
   );
