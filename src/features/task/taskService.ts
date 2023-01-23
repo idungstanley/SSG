@@ -11,7 +11,7 @@ export const createTaskService = (data) => {
       data: {
         name: data.name,
         description: data.description,
-        list_id: data.showMenuDropdown,
+        list_id: data.showMenuDropdown || data.getListId,
         // parent_id: data.parentTaskId,
       },
     },
@@ -37,7 +37,7 @@ export const getTaskListService = ({ listId }) => {
 
   const queryClient = useQueryClient();
   return useQuery(
-    ['task'],
+    ['task', { listId: listId }],
     async () => {
       const data = await requestNew(
         {
@@ -239,6 +239,31 @@ export const RemoveWatcherService = ({ query }) => {
       },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null,
+    }
+  );
+};
+
+//Assign task to team member
+export const UseAssignTaskService = ({ task_id, team_member_id }) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['assign', { task_id: task_id, team_member_id: team_member_id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
+          method: 'POST',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
+      initialData: queryClient.getQueryData(['assign', team_member_id]),
+      enabled: (team_member_id & task_id) != null,
     }
   );
 };

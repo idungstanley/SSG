@@ -3,13 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getWalletService } from '../../features/wallet/walletService';
 import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
-import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import { closeMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
-import { BsListUl } from 'react-icons/bs';
 import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../app/hooks';
 

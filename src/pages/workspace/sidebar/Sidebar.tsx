@@ -6,9 +6,7 @@ import {
   setShowSidebar,
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
-import {
-  setShowSidebarSettings
-} from '../../../features/hubs/hubSlice';
+import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
 import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
