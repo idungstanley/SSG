@@ -1,7 +1,8 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
-import { getTaskData } from './taskSlice';
+import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
+import { useDispatch } from 'react-redux';
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -275,9 +276,11 @@ export const RemoveWatcherService = ({ query }) => {
 
 //Assign task to team member
 export const UseAssignTaskService = ({ task_id, team_member_id }) => {
+  const dispatch = useDispatch();
+  console.log(task_id, team_member_id);
   const queryClient = useQueryClient();
   return useQuery(
-    ['assign'],
+    ['assign', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
@@ -290,10 +293,10 @@ export const UseAssignTaskService = ({ task_id, team_member_id }) => {
     },
     {
       onSuccess: () => {
-        // queryClient.invalidateQueries();
+        dispatch(setToggleAssignCurrentTaskId(null));
       },
       initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: (team_member_id & task_id) != null,
+      enabled: team_member_id != null,
     }
   );
 };
@@ -306,7 +309,7 @@ export const UseUnAssignTaskService = ({
 }) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['unassign'],
+    ['unassign', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {

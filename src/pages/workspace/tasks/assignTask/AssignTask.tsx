@@ -47,12 +47,10 @@ export default function AssignTask() {
     ({ id }) => id
   );
 
-  const handleUnAssign = (id) => {
+  const handleUnAssign = (id: string) => {
     dispatch(setCurrTeamMemId(id));
     setUnAssignTrigger(true);
   };
-
-  console.log(toggleAssignCurrentTaskId, currTeamMemberId);
 
   // const handleAssignModal = (e) => {
   //   if (assigneeRef.current?.getAttribute('id') !== 'assignModal') {

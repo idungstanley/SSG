@@ -124,12 +124,15 @@ export default function TaskData({ task }: TaskDataProps) {
 
           {task.assignees.length == 0 ? (
             <UserAddOutlined
-              className=" h-5 w-5 text-gray-400 text-xl "
+              className=" h-5 w-5 text-gray-400 text-xl cursor-pointer "
               aria-hidden="true"
               onClick={() => handleAssigneeModal(task.id)}
             />
           ) : (
-            <div onClick={() => handleAssigneeModal(task.id)}>
+            <div
+              onClick={() => handleAssigneeModal(task.id)}
+              className="cursor-pointer"
+            >
               {groupAssignee(task.assignees)}
             </div>
           )}
