@@ -128,7 +128,7 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        ' grid grid-cols-sidebarItem justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
+        'grid grid-cols-sidebarItem justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
         isActiveFolder ? 'text-primary-600 bg-primary-50' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
@@ -146,7 +146,10 @@ export default function FolderItem({
         )}
       </div>
 
-      <div className="space-x-2 whitespace-nowrap overflow-x-hidden truncate">
+      <div
+        onClick={() => handleClickFolder(id, parentId)}
+        className="space-x-2 whitespace-nowrap overflow-x-hidden truncate cursor-pointer"
+      >
         <FolderIcon
           className="h-5 w-5 mb-1 inline-flex items-center"
           aria-hidden="true"

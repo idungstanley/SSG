@@ -89,8 +89,10 @@ export const useGetExplorerFolders = () => {
     {
       select: (res) => res.data.folders,
       onSuccess: (res) =>
-        res.map((folder) =>
-          queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
+        res.map(
+          (folder) =>
+            queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
+          // ? query name 'explorer-folder-1' using because 'explorer-folder' is already use
         ),
     }
   );
