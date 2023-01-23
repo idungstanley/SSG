@@ -4,44 +4,44 @@ import {
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/outline';
-import { FiPlusCircle, FiArrowDownCircle } from 'react-icons/fi';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
-import { MdOutlineDragIndicator, MdDragIndicator } from 'react-icons/md';
-import { FaTimes, FaSort } from 'react-icons/fa';
-import { CheckIcon } from '@heroicons/react/solid';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AvatarWithInitials, Button } from '../../../components';
+} from "@heroicons/react/outline";
+import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
+import { RiCheckboxBlankFill } from "react-icons/ri";
+import { MdOutlineDragIndicator, MdDragIndicator } from "react-icons/md";
+import { FaTimes, FaSort } from "react-icons/fa";
+import { CheckIcon } from "@heroicons/react/solid";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AvatarWithInitials, Button } from "../../../components";
 import {
   createTaskService,
   getTaskListService,
-} from '../../../features/task/taskService';
-import { getListsDetailsService } from '../../../features/list/listService';
-import SubTask from '../subtasks/subtask1/SubTask';
+} from "../../../features/task/taskService";
+import { getListsDetailsService } from "../../../features/list/listService";
+import SubTask from "../subtasks/subtask1/SubTask";
 // import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
-import ListNav from './components/renderlist/ListNav';
-import addColumns from './components/renderlist/listDetails/listDetails';
-import { useAppSelector } from '../../../app/hooks';
-import AddColumnDropdown from '../tasks/dropdown/AddColumnDropdown';
-import { useDispatch } from 'react-redux';
+import ListNav from "./components/renderlist/ListNav";
+import addColumns from "./components/renderlist/listDetails/listDetails";
+import { useAppSelector } from "../../../app/hooks";
+import AddColumnDropdown from "../tasks/dropdown/AddColumnDropdown";
+import { useDispatch } from "react-redux";
 import {
   setCurrentTaskId,
   setShowTaskNavigation,
-} from '../../../features/task/taskSlice';
-import TaskMenu from '../tasks/component/taskMenu/TaskMenu';
-import TaskTableView from '../tasks/component/TaskTableView';
-import AssignTask from '../tasks/assignTask/AssignTask';
+} from "../../../features/task/taskSlice";
+import TaskMenu from "../tasks/component/taskMenu/TaskMenu";
+import TaskTableView from "../tasks/component/TaskTableView";
+import AssignTask from "../tasks/assignTask/AssignTask";
 
 function RenderList() {
   const dispatch = useDispatch();
   const [addNewItem, setAddNewItem] = useState(false);
-  const [parentTaskId, setParentTaskId] = useState('');
+  const [parentTaskId, setParentTaskId] = useState("");
   const [subTaskOne, setSubTaskOne] = useState<boolean | string>(false);
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const { listId } = useParams();
@@ -60,11 +60,11 @@ function RenderList() {
   const { data: listChildrenData } = getTaskListService({ listId });
 
   const { data: listDetailsData } = useQuery({
-    queryKey: ['listDetails', listId],
+    queryKey: ["listDetails", listId],
     queryFn: getListsDetailsService,
   });
   const defaultTaskFormState = {
-    name: '',
+    name: "",
   };
   console.log(listChildrenData);
   const [formState, setFormState] = useState(defaultTaskFormState);
@@ -138,7 +138,7 @@ function RenderList() {
   return (
     <div
       className="h-screen overflow-hidden relative"
-      style={{ backgroundColor: '#eee' }}
+      style={{ backgroundColor: "#eee" }}
     >
       {showTaskNavigation && (
         <span className="transition	duration-300 ease-in-out absolute w-full">
@@ -157,7 +157,7 @@ function RenderList() {
       <section className="mt-3 p-3">
         <div
           className=" block p-2 border-2 border-gray-200"
-          style={{ backgroundColor: '#eee' }}
+          style={{ backgroundColor: "#eee" }}
         >
           <div id="listTitle" className="flex justify-between items-center">
             <div className="flex items-center justify-center space-x-2 text-gray-400 group">
@@ -173,7 +173,7 @@ function RenderList() {
                 aria-hidden="true"
               />
               <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
-                {' '}
+                {" "}
                 + New Task
                 {/* <span onClick={() => handleNewTask()}></span> */}
               </p>
@@ -197,7 +197,7 @@ function RenderList() {
               <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
               <span
                 className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
-                style={{ backgroundColor: '#eee' }}
+                style={{ backgroundColor: "#eee" }}
               >
                 Add New Status
               </span>
@@ -217,7 +217,7 @@ function RenderList() {
                 <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
                   <FiArrowDownCircle
                     className={`text-gray-400 text-sm hover:text-gray-200  ${
-                      close === false && 'rotateimg90'
+                      close === false && "rotateimg90"
                     }`}
                     aria-hidden="true"
                     onClick={() => handleClose()}
@@ -295,7 +295,7 @@ function RenderList() {
                   <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
                     <span
                       className="flex items-center absolute  "
-                      style={{ left: '-30px' }}
+                      style={{ left: "-30px" }}
                     >
                       {/* <input
                         type="checkbox"
@@ -306,22 +306,14 @@ function RenderList() {
                         className={` opacity-0 transition rounded-full duration-200 group-hover:opacity-100 checked:opacity-100 cursor-pointer focus:ring-transparent `}
                         onClick={(e) => displayNav(task.id)}
                       /> */}
-                      {nav && (
-                        <input
-                          type="checkbox"
-                          id="default-checkbox"
-                          className={`opacity-100 transition duration-200 group-hover:opacity-100 cursor-pointer `}
-                          onClick={(e) => displayNav(task.id)}
-                        />
-                      )}
-                      {!nav && (
-                        <input
-                          type="checkbox"
-                          id="checked-checkbox"
-                          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
-                          onClick={(e) => displayNav(task.id)}
-                        />
-                      )}
+
+                      <input
+                        type="checkbox"
+                        id="checked-checkbox"
+                        className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
+                        onClick={(e) => displayNav(task.id)}
+                      />
+
                       <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
                     </span>
 
