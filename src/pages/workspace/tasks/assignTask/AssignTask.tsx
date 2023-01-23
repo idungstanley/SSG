@@ -1,55 +1,70 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { AvatarWithInitials } from '../../../../components';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { useAppSelector } from '../../../../app/hooks';
-import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import {
+  setCurrTeamMemId,
+  setToggleAssignCurrentTaskId,
+} from '../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
 import { TrashIcon } from '@heroicons/react/outline';
+
 import {
   UseAssignTaskService,
   UseUnAssignTaskService,
-  getOneTaskService,
   getOneTaskServices,
 } from '../../../../features/task/taskService';
 
 export default function AssignTask() {
   const dispatch = useDispatch();
   const [unAssignTrigger, setUnAssignTrigger] = React.useState(false);
+  const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
     query: '',
   });
-  const { current_task_id, currTeamMemberId } = useAppSelector(
+  const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
     (state) => state.task
   );
 
   UseAssignTaskService({
-    task_id: current_task_id,
+    task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
   });
 
   UseUnAssignTaskService({
-    task_id: current_task_id,
+    task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
     unAssignTrigger,
   });
 
   const { data: getTaskAssignees } = getOneTaskServices({
-    task_id: current_task_id,
+    task_id: toggleAssignCurrentTaskId,
   });
 
   const assignedUser = getTaskAssignees?.data.task.assignees.map(
     ({ id }) => id
   );
 
-  const handleUnAssign = (id) => {
+  const handleUnAssign = (id: string) => {
     dispatch(setCurrTeamMemId(id));
     setUnAssignTrigger(true);
   };
+
+  // const handleAssignModal = (e) => {
+  //   if (assigneeRef.current?.getAttribute('id') !== 'assignModal') {
+  //     dispatch(setToggleAssignCurrentTaskId(null));
+  //   }
+  // };
   return (
     <div className="">
-      <section className="absolute top-10 z-20 -mt-12 w-60 rounded-md shadow-lg bg-gray-100">
+      <section
+        className="absolute top-10 z-20 -mt-12 w-60 rounded-md shadow-lg bg-gray-100"
+        ref={assigneeRef}
+        id="assignModal"
+        // onClick={(e) => handleAssignModal(e)}
+      >
         <div className="text-xs">
           <section className="flex relative w-full ">
             <AiOutlineSearch className="h-5 w-5 absolute right-3 top-3" />

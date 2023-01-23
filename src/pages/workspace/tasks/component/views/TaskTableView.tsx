@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../../../app/hooks";
+import { useAppSelector } from "../../../../../app/hooks";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { BiExport } from "react-icons/bi";
@@ -7,7 +7,7 @@ import { BiHide } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
-import { AvatarWithInitials } from "../../../../components";
+import { AvatarWithInitials } from "../../../../../components";
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
