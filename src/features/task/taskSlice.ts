@@ -27,6 +27,7 @@ interface TaskState {
   current_task_id: null;
   listView: boolean;
   tableView: boolean;
+  showTaskNavigation: boolean;
 }
 
 const initialState: TaskState = {
@@ -38,6 +39,7 @@ const initialState: TaskState = {
   current_task_id: null,
   listView: true,
   tableView: false,
+  showTaskNavigation: false,
 };
 
 export const taskSlice = createSlice({
@@ -59,6 +61,10 @@ export const taskSlice = createSlice({
     },
     getTableView(state, action) {
       state.tableView = action.payload;
+    },
+
+    setShowTaskNavigation(state, action) {
+      state.showTaskNavigation = action.payload;
     },
 
     setWatchersData(state, action) {
@@ -88,6 +94,7 @@ export const {
   getTaskData,
   getListView,
   getTableView,
+  setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
 } = taskSlice.actions;

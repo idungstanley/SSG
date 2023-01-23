@@ -7,6 +7,7 @@ import { BiHide } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
+import TaskMenu from "./taskMenu/TaskMenu";
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
@@ -20,6 +21,11 @@ function TaskTableView() {
     ViewColumn: () => <BiHide />,
     Clear: () => <AiOutlineFilter />,
     SortArrow: () => <FaSort />,
+    FirstPage: () => null,
+    LastPage: () => null,
+    NextPage: () => null,
+    PreviousPage: () => null,
+    // Clear: () => null,
   };
 
   const columns: any = [
@@ -73,38 +79,40 @@ function TaskTableView() {
   const editable = myTaskData.map((o) => ({ ...o }));
 
   return (
-    <div>
-      <ThemeProvider theme={defaultMaterialTheme}>
-        <MaterialTable
-          tableRef={tableRef}
-          title="{SSG}"
-          columns={columns}
-          data={editable ?? []}
-          options={{
-            searchFieldAlignment: "right",
-            filtering: true,
-            exportButton: true,
-            selection: true,
-            showSelectAllCheckbox: false,
-            grouping: true,
-            columnResizable: false,
-            columnsButton: true,
-            headerStyle: {
-              fontSize: "10px",
-            },
-            rowStyle: { fontSize: "10px" },
-            maxBodyHeight: "300px",
-            // fixedColumns: {
-            //   left: 1,
-            //   right: 0,
-            // },
+    <>
+      <div>
+        <ThemeProvider theme={defaultMaterialTheme}>
+          <MaterialTable
+            tableRef={tableRef}
+            title="{SSG}"
+            columns={columns}
+            data={editable ?? []}
+            options={{
+              searchFieldAlignment: "right",
+              filtering: true,
+              exportButton: true,
+              selection: true,
+              showSelectAllCheckbox: false,
+              grouping: true,
+              columnResizable: false,
+              columnsButton: true,
+              headerStyle: {
+                fontSize: "10px",
+              },
+              rowStyle: { fontSize: "10px" },
+              maxBodyHeight: "300px",
+              // fixedColumns: {
+              //   left: 1,
+              //   right: 0,
+              // },
 
-            // tableLayout: "fixed",
-          }}
-          icons={icons}
-        />
-      </ThemeProvider>
-    </div>
+              // tableLayout: "fixed",
+            }}
+            icons={icons}
+          />
+        </ThemeProvider>
+      </div>
+    </>
   );
 }
 

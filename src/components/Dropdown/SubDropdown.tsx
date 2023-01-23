@@ -1,24 +1,24 @@
-import React from 'react';
-import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
+import React from "react";
+import WalletModal from "../../pages/workspace/wallet/components/modals/WalletModal";
 import {
   DocumentDuplicateIcon,
   StarIcon,
   PlusIcon,
   LinkIcon,
   ColorSwatchIcon,
-} from '@heroicons/react/outline';
-import { useAppSelector } from '../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { FaFolder } from 'react-icons/fa';
-import { AiOutlineUnorderedList } from 'react-icons/ai';
-import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
+} from "@heroicons/react/outline";
+import { useAppSelector } from "../../app/hooks";
+import { useDispatch } from "react-redux";
+import { FaFolder } from "react-icons/fa";
+import { AiOutlineUnorderedList } from "react-icons/ai";
+import ListModal from "../../pages/workspace/listsData/components/modals/ListModal";
 import {
   setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
-} from '../../features/general/slideOver/slideOverSlice';
-import TaskModal from '../../pages/workspace/tasks/component/TaskModal';
+} from "../../features/general/slideOver/slideOverSlice";
+import TaskModal from "../../pages/workspace/tasks/component/TaskModal";
 
 interface itemsType {
   id: number;
@@ -36,7 +36,7 @@ export default function SubDropdown() {
   const itemsList: itemsType[] = [
     {
       id: 1,
-      title: 'Sub Hub',
+      title: "Sub Hub",
       handleClick: () => {
         dispatch(setCreateHubSlideOverVisibility(true));
       },
@@ -44,41 +44,41 @@ export default function SubDropdown() {
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
       isVisible:
-        showMenuDropdownType == 'hubs'
+        showMenuDropdownType == "hubs"
           ? true
-          : false || SubMenuType == 'hubs'
+          : false || SubMenuType == "hubs"
           ? true
           : false,
     },
     {
       id: 2,
       title:
-        ((showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet') ||
-          (SubMenuType == 'wallet' ? 'Sub Wallet' : '')) &&
-        (showMenuDropdownType == 'subwallet' ? 'Sub Wallet' : 'Wallet'),
+        ((showMenuDropdownType == "wallet" ? "Sub Wallet" : "Wallet") ||
+          (SubMenuType == "wallet" ? "Sub Wallet" : "")) &&
+        (showMenuDropdownType == "subwallet" ? "Sub Wallet" : "Wallet"),
       handleClick: () => {
         dispatch(setCreateWalletSlideOverVisibility(true));
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
-        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3'
+        showMenuDropdownType == "list" || showMenuDropdownType == "subwallet3"
           ? false
           : true,
     },
     {
       id: 3,
-      title: 'Task',
+      title: "Task",
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
       },
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
-      isVisible: showMenuDropdownType == 'list' ? true : false,
+      isVisible: showMenuDropdownType == "list" ? true : false,
     },
     {
       id: 4,
-      title: 'List',
+      title: "List",
       handleClick: () => {
         dispatch(setCreateListSlideOverVisibility(true));
       },
@@ -87,7 +87,7 @@ export default function SubDropdown() {
     },
     {
       id: 5,
-      title: 'Sprint',
+      title: "Sprint",
       handleClick: () => ({}),
       icon: (
         <ColorSwatchIcon
@@ -99,21 +99,21 @@ export default function SubDropdown() {
     },
     {
       id: 6,
-      title: 'Folder',
+      title: "Folder",
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 7,
-      title: 'From Template',
+      title: "From Template",
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 8,
-      title: 'Import',
+      title: "Import",
       handleClick: () => ({}),
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
