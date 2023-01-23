@@ -8,11 +8,12 @@ import Information from './components/Information';
 import Permissions from './components/Permissions';
 import CommentsForPilot from '../../../../components/Comments/CommentsForPilot';
 import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
+import ChatForPilot from '../../../../components/Chat/ChatForPilot';
 
 const sections = [
   {
     id: 0,
-    element: <div></div>,
+    element: <Information />,
   },
   {
     id: 1,
@@ -24,7 +25,7 @@ const sections = [
   },
   {
     id: 3,
-    element: <Information />,
+    element: <ChatForPilot />,
   },
   {
     id: 4,

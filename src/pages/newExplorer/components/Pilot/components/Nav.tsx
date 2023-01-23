@@ -12,8 +12,10 @@ import { classNames } from '../../../../../utils';
 const tabs = [
   {
     id: 0,
-    label: 'Communication',
-    icon: <SignalIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
+    label: 'Information',
+    icon: (
+      <InformationCircleIcon className="w-6 h-6 text-gray-300 cursor-pointer" />
+    ),
   },
   {
     id: 1,
@@ -27,10 +29,8 @@ const tabs = [
   },
   {
     id: 3,
-    label: 'Information',
-    icon: (
-      <InformationCircleIcon className="w-6 h-6 text-gray-300 cursor-pointer" />
-    ),
+    label: 'Communication',
+    icon: <SignalIcon className="w-6 h-6 text-gray-300 cursor-pointer" />,
   },
   {
     id: 4,
