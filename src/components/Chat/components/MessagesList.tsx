@@ -5,6 +5,8 @@ import { useChatScroll } from '../../../hooks';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 import DropdownMenuForMessage from './DropdownMenuForMessage';
 import { mentionTeamMemberInMessageReg } from '../../../regex';
+import { useAppSelector } from '../../../app/hooks';
+import { classNames } from '../../../utils';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -12,38 +14,58 @@ interface MessagesListProps {
 
 export default function MessagesList({ messages }: MessagesListProps) {
   const ref = useChatScroll(messages);
+  const { currentUserId } = useAppSelector((state) => state.auth);
 
-  const sortedByTime = useMemo(
+  const sortedByTimeMessages = useMemo(
     () => [
       ...messages.sort((a, b) => a.created_at.localeCompare(b.created_at)),
     ],
     [messages]
   );
 
+  const isCurrentUser = (id: string) => id === currentUserId;
+
   return (
     <div className="p-2">
       <div
         ref={ref}
-        className="flex h-full w-full border rounded-xl overflow-y-scroll"
+        className="flex flex-col h-full w-full border rounded-xl overflow-y-scroll"
       >
-        {sortedByTime.map((message) => (
-          <div className="flex gap-3 items-center px-2 py-1" key={message.id}>
-            <AvatarWithInitials
-              initials={message.team_member.initials}
-              backgroundColour={message.team_member.colour}
-            />
+        {sortedByTimeMessages.map((message) => (
+          <div
+            className={classNames(
+              'flex gap-3 px-2 py-1',
+              isCurrentUser(message.team_member.user.id)
+                ? 'justify-end'
+                : 'justify-start'
+            )}
+            key={message.id}
+          >
+            {/* avatar */}
+            {!isCurrentUser(message.team_member.user.id) ? (
+              <AvatarWithInitials
+                initials={message.team_member.initials}
+                backgroundColour={message.team_member.colour}
+              />
+            ) : null}
+
             <div className="w-3/4">
               <div className="flex group flex-col justify-start gap-1 p-2 rounded-xl border">
+                {/* top */}
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <p>{message.team_member.user.name}</p>
                   <DropdownMenuForMessage />
                 </div>
+
+                {/* message */}
                 <p className="text-black">
                   {message.message.replaceAll(
                     mentionTeamMemberInMessageReg,
                     ''
                   )}
                 </p>
+
+                {/* bottom */}
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
                     {message.mention_users?.map((user) => (

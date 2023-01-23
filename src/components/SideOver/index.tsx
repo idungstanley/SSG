@@ -37,7 +37,7 @@ export default function SideOver({
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                   <div className="flex h-full pl-1.5 w-full flex-col overflow-y-scroll bg-white shadow-xl">
-                    <div className="px-4 sm:px-6">
+                    <div className="px-2 sm:px-3">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
                           {title}
@@ -56,7 +56,7 @@ export default function SideOver({
                     </div>
                     <div
                       className={classNames(
-                        'relative my-6 flex flex-col  px-4 sm:px-6 h-full',
+                        'relative my-6 flex flex-col px-3 sm:px-3 h-full',
                         disableGapForChildren ? '' : 'gap-6'
                       )}
                     >
