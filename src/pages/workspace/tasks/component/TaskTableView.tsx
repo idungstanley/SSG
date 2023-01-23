@@ -89,7 +89,7 @@ function TaskTableView() {
             data={editable ?? []}
             options={{
               searchFieldAlignment: "right",
-              filtering: true,
+              // filtering: true,
               exportButton: true,
               selection: true,
               showSelectAllCheckbox: false,
