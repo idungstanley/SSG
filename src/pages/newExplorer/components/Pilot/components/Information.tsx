@@ -8,8 +8,9 @@ export default function Information() {
 
   const id = pilotSideOver.id;
   const type = pilotSideOver.type;
+  const isRootFolder = pilotSideOver.isRootFolder;
 
-  const { data } = useGetExplorerFileOrFolder(type, id);
+  const { data } = useGetExplorerFileOrFolder(type, id, isRootFolder);
 
   const info = [
     {
@@ -23,7 +24,7 @@ export default function Information() {
   ];
 
   return (
-    <div>
+    <>
       {data ? (
         <div className="flex border-b flex-col justify-center text-sm font-medium divide-y divide-gray-200">
           {info.map((item) => (
@@ -47,6 +48,6 @@ export default function Information() {
             </div>
           </>
         ) : null} */}
-    </div>
+    </>
   );
 }

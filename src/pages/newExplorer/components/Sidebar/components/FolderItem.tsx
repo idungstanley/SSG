@@ -106,7 +106,14 @@ export default function FolderItem({
     {
       label: 'Pilot',
       onClick: () =>
-        dispatch(setShowPilotSideOver({ id, type: 'folder', show: true })),
+        dispatch(
+          setShowPilotSideOver({
+            id,
+            type: 'folder',
+            show: true,
+            isRootFolder: !parentId,
+          })
+        ),
       icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
     },
     {

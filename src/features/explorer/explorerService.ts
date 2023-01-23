@@ -100,10 +100,16 @@ export const useGetExplorerFolders = () => {
 
 export const useGetExplorerFileOrFolder = (
   type?: explorerItemType,
-  itemId?: string
+  itemId?: string,
+  isRootFolder?: boolean
 ) => {
   const queryClient = useQueryClient();
-  const query = type === 'folder' ? 'explorer-folder-1' : 'explorer-file';
+  const query =
+    type === 'folder'
+      ? isRootFolder
+        ? 'explorer-folder-1'
+        : 'explorer-folder'
+      : 'explorer-file';
 
   return useQuery<IExplorerFile | undefined>(
     [query, itemId],
