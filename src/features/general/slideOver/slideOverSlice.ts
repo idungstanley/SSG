@@ -33,6 +33,13 @@ type Pilot = {
 
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
+  showCreateHubSlideOver: boolean;
+  showEditHubSlideOver: boolean;
+  showEditListSlideOver: boolean;
+  showCreateWalletSlideOver: boolean;
+  showEditWalletSlideOver: boolean;
+  showCreateListSlideOver: boolean;
+  showCreateTaskSlideOver: boolean;
   showAssignInboxFileSlideOver: boolean;
   showCreateFolderSlideOver: boolean;
   showInviteTeamMemberSlideOver: boolean;
@@ -50,6 +57,13 @@ interface SideOverState {
 
 const initialState: SideOverState = {
   showCreateInboxSlideOver: false,
+  showCreateHubSlideOver: false,
+  showEditHubSlideOver: false,
+  showEditListSlideOver: false,
+  showCreateWalletSlideOver: false,
+  showEditWalletSlideOver: false,
+  showCreateListSlideOver: false,
+  showCreateTaskSlideOver: false,
   showAssignInboxFileSlideOver: false,
   showCreateFolderSlideOver: false,
   showInviteTeamMemberSlideOver: false,
@@ -80,6 +94,42 @@ export const slideOverSlice = createSlice({
       action: PayloadAction<boolean>
     ) => {
       state.showCreateInboxSlideOver = action.payload;
+    },
+    setCreateHubSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateHubSlideOver = action.payload;
+    },
+    setEditListSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
+      state.showEditListSlideOver = action.payload;
+    },
+    setEditHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
+      state.showEditHubSlideOver = action.payload;
+    },
+    setCreateWalletSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateWalletSlideOver = action.payload;
+    },
+    setEditWalletSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showEditWalletSlideOver = action.payload;
+    },
+    setCreateListSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateListSlideOver = action.payload;
+    },
+    setCreateTaskSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateTaskSlideOver = action.payload;
     },
     setAssignInboxFileSlideOverVisibility: (
       state,
@@ -146,6 +196,12 @@ export const slideOverSlice = createSlice({
 
 export const {
   setCreateInboxSlideOverVisibility,
+  setCreateHubSlideOverVisibility,
+  setEditHubSlideOverVisibility,
+  setCreateWalletSlideOverVisibility,
+  setEditWalletSlideOverVisibility,
+  setCreateListSlideOverVisibility,
+  setCreateTaskSlideOverVisibility,
   setAssignInboxFileSlideOverVisibility,
   setCreateFolderSlideOverVisibility,
   setInviteTeamMemberSlideOverVisibility,
@@ -156,6 +212,7 @@ export const {
   setShowAddTeamMembersOrGroupsSideOver,
   setShowWatchersSideOver,
   setItemActionForSideOver,
+  setEditListSlideOverVisibility,
   setShowCommentsSideOver,
   setShowShareSideOver,
   setShowPilotSideOver,

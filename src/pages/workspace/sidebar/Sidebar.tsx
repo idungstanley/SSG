@@ -1,27 +1,32 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HiChevronDoubleLeft } from 'react-icons/hi';
+import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi';
 import {
   setShowExtendedBar,
   setShowSidebar,
   setSidebarWidth,
 } from '../../../features/workspace/workspaceSlice';
+import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
 import MainLogo from '../../../assets/branding/main-logo.png';
+import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import { AvatarWithInitials } from '../../../components';
-import Setting from '../../../assets/branding/setting.png';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
-import Search from '../Search';
+import Modal from '../hubs/components/Modal';
+import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
+import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
   const { showSidebar, showExtendedBar, sidebarWidth, activePlaceId } =
     useAppSelector((state) => state.workspace);
+  const { sidebarSettings } = useAppSelector((state) => state.hub);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [scrollTop, setScrollTop] = useState<string>('');
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -54,22 +59,38 @@ export default function Sidebar() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
+  const handleScroll = (event) => {
+    setScrollTop(event.currentTarget.scrollTop);
+  };
+  if (sidebarWidth < 240) {
+    dispatch(setShowSidebar(false));
+  }
+  const handleShowSidebar = () => {
+    dispatch(setSidebarWidth(300));
+    dispatch(setShowSidebar(true));
+  };
+
+  const getLocalWSName = JSON.parse(
+    localStorage.getItem('currentWorkspacename') as string
+  );
+
+  const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
 
   return (
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="md:fixed relative md:inset-y-0 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
+        className="md:fixed relative transition-[width] ease-in-out duration-100 delay-300 md:inset-y-0 z-10 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
         ref={sidebarRef}
         style={
           showSidebar
             ? { maxWidth: 321, width: sidebarWidth, minWidth: '54px' }
-            : { width: '54px', minWidth: '54px' }
+            : { width: '54px', minWidth: '54px', maxWidth: 321 }
         }
-        onMouseDown={(e) => e.preventDefault()}
       >
+        <Modal />
         <span
-          className={`absolute -right-2 top-6 z-20 bg-white rounded-full border-2 border-inherit ${
+          className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
             activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
           }`}
         >
@@ -80,49 +101,82 @@ export default function Sidebar() {
             />
           )}
         </span>
-        <div className="flex flex-col flex-grow bg-white overflow-y-auto mr-1">
+        <div className="flex flex-col overflow-y-scroll overflow-x-hidden bg-white relative">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
-              className={`flex items-center justify-between border-b border-gray-300 mb-1.5 w-full py-2 pl-1 pr-1.5 bg-white w-inherit h-30 ${
+              className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${
                 showSidebar ? 'flex-row' : 'flex-col space-y-1'
               }`}
             >
-              <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
+              <img className="w-10 h-11 ml-1" src={MainLogo} alt="Workflow" />
               <WorkSpaceSelection />
               <div
                 className={`flex items-center mt-1 ${
                   showSidebar
-                    ? 'flex-row space-x-1 justify-between'
+                    ? 'flex-row justify-between'
                     : 'flex-col space-y-1 justify-center'
                 }`}
               >
-                <img className="w-auto h-6" src={Setting} alt="Workflow" />
+                {scrollTop > '108' ? (
+                  <span className="relative h-4 w-4 mr-0.5 cursor-pointer">
+                    <p
+                      className="flex items-center justify-center px-0.5 h-2.5 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
+                      style={{ fontSize: '7px', borderRadius: '50px' }}
+                    >
+                      24
+                    </p>
+                    <img src={notificationIcon} alt="a" className="h-4 w-4" />
+                  </span>
+                ) : null}
+                <div
+                  className="mt-2"
+                  onClick={() =>
+                    dispatch(setShowSidebarSettings(!sidebarSettings))
+                  }
+                >
+                  <ArchiveMenu />
+                </div>
+
                 <AvatarWithInitials
-                  initials="SS"
+                  initials={workspaceName
+                    .split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()}
                   height="h-5"
                   width="w-5"
                   backgroundColour="blue"
                 />
               </div>
-              <HiChevronDoubleLeft
-                color="blue"
-                className={`cursor-pointer mt-1 ${
-                  showSidebar ? 'ml-2' : 'ml-0 rotateimg180'
-                }`}
-                onClick={() => dispatch(setShowSidebar('CHANGE'))}
-              />
+              {showSidebar ? (
+                <HiChevronDoubleLeft
+                  color="blue"
+                  className="cursor-pointer mt-1 ml-1"
+                  onClick={() => dispatch(setShowSidebar(false))}
+                />
+              ) : (
+                <HiChevronDoubleRight
+                  color="blue"
+                  className="cursor-pointer mt-1 ml-0"
+                  onClick={() => handleShowSidebar()}
+                />
+              )}
             </div>
           </div>
-          <div className="overflow-y-auto overflow-x-hidden">
+          <div
+            className="overflow-y-auto overflow-x-hidden relative"
+            onScroll={(e) => handleScroll(e)}
+          >
             <Search />
             <NavigationItems />
             <Places />
           </div>
         </div>
         <div
-          className="justify-self-end absolute shrink-0 grow-0 w-0.5 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
+          className="justify-self-end absolute shrink-0 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
           onMouseDown={startResizing}
-          style={{ cursor: 'col-resize' }}
+          style={{ cursor: 'col-resize', width: '3px' }}
         ></div>
       </div>
     </>

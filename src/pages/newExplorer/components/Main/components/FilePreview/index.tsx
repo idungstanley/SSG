@@ -32,7 +32,7 @@ export default function FilePreview() {
 
   return (
     <div
-      className={`w-full h-full overflow-y-scroll p-2 pr-1 ${
+      className={`w-72 h-full p-2 pr-1 ${
         extension === 'word' ? '' : 'flex justify-center items-start'
       }`}
     >

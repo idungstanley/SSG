@@ -13,7 +13,7 @@ import {
 } from '../../../../../features/task/taskService';
 
 import { useAppSelector } from '../../../../../app/hooks';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/outline';
 
 interface DropdownProps {
   taskId: string | undefined;
@@ -27,10 +27,10 @@ export default function Dropdown({ taskId }: DropdownProps) {
     query: '',
   });
 
-  const currTeamMemberId: any = useAppSelector(
+  const currTeamMemberId = useAppSelector(
     (state) => state.task.currTeamMemberId
   );
-  const currTeamMemberDelId: any = useAppSelector(
+  const currTeamMemberDelId = useAppSelector(
     (state) => state.task.removeWatcherId
   );
 

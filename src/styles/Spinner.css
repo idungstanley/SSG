@@ -10,6 +10,9 @@
   width: var(--uib-size);
 }
 
+.place::placeholder {
+  font-size: 12px;
+}
 .dot-spinner__dot {
   position: absolute;
   top: 0;

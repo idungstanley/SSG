@@ -1,24 +1,26 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import {
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import { CheckIcon } from '@heroicons/react/24/solid';
+} from "@heroicons/react/outline";
+import { CheckIcon } from "@heroicons/react/solid";
 import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { getListsListService } from '../../../../features/list/listService';
-import ListNav from '../../Lists/components/renderlist/ListNav';
+} from "@ant-design/icons";
+import { getListsListService } from "../../../../features/list/listService";
+import ListNav from "../../lists/components/renderlist/ListNav";
+import { useAppSelector } from "../../../../app/hooks";
 
 function RenderWallets() {
   const { walletId } = useParams();
+  const { currentWalletName } = useAppSelector((state) => state.workspace);
 
   const { data: WalletListData } = useQuery({
-    queryKey: ['walletdata', walletId],
+    queryKey: ["walletdata", walletId],
     queryFn: getListsListService,
   });
 
@@ -26,7 +28,7 @@ function RenderWallets() {
     <div className="overflow-auto h-screen">
       <section id="nav">
         <ListNav
-          navName="ListName"
+          navName={currentWalletName}
           viewsList="List"
           viewsList2="Board"
           changeViews="View"

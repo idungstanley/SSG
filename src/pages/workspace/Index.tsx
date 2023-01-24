@@ -10,7 +10,7 @@ function Index() {
   const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(
     (state) => state.workspace
   );
-  const paddingStyles: any = () => {
+  const paddingStyles = () => {
     if (showSidebar && sidebarWidth > 54) {
       return { paddingLeft: `min(${sidebarWidth}px, 321px)` };
     } else if (sidebarWidth < 55) {
@@ -21,19 +21,21 @@ function Index() {
   };
 
   return (
-    <div className="flex  flex-row">
+    <div className="flex flex-row">
       <UploadModal />
       <Sidebar />
-      <div className="flex flex-1 flex-row" style={paddingStyles()}>
+      <div className="flex flex-row w-full" style={paddingStyles()}>
         {showExtendedBar && <ExpandedNav />}
-        <Header />
-        <main className="flex-1">
-          <div
-            className={`py-6 mx-auto px-4 sm:px-6 ${showSidebar ? 'px-8' : ''}`}
-          >
-            <Outlet />
-          </div>
-        </main>
+        <div className="grow flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <div
+              className={`py-3.5 mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}
+            >
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

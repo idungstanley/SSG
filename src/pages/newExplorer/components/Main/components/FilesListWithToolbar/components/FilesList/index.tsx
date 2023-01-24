@@ -85,7 +85,7 @@ export default function FilesList({ data }: FilesListProps) {
   }
 
   return (
-    <div className="flex flex-col h-full w-full overflow-x-scroll gap-2 p-2">
+    <div className="flex flex-col h-full w-full gap-2 px-2">
       {/* file table with selection */}
       {/* status checking */}
       {status === 'loading' ? (

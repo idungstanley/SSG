@@ -1,14 +1,17 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BsCalendar2Minus } from 'react-icons/bs';
 import dashboardIcon from '../../../../assets/branding/dashboard-icon.png';
-import favoriteIcon from '../../../../assets/branding/favorite-icon.png';
+import favoriteIcon from '../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../assets/branding/Group.png';
 import communityIcon from '../../../../assets/branding/community-icon.png';
 import notificationIcon from '../../../../assets/branding/notification-logo.png';
-import homeIcon from '../../../../assets/branding/home-icon.png';
+import homeIcon from '../../../../assets/branding/Home-icon.svg';
 import { classNames } from '../../../../utils';
+import { MdOutlineDashboard } from 'react-icons/md';
+import { HiUserGroup } from 'react-icons/hi';
+import { IoMdNotificationsOutline } from 'react-icons/io';
 
 const navigation = [
   {
@@ -26,13 +29,13 @@ const navigation = [
   {
     name: 'Calendar',
     href: '/workspace/calendar',
-    icon: <BsCalendar2Minus color="rgba(75, 75, 75, 0.64)" />,
+    icon: <BsCalendar2Minus className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
     name: 'Community',
     href: '/workspace/community',
-    source: communityIcon,
+    icon: <HiUserGroup className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
@@ -44,12 +47,12 @@ const navigation = [
   {
     name: 'Dashboards',
     href: '/workspace/dashboard',
-    source: dashboardIcon,
+    icon: <MdOutlineDashboard className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
     name: 'Favorites',
-    href: '/workspace/favorite',
+    href: '/workspace/favorites',
     source: favoriteIcon,
     alwaysShow: false,
   },
@@ -80,13 +83,13 @@ export default function NavigationItems() {
               to={item.href}
               className={classNames(
                 item.href === pathname
-                  ? 'bg-green-50 text-gray-900'
+                  ? 'bg-green-100 text-gray-900'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center pl-4 py-1 text-base relative font-medium hover:bg-gray-100'
+                'flex items-center pl-4 py-2 text-base relative font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
               )}
               <div className="flex items-center">
                 <div
@@ -112,7 +115,7 @@ export default function NavigationItems() {
                   style={{ fontSize: '10px' }}
                   className={classNames(
                     item.href === pathname ? 'text-green-500' : 'text-gray-500',
-                    'tracking-wider truncate'
+                    'tracking-wider leading-3 truncate'
                   )}
                 >
                   {item.name}
@@ -125,13 +128,13 @@ export default function NavigationItems() {
               to={item.href}
               className={classNames(
                 item.href === pathname
-                  ? 'bg-green-50 text-gray-900 mr-0'
+                  ? 'bg-green-100 text-gray-900 mr-0'
                   : 'text-gray-600 hover:text-gray-900',
-                'flex items-center relative pl-4 py-1 text-base font-medium hover:bg-gray-100'
+                'flex items-center relative pl-4 py-2 text-base font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
               )}
               <div className="flex items-center">
                 <div
@@ -157,7 +160,7 @@ export default function NavigationItems() {
                   style={{ fontSize: '10px' }}
                   className={classNames(
                     item.href === pathname ? 'text-green-500' : 'text-gray-500',
-                    'tracking-wider truncate'
+                    'tracking-wider truncate leading-3'
                   )}
                 >
                   {item.name}

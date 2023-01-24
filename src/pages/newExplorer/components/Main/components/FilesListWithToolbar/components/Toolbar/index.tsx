@@ -2,10 +2,14 @@ import React from 'react';
 import {
   TrashIcon,
   ShareIcon,
-  ClipboardIcon,
-  ArrowDownTrayIcon,
-  AdjustmentsVerticalIcon,
-} from '@heroicons/react/24/outline';
+  ClipboardCopyIcon,
+  DownloadIcon,
+  ChatIcon,
+  EyeIcon,
+  ChatAlt2Icon,
+  SearchIcon,
+  PrinterIcon,
+} from '@heroicons/react/outline';
 import {
   useAppDispatch,
   useAppSelector,
@@ -20,6 +24,10 @@ import {
   setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { BsClipboardCheck } from 'react-icons/bs';
+import { ArrowDownIcon } from '@heroicons/react/solid';
+import { TbArrowsUpDown } from 'react-icons/tb';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -56,10 +64,7 @@ export default function Toolbar({ data }: ToolbarProps) {
   const menuItems = [
     {
       icon: (
-        <ArrowDownTrayIcon
-          className="h-5 w-5 stroke-current"
-          aria-hidden="true"
-        />
+        <ArrowDownIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
       onClick: handleDownload,
       label: 'Download',
@@ -80,7 +85,10 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: (
-        <ClipboardIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <BsClipboardCheck
+          className="h-5 w-5 stroke-current"
+          aria-hidden="true"
+        />
       ),
       onClick: () => ({}),
       label: 'Copy',
@@ -96,7 +104,7 @@ export default function Toolbar({ data }: ToolbarProps) {
             show: true,
           })
         ),
-      icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowsUpDown className="h-5 w-5" aria-hidden="true" />,
       disabled: !selectedFileId,
     },
     {
@@ -108,9 +116,9 @@ export default function Toolbar({ data }: ToolbarProps) {
   ];
 
   return (
-    <div className="flex items-center justify-between p-2">
+    <div className="flex items-center justify-between px-2 py-1">
       {/* file actions */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center pt-1">
         {menuItems.map((button) => (
           <Tooltip key={button.label} tooltip={button.label}>
             <button
@@ -126,16 +134,32 @@ export default function Toolbar({ data }: ToolbarProps) {
       </div>
 
       {/* badge (items length and current index) */}
-      <div className="flex gap-1.5 items-center rounded-full bg-indigo-100 px-2.5 py-0.5 font-semibold text-gray-800">
-        {currentFileIndex ? (
-          <>
-            <span className="text-primary-700">
-              {stringifyNumber(currentFileIndex)}
-            </span>
-            <span>/</span>
-          </>
-        ) : null}
-        <span>{stringifyNumber(data.length)}</span>
+      <div className="flex items-center">
+        <div className="flex w-6 items-center cursor-pointer">
+          <SearchIcon className="h-4 w-4" />
+          <BiDotsVerticalRounded className="h-4 w-4" />
+        </div>
+        <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
+          {currentFileIndex ? (
+            <>
+              <span className="text-primary-500">
+                {stringifyNumber(currentFileIndex)}
+              </span>
+              <span>/</span>
+            </>
+          ) : null}
+          <span>{stringifyNumber(data.length)}</span>
+        </div>
+        <button
+          disabled={selectedIds.length === 0}
+          className={
+            selectedIds.length === 0 ? 'text-gray-300' : 'text-gray-500'
+          }
+          onClick={handleDelete}
+          type="button"
+        >
+          <TrashIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
+        </button>
       </div>
     </div>
   );

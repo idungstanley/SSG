@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -163,12 +163,10 @@ function CreateWorkspace() {
             </div>
           </div>
           <div className="px-4 mb-8 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-            {/* <p className="mb-4 h">Invite people into your workspace</p> */}
             <Input
               label="Invite people into your workspace:"
               placeholder="Enter email"
               name="email"
-              // value={null}
               type="email"
               onChange={handleChange}
             />

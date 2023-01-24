@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+// import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/outline';
+import { BsPlusLg } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 
 interface IDropdownItem {
   label: string;
@@ -23,13 +25,16 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+        <Menu.Button className="flex items-center rounded-full cursor-pointer text-black hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+            <AiOutlineEllipsis
+              className="h-4 w-4 text-black"
+              aria-hidden="true"
+            />
           ) : (
-            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>

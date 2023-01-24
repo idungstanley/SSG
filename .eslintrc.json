@@ -27,7 +27,7 @@
     "rules": {
         "no-multi-spaces": ["error", {"ignoreEOLComments": true}],
         "no-empty": "error",
-        "linebreak-style":"error",
+        "linebreak-style":0,
         "no-console":"warn",
         "semi-spacing": ["error", {"before": false, "after": true}],
         "space-infix-ops":"error",

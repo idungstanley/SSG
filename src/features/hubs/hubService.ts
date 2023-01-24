@@ -1,9 +1,13 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
+import { closeMenu, getHub } from './hubSlice';
+import { setArchiveHub, setDelHub } from './hubSlice';
 
 export const createHubService = (data: {
   name: string;
+  currHubId?: string | null;
   currentWorkspaceId?: string;
 }) => {
   const response = requestNew(
@@ -11,6 +15,78 @@ export const createHubService = (data: {
       url: 'hubs',
       method: 'POST',
       data: {
+        name: data.name,
+        current_workspace_id: data.currentWorkspaceId,
+        parent_id: data.currHubId,
+      },
+    },
+    false,
+    true
+  );
+  return response;
+};
+
+// get all hubs
+export const useGetHubList = ({ query }) => {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+
+  return useQuery<IResponseGetHubs>(
+    ['hubs', { isArchived: query ? 1 : 0 }],
+    () =>
+      requestNew(
+        {
+          url: 'hubs',
+          method: 'GET',
+          params: {
+            is_archived: query ? 1 : 0,
+          },
+        },
+        false,
+        true
+      ),
+    {
+      onSuccess: (data) => {
+        const hubData = data.data.hubs.map((hub) => {
+          queryClient.setQueryData(['hub', hub.id], hub);
+          return { ...hub, isOpen: false };
+        });
+        dispatch(getHub(hubData));
+      },
+    }
+  );
+};
+
+//get subhub
+export const useGetSubHub = ({ parentId }) => {
+  return useQuery<IResponseGetHubs>(
+    ['hubs', { parentId: parentId }],
+    () =>
+      requestNew(
+        {
+          url: `hubs/${parentId}`,
+          method: 'GET',
+        },
+        false,
+        true
+      ),
+    {
+      enabled: parentId != null,
+    }
+  );
+};
+
+//edit a hub
+export const useEditHubService = (data: {
+  name: string;
+  currentWorkspaceId?: string;
+  currHubId?: string | null;
+}) => {
+  const response = requestNew(
+    {
+      url: `hubs/${data.currHubId}`,
+      method: 'PUT',
+      params: {
         name: data.name,
         current_workspace_id: data.currentWorkspaceId,
       },
@@ -21,32 +97,65 @@ export const createHubService = (data: {
   return response;
 };
 
-// get all hubs
-export const useGetHubList = () => {
+//Delete a Hub
+export const UseDeleteHubService = (data) => {
+  const dispatch = useDispatch();
+  const hubid = data.query;
   const queryClient = useQueryClient();
-
-  return useQuery<IResponseGetHubs>(
+  return useQuery(
     ['hubs'],
-    () =>
-      requestNew(
+    async () => {
+      const data = await requestNew(
         {
-          url: 'hubs',
-          method: 'GET',
+          url: `at/hubs/${hubid}`,
+          method: 'DELETE',
         },
-        false,
         true
-      ),
+      );
+      return data;
+    },
     {
-      onSuccess: (data) => {
-        data.data.hubs.map((hub) =>
-          queryClient.setQueryData(['hub', hub.id], hub)
-        );
+      // initialData: queryClient.getQueryData(['hubs', hubid]),
+      enabled: data.delHub,
+      // retry: false,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        dispatch(setDelHub(false));
       },
     }
   );
 };
 
-export const useGetHub = (hubId: string | null) =>
+//archive hub
+export const ArchiveHubService = (hub) => {
+  const hubid = hub.query;
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  return useQuery(
+    ['hubs', hubid],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/hubs/${hubid}/archive`,
+          method: 'POST',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['hubs', hubid]),
+      enabled: hub.archiveHub,
+      onSuccess: () => {
+        dispatch(setArchiveHub(false));
+        dispatch(closeMenu());
+        queryClient.invalidateQueries();
+      },
+    }
+  );
+};
+
+export const useGetHubWallet = (hubId: string | null) =>
   useQuery<IHubReq>([`hub-${hubId}`], () =>
     requestNew(
       {

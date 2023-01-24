@@ -1,6 +1,8 @@
 import React from 'react';
-import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useDispatch } from 'react-redux';
+import { XIcon } from '@heroicons/react/solid';
 import { Input } from '../../../components';
+// import { XMarkIcon } from '@heroicons/react/24/solid';
 
 interface SearchProps {
   query: string;
@@ -9,16 +11,17 @@ interface SearchProps {
 }
 
 export default function Search({ query, setQuery, type }: SearchProps) {
+  const dispatch = useDispatch();
   return (
     <div className="relative flex-grow">
       <Input
         name={`explorer-${type}-search`}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => dispatch(setQuery(e.target.value))}
         value={query}
         placeholder={`enter ${type} name`}
       />
       {query.length ? (
-        <XMarkIcon
+        <XIcon
           onClick={() => setQuery('')}
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500 absolute right-2 top-2.5"
           aria-hidden="true"

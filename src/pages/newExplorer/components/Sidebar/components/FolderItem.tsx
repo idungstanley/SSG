@@ -1,16 +1,10 @@
 import React from 'react';
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  FolderIcon,
   TrashIcon,
   PlusIcon,
   PencilIcon,
-  ArrowDownTrayIcon,
   ShareIcon,
-  AdjustmentsVerticalIcon,
-  ArrowsUpDownIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
@@ -24,6 +18,9 @@ import { resetSelectedItem } from '../../../../../features/explorer/explorerSlic
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { FaFolder } from 'react-icons/fa';
+import { TbArrowRotaryFirstLeft, TbArrowsUpDown } from 'react-icons/tb';
 
 interface FolderItemProps {
   id: string;
@@ -70,7 +67,6 @@ export default function FolderItem({
       type: 'folder',
       id,
     });
-
     if (isActiveFolder) {
       dispatch(resetSelectedItem());
       navigate('/new-explorer', { replace: true });
@@ -79,7 +75,6 @@ export default function FolderItem({
 
   const handleDownload = () => {
     const itemName = `${name}.zip`;
-
     DownloadFile('folder', id, itemName);
   };
 
@@ -90,7 +85,7 @@ export default function FolderItem({
     {
       label: 'Download',
       onClick: handleDownload,
-      icon: <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowRotaryFirstLeft className="h-5 w-5" aria-hidden="true" />,
     },
     {
       label: 'Rename',
@@ -113,7 +108,7 @@ export default function FolderItem({
             show: true,
           })
         ),
-      icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowsUpDown className="h-5 w-5" aria-hidden="true" />,
     },
     {
       label: 'Delete',
@@ -132,14 +127,26 @@ export default function FolderItem({
       ref={droppableRef}
       style={style}
     >
+      {isActiveFolder && (
+        <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+      )}
       <div
         onClick={() => handleClickFolder(id, parentId)}
         className="flex gap-2 mr-2 items-center cursor-pointer"
       >
         {isActiveFolder || haveAncestors ? (
-          <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+          <>
+            <VscTriangleDown className="flex-shrink-0 h-3 text-xs mr-0.5" />
+          </>
         ) : (
-          <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+          <>
+            <VscTriangleRight
+              className="flex-shrink-0 h-3 text-xs"
+              color="rgb(95,99,104)"
+              aria-hidden="true"
+            />
+            <FaFolder color="rgb(95,99,104)" />
+          </>
         )}
       </div>
 
@@ -147,7 +154,7 @@ export default function FolderItem({
         onClick={() => handleClickFolder(id, parentId)}
         className="space-x-2 whitespace-nowrap overflow-x-hidden truncate cursor-pointer"
       >
-        <FolderIcon
+        <FaFolder
           className="h-5 w-5 mb-1 inline-flex items-center"
           aria-hidden="true"
         />
@@ -164,7 +171,7 @@ export default function FolderItem({
           aria-hidden="true"
         />
         <div ref={draggableRef} {...listeners} {...attributes}>
-          <ArrowsUpDownIcon
+          <TbArrowsUpDown
             className="h-5 w-5 text-gray-400"
             aria-hidden="true"
           />

@@ -5,8 +5,8 @@ import { useAppSelector } from '../../../app/hooks';
 import { FileIcon, Spinner } from '../../../common';
 import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
-import FullScreenMessage from "../../CenterMessage/FullScreenMessage";
-import MenuDropdown from '../../Dropdown/DropdownForWorkspace';
+import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
 
 export default function InboxIndex() {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export default function InboxIndex() {
 
   const data = useMemo(
     () => dt?.pages.flatMap((page) => page.data.inbox_files),
-    [dt],
+    [dt]
   );
 
   if (status === 'error') {

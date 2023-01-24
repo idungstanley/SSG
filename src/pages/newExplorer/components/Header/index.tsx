@@ -1,13 +1,13 @@
 import React from 'react';
-import {
-  ArrowRightCircleIcon,
-  ArrowLeftCircleIcon,
-  PlusIcon,
-  ArrowUpTrayIcon,
-} from '@heroicons/react/24/outline';
+import { PlusIcon, UploadIcon } from '@heroicons/react/outline';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
+import { TbArrowRotaryFirstLeft } from 'react-icons/tb';
+import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
+} from '@heroicons/react/solid';
 
 const SquareStackIcon = (
   <svg
@@ -16,7 +16,7 @@ const SquareStackIcon = (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="w-6 h-6 stroke-current text-gray-500"
+    className="w-4 h-4 stroke-current text-gray-500"
   >
     <path
       strokeLinecap="round"
@@ -34,7 +34,7 @@ export default function Header() {
       id: 1,
       onClick: () => ({}),
       icon: (
-        <ArrowLeftCircleIcon
+        <ArrowCircleLeftIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -44,7 +44,7 @@ export default function Header() {
       id: 2,
       onClick: () => ({}),
       icon: (
-        <ArrowRightCircleIcon
+        <ArrowCircleRightIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -57,7 +57,7 @@ export default function Header() {
       label: 'New',
       icon: (
         <PlusIcon
-          className="h-6 w-6 stroke-current text-gray-500"
+          className="h-4 w-4 stroke-current text-gray-500"
           aria-hidden="true"
         />
       ),
@@ -66,7 +66,7 @@ export default function Header() {
     {
       label: 'Upload',
       icon: (
-        <ArrowUpTrayIcon
+        <TbArrowRotaryFirstLeft
           className="h-6 w-6 stroke-current text-gray-500"
           aria-hidden="true"
         />
@@ -86,21 +86,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-2 border-b h-14">
-      {/* move between files */}
-      <div className="flex items-center">
-        {navigationButtons.map((button) => (
-          <button
-            onClick={button.onClick}
-            key={button.id}
-            type="button"
-            className="inline-flex items-center rounded-full border border-transparent text-white shadow-sm focus:outline-none ring-0 focus:ring-0"
-          >
-            {button.icon}
-          </button>
-        ))}
-      </div>
-
+    <header className="flex items-center justify-end p-2 border-b h-8">
       {/* right items */}
       <div className="flex items-center gap-4">
         {rightItems.map((button) => (
@@ -110,7 +96,7 @@ export default function Header() {
             key={button.label}
           >
             {button.icon}
-            <p className="text-gray-600 text-sm">{button.label}</p>
+            {/* <p className="text-gray-600 text-xs">{button.label}</p> */}
           </div>
         ))}
       </div>
