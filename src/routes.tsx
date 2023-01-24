@@ -54,6 +54,7 @@ import Goals from "./pages/workspace/goals";
 import Favorites from "./pages/workspace/favorites";
 import Home from "./pages/workspace/home/Home";
 import NewExplorerPage from "./pages/newExplorer";
+import RenderHubs from "./pages/workspace/hubs/RenderHubs";
 
 const inbox = [
   {
@@ -166,6 +167,7 @@ export const routes = (user: IUser | null) =>
         { path: "favorites", element: <Favorites /> },
         { path: "goals", element: <Goals /> },
         { path: "docs", element: <Docs /> },
+        { path: "hub/:hubId", element: <RenderHubs /> },
         { path: "wallet/:walletId", element: <RenderWallets /> },
         { path: "list/:listId", element: <RenderList /> },
         { path: "t/:taskId", element: <RenderTaskModal /> },

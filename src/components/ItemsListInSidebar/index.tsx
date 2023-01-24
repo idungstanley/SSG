@@ -23,6 +23,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -36,6 +37,8 @@ export default function ItemsListInSidebar({
   type,
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
@@ -67,9 +70,19 @@ export default function ItemsListInSidebar({
     );
   }
 
+  const handleLocation = (id: string, name:string) => {
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'hub',
+        activeItemName: name,
+      })
+    );
+    navigate(`/workspace/hub/${id}`);
+  };
+
   const handleClick = (id: string) => {
     const isMatch = id === currentItemId;
-    dispatch(setActiveItem({ activeItemId: id, activeItemType: 'hub' }));
     if (isMatch) {
       dispatch(setShowHub(false));
       if (!currentItemId) {
@@ -118,7 +131,7 @@ export default function ItemsListInSidebar({
   };
 
   return status === 'success' ? (
-    <ul className="w-full z-20">
+    <ul className="z-20 w-full">
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}
@@ -141,7 +154,7 @@ export default function ItemsListInSidebar({
               }`}
             >
               {i.id === currentItemId && i.id === activeItemId && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
               <div
                 role="button"
@@ -166,7 +179,7 @@ export default function ItemsListInSidebar({
                     />
                   )}
                 </div>
-                <div className="flex min-w-0 flex-1 items-center">
+                <div className="flex items-center flex-1 min-w-0">
                   <AvatarWithInitials
                     initials={i.name
                       .split(' ')
@@ -183,6 +196,7 @@ export default function ItemsListInSidebar({
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
                       style={{ fontSize: '10px' }}
+                      onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}
                     </h4>
@@ -191,15 +205,15 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {isHovering === index && (
-              <div className="flex items-center space-x-1 pr-1">
+              <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
                   onClick={(e) => handleHubSettings(i.id, e)}
-                  className="cursor-pointer text-black"
+                  className="text-black cursor-pointer"
                   id="menusettings"
                 />
                 <AiOutlinePlus
                   onClick={() => handleItemAction(i.id)}
-                  className="cursor-pointer text-black"
+                  className="text-black cursor-pointer"
                 />
               </div>
             )}

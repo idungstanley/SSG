@@ -33,8 +33,8 @@ export default function SubHubIndex() {
   const { hubParentId, showMenuDropdown, currSubHubId, SubMenuId } =
     useAppSelector((state) => state.hub);
 
-  const handleClick = (id: string) => {
-    dispatch(setActiveItem({ activeItemType: 'subhub', activeItemId: id }));
+  const handleClick = (id: string, name: string) => {
+    dispatch(setActiveItem({ activeItemType: 'subhub', activeItemId: id, activeItemName: name }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
@@ -86,7 +86,7 @@ export default function SubHubIndex() {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => handleClick(subhub.id)}
+                  onClick={() => handleClick(subhub.id, subhub.name)}
                   className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
                 >
                   {currSubHubId === subhub.id ? (
@@ -103,7 +103,7 @@ export default function SubHubIndex() {
                     />
                   )}
                 </div>
-                <div className="flex min-w-0 flex-1 items-center">
+                <div className="flex items-center flex-1 min-w-0">
                   <AvatarWithInitials
                     initials={subhub.name
                       .split(' ')
