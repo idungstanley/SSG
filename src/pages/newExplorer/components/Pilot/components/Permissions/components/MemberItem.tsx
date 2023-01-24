@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import ChangeAccess from '../ChangeAccess';
-import { IPermissionMember } from '../../../../../../../../features/permissions/permissions.interfaces';
-import RemoveAccess from '../RemoveAccess';
+import { useAppSelector } from '../../../../../../../app/hooks';
+import ChangeAccess from './ChangeAccess';
+import { IPermissionMember } from '../../../../../../../features/permissions/permissions.interfaces';
+import RemoveAccess from './RemoveAccess';
 
 interface MemberProps {
   member: IPermissionMember;
@@ -13,7 +13,7 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
   const { currentUserId } = useAppSelector((state) => state.auth);
 
   const access = member.access_level.name;
-  const isOwner = access === 'Owner';
+
   const isCurrentUser = !isGroup
     ? currentUserId === member.team_member.user.id
     : false;
@@ -39,7 +39,8 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
           )}
         </div>
 
-        {isCurrentUser || isOwner ? (
+        {/* can change if it's not you */}
+        {isCurrentUser ? (
           <p className="text-indigo-600 font-semibold">{access}</p>
         ) : (
           <ChangeAccess

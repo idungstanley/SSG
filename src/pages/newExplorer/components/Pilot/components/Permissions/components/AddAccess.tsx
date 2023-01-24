@@ -20,6 +20,7 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
     isGroups: type === 'member-group',
   });
 
+  // members or member groups list
   const data = dt?.pages.flatMap(
     (page) => page.data.team_members || page.data.team_member_groups
   );
@@ -49,7 +50,7 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
           name: i.name || i.user.name,
           email: i.user?.email,
           accessLevel: i.id,
-          type: 'member',
+          type,
         }))}
         selectedData={null}
         setSelectedData={handleAddAccess}

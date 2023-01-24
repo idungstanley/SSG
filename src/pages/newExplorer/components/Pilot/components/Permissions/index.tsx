@@ -53,7 +53,7 @@ export default function Permissions() {
         ) : null}
       </div>
 
-      {/* add access */}
+      {/* add access menu */}
       <div className="space-y-3">
         {fileMembers ? (
           <AddAccess
