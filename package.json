@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@dnd-kit/core": "^6.0.7",
     "@headlessui/react": "^1.6.6",
-    "@heroicons/react": "^1.0.5",
+    "@heroicons/react": "^2.0.13",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.11.0",

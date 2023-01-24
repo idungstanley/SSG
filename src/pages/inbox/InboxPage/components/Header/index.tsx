@@ -3,11 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   CogIcon,
   TrashIcon,
-  MailOpenIcon,
-  ChatIcon,
+  EnvelopeOpenIcon,
+  ChatBubbleBottomCenterIcon,
   EyeIcon,
-} from '@heroicons/react/solid';
-import { UploadIcon } from '@heroicons/react/outline';
+} from '@heroicons/react/24/solid';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { Button } from '../../../../../components';
 import BlackListEmails from '../BlackListEmails';
@@ -50,7 +50,7 @@ function Header() {
       label: 'Blacklist',
       onClick: () => setShowEmailsModal((prev) => !prev),
       icon: (
-        <MailOpenIcon
+        <EnvelopeOpenIcon
           className="mr-2.5 h-5 w-5 text-gray-500"
           aria-hidden="true"
         />
@@ -61,7 +61,10 @@ function Header() {
       label: 'Comments',
       onClick: () => setShowCommentsModal((prev) => !prev),
       icon: (
-        <ChatIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
+        <ChatBubbleBottomCenterIcon
+          className="mr-2.5 h-5 w-5 text-gray-500"
+          aria-hidden="true"
+        />
       ),
     },
     {
@@ -69,7 +72,7 @@ function Header() {
       label: 'Upload',
       onClick: upload,
       icon: (
-        <UploadIcon
+        <ArrowUpTrayIcon
           className="mr-2.5 h-5 w-5 text-gray-500"
           aria-hidden="true"
         />
@@ -90,7 +93,10 @@ function Header() {
       onClick: () =>
         dispatch(setSelectedItem({ id: inboxId || '', type: 'inbox' })),
       icon: (
-        <ChatIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
+        <ChatBubbleBottomCenterIcon
+          className="mr-2.5 h-5 w-5 text-gray-500"
+          aria-hidden="true"
+        />
       ),
     },
     {

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { useGetDataAccess } from '../../features/permissions/permissionsService';
+import { useGetItemAccess } from '../../features/permissions/permissionsService';
 import SelectMenuTeamMembers from '../selectMenu';
 import AddAccess from './components/AddAccess';
 import ChangeAccess from './components/ChangeAccess';
@@ -20,7 +20,7 @@ export default function PermissionManagement() {
   const { selectedItemId, selectedItemType: type } = useAppSelector(
     (state) => state.explorer
   );
-  const { data, status } = useGetDataAccess(selectedItemId, type);
+  const { data, status } = useGetItemAccess({ id: selectedItemId, type });
 
   const [selectedData, setSelectedData] = useState<ISelectedData | null>(null);
   const [showPopup, setShowPopup] = useState(false);

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { PlusCircleIcon } from '@heroicons/react/outline';
-import { ChevronDownIcon, FolderAddIcon } from '@heroicons/react/solid';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, FolderPlusIcon } from '@heroicons/react/24/solid';
 import { useDispatch } from 'react-redux';
 import { setCreateFolderSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { classNames } from '../../../../../../utils';
@@ -37,13 +37,15 @@ export default function CreateNewSelect() {
               {({ active }) => (
                 <button
                   type="button"
-                  onClick={() => dispatch(setCreateFolderSlideOverVisibility(true))}
+                  onClick={() =>
+                    dispatch(setCreateFolderSlideOverVisibility(true))
+                  }
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full',
+                    'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
-                  <FolderAddIcon
+                  <FolderPlusIcon
                     className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

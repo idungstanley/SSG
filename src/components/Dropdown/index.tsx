@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+// import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/outline';
@@ -29,7 +29,10 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <AiOutlineEllipsis className="h-4 w-4 text-black" aria-hidden="true" />
+            <AiOutlineEllipsis
+              className="h-4 w-4 text-black"
+              aria-hidden="true"
+            />
           ) : (
             <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
           )}

@@ -3,7 +3,7 @@ import {
   useGetExplorerFolders,
   useGetSearchFolders,
 } from '../../../../features/explorer/explorerService';
-import { FolderAddIcon } from '@heroicons/react/outline';
+import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import FoldersList from './components/FoldersList';
 // import Search from '../Search';
 import { useParams } from 'react-router-dom';
@@ -74,7 +74,7 @@ export default function Extendedbar() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({

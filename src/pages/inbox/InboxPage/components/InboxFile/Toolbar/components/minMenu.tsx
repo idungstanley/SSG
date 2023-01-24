@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
-  ArchiveIcon,
+  ArchiveBoxXMarkIcon,
   ChevronDownIcon,
-  DownloadIcon,
+  ArrowDownTrayIcon,
   InboxIcon,
-  InboxInIcon,
-} from '@heroicons/react/solid';
+  InboxArrowDownIcon,
+  NoSymbolIcon,
+} from '@heroicons/react/24/solid';
 import { useDispatch } from 'react-redux';
 import {
   useArchiveOrUnarchiveInboxFile,
@@ -22,25 +23,7 @@ import {
 } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
 import { useAppSelector } from '../../../../../../../app/hooks';
-import { EyeIcon } from '@heroicons/react/outline';
-
-const noSymbolIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="mr-2.5 h-5 w-5 text-gray-400"
-    aria-hidden="true"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-    />
-  </svg>
-);
+import { EyeIcon } from '@heroicons/react/24/outline';
 
 export default function MinMenu() {
   const dispatch = useDispatch();
@@ -92,7 +75,7 @@ export default function MinMenu() {
           aria-hidden="true"
         />
       ) : (
-        <ArchiveIcon
+        <ArchiveBoxXMarkIcon
           className="mr-2.5 h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
@@ -110,7 +93,7 @@ export default function MinMenu() {
       label: 'Assign',
       onClick: () => dispatch(setAssignInboxFileSlideOverVisibility(true)),
       icon: (
-        <InboxInIcon
+        <InboxArrowDownIcon
           className="mr-2.5 h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
@@ -119,7 +102,12 @@ export default function MinMenu() {
     {
       label: fileInBlacklist ? 'Remove from blacklist' : 'Add to blacklist',
       onClick: blacklist,
-      icon: noSymbolIcon,
+      icon: (
+        <NoSymbolIcon
+          className="mr-2.5 h-5 w-5 text-gray-400"
+          aria-hidden="true"
+        />
+      ),
     },
   ];
 
@@ -159,7 +147,7 @@ export default function MinMenu() {
               ))}
 
               <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
-                <DownloadIcon
+                <ArrowDownTrayIcon
                   className="mr-2.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />

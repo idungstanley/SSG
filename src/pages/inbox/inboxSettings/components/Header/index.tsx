@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InboxIcon } from '@heroicons/react/solid';
-import { UploadIcon } from '@heroicons/react/outline';
+import { InboxIcon } from '@heroicons/react/24/solid';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { Button } from '../../../../../components';
 
@@ -16,7 +16,9 @@ function Header() {
   return (
     <div className="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 h-20">
       <div className="flex items-center">
-        <h1 className="text-lg font-medium leading-6 text-gray-900 sm:truncate mr-5 inline-block align-middle">Inbox</h1>
+        <h1 className="text-lg font-medium leading-6 text-gray-900 sm:truncate mr-5 inline-block align-middle">
+          Inbox
+        </h1>
         <div className="w-96 z-40">
           <SelectInboxMenu />
         </div>
@@ -27,7 +29,12 @@ function Header() {
           buttonStyle="white"
           label="Upload"
           onClick={() => ({})}
-          icon={<UploadIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
+          icon={
+            <ArrowUpTrayIcon
+              className="mr-2.5 h-5 w-5 text-gray-500"
+              aria-hidden="true"
+            />
+          }
           iconPosition="center"
           disabled
           ringOnFocus
@@ -37,7 +44,12 @@ function Header() {
           buttonStyle="white"
           label="Back to inbox"
           onClick={goBackToInbox}
-          icon={<InboxIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
+          icon={
+            <InboxIcon
+              className="mr-2.5 h-5 w-5 text-gray-500"
+              aria-hidden="true"
+            />
+          }
           iconPosition="center"
           disabled={false}
           ringOnFocus

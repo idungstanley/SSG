@@ -1,5 +1,5 @@
 import React from 'react';
-import { XIcon } from '@heroicons/react/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   useAddOrRemoveItemToOrFromLink,
   useGetShareLink,
@@ -35,7 +35,7 @@ export default function FilesFromLink({ shareLinkId }: FilesFromLinkProps) {
                 className="rounded-full flex py-1 px-2 items-center bg-indigo-100 text-sm font-medium text-indigo-700"
               >
                 {file.file.display_name}
-                <XIcon
+                <XMarkIcon
                   onClick={() => handleRemove(file.id)}
                   className="h-4 w-4 mt-0.5 ml-2 cursor-pointer"
                   aria-hidden="true"

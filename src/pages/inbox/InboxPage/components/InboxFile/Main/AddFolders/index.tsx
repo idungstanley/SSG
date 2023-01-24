@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { LightBulbIcon } from '@heroicons/react/outline';
+import { LightBulbIcon } from '@heroicons/react/24/outline';
 import FolderSearchResultItem from './FolderSearchResultItem';
 import SelectedFolderItem from './SelectedFolderItem';
 import {

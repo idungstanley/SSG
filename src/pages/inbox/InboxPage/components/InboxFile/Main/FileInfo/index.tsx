@@ -3,8 +3,8 @@ import {
   EyeIcon,
   InformationCircleIcon,
   ClockIcon,
-  ChatIcon,
-} from '@heroicons/react/outline';
+  ChatBubbleBottomCenterIcon,
+} from '@heroicons/react/24/outline';
 import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
@@ -35,7 +35,7 @@ const tabs = [
   {
     key: 'comments',
     name: 'Comments',
-    icon: ChatIcon,
+    icon: ChatBubbleBottomCenterIcon,
     current: false,
   },
 ];

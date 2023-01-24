@@ -1,4 +1,8 @@
-import { ArrowCircleLeftIcon, ArrowCircleRightIcon, HomeIcon } from '@heroicons/react/outline';
+import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
+  HomeIcon,
+} from '@heroicons/react/outline';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetExplorerFolder } from '../../../../features/explorer/explorerService';

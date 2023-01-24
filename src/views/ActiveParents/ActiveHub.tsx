@@ -10,7 +10,6 @@ import {
   setShowHub,
 } from '../../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../../components';
-import MenuDropdown from '../../components/Dropdown/DropdownForWorkspace';
 import { Spinner } from '../../common';
 import { useGetHubList, useGetHubWallet } from '../../features/hubs/hubService';
 import { getHub } from '../../features/hubs/hubSlice';
@@ -21,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
+import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();

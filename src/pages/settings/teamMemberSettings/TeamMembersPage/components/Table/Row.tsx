@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  BanIcon,
-  UserRemoveIcon,
+  NoSymbolIcon,
+  UserMinusIcon,
   CheckCircleIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import {
   useGetTeamMember,
   useDeactivateTeamMember,
@@ -172,7 +172,7 @@ export default function Row({ teamMemberId }: RowProps) {
                     ? deactivateTeamMemberConfirmation()
                     : reactivateTeamMemberConfirmation(),
                 icon: teamMember.is_active ? (
-                  <BanIcon
+                  <NoSymbolIcon
                     className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
@@ -187,7 +187,7 @@ export default function Row({ teamMemberId }: RowProps) {
                 label: 'Remove access',
                 onClick: removeTeamMemberConfirmation,
                 icon: (
-                  <UserRemoveIcon
+                  <UserMinusIcon
                     className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

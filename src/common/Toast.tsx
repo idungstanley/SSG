@@ -1,6 +1,6 @@
 import React from 'react';
-import { CheckCircleIcon } from '@heroicons/react/outline';
-import { XIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon, XIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
 import toast from 'react-hot-toast';
 
 interface ToastProps {

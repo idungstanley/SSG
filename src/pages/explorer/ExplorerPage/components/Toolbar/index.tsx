@@ -5,12 +5,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import {
   TrashIcon,
-  DuplicateIcon,
-  DownloadIcon,
+  DocumentDuplicateIcon,
+  ArrowDownTrayIcon,
   ClipboardIcon,
-  UploadIcon,
+  ArrowUpTrayIcon,
   PencilIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import {
   setCopyItems,
   resetSelectedFilesAndFolders,
@@ -141,7 +141,7 @@ export default function Toolbar() {
 
   const toolbarItems = [
     {
-      icon: <DownloadIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: onDownload,
       disabled: selectedFileIds.length + selectedFolderIds.length === 0,
       title: 'Download',
@@ -154,7 +154,7 @@ export default function Toolbar() {
       title: 'Delete',
     },
     {
-      icon: <DuplicateIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <DocumentDuplicateIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: onCopy,
       disabled: selectedFileIds.length + selectedFolderIds.length === 0,
       title: 'Copy',
@@ -248,7 +248,7 @@ function Upload() {
         type="button"
         className="flex justify-center px-4 rounded-md border border-gray-300 shadow-sm py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ring-0 focus:ring-0"
       >
-        <UploadIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        <ArrowUpTrayIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         <span className="sm:ml-2.5 hidden sm:block">Upload</span>
       </button>
     </div>
