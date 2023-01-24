@@ -15,8 +15,6 @@ function TaskTableView() {
 
   const editable = myTaskData.map((o) => ({ ...o }));
 
-  console.log(editable);
-
   const icons: any = {
     Export: () => <BiExport />,
     Search: () => null,
@@ -96,16 +94,7 @@ function TaskTableView() {
 
       render:
         column == "assignees"
-          ? (newData) => (
-              <span key={newData.id} className="flex-1">
-                <AvatarWithInitials
-                  initials={newData.initials}
-                  backgroundColour={newData.colour}
-                  height="h-5"
-                  width="w-5"
-                />
-              </span>
-            )
+          ? (newData) => groupAssignee(newData.assignees)
           : null,
     };
     dynamicColum.push(singleColumn);
