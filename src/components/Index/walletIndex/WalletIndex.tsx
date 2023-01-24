@@ -45,6 +45,14 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const navigate = useNavigate();
   const handleLocation = (id: string, name, type = 'wallet') => {
     navigate(`/workspace/wallet/${id}`);
+    setShowSubWallet(id);
+    dispatch(setCurrentWalletId(id));
+    dispatch(
+      setWalletItem({
+        currentWalletParentId: id,
+        currentWalletParentType: 'wallet',
+      })
+    );
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
@@ -111,7 +119,11 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       {data?.data?.wallets.length !== 0 &&
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
-            <section className="flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
+            <section
+              className={`flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
+                wallet.id === activeItemId && 'bg-green-100 text-black'
+              }`}
+            >
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
               )}

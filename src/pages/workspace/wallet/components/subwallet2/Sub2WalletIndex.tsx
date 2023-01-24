@@ -27,7 +27,6 @@ function Sub2WalletIndex({
   currWalId,
 }: Sub2WalletIndexProps) {
   const dispatch = useDispatch();
-
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [finalParentId, setFinalWalletParentId] = useState('');
   const { activeItemId } = useAppSelector((state) => state.workspace);
