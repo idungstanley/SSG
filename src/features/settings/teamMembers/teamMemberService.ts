@@ -4,8 +4,13 @@ import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
-export const useGetTeamMembers = (data: { page: number; query: string }) => {
+export const useGetTeamMembers = (data: {
+  page: number;
+  query: string;
+  isEnabled?: boolean;
+}) => {
   const queryClient = useQueryClient();
+  const enabled = data.isEnabled ? data.isEnabled : true;
 
   return useQuery<ITeamMembersAndGroupsReq>(
     ['team_members', { page: data.page, query: data.query }],
@@ -25,6 +30,7 @@ export const useGetTeamMembers = (data: { page: number; query: string }) => {
       );
     },
     {
+      enabled,
       onSuccess: (successData) => {
         successData.data.team_members?.map((teamMember) =>
           queryClient.setQueryData(['team_member', teamMember.id], teamMember)

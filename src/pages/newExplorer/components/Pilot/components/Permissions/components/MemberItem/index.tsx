@@ -15,7 +15,7 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
   const isCurrentUser = currentUserId === member.team_member.user.id;
 
   return (
-    <div className="flex flex-col gap-3 border rounded-xl p-2 w-full text-sm">
+    <div className="flex flex-col gap-3 border rounded-md p-2 w-full text-sm">
       <div className="flex justify-between items-center">
         <div className="space-y-1 text-gray-500">
           {isGroup ? (
