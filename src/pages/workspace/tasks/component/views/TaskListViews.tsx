@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { FiPlusCircle, FiArrowDownCircle } from 'react-icons/fi';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdOutlineDragIndicator } from 'react-icons/md';
-import { FaSort } from 'react-icons/fa';
-import AddColumnDropdown from '../../dropdown/AddColumnDropdown';
-import addColumns from '../../../lists/components/renderlist/listDetails/listDetails';
-import { useDispatch } from 'react-redux';
-import { setCloseTaskListView } from '../../../../../features/task/taskSlice';
+import React, { useState } from "react";
+import { FiPlusCircle, FiArrowDownCircle } from "react-icons/fi";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdOutlineDragIndicator } from "react-icons/md";
+import { FaSort } from "react-icons/fa";
+import AddColumnDropdown from "../../dropdown/AddColumnDropdown";
+import addColumns from "../../../lists/components/renderlist/listDetails/listDetails";
+import { useDispatch } from "react-redux";
+import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -23,8 +23,8 @@ export default function TaskListViews() {
       <div className=" flex w-6/12 items-center gap-2 shrink-0">
         <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
           <FiArrowDownCircle
-            className={`text-gray-400 text-sm hover:text-gray-200  ${
-              closeTaskListView === false && 'rotateimg90'
+            className={` text-gray-400 text-sm hover:text-gray-200  ${
+              closeTaskListView === false ? "rotateimg90" : null
             }`}
             aria-hidden="true"
             onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
