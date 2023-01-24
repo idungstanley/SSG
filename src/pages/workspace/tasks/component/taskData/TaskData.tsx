@@ -18,6 +18,7 @@ import { useAppSelector } from "../../../../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
+import "./task.css";
 
 interface TaskDataProps {
   task: any;
@@ -61,7 +62,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="stack">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
