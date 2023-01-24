@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../../app/hooks';
 import { IPermissionMember } from '../../../../../../../../features/permissions/permissions.interfaces';
+import RemoveAccess from '../RemoveAccess';
 
 interface MemberProps {
   member: IPermissionMember;
@@ -43,7 +44,15 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
       {!isOwner ? (
         <div className="flex items-center justify-between">
           <span>change access</span>
-          <span>remove access</span>
+          <RemoveAccess
+            itemType={isGroup ? 'member-group' : 'member'}
+            accessToId={
+              !isGroup ? member.team_member.id : member.team_member_group.id
+            }
+            isActiveUser={
+              !isGroup ? member.team_member.user.id === currentUserId : false
+            }
+          />
         </div>
       ) : null}
     </div>

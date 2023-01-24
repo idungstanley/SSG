@@ -79,8 +79,8 @@ const removeAccessForData = (dat: {
 };
 
 export const useRemoveAccessForData = (
-  type: explorerItemType | null,
-  id: string | null
+  type?: explorerItemType | null,
+  id?: string | null
 ) => {
   const queryClient = useQueryClient();
 
