@@ -30,7 +30,7 @@ export default function AddAccess({ itemType, actualDataIds }: AddAccessProps) {
     type: itemType,
   }));
 
-  const { mutate: onAdd } = useAddAccessForData(type, selectedItemId);
+  const { mutate: onAdd } = useAddAccessForData(selectedItemId, type);
 
   const dataListWithoutActual = dataList?.filter(
     (i) => !actualDataIds.includes(i.id)
