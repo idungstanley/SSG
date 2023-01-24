@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../../app/hooks';
+import ChangeAccess from '../ChangeAccess';
 import { IPermissionMember } from '../../../../../../../../features/permissions/permissions.interfaces';
 import RemoveAccess from '../RemoveAccess';
 
@@ -38,23 +39,30 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
           )}
         </div>
 
-        <p className="text-indigo-600 font-semibold">{access}</p>
-      </div>
-
-      {!isOwner ? (
-        <div className="flex items-center justify-between">
-          <span>change access</span>
-          <RemoveAccess
+        {isCurrentUser || isOwner ? (
+          <p className="text-indigo-600 font-semibold">{access}</p>
+        ) : (
+          <ChangeAccess
             itemType={isGroup ? 'member-group' : 'member'}
+            actualAccess={member.access_level.key}
             accessToId={
               !isGroup ? member.team_member.id : member.team_member_group.id
             }
-            isActiveUser={
-              !isGroup ? member.team_member.user.id === currentUserId : false
-            }
           />
-        </div>
-      ) : null}
+        )}
+      </div>
+
+      <div className="flex items-center justify-end">
+        <RemoveAccess
+          itemType={isGroup ? 'member-group' : 'member'}
+          accessToId={
+            !isGroup ? member.team_member.id : member.team_member_group.id
+          }
+          isActiveUser={
+            !isGroup ? member.team_member.user.id === currentUserId : false
+          }
+        />
+      </div>
     </div>
   );
 }

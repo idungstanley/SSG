@@ -114,8 +114,8 @@ const changeAccessForData = (data: {
 };
 
 export const useChangeAccessForData = (
-  type: explorerItemType | null,
-  id: string | null
+  type?: explorerItemType | null,
+  id?: string | null
 ) => {
   const queryClient = useQueryClient();
 
