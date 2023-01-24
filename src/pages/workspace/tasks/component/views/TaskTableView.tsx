@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import MaterialTable from "material-table";
-import { ThemeProvider, createTheme } from "@mui/material";
-import { BiExport } from "react-icons/bi";
-import { BiHide } from "react-icons/bi";
-import { BsSearch } from "react-icons/bs";
-import { AiOutlineFilter } from "react-icons/ai";
-import { FaSort } from "react-icons/fa";
-import { AvatarWithInitials } from "../../../../../components";
+import React, { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import MaterialTable from 'material-table';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { BiExport } from 'react-icons/bi';
+import { BiHide } from 'react-icons/bi';
+import { BsSearch } from 'react-icons/bs';
+import { AiOutlineFilter } from 'react-icons/ai';
+import { FaSort } from 'react-icons/fa';
+import { AvatarWithInitials } from '../../../../../components';
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
@@ -50,34 +50,34 @@ function TaskTableView() {
   };
 
   const hidden = (col) => {
-    if (col == "id") {
+    if (col == 'id') {
       return true;
     }
-    if (col == "list_id") {
+    if (col == 'list_id') {
       return true;
     }
-    if (col == "parent_id") {
+    if (col == 'parent_id') {
       return true;
     }
-    if (col == "archived_at") {
+    if (col == 'archived_at') {
       return true;
     }
-    if (col == "deleted_at") {
+    if (col == 'deleted_at') {
       return true;
     }
-    if (col == "updated_at") {
+    if (col == 'updated_at') {
       return true;
     }
-    if (col == "group_assignees") {
+    if (col == 'group_assignees') {
       return true;
     }
-    if (col == "description") {
+    if (col == 'description') {
       return true;
     }
-    if (col == "end_date") {
+    if (col == 'end_date') {
       return true;
     }
-    if (col == "start_date") {
+    if (col == 'start_date') {
       return true;
     }
   };
@@ -85,15 +85,15 @@ function TaskTableView() {
   columnHead[0].map((column) => {
     const singleColumn = {
       title:
-        column.split("_").join(" ").toUpperCase() == "NAME"
-          ? "TASKS"
-          : column.split("_").join(" ").toUpperCase(),
+        column.split('_').join(' ').toUpperCase() == 'NAME'
+          ? 'TASKS'
+          : column.split('_').join(' ').toUpperCase(),
       field: column,
       emptyValue: () => <p>-</p>,
       hidden: hidden(column),
 
       render:
-        column == "assignees"
+        column == 'assignees'
           ? (newData) => groupAssignee(newData.assignees)
           : null,
     };
@@ -110,7 +110,7 @@ function TaskTableView() {
             columns={dynamicColum}
             data={editable ?? []}
             options={{
-              searchFieldAlignment: "right",
+              searchFieldAlignment: 'right',
               // filtering: true,
               exportButton: true,
               selection: true,
@@ -119,10 +119,10 @@ function TaskTableView() {
               columnResizable: false,
               columnsButton: true,
               headerStyle: {
-                fontSize: "10px",
+                fontSize: '10px',
               },
-              rowStyle: { fontSize: "10px" },
-              maxBodyHeight: "300px",
+              rowStyle: { fontSize: '10px' },
+              maxBodyHeight: '300px',
               // doubleHorizontalScroll: false,
             }}
             icons={icons}
