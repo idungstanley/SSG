@@ -1,5 +1,4 @@
 import React from 'react';
-import { ChevronRightIcon, FolderIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { VscTriangleRight } from 'react-icons/vsc';
 import { FaFolderOpen } from 'react-icons/fa';

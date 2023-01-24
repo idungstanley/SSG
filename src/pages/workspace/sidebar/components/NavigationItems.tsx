@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BsCalendar2Minus } from 'react-icons/bs';

@@ -4,7 +4,7 @@ import {
   PlusIcon,
   PencilIcon,
   ShareIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';

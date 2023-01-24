@@ -8,7 +8,7 @@ import {
   setToggleAssignCurrentTaskId,
 } from '../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
-import { TrashIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 import {
   UseAssignTaskService,
