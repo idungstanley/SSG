@@ -1,6 +1,6 @@
 import React from 'react';
-import { useGetSubHub } from '../../../features/hubs/hubService';
-import { useAppSelector } from '../../../app/hooks';
+import { useGetSubHub } from '../../features/hubs/hubService';
+import { useAppSelector } from '../../app/hooks';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import {
@@ -10,15 +10,15 @@ import {
   getSubMenu,
   setHubParentId,
   setshowMenuDropdown,
-} from '../../../features/hubs/hubSlice';
-import AvatarWithInitials from '../../avatar/AvatarWithInitials';
+} from '../../features/hubs/hubSlice';
+import { AvatarWithInitials } from '../../components';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import MenuDropdown from '../../Dropdown/MenuDropdown';
-import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
-import SubDropdown from '../../Dropdown/SubDropdown';
-import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+import MenuDropdown from '../../components/Dropdown/MenuDropdown';
+import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
+import SubDropdown from '../../components/Dropdown/SubDropdown';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 
-export default function SubHubIndex() {
+export default function ActiveSubHub() {
   const dispatch = useDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
@@ -83,26 +83,6 @@ export default function SubHubIndex() {
             <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
               <div id="subhubleft" className="flex items-center justify-center">
                 {/* showsub1 */}
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => handleClick(subhub.id)}
-                  className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-                >
-                  {currSubHubId === subhub.id ? (
-                    <VscTriangleDown
-                      className="flex-shrink-0 h-3 ml-1"
-                      aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
-                    />
-                  ) : (
-                    <VscTriangleRight
-                      className="flex-shrink-0 h-3"
-                      aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
-                    />
-                  )}
-                </div>
                 <div className="flex min-w-0 flex-1 items-center">
                   <AvatarWithInitials
                     initials={subhub.name
@@ -116,7 +96,6 @@ export default function SubHubIndex() {
                     backgroundColour="orange"
                     roundedStyle="rounded"
                   />
-
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
@@ -126,20 +105,6 @@ export default function SubHubIndex() {
                     </h4>
                   </span>
                 </div>
-              </div>
-              <div
-                id="subhubRight"
-                className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
-              >
-                <AiOutlineEllipsis
-                  className="cursor-pointer"
-                  onClick={(e) => handleShowMenu(subhub.id, e)}
-                  id="menusettings"
-                />
-                <AiOutlinePlus
-                  onClick={() => handleItemAction(subhub.id)}
-                  className="cursor-pointer"
-                />
               </div>
             </section>
             {currSubHubId === subhub.id ? <SHubDropdownList /> : null}

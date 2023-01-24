@@ -11,7 +11,11 @@ import {
 } from '../../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../../components';
 import { Spinner } from '../../common';
-import { useGetHubList, useGetHubWallet } from '../../features/hubs/hubService';
+import {
+  useGetHubList,
+  useGetHubWallet,
+  useGetSubHub,
+} from '../../features/hubs/hubService';
 import { getHub } from '../../features/hubs/hubSlice';
 import HubData from '../ExtendedBar/HubData';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
@@ -21,6 +25,7 @@ import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
 import MenuDropdown from '../../components/Dropdown/MenuDropdown';
+import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
@@ -33,6 +38,10 @@ export default function ActiveHub() {
     queryKey: ['subwalletlist', [currentWalletId]],
     queryFn: getWalletService,
   });
+  const { data: subHub, status: subHubStatus } = useGetSubHub({
+    parentId: currentItemId,
+  });
+  const subHubData = subHub?.data.hubs;
   const subWalletData = subwallet?.data?.wallets;
   const { data, status } = useGetHubList({ query: null });
 
@@ -73,6 +82,13 @@ export default function ActiveHub() {
         }
         return null;
       });
+    } else if (activeItemType === 'subhub') {
+      return subHubData?.map((subHub) => {
+        if (subHub.id === activeItemId) {
+          return <SHubDropdownList key={subHub.id} marginLeft="ml-0" />;
+        }
+        return null;
+      });
     } else if (activeItemType === 'wallet') {
       return walletData?.map((wallet) => {
         if (wallet.id === activeItemId) {
@@ -83,7 +99,13 @@ export default function ActiveHub() {
     } else if (activeItemType === 'subWallet') {
       return subWalletData?.map((subWallet) => {
         if (subWallet.id === activeItemId) {
-          return <Sub2WalletIndex key={subWallet.id} padding="pl-0" />;
+          return (
+            <Sub2WalletIndex
+              key={subWallet.id}
+              currWalId={subWallet.id}
+              padding="pl-0"
+            />
+          );
         }
         return null;
       });
