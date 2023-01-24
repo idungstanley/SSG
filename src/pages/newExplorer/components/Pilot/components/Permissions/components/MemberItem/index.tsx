@@ -12,7 +12,9 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
 
   const access = member.access_level.name;
   const isOwner = access === 'Owner';
-  const isCurrentUser = currentUserId === member.team_member.user.id;
+  const isCurrentUser = !isGroup
+    ? currentUserId === member.team_member.user.id
+    : false;
 
   return (
     <div className="flex flex-col gap-3 border rounded-md p-2 w-full text-sm">
