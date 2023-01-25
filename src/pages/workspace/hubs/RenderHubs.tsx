@@ -23,7 +23,7 @@ function RenderHubs() {
       </section>
       <section className="flex w-full">
         {/* ListList */}
-        <div className="w-7/12 overflow-y-scroll">
+        <div className="w-full overflow-y-scroll">
           <div>
             {HubDetail?.data.hubs.map((data) => (
               <TaskListSections data={data} key={data.id} />

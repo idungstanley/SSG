@@ -79,7 +79,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
   };
   return (
     <div
-      className={`gap-4 pb-1  ${showPilot ? 'w-96 border' : 'w-12'}`}
+      className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
       aria-label="Tabs"
     >
       <div
@@ -96,12 +96,16 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         <BsThreeDotsVertical />
       </div>
       <div
-        className={`flex flex-wrap relative divide-x ${
+        className={`flex relative divide-x ${
           showPilot ? 'flex-row' : 'flex-col'
-        }`}
+        } ${showPilotIconView ? '' : 'flex-wrap'}`}
       >
         {showPilot && (
-          <span className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${showPilotIconView && 'text-green-500'}`}>
+          <span
+            className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${
+              showPilotIconView && 'text-green-500'
+            }`}
+          >
             <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
           </span>
         )}
@@ -114,6 +118,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
                 ? 'bg-gray-300 text-black'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
               showPilot ? 'border-y-2 border gap-2' : 'py-3',
+              showPilotIconView ? 'w-12' : '',
               'px-3 relative py-2 font-medium h-fit flex-grow cursor-pointer flex justify-center transition'
             )}
             aria-current={item.id === activeTabId ? 'page' : undefined}
