@@ -1,14 +1,13 @@
-import React from "react";
-import { MdFileCopy } from "react-icons/md";
-import TaskIcons from "./taskIcons";
-console.log(TaskIcons);
+import React from 'react';
+import { MdFileCopy } from 'react-icons/md';
+import TaskIcons from './taskIcons';
 
 export default function TaskMenu() {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden z-100">
       <div
         className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
-        style={{ transition: "linear", transitionDelay: "100s" }}
+        style={{ transition: 'linear', transitionDelay: '100s' }}
       >
         <div className="pl-5">
           <input type="checkbox" value="checked" />

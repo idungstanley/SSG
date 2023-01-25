@@ -1,8 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getTaskListService } from '../../../features/task/taskService';
-// import SubTask from '../subtasks/subtask1/SubTask';
-// import RenderTaskModal from '../../tasks/ccomponent/RenderTaskModal';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -19,7 +17,6 @@ import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
-
   const {
     myTaskData,
     listView,
@@ -44,11 +41,11 @@ function RenderList() {
       className="h-screen overflow-hidden relative"
       style={{ backgroundColor: '#eee' }}
     >
-      {showTaskNavigation && (
+      {/* {showTaskNavigation && (
         <span className="transition	duration-300 ease-in-out absolute w-full">
           <TaskMenu />
         </span>
-      )}
+      )} */}
       <section id="nav">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
