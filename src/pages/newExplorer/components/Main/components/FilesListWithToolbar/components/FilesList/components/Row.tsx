@@ -20,6 +20,7 @@ import {
   ArrowsUpDownIcon,
   EyeSlashIcon,
 } from '@heroicons/react/24/outline';
+import ToolTip from '../../../../../../../../../components/Tooltip';
 
 interface RowProps {
   fileId: string;
@@ -137,27 +138,29 @@ export default function Row({ fileId }: RowProps) {
           </span>
         </div>
 
-        <span
-          onClick={() =>
-            dispatch(
-              setFastPreview(
-                fastPreview.fileId === file.id
-                  ? { show: false }
-                  : { show: true, fileId: file.id }
+        <ToolTip tooltip={fastPreview.fileId ? 'Hide preview' : 'Show preview'}>
+          <span
+            onClick={() =>
+              dispatch(
+                setFastPreview(
+                  fastPreview.fileId === file.id
+                    ? { show: false }
+                    : { show: true, fileId: file.id }
+                )
               )
-            )
-          }
-          className="transition text-gray-500"
-        >
-          {fastPreview.fileId === file.id ? (
-            <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
-          ) : !fastPreview.fileId ? (
-            <EyeIcon
-              className="h-5 w-5 group-hover:opacity-100 opacity-0"
-              aria-hidden="true"
-            />
-          ) : null}
-        </span>
+            }
+            className="transition text-gray-500"
+          >
+            {fastPreview.fileId === file.id ? (
+              <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
+            ) : !fastPreview.fileId ? (
+              <EyeIcon
+                className="h-5 w-5 group-hover:opacity-100 opacity-0"
+                aria-hidden="true"
+              />
+            ) : null}
+          </span>
+        </ToolTip>
       </td>
       <td className="whitespace-nowrap py-2 px-2 text-sm text-gray-500">
         {OutputDateTime(file.created_at)}

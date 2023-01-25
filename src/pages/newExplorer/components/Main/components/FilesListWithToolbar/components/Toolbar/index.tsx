@@ -86,7 +86,7 @@ export default function Toolbar({ data }: ToolbarProps) {
       ),
       onClick: () => ({}),
       label: 'Copy',
-      disabled: selectedIds.length === 0,
+      disabled: true,
     },
     {
       label: 'Pilot',
