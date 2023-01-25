@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import Badge from '../Badge';
 import { classNames } from '../../utils';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 export interface IOption {
   id: string | null;

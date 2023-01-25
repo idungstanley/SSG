@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { ViewListIcon } from '@heroicons/react/outline';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Button } from '../../../../../components';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { getListView } from '../../../../../features/task/taskSlice';
@@ -47,10 +47,7 @@ function ListNav({
         </span>
         <span className="space-x-1 flex items-center justify-start">
           <span>
-            <ViewListIcon
-              className="flex-shrink-0 h-4 w-5"
-              aria-hidden="true"
-            />
+            <Bars3Icon className="flex-shrink-0 h-4 w-5" aria-hidden="true" />
           </span>
           <span className="text-sm hover:bg-gray-100" onClick={toggleView}>
             {' '}
@@ -61,7 +58,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <Bars3Icon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}
@@ -75,7 +72,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <Bars3Icon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}
@@ -86,7 +83,7 @@ function ListNav({
         <span className="space-x-1 flex items-center justify-start">
           <span>
             {' '}
-            <ViewListIcon
+            <Bars3Icon
               className="flex-shrink-0 h-4 w-5"
               aria-hidden="true"
             />{' '}

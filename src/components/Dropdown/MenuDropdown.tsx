@@ -1,11 +1,11 @@
-import React from "react";
-import { useAppSelector } from "../../app/hooks";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { useAppSelector } from '../../app/hooks';
+import { useDispatch } from 'react-redux';
 import {
-  ArchiveIcon,
+  ArchiveBoxIcon,
   CogIcon,
   DocumentDuplicateIcon,
-  EyeOffIcon,
+  EyeSlashIcon,
   PencilIcon,
   ShareIcon,
   SparklesIcon,
@@ -13,41 +13,41 @@ import {
   StarIcon,
   PlusIcon,
   LinkIcon,
-  ColorSwatchIcon,
+  SwatchIcon,
   ArrowDownIcon,
-  PencilAltIcon,
-} from "@heroicons/react/outline";
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline';
 import {
   setArchiveHub,
   setDelHub,
   setSubDropdownMenu,
-} from "../../features/hubs/hubSlice";
-import EditHubModal from "../../pages/workspace/hubs/components/EditHubModal";
-import SubDropdown from "./SubDropdown";
+} from '../../features/hubs/hubSlice';
+import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
+import SubDropdown from './SubDropdown';
 import {
   ArchiveHubService,
   UseDeleteHubService,
-} from "../../features/hubs/hubService";
+} from '../../features/hubs/hubService';
 import {
   setEditHubSlideOverVisibility,
   setEditListSlideOverVisibility,
   setEditWalletSlideOverVisibility,
-} from "../../features/general/slideOver/slideOverSlice";
-import EditListModal from "../../pages/workspace/lists/components/modals/EditListModal";
-import EditWalletModal from "../../pages/workspace/wallet/components/modals/EditWalletModal";
+} from '../../features/general/slideOver/slideOverSlice';
+import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
+import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
 import {
   setArchiveWallet,
   setDeleteWallet,
-} from "../../features/wallet/walletSlice";
+} from '../../features/wallet/walletSlice';
 import {
   UseArchiveWalletService,
   UseDeleteWalletService,
-} from "../../features/wallet/walletService";
-import { setArchiveList, setDeleteList } from "../../features/list/listSlice";
+} from '../../features/wallet/walletService';
+import { setArchiveList, setDeleteList } from '../../features/list/listSlice';
 import {
   UseArchiveListService,
   UseDeleteListService,
-} from "../../features/list/listService";
+} from '../../features/list/listService';
 
 interface itemsType {
   id: number;
@@ -111,7 +111,7 @@ export default function MenuDropdown() {
   const itemsList: itemsType[] = [
     {
       id: 1,
-      title: "Create new",
+      title: 'Create new',
       handleClick: () => {
         dispatch(setSubDropdownMenu(!SubDropdownMenu));
       },
@@ -122,16 +122,16 @@ export default function MenuDropdown() {
     },
     {
       id: 2,
-      title: "Rename",
+      title: 'Rename',
       handleClick: () => {
         if (
-          showMenuDropdownType == "hubs" ||
-          showMenuDropdownType == "subhub"
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhub'
         ) {
           dispatch(setEditHubSlideOverVisibility(true));
         } else if (
-          showMenuDropdownType == "wallet" ||
-          showMenuDropdownType == "subwallet"
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
         ) {
           dispatch(setEditWalletSlideOverVisibility(true));
         } else {
@@ -143,47 +143,44 @@ export default function MenuDropdown() {
     },
     {
       id: 3,
-      title: "Color & Avatar",
+      title: 'Color & Avatar',
       handleClick: () => ({}),
       icon: (
-        <ColorSwatchIcon
-          className="w-5 pt-2 text-gray-700 h-7"
-          aria-hidden="true"
-        />
+        <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
       ),
       isVisible: false,
     },
     {
       id: 4,
-      title: "Copy link",
+      title: 'Copy link',
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 5,
-      title: "Duplicate",
+      title: 'Duplicate',
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 6,
-      title: "Add to favorites",
+      title: 'Add to favorites',
       handleClick: () => ({}),
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 7,
-      title: "Hide in sidebar",
+      title: 'Hide in sidebar',
       handleClick: () => ({}),
-      icon: <EyeOffIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 8,
-      title: "Templates",
+      title: 'Templates',
       handleClick: () => ({}),
       icon: (
         <SparklesIcon
@@ -195,7 +192,7 @@ export default function MenuDropdown() {
     },
     {
       id: 9,
-      title: "More settings",
+      title: 'More settings',
       handleClick: () => ({}),
       icon: (
         <CogIcon className="w-5 h-6 pt-2 text-gray-700" aria-hidden="true" />
@@ -204,56 +201,56 @@ export default function MenuDropdown() {
     },
     {
       id: 10,
-      title: "Sharing & Permission",
+      title: 'Sharing & Permission',
       handleClick: () => ({}),
       icon: <ShareIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 11,
-      title: "Archive",
+      title: 'Archive',
       handleClick: () => ({}),
-      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 12,
-      title: "Import",
+      title: 'Import',
       handleClick: () => ({}),
       icon: <ArrowDownIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 13,
-      title: "Archive",
+      title: 'Archive',
       handleClick: () => {
         if (
-          showMenuDropdownType == "hubs" ||
-          showMenuDropdownType == "subhubs"
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhubs'
         ) {
           dispatch(setArchiveHub(true));
         } else if (
-          showMenuDropdownType == "wallet" ||
-          showMenuDropdownType == "subwallet"
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
         ) {
           dispatch(setArchiveWallet(true));
         } else {
           dispatch(setArchiveList(true));
         }
       },
-      icon: <ArchiveIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
     },
     {
       id: 14,
-      title: "Whiteboard",
+      title: 'Whiteboard',
       handleClick: () => ({}),
-      icon: <PencilAltIcon className="w-4 h-4" aria-hidden="true" />,
+      icon: <PencilSquareIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false,
     },
     {
       id: 15,
-      title: "Wallet",
+      title: 'Wallet',
       handleClick: () => ({}),
       icon: (
         <svg
@@ -275,16 +272,16 @@ export default function MenuDropdown() {
     },
     {
       id: 16,
-      title: "Delete",
+      title: 'Delete',
       handleClick: () => {
         if (
-          showMenuDropdownType == "hubs" ||
-          showMenuDropdownType == "subhub"
+          showMenuDropdownType == 'hubs' ||
+          showMenuDropdownType == 'subhub'
         ) {
           dispatch(setDelHub(true));
         } else if (
-          showMenuDropdownType == "wallet" ||
-          showMenuDropdownType == "subwallet"
+          showMenuDropdownType == 'wallet' ||
+          showMenuDropdownType == 'subwallet'
         ) {
           dispatch(setDeleteWallet(true));
         } else {

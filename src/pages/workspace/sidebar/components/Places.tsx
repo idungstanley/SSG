@@ -24,12 +24,15 @@ import commerceIcon from '../../../../assets/branding/commerce.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
-import { FolderAddIcon, SearchIcon } from '@heroicons/react/outline';
+import {
+  FolderPlusIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
-import { setQuery } from '../../../../features/explorer/explorerSlice';
+// import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 import {
   setCreateInboxSlideOverVisibility,
@@ -43,7 +46,7 @@ function Places() {
     (state) => state.workspace
   );
   const { folderId } = useParams();
-  const { query } = useAppSelector((state) => state.explorer);
+  // const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
   const handleMouseOver = (i: number) => {
@@ -59,7 +62,7 @@ function Places() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({
@@ -277,11 +280,9 @@ function Places() {
                 >
                   <input
                     type="text"
-                    name=""
-                    id=""
                     placeholder="Search for List, Hubs, & Wallets"
-                    onChange={(e) => dispatch(setQuery(e.target.value))}
-                    value={query}
+                    // onChange={(e) => dispatch(setQuery(e.target.value))}
+                    // value={query}
                     className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
@@ -305,7 +306,7 @@ function Places() {
                       showSidebar ? 'block' : 'hidden'
                     } flex items-center space-x-1`}
                   >
-                    <SearchIcon
+                    <MagnifyingGlassIcon
                       className="w-3 h-4"
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}

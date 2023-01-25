@@ -9,17 +9,16 @@ export default function Main() {
   const { settings } = useAppSelector((state) => state.account);
   const { showPreview } = settings;
 
+  const { fastPreview } = useAppSelector((state) => state.explorer);
+
+  const show = showPreview || fastPreview.show;
+
   return (
-    <div
-      className={classNames(
-        'border-t',
-        showPreview ? 'flex flex-row' : ''
-      )}
-    >
+    <div className={classNames('border-t', show ? 'grid grid-cols-2' : '')}>
       <FilesListWithToolbar />
 
       {/* file preview */}
-      {showPreview ? <FilePreview /> : null}
+      {show ? <FilePreview /> : null}
     </div>
   );
 }

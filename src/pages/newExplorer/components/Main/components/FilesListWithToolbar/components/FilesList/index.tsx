@@ -8,6 +8,7 @@ import { Spinner } from '../../../../../../../../common';
 import FullScreenMessage from '../../../../../../../../components/CenterMessage/FullScreenMessage';
 import { useGetExplorerFiles } from '../../../../../../../../features/explorer/explorerService';
 import {
+  setFastPreview,
   setSelectedFileId,
   setSelectedFiles,
 } from '../../../../../../../../features/explorer/explorerSlice';

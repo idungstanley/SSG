@@ -79,14 +79,14 @@ const removeAccessForData = (dat: {
 };
 
 export const useRemoveAccessForData = (
-  type: explorerItemType | null,
-  id: string | null
+  type?: explorerItemType | null,
+  id?: string | null
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation(removeAccessForData, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`${type}-permissions-${id}`]);
+      queryClient.invalidateQueries([`${type}-permissions`, id]);
     },
   });
 };
@@ -114,14 +114,14 @@ const changeAccessForData = (data: {
 };
 
 export const useChangeAccessForData = (
-  type: explorerItemType | null,
-  id: string | null
+  type?: explorerItemType | null,
+  id?: string | null
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation(changeAccessForData, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`${type}-permissions-${id}`]);
+      queryClient.invalidateQueries([`${type}-permissions`, id]);
     },
   });
 };
@@ -149,14 +149,14 @@ const addAccessForData = (data: {
 };
 
 export const useAddAccessForData = (
-  type: explorerItemType | null,
-  id: string | null
+  id?: string | null,
+  type?: explorerItemType | null
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation(addAccessForData, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`${type}-permissions-${id}`]);
+      queryClient.invalidateQueries([`${type}-permissions`, id]);
     },
   });
 };
