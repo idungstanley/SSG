@@ -105,6 +105,10 @@ function TaskTableView() {
     dispatch(setCurrentTaskId(id));
   };
 
+  const handleSubTask: any = (rowData) => {
+    alert(rowData.name);
+  };
+
   columnHead[0]?.map((column) => {
     const singleColumn = {
       title:
@@ -147,7 +151,8 @@ function TaskTableView() {
                         placeholder="Enter a subtask name"
                       />
                       <button
-                        type="submit"
+                        type="button"
+                        onClick={() => handleSubTask(rowData)}
                         className="bg-blue-700 px-3 py-1 text-white"
                       >
                         Save
