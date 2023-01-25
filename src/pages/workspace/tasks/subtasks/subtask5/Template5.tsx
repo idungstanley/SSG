@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  setCurrentParentSubTaskId,
+  setCurrentParentSubTaskId3,
+  setCurrentParentSubTaskId4,
   setCurrentParentTaskId,
   setCurrentTaskId,
-  setGetSubTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
 } from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
 import { MdDragIndicator } from 'react-icons/md';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import {
   CalendarOutlined,
   EditOutlined,
@@ -16,60 +20,24 @@ import {
   PlusOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../components';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import AssignTask from '../../assignTask/AssignTask';
 
-interface TaskDataProps {
+interface TemplateProps {
   task: any;
 }
 
-export default function TaskData({ task }: TaskDataProps) {
+export default function Template5({ task }: TemplateProps) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const {
-    showTaskNavigation,
-    toggleAssignCurrentTaskId,
-    currentParentTaskId,
-    getSubTaskId,
-  } = useAppSelector((state) => state.task);
-  const [openTaskModal, setOpenTaskModal] = useState(false);
+
+  const [showSubTask, setShowSubTask] = useState<string | null>(null);
+
+  const { showTaskNavigation, toggleAssignCurrentTaskId, currentParentTaskId } =
+    useAppSelector((state) => state.task);
 
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
-  };
-
-  const handleTaskModal = (id: string) => {
-    setOpenTaskModal(true);
-    navigate(`/workspace/t/${id}`);
-  };
-
-  // const handleSubTask = (id: string) => {
-  //   setParentTaskId(id);
-  //   setSubTaskOne(!subTaskOne);
-  //   if (subTaskOne === id) {
-  //     return setSubTaskOne(false);
-  //   }
-  //   setSubTaskOne(id);
-  // };
-
-  const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
-
-  const handleGetSubTask = (id: string) => {
-    if (id == getSubTaskId) {
-      dispatch(setGetSubTaskId(null));
-    } else {
-      dispatch(setGetSubTaskId(id));
-    }
   };
 
   const handleCreateSubTask = (id: string) => {
@@ -77,6 +45,14 @@ export default function TaskData({ task }: TaskDataProps) {
       dispatch(setCurrentParentTaskId(null));
     } else {
       dispatch(setCurrentParentTaskId(id));
+    }
+  };
+
+  const handleAssigneeModal = (id: string) => {
+    if (toggleAssignCurrentTaskId == id) {
+      dispatch(setToggleAssignCurrentTaskId(null));
+    } else {
+      dispatch(setToggleAssignCurrentTaskId(id));
     }
   };
 
@@ -95,26 +71,22 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
+  const handleShowSubTask = (id: string) => {
+    if (id == showSubTask) {
+      setShowSubTask(null);
+      dispatch(setCurrentParentSubTaskId4(null));
+    } else {
+      setShowSubTask(id);
+      dispatch(setCurrentParentSubTaskId4(id));
+    }
+  };
+
   return (
-    <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
-      <div onClick={() => handleGetSubTask(task.id)}>
-        {task.id == getSubTaskId ? (
-          <span className="flex flex-col">
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 ml-1"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
-          </span>
-        ) : (
-          <VscTriangleRight
-            className="flex-shrink-0 h-3"
-            aria-hidden="true"
-            color="rgba(72, 67, 67, 0.64)"
-          />
-        )}
-      </div>
-      <span className="flex items-center absolute  " style={{ left: '-30px' }}>
+    <div
+      className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3"
+      key={task.id}
+    >
+      <span className="flex items-center absolute" style={{ left: '-30px' }}>
         <input
           type="checkbox"
           id="checked-checkbox"
@@ -126,12 +98,13 @@ export default function TaskData({ task }: TaskDataProps) {
       </span>
 
       <RiCheckboxBlankFill
-        className=" text-gray-400 text-xs"
+        className=" text-gray-400 text-xs ml-28 "
         aria-hidden="true"
       />
       <div className="flex items-center w-6/12 group">
         {/* data and input */}
-        <div onClick={() => handleTaskModal(task.id)}>
+        {/* <div onClick={() => handleTaskModal(task.id)}> */}
+        <div>
           {/* {i == 0 && <h1>Tasks</h1>} */}
 
           <p className="capitalize text-xs font-semibold leading-8 pl-5	">
@@ -144,11 +117,11 @@ export default function TaskData({ task }: TaskDataProps) {
           id="iconWrapper"
           className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
         >
-          <PlusOutlined
+          {/* <PlusOutlined
             className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
             aria-hidden="true"
             onClick={() => handleCreateSubTask(task.id)}
-          />
+          /> */}
           <EditOutlined
             className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
             aria-hidden="true"

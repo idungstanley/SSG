@@ -31,6 +31,12 @@ interface TaskState {
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: null;
+  currentParentTaskId: null;
+  getSubTaskId: null;
+  currentParentSubTaskId: null;
+  currentParentSubTaskId2: null;
+  currentParentSubTaskId3: null;
+  currentParentSubTaskId4: null;
 }
 
 const initialState: TaskState = {
@@ -46,6 +52,12 @@ const initialState: TaskState = {
   addNewTaskItem: false,
   closeTaskListView: true,
   toggleAssignCurrentTaskId: null,
+  currentParentTaskId: null,
+  getSubTaskId: null,
+  currentParentSubTaskId: null,
+  currentParentSubTaskId2: null,
+  currentParentSubTaskId3: null,
+  currentParentSubTaskId4: null,
 };
 
 export const taskSlice = createSlice({
@@ -96,6 +108,24 @@ export const taskSlice = createSlice({
     setToggleAssignCurrentTaskId(state, action) {
       state.toggleAssignCurrentTaskId = action.payload;
     },
+    setCurrentParentTaskId(state, action) {
+      state.currentParentTaskId = action.payload;
+    },
+    setGetSubTaskId(state, action) {
+      state.getSubTaskId = action.payload;
+    },
+    setCurrentParentSubTaskId(state, action) {
+      state.currentParentSubTaskId = action.payload;
+    },
+    setCurrentParentSubTaskId2(state, action) {
+      state.currentParentSubTaskId2 = action.payload;
+    },
+    setCurrentParentSubTaskId3(state, action) {
+      state.currentParentSubTaskId3 = action.payload;
+    },
+    setCurrentParentSubTaskId4(state, action) {
+      state.currentParentSubTaskId4 = action.payload;
+    },
 
     checkIfTask: (state) => state,
   },
@@ -115,5 +145,11 @@ export const {
   setAddNewTaskItem,
   setCloseTaskListView,
   setToggleAssignCurrentTaskId,
+  setCurrentParentTaskId,
+  setGetSubTaskId,
+  setCurrentParentSubTaskId,
+  setCurrentParentSubTaskId2,
+  setCurrentParentSubTaskId3,
+  setCurrentParentSubTaskId4,
 } = taskSlice.actions;
 export default taskSlice.reducer;

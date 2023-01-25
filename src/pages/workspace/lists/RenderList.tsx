@@ -13,6 +13,8 @@ import TaskListViews from '../tasks/component/views/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
 import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
+import SubTask from '../tasks/subtasks/create/SubTask';
+import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -25,6 +27,8 @@ function RenderList() {
     addNewTaskItem,
     showTaskNavigation,
     closeTaskListView,
+    currentParentTaskId,
+    getSubTaskId,
   } = useAppSelector((state) => state.task);
 
   const { data: listDetailsData } = getTaskListService({ listId });
@@ -74,11 +78,12 @@ function RenderList() {
             myTaskData?.map((task) => (
               <div key={task.id}>
                 {closeTaskListView && <TaskData task={task} />}
-                {/* {subTaskOne === task.id ? (
+                {currentParentTaskId === task.id ? (
                   <div>
-                    <SubTask parentTaskId={parentTaskId} />
+                    <SubTask parentTaskId={currentParentTaskId} />
                   </div>
-                ) : null} */}
+                ) : null}
+                {getSubTaskId === task.id ? <RenderSubTasks /> : null}
               </div>
             ))}
 
