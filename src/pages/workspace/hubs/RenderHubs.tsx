@@ -12,7 +12,7 @@ function RenderHubs() {
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
   console.log(HubDetail);
   return (
-    <div className="h-screen overflow-y-auto">
+    <div className="h-screen">
       <section id="nav">
         <ListNav
           navName={activeItemName}
@@ -21,7 +21,7 @@ function RenderHubs() {
           changeViews="View"
         />
       </section>
-      <section className="flex h-full w-full">
+      <section className="flex w-full h-full">
         {/* ListList */}
         <div className="w-full overflow-y-scroll">
           <div>
@@ -36,7 +36,7 @@ function RenderHubs() {
             ))}
           </div>
         </div>
-        <div className="ml-auto">
+        <div className="ml-5">
           <Pilot />
         </div>
       </section>
