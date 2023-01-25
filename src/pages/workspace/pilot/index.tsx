@@ -42,24 +42,17 @@ const sections = [
 ];
 
 export default function Pilot() {
-  const dispatch = useAppDispatch();
-  const onClose = () => {
-    setActiveTabId(0);
-    dispatch(setShowPilotSideOverHub({ show: false }));
-  };
   const [activeTabId, setActiveTabId] = useState(0);
-
   const selectedSection = useMemo(
     () => sections.find((section) => section.id === activeTabId),
     [activeTabId]
   );
-
   return (
     <div className="flex flex-col h-full border">
       {/* navigation */}
       <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
-      <div>{selectedSection ? selectedSection.element : null}</div>
       {/* main section depends of active tab */}
+      <div>{selectedSection ? selectedSection.element : null}</div>
     </div>
   );
 }

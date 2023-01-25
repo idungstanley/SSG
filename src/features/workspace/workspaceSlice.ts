@@ -21,6 +21,7 @@ interface workspaceState {
   currentWalletId: string | null;
   currentSubWalletId: string | null;
   currentWalletName: string | null;
+  showPilot: boolean;
 }
 
 const initialState: workspaceState = {
@@ -44,6 +45,7 @@ const initialState: workspaceState = {
   currentSubWalletId: null,
   currentWalletId: null,
   currentWalletName: null,
+  showPilot: true,
 };
 
 export const wsSlice = createSlice({
@@ -68,6 +70,9 @@ export const wsSlice = createSlice({
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setShowPilot(state, action) {
+      state.showPilot = action.payload;
     },
     setExtendedSidebarWidth(state, action) {
       state.extendedSidebarWidth = action.payload;
@@ -155,6 +160,7 @@ export const {
   setCurrentWalletId,
   setCurrenSubtWalletId,
   setCurrentWalletName,
+  setShowPilot,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

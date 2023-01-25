@@ -2,6 +2,7 @@ import React from 'react';
 import { AiOutlineContacts } from 'react-icons/ai';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { RiWechatLine } from 'react-icons/ri';
+import { useAppSelector } from '../../../../app/hooks';
 
 const communicationOptions = [
   { id: 0, label: 'email', icon: <MdOutlineMarkEmailUnread /> },
@@ -9,8 +10,9 @@ const communicationOptions = [
   { id: 2, label: 'contact', icon: <AiOutlineContacts /> },
 ];
 export default function Commnunication() {
+  const { showPilot } = useAppSelector((state) => state.workspace);
   return (
-    <div className="flex">
+    <div className={`flex ${showPilot ? 'flex-row' : 'flex-col'}`}>
       {communicationOptions.map((item) => (
         <div
           key={item.id}

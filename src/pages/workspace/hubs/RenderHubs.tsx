@@ -12,7 +12,7 @@ function RenderHubs() {
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
 
   return (
-    <div className="h-screen overflow-auto">
+    <div className="h-screen">
       <section id="nav">
         <ListNav
           navName={activeItemName}
@@ -23,16 +23,18 @@ function RenderHubs() {
       </section>
       <section className="flex w-full">
         {/* ListList */}
-        <div className="w-7/12">
-          {HubDetail?.data.hubs.map((data) => (
-            <TaskListSections data={data} key={data.id} />
-          ))}
-          {HubDetail?.data.wallets.map((data) => (
-            <TaskListSections data={data} key={data.id} />
-          ))}
-          {HubDetail?.data.lists.map((data) => (
-            <TaskListSections data={data} key={data.id} />
-          ))}
+        <div className="w-7/12 overflow-y-scroll">
+          <div>
+            {HubDetail?.data.hubs.map((data) => (
+              <TaskListSections data={data} key={data.id} />
+            ))}
+            {HubDetail?.data.wallets.map((data) => (
+              <TaskListSections data={data} key={data.id} />
+            ))}
+            {HubDetail?.data.lists.map((data) => (
+              <TaskListSections data={data} key={data.id} />
+            ))}
+          </div>
         </div>
         <div className="ml-auto">
           <Pilot />
