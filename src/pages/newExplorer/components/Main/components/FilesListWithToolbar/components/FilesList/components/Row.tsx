@@ -33,6 +33,8 @@ export default function Row({ fileId }: RowProps) {
   const { selectedFileIds, selectedFileId, fastPreview } = useAppSelector(
     (state) => state.explorer
   );
+  const { settings } = useAppSelector((state) => state.account);
+  const { showPreview } = settings;
 
   const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
     (i) => i
@@ -44,6 +46,7 @@ export default function Row({ fileId }: RowProps) {
   ) => {
     const isCheckboxTarget = (e.target as HTMLButtonElement).value;
 
+    //  clear fast preview id when user clicked on another row
     if (fastPreview.fileId && fastPreview.fileId !== fileId) {
       dispatch(setFastPreview({ show: false }));
     }
@@ -118,6 +121,7 @@ export default function Row({ fileId }: RowProps) {
         />
       </td>
 
+      {/* move row by grabbing this icon */}
       <td
         {...listeners}
         {...attributes}
@@ -138,30 +142,36 @@ export default function Row({ fileId }: RowProps) {
           </span>
         </div>
 
-        <ToolTip tooltip={fastPreview.fileId ? 'Hide preview' : 'Show preview'}>
-          <span
-            onClick={() =>
-              dispatch(
-                setFastPreview(
-                  fastPreview.fileId === file.id
-                    ? { show: false }
-                    : { show: true, fileId: file.id }
-                )
-              )
-            }
-            className="transition text-gray-500"
+        {/* show eye icon if preview toggle enabled */}
+        {!showPreview ? (
+          <ToolTip
+            tooltip={fastPreview.fileId ? 'Hide preview' : 'Show preview'}
           >
-            {fastPreview.fileId === file.id ? (
-              <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
-            ) : !fastPreview.fileId ? (
-              <EyeIcon
-                className="h-5 w-5 group-hover:opacity-100 opacity-0"
-                aria-hidden="true"
-              />
-            ) : null}
-          </span>
-        </ToolTip>
+            <span
+              onClick={() =>
+                dispatch(
+                  setFastPreview(
+                    fastPreview.fileId === file.id
+                      ? { show: false }
+                      : { show: true, fileId: file.id }
+                  )
+                )
+              }
+              className="transition text-gray-500"
+            >
+              {fastPreview.fileId === file.id ? (
+                <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
+              ) : !fastPreview.fileId ? (
+                <EyeIcon
+                  className="h-5 w-5 group-hover:opacity-100 opacity-0"
+                  aria-hidden="true"
+                />
+              ) : null}
+            </span>
+          </ToolTip>
+        ) : null}
       </td>
+
       <td className="whitespace-nowrap py-2 px-2 text-sm text-gray-500">
         {OutputDateTime(file.created_at)}
       </td>

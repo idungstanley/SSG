@@ -11,6 +11,7 @@ export default function Main() {
 
   const { fastPreview } = useAppSelector((state) => state.explorer);
 
+  // show only if preview toggle or fast preview is enabled
   const show = showPreview || fastPreview.show;
 
   return (
