@@ -50,7 +50,7 @@ export default function FilesListWithToolbar() {
   return (
     <div className="h-full relative">
       <section className="border-r h-full overflow-y-auto overflow-x-hidden border-gray">
-        <div className="flex flex-col w-full ">
+        <div className="flex flex-col w-full">
           <UploadModal />
           {/* toolbar */}
           <Toolbar data={sortedItems} />

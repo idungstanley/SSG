@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
-import { BsPlusLg } from 'react-icons/bs';
 
 interface IDropdownItem {
   label: string;
@@ -27,12 +26,9 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisVerticalIcon
-              className="h-4 w-4 text-black"
-              aria-hidden="true"
-            />
+            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
           ) : (
-            <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
+            <PlusIcon className="h-5 w-5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>
