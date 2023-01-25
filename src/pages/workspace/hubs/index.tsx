@@ -21,7 +21,7 @@ function Hubs() {
         <div className="flex items-center content-center self-center py-2">
           <img src={everythingIcon} alt="Hub Icon" className="h-4 mr-4" />
           <p className="tracking-wider" style={{ fontSize: '10px' }}>
-            Everthing
+            Everything
           </p>
         </div>
       </div>
