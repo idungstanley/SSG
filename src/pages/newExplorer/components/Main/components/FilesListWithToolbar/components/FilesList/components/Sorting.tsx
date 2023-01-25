@@ -7,6 +7,7 @@ import {
   BarsArrowDownIcon,
   ClockIcon,
   PaperClipIcon,
+  EllipsisVerticalIcon,
 } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { IStringifiedFile } from '../index';
@@ -43,7 +44,7 @@ const sortingItems = [
     title: 'Created at (latest)',
     icon: (
       <ClockIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -53,7 +54,7 @@ const sortingItems = [
     title: 'Created at (oldest)',
     icon: (
       <ClockIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -63,7 +64,7 @@ const sortingItems = [
     title: 'Modified at (latest)',
     icon: (
       <PencilIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -73,7 +74,7 @@ const sortingItems = [
     title: 'Modified at (oldest)',
     icon: (
       <PencilIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -83,7 +84,7 @@ const sortingItems = [
     title: 'Name (A-Z)',
     icon: (
       <BarsArrowUpIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -93,7 +94,7 @@ const sortingItems = [
     title: 'Name (Z-A)',
     icon: (
       <BarsArrowDownIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -103,7 +104,7 @@ const sortingItems = [
     title: 'Size (largest)',
     icon: (
       <PaperClipIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -113,7 +114,7 @@ const sortingItems = [
     title: 'Size (smallest)',
     icon: (
       <PaperClipIcon
-        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
     ),
@@ -129,25 +130,14 @@ export default function Sorting() {
     localStorage.setItem('selectedSortingId', JSON.stringify(itemId));
   };
 
-  const selectedItem = sortingItems.find((i) => i.id === selectedSortingId);
-
   return (
     <Menu
       as="div"
       className="relative inline-block text-left whitespace-nowrap"
     >
-      <div>
-        {selectedItem ? (
-          <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none ring-0 focus:ring-0">
-            {selectedItem.icon}
-            <span className="hidden sm:block">{selectedItem.title}</span>
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
-        ) : null}
-      </div>
+      <Menu.Button className="flex pt-1.5 text-gray-700 focus:outline-none ring-0 focus:ring-0">
+        <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+      </Menu.Button>
 
       <Transition
         as={Fragment}

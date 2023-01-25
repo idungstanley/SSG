@@ -3,17 +3,13 @@ import Toolbar from './components/Toolbar';
 import FilesList, { IStringifiedFile } from './components/FilesList';
 import { useParams } from 'react-router-dom';
 import { useGetExplorerFiles } from '../../../../../../features/explorer/explorerService';
-import Search from '../../../Search';
 import { useDebounce } from '../../../../../../hooks';
-import Sorting, { sortItems } from './components/FilesList/components/Sorting';
+import { sortItems } from './components/FilesList/components/Sorting';
 import { useAppSelector } from '../../../../../../app/hooks';
 import UploadModal from '../../../../../../components/UploadModal';
-import { useDispatch } from 'react-redux';
-import { setFileSelectWidth } from '../../../../../../features/explorer/explorerSlice';
 
 export default function FilesListWithToolbar() {
   const { folderId } = useParams();
-  const dispatch = useDispatch();
   const { data } = useGetExplorerFiles(folderId);
   const { selectedSortingId } = useAppSelector((state) => state.explorer);
 
@@ -53,7 +49,7 @@ export default function FilesListWithToolbar() {
         <div className="flex flex-col w-full">
           <UploadModal />
           {/* toolbar */}
-          <Toolbar data={sortedItems} />
+          <Toolbar data={sortedItems} query={query} setQuery={setQuery} />
 
           <div className="flex gap-2 justify-between px-2">
             {/* Search */}

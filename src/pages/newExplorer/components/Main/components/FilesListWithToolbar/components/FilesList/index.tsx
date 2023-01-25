@@ -8,7 +8,6 @@ import { Spinner } from '../../../../../../../../common';
 import FullScreenMessage from '../../../../../../../../components/CenterMessage/FullScreenMessage';
 import { useGetExplorerFiles } from '../../../../../../../../features/explorer/explorerService';
 import {
-  setFastPreview,
   setSelectedFileId,
   setSelectedFiles,
 } from '../../../../../../../../features/explorer/explorerSlice';
@@ -111,7 +110,7 @@ export default function FilesList({ data }: FilesListProps) {
             showCta
           />
         ) : (
-          <div className="flex flex-col h-full w-full">
+          <div className="flex flex-col h-full w-full overflow-x-scroll">
             <Table
               checkbox={checkbox}
               checked={checked}
