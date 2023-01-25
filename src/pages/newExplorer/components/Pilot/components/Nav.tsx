@@ -58,7 +58,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
 
   return (
     <nav
-      className="flex gap-4 flex-wrap w-full border-b pb-5"
+      className="flex flex-wrap w-full gap-4 pb-5 border-b"
       aria-label="Tabs"
     >
       {tabs.map((tab) => (

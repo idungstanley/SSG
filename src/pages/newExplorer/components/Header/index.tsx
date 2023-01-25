@@ -1,13 +1,13 @@
 import React from 'react';
-import { PlusIcon, UploadIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
 import { TbArrowRotaryFirstLeft } from 'react-icons/tb';
 import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
-} from '@heroicons/react/solid';
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from '@heroicons/react/24/solid';
 
 const SquareStackIcon = (
   <svg
@@ -34,7 +34,7 @@ export default function Header() {
       id: 1,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleLeftIcon
+        <ArrowLeftCircleIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -44,7 +44,7 @@ export default function Header() {
       id: 2,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleRightIcon
+        <ArrowRightCircleIcon
           className="h-8 w-8 stroke-current text-gray-400"
           aria-hidden="true"
         />

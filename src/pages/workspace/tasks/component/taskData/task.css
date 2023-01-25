@@ -1,0 +1,25 @@
+.stack {
+  position: relative;
+  border-radius: 50%;
+  outline: 1px solid #fff;
+}
+
+.stack:first-child {
+  position: absolute;
+  z-index: 10;
+  left: 15px;
+}
+
+.stack2 {
+  float: left;
+  border-radius: 50%;
+  outline: 1px solid #fff;
+}
+
+.hii {
+  font-size: 14px;
+  gap: 10px;
+  text-transform: capitalize;
+  padding-left: 20px;
+  color: red;
+}

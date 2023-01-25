@@ -17,9 +17,12 @@ interface workspaceState {
   isExtSearchActive: boolean;
   activeItemId: string | null;
   activeItemType: string | null;
+  activeItemName: string | null;
   currentWalletId: string | null;
   currentSubWalletId: string | null;
   currentWalletName: string | null;
+  showPilot: boolean;
+  showPilotIconView: boolean;
 }
 
 const initialState: workspaceState = {
@@ -39,9 +42,12 @@ const initialState: workspaceState = {
   isExtSearchActive: false,
   activeItemId: null,
   activeItemType: null,
+  activeItemName: null,
   currentSubWalletId: null,
   currentWalletId: null,
   currentWalletName: null,
+  showPilot: true,
+  showPilotIconView: false,
 };
 
 export const wsSlice = createSlice({
@@ -66,6 +72,12 @@ export const wsSlice = createSlice({
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setShowPilot(state, action) {
+      state.showPilot = action.payload;
+    },
+    setShowPilotIconView(state, action) {
+      state.showPilotIconView = action.payload;
     },
     setExtendedSidebarWidth(state, action) {
       state.extendedSidebarWidth = action.payload;
@@ -114,6 +126,7 @@ export const wsSlice = createSlice({
     setActiveItem(state, action) {
       state.activeItemId = action.payload.activeItemId;
       state.activeItemType = action.payload.activeItemType;
+      state.activeItemName = action.payload.activeItemName;
     },
     setCurrentWalletId(state, action) {
       state.currentWalletId = action.payload;
@@ -152,6 +165,8 @@ export const {
   setCurrentWalletId,
   setCurrenSubtWalletId,
   setCurrentWalletName,
+  setShowPilot,
+  setShowPilotIconView,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

@@ -53,7 +53,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
         currentWalletParentType: 'wallet',
       })
     );
-    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    dispatch(setActiveItem({ activeItemType: type, activeItemId: id, activeItemName: name }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
@@ -103,13 +103,13 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
             Create a
             <span
               onClick={() => dispatch(setCreateWalletSlideOverVisibility(true))}
-              className="underline mx-1 text-black"
+              className="mx-1 text-black underline"
             >
               Wallet,
             </span>
             <span
               onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-              className="underline text-black"
+              className="text-black underline"
             >
               List
             </span>
@@ -125,7 +125,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               }`}
             >
               {wallet.id === activeItemId && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
               <div id="walletLeft" className="flex items-center justify-center">
                 {/* showsub1 */}

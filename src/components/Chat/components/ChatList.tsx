@@ -12,9 +12,7 @@ interface ChatsListProps {
 export default function ChatsList({ selectChat }: ChatsListProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { id, type } = pilotSideOver;
-
   const { mutate: onDelete } = useDeleteChat();
-
   const { data, status } = useGetChats({
     type,
     id,
@@ -25,24 +23,24 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
   };
 
   return status === 'loading' ? (
-    <div className="mx-auto w-6 mt-5 justify-center">
+    <div className="justify-center w-6 mx-auto mt-5">
       <Spinner size={8} color="#0F70B7" />
     </div>
   ) : !data?.length ? (
     <FullScreenMessage title="No chats." description="Create one." />
   ) : (
     <>
-      <h2 className="text-lg font-medium text-gray-900 border-b p-2">Chats</h2>
-      <ul role="list" className="divide-y divide-gray-200 flex flex-wrap">
+      <h2 className="p-2 text-lg font-medium text-gray-900 border-b">Chats</h2>
+      <ul role="list" className="flex flex-wrap divide-y divide-gray-200">
         {data?.map((chat) => (
           <li
             key={chat.id}
-            className="grid grid-cols-sidebarItem items-center justify-between w-full hover:bg-gray-100 p-2"
+            className="grid items-center justify-between w-full p-2 grid-cols-sidebarItem hover:bg-gray-100"
           >
             {/* avatar */}
             <span
               onClick={() => selectChat(chat.id)}
-              className="flex items-center cursor-pointer justify-center p-1 rounded-full w-12 h-12 bg-indigo-600 text-white pb-1 uppercase font-medium text-xl"
+              className="flex items-center justify-center w-12 h-12 p-1 pb-1 text-xl font-medium text-white uppercase bg-indigo-600 rounded-full cursor-pointer"
             >
               {chat.name.slice(0, 2)}
             </span>
@@ -58,12 +56,12 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
 
             {/* action buttons */}
             <div className="flex items-center gap-2">
-              <span className="flex bg-indigo-600 text-xs text-white w-6 h-6 justify-center items-center rounded-full">
+              <span className="flex items-center justify-center w-6 h-6 text-xs text-white bg-indigo-600 rounded-full">
                 {chat.new_messages_count}
               </span>
               <TrashIcon
                 onClick={() => handleDelete(chat.id)}
-                className="h-5 w-5 cursor-pointer"
+                className="w-5 h-5 cursor-pointer"
                 aria-hidden="true"
                 id="trashIcon"
               />

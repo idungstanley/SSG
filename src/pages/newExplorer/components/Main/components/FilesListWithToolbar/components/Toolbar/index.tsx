@@ -2,14 +2,8 @@ import React from 'react';
 import {
   TrashIcon,
   ShareIcon,
-  ClipboardCopyIcon,
-  DownloadIcon,
-  ChatIcon,
-  EyeIcon,
-  ChatAlt2Icon,
-  SearchIcon,
-  PrinterIcon,
-} from '@heroicons/react/outline';
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import {
   useAppDispatch,
   useAppSelector,
@@ -26,7 +20,7 @@ import {
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { BsClipboardCheck } from 'react-icons/bs';
-import { ArrowDownIcon } from '@heroicons/react/solid';
+import { ArrowDownIcon } from '@heroicons/react/24/solid';
 import { TbArrowsUpDown } from 'react-icons/tb';
 
 interface ToolbarProps {
@@ -136,7 +130,7 @@ export default function Toolbar({ data }: ToolbarProps) {
       {/* badge (items length and current index) */}
       <div className="flex items-center">
         <div className="flex w-6 items-center cursor-pointer">
-          <SearchIcon className="h-4 w-4" />
+          <MagnifyingGlassIcon className="h-4 w-4" />
           <BiDotsVerticalRounded className="h-4 w-4" />
         </div>
         <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">

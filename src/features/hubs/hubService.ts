@@ -57,6 +57,22 @@ export const useGetHubList = ({ query }) => {
   );
 };
 
+export const useGetHubChildren = ({ query }) => {
+  // const queryClient = useQueryClient();
+  const hubId = query;
+
+  return useQuery<any>(['hubs', hubId], async () => {
+    const data = await requestNew(
+      {
+        url: `at/hubs/${hubId}`,
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
+};
+
 //get subhub
 export const useGetSubHub = ({ parentId }) => {
   return useQuery<IResponseGetHubs>(

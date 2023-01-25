@@ -8,7 +8,7 @@ import {
   setToggleAssignCurrentTaskId,
 } from '../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
-import { TrashIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 import {
   UseAssignTaskService,
@@ -91,7 +91,7 @@ export default function AssignTask() {
                     height="h-5"
                     width="w-5"
                   />
-                  <p className="text-xs">
+                  <p className="text-lg">
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>

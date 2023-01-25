@@ -24,7 +24,10 @@ import commerceIcon from '../../../../assets/branding/commerce.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
-import { FolderAddIcon, SearchIcon } from '@heroicons/react/outline';
+import {
+  FolderPlusIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { useParams } from 'react-router-dom';
@@ -59,7 +62,7 @@ function Places() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({
@@ -305,7 +308,7 @@ function Places() {
                       showSidebar ? 'block' : 'hidden'
                     } flex items-center space-x-1`}
                   >
-                    <SearchIcon
+                    <MagnifyingGlassIcon
                       className="w-3 h-4"
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}

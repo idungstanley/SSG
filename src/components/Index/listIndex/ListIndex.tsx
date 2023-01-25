@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import { setCurrentListId } from '../../../features/list/listSlice';
 import { useAppSelector } from '../../../app/hooks';
+import { setActiveItem } from '../../../features/workspace/workspaceSlice';
 
 interface ListIndexProps {
   showHubList: boolean;
@@ -23,8 +24,16 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const { data } = useGetHubWallet(getCurrentHubId);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
-  const handleListLocation = (id: string) => {
+  const handleListLocation = (id: string, name: string) => {
     navigate(`/workspace/list/${id}`);
+        dispatch(
+          setActiveItem({
+            activeItemType: 'list',
+            activeItemId: id,
+            activeItemName: name,
+          })
+        );
+
   };
   const handleListSettings = (id: string, e) => {
     dispatch(setCurrentListId(id));
@@ -49,13 +58,13 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
             <section className="flex justify-between items-center text-sm pl-6 ml-0.5 h-8 hover:bg-gray-100">
               <div className="flex items-center justify-center space-x-1">
                 <BsListUl
-                  className="flex-shrink-0 h-3 w-5"
+                  className="flex-shrink-0 w-5 h-3"
                   aria-hidden="true"
                 />
                 <button
                   type="button"
-                  onClick={() => handleListLocation(list.id)}
-                  className="tracking-wider capitalize ml-2"
+                  onClick={() => handleListLocation(list.id, list.name)}
+                  className="ml-2 tracking-wider capitalize"
                   style={{ fontSize: '10px' }}
                 >
                   {list.name.length > 10
@@ -67,7 +76,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
               <button
                 type="button"
                 id="listright"
-                className="flex items-center justify-end space-x-1 mr-6"
+                className="flex items-center justify-end mr-6 space-x-1"
               >
                 {/* <TaskDropdown getListId={getListId} /> */}
                 <AiOutlineEllipsis

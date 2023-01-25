@@ -73,7 +73,7 @@ export default function SelectMenuSimple({
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-primary-600' : 'text-gray-900',
-                        'cursor-default select-none relative py-2 pl-8 pr-4'
+                        'cursor-pointer select-none relative py-2 pl-8 pr-4'
                       )
                     }
                     value={option}

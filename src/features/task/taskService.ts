@@ -13,7 +13,7 @@ export const createTaskService = (data) => {
         name: data.name,
         description: data.description,
         list_id: data.showMenuDropdown || data.getListId,
-        // parent_id: data.parentTaskId,
+        parent_id: data.parentTaskId,
       },
     },
     true
@@ -94,6 +94,38 @@ export const getTaskListService = ({ listId }) => {
   );
 };
 // getTaskListService();
+
+export const getTaskListService2 = (query: { parentId: string | null }) => {
+  const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { query: query.parentId }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'at/tasks/list',
+          method: 'POST',
+          params: {
+            parent_id: query.parentId,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.parentId != null,
+      onSuccess: () => {
+        // const taskData = data.data.tasks.map((task) => {
+        //   queryClient.setQueryData(['task', task.id], task);
+        //   return { ...task };
+        // });
+        // dispatch(getTaskData(taskData));
+      },
+    }
+  );
+};
 
 export const createTimeEntriesService = (data) => {
   const taskID = data.queryKey[1];

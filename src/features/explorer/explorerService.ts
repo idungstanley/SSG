@@ -1,4 +1,3 @@
-import { explorerItemType } from './../../types/index';
 import {
   IExplorerFile,
   IExplorerFilesAndFolders,

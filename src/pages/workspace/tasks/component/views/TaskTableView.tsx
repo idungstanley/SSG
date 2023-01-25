@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import MaterialTable from "material-table";
-import { ThemeProvider, createTheme } from "@mui/material";
-import { BiExport } from "react-icons/bi";
-import { BiHide } from "react-icons/bi";
-import { MdOutlineCancelScheduleSend } from "react-icons/md";
-import { FcParallelTasks } from "react-icons/fc";
-import { AiOutlineFilter } from "react-icons/ai";
-import { FaSort } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import MaterialTable from 'material-table';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { BiExport } from 'react-icons/bi';
+import { BiHide } from 'react-icons/bi';
+import { MdOutlineCancelScheduleSend } from 'react-icons/md';
+import { FcParallelTasks } from 'react-icons/fc';
+import { AiOutlineFilter } from 'react-icons/ai';
+import { FaSort } from 'react-icons/fa';
+import '../taskData/task.css';
 import { format } from "date-fns";
-import { AvatarWithInitials } from "../../../../../components";
+import { AvatarWithInitials } from '../../../../../components';
 import {
   setCloseTaskListView,
   setCurrentTaskId,
   setShowTaskNavigation,
-} from "../../../../../features/task/taskSlice";
+} from '../../../../../features/task/taskSlice';
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
@@ -53,7 +54,7 @@ function TaskTableView() {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="flex-1 stack2">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -66,40 +67,40 @@ function TaskTableView() {
   };
 
   const hidden = (col) => {
-    if (col == "id") {
+    if (col == 'id') {
       return true;
     }
-    if (col == "list_id") {
+    if (col == 'list_id') {
       return true;
     }
-    if (col == "parent_id") {
+    if (col == 'parent_id') {
       return true;
     }
-    if (col == "archived_at") {
+    if (col == 'archived_at') {
       return true;
     }
-    if (col == "deleted_at") {
+    if (col == 'deleted_at') {
       return true;
     }
-    if (col == "updated_at") {
+    if (col == 'updated_at') {
       return true;
     }
-    if (col == "group_assignees") {
+    if (col == 'group_assignees') {
       return true;
     }
-    if (col == "description") {
+    if (col == 'description') {
       return true;
     }
-    if (col == "end_date") {
+    if (col == 'end_date') {
       return true;
     }
-    if (col == "start_date") {
+    if (col == 'start_date') {
       return true;
     }
   };
 
   const renderData = (column, newData) => {
-    if (column == "assignees") {
+    if (column == 'assignees') {
       return groupAssignee(newData.assignees);
     }
     if (column == "created_at") {
@@ -119,9 +120,9 @@ function TaskTableView() {
   columnHead[0]?.map((column) => {
     const singleColumn = {
       title:
-        column.split("_").join(" ").toUpperCase() == "NAME"
-          ? "TASKS"
-          : column.split("_").join(" ").toUpperCase(),
+        column.split('_').join(' ').toUpperCase() == 'NAME'
+          ? 'TASKS'
+          : column.split('_').join(' ').toUpperCase(),
       field: column,
       emptyValue: () => <p>-</p>,
       hidden: hidden(column),
@@ -149,7 +150,7 @@ function TaskTableView() {
             //   }}
             detailPanel={[
               {
-                tooltip: "Add Subtask",
+                tooltip: 'Add Subtask',
                 render: (rowData) => {
                   return (
                     <form className="flex justify-between items-center w-full pl-20 pr-5 border-blue-400 border-2 ">
@@ -172,7 +173,7 @@ function TaskTableView() {
             ]}
             options={{
               //     tableLayout: "fixed",
-              searchFieldAlignment: "right",
+              searchFieldAlignment: 'right',
               // filtering: true,
               exportButton: true,
               selection: true,
@@ -181,10 +182,10 @@ function TaskTableView() {
               columnResizable: false,
               columnsButton: true,
               headerStyle: {
-                fontSize: "10px",
+                fontSize: '10px',
               },
-              rowStyle: { fontSize: "10px" },
-              maxBodyHeight: "300px",
+              rowStyle: { fontSize: '10px' },
+              maxBodyHeight: '300px',
             }}
             icons={icons}
           />

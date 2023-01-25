@@ -1,8 +1,8 @@
 import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
   HomeIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetExplorerFolder } from '../../../../features/explorer/explorerService';
@@ -18,7 +18,7 @@ export default function BreadcrumbSection() {
       id: 1,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleLeftIcon
+        <ArrowLeftCircleIcon
           className="h-4 w-4 stroke-current text-gray-400"
           aria-hidden="true"
         />
@@ -28,7 +28,7 @@ export default function BreadcrumbSection() {
       id: 2,
       onClick: () => ({}),
       icon: (
-        <ArrowCircleRightIcon
+        <ArrowRightCircleIcon
           className="h-4 w-4 stroke-current text-gray-400"
           aria-hidden="true"
         />

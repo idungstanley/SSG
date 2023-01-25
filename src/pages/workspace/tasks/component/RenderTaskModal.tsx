@@ -7,7 +7,7 @@ import {
   UserAddOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { CheckIcon, PlayIcon, StopIcon } from '@heroicons/react/outline';
+import { CheckIcon, PlayIcon, StopIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
