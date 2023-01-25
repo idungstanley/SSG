@@ -51,14 +51,6 @@ export default function FilesListWithToolbar() {
           {/* toolbar */}
           <Toolbar data={sortedItems} query={query} setQuery={setQuery} />
 
-          <div className="flex gap-2 justify-between px-2">
-            {/* Search */}
-            {/* <Search query={query} setQuery={setQuery} type="file" /> */}
-
-            {/* sorting */}
-            {/* <Sorting /> */}
-          </div>
-
           {/* file list */}
           <FilesList data={sortedItems} />
         </div>

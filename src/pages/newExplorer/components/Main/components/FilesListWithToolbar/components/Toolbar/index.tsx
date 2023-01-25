@@ -128,7 +128,9 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           ))}
         </div>
 
+        {/* right items */}
         <div className="flex items-center gap-3">
+          {/* search */}
           <Tooltip tooltip={showSearch ? 'Hide search' : 'Show search'}>
             {showSearch ? (
               <MagnifyingGlassMinusIcon
@@ -143,6 +145,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             )}
           </Tooltip>
 
+          {/* sort */}
           <Tooltip tooltip="Sorting">
             <Sorting />
           </Tooltip>
@@ -160,6 +163,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             <span>{stringifyNumber(data.length)}</span>
           </div>
 
+          {/* trash icon */}
           <Tooltip tooltip="Delete">
             <button
               disabled={selectedIds.length === 0}
@@ -180,6 +184,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
         </div>
       </div>
 
+      {/* search input */}
       {showSearch ? (
         <Search query={query} setQuery={setQuery} type="file" />
       ) : null}
