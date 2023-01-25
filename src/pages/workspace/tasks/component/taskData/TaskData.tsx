@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
 import "./task.css";
+import { type } from "os";
 
 interface TaskDataProps {
   task: any;
@@ -32,7 +33,7 @@ export default function TaskData({ task }: TaskDataProps) {
   );
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
-  const displayNav = (id: string) => {
+  const displayNav: any = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
@@ -74,16 +75,20 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
+  const taskfield: any = () => {
+    console.log("great");
+  };
   return (
-    <div className="group relative bg-white border border-gray-100 hover:bg-gray-100 flex items-center ml-6 pl-3">
+    <div className="group relative bg-white mb-px bordar hover:bg-gray-100 flex items-center ml-6 pl-3 field">
       <span className="flex items-center absolute  " style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"
-          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
-          onClick={() => displayNav(task.id)}
+          className="handlecheck opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
+          onClick={() => {
+            displayNav(task.id);
+          }}
         />
-
         <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
       </span>
 

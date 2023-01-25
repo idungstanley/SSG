@@ -8,15 +8,17 @@ import addColumns from "../../../lists/components/renderlist/listDetails/listDet
 import { useDispatch } from "react-redux";
 import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
 
+import "../taskData/task.css";
+
 export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
+  const { myTaskData } = useAppSelector((state) => state.task);
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
   };
-  const { myTaskData } = useAppSelector((state) => state.task);
 
   return (
     <div className=" flex items-center  ">
