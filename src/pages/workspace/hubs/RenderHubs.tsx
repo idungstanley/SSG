@@ -12,7 +12,7 @@ function RenderHubs() {
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
 
   return (
-    <div className="h-screen">
+    <div className="h-screen overflow-y-auto">
       <section id="nav">
         <ListNav
           navName={activeItemName}
