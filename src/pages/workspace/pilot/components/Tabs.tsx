@@ -6,11 +6,18 @@ import automationIcon from '../../../../assets/branding/automation.png';
 import propertiesIcon from '../../../../assets/branding/properties-icon.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import { classNames } from '../../../../utils';
-import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi';
+import {
+  HiChevronDoubleLeft,
+  HiChevronDoubleRight,
+  HiChevronDoubleUp,
+} from 'react-icons/hi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setShowPilot } from '../../../../features/workspace/workspaceSlice';
+import {
+  setShowPilot,
+  setShowPilotIconView,
+} from '../../../../features/workspace/workspaceSlice';
 const pilotOptions = [
   {
     id: 0,
@@ -50,7 +57,9 @@ interface TabProps {
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const { showPilot } = useAppSelector((state) => state.workspace);
+  const { showPilot, showPilotIconView } = useAppSelector(
+    (state) => state.workspace
+  );
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
@@ -61,11 +70,16 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       dispatch(setShowPilot(true));
     }
   };
+  const handleShowPilotIconView = () => {
+    if (showPilotIconView) {
+      dispatch(setShowPilotIconView(false));
+    } else {
+      dispatch(setShowPilotIconView(true));
+    }
+  };
   return (
     <div
-      className={`gap-4 pb-1  ${
-        showPilot ? 'w-96 border' : 'w-12'
-      }`}
+      className={`gap-4 pb-1  ${showPilot ? 'w-96 border' : 'w-12'}`}
       aria-label="Tabs"
     >
       <div
@@ -82,10 +96,15 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         <BsThreeDotsVertical />
       </div>
       <div
-        className={`flex flex-wrap divide-x ${
+        className={`flex flex-wrap relative divide-x ${
           showPilot ? 'flex-row' : 'flex-col'
         }`}
       >
+        {showPilot && (
+          <span className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${showPilotIconView && 'text-green-500'}`}>
+            <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
+          </span>
+        )}
         {pilotOptions.map((item) => (
           <div
             key={item.id}
@@ -95,7 +114,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
                 ? 'bg-gray-300 text-black'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
               showPilot ? 'border-y-2 border gap-2' : 'py-3',
-              'px-3 relative py-2 font-medium h-fit  flex-grow cursor-pointer flex justify-center transition'
+              'px-3 relative py-2 font-medium h-fit flex-grow cursor-pointer flex justify-center transition'
             )}
             aria-current={item.id === activeTabId ? 'page' : undefined}
           >
@@ -103,7 +122,11 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
               <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
             )}
             <img src={item.source} alt="" className="w-4 h-4" />
-            <p className={`text-xs ${showPilot ? 'block' : 'hidden'}`}>
+            <p
+              className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
+                showPilotIconView ? 'hidden' : 'block'
+              }`}
+            >
               {item.name}
             </p>
           </div>
