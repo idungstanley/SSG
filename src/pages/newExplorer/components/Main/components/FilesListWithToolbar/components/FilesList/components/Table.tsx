@@ -24,7 +24,7 @@ export default function Table({
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
   return (
-    <table className="min-w-full table-fixed overflow-x-scroll bg-white">
+    <table className="min-w-full table-fixed bg-white">
       <thead>
         <tr className="border">
           <th scope="col" className="relative px-2 pr-6 py-2">

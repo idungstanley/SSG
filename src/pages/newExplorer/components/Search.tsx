@@ -9,9 +9,8 @@ interface SearchProps {
 }
 
 export default function Search({ query, setQuery, type }: SearchProps) {
-
   return (
-    <div className="relative flex-grow">
+    <div className="relative flex-grow m-2">
       <Input
         name={`explorer-${type}-search`}
         onChange={(e) => setQuery(e.target.value)}
