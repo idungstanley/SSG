@@ -18,8 +18,6 @@ export default function TaskListViews() {
   };
   const { myTaskData } = useAppSelector((state) => state.task);
 
-  console.log(myTaskData);
-
   return (
     <div className=" flex items-center  ">
       <div className=" flex w-6/12 items-center gap-2 shrink-0">

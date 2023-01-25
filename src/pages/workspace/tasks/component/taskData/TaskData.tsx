@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   setCurrentTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { MdDragIndicator } from 'react-icons/md';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
+} from "../../../../../features/task/taskSlice";
+import { MdDragIndicator } from "react-icons/md";
+import { RiCheckboxBlankFill } from "react-icons/ri";
 import {
   CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
+} from "@ant-design/icons";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import AssignTask from "../../assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../components";
 
 interface TaskDataProps {
   task: any;
@@ -75,7 +75,7 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
-      <span className="flex items-center absolute  " style={{ left: '-30px' }}>
+      <span className="flex items-center absolute  " style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"

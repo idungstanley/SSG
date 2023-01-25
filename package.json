@@ -5,12 +5,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^6.4.0",
+    "@dnd-kit/core": "^6.0.7",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@dnd-kit/core": "^6.0.7",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^2.0.13",
     "@material-ui/core": "^4.12.4",
@@ -75,7 +75,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco --openssl-legacy-provider start",
+    "start": "craco start --openssl-legacy-provider",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",

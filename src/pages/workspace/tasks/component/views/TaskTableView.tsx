@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { BiExport } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
+import { FcParallelTasks } from "react-icons/fc";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
 import { AvatarWithInitials } from "../../../../../components";
+import {
+  setCloseTaskListView,
+  setCurrentTaskId,
+  setShowTaskNavigation,
+} from "../../../../../features/task/taskSlice";
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
   const { myTaskData } = useAppSelector((state) => state.task);
+  const { showTaskNavigation, toggleAssignCurrentTaskId } = useAppSelector(
+    (state) => state.task
+  );
+
+  const dispatch = useAppDispatch();
 
   const editable = myTaskData.map((o) => ({ ...o }));
 
@@ -82,6 +93,17 @@ function TaskTableView() {
     }
   };
 
+  const renderData = (column, newData) => {
+    if (column == "assignees") {
+      return groupAssignee(newData.assignees);
+    } else return;
+  };
+
+  const displayNav = (id: string) => {
+    dispatch(setShowTaskNavigation(!showTaskNavigation));
+    dispatch(setCurrentTaskId(id));
+  };
+
   columnHead[0]?.map((column) => {
     const singleColumn = {
       title:
@@ -91,11 +113,8 @@ function TaskTableView() {
       field: column,
       emptyValue: () => <p>-</p>,
       hidden: hidden(column),
-
       render:
-        column == "assignees"
-          ? (newData) => groupAssignee(newData.assignees)
-          : null,
+        column == "assignees" ? (newData) => renderData(column, newData) : null,
     };
     dynamicColum.push(singleColumn);
   });
@@ -109,7 +128,20 @@ function TaskTableView() {
             title="{SSG}"
             columns={dynamicColum}
             data={editable ?? []}
+            onSelectionChange={(selectedRow) => {
+              setTimeout(() => {
+                displayNav(selectedRow[0]?.id);
+              }, 1000);
+            }}
+            //   actions={[
+            //     {
+            //       icon: () => <FcParallelTasks />,
+            //       onClick: (e, data) => displayNav(data[0]?.id),
+            //     },
+            //   ]}
+
             options={{
+              //     tableLayout: "fixed",
               searchFieldAlignment: "right",
               // filtering: true,
               exportButton: true,
@@ -123,7 +155,6 @@ function TaskTableView() {
               },
               rowStyle: { fontSize: "10px" },
               maxBodyHeight: "300px",
-              // doubleHorizontalScroll: false,
             }}
             icons={icons}
           />
