@@ -79,7 +79,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
   };
   return (
     <div
-      className={`gap-4 pb-1  ${showPilot ? 'w-96 border' : 'w-12'}`}
+      className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
       aria-label="Tabs"
     >
       <div
@@ -101,7 +101,11 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         }`}
       >
         {showPilot && (
-          <span className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${showPilotIconView && 'text-green-500'}`}>
+          <span
+            className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${
+              showPilotIconView && 'text-green-500'
+            }`}
+          >
             <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
           </span>
         )}

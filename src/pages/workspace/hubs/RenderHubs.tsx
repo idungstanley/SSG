@@ -10,7 +10,7 @@ function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
-
+  console.log(HubDetail);
   return (
     <div className="h-screen overflow-y-auto">
       <section id="nav">
@@ -21,9 +21,9 @@ function RenderHubs() {
           changeViews="View"
         />
       </section>
-      <section className="flex w-full">
+      <section className="flex h-full w-full">
         {/* ListList */}
-        <div className="w-7/12 overflow-y-scroll">
+        <div className="w-full overflow-y-scroll">
           <div>
             {HubDetail?.data.hubs.map((data) => (
               <TaskListSections data={data} key={data.id} />
