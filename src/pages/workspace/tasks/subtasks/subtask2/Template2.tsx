@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   setCurrentParentSubTaskId,
   setCurrentParentSubTaskId2,
@@ -7,20 +7,20 @@ import {
   setCurrentTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { RiCheckboxBlankFill } from "react-icons/ri";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
 import {
   CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { AvatarWithInitials } from '../../../../../components';
-import AssignTask from '../../assignTask/AssignTask';
+} from "@ant-design/icons";
+import { AvatarWithInitials } from "../../../../../components";
+import AssignTask from "../../assignTask/AssignTask";
 
 interface TemplateProps {
   task: any;
@@ -85,7 +85,7 @@ export default function Template2({ task }: TemplateProps) {
       className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3"
       key={task.id}
     >
-      <span className="flex items-center absolute" style={{ left: '-30px' }}>
+      <span className="flex items-center absolute" style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"
@@ -98,11 +98,7 @@ export default function Template2({ task }: TemplateProps) {
       <div className="ml-10" onClick={() => handleShowSubTask(task.id)}>
         {task.id == showSubTask ? (
           <span className="flex flex-col">
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 ml-1"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
+            <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
           </span>
         ) : (
           <VscTriangleRight
@@ -113,7 +109,7 @@ export default function Template2({ task }: TemplateProps) {
         )}
       </div>
       <RiCheckboxBlankFill
-        className=" text-gray-400 text-xs "
+        className="pl-1 text-gray-400 text-xs "
         aria-hidden="true"
       />
       <div className="flex items-center w-6/12 group">
@@ -145,8 +141,11 @@ export default function Template2({ task }: TemplateProps) {
       </div>
       {/* icons */}
 
-      <div className="flex  space-x-10">
-        <span className="relative rounded-full text-xs text-center">
+      <div className="flex relative  space-x-10">
+        <span
+          className="absolute rounded-full text-xs text-center"
+          style={{ left: "-60px" }}
+        >
           {/* assignees here */}
 
           {task.assignees.length == 0 ? (
@@ -164,7 +163,10 @@ export default function Template2({ task }: TemplateProps) {
             </div>
           )}
         </span>
-        <span className="border-dotted border-gray-300 pl-3 ml-5">
+        <span
+          className="absolute border-dotted border-gray-300 "
+          style={{ left: "-40px" }}
+        >
           <CalendarOutlined
             className="h-5 w-7 text-gray-400"
             aria-hidden="true"
@@ -172,7 +174,7 @@ export default function Template2({ task }: TemplateProps) {
         </span>
         <span className="border-dotted border-gray-300 ml-5">
           <FlagOutlined
-            className="h-5 w-7  text-gray-400 ml-8"
+            className="h-5 w-7  text-gray-400 ml-10 pl-5"
             aria-hidden="true"
           />
         </span>
