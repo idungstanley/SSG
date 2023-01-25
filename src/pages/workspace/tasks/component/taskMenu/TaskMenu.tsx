@@ -7,7 +7,7 @@ export default function TaskMenu() {
   return (
     <div className="overflow-hidden">
       <div
-        className="abolute flex justify-between items-center w-full h-11 bg-gray-800"
+        className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
         style={{ transition: "linear", transitionDelay: "100s" }}
       >
         <div className="pl-5">

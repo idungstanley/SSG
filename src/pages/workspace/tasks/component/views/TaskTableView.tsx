@@ -8,6 +8,7 @@ import { BsSearch } from 'react-icons/bs';
 import { AiOutlineFilter } from 'react-icons/ai';
 import { FaSort } from 'react-icons/fa';
 import { AvatarWithInitials } from '../../../../../components';
+import '../taskData/task.css';
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
@@ -31,13 +32,14 @@ function TaskTableView() {
   const columnHead: any = [];
   const singleObj: any = editable[0];
   columnHead.push(Object.keys(singleObj));
+  // console.log(columnHead);
 
   const dynamicColum: any = [];
 
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="flex-1 stack2">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}

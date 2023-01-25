@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import AssignTask from '../../assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../components';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-
+import './task.css';
 interface TaskDataProps {
   task: any;
 }
@@ -37,7 +37,7 @@ export default function TaskData({ task }: TaskDataProps) {
   } = useAppSelector((state) => state.task);
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
-  const displayNav = (id: string) => {
+  const displayNav: any = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
@@ -46,15 +46,6 @@ export default function TaskData({ task }: TaskDataProps) {
     setOpenTaskModal(true);
     navigate(`/workspace/t/${id}`);
   };
-
-  // const handleSubTask = (id: string) => {
-  //   setParentTaskId(id);
-  //   setSubTaskOne(!subTaskOne);
-  //   if (subTaskOne === id) {
-  //     return setSubTaskOne(false);
-  //   }
-  //   setSubTaskOne(id);
-  // };
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -83,7 +74,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="stack">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -96,7 +87,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
+    <div className="group relative bg-white mb-px bordar hover:bg-gray-100 flex items-center ml-6 pl-3 field">
       <div onClick={() => handleGetSubTask(task.id)}>
         {task.id == getSubTaskId ? (
           <span className="flex flex-col">
@@ -114,14 +105,15 @@ export default function TaskData({ task }: TaskDataProps) {
           />
         )}
       </div>
-      <span className="flex items-center absolute  " style={{ left: '-30px' }}>
+      <span className="flex items-center absolute -left-32">
         <input
           type="checkbox"
           id="checked-checkbox"
-          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
-          onClick={() => displayNav(task.id)}
+          className="handlecheck opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
+          onClick={() => {
+            displayNav(task.id);
+          }}
         />
-
         <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
       </span>
 
@@ -157,13 +149,16 @@ export default function TaskData({ task }: TaskDataProps) {
       </div>
       {/* icons */}
 
-      <div className="flex  space-x-10">
-        <span className="relative rounded-full text-xs text-center">
+      <div className="relative ">
+        <span
+          className="absolute rounded-full text-end	 text-xs "
+          style={{ left: '-20px' }}
+        >
           {/* assignees here */}
 
           {task.assignees.length == 0 ? (
             <UserAddOutlined
-              className=" h-5 w-5 text-gray-400 text-xl cursor-pointer "
+              className="	 h-5 w-5 pr-10 text-gray-400 text-xl cursor-pointer "
               aria-hidden="true"
               onClick={() => handleAssigneeModal(task.id)}
             />
@@ -176,13 +171,13 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           )}
         </span>
-        <span className="border-dotted border-gray-300 pl-3 ml-5">
+        <span className=" border-dotted border-gray-300 pl-10 ml-5">
           <CalendarOutlined
-            className="h-5 w-7 text-gray-400"
+            className=" h-5 w-7 text-gray-400"
             aria-hidden="true"
           />
         </span>
-        <span className="border-dotted border-gray-300 ml-5">
+        <span className=" border-dotted border-gray-300 ml-8">
           <FlagOutlined
             className="h-5 w-7  text-gray-400 ml-8"
             aria-hidden="true"
