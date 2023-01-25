@@ -4,10 +4,11 @@ import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { BiExport } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
-import { BsSearch } from "react-icons/bs";
+import { MdOutlineCancelScheduleSend } from "react-icons/md";
 import { FcParallelTasks } from "react-icons/fc";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
+import { format } from "date-fns";
 import { AvatarWithInitials } from "../../../../../components";
 import {
   setCloseTaskListView,
@@ -38,11 +39,14 @@ function TaskTableView() {
     LastPage: () => null,
     NextPage: () => null,
     PreviousPage: () => null,
+    ResetSearch: () => <MdOutlineCancelScheduleSend />,
   };
 
   const columnHead: any = [];
   const singleObj: any = editable[0];
   singleObj && columnHead.push(Object.keys(singleObj));
+
+  console.log(editable);
 
   const dynamicColum: any = [];
 
@@ -97,6 +101,9 @@ function TaskTableView() {
   const renderData = (column, newData) => {
     if (column == "assignees") {
       return groupAssignee(newData.assignees);
+    }
+    if (column == "created_at") {
+      return <p>{format(newData.created_at, "yyyy/mm/dd")}</p>;
     } else return;
   };
 
@@ -119,7 +126,9 @@ function TaskTableView() {
       emptyValue: () => <p>-</p>,
       hidden: hidden(column),
       render:
-        column == "assignees" ? (newData) => renderData(column, newData) : null,
+        column == "assignees" || column == "created_at"
+          ? (newData) => renderData(column, newData)
+          : null,
     };
     dynamicColum.push(singleColumn);
   });
@@ -138,17 +147,16 @@ function TaskTableView() {
             //       displayNav(selectedRow[0]?.id);
             //     }, 1000);
             //   }}
-            //   actions={[
             detailPanel={[
               {
                 tooltip: "Add Subtask",
                 render: (rowData) => {
                   return (
-                    <form className="flex justify-between items-center w-10/12 mx-auto">
+                    <form className="flex justify-between items-center w-full pl-20 pr-5 border-blue-400 border-2 ">
                       <input
                         type="text"
-                        className=" text-black pl-10 border-0"
-                        placeholder="Enter a subtask name"
+                        className=" text-black pl-10 border-0 w-full focus:outline-1 focus:ring-transparent"
+                        placeholder="Create a Subtask"
                       />
                       <button
                         type="button"
