@@ -3,6 +3,10 @@ import {
   TrashIcon,
   ShareIcon,
   MagnifyingGlassIcon,
+  EllipsisVerticalIcon,
+  ArrowDownTrayIcon,
+  ClipboardIcon,
+  AdjustmentsVerticalIcon,
 } from '@heroicons/react/24/outline';
 import {
   useAppDispatch,
@@ -18,10 +22,6 @@ import {
   setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { BsClipboardCheck } from 'react-icons/bs';
-import { ArrowDownIcon } from '@heroicons/react/24/solid';
-import { TbArrowsUpDown } from 'react-icons/tb';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -55,10 +55,13 @@ export default function Toolbar({ data }: ToolbarProps) {
     DownloadFile('file', selectedFileId || '', selectedFileId || '');
   };
 
-  const menuItems = [
+  const leftItems = [
     {
       icon: (
-        <ArrowDownIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <ArrowDownTrayIcon
+          className="h-5 w-5 stroke-current"
+          aria-hidden="true"
+        />
       ),
       onClick: handleDownload,
       label: 'Download',
@@ -79,10 +82,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     },
     {
       icon: (
-        <BsClipboardCheck
-          className="h-5 w-5 stroke-current"
-          aria-hidden="true"
-        />
+        <ClipboardIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
       ),
       onClick: () => ({}),
       label: 'Copy',
@@ -98,14 +98,8 @@ export default function Toolbar({ data }: ToolbarProps) {
             show: true,
           })
         ),
-      icon: <TbArrowsUpDown className="h-5 w-5" aria-hidden="true" />,
+      icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
       disabled: !selectedFileId,
-    },
-    {
-      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
-      onClick: handleDelete,
-      label: 'Delete',
-      disabled: selectedIds.length === 0,
     },
   ];
 
@@ -113,7 +107,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     <div className="flex items-center justify-between px-2 py-1">
       {/* file actions */}
       <div className="flex gap-4 items-center pt-1">
-        {menuItems.map((button) => (
+        {leftItems.map((button) => (
           <Tooltip key={button.label} tooltip={button.label}>
             <button
               disabled={button.disabled}
@@ -127,13 +121,26 @@ export default function Toolbar({ data }: ToolbarProps) {
         ))}
       </div>
 
-      {/* badge (items length and current index) */}
-      <div className="flex items-center">
-        <div className="flex w-6 items-center cursor-pointer">
-          <MagnifyingGlassIcon className="h-4 w-4" />
-          <BiDotsVerticalRounded className="h-4 w-4" />
-        </div>
-        <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
+      <div className="flex items-center gap-3">
+        <MagnifyingGlassIcon className="h-5 w-5 text-gray-500" />
+        <EllipsisVerticalIcon className="h-5 w-5 text-gray-500" />
+        <Tooltip tooltip="Delete">
+          <button
+            disabled={selectedIds.length === 0}
+            className={
+              selectedIds.length === 0
+                ? 'text-gray-300 pt-1'
+                : 'text-gray-500 pt-1'
+            }
+            onClick={handleDelete}
+            type="button"
+          >
+            <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+          </button>
+        </Tooltip>
+
+        {/* badge (items length and current index) */}
+        <div className="flex gap-1.5 items-center text-sm border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
           {currentFileIndex ? (
             <>
               <span className="text-primary-500">
@@ -144,16 +151,6 @@ export default function Toolbar({ data }: ToolbarProps) {
           ) : null}
           <span>{stringifyNumber(data.length)}</span>
         </div>
-        <button
-          disabled={selectedIds.length === 0}
-          className={
-            selectedIds.length === 0 ? 'text-gray-300' : 'text-gray-500'
-          }
-          onClick={handleDelete}
-          type="button"
-        >
-          <TrashIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
-        </button>
       </div>
     </div>
   );

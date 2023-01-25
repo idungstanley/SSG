@@ -13,7 +13,7 @@ export default function Main() {
     <div
       className={classNames(
         'border-t',
-        showPreview ? 'flex flex-row' : ''
+        showPreview ? 'grid grid-cols-2' : ''
       )}
     >
       <FilesListWithToolbar />
