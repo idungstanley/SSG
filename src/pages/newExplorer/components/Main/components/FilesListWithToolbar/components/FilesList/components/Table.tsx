@@ -24,9 +24,9 @@ export default function Table({
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
   return (
-    <table className="min-w-full border table-fixed divide-y divide-gray-300 overflow-x-scroll bg-white">
+    <table className="min-w-full table-fixed overflow-x-scroll bg-white">
       <thead>
-        <tr>
+        <tr className="border">
           <th scope="col" className="relative px-2 pr-6 py-2">
             <input
               type="checkbox"
@@ -69,7 +69,7 @@ export default function Table({
       ) : null}
 
       {/* all items */}
-      <tbody className="group">
+      <tbody>
         {items.map((file) => (
           <Row key={file.id} fileId={file.id} />
         ))}

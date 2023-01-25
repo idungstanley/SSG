@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import FolderItem from './FolderItem';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
+  setFastPreview,
   setSelectedFolderId,
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
@@ -27,7 +28,7 @@ export default function FoldersList({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const { selectedFolderId, draggableItem } = useAppSelector(
+  const { selectedFolderId, draggableItem, fastPreview } = useAppSelector(
     (state) => state.explorer
   );
   const { data: sub } = useGetExplorerFolder(folderId);
@@ -45,6 +46,10 @@ export default function FoldersList({
         selectedItemType: 'folder',
       })
     );
+
+    if (fastPreview.show) {
+      dispatch(setFastPreview({ show: false }));
+    }
   };
 
   const subFolders = useMemo(
@@ -73,10 +78,6 @@ export default function FoldersList({
           <FolderItem
             key={rootFolder.id}
             id={rootFolder.id}
-            haveAncestors={
-              !!subFolders?.length &&
-              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
-            }
             parentId={rootFolder.parentId}
             name={rootFolder.name}
             handleClickFolder={handleClickFolder}
@@ -102,7 +103,6 @@ export default function FoldersList({
                       id={ancestor.id}
                       name={ancestor.name}
                       parentId={ancestor.parent_id}
-                      haveAncestors={!!ancestor.parent_id}
                       handleClickFolder={handleClickFolder}
                       isActiveFolder={ancestor.id === selectedFolderId}
                     />
@@ -115,7 +115,6 @@ export default function FoldersList({
                   <FolderItem
                     id={selectedFolder.id}
                     name={selectedFolder.name}
-                    haveAncestors={!!selectedFolder.ancestors?.length}
                     parentId={selectedFolder.parent_id}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={selectedFolder.id === selectedFolderId}
@@ -137,7 +136,6 @@ export default function FoldersList({
                     id={subFolder.id}
                     parentId={subFolder.parentId}
                     name={subFolder.name}
-                    haveAncestors={false}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={subFolder.id === selectedFolderId}
                   />

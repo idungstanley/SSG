@@ -5,17 +5,21 @@ import {
   OutputFileSize,
 } from '../../../../../../../../../app/helpers';
 import { FileIcon } from '../../../../../../../../../common';
-import { classNames } from '../../../../../../../../../utils';
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../../../../app/hooks';
 import {
+  setFastPreview,
   setSelectedFileId,
   setSelectedFiles,
 } from '../../../../../../../../../features/explorer/explorerSlice';
 import { useGetExplorerFile } from '../../../../../../../../../features/explorer/explorerService';
-import { ArrowsUpDownIcon } from '@heroicons/react/24/outline';
+import {
+  EyeIcon,
+  ArrowsUpDownIcon,
+  EyeSlashIcon,
+} from '@heroicons/react/24/outline';
 
 interface RowProps {
   fileId: string;
@@ -25,7 +29,7 @@ export default function Row({ fileId }: RowProps) {
   const dispatch = useAppDispatch();
 
   const { data: file } = useGetExplorerFile(fileId);
-  const { selectedFileIds, selectedFileId } = useAppSelector(
+  const { selectedFileIds, selectedFileId, fastPreview } = useAppSelector(
     (state) => state.explorer
   );
 
@@ -38,6 +42,10 @@ export default function Row({ fileId }: RowProps) {
     fileId: string
   ) => {
     const isCheckboxTarget = (e.target as HTMLButtonElement).value;
+
+    if (fastPreview.fileId && fastPreview.fileId !== fileId) {
+      dispatch(setFastPreview({ show: false }));
+    }
 
     // clear multiple selected files and choose one
     if (!isCheckboxTarget) {
@@ -91,11 +99,9 @@ export default function Row({ fileId }: RowProps) {
       key={file.id}
       className={`${selectedIds.includes(file.id) ? 'bg-green-100' : null}
         ${
-          selectedFileId === file.id
-            ? 'bg-green-100 hover:bg-green-100'
-            : null
+          selectedFileId === file.id ? 'bg-green-100 hover:bg-green-100' : null
         } 
-         cursor-pointer hover:bg-gray-50`}
+         cursor-pointer hover:bg-gray-50 group`}
       onClick={(e) => onClickRow(e, file.id)}
     >
       <td className="relative w-8 px-2">
@@ -123,19 +129,40 @@ export default function Row({ fileId }: RowProps) {
         />
       </td>
 
-      <td
-        className={classNames(
-          'py-2 text-sm font-medium flex gap-4 items-center px-2',
-          selectedIds.includes(file.id) ? 'text-indigo-600' : 'text-gray-900'
-        )}
-      >
-        <FileIcon extensionKey={file.file_format.extension} size={4} />
-        <span className="truncate w-48 text-xs pt-0.5">{file.display_name}</span>
+      <td className="py-2 text-sm font-medium flex gap-4 items-center px-2 justify-between text-gray-700">
+        <div className="flex items-center gap-2 truncate">
+          <FileIcon extensionKey={file.file_format.extension} size={4} />
+          <span className="truncate text-sm pt-0.5 flex justify-between">
+            {file.display_name}
+          </span>
+        </div>
+
+        <span
+          onClick={() =>
+            dispatch(
+              setFastPreview(
+                fastPreview.fileId === file.id
+                  ? { show: false }
+                  : { show: true, fileId: file.id }
+              )
+            )
+          }
+          className="transition text-gray-500"
+        >
+          {fastPreview.fileId === file.id ? (
+            <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
+          ) : !fastPreview.fileId ? (
+            <EyeIcon
+              className="h-5 w-5 group-hover:opacity-100 opacity-0"
+              aria-hidden="true"
+            />
+          ) : null}
+        </span>
       </td>
-      <td className="whitespace-nowrap py-2 px-2 text-xs text-gray-500">
+      <td className="whitespace-nowrap py-2 px-2 text-sm text-gray-500">
         {OutputDateTime(file.created_at)}
       </td>
-      <td className="whitespace-nowrap py-2 px-2 text-xs text-gray-500">
+      <td className="whitespace-nowrap py-2 px-2 text-sm text-gray-500">
         {OutputFileSize(file.size)}
       </td>
     </tr>
