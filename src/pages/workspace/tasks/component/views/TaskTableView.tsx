@@ -33,6 +33,7 @@ function TaskTableView() {
     ViewColumn: () => <BiHide />,
     Clear: () => <AiOutlineFilter />,
     SortArrow: () => <FaSort />,
+    DetailPanel: () => <FcParallelTasks />,
     FirstPage: () => null,
     LastPage: () => null,
     NextPage: () => null,
@@ -128,18 +129,34 @@ function TaskTableView() {
             title="{SSG}"
             columns={dynamicColum}
             data={editable ?? []}
-            onSelectionChange={(selectedRow) => {
-              setTimeout(() => {
-                displayNav(selectedRow[0]?.id);
-              }, 1000);
-            }}
+            //   onSelectionChange={(selectedRow) => {
+            //     setTimeout(() => {
+            //       displayNav(selectedRow[0]?.id);
+            //     }, 1000);
+            //   }}
             //   actions={[
-            //     {
-            //       icon: () => <FcParallelTasks />,
-            //       onClick: (e, data) => displayNav(data[0]?.id),
-            //     },
-            //   ]}
-
+            detailPanel={[
+              {
+                tooltip: "Add Subtask",
+                render: (rowData) => {
+                  return (
+                    <form className="flex justify-between items-center w-10/12 mx-auto">
+                      <input
+                        type="text"
+                        className=" text-black pl-10 border-0"
+                        placeholder="Enter a subtask name"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-blue-700 px-3 py-1 text-white"
+                      >
+                        Save
+                      </button>
+                    </form>
+                  );
+                },
+              },
+            ]}
             options={{
               //     tableLayout: "fixed",
               searchFieldAlignment: "right",
