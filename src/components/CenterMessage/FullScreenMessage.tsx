@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
 
 interface FullScreenMessageProps {
@@ -25,7 +25,9 @@ export default function FullScreenMessage({
 }: FullScreenMessageProps) {
   return (
     <div
-      className={`flex flex-1 ${showHalFScreen ? 'h-2/4' : showOneThirdMessage ? 'h-1/3' : 'h-full'} bg-white`}
+      className={`flex flex-1 ${
+        showHalFScreen ? 'h-2/4' : showOneThirdMessage ? 'h-1/3' : 'h-full'
+      } bg-white`}
     >
       <div className="m-auto text-center">
         {showIcon ? (

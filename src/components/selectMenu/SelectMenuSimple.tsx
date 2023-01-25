@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { expiresIn } from '../../features/shared/shared.interfaces';
 
@@ -52,7 +52,7 @@ export default function SelectMenuSimple({
                 {processedOptions.find((item) => item.id === selectedId)?.name}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <SelectorIcon
+                <ChevronUpDownIcon
                   className="w-5 h-5 text-gray-400"
                   aria-hidden="true"
                 />

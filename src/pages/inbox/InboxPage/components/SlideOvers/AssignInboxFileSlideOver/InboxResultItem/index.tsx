@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, CheckCircleIcon } from '@heroicons/react/solid';
+import { PlusIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import {
   Button,
   StackListItemNarrow,
@@ -8,11 +8,11 @@ import {
 import { useGetInbox } from '../../../../../../../features/inbox/inboxesService';
 
 interface InboxResultItemProps {
-  inboxId: string,
-  isAssigned: boolean,
-  isDisabled: boolean,
-  handleAssignToInbox: (i: string) => void,
-  handleUnassignFromInbox: (i: string) => void,
+  inboxId: string;
+  isAssigned: boolean;
+  isDisabled: boolean;
+  handleAssignToInbox: (i: string) => void;
+  handleUnassignFromInbox: (i: string) => void;
 }
 
 function InboxResultItem({
@@ -29,22 +29,38 @@ function InboxResultItem({
       key={inbox.id}
       title={inbox.name}
       description={`${inbox.email_key}@inbox.alsofile.com`}
-      icon={(
+      icon={
         <AvatarWithInitials
           backgroundColour={inbox.colour}
           initials={inbox.initials}
         />
-      )}
-      button={(
+      }
+      button={
         <Button
           buttonStyle="white"
-          onClick={isAssigned ? () => handleUnassignFromInbox(inbox.id) : () => handleAssignToInbox(inbox.id)}
+          onClick={
+            isAssigned
+              ? () => handleUnassignFromInbox(inbox.id)
+              : () => handleAssignToInbox(inbox.id)
+          }
           disabled={isDisabled}
           label={isAssigned ? 'Assigned' : 'Assign'}
-          icon={isAssigned ? <CheckCircleIcon className="mr-1 -ml-2 h-5 w-5 text-green-500" aria-hidden="true" /> : <PlusIcon className="mr-1 -ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />}
+          icon={
+            isAssigned ? (
+              <CheckCircleIcon
+                className="mr-1 -ml-2 h-5 w-5 text-green-500"
+                aria-hidden="true"
+              />
+            ) : (
+              <PlusIcon
+                className="mr-1 -ml-2 h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            )
+          }
           width="w-36"
         />
-      )}
+      }
     />
   ) : null;
 }

@@ -1,4 +1,3 @@
-import { SearchIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import CommandSearchModal from '../sidebar/components/CommandSearchModal';
@@ -23,13 +22,8 @@ export default function Search() {
           style={{ fontSize: '9px' }}
         >
           <div className="flex items-center justify-between ">
-            <SearchIcon
-              className={`${showSidebar ? 'w-2.5 h-2.5 mr-1' : 'h-4'}`}
-              aria-hidden="true"
-            />
             <p className={`${!showSidebar && 'hidden'}`}>Search</p>
           </div>
-          <p className={`mr-5 ${!showSidebar && 'hidden'}`}>Ctrl+k</p>
         </div>
         <input
           placeholder=""

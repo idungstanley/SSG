@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import { useDispatch } from 'react-redux';
-import { UserRemoveIcon, RefreshIcon } from '@heroicons/react/outline';
+import { UserMinusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import {
   useGetTeamMemberInvite,
   useDeleteTeamMemberInvite,
@@ -79,7 +79,7 @@ export default function Row({ teamMemberInviteId }: RowProps) {
         label: 'Resend email',
         onClick: resendInvite,
         icon: (
-          <RefreshIcon
+          <ArrowPathIcon
             className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"
           />
@@ -89,7 +89,7 @@ export default function Row({ teamMemberInviteId }: RowProps) {
         label: 'Delete',
         onClick: deleteTeamMemberInviteConfirmation,
         icon: (
-          <UserRemoveIcon
+          <UserMinusIcon
             className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"
           />

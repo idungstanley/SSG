@@ -40,10 +40,10 @@ const pilotOptions = [
 
 function Pilot() {
   return (
-    <div className="">
+    <div className="flex items-center border w-full justify-between">
       {pilotOptions.map((item) => (
-        <div key={item.id}>
-          <img src={item.source} alt="" />
+        <div key={item.id} className="flex items-center justify-between space-x-1">
+          <img src={item.source} alt="" className="w-4 h-4" />
           <p>{item.name}</p>
         </div>
       ))}

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
 import PermissionsCheckbox from './PermissionsCheckbox';
 import { classNames } from '../../../../utils';

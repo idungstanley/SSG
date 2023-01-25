@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu as HeadlessUIMenu, Transition } from '@headlessui/react';
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import {
   useArchiveOrUnarchiveInbox,
@@ -91,7 +91,7 @@ export default function Menu({ inboxId, type }: MenuProps) {
       <div>
         <HeadlessUIMenu.Button className="relative top-1 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
           <span className="sr-only">Open options</span>
-          <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+          <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
         </HeadlessUIMenu.Button>
       </div>
 

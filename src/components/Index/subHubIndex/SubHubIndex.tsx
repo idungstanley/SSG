@@ -16,6 +16,7 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
+import { setActiveItem } from '../../../features/workspace/workspaceSlice';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export default function SubHubIndex() {
     useAppSelector((state) => state.hub);
 
   const handleClick = (id: string) => {
+    dispatch(setActiveItem({ activeItemType: 'subhub', activeItemId: id }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,

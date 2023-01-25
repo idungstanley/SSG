@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { XIcon } from '@heroicons/react/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useGetChat } from '../../features/chat/chatService';
 import CreateChatSideOver from './components/CreateChatSideOver';
 import Pusher from 'pusher-js';
@@ -12,8 +12,8 @@ import {
   setShowCreateChatSideOver,
   setShowMembersInChatSideOver,
 } from '../../features/chat/chatSlice';
-import CreateMessage from './components/CreateMessage';
-import MessagesList from './components/MessagesList';
+import CreateMessage from './components/ChatSection/components/CreateMessage';
+import MessagesList from './components/ChatSection/components/MessagesList';
 import ChatsList from './components/ChatList';
 import TeamMembersInChat from './components/TeamMembersInChat';
 
@@ -135,7 +135,7 @@ export default function Chat() {
                           <div></div>
                         )}
 
-                        <XIcon
+                        <XMarkIcon
                           onClick={handleHideChat}
                           className="h-6 w-6 cursor-pointer"
                           aria-hidden="true"

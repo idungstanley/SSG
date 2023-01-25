@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { explorerItemType } from '../../types';
 import { ITeamMembersAndGroupsReq } from '../workspace/teamMembers.intrfaces';
-import { IDataAccessReq } from './permissions.interfaces';
+import { IDataAccessRes, IPermissions } from './permissions.interfaces';
 
 export const useGetFilteredTeamMembers = (
   currentUserId?: string | null,
@@ -36,24 +36,21 @@ export const useGetFilteredTeamMembers = (
   return { users: teamMembers, status };
 };
 
-export const useGetDataAccess = (
-  id: string | null,
-  type: explorerItemType | null
-) => {
-  const url = `${type}s/${id}/access`;
-  const queryKey = [`${type}-permissions-${id}`];
+export const useGetItemAccess = (data: {
+  id?: string | null;
+  type?: explorerItemType | null;
+}) => {
+  const { id, type } = data;
 
-  const { data, status, refetch } = useQuery<IDataAccessReq>(
-    queryKey,
+  return useQuery<IDataAccessRes, unknown, IPermissions>(
+    [`${type}-permissions`, id],
     async () =>
       requestNew({
-        url,
+        url: `${type}s/${id}/access`,
         method: 'GET',
       }),
-    { enabled: !!id && !!type }
+    { enabled: !!id && !!type, select: (res) => res.data }
   );
-
-  return { data: data?.data, status, refetch };
 };
 
 const removeAccessForData = (dat: {

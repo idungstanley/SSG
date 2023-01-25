@@ -1,5 +1,5 @@
 import React from 'react';
-import { XIcon } from '@heroicons/react/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { selectedUserType } from './componentType';
 
@@ -37,7 +37,7 @@ export default function Dropdown({
       </div>
 
       <div className="absolute z-10 mt-0 w-48 overflow-x-scroll top-20 right-0 border bg-white rounded-xl">
-        <XIcon
+        <XMarkIcon
           onClick={() => setShowDropdown(false)}
           className="absolute w-6 h-6 text-black transition-all duration-300 rounded-full cursor-pointer top-1 right-1"
         />
@@ -49,7 +49,7 @@ export default function Dropdown({
                   key={user.id}
                   className="relative px-3 py-2 text-sm bg-indigo-100 border border-primary-400 rounded-xl"
                 >
-                  <XIcon
+                  <XMarkIcon
                     onClick={() =>
                       setSelectedUsers((prev) => [
                         ...prev.filter((i) => i.id !== user.id),

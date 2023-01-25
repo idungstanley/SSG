@@ -13,7 +13,7 @@ import Hubs from '../../hubs';
 import Inbox from '../../inbox';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
-import inboxIcon from '../../../../assets/branding/inbox.png';
+import InboxIcon from '../../../../assets/branding/inbox.png';
 import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
@@ -103,7 +103,7 @@ function Places() {
       name: 'intrail',
       id: 3,
       place: <Inbox />,
-      source: inboxIcon,
+      source: InboxIcon,
       plusIcon: (
         <BsPlusLg
           className="w-2.5 h-2.5"
@@ -222,7 +222,7 @@ function Places() {
 
   return (
     <div className="mt-2">
-      <ul aria-labelledby="projects-headline ">
+      <ul aria-labelledby="projects-headline relative">
         {secondaryNavigation.map((item, index) => (
           <div key={item.id}>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />

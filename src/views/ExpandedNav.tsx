@@ -14,19 +14,19 @@ import {
 } from '../features/workspace/workspaceSlice';
 import emailIcon from '../assets/branding/email-icon.png';
 import hubIcon from '../assets/branding/hub.png';
-import inboxIcon from '../assets/branding/inbox.png';
+import InboxIcon from '../assets/branding/inbox.png';
 import filesIcon from '../assets/branding/file.png';
 import timeClockIcon from '../assets/branding/timeclock.png';
 import trackerIcon from '../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../app/hooks';
-import { SearchIcon } from '@heroicons/react/outline';
 import { BsPlusLg } from 'react-icons/bs';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 import ActiveHub from './ActiveParents/ActiveHub';
 import { IoMdCloseCircle } from 'react-icons/io';
 import Extendedbar from '../pages/newExplorer/components/Sidebar';
 import { BiCabinet } from 'react-icons/bi';
+import { IoSearchCircleOutline } from 'react-icons/io5';
 
 const secondaryNavigation = [
   {
@@ -45,7 +45,7 @@ const secondaryNavigation = [
     name: 'intrail',
     id: 3,
     place: <Inbox />,
-    source: inboxIcon,
+    source: InboxIcon,
   },
   {
     name: 'Cabinet',
@@ -176,7 +176,7 @@ function ExpandedNav() {
                           color="black"
                           onClick={() => dispatch(setShowModal(true))}
                         />
-                        <SearchIcon
+                        <IoSearchCircleOutline
                           className="w-2.5 h-2.5 mr-1 h-4"
                           aria-hidden="true"
                           onClick={() =>
@@ -204,7 +204,7 @@ function ExpandedNav() {
                             dispatch(setIsExtSearchActive('TOGGLE'))
                           }
                         />
-                        <SearchIcon
+                        <IoSearchCircleOutline
                           className="left-0 top-5  absolute w-6 h-4 text-green-500"
                           aria-hidden="true"
                         />

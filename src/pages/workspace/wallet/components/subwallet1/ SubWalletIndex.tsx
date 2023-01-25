@@ -48,6 +48,8 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`/workspace/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    setShowSubWallet2(id);
+    setCurrWalId(id);
   };
 
   const handleListLocation = (id: string) => {

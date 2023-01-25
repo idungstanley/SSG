@@ -1,7 +1,7 @@
 import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
-} from '@heroicons/react/outline';
+  ArrowRightCircleIcon,
+  ArrowLeftCircleIcon,
+} from '@heroicons/react/24/outline';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -50,7 +50,7 @@ export default function NavigationBetweenFiles() {
       id: 1,
       onClick: () => handleNavigateToFile('previous'),
       icon: (
-        <ArrowCircleLeftIcon
+        <ArrowRightCircleIcon
           className="h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
@@ -60,7 +60,7 @@ export default function NavigationBetweenFiles() {
       id: 2,
       onClick: () => handleNavigateToFile('next'),
       icon: (
-        <ArrowCircleRightIcon
+        <ArrowLeftCircleIcon
           className="h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
@@ -83,6 +83,8 @@ export default function NavigationBetweenFiles() {
           />
         ))}
       </div>
-    ) : <div />
+    ) : (
+      <div />
+    )
   ) : null;
 }

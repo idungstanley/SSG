@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/solid';
+import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { useGetInviteByCode } from '../../../../../../../features/auth/authService';
 import { Spinner } from '../../../../../../../common';
 

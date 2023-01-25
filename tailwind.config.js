@@ -17,9 +17,11 @@ module.exports = {
       },
       gridTemplateColumns: {
         mainLayout: '300px 1fr',
+        sidebarItem: 'auto 1fr auto',
       },
       gridTemplateRows: {
         mainContent: 'auto 1fr',
+        autoFrAuto: 'auto 1fr auto',
       },
       height: {
         204: '51rem',

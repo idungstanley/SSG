@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
-  ViewGridIcon,
-  ViewListIcon,
-} from '@heroicons/react/outline';
+  Squares2X2Icon,
+  ListBulletIcon,
+} from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { setSelectedViewId } from '../../../../../../features/explorer/explorerSlice';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -15,7 +15,7 @@ const sortingItems = [
     id: 1,
     title: 'Table',
     icon: (
-      <ViewListIcon
+      <ListBulletIcon
         className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
@@ -25,7 +25,7 @@ const sortingItems = [
     id: 2,
     title: 'Grid',
     icon: (
-      <ViewGridIcon
+      <Squares2X2Icon
         className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
         aria-hidden="true"
       />
@@ -72,7 +72,7 @@ export default function ChangeView() {
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full',
-                    selectedViewId === i.id ? 'bg-gray-100 text-gray-900' : '',
+                    selectedViewId === i.id ? 'bg-gray-100 text-gray-900' : ''
                   )}
                   onClick={() => handleClick(i.id)}
                 >

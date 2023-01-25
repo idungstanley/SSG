@@ -1,12 +1,14 @@
 import React, { Fragment, ReactNode } from 'react';
-import { XIcon } from '@heroicons/react/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { classNames } from '../../utils';
 
 interface SideOverProps {
   show: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  disableGapForChildren?: boolean;
 }
 
 export default function SideOver({
@@ -14,6 +16,7 @@ export default function SideOver({
   onClose,
   title,
   children,
+  disableGapForChildren = false,
 }: SideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -33,8 +36,8 @@ export default function SideOver({
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-2 shadow-xl">
-                    <div className="px-4 sm:px-6">
+                  <div className="flex h-full pl-1.5 w-full flex-col overflow-y-scroll bg-white shadow-xl">
+                    <div className="px-2 sm:px-3">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
                           {title}
@@ -46,12 +49,17 @@ export default function SideOver({
                             onClick={onClose}
                           >
                             <span className="sr-only">Close panel</span>
-                            <XIcon className="h-6 w-6" aria-hidden="true" />
+                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex flex-col gap-6 px-4 sm:px-6 h-full">
+                    <div
+                      className={classNames(
+                        'relative my-6 flex flex-col px-3 sm:px-3 h-full',
+                        disableGapForChildren ? '' : 'gap-6'
+                      )}
+                    >
                       {children}
                     </div>
                   </div>

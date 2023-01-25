@@ -26,7 +26,7 @@ function AvatarWithInitials({
       style={{ backgroundColor: backgroundColour }}
     >
       <span
-        className="font-medium leading-none"
+        className="font-medium leading-none pb-1"
         style={{ fontSize: textSize, color: textColor }}
       >
         {initials}

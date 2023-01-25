@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, UserIcon, UsersIcon } from '@heroicons/react/solid';
+import {
+  ChevronDownIcon,
+  UserIcon,
+  UsersIcon,
+} from '@heroicons/react/24/solid';
 import ResponsibleData from '../ResponsibleData';
 
 export default function MinMenuForResponsible() {

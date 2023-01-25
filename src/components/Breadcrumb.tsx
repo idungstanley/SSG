@@ -18,7 +18,7 @@ interface BreadcrumbProps {
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
-    <nav className="flex bg-white py-2 h-7" aria-label="Breadcrumb">
+    <nav className="flex bg-white py-3" aria-label="Breadcrumb">
       <ol className="flex w-full pl-2">
         {rootIcon && (
           <li className="flex pl-2">
