@@ -7,6 +7,15 @@ type itemAction = {
   name?: string;
 };
 
+type HubItemType =
+  | 'hub'
+  | 'subHub'
+  | 'wallet'
+  | 'subwallet'
+  | 'sub2wallet'
+  | 'list'
+  | 'task';
+
 type Watchers = {
   show: boolean;
   id?: string;
@@ -30,6 +39,11 @@ type Pilot = {
   id?: string;
   type?: explorerItemType;
 };
+type PilotHub = {
+  show: boolean;
+  id?: string;
+  type?: HubItemType;
+};
 
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
@@ -52,6 +66,7 @@ interface SideOverState {
   commentsSideOver: Comments;
   shareSideOver: Share;
   pilotSideOver: Pilot;
+  pilotSideOverHub: PilotHub;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -76,6 +91,7 @@ const initialState: SideOverState = {
   commentsSideOver: { show: false },
   shareSideOver: { show: false },
   pilotSideOver: { show: false },
+  pilotSideOverHub: { show: true },
   itemActionForSideOver: null,
 };
 
@@ -191,6 +207,9 @@ export const slideOverSlice = createSlice({
     setShowPilotSideOver: (state, action: PayloadAction<Pilot>) => {
       state.pilotSideOver = action.payload;
     },
+    setShowPilotSideOverHub: (state, action: PayloadAction<PilotHub>) => {
+      state.pilotSideOverHub = action.payload;
+    },
   },
 });
 
@@ -216,6 +235,7 @@ export const {
   setShowCommentsSideOver,
   setShowShareSideOver,
   setShowPilotSideOver,
+  setShowPilotSideOverHub,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

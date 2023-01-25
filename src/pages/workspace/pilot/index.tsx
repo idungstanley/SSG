@@ -1,54 +1,65 @@
-import React from 'react';
-import communicationIcon from '../../../assets/branding/communication.png';
-import logsIcon from '../../../assets/branding/logs.png';
-import detailIcon from '../../../assets/branding/detail.png';
-import automationIcon from '../../../assets/branding/automation.png';
-import propertiesIcon from '../../../assets/branding/properties-icon.png';
-import permissionIcon from '../../../assets/branding/permission.png';
-const pilotOptions = [
+import React, { useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import SideOver from '../../../components/SideOver';
+import {
+  setShowPilotSideOver,
+  setShowPilotSideOverHub,
+} from '../../../features/general/slideOver/slideOverSlice';
+import Tab from './components/Tabs';
+import History from '../../newExplorer/components/Pilot/components/History';
+import Information from '../../newExplorer/components/Pilot/components/Information';
+import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
+import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
+import WatchersForPilot from '../../../components/Watchers/WatchersForPilot';
+import ChatForPilot from '../../../components/Chat/ChatForPilot';
+import Commnunication from './components/Communication';
+
+const sections = [
+  {
+    id: 0,
+    element: <Commnunication />,
+  },
   {
     id: 1,
-    name: 'communication',
-    source: communicationIcon,
+    element: <History />,
   },
   {
     id: 2,
-    name: 'Logs',
-    source: logsIcon,
+    element: <Permissions />,
   },
   {
     id: 3,
-    name: 'Permissions',
-    source: permissionIcon,
+    element: <ChatForPilot />,
   },
   {
     id: 4,
-    name: 'Properties',
-    source: propertiesIcon,
+    element: <WatchersForPilot />,
   },
   {
     id: 5,
-    name: 'Details',
-    source: detailIcon,
-  },
-  {
-    id: 6,
-    name: 'Automation',
-    source: automationIcon,
+    element: <CommentsForPilot />,
   },
 ];
 
-function Pilot() {
+export default function Pilot() {
+  const dispatch = useAppDispatch();
+  const onClose = () => {
+    setActiveTabId(0);
+    dispatch(setShowPilotSideOverHub({ show: false }));
+  };
+  const [activeTabId, setActiveTabId] = useState(0);
+
+  const selectedSection = useMemo(
+    () => sections.find((section) => section.id === activeTabId),
+    [activeTabId]
+  );
+
   return (
-    <div className="flex items-center border w-full justify-between">
-      {pilotOptions.map((item) => (
-        <div key={item.id} className="flex items-center justify-between space-x-1">
-          <img src={item.source} alt="" className="w-4 h-4" />
-          <p>{item.name}</p>
-        </div>
-      ))}
+    <div className="flex flex-col h-full border">
+      {/* navigation */}
+      <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <div>{selectedSection ? selectedSection.element : null}</div>
+      {/* main section depends of active tab */}
     </div>
   );
 }
-
-export default Pilot;
