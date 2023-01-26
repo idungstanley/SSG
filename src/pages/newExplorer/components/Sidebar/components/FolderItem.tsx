@@ -35,6 +35,7 @@ interface FolderItemProps {
   parentId: string | null;
   handleClickFolder: (i: string, parentId: string | null) => void;
   isActiveFolder: boolean;
+  haveActiveChild: boolean;
 }
 
 export default function FolderItem({
@@ -43,6 +44,7 @@ export default function FolderItem({
   parentId,
   handleClickFolder,
   isActiveFolder,
+  haveActiveChild,
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -153,7 +155,7 @@ export default function FolderItem({
         onClick={() => handleClickFolder(id, parentId)}
         className="flex gap-2 mr-2 items-center cursor-pointer"
       >
-        {isActiveFolder ? (
+        {isActiveFolder || haveActiveChild ? (
           <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
         ) : (
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

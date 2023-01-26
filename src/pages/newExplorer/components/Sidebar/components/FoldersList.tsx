@@ -82,6 +82,9 @@ export default function FoldersList({
             name={rootFolder.name}
             handleClickFolder={handleClickFolder}
             isActiveFolder={rootFolder.id === selectedFolderId}
+            haveActiveChild={
+              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
+            }
           />
 
           {selectedFolder?.ancestors
@@ -105,6 +108,11 @@ export default function FoldersList({
                       parentId={ancestor.parent_id}
                       handleClickFolder={handleClickFolder}
                       isActiveFolder={ancestor.id === selectedFolderId}
+                      haveActiveChild={
+                        !!selectedFolder?.ancestors?.find(
+                          (i) => i.id === ancestor.id
+                        )
+                      }
                     />
                   </div>
                 ))}
@@ -118,6 +126,7 @@ export default function FoldersList({
                     parentId={selectedFolder.parent_id}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={selectedFolder.id === selectedFolderId}
+                    haveActiveChild={false}
                   />
                 ) : null}
               </div>
@@ -138,6 +147,7 @@ export default function FoldersList({
                     name={subFolder.name}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={subFolder.id === selectedFolderId}
+                    haveActiveChild={false}
                   />
                 </div>
               ))}
