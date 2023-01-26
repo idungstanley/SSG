@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { Button, Input, SlideOver } from '../../../../components';
-import { useEditHubService } from '../../../../features/hubs/hubService';
-import { useAppSelector } from '../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
-import { setEditHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import React, { useState } from "react";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { Button, Input, SlideOver } from "../../../../components";
+import { useEditHubService } from "../../../../features/hubs/hubService";
+import { useAppSelector } from "../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { setshowMenuDropdown } from "../../../../features/hubs/hubSlice";
+import { setEditHubSlideOverVisibility } from "../../../../features/general/slideOver/slideOverSlice";
 
 export default function EditHubModal() {
   const queryClient = useQueryClient();
@@ -24,7 +24,7 @@ export default function EditHubModal() {
   });
 
   const defaultHubFormState = {
-    name: '',
+    name: "",
   };
 
   const [formState, setFormState] = useState(defaultHubFormState);
@@ -37,7 +37,7 @@ export default function EditHubModal() {
   };
 
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId') || '"'
+    localStorage.getItem("currentWorkspaceId") || '"'
   );
 
   const { name } = formState;
@@ -66,19 +66,19 @@ export default function EditHubModal() {
       show={showEditHubSlideOver}
       onClose={() => handleCloseSlider()}
       headerTitle={
-        showMenuDropdownType === 'hubs' ? ' Edit hub' : 'Edit subhub'
+        showMenuDropdownType === "hubs" ? " Edit hub" : "Edit subhub"
       }
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label={
-                showMenuDropdownType === 'hubs' ? 'Hub Name:' : 'Subhub Name:'
+                showMenuDropdownType === "hubs" ? "Hub Name:" : "Subhub Name:"
               }
               placeholder={
-                showMenuDropdownType === 'hubs'
-                  ? 'Enter hub Name'
-                  : 'Enter SubHub Name'
+                showMenuDropdownType === "hubs"
+                  ? "Enter hub Name"
+                  : "Enter SubHub Name"
               }
               name="name"
               value={name}
@@ -92,7 +92,7 @@ export default function EditHubModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={showMenuDropdownType === 'hubs' ? 'Edit hub' : 'Edit  Subhub'}
+          label={showMenuDropdownType === "hubs" ? "Edit hub" : "Edit  Subhub"}
           padding="py-2 px-4"
           height="h-10"
           width="w-40"
