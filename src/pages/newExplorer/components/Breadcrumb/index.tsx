@@ -66,7 +66,7 @@ export default function BreadcrumbSection() {
       <Breadcrumb
         pages={pages}
         rootIcon={
-          <HomeIcon className="flex-shrink-0 h-4 w-4" aria-hidden="true" />
+          <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
         }
         rootIconHref="/new-explorer"
       />
