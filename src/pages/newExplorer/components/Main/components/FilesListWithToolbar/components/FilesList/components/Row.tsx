@@ -101,7 +101,9 @@ export default function Row({ fileId }: RowProps) {
     <tr
       style={style}
       key={file.id}
-      className={`${selectedIds.includes(file.id) ? 'bg-green-100' : null}
+      className={`${
+        selectedIds.includes(file.id) ? 'bg-green-100 hover:bg-green-200' : null
+      }
         ${
           selectedFileId === file.id ? 'bg-green-100 hover:bg-green-100' : null
         } 

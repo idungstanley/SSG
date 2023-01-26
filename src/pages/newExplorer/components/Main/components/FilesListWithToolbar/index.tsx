@@ -46,7 +46,7 @@ export default function FilesListWithToolbar() {
   return (
     <div className="h-full relative">
       <section className="border-r h-full">
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-full">
           <UploadModal />
           {/* toolbar */}
           <Toolbar data={sortedItems} query={query} setQuery={setQuery} />

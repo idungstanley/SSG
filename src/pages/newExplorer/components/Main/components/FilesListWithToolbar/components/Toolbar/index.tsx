@@ -3,8 +3,10 @@ import {
   TrashIcon,
   ShareIcon,
   MagnifyingGlassIcon,
+  ArrowDownTrayIcon,
   AdjustmentsVerticalIcon,
   MagnifyingGlassMinusIcon,
+  ClipboardIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -23,6 +25,7 @@ import {
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import Search from '../../../../../Search';
 import Sorting from '../FilesList/components/Sorting';
+import { useCopyItems } from '../../../../../../../../features/explorer/explorerActionsService';
 import { BsClipboardCheck } from 'react-icons/bs';
 
 interface ToolbarProps {
@@ -52,6 +55,8 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
 
   const { mutate: onDelete } = useMultipleDeleteFiles(folderId);
 
+  const { mutate: onCopy } = useCopyItems(folderId);
+
   const handleDelete = () => {
     onDelete(selectedIds);
     dispatch(resetSelectedFiles());
@@ -59,6 +64,15 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
 
   const handleDownload = async () => {
     DownloadFile('file', selectedFileId || '', selectedFileId || '');
+  };
+
+  const handleCopy = () => {
+    onCopy({
+      copyToFolderId: folderId,
+      fileIds: selectedIds,
+    });
+
+    dispatch(resetSelectedFiles());
   };
 
   const leftItems = [
@@ -90,9 +104,9 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           aria-hidden="true"
         />
       ),
-      onClick: () => ({}),
+      onClick: handleCopy,
       label: 'Copy',
-      disabled: true,
+      disabled: selectedIds.length === 0,
     },
     {
       label: 'Pilot',

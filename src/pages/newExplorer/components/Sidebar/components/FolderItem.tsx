@@ -10,6 +10,7 @@ import {
   FolderIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  ClipboardIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -19,7 +20,10 @@ import {
   setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
-import { useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
+import {
+  useCopyItems,
+  useDeleteExplorerItem,
+} from '../../../../../features/explorer/explorerActionsService';
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
@@ -68,6 +72,8 @@ export default function FolderItem({
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
 
+  const { mutate: onCopy } = useCopyItems(parentId || '', true);
+
   const handleDelete = () => {
     onDelete({
       type: 'folder',
@@ -87,6 +93,13 @@ export default function FolderItem({
   const handleShowShare = () =>
     dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
 
+  const handleCopy = () => {
+    onCopy({
+      copyToFolderId: parentId,
+      folderIds: [id],
+    });
+  };
+
   const configForDropdown = [
     {
       label: 'Download',
@@ -98,6 +111,13 @@ export default function FolderItem({
       onClick: () =>
         dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
       icon: <PencilIcon className="w-5 h-5" aria-hidden="true" />,
+    },
+    {
+      label: 'Copy',
+      icon: (
+        <ClipboardIcon className="w-5 h-5 stroke-current" aria-hidden="true" />
+      ),
+      onClick: handleCopy,
     },
     {
       label: 'Share',
@@ -132,6 +152,7 @@ export default function FolderItem({
       )}
       ref={droppableRef}
       style={style}
+      title={name}
     >
       {isActiveFolder && parentId === null && (
         <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />

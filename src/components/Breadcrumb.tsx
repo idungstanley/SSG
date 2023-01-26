@@ -1,7 +1,8 @@
 import React from 'react';
+import { ChevronRightIcon, FolderIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { VscTriangleRight } from 'react-icons/vsc';
 import { FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleRight } from 'react-icons/vsc';
 
 interface IBreadcrumbItem {
   name: string;
