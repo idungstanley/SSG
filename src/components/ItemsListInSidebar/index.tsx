@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
-import { Spinner } from '../../common';
-import AvatarWithInitials from '../avatar/AvatarWithInitials';
+import React, { useState } from "react";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { useDispatch } from "react-redux";
+import { Spinner } from "../../common";
+import AvatarWithInitials from "../avatar/AvatarWithInitials";
 import {
   resetCurrentItem,
   setActiveItem,
   setCurrentItem,
   setShowHub,
-} from '../../features/workspace/workspaceSlice';
-import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/MenuDropdown';
-import FullScreenMessage from '../CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../app/hooks';
-import { IInbox } from '../../features/inbox/inbox.interfaces';
-import { IHub } from '../../features/hubs/hubs.interfaces';
+} from "../../features/workspace/workspaceSlice";
+import DropdownList from "./components/DropdownList";
+import MenuDropdown from "../Dropdown/MenuDropdown";
+import FullScreenMessage from "../CenterMessage/FullScreenMessage";
+import { useAppSelector } from "../../app/hooks";
+import { IInbox } from "../../features/inbox/inbox.interfaces";
+import { IHub } from "../../features/hubs/hubs.interfaces";
 import {
   closeMenu,
   getCurrHubId,
+  getPrevName,
   getSubMenu,
   setshowMenuDropdown,
-} from '../../features/hubs/hubSlice';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import SubDropdown from '../Dropdown/SubDropdown';
-import { Navigate, useNavigate } from 'react-router-dom';
+} from "../../features/hubs/hubSlice";
+import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
+import SubDropdown from "../Dropdown/SubDropdown";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -52,7 +53,7 @@ export default function ItemsListInSidebar({
     setIsHovering(-1);
   };
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <FullScreenMessage
         title="Oops, an error occurred :("
@@ -62,7 +63,7 @@ export default function ItemsListInSidebar({
     );
   }
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex justify-center mx-auto mt-10">
         <Spinner size={8} color="#0F70B7" />
@@ -70,11 +71,11 @@ export default function ItemsListInSidebar({
     );
   }
 
-  const handleLocation = (id: string, name:string) => {
+  const handleLocation = (id: string, name: string) => {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'hub',
+        activeItemType: "hub",
         activeItemName: name,
       })
     );
@@ -106,16 +107,17 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id: string, e) => {
+  const handleHubSettings = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'hubs',
+        showMenuDropdownType: "hubs",
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (e.target.id == "menusettings") {
         dispatch(closeMenu());
       }
     }
@@ -125,12 +127,12 @@ export default function ItemsListInSidebar({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'hubs',
+        SubMenuType: "hubs",
       })
     );
   };
 
-  return status === 'success' ? (
+  return status === "success" ? (
     <ul className="z-20 w-full">
       {items?.map((i: { id: string; name: string }, index) => (
         <li
@@ -142,15 +144,15 @@ export default function ItemsListInSidebar({
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId && i.id === activeItemId
-                ? 'bg-green-100 text-green-500'
-                : 'text-black-500'
+                ? "bg-green-100 text-green-500"
+                : "text-black-500"
             }`}
           >
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
                 i.id === currentItemId && i.id === activeItemId
-                  ? 'text-green-500'
-                  : 'text-black-500'
+                  ? "text-green-500"
+                  : "text-black-500"
               }`}
             >
               {i.id === currentItemId && i.id === activeItemId && (
@@ -182,10 +184,10 @@ export default function ItemsListInSidebar({
                 <div className="flex items-center flex-1 min-w-0">
                   <AvatarWithInitials
                     initials={i.name
-                      .split(' ')
+                      .split(" ")
                       .slice(0, 2)
                       .map((word) => word[0])
-                      .join('')
+                      .join("")
                       .toUpperCase()}
                     height="h-4"
                     width="w-4"
@@ -195,7 +197,7 @@ export default function ItemsListInSidebar({
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
-                      style={{ fontSize: '10px' }}
+                      style={{ fontSize: "10px" }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}
@@ -207,7 +209,7 @@ export default function ItemsListInSidebar({
             {isHovering === index && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, e)}
+                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="text-black cursor-pointer"
                   id="menusettings"
                 />
