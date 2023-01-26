@@ -138,7 +138,7 @@ export default function SubHubIndex() {
 
                   <span className="ml-4 overflow-hidden">
                     <h4
-                      className="font-medium tracking-wider capitalize truncate"
+                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '10px' }}
                       onClick={() => handleLocation(subhub.id, subhub.name)}
                     >
