@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { Button } from '../../../../../components';
-import { createTaskService } from '../../../../../features/task/taskService';
-import { FaTimes } from 'react-icons/fa';
-import { setCurrentParentTaskId } from '../../../../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
+} from "@ant-design/icons";
+import { Button } from "../../../../../components";
+import { createTaskService } from "../../../../../features/task/taskService";
+import { FaTimes } from "react-icons/fa";
+import { setCurrentParentTaskId } from "../../../../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
 
 interface SubTaskProps {
   parentTaskId?: string | null;
@@ -26,7 +26,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   });
 
   const defaultTaskFormState = {
-    name: '',
+    name: "",
   };
 
   const [taskFormState, setTaskFormState] = useState(defaultTaskFormState);
@@ -50,7 +50,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   return (
     <>
       {/* subtask */}
-      <div className="bg-white border border-gray-100 ml-5 flex  items-center">
+      <div className="bg-white border border-sky-500  ml-6 flex items-center">
         <div className="flex items-center w-9/12">
           {/* data and input */}
           <div>
