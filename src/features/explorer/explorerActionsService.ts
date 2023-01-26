@@ -20,7 +20,7 @@ export const deleteService = async (data: {
 
 // Paste service
 export const pasteService = async (data: {
-  copyToFolderId?: string;
+  copyToFolderId?: string | null;
   fileIds?: string[];
   folderIds?: string[];
 }) => {
@@ -39,12 +39,18 @@ export const pasteService = async (data: {
   return response;
 };
 
-export const useCopyItems = (folderId?: string) => {
+export const useCopyItems = (folderId?: string, isFolder?: boolean) => {
   const queryClient = useQueryClient();
 
   return useMutation(pasteService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+      if (!isFolder) {
+        queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+      } else {
+        queryClient.invalidateQueries(
+          folderId ? ['explorer-folder', folderId] : ['explorer-folders']
+        );
+      }
     },
   });
 };
