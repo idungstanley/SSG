@@ -1,16 +1,17 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks';
-import ListNav from '../lists/components/renderlist/ListNav';
-import { useGetHubChildren } from '../../../features/hubs/hubService';
-import TaskListSections from './components/TaskListSections';
-import Pilot from '../pilot';
+import { useAppSelector } from '../../../../../app/hooks';
+import ListNav from '../../../lists/components/renderlist/ListNav';
+import { useGetHubChildren } from '../../../../../features/hubs/hubService';
+import TaskListSections from './items/ItemsHubData/TaskListSections';
+import Pilot from '../../../pilot';
+import WalletSection from './items/itemsWalletData/WalletSection';
+import ListSection from './items/itemsListData/ListSection';
 
 function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
-  console.log(HubDetail);
   return (
     <div className="h-screen overflow-y-auto">
       <section id="nav">
@@ -29,10 +30,10 @@ function RenderHubs() {
               <TaskListSections data={data} key={data.id} />
             ))}
             {HubDetail?.data.wallets.map((data) => (
-              <TaskListSections data={data} key={data.id} />
+              <WalletSection data={data} key={data.id} />
             ))}
             {HubDetail?.data.lists.map((data) => (
-              <TaskListSections data={data} key={data.id} />
+              <ListSection data={data} key={data.id} />
             ))}
           </div>
         </div>
