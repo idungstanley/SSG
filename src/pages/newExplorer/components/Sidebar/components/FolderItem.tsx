@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { FaFolder } from 'react-icons/fa';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { TbArrowRotaryFirstLeft, TbArrowsUpDown } from 'react-icons/tb';
 
 interface FolderItemProps {
@@ -85,17 +85,17 @@ export default function FolderItem({
     {
       label: 'Download',
       onClick: handleDownload,
-      icon: <TbArrowRotaryFirstLeft className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowRotaryFirstLeft className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: 'Rename',
       onClick: () =>
         dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
-      icon: <PencilIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <PencilIcon className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: 'Share',
-      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      icon: <ShareIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
       onClick: handleShowShare,
     },
     {
@@ -108,35 +108,40 @@ export default function FolderItem({
             show: true,
           })
         ),
-      icon: <TbArrowsUpDown className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowsUpDown className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: 'Delete',
       onClick: handleDelete,
-      icon: <TrashIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <TrashIcon className="w-5 h-5" aria-hidden="true" />,
     },
   ];
 
   return (
     <div
       className={classNames(
-        'grid grid-cols-sidebarItem justify-between w-full items-center py-1 px-1 hover:bg-gray-100',
-        isActiveFolder ? 'text-primary-600 bg-primary-50' : '',
+        'group flex relative justify-between w-full items-center py-1.5',
+        isActiveFolder && !haveAncestors ? 'bg-green-50 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
       style={style}
     >
-      {isActiveFolder && (
+      {isActiveFolder && !haveAncestors && (
         <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
       )}
       <div
         onClick={() => handleClickFolder(id, parentId)}
-        className="flex gap-2 mr-2 items-center cursor-pointer"
+        className="flex items-center cursor-pointer ml-0.5"
       >
         {isActiveFolder || haveAncestors ? (
           <>
-            <VscTriangleDown className="flex-shrink-0 h-3 text-xs mr-0.5" />
+            <VscTriangleDown
+              className="flex-shrink-0 h-3 text-xs mr-0.5"
+              color="rgb(95,99,104)"
+              aria-hidden="true"
+            />
+            <FaFolderOpen className="text-green-500" />
           </>
         ) : (
           <>
@@ -148,33 +153,24 @@ export default function FolderItem({
             <FaFolder color="rgb(95,99,104)" />
           </>
         )}
+        <div
+          className="ml-2 font-semibold tracking-wider capitalize"
+          style={{ fontSize: '10px' }}
+        >
+          <p>{name}</p>
+        </div>
       </div>
-
-      <div
-        onClick={() => handleClickFolder(id, parentId)}
-        className="space-x-2 whitespace-nowrap overflow-x-hidden truncate cursor-pointer"
-      >
-        <FaFolder
-          className="h-5 w-5 mb-1 inline-flex items-center"
-          aria-hidden="true"
-        />
-        <p className="inline">{name}</p>
-      </div>
-
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
             dispatch(setItemActionForSideOver({ action: 'create', id }))
           }
-          className="h-5 w-5 cursor-pointer stroke-current text-gray-400"
+          className="w-4 h-4 text-black cursor-pointer stroke-current"
           aria-hidden="true"
         />
         <div ref={draggableRef} {...listeners} {...attributes}>
-          <TbArrowsUpDown
-            className="h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
+          <TbArrowsUpDown aria-hidden="true" className="cursor-move" />
         </div>
       </div>
     </div>
