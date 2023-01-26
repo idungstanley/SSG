@@ -44,7 +44,7 @@ import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
-import RenderWallets from './pages/workspace/wallet/components/RenderWallets';
+import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets';
 import RenderList from './pages/workspace/lists/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';

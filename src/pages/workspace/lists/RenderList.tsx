@@ -32,10 +32,7 @@ function RenderList() {
   const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
-    <div
-      className="h-screen overflow-hidden relative"
-      style={{ backgroundColor: '#eee' }}
-    >
+    <div className="h-screen overflow-hidden relative">
       {/* {showTaskNavigation && (
         <span className="transition	duration-300 ease-in-out absolute w-full">
           <TaskMenu />

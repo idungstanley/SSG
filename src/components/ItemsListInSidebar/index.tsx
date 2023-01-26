@@ -23,7 +23,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -70,7 +70,7 @@ export default function ItemsListInSidebar({
     );
   }
 
-  const handleLocation = (id: string, name:string) => {
+  const handleLocation = (id: string, name: string) => {
     dispatch(
       setActiveItem({
         activeItemId: id,
