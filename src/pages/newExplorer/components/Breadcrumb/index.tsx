@@ -19,7 +19,7 @@ export default function BreadcrumbSection() {
       onClick: () => ({}),
       icon: (
         <ArrowLeftCircleIcon
-          className="h-4 w-4 stroke-current text-gray-400"
+          className="h-6 w-6"
           aria-hidden="true"
         />
       ),
@@ -29,7 +29,7 @@ export default function BreadcrumbSection() {
       onClick: () => ({}),
       icon: (
         <ArrowRightCircleIcon
-          className="h-4 w-4 stroke-current text-gray-400"
+          className="h-6 w-6"
           aria-hidden="true"
         />
       ),
@@ -57,7 +57,7 @@ export default function BreadcrumbSection() {
             onClick={button.onClick}
             key={button.id}
             type="button"
-            className="inline-flex items-center rounded-full border border-transparent text-white shadow-sm focus:outline-none ring-0 focus:ring-0"
+            className="text-gray-400 focus:outline-none ring-0 focus:ring-0"
           >
             {button.icon}
           </button>

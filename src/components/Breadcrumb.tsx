@@ -1,7 +1,6 @@
+import { ChevronRightIcon, FolderIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { VscTriangleRight } from 'react-icons/vsc';
-import { FaFolderOpen } from 'react-icons/fa';
 
 interface IBreadcrumbItem {
   name: string;
@@ -33,20 +32,16 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
           </li>
         )}
         <div className="flex items-center pl-1">
-          <FaFolderOpen
-            className="h-4 w-4 stroke-current text-gray-400"
-            aria-hidden="true"
-          />
           {pages?.map((page) => (
             <li key={page.name} className="flex">
               <div className="flex items-center">
-                <VscTriangleRight
-                  className="h-3 w-3 stroke-current text-gray-400"
+                <FolderIcon
+                  className="h-5 w-5 stroke-current text-gray-400"
                   aria-hidden="true"
                 />
                 <Link
                   to={page.href || ''}
-                  className="flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-600 cursor-none select-none"
+                  className="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-600 cursor-none select-none"
                   aria-current="page"
                 >
                   <span>{page.name}</span>
