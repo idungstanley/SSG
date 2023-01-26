@@ -42,7 +42,7 @@ const secondaryNavigation = [
     source: hubIcon,
   },
   {
-    name: 'intrail',
+    name: 'In-tray',
     id: 3,
     place: <Inbox />,
     source: InboxIcon,
@@ -128,7 +128,7 @@ function ExpandedNav() {
       }
       // onMouseDown={(e) => e.preventDefault()}
     >
-      <span className="absolute -right-2 cursor-pointer top-2 z-20 bg-green-400 rounded-full border-2 border-green-400">
+      <span className="absolute z-20 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
         {showExtendedBar && (
           <RiArrowLeftSLine
             className="text-sm text-white"
@@ -136,13 +136,13 @@ function ExpandedNav() {
           />
         )}
       </span>
-      <section className="border-r h-screen border-gray-400 z-10 overflow-y-auto overflow-x-hidden">
+      <section className="z-10 h-screen overflow-x-hidden overflow-y-auto border-r border-gray-400">
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
               activePlaceId === item.id && (
                 <div key={item.id} className="">
-                  <div className="relative flex p-2 items-center text-gray-600 cursor-pointer h-8 top-0 border-b border-gray">
+                  <div className="relative top-0 flex items-center h-8 p-2 text-gray-600 border-b cursor-pointer border-gray">
                     <button
                       className={`${
                         isExtSearchActive ? 'hidden' : 'flex'
@@ -169,7 +169,7 @@ function ExpandedNav() {
                           {item.name}
                         </span>
                       </span>
-                      <span className="flex flex-end space-x-2 mr-1">
+                      <span className="flex mr-1 space-x-2 flex-end">
                         <BsPlusLg
                           className="w-2.5 h-2.5"
                           aria-hidden="true"
@@ -196,16 +196,16 @@ function ExpandedNav() {
                           name=""
                           id=""
                           placeholder="Filter List, Hubs, & Wallets"
-                          className="w-full h-14 pl-5 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
+                          className="w-full pl-5 bg-gray-200 border-transparent border-none h-14 hover:bg-gray-100 focus:border-transparent focus:ring-0"
                         />
                         <IoMdCloseCircle
-                          className="absolute w-6 top-5 h-4 right-0 text-green-500"
+                          className="absolute right-0 w-6 h-4 text-green-500 top-5"
                           onClick={() =>
                             dispatch(setIsExtSearchActive('TOGGLE'))
                           }
                         />
                         <IoSearchCircleOutline
-                          className="left-0 top-5  absolute w-6 h-4 text-green-500"
+                          className="absolute left-0 w-6 h-4 text-green-500 top-5"
                           aria-hidden="true"
                         />
                       </div>
@@ -217,7 +217,7 @@ function ExpandedNav() {
           )}
         </div>
         <div
-          className="justify-self-end absolute shrink-0 border-transparent hover:border-gray-600 border-r-2 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
+          className="absolute top-0 bottom-0 right-0 h-full border-r-2 border-transparent justify-self-end shrink-0 hover:border-gray-600 grow-0 cursor-all-scroll hover:bg-green-100"
           onMouseDown={startResizing}
           style={{ cursor: 'col-resize', width: '4px' }}
         ></div>

@@ -7,12 +7,12 @@ import {
 } from '../../../features/general/slideOver/slideOverSlice';
 import Tab from './components/Tabs';
 import History from '../../newExplorer/components/Pilot/components/History';
-import Information from '../../newExplorer/components/Pilot/components/Information';
 import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import WatchersForPilot from '../../../components/Watchers/WatchersForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
 import Commnunication from './components/Communication';
+import Details from './components/Details';
 
 const sections = [
   {
@@ -33,7 +33,7 @@ const sections = [
   },
   {
     id: 4,
-    element: <WatchersForPilot />,
+    element: <Details />,
   },
   {
     id: 5,

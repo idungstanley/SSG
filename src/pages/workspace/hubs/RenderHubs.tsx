@@ -10,7 +10,6 @@ function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
-  console.log(HubDetail);
   return (
     <div className="h-screen">
       <section id="nav">

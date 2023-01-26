@@ -62,7 +62,7 @@ function Places() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="w-5 h-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({
@@ -103,7 +103,7 @@ function Places() {
       ),
     },
     {
-      name: 'intrail',
+      name: 'in-tray',
       id: 3,
       place: <Inbox />,
       source: InboxIcon,
@@ -120,7 +120,7 @@ function Places() {
       name: 'Cabinet',
       id: 4,
       place: <Extendedbar />,
-      icon: <BiCabinet className="h-5 text-lg mr-4" />,
+      icon: <BiCabinet className="h-5 mr-4 text-lg" />,
       plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
     },
     {
@@ -285,14 +285,14 @@ function Places() {
                     placeholder="Search for List, Hubs, & Wallets"
                     onChange={(e) => dispatch(setQuery(e.target.value))}
                     value={query}
-                    className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
+                    className="w-full pl-6 bg-gray-200 border-transparent border-none place h-14 hover:bg-gray-100 focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
-                    className="absolute w-6 top-5 h-4 right-0 text-green-500"
+                    className="absolute right-0 w-6 h-4 text-green-500 top-5"
                     onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                   />
                   <GoSettings
-                    className="left-0 top-5 absolute w-6 h-4 text-green-500"
+                    className="absolute left-0 w-6 h-4 text-green-500 top-5"
                     aria-hidden="true"
                   />
                 </div>

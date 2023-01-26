@@ -58,14 +58,14 @@ export default function Toolbar({ data }: ToolbarProps) {
   const menuItems = [
     {
       icon: (
-        <ArrowDownIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <ArrowDownIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
       ),
       onClick: handleDownload,
       label: 'Download',
       disabled: selectedIds.length === 0,
     },
     {
-      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      icon: <ShareIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setShowShareSideOver({
@@ -80,7 +80,7 @@ export default function Toolbar({ data }: ToolbarProps) {
     {
       icon: (
         <BsClipboardCheck
-          className="h-5 w-5 stroke-current"
+          className="w-4 h-4 stroke-current"
           aria-hidden="true"
         />
       ),
@@ -98,11 +98,11 @@ export default function Toolbar({ data }: ToolbarProps) {
             show: true,
           })
         ),
-      icon: <TbArrowsUpDown className="h-5 w-5" aria-hidden="true" />,
+      icon: <TbArrowsUpDown className="w-4 h-4" aria-hidden="true" />,
       disabled: !selectedFileId,
     },
     {
-      icon: <TrashIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      icon: <TrashIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
       onClick: handleDelete,
       label: 'Delete',
       disabled: selectedIds.length === 0,
@@ -112,7 +112,7 @@ export default function Toolbar({ data }: ToolbarProps) {
   return (
     <div className="flex items-center justify-between px-2 py-1">
       {/* file actions */}
-      <div className="flex gap-4 items-center pt-1">
+      <div className="flex items-center gap-4 pt-1">
         {menuItems.map((button) => (
           <Tooltip key={button.label} tooltip={button.label}>
             <button
@@ -129,9 +129,9 @@ export default function Toolbar({ data }: ToolbarProps) {
 
       {/* badge (items length and current index) */}
       <div className="flex items-center">
-        <div className="flex w-6 items-center cursor-pointer">
-          <MagnifyingGlassIcon className="h-4 w-4" />
-          <BiDotsVerticalRounded className="h-4 w-4" />
+        <div className="flex items-center w-6 cursor-pointer">
+          <MagnifyingGlassIcon className="w-4 h-4" />
+          <BiDotsVerticalRounded className="w-4 h-4" />
         </div>
         <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
           {currentFileIndex ? (
@@ -152,7 +152,7 @@ export default function Toolbar({ data }: ToolbarProps) {
           onClick={handleDelete}
           type="button"
         >
-          <TrashIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
+          <TrashIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
         </button>
       </div>
     </div>
