@@ -17,7 +17,8 @@ export default function NewExplorerPage() {
   const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
     (state) => state.workspace
   );
-  const paddingStyles: any = () => {
+
+  const paddingStyles = () => {
     if (showSidebar && sidebarWidth > 54) {
       return { paddingLeft: `min(${sidebarWidth}px, 321px)` };
     } else if (sidebarWidth < 55) {
@@ -26,6 +27,7 @@ export default function NewExplorerPage() {
       return { paddingLeft: `${54}px` };
     }
   };
+
   return (
     <>
       <DragContext>

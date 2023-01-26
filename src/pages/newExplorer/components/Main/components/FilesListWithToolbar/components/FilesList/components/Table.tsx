@@ -24,10 +24,10 @@ export default function Table({
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
 
   return (
-    <table className="min-w-full table-fixed divide-y divide-gray-300 overflow-x-scroll bg-white">
+    <table className="min-w-full table-fixed bg-white">
       <thead>
-        <tr>
-          <th scope="col" className="relative border px-2 pr-6">
+        <tr className="border">
+          <th scope="col" className="relative px-2 pr-6 py-2">
             <input
               type="checkbox"
               className="absolute cursor-pointer left-3 -mt-2 top-1/2 rounded border-gray-300 text-green-500 ring-0 focus:ring-0"
@@ -38,23 +38,23 @@ export default function Table({
           </th>
           <th
             scope="col"
-            className="px-3 py-3.5 border uppercase text-left text-sm font-normal text-gray-400"
+            className="px-3 py-2 uppercase text-left text-sm font-normal text-gray-400"
           />
           <th
             scope="col"
-            className="min-w-[12rem] border py-3 pr-3.5 pl-3 uppercase text-left text-sm font-normal text-gray-400"
+            className="min-w-[12rem] pr-3.5 py-2  pl-3 uppercase text-left text-sm font-normal text-gray-400"
           >
             Name
           </th>
           <th
             scope="col"
-            className="px-3 py-3.5 uppercase border text-left text-xs font-normal text-gray-400"
+            className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400"
           >
             Created at
           </th>
           <th
             scope="col"
-            className="px-3 py-3.5 border uppercase text-left text-xs font-normal text-gray-400"
+            className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400"
           >
             Size
           </th>
@@ -69,7 +69,7 @@ export default function Table({
       ) : null}
 
       {/* all items */}
-      <tbody className="group">
+      <tbody>
         {items.map((file) => (
           <Row key={file.id} fileId={file.id} />
         ))}

@@ -4,6 +4,12 @@ import {
   PlusIcon,
   PencilIcon,
   ShareIcon,
+  ArrowsUpDownIcon,
+  ArrowUpTrayIcon,
+  AdjustmentsVerticalIcon,
+  FolderIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -36,8 +42,8 @@ export default function FolderItem({
   name,
   parentId,
   handleClickFolder,
-  isActiveFolder,
   haveAncestors,
+  isActiveFolder,
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -85,7 +91,7 @@ export default function FolderItem({
     {
       label: 'Download',
       onClick: handleDownload,
-      icon: <TbArrowRotaryFirstLeft className="w-5 h-5" aria-hidden="true" />,
+      icon: <ArrowUpTrayIcon className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: 'Rename',
@@ -121,13 +127,13 @@ export default function FolderItem({
     <div
       className={classNames(
         'group flex relative justify-between w-full items-center py-1.5',
-        isActiveFolder && !haveAncestors ? 'bg-green-50 text-black' : '',
+        isActiveFolder && parentId === null ? 'bg-green-50 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
       style={style}
     >
-      {isActiveFolder && !haveAncestors && (
+      {isActiveFolder && parentId === null && (
         <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
       )}
       <div
