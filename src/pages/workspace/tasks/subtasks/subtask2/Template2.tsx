@@ -144,7 +144,7 @@ export default function Template2({ task }: TemplateProps) {
       <div className="flex relative  space-x-10">
         <span
           className="absolute rounded-full text-xs text-center"
-          style={{ left: "-60px" }}
+          style={{ left: "-75px" }}
         >
           {/* assignees here */}
 

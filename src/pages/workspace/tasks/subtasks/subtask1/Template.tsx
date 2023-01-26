@@ -20,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
+import "../create/subtask.css";
 
 interface TemplateProps {
   task: any;
@@ -57,7 +58,7 @@ export default function Template({ task }: TemplateProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="flex-1 stack">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -143,7 +144,7 @@ export default function Template({ task }: TemplateProps) {
       <div className="flex relative  space-x-10">
         <span
           className="absolute rounded-full text-xs text-center"
-          style={{ left: "-40px" }}
+          style={{ left: "-55px" }}
         >
           {/* assignees here */}
 
