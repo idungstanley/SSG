@@ -30,7 +30,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
 // import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
@@ -46,6 +46,8 @@ function Places() {
     (state) => state.workspace
   );
   const { folderId } = useParams();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   // const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
@@ -57,6 +59,17 @@ function Places() {
   };
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
+
+    const selectedRoute = pathname.split('/')[1]; // 'new-explorer', 'workspace', etc
+
+    // required for all modals, side-overs in the explorer
+    if (id === 4) {
+      if (selectedRoute === 'new-explorer') {
+        navigate('/workspace');
+      } else {
+        navigate('/new-explorer');
+      }
+    }
   };
 
   const configForDropdown = [
