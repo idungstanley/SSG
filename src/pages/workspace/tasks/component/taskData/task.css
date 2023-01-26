@@ -2,13 +2,14 @@
   position: relative;
   border-radius: 50%;
   outline: 1px solid #fff;
+  margin-left: 10px;
 }
 
-.stack:first-child {
+/* .stack:first-child {
   position: absolute;
   z-index: 10;
   left: 15px;
-}
+} */
 
 .stack2 {
   float: left;

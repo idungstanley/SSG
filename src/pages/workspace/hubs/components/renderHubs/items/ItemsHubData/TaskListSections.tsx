@@ -1,8 +1,17 @@
-import { CalendarOutlined, FlagOutlined, UserAddOutlined } from '@ant-design/icons';
-import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import {
+  CalendarOutlined,
+  FlagOutlined,
+  UserAddOutlined,
+} from '@ant-design/icons';
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline';
 import React from 'react';
+import ItemsHubData from '.';
 
-export default function TaskListSections({data}:any) {
+export default function TaskListSections({ data }: any) {
   return (
     <section id="listcard" className="p-3 mt-3" key={data.id}>
       <div className="block p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -13,7 +22,7 @@ export default function TaskListSections({data}:any) {
               aria-hidden="true"
             />
             <p className="font-bold text-gray-700 dark:text-gray-400">
-              {data.name}
+              {data.name.toUpperCase()}
             </p>
             <InformationCircleIcon
               className="flex-shrink-0 w-5 h-4 text-gray-400"
@@ -29,7 +38,7 @@ export default function TaskListSections({data}:any) {
               Add Comment
             </p>
           </div>
-          <div className="flex items-center justify-center space-x-1 text-gray-400">
+          <div className="flex items-center justify-center space-x-1 text-gray-400 text-xs">
             <CheckIcon
               className="flex-shrink-0 w-5 h-4 text-gray-400"
               aria-hidden="true"
@@ -37,19 +46,11 @@ export default function TaskListSections({data}:any) {
             <p>Show Closed</p>
           </div>
         </div>
-        <section id="border">
-          <div className="inline-flex items-center justify-center w-full p-3">
-            <hr className="w-full h-px my-8 bg-gray-300 border-0 dark:bg-gray-700" />
-            <span className="fixed px-3 text-gray-400 -translate-x-1/2 bg-white left-1/2 font-sm dark:text-white dark:bg-gray-900">
-              Add New Status
-            </span>
-          </div>
-        </section>
         {/* card */}
-        <div className="flex items-center px-2 py-1 bg-white border border-gray-100 rounded-lg">
+        <div className="flex items-center mt-10 px-2 py-1 bg-white border border-gray-100 rounded-lg">
           {/* data and input */}
-          <div className="w-6/12">
-            <p>task name here</p>
+          <div className="w-6/12 flex flex-col">
+            <ItemsHubData hubId={data.id} />
           </div>
           {/* icons */}
           <div className="flex items-center space-x-10">

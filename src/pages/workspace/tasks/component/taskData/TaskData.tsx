@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
   setGetSubTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { MdDragIndicator } from 'react-icons/md';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
+} from "../../../../../features/task/taskSlice";
+import { MdDragIndicator } from "react-icons/md";
+import { RiCheckboxBlankFill } from "react-icons/ri";
 import {
   CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import './task.css';
+} from "@ant-design/icons";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import AssignTask from "../../assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../components";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import "./task.css";
 interface TaskDataProps {
   task: any;
 }
@@ -91,11 +91,7 @@ export default function TaskData({ task }: TaskDataProps) {
       <div onClick={() => handleGetSubTask(task.id)}>
         {task.id == getSubTaskId ? (
           <span className="flex flex-col">
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 ml-1"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
+            <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
           </span>
         ) : (
           <VscTriangleRight
@@ -118,7 +114,7 @@ export default function TaskData({ task }: TaskDataProps) {
       </span>
 
       <RiCheckboxBlankFill
-        className=" text-gray-400 text-xs"
+        className="pl-px text-gray-400 text-xs"
         aria-hidden="true"
       />
       <div className="flex items-center w-6/12 group">
@@ -151,8 +147,8 @@ export default function TaskData({ task }: TaskDataProps) {
 
       <div className="relative ">
         <span
-          className="absolute rounded-full text-end	 text-xs "
-          style={{ left: '-20px' }}
+          className="absolute rounded-full text-center	text-xs "
+          style={{ left: "-40px" }}
         >
           {/* assignees here */}
 
@@ -171,7 +167,7 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           )}
         </span>
-        <span className=" border-dotted border-gray-300 pl-10 ml-5">
+        <span className=" border-dotted border-gray-300 pl-10 ">
           <CalendarOutlined
             className=" h-5 w-7 text-gray-400"
             aria-hidden="true"

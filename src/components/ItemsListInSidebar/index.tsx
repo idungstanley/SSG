@@ -23,7 +23,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -70,7 +70,7 @@ export default function ItemsListInSidebar({
     );
   }
 
-  const handleLocation = (id: string, name:string) => {
+  const handleLocation = (id: string, name: string) => {
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -143,7 +143,7 @@ export default function ItemsListInSidebar({
             className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId && i.id === activeItemId
                 ? 'bg-green-100 text-green-500'
-                : 'text-black-500'
+                : 'text-black'
             }`}
           >
             <div
@@ -195,7 +195,7 @@ export default function ItemsListInSidebar({
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
-                      style={{ fontSize: '10px' }}
+                      style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}

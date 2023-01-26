@@ -17,9 +17,11 @@ import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
 import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
     parentId: currentItemId,
@@ -34,7 +36,13 @@ export default function SubHubIndex() {
     useAppSelector((state) => state.hub);
 
   const handleClick = (id: string, name: string) => {
-    dispatch(setActiveItem({ activeItemType: 'subhub', activeItemId: id, activeItemName: name }));
+    dispatch(
+      setActiveItem({
+        activeItemType: 'subhub',
+        activeItemId: id,
+        activeItemName: name,
+      })
+    );
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
@@ -73,6 +81,17 @@ export default function SubHubIndex() {
         SubMenuType: 'subhub',
       })
     );
+  };
+
+  const handleLocation = (id: string, name: string) => {
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'hub',
+        activeItemName: name,
+      })
+    );
+    navigate(`/workspace/hub/${id}`);
   };
 
   return currentItemId === hubParentId ? (
@@ -119,8 +138,9 @@ export default function SubHubIndex() {
 
                   <span className="ml-4 overflow-hidden">
                     <h4
-                      className="font-medium tracking-wider capitalize truncate"
+                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '10px' }}
+                      onClick={() => handleLocation(subhub.id, subhub.name)}
                     >
                       {subhub.name}
                     </h4>
