@@ -164,12 +164,12 @@ export const explorerSlice = createSlice({
     setCopyItems: (
       state,
       action: PayloadAction<{
-        fileIdsToPaste: string[];
-        folderIdsToPaste: string[];
+        fileIdsToPaste?: string[];
+        folderIdsToPaste?: string[];
       }>
     ) => {
-      state.fileIdsToPaste = action.payload.fileIdsToPaste;
-      state.folderIdsToPaste = action.payload.folderIdsToPaste;
+      state.fileIdsToPaste = action.payload.fileIdsToPaste || [];
+      state.folderIdsToPaste = action.payload.folderIdsToPaste || [];
     },
   },
   extraReducers: (builder) => {

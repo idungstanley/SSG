@@ -21,23 +21,32 @@ export const deleteService = async (data: {
 // Paste service
 export const pasteService = async (data: {
   copyToFolderId?: string;
-  fileIds: string[];
-  folderIds: string[];
+  fileIds?: string[];
+  folderIds?: string[];
 }) => {
-  const url =
-    data.copyToFolderId == null
-      ? '/explorer/copy'
-      : `/explorer/copy/${data.copyToFolderId}`;
+  const { copyToFolderId, fileIds, folderIds } = data;
+
+  const url = `/explorer/copy${copyToFolderId ? '/' + copyToFolderId : ''}`;
 
   const response = requestNew({
     url,
     method: 'POST',
     params: {
-      file_ids: data.fileIds,
-      folder_ids: data.folderIds,
+      file_ids: fileIds,
+      folder_ids: folderIds,
     },
   });
   return response;
+};
+
+export const useCopyItems = (folderId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(pasteService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+    },
+  });
 };
 
 const renameItemService = (data: {
