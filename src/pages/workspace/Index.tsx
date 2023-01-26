@@ -26,11 +26,11 @@ function Index() {
       <Sidebar />
       <div className="flex flex-row w-full" style={paddingStyles()}>
         {showExtendedBar && <ExpandedNav />}
-        <div className="grow flex-1 flex flex-col">
+        <div className="flex flex-col flex-1 grow">
           <Header />
           <main className="flex-1">
             <div
-              className={`py-3.5 mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}
+              className={`mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}
             >
               <Outlet />
             </div>

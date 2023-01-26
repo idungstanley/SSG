@@ -18,6 +18,7 @@ import {
   setShowPilot,
   setShowPilotIconView,
 } from '../../../../features/workspace/workspaceSlice';
+import { MdDragIndicator } from 'react-icons/md';
 const pilotOptions = [
   {
     id: 0,
@@ -83,14 +84,14 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       aria-label="Tabs"
     >
       <div
-        className={`flex items-center h-fit px-2 ${
+        className={`flex items-center h-fit px-1 ${
           showPilot ? 'flex-row py-2' : 'flex-col gap-1'
         }`}
       >
         <HiChevronDoubleRight
           onClick={() => handleShowPilot()}
           className={`cursor-pointer ${
-            showPilot ? '-rotate-180 translate-x-4 skew-y-3' : 'mb-1'
+            showPilot ? 'translate-x-4 skew-y-3' : 'transform -rotate-180 mb-1'
           }`}
         />
         <BsThreeDotsVertical />
@@ -102,7 +103,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       >
         {showPilot && (
           <span
-            className={`absolute left-0 z-10 top-2.5 hover:text-green-500 ${
+            className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
               showPilotIconView && 'text-green-500'
             }`}
           >
@@ -117,16 +118,25 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
               item.id === activeTabId
                 ? 'bg-gray-300 text-black'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-              showPilot ? 'border-y-2 border gap-2' : 'py-3',
+              showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
               showPilotIconView ? 'w-12' : '',
-              'px-3 relative py-2 font-medium h-fit flex-grow cursor-pointer flex justify-center transition'
+              'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
             )}
             aria-current={item.id === activeTabId ? 'page' : undefined}
           >
             {item.id === activeTabId && (
               <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
             )}
-            <img src={item.source} alt="" className="w-4 h-4" />
+            <div className="flex items-center">
+              <span
+                className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
+                  showPilot ? 'block' : 'hidden'
+                }`}
+              >
+                <MdDragIndicator />
+              </span>
+              <img src={item.source} alt="" className="w-4 h-4" />
+            </div>
             <p
               className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
                 showPilotIconView ? 'hidden' : 'block'
