@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { BsPlusLg } from 'react-icons/bs';
@@ -33,7 +33,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
               aria-hidden="true"
             />
           ) : (
-            <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
+            <PlusIcon className="w-5 h-5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>
