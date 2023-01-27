@@ -3,6 +3,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { BsPlusLg } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 
 interface IDropdownItem {
   label: string;
@@ -26,9 +28,12 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+            <AiOutlineEllipsis
+              className="w-4 h-4 text-black"
+              aria-hidden="true"
+            />
           ) : (
-            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            <PlusIcon className="w-5 h-5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>
@@ -42,7 +47,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute py-1 right-0 z-40 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 w-56 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {config.map((i) => (
             <Menu.Item key={i.label}>
               {({ active }) => (

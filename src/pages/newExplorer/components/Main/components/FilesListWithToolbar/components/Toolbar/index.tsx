@@ -7,6 +7,7 @@ import {
   AdjustmentsVerticalIcon,
   MagnifyingGlassMinusIcon,
   ClipboardIcon,
+  ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import {
   useAppDispatch,
@@ -25,6 +26,7 @@ import {
 import Search from '../../../../../Search';
 import Sorting from '../FilesList/components/Sorting';
 import { useCopyItems } from '../../../../../../../../features/explorer/explorerActionsService';
+import { BsClipboardCheck } from 'react-icons/bs';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -76,17 +78,14 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
   const leftItems = [
     {
       icon: (
-        <ArrowDownTrayIcon
-          className="h-5 w-5 stroke-current"
-          aria-hidden="true"
-        />
+        <ArrowDownIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
       ),
       onClick: handleDownload,
       label: 'Download',
       disabled: selectedIds.length === 0,
     },
     {
-      icon: <ShareIcon className="h-5 w-5 stroke-current" aria-hidden="true" />,
+      icon: <ShareIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setShowShareSideOver({
@@ -100,7 +99,10 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
     },
     {
       icon: (
-        <ClipboardIcon className="h-5 w-5 stroke-current" aria-hidden="true" />
+        <BsClipboardCheck
+          className="w-4 h-4 stroke-current"
+          aria-hidden="true"
+        />
       ),
       onClick: handleCopy,
       label: 'Copy',
@@ -116,7 +118,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             show: true,
           })
         ),
-      icon: <AdjustmentsVerticalIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <AdjustmentsVerticalIcon className="w-5 h-5" aria-hidden="true" />,
       disabled: !selectedFileId,
     },
   ];
@@ -125,7 +127,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
     <>
       <div className="flex items-center justify-between px-2 py-1">
         {/* file actions */}
-        <div className="flex gap-4 items-center pt-1">
+        <div className="flex items-center gap-4 pt-1">
           {leftItems.map((button) => (
             <Tooltip key={button.label} tooltip={button.label}>
               <button
@@ -147,12 +149,12 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             {showSearch ? (
               <MagnifyingGlassMinusIcon
                 onClick={() => setShowSearch(false)}
-                className="h-5 w-5 text-gray-500"
+                className="w-5 h-5 text-gray-500"
               />
             ) : (
               <MagnifyingGlassIcon
                 onClick={() => setShowSearch(true)}
-                className="h-5 w-5 text-gray-500"
+                className="w-5 h-5 text-gray-500"
               />
             )}
           </Tooltip>
@@ -161,7 +163,6 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           <Tooltip tooltip="Sorting">
             <Sorting />
           </Tooltip>
-
           {/* badge (items length and current index) */}
           <div className="flex gap-1.5 items-center text-sm border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
             {currentFileIndex ? (
@@ -188,7 +189,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
               type="button"
             >
               <TrashIcon
-                className="h-5 w-5 stroke-current"
+                className="w-5 h-5 stroke-current"
                 aria-hidden="true"
               />
             </button>

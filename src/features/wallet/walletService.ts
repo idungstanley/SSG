@@ -44,7 +44,7 @@ export const getWalletService = (data) => {
 
 export const getWalletServices = (data: {
   hubId?: string | null;
-  Archived: boolean;
+  Archived?: boolean;
   parentId?: string | null;
 }) => {
   // const queryClient = useQueryClient();

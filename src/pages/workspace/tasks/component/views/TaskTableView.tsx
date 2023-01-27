@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import MaterialTable from 'material-table';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { BiExport } from 'react-icons/bi';
 import { BiHide } from 'react-icons/bi';
 import { BsSearch } from 'react-icons/bs';
+import { FcParallelTasks } from 'react-icons/fc';
 import { AiOutlineFilter } from 'react-icons/ai';
 import { FaSort } from 'react-icons/fa';
+import '../taskData/task.css';
 import { AvatarWithInitials } from '../../../../../components';
+import {
+  setCloseTaskListView,
+  setCurrentTaskId,
+  setShowTaskNavigation,
+} from '../../../../../features/task/taskSlice';
 
 function TaskTableView() {
   const defaultMaterialTheme = createTheme();
   const { myTaskData } = useAppSelector((state) => state.task);
+  const { showTaskNavigation, toggleAssignCurrentTaskId } = useAppSelector(
+    (state) => state.task
+  );
+
+  const dispatch = useAppDispatch();
 
   const editable = myTaskData.map((o) => ({ ...o }));
 
@@ -22,6 +34,7 @@ function TaskTableView() {
     ViewColumn: () => <BiHide />,
     Clear: () => <AiOutlineFilter />,
     SortArrow: () => <FaSort />,
+    DetailPanel: () => <FcParallelTasks />,
     FirstPage: () => null,
     LastPage: () => null,
     NextPage: () => null,
@@ -30,14 +43,14 @@ function TaskTableView() {
 
   const columnHead: any = [];
   const singleObj: any = editable[0];
-  columnHead.push(Object.keys(singleObj));
+  singleObj && columnHead.push(Object.keys(singleObj));
 
   const dynamicColum: any = [];
 
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="flex-1 stack2">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -82,7 +95,22 @@ function TaskTableView() {
     }
   };
 
-  columnHead[0].map((column) => {
+  const renderData = (column, newData) => {
+    if (column == 'assignees') {
+      return groupAssignee(newData.assignees);
+    } else return;
+  };
+
+  const displayNav = (id: string) => {
+    dispatch(setShowTaskNavigation(!showTaskNavigation));
+    dispatch(setCurrentTaskId(id));
+  };
+
+  const handleSubTask: any = (rowData) => {
+    alert(rowData.name);
+  };
+
+  columnHead[0]?.map((column) => {
     const singleColumn = {
       title:
         column.split('_').join(' ').toUpperCase() == 'NAME'
@@ -91,11 +119,8 @@ function TaskTableView() {
       field: column,
       emptyValue: () => <p>-</p>,
       hidden: hidden(column),
-
       render:
-        column == 'assignees'
-          ? (newData) => groupAssignee(newData.assignees)
-          : null,
+        column == 'assignees' ? (newData) => renderData(column, newData) : null,
     };
     dynamicColum.push(singleColumn);
   });
@@ -109,7 +134,37 @@ function TaskTableView() {
             title="{SSG}"
             columns={dynamicColum}
             data={editable ?? []}
+            //   onSelectionChange={(selectedRow) => {
+            //     setTimeout(() => {
+            //       displayNav(selectedRow[0]?.id);
+            //     }, 1000);
+            //   }}
+            //   actions={[
+            detailPanel={[
+              {
+                tooltip: 'Add Subtask',
+                render: (rowData) => {
+                  return (
+                    <form className="flex justify-between items-center w-10/12 mx-auto">
+                      <input
+                        type="text"
+                        className=" text-black pl-10 border-0"
+                        placeholder="Enter a subtask name"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleSubTask(rowData)}
+                        className="bg-blue-700 px-3 py-1 text-white"
+                      >
+                        Save
+                      </button>
+                    </form>
+                  );
+                },
+              },
+            ]}
             options={{
+              //     tableLayout: "fixed",
               searchFieldAlignment: 'right',
               // filtering: true,
               exportButton: true,
@@ -123,7 +178,6 @@ function TaskTableView() {
               },
               rowStyle: { fontSize: '10px' },
               maxBodyHeight: '300px',
-              // doubleHorizontalScroll: false,
             }}
             icons={icons}
           />

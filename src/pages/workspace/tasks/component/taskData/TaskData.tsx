@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
+  setCurrentParentTaskId,
   setCurrentTaskId,
+  setGetSubTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { MdDragIndicator } from 'react-icons/md';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
+} from "../../../../../features/task/taskSlice";
+import { MdDragIndicator } from "react-icons/md";
+import { RiCheckboxBlankFill } from "react-icons/ri";
 import {
   CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-
+} from "@ant-design/icons";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import AssignTask from "../../assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../components";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import "./task.css";
 interface TaskDataProps {
   task: any;
 }
@@ -26,12 +29,15 @@ interface TaskDataProps {
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { showTaskNavigation, toggleAssignCurrentTaskId } = useAppSelector(
-    (state) => state.task
-  );
+  const {
+    showTaskNavigation,
+    toggleAssignCurrentTaskId,
+    currentParentTaskId,
+    getSubTaskId,
+  } = useAppSelector((state) => state.task);
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
-  const displayNav = (id: string) => {
+  const displayNav: any = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
@@ -41,15 +47,6 @@ export default function TaskData({ task }: TaskDataProps) {
     navigate(`/workspace/t/${id}`);
   };
 
-  // const handleSubTask = (id: string) => {
-  //   setParentTaskId(id);
-  //   setSubTaskOne(!subTaskOne);
-  //   if (subTaskOne === id) {
-  //     return setSubTaskOne(false);
-  //   }
-  //   setSubTaskOne(id);
-  // };
-
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
@@ -58,10 +55,26 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
+  const handleGetSubTask = (id: string) => {
+    if (id == getSubTaskId) {
+      dispatch(setGetSubTaskId(null));
+    } else {
+      dispatch(setGetSubTaskId(id));
+    }
+  };
+
+  const handleCreateSubTask = (id: string) => {
+    if (id == currentParentTaskId) {
+      dispatch(setCurrentParentTaskId(null));
+    } else {
+      dispatch(setCurrentParentTaskId(id));
+    }
+  };
+
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <>
-        <span key={newData.id} className="flex-1">
+        <span key={newData.id} className="stack">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -74,20 +87,34 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3">
-      <span className="flex items-center absolute  " style={{ left: '-30px' }}>
+    <div className="group relative bg-white mb-px bordar hover:bg-gray-100 flex items-center ml-6 pl-3 field">
+      <div onClick={() => handleGetSubTask(task.id)}>
+        {task.id == getSubTaskId ? (
+          <span className="flex flex-col">
+            <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
+          </span>
+        ) : (
+          <VscTriangleRight
+            className="flex-shrink-0 h-3"
+            aria-hidden="true"
+            color="rgba(72, 67, 67, 0.64)"
+          />
+        )}
+      </div>
+      <span className="flex items-center absolute -left-32">
         <input
           type="checkbox"
           id="checked-checkbox"
-          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
-          onClick={() => displayNav(task.id)}
+          className="handlecheck opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
+          onClick={() => {
+            displayNav(task.id);
+          }}
         />
-
         <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
       </span>
 
       <RiCheckboxBlankFill
-        className=" text-gray-400 text-xs"
+        className="pl-px text-gray-400 text-xs"
         aria-hidden="true"
       />
       <div className="flex items-center w-6/12 group">
@@ -108,7 +135,7 @@ export default function TaskData({ task }: TaskDataProps) {
           <PlusOutlined
             className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
             aria-hidden="true"
-            // onClick={() => handleSubTask(task.id)}
+            onClick={() => handleCreateSubTask(task.id)}
           />
           <EditOutlined
             className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
@@ -118,13 +145,16 @@ export default function TaskData({ task }: TaskDataProps) {
       </div>
       {/* icons */}
 
-      <div className="flex  space-x-10">
-        <span className="relative rounded-full text-xs text-center">
+      <div className="relative ">
+        <span
+          className="absolute rounded-full text-center	text-xs "
+          style={{ left: "-40px" }}
+        >
           {/* assignees here */}
 
           {task.assignees.length == 0 ? (
             <UserAddOutlined
-              className=" h-5 w-5 text-gray-400 text-xl cursor-pointer "
+              className="	 h-5 w-5 pr-10 text-gray-400 text-xl cursor-pointer "
               aria-hidden="true"
               onClick={() => handleAssigneeModal(task.id)}
             />
@@ -137,13 +167,13 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           )}
         </span>
-        <span className="border-dotted border-gray-300 pl-3 ml-5">
+        <span className=" border-dotted border-gray-300 pl-10 ">
           <CalendarOutlined
-            className="h-5 w-7 text-gray-400"
+            className=" h-5 w-7 text-gray-400"
             aria-hidden="true"
           />
         </span>
-        <span className="border-dotted border-gray-300 ml-5">
+        <span className=" border-dotted border-gray-300 ml-8">
           <FlagOutlined
             className="h-5 w-7  text-gray-400 ml-8"
             aria-hidden="true"

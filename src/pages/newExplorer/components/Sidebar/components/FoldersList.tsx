@@ -32,8 +32,10 @@ export default function FoldersList({
     (state) => state.explorer
   );
   const { data: sub } = useGetExplorerFolder(folderId);
+  console.log(folders);
 
   const handleClickFolder = (folderId: string, parentId: string | null) => {
+    console.log(parentId);
     const isActiveFolder = selectedFolderId === folderId;
     dispatch(setSelectedFolderId(isActiveFolder ? parentId : folderId));
     navigate(`/new-explorer/${isActiveFolder ? parentId || '' : folderId}`, {
@@ -79,12 +81,13 @@ export default function FoldersList({
             key={rootFolder.id}
             id={rootFolder.id}
             parentId={rootFolder.parentId}
+            haveAncestors={
+              !!subFolders?.length &&
+              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
+            }
             name={rootFolder.name}
             handleClickFolder={handleClickFolder}
             isActiveFolder={rootFolder.id === selectedFolderId}
-            haveActiveChild={
-              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
-            }
           />
 
           {selectedFolder?.ancestors
@@ -99,34 +102,50 @@ export default function FoldersList({
                   <div
                     key={ancestor.id}
                     style={{
-                      marginLeft: (index + 1) * 10,
+                      paddingLeft: (index + 1) * 10,
                     }}
+                    className={classNames(
+                      ancestor.id === selectedFolderId
+                        ? 'bg-green-50 text-black'
+                        : '',
+                      'hover:bg-gray-100 relative'
+                    )}
                   >
+                    {ancestor.id === selectedFolderId && (
+                      <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                    )}
                     <FolderItem
                       id={ancestor.id}
                       name={ancestor.name}
+                      haveAncestors={!!ancestor.parent_id}
                       parentId={ancestor.parent_id}
                       handleClickFolder={handleClickFolder}
                       isActiveFolder={ancestor.id === selectedFolderId}
-                      haveActiveChild={
-                        !!selectedFolder?.ancestors?.find(
-                          (i) => i.id === ancestor.id
-                        )
-                      }
                     />
                   </div>
                 ))}
 
               {/* selected folder (only if child, not root) */}
-              <div style={{ marginLeft: ancestorsLength * 10 }}>
+              <div
+                style={{ paddingLeft: ancestorsLength * 10 }}
+                className={classNames(
+                  rootFolder.id !== selectedFolder.id
+                    ? 'bg-green-50 text-black'
+                    : '',
+                  'hover:bg-gray-100 relative'
+                )}
+              >
+                {rootFolder.id !== selectedFolder.id && (
+                  <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                )}
                 {rootFolder.id !== selectedFolder.id ? (
                   <FolderItem
                     id={selectedFolder.id}
                     name={selectedFolder.name}
                     parentId={selectedFolder.parent_id}
+                    haveAncestors={!!selectedFolder.ancestors?.length}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={selectedFolder.id === selectedFolderId}
-                    haveActiveChild={false}
                   />
                 ) : null}
               </div>
@@ -136,18 +155,27 @@ export default function FoldersList({
                 <div
                   key={subFolder.id}
                   style={{
-                    marginLeft: ancestorsLength
+                    paddingLeft: ancestorsLength
                       ? (ancestorsLength + 1) * 10
                       : 10,
                   }}
+                  className={classNames(
+                    subFolder.id === selectedFolderId
+                      ? 'bg-green-50 text-black'
+                      : '',
+                    'hover:bg-gray-100 relative'
+                  )}
                 >
+                  {subFolder.id === selectedFolderId && (
+                    <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                  )}
                   <FolderItem
                     id={subFolder.id}
                     parentId={subFolder.parentId}
                     name={subFolder.name}
+                    haveAncestors={false}
                     handleClickFolder={handleClickFolder}
                     isActiveFolder={subFolder.id === selectedFolderId}
-                    haveActiveChild={false}
                   />
                 </div>
               ))}

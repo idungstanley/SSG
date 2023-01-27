@@ -91,7 +91,7 @@ export default function AssignTask() {
                     height="h-5"
                     width="w-5"
                   />
-                  <p className="text-xs">
+                  <p className="text-lg">
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>
