@@ -3,26 +3,30 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../../features/wallet/walletService';
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setCreateWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import {
+  setCreateSubWalletSlideOverVisibility,
+  setCreateWalletSlideOverVisibility,
+} from '../../../../../features/general/slideOver/slideOverSlice';
 import {
   setSubDropdownMenu,
   setshowMenuDropdown,
 } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 
-function WalletModal() {
+function SubWalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown } = useAppSelector(
+  const { showMenuDropdownType, showMenuDropdown} = useAppSelector(
     (state) => state.hub
   );
-  const { showCreateWalletSlideOver } = useAppSelector(
+  const { showCreateSubWalletSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
+
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      dispatch(setCreateWalletSlideOverVisibility(false));
+      dispatch(setCreateSubWalletSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
@@ -56,7 +60,7 @@ function WalletModal() {
   };
 
   const handleCloseSlider = () => {
-    dispatch(setCreateWalletSlideOverVisibility(false));
+    dispatch(setCreateSubWalletSlideOverVisibility(false));
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
@@ -66,27 +70,15 @@ function WalletModal() {
   };
   return (
     <SlideOver
-      show={showCreateWalletSlideOver}
+      show={showCreateSubWalletSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={
-        showMenuDropdownType === 'wallet'
-          ? ' Create wallet'
-          : 'Create subwallet'
-      }
+      headerTitle="Create subwallet"
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={
-                showMenuDropdownType === 'wallet'
-                  ? 'Wallet Name:'
-                  : 'Subwallet Name:'
-              }
-              placeholder={
-                showMenuDropdownType === 'wallet'
-                  ? 'Enter wallet Name'
-                  : 'Enter Subwallet Name'
-              }
+              label="Subwallet Name:"
+              placeholder="Enter Subwallet Name"
               name="name"
               value={name}
               type="text"
@@ -99,11 +91,7 @@ function WalletModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={
-            showMenuDropdownType === 'wallet'
-              ? 'Create Wallet'
-              : 'Create Subwallet'
-          }
+          label="Create Subwallet"
           padding="py-2 px-4"
           height="h-10"
           width="w-40"
@@ -113,4 +101,4 @@ function WalletModal() {
   );
 }
 
-export default WalletModal;
+export default SubWalletModal;

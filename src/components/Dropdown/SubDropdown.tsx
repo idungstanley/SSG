@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
 import {
   DocumentDuplicateIcon,
@@ -15,10 +15,14 @@ import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
 import {
   setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
+  setCreateSubHubSlideOverVisibility,
+  setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
 } from '../../features/general/slideOver/slideOverSlice';
 import TaskModal from '../../pages/workspace/tasks/component/TaskModal';
+import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import SubWalletModal from '../../pages/workspace/wallet/components/modals/SubWalletModal';
 
 interface itemsType {
   id: number;
@@ -30,15 +34,51 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType, SubMenuType } = useAppSelector(
-    (state) => state.hub
-  );
+  const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } =
+    useAppSelector((state) => state.hub);
+  const {
+    showCreateSubWalletSlideOver,
+    showCreateHubSlideOver,
+    showCreateSubHubSlideOver,
+    showCreateWalletSlideOver,
+  } = useAppSelector((state) => state.slideOver);
+  const ref = useRef<any>();
+  useEffect(() => {
+    const checkClickedOutSide = (e) => {
+      if (SubMenuId != null && ref.current && !ref.current.contains(e.target)) {
+        if (
+          showCreateSubWalletSlideOver === false &&
+          showCreateHubSlideOver === false &&
+          showCreateSubHubSlideOver === false &&
+          showCreateWalletSlideOver === false
+        ) {
+          dispatch(setSubDropdownMenu(false));
+          dispatch(
+            getSubMenu({
+              SubMenuId: null,
+              SubMenuType: null,
+            })
+          );
+        }
+      }
+    };
+    document.addEventListener('click', checkClickedOutSide);
+    return () => {
+      document.removeEventListener('click', checkClickedOutSide);
+    };
+  }, [
+    SubMenuId,
+    showCreateSubWalletSlideOver,
+    showCreateHubSlideOver,
+    showCreateSubHubSlideOver,
+    showCreateWalletSlideOver,
+  ]);
   const itemsList: itemsType[] = [
     {
       id: 1,
       title: 'Sub Hub',
       handleClick: () => {
-        dispatch(setCreateHubSlideOverVisibility(true));
+        dispatch(setCreateSubHubSlideOverVisibility(true));
       },
       icon: (
         <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
@@ -53,11 +93,11 @@ export default function SubDropdown() {
     {
       id: 2,
       title:
-        ((showMenuDropdownType == 'wallet' ? 'Sub Wallet' : 'Wallet') ||
-          (SubMenuType == 'wallet' ? 'Sub Wallet' : '')) &&
-        (showMenuDropdownType == 'subwallet' ? 'Sub Wallet' : 'Wallet'),
+        (showMenuDropdownType === 'wallet' ? 'Sub Wallet' : 'Wallet') ||
+        (SubMenuType === 'wallet' ? 'Sub Wallet' : '') ||
+        (showMenuDropdownType === 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
-        dispatch(setCreateWalletSlideOverVisibility(true));
+        dispatch(setCreateSubWalletSlideOverVisibility(true));
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
@@ -83,7 +123,7 @@ export default function SubDropdown() {
         dispatch(setCreateListSlideOverVisibility(true));
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: showMenuDropdownType === 'list' ? false : true,
     },
     {
       id: 5,
@@ -117,13 +157,13 @@ export default function SubDropdown() {
     },
   ];
   return (
-    <div className="">
-      <div className="fixed w-56 py-1 origin-top-right bg-white rounded-md shadow-lg top-auto left-32 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
+    <div className="" ref={ref}>
+      <div className="fixed z-50 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none">
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left hover:bg-gray-100"
+                className="flex items-center px-4 py-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-100"
                 onClick={item.handleClick}
               >
                 {item.icon}
@@ -134,6 +174,7 @@ export default function SubDropdown() {
         )}
       </div>
       <WalletModal />
+      <SubWalletModal />
       <ListModal />
       <TaskModal />
     </div>

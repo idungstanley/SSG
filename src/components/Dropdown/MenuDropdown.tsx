@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -20,6 +20,8 @@ import {
 import {
   setArchiveHub,
   setDelHub,
+  setGlobalRef,
+  setshowMenuDropdown,
   setSubDropdownMenu,
 } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
@@ -66,9 +68,52 @@ export default function MenuDropdown() {
     showMenuDropdown,
     showMenuDropdownType,
   } = useAppSelector((state) => state.hub);
+  const {
+    showCreateSubWalletSlideOver,
+    showCreateHubSlideOver,
+    showCreateSubHubSlideOver,
+    showCreateWalletSlideOver,
+  } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
   const { delList, archiveList } = useAppSelector((state) => state.list);
-  // console.log(showMenuDropdown, showMenuDropdownType);
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    dispatch(setGlobalRef(ref.current));
+    const checkClickedOutSide = (e) => {
+      if (
+        showMenuDropdown != null &&
+        ref.current &&
+        !ref.current.contains(e.target)
+      ) {
+        if (
+          showCreateSubWalletSlideOver === false &&
+          showCreateHubSlideOver === false &&
+          showCreateSubHubSlideOver === false &&
+          showCreateWalletSlideOver === false
+        ) {
+          if (SubDropdownMenu === true) {
+            dispatch(setSubDropdownMenu(false));
+          } else {
+            dispatch(
+              setshowMenuDropdown({
+                showMenuDropdown: null,
+              })
+            );
+          }
+        }
+      }
+    };
+    document.addEventListener('click', checkClickedOutSide);
+    return () => {
+      document.removeEventListener('click', checkClickedOutSide);
+    };
+  }, [
+    SubDropdownMenu,
+    showCreateSubWalletSlideOver,
+    showCreateHubSlideOver,
+    showCreateSubHubSlideOver,
+    showCreateWalletSlideOver,
+  ]);
 
   //delete-entity
   //hubs and subhubs
@@ -294,13 +339,13 @@ export default function MenuDropdown() {
   ];
 
   return (
-    <div className="">
-      <div className="absolute w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 z-50 ring-1 ring-black ring-opacity-5 focus:outline-none">
+    <div className="" ref={ref}>
+      <div className="absolute z-50 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 ring-1 ring-black ring-opacity-5 focus:outline-none">
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 text-left hover:bg-gray-100"
+                className="flex items-center px-4 py-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-100"
                 onClick={item.handleClick}
               >
                 {item.icon}

@@ -8,16 +8,16 @@ import {
   setSubDropdownMenu,
 } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
-import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { setCreateSubHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
-function Modal() {
+function SubHubModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currHubId } = useAppSelector((state) => state.hub);
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      dispatch(setCreateHubSlideOverVisibility(false));
+      dispatch(setCreateSubHubSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
@@ -28,7 +28,7 @@ function Modal() {
   });
 
   const handleCloseSlider = () => {
-    dispatch(setCreateHubSlideOverVisibility(false));
+    dispatch(setCreateSubHubSlideOverVisibility(false));
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
@@ -64,18 +64,20 @@ function Modal() {
     });
   };
 
-  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
+  const { showCreateSubHubSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
   return (
     <SlideOver
-      show={showCreateHubSlideOver}
+      show={showCreateSubHubSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle="Create A New Hub"
+      headerTitle="Create A New Sub Hub"
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label="Hub Name:"
-              placeholder="Enter Hub Name"
+              label="Sub Hub Name:"
+              placeholder="Enter Sub Hub Name"
               name="name"
               value={name}
               type="text"
@@ -88,7 +90,7 @@ function Modal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label="Create Hub"
+          label="Create  Sub Hub"
           padding="py-2 px-4"
           height="h-10"
           width="w-40"
@@ -98,4 +100,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default SubHubModal;

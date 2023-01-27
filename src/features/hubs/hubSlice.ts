@@ -18,6 +18,7 @@ interface HubState {
   SubMenuType: null;
   hubParentId: null;
   refType: null;
+  ref: null;
 }
 
 const initialState: HubState = {
@@ -38,6 +39,7 @@ const initialState: HubState = {
   SubMenuType: null,
   hubParentId: null,
   refType: null,
+  ref: null,
 };
 
 export const hubSlice = createSlice({
@@ -49,6 +51,9 @@ export const hubSlice = createSlice({
     },
     getHub(state, action) {
       state.hub = action.payload;
+    },
+    setGlobalRef(state, action) {
+      state.ref = action.payload;
     },
     setDelHub(state, action) {
       state.delHub = action.payload;
@@ -118,5 +123,6 @@ export const {
   setHubParentId,
   closeMenu,
   getMenuRef,
+  setGlobalRef,
 } = hubSlice.actions;
 export default hubSlice.reducer;
