@@ -2,16 +2,13 @@ import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BsCalendar2Minus } from 'react-icons/bs';
-import dashboardIcon from '../../../../assets/branding/dashboard-icon.png';
 import favoriteIcon from '../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../assets/branding/Group.png';
-import communityIcon from '../../../../assets/branding/community-icon.png';
 import notificationIcon from '../../../../assets/branding/notification-logo.png';
 import homeIcon from '../../../../assets/branding/Home-icon.svg';
 import { classNames } from '../../../../utils';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { HiUserGroup } from 'react-icons/hi';
-import { IoMdNotificationsOutline } from 'react-icons/io';
 
 const navigation = [
   {

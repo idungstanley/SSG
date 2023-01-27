@@ -1,3 +1,4 @@
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode } from 'react';
 import { classNames } from '../../../../utils';
 
@@ -16,15 +17,17 @@ export default function PlaceItem({
   rightContent,
   bottomContent,
 }: PlaceItemProps) {
+  const isActivePlace = rightContent || bottomContent;
+
   return (
     <li
       className={classNames(
-        !rightContent || !bottomContent ? 'hover:bg-gray-100' : '',
-        'flex flex-col w-full px-2 pt-3 pb-2 items-center',
+        !isActivePlace ? 'hover:bg-gray-100' : '',
+        'group focus:flex flex-col w-full px-2 py-3.5 items-center',
         bottomContent ? 'gap-2' : ''
       )}
     >
-      <div className="flex justify-between w-full">
+      <div className=" flex justify-between w-full">
         <div
           onClick={onClick}
           className="flex gap-5 items-center w-full cursor-pointer"
@@ -32,7 +35,17 @@ export default function PlaceItem({
           {icon}
           {label}
         </div>
-        {rightContent}
+        <div className="flex gap-2 items-center group-hover:opacity-100 opacity-0 transition">
+          {rightContent}
+
+          <span onClick={onClick}>
+            {isActivePlace ? (
+              <ChevronDownIcon className="h-5 w-5 cursor-pointer" />
+            ) : (
+              <ChevronRightIcon className="h-5 w-5 cursor-pointer" />
+            )}
+          </span>
+        </div>
       </div>
       {bottomContent}
     </li>
