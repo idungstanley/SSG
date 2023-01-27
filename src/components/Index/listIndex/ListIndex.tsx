@@ -1,17 +1,18 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGetHubWallet } from '../../../features/hubs/hubService';
-import { BsListUl } from 'react-icons/bs';
-import { AiOutlineEllipsis } from 'react-icons/ai';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useGetHubWallet } from "../../../features/hubs/hubService";
+import { BsListUl } from "react-icons/bs";
+import { AiOutlineEllipsis } from "react-icons/ai";
 import {
   closeMenu,
+  getPrevName,
   setshowMenuDropdown,
-} from '../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import MenuDropdown from '../../Dropdown/MenuDropdown';
-import { setCurrentListId } from '../../../features/list/listSlice';
-import { useAppSelector } from '../../../app/hooks';
-import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+} from "../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
+import MenuDropdown from "../../Dropdown/MenuDropdown";
+import { setCurrentListId } from "../../../features/list/listSlice";
+import { useAppSelector } from "../../../app/hooks";
+import { setActiveItem } from "../../../features/workspace/workspaceSlice";
 
 interface ListIndexProps {
   showHubList: boolean;
@@ -26,32 +27,32 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
 
   const handleListLocation = (id: string, name: string) => {
     navigate(`/workspace/list/${id}`);
-        dispatch(
-          setActiveItem({
-            activeItemType: 'list',
-            activeItemId: id,
-            activeItemName: name,
-          })
-        );
-
+    dispatch(
+      setActiveItem({
+        activeItemType: "list",
+        activeItemId: id,
+        activeItemName: name,
+      })
+    );
   };
-  const handleListSettings = (id: string, e) => {
+  const handleListSettings = (id: string, name: string, e) => {
     dispatch(setCurrentListId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'list',
+        showMenuDropdownType: "list",
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (e.target.id == "menusettings") {
         dispatch(closeMenu());
       }
     }
   };
 
   return (
-    <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
+    <div id="createWallet" className={`${showHubList ? "block" : "hidden"}`}>
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
@@ -65,10 +66,10 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                   type="button"
                   onClick={() => handleListLocation(list.id, list.name)}
                   className="ml-2 tracking-wider capitalize"
-                  style={{ fontSize: '10px' }}
+                  style={{ fontSize: "10px" }}
                 >
                   {list.name.length > 10
-                    ? list.name.substr(0, 10) + '...'
+                    ? list.name.substr(0, 10) + "..."
                     : list.name}
                 </button>
               </div>
@@ -81,7 +82,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                 {/* <TaskDropdown getListId={getListId} /> */}
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={(e) => handleListSettings(list.id, e)}
+                  onClick={(e) => handleListSettings(list.id, list.name, e)}
                   id="menusettings"
                 />
               </button>
