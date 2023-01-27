@@ -45,7 +45,7 @@ export default function TaskListViews() {
           <span className="text-xs text-gray-400 mt-1	">TASK</span>
         </div>
       </div>
-      <div className="flex items-center w-6/12">
+      <div className="flex items-center w-9/12">
         <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
           <span className="opacity-0 group-hover:opacity-100">
             <MdOutlineDragIndicator />

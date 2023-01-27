@@ -13,9 +13,16 @@ import ItemsHubData from ".";
 
 export default function TaskListSections({ data }: any) {
   return (
-    <section id="listcard" className="p-3 mt-3 text-xs" key={data.id}>
-      <div className="block p-2 bg-gray-100 border border-gray-200 rounded shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <div id="listTitle" className="flex items-center justify-between">
+    <section
+      id="listcard"
+      className="text-xs h-full bg-gray-100 "
+      key={data.id}
+    >
+      <div className="block p-5 bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div className=" capitalize ">
+          <ItemsHubData hubId={data.id} />
+        </div>
+        {/* <div id="listTitle" className="flex items-center justify-between">
           <div className="flex items-center justify-center space-x-2 text-gray-400">
             <ChevronDownIcon
               className="flex-shrink-0 w-5 h-4"
@@ -45,15 +52,15 @@ export default function TaskListSections({ data }: any) {
             />
             <p>Show Closed</p>
           </div>
-        </div>
+        </div> */}
         {/* card */}
         <div className="flex items-center mt-10 px-2 bg-white border py-1 border-gray-100 rounded">
           {/* data and input */}
-          <div className="w-6/12 capitalize ">
+          {/* <div className="w-6/12 capitalize ">
             <ItemsHubData hubId={data.id} />
-          </div>
+          </div> */}
           {/* icons */}
-          <div className="flex items-center space-x-10">
+          {/* <div className="flex items-center space-x-10">
             <span className="p-1 ml-1 border-2 border-gray-300 border-dotted rounded-full">
               <UserAddOutlined
                 className=" text-gray-400 text-xs h-5 w-5"
@@ -72,7 +79,7 @@ export default function TaskListSections({ data }: any) {
                 aria-hidden="true"
               />
             </span>
-          </div>
+          </div> */}
         </div>
         {/* endshere */}
       </div>
