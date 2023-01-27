@@ -4,13 +4,9 @@ import {
   PlusIcon,
   PencilIcon,
   ShareIcon,
-  ArrowsUpDownIcon,
   ArrowUpTrayIcon,
-  AdjustmentsVerticalIcon,
-  FolderIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
   ClipboardIcon,
+  AdjustmentsVerticalIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
@@ -30,7 +26,7 @@ import { DownloadFile } from '../../../../../app/helpers';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { TbArrowRotaryFirstLeft, TbArrowsUpDown } from 'react-icons/tb';
+import { TbArrowsUpDown } from 'react-icons/tb';
 
 interface FolderItemProps {
   id: string;
@@ -38,7 +34,7 @@ interface FolderItemProps {
   parentId: string | null;
   handleClickFolder: (i: string, parentId: string | null) => void;
   isActiveFolder: boolean;
-  haveAncestors: boolean;
+  haveActiveChild: boolean;
 }
 
 export default function FolderItem({
@@ -46,7 +42,7 @@ export default function FolderItem({
   name,
   parentId,
   handleClickFolder,
-  haveAncestors,
+  haveActiveChild,
   isActiveFolder,
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
@@ -134,7 +130,7 @@ export default function FolderItem({
             show: true,
           })
         ),
-      icon: <TbArrowsUpDown className="w-5 h-5" aria-hidden="true" />,
+      icon: <AdjustmentsVerticalIcon className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: 'Delete',
@@ -161,7 +157,7 @@ export default function FolderItem({
         onClick={() => handleClickFolder(id, parentId)}
         className="flex items-center cursor-pointer ml-0.5"
       >
-        {isActiveFolder || haveAncestors ? (
+        {isActiveFolder || haveActiveChild ? (
           <>
             <VscTriangleDown
               className="flex-shrink-0 h-3 text-xs mr-0.5"

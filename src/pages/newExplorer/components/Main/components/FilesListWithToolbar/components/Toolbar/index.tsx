@@ -3,10 +3,8 @@ import {
   TrashIcon,
   ShareIcon,
   MagnifyingGlassIcon,
-  ArrowDownTrayIcon,
   AdjustmentsVerticalIcon,
   MagnifyingGlassMinusIcon,
-  ClipboardIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -164,7 +162,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             <Sorting />
           </Tooltip>
           {/* badge (items length and current index) */}
-          <div className="flex gap-1.5 items-center text-sm border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
+          <div className="flex gap-1.5 items-center text-sm rounded bg-green-100 px-2.5 font-semibold text-gray-800">
             {currentFileIndex ? (
               <>
                 <span className="text-primary-500">
