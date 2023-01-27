@@ -1,5 +1,5 @@
-import React from 'react';
-import { getTaskListService } from '../../../../../../../features/task/taskService';
+import React from "react";
+import { getTaskListService } from "../../../../../../../features/task/taskService";
 
 interface ItemsListsDataProps {
   listId: string | null;

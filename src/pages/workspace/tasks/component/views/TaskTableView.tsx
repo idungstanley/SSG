@@ -67,18 +67,18 @@ function TaskTableView() {
     if (col == "id") {
       return true;
     }
-    if (col == "list_id") {
-      return true;
-    }
-    if (col == "parent_id") {
-      return true;
-    }
-    if (col == "archived_at") {
-      return true;
-    }
-    if (col == "deleted_at") {
-      return true;
-    }
+    // if (col == "list_id") {
+    //   return true;
+    // }
+    // if (col == "parent_id") {
+    //   return true;
+    // }
+    // if (col == "archived_at") {
+    //   return true;
+    // }
+    // if (col == "deleted_at") {
+    //   return true;
+    // }
     if (col == "updated_at") {
       return true;
     }

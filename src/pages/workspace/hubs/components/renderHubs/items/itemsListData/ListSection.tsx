@@ -2,14 +2,14 @@ import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import React from 'react';
-import ItemsListsData from './ItemsListsData';
+} from "@heroicons/react/24/outline";
+import React from "react";
+import ItemsListsData from "./ItemsListsData";
 
 export default function ListSection({ data }: any) {
   return (

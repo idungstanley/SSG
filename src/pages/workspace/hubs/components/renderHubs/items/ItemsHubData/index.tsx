@@ -1,5 +1,8 @@
-import React from 'react';
-import { useGetHubChildren } from '../../../../../../../features/hubs/hubService';
+import React from "react";
+import { useAppSelector } from "../../../../../../../app/hooks";
+import { useGetHubChildren } from "../../../../../../../features/hubs/hubService";
+import TaskData from "../../../../../tasks/component/taskData/TaskData";
+import "../ItemsHubData/wallet.css";
 
 interface ItemsHubDataProps {
   hubId: string | null;
@@ -9,10 +12,18 @@ export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
   return (
     <section>
       {/* wallets */}
-      <div>{data?.data.wallets.map((item) => item.name)}</div>
+      <div className="stac">{data?.data.wallets.map((item) => item.name)}</div>
 
       {/* lists */}
-      <div>{data?.data.lists.map((item) => item.name)}</div>
+      <div className="">
+        {data?.data.lists.map((item) => {
+          return (
+            <div key={item.name}>
+              <p>{item.name}</p>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
