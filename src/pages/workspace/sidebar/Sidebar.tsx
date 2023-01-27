@@ -91,7 +91,7 @@ export default function Sidebar() {
         <Modal />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
-            activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
+            !activePlaceId ? 'hidden' : 'block'
           }`}
         >
           {!showExtendedBar && (

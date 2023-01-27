@@ -24,7 +24,7 @@ import {
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
 import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
-import { PlaceItem } from '../../../workspace/sidebar/components/Places';
+import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
 
 const stringifyFolders = (
   query: string,
@@ -95,7 +95,7 @@ export default function ExtendedBar() {
       <PlaceItem
         label="Cabinet"
         icon={<FolderOpenIcon className="h-5 w-5" />}
-        onClick={() => dispatch(setActivePlaceId(0))}
+        onClick={() => dispatch(setActivePlaceId(null))}
         rightContent={
           <div className="flex gap-2">
             <Dropdown config={configForDropdown} iconType="plus" />
@@ -139,7 +139,6 @@ export default function ExtendedBar() {
             <FoldersList
               folders={folders}
               isSearchedResults={!!filteredSearchedFolders?.length}
-              // isSearchedResults={false}
             />
           ) : (
             <FullScreenMessage
