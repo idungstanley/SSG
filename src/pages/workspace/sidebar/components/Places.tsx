@@ -68,7 +68,7 @@ function Places() {
       // icon: <CubeTransparentIcon className="h-5 w-5" />,
     },
     {
-      name: 'in-tray',
+      name: 'In-tray',
       id: 3,
       place: <Inbox />,
       // source: InboxIcon,

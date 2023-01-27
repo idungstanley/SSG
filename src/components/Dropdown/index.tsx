@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
-import { BsPlusLg } from 'react-icons/bs';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 
 interface IDropdownItem {

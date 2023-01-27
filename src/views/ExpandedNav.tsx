@@ -15,7 +15,6 @@ import {
 import emailIcon from '../assets/branding/email-icon.png';
 import hubIcon from '../assets/branding/hub.png';
 import InboxIcon from '../assets/branding/inbox.png';
-import filesIcon from '../assets/branding/file.png';
 import timeClockIcon from '../assets/branding/timeclock.png';
 import trackerIcon from '../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
@@ -177,7 +176,7 @@ function ExpandedNav() {
                           onClick={() => dispatch(setShowModal(true))}
                         />
                         <IoSearchCircleOutline
-                          className="w-2.5 h-2.5 mr-1 h-4"
+                          className="w-2.5 mr-1 h-4"
                           aria-hidden="true"
                           onClick={() =>
                             dispatch(setIsExtSearchActive('TOGGLE'))
