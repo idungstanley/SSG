@@ -3,29 +3,48 @@ import { AiOutlineContacts, AiTwotoneEye } from 'react-icons/ai';
 import { BiMessageAltDetail } from 'react-icons/bi';
 import { MdAddToPhotos, MdDragIndicator } from 'react-icons/md';
 import { useAppSelector } from '../../../../app/hooks';
-import SubDetails from './subDetails/SubDetails';
+import SubDetails from './subDetails/subDetailsType/tasks/SubDetails';
 import AddTo from './addTo/AddTo';
 import DetailsIndex from './subDetails/DetailsIndex';
+import { getOneTaskServices } from '../../../../features/task/taskService';
+import { UseGetHubDetails } from '../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../features/list/listService';
 
 const DetailOptions = [
   {
     id: 0,
     label: 'details',
     icon: <BiMessageAltDetail />,
-    element: <SubDetails />,
+    // element: <SubDetails />,
   },
   {
     id: 1,
     label: 'addTo',
     icon: <MdAddToPhotos />,
-    element: <AddTo />,
+    // element: <AddTo />,
   },
 ];
 export default function Details() {
-  const { showPilot } = useAppSelector((state) => state.workspace);
+  const { showPilot, activeItemId, activeItemType } = useAppSelector(
+    (state) => state.workspace
+  );
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
   const [activeId, setActiveId] = useState<number>(5);
-  console.log(activeId);
 
+  const { data: task } = getOneTaskServices({ task_id: currentTaskIdForPilot });
+  const { data: hub } = UseGetHubDetails({
+    activeItemId,
+    activeItemType,
+  });
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId,
+    activeItemType,
+  });
+  const { data: list } = UseGetListDetails({
+    activeItemId,
+    activeItemType,
+  });
   return (
     <section>
       <div className={`flex ${showPilot ? 'flex-row' : 'flex-col'}`}>
@@ -44,14 +63,19 @@ export default function Details() {
               </span>
               <span>{item.icon}</span>
             </div>
-            {activeId === item.id && (
+            {/* {activeId === item.id && (
               <div className="w-full">{item.element}</div>
-            )}
+            )} */}
           </section>
         ))}
       </div>
       <div className="w-full p-3">
-        <DetailsIndex />
+        <DetailsIndex
+          taskDetails={task?.data.task}
+          hubDetails={hub?.data.hub}
+          walletDetails={wallet?.data.wallet}
+          listDetails={list?.data.list}
+        />
       </div>
     </section>
   );

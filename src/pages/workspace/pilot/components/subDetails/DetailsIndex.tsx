@@ -7,9 +7,41 @@ import EntitySettings from './entitySettings/EntitySettings';
 import Assignees from './assignees/Assignees';
 import Subscribers from './subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../components';
-import SubDetails from './SubDetails';
+import SubDetails from './subDetailsType/tasks/SubDetails';
+import HubSubDetails from './subDetailsType/hubs/HubSubDetails';
+import { useAppSelector } from '../../../../../app/hooks';
+import WalletSubDetails from './subDetailsType/wallets/WalletSubDetails';
+import ListSubDetails from './subDetailsType/lists/ListSubDetails';
 
-export default function DetailsIndex() {
+interface DetailsIndexProps {
+  taskDetails: any;
+  hubDetails: any;
+  walletDetails: any;
+  listDetails: any;
+}
+export default function DetailsIndex({
+  taskDetails,
+  hubDetails,
+  walletDetails,
+  listDetails,
+}: DetailsIndexProps) {
+  const { activeItemType } = useAppSelector((state) => state.workspace);
+  const showDetailsType = () => {
+    if (activeItemType == 'hub' || activeItemType == 'subhub') {
+      return <HubSubDetails hubDetails={hubDetails} key={hubDetails?.id} />;
+    } else if (activeItemType == 'task') {
+      return <SubDetails taskDetails={taskDetails} key={taskDetails?.id} />;
+    } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
+      return (
+        <WalletSubDetails
+          walletDetails={walletDetails}
+          key={walletDetails?.id}
+        />
+      );
+    } else if (activeItemType == 'list') {
+      return <ListSubDetails listDetails={listDetails} key={listDetails?.id} />;
+    }
+  };
   return (
     <>
       <div className="flex justify-between items-center">
@@ -36,9 +68,7 @@ export default function DetailsIndex() {
           width="w-5"
         />
       </section>
-      <section className="mt-3">
-        <SubDetails />
-      </section>
+      <section className="mt-3">{showDetailsType()}</section>
     </>
   );
 }

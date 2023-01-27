@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import SubTask from '../../../tasks/subtasks/create/SubTask';
+import SubTask from '../../../../../tasks/subtasks/create/SubTask';
+import moment from 'moment';
 
-export default function SubDetails() {
+interface DetailsIndexProps {
+  taskDetails: any;
+}
+export default function SubDetails({ taskDetails }: DetailsIndexProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
   return (
     <>
-      <section className="p-2">
+      <section className="p-2" key={taskDetails?.id}>
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>Name of entity</p>
+            <p>{taskDetails?.name}</p>
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md h-20">
-            <p>Description of entity</p>
+            <p>{taskDetails?.description}</p>
           </div>
         </div>
         {/* created time */}
         <div id="created time" className="mt-2">
           <label className="text-xs text-gray-500">Created</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>Dec 14 2022, 23:51</p>
+            <p>{moment(taskDetails?.created_at).format('MMM DD, hh:mm a')}</p>
           </div>
         </div>
         {/* due date */}

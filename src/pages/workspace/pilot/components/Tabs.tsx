@@ -3,14 +3,11 @@ import communicationIcon from '../../../../assets/branding/communication.png';
 import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
 import automationIcon from '../../../../assets/branding/automation.png';
+import timeclockIcon from '../../../../assets/branding/timeclock.png';
 import propertiesIcon from '../../../../assets/branding/properties-icon.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import { classNames } from '../../../../utils';
-import {
-  HiChevronDoubleLeft,
-  HiChevronDoubleRight,
-  HiChevronDoubleUp,
-} from 'react-icons/hi';
+import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -49,6 +46,11 @@ const pilotOptions = [
     id: 5,
     name: 'Automation',
     source: automationIcon,
+  },
+  {
+    id: 6,
+    name: 'TimeClock',
+    source: timeclockIcon,
   },
 ];
 

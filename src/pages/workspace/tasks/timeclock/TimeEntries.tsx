@@ -1,94 +1,28 @@
 import React, { useState } from 'react';
-import {
-  EditOutlined,
-  PlayCircleFilled,
-  StopFilled,
-  TagOutlined,
-} from '@ant-design/icons';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { AvatarWithInitials } from '../../../../components';
+import { EditOutlined, PlayCircleFilled, TagOutlined } from '@ant-design/icons';
 import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { GetTimeEntriesService } from '../../../../features/task/taskService';
+import { useAppSelector } from '../../../../app/hooks';
 import moment from 'moment';
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
-import {
-  GetTimeEntriesService,
-  DeleteTimeEntriesService,
-} from '../../../../../features/task/taskService';
-import { AvatarWithInitials } from '../../../../../components';
-import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
 
-interface TimeEntriesDropdownProps {
-  taskId: string | undefined;
-  startTimeClicked: boolean;
-  showEntries: boolean;
-  setShowEntries: (value: boolean) => void;
-  isBillable: boolean;
-  setIsBillable: (value: boolean) => void;
-  setFormState: any;
-  formState: Record<string, unknown>;
-  handleTimeTracker: () => void;
-}
-
-function TimeEntriesDropdown({
-  taskId,
-  startTimeClicked,
-  showEntries,
-  setShowEntries,
-  isBillable,
-  setIsBillable,
-  setFormState,
-  formState,
-  handleTimeTracker,
-}: TimeEntriesDropdownProps) {
-  const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
-  const [getTEId, setTEId] = useState('');
-  const [triggerDel, setTriggerDel] = useState(false);
-
-  queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
+export default function TimeEntries() {
+  const [showEntries, setShowEntries] = useState(false);
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
 
   const { data: getEntries } = GetTimeEntriesService({
-    taskId,
+    taskId: currentTaskIdForPilot,
   });
-
-  useQuery({
-    queryKey: ['delTE', getTEId],
-    queryFn: DeleteTimeEntriesService,
-    enabled: triggerDel,
-  });
-
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleUpdateEntry = (id) => {
-    setOpenUpdateEntry(!openUpdateEntry);
-    if (openUpdateEntry === id) {
-      setOpenUpdateEntry(false);
-    } else {
-      setOpenUpdateEntry(id);
-    }
-  };
-
-  const handleDeleteEntry = (id) => {
-    setTEId(id);
-    setTriggerDel(true);
-  };
-
-  const totalDuration = getEntries?.data.total_duration;
+  console.log(getEntries);
   return (
-    <div className="">
-      <div className="absolute -left-44 top-10 z-10 -mt-3 w-80 rounded-md shadow-lg bg-gray-100">
+    <div className="mt-6 p-2 rounded-t-md">
+      <div className="bg-gray-100">
         <section className="">
           <div
             id="lastUpdatedTask"
             className="flex justify-between items-center text-xs font-normal h-7 mb-3 py-1 px-3"
           >
-            <h4>This task only</h4>
-            <p>1m</p>
+            <h4>*task name</h4>
           </div>
           <div
             id="taskUser"
@@ -99,7 +33,8 @@ function TimeEntriesDropdown({
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
               <p>Me</p>
             </div>
-            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
+            {/* total time here */}
+            {/* <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p> */}
           </div>
           {/* render time enteries */}
           {showEntries &&
@@ -121,20 +56,26 @@ function TimeEntriesDropdown({
                     id="right"
                     className="flex items-center space-x-2 relative"
                   >
-                    <button type="button" onClick={() => handleUpdateEntry(id)}>
+                    <button
+                      type="button"
+                      // onClick={() => handleUpdateEntry(id)}
+                    >
                       <EditOutlined
                         className="flex-shrink-0 h-3 w-5 text-gray-400"
                         aria-hidden="true"
                       />
                     </button>
-                    {openUpdateEntry === id ? (
-                      <UpdateTimeEntryDropdown
-                        id={id}
-                        setOpenUpdateEntry={setOpenUpdateEntry}
-                        taskId={taskId}
-                      />
-                    ) : null}
-                    <button type="button" onClick={() => handleDeleteEntry(id)}>
+                    {/* {openUpdateEntry === id ? ( */}
+                    {/* <UpdateTimeEntryDropdown
+                          id={id}
+                          setOpenUpdateEntry={setOpenUpdateEntry}
+                          taskId={taskId}
+                        />
+                      ) : null} */}
+                    <button
+                      type="button"
+                      // onClick={() => handleDeleteEntry(id)}
+                    >
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"
                         aria-hidden="true"
@@ -163,7 +104,7 @@ function TimeEntriesDropdown({
             <input
               type="text"
               name="description"
-              onChange={handleEndTimeChange}
+              // onChange={handleEndTimeChange}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
@@ -175,35 +116,35 @@ function TimeEntriesDropdown({
             <div
               id="left"
               className="flex items-center space-x-1"
-              onClick={handleTimeTracker}
+              // onClick={handleTimeTracker}
             >
-              {startTimeClicked ? (
-                <StopFilled
-                  className="text-red-400 cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
-              ) : (
-                <PlayCircleFilled
-                  className="cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
-              )}
-              <Timer active={startTimeClicked} duration={null}>
-                <Timecode />
-              </Timer>
+              {/* {startTimeClicked ? (
+                  <StopFilled
+                    className="text-red-400 cursor-pointer text-2xl"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <PlayCircleFilled
+                    className="cursor-pointer text-2xl"
+                    aria-hidden="true"
+                  />
+                )} */}
+              {/* <Timer active={startTimeClicked} duration={null}>
+                  <Timecode />
+                </Timer> */}
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
                 <TagOutlined className="text-white" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon
-                className={`${
-                  isBillable
-                    ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
-                    : 'text-white cursor-pointer text-xl rounded-full h-7'
-                }`}
+                // className={`${
+                //   isBillable
+                //     ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
+                //     : 'text-white cursor-pointer text-xl rounded-full h-7'
+                // }`}
                 aria-hidden="true"
-                onClick={() => setIsBillable(!isBillable)}
+                // onClick={() => setIsBillable(!isBillable)}
               />
             </div>
           </div>
@@ -212,5 +153,3 @@ function TimeEntriesDropdown({
     </div>
   );
 }
-
-export default TimeEntriesDropdown;
