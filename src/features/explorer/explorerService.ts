@@ -75,27 +75,43 @@ export const useGetExplorerFilesAndFolders = (folderId?: string) => {
 };
 
 // folders
-export const useGetExplorerFolders = () =>
-  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+export const useGetExplorerFolders = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
     ['explorer-folders'],
     () =>
       requestNew({
         url: 'explorer-folders',
         method: 'GET',
       }),
-    { select: (res) => res.data.folders }
+    {
+      select: (res) => res.data.folders,
+      onSuccess: (res) =>
+        res.map(
+          (folder) =>
+            queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
+          // ? query name 'explorer-folder-1' using because 'explorer-folder' is already use
+        ),
+    }
   );
+};
 
-export const useGetExplorerFolder = (folderId?: string) =>
-  useQuery<IExplorerFoldersRes>(
+export const useGetExplorerFolder = (folderId?: string, isFolder?: boolean) => {
+  // isFolder - needed only for Pilot/Information
+
+  const enabled = isFolder ? !!folderId : !!folderId && isFolder;
+
+  return useQuery<IExplorerFoldersRes>(
     ['explorer-folder', folderId],
     () =>
       requestNew({
         url: `explorer-folders/${folderId}`,
         method: 'GET',
       }),
-    { enabled: !!folderId }
+    { enabled }
   );
+};
 
 export const useGetSearchFolders = (query: string) =>
   useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
@@ -152,15 +168,21 @@ export const useGetExplorerFiles = (folderId?: string) => {
   );
 };
 
-export const useGetExplorerFile = (fileId: string | null) => {
+export const useGetExplorerFile = (
+  fileId?: string | null,
+  isFile?: boolean
+) => {
+  // isFile - needed only for Pilot/Information
+
   const queryClient = useQueryClient();
+  const enabled = isFile ? !!fileId : !!fileId && isFile;
 
   return useQuery<IExplorerFile | undefined>(
     ['explorer-file', fileId],
     () => queryClient.getQueryData(['explorer-file', fileId]),
     {
       initialData: () => queryClient.getQueryData(['explorer-file', fileId]),
-      enabled: !!fileId,
+      enabled,
     }
   );
 };

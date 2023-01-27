@@ -6,7 +6,7 @@ import {
 import { itemType } from '../../../types';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
-import { TrashIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 interface ListProps {
   item: { type: itemType; id: string };

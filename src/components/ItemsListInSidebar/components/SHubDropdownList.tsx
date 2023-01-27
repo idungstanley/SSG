@@ -4,14 +4,17 @@ import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
 import { useAppSelector } from '../../../app/hooks';
 
-export default function SHubDropdownList() {
+interface SubHubIndexProps {
+  marginLeft?: string;
+}
+export default function SHubDropdownList({ marginLeft = 'ml-4' }: SubHubIndexProps) {
   const { currSubHubId, currSubHubIdType } = useAppSelector(
     (state) => state.hub
   );
 
   return currSubHubIdType === 'subhub' ? (
     <>
-      <div className="ml-4">
+      <div className={`${marginLeft}`}>
         <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} />
         <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} />
       </div>

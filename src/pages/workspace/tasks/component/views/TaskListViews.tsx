@@ -8,23 +8,25 @@ import addColumns from '../../../lists/components/renderlist/listDetails/listDet
 import { useDispatch } from 'react-redux';
 import { setCloseTaskListView } from '../../../../../features/task/taskSlice';
 
+import '../taskData/task.css';
+
 export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
+  const { myTaskData } = useAppSelector((state) => state.task);
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
   };
-  const { myTaskData } = useAppSelector((state) => state.task);
 
   return (
     <div className=" flex items-center  ">
       <div className=" flex w-6/12 items-center gap-2 shrink-0">
         <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
           <FiArrowDownCircle
-            className={`text-gray-400 text-sm hover:text-gray-200  ${
-              closeTaskListView === false && 'rotateimg90'
+            className={` text-gray-400 text-sm hover:text-gray-200  ${
+              closeTaskListView === false ? 'rotateimg90' : null
             }`}
             aria-hidden="true"
             onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}

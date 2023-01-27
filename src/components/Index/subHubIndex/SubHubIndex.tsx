@@ -7,6 +7,7 @@ import {
   closeMenu,
   getCurrHubId,
   getCurrSubHubId,
+  getPrevName,
   getSubMenu,
   setHubParentId,
   setshowMenuDropdown,
@@ -16,9 +17,12 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
+import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
     parentId: currentItemId,
@@ -32,7 +36,14 @@ export default function SubHubIndex() {
   const { hubParentId, showMenuDropdown, currSubHubId, SubMenuId } =
     useAppSelector((state) => state.hub);
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string, name: string) => {
+    dispatch(
+      setActiveItem({
+        activeItemType: 'subhub',
+        activeItemId: id,
+        activeItemName: name,
+      })
+    );
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
@@ -49,7 +60,7 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string, e) => {
+  const handleShowMenu = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -57,6 +68,7 @@ export default function SubHubIndex() {
         showMenuDropdownType: 'subhub',
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
@@ -73,6 +85,17 @@ export default function SubHubIndex() {
     );
   };
 
+  const handleLocation = (id: string, name: string) => {
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'hub',
+        activeItemName: name,
+      })
+    );
+    navigate(`/workspace/hub/${id}`);
+  };
+
   return currentItemId === hubParentId ? (
     <div id="subhub">
       {data?.data?.hubs.length !== 0 &&
@@ -84,7 +107,7 @@ export default function SubHubIndex() {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => handleClick(subhub.id)}
+                  onClick={() => handleClick(subhub.id, subhub.name)}
                   className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
                 >
                   {currSubHubId === subhub.id ? (
@@ -101,7 +124,7 @@ export default function SubHubIndex() {
                     />
                   )}
                 </div>
-                <div className="flex min-w-0 flex-1 items-center">
+                <div className="flex items-center flex-1 min-w-0">
                   <AvatarWithInitials
                     initials={subhub.name
                       .split(' ')
@@ -117,8 +140,9 @@ export default function SubHubIndex() {
 
                   <span className="ml-4 overflow-hidden">
                     <h4
-                      className="font-medium tracking-wider capitalize truncate"
+                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '10px' }}
+                      onClick={() => handleLocation(subhub.id, subhub.name)}
                     >
                       {subhub.name}
                     </h4>
@@ -131,7 +155,7 @@ export default function SubHubIndex() {
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={(e) => handleShowMenu(subhub.id, e)}
+                  onClick={(e) => handleShowMenu(subhub.id, subhub.name, e)}
                   id="menusettings"
                 />
                 <AiOutlinePlus

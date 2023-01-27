@@ -21,7 +21,7 @@ import Search from '../search';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const { showSidebar, showExtendedBar, sidebarWidth, showHub, activePlaceId } =
+  const { showSidebar, showExtendedBar, sidebarWidth, activePlaceId } =
     useAppSelector((state) => state.workspace);
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const sidebarRef = useRef<HTMLInputElement>(null);
@@ -80,7 +80,7 @@ export default function Sidebar() {
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="md:fixed relative transition ease-in-out duration-300 delay-700 md:inset-y-0 z-10 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
+        className="md:fixed relative transition-[width] ease-in-out duration-100 delay-300 md:inset-y-0 z-10 lg:flex max-w-xs md:flex-col pr-px border-r border-gray-300"
         ref={sidebarRef}
         style={
           showSidebar

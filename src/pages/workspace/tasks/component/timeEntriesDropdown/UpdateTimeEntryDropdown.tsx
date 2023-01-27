@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CurrencyDollarIcon } from '@heroicons/react/outline';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { CalendarOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
@@ -23,11 +23,14 @@ function UpdateTimeEntryDropdown({
   const [currEntry, setCurrEntry] = useState<any>([]);
   const queryClient = useQueryClient();
 
-  const { data: getEntries } = useQuery({
-    queryKey: ['getTimeEntries', taskId],
-    queryFn: GetTimeEntriesService,
-  });
+  // const { data: getEntries } = useQuery({
+  //   queryKey: ['getTimeEntries', taskId],
+  //   queryFn: GetTimeEntriesService,
+  // });
 
+    const { data: getEntries } = GetTimeEntriesService({
+    taskId
+  });
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {
       queryClient.invalidateQueries('clocktimer' as any);

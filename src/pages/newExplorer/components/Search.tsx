@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { XIcon } from '@heroicons/react/solid';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Input } from '../../../components';
+// import { XMarkIcon } from '@heroicons/react/24/solid';
 
 interface SearchProps {
   query: string;
@@ -20,8 +21,8 @@ export default function Search({ query, setQuery, type }: SearchProps) {
         placeholder={`enter ${type} name`}
       />
       {query.length ? (
-        <XIcon
-          onClick={() => dispatch(setQuery(''))}
+        <XMarkIcon
+          onClick={() => setQuery('')}
           className="h-5 w-5 cursor-pointer stroke-current text-gray-500 absolute right-2 top-2.5"
           aria-hidden="true"
         />

@@ -57,6 +57,22 @@ export const useGetHubList = ({ query }) => {
   );
 };
 
+export const useGetHubChildren = ({ query }) => {
+  // const queryClient = useQueryClient();
+  const hubId = query;
+
+  return useQuery<any>(['hubs', hubId], async () => {
+    const data = await requestNew(
+      {
+        url: `at/hubs/${hubId}`,
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
+};
+
 //get subhub
 export const useGetSubHub = ({ parentId }) => {
   return useQuery<IResponseGetHubs>(
@@ -151,6 +167,26 @@ export const ArchiveHubService = (hub) => {
         dispatch(closeMenu());
         queryClient.invalidateQueries();
       },
+    }
+  );
+};
+
+//get hub details
+export const UseGetHubDetails = (query) => {
+  return useQuery(
+    ['hubs', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/hubs/${query.activeItemId}/details`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.activeItemType === 'hub',
     }
   );
 };

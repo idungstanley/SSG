@@ -2,14 +2,8 @@ import React from 'react';
 import {
   TrashIcon,
   ShareIcon,
-  ClipboardCopyIcon,
-  DownloadIcon,
-  ChatIcon,
-  EyeIcon,
-  ChatAlt2Icon,
-  SearchIcon,
-  PrinterIcon,
-} from '@heroicons/react/outline';
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import {
   useAppDispatch,
   useAppSelector,
@@ -19,14 +13,15 @@ import Tooltip from '../../../../../../../../components/Tooltip';
 import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
-import { setSelectedItem } from '../../../../../../../../features/chat/chatSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
-  setShowCommentsSideOver,
+  setShowPilotSideOver,
   setShowShareSideOver,
-  setShowWatchersSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { BsClipboardCheck } from 'react-icons/bs';
+import { ArrowDownIcon } from '@heroicons/react/24/solid';
+import { TbArrowsUpDown } from 'react-icons/tb';
 
 interface ToolbarProps {
   data: IStringifiedFile[];
@@ -60,43 +55,32 @@ export default function Toolbar({ data }: ToolbarProps) {
     DownloadFile('file', selectedFileId || '', selectedFileId || '');
   };
 
-  const handleShowWatchers = () =>
-    dispatch(
-      setShowWatchersSideOver({
-        show: true,
-        type: 'file',
-        id: selectedFileId || '',
-      })
-    );
-
-  const handleShowComments = () =>
-    dispatch(
-      setShowCommentsSideOver({
-        show: true,
-        type: 'file',
-        id: selectedFileId || '',
-      })
-    );
-
   const menuItems = [
     {
       icon: (
-        <DownloadIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
+        <ArrowDownIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
       ),
       onClick: handleDownload,
       label: 'Download',
       disabled: selectedIds.length === 0,
     },
     {
-      icon: <ShareIcon className="h-4 w-4 stroke-current" aria-hidden="true" />,
-      onClick: () => ({}),
+      icon: <ShareIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
+      onClick: () =>
+        dispatch(
+          setShowShareSideOver({
+            show: true,
+            id: selectedFileId || '',
+            type: 'file',
+          })
+        ),
       label: 'Share',
       disabled: !selectedFileId,
     },
     {
       icon: (
-        <ClipboardCopyIcon
-          className="h-4 w-4 stroke-current"
+        <BsClipboardCheck
+          className="w-4 h-4 stroke-current"
           aria-hidden="true"
         />
       ),
@@ -105,52 +89,35 @@ export default function Toolbar({ data }: ToolbarProps) {
       disabled: selectedIds.length === 0,
     },
     {
-      icon: (
-        <PrinterIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
-      ),
-      onClick: () => ({}),
-      label: 'Print',
-      disabled: !selectedFileId,
-    },
-    {
-      label: 'Watchers',
-      onClick: handleShowWatchers,
-      icon: <EyeIcon className="h-4 w-4" aria-hidden="true" />,
-      disabled: !selectedFileId,
-    },
-    {
-      label: 'Comments',
-      onClick: handleShowComments,
-      icon: <ChatIcon className="h-4 w-4" aria-hidden="true" />,
-      disabled: !selectedFileId,
-    },
-    {
-      label: 'Chat',
+      label: 'Pilot',
       onClick: () =>
-        dispatch(setSelectedItem({ id: selectedFileId || '', type: 'file' })),
-      icon: (
-        <ChatAlt2Icon
-          className="mr-2.5 h-4 w-4 stroke-current"
-          aria-hidden="true"
-        />
-      ),
+        dispatch(
+          setShowPilotSideOver({
+            id: selectedFileId || '',
+            type: 'file',
+            show: true,
+          })
+        ),
+      icon: <TbArrowsUpDown className="w-4 h-4" aria-hidden="true" />,
       disabled: !selectedFileId,
+    },
+    {
+      icon: <TrashIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
+      onClick: handleDelete,
+      label: 'Delete',
+      disabled: selectedIds.length === 0,
     },
   ];
 
   return (
     <div className="flex items-center justify-between px-2 py-1">
       {/* file actions */}
-      <div className="flex gap-4 items-center pt-1">
+      <div className="flex items-center gap-4 pt-1">
         {menuItems.map((button) => (
           <Tooltip key={button.label} tooltip={button.label}>
             <button
               disabled={button.disabled}
-              className={
-                button.disabled
-                  ? 'text-gray-300'
-                  : 'text-gray-500'
-              }
+              className={button.disabled ? 'text-gray-300' : 'text-gray-500'}
               onClick={button.onClick}
               type="button"
             >
@@ -162,9 +129,9 @@ export default function Toolbar({ data }: ToolbarProps) {
 
       {/* badge (items length and current index) */}
       <div className="flex items-center">
-        <div className="flex w-6 items-center cursor-pointer">
-          <SearchIcon className="h-4 w-4" />
-          <BiDotsVerticalRounded className="h-4 w-4" />
+        <div className="flex items-center w-6 cursor-pointer">
+          <MagnifyingGlassIcon className="w-4 h-4" />
+          <BiDotsVerticalRounded className="w-4 h-4" />
         </div>
         <div className="flex gap-1.5 ml-2 items-center text-xs border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
           {currentFileIndex ? (
@@ -185,7 +152,7 @@ export default function Toolbar({ data }: ToolbarProps) {
           onClick={handleDelete}
           type="button"
         >
-          <TrashIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
+          <TrashIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
         </button>
       </div>
     </div>

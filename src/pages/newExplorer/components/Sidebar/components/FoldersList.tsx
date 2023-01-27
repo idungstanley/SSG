@@ -95,9 +95,18 @@ export default function FoldersList({
                   <div
                     key={ancestor.id}
                     style={{
-                      marginLeft: (index + 1) * 10,
+                      paddingLeft: (index + 1) * 10,
                     }}
+                    className={classNames(
+                      ancestor.id === selectedFolderId
+                        ? 'bg-green-50 text-black'
+                        : '',
+                      'hover:bg-gray-100 relative'
+                    )}
                   >
+                    {ancestor.id === selectedFolderId && (
+                      <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                    )}
                     <FolderItem
                       id={ancestor.id}
                       name={ancestor.name}
@@ -110,7 +119,18 @@ export default function FoldersList({
                 ))}
 
               {/* selected folder (only if child, not root) */}
-              <div style={{ marginLeft: ancestorsLength * 10 }}>
+              <div
+                style={{ paddingLeft: ancestorsLength * 10 }}
+                className={classNames(
+                  rootFolder.id !== selectedFolder.id
+                    ? 'bg-green-50 text-black'
+                    : '',
+                  'hover:bg-gray-100 relative'
+                )}
+              >
+                {rootFolder.id !== selectedFolder.id && (
+                  <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                )}
                 {rootFolder.id !== selectedFolder.id ? (
                   <FolderItem
                     id={selectedFolder.id}
@@ -128,11 +148,20 @@ export default function FoldersList({
                 <div
                   key={subFolder.id}
                   style={{
-                    marginLeft: ancestorsLength
+                    paddingLeft: ancestorsLength
                       ? (ancestorsLength + 1) * 10
                       : 10,
                   }}
+                  className={classNames(
+                    subFolder.id === selectedFolderId
+                      ? 'bg-green-50 text-black'
+                      : '',
+                    'hover:bg-gray-100 relative'
+                  )}
                 >
+                  {subFolder.id === selectedFolderId && (
+                    <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
+                  )}
                   <FolderItem
                     id={subFolder.id}
                     parentId={subFolder.parentId}

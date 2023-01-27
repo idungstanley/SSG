@@ -7,6 +7,15 @@ type itemAction = {
   name?: string;
 };
 
+type HubItemType =
+  | 'hub'
+  | 'subHub'
+  | 'wallet'
+  | 'subwallet'
+  | 'sub2wallet'
+  | 'list'
+  | 'task';
+
 type Watchers = {
   show: boolean;
   id?: string;
@@ -23,6 +32,17 @@ type Share = {
   show: boolean;
   id?: string;
   type?: explorerItemType;
+};
+
+type Pilot = {
+  show: boolean;
+  id?: string;
+  type?: explorerItemType;
+};
+type PilotHub = {
+  show: boolean;
+  id?: string;
+  type?: HubItemType;
 };
 
 interface SideOverState {
@@ -45,6 +65,8 @@ interface SideOverState {
   watchersSideOver: Watchers;
   commentsSideOver: Comments;
   shareSideOver: Share;
+  pilotSideOver: Pilot;
+  pilotSideOverHub: PilotHub;
   itemActionForSideOver: itemAction | null;
 }
 
@@ -68,6 +90,8 @@ const initialState: SideOverState = {
   watchersSideOver: { show: false },
   commentsSideOver: { show: false },
   shareSideOver: { show: false },
+  pilotSideOver: { show: false },
+  pilotSideOverHub: { show: true },
   itemActionForSideOver: null,
 };
 
@@ -180,6 +204,12 @@ export const slideOverSlice = createSlice({
     setShowShareSideOver: (state, action: PayloadAction<Share>) => {
       state.shareSideOver = action.payload;
     },
+    setShowPilotSideOver: (state, action: PayloadAction<Pilot>) => {
+      state.pilotSideOver = action.payload;
+    },
+    setShowPilotSideOverHub: (state, action: PayloadAction<PilotHub>) => {
+      state.pilotSideOverHub = action.payload;
+    },
   },
 });
 
@@ -204,6 +234,8 @@ export const {
   setEditListSlideOverVisibility,
   setShowCommentsSideOver,
   setShowShareSideOver,
+  setShowPilotSideOver,
+  setShowPilotSideOverHub,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

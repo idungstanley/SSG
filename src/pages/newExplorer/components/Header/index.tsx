@@ -1,13 +1,13 @@
 import React from 'react';
-import {
-  ArrowCircleRightIcon,
-  ArrowCircleLeftIcon,
-  PlusIcon,
-  UploadIcon,
-} from '@heroicons/react/outline';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
+import { TbArrowRotaryFirstLeft } from 'react-icons/tb';
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from '@heroicons/react/24/solid';
 
 const SquareStackIcon = (
   <svg
@@ -29,9 +29,28 @@ const SquareStackIcon = (
 export default function Header() {
   const dispatch = useAppDispatch();
 
-  const { settings } = useAppSelector((state) => state.account);
-
-  const { showPreview } = settings;
+  const navigationButtons = [
+    {
+      id: 1,
+      onClick: () => ({}),
+      icon: (
+        <ArrowLeftCircleIcon
+          className="h-8 w-8 stroke-current text-gray-400"
+          aria-hidden="true"
+        />
+      ),
+    },
+    {
+      id: 2,
+      onClick: () => ({}),
+      icon: (
+        <ArrowRightCircleIcon
+          className="h-8 w-8 stroke-current text-gray-400"
+          aria-hidden="true"
+        />
+      ),
+    },
+  ];
 
   const rightItems = [
     {
@@ -47,8 +66,8 @@ export default function Header() {
     {
       label: 'Upload',
       icon: (
-        <UploadIcon
-          className="h-4 w-4 stroke-current text-gray-500"
+        <TbArrowRotaryFirstLeft
+          className="h-6 w-6 stroke-current text-gray-500"
           aria-hidden="true"
         />
       ),

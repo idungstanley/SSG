@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { UserRemoveIcon } from '@heroicons/react/outline';
+import { UserMinusIcon } from '@heroicons/react/24/outline';
 import {
   AvatarWithInitials,
   StatusDot,
@@ -28,7 +28,9 @@ export default function Row({ item, isGroups }: RowProps) {
   };
 
   const member = isGroups ? item.team_member_group : item.team_member;
-  const name = isGroups ? item.team_member_group.name : item.team_member.user.name;
+  const name = isGroups
+    ? item.team_member_group.name
+    : item.team_member.user.name;
   const secondTitle = isGroups ? 'Groups' : item.team_member.user.email;
 
   return (
@@ -46,9 +48,7 @@ export default function Row({ item, isGroups }: RowProps) {
             />
           </div>
           <div className="ml-4">
-            <div className="font-medium text-gray-900">
-              {name}
-            </div>
+            <div className="font-medium text-gray-900">{name}</div>
             <div className="text-gray-500">{secondTitle}</div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function Row({ item, isGroups }: RowProps) {
                 label: 'Remove access',
                 onClick: removeAccess,
                 icon: (
-                  <UserRemoveIcon
+                  <UserMinusIcon
                     className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

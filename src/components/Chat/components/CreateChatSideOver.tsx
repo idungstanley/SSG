@@ -9,9 +9,10 @@ export default function CreateChatSideOver() {
   const dispatch = useAppDispatch();
   const { showCreateChatSideOver } = useAppSelector((state) => state.chat);
   const [name, setName] = useState('');
-  const { selectedItem } = useAppSelector((state) => state.chat);
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { id, type } = pilotSideOver;
 
-  const { mutate: onCreate } = useCreateChat(selectedItem?.id);
+  const { mutate: onCreate } = useCreateChat(id);
 
   const onClose = () => {
     dispatch(setShowCreateChatSideOver(false));
@@ -21,10 +22,10 @@ export default function CreateChatSideOver() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (selectedItem) {
+    if (id && type) {
       onCreate({
-        id: selectedItem.id,
-        type: selectedItem.type,
+        id,
+        type,
         name,
       });
     }

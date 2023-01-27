@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { SelectorIcon } from '@heroicons/react/solid';
 import Badge from '../Badge';
 import { classNames } from '../../utils';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 export interface IOption {
   id: string | null;
@@ -19,20 +19,20 @@ interface SelectMenuWithAvatarProps {
   showSelectPlaceholder?: boolean;
 }
 
-// interface OptionsType {
-//   id: string | null;
-//   name: string;
-//   avatar?: string;
-//   badge?: string;
-// }
+interface OptionsType {
+  id: string | null;
+  name: string;
+  avatar?: string;
+  badge?: string;
+}
 
-// interface withAvatarType {
-//   options: OptionsType[];
-//   selectedId: string;
-//   label: string;
-//   onChange: ()=> void;
-//   showSelectPlaceholder: boolean;
-// }
+interface withAvatarType {
+  options: OptionsType[];
+  selectedId: string;
+  label: string;
+  onChange: () => void;
+  showSelectPlaceholder: boolean;
+}
 export default function SelectMenuWithAvatar({
   options,
   selectedId,
@@ -83,7 +83,7 @@ export default function SelectMenuWithAvatar({
                   )}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 ml-3 pointer-events-none">
-                  <SelectorIcon
+                  <ChevronDownIcon
                     className="w-5 h-5 text-gray-400"
                     aria-hidden="true"
                   />

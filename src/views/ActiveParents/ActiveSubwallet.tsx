@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getWalletService } from '../../features/wallet/walletService';
+import { getWalletService, getWalletServices } from '../../features/wallet/walletService';
 import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
 import { useDispatch } from 'react-redux';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
@@ -14,28 +14,38 @@ interface SubWalletIndexProps {
 }
 
 function ActiveSubWallet({
-  walletParentId,
   padding = 'pl-8',
 }: SubWalletIndexProps) {
   const dispatch = useDispatch();
-  const [wallet2ParentId, setWallet2ParentId] = useState('');
+  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector(
+    (state) => state.wallet
+  );
+
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
-  const { data: subwallet } = useQuery({
-    queryKey: ['subwalletlist', [walletParentId]],
-    queryFn: getWalletService,
+  const [currWalId, setCurrWalId] = useState('');
+  const { data: subwallet } = getWalletServices({
+    Archived: toggleArchiveWallet,
+    parentId: currentWalletParentId,
   });
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+
+  const handleShowSubWallet = (id: string) => {
+    setShowSubWallet2(id);
+    setCurrWalId(id);
+    if (showSubWallet2 === id) {
+      return setShowSubWallet2(null);
+    }
+  };
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`/workspace/wallet/${id}`);
-    setWallet2ParentId(id);
-    if (showSubWallet2 === id) {
-      return setShowSubWallet2(null);
-    }
-    setShowSubWallet2(id);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+  };
+
+  const handleListLocation = (id: string) => {
+    navigate(`/workspace/list/${id}`);
   };
 
   return (

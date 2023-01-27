@@ -44,7 +44,7 @@ export const getWalletService = (data) => {
 
 export const getWalletServices = (data: {
   hubId?: string | null;
-  Archived: boolean;
+  Archived?: boolean;
   parentId?: string | null;
 }) => {
   // const queryClient = useQueryClient();
@@ -141,6 +141,26 @@ export const UseArchiveWalletService = (wallet) => {
         dispatch(closeMenu());
         queryClient.invalidateQueries();
       },
+    }
+  );
+};
+
+//get walllet details
+export const UseGetWalletDetails = (query) => {
+  return useQuery(
+    ['hubs', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/wallets/${query.activeItemId}`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.activeItemType === 'wallet',
     }
   );
 };

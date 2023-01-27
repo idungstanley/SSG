@@ -1,6 +1,6 @@
 import React from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Combobox } from '@headlessui/react';
 import { Spinner } from '../../common';
 import { classNames } from '../../utils';
@@ -56,7 +56,10 @@ export default function ComboBoxWithAvatar({
           }
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none">
-          <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+          <ChevronUpDownIcon
+            className="w-5 h-5 text-gray-400"
+            aria-hidden="true"
+          />
         </Combobox.Button>
         {options.length > 0 && (
           <Combobox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">

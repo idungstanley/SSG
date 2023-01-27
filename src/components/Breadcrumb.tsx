@@ -1,5 +1,4 @@
 import React from 'react';
-import { ChevronRightIcon, FolderIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { VscTriangleRight } from 'react-icons/vsc';
 import { FaFolderOpen } from 'react-icons/fa';
@@ -18,7 +17,7 @@ interface BreadcrumbProps {
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
   return (
-    <nav className="flex bg-white py-2 h-7" aria-label="Breadcrumb">
+    <nav className="flex py-2 bg-white h-7" aria-label="Breadcrumb">
       <ol className="flex w-full pl-2">
         {rootIcon && (
           <li className="flex pl-2">
@@ -35,19 +34,19 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
         )}
         <div className="flex items-center pl-1">
           <FaFolderOpen
-            className="h-4 w-4 stroke-current text-gray-400"
+            className="w-4 h-4 text-gray-400 stroke-current"
             aria-hidden="true"
           />
           {pages?.map((page) => (
             <li key={page.name} className="flex">
               <div className="flex items-center">
                 <VscTriangleRight
-                  className="h-3 w-3 stroke-current text-gray-400"
+                  className="w-3 h-3 text-gray-400 stroke-current"
                   aria-hidden="true"
                 />
                 <Link
                   to={page.href || ''}
-                  className="flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-600 cursor-none select-none"
+                  className="flex items-center gap-1 text-xs font-semibold text-gray-500 select-none hover:text-gray-600 cursor-none"
                   aria-current="page"
                 >
                   <span>{page.name}</span>

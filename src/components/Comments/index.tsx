@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   useCreateItemComment,
   useDeleteItemComment,
@@ -19,7 +19,8 @@ export default function Comments() {
   const dispatch = useAppDispatch();
   const { type, id, show } = commentsSideOver;
 
-  const [message, setMessage] = useState('');
+  const messageRef = useRef<HTMLInputElement>(null);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<selectedUserType[]>([]);
   const onClose = () => dispatch(setShowCommentsSideOver({ show: false }));
@@ -42,7 +43,9 @@ export default function Comments() {
   ) => {
     e.preventDefault();
 
-    if (message.length > 2) {
+    if (messageRef.current && messageRef.current.value.length > 2) {
+      const message = messageRef.current.value;
+
       if (editId) {
         editComment({
           id: editId,
@@ -59,8 +62,9 @@ export default function Comments() {
           type: type || 'file',
           id: id || '',
         });
+
+        messageRef.current.value = '';
       }
-      setMessage('');
       setSelectedUsers([]);
     }
   };
@@ -72,7 +76,12 @@ export default function Comments() {
   };
 
   const onEdit = (id: string, value: string, user: selectedUserType[]) => {
-    setMessage(value.replaceAll(mentionTeamMemberInMessageReg, ''));
+    if (messageRef.current) {
+      messageRef.current.value = value.replaceAll(
+        mentionTeamMemberInMessageReg,
+        ''
+      );
+    }
     setEditId(id);
     setSelectedUsers([...user]);
   };
@@ -80,9 +89,8 @@ export default function Comments() {
   return (
     <SideOver show={show} onClose={onClose} title="Comments">
       <Form
-        setMessage={setMessage}
+        messageRef={messageRef}
         handleSubmit={handleSubmit}
-        message={message}
         setShowDropdown={setShowDropdown}
       />
       <Dropdown

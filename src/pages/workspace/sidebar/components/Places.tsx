@@ -13,7 +13,7 @@ import Hubs from '../../hubs';
 import Inbox from '../../inbox';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
-import inboxIcon from '../../../../assets/branding/inbox.png';
+import InboxIcon from '../../../../assets/branding/inbox.png';
 import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
@@ -24,7 +24,10 @@ import commerceIcon from '../../../../assets/branding/commerce.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { BsPlusLg } from 'react-icons/bs';
-import { FolderAddIcon, SearchIcon } from '@heroicons/react/outline';
+import {
+  FolderPlusIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { useParams } from 'react-router-dom';
@@ -59,7 +62,7 @@ function Places() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderAddIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="w-5 h-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({
@@ -100,10 +103,10 @@ function Places() {
       ),
     },
     {
-      name: 'intrail',
+      name: 'in-tray',
       id: 3,
       place: <Inbox />,
-      source: inboxIcon,
+      source: InboxIcon,
       plusIcon: (
         <BsPlusLg
           className="w-2.5 h-2.5"
@@ -117,7 +120,7 @@ function Places() {
       name: 'Cabinet',
       id: 4,
       place: <Extendedbar />,
-      icon: <BiCabinet className="h-5 text-lg mr-4" />,
+      icon: <BiCabinet className="h-5 mr-4 text-lg" />,
       plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
     },
     {
@@ -222,7 +225,7 @@ function Places() {
 
   return (
     <div className="mt-2">
-      <ul aria-labelledby="projects-headline ">
+      <ul aria-labelledby="projects-headline relative">
         {secondaryNavigation.map((item, index) => (
           <div key={item.id}>
             <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
@@ -282,14 +285,14 @@ function Places() {
                     placeholder="Search for List, Hubs, & Wallets"
                     onChange={(e) => dispatch(setQuery(e.target.value))}
                     value={query}
-                    className="place w-full h-14 pl-6 border-none bg-gray-200 hover:bg-gray-100 border-transparent focus:border-transparent focus:ring-0"
+                    className="w-full pl-6 bg-gray-200 border-transparent border-none place h-14 hover:bg-gray-100 focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
-                    className="absolute w-6 top-5 h-4 right-0 text-green-500"
+                    className="absolute right-0 w-6 h-4 text-green-500 top-5"
                     onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                   />
                   <GoSettings
-                    className="left-0 top-5 absolute w-6 h-4 text-green-500"
+                    className="absolute left-0 w-6 h-4 text-green-500 top-5"
                     aria-hidden="true"
                   />
                 </div>
@@ -305,7 +308,7 @@ function Places() {
                       showSidebar ? 'block' : 'hidden'
                     } flex items-center space-x-1`}
                   >
-                    <SearchIcon
+                    <MagnifyingGlassIcon
                       className="w-3 h-4"
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}

@@ -80,7 +80,7 @@ export default function FilesListWithToolbar() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
-  console.log(fileSelectWidth);
+  // console.log(fileSelectWidth);
 
   return (
     <div
@@ -108,13 +108,8 @@ export default function FilesListWithToolbar() {
           </div>
 
           {/* file list */}
-          <FilesList data={sortedItems} query={query} setQuery={setQuery} />
+          <FilesList data={sortedItems} />
         </div>
-        <div
-          className="justify-self-end absolute shrink-0 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
-          onMouseDown={startResizing}
-          style={{ cursor: 'col-resize', width: '3px' }}
-        ></div>
       </section>
     </div>
   );

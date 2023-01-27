@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { SearchIcon } from '@heroicons/react/solid';
-import { XIcon } from '@heroicons/react/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setSearchQuery } from '../../../../../features/search/searchSlice';
 import SavedSearches from './components';
@@ -48,7 +48,10 @@ export default function SearchInput() {
     <div className="flex-1 flex justify-center lg:justify-end w-full px-2 lg:px-6">
       <div className="relative text-indigo-200 focus-within:text-gray-400 flex items-center w-full">
         <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <MagnifyingGlassIcon
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
         </div>
         <input
           id="search"
@@ -62,7 +65,7 @@ export default function SearchInput() {
         />
 
         {searchQuery.length ? (
-          <XIcon
+          <XMarkIcon
             onClick={handleReset}
             className="h-5 w-5 text-gray-400 absolute right-9 cursor-pointer"
             aria-hidden="true"

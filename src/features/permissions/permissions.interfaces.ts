@@ -1,4 +1,4 @@
-export interface IDockOrGroupMember {
+export interface IPermissionMember {
   id: string;
   file_id?: string;
   folder_id?: string;
@@ -26,13 +26,15 @@ export interface IDockOrGroupMember {
     initials: string;
     created_at: string;
     updated_at: string;
-  }
+  };
 }
 
-export interface IDataAccessReq {
-  data: {
-    folder_team_members?: IDockOrGroupMember[];
-    folder_team_member_groups?: IDockOrGroupMember[];
-    file_members?: IDockOrGroupMember[];
-  };
+export interface IPermissions {
+  folder_team_members?: IPermissionMember[];
+  folder_team_member_groups?: IPermissionMember[];
+  file_members?: IPermissionMember[];
+}
+
+export interface IDataAccessRes {
+  data: IPermissions;
 }

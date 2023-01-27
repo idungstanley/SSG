@@ -11,6 +11,7 @@ import { useAppSelector } from '../../app/hooks';
 import ExpandedNav from '../../views/ExpandedNav';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
+import Pilot from './components/Pilot';
 
 export default function NewExplorerPage() {
   const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
@@ -54,6 +55,7 @@ export default function NewExplorerPage() {
       <Watchers />
       <Comments />
       <ShareItemModal />
+      <Pilot />
     </>
   );
 }

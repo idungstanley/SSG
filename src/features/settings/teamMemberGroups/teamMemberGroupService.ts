@@ -4,8 +4,9 @@ import requestNew from '../../../app/requestNew';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team member groups
-export const useGetTeamMemberGroups = (page: number) => {
+export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
   const queryClient = useQueryClient();
+  const enabled = notFetch ? notFetch : true;
 
   return useQuery<ITeamMembersAndGroupsReq>(
     ['team_member_groups', { page }],
@@ -24,6 +25,7 @@ export const useGetTeamMemberGroups = (page: number) => {
       );
     },
     {
+      enabled,
       onSuccess: (data) => {
         data.data.team_member_groups?.map((teamMemberGroup) =>
           queryClient.setQueryData(

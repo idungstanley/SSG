@@ -6,7 +6,7 @@ import {
   TagOutlined,
 } from '@ant-design/icons';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/outline';
+import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
@@ -47,9 +47,8 @@ function TimeEntriesDropdown({
 
   queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
 
-  const { data: getEntries } = useQuery({
-    queryKey: ['getTimeEntries', taskId],
-    queryFn: GetTimeEntriesService,
+  const { data: getEntries } = GetTimeEntriesService({
+    taskId,
   });
 
   useQuery({

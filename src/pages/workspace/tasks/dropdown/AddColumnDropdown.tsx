@@ -21,7 +21,7 @@ export default function AddColumnDropdown({
   return (
     <div className="">
       <div
-        className=" absolute top-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto "
+        className=" absolute top-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto z-30 "
         style={{ left: "-40px", height: "500px" }}
       >
         <div className="flex py-2 px-2 justify-around">

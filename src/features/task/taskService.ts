@@ -13,7 +13,7 @@ export const createTaskService = (data) => {
         name: data.name,
         description: data.description,
         list_id: data.showMenuDropdown || data.getListId,
-        // parent_id: data.parentTaskId,
+        parent_id: data.parentTaskId,
       },
     },
     true
@@ -39,7 +39,7 @@ export const getOneTaskServices = ({ task_id }) => {
 
   const queryClient = useQueryClient();
   return useQuery(
-    ['task'],
+    ['task', { task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
@@ -51,7 +51,7 @@ export const getOneTaskServices = ({ task_id }) => {
       return data;
     },
     {
-      // enabled: getterTrigger,
+      enabled: task_id != null,
       // onSuccess: (data) => {
       //   const taskData = data.data.tasks.map((task) => {
       //     queryClient.setQueryData(['task', task.id], task);
@@ -95,6 +95,38 @@ export const getTaskListService = ({ listId }) => {
 };
 // getTaskListService();
 
+export const getTaskListService2 = (query: { parentId: string | null }) => {
+  const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { query: query.parentId }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'at/tasks/list',
+          method: 'POST',
+          params: {
+            parent_id: query.parentId,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.parentId != null,
+      onSuccess: () => {
+        // const taskData = data.data.tasks.map((task) => {
+        //   queryClient.setQueryData(['task', task.id], task);
+        //   return { ...task };
+        // });
+        // dispatch(getTaskData(taskData));
+      },
+    }
+  );
+};
+
 export const createTimeEntriesService = (data) => {
   const taskID = data.queryKey[1];
   const response = requestNew(
@@ -126,20 +158,46 @@ export const EndTimeEntriesService = (data) => {
   return response;
 };
 
-export const GetTimeEntriesService = (data) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'time-entries',
-      method: 'GET',
-      params: {
-        type: 'task',
-        id: taskID,
-      },
+// export const GetTimeEntriesService = (data) => {
+//   const taskID = data.queryKey[1];
+//   const response = requestNew(
+//     {
+//       url: 'time-entries',
+//       method: 'GET',
+//       params: {
+//         type: 'task',
+//         id: taskID,
+//       },
+//     },
+//     true
+//   );
+//   return response;
+// };
+
+export const GetTimeEntriesService = ({ taskId }) => {
+  const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
+  return useQuery(
+    ['timeclock', taskId],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'time-entries',
+          method: 'GET',
+          params: {
+            type: 'task',
+            id: taskId,
+          },
+        },
+        true
+      );
+      return data;
     },
-    true
+    {
+      initialData: queryClient.getQueryData(['timeclock', taskId]),
+      enabled: taskId != null,
+    }
   );
-  return response;
 };
 
 export const UpdateTimeEntriesService = (data) => {

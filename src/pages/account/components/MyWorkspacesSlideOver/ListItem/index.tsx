@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment-timezone';
-import { CheckCircleIcon } from '@heroicons/react/solid';
-import { LogoutIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import { switchWorkspaceService } from '../../../../../features/account/accountService';
 import {
   selectCurrentWorkspaceId,
@@ -87,7 +87,7 @@ function ListItem({ userWorkspace }: ListItemProps) {
                 aria-hidden="true"
               />
             ) : (
-              <LogoutIcon
+              <ArrowRightOnRectangleIcon
                 className="mr-1 -ml-2 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />

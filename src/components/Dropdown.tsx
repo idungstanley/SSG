@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../utils';
 
 interface itemType {
-  label: string
-  onClick: () => void
-  icon: string | JSX.Element
+  label: string;
+  onClick: () => void;
+  icon: string | JSX.Element;
 }
 interface DropDownProps {
-  items: itemType[]
+  items: itemType[];
 }
 
 export default function Dropdown({ items }: DropDownProps) {
@@ -17,7 +17,7 @@ export default function Dropdown({ items }: DropDownProps) {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex items-center text-gray-400 rounded-full hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-          <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
+          <EllipsisVerticalIcon className="w-5 h-5" aria-hidden="true" />
         </Menu.Button>
       </div>
 
