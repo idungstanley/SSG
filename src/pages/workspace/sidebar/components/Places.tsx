@@ -20,7 +20,9 @@ import {
   MapIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  useNavigate,
+} from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
 // import { FaWpforms } from 'react-icons/fa';
@@ -37,22 +39,16 @@ function Places() {
   const { activePlaceId } = useAppSelector((state) => state.workspace);
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const dispatch = useDispatch();
 
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
 
-    const selectedRoute = pathname.split('/')[1]; // 'new-explorer', 'workspace', etc
-
     // required for all modals, side-overs in the explorer
     if (id === 4) {
-      if (selectedRoute === 'new-explorer') {
-        navigate('/workspace');
-      } else {
-        navigate('/new-explorer');
-      }
+      navigate('/new-explorer');
+
     }
   };
 
@@ -126,12 +122,6 @@ function Places() {
       // source: commerceIcon,
       icon: <BriefcaseIcon className="h-5 w-5" />,
     },
-    // { // ! copy item with id 5
-    //   name: 'Forms',
-    //   id: 11,
-    //   place: <Directory />,
-    //   source: formsIcon,
-    // },
   ];
 
   return (
@@ -145,12 +135,15 @@ function Places() {
             place.place
           ) : (
             <PlaceItem
-              // icon={place.icon}
               icon={
                 place.icon ? (
                   place.icon
                 ) : (
-                  <img src={place.source} alt="Hub Icon" className="h-4 w-4" />
+                  <img
+                    src={place.source}
+                    alt={name + 'icon'}
+                    className="h-4 w-4"
+                  />
                 )
               }
               label={place.name}

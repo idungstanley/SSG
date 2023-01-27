@@ -1,12 +1,13 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import { classNames } from '../../../../utils';
 
 interface PlaceItemProps {
   label: string;
-  onClick?: () => void;
+  onClick?: () => void; // not required if already clicked in place
   icon: JSX.Element;
   rightContent?: ReactNode;
   bottomContent?: ReactNode;
@@ -20,9 +21,15 @@ export default function PlaceItem({
   bottomContent,
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const isActivePlace = !onClick;
 
-  const resetSelectedPlace = () => dispatch(setActivePlaceId(null));
+  const resetSelectedPlace = () => {
+    dispatch(setActivePlaceId(null));
+
+    navigate('/workspace');
+  };
 
   return (
     <li
@@ -52,6 +59,7 @@ export default function PlaceItem({
           </span>
         </div>
       </div>
+
       {bottomContent}
     </li>
   );
