@@ -113,7 +113,7 @@ function ExpandedNav() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
-  if (extendedSidebarWidth < 140 || activePlaceId === (0 || true)) {
+  if (extendedSidebarWidth < 140 || !activePlaceId) {
     dispatch(setShowExtendedBar(false));
     dispatch(setExtendedSidebarWidth(240));
   }

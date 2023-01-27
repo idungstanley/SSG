@@ -1,10 +1,12 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode } from 'react';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import { classNames } from '../../../../utils';
 
 interface PlaceItemProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon: JSX.Element;
   rightContent?: ReactNode;
   bottomContent?: ReactNode;
@@ -17,7 +19,10 @@ export default function PlaceItem({
   rightContent,
   bottomContent,
 }: PlaceItemProps) {
-  const isActivePlace = rightContent || bottomContent;
+  const dispatch = useAppDispatch();
+  const isActivePlace = !onClick;
+
+  const resetSelectedPlace = () => dispatch(setActivePlaceId(null));
 
   return (
     <li
@@ -29,7 +34,7 @@ export default function PlaceItem({
     >
       <div className=" flex justify-between w-full">
         <div
-          onClick={onClick}
+          onClick={isActivePlace ? resetSelectedPlace : onClick}
           className="flex gap-5 items-center w-full cursor-pointer"
         >
           {icon}
@@ -38,7 +43,7 @@ export default function PlaceItem({
         <div className="flex gap-2 items-center group-hover:opacity-100 opacity-0 transition">
           {rightContent}
 
-          <span onClick={onClick}>
+          <span onClick={isActivePlace ? resetSelectedPlace : onClick}>
             {isActivePlace ? (
               <ChevronDownIcon className="h-5 w-5 cursor-pointer" />
             ) : (
