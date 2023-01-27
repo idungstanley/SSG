@@ -20,7 +20,6 @@ import {
 import {
   setArchiveHub,
   setDelHub,
-  setGlobalRef,
   setshowMenuDropdown,
   setSubDropdownMenu,
 } from '../../features/hubs/hubSlice';
@@ -78,7 +77,6 @@ export default function MenuDropdown() {
   const { delList, archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    dispatch(setGlobalRef(ref.current));
     const checkClickedOutSide = (e) => {
       if (
         showMenuDropdown != null &&

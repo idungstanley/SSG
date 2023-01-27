@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface HubState {
   hub: string[];
@@ -18,7 +18,7 @@ interface HubState {
   SubMenuType: null;
   hubParentId: null;
   refType: null;
-  ref: null;
+  prevName: any;
 }
 
 const initialState: HubState = {
@@ -39,11 +39,11 @@ const initialState: HubState = {
   SubMenuType: null,
   hubParentId: null,
   refType: null,
-  ref: null,
+  prevName: "",
 };
 
 export const hubSlice = createSlice({
-  name: 'hub',
+  name: "hub",
   initialState,
   reducers: {
     createHub(state, action) {
@@ -51,9 +51,6 @@ export const hubSlice = createSlice({
     },
     getHub(state, action) {
       state.hub = action.payload;
-    },
-    setGlobalRef(state, action) {
-      state.ref = action.payload;
     },
     setDelHub(state, action) {
       state.delHub = action.payload;
@@ -101,6 +98,9 @@ export const hubSlice = createSlice({
     getMenuRef(state, action) {
       state.refType = action.payload;
     },
+    getPrevName(state, action) {
+      state.prevName = action.payload;
+    },
     chechIfHub: (state) => state,
   },
 });
@@ -123,6 +123,6 @@ export const {
   setHubParentId,
   closeMenu,
   getMenuRef,
-  setGlobalRef,
+  getPrevName,
 } = hubSlice.actions;
 export default hubSlice.reducer;

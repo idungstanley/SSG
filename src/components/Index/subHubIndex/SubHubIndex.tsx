@@ -7,6 +7,7 @@ import {
   closeMenu,
   getCurrHubId,
   getCurrSubHubId,
+  getPrevName,
   getSubMenu,
   setHubParentId,
   setshowMenuDropdown,
@@ -59,7 +60,7 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string, e) => {
+  const handleShowMenu = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -67,6 +68,7 @@ export default function SubHubIndex() {
         showMenuDropdownType: 'subhub',
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
@@ -153,7 +155,7 @@ export default function SubHubIndex() {
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={(e) => handleShowMenu(subhub.id, e)}
+                  onClick={(e) => handleShowMenu(subhub.id, subhub.name, e)}
                   id="menusettings"
                 />
                 <AiOutlinePlus

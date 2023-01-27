@@ -1,27 +1,31 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
   setGetSubTaskId,
   setShowTaskNavigation,
+  setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
+} from '../../../../../features/task/taskSlice';
+import {
+  setActiveItem
+} from '../../../../../features/workspace/workspaceSlice';
+import { MdDragIndicator } from 'react-icons/md';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
 import {
   CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from "@ant-design/icons";
-import { useAppSelector } from "../../../../../app/hooks";
-import { useNavigate } from "react-router-dom";
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import "./task.css";
+} from '@ant-design/icons';
+import { useAppSelector } from '../../../../../app/hooks';
+import { useNavigate } from 'react-router-dom';
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import './task.css';
 interface TaskDataProps {
   task: any;
 }
@@ -42,9 +46,21 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskModal = (id: string) => {
-    setOpenTaskModal(true);
-    navigate(`/workspace/t/${id}`);
+  // const handleTaskModal = (id: string) => {
+  //   setOpenTaskModal(true);
+  //   navigate(`/workspace/t/${id}`);
+  // };
+
+  const handleTaskPilot = (id: string, name: string) => {
+    dispatch(setTaskIdForPilot(id));
+      dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name,
+      })
+    );
+    // dispatch(ilotTrigger)
   };
 
   const handleAssigneeModal = (id: string) => {
@@ -119,10 +135,10 @@ export default function TaskData({ task }: TaskDataProps) {
       />
       <div className="flex items-center w-6/12 group">
         {/* data and input */}
-        <div onClick={() => handleTaskModal(task.id)}>
+        <div onClick={() => handleTaskPilot(task.id, task.name)}>
           {/* {i == 0 && <h1>Tasks</h1>} */}
 
-          <p className="capitalize text-xs font-semibold leading-8 pl-5	">
+          <p className="capitalize text-xs font-semibold leading-8 pl-5 cursor-pointer">
             {task.name}
           </p>
         </div>
@@ -148,7 +164,7 @@ export default function TaskData({ task }: TaskDataProps) {
       <div className="relative ">
         <span
           className="absolute rounded-full text-center	text-xs "
-          style={{ left: "-40px" }}
+          style={{ left: '-40px' }}
         >
           {/* assignees here */}
 

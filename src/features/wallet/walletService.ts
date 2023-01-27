@@ -144,3 +144,23 @@ export const UseArchiveWalletService = (wallet) => {
     }
   );
 };
+
+//get walllet details
+export const UseGetWalletDetails = (query) => {
+  return useQuery(
+    ['hubs', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/wallets/${query.activeItemId}`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.activeItemType === 'wallet',
+    }
+  );
+};

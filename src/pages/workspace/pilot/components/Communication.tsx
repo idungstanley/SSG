@@ -23,7 +23,6 @@ const communicationOptions = [
 export default function Commnunication() {
   const { showPilot } = useAppSelector((state) => state.workspace);
   const [activeId, setActiveId] = useState<number | null>(null);
-  console.log(activeId);
   const handleActiveId = (id: number) => {
     setActiveId(id);
   };
