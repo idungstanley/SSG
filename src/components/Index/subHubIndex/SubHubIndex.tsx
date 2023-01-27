@@ -1,22 +1,23 @@
-import React from 'react';
-import { useGetSubHub } from '../../../features/hubs/hubService';
-import { useAppSelector } from '../../../app/hooks';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import { useGetSubHub } from "../../../features/hubs/hubService";
+import { useAppSelector } from "../../../app/hooks";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { useDispatch } from "react-redux";
 import {
   closeMenu,
   getCurrHubId,
   getCurrSubHubId,
+  getPrevName,
   getSubMenu,
   setHubParentId,
   setshowMenuDropdown,
-} from '../../../features/hubs/hubSlice';
-import AvatarWithInitials from '../../avatar/AvatarWithInitials';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import MenuDropdown from '../../Dropdown/MenuDropdown';
-import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
-import SubDropdown from '../../Dropdown/SubDropdown';
-import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+} from "../../../features/hubs/hubSlice";
+import AvatarWithInitials from "../../avatar/AvatarWithInitials";
+import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
+import MenuDropdown from "../../Dropdown/MenuDropdown";
+import SHubDropdownList from "../../ItemsListInSidebar/components/SHubDropdownList";
+import SubDropdown from "../../Dropdown/SubDropdown";
+import { setActiveItem } from "../../../features/workspace/workspaceSlice";
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function SubHubIndex() {
     parentId: currentItemId,
   });
 
-  if (status === 'success') {
+  if (status === "success") {
     data?.data?.hubs.map(({ parent_id }) =>
       dispatch(setHubParentId(parent_id))
     );
@@ -34,11 +35,17 @@ export default function SubHubIndex() {
     useAppSelector((state) => state.hub);
 
   const handleClick = (id: string, name: string) => {
-    dispatch(setActiveItem({ activeItemType: 'subhub', activeItemId: id, activeItemName: name }));
+    dispatch(
+      setActiveItem({
+        activeItemType: "subhub",
+        activeItemId: id,
+        activeItemName: name,
+      })
+    );
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
-        currSubHubIdType: 'subhub',
+        currSubHubIdType: "subhub",
       })
     );
     if (currSubHubId === id) {
@@ -51,16 +58,17 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string, e) => {
+  const handleShowMenu = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'subhub',
+        showMenuDropdownType: "subhub",
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (e.target.id == "menusettings") {
         dispatch(closeMenu());
       }
     }
@@ -70,7 +78,7 @@ export default function SubHubIndex() {
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'subhub',
+        SubMenuType: "subhub",
       })
     );
   };
@@ -106,10 +114,10 @@ export default function SubHubIndex() {
                 <div className="flex items-center flex-1 min-w-0">
                   <AvatarWithInitials
                     initials={subhub.name
-                      .split(' ')
+                      .split(" ")
                       .slice(0, 2)
                       .map((word) => word[0])
-                      .join('')
+                      .join("")
                       .toUpperCase()}
                     height="h-4"
                     width="w-4"
@@ -120,7 +128,7 @@ export default function SubHubIndex() {
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
-                      style={{ fontSize: '10px' }}
+                      style={{ fontSize: "10px" }}
                     >
                       {subhub.name}
                     </h4>
@@ -133,7 +141,7 @@ export default function SubHubIndex() {
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
-                  onClick={(e) => handleShowMenu(subhub.id, e)}
+                  onClick={(e) => handleShowMenu(subhub.id, subhub.name, e)}
                   id="menusettings"
                 />
                 <AiOutlinePlus
