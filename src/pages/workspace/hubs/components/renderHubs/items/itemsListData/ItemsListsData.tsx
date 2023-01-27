@@ -6,7 +6,7 @@ interface ItemsListsDataProps {
 }
 export default function ItemsListsData({ listId }: ItemsListsDataProps) {
   const { data } = getTaskListService({ listId });
-  console.log(data);
+
   return (
     <section>
       {/* lists */}

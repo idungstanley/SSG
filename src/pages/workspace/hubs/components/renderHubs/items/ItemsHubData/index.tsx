@@ -18,13 +18,17 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
+import { getTaskListService } from "../../../../../../../features/task/taskService";
 import ListTemplate from "./ListTemplate";
+import { useParams } from "react-router-dom";
 
 interface ItemsHubDataProps {
   hubId: string | null;
 }
 export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
   const { data } = useGetHubChildren({ query: hubId });
+  const { myTaskData } = useAppSelector((state) => state.task);
+
   return (
     <section>
       {/* wallets */}

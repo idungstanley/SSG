@@ -31,6 +31,8 @@ function RenderList() {
 
   const { data: listDetailsData } = getTaskListService({ listId });
 
+  // console.log("listDetailsData", listDetailsData);
+
   return (
     <div className="h-screen overflow-hidden relative">
       {/* {showTaskNavigation && (

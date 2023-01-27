@@ -2,18 +2,17 @@ import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import React from 'react';
-import ItemsWalletData from './ItemsWalletData';
+} from "@heroicons/react/24/outline";
+import React from "react";
+import ItemsWalletData from "./ItemsWalletData";
 // import ItemsHubData from '.';
 
 export default function WalletSection({ data }: any) {
-  console.log(data);
   return (
     <section id="listcard" className="p-3 mt-3" key={data.id}>
       <div className="block p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
