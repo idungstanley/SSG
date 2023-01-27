@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseEditWalletService } from '../../../../../features/wallet/walletService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import { setEditWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UseEditWalletService } from "../../../../../features/wallet/walletService";
+import { Button, Input, SlideOver } from "../../../../../components";
+import { useAppSelector } from "../../../../../app/hooks";
+import { setEditWalletSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
 import {
   setSubDropdownMenu,
   setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
+} from "../../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
 
 function EditWalletModal() {
   const queryClient = useQueryClient();
@@ -19,6 +19,7 @@ function EditWalletModal() {
   const { showEditWalletSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
+  const { prevName } = useAppSelector((state) => state.hub);
   const editWallet = useMutation(UseEditWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -33,7 +34,7 @@ function EditWalletModal() {
   });
 
   const defaultWalletFormState = {
-    name: '',
+    name: prevName,
   };
 
   const [formState, setFormState] = useState(defaultWalletFormState);
@@ -65,21 +66,21 @@ function EditWalletModal() {
       show={showEditWalletSlideOver}
       onClose={() => handleCloseSlider()}
       headerTitle={
-        showMenuDropdownType === 'wallet' ? ' Edit wallet' : 'Edit subwallet'
+        showMenuDropdownType === "wallet" ? " Edit wallet" : "Edit subwallet"
       }
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label={
-                showMenuDropdownType === 'wallet'
-                  ? 'Wallet Name:'
-                  : 'Subwallet Name:'
+                showMenuDropdownType === "wallet"
+                  ? "Wallet Name:"
+                  : "Subwallet Name:"
               }
               placeholder={
-                showMenuDropdownType === 'wallet'
-                  ? 'Enter wallet Name'
-                  : 'Enter Subwallet Name'
+                showMenuDropdownType === "wallet"
+                  ? "Enter wallet Name"
+                  : "Enter Subwallet Name"
               }
               name="name"
               value={name}
@@ -94,7 +95,7 @@ function EditWalletModal() {
           buttonStyle="primary"
           onClick={onSubmit}
           label={
-            showMenuDropdownType === 'wallet' ? 'Edit Wallet' : 'Edit Subwallet'
+            showMenuDropdownType === "wallet" ? "Edit Wallet" : "Edit Subwallet"
           }
           padding="py-2 px-4"
           height="h-10"

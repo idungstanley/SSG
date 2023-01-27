@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getWalletServices } from '../../../../../features/wallet/walletService';
-import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
-import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getWalletServices } from "../../../../../features/wallet/walletService";
+import Sub2WalletIndex from "../subwallet2/Sub2WalletIndex";
+import { FaFolder, FaFolderOpen } from "react-icons/fa";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
 import {
   closeMenu,
+  getPrevName,
   getSubMenu,
   setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { BsListUl } from 'react-icons/bs';
-import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
-import { useAppSelector } from '../../../../../app/hooks';
-import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
+} from "../../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
+import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
+import { BsListUl } from "react-icons/bs";
+import MenuDropdown from "../../../../../components/Dropdown/MenuDropdown";
+import { useAppSelector } from "../../../../../app/hooks";
+import SubDropdown from "../../../../../components/Dropdown/SubDropdown";
 
 interface SubWalletIndexProps {
   padding?: string;
 }
 
-function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
+function SubWalletIndex({ padding = "pl-8" }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector(
     (state) => state.wallet
   );
 
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
-  const [currWalId, setCurrWalId] = useState('');
+  const [currWalId, setCurrWalId] = useState("");
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
     parentId: currentWalletParentId,
@@ -45,7 +46,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
   };
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, type = 'subWallet') => {
+  const handleLocation = (id: string, type = "subWallet") => {
     navigate(`/workspace/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     setShowSubWallet2(id);
@@ -56,15 +57,16 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
     navigate(`/workspace/list/${id}`);
   };
 
-  const handleWalletSettings = (id: string, e) => {
+  const handleWalletSettings = (id: string, name: string, e) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'subwallet',
+        showMenuDropdownType: "subwallet",
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (e.target.id == "menusettings") {
         dispatch(closeMenu());
       }
     }
@@ -73,11 +75,11 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'list',
+        showMenuDropdownType: "list",
       })
     );
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (e.target.id == "menusettings") {
         dispatch(closeMenu());
       }
     }
@@ -86,7 +88,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'subwallet2',
+        SubMenuType: "subwallet2",
       })
     );
   };
@@ -96,7 +98,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between group ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
-              wallet.id === activeItemId && 'bg-green-100 text-black'
+              wallet.id === activeItemId && "bg-green-100 text-black"
             }`}
           >
             {wallet.id === activeItemId && (
@@ -131,10 +133,10 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
               >
                 <p
                   className="ml-2 font-medium tracking-wider capitalize truncate"
-                  style={{ fontSize: '10px' }}
+                  style={{ fontSize: "10px" }}
                 >
                   {wallet.name.length > 10
-                    ? wallet.name.substr(0, 10) + '...'
+                    ? wallet.name.substr(0, 10) + "..."
                     : wallet.name}
                 </p>
               </div>
@@ -146,7 +148,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"
-                onClick={(e) => handleWalletSettings(wallet.id, e)}
+                onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
                 id="menusettings"
               />
               <AiOutlinePlus
