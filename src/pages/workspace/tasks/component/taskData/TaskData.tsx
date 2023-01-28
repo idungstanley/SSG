@@ -27,8 +27,6 @@ interface TaskDataProps {
 }
 
 export default function TaskData({ task }: TaskDataProps) {
-  console.log(task);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {

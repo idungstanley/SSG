@@ -39,7 +39,7 @@ export default function TaskListViews() {
             </span>
           </div>
           <span className="text-xs text-gray-400 mt-1	ml-1">
-            {myTaskData?.length}
+            {myTaskData?.length }
           </span>
 
           <span className="text-xs text-gray-400 mt-1	">TASK</span>

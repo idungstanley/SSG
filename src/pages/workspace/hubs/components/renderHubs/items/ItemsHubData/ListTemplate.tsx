@@ -16,7 +16,6 @@ interface listIdprops {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  console.log(data);
 
   return (
     <div className="">
