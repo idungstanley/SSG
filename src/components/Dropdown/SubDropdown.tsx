@@ -41,6 +41,7 @@ export default function SubDropdown() {
     showCreateHubSlideOver,
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
+    showCreateTaskSlideOver,
   } = useAppSelector((state) => state.slideOver);
   const ref = useRef<any>();
   useEffect(() => {
@@ -50,7 +51,8 @@ export default function SubDropdown() {
           showCreateSubWalletSlideOver === false &&
           showCreateHubSlideOver === false &&
           showCreateSubHubSlideOver === false &&
-          showCreateWalletSlideOver === false
+          showCreateWalletSlideOver === false &&
+          showCreateTaskSlideOver === false
         ) {
           dispatch(setSubDropdownMenu(false));
           dispatch(
@@ -72,6 +74,7 @@ export default function SubDropdown() {
     showCreateHubSlideOver,
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
+    showCreateTaskSlideOver,
   ]);
   const itemsList: itemsType[] = [
     {
