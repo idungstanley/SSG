@@ -111,13 +111,13 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
             Create a
             <span
               onClick={() => dispatch(setCreateWalletSlideOverVisibility(true))}
-              className="mx-1 text-black underline"
+              className="mx-1 text-black underline cursor-pointer"
             >
               Wallet,
             </span>
             <span
               onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-              className="text-black underline"
+              className="text-black underline cursor-pointer"
             >
               List
             </span>

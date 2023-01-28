@@ -68,25 +68,13 @@ function WalletModal() {
     <SlideOver
       show={showCreateWalletSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={
-        showMenuDropdownType === 'wallet'
-          ? ' Create wallet'
-          : 'Create subwallet'
-      }
+      headerTitle="Create wallet"
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={
-                showMenuDropdownType === 'wallet'
-                  ? 'Wallet Name:'
-                  : 'Subwallet Name:'
-              }
-              placeholder={
-                showMenuDropdownType === 'wallet'
-                  ? 'Enter wallet Name'
-                  : 'Enter Subwallet Name'
-              }
+              label="Wallet Name:"
+              placeholder="Enter wallet Name"
               name="name"
               value={name}
               type="text"
@@ -99,11 +87,7 @@ function WalletModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={
-            showMenuDropdownType === 'wallet'
-              ? 'Create Wallet'
-              : 'Create Subwallet'
-          }
+          label="Create Wallet"
           padding="py-2 px-4"
           height="h-10"
           width="w-40"
