@@ -11,10 +11,15 @@ import {
 import React from "react";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
 import ItemsListsData from "./ItemsListsData";
+import "../ItemsHubData/wallet.css";
 
 export default function ListSection({ data }: any) {
   return (
-    <section id="listcard" className=" pb-5 bg-gray-100 w-full " key={data.id}>
+    <section
+      id="listcard"
+      className="pb-5 bg-gray-100 w-full last "
+      key={data.id}
+    >
       <div className=" p-2 bg-gray-100">
         <div id="listTitle" className="flex items-center justify-between">
           <div className="flex items-center justify-center space-x-2 text-gray-400">
@@ -48,7 +53,7 @@ export default function ListSection({ data }: any) {
           </div>
         </div>
         {/* card */}
-        <div className="pt-10 bg-gray-100">
+        <div className=" bg-gray-100 ">
           {/* data and input */}
           <TaskListViews />
           <div>{<ItemsListsData listId={data.id} />}</div>
