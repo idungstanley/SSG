@@ -19,10 +19,14 @@ export default function ListTemplate({ listId }: listIdprops) {
   console.log(data);
 
   return (
-    <div className="group relative bg-white mb-px bordar flex items-center ml-6 pl-3">
-      {data?.data.tasks.map((task) => (
-        <TaskData key={task.id} task={task} />
-      ))}
+    <div className="">
+      {data?.data.tasks.map((task) => {
+        return (
+          <div key={task.id} className="">
+            <TaskData task={task} />
+          </div>
+        );
+      })}
     </div>
   );
 }
