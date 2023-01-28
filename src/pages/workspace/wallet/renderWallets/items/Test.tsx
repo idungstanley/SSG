@@ -1,3 +1,13 @@
+import React from 'react'
+
+export default function Test() {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
 // {
 //   WalletListData?.data?.lists?.map((data) => (
 //     <section id="listcard" className="mt-3 p-3" key={data.id}>
