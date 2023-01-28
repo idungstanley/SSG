@@ -25,6 +25,7 @@ function Modal() {
           showMenuDropdown: null,
         })
       );
+      setFormState(defaultHubFormState);
     },
   });
 
@@ -89,7 +90,7 @@ function Modal() {
                   : "Enter Hub Name"
               }
               name="name"
-              value=""
+              value={name}
               type="text"
               onChange={handleHubChange}
             />
