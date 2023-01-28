@@ -38,8 +38,8 @@ export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
         {data?.data.lists.map((item) => {
           return (
             <>
-              <p>{item.name}</p>
-              <div key={item.name}>
+              <div key={item.name} className="pt-5">
+                <p className="text-xs">folder name here</p>
                 <div
                   id="listTitle"
                   className="flex items-center justify-between"
@@ -49,6 +49,7 @@ export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
                       className="flex-shrink-0 w-5 h-4"
                       aria-hidden="true"
                     />
+                    <p className="text-xs font-bold text-black	">{item.name}</p>
                     <p className="font-bold text-gray-700 dark:text-gray-400">
                       {/* {data.name.toUpperCase()} */}
                     </p>
@@ -66,6 +67,7 @@ export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
                       Add Comment
                     </p>
                   </div>
+
                   <div className="flex items-center justify-center space-x-1 text-gray-400 text-xs">
                     <CheckIcon
                       className="flex-shrink-0 w-5 h-4 text-gray-400"

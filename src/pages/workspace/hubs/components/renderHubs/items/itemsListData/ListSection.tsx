@@ -14,16 +14,16 @@ import ItemsListsData from "./ItemsListsData";
 
 export default function ListSection({ data }: any) {
   return (
-    <section id="listcard" className="p-3 mt-3 " key={data.id}>
-      <div className="block p-2 bg-gray-200 border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <section id="listcard" className=" pb-5 bg-gray-100 w-full " key={data.id}>
+      <div className=" p-2 bg-gray-100">
         <div id="listTitle" className="flex items-center justify-between">
           <div className="flex items-center justify-center space-x-2 text-gray-400">
             <ChevronDownIcon
               className="flex-shrink-0 w-5 h-4"
               aria-hidden="true"
             />
-            <p className="font-bold text-gray-700 dark:text-gray-400">
-              {data.name.toUpperCase()}
+            <p className="font-bold text-xs text-gray-700 dark:text-gray-400 capitalize">
+              {data.name}
             </p>
             <InformationCircleIcon
               className="flex-shrink-0 w-5 h-4 text-gray-400"
@@ -48,7 +48,7 @@ export default function ListSection({ data }: any) {
           </div>
         </div>
         {/* card */}
-        <div className="pt-10 bg-gray-200">
+        <div className="pt-10 bg-gray-100">
           {/* data and input */}
           <TaskListViews />
           <div>{<ItemsListsData listId={data.id} />}</div>
