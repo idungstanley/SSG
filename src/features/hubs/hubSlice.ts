@@ -18,7 +18,7 @@ interface HubState {
   SubMenuType: null;
   hubParentId: null;
   refType: null;
-  prevName: any;
+  prevName: string;
 }
 
 const initialState: HubState = {
