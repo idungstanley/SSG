@@ -128,10 +128,9 @@ function Sub2WalletIndex({
               </div>
               <div onClick={() => handleLocation(wallet.id)}>
                 <p className="ml-2" style={{ fontSize: "10px" }}>
-                  {/* {wallet.name.length > 10
+                  {wallet.name.length > 10
                     ? wallet.name.substr(0, 10) + '...'
-                    : wallet.name} */}
-                  Deen
+                    : wallet.name}
                 </p>
               </div>
             </div>
@@ -163,7 +162,7 @@ function Sub2WalletIndex({
           <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100 group">
             <div className="flex items-center space-x-1">
               <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
-              <div onClick={() => handleListLocation(list.id)}>Deen</div>
+              <div onClick={() => handleListLocation(list.id)}></div>
             </div>
             {/* ends here */}
             <button
