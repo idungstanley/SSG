@@ -37,7 +37,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   };
   const handleListSettings = (id: string, name: string, e) => {
     dispatch(setCurrentListId(id));
-    dispatch(
+    dispatch( 
       setshowMenuDropdown({
         showMenuDropdown: id,
         showMenuDropdownType: "list",
