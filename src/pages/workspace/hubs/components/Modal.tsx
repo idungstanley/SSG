@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { Button, Input, SlideOver } from '../../../../components';
-import { createHubService } from '../../../../features/hubs/hubService';
-import { useAppSelector } from '../../../../app/hooks';
+import React, { useState } from "react";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { Button, Input, SlideOver } from "../../../../components";
+import { createHubService } from "../../../../features/hubs/hubService";
+import { useAppSelector } from "../../../../app/hooks";
 import {
   setshowMenuDropdown,
   setSubDropdownMenu,
-} from '../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+} from "../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
+import { setCreateHubSlideOverVisibility } from "../../../../features/general/slideOver/slideOverSlice";
 
 function Modal() {
   const queryClient = useQueryClient();
@@ -39,7 +39,7 @@ function Modal() {
   };
 
   const defaultHubFormState = {
-    name: '',
+    name: "",
   };
 
   const [formState, setFormState] = useState(defaultHubFormState);
@@ -52,7 +52,7 @@ function Modal() {
   };
 
   const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId') || '"'
+    localStorage.getItem("currentWorkspaceId") || '"'
   );
 
   const { name } = formState;
@@ -72,24 +72,24 @@ function Modal() {
       show={showCreateHubSlideOver}
       onClose={() => handleCloseSlider()}
       headerTitle={
-        showMenuDropdownType === 'hubs'
-          ? 'Create a new subhub'
-          : 'Create a new hub'
+        showMenuDropdownType === "hubs"
+          ? "Create a new subhub"
+          : "Create a new hub"
       }
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label={
-                showMenuDropdownType === 'hubs' ? 'Sub Hub Name:' : 'Hub Name:'
+                showMenuDropdownType === "hubs" ? "Sub Hub Name:" : "Hub Name:"
               }
               placeholder={
-                showMenuDropdownType === 'hubs'
-                  ? 'Enter Subhub Name'
-                  : 'Enter Hub Name'
+                showMenuDropdownType === "hubs"
+                  ? "Enter Subhub Name"
+                  : "Enter Hub Name"
               }
               name="name"
-              value={name}
+              value=""
               type="text"
               onChange={handleHubChange}
             />
@@ -101,7 +101,7 @@ function Modal() {
           buttonStyle="primary"
           onClick={onSubmit}
           label={
-            showMenuDropdownType === 'hubs' ? 'Create Subhub' : 'Create  Hub'
+            showMenuDropdownType === "hubs" ? "Create Subhub" : "Create  Hub"
           }
           padding="py-2 px-4"
           height="h-10"

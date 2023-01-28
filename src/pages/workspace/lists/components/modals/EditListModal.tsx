@@ -70,7 +70,7 @@ function EditListModal() {
               label="Edit List Name"
               placeholder="Enter list name"
               name="name"
-              value={name}
+              value={"Deen"}
               type="text"
               onChange={handleListChange}
             />
