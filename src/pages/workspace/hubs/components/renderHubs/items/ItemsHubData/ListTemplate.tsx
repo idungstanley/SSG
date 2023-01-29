@@ -21,7 +21,7 @@ export default function ListTemplate({ listId }: listIdprops) {
   return (
     <div className="">
       {data?.data.tasks.map((task) => {
-        console.log(task);
+        
 
         return (
           <div key={task.id} className="">
