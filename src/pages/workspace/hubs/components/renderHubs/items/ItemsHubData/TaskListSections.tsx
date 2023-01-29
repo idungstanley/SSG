@@ -20,7 +20,7 @@ export default function TaskListSections({ data }: any) {
     >
       <div className="block p-2 bg-gray-100 ">
         <div className=" capitalize ">
-          <ItemsHubData hubId={data.id} />
+          <ItemsHubData hubId={data.id} hubName={data.name} />
         </div>
 
         {/* card */}

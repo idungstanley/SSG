@@ -24,8 +24,9 @@ import { useParams } from "react-router-dom";
 
 interface ItemsHubDataProps {
   hubId: string | null;
+  hubName: string | null;
 }
-export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
+export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
   const { data } = useGetHubChildren({ query: hubId });
 
   return (
@@ -36,10 +37,12 @@ export default function ItemsHubData({ hubId }: ItemsHubDataProps) {
       {/* lists */}
       <div className="">
         {data?.data.lists.map((item) => {
+          console.log(item);
+
           return (
             <>
               <div key={item.name} className="pt-5">
-                <p className="text-xs">folder name here</p>
+                <p className="text-xs">{hubName}</p>
                 <div
                   id="listTitle"
                   className="flex items-center justify-between"
