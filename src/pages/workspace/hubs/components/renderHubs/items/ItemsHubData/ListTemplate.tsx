@@ -16,13 +16,10 @@ interface listIdprops {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  
 
   return (
     <div className="">
       {data?.data.tasks.map((task) => {
-        
-
         return (
           <div key={task.id} className="">
             <TaskData task={task} />
