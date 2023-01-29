@@ -27,7 +27,7 @@ export default function ItemsWalletData({
       <div>
         {data?.data.lists.map((item) => {
           return (
-            <div key={item.id} className="pt-5">
+            <div key={item.id} className="">
               <p className="text-xs">{walletName}</p>
 
               <div id="listTitle" className="flex items-center justify-between">
@@ -37,9 +37,7 @@ export default function ItemsWalletData({
                     aria-hidden="true"
                   />
                   <p className="text-xs font-bold text-black	">{item.name}</p>
-                  <p className="font-bold text-gray-700 dark:text-gray-400">
-                    {/* {data.name.toUpperCase()} */}
-                  </p>
+
                   <InformationCircleIcon
                     className="flex-shrink-0 w-5 h-4 text-gray-400"
                     aria-hidden="true"
