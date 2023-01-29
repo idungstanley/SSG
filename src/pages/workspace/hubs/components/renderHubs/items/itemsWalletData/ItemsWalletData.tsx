@@ -27,7 +27,7 @@ export default function ItemsWalletData({
       <div>
         {data?.data.lists.map((item) => {
           return (
-            <div key={item.name} className="pt-5">
+            <div key={item.id} className="pt-5">
               <p className="text-xs">{walletName}</p>
 
               <div id="listTitle" className="flex items-center justify-between">
