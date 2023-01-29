@@ -22,7 +22,7 @@ export default function SubHubSections({ data }: any) {
 
       <div className="block p-5 bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700">
         <div className=" capitalize ">
-          <ItemsHubData hubId={data.id} />
+          <ItemsHubData hubId={data.id} hubName={data.name} />
         </div>
         {/* <div id="listTitle" className="flex items-center justify-between">
           <div className="flex items-center justify-center space-x-2 text-gray-400">

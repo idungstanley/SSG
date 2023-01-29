@@ -171,6 +171,26 @@ export const ArchiveHubService = (hub) => {
   );
 };
 
+//get hub details
+export const UseGetHubDetails = (query) => {
+  return useQuery(
+    ['hubs', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/hubs/${query.activeItemId}/details`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.activeItemType === 'hub',
+    }
+  );
+};
+
 export const useGetHubWallet = (hubId: string | null) =>
   useQuery<IHubReq>([`hub-${hubId}`], () =>
     requestNew(

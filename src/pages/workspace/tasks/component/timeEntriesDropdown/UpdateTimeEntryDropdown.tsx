@@ -23,11 +23,14 @@ function UpdateTimeEntryDropdown({
   const [currEntry, setCurrEntry] = useState<any>([]);
   const queryClient = useQueryClient();
 
-  const { data: getEntries } = useQuery({
-    queryKey: ['getTimeEntries', taskId],
-    queryFn: GetTimeEntriesService,
-  });
+  // const { data: getEntries } = useQuery({
+  //   queryKey: ['getTimeEntries', taskId],
+  //   queryFn: GetTimeEntriesService,
+  // });
 
+    const { data: getEntries } = GetTimeEntriesService({
+    taskId
+  });
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {
       queryClient.invalidateQueries('clocktimer' as any);

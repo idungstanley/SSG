@@ -5,19 +5,20 @@ import {
   setShowExtendedBar,
   setShowSidebar,
   setSidebarWidth,
-} from "../../../features/workspace/workspaceSlice";
-import { setShowSidebarSettings } from "../../../features/hubs/hubSlice";
-import MainLogo from "../../../assets/branding/main-logo.png";
-import notificationIcon from "../../../assets/branding/notification-logo.png";
-import NavigationItems from "./components/NavigationItems";
-import Places from "./components/Places";
-import { AvatarWithInitials } from "../../../components";
-import { useAppSelector } from "../../../app/hooks";
-import { RiArrowRightSLine } from "react-icons/ri";
-import WorkSpaceSelection from "./components/WorkSpaceSelection";
-import Modal from "../hubs/components/Modal";
-import ArchiveMenu from "../hubs/components/archive/ArchiveMenu";
-import Search from "../search";
+} from '../../../features/workspace/workspaceSlice';
+import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
+import MainLogo from '../../../assets/branding/main-logo.png';
+import notificationIcon from '../../../assets/branding/notification-logo.png';
+import NavigationItems from './components/NavigationItems';
+import Places from './components/Places';
+import { AvatarWithInitials } from '../../../components';
+import { useAppSelector } from '../../../app/hooks';
+import { RiArrowRightSLine } from 'react-icons/ri';
+import WorkSpaceSelection from './components/WorkSpaceSelection';
+import Modal from '../hubs/components/Modal';
+import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
+import Search from '../search';
+import SubHubModal from '../hubs/components/SubHubModal';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ export default function Sidebar() {
         }
       >
         <Modal />
+        <SubHubModal />
         <span
           className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
             activePlaceId === true || activePlaceId === 0 ? "hidden" : "block"
@@ -101,14 +103,14 @@ export default function Sidebar() {
             />
           )}
         </span>
-        <div className="flex flex-col overflow-y-scroll overflow-x-hidden bg-white relative">
+        <div className="relative flex flex-col overflow-x-hidden overflow-y-scroll bg-white">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
               className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${
                 showSidebar ? "flex-row" : "flex-col space-y-1"
               }`}
             >
-              <img className="w-10 h-11 ml-1" src={MainLogo} alt="Workflow" />
+              <img className="w-10 ml-1 h-11" src={MainLogo} alt="Workflow" />
               <WorkSpaceSelection />
               <div
                 className={`flex items-center mt-1 ${
@@ -125,7 +127,7 @@ export default function Sidebar() {
                     >
                       24
                     </p>
-                    <img src={notificationIcon} alt="a" className="h-4 w-4" />
+                    <img src={notificationIcon} alt="a" className="w-4 h-4" />
                   </span>
                 ) : null}
                 <div
@@ -152,20 +154,20 @@ export default function Sidebar() {
               {showSidebar ? (
                 <HiChevronDoubleLeft
                   color="blue"
-                  className="cursor-pointer mt-1 ml-1"
+                  className="mt-1 ml-1 cursor-pointer"
                   onClick={() => dispatch(setShowSidebar(false))}
                 />
               ) : (
                 <HiChevronDoubleRight
                   color="blue"
-                  className="cursor-pointer mt-1 ml-0"
+                  className="mt-1 ml-0 cursor-pointer"
                   onClick={() => handleShowSidebar()}
                 />
               )}
             </div>
           </div>
           <div
-            className="overflow-y-auto overflow-x-hidden relative"
+            className="relative overflow-x-hidden overflow-y-auto"
             onScroll={(e) => handleScroll(e)}
           >
             <Search />
@@ -174,7 +176,7 @@ export default function Sidebar() {
           </div>
         </div>
         <div
-          className="justify-self-end absolute shrink-0 grow-0 h-full cursor-all-scroll hover:bg-green-100 right-0 bottom-0 top-0"
+          className="absolute top-0 bottom-0 right-0 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll hover:bg-green-100"
           onMouseDown={startResizing}
           style={{ cursor: "col-resize", width: "3px" }}
         ></div>

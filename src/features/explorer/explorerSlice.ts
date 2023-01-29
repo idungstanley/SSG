@@ -15,6 +15,11 @@ const selectedViewId: number = JSON.parse(
   localStorage.getItem('selectedView') || '1'
 );
 
+interface IFastPreview {
+  show: boolean;
+  fileId?: string;
+}
+
 interface log {
   id: string;
   team_member: {
@@ -40,11 +45,10 @@ interface ExplorerState {
   selectedViewId: number;
   selectedFolderId: string | null;
   selectedFileId: string | null;
-
+  fastPreview: IFastPreview;
   fileIdsToPaste: string[];
   folderIdsToPaste: string[];
-  query: string;
-  fileSelectWidth:number;
+  fileSelectWidth: number;
 
   draggableItem: { id: string; isFile: boolean } | null;
 }
@@ -54,14 +58,13 @@ const initialState: ExplorerState = {
   selectedItemType: null,
   selectedItemLoadingFullDetails: false,
   selectedItemFullDetails: null,
-
+  fastPreview: { show: false },
   selectedFileIds: [],
   selectedFolderIds: [],
   selectedFolderId: null,
   selectedFileId: null,
   selectedSortingId,
   selectedViewId,
-  query: '',
   fileSelectWidth: 490,
 
   fileIdsToPaste,
@@ -74,6 +77,13 @@ export const explorerSlice = createSlice({
   name: 'explorer',
   initialState,
   reducers: {
+    setFastPreview: (state, action: PayloadAction<IFastPreview>) => {
+      if (!action.payload.show) {
+        state.fastPreview = { show: false };
+      } else {
+        state.fastPreview = action.payload;
+      }
+    },
     setDraggableItem: (
       state,
       action: PayloadAction<{ id: string; isFile: boolean } | null>
@@ -145,9 +155,6 @@ export const explorerSlice = createSlice({
     setSelectedSorting: (state, action: PayloadAction<number>) => {
       state.selectedSortingId = action.payload;
     },
-    setQuery: (state, action: PayloadAction<string>) => {
-      state.query = action.payload;
-    },
     setSelectedViewId: (state, action: PayloadAction<number>) => {
       state.selectedViewId = action.payload;
     },
@@ -157,12 +164,12 @@ export const explorerSlice = createSlice({
     setCopyItems: (
       state,
       action: PayloadAction<{
-        fileIdsToPaste: string[];
-        folderIdsToPaste: string[];
+        fileIdsToPaste?: string[];
+        folderIdsToPaste?: string[];
       }>
     ) => {
-      state.fileIdsToPaste = action.payload.fileIdsToPaste;
-      state.folderIdsToPaste = action.payload.folderIdsToPaste;
+      state.fileIdsToPaste = action.payload.fileIdsToPaste || [];
+      state.folderIdsToPaste = action.payload.folderIdsToPaste || [];
     },
   },
   extraReducers: (builder) => {
@@ -173,6 +180,7 @@ export const explorerSlice = createSlice({
 });
 
 export const {
+  setFastPreview,
   setDraggableItem,
   setSelectedFileId,
   setSelectedFolderId,
@@ -189,7 +197,6 @@ export const {
   setSelectedSorting,
   setSelectedViewId,
   setCopyItems,
-  setQuery,
   setFileSelectWidth,
 } = explorerSlice.actions;
 

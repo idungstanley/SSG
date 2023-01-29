@@ -1,26 +1,28 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  //  useState
+} from 'react';
 import {
   useGetExplorerFolders,
-  useGetSearchFolders,
+  // useGetSearchFolders,
 } from '../../../../features/explorer/explorerService';
-import { FolderPlusIcon } from '@heroicons/react/24/outline';
+// import { FolderPlusIcon } from '@heroicons/react/24/outline';
 import FoldersList from './components/FoldersList';
 // import Search from '../Search';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import Dropdown from '../../../../components/Dropdown/index';
-import { useDebounce } from '../../../../hooks';
+// import { setItemActionForSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+// import Dropdown from '../../../../components/Dropdown/index';
+// import { useDebounce } from '../../../../hooks';
 import { IExplorerFolder } from '../../../../features/explorer/explorer.interfaces';
-import ExplorerIcon from '../../../../assets/branding/file.png';
 import {
-  setQuery,
+  // setQuery,
   setSelectedFileId,
   setSelectedFolderId,
 } from '../../../../features/explorer/explorerSlice';
-import { Link } from 'react-router-dom';
 
 const stringifyFolders = (
   query: string,
@@ -41,20 +43,20 @@ const stringifyFolders = (
   );
 };
 
-export default function Extendedbar() {
+export default function ExtendedBar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { selectedFileId, query } = useAppSelector((state) => state.explorer);
+  const { selectedFileId } = useAppSelector((state) => state.explorer);
 
   // const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 500);
-  const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
+  // const debouncedQuery = useDebounce(query, 500);
+  // const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
 
   // ? results includes children for some reason, this value remove unsuitable folders
-  const filteredSearchedFolders = searchedFolders?.filter((i) =>
-    i.name.includes(query)
-  );
+  // const filteredSearchedFolders = searchedFolders?.filter((i) =>
+  //   i.name.includes(query)
+  // );
 
   const { data: allFolders, status } = useGetExplorerFolders();
 
@@ -65,25 +67,26 @@ export default function Extendedbar() {
     }
   }, [folderId]);
 
-  const folders = stringifyFolders(
-    debouncedQuery,
-    allFolders,
-    filteredSearchedFolders
-  );
+  // const folders = stringifyFolders(
+  //   debouncedQuery,
+  //   allFolders,
+  //   filteredSearchedFolders
+  // );
+  const folders = stringifyFolders('', allFolders, []);
 
-  const configForDropdown = [
-    {
-      label: 'Folder',
-      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
-      onClick: () =>
-        dispatch(
-          setItemActionForSideOver({
-            action: 'create',
-            id: folderId || '',
-          })
-        ),
-    },
-  ];
+  // const configForDropdown = [
+  //   {
+  //     label: 'Folder',
+  //     icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
+  //     onClick: () =>
+  //       dispatch(
+  //         setItemActionForSideOver({
+  //           action: 'create',
+  //           id: folderId || '',
+  //         })
+  //       ),
+  //   },
+  // ];
 
   return (
     <aside className="border-r">
@@ -104,7 +107,8 @@ export default function Extendedbar() {
         folders.length ? (
           <FoldersList
             folders={folders}
-            isSearchedResults={!!filteredSearchedFolders?.length}
+            // isSearchedResults={!!filteredSearchedFolders?.length}
+            isSearchedResults={false}
           />
         ) : (
           <FullScreenMessage

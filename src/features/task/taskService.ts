@@ -39,7 +39,7 @@ export const getOneTaskServices = ({ task_id }) => {
 
   const queryClient = useQueryClient();
   return useQuery(
-    ["task"],
+    ['task', { task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
@@ -51,7 +51,7 @@ export const getOneTaskServices = ({ task_id }) => {
       return data;
     },
     {
-      // enabled: getterTrigger,
+      enabled: task_id != null,
       // onSuccess: (data) => {
       //   const taskData = data.data.tasks.map((task) => {
       //     queryClient.setQueryData(['task', task.id], task);
@@ -159,20 +159,46 @@ export const EndTimeEntriesService = (data) => {
   return response;
 };
 
-export const GetTimeEntriesService = (data) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: "time-entries",
-      method: "GET",
-      params: {
-        type: "task",
-        id: taskID,
-      },
+// export const GetTimeEntriesService = (data) => {
+//   const taskID = data.queryKey[1];
+//   const response = requestNew(
+//     {
+//       url: 'time-entries',
+//       method: 'GET',
+//       params: {
+//         type: 'task',
+//         id: taskID,
+//       },
+//     },
+//     true
+//   );
+//   return response;
+// };
+
+export const GetTimeEntriesService = ({ taskId }) => {
+  const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
+  return useQuery(
+    ['timeclock', taskId],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'time-entries',
+          method: 'GET',
+          params: {
+            type: 'task',
+            id: taskId,
+          },
+        },
+        true
+      );
+      return data;
     },
-    true
+    {
+      initialData: queryClient.getQueryData(['timeclock', taskId]),
+      enabled: taskId != null,
+    }
   );
-  return response;
 };
 
 export const UpdateTimeEntriesService = (data) => {

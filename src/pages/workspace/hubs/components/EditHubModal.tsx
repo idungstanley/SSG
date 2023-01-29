@@ -10,7 +10,7 @@ import { setEditHubSlideOverVisibility } from "../../../../features/general/slid
 export default function EditHubModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { currHubId } = useAppSelector((state) => state.hub);
+  const { currHubId, prevName } = useAppSelector((state) => state.hub);
   const createHub = useMutation(useEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -24,7 +24,7 @@ export default function EditHubModal() {
   });
 
   const defaultHubFormState = {
-    name: "",
+    name: prevName,
   };
 
   const [formState, setFormState] = useState(defaultHubFormState);

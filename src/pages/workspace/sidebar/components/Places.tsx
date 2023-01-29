@@ -32,7 +32,7 @@ import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { useParams } from 'react-router-dom';
 import Extendedbar from '../../../newExplorer/components/Sidebar';
-import { setQuery } from '../../../../features/explorer/explorerSlice';
+// import { setQuery } from '../../../../features/explorer/explorerSlice';
 import Dropdown from '../../../../components/Dropdown/index';
 import {
   setCreateInboxSlideOverVisibility,
@@ -46,7 +46,7 @@ function Places() {
     (state) => state.workspace
   );
   const { folderId } = useParams();
-  const { query } = useAppSelector((state) => state.explorer);
+  // const { query } = useAppSelector((state) => state.explorer);
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
   const handleMouseOver = (i: number) => {
@@ -280,11 +280,9 @@ function Places() {
                 >
                   <input
                     type="text"
-                    name=""
-                    id=""
                     placeholder="Search for List, Hubs, & Wallets"
-                    onChange={(e) => dispatch(setQuery(e.target.value))}
-                    value={query}
+                    // onChange={(e) => dispatch(setQuery(e.target.value))}
+                    // value={query}
                     className="w-full pl-6 bg-gray-200 border-transparent border-none place h-14 hover:bg-gray-100 focus:border-transparent focus:ring-0"
                   />
                   <IoMdCloseCircle
