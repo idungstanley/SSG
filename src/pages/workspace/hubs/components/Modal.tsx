@@ -24,6 +24,7 @@ function Modal() {
           showMenuDropdown: null,
         })
       );
+      setFormState(defaultHubFormState);
     },
   });
 
