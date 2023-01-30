@@ -12,20 +12,39 @@ import HubSubDetails from './subDetailsType/hubs/HubSubDetails';
 import { useAppSelector } from '../../../../../app/hooks';
 import WalletSubDetails from './subDetailsType/wallets/WalletSubDetails';
 import ListSubDetails from './subDetailsType/lists/ListSubDetails';
+import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../../features/list/listService';
+import { getOneTaskServices } from '../../../../../features/task/taskService';
 
-interface DetailsIndexProps {
-  taskDetails: any;
-  hubDetails: any;
-  walletDetails: any;
-  listDetails: any;
-}
-export default function DetailsIndex({
-  taskDetails,
-  hubDetails,
-  walletDetails,
-  listDetails,
-}: DetailsIndexProps) {
-  const { activeItemType } = useAppSelector((state) => state.workspace);
+// interface DetailsIndexProps {
+//   taskDetails: any;
+//   hubDetails: any;
+//   walletDetails: any;
+//   listDetails: any;
+// }
+export default function DetailsIndex() {
+  const { activeItemId, activeItemType } = useAppSelector(
+    (state) => state.workspace
+  );
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const { data: hub } = UseGetHubDetails({
+    activeItemId,
+    activeItemType,
+  });
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId,
+    activeItemType,
+  });
+  const { data: list } = UseGetListDetails({
+    activeItemId,
+    activeItemType,
+  });
+  const { data: task } = getOneTaskServices({ task_id: currentTaskIdForPilot });
+  const taskDetails = task?.data.task;
+  const hubDetails = hub?.data.hub;
+  const walletDetails = wallet?.data.wallet;
+  const listDetails = list?.data.list;
   const showDetailsType = () => {
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
       return <HubSubDetails hubDetails={hubDetails} key={hubDetails?.id} />;
@@ -44,7 +63,7 @@ export default function DetailsIndex({
   };
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <section className="flex items-center space-x-3">
           <Status />
           <Priority />
