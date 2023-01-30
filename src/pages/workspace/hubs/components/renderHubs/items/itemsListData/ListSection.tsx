@@ -12,8 +12,14 @@ import React from "react";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
 import ItemsListsData from "./ItemsListsData";
 import "../ItemsHubData/wallet.css";
+import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
+import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
+import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
 
 export default function ListSection({ data }: any) {
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
   return (
     <section
       id="listcard"
@@ -58,6 +64,17 @@ export default function ListSection({ data }: any) {
           <TaskListViews />
           <div>{<ItemsListsData listId={data.id} />}</div>
           {/* icons */}
+        </div>
+
+        {addNewTaskItem && <AddNewItem listId={data.id} />}
+        <div
+          className=""
+          id="newItem"
+          onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+        >
+          <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+            + New Task
+          </p>
         </div>
         {/* endshere */}
       </div>

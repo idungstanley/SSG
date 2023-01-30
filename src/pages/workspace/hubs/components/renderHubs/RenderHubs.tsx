@@ -1,17 +1,22 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../../app/hooks';
-import ListNav from '../../../lists/components/renderlist/ListNav';
-import { useGetHubChildren } from '../../../../../features/hubs/hubService';
-import TaskListSections from './items/ItemsHubData/TaskListSections';
-import Pilot from '../../../pilot';
-import WalletSection from './items/itemsWalletData/WalletSection';
-import ListSection from './items/itemsListData/ListSection';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import ListNav from "../../../lists/components/renderlist/ListNav";
+import { useGetHubChildren } from "../../../../../features/hubs/hubService";
+import TaskListSections from "./items/ItemsHubData/TaskListSections";
+import Pilot from "../../../pilot";
+import WalletSection from "./items/itemsWalletData/WalletSection";
+import ListSection from "./items/itemsListData/ListSection";
+import AddNewItem from "../../../tasks/component/taskColumn/AddNewItem";
+import { setAddNewTaskItem } from "../../../../../features/task/taskSlice";
 
 function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
+
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
   return (
     <div className="h-screen">
       <section id="nav">
@@ -32,11 +37,12 @@ function RenderHubs() {
             {HubDetail?.data.wallets.map((data) => (
               <WalletSection data={data} key={data.id} />
             ))}
-            {HubDetail?.data.lists.map((data) => (
-              <ListSection data={data} key={data.id} />
-            ))}
+            {HubDetail?.data.lists.map((data) => {
+              return <ListSection data={data} key={data.id} />;
+            })}
           </div>
         </div>
+
         <div className="ml-5">
           <Pilot />
         </div>
