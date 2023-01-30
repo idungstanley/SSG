@@ -80,7 +80,8 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
     }
   };
 
-  // Save reference for dragItem and dragOverItem
+
+  // Drag an drop functionality
   const dragItem = React.useRef<any>(null);
   const dragOverItem = React.useRef<any>(null);
 
