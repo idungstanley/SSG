@@ -71,13 +71,14 @@ function SubWalletIndex({ padding = "pl-8" }: SubWalletIndexProps) {
       }
     }
   };
-  const handleListSettings = (id: string, e) => {
+  const handleListSettings = (id: string, name: string, e) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
         showMenuDropdownType: "list",
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if (e.target.id == "menusettings") {
         dispatch(closeMenu());
@@ -183,7 +184,7 @@ function SubWalletIndex({ padding = "pl-8" }: SubWalletIndexProps) {
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 id="menusettings"
-                onClick={(e) => handleListSettings(list.id, e)}
+                onClick={(e) => handleListSettings(list.id, list.name, e)}
               />
             </button>
           </section>
