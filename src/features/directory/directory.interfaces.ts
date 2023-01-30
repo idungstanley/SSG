@@ -15,3 +15,9 @@ export interface IDirectoriesRes {
     hubs: IDirectory[];
   };
 }
+
+export interface IDirectoryRes {
+  data: {
+    directory: IDirectory;
+  };
+}

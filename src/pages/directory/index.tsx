@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetDirectory } from '../../features/directory/directoryService';
 import Sidebar from '../workspace/sidebar/Sidebar';
+import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 
 function Directory() {
   const { directoryId } = useParams();
@@ -20,6 +21,8 @@ function Directory() {
 
         <p className="text-red-500">no design for this page :(</p>
       </div>
+
+      <CreateDirectorySideOver />
     </>
   );
 }

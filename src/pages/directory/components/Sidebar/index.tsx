@@ -12,11 +12,14 @@ import { useGetDirectories } from '../../../../features/directory/directoryServi
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 import { AiOutlineBranches } from 'react-icons/ai';
-import { PlayIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 
 function Sidebar() {
+  const dispatch = useAppDispatch();
   const { directoryId } = useParams();
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
@@ -28,13 +31,7 @@ function Sidebar() {
     {
       label: 'Directory',
       icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
-      onClick: () => ({}),
-      // dispatch(
-      //   setItemActionForSideOver({
-      //     action: 'create',
-      //     id: folderId || '',
-      //   })
-      // ),
+      onClick: () => dispatch(setShowCreateDirectorySlideOver(true)),
     },
   ];
 
@@ -87,6 +84,9 @@ function Sidebar() {
       ) : null}
 
       <div className="flex flex-col mb-2">
+        {/*
+          // ! move to another component
+        */}
         {data
           ? data.map((directory) => (
               <div key={directory.id} className="flex flex-col w-full">
@@ -95,7 +95,18 @@ function Sidebar() {
                   onClick={() => onClickDirectory(directory.id)}
                   className="hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer"
                 >
-                  <PlayIcon className="h-4 w-4 cursor-pointer text-gray-700" />
+                  {directoryId === directory.id ? (
+                    <VscTriangleDown
+                      className="h-4 w-4 text-gray-500"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <VscTriangleRight
+                      className="h-4 w-4 text-gray-500"
+                      aria-hidden="true"
+                    />
+                  )}
+                  {/* <PlayIcon className="h-4 w-4 cursor-pointer text-gray-700" /> */}
                   <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
                   <p>{directory.name}</p>
                 </div>
