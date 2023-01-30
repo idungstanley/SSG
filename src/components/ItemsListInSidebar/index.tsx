@@ -18,12 +18,13 @@ import { IHub } from '../../features/hubs/hubs.interfaces';
 import {
   closeMenu,
   getCurrHubId,
+  getPrevName,
   getSubMenu,
   setshowMenuDropdown,
 } from '../../features/hubs/hubSlice';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -70,7 +71,7 @@ export default function ItemsListInSidebar({
     );
   }
 
-  const handleLocation = (id: string, name:string) => {
+  const handleLocation = (id: string, name: string) => {
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -106,7 +107,7 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id: string, e) => {
+  const handleHubSettings = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -114,6 +115,7 @@ export default function ItemsListInSidebar({
         showMenuDropdownType: 'hubs',
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
@@ -143,7 +145,7 @@ export default function ItemsListInSidebar({
             className={`flex justify-between items-center hover:bg-gray-100 ${
               i.id === currentItemId && i.id === activeItemId
                 ? 'bg-green-100 text-green-500'
-                : 'text-black-500'
+                : 'text-black'
             }`}
           >
             <div
@@ -195,7 +197,7 @@ export default function ItemsListInSidebar({
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate"
-                      style={{ fontSize: '10px' }}
+                      style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}
@@ -207,7 +209,7 @@ export default function ItemsListInSidebar({
             {isHovering === index && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, e)}
+                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="text-black cursor-pointer"
                   id="menusettings"
                 />

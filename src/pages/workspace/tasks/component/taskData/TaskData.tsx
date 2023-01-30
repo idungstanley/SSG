@@ -5,8 +5,12 @@ import {
   setCurrentTaskId,
   setGetSubTaskId,
   setShowTaskNavigation,
+  setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
 } from '../../../../../features/task/taskSlice';
+import {
+  setActiveItem
+} from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import {
@@ -42,9 +46,21 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskModal = (id: string) => {
-    setOpenTaskModal(true);
-    navigate(`/workspace/t/${id}`);
+  // const handleTaskModal = (id: string) => {
+  //   setOpenTaskModal(true);
+  //   navigate(`/workspace/t/${id}`);
+  // };
+
+  const handleTaskPilot = (id: string, name: string) => {
+    dispatch(setTaskIdForPilot(id));
+      dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name,
+      })
+    );
+    // dispatch(ilotTrigger)
   };
 
   const handleAssigneeModal = (id: string) => {
@@ -87,15 +103,11 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="group relative bg-white mb-px bordar hover:bg-gray-100 flex items-center ml-6 pl-3 field">
+    <div className="group relative bg-white mb-px bordar hover:bg-slate-900	 flex items-center ml-6 pl-3 field">
       <div onClick={() => handleGetSubTask(task.id)}>
         {task.id == getSubTaskId ? (
           <span className="flex flex-col">
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 ml-1"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
+            <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
           </span>
         ) : (
           <VscTriangleRight
@@ -105,11 +117,11 @@ export default function TaskData({ task }: TaskDataProps) {
           />
         )}
       </div>
-      <span className="flex items-center absolute -left-32">
+      <span className="flex items-center absolute" style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"
-          className="handlecheck opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
+          className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
           onClick={() => {
             displayNav(task.id);
           }}
@@ -118,15 +130,15 @@ export default function TaskData({ task }: TaskDataProps) {
       </span>
 
       <RiCheckboxBlankFill
-        className=" text-gray-400 text-xs"
+        className="pl-px text-gray-400 text-xs"
         aria-hidden="true"
       />
       <div className="flex items-center w-6/12 group">
         {/* data and input */}
-        <div onClick={() => handleTaskModal(task.id)}>
+        <div onClick={() => handleTaskPilot(task.id, task.name)}>
           {/* {i == 0 && <h1>Tasks</h1>} */}
 
-          <p className="capitalize text-xs font-semibold leading-8 pl-5	">
+          <p className="capitalize text-xs font-semibold leading-8 pl-5 cursor-pointer">
             {task.name}
           </p>
         </div>
@@ -151,8 +163,8 @@ export default function TaskData({ task }: TaskDataProps) {
 
       <div className="relative ">
         <span
-          className="absolute rounded-full text-end	 text-xs "
-          style={{ left: '-20px' }}
+          className="absolute rounded-full text-center	text-xs "
+          style={{ left: "-95px" }}
         >
           {/* assignees here */}
 
@@ -171,7 +183,10 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           )}
         </span>
-        <span className=" border-dotted border-gray-300 pl-10 ml-5">
+        <span
+          className=" border-dotted border-gray-300 pl-10 "
+          style={{ marginLeft: "-60px" }}
+        >
           <CalendarOutlined
             className=" h-5 w-7 text-gray-400"
             aria-hidden="true"

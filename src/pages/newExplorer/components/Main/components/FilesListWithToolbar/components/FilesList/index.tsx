@@ -110,7 +110,7 @@ export default function FilesList({ data }: FilesListProps) {
             showCta
           />
         ) : (
-          <div className="flex flex-col h-full w-full">
+          <div className="flex flex-col h-full w-full overflow-x-scroll">
             <Table
               checkbox={checkbox}
               checked={checked}

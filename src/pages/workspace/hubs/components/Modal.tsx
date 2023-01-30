@@ -14,7 +14,6 @@ function Modal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currHubId } = useAppSelector((state) => state.hub);
-
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -25,6 +24,7 @@ function Modal() {
           showMenuDropdown: null,
         })
       );
+      setFormState(defaultHubFormState);
     },
   });
 
@@ -66,28 +66,17 @@ function Modal() {
   };
 
   const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
-  const { showMenuDropdownType } = useAppSelector((state) => state.hub);
   return (
     <SlideOver
       show={showCreateHubSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={
-        showMenuDropdownType === 'hubs'
-          ? 'Create a new subhub'
-          : 'Create a new hub'
-      }
+      headerTitle="Create A New Hub"
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={
-                showMenuDropdownType === 'hubs' ? 'Sub Hub Name:' : 'Hub Name:'
-              }
-              placeholder={
-                showMenuDropdownType === 'hubs'
-                  ? 'Enter Subhub Name'
-                  : 'Enter Hub Name'
-              }
+              label="Hub Name:"
+              placeholder="Enter Hub Name"
               name="name"
               value={name}
               type="text"
@@ -100,9 +89,7 @@ function Modal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={
-            showMenuDropdownType === 'hubs' ? 'Create Subhub' : 'Create  Hub'
-          }
+          label="Create Hub"
           padding="py-2 px-4"
           height="h-10"
           width="w-40"

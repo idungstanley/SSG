@@ -51,6 +51,8 @@ interface SideOverState {
   showEditHubSlideOver: boolean;
   showEditListSlideOver: boolean;
   showCreateWalletSlideOver: boolean;
+  showCreateSubWalletSlideOver: boolean;
+  showCreateSubHubSlideOver: boolean;
   showEditWalletSlideOver: boolean;
   showCreateListSlideOver: boolean;
   showCreateTaskSlideOver: boolean;
@@ -75,7 +77,9 @@ const initialState: SideOverState = {
   showCreateHubSlideOver: false,
   showEditHubSlideOver: false,
   showEditListSlideOver: false,
+  showCreateSubHubSlideOver: false,
   showCreateWalletSlideOver: false,
+  showCreateSubWalletSlideOver: false,
   showEditWalletSlideOver: false,
   showCreateListSlideOver: false,
   showCreateTaskSlideOver: false,
@@ -128,6 +132,18 @@ export const slideOverSlice = createSlice({
       action: PayloadAction<boolean>
     ) => {
       state.showCreateWalletSlideOver = action.payload;
+    },
+    setCreateSubWalletSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateSubWalletSlideOver = action.payload;
+    },
+    setCreateSubHubSlideOverVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateSubHubSlideOver = action.payload;
     },
     setEditWalletSlideOverVisibility: (
       state,
@@ -218,6 +234,7 @@ export const {
   setCreateHubSlideOverVisibility,
   setEditHubSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
+  setCreateSubWalletSlideOverVisibility,
   setEditWalletSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
@@ -236,6 +253,7 @@ export const {
   setShowShareSideOver,
   setShowPilotSideOver,
   setShowPilotSideOverHub,
+  setCreateSubHubSlideOverVisibility,
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

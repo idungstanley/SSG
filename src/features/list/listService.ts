@@ -166,3 +166,23 @@ export const UseArchiveListService = (list) => {
     }
   );
 };
+
+//get list details
+export const UseGetListDetails = (query) => {
+  return useQuery(
+    ['hubs', query],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/lists/${query.activeItemId}`,
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.activeItemType === 'list',
+    }
+  );
+};

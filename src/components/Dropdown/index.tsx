@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { BsPlusLg } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 
 interface IDropdownItem {
   label: string;
@@ -23,16 +24,16 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center rounded-full cursor-pointer text-black hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+        <Menu.Button className="flex items-center text-black rounded-full cursor-pointer hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisVerticalIcon
-              className="h-4 w-4 text-black"
+            <AiOutlineEllipsis
+              className="w-4 h-4 text-black"
               aria-hidden="true"
             />
           ) : (
-            <BsPlusLg className="w-3 h-2.5" aria-hidden="true" />
+            <PlusIcon className="w-5 h-5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>
@@ -46,7 +47,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute py-1 right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 w-56 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {config.map((i) => (
             <Menu.Item key={i.label}>
               {({ active }) => (

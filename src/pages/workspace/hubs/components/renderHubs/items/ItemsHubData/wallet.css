@@ -1,0 +1,12 @@
+.stac {
+  color: blue;
+}
+
+/* .stac:first-child {
+  position: absolute;
+  left: 20px;
+} */
+
+.last:last-child {
+  padding-bottom: 80px;
+}
