@@ -103,7 +103,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="group relative bg-white mb-px bordar hover:bg-gray-100 flex items-center ml-6 pl-3 field">
+    <div className="group relative bg-white mb-px bordar hover:bg-slate-900	 flex items-center ml-6 pl-3 field">
       <div onClick={() => handleGetSubTask(task.id)}>
         {task.id == getSubTaskId ? (
           <span className="flex flex-col">
@@ -117,11 +117,11 @@ export default function TaskData({ task }: TaskDataProps) {
           />
         )}
       </div>
-      <span className="flex items-center absolute -left-32">
+      <span className="flex items-center absolute" style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"
-          className="handlecheck opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
+          className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100"
           onClick={() => {
             displayNav(task.id);
           }}
@@ -164,7 +164,7 @@ export default function TaskData({ task }: TaskDataProps) {
       <div className="relative ">
         <span
           className="absolute rounded-full text-center	text-xs "
-          style={{ left: '-40px' }}
+          style={{ left: "-95px" }}
         >
           {/* assignees here */}
 
@@ -183,7 +183,10 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           )}
         </span>
-        <span className=" border-dotted border-gray-300 pl-10 ">
+        <span
+          className=" border-dotted border-gray-300 pl-10 "
+          style={{ marginLeft: "-60px" }}
+        >
           <CalendarOutlined
             className=" h-5 w-7 text-gray-400"
             aria-hidden="true"

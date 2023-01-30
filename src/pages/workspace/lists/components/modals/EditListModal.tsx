@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseEditListService } from '../../../../../features/list/listService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UseEditListService } from "../../../../../features/list/listService";
+import { Button, Input, SlideOver } from "../../../../../components";
+import { useAppSelector } from "../../../../../app/hooks";
 import {
   setSubDropdownMenu,
   setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setEditListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+} from "../../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
+import { setEditListSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
 
 function EditListModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { showEditListSlideOver } = useAppSelector((state) => state.slideOver);
+  const { prevName } = useAppSelector((state) => state.hub);
   const createList = useMutation(UseEditListService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -29,7 +30,7 @@ function EditListModal() {
   });
 
   const defaultListFormState = {
-    name: '',
+    name: prevName,
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
