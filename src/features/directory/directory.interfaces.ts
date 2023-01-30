@@ -21,3 +21,15 @@ export interface IDirectoryRes {
     directory: IDirectory;
   };
 }
+
+export interface IDirectoryTemplate {
+  id: string;
+  name: string;
+  fields: string[];
+}
+
+export interface IDirectoryTemplateRes {
+  data: {
+    template: IDirectoryTemplate;
+  };
+}

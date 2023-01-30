@@ -4,6 +4,8 @@ import {
   IDirectoriesRes,
   IDirectory,
   IDirectoryRes,
+  IDirectoryTemplate,
+  IDirectoryTemplateRes,
 } from './directory.interfaces';
 
 export const useGetDirectories = () =>
@@ -69,3 +71,71 @@ export const useCreateDirectory = (parentId?: string) => {
     },
   });
 };
+
+const createDirectoryTemplate = (data: {
+  name: string;
+  directoryId: string;
+}) => {
+  const { name, directoryId } = data;
+
+  const response = requestNew(
+    {
+      url: `directories/${directoryId}/template`,
+      method: 'POST',
+      data: {
+        name,
+      },
+    },
+    true
+  );
+  return response;
+};
+
+export const useCreateDirectoryTemplate = (directoryId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createDirectoryTemplate, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['directory', directoryId]);
+    },
+  });
+};
+
+export const useGetDirectoryTemplate = (
+  directoryId: string,
+  templateId: string
+) =>
+  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplate>(
+    ['directory-template', templateId],
+    () =>
+      requestNew(
+        {
+          url: `directories/${directoryId}/template${templateId}`,
+          method: 'GET',
+        },
+        true
+      ),
+    {
+      select: (res) => res.data.template,
+    }
+  );
+
+export const useGetDirectoryTemplateItems = (
+  directoryId: string,
+  templateId: string
+) =>
+  // ! add types
+  useQuery(
+    ['directory-template-items', templateId],
+    () =>
+      requestNew(
+        {
+          url: `directories/${directoryId}/template${templateId}/items`,
+          method: 'GET',
+        },
+        true
+      ),
+    {
+      // select: (res) => res.data.template,
+    }
+  );
