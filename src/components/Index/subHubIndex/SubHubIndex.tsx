@@ -89,7 +89,7 @@ export default function SubHubIndex() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'hub',
+        activeItemType: 'subhub',
         activeItemName: name,
       })
     );

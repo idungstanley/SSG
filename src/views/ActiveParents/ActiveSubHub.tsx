@@ -80,36 +80,26 @@ export default function ActiveSubHub() {
       {data?.data?.hubs.length !== 0 &&
         data?.data?.hubs.map((subhub) => (
           <div key={subhub.id}>
-            <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
-              <div id="subhubleft" className="flex items-center justify-center">
-                {/* showsub1 */}
-                <div className="flex min-w-0 flex-1 items-center">
-                  <AvatarWithInitials
-                    initials={subhub.name
-                      .split(' ')
-                      .slice(0, 2)
-                      .map((word) => word[0])
-                      .join('')
-                      .toUpperCase()}
-                    height="h-4"
-                    width="w-4"
-                    backgroundColour="orange"
-                    roundedStyle="rounded"
-                  />
-                  <span className="ml-4 overflow-hidden">
-                    <h4
-                      className="font-medium tracking-wider capitalize truncate"
-                      style={{ fontSize: '10px' }}
-                    >
-                      {subhub.name}
-                    </h4>
-                  </span>
+            {currSubHubId === subhub.id && (
+              <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
+                <div
+                  id="subhubleft"
+                  className="flex items-center justify-center"
+                >
+                  {/* showsub1 */}
+                  <div className="flex items-center flex-1 min-w-0">
+                    <span className="overflow-hidden">
+                      <h4
+                        className="font-medium tracking-wider capitalize truncate"
+                        style={{ fontSize: '10px' }}
+                      >
+                        {subhub.name}
+                      </h4>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </section>
-            {currSubHubId === subhub.id ? <SHubDropdownList /> : null}
-            {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
-            {SubMenuId === subhub.id ? <SubDropdown /> : null}
+              </section>
+            )}
           </div>
         ))}
     </div>
