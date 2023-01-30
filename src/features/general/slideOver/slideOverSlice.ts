@@ -68,9 +68,11 @@ interface SideOverState {
   pilotSideOver: Pilot;
   pilotSideOverHub: PilotHub;
   itemActionForSideOver: itemAction | null;
+  showCreateDirectorySlideOver: boolean;
 }
 
 const initialState: SideOverState = {
+  showCreateDirectorySlideOver: false,
   showCreateInboxSlideOver: false,
   showCreateHubSlideOver: false,
   showEditHubSlideOver: false,
@@ -99,6 +101,12 @@ export const slideOverSlice = createSlice({
   name: 'slideOver',
   initialState,
   reducers: {
+    setShowCreateDirectorySlideOver: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showCreateDirectorySlideOver = action.payload;
+    },
     setItemActionForSideOver: (
       state,
       action: PayloadAction<itemAction | null>
@@ -214,6 +222,7 @@ export const slideOverSlice = createSlice({
 });
 
 export const {
+  setShowCreateDirectorySlideOver,
   setCreateInboxSlideOverVisibility,
   setCreateHubSlideOverVisibility,
   setEditHubSlideOverVisibility,
