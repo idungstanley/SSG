@@ -16,13 +16,13 @@ import {
   FolderOpenIcon,
   InboxStackIcon,
   MapIcon,
-  RectangleStackIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
-import Directory from '../../../directory';
+import Directory from '../../../directory/components/Sidebar';
+import { AiOutlineBranches } from 'react-icons/ai';
 // import { FaWpforms } from 'react-icons/fa';
 // import emailIcon from '../../../../assets/branding/email-icon.png';
 // import InboxIcon from '../../../../assets/branding/inbox.png';
@@ -46,6 +46,8 @@ function Places() {
     // required for all modals, side-overs in the explorer
     if (id === 4) {
       navigate('/new-explorer');
+    } else if (id === 5) {
+      navigate('/directory');
     }
   };
 
@@ -82,7 +84,7 @@ function Places() {
       id: 5,
       place: <Directory />,
       // source: trackerIcon,
-      icon: <RectangleStackIcon className="h-5 w-5" />,
+      icon: <AiOutlineBranches className="h-5 w-5" />,
     },
     {
       name: 'Forms',
