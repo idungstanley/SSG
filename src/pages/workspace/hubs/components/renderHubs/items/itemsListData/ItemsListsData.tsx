@@ -4,6 +4,8 @@ import { getTaskListService } from "../../../../../../../features/task/taskServi
 import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
 import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
 import TaskData from "../../../../../tasks/component/taskData/TaskData";
+import SubTask from "../../../../../tasks/subtasks/create/SubTask";
+import RenderSubTasks from "../../../../../tasks/subtasks/subtask1/RenderSubTasks";
 
 interface ItemsListsDataProps {
   listId: string | null;
@@ -11,7 +13,17 @@ interface ItemsListsDataProps {
 export default function ItemsListsData({ listId }: ItemsListsDataProps) {
   const { data } = getTaskListService({ listId });
 
-  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const {
+    myTaskData,
+    listView,
+    tableView,
+    addNewTaskItem,
+    showTaskNavigation,
+    closeTaskListView,
+    currentParentTaskId,
+    getSubTaskId,
+  } = useAppSelector((state) => state.task);
+
   const dispatch = useAppDispatch();
 
   return (
@@ -22,20 +34,16 @@ export default function ItemsListsData({ listId }: ItemsListsDataProps) {
           return (
             <div key={task.id}>
               <TaskData task={task} />
+
+              {currentParentTaskId === task.id ? (
+                <div>
+                  <SubTask parentTaskId={currentParentTaskId} />
+                </div>
+              ) : null}
+              {getSubTaskId === task.id ? <RenderSubTasks /> : null}
             </div>
           );
         })}
-
-        {/* {addNewTaskItem && <AddNewItem listId={listId} />}
-        <div
-          className=""
-          id="newItem"
-          onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
-        >
-          <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
-            + New Task
-          </p>
-        </div> */}
       </div>
     </section>
   );
