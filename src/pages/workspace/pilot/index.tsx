@@ -11,8 +11,9 @@ import Permissions from '../../newExplorer/components/Pilot/components/Permissio
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import WatchersForPilot from '../../../components/Watchers/WatchersForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
-import Commnunication from './components/Communication';
-import Details from './components/Details';
+import Commnunication from './components/communication/Communication';
+import Details from './components/details/Details';
+import TimeClock from './components/TimeClock';
 
 const sections = [
   {
@@ -39,10 +40,14 @@ const sections = [
     id: 5,
     element: <CommentsForPilot />,
   },
+  {
+    id: 6,
+    element: <TimeClock />,
+  },
 ];
 
 export default function Pilot() {
-  const [activeTabId, setActiveTabId] = useState(0);
+  const [activeTabId, setActiveTabId] = useState(4);
   const selectedSection = useMemo(
     () => sections.find((section) => section.id === activeTabId),
     [activeTabId]

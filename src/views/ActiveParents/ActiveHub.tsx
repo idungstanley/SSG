@@ -26,6 +26,7 @@ import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
 import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
+import ActiveSubHub from './ActiveSubHub';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ export default function ActiveHub() {
 
   if (status === 'loading') {
     return (
-      <div className="mx-auto w-6 mt-10 justify-center">
+      <div className="justify-center w-6 mx-auto mt-10">
         <Spinner size={8} color="#0F70B7" />
       </div>
     );
@@ -114,7 +115,14 @@ export default function ActiveHub() {
   };
 
   const displayClickedParent = () => {
-    if (activeItemType === 'wallet') {
+    if (activeItemType === 'subhub') {
+      return subHubData?.map((subHub) => {
+        if (subHub.id === activeItemId) {
+          return <ActiveSubHub key={subHub.id} />;
+        }
+        return null;
+      });
+    } else if (activeItemType === 'wallet') {
       return walletData?.map((wallet) => {
         if (wallet.id === activeItemId) {
           return (
@@ -185,13 +193,13 @@ export default function ActiveHub() {
                   <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
                 )}
                 <div
-                  className="flex justify-between gap-2 items-center hover:bg-gray-100 relative"
+                  className="relative flex items-center justify-between gap-2 hover:bg-gray-100"
                   style={{ height: '28px' }}
                   onMouseEnter={() => handleMouseOver(index)}
                   onMouseLeave={handleMouseOut}
                 >
                   {i.id === currentItemId && (
-                    <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500" />
+                    <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
                   )}
                   <div
                     role="button"
@@ -199,7 +207,7 @@ export default function ActiveHub() {
                     onClick={() => handleClick(i.id)}
                     className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
                   >
-                    <div className="flex min-w-0 ml-2 flex-1 items-center">
+                    <div className="flex items-center flex-1 min-w-0 ml-2">
                       <AvatarWithInitials
                         initials={i.name
                           .split(' ')
@@ -223,7 +231,7 @@ export default function ActiveHub() {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    {currentWalletId && <span className="">/</span>}
+                    {(activeItemType != 'hub' && activeItemType != null) && <span className="">/</span>}
                     <span>{displayClickedParent()}</span>
                   </div>
                 </div>

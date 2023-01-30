@@ -18,6 +18,7 @@ import { IHub } from '../../features/hubs/hubs.interfaces';
 import {
   closeMenu,
   getCurrHubId,
+  getPrevName,
   getSubMenu,
   setshowMenuDropdown,
 } from '../../features/hubs/hubSlice';
@@ -106,7 +107,7 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id: string, e) => {
+  const handleHubSettings = (id: string, name: string, e) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -114,6 +115,7 @@ export default function ItemsListInSidebar({
         showMenuDropdownType: 'hubs',
       })
     );
+    dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
@@ -207,7 +209,7 @@ export default function ItemsListInSidebar({
             {isHovering === index && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, e)}
+                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="text-black cursor-pointer"
                   id="menusettings"
                 />

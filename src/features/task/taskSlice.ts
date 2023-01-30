@@ -20,6 +20,7 @@ export interface ImyTaskData {
 
 interface TaskState {
   task: string[];
+  currentTaskIdForPilot: null;
   watchersData: string[];
   removeWatcherId: null;
   currTeamMemberId: null;
@@ -41,6 +42,7 @@ interface TaskState {
 
 const initialState: TaskState = {
   task: [],
+  currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
   removeWatcherId: null,
@@ -66,6 +68,9 @@ export const taskSlice = createSlice({
   reducers: {
     createTaskSlice(state, action) {
       state.task.push(action.payload);
+    },
+    setTaskIdForPilot(state, action) {
+      state.currentTaskIdForPilot = action.payload;
     },
     getTaskData(state, action) {
       const taskDataArray = action.payload;
@@ -133,6 +138,7 @@ export const taskSlice = createSlice({
 
 export const {
   createTaskSlice,
+  setTaskIdForPilot,
   checkIfTask,
   setWatchersData,
   setCurrTeamMemId,

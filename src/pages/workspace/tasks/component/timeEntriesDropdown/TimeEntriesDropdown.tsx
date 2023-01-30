@@ -47,9 +47,8 @@ function TimeEntriesDropdown({
 
   queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
 
-  const { data: getEntries } = useQuery({
-    queryKey: ['getTimeEntries', taskId],
-    queryFn: GetTimeEntriesService,
+  const { data: getEntries } = GetTimeEntriesService({
+    taskId,
   });
 
   useQuery({
