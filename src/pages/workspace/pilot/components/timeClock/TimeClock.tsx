@@ -1,5 +1,5 @@
 import React from 'react';
-import TimeEntries from '../../tasks/timeclock/TimeEntries';
+import TimeEntries from '../../../tasks/timeclock/TimeEntries';
 
 export default function TimeClock() {
   return (

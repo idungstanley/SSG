@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import communicationIcon from '../../../../assets/branding/communication.png';
 import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
@@ -60,6 +60,7 @@ interface TabProps {
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
+  const [pilots, setPilots] = useState(pilotOptions);
   const { showPilot, showPilotIconView } = useAppSelector(
     (state) => state.workspace
   );
@@ -80,13 +81,27 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       dispatch(setShowPilotIconView(true));
     }
   };
+
+  // Save reference for dragItem and dragOverItem
+  const dragItem = React.useRef<any>(null);
+  const dragOverItem = React.useRef<any>(null);
+
+  const handleSort = () => {
+    const _pilotOptions = [...pilotOptions];
+    const draggedItemContent = _pilotOptions.splice(dragItem.current, 1)[0];
+    _pilotOptions.splice(dragOverItem.current, 0, draggedItemContent);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setPilots(_pilotOptions);
+  };
+
   return (
     <div
       className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
       aria-label="Tabs"
     >
       <div
-        className={`flex items-center h-fit px-1 ${
+        className={`flex items-center h-fit px-2 ${
           showPilot ? 'flex-row py-2' : 'flex-col gap-1'
         }`}
       >
@@ -112,8 +127,13 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
             <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
           </span>
         )}
-        {pilotOptions.map((item) => (
+        {pilots.map((item, index) => (
           <div
+            draggable
+            onDragStart={() => (dragItem.current = index)}
+            onDragEnter={() => (dragOverItem.current = index)}
+            onDragEnd={handleSort}
+            onDragOver={(e) => e.preventDefault()}
             key={item.id}
             onClick={() => handleClick(item.id)}
             className={classNames(

@@ -11,9 +11,9 @@ import Permissions from '../../newExplorer/components/Pilot/components/Permissio
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import WatchersForPilot from '../../../components/Watchers/WatchersForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
-import Commnunication from './components/Communication';
-import Details from './components/Details';
-import TimeClock from './components/TimeClock';
+import Commnunication from './components/communication/Communication';
+import Details from './components/details/Details';
+import TimeClock from './components/timeClock/TimeClock';
 
 const sections = [
   {
