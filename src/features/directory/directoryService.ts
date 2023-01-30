@@ -6,10 +6,13 @@ export const useGetDirectories = () =>
   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
     ['directory', 'root'],
     () =>
-      requestNew({
-        url: 'directories',
-        method: 'GET',
-      }),
+      requestNew(
+        {
+          url: 'directories',
+          method: 'GET',
+        },
+        true
+      ),
     {
       select: (res) => res.data.hubs,
     }
@@ -18,14 +21,17 @@ export const useGetDirectories = () =>
 const createDirectory = (data: { name: string; parentId?: string }) => {
   const { name, parentId } = data;
 
-  const response = requestNew({
-    url: 'directories',
-    method: 'POST',
-    params: {
-      name,
-      parent_id: parentId,
+  const response = requestNew(
+    {
+      url: 'directories',
+      method: 'POST',
+      params: {
+        name,
+        parent_id: parentId,
+      },
     },
-  });
+    true
+  );
   return response;
 };
 
