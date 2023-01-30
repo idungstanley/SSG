@@ -1,10 +1,10 @@
-import React from "react";
-import { useGetHubList } from "../../../features/hubs/hubService";
-import ItemsListInSidebar from "../../../components/ItemsListInSidebar";
-import { useDispatch } from "react-redux";
-import { getHub } from "../../../features/hubs/hubSlice";
-import everythingIcon from "../../../assets/branding/everything-icon.png";
-import { useAppSelector } from "../../../app/hooks";
+import React from 'react';
+import { useGetHubList } from '../../../features/hubs/hubService';
+import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
+import { useDispatch } from 'react-redux';
+import { getHub } from '../../../features/hubs/hubSlice';
+import everythingIcon from '../../../assets/branding/everything-icon.png';
+import { useAppSelector } from '../../../app/hooks';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -12,17 +12,16 @@ function Hubs() {
   const { data, status } = useGetHubList({
     query: toggleArchive,
   });
-  if (status === "success") {
+  if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
-    console.log(data?.data.hubs);
   }
   return (
     <>
       <div className="flex items-center justify-between pl-4 hover:bg-gray-100">
         <div className="flex items-center content-center self-center py-2">
           <img src={everythingIcon} alt="Hub Icon" className="h-4 mr-4" />
-          <p className="tracking-wider" style={{ fontSize: "10px" }}>
-            Everthing
+          <p className="tracking-wider" style={{ fontSize: '10px' }}>
+            Everything
           </p>
         </div>
       </div>
