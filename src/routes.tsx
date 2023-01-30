@@ -108,6 +108,8 @@ export const routes = (user: IUser | null) =>
     },
     { path: 'new-explorer', element: <NewExplorerPage /> },
     { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
+    { path: 'directory', element: <Directory /> },
+    { path: 'directory/:directoryId', element: <Directory /> },
     {
       path: '/',
       element: user ? (
@@ -121,9 +123,6 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: '/', element: <Navigate to="/workspace" /> },
-        { path: 'new-explorer', element: <NewExplorerPage /> },
-        { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
-        { path: 'directory', element: <Directory /> },
         { path: 'explorer', element: <ExplorerPage /> },
         { path: 'explorer/:folderId', element: <ExplorerPage /> },
         { path: 'shared', element: <SharedPage /> },
