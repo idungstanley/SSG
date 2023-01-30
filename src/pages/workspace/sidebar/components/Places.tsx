@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../dashboard';
-import Directory from '../../directory';
 import Favorites from '../../favorites';
 import Files from '../../files';
 import Hubs from '../../hubs';
@@ -20,11 +19,10 @@ import {
   MapIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import {
-  useNavigate,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
+import Directory from '../../../directory';
 // import { FaWpforms } from 'react-icons/fa';
 // import emailIcon from '../../../../assets/branding/email-icon.png';
 // import InboxIcon from '../../../../assets/branding/inbox.png';
@@ -48,7 +46,6 @@ function Places() {
     // required for all modals, side-overs in the explorer
     if (id === 4) {
       navigate('/new-explorer');
-
     }
   };
 
@@ -95,7 +92,7 @@ function Places() {
       icon: <ClockIcon className="h-5 w-5" />,
     },
     {
-      name: 'Tracker',
+      name: 'Directory',
       id: 7,
       place: <Directory />,
       // source: trackerIcon,
@@ -104,21 +101,21 @@ function Places() {
     {
       name: 'Route Planner',
       id: 8,
-      place: <Directory />,
+      place: <> </>,
       // source: routePlanner,
       icon: <MapIcon className="h-5 w-5" />,
     },
     {
       name: 'Also HR',
       id: 9,
-      place: <Directory />,
+      place: <> </>,
       // source: alsoHRIcon, // ! bad because all icons are outlined, this - solid
       icon: <UserIcon className="h-5 w-5" />,
     },
     {
       name: 'Commerce',
       id: 10,
-      place: <Directory />,
+      place: <> </>,
       // source: commerceIcon,
       icon: <BriefcaseIcon className="h-5 w-5" />,
     },

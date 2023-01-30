@@ -168,7 +168,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
                 <span className="text-primary-500">
                   {stringifyNumber(currentFileIndex)}
                 </span>
-                <span>/</span>
+                <span>of</span>
               </>
             ) : null}
             <span>{stringifyNumber(data.length)}</span>
