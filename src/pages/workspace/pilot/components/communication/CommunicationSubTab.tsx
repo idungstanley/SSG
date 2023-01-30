@@ -44,7 +44,7 @@ export default function CommunicationSubTab({
           <div
             key={item.id}
             onClick={() => setActiveSubTabId(item.id)}
-            className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 hover:bg-gray-50 border-y-2 ${
+            className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
               item.id === activeSubTabId
                 ? 'rounded-t-lg bg-white'
                 : 'rounded-b-lg bg-gray-400'
