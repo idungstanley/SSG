@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import SubTask from '../../../../../tasks/subtasks/create/SubTask';
+import SubTask from '../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 
 interface DetailsIndexProps {

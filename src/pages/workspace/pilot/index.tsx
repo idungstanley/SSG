@@ -13,7 +13,7 @@ import WatchersForPilot from '../../../components/Watchers/WatchersForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
-import TimeClock from './components/TimeClock';
+import TimeClock from './components/timeClock/TimeClock';
 
 const sections = [
   {

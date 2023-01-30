@@ -10,17 +10,19 @@ interface SubTabProps {
 const DetailOptions = [
   {
     id: 0,
-    label: 'details',
+    label: 'properties',
     icon: <BiMessageAltDetail />,
-    // element: <SubDetails />,
   },
   {
     id: 1,
-    label: 'addTo',
+    label: 'attachments',
     icon: <MdAddToPhotos />,
   },
 ];
-export default function DetailsSubTab({activeSubTabId, setActiveSubTabId}: SubTabProps) {
+export default function DetailsSubTab({
+  activeSubTabId,
+  setActiveSubTabId,
+}: SubTabProps) {
   const { showPilot } = useAppSelector((state) => state.workspace);
   return (
     <section>

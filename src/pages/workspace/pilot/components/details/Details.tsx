@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import AddTo from '../addTo/AddTo';
-import DetailsIndex from '../subDetails/DetailsIndex';
+import AddTo from '../attachments/AddTo';
+import DetailsIndex from './properties/DetailsIndex';
 import DetailsSubTab from './DetailsSubTab';
 
 const DetailOptions = [
