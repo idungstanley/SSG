@@ -12,11 +12,11 @@ import {
   AtSymbolIcon,
   BriefcaseIcon,
   ClockIcon,
-  Cog6ToothIcon,
   DocumentTextIcon,
   FolderOpenIcon,
   InboxStackIcon,
   MapIcon,
+  RectangleStackIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
@@ -78,25 +78,25 @@ function Places() {
       icon: <FolderOpenIcon className="h-5 w-5" />,
     },
     {
-      name: 'Forms',
+      name: 'Directory',
       id: 5,
+      place: <Directory />,
+      // source: trackerIcon,
+      icon: <RectangleStackIcon className="h-5 w-5" />,
+    },
+    {
+      name: 'Forms',
+      id: 6,
       place: <Files />,
       // icon: <FaWpforms className="h-4" />,
       icon: <DocumentTextIcon className="h-5 w-5" />,
     },
     {
       name: 'Time clock',
-      id: 6,
+      id: 7,
       place: <Dashboard />,
       // source: timeClockIcon,
       icon: <ClockIcon className="h-5 w-5" />,
-    },
-    {
-      name: 'Directory',
-      id: 7,
-      place: <Directory />,
-      // source: trackerIcon,
-      icon: <Cog6ToothIcon className="h-5 w-5" />,
     },
     {
       name: 'Route Planner',
