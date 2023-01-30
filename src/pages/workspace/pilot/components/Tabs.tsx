@@ -84,15 +84,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dragItem = React.useRef<any>(null);
   const dragOverItem = React.useRef<any>(null);
 
-  // // Drag Start
-  // const onDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-  //   console.log("Drag Start");
-  // };
-
-  // // Drag Enter
-  // const onDragEnter = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-  //   console.log("Drag Enter");
-  // };
   const handleSort = () => {
     const _pilotOptions = [...pilotOptions];
     const draggedItemContent = _pilotOptions.splice(dragItem.current, 1)[0];
@@ -102,10 +93,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
     setPilots(_pilotOptions);
   };
 
-  // Drag End
-  // const onDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-  //   console.log("Drag End");
-  // };
   return (
     <div
       className={`gap-4 pb-1  ${showPilot ? "w-full border" : "w-12"}`}
@@ -144,6 +131,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
             onDragStart={(e) => (dragItem.current = index)}
             onDragEnter={(e) => (dragOverItem.current = index)}
             onDragEnd={handleSort}
+            onDragOver={(e)=>e.preventDefault()}
             key={item.id}
             onClick={() => handleClick(item.id)}
             className={classNames(
