@@ -8,7 +8,7 @@ import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import { classNames } from '../../../../utils';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
-import { AiOutlineEllipsis } from 'react-icons/ai';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -16,6 +16,8 @@ import {
   setShowPilotIconView,
 } from '../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
+import DetailsSubTab from './details/DetailsSubTab';
+import CommunicationSubTab from './communication/CommunicationSubTab';
 
 interface TabProps {
   activeTabId: number;
@@ -26,11 +28,13 @@ interface IItem {
   id: number;
   name: string;
   source: any;
+  subTab?: any;
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
-    useAppSelector((state) => state.workspace);
+  const { showPilot, showPilotIconView } = useAppSelector(
+    (state) => state.workspace
+  );
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
@@ -54,6 +58,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       id: 1,
       name: 'Connect',
       source: communicationIcon,
+      subTab: <CommunicationSubTab />,
     },
     {
       id: 2,
@@ -70,6 +75,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       id: 4,
       name: 'Details',
       source: detailIcon,
+      subTab: <DetailsSubTab />,
     },
     {
       id: 5,
@@ -103,48 +109,45 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
 
   return (
     <div
-      className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
+      className={`gap-4 pb-1 border  ${showPilot ? 'w-full' : 'w-12'}`}
       aria-label="Tabs"
     >
-      <section>
-        <div id="entity" className="flex -mb-3 p-1 text-xs capitalize">
-          <p className="text-gray-600"> {activeItemType && activeItemType}</p>
-          <p>:</p>
-          <p className="pl-1 text-gray-500 capitalize">
-            {activeItemName && activeItemName}
-          </p>
-        </div>
-        <div
-          className={`flex items-center h-fit px-2 ${
-            showPilot ? 'flex-row py-2' : 'flex-col gap-1'
+      <div
+        className={`flex items-center h-fit px-2 ${
+          showPilot ? 'flex-row py-2' : 'flex-col gap-1'
+        }`}
+      >
+        <HiChevronDoubleRight
+          onClick={() => handleShowPilot()}
+          className={`cursor-pointer ${
+            showPilot ? 'translate-x-4 skew-y-3' : 'transform -rotate-180 mb-1'
           }`}
-        >
-          <HiChevronDoubleRight
-            onClick={() => handleShowPilot()}
-            className={`cursor-pointer ${
-              showPilot
-                ? 'translate-x-4 skew-y-3'
-                : 'transform -rotate-180 mb-1'
+        />
+        <BsThreeDotsVertical />
+      </div>
+      <div
+        className={`flex relative divide-x ${
+          showPilot ? 'flex-row' : 'flex-col'
+        } ${showPilotIconView ? '' : 'flex-wrap'}`}
+      >
+        {showPilot && (
+          <span
+            className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
+              showPilotIconView && 'text-green-500'
             }`}
-          />
-          <AiOutlineEllipsis />
-        </div>
-
-        <div
-          className={`flex relative divide-x ${
-            showPilot ? 'flex-row' : 'flex-col'
-          } ${showPilotIconView ? '' : 'flex-wrap'}`}
-        >
-          {showPilot && (
-            <span
-              className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
-                showPilotIconView && 'text-green-500'
-              }`}
-            >
-              <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
-            </span>
-          )}
-          {items.map((item, index) => (
+          >
+            <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
+          </span>
+        )}
+        {items.map((item, index) => (
+          <section
+            key={item.id}
+            className={`flex ${
+              item.id === activeTabId && showPilot === false
+                ? 'flex-col'
+                : 'flex-row'
+            }`}
+          >
             <div
               draggable
               onDragStart={() => (dragItem.current = index)}
@@ -184,9 +187,10 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
                 {item.name}
               </p>
             </div>
-          ))}
-        </div>
-      </section>
+            {item.id === activeTabId && showPilot === false && item.subTab}
+          </section>
+        ))}
+      </div>
     </div>
   );
 }
