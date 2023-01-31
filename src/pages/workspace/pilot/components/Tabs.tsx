@@ -16,69 +16,19 @@ import {
   setShowPilotIconView,
 } from "../../../../features/workspace/workspaceSlice";
 import { MdDragIndicator } from "react-icons/md";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  rectSortingStrategy,
-} from "@dnd-kit/sortable";
-import SortMe from "../../../../utils/DragnDrop";
-
-const pilotOptions = [
-  {
-    id: 0,
-    name: "communication",
-    source: communicationIcon,
-  },
-  {
-    id: 1,
-    name: "Logs",
-    source: logsIcon,
-  },
-  {
-    id: 2,
-    name: "Permissions",
-    source: permissionIcon,
-  },
-  {
-    id: 3,
-    name: "Properties",
-    source: propertiesIcon,
-  },
-  {
-    id: 4,
-    name: "Details",
-    source: detailIcon,
-  },
-  {
-    id: 5,
-    name: "Automation",
-    source: automationIcon,
-  },
-  {
-    id: 6,
-    name: "TimeClock",
-    source: timeclockIcon,
-  },
-];
 
 interface TabProps {
   activeTabId: number;
   setActiveTabId: (i: number) => void;
 }
+
+interface IItem {
+  id: number;
+  name: string;
+  source: any;
+}
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const [pilots, setPilots] = useState<any>(pilotOptions);
   const { showPilot, showPilotIconView } = useAppSelector(
     (state) => state.workspace
   );
@@ -138,6 +88,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       source: timeclockIcon,
     },
   ]);
+
   // Drag an drop functionality
   const dragItem = React.useRef<any>(null);
   const dragOverItem = React.useRef<any>(null);
@@ -149,37 +100,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
     dragItem.current = null;
     dragOverItem.current = null;
     setItems(_pilotOptions);
-  };
-
-  interface IItem {
-    id: number;
-    name: string;
-    source: any;
-  }
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e;
-
-    if (active.id !== over?.id) {
-      const findActive = items.find((i) => i.id === active.id);
-      const findOver = items.find((i) => i.id === over?.id);
-
-      if (findActive && findOver) {
-        setItems((items) => {
-          const oldIndex = items.indexOf(findActive);
-          const newIndex = items.indexOf(findOver);
-
-          return arrayMove(items, oldIndex, newIndex);
-        });
-      }
-    }
   };
 
   return (
@@ -217,8 +137,8 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         {items.map((item, index) => (
           <div
             draggable
-            onDragStart={(e) => (dragItem.current = index)}
-            onDragEnter={(e) => (dragOverItem.current = index)}
+            onDragStart={() => (dragItem.current = index)}
+            onDragEnter={() => (dragOverItem.current = index)}
             onDragEnd={handleSort}
             onDragOver={(e) => e.preventDefault()}
             key={item.id}
@@ -255,100 +175,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
             </p>
           </div>
         ))}
-        {/* <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={(e) => handleDragEnd(e)}
-        >
-          <SortableContext strategy={rectSortingStrategy} items={items}>
-            {items.map((item) => (
-              <div
-                draggable
-                key={item.id}
-                onClick={() => handleClick(item.id)}
-                className={classNames(
-                  item.id === activeTabId
-                    ? "bg-gray-300 text-black"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
-                  showPilot ? "border-y-2 border gap-2 pr-6" : "py-3 px-3",
-                  showPilotIconView ? "w-12" : "",
-                  "relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition"
-                )}
-                aria-current={item.id === activeTabId ? "page" : undefined}
-              >
-                {item.id === activeTabId && (
-                  <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
-                )}
-                <div className="flex items-center">
-                  <span
-                    className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                      showPilot ? "block" : "hidden"
-                    }`}
-                  >
-                    <MdDragIndicator />
-                  </span>
-                  <img src={item.source} alt="" className="w-4 h-4" />
-                </div>
-                <SortMe
-                  key={item.id}
-                  id={item.id}
-                  label={item.name}
-                  showPilot={showPilot}
-                  showPilotIconView={showPilotIconView}
-                />
-              </div>
-            ))}
-          </SortableContext>
-        </DndContext> */}
-      </div>
-      <div className="container mx-auto w-full mt-5">
-        <div className="border p-2 bg-gray-100 gap-2 grid grid-rows-2 grid-cols-3 overflow-hidden">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={(e) => handleDragEnd(e)}
-          >
-            <SortableContext strategy={rectSortingStrategy} items={items}>
-              {items.map((item) => (
-                <div
-                  draggable
-                  key={item.id}
-                  onClick={() => handleClick(item.id)}
-                  className={classNames(
-                    item.id === activeTabId
-                      ? "bg-gray-300 text-black"
-                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
-                    showPilot ? "border-y-2 border gap-2 pr-6" : "py-3 px-3",
-                    showPilotIconView ? "w-12" : "",
-                    "relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition"
-                  )}
-                  aria-current={item.id === activeTabId ? "page" : undefined}
-                >
-                  {item.id === activeTabId && (
-                    <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
-                  )}
-                  <div className="flex items-center">
-                    <span
-                      className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                        showPilot ? "block" : "hidden"
-                      }`}
-                    >
-                      <MdDragIndicator />
-                    </span>
-                    <img src={item.source} alt="" className="w-4 h-4" />
-                  </div>
-                  <SortMe
-                    key={item.id}
-                    id={item.id}
-                    label={item.name}
-                    showPilot={showPilot}
-                    showPilotIconView={showPilotIconView}
-                  />
-                </div>
-              ))}
-            </SortableContext>
-          </DndContext>
-        </div>
       </div>
     </div>
   );
