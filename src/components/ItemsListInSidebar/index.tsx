@@ -8,6 +8,7 @@ import {
   setActiveItem,
   setCurrentItem,
   setShowHub,
+  setShowPilot,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/MenuDropdown';
@@ -79,6 +80,7 @@ export default function ItemsListInSidebar({
         activeItemName: name,
       })
     );
+    dispatch(setShowPilot(true));
     navigate(`/workspace/hub/${id}`);
   };
 
