@@ -3,29 +3,21 @@ import {
   FolderPlusIcon,
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
-  Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../newExplorer/components/Search';
-import { useGetDirectories } from '../../../../features/directory/directoryService';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 import { AiOutlineBranches } from 'react-icons/ai';
-import { classNames } from '../../../../utils';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import DirectoryList from './components';
 
 function Sidebar() {
   const dispatch = useAppDispatch();
-  const { directoryId } = useParams();
-  const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState('');
-
-  const { data, status } = useGetDirectories();
 
   const configForDropdown = [
     {
@@ -34,14 +26,6 @@ function Sidebar() {
       onClick: () => dispatch(setShowCreateDirectorySlideOver(true)),
     },
   ];
-
-  const onClickDirectory = (id: string) => {
-    const isActiveDirectory = directoryId === id;
-
-    navigate(`/directory/${isActiveDirectory ? '' : id}`, {
-      replace: true,
-    });
-  };
 
   return (
     <>
@@ -83,52 +67,7 @@ function Sidebar() {
         />
       ) : null}
 
-      <div className="flex flex-col mb-2">
-        {/*
-          // ! move to another component
-        */}
-        {data
-          ? data.map((directory) => (
-              <div key={directory.id} className="flex flex-col w-full">
-                {/* directory */}
-                <div
-                  onClick={() => onClickDirectory(directory.id)}
-                  className="hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer"
-                >
-                  {directoryId === directory.id ? (
-                    <VscTriangleDown
-                      className="h-4 w-4 text-gray-500"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <VscTriangleRight
-                      className="h-4 w-4 text-gray-500"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {/* <PlayIcon className="h-4 w-4 cursor-pointer text-gray-700" /> */}
-                  <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
-                  <p>{directory.name}</p>
-                </div>
-
-                {/* templates */}
-                <div
-                  className={classNames(
-                    'ml-6',
-                    directory.templates.length > 0 ? 'mt-2' : ''
-                  )}
-                >
-                  {directory.templates.map((template) => (
-                    <div key={template.id} className="flex gap-2">
-                      <Squares2X2Icon className="h-5 w-5 cursor-pointer" />
-                      <p>{template.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))
-          : null}
-      </div>
+      <DirectoryList />
     </>
   );
 }

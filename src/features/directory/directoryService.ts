@@ -6,7 +6,28 @@ import {
   IDirectoryRes,
   IDirectoryTemplate,
   IDirectoryTemplateRes,
+  IDirectoryTmpRes,
+  IDirectoryTree,
 } from './directory.interfaces';
+
+export const useGetDirectoryTmp = (id?: string | null) =>
+  useQuery<IDirectoryTmpRes, unknown, IDirectoryTree>(
+    ['directory', id || 'root'],
+    () =>
+      requestNew(
+        {
+          url: `directories${id ? '/' + id : ''}`,
+          method: 'GET',
+          params: {
+            include_tree: 1,
+          },
+        },
+        true
+      ),
+    {
+      select: (res) => res.data,
+    }
+  );
 
 export const useGetDirectories = () =>
   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
@@ -16,6 +37,9 @@ export const useGetDirectories = () =>
         {
           url: 'directories',
           method: 'GET',
+          params: {
+            include_tree: 1,
+          },
         },
         true
       ),

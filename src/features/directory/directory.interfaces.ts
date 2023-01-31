@@ -33,3 +33,13 @@ export interface IDirectoryTemplateRes {
     template: IDirectoryTemplate;
   };
 }
+
+export interface IDirectoryTree {
+  directories?: IDirectory[];
+  directory?: IDirectory;
+  tree?: { directories?: IDirectory[]; directory?: IDirectory }[];
+}
+
+export interface IDirectoryTmpRes {
+  data: IDirectoryTree;
+}
