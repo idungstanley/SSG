@@ -68,7 +68,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [navItems, setNavItems] = useState(
-    tabs.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+    tabs.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
 
   const sensors = useSensors(
@@ -162,7 +162,7 @@ function NavItem({
       : undefined,
     transition,
     backgroundColor: isDragging ? '#f3f4f6' : undefined,
-    zIndex: isDragging ? 1 : undefined,
+    zIndex: isDragging ? 1 : undefined, // important for overlay
   };
 
   const handleClick = (tabId: number) => {
@@ -181,6 +181,7 @@ function NavItem({
       )}
       aria-current={id === activeTabId ? 'page' : undefined}
     >
+      {/* drag area */}
       <span
         ref={setNodeRef}
         {...attributes}
@@ -189,6 +190,8 @@ function NavItem({
       >
         <MdDragIndicator aria-hidden="true" className="w-4 h-4 cursor-move" />
       </span>
+
+      {/* main content */}
       <div className="flex gap-2 truncate">
         {icon}
         <p title={label}>{label}</p>
