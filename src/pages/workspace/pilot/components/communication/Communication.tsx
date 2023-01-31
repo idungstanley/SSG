@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommunicationSubTab from './CommunicationSubTab';
 
@@ -14,17 +15,19 @@ const communicationOptions = [
   },
 ];
 export default function Commnunication() {
-  const [activeSubTabId, setActiveSubTabId] = useState<number>(0);
+  const { activeSubCommunicationTabId, showPilot } = useAppSelector(
+    (state) => state.workspace
+  );
   const selectedSubSection = useMemo(
-    () => communicationOptions.find((option) => option.id === activeSubTabId),
-    [activeSubTabId]
+    () =>
+      communicationOptions.find(
+        (option) => option.id === activeSubCommunicationTabId
+      ),
+    [activeSubCommunicationTabId]
   );
   return (
     <section className="flex flex-col h-full">
-      <CommunicationSubTab
-        activeSubTabId={activeSubTabId}
-        setActiveSubTabId={setActiveSubTabId}
-      />
+      {showPilot && <CommunicationSubTab />}
       <div>{selectedSubSection ? selectedSubSection.element : null}</div>
     </section>
   );

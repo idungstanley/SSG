@@ -186,7 +186,8 @@ export const UseGetHubDetails = (query) => {
       return data;
     },
     {
-      enabled: query.activeItemType === 'hub',
+      enabled:
+        query.activeItemType === 'hub' || query.activeItemType === 'subhub',
     }
   );
 };

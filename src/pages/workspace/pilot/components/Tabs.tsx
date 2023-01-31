@@ -20,7 +20,7 @@ import { MdDragIndicator } from 'react-icons/md';
 const pilotOptions = [
   {
     id: 0,
-    name: 'communication',
+    name: 'Connect',
     source: communicationIcon,
   },
   {
@@ -35,26 +35,21 @@ const pilotOptions = [
   },
   {
     id: 3,
-    name: 'Properties',
-    source: propertiesIcon,
-  },
-  {
-    id: 4,
     name: 'Details',
     source: detailIcon,
   },
   {
-    id: 5,
+    id: 4,
     name: 'Automation',
     source: automationIcon,
   },
   {
-    id: 6,
+    id: 5,
     name: 'TimeClock',
     source: timeclockIcon,
   },
   {
-    id: 7,
+    id: 6,
     name: 'Checklist',
     source: checklistIcon,
   },

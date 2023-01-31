@@ -17,7 +17,7 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
-import { setActiveItem } from '../../../features/workspace/workspaceSlice';
+import { setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function SubHubIndex() {
@@ -86,6 +86,7 @@ export default function SubHubIndex() {
   };
 
   const handleLocation = (id: string, name: string) => {
+    dispatch(setShowHub(true));
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -137,7 +138,6 @@ export default function SubHubIndex() {
                     backgroundColour="orange"
                     roundedStyle="rounded"
                   />
-
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate cursor-pointer"

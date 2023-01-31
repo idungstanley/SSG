@@ -47,6 +47,7 @@ export default function DetailsIndex() {
   const listDetails = list?.data.list;
 
   const showDetailsType = () => {
+    console.log(activeItemId, activeItemType);
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
       return <HubSubDetails hubDetails={hubDetails} key={hubDetails?.id} />;
     } else if (activeItemType == 'task') {
