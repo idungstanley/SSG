@@ -11693,7 +11693,7 @@ react-scripts@4.0.3:
 
 react-timecode@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/react-timecode/-/react-timecode-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-timecode/-/react-timecode-1.2.0.tgz#d48431f79892f930ce4169db1fc072f63a41eafe"
   integrity sha512-nm8KCipv0HItTLYFc4VkPFgTbETDRCRnVN4NDAggQfEouW3XDduXcewJsCsdck/jv309z25EdxVPyGTtirIk2w==
   dependencies:
     clean-react-props "^0.4.0"

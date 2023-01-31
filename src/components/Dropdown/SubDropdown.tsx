@@ -34,10 +34,13 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } =
+  const { showMenuDropdownType, SubMenuType, SubMenuId } =
     useAppSelector((state) => state.hub);
   const {
     showCreateSubWalletSlideOver,
+    showEditHubSlideOver,
+    showEditListSlideOver,
+    showEditWalletSlideOver,
     showCreateHubSlideOver,
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
@@ -52,7 +55,10 @@ export default function SubDropdown() {
           showCreateHubSlideOver === false &&
           showCreateSubHubSlideOver === false &&
           showCreateWalletSlideOver === false &&
-          showCreateTaskSlideOver === false
+          showCreateTaskSlideOver === false &&
+          showEditHubSlideOver === false &&
+          showEditListSlideOver === false &&
+          showEditWalletSlideOver === false
         ) {
           dispatch(setSubDropdownMenu(false));
           dispatch(
@@ -75,6 +81,9 @@ export default function SubDropdown() {
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
     showCreateTaskSlideOver,
+    showEditHubSlideOver,
+    showEditListSlideOver,
+    showEditWalletSlideOver,
   ]);
   const itemsList: itemsType[] = [
     {

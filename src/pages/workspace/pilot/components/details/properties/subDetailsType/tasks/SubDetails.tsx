@@ -1,35 +1,35 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import SubTask from '../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 
 interface DetailsIndexProps {
-  hubDetails: any;
+  taskDetails: any;
 }
-export default function HubSubDetails({ hubDetails }: DetailsIndexProps) {
-  console.log(hubDetails);
+export default function SubDetails({ taskDetails }: DetailsIndexProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
   return (
     <>
-      <section className="p-2" key={hubDetails?.id}>
+      <section className="p-2" key={taskDetails?.id}>
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>{hubDetails?.name}</p>
+            <p>{taskDetails?.name}</p>
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md h-20">
-            <p>{hubDetails?.description}</p>
+            <p>{taskDetails?.description}</p>
           </div>
         </div>
         {/* created time */}
         <div id="created time" className="mt-2">
           <label className="text-xs text-gray-500">Created</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>{moment(hubDetails?.created_at).format('MMM DD, hh:mm a')}</p>
+            <p>{moment(taskDetails?.created_at).format('MMM DD, hh:mm a')}</p>
           </div>
         </div>
         {/* due date */}
@@ -56,7 +56,7 @@ export default function HubSubDetails({ hubDetails }: DetailsIndexProps) {
             <button className="text-xs text-gray-500  ">Subtask</button>
           </div>
         </div>
-        {/* <div className="mt-4">{toggleSubTask && <SubTask />}</div> */}
+        <div className="mt-4">{toggleSubTask && <SubTask />}</div>
       </section>
     </>
   );

@@ -56,11 +56,11 @@ function RenderTaskModal() {
   const [formState, setFormState] = useState(defaultEndTimeClockFormState);
 
   // const { description } = formState;
-  useMutation(EndTimeEntriesService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-    },
-  });
+  // useMutation(EndTimeEntriesService, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries();
+  //   },
+  // });
 
   // const onSubmit = async () => {
   //   await endClockTimer.mutateAsync({

@@ -31,9 +31,6 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
 
   return (
     <section>
-      {/* wallets */}
-      {/* <div className="stac">{data?.data.wallets.map((item) => item.name)}</div> */}
-
       {/* lists */}
       <div className="">
         {data?.data.lists.map((item) => {
