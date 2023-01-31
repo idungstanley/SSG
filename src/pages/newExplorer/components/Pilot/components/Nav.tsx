@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ChatBubbleLeftEllipsisIcon,
   ClockIcon,
@@ -8,35 +8,52 @@ import {
   SignalIcon,
 } from '@heroicons/react/24/outline';
 import { classNames } from '../../../../../utils';
+import { MdDragIndicator } from 'react-icons/md';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from '@dnd-kit/sortable';
 
 const tabs = [
   {
-    id: 0,
+    id: 1,
     label: 'Details',
     icon: <InformationCircleIcon className="w-5 h-5" />,
   },
   {
-    id: 1,
+    id: 2,
     label: 'Logs',
     icon: <ClockIcon className="w-5 h-5" />,
   },
   {
-    id: 2,
+    id: 3,
     label: 'Permissions',
     icon: <LockClosedIcon className="w-5 h-5" />,
   },
   {
-    id: 3,
+    id: 4,
     label: 'Comments',
     icon: <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />,
   },
   {
-    id: 4,
+    id: 5,
     label: 'Watchers',
     icon: <EyeIcon className="w-5 h-5" />,
   },
   {
-    id: 5,
+    id: 6,
     label: 'Communication',
     icon: <SignalIcon className="w-5 h-5" />,
   },
@@ -48,31 +65,135 @@ interface NavProps {
 }
 
 export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
+  const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
+
+  const [navItems, setNavItems] = useState(
+    tabs.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+  );
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const findActive = navItems.find((i) => i.id === active.id);
+      const findOver = navItems.find((i) => i.id === over?.id);
+
+      if (findActive && findOver) {
+        setNavItems((navItems) => {
+          const oldIndex = navItems.indexOf(findActive);
+          const newIndex = navItems.indexOf(findOver);
+
+          const sortArray = arrayMove(navItems, oldIndex, newIndex);
+
+          localStorage.setItem(
+            'pilotSections',
+            JSON.stringify([...sortArray.map((i) => i.id)])
+          );
+
+          return sortArray;
+        });
+      }
+    }
+  };
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={(e) => handleDragEnd(e)}
+    >
+      <nav
+        className="gap-2 grid grid-cols-3 overflow-hidden w-full pb-5 border-b"
+        aria-label="Tabs"
+      >
+        <SortableContext strategy={rectSortingStrategy} items={navItems}>
+          {tabs.map((tab) => (
+            <NavItem
+              key={tab.id}
+              id={tab.id}
+              icon={tab.icon}
+              label={tab.label}
+              activeTabId={activeTabId}
+              setActiveTabId={setActiveTabId}
+            />
+          ))}
+        </SortableContext>
+      </nav>
+    </DndContext>
+  );
+}
+
+interface NavItemProps {
+  id: number;
+  label: string;
+  icon: JSX.Element;
+  activeTabId: number;
+  setActiveTabId: (i: number) => void;
+}
+
+function NavItem({
+  id,
+  label,
+  icon,
+  activeTabId,
+  setActiveTabId,
+}: NavItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id,
+  });
+
+  const style = {
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+    transition,
+    backgroundColor: isDragging ? '#f3f4f6' : undefined,
+    zIndex: isDragging ? 1 : undefined,
+  };
+
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
 
   return (
-    <nav
-      className="flex flex-wrap gap-1 w-full pb-5 border-b"
-      aria-label="Tabs"
+    <div
+      style={style}
+      onClick={() => handleClick(id)}
+      className={classNames(
+        id === activeTabId
+          ? 'bg-gray-100 text-gray-700'
+          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
+        'group flex cursor-pointer text-sm items-center gap-2 px-3 py-2 pr-7 border justify-between'
+      )}
+      aria-current={id === activeTabId ? 'page' : undefined}
     >
-      {tabs.map((tab) => (
-        <span
-          key={tab.id}
-          onClick={() => handleClick(tab.id)}
-          className={classNames(
-            tab.id === activeTabId
-              ? 'bg-gray-100 text-gray-700'
-              : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-            'flex cursor-pointer text-sm flex-grow items-center gap-2 px-3 py-2 fon justify-center border transition'
-          )}
-          aria-current={tab.id === activeTabId ? 'page' : undefined}
-        >
-          {tab.icon}
-          {tab.label}
-        </span>
-      ))}
-    </nav>
+      <span
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        className="opacity-0 group-hover:opacity-100"
+      >
+        <MdDragIndicator aria-hidden="true" className="w-4 h-4 cursor-move" />
+      </span>
+      <div className="flex gap-2 truncate">
+        {icon}
+        <p title={label}>{label}</p>
+      </div>
+      <div />
+    </div>
   );
 }

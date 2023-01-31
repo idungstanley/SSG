@@ -11,34 +11,34 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 
 const sections = [
   {
-    id: 0,
+    id: 1,
     element: <Information />,
   },
   {
-    id: 1,
+    id: 2,
     element: <History />,
   },
   {
-    id: 2,
+    id: 3,
     element: <Permissions />,
   },
   {
-    id: 3,
+    id: 4,
     element: <CommentsForPilot />,
   },
   {
-    id: 4,
+    id: 5,
     element: <WatchersForPilot />,
   },
   {
-    id: 5,
+    id: 6,
     element: <ChatForPilot />,
   },
 ];
 
 export default function Pilot() {
   const dispatch = useAppDispatch();
-  const [activeTabId, setActiveTabId] = useState(0);
+  const [activeTabId, setActiveTabId] = useState(1);
 
   const { selectedFolderId, selectedFileId } = useAppSelector(
     (state) => state.explorer
