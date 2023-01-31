@@ -8,7 +8,7 @@ import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import { classNames } from '../../../../utils';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -29,9 +29,8 @@ interface IItem {
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const { showPilot, showPilotIconView } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
+    useAppSelector((state) => state.workspace);
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
@@ -107,75 +106,87 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
       aria-label="Tabs"
     >
-      <div
-        className={`flex items-center h-fit px-2 ${
-          showPilot ? 'flex-row py-2' : 'flex-col gap-1'
-        }`}
-      >
-        <HiChevronDoubleRight
-          onClick={() => handleShowPilot()}
-          className={`cursor-pointer ${
-            showPilot ? 'translate-x-4 skew-y-3' : 'transform -rotate-180 mb-1'
+      <section>
+        <div id="entity" className="flex -mb-3 p-1 text-xs capitalize">
+          <p className="text-gray-600"> {activeItemType && activeItemType}</p>
+          <p>:</p>
+          <p className="pl-1 text-gray-500 capitalize">
+            {activeItemName && activeItemName}
+          </p>
+        </div>
+        <div
+          className={`flex items-center h-fit px-2 ${
+            showPilot ? 'flex-row py-2' : 'flex-col gap-1'
           }`}
-        />
-        <BsThreeDotsVertical />
-      </div>
-      <div
-        className={`flex relative divide-x ${
-          showPilot ? 'flex-row' : 'flex-col'
-        } ${showPilotIconView ? '' : 'flex-wrap'}`}
-      >
-        {showPilot && (
-          <span
-            className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
-              showPilotIconView && 'text-green-500'
+        >
+          <HiChevronDoubleRight
+            onClick={() => handleShowPilot()}
+            className={`cursor-pointer ${
+              showPilot
+                ? 'translate-x-4 skew-y-3'
+                : 'transform -rotate-180 mb-1'
             }`}
-          >
-            <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
-          </span>
-        )}
-        {items.map((item, index) => (
-          <div
-            draggable
-            onDragStart={() => (dragItem.current = index)}
-            onDragEnter={() => (dragOverItem.current = index)}
-            onDragEnd={handleSort}
-            onDragOver={(e) => e.preventDefault()}
-            key={item.id}
-            onClick={() => handleClick(item.id)}
-            className={classNames(
-              item.id === activeTabId
-                ? 'bg-gray-300 text-black'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-              showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
-              showPilotIconView ? 'w-12' : '',
-              'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
-            )}
-            aria-current={item.id === activeTabId ? 'page' : undefined}
-          >
-            {item.id === activeTabId && (
-              <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
-            )}
-            <div className="flex items-center">
-              <span
-                className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                  showPilot ? 'block' : 'hidden'
-                }`}
-              >
-                <MdDragIndicator />
-              </span>
-              <img src={item.source} alt="" className="w-4 h-4" />
-            </div>
-            <p
-              className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
-                showPilotIconView ? 'hidden' : 'block'
+          />
+          <AiOutlineEllipsis />
+        </div>
+
+        <div
+          className={`flex relative divide-x ${
+            showPilot ? 'flex-row' : 'flex-col'
+          } ${showPilotIconView ? '' : 'flex-wrap'}`}
+        >
+          {showPilot && (
+            <span
+              className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
+                showPilotIconView && 'text-green-500'
               }`}
             >
-              {item.name}
-            </p>
-          </div>
-        ))}
-      </div>
+              <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />
+            </span>
+          )}
+          {items.map((item, index) => (
+            <div
+              draggable
+              onDragStart={() => (dragItem.current = index)}
+              onDragEnter={() => (dragOverItem.current = index)}
+              onDragEnd={handleSort}
+              onDragOver={(e) => e.preventDefault()}
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className={classNames(
+                item.id === activeTabId
+                  ? 'bg-gray-300 text-black'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
+                showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
+                showPilotIconView ? 'w-12' : '',
+                'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
+              )}
+              aria-current={item.id === activeTabId ? 'page' : undefined}
+            >
+              {item.id === activeTabId && (
+                <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
+              )}
+              <div className="flex items-center">
+                <span
+                  className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
+                    showPilot ? 'block' : 'hidden'
+                  }`}
+                >
+                  <MdDragIndicator />
+                </span>
+                <img src={item.source} alt="" className="w-4 h-4" />
+              </div>
+              <p
+                className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
+                  showPilotIconView ? 'hidden' : 'block'
+                }`}
+              >
+                {item.name}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
