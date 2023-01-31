@@ -136,11 +136,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         )}
         {items.map((item, index) => (
           <div
-            draggable
-            onDragStart={() => (dragItem.current = index)}
-            onDragEnter={() => (dragOverItem.current = index)}
-            onDragEnd={handleSort}
-            onDragOver={(e) => e.preventDefault()}
             key={item.id}
             onClick={() => handleClick(item.id)}
             className={classNames(
