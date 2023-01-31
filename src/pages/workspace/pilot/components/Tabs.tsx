@@ -17,43 +17,6 @@ import {
   setShowPilotIconView,
 } from "../../../../features/workspace/workspaceSlice";
 import { MdDragIndicator } from "react-icons/md";
-const pilotOptions = [
-  {
-    id: 0,
-    name: "Connect",
-    source: communicationIcon,
-  },
-  {
-    id: 1,
-    name: "Logs",
-    source: logsIcon,
-  },
-  {
-    id: 2,
-    name: "Permissions",
-    source: permissionIcon,
-  },
-  {
-    id: 3,
-    name: "Details",
-    source: detailIcon,
-  },
-  {
-    id: 4,
-    name: "Automation",
-    source: automationIcon,
-  },
-  {
-    id: 5,
-    name: "TimeClock",
-    source: timeclockIcon,
-  },
-  {
-    id: 6,
-    name: "Checklist",
-    source: checklistIcon,
-  },
-];
 
 interface TabProps {
   activeTabId: number;
