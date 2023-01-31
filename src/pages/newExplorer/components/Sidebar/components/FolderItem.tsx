@@ -26,7 +26,7 @@ import { DownloadFile } from '../../../../../app/helpers';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { TbArrowsUpDown } from 'react-icons/tb';
+import { MdDragIndicator } from 'react-icons/md';
 
 interface FolderItemProps {
   id: string;
@@ -53,6 +53,7 @@ export default function FolderItem({
     listeners,
     setNodeRef: draggableRef,
     transform,
+    isDragging,
   } = useDraggable({ id, data: { parentId, isFolder: true } });
 
   const { isOver, setNodeRef: droppableRef } = useDroppable({
@@ -64,6 +65,7 @@ export default function FolderItem({
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
+    zIndex: isDragging ? 1 : 0,
   };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
@@ -142,8 +144,8 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex relative justify-between w-full items-center transition py-1.5 hover:bg-gray-100',
-        isActiveFolder && parentId === null ? 'bg-green-500 text-black' : '',
+        'group flex relative bg-white justify-between w-full items-center py-1.5 hover:bg-gray-100',
+        isActiveFolder && parentId === null ? 'bg-green-200 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
@@ -158,7 +160,7 @@ export default function FolderItem({
           {isActiveFolder || haveActiveChild ? (
             <>
               <VscTriangleDown
-                className="h-5 w-5 text-gray-600"
+                className="h-4 w-4 text-gray-600"
                 aria-hidden="true"
               />
               <FaFolderOpen className="text-green-500" />
@@ -174,16 +176,11 @@ export default function FolderItem({
           )}
         </div>
 
-        <div
-          ref={draggableRef}
-          {...listeners}
-          {...attributes}
-          className="ml-2 text-sm font-medium tracking-wider capitalize"
-        >
+        <div className="ml-2 text-sm font-medium tracking-wider capitalize">
           <p>{name}</p>
         </div>
       </div>
-      <div className="flex items-center transition gap-2 opacity-0 group-hover:opacity-100">
+      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
@@ -192,9 +189,9 @@ export default function FolderItem({
           className="w-4 h-4 text-black cursor-pointer stroke-current"
           aria-hidden="true"
         />
-        {/* <div ref={draggableRef} {...listeners} {...attributes}>
-          <TbArrowsUpDown aria-hidden="true" className="cursor-move" />
-        </div> */}
+        <div ref={draggableRef} {...listeners} {...attributes}>
+          <MdDragIndicator aria-hidden="true" className="cursor-move" />
+        </div>
       </div>
     </div>
   );
