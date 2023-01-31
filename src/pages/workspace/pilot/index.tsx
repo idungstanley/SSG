@@ -14,6 +14,7 @@ import ChatForPilot from '../../../components/Chat/ChatForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
 import TimeClock from './components/timeClock/TimeClock';
+import Checklist from './components/checklist/Checklist';
 
 const sections = [
   {
@@ -43,6 +44,10 @@ const sections = [
   {
     id: 6,
     element: <TimeClock />,
+  },
+  {
+    id: 7,
+    element: <Checklist />,
   },
 ];
 

@@ -6,6 +6,7 @@ import automationIcon from '../../../../assets/branding/automation.png';
 import timeclockIcon from '../../../../assets/branding/timeclock.png';
 import propertiesIcon from '../../../../assets/branding/properties-icon.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
+import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import { classNames } from '../../../../utils';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -51,6 +52,11 @@ const pilotOptions = [
     id: 6,
     name: 'TimeClock',
     source: timeclockIcon,
+  },
+  {
+    id: 7,
+    name: 'Checklist',
+    source: checklistIcon,
   },
 ];
 
