@@ -1,7 +1,10 @@
 import React from 'react';
 import { BiMessageAltDetail } from 'react-icons/bi';
 import { MdAddToPhotos, MdDragIndicator } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
+import propertiesIcon from '../../../../../assets/branding/properties-icon.png';
+import { setActiveSubDetailsTabId } from '../../../../../features/workspace/workspaceSlice';
 
 interface SubTabProps {
   activeSubTabId: number;
@@ -10,18 +13,26 @@ interface SubTabProps {
 const DetailOptions = [
   {
     id: 0,
-    label: 'details',
-    icon: <BiMessageAltDetail />,
-    // element: <SubDetails />,
+    name: 'Properties',
+    source: propertiesIcon,
   },
+  // {
+  //   id: 1,
+  //   label: 'details',
+  //   icon: <BiMessageAltDetail />,
+  //   // element: <SubDetails />,
+  // },
   {
     id: 1,
     label: 'addTo',
     icon: <MdAddToPhotos />,
   },
 ];
-export default function DetailsSubTab({activeSubTabId, setActiveSubTabId}: SubTabProps) {
-  const { showPilot } = useAppSelector((state) => state.workspace);
+export default function DetailsSubTab() {
+  const { showPilot, activeSubDetailsTabId } = useAppSelector(
+    (state) => state.workspace
+  );
+  const dispatch = useDispatch();
   return (
     <section>
       <div
@@ -32,17 +43,23 @@ export default function DetailsSubTab({activeSubTabId, setActiveSubTabId}: SubTa
         {DetailOptions.map((item) => (
           <section
             className={`flex flex-col w-full bg-white ${
-              item.id === activeSubTabId ? 'rounded-t-lg bg-white' : ''
+              item.id === activeSubDetailsTabId && showPilot
+                ? 'rounded-t-lg bg-white'
+                : ''
             }`}
             key={item.id}
           >
             <div
               key={item.id}
-              onClick={() => setActiveSubTabId(item.id)}
+              onClick={() => dispatch(setActiveSubDetailsTabId(item.id))}
               className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-                item.id === activeSubTabId
-                  ? 'rounded-t-lg bg-white'
-                  : 'rounded-b-lg bg-gray-400'
+                item.id === activeSubDetailsTabId &&
+                showPilot &&
+                'rounded-t-lg bg-white'
+              } ${
+                item.id != activeSubDetailsTabId &&
+                showPilot &&
+                'rounded-b-lg bg-gray-400'
               }`}
             >
               <span
@@ -52,7 +69,23 @@ export default function DetailsSubTab({activeSubTabId, setActiveSubTabId}: SubTa
               >
                 <MdDragIndicator />
               </span>
-              <span>{item.icon}</span>
+              <span
+                className={`${!showPilot && 'text-xs'} ${
+                  item.id === activeSubDetailsTabId &&
+                  !showPilot &&
+                  'bg-green-500 p-2 rounded'
+                }`}
+              >
+                {item.icon ? (
+                  item.icon
+                ) : (
+                  <img
+                    src={item.source}
+                    alt="Hub Icon"
+                    className="w-3 h-3"
+                  />
+                )}
+              </span>
             </div>
           </section>
         ))}

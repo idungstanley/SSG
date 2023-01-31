@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getWalletServices } from "../../../../../features/wallet/walletService";
-import { FaFolder, FaFolderOpen } from "react-icons/fa";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import { BsListUl } from "react-icons/bs";
-import { useAppSelector } from "../../../../../app/hooks";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { useDispatch } from "react-redux";
-import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getWalletServices } from '../../../../../features/wallet/walletService';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { BsListUl } from 'react-icons/bs';
+import { useAppSelector } from '../../../../../app/hooks';
+import {
+  setActiveItem,
+  setShowHub,
+} from '../../../../../features/workspace/workspaceSlice';
+import { useDispatch } from 'react-redux';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import {
   closeMenu,
   getSubMenu,
   setshowMenuDropdown,
-} from "../../../../../features/hubs/hubSlice";
-import SubDropdown from "../../../../../components/Dropdown/SubDropdown";
-import LastListIndex from "./LastListIndex";
-import MenuDropdown from "../../../../../components/Dropdown/MenuDropdown";
+} from '../../../../../features/hubs/hubSlice';
+import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
+import LastListIndex from './LastListIndex';
+import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 
 interface Sub2WalletIndexProps {
   padding?: string;
@@ -23,12 +26,12 @@ interface Sub2WalletIndexProps {
 }
 
 function Sub2WalletIndex({
-  padding = "pl-14",
+  padding = 'pl-14',
   currWalId,
 }: Sub2WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
-  const [finalParentId, setFinalWalletParentId] = useState("");
+  const [finalParentId, setFinalWalletParentId] = useState('');
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
@@ -47,10 +50,12 @@ function Sub2WalletIndex({
 
   const navigate = useNavigate();
   const handleListLocation = (id: string) => {
+    dispatch(setShowHub(true));
     navigate(`/workspace/list/${id}`);
   };
 
-  const handleLocation = (id: string, type = "sub2wallet") => {
+  const handleLocation = (id: string, type = 'sub2wallet') => {
+    dispatch(setShowHub(true));
     navigate(`/workspace/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
@@ -59,11 +64,11 @@ function Sub2WalletIndex({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: "subwallet3",
+        showMenuDropdownType: 'subwallet3',
       })
     );
     if (showMenuDropdown != null) {
-      if (e.target.id == "menusettings") {
+      if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -73,7 +78,7 @@ function Sub2WalletIndex({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: "subwallet3",
+        SubMenuType: 'subwallet3',
       })
     );
   };
@@ -82,11 +87,11 @@ function Sub2WalletIndex({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: "list",
+        showMenuDropdownType: 'list',
       })
     );
     if (showMenuDropdown != null) {
-      if (e.target.id == "menusettings") {
+      if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -98,11 +103,11 @@ function Sub2WalletIndex({
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between space-x-1 text-sm h-8 group ${padding} py-1.5 hover:bg-gray-100 ${
-              wallet.id === activeItemId && "bg-green-50 text-green-500"
+              wallet.id === activeItemId && 'bg-green-50 text-green-500'
             }`}
           >
             {wallet.id === activeItemId && (
-              <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg bg-green-500" />
+              <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
             )}
             <div className="flex items-center">
               <div onClick={() => handleShowSubWallet(wallet.id)}>
@@ -127,7 +132,7 @@ function Sub2WalletIndex({
                 )}
               </div>
               <div onClick={() => handleLocation(wallet.id)}>
-                <p className="ml-2" style={{ fontSize: "10px" }}>
+                <p className="ml-2" style={{ fontSize: '10px' }}>
                   {wallet.name.length > 10
                     ? wallet.name.substr(0, 10) + '...'
                     : wallet.name}
@@ -159,9 +164,9 @@ function Sub2WalletIndex({
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between pl-14 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100 group">
+          <section className="flex items-center justify-between h-8 mr-6 space-x-1 text-sm pl-14 hover:bg-gray-100 group">
             <div className="flex items-center space-x-1">
-              <BsListUl className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
+              <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id)}></div>
             </div>
             {/* ends here */}

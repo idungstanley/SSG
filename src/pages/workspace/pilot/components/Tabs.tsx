@@ -4,7 +4,6 @@ import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
 import automationIcon from '../../../../assets/branding/automation.png';
 import timeclockIcon from '../../../../assets/branding/timeclock.png';
-import propertiesIcon from '../../../../assets/branding/properties-icon.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import { classNames } from '../../../../utils';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
@@ -16,11 +15,14 @@ import {
   setShowPilotIconView,
 } from '../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
+import CommunicationSubTab from './communication/CommunicationSubTab';
+import DetailsSubTab from './details/DetailsSubTab';
 const pilotOptions = [
   {
     id: 0,
-    name: 'communication',
+    name: 'Connect',
     source: communicationIcon,
+    subTab: <CommunicationSubTab />,
   },
   {
     id: 1,
@@ -34,21 +36,17 @@ const pilotOptions = [
   },
   {
     id: 3,
-    name: 'Properties',
-    source: propertiesIcon,
+    name: 'Details',
+    source: detailIcon,
+    subTab: <DetailsSubTab />,
   },
   {
     id: 4,
-    name: 'Details',
-    source: detailIcon,
-  },
-  {
-    id: 5,
     name: 'Automation',
     source: automationIcon,
   },
   {
-    id: 6,
+    id: 5,
     name: 'TimeClock',
     source: timeclockIcon,
   },
@@ -82,7 +80,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
   };
   return (
     <div
-      className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12'}`}
+      className={`gap-4 pb-1  ${showPilot ? 'w-full border' : 'w-12 border'}`}
       aria-label="Tabs"
     >
       <div
@@ -113,40 +111,50 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
           </span>
         )}
         {pilotOptions.map((item) => (
-          <div
+          <section
             key={item.id}
-            onClick={() => handleClick(item.id)}
-            className={classNames(
-              item.id === activeTabId
-                ? 'bg-gray-300 text-black'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-              showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
-              showPilotIconView ? 'w-12' : '',
-              'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
-            )}
-            aria-current={item.id === activeTabId ? 'page' : undefined}
+            className={`flex ${
+              item.id === activeTabId && showPilot === false
+                ? 'flex-col'
+                : 'flex-row'
+            }`}
           >
-            {item.id === activeTabId && (
-              <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
-            )}
-            <div className="flex items-center">
-              <span
-                className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                  showPilot ? 'block' : 'hidden'
+            <div
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className={classNames(
+                item.id === activeTabId
+                  ? 'bg-gray-300 text-black'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
+                showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
+                showPilotIconView ? 'w-12' : '',
+                'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
+              )}
+              aria-current={item.id === activeTabId ? 'page' : undefined}
+            >
+              {item.id === activeTabId && (
+                <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
+              )}
+              <div className="flex items-center">
+                <span
+                  className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
+                    showPilot ? 'block' : 'hidden'
+                  }`}
+                >
+                  <MdDragIndicator />
+                </span>
+                <img src={item.source} alt="" className="w-4 h-4" />
+              </div>
+              <p
+                className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
+                  showPilotIconView ? 'hidden' : 'block'
                 }`}
               >
-                <MdDragIndicator />
-              </span>
-              <img src={item.source} alt="" className="w-4 h-4" />
+                {item.name}
+              </p>
             </div>
-            <p
-              className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
-                showPilotIconView ? 'hidden' : 'block'
-              }`}
-            >
-              {item.name}
-            </p>
-          </div>
+            {item.id === activeTabId && showPilot === false && item.subTab}
+          </section>
         ))}
       </div>
     </div>
