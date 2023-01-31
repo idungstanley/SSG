@@ -87,8 +87,8 @@ export default function TaskData({ task }: TaskDataProps) {
 
   const groupAssignee = (data) => {
     return data?.map((newData) => (
-      <>
-        <span key={newData.id} className="stack">
+      <div key={newData.id} className="relative">
+        <span key={newData.id} className=" absolute">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -96,7 +96,7 @@ export default function TaskData({ task }: TaskDataProps) {
             width="w-5"
           />
         </span>
-      </>
+      </div>
     ));
   };
 
@@ -174,24 +174,42 @@ export default function TaskData({ task }: TaskDataProps) {
             ) : (
               <div
                 onClick={() => handleAssigneeModal(task.id)}
-                className="cursor-pointer"
+                className="cursor-pointer ml-2 absolute "
               >
                 {groupAssignee(task.assignees)}
               </div>
             )}
           </span>
-          <span className=" border-dotted border-gray-300 ml-12 pl-1 ">
-            <CalendarOutlined
-              className=" h-5 w-7 text-gray-400"
-              aria-hidden="true"
-            />
-          </span>
-          <span className=" ml-12 pl-5 border-dotted border-gray-300 ">
-            <FlagOutlined
-              className="h-5 w-7  text-gray-400 "
-              aria-hidden="true"
-            />
-          </span>
+          {task.assignees.length == 0 ? (
+            <span className=" border-dotted border-gray-300 ml-12 pl-1 ">
+              <CalendarOutlined
+                className=" h-5 w-7 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          ) : (
+            <span className="relative border-dotted border-gray-300 ml-12 pl-1 ">
+              <CalendarOutlined
+                className="absolute ml-7 mt-1  h-5 w-7 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          )}
+          {task.assignees.length == 0 ? (
+            <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+              <FlagOutlined
+                className="h-5 w-7  text-gray-400 "
+                aria-hidden="true"
+              />
+            </span>
+          ) : (
+            <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+              <FlagOutlined
+                className="h-5 w-7 ml-14 absolute  text-gray-400 "
+                aria-hidden="true"
+              />
+            </span>
+          )}
           {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
         </div>
       </div>
