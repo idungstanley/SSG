@@ -162,7 +162,7 @@ export default function TaskData({ task }: TaskDataProps) {
         {/* icons */}
 
         <div className=" w-6/12">
-          <span className="rounded-full text-center	text-xs ">
+          <span className="relative rounded-full text-center	text-xs ">
             {/* assignees here */}
 
             {task.assignees.length == 0 ? (
