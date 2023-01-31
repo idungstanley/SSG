@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
 
 import "../taskData/task.css";
+import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -21,10 +22,10 @@ export default function TaskListViews() {
   };
 
   return (
-    <div className=" flex items-center  ">
-      <div className=" flex w-6/12 items-center gap-2 shrink-0">
-        <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px mt-1">
-          <FiArrowDownCircle
+    <div className=" flex justify-between items-center  ">
+      <div className=" flex items-center ">
+        <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
+          <IoIosArrowDropdown
             className={` text-gray-400 text-sm hover:text-gray-200  ${
               closeTaskListView === false ? "rotateimg90" : null
             }`}
@@ -39,54 +40,54 @@ export default function TaskListViews() {
             </span>
           </div>
           <span className="text-xs text-gray-400 mt-1	ml-1">
-            {myTaskData?.length }
+            {myTaskData?.length}
           </span>
 
           <span className="text-xs text-gray-400 mt-1	">TASK</span>
         </div>
       </div>
-      <div className="flex items-center w-9/12">
-        <p className=" flex justify-start items-center h-5  text-gray-400 text-xs  rounded-full font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100">
+      <div className="flex relative w-6/12 items-center ">
+        <p className=" flex items-center   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group">
+          <span className="opacity-0 group-hover:opacity-100 cursor-move">
             <MdOutlineDragIndicator />
           </span>
-          <span>USER</span>
+          <span className="cursor-pointer">USER</span>
           <span className="opacity-0 group-hover:opacity-100">
             <FaSort />
           </span>
         </p>
-        <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100">
+        <p className=" flex items-center h-5  text-gray-400 text-xs  p-1 ml-1 font-medium hover:bg-gray-400 hover:text-gray-50 group">
+          <span className="opacity-0 group-hover:opacity-100 cursor-move">
             <MdOutlineDragIndicator />
           </span>
-          <span>DUE DATE</span>
+          <span className="cursor-pointer">DUEDATE</span>
           <span className="opacity-0 group-hover:opacity-100">
             <FaSort />
           </span>
         </p>
-        <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100">
+        <p className="flex items-center h-5  text-gray-400 text-xs  p-1 ml-1 font-medium hover:bg-gray-400 hover:text-gray-50 group">
+          <span className="opacity-0 group-hover:opacity-100 cursor-move">
             <MdOutlineDragIndicator />
           </span>
-          <span>PRIORITY</span>
+          <span className="cursor-pointer">PRIORITY</span>
           <span className="opacity-0 group-hover:opacity-100">
             <FaSort />
           </span>
         </p>
-        <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
+        {/* <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
           <span className="opacity-0 group-hover:opacity-100">
             <MdOutlineDragIndicator />
           </span>
-          <span>CREATED AT</span>
+          <span>CREATED</span>
           <span className="opacity-0 group-hover:opacity-100">
             <FaSort />
           </span>
-        </p>
+        </p> */}
         <span
-          className=" flex relative items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
+          className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
           onClick={() => handleDropDown()}
         >
-          <FiPlusCircle className="font-black	" />
+          <FiPlusCircle className="font-black hover:bg-white	" />
           <span className="text-sm">
             {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
           </span>
