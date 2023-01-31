@@ -37,7 +37,7 @@ export default function NewExplorerPage() {
           {/* header */}
           <div className="flex w-full flex-row" style={paddingStyles()}>
             {showExtendedBar && <ExpandedNav />}
-            <section className="grid w-full grid-rows-mainContent">
+            <section className="grid w-full h-full">
               <Header />
 
               <div className="grid grid-rows-mainContent">

@@ -9,6 +9,7 @@ import {
   // useGetDirectory,
   useGetDirectoryTmp,
 } from '../../../../../features/directory/directoryService';
+import { classNames } from '../../../../../utils';
 // import { classNames } from '../../../../../utils';
 
 export default function DirectoryList() {
@@ -45,7 +46,7 @@ export default function DirectoryList() {
             <div key={rootDir.id}>
               <DirectoryItem id={rootDir.id} name={rootDir.name} />
 
-              <div className="ml-5">
+              <div className="pl-5">
                 {rootDir.id === tree.slice(1)[0].directory?.id ? (
                   <Directories directories={tree.slice(1)} />
                 ) : null}
@@ -112,7 +113,7 @@ function Directories({ directories }: DirectoriesProps) {
     <>
       {directories.map((i, index) =>
         i.directories?.map((j) => (
-          <div key={j.id} className={`ml-${index * 5}`}>
+          <div key={j.id} className={`pl-${index * 5}`}>
             <DirectoryItem id={j.id} name={j.name} />
           </div>
         ))
@@ -141,7 +142,10 @@ function DirectoryItem({ id, name }: DirectoryItemProps) {
   return (
     <div
       onClick={() => onClickDirectory(id)}
-      className="hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer"
+      className={classNames(
+        'hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer',
+        directoryId === id ? 'bg-gray-100' : ''
+      )}
     >
       {directoryId === id ? (
         <VscTriangleDown className="h-4 w-4 text-gray-500" aria-hidden="true" />

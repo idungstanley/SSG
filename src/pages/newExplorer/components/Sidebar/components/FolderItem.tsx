@@ -142,48 +142,48 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex relative justify-between w-full items-center py-1.5',
-        isActiveFolder && parentId === null ? 'bg-green-50 text-black' : '',
+        'group flex relative justify-between w-full items-center transition py-1.5 hover:bg-gray-100',
+        isActiveFolder && parentId === null ? 'bg-green-500 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
       style={style}
       title={name}
     >
-      {isActiveFolder && parentId === null && (
-        <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
-      )}
       <div
         onClick={() => handleClickFolder(id, parentId)}
         className="flex items-center cursor-pointer ml-0.5"
       >
-        {isActiveFolder || haveActiveChild ? (
-          <>
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 text-xs mr-0.5"
-              color="rgb(95,99,104)"
-              aria-hidden="true"
-            />
-            <FaFolderOpen className="text-green-500" />
-          </>
-        ) : (
-          <>
-            <VscTriangleRight
-              className="flex-shrink-0 h-3 text-xs"
-              color="rgb(95,99,104)"
-              aria-hidden="true"
-            />
-            <FaFolder color="rgb(95,99,104)" />
-          </>
-        )}
+        <div className="flex items-center gap-2">
+          {isActiveFolder || haveActiveChild ? (
+            <>
+              <VscTriangleDown
+                className="h-5 w-5 text-gray-600"
+                aria-hidden="true"
+              />
+              <FaFolderOpen className="text-green-500" />
+            </>
+          ) : (
+            <>
+              <VscTriangleRight
+                className="h-4 w-4 text-gray-600"
+                aria-hidden="true"
+              />
+              <FaFolder color="rgb(95,99,104)" />
+            </>
+          )}
+        </div>
+
         <div
-          className="ml-2 font-semibold tracking-wider capitalize"
-          style={{ fontSize: '10px' }}
+          ref={draggableRef}
+          {...listeners}
+          {...attributes}
+          className="ml-2 text-sm font-medium tracking-wider capitalize"
         >
           <p>{name}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
+      <div className="flex items-center transition gap-2 opacity-0 group-hover:opacity-100">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
@@ -192,9 +192,9 @@ export default function FolderItem({
           className="w-4 h-4 text-black cursor-pointer stroke-current"
           aria-hidden="true"
         />
-        <div ref={draggableRef} {...listeners} {...attributes}>
+        {/* <div ref={draggableRef} {...listeners} {...attributes}>
           <TbArrowsUpDown aria-hidden="true" className="cursor-move" />
-        </div>
+        </div> */}
       </div>
     </div>
   );
