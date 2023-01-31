@@ -68,11 +68,7 @@ export default function DetailsSubTab() {
                 {item.icon ? (
                   item.icon
                 ) : (
-                  <img
-                    src={item.source}
-                    alt="Hub Icon"
-                    className="w-3 h-3"
-                  />
+                  <img src={item.source} alt="Hub Icon" className="w-3 h-3" />
                 )}
               </span>
             </div>
