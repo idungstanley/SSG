@@ -35,13 +35,13 @@ export default function CommunicationSubTab() {
       }`}
     >
       {communicationOptions.map((item) => (
-        <ToolTip tooltip={item.label} key={item.id}>
           <section
             className={`flex flex-col w-full bg-white ${
               item.id === activeSubCommunicationTabId && showPilot
                 ? 'rounded-t-lg bg-white'
                 : ''
             }`}
+            key={item.id}
           >
             <div
               key={item.id}
@@ -74,7 +74,6 @@ export default function CommunicationSubTab() {
               </span>
             </div>
           </section>
-        </ToolTip>
       ))}
     </div>
   );
