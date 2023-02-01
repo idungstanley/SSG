@@ -27,6 +27,8 @@ import "./task.css";
 interface TaskDataProps {
   task: any;
 }
+import { columnsHead } from "../views/ListColumns";
+import moment from "moment";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -43,11 +45,6 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
-
-  // const handleTaskModal = (id: string) => {
-  //   setOpenTaskModal(true);
-  //   navigate(`/workspace/t/${id}`);
-  // };
 
   const handleTaskPilot = (id: string, name: string) => {
     dispatch(setTaskIdForPilot(id));
@@ -100,22 +97,44 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
-  return (
-    <div className="group flex items-center justify-between">
-      {" "}
-      <span className="flex relative items-center ">
-        <input
-          type="checkbox"
-          id="checked-checkbox"
-          className="opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100 absolute -left-3 h-3 w-3 "
-          onClick={() => {
-            displayNav(task.id);
-          }}
+  const renderData = (taskColField, colfield) => {
+    if (colfield === "assignees" && taskColField.length !== 0) {
+      return (
+        <div
+          onClick={() => handleAssigneeModal(task.id)}
+          className="cursor-pointer ml-2"
+        >
+          {groupAssignee(task.assignees)}
+        </div>
+      );
+    } else if (colfield === "assignees" && taskColField.length === 0) {
+      return (
+        <UserAddOutlined
+          className=" ml-2 h-5 w-5 text-gray-400 text-xl cursor-pointer "
+          aria-hidden="true"
+          onClick={() => handleAssigneeModal(task.id)}
         />
-        <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute left-0 " />
-      </span>
-      <div className="w-full bg-white mb-px bordar hover:bg-slate-900 flex justify-between items-center ml-4">
-        <div className="flex   text-gray-400 md:text-black lg:text-black items-center">
+      );
+    } else if (colfield == "created_at") {
+      return (
+        <span className="text-gray-400 pl-12 text-sm font-medium">
+          {moment(taskColField).format("MM/DD")}
+        </span>
+      );
+    } else if (colfield === "name") {
+      return (
+        <div className="flex items-center relative">
+          <div className=" flex items center">
+            <input
+              type="checkbox"
+              id="checked-checkbox"
+              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-7 h-3 w-3"
+              onClick={() => {
+                displayNav(task.id);
+              }}
+            />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute -left-3 " />
+          </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
               <span className="flex flex-col">
@@ -129,90 +148,73 @@ export default function TaskData({ task }: TaskDataProps) {
               />
             )}
           </div>
-
-          <div className="flex items-center group">
+          <p>
             <RiCheckboxBlankFill
               className="pl-px text-gray-400 text-xs"
               aria-hidden="true"
             />
-            {/* data and input */}
-            <div onClick={() => handleTaskPilot(task.id, task.name)}>
-              <p className="capitalize text-xs font-medium leading-8 pl-2 cursor-pointer">
-                {task.name}
-              </p>
-            </div>
-
-            {/* iconstask */}
-            <div
-              id="iconWrapper"
-              className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-            >
-              <PlusOutlined
-                className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-                aria-hidden="true"
-                onClick={() => handleCreateSubTask(task.id)}
-              />
-              <EditOutlined
-                className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-                aria-hidden="true"
-              />
-            </div>
+          </p>
+          <p>{taskColField}</p>
+          <div
+            id="iconWrapper"
+            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+          >
+            <PlusOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+              aria-hidden="true"
+              onClick={() => handleCreateSubTask(task.id)}
+            />
+            <EditOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+              aria-hidden="true"
+            />
           </div>
         </div>
-        {/* icons */}
+      );
+    } else if (colfield === "priority") {
+      return (
+        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+          <FlagOutlined
+            className="h-5 w-7  text-gray-400 "
+            aria-hidden="true"
+          />
+        </span>
+      );
+    } else return taskColField;
+  };
 
-        <div className=" w-6/12">
-          <span className="relative rounded-full text-center	text-xs ">
-            {/* assignees here */}
-
-            {task.assignees.length == 0 ? (
-              <UserAddOutlined
-                className="	ml-2 h-5 w-5 text-gray-400 text-xl cursor-pointer "
-                aria-hidden="true"
-                onClick={() => handleAssigneeModal(task.id)}
-              />
-            ) : (
-              <div
-                onClick={() => handleAssigneeModal(task.id)}
-                className="cursor-pointer ml-2 absolute "
-              >
-                {groupAssignee(task.assignees)}
-              </div>
-            )}
-          </span>
-          {task.assignees.length == 0 ? (
-            <span className=" border-dotted border-gray-300 ml-12 pl-1 ">
-              <CalendarOutlined
-                className=" h-5 w-7 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          ) : (
-            <span className="relative border-dotted border-gray-300 ml-12 pl-1 ">
-              <CalendarOutlined
-                className="absolute ml-7 mt-1  h-5 w-7 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
+  return (
+    <>
+      <div className="flex">
+        <div className=" bg-white mb-px w-full ml-4 flex items-center justify-between ">
+          {columnsHead.map(
+            (col) =>
+              col.value == "Task" && (
+                <div
+                  key={col.field}
+                  className="flex items-center uppercase ml-2 text-xs py-px font-medium  group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
           )}
-          {task.assignees.length == 0 ? (
-            <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
-              <FlagOutlined
-                className="h-5 w-7  text-gray-400 "
-                aria-hidden="true"
-              />
-            </span>
-          ) : (
-            <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
-              <FlagOutlined
-                className="h-5 w-7 ml-14 absolute  text-gray-400 "
-                aria-hidden="true"
-              />
-            </span>
-          )}
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
         </div>
+        <div className="flex w-full bg-white mb-px">
+          {columnsHead.map(
+            (col) =>
+              col.value !== "Task" && (
+                <div
+                  key={col.field}
+                  className="flex items-center uppercase  text-gray-400 py-px  font-medium  group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
+          )}
+        </div>
+
+        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
       </div>
-    </div>
+    </>
   );
 }

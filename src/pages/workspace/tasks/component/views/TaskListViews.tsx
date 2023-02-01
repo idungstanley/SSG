@@ -10,6 +10,7 @@ import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
 
 import "../taskData/task.css";
 import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
+import { columnsHead } from "./ListColumns";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -17,13 +18,15 @@ export default function TaskListViews() {
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { myTaskData } = useAppSelector((state) => state.task);
 
+  console.log(myTaskData);
+
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
   };
 
   return (
-    <div className=" flex justify-between items-center  ">
-      <div className=" flex items-center ">
+    <div className="flex justify-beteen items-center relative">
+      <div className=" flex items-center items-center ">
         <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
           <IoIosArrowDropdown
             className={` text-gray-400 text-sm hover:text-gray-200  ${
@@ -42,57 +45,43 @@ export default function TaskListViews() {
           <span className="text-xs text-gray-400 mt-1	ml-1">
             {myTaskData?.length}
           </span>
-
-          <span className="text-xs text-gray-400 mt-1	">TASK</span>
         </div>
       </div>
-      <div className="flex relative w-6/12 items-center ">
-        <p className=" flex items-center   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100 cursor-move">
-            <MdOutlineDragIndicator />
-          </span>
-          <span className="cursor-pointer">USER</span>
-          <span className="opacity-0 group-hover:opacity-100">
-            <FaSort />
-          </span>
-        </p>
-        <p className=" flex items-center h-5  text-gray-400 text-xs  p-1 ml-1 font-medium hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100 cursor-move">
-            <MdOutlineDragIndicator />
-          </span>
-          <span className="cursor-pointer">DUEDATE</span>
-          <span className="opacity-0 group-hover:opacity-100">
-            <FaSort />
-          </span>
-        </p>
-        <p className="flex items-center h-5  text-gray-400 text-xs  p-1 ml-1 font-medium hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100 cursor-move">
-            <MdOutlineDragIndicator />
-          </span>
-          <span className="cursor-pointer">PRIORITY</span>
-          <span className="opacity-0 group-hover:opacity-100">
-            <FaSort />
-          </span>
-        </p>
-        {/* <p className=" flex items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold hover:bg-gray-400 hover:text-gray-50 group">
-          <span className="opacity-0 group-hover:opacity-100">
-            <MdOutlineDragIndicator />
-          </span>
-          <span>CREATED</span>
-          <span className="opacity-0 group-hover:opacity-100">
-            <FaSort />
-          </span>
-        </p> */}
-        <span className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
-          <FiPlusCircle
-            className="relative font-black hover:bg-white	"
-            onClick={() => handleDropDown()}
-          />
-          <span className="text-sm">
-            {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
-          </span>
-        </span>
+      <div className="relative flex w-5/12    items-center first:text-blue-500  ">
+        {columnsHead.map(
+          (col) =>
+            col.value == "Task" && (
+              <div
+                key={col.field}
+                className="flex items-center uppercase   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+              >
+                {col.value}
+              </div>
+            )
+        )}
       </div>
+      <div className="flex justify-between">
+        {columnsHead.map(
+          (col) =>
+            col.value !== "Task" && (
+              <div
+                key={col.field}
+                className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+              >
+                {col.value}
+              </div>
+            )
+        )}
+      </div>
+      <span className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 font-semibold group">
+        <FiPlusCircle
+          className=" font-black hover:bg-white	"
+          onClick={() => handleDropDown()}
+        />
+        <span className="text-sm">
+          {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
+        </span>
+      </span>
     </div>
   );
 }
