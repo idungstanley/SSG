@@ -32,10 +32,25 @@ function updateNestedArray(
       });
 }
 
-const arrayToTree = (arr: IDir[], parentId?: string) =>
-  arr
-    .filter((item) => item.parent_id === parentId)
-    .map((child) => ({ ...child, children: arrayToTree(arr, child.id) }));
+function arrayToTree(array: IDir[]) {
+  const nodes = [...array];
+
+  const tree: IDir[] = [];
+
+  nodes.forEach((node) => {
+    if (node.parent_id === null) {
+      tree.push(node);
+    } else {
+      nodes[node.parent_id].children.push(node);
+    }
+  });
+  return tree;
+}
+
+// const arrayToTree = (arr: IDir[], parentId?: string) =>
+//   arr
+//     .filter((item) => item.parent_id === parentId)
+//     .map((child) => ({ ...child, children: arrayToTree(arr, child.id) }));
 
 export default function DirectoryList() {
   const { directoryId } = useParams();
@@ -44,7 +59,7 @@ export default function DirectoryList() {
 
   const isSavedIdFromURL = !directories.length && !!directoryId;
 
-  const { data } = useGetDirectories(directoryId, true);
+  const { data } = useGetDirectories(directoryId, isSavedIdFromURL);
 
   useEffect(() => {
     if (data) {
