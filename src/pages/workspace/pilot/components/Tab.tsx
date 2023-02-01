@@ -6,7 +6,6 @@ import automationIcon from "../../../../assets/branding/automation.png";
 import timeclockIcon from "../../../../assets/branding/timeclock.png";
 import permissionIcon from "../../../../assets/branding/permission.png";
 import checklistIcon from "../../../../assets/branding/checklist-icon.svg";
-import { classNames } from "../../../../utils";
 import { HiChevronDoubleRight, HiChevronDoubleUp } from "react-icons/hi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useAppSelector } from "../../../../app/hooks";
@@ -15,17 +14,8 @@ import {
   setShowPilot,
   setShowPilotIconView,
 } from "../../../../features/workspace/workspaceSlice";
-import { MdDragIndicator } from "react-icons/md";
 import DetailsSubTab from "./details/DetailsSubTab";
 import CommunicationSubTab from "./communication/CommunicationSubTab";
-import {
-  ChatBubbleLeftEllipsisIcon,
-  ClockIcon,
-  EyeIcon,
-  InformationCircleIcon,
-  LockClosedIcon,
-  SignalIcon,
-} from "@heroicons/react/24/outline";
 import {
   closestCenter,
   DndContext,

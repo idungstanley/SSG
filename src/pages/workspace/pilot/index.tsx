@@ -57,6 +57,7 @@ export default function Pilot() {
   } = useAppSelector((state) => state.workspace);
   const hoverRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    console.log(activeItemId);
     if (activeItemId != null) {
       setActiveTabId(4);
     }
