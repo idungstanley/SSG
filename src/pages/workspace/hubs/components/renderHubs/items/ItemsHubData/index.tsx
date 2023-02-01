@@ -38,32 +38,32 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
 
           return (
             <>
-              <div key={item.name} className="pt-5">
-                <p className="text-xs">{hubName}</p>
+              <div key={item.name} className="border p-5 rounded">
+                <p className="text-xs font-semibold text-gray-400	">{hubName}</p>
                 <div
                   id="listTitle"
                   className="flex items-center justify-between"
                 >
-                  <div className="flex items-center justify-center space-x-2 text-gray-400">
+                  <div className="group flex items-center justify-center text-gray-400">
                     <ChevronDownIcon
                       className="flex-shrink-0 w-5 h-4"
                       aria-hidden="true"
                     />
-                    <p className="text-xs font-bold text-black	">{item.name}</p>
-                    <p className="font-bold text-gray-700 dark:text-gray-400">
-                      {/* {data.name.toUpperCase()} */}
+                    <p className="text-xs font-medium text-black font-sans">
+                      {item.name}
                     </p>
+
                     <InformationCircleIcon
-                      className="flex-shrink-0 w-5 h-4 text-gray-400"
+                      className="flex-shrink-0 w-5 h-4 ml-1 text-gray-400"
                       aria-hidden="true"
                     />
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
+                    <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
                       + New Task
                     </p>
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
+                    <p className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
                       Add Description
                     </p>
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
+                    <p className="px-1 py-1 text-xs rou cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
                       Add Comment
                     </p>
                   </div>

@@ -6,23 +6,17 @@ import Share from './share/Share';
 import EntitySettings from './entitySettings/EntitySettings';
 import Assignees from './assignees/Assignees';
 import Subscribers from './subscribers/Subscribers';
-import { AvatarWithInitials } from '../../../../../components';
+import { AvatarWithInitials } from '../../../../../../components';
 import SubDetails from './subDetailsType/tasks/SubDetails';
 import HubSubDetails from './subDetailsType/hubs/HubSubDetails';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import WalletSubDetails from './subDetailsType/wallets/WalletSubDetails';
 import ListSubDetails from './subDetailsType/lists/ListSubDetails';
-import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
-import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
-import { UseGetListDetails } from '../../../../../features/list/listService';
-import { getOneTaskServices } from '../../../../../features/task/taskService';
+import { UseGetHubDetails } from '../../../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../../../features/list/listService';
+import { getOneTaskServices } from '../../../../../../features/task/taskService';
 
-// interface DetailsIndexProps {
-//   taskDetails: any;
-//   hubDetails: any;
-//   walletDetails: any;
-//   listDetails: any;
-// }
 export default function DetailsIndex() {
   const { activeItemId, activeItemType } = useAppSelector(
     (state) => state.workspace
@@ -45,6 +39,7 @@ export default function DetailsIndex() {
   const hubDetails = hub?.data.hub;
   const walletDetails = wallet?.data.wallet;
   const listDetails = list?.data.list;
+
   const showDetailsType = () => {
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
       return <HubSubDetails hubDetails={hubDetails} key={hubDetails?.id} />;

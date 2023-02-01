@@ -15,7 +15,7 @@ import {
   DeleteTimeEntriesService,
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
-import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
+import UpdateTimeEntryDropdown from '../../timeclock/entryLists/UpdateTimeEntryDropdown';
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -127,13 +127,13 @@ function TimeEntriesDropdown({
                         aria-hidden="true"
                       />
                     </button>
-                    {openUpdateEntry === id ? (
+                    {/* {openUpdateEntry === id ? (
                       <UpdateTimeEntryDropdown
                         id={id}
-                        setOpenUpdateEntry={setOpenUpdateEntry}
+                        // setOpenUpdateEntry={setOpenUpdateEntry}
                         taskId={taskId}
                       />
-                    ) : null}
+                    ) : null} */}
                     <button type="button" onClick={() => handleDeleteEntry(id)}>
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"
