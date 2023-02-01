@@ -5,7 +5,6 @@ import { MdDragIndicator, MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { RiWechatLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setActiveSubCommunicationTabId } from '../../../../../features/workspace/workspaceSlice';
 import SubtabDrag from '../SubtabDnd';
 import {
   closestCenter,
