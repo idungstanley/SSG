@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTaskListService } from "../../../features/task/taskService";
 import ListNav from "./components/renderlist/ListNav";
 import { useAppSelector } from "../../../app/hooks";
 import { useDispatch } from "react-redux";
 import { setAddNewTaskItem } from "../../../features/task/taskSlice";
-import TaskMenu from "../tasks/component/taskMenu/TaskMenu";
 import TaskTableView from "../tasks/component/views/TaskTableView";
 import TaskListViews from "../tasks/component/views/TaskListViews";
 import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
@@ -23,7 +22,6 @@ function RenderList() {
     listView,
     tableView,
     addNewTaskItem,
-    showTaskNavigation,
     closeTaskListView,
     currentParentTaskId,
     getSubTaskId,
@@ -31,15 +29,31 @@ function RenderList() {
 
   const { data: listDetailsData } = getTaskListService({ listId });
 
-  // console.log("listDetailsData", listDetailsData);
+  // console.log("listDetailsData",
+
+  const editable: any = myTaskData.map((o) => ({ ...o }));
+
+  const columnsHead = myTaskData[0];
+  const columnsArr: any = [];
+
+  const columnsObj = {};
+  columnsHead &&
+    Object.keys(columnsHead).map((columnKey) => {
+      columnsObj[columnKey] = columnKey;
+      columnsArr.push(columnKey);
+    });
+
+  editable.unshift(columnsObj);
+
+  const handleOutput = (objDataCol) => {
+    if (Array.isArray(objDataCol) && objDataCol.length !== 0) {
+      return "Assignees";
+    }
+    return objDataCol;
+  };
 
   return (
     <div className="h-screen overflow-hidden relative">
-      {/* {showTaskNavigation && (
-        <span className="transition	duration-300 ease-in-out absolute w-full">
-          <TaskMenu />
-        </span>
-      )} */}
       <section id="nav">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
@@ -57,6 +71,18 @@ function RenderList() {
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
+            {columnsArr.map((col) => {
+              return editable.map((objData) => {
+                console.log(objData[col]);
+                return (
+                  <div className="flex" key={objData.id}>
+                    <p className="flex">{handleOutput(objData[col])}</p>
+                  </div>
+                );
+              });
+            })}
+
+            {/* task list logic */}
 
             {tableView && (
               <div>
