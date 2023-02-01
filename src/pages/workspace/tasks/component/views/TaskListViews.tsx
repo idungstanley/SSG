@@ -83,11 +83,11 @@ export default function TaskListViews() {
             <FaSort />
           </span>
         </p> */}
-        <span
-          className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group"
-          onClick={() => handleDropDown()}
-        >
-          <FiPlusCircle className="font-black hover:bg-white	" />
+        <span className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 ml-1 font-semibold group">
+          <FiPlusCircle
+            className="relative font-black hover:bg-white	"
+            onClick={() => handleDropDown()}
+          />
           <span className="text-sm">
             {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
           </span>

@@ -88,7 +88,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
-        <span key={newData.id} className=" absolute">
+        <span key={newData.id} className="absolute ">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
