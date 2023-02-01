@@ -69,8 +69,8 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                 <button
                   type="button"
                   onClick={() => handleListLocation(list.id, list.name)}
-                  className="ml-2 tracking-wider capitalize"
-                  style={{ fontSize: '10px' }}
+                  className="ml-2 font-medium tracking-wider capitalize truncate cursor-pointer"
+                  style={{ fontSize: '12px' }}
                 >
                   {list.name.length > 10
                     ? list.name.substr(0, 10) + '...'

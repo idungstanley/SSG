@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../app/hooks';
 interface SubHubIndexProps {
   marginLeft?: string;
 }
-export default function SHubDropdownList({ marginLeft = 'ml-4' }: SubHubIndexProps) {
+export default function SHubDropdownList({ marginLeft = 'pl-0' }: SubHubIndexProps) {
   const { currSubHubId, currSubHubIdType } = useAppSelector(
     (state) => state.hub
   );
