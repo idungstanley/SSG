@@ -162,7 +162,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="group flex items-center justify-between ">
+    <div className="group bg-white mb-px w-full flex items-center justify-between ">
       {columnsHead.map((col) => (
         <div key={task.id}>{renderData(task[col.field], col.field)}</div>
       ))}
