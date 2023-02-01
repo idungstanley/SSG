@@ -15,9 +15,17 @@ import "../ItemsHubData/wallet.css";
 import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
 import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
 import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
+import {
+  setCreateTaskFromTop,
+  setCurrentListId,
+} from "../../../../../../../features/list/listSlice";
 
 export default function ListSection({ data }: any) {
   const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const { currentListId, createTaskFromTop } = useAppSelector(
+    (state) => state.list
+  );
+
   const dispatch = useAppDispatch();
 
   return (
@@ -37,9 +45,18 @@ export default function ListSection({ data }: any) {
               className="flex-shrink-0 w-5 h-4 ml-1 text-gray-400"
               aria-hidden="true"
             />
-            <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
-              + New Task
-            </p>
+            <div
+              className=""
+              id="newItem"
+              onClick={() => {
+                dispatch(setCurrentListId(data.id));
+                dispatch(setCreateTaskFromTop(!createTaskFromTop));
+              }}
+            >
+              <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
+                + New Task
+              </p>
+            </div>
             <p className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
               Add Description
             </p>
@@ -56,6 +73,9 @@ export default function ListSection({ data }: any) {
             <p>Show Closed</p>
           </div>
         </div>
+        {createTaskFromTop && currentListId === data.id && (
+          <AddNewItem listId={data.id} />
+        )}
 
         {/* card */}
         <div className="mt-5">
@@ -65,11 +85,16 @@ export default function ListSection({ data }: any) {
           {/* icons */}
         </div>
 
-        {addNewTaskItem && <AddNewItem listId={data.id} />}
+        {addNewTaskItem && currentListId === data.id && (
+          <AddNewItem listId={data.id} />
+        )}
         <div
           className=""
           id="newItem"
-          onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+          onClick={() => {
+            dispatch(setAddNewTaskItem(!addNewTaskItem));
+            dispatch(setCurrentListId(data.id));
+          }}
         >
           <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
             + New Task

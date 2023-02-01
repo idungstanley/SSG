@@ -4,7 +4,14 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
+import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
+import {
+  setCreateTaskFromTop,
+  setCurrentListId,
+} from "../../../../../../../features/list/listSlice";
+import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
 import { getWalletServices } from "../../../../../../../features/wallet/walletService";
+import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
 import ListTemplate from "../ItemsHubData/ListTemplate";
 import WalletSection from "./WalletSection";
@@ -18,6 +25,13 @@ export default function ItemsWalletData({
   walletName,
 }: ItemsWalletDataProps) {
   const { data } = getWalletServices({ parentId: walletId });
+
+  const { currentListId, createTaskFromTop } = useAppSelector(
+    (state) => state.list
+  );
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
   return (
     <section>
       {/* wallets */}
@@ -45,9 +59,18 @@ export default function ItemsWalletData({
                     className="flex-shrink-0 w-5 h-4 ml-1 text-gray-400"
                     aria-hidden="true"
                   />
-                  <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
-                    + New Task
-                  </p>
+                  <div
+                    className=""
+                    id="newItem"
+                    onClick={() => {
+                      dispatch(setCurrentListId(item.id));
+                      dispatch(setCreateTaskFromTop(!createTaskFromTop));
+                    }}
+                  >
+                    <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
+                      + New Task
+                    </p>
+                  </div>
                   <p className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
                     Add Description
                   </p>
@@ -64,37 +87,9 @@ export default function ItemsWalletData({
                   <p>Show Closed</p>
                 </div>
               </div>
-              {/* <div id="listTitle" className="flex items-center justify-between">
-                <div className="flex items-center justify-center space-x-2 text-gray-400">
-                  <ChevronDownIcon
-                    className="flex-shrink-0 w-5 h-4"
-                    aria-hidden="true"
-                  />
-                  <p className="text-xs font-bold text-black	">{item.name}</p>
-
-                  <InformationCircleIcon
-                    className="flex-shrink-0 w-5 h-4 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
-                    + New Task
-                  </p>
-                  <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
-                    Add Description
-                  </p>
-                  <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
-                    Add Comment
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center space-x-1 text-gray-400 text-xs">
-                  <CheckIcon
-                    className="flex-shrink-0 w-5 h-4 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <p>Show Closed</p>
-                </div>
-              </div> */}
+              {createTaskFromTop && currentListId === item.id && (
+                <AddNewItem listId={item.id} />
+              )}
               <div>
                 <div className="mt-5 ">
                   <TaskListViews />
@@ -102,6 +97,21 @@ export default function ItemsWalletData({
                     <ListTemplate listId={item.id} />
                   </span>
                 </div>
+              </div>
+              {addNewTaskItem && currentListId === item.id && (
+                <AddNewItem listId={item.id} />
+              )}
+              <div
+                className=""
+                id="newItem"
+                onClick={() => {
+                  dispatch(setAddNewTaskItem(!addNewTaskItem));
+                  dispatch(setCurrentListId(item.id));
+                }}
+              >
+                <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                  + New Task
+                </p>
               </div>
             </div>
           );
