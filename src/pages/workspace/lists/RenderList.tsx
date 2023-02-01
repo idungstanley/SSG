@@ -47,7 +47,7 @@ function RenderList() {
 
   return (
     <div className="h-screen overflow-hidden relative">
-      <section id="nav">
+      <section id="nav" className="capitalize">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
           viewsList="List"
