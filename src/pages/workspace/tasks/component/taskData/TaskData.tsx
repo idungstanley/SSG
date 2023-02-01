@@ -46,11 +46,6 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  // const handleTaskModal = (id: string) => {
-  //   setOpenTaskModal(true);
-  //   navigate(`/workspace/t/${id}`);
-  // };
-
   const handleTaskPilot = (id: string, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
@@ -101,17 +96,45 @@ export default function TaskData({ task }: TaskDataProps) {
       </div>
     ));
   };
+  const groupAssigneeEmpty = () => {
+    return (
+      <div className="relative">
+        <UserAddOutlined />
+      </div>
+    );
+  };
 
   const renderData = (taskColField, colfield) => {
-    if (colfield == "assignees") {
+    if (colfield === "assignees" && taskColField.length !== 0) {
       return groupAssignee(task.assignees);
+    } else if (colfield === "assignees" && taskColField.length === 0) {
+      return groupAssigneeEmpty();
     } else if (colfield == "created_at") {
       return moment(taskColField).format("HH:mm");
+    } else if (colfield === "name") {
+      return (
+        <div className="flex items-center">
+          <input type="checkbox" />
+          <p>
+            <VscTriangleRight />
+          </p>
+          <p>
+            <RiCheckboxBlankFill />
+          </p>
+          <p>{taskColField}</p>
+          <p>
+            <PlusOutlined />
+          </p>
+          <p>
+            <EditOutlined />
+          </p>
+        </div>
+      );
     } else return taskColField;
   };
 
   return (
-    <div className="group flex items-center justify-between">
+    <div className="group flex items-center justify-between ">
       {columnsHead.map((col) => (
         <div key={task.id}>{renderData(task[col.field], col.field)}</div>
       ))}
