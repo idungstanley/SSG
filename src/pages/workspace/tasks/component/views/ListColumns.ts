@@ -1,8 +1,9 @@
-export const columnsHead = [
+export const columnsHead: any = [
   {
     field: "name",
     value: "Task",
   },
+
   {
     field: "assignees",
     value: "Assignees",
@@ -14,12 +15,5 @@ export const columnsHead = [
   {
     field: "created_at",
     value: "Created at",
-  },
-];
-
-export const taskHead = [
-  {
-    field: "name",
-    value: "Task",
   },
 ];

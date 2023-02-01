@@ -27,7 +27,7 @@ import "./task.css";
 interface TaskDataProps {
   task: any;
 }
-import { columnsHead, taskHead } from "../views/ListColumns";
+import { columnsHead } from "../views/ListColumns";
 import moment from "moment";
 
 export default function TaskData({ task }: TaskDataProps) {
@@ -187,24 +187,36 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <section className="flex">
-        <div className="group bg-white mb-px w-full  flex items-center justify-between ml-4">
-          {taskHead.map((col) => (
-            <div key={task.id} className="font-medium w-4/12 text-xs ml-2">
-              {task[col.field]}
-            </div>
-          ))}
+      <div className="flex">
+        <div className=" bg-white mb-px w-full ml-4 flex items-center justify-between ">
+          {columnsHead.map(
+            (col) =>
+              col.value == "Task" && (
+                <div
+                  key={col.field}
+                  className="flex items-center uppercase text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
+          )}
         </div>
-        <div className="group bg-white mb-px w-full flex items-center pl-12 ">
-          {columnsHead.map((col) => (
-            <div key={task.id} className="">
-              {renderData(task[col.field], col.field)}
-            </div>
-          ))}
+        <div className="flex w-full bg-white mb-px">
+          {columnsHead.map(
+            (col) =>
+              col.value !== "Task" && (
+                <div
+                  key={col.field}
+                  className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
+          )}
         </div>
-      </section>
 
-      {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+      </div>
     </>
   );
 }

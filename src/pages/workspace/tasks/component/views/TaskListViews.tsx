@@ -10,7 +10,7 @@ import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
 
 import "../taskData/task.css";
 import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
-import { columnsHead, taskHead } from "./ListColumns";
+import { columnsHead } from "./ListColumns";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -48,24 +48,30 @@ export default function TaskListViews() {
         </div>
       </div>
       <div className="relative flex w-5/12    items-center first:text-blue-500  ">
-        {taskHead.map((col) => (
-          <div
-            key={col.field}
-            className="flex items-center uppercase   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-          >
-            {col.value}
-          </div>
-        ))}
+        {columnsHead.map(
+          (col) =>
+            col.value == "Task" && (
+              <div
+                key={col.field}
+                className="flex items-center uppercase   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+              >
+                {col.value}
+              </div>
+            )
+        )}
       </div>
       <div className="flex justify-between">
-        {columnsHead.map((col) => (
-          <div
-            key={col.field}
-            className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
-          >
-            {col.value == "Task" ? "" : col.value}
-          </div>
-        ))}
+        {columnsHead.map(
+          (col) =>
+            col.value !== "Task" && (
+              <div
+                key={col.field}
+                className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+              >
+                {col.value}
+              </div>
+            )
+        )}
       </div>
       <span className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 font-semibold group">
         <FiPlusCircle
