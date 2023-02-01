@@ -27,6 +27,73 @@ function TaskTableView() {
 
   const editable = myTaskData.map((o) => ({ ...o }));
 
+  interface tableIcons {
+    Export: () => JSX.Element;
+    Search: () => null;
+    Filter: () => JSX.Element;
+    ViewColumn: () => JSX.Element;
+    Clear: () => JSX.Element;
+    SortArrow: () => JSX.Element;
+    DetailPanel: () => JSX.Element;
+    FirstPage: () => null;
+    LastPage: () => null;
+    NextPage: () => null;
+    PreviousPage: () => null;
+    ResetSearch: () => JSX.Element;
+  }
+
+  interface ListItem {
+    id?: string;
+    name?: string;
+    description?: string | null;
+    list_id?: string;
+    parent_id?: string | null;
+    priority?: string | null;
+    start_date?: string | null;
+    end_date?: string | null;
+    assignees?: string[];
+    group_assignees?: string[];
+    updated_at?: string;
+    created_at?: string;
+    archived_at?: string | null;
+    deleted_at?: string | null;
+    directory_items?: string[];
+
+    title?: string;
+    field?: string;
+    emptyValue?: () => JSX.Element;
+    hidden?: boolean | undefined;
+    render?: ((newData: any) => any) | null;
+  }
+
+  interface singleColumnProps {
+    title: string;
+    field: string;
+    emptyValue: () => JSX.Element;
+    hidden: boolean | undefined;
+    render: ((newData: any) => any) | null;
+  }
+
+  interface ColumnsHead {
+    id: string;
+    name: string;
+    description: string;
+    list_id: string;
+    parent_id: string;
+    priority: string;
+    start_date: string;
+    end_date: string;
+    assignees: string;
+    group_assignees: string;
+    custom_fields: string;
+    updated_at: string;
+    created_at: string;
+    archived_at: string;
+    deleted_at: string;
+    directory_items: string;
+  }
+  [];
+
   const icons: any = {
     Export: () => <BiExport />,
     Search: () => null,
@@ -42,11 +109,11 @@ function TaskTableView() {
     ResetSearch: () => <MdOutlineCancelScheduleSend />,
   };
 
-  const columnHead: any = [];
-  const singleObj: any = editable[0];
+  const columnHead: string[][] = [];
+  const singleObj: ListItem = editable[0];
   singleObj && columnHead.push(Object.keys(singleObj));
 
-  const dynamicColum: any = [];
+  const dynamicColum: ListItem[] = [];
 
   const groupAssignee = (data) => {
     return data?.map((newData) => (
@@ -115,7 +182,7 @@ function TaskTableView() {
   };
 
   columnHead[0]?.map((column) => {
-    const singleColumn = {
+    const singleColumn: singleColumnProps = {
       title:
         column.split("_").join(" ").toUpperCase() == "NAME"
           ? "TASKS"
@@ -136,7 +203,7 @@ function TaskTableView() {
           <MaterialTable
             // tableRef={tableRef}
             title="{SSG}"
-            columns={dynamicColum}
+            columns={dynamicColum as any}
             data={editable ?? []}
             //   onSelectionChange={(selectedRow) => {
             //     setTimeout(() => {

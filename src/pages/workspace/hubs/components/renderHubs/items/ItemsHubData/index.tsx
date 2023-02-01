@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "../../../../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
 import { useGetHubChildren } from "../../../../../../../features/hubs/hubService";
 import TaskData from "../../../../../tasks/component/taskData/TaskData";
 import "../ItemsHubData/wallet.css";
@@ -21,6 +21,12 @@ import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
 import { getTaskListService } from "../../../../../../../features/task/taskService";
 import ListTemplate from "./ListTemplate";
 import { useParams } from "react-router-dom";
+import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
+import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
+import {
+  setCreateTaskFromTop,
+  setCurrentListId,
+} from "../../../../../../../features/list/listSlice";
 
 interface ItemsHubDataProps {
   hubId: string | null;
@@ -29,41 +35,56 @@ interface ItemsHubDataProps {
 export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
   const { data } = useGetHubChildren({ query: hubId });
 
+  const dispatch = useAppDispatch();
+
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const { currentListId, createTaskFromTop } = useAppSelector(
+    (state) => state.list
+  );
+
   return (
     <section>
       {/* lists */}
       <div className="">
         {data?.data.lists.map((item) => {
-          console.log(item);
-
           return (
             <>
-              <div key={item.name} className="pt-5">
-                <p className="text-xs">{hubName}</p>
+              <div key={item.name} className="border p-5 rounded">
+                <p className="text-xs font-semibold text-gray-400	">{hubName}</p>
                 <div
                   id="listTitle"
                   className="flex items-center justify-between"
                 >
-                  <div className="flex items-center justify-center space-x-2 text-gray-400">
+                  <div className="group flex items-center justify-center text-gray-400">
                     <ChevronDownIcon
                       className="flex-shrink-0 w-5 h-4"
                       aria-hidden="true"
                     />
-                    <p className="text-xs font-bold text-black	">{item.name}</p>
-                    <p className="font-bold text-gray-700 dark:text-gray-400">
-                      {/* {data.name.toUpperCase()} */}
+                    <p className="text-xs font-medium text-black font-sans">
+                      {item.name}
                     </p>
+
                     <InformationCircleIcon
-                      className="flex-shrink-0 w-5 h-4 text-gray-400"
+                      className="flex-shrink-0 w-5 h-4 ml-1 text-gray-400"
                       aria-hidden="true"
                     />
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
-                      + New Task
-                    </p>
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
+                    <div
+                      className=""
+                      id="newItem"
+                      onClick={() => {
+                        dispatch(setCurrentListId(item.id));
+                        dispatch(setCreateTaskFromTop(!createTaskFromTop));
+                      }}
+                    >
+                      <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
+                        + New Task
+                      </p>
+                    </div>
+
+                    <p className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
                       Add Description
                     </p>
-                    <p className="px-1 py-1 text-xs rounded cursor-pointer hover:bg-gray-200">
+                    <p className="px-1 py-1 text-xs rou cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
                       Add Comment
                     </p>
                   </div>
@@ -76,6 +97,9 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                     <p>Show Closed</p>
                   </div>
                 </div>
+                {createTaskFromTop && currentListId === item.id && (
+                  <AddNewItem listId={data.id} />
+                )}
                 <div>
                   <div className="mt-5 ">
                     <TaskListViews />
@@ -84,6 +108,21 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                     </span>
                   </div>
                 </div>
+              </div>
+              {addNewTaskItem && currentListId === item.id && (
+                <AddNewItem listId={item.id} />
+              )}
+              <div
+                className=""
+                id="newItem"
+                onClick={() => {
+                  dispatch(setAddNewTaskItem(!addNewTaskItem));
+                  dispatch(setCurrentListId(item.id));
+                }}
+              >
+                <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                  + New Task
+                </p>
               </div>
             </>
           );

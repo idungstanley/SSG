@@ -18,6 +18,7 @@ import {
 import { MdDragIndicator } from 'react-icons/md';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
+import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 
 interface TabProps {
   activeTabId: number;
@@ -32,9 +33,8 @@ interface IItem {
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const { showPilot, showPilotIconView } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
+    useAppSelector((state) => state.workspace);
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
@@ -86,6 +86,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       id: 6,
       name: 'TimeClock',
       source: timeclockIcon,
+      subTab: <TimeSubTab />,
     },
     {
       id: 7,
@@ -112,19 +113,30 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       className={`gap-4 pb-1 border  ${showPilot ? 'w-full' : 'w-12'}`}
       aria-label="Tabs"
     >
-      <div
-        className={`flex items-center h-fit px-2 ${
-          showPilot ? 'flex-row py-2' : 'flex-col gap-1'
-        }`}
-      >
-        <HiChevronDoubleRight
-          onClick={() => handleShowPilot()}
-          className={`cursor-pointer ${
-            showPilot ? 'translate-x-4 skew-y-3' : 'transform -rotate-180 mb-1'
+      <section>
+        <div id="entity" className="flex -mb-3 p-1 text-xs capitalize">
+          <p className="text-gray-600"> {activeItemType && activeItemType}</p>
+          <p>:</p>
+          <p className="pl-1 text-gray-500 capitalize">
+            {activeItemName && activeItemName}
+          </p>
+        </div>
+        <div
+          className={`flex items-center h-fit px-2 ${
+            showPilot ? 'flex-row py-2' : 'flex-col gap-1'
           }`}
-        />
-        <BsThreeDotsVertical />
-      </div>
+        >
+          <HiChevronDoubleRight
+            onClick={() => handleShowPilot()}
+            className={`cursor-pointer ${
+              showPilot
+                ? 'translate-x-4 skew-y-3'
+                : 'transform -rotate-180 mb-1'
+            }`}
+          />
+          <BsThreeDotsVertical />
+        </div>
+      </section>
       <div
         className={`flex relative divide-x ${
           showPilot ? 'flex-row' : 'flex-col'
