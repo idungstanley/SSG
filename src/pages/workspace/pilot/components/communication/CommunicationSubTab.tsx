@@ -2,12 +2,10 @@ import React from 'react';
 import { AiOutlineContacts } from 'react-icons/ai';
 import { MdDragIndicator, MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { RiWechatLine } from 'react-icons/ri';
+import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
+import { setActiveSubCommunicationTabId } from '../../../../../features/workspace/workspaceSlice';
 
-interface SubTabProps {
-  activeSubTabId: number;
-  setActiveSubTabId: (i: number) => void;
-}
 const communicationOptions = [
   {
     id: 0,
@@ -21,21 +19,24 @@ const communicationOptions = [
     icon: <AiOutlineContacts />,
   },
 ];
-export default function CommunicationSubTab({
-  activeSubTabId,
-  setActiveSubTabId,
-}: SubTabProps) {
-  const { showPilot } = useAppSelector((state) => state.workspace);
+export default function CommunicationSubTab() {
+  const { showPilot, activeSubCommunicationTabId } = useAppSelector(
+    (state) => state.workspace
+  );
+  const dispatch = useDispatch();
+  const handleClick = (id: number) => {
+    dispatch(setActiveSubCommunicationTabId(id));
+  };
   return (
     <div
       className={`flex bg-gray-400 pt-0.5 ${
-        showPilot ? 'flex-row' : 'flex-col'
+        showPilot ? 'flex-row' : 'flex-col border'
       }`}
     >
       {communicationOptions.map((item) => (
         <section
           className={`flex flex-col w-full bg-white ${
-            item.id === activeSubTabId
+            item.id === activeSubCommunicationTabId && showPilot
               ? 'rounded-t-lg bg-white'
               : ''
           }`}
@@ -43,11 +44,15 @@ export default function CommunicationSubTab({
         >
           <div
             key={item.id}
-            onClick={() => setActiveSubTabId(item.id)}
+            onClick={() => handleClick(item.id)}
             className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-              item.id === activeSubTabId
-                ? 'rounded-t-lg bg-white'
-                : 'rounded-b-lg bg-gray-400'
+              item.id === activeSubCommunicationTabId &&
+              showPilot &&
+              'rounded-t-lg bg-white'
+            } ${
+              item.id != activeSubCommunicationTabId &&
+              showPilot &&
+              'rounded-b-lg bg-gray-400'
             }`}
           >
             <span
@@ -57,7 +62,15 @@ export default function CommunicationSubTab({
             >
               <MdDragIndicator />
             </span>
-            <span>{item.icon}</span>
+            <span
+              className={`${!showPilot && 'text-xs'} ${
+                item.id === activeSubCommunicationTabId &&
+                !showPilot &&
+                'bg-green-500 p-2 rounded'
+              }`}
+            >
+              {item.icon}
+            </span>
           </div>
         </section>
       ))}

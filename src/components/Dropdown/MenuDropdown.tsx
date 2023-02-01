@@ -73,6 +73,9 @@ export default function MenuDropdown() {
     showCreateSubHubSlideOver,
     showCreateTaskSlideOver,
     showCreateWalletSlideOver,
+    showEditHubSlideOver,
+    showEditListSlideOver,
+    showEditWalletSlideOver,
   } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
   const { delList, archiveList } = useAppSelector((state) => state.list);
@@ -89,7 +92,10 @@ export default function MenuDropdown() {
           showCreateHubSlideOver === false &&
           showCreateSubHubSlideOver === false &&
           showCreateWalletSlideOver === false &&
-          showCreateTaskSlideOver === false
+          showCreateTaskSlideOver === false &&
+          showEditHubSlideOver === false &&
+          showEditListSlideOver === false &&
+          showEditWalletSlideOver === false
         ) {
           if (SubDropdownMenu === true) {
             dispatch(setSubDropdownMenu(false));
@@ -114,6 +120,9 @@ export default function MenuDropdown() {
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
     showCreateTaskSlideOver,
+    showEditHubSlideOver,
+    showEditListSlideOver,
+    showEditWalletSlideOver,
   ]);
 
   //delete-entity

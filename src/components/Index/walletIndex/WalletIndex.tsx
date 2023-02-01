@@ -1,30 +1,31 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import SubWalletIndex from "../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex";
-import { FaFolder, FaFolderOpen } from "react-icons/fa";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import {
   closeMenu,
   getPrevName,
   getSubMenu,
   setshowMenuDropdown,
-} from "../../../features/hubs/hubSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../app/hooks";
+} from '../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../app/hooks';
 import {
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName,
-} from "../../../features/workspace/workspaceSlice";
-import MenuDropdown from "../../Dropdown/MenuDropdown";
-import { setWalletItem } from "../../../features/wallet/walletSlice";
-import SubDropdown from "../../Dropdown/SubDropdown";
+  setShowHub,
+} from '../../../features/workspace/workspaceSlice';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { setWalletItem } from '../../../features/wallet/walletSlice';
+import SubDropdown from '../../Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
-} from "../../../features/general/slideOver/slideOverSlice";
-import { getWalletServices } from "../../../features/wallet/walletService";
+} from '../../../features/general/slideOver/slideOverSlice';
+import { getWalletServices } from '../../../features/wallet/walletService';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -44,14 +45,15 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   });
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, name, type = "wallet") => {
+  const handleLocation = (id: string, name, type = 'wallet') => {
+    dispatch(setShowHub(true));
     navigate(`/workspace/wallet/${id}`);
     setShowSubWallet(id);
     dispatch(setCurrentWalletId(id));
     dispatch(
       setWalletItem({
         currentWalletParentId: id,
-        currentWalletParentType: "wallet",
+        currentWalletParentType: 'wallet',
       })
     );
     dispatch(
@@ -74,7 +76,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       dispatch(
         setWalletItem({
           currentWalletParentId: id,
-          currentWalletParentType: "wallet",
+          currentWalletParentType: 'wallet',
         })
       );
     }
@@ -83,12 +85,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: "wallet",
+        showMenuDropdownType: 'wallet',
       })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == "menusettings") {
+      if (e.target.id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -98,13 +100,13 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: "wallet",
+        SubMenuType: 'wallet',
       })
     );
   };
 
   return data?.data?.wallets != null ? (
-    <div id="createWallet" className={`${showHubList ? "block" : "hidden"}`}>
+    <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {data?.data?.wallets.length == 0 && data?.data?.lists.length == 0 && (
         <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
           <span className="text-gray-600">
@@ -129,7 +131,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
           <div key={wallet.id}>
             <section
               className={`flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-                wallet.id === activeItemId && "bg-green-100 text-black"
+                wallet.id === activeItemId && 'bg-green-100 text-black'
               }`}
             >
               {wallet.id === activeItemId && (
@@ -167,7 +169,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 >
                   <p
                     className="tracking-wider capitalize"
-                    style={{ fontSize: "10px" }}
+                    style={{ fontSize: '10px' }}
                   >
                     {wallet.name}
                   </p>

@@ -6,9 +6,7 @@ interface DetailsIndexProps {
   hubDetails: any;
 }
 export default function HubSubDetails({ hubDetails }: DetailsIndexProps) {
-  console.log(hubDetails);
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  console.log(hubDetails);
   return (
     <>
       <section className="p-2" key={hubDetails?.id}>
@@ -57,7 +55,6 @@ export default function HubSubDetails({ hubDetails }: DetailsIndexProps) {
             <button className="text-xs text-gray-500 ">Subtask</button>
           </div>
         </div>
-        {/* <div className="mt-4">{toggleSubTask && <SubTask />}</div> */}
       </section>
     </>
   );

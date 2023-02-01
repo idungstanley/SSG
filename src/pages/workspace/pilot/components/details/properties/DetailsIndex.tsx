@@ -17,12 +17,6 @@ import { UseGetWalletDetails } from '../../../../../../features/wallet/walletSer
 import { UseGetListDetails } from '../../../../../../features/list/listService';
 import { getOneTaskServices } from '../../../../../../features/task/taskService';
 
-// interface DetailsIndexProps {
-//   taskDetails: any;
-//   hubDetails: any;
-//   walletDetails: any;
-//   listDetails: any;
-// }
 export default function DetailsIndex() {
   const { activeItemId, activeItemType } = useAppSelector(
     (state) => state.workspace
