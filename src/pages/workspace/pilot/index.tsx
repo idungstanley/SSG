@@ -1,19 +1,20 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useAppSelector } from '../../../app/hooks';
-import Tab from './components/Tabs';
-import History from '../../newExplorer/components/Pilot/components/History';
-import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
-import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
-import ChatForPilot from '../../../components/Chat/ChatForPilot';
-import Commnunication from './components/communication/Communication';
-import Details from './components/details/Details';
-import TimeClock from './components/timeClock/TimeClock';
-import Checklist from './components/checklist/Checklist';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useAppSelector } from "../../../app/hooks";
+import Tab from "./components/Tabs";
+import Taba from "./components/Tab";
+import History from "../../newExplorer/components/Pilot/components/History";
+import Permissions from "../../newExplorer/components/Pilot/components/Permissions";
+import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
+import ChatForPilot from "../../../components/Chat/ChatForPilot";
+import Commnunication from "./components/communication/Communication";
+import Details from "./components/details/Details";
+import TimeClock from "./components/timeClock/TimeClock";
+import Checklist from "./components/checklist/Checklist";
+import { useDispatch } from "react-redux";
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
-} from '../../../features/workspace/workspaceSlice';
+} from "../../../features/workspace/workspaceSlice";
 
 const sections = [
   {
@@ -66,9 +67,9 @@ export default function Pilot() {
         dispatch(setActiveSubDetailsTabId(null));
       }
     };
-    hoverRef.current?.addEventListener('mouseleave', checkHoverOutside);
+    hoverRef.current?.addEventListener("mouseleave", checkHoverOutside);
     return () => {
-      hoverRef.current?.removeEventListener('mouseleave', checkHoverOutside);
+      hoverRef.current?.removeEventListener("mouseleave", checkHoverOutside);
     };
   }, [
     activeSubCommunicationTabId,
@@ -85,13 +86,14 @@ export default function Pilot() {
     <div
       className={`flex h-full ease-in-out delay-300 duration-300 transition-all transform bg-white border ${
         !showPilot && selectedSection
-          ? 'flex-row fixed z-40 top-16 right-0'
-          : 'flex-col'
+          ? "flex-row fixed z-40 top-16 right-0"
+          : "flex-col"
       }`}
       ref={hoverRef}
     >
       {/* navigation */}
       <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <Taba activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
       {/* main section depends of active tab */}
       <div>{selectedSection ? selectedSection.element : null}</div>
     </div>
