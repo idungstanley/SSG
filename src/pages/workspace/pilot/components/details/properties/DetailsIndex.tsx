@@ -16,6 +16,7 @@ import { UseGetHubDetails } from '../../../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../../../features/list/listService';
 import { getOneTaskServices } from '../../../../../../features/task/taskService';
+import ToolTip from '../../../../../../components/Tooltip';
 
 export default function DetailsIndex() {
   const { activeItemId, activeItemType } = useAppSelector(
@@ -60,19 +61,29 @@ export default function DetailsIndex() {
     <>
       <div className="flex items-center justify-between">
         <section className="flex items-center space-x-3">
-          <Status />
-          <Priority />
+          <ToolTip tooltip="Status">
+            <Status />
+          </ToolTip>
+          <ToolTip tooltip="Priority">
+            <Priority />
+          </ToolTip>
         </section>
         <section className="flex items-center justify-center space-x-3">
           <CustomReference />
-          <Share />
+          <ToolTip tooltip="Share">
+            <Share />
+          </ToolTip>
           <EntitySettings />
         </section>
       </div>
       <section className="flex items-center mt-3 space-x-2">
-        <Assignees />
+        <ToolTip tooltip="Assignees">
+          <Assignees />
+        </ToolTip>
         <span className="text-gray-300">|</span>
-        <Subscribers />
+        <ToolTip tooltip="Subscribers">
+          <Subscribers />
+        </ToolTip>
         <span className="text-gray-300">|</span>
         <AvatarWithInitials
           initials="DN"

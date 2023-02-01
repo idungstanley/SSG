@@ -142,7 +142,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         {items.map((item, index) => (
           <section
             key={item.id}
-            className={`flex ${
+            className={`flex flex-auto ${
               item.id === activeTabId && showPilot === false
                 ? 'flex-col'
                 : 'flex-row'
