@@ -96,21 +96,27 @@ export default function TaskData({ task }: TaskDataProps) {
       </div>
     ));
   };
-  const groupAssigneeEmpty = () => {
-    return (
-      <div className="relative">
-        <UserAddOutlined />
-      </div>
-    );
-  };
 
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
-      return groupAssignee(task.assignees);
+      return (
+        <div
+          onClick={() => handleAssigneeModal(task.id)}
+          className="cursor-pointer ml-2"
+        >
+          {groupAssignee(task.assignees)}
+        </div>
+      );
     } else if (colfield === "assignees" && taskColField.length === 0) {
-      return groupAssigneeEmpty();
+      return (
+        <UserAddOutlined
+          className=" ml-2 h-5 w-5 text-gray-400 text-xl cursor-pointer "
+          aria-hidden="true"
+          onClick={() => handleAssigneeModal(task.id)}
+        />
+      );
     } else if (colfield == "created_at") {
-      return moment(taskColField).format("HH:mm");
+      return moment(taskColField).format("MM/DD");
     } else if (colfield === "name") {
       return (
         <div className="flex items-center">
@@ -158,14 +164,27 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
+    } else if (colfield === "priority") {
+      return (
+        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+          <FlagOutlined
+            className="h-5 w-7  text-gray-400 "
+            aria-hidden="true"
+          />
+        </span>
+      );
     } else return taskColField;
   };
 
   return (
-    <div className="group flex items-center justify-between ">
-      {columnsHead.map((col) => (
-        <div key={task.id}>{renderData(task[col.field], col.field)}</div>
-      ))}
-    </div>
+    <>
+      <div className="group flex items-center justify-between ">
+        {columnsHead.map((col) => (
+          <div key={task.id}>{renderData(task[col.field], col.field)}</div>
+        ))}
+      </div>
+
+      {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+    </>
   );
 }

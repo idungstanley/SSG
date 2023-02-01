@@ -8,11 +8,11 @@ export const columnsHead = [
     value: "Assignees",
   },
   {
-    field: "created_at",
-    value: "Created at",
-  },
-  {
     field: "priority",
     value: "Priority",
+  },
+  {
+    field: "created_at",
+    value: "Created at",
   },
 ];
