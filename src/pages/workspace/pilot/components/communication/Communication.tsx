@@ -1,16 +1,16 @@
-import React, { useMemo } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
-import CommunicationSubTab from './CommunicationSubTab';
+import React, { useMemo } from "react";
+import { useAppSelector } from "../../../../../app/hooks";
+import ChatForPilot from "../../../../../components/Chat/ChatForPilot";
+import CommunicationSubTab from "./CommunicationSubTab";
 
 const communicationOptions = [
   {
-    id: 0,
+    id: 1,
     element: <ChatForPilot />,
   },
-  { id: 1, element: <ChatForPilot /> },
+  { id: 2, element: <ChatForPilot /> },
   {
-    id: 2,
+    id: 3,
     element: <ChatForPilot />,
   },
 ];

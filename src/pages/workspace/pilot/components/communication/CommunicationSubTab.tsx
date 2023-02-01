@@ -1,81 +1,107 @@
-import React from 'react';
+import Icon from '@ant-design/icons/lib/components/Icon';
+import React, { useState } from 'react';
 import { AiOutlineContacts } from 'react-icons/ai';
 import { MdDragIndicator, MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { RiWechatLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
-import ToolTip from '../../../../../components/Tooltip';
 import { setActiveSubCommunicationTabId } from '../../../../../features/workspace/workspaceSlice';
+import SubtabDrag from '../SubtabDnd';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 
 const communicationOptions = [
   {
-    id: 0,
+    id: 1,
     label: 'email',
     icon: <MdOutlineMarkEmailUnread />,
   },
-  { id: 1, label: 'chat', icon: <RiWechatLine /> },
+  { id: 2, label: 'chat', icon: <RiWechatLine /> },
   {
-    id: 2,
+    id: 3,
     label: 'contact',
     icon: <AiOutlineContacts />,
   },
 ];
 export default function CommunicationSubTab() {
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
   const { showPilot, activeSubCommunicationTabId } = useAppSelector(
     (state) => state.workspace
   );
-  const dispatch = useDispatch();
-  const handleClick = (id: number) => {
-    dispatch(setActiveSubCommunicationTabId(id));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const [items, setItems] = useState(
+    communicationOptions.sort(
+      (a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
+    )
+  );
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const findActive = items.find((i) => i.id === active.id);
+      const findOver = items.find((i) => i.id === over?.id);
+
+      if (findActive && findOver) {
+        setItems((items) => {
+          const oldIndex = items.indexOf(findActive);
+          const newIndex = items.indexOf(findOver);
+
+          const sortArray = arrayMove(items, oldIndex, newIndex);
+
+          localStorage.setItem(
+            'subTab',
+            JSON.stringify([...sortArray.map((i) => i.id)])
+          );
+
+          return sortArray;
+        });
+      }
+    }
   };
   return (
-    <div
-      className={`flex bg-gray-400 pt-0.5 ${
-        showPilot ? 'flex-row' : 'flex-col border'
-      }`}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={(e) => handleDragEnd(e)}
     >
-      {communicationOptions.map((item) => (
-        <ToolTip tooltip={item.label} key={item.id}>
-          <section
-            className={`flex flex-col w-full bg-white ${
-              item.id === activeSubCommunicationTabId && showPilot
-                ? 'rounded-t-lg bg-white'
-                : ''
-            }`}
-          >
-            <div
+      <SortableContext strategy={rectSortingStrategy} items={items}>
+        <div
+          className={`flex bg-gray-400 pt-0.5 ${
+            showPilot ? 'flex-row' : 'flex-col border'
+          }`}
+        >
+          {items.map((item) => (
+            <SubtabDrag
               key={item.id}
-              onClick={() => handleClick(item.id)}
-              className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-                item.id === activeSubCommunicationTabId &&
-                showPilot &&
-                'rounded-t-lg bg-white'
-              } ${
-                item.id != activeSubCommunicationTabId &&
-                showPilot &&
-                'rounded-b-lg bg-gray-400'
-              }`}
-            >
-              <span
-                className={`absolute left-2 text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                  showPilot ? 'block' : 'hidden'
-                }`}
-              >
-                <MdDragIndicator />
-              </span>
-              <span
-                className={`${!showPilot && 'text-xs'} ${
-                  item.id === activeSubCommunicationTabId &&
-                  !showPilot &&
-                  'bg-green-500 p-2 rounded'
-                }`}
-              >
-                {item.icon}
-              </span>
-            </div>
-          </section>
-        </ToolTip>
-      ))}
-    </div>
+              id={item.id}
+              icon={item.icon}
+              activeSub={activeSubCommunicationTabId}
+              showPilot={showPilot}
+              name={'connect'}
+            />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 }
