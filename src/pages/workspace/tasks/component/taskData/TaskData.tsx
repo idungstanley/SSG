@@ -107,8 +107,6 @@ export default function TaskData({ task }: TaskDataProps) {
           {groupAssignee(task.assignees)}
         </div>
       );
-    } else if (colfield == "name") {
-      return "";
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
@@ -119,23 +117,23 @@ export default function TaskData({ task }: TaskDataProps) {
       );
     } else if (colfield == "created_at") {
       return (
-        <span className="text-xs font-medium pl-12 text-gray-">
+        <span className="text-gray-400 pl-12 text-sm font-medium">
           {moment(taskColField).format("MM/DD")}
         </span>
       );
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative">
-          <div className="">
+          <div className=" flex items center">
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-3 h-3 w-3"
+              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-7 h-3 w-3"
               onClick={() => {
                 displayNav(task.id);
               }}
             />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute left-0 " />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute -left-3 " />
           </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
@@ -194,7 +192,7 @@ export default function TaskData({ task }: TaskDataProps) {
               col.value == "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                  className="flex items-center uppercase ml-2 text-xs py-px font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
@@ -207,7 +205,7 @@ export default function TaskData({ task }: TaskDataProps) {
               col.value !== "Task" && (
                 <div
                   key={col.field}
-                  className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                  className="flex items-center uppercase  text-gray-400 py-px  font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
