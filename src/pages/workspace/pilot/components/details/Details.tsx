@@ -6,11 +6,11 @@ import DetailsSubTab from "./DetailsSubTab";
 
 const DetailOptions = [
   {
-    id: 0,
+    id: 1,
     element: <DetailsIndex />,
   },
   {
-    id: 1,
+    id: 2,
     element: <AddTo />,
   },
 ];
