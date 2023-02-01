@@ -14,11 +14,15 @@ export default function ClockLogIndex() {
   });
 
   const renderItemEntries = () => {
-    if (getTaskEntries?.data.time_entries) {
-      return getTaskEntries?.data?.time_entries?.map((entries) => (
-        <EntryList entries={entries} key={entries.id} />
-      ));
-    } else {
+    if (getTaskEntries?.data.time_entries)
+      if (getTaskEntries?.data.time_entries.length == 0) {
+        return <NoEntriesFound />;
+      } else {
+        return getTaskEntries?.data?.time_entries?.map((entries) => (
+          <EntryList entries={entries} key={entries.id} />
+        ));
+      }
+    else {
       return <NoEntriesFound />;
     }
   };
