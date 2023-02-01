@@ -10,6 +10,26 @@ import {
   IDirectoryTree,
 } from './directory.interfaces';
 
+export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
+  useQuery<IDirectoriesRes, unknown, IDirectory[]>(
+    ['directory', parentId || 'root'],
+    () =>
+      requestNew(
+        {
+          url: 'directories',
+          method: 'GET',
+          params: {
+            // include_tree: includeTree || false,
+            parent_id: parentId,
+          },
+        },
+        true
+      ),
+    {
+      select: (res) => res.data.directories,
+    }
+  );
+
 export const useGetDirectoryTmp = (id?: string | null) =>
   useQuery<IDirectoryTmpRes, unknown, IDirectoryTree>(
     ['directory', id || 'root'],
@@ -29,24 +49,24 @@ export const useGetDirectoryTmp = (id?: string | null) =>
     }
   );
 
-export const useGetDirectories = () =>
-  useQuery<IDirectoriesRes, unknown, IDirectory[]>(
-    ['directory', 'root'],
-    () =>
-      requestNew(
-        {
-          url: 'directories',
-          method: 'GET',
-          params: {
-            include_tree: 1,
-          },
-        },
-        true
-      ),
-    {
-      select: (res) => res.data.hubs,
-    }
-  );
+// export const useGetDirectories = () =>
+//   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
+//     ['directory', 'root'],
+//     () =>
+//       requestNew(
+//         {
+//           url: 'directories',
+//           method: 'GET',
+//           params: {
+//             include_tree: 1,
+//           },
+//         },
+//         true
+//       ),
+//     {
+//       select: (res) => res.data.hubs,
+//     }
+//   );
 
 export const useGetDirectory = (id?: string) =>
   useQuery<IDirectoryRes, unknown, IDirectory>(

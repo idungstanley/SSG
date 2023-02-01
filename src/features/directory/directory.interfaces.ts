@@ -12,7 +12,7 @@ export interface IDirectory {
 
 export interface IDirectoriesRes {
   data: {
-    hubs: IDirectory[];
+    directories: IDirectory[];
   };
 }
 

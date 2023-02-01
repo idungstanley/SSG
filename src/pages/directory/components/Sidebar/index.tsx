@@ -7,8 +7,6 @@ import {
 import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../newExplorer/components/Search';
-import { Spinner } from '../../../../common';
-import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 import { AiOutlineBranches } from 'react-icons/ai';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
@@ -55,17 +53,6 @@ function Sidebar() {
           ) : null
         }
       />
-
-      {status === 'loading' ? (
-        <div className="mx-auto w-6 mt-5 justify-center">
-          <Spinner size={8} color="#0F70B7" />
-        </div>
-      ) : status === 'error' ? (
-        <FullScreenMessage
-          title="Oops, an error occurred :("
-          description="Please try again later."
-        />
-      ) : null}
 
       <DirectoryList />
     </>
