@@ -28,7 +28,7 @@ export default function TaskListViews() {
     <div className=" flex justify-between items-center  ">
       {columnsHead.map((col) => (
         <ul key={col.field}>
-          <li>{col.value}</li>
+          <li className="ml-24">{col.value}</li>
         </ul>
       ))}
     </div>
