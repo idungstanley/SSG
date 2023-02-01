@@ -45,13 +45,6 @@ function RenderList() {
 
   editable.unshift(columnsObj);
 
-  const handleOutput = (objDataCol) => {
-    if (Array.isArray(objDataCol) && objDataCol.length !== 0) {
-      return "Assignees";
-    }
-    return objDataCol;
-  };
-
   return (
     <div className="h-screen overflow-hidden relative">
       <section id="nav">
@@ -71,16 +64,6 @@ function RenderList() {
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
-            {columnsArr.map((col) => {
-              return editable.map((objData) => {
-                console.log(objData[col]);
-                return (
-                  <div className="flex" key={objData.id}>
-                    <p className="flex">{handleOutput(objData[col])}</p>
-                  </div>
-                );
-              });
-            })}
 
             {/* task list logic */}
 
