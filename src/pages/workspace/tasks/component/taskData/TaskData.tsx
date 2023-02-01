@@ -114,20 +114,48 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === "name") {
       return (
         <div className="flex items-center">
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            id="checked-checkbox"
+            className="cursor-pointer rounded-full focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 -left-3 h-3 w-3"
+            onClick={() => {
+              displayNav(task.id);
+            }}
+          />
+          <div onClick={() => handleGetSubTask(task.id)} className="">
+            {task.id == getSubTaskId ? (
+              <span className="flex flex-col">
+                <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
+              </span>
+            ) : (
+              <VscTriangleRight
+                className="flex-shrink-0 h-3"
+                aria-hidden="true"
+                color="rgba(72, 67, 67, 0.64)"
+              />
+            )}
+          </div>
           <p>
-            <VscTriangleRight />
-          </p>
-          <p>
-            <RiCheckboxBlankFill />
+            <RiCheckboxBlankFill
+              className="pl-px text-gray-400 text-xs"
+              aria-hidden="true"
+            />
           </p>
           <p>{taskColField}</p>
-          <p>
-            <PlusOutlined />
-          </p>
-          <p>
-            <EditOutlined />
-          </p>
+          <div
+            id="iconWrapper"
+            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+          >
+            <PlusOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+              aria-hidden="true"
+              onClick={() => handleCreateSubTask(task.id)}
+            />
+            <EditOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+              aria-hidden="true"
+            />
+          </div>
         </div>
       );
     } else return taskColField;
