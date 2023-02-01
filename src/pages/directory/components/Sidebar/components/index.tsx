@@ -32,44 +32,52 @@ function updateNestedArray(
       });
 }
 
+const arrayToTree = (arr: IDir[], parentId?: string) =>
+  arr
+    .filter((item) => item.parent_id === parentId)
+    .map((child) => ({ ...child, children: arrayToTree(arr, child.id) }));
+
 export default function DirectoryList() {
   const { directoryId } = useParams();
 
-  const { data } = useGetDirectories(directoryId, false);
-
   const [directories, setDirectories] = useState<IDir[]>([]);
+
+  const isSavedIdFromURL = !directories.length && !!directoryId;
+
+  const { data } = useGetDirectories(directoryId, true);
 
   useEffect(() => {
     if (data) {
-      setDirectories((oldData) =>
-        oldData.length
-          ? updateNestedArray(
-              oldData,
-              (item) => ({
-                ...item,
-                children: data.map((i) => ({
-                  id: i.id,
-                  name: i.name,
-                  parent_id: i.parent_id,
-                  children: [],
-                })),
-              }),
-              directoryId
-            )
-          : data.map((i) => ({
-              id: i.id,
-              name: i.name,
-              parent_id: i.parent_id,
-              children: [],
-            }))
-      );
+      const stringifiedData = data.map((i) => ({
+        id: i.id,
+        name: i.name,
+        parent_id: i.parent_id,
+        children: [],
+      }));
+
+      if (isSavedIdFromURL) {
+        setDirectories([...arrayToTree(stringifiedData)]);
+      } else {
+        setDirectories((oldData) =>
+          oldData.length
+            ? updateNestedArray(
+                oldData,
+                (item) => ({
+                  ...item,
+                  children: stringifiedData,
+                }),
+                directoryId
+              )
+            : stringifiedData
+        );
+      }
     }
   }, [data]);
 
   return (
-    <ul className="flex flex-col mb-2">
+    <div className="flex flex-col mb-2">
       <Directories directories={directories} leftMargin={false} />
-    </ul>
+    </div>
   );
 }
 
@@ -82,13 +90,13 @@ function Directories({ directories, leftMargin }: DirectoriesProps) {
   return (
     <>
       {directories.map((directory) => (
-        <li key={directory.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
+        <div key={directory.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <DirectoryItem id={directory.id} name={directory.name} />
 
           {directory.children.length ? (
             <Directories directories={directory.children} leftMargin />
           ) : null}
-        </li>
+        </div>
       ))}
     </>
   );

@@ -16,11 +16,11 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
     () =>
       requestNew(
         {
-          url: 'directories',
+          url: `directories${includeTree ? '/' + parentId : ''}`,
           method: 'GET',
           params: {
-            // include_tree: includeTree || false,
-            parent_id: parentId,
+            parent_id: !includeTree ? parentId : undefined,
+            include_tree: includeTree ? 1 : undefined,
           },
         },
         true
@@ -48,25 +48,6 @@ export const useGetDirectoryTmp = (id?: string | null) =>
       select: (res) => res.data,
     }
   );
-
-// export const useGetDirectories = () =>
-//   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
-//     ['directory', 'root'],
-//     () =>
-//       requestNew(
-//         {
-//           url: 'directories',
-//           method: 'GET',
-//           params: {
-//             include_tree: 1,
-//           },
-//         },
-//         true
-//       ),
-//     {
-//       select: (res) => res.data.hubs,
-//     }
-//   );
 
 export const useGetDirectory = (id?: string) =>
   useQuery<IDirectoryRes, unknown, IDirectory>(
