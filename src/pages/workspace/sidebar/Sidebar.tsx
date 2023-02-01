@@ -19,6 +19,7 @@ import Modal from '../hubs/components/Modal';
 import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
+import FooterTabs from './components/FooterTabs';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ export default function Sidebar() {
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="relative z-10 max-w-xs pr-px border-r border-gray-300 md:fixed md:inset-y-0 lg:flex md:flex-col"
+        className="relative z-10 max-w-xs pr-px mb-0.5 border-r border-gray-300 md:fixed md:inset-y-0 lg:flex md:flex-col"
         ref={sidebarRef}
         style={
           showSidebar
@@ -171,6 +172,7 @@ export default function Sidebar() {
             <Places />
           </div>
         </div>
+        <FooterTabs />
         <span className="group">
           <div
             className={`absolute top-0 bottom-0 right-0.5 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
