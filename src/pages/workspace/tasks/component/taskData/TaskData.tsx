@@ -27,7 +27,7 @@ import "./task.css";
 interface TaskDataProps {
   task: any;
 }
-import { columnsHead } from "../views/ListColumns";
+import { columnsHead, taskHead } from "../views/ListColumns";
 import moment from "moment";
 
 export default function TaskData({ task }: TaskDataProps) {
@@ -107,6 +107,8 @@ export default function TaskData({ task }: TaskDataProps) {
           {groupAssignee(task.assignees)}
         </div>
       );
+    } else if (colfield == "name") {
+      return "";
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
@@ -116,7 +118,11 @@ export default function TaskData({ task }: TaskDataProps) {
         />
       );
     } else if (colfield == "created_at") {
-      return moment(taskColField).format("MM/DD");
+      return (
+        <span className="text-xs font-medium pl-12 text-gray-">
+          {moment(taskColField).format("MM/DD")}
+        </span>
+      );
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative">
@@ -181,13 +187,22 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="group bg-white mb-px w-full ml-4 flex items-center justify-between ">
-        {columnsHead.map((col) => (
-          <div key={task.id} className="font-medium w-4/12 text-xs ml-2">
-            {renderData(task[col.field], col.field)}
-          </div>
-        ))}
-      </div>
+      <section className="flex">
+        <div className="group bg-white mb-px w-full  flex items-center justify-between ml-4">
+          {taskHead.map((col) => (
+            <div key={task.id} className="font-medium w-4/12 text-xs ml-2">
+              {task[col.field]}
+            </div>
+          ))}
+        </div>
+        <div className="group bg-white mb-px w-full flex items-center pl-12 ">
+          {columnsHead.map((col) => (
+            <div key={task.id} className="">
+              {renderData(task[col.field], col.field)}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
     </>
