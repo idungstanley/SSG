@@ -88,7 +88,7 @@ const pilotOptions = [
     source: checklistIcon,
   },
 ];
-function Taba({ activeTabId, setActiveTabId }: TabProps) {
+function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
   const { showPilot, showPilotIconView, activeItemName, activeItemType } =
     useAppSelector((state) => state.workspace);
@@ -214,4 +214,4 @@ function Taba({ activeTabId, setActiveTabId }: TabProps) {
   );
 }
 
-export default Taba;
+export default Tab;

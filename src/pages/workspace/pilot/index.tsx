@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAppSelector } from "../../../app/hooks";
-import Tab from "./components/Tabs";
-import Taba from "./components/Tab";
+import Tab from "./components/Tab";
 import History from "../../newExplorer/components/Pilot/components/History";
 import Permissions from "../../newExplorer/components/Pilot/components/Permissions";
 import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
@@ -93,7 +92,6 @@ export default function Pilot() {
     >
       {/* navigation */}
       <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
-      <Taba activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
       {/* main section depends of active tab */}
       <div>{selectedSection ? selectedSection.element : null}</div>
     </div>
