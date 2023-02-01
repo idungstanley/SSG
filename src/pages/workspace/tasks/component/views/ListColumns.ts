@@ -16,3 +16,10 @@ export const columnsHead = [
     value: "Created at",
   },
 ];
+
+export const taskHead = [
+  {
+    field: "name",
+    value: "Task",
+  },
+];

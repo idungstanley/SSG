@@ -119,15 +119,18 @@ export default function TaskData({ task }: TaskDataProps) {
       return moment(taskColField).format("MM/DD");
     } else if (colfield === "name") {
       return (
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="checked-checkbox"
-            className="cursor-pointer rounded-full focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 -left-3 h-3 w-3"
-            onClick={() => {
-              displayNav(task.id);
-            }}
-          />
+        <div className="flex items-center relative">
+          <div className="">
+            <input
+              type="checkbox"
+              id="checked-checkbox"
+              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-3 h-3 w-3"
+              onClick={() => {
+                displayNav(task.id);
+              }}
+            />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute left-0 " />
+          </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
               <span className="flex flex-col">
@@ -178,9 +181,11 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="group bg-white mb-px w-full flex items-center justify-between ">
+      <div className="group bg-white mb-px w-full ml-4 flex items-center justify-between ">
         {columnsHead.map((col) => (
-          <div key={task.id}>{renderData(task[col.field], col.field)}</div>
+          <div key={task.id} className="font-medium w-4/12 text-xs ml-2">
+            {renderData(task[col.field], col.field)}
+          </div>
         ))}
       </div>
 
