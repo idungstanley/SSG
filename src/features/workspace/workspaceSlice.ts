@@ -25,6 +25,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
+  activeSubTimeClockTabId: number | null;
 }
 
 const initialState: workspaceState = {
@@ -51,6 +52,7 @@ const initialState: workspaceState = {
   showPilot: false,
   showPilotIconView: false,
   activeSubDetailsTabId: 1,
+  activeSubTimeClockTabId: 1,
   activeSubCommunicationTabId: 1,
 };
 
@@ -141,6 +143,9 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action) {
       state.activeSubDetailsTabId = action.payload;
     },
+    setActiveSubTimeClockTabId(state, action) {
+      state.activeSubTimeClockTabId = action.payload;
+    },
     setCurrentWalletName(state, action) {
       state.currentWalletName = action.payload;
     },
@@ -179,6 +184,7 @@ export const {
   setShowPilotIconView,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
+  setActiveSubTimeClockTabId,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

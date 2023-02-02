@@ -57,8 +57,15 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
     setCurrWalId(id);
   };
 
-  const handleListLocation = (id: string) => {
+  const handleListLocation = (id: string, name: string) => {
     navigate(`/workspace/list/${id}`);
+    dispatch(
+      setActiveItem({
+        activeItemType: 'list',
+        activeItemId: id,
+        activeItemName: name,
+      })
+    );
   };
 
   const handleWalletSettings = (id: string, name: string, e) => {
@@ -173,10 +180,21 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
-          <section className="flex items-center justify-between h-8 pl-8 mr-6 space-x-1 text-sm hover:bg-gray-100 group">
-            <div className="flex items-center space-x-1">
+          <section
+            className={`relative flex items-center justify-between h-8 pr-6 space-x-1 text-sm hover:bg-gray-100 group ${
+              list.id === activeItemId
+                ? 'bg-green-100 text-green-500'
+                : 'text-black'
+            }`}
+          >
+            {list.id === activeItemId && (
+              <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
+            )}
+            <div className="flex items-center pl-8 space-x-1">
               <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
-              <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
+              <div onClick={() => handleListLocation(list.id, list.name)}>
+                {list.name}
+              </div>
             </div>
             {/* ends here */}
             <button

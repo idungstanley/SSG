@@ -16,6 +16,7 @@ import {
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
 import UpdateTimeEntryDropdown from '../../timeclock/entryLists/UpdateTimeEntryDropdown';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -42,6 +43,7 @@ function TimeEntriesDropdown({
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
   const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
   const [getTEId, setTEId] = useState('');
   const [triggerDel, setTriggerDel] = useState(false);
 
@@ -49,6 +51,7 @@ function TimeEntriesDropdown({
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId,
+    trigger: activeItemType,
   });
 
   useQuery({

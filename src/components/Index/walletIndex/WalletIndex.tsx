@@ -130,14 +130,14 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
             <section
-              className={`flex items-center relative justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
+              className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
                 wallet.id === activeItemId && 'bg-green-100 text-black'
               }`}
             >
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
-              <div id="walletLeft" className="flex items-center justify-center">
+              <div id="walletLeft" className="flex items-center justify-center pl-6">
                 {/* showsub1 */}
                 <div
                   onClick={() => handleShowSubWallet(wallet.id)}
@@ -168,8 +168,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
                 >
                   <p
-                    className="tracking-wider capitalize"
-                    style={{ fontSize: '10px' }}
+                    className="font-medium tracking-wider capitalize truncate cursor-pointer"
+                    style={{ fontSize: '12px' }}
                   >
                     {wallet.name}
                   </p>

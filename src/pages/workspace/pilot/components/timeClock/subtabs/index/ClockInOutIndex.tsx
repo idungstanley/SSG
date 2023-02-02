@@ -1,41 +1,31 @@
 import React, { useState } from 'react';
-import { AvatarWithInitials } from '../../../../components';
-import { EditOutlined, TagOutlined } from '@ant-design/icons';
 import { BsStopCircle } from 'react-icons/bs';
+import { TagOutlined } from '@ant-design/icons';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
-import {
-  EndTimeEntriesService,
-  GetTimeEntriesService,
-  StartTimeEntryService,
-} from '../../../../features/task/taskService';
-import { useAppSelector } from '../../../../app/hooks';
-import moment from 'moment';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
-import EntryList from './entryLists/EntryList';
+import {
+  EndTimeEntriesService,
+  StartTimeEntryService,
+} from '../../../../../../../features/task/taskService';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
-export default function TimeEntries() {
-  const [showEntries, setShowEntries] = useState(false);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { activeItemName, activeItemType } = useAppSelector(
-    (state) => state.workspace
-  );
+export default function ClockInOutIndex() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
-
-  const { data: getEntries, refetch } = GetTimeEntriesService({
-    taskId: currentTaskIdForPilot,
-    trigger: activeItemType,
-  });
+  const [isBillable, setIsBillable] = useState(false);
+  const { activeItemId, activeItemType } = useAppSelector(
+    (state) => state.workspace
+  );
 
   StartTimeEntryService({
-    taskId: currentTaskIdForPilot,
+    taskId: activeItemId,
     trigger: startTimeClicked,
   });
 
   EndTimeEntriesService({
-    taskId: currentTaskIdForPilot,
+    taskId: activeItemId,
     trigger: stopTimeClock,
   });
 
@@ -45,39 +35,9 @@ export default function TimeEntries() {
       setStopTimeClock(!stopTimeClock);
     }
   };
-
-  const handleShowEntries = () => {
-    setShowEntries(!showEntries);
-    refetch();
-  };
-  const totalDuration = getEntries?.data.total_duration;
   return (
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
-        <section className="">
-          <div
-            id="lastUpdatedTask"
-            className="flex justify-between items-center text-xs font-normal h-7 mb-3 py-1 px-3"
-          >
-            <h4>{activeItemName}</h4>
-          </div>
-          <div
-            id="taskUser"
-            className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 hover:bg-gray-200 cursor-pointer"
-            onClick={() => handleShowEntries()}
-          >
-            <div className="p-2 flex items-center justify-start space-x-1 cursor-pointer">
-              <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
-            </div>
-            {/* total time here */}
-            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
-          </div>
-          {/* render time enteries */}
-          {showEntries &&
-            getEntries?.data?.time_entries?.map((entries) => (
-              <EntryList entries={entries} key={entries.id} />
-            ))}
-        </section>
         <section
           id="body"
           className="bg-indigo-500 text-white rounded-b-md px-3 py-1"
@@ -124,13 +84,13 @@ export default function TimeEntries() {
                 <TagOutlined className="text-white" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon
-                // className={`${
-                //   isBillable
-                //     ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
-                //     : 'text-white cursor-pointer text-xl rounded-full h-7'
-                // }`}
+                className={`${
+                  isBillable
+                    ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
+                    : 'text-white cursor-pointer text-xl rounded-full h-7'
+                }`}
                 aria-hidden="true"
-                // onClick={() => setIsBillable(!isBillable)}
+                onClick={() => setIsBillable(!isBillable)}
               />
             </div>
           </div>
