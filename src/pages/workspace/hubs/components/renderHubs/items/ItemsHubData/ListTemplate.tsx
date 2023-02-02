@@ -1,12 +1,4 @@
-import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
 import React from "react";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
 import { useAppSelector } from "../../../../../../../app/hooks";
 import { getTaskListService } from "../../../../../../../features/task/taskService";
 import TaskData from "../../../../../tasks/component/taskData/TaskData";
@@ -19,16 +11,9 @@ interface listIdprops {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  const {
-    myTaskData,
-    listView,
-    tableView,
-    addNewTaskItem,
-    showTaskNavigation,
-    closeTaskListView,
-    currentParentTaskId,
-    getSubTaskId,
-  } = useAppSelector((state) => state.task);
+  const { currentParentTaskId, getSubTaskId } = useAppSelector(
+    (state) => state.task
+  );
 
   return (
     <div className="">

@@ -1,4 +1,7 @@
-export const columnsHead: any = [
+export const columnsHead: {
+  field: string;
+  value: string;
+}[] = [
   {
     field: "name",
     value: "Task",

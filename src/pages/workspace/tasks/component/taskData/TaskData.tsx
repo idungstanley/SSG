@@ -156,7 +156,12 @@ export default function TaskData({ task }: TaskDataProps) {
               aria-hidden="true"
             />
           </p>
-          <p>{taskColField}</p>
+          <p
+            onClick={() => handleTaskPilot(task.id, task.name)}
+            className="cursor-pointer"
+          >
+            {taskColField}
+          </p>
           <div
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
