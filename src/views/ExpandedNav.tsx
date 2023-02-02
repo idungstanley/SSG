@@ -132,7 +132,7 @@ function ExpandedNav() {
           />
         )}
       </span>
-      <section className="z-10 h-screen overflow-x-hidden overflow-y-auto border-r border-gray-300">
+      <section className="z-10 h-screen overflow-x-hidden overflow-y-auto border-r border-gray-400">
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
