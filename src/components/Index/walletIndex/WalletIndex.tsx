@@ -26,6 +26,7 @@ import {
   setCreateWalletSlideOverVisibility,
 } from '../../../features/general/slideOver/slideOverSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
+import { useGetHubWallet } from '../../../features/hubs/hubService';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -36,8 +37,10 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { SubMenuId, showMenuDropdown, currSubHubId, hubParentId } =
+    useAppSelector((state) => state.hub);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
 
   const { data } = getWalletServices({
     hubId: getCurrentHubId,
@@ -96,6 +99,12 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     }
   };
 
+  const handleCreateWallet = () => {
+    if (currSubHubId === getCurrentHubId || hubParentId === getCurrentHubId) {
+      dispatch(setCreateWalletSlideOverVisibility(true));
+    }
+  };
+
   const handleItemAction = (id: string) => {
     dispatch(
       getSubMenu({
@@ -104,29 +113,29 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       })
     );
   };
-  console.log(data?.data);
 
-  return data?.data?.wallets != null && data?.data?.lists != null ? (
+  return walletAndListData?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data.lists.length === 0 && data?.data.wallets.length === 0 && (
-        <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
-          <span className="text-gray-600">
-            Create a
-            <span
-              onClick={() => dispatch(setCreateWalletSlideOverVisibility(true))}
-              className="mx-1 text-black underline cursor-pointer"
-            >
-              Wallet,
+      {walletAndListData?.data.lists.length === 0 &&
+        walletAndListData?.data.wallets.length === 0 && (
+          <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
+            <span className="text-gray-600">
+              Create a
+              <span
+                onClick={() => handleCreateWallet()}
+                className="mx-1 text-black underline cursor-pointer"
+              >
+                Wallet,
+              </span>
+              <span
+                onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
+                className="text-black underline cursor-pointer"
+              >
+                List
+              </span>
             </span>
-            <span
-              onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-              className="text-black underline cursor-pointer"
-            >
-              List
-            </span>
-          </span>
-        </div>
-      )}
+          </div>
+        )}
       {data?.data?.wallets.length !== 0 &&
         data?.data?.wallets.map((wallet) => (
           <div key={wallet.id}>
