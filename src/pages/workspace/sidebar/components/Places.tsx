@@ -8,52 +8,39 @@ import Inbox from '../../inbox';
 import hubIcon from '../../../../assets/branding/hub.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  AtSymbolIcon,
-  BriefcaseIcon,
-  ClockIcon,
-  DocumentTextIcon,
-  FolderOpenIcon,
-  InboxStackIcon,
-  MapIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
+import { FolderOpenIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
 import Directory from '../../../directory/components/Sidebar';
-import { AiOutlineBranches } from 'react-icons/ai';
-// import { FaWpforms } from 'react-icons/fa';
-// import emailIcon from '../../../../assets/branding/email-icon.png';
-// import InboxIcon from '../../../../assets/branding/inbox.png';
-// import timeClockIcon from '../../../../assets/branding/timeclock.png';
+import { FaWpforms } from 'react-icons/fa';
+import emailIcon from '../../../../assets/branding/email-icon.png';
+import InboxIcon from '../../../../assets/branding/inbox.png';
+import timeClockIcon from '../../../../assets/branding/timeclock.png';
 // import trackerIcon from '../../../../assets/branding/tracker-icon.png';
-// import routePlanner from '../../../../assets/branding/gis_route.png';
-// import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
+import routePlanner from '../../../../assets/branding/gis_route.png';
+import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
 // import formsIcon from '../../../../assets/branding/forms-icon.png';
-// import commerceIcon from '../../../../assets/branding/commerce.png';
+import commerceIcon from '../../../../assets/branding/commerce.png';
 
 const places = [
   {
     name: 'Email',
     id: 1,
     place: <Favorites />,
-    // source: emailIcon,
-    icon: <AtSymbolIcon className="h-5 w-5" />,
+    source: emailIcon,
   },
   {
     name: 'Hubs',
     id: 2,
     place: <Hubs />,
     source: hubIcon,
-    // icon: <CubeTransparentIcon className="h-5 w-5" />,
   },
   {
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    // source: InboxIcon,
-    icon: <InboxStackIcon className="h-5 w-5" />,
+    source: InboxIcon,
   },
   {
     name: 'Cabinet',
@@ -63,47 +50,42 @@ const places = [
     link: 'new-explorer',
   },
   {
-    name: 'Directory',
+    name: 'Library',
     id: 5,
     place: <Directory />,
-    // source: trackerIcon,
-    icon: <AiOutlineBranches className="h-5 w-5" />,
+    icon: <HomeIcon className="h-5 w-5" />,
+    // source: formsIcon,
     link: 'directory',
   },
   {
     name: 'Forms',
     id: 6,
     place: <Files />,
-    // icon: <FaWpforms className="h-4" />,
-    icon: <DocumentTextIcon className="h-5 w-5" />,
+    icon: <FaWpforms className="h-4" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    // source: timeClockIcon,
-    icon: <ClockIcon className="h-5 w-5" />,
+    source: timeClockIcon,
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <> </>,
-    // source: routePlanner,
-    icon: <MapIcon className="h-5 w-5" />,
+    source: routePlanner,
   },
   {
     name: 'Also HR',
     id: 9,
     place: <> </>,
-    // source: alsoHRIcon, // ! bad because all icons are outlined, this - solid
-    icon: <UserIcon className="h-5 w-5" />,
+    source: alsoHRIcon,
   },
   {
     name: 'Commerce',
     id: 10,
     place: <> </>,
-    // source: commerceIcon,
-    icon: <BriefcaseIcon className="h-5 w-5" />,
+    source: commerceIcon,
   },
 ];
 
@@ -122,7 +104,8 @@ function Places() {
     }
   };
 
-  useEffect(() => { // ? go to active place from URL on mount
+  useEffect(() => {
+    // ? go to active place from URL on mount
     const placeFromUrl = pathname.split('/')[1];
 
     const activePlace = places.find((i) => i.link === placeFromUrl);

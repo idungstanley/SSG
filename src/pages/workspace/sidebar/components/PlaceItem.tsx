@@ -42,7 +42,7 @@ export default function PlaceItem({
       <div className=" flex justify-between w-full">
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
-          className="flex gap-5 items-center w-full cursor-pointer"
+          className="flex gap-5 items-center w-full cursor-pointer uppercase"
         >
           {icon}
           {label}

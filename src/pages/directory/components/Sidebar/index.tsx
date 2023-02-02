@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
   FolderPlusIcon,
+  HomeIcon,
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
 import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../newExplorer/components/Search';
-import { AiOutlineBranches } from 'react-icons/ai';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import DirectoryList from './components';
@@ -28,8 +28,8 @@ function Sidebar() {
   return (
     <>
       <PlaceItem
-        label="Directory"
-        icon={<AiOutlineBranches className="h-5 w-5" />}
+        label="Library"
+        icon={<HomeIcon className="h-5 w-5" />}
         rightContent={
           <div className="flex gap-2">
             <Dropdown config={configForDropdown} iconType="plus" />

@@ -1,4 +1,4 @@
-import { AtSymbolIcon } from '@heroicons/react/24/outline';
+import emailIcon from '../../../assets/branding/email-icon.png';
 import React from 'react';
 import PlaceItem from '../sidebar/components/PlaceItem';
 
@@ -7,7 +7,7 @@ function Favorites() {
     <>
       <PlaceItem
         label="Email"
-        icon={<AtSymbolIcon className="h-5 w-5" />}
+        icon={<img src={emailIcon} alt="icon" className="h-4 w-4" />}
       />
       <div>favorites</div>
     </>
