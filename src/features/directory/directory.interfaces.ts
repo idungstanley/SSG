@@ -1,13 +1,7 @@
-interface ITemplate {
-  id: string;
-  name: string;
-}
-
-export interface IDirWithTemplates {
+export interface IDirectory {
   id: string;
   name: string;
   parent_id: null | string;
-  templates: ITemplate[];
 }
 
 export interface IDirWithChildren {
@@ -19,9 +13,9 @@ export interface IDirWithChildren {
 
 export interface IDirectoriesRes {
   data: {
-    directories?: IDirWithTemplates[];
+    directories?: IDirectory[];
     tree_elements?: {
-      directories: IDirWithTemplates[];
+      directories: IDirectory[];
     };
   };
 }
@@ -29,11 +23,11 @@ export interface IDirectoriesRes {
 export interface IDirectoryTemplate {
   id: string;
   name: string;
-  fields: string[];
+  directory_id: string;
 }
 
 export interface IDirectoryTemplateRes {
   data: {
-    template: IDirectoryTemplate;
+    templates: IDirectoryTemplate[];
   };
 }

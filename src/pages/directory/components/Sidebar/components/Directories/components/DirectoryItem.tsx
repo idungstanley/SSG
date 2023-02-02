@@ -26,7 +26,7 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
     <div
       className={classNames(
         'group hover:bg-gray-100 flex w-full p-1 justify-between items-center',
-        directoryId === id ? 'bg-gray-100' : ''
+        directoryId === id ? 'bg-green-200' : ''
       )}
     >
       <div

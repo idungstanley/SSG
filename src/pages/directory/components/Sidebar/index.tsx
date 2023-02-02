@@ -61,8 +61,8 @@ function Sidebar() {
         }
       />
 
-      <LibraryNavigation label="Book Case" path="case" />
-      <LibraryNavigation label="Book Shelf" path="shelf" />
+      <LibraryNavigation label="Case" path="case" />
+      <LibraryNavigation label="Shelf" path="shelf" />
       {isBookShelf ? (
         <div className="ml-5">
           <DirectoryList />

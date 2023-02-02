@@ -2,14 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import {
   IDirectoriesRes,
-  IDirWithTemplates,
+  IDirectory,
   IDirectoryTemplate,
   IDirectoryTemplateRes,
 } from './directory.interfaces';
 
 // request includes both fetch with and within tree
 export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
-  useQuery<IDirectoriesRes, unknown, IDirWithTemplates[]>(
+  useQuery<IDirectoriesRes, unknown, IDirectory[]>(
     ['directory', includeTree ? 'tree-' + parentId : parentId || 'root'],
     () =>
       requestNew(
@@ -89,22 +89,25 @@ export const useCreateDirectoryTemplate = (directoryId: string) => {
   });
 };
 
-export const useGetDirectoryTemplate = (
-  directoryId: string,
-  templateId: string
-) =>
-  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplate>(
-    ['directory-template', templateId],
+export const useGetDirectoryTemplates = (directoryId?: string) =>
+  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplate[]>(
+    ['directory-templates', directoryId || 'root'],
     () =>
       requestNew(
         {
-          url: `directories/${directoryId}/template${templateId}`,
+          url: 'directory-templates',
           method: 'GET',
+          params: !directoryId
+            ? undefined
+            : {
+                directory_id: directoryId,
+              },
         },
         true
       ),
     {
-      select: (res) => res.data.template,
+      // enabled: !!directoryId,
+      select: (res) => res.data.templates,
     }
   );
 
