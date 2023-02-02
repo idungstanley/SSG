@@ -12,7 +12,7 @@ import {
 
 export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
-    ['directory', parentId || 'root'],
+    ['directory', 'root'],
     () =>
       requestNew(
         {
@@ -26,7 +26,7 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
         true
       ),
     {
-      select: (res) => res.data.directories,
+      select: (res) => res.data.directories || res.data.tree_elements?.directories || [],
     }
   );
 

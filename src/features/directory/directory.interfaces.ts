@@ -12,7 +12,10 @@ export interface IDirectory {
 
 export interface IDirectoriesRes {
   data: {
-    directories: IDirectory[];
+    directories?: IDirectory[];
+    tree_elements?: {
+      directories: IDirectory[];
+    };
   };
 }
 

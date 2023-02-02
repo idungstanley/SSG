@@ -34,11 +34,15 @@ function updateNestedArray(
 }
 
 function arrayToTree(array: IDir[]) {
-  const nodes = [...array];
+  const nodes: Record<string, IDir> = {};
+
+  array.forEach((node) => {
+    nodes[node.id] = node;
+  });
 
   const tree: IDir[] = [];
 
-  nodes.forEach((node) => {
+  Object.values(nodes).forEach((node) => {
     if (node.parent_id === null) {
       tree.push(node);
     } else {
@@ -47,11 +51,6 @@ function arrayToTree(array: IDir[]) {
   });
   return tree;
 }
-
-// const arrayToTree = (arr: IDir[], parentId?: string) =>
-//   arr
-//     .filter((item) => item.parent_id === parentId)
-//     .map((child) => ({ ...child, children: arrayToTree(arr, child.id) }));
 
 export default function DirectoryList() {
   const { directoryId } = useParams();
