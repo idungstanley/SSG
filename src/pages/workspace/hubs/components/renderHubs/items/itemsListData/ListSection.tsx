@@ -2,23 +2,23 @@ import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from "@heroicons/react/24/outline";
-import React from "react";
-import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
-import ItemsListsData from "./ItemsListsData";
-import "../ItemsHubData/wallet.css";
-import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
-import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
-import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
+} from '@heroicons/react/24/outline';
+import React from 'react';
+import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
+import ItemsListsData from './ItemsListsData';
+import '../ItemsHubData/wallet.css';
+import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
 import {
   setCreateTaskFromTop,
   setCurrentListId,
-} from "../../../../../../../features/list/listSlice";
+} from '../../../../../../../features/list/listSlice';
 
 export default function ListSection({ data }: any) {
   const { addNewTaskItem } = useAppSelector((state) => state.task);
@@ -37,7 +37,7 @@ export default function ListSection({ data }: any) {
               className="flex-shrink-0 w-5 h-4"
               aria-hidden="true"
             />
-            <p className="text-xs font-medium text-black font-sans">
+            <p className="text-xs font-medium text-black font-sans capitalize">
               {data.name}
             </p>
 

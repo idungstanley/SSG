@@ -1,16 +1,16 @@
-import React, { useMemo } from 'react';
-import AddTo from '../attachments/AddTo';
-import DetailsIndex from './properties/DetailsIndex';
-import { useAppSelector } from '../../../../../app/hooks';
-import DetailsSubTab from './DetailsSubTab';
+import React, { useMemo } from "react";
+import AddTo from "../attachments/AddTo";
+import DetailsIndex from "./properties/DetailsIndex";
+import { useAppSelector } from "../../../../../app/hooks";
+import DetailsSubTab from "./DetailsSubTab";
 
 const DetailOptions = [
   {
-    id: 0,
+    id: 1,
     element: <DetailsIndex />,
   },
   {
-    id: 1,
+    id: 2,
     element: <AddTo />,
   },
 ];
