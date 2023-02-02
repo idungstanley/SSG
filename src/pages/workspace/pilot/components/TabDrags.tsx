@@ -50,14 +50,12 @@ export default function TabDrag({
 
   return (
     <section
-      key={id}
       style={style}
-      className={`flex ${
+      className={`flex flex-auto ${
         id === activeTabId && showPilot === false ? "flex-col" : "flex-row"
       }`}
     >
       <div
-        key={id}
         onClick={() => handleClick(id)}
         className={classNames(
           id === activeTabId
