@@ -21,7 +21,7 @@ function RenderWallets() {
 
   return (
     <div className="overflow-auto h-screen">
-      <section id="nav">
+      <section id="nav" className="capitalize">
         <ListNav
           navName={currentWalletName}
           viewsList="List"

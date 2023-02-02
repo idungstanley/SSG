@@ -15,7 +15,8 @@ import {
   DeleteTimeEntriesService,
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
-import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
+import UpdateTimeEntryDropdown from '../../timeclock/entryLists/UpdateTimeEntryDropdown';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -42,6 +43,7 @@ function TimeEntriesDropdown({
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
   const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
   const [getTEId, setTEId] = useState('');
   const [triggerDel, setTriggerDel] = useState(false);
 
@@ -49,6 +51,7 @@ function TimeEntriesDropdown({
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId,
+    trigger: activeItemType,
   });
 
   useQuery({
@@ -127,13 +130,13 @@ function TimeEntriesDropdown({
                         aria-hidden="true"
                       />
                     </button>
-                    {openUpdateEntry === id ? (
+                    {/* {openUpdateEntry === id ? (
                       <UpdateTimeEntryDropdown
                         id={id}
-                        setOpenUpdateEntry={setOpenUpdateEntry}
+                        // setOpenUpdateEntry={setOpenUpdateEntry}
                         taskId={taskId}
                       />
-                    ) : null}
+                    ) : null} */}
                     <button type="button" onClick={() => handleDeleteEntry(id)}>
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"

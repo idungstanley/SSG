@@ -8,6 +8,7 @@ import {
   setActiveItem,
   setCurrentItem,
   setShowHub,
+  setShowPilot,
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
 import MenuDropdown from '../Dropdown/MenuDropdown';
@@ -79,6 +80,7 @@ export default function ItemsListInSidebar({
         activeItemName: name,
       })
     );
+    dispatch(setShowPilot(true));
     navigate(`/workspace/hub/${id}`);
   };
 
@@ -143,32 +145,30 @@ export default function ItemsListInSidebar({
         >
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
-              i.id === currentItemId && i.id === activeItemId
+              i.id === activeItemId
                 ? 'bg-green-100 text-green-500'
                 : 'text-black'
             }`}
+            tabIndex={0}
+            onClick={() => handleClick(i.id)}
           >
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
-                i.id === currentItemId && i.id === activeItemId
-                  ? 'text-green-500'
-                  : 'text-black-500'
+                i.id === activeItemId ? 'text-green-500' : 'text-black-500'
               }`}
             >
-              {i.id === currentItemId && i.id === activeItemId && (
+              {i.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
               <div
                 role="button"
-                tabIndex={0}
-                onClick={() => handleClick(i.id)}
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 <div className="mr-0.5">
                   {i.id === currentItemId ? (
                     <span className="flex flex-col">
                       <VscTriangleDown
-                        className="flex-shrink-0 h-3 ml-1"
+                        className="flex-shrink-0 h-3"
                         aria-hidden="true"
                         color="rgba(72, 67, 67, 0.64)"
                       />
@@ -195,13 +195,13 @@ export default function ItemsListInSidebar({
                     roundedStyle="rounded"
                   />
                   <span className="ml-4 overflow-hidden">
-                    <h4
-                      className="font-medium tracking-wider capitalize truncate"
+                    <a
+                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}
-                    </h4>
+                    </a>
                   </span>
                 </div>
               </div>

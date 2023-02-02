@@ -19,10 +19,10 @@ export default function AddColumnDropdown({
 }: CustomDropdownProps) {
   const [column, setColumn] = useState(true);
   return (
-    <div className="">
+    <div className="relative">
       <div
-        className=" absolute top-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto z-30 "
-        style={{ left: "-40px", height: "500px" }}
+        className=" absolute  border-2 right-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto z-30 h-auto"
+        style={{ height: "300px" }}
       >
         <div className="flex py-2 px-2 justify-around">
           <p onClick={() => setColumn(!column)}>Show/Hide</p>

@@ -81,14 +81,14 @@ export default function Template3({ task }: TemplateProps) {
 
   return (
     <div
-      className="group relative bg-white border border-gray-100 hover:bg-gray-100  flex  items-center ml-6 pl-3"
+      className="group relative bg-white border border-gray-100 hover:bg-slate-100  flex  items-center ml-4 "
       key={task.id}
     >
       <span className="flex items-center absolute" style={{ left: "-30px" }}>
         <input
           type="checkbox"
           id="checked-checkbox"
-          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
+          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 h-3 w-3 focus:opacity-100`}
           onClick={() => displayNav(task.id)}
         />
 
@@ -143,7 +143,7 @@ export default function Template3({ task }: TemplateProps) {
       <div className="flex relative  space-x-10">
         <span
           className="absolute rounded-full text-xs text-center"
-          style={{ left: "-100px" }}
+          style={{ left: "-84px" }}
         >
           {/* assignees here */}
 
@@ -156,7 +156,7 @@ export default function Template3({ task }: TemplateProps) {
           ) : (
             <div
               onClick={() => handleAssigneeModal(task.id)}
-              className="cursor-pointer"
+              className="cursor-pointer mt-1"
             >
               {groupAssignee(task.assignees)}
             </div>
@@ -164,7 +164,7 @@ export default function Template3({ task }: TemplateProps) {
         </span>
         <span
           className="absolute border-dotted border-gray-300 pl-3 ml-5"
-          style={{ left: "-76px" }}
+          style={{ left: "-64px" }}
         >
           <CalendarOutlined
             className="h-5 w-7 text-gray-400"
@@ -173,7 +173,7 @@ export default function Template3({ task }: TemplateProps) {
         </span>
         <span className="border-dotted border-gray-300 ml-5">
           <FlagOutlined
-            className="h-5 w-7  text-gray-400 ml-7"
+            className="h-5 w-7  text-gray-400 ml-10"
             aria-hidden="true"
           />
         </span>

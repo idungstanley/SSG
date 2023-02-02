@@ -1,66 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { CalendarOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
 import { UpdateTimeEntriesService } from '../../../../../features/task/taskService';
-import { useQuery } from '@tanstack/react-query';
-import { GetTimeEntriesService } from '../../../../../features/task/taskService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { setUpdateEntries } from '../../../../../features/task/taskSlice';
+import { useDispatch } from 'react-redux';
 
 interface UpdateTimeEntryDropdownProps {
-  id: string;
-  setOpenUpdateEntry: React.Dispatch<React.SetStateAction<boolean>>;
-  taskId: string | undefined;
+  time_entry_id: string | undefined;
 }
 
 function UpdateTimeEntryDropdown({
-  id,
-  setOpenUpdateEntry,
-  taskId,
+  time_entry_id,
 }: UpdateTimeEntryDropdownProps) {
-  const [isBillable, setIsBillable] = useState(false);
-  const [currEntry, setCurrEntry] = useState<any>([]);
   const queryClient = useQueryClient();
-
-  // const { data: getEntries } = useQuery({
-  //   queryKey: ['getTimeEntries', taskId],
-  //   queryFn: GetTimeEntriesService,
-  // });
-
-    const { data: getEntries } = GetTimeEntriesService({
-    taskId
-  });
+  const dispatch = useDispatch();
+  const [isBillable, setIsBillable] = useState(false);
+  const { initial_description, initial_start_date, initial_end_date } =
+    useAppSelector((state) => state.task);
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {
-      queryClient.invalidateQueries('clocktimer' as any);
+      queryClient.invalidateQueries(['timeclock']);
+      dispatch(setUpdateEntries({ openUpdateEntryId: null }));
     },
   });
 
   const defaultUpdateTimeFormState = {
-    description: '',
-    start_date: '',
-    end_date: '',
+    description: initial_description,
+    start_date: initial_start_date,
+    end_date: initial_end_date,
   };
 
   const [formState, setFormState] = useState(defaultUpdateTimeFormState);
 
   const handleUpdateTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
+    setFormState((prevState) => ({
+      ...prevState,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const { description, start_date, end_date } = formState;
-
-  const getCurrTimeClockData = () => {
-    getEntries?.data.time_entries.map((entry) => {
-      if (entry.id == id) {
-        setCurrEntry(entry);
-      }
-    });
-  };
 
   const onSubmit = async () => {
     await updateClockTimer.mutateAsync({
@@ -68,31 +51,31 @@ function UpdateTimeEntryDropdown({
       isBillable: isBillable === false ? 0 : 1,
       start_date,
       end_date,
-      id,
+      time_entry_id,
     });
   };
 
-  console.log(currEntry);
-
-  useEffect(() => {
-    getCurrTimeClockData() as any;
-  }, []);
-
   return (
     <div className="">
-      <section className="absolute -left-0 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+      <section className="absolute -left-44 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
         <div className="flex justify-between items-center px-3 py-3 text-xs">
           <p>Edit Session</p>
-          <button type="button" onClick={() => setOpenUpdateEntry(false)}>
+          <button
+            type="button"
+            onClick={() =>
+              dispatch(setUpdateEntries({ openUpdateEntryId: null }))
+            }
+          >
             X
           </button>
         </div>
-        <div id="descNote" className="text-white w-full my-2 mx-3">
+        <div id="descNote" className=" w-5/6 my-2 mx-3">
           <input
             type="text"
-            name="description"
-            // value={currEntry?.description}
             placeholder="Enter a note"
+            name="description"
+            value={description}
+            onChange={handleUpdateTimeChange}
             className="border-0 shadow-sm rounded text-gray-600"
           />
         </div>
@@ -120,7 +103,7 @@ function UpdateTimeEntryDropdown({
             type="text"
             name="start_date"
             placeholder="HH:MM"
-            // value={moment(currEntry?.start_date).format('YYYY-MM-D h:mm:ss')}
+            value={moment(start_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>
@@ -133,7 +116,7 @@ function UpdateTimeEntryDropdown({
             type="text"
             placeholder="HH:MM"
             name="end_date"
-            // value={moment(currEntry?.end_date).format('YYYY-MM-D h:mm:ss')}
+            value={moment(end_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>

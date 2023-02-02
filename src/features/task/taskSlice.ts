@@ -38,6 +38,10 @@ interface TaskState {
   currentParentSubTaskId2: null;
   currentParentSubTaskId3: null;
   currentParentSubTaskId4: null;
+  initial_description: string;
+  initial_start_date: null;
+  initial_end_date: null;
+  openUpdateEntryId: null;
 }
 
 const initialState: TaskState = {
@@ -60,6 +64,10 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
+  initial_description: '',
+  initial_start_date: null,
+  initial_end_date: null,
+  openUpdateEntryId: null,
 };
 
 export const taskSlice = createSlice({
@@ -131,6 +139,12 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId4(state, action) {
       state.currentParentSubTaskId4 = action.payload;
     },
+    setUpdateEntries(state, action) {
+      state.initial_description = action.payload.initial_description;
+      state.initial_start_date = action.payload.initial_start_date;
+      state.initial_end_date = action.payload.initial_end_date;
+      state.openUpdateEntryId = action.payload.openUpdateEntryId;
+    },
 
     checkIfTask: (state) => state,
   },
@@ -157,5 +171,6 @@ export const {
   setCurrentParentSubTaskId2,
   setCurrentParentSubTaskId3,
   setCurrentParentSubTaskId4,
+  setUpdateEntries,
 } = taskSlice.actions;
 export default taskSlice.reducer;
