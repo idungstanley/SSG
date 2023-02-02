@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface workspaceState {
   workspace: string[];
@@ -50,19 +50,19 @@ const initialState: workspaceState = {
   currentWalletName: null,
   showPilot: false,
   showPilotIconView: false,
-  activeSubDetailsTabId: 0,
-  activeSubCommunicationTabId: 0,
+  activeSubDetailsTabId: 1,
+  activeSubCommunicationTabId: 1,
 };
 
 export const wsSlice = createSlice({
-  name: 'workspace',
+  name: "workspace",
   initialState,
   reducers: {
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      if (action.payload === 'CHANGE') {
+      if (action.payload === "CHANGE") {
         return {
           ...state,
           showSidebar: !state.showSidebar,
@@ -87,7 +87,7 @@ export const wsSlice = createSlice({
       state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -95,7 +95,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
