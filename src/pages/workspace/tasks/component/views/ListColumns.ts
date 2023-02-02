@@ -14,6 +14,6 @@ export const columnsHead: any = [
   },
   {
     field: "created_at",
-    value: "Created at",
+    value: "Created",
   },
 ];
