@@ -17,13 +17,18 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
-import { setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
+import {
+  setActiveItem,
+  setShowHub,
+} from '../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { currentItemId, activeItemId } = useAppSelector(
+    (state) => state.workspace
+  );
   const { data, status } = useGetSubHub({
     parentId: currentItemId,
   });
@@ -102,8 +107,20 @@ export default function SubHubIndex() {
       {data?.data?.hubs.length !== 0 &&
         data?.data?.hubs.map((subhub) => (
           <div key={subhub.id}>
-            <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
-              <div id="subhubleft" className="flex items-center justify-center">
+            <section
+              className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
+                subhub.id === activeItemId
+                  ? 'bg-green-100 text-green-500'
+                  : 'text-black'
+              }`}
+            >
+              {subhub.id === activeItemId && (
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
+              )}
+              <div
+                id="subhubleft"
+                className="flex items-center justify-center pl-3 "
+              >
                 {/* showsub1 */}
                 <div
                   role="button"
@@ -113,7 +130,7 @@ export default function SubHubIndex() {
                 >
                   {currSubHubId === subhub.id ? (
                     <VscTriangleDown
-                      className="flex-shrink-0 h-3 ml-1"
+                      className="flex-shrink-0 h-3"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -141,7 +158,7 @@ export default function SubHubIndex() {
                   <span className="ml-4 overflow-hidden">
                     <h4
                       className="font-medium tracking-wider capitalize truncate cursor-pointer"
-                      style={{ fontSize: '10px' }}
+                      style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(subhub.id, subhub.name)}
                     >
                       {subhub.name}
@@ -151,7 +168,7 @@ export default function SubHubIndex() {
               </div>
               <div
                 id="subhubRight"
-                className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+                className="flex items-center space-x-1 text-black opacity-0 group-hover:opacity-100"
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"

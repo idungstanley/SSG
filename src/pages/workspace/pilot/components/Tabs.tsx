@@ -18,6 +18,7 @@ import {
 import { MdDragIndicator } from 'react-icons/md';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
+import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 
 interface TabProps {
   activeTabId: number;
@@ -85,6 +86,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       id: 6,
       name: 'TimeClock',
       source: timeclockIcon,
+      subTab: <TimeSubTab />,
     },
     {
       id: 7,
@@ -152,7 +154,7 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
         {items.map((item, index) => (
           <section
             key={item.id}
-            className={`flex ${
+            className={`flex flex-auto ${
               item.id === activeTabId && showPilot === false
                 ? 'flex-col'
                 : 'flex-row'

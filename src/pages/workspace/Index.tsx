@@ -11,14 +11,15 @@ function Index() {
     (state) => state.workspace
   );
   const paddingStyles = () => {
-    if (showSidebar && sidebarWidth > 54) {
+    if (showSidebar && sidebarWidth > 230) {
       return { paddingLeft: `min(${sidebarWidth}px, 321px)` };
-    } else if (sidebarWidth < 55) {
-      return { paddingLeft: `${54}px` };
-    } else {
+    } else if (sidebarWidth > 55 && sidebarWidth < 230) {
+      return { paddingLeft: `${230}px` };
+    } else if (showSidebar === false) {
       return { paddingLeft: `${54}px` };
     }
   };
+  console.log(sidebarWidth);
 
   return (
     <div className="flex flex-row">
@@ -29,9 +30,7 @@ function Index() {
         <div className="flex flex-col flex-1 grow">
           <Header />
           <main className="flex-1">
-            <div
-              className={`mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}
-            >
+            <div className={`mx-auto sm:px-0 ${showSidebar ? 'px-8' : ''}`}>
               <Outlet />
             </div>
           </main>

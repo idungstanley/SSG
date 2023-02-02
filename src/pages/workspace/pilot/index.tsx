@@ -7,9 +7,9 @@ import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
-import TimeClock from './components/timeClock/TimeClock';
 import Checklist from './components/checklist/Checklist';
 import { useDispatch } from 'react-redux';
+import TimeClock from './components/timeClock/subtabs/TimeClock';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,

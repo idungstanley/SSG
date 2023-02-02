@@ -3,17 +3,19 @@ import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from "@heroicons/react/24/outline";
-import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
+} from '@heroicons/react/24/outline';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
   setCreateTaskFromTop,
   setCurrentListId,
-} from "../../../../../../../features/list/listSlice";
-import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
-import { getWalletServices } from "../../../../../../../features/wallet/walletService";
-import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
-import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
-import ListTemplate from "../ItemsHubData/ListTemplate";
+} from '../../../../../../../features/list/listSlice';
+import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
+import { getWalletServices } from '../../../../../../../features/wallet/walletService';
+import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
+import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
+import ListTemplate from '../ItemsHubData/ListTemplate';
+import WalletSection from './WalletSection';
 
 interface ItemsWalletDataProps {
   walletId: string | null;
@@ -41,7 +43,7 @@ export default function ItemsWalletData({
         {data?.data.lists.map((item) => {
           return (
             <div key={item.id} className="border p-5 rounded">
-              <p className="text-xs font-semibold text-gray-400">
+              <p className="text-xs font-semibold text-gray-400 capitalize">
                 {walletName}
               </p>
               <div id="listTitle" className="flex items-center justify-between">
@@ -50,7 +52,7 @@ export default function ItemsWalletData({
                     className="flex-shrink-0 w-5 h-4"
                     aria-hidden="true"
                   />
-                  <p className="text-xs font-medium text-black font-sans">
+                  <p className="text-xs font-medium text-black font-sans capitalize">
                     {item.name}
                   </p>
 

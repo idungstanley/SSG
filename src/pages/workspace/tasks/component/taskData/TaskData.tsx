@@ -199,20 +199,20 @@ export default function TaskData({ task }: TaskDataProps) {
               col.value == "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center capitalize ml-2 text-xs py-px font-medium  group"
+                  className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
               )
           )}
         </div>
-        <div className="flex w-7/12 bg-white mb-px">
+        <div className="flex pl-20 bg-white  mb-px">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase  text-gray-400 py-px  font-medium  group"
+                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>

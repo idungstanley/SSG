@@ -194,23 +194,29 @@ export const EndTimeEntriesService = (data) => {
   );
 };
 
-export const GetTimeEntriesService = ({ taskId }) => {
+export const GetTimeEntriesService = ({ taskId, trigger }) => {
   const queryClient = useQueryClient();
   // const dispatch = useDispatch();
-  return useQuery(['timeclock', { taskId: taskId }], async () => {
-    const data = await requestNew(
-      {
-        url: 'time-entries',
-        method: 'GET',
-        params: {
-          type: 'task',
-          id: taskId,
+  return useQuery(
+    ['timeclock', { taskId: taskId }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'time-entries',
+          method: 'GET',
+          params: {
+            type: 'task',
+            id: taskId,
+          },
         },
-      },
-      true
-    );
-    return data;
-  });
+        true
+      );
+      return data;
+    },
+    {
+      enabled: trigger == 'task',
+    }
+  );
 };
 
 export const UpdateTimeEntriesService = (data) => {

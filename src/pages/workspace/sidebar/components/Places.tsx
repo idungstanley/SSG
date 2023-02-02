@@ -89,7 +89,7 @@ function Places() {
       ),
     },
     {
-      name: 'hubs',
+      name: 'Tasks',
       id: 2,
       place: <Hubs />,
       source: hubIcon,

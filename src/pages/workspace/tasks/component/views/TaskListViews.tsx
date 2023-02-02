@@ -45,7 +45,7 @@ export default function TaskListViews() {
           </span>
         </div>
       </div>
-      <div className="relative flex w-4/12    items-center first:text-blue-500  ">
+      <div className="relative flex w-5/12    items-center  ">
         {columnsHead.map(
           (col) =>
             col.value == "Task" && (
