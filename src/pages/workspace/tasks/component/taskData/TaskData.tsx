@@ -130,12 +130,12 @@ export default function TaskData({ task }: TaskDataProps) {
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-7 h-3 w-3"
+              className="cursor-pointer -mt-1 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
               onClick={() => {
                 displayNav(task.id);
               }}
             />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute -left-3 " />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move -mt-1 text-sm	 absolute -left-5 " />
           </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
