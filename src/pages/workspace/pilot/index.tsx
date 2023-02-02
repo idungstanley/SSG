@@ -13,6 +13,7 @@ import TimeClock from './components/timeClock/subtabs/TimeClock';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
+  setPilotWidth,
 } from '../../../features/workspace/workspaceSlice';
 
 const sections = [

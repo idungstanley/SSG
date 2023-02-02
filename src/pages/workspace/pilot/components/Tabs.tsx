@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import communicationIcon from '../../../../assets/branding/communication.png';
 import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
@@ -12,6 +12,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
+  setPilotWidth,
   setShowPilot,
   setShowPilotIconView,
 } from '../../../../features/workspace/workspaceSlice';
@@ -33,8 +34,48 @@ interface IItem {
 }
 function Tab({ activeTabId, setActiveTabId }: TabProps) {
   const dispatch = useDispatch();
-  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
-    useAppSelector((state) => state.workspace);
+  const {
+    showPilot,
+    showPilotIconView,
+    activeItemName,
+    activeItemType,
+    pilotWidth,
+  } = useAppSelector((state) => state.workspace);
+  const sidebarRef = useRef<HTMLInputElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
+  const [scrollTop, setScrollTop] = useState<string>('');
+  const startResizing = React.useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = React.useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  const resize = React.useCallback(
+    (mouseMoveEvent) => {
+      if (sidebarRef !== undefined) {
+        if (sidebarRef.current !== undefined && sidebarRef.current !== null)
+          if (isResizing) {
+            dispatch(
+              setPilotWidth(
+                mouseMoveEvent.clientX - sidebarRef?.current?.offsetLeft
+              )
+            );
+          }
+      }
+    },
+    [isResizing]
+  );
+  console.log(pilotWidth);
+  React.useEffect(() => {
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resize, stopResizing, pilotWidth]);
   const handleClick = (tabId: number) => {
     setActiveTabId(tabId);
   };
@@ -110,9 +151,39 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
 
   return (
     <div
-      className={`gap-4 pb-1 border  ${showPilot ? 'w-full' : 'w-12'}`}
+      className="gap-4 pb-1 border"
       aria-label="Tabs"
+      ref={sidebarRef}
+      style={
+        showPilot
+          ? { maxWidth: '450px', width: `${pilotWidth}px`, minWidth: '230px' }
+          : { width: '48px' }
+      }
     >
+      <span className="group">
+        <div
+          className={`absolute top-0 left-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+            pilotWidth >= 230 && 'group-hover:bg-green-300'
+          }`}
+          onMouseDown={startResizing}
+          onMouseUp={stopResizing}
+          style={{
+            cursor: 'col-resize',
+            width: `${pilotWidth > 320 ? '4px' : '2px'}`,
+          }}
+        ></div>
+        <div
+          className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+            pilotWidth <= 320 && 'group-hover:bg-green-300'
+          }`}
+          style={{
+            cursor: 'col-resize',
+            width: `${pilotWidth < 230 ? '4px' : '2px'}`,
+            left: `${pilotWidth < 230 ? '-4.8px' : '-2.8px'}`,
+          }}
+          onMouseDown={startResizing}
+        ></div>
+      </span>
       <section>
         <div id="entity" className="flex -mb-3 p-1 text-xs capitalize">
           <p className="text-gray-600"> {activeItemType && activeItemType}</p>
@@ -140,12 +211,12 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       <div
         className={`flex relative divide-x ${
           showPilot ? 'flex-row' : 'flex-col'
-        } ${showPilotIconView ? '' : 'flex-wrap'}`}
+        } ${showPilotIconView ? 'flex-wrap' : 'flex-wrap'}`}
       >
         {showPilot && (
           <span
-            className={`absolute left-1 z-10 text-xs top-2.5 hover:text-green-500 ${
-              showPilotIconView && 'text-green-500'
+            className={`z-10 text-xs border flex items-center hover:text-green-500 ${
+              showPilotIconView ? 'text-green-500 transform -rotate-180' : ''
             }`}
           >
             <HiChevronDoubleUp onClick={() => handleShowPilotIconView()} />

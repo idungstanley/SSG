@@ -40,7 +40,7 @@ export default function ItemsListInSidebar({
 }: ItemsListInSidebarProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [showChildren, setShowChidren] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
@@ -85,9 +85,10 @@ export default function ItemsListInSidebar({
   };
 
   const handleClick = (id: string) => {
-    const isMatch = id === currentItemId;
+    const isMatch = id === showChildren;
     if (isMatch) {
       dispatch(setShowHub(false));
+      setShowChidren(null);
       if (!currentItemId) {
         dispatch(
           setCurrentItem({
@@ -95,11 +96,10 @@ export default function ItemsListInSidebar({
             currentItemType: type,
           })
         );
-      } else {
-        dispatch(resetCurrentItem());
       }
     } else {
       dispatch(setShowHub(true));
+      setShowChidren(id);
       dispatch(
         setCurrentItem({
           currentItemId: id,
@@ -139,7 +139,7 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}
-          className={`flex relative flex-col ${i.id === currentItemId}`}
+          className={`flex relative flex-col ${i.id === showChildren}`}
           onMouseEnter={() => handleMouseOver(index)}
           onMouseLeave={handleMouseOut}
         >
@@ -165,7 +165,7 @@ export default function ItemsListInSidebar({
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 <div className="mr-0.5">
-                  {i.id === currentItemId ? (
+                  {i.id === showChildren ? (
                     <span className="flex flex-col">
                       <VscTriangleDown
                         className="flex-shrink-0 h-3"
@@ -220,7 +220,7 @@ export default function ItemsListInSidebar({
               </div>
             )}
           </div>
-          {currentItemId === i.id ? <DropdownList /> : null}
+          {showChildren === i.id ? <DropdownList /> : null}
           {showMenuDropdown === i.id ? <MenuDropdown /> : null}
           {SubMenuId === i.id ? <SubDropdown /> : null}
         </li>

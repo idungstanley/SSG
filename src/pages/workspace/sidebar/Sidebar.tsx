@@ -78,7 +78,9 @@ export default function Sidebar() {
     <>
       {/* Static sidebar for desktop */}
       <div
-        className="relative z-10 max-w-xs pr-px border-r border-gray-300 md:fixed md:inset-y-0 lg:flex md:flex-col"
+        className={`relative z-10 max-w-xs pr-px border-r border-gray-300 md:fixed md:inset-y-0 lg:flex md:flex-col ${
+          isResizing ? 'border-gray-500' : 'border-gray-300'
+        }`}
         ref={sidebarRef}
         style={
           showSidebar
@@ -177,14 +179,13 @@ export default function Sidebar() {
         <FooterTabs />
         <span className="group">
           <div
-            className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+            className={`absolute top-0 right-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
               sidebarWidth >= 230 && 'group-hover:bg-green-300'
             }`}
             onMouseDown={startResizing}
             style={{
               cursor: 'col-resize',
               width: `${sidebarWidth > 320 ? '4px' : '2px'}`,
-              right: '0.5px',
             }}
           ></div>
           <div
@@ -194,8 +195,9 @@ export default function Sidebar() {
             style={{
               cursor: 'col-resize',
               width: `${sidebarWidth < 230 ? '4px' : '2px'}`,
-              right: `${sidebarWidth < 230 ? '-4px' : '-2px'}`,
+              right: `${sidebarWidth < 230 ? '-4.8px' : '-2.8px'}`,
             }}
+            onMouseDown={startResizing}
           ></div>
         </span>
       </div>

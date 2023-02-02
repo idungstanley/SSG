@@ -8,6 +8,7 @@ interface workspaceState {
   activePlaceId: number | boolean;
   showExtendedBar: boolean;
   sidebarWidth: number;
+  pilotWidth: number;
   extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
@@ -36,6 +37,7 @@ const initialState: workspaceState = {
   activePlaceId: 0,
   showExtendedBar: false,
   sidebarWidth: 300,
+  pilotWidth: 400,
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
@@ -78,6 +80,9 @@ export const wsSlice = createSlice({
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setPilotWidth(state, action) {
+      state.pilotWidth = action.payload;
     },
     setShowPilot(state, action) {
       state.showPilot = action.payload;
@@ -185,6 +190,7 @@ export const {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
+  setPilotWidth,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
