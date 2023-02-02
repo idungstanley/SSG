@@ -14,7 +14,6 @@ import { getWalletServices } from '../../../../../../../features/wallet/walletSe
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
 import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
 import ListTemplate from '../ItemsHubData/ListTemplate';
-import WalletSection from './WalletSection';
 
 interface ItemsWalletDataProps {
   walletId: string | null;

@@ -1,8 +1,6 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import {  useAppSelector } from '../../../../../../../app/hooks';
 import { getTaskListService } from '../../../../../../../features/task/taskService';
-import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
-import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../../../../../tasks/component/taskData/TaskData';
 import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../../../../../tasks/subtasks/subtask1/RenderSubTasks';
