@@ -40,6 +40,9 @@ export const checklistSlice = createSlice({
     createchecklistSlice(state, action) {
       state.checklist.push(action.payload);
     },
+    // getchecklist(state, { payload }) {
+    //   state.checklist.push(payload);
+    // },
   },
 });
 
