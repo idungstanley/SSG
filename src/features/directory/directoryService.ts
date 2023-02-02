@@ -3,16 +3,16 @@ import requestNew from '../../app/requestNew';
 import {
   IDirectoriesRes,
   IDirectory,
-  IDirectoryRes,
+  // IDirectoryRes,
   IDirectoryTemplate,
   IDirectoryTemplateRes,
-  IDirectoryTmpRes,
-  IDirectoryTree,
+  // IDirectoryTmpRes,
+  // IDirectoryTree,
 } from './directory.interfaces';
 
 export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
-    ['directory', 'root'],
+    ['directory', includeTree ? 'tree-' + parentId : parentId || 'root'],
     () =>
       requestNew(
         {
@@ -26,45 +26,46 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
         true
       ),
     {
-      select: (res) => res.data.directories || res.data.tree_elements?.directories || [],
+      select: (res) =>
+        res.data.directories || res.data.tree_elements?.directories || [],
     }
   );
 
-export const useGetDirectoryTmp = (id?: string | null) =>
-  useQuery<IDirectoryTmpRes, unknown, IDirectoryTree>(
-    ['directory', id || 'root'],
-    () =>
-      requestNew(
-        {
-          url: `directories${id ? '/' + id : ''}`,
-          method: 'GET',
-          params: {
-            include_tree: 1,
-          },
-        },
-        true
-      ),
-    {
-      select: (res) => res.data,
-    }
-  );
+// export const useGetDirectoryTmp = (id?: string | null) =>
+//   useQuery<IDirectoryTmpRes, unknown, IDirectoryTree>(
+//     ['directory', id || 'root'],
+//     () =>
+//       requestNew(
+//         {
+//           url: `directories${id ? '/' + id : ''}`,
+//           method: 'GET',
+//           params: {
+//             include_tree: 1,
+//           },
+//         },
+//         true
+//       ),
+//     {
+//       select: (res) => res.data,
+//     }
+//   );
 
-export const useGetDirectory = (id?: string) =>
-  useQuery<IDirectoryRes, unknown, IDirectory>(
-    ['directory', id],
-    () =>
-      requestNew(
-        {
-          url: `directories/${id} `,
-          method: 'GET',
-        },
-        true
-      ),
-    {
-      select: (res) => res.data.directory,
-      enabled: !!id,
-    }
-  );
+// export const useGetDirectory = (id?: string) =>
+//   useQuery<IDirectoryRes, unknown, IDirectory>(
+//     ['directory', id],
+//     () =>
+//       requestNew(
+//         {
+//           url: `directories/${id} `,
+//           method: 'GET',
+//         },
+//         true
+//       ),
+//     {
+//       select: (res) => res.data.directory,
+//       enabled: !!id,
+//     }
+//   );
 
 const createDirectory = (data: { name: string; parentId?: string }) => {
   const { name, parentId } = data;

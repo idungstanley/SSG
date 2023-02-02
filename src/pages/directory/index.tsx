@@ -1,20 +1,20 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetDirectory } from '../../features/directory/directoryService';
+// import { useGetDirectory } from '../../features/directory/directoryService';
 import Sidebar from '../workspace/sidebar/Sidebar';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 
 function Directory() {
   const { directoryId } = useParams();
 
-  const { data } = useGetDirectory(directoryId);
+  // const { data } = useGetDirectory(directoryId);
 
   return (
     <>
       <Sidebar />
       <div className="ml-80">
-        {data?.name ? (
-          <p>Selected directory: {data.name}</p>
+        {directoryId ? (
+          <p>Selected directory: {directoryId}</p>
         ) : (
           <p>No selected directory</p>
         )}
