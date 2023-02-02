@@ -46,8 +46,11 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 10px;
+  height: 10px;
+  padding: 0 20px;
+  background-color: #fff;
+  border: gray;
 }
 
 ::-webkit-scrollbar-track {
@@ -55,11 +58,11 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(201, 201, 201);
+  background-color: #8a878786;
   border-radius: 30px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(153, 153, 153, 0.493);
+  background-color: #8a8787e9;
   width: 10px;
 }

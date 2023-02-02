@@ -19,6 +19,7 @@ import Modal from '../hubs/components/Modal';
 import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
+import FooterTabs from './components/FooterTabs';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -88,7 +89,7 @@ export default function Sidebar() {
         <Modal />
         <SubHubModal />
         <span
-          className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
+          className={`absolute -right-2 top-16 z-50 bg-white rounded-full border-2 border-inherit ${
             activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
           }`}
         >
@@ -99,7 +100,7 @@ export default function Sidebar() {
             />
           )}
         </span>
-        <div className="relative flex flex-col overflow-x-hidden overflow-y-scroll bg-white">
+        <div className="relative flex flex-col bg-white">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
               className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${
@@ -162,28 +163,39 @@ export default function Sidebar() {
               )}
             </div>
           </div>
-          <div
-            className="relative overflow-x-hidden overflow-y-auto"
-            onScroll={(e) => handleScroll(e)}
-          >
-            <Search />
-            <NavigationItems />
-            <Places />
+          <div onScroll={(e) => handleScroll(e)} className="pr-1">
+            <section
+              className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
+              style={{ minHeight: '0', maxHeight: '460px' }}
+            >
+              <Search />
+              <NavigationItems />
+              <Places />
+            </section>
           </div>
         </div>
+        <FooterTabs />
         <span className="group">
           <div
-            className={`absolute top-0 bottom-0 right-0.5 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth >= 230 && 'group-hover:bg-green-100'
+            className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+              sidebarWidth >= 230 && 'group-hover:bg-green-300'
             }`}
             onMouseDown={startResizing}
-            style={{ cursor: 'col-resize', width: '4px' }}
+            style={{
+              cursor: 'col-resize',
+              width: `${sidebarWidth > 320 ? '4px' : '2px'}`,
+              right: '0.5px',
+            }}
           ></div>
           <div
-            className={`absolute top-0 bottom-0 -right-1.5 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth <= 320 && 'group-hover:bg-green-100'
+            className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+              sidebarWidth <= 320 && 'group-hover:bg-green-300'
             }`}
-            style={{ cursor: 'col-resize', width: '4px' }}
+            style={{
+              cursor: 'col-resize',
+              width: `${sidebarWidth < 230 ? '4px' : '2px'}`,
+              right: `${sidebarWidth < 230 ? '-4px' : '-2px'}`,
+            }}
           ></div>
         </span>
       </div>
