@@ -3,25 +3,26 @@ interface ITemplate {
   name: string;
 }
 
-export interface IDirectory {
+export interface IDirWithTemplates {
   id: string;
   name: string;
   parent_id: null | string;
   templates: ITemplate[];
 }
 
-export interface IDirectoriesRes {
-  data: {
-    directories?: IDirectory[];
-    tree_elements?: {
-      directories: IDirectory[];
-    };
-  };
+export interface IDirWithChildren {
+  name: string;
+  id: string;
+  parent_id: string | null;
+  children: IDirWithChildren[];
 }
 
-export interface IDirectoryRes {
+export interface IDirectoriesRes {
   data: {
-    directory: IDirectory;
+    directories?: IDirWithTemplates[];
+    tree_elements?: {
+      directories: IDirWithTemplates[];
+    };
   };
 }
 
@@ -35,14 +36,4 @@ export interface IDirectoryTemplateRes {
   data: {
     template: IDirectoryTemplate;
   };
-}
-
-export interface IDirectoryTree {
-  directories?: IDirectory[];
-  directory?: IDirectory;
-  tree?: { directories?: IDirectory[]; directory?: IDirectory }[];
-}
-
-export interface IDirectoryTmpRes {
-  data: IDirectoryTree;
 }

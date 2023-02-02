@@ -11,7 +11,7 @@ import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../newExplorer/components/Search';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import DirectoryList from './components';
+import DirectoryList from './components/Directories';
 import { classNames } from '../../../../utils';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
