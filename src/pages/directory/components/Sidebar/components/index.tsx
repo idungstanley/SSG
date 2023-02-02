@@ -1,3 +1,4 @@
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineBranches } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -129,29 +130,40 @@ function DirectoryItem({ id, name }: DirectoryItemProps) {
   const onClickDirectory = (id: string) => {
     const isActiveDirectory = directoryId === id;
 
-    navigate(`/directory/${isActiveDirectory ? '' : id}`, {
+    navigate(`/directory/shelf/${isActiveDirectory ? '' : id}`, {
       replace: true,
     });
   };
 
   return (
     <div
-      onClick={() => onClickDirectory(id)}
       className={classNames(
-        'hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer',
+        'group hover:bg-gray-100 flex w-full p-1 justify-between items-center',
         directoryId === id ? 'bg-gray-100' : ''
       )}
     >
-      {directoryId === id ? (
-        <VscTriangleDown className="h-4 w-4 text-gray-500" aria-hidden="true" />
-      ) : (
-        <VscTriangleRight
-          className="h-4 w-4 text-gray-500"
-          aria-hidden="true"
-        />
-      )}
-      <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
-      <p title={name}>{name}</p>
+      <div
+        onClick={() => onClickDirectory(id)}
+        className="flex items-center gap-2 cursor-pointer"
+      >
+        {directoryId === id ? (
+          <VscTriangleDown
+            className="h-4 w-4 text-gray-500"
+            aria-hidden="true"
+          />
+        ) : (
+          <VscTriangleRight
+            className="h-4 w-4 text-gray-500"
+            aria-hidden="true"
+          />
+        )}
+        <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
+        <p title={name}>{name}</p>
+      </div>
+
+      <span className="opacity-0 group-hover:opacity-100">
+        <EllipsisHorizontalIcon className="h-5 w-5 cursor-pointer" />
+      </span>
     </div>
   );
 }

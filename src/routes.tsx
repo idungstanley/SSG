@@ -109,7 +109,9 @@ export const routes = (user: IUser | null) =>
     { path: 'new-explorer', element: <NewExplorerPage /> },
     { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
     { path: 'directory', element: <Directory /> },
-    { path: 'directory/:directoryId', element: <Directory /> },
+    { path: 'directory/case', element: <Directory /> },
+    { path: 'directory/shelf', element: <Directory /> },
+    { path: 'directory/shelf/:directoryId', element: <Directory /> },
     {
       path: '/',
       element: user ? (
