@@ -35,9 +35,7 @@ export const getOneTaskService = (data) => {
 
 //getOneTask
 export const getOneTaskServices = ({ task_id }) => {
-  const dispatch = useAppDispatch();
-
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -52,13 +50,29 @@ export const getOneTaskServices = ({ task_id }) => {
     },
     {
       enabled: task_id != null,
-      // onSuccess: (data) => {
-      //   const taskData = data.data.tasks.map((task) => {
-      //     queryClient.setQueryData(['task', task.id], task);
-      //     return { ...task };
-      //   });
-      //   dispatch(getTaskData(taskData));
-      // },
+    }
+  );
+};
+
+export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id, statusDataUpdate }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `at/tasks/${task_id}`,
+          method: 'PUT',
+          params: {
+            status: statusDataUpdate,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: statusDataUpdate != '',
     }
   );
 };

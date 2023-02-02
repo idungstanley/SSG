@@ -42,6 +42,8 @@ interface TaskState {
   initial_start_date: null;
   initial_end_date: null;
   openUpdateEntryId: null;
+  updateStatusModalId: null;
+  updateStatusModalIdForPilot: null;
 }
 
 const initialState: TaskState = {
@@ -68,6 +70,8 @@ const initialState: TaskState = {
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
+  updateStatusModalId: null,
+  updateStatusModalIdForPilot: null,
 };
 
 export const taskSlice = createSlice({
@@ -145,7 +149,9 @@ export const taskSlice = createSlice({
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-
+    setUpdateStatusModalId(state, action) {
+      state.updateStatusModalId = action.payload;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -172,5 +178,6 @@ export const {
   setCurrentParentSubTaskId3,
   setCurrentParentSubTaskId4,
   setUpdateEntries,
+  setUpdateStatusModalId,
 } = taskSlice.actions;
 export default taskSlice.reducer;

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -7,39 +8,41 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
+  setUpdateStatusModalId,
+} from '../../../../../features/task/taskSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { MdDragIndicator } from 'react-icons/md';
+
 import {
-  CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from "@ant-design/icons";
-import { useAppSelector } from "../../../../../app/hooks";
-import { useNavigate } from "react-router-dom";
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import "./task.css";
+} from '@ant-design/icons';
+import { useAppSelector } from '../../../../../app/hooks';
+// import { useNavigate } from 'react-router-dom';
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import './task.css';
 interface TaskDataProps {
   task: any;
 }
-import { columnsHead } from "../views/ListColumns";
-import moment from "moment";
+import { columnsHead } from '../views/ListColumns';
+import moment from 'moment';
+import StatusDropdown from '../../../../../components/status/component/StatusDropdown';
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
+    updateStatusModalId,
   } = useAppSelector((state) => state.task);
-  const [openTaskModal, setOpenTaskModal] = useState(false);
+  // const [openTaskModal, setOpenTaskModal] = useState(false);
 
   const displayNav: any = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
@@ -51,7 +54,23 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "task",
+        activeItemType: 'task',
+        activeItemName: name,
+      })
+    );
+    // dispatch(ilotTrigger)
+  };
+  const handleStatusUpdate = (id: string, name: string) => {
+    dispatch(setTaskIdForPilot(id));
+    dispatch(setUpdateStatusModalId(id));
+
+    if (updateStatusModalId == id) {
+      dispatch(setUpdateStatusModalId(null));
+    }
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
         activeItemName: name,
       })
     );
@@ -97,8 +116,40 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
+  const setStatusColor = (status: string) => {
+    if (status == 'new' || status == 'todo') {
+      return (
+        <RiCheckboxBlankFill
+          className="pl-px text-gray-400 text-xs"
+          aria-hidden="true"
+        />
+      );
+    } else if (status == 'in progress') {
+      return (
+        <RiCheckboxBlankFill
+          className="pl-px text-purple-400 text-xs"
+          aria-hidden="true"
+        />
+      );
+    } else if (status == 'completed') {
+      return (
+        <RiCheckboxBlankFill
+          className="pl-px text-green-400 text-xs"
+          aria-hidden="true"
+        />
+      );
+    } else if (status == 'archived') {
+      return (
+        <RiCheckboxBlankFill
+          className="pl-px text-yellow-400 text-xs"
+          aria-hidden="true"
+        />
+      );
+    }
+  };
+
   const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -109,7 +160,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
           className=" ml-2  text-gray-400 text-xl cursor-pointer "
@@ -117,13 +168,13 @@ export default function TaskData({ task }: TaskDataProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield == 'created_at') {
       return (
         <span className="text-gray-400 pl-12 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField).format('MM/DD')}
         </span>
       );
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -150,11 +201,12 @@ export default function TaskData({ task }: TaskDataProps) {
               />
             )}
           </div>
-          <p>
-            <RiCheckboxBlankFill
-              className="pl-px text-gray-400 text-xs"
-              aria-hidden="true"
-            />
+          <p
+            onClick={() => handleStatusUpdate(task.id, task.name)}
+            className="relative"
+          >
+            {/* {setStatusColor(task?.status)} */}
+            <StatusDropdown />
           </p>
           <p
             onClick={() => handleTaskPilot(task.id, task.name)}
@@ -178,7 +230,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
           <FlagOutlined
@@ -196,7 +248,7 @@ export default function TaskData({ task }: TaskDataProps) {
         <div className="  w-5/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == 'Task' && (
                 <div
                   key={col.field}
                   className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
@@ -209,7 +261,7 @@ export default function TaskData({ task }: TaskDataProps) {
         <div className="flex pl-20 ">
           {columnsHead.map(
             (col) =>
-              col.value !== "Task" && (
+              col.value !== 'Task' && (
                 <div
                   key={col.field}
                   className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
@@ -221,6 +273,7 @@ export default function TaskData({ task }: TaskDataProps) {
         </div>
 
         {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+        {/* {updateStatusModalId == task.id ? <StatusDropdown /> : null} */}
       </div>
     </>
   );
