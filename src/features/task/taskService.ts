@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
@@ -55,7 +55,7 @@ export const getOneTaskServices = ({ task_id }) => {
 };
 
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id, statusDataUpdate }],
     async () => {
@@ -73,6 +73,9 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
     },
     {
       enabled: statusDataUpdate != '',
+      onSuccess: () => {
+        queryClient.invalidateQueries(['task']);
+      },
     }
   );
 };

@@ -60,22 +60,6 @@ export default function TaskData({ task }: TaskDataProps) {
     );
     // dispatch(ilotTrigger)
   };
-  const handleStatusUpdate = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(setUpdateStatusModalId(id));
-
-    if (updateStatusModalId == id) {
-      dispatch(setUpdateStatusModalId(null));
-    }
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name,
-      })
-    );
-    // dispatch(ilotTrigger)
-  };
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -114,38 +98,6 @@ export default function TaskData({ task }: TaskDataProps) {
         </span>
       </div>
     ));
-  };
-
-  const setStatusColor = (status: string) => {
-    if (status == 'new' || status == 'todo') {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-gray-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == 'in progress') {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-purple-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == 'completed') {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-green-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == 'archived') {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-yellow-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    }
   };
 
   const renderData = (taskColField, colfield) => {
@@ -202,11 +154,11 @@ export default function TaskData({ task }: TaskDataProps) {
             )}
           </div>
           <p
-            onClick={() => handleStatusUpdate(task.id, task.name)}
+            onClick={() => handleTaskPilot(task.id, task.name)}
             className="relative"
           >
             {/* {setStatusColor(task?.status)} */}
-            <StatusDropdown />
+            <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
           <p
             onClick={() => handleTaskPilot(task.id, task.name)}

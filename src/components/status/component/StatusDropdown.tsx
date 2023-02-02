@@ -16,9 +16,14 @@ interface statusType {
   bg: string;
 }
 
-export default function StatusDropdown() {
+interface StatusDropdownProps {
+  TaskCurrentStatus: string;
+}
+
+export default function StatusDropdown({
+  TaskCurrentStatus,
+}: StatusDropdownProps) {
   const [statusValue, setStatus] = useState('');
-  const dispatch = useDispatch();
 
   const statusList: statusType[] = [
     {
@@ -60,10 +65,6 @@ export default function StatusDropdown() {
   ];
 
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { data } = getOneTaskServices({
-    task_id: activeItemId,
-  });
-  const statusData = data?.data.task.status;
 
   //update task status
 
@@ -114,11 +115,7 @@ export default function StatusDropdown() {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          {/* {setStatusColor(statusData)} */}
-          <RiCheckboxBlankFill
-            className="pl-px text-gray-400 text-xs"
-            aria-hidden="true"
-          />
+          {setStatusColor(TaskCurrentStatus)}
         </Menu.Button>
       </div>
 
@@ -160,29 +157,4 @@ export default function StatusDropdown() {
       </Transition>
     </Menu>
   );
-
-  // return (
-  //   <div className="">
-  //     <div className="absolute z-20 left-96 mt-7 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-  //       {statusList.map((i) => (
-  //         <div key={i.id}>
-  //           <button
-  //             type="button"
-  //             className={`flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full hover:bg-${i.bg}-200`}
-  //             onClick={i.handleClick}
-  //           >
-  //             <p>
-  //               <RiCheckboxBlankFill
-  //                 className="pl-px text-xs "
-  //                 aria-hidden="true"
-  //                 style={{ color: `${i.color}` }}
-  //               />
-  //             </p>
-  //             <p>{i.title}</p>
-  //           </button>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
 }
