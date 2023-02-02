@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import {
   IDirectoriesRes,
@@ -33,66 +33,6 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
     }
   );
 
-const createDirectory = (data: { name: string; parentId?: string }) => {
-  const { name, parentId } = data;
-
-  const response = requestNew(
-    {
-      url: 'directories',
-      method: 'POST',
-      params: {
-        name,
-        parent_id: parentId,
-      },
-    },
-    true
-  );
-  return response;
-};
-
-export const useCreateDirectory = (parentId?: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(createDirectory, {
-    onSuccess: () => {
-      if (!parentId) {
-        queryClient.invalidateQueries(['directory', 'root']);
-      } else {
-        // ...
-      }
-    },
-  });
-};
-
-const createDirectoryTemplate = (data: {
-  name: string;
-  directoryId: string;
-}) => {
-  const { name, directoryId } = data;
-
-  const response = requestNew(
-    {
-      url: `directories/${directoryId}/template`,
-      method: 'POST',
-      data: {
-        name,
-      },
-    },
-    true
-  );
-  return response;
-};
-
-export const useCreateDirectoryTemplate = (directoryId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation(createDirectoryTemplate, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['directory', directoryId]);
-    },
-  });
-};
-
 export const useGetDirectoryTemplates = (directoryId?: string) =>
   useQuery<IDirectoryTemplatesRes, unknown, IDirectoryTemplate[]>(
     ['directory-templates', directoryId || 'root'],
@@ -116,7 +56,7 @@ export const useGetDirectoryTemplates = (directoryId?: string) =>
 
 export const useGetDirectoryTemplate = (templateId?: string) =>
   useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplateWithFields[]>(
-    ['directory-templates', templateId],
+    ['directory-template', templateId],
     () =>
       requestNew(
         {

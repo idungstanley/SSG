@@ -1,3 +1,5 @@
+export type FieldType = 'number' | 'text' | 'date' | 'bool' | 'directory';
+
 export interface IDirectory {
   id: string;
   name: string;
