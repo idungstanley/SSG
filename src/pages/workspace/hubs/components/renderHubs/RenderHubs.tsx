@@ -41,7 +41,7 @@ function RenderHubs() {
           </div>
         </div>
 
-        <div className="ml-5">
+        <div>
           <Pilot />
         </div>
       </section>

@@ -102,7 +102,7 @@ function RenderList() {
             </div>
           </div>
         </div>
-        <div className="ml-auto">
+        <div>
           <Pilot />
         </div>
       </section>

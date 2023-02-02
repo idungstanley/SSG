@@ -6,7 +6,7 @@ const configData: any = [
 ];
 export default function FooterTabs() {
   return (
-    <div className="z-50 h-20 p-2 border">
+    <div className="z-50 h-20 p-2 border-t">
       <section>
         <div className="flex flex-col gap-1">
           <div className="p-0.5 border">Library</div>
