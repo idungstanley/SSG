@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { createChecklistService } from "../../../../../features/task/checklist/checklistService";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../app/hooks";
 
 export default function Checklist() {
-  const [input, setInput] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { checklist } = useAppSelector((state) => state.checklist);
 
   type checklistItem = {
     name: string;
   };
-  const [checklists, setChecklists] = useState<any>([
-    {
-      name: "Checklist",
-    },
-    {
-      name: "Checklist",
-    },
-  ]);
+  const [checklists, setChecklists] = useState<any>(checklist);
   const addChecklist = () => {
     const newChecklist: checklistItem = {
       name: "Checklist",

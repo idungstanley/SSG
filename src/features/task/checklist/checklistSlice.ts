@@ -19,11 +19,18 @@ export interface ImyTaskData {
 }
 
 interface checklistState {
-  checklist: string[];
+  checklist: any[];
 }
 
 const initialState: checklistState = {
-  checklist: [],
+  checklist: [
+    {
+      name: "Checklist",
+    },
+    {
+      name: "Checklist",
+    },
+  ],
 };
 
 export const checklistSlice = createSlice({
