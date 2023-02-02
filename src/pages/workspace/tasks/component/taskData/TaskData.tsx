@@ -85,7 +85,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
-        <span key={newData.id} className="absolute ">
+        <span key={newData.id} className="">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -100,17 +100,19 @@ export default function TaskData({ task }: TaskDataProps) {
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
-        <div
-          onClick={() => handleAssigneeModal(task.id)}
-          className="cursor-pointer ml-2"
-        >
-          {groupAssignee(task.assignees)}
+        <div className="relative">
+          <div
+            onClick={() => handleAssigneeModal(task.id)}
+            className="cursor-pointer flex ml-2"
+          >
+            {groupAssignee(task.assignees)}
+          </div>
         </div>
       );
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" ml-2 h-5 w-5 text-gray-400 text-xl cursor-pointer "
+          className=" ml-2  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -186,20 +188,20 @@ export default function TaskData({ task }: TaskDataProps) {
   return (
     <>
       <div className="flex">
-        <div className=" bg-white mb-px w-full ml-4 flex items-center justify-between ">
+        <div className=" bg-white mb-px w-5/12  ml-4 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase ml-2 text-xs py-px font-medium  group"
+                  className="flex items-center capitalize ml-2 text-xs py-px font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
               )
           )}
         </div>
-        <div className="flex w-full bg-white mb-px">
+        <div className="flex w-7/12 bg-white mb-px">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
