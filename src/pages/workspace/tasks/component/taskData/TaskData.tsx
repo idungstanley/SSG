@@ -85,7 +85,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
-        <span key={newData.id} className="absolute ">
+        <span key={newData.id} className="">
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -100,17 +100,19 @@ export default function TaskData({ task }: TaskDataProps) {
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
-        <div
-          onClick={() => handleAssigneeModal(task.id)}
-          className="cursor-pointer ml-2"
-        >
-          {groupAssignee(task.assignees)}
+        <div className="relative">
+          <div
+            onClick={() => handleAssigneeModal(task.id)}
+            className="cursor-pointer flex ml-2"
+          >
+            {groupAssignee(task.assignees)}
+          </div>
         </div>
       );
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" ml-2 h-5 w-5 text-gray-400 text-xl cursor-pointer "
+          className=" ml-2  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -128,12 +130,12 @@ export default function TaskData({ task }: TaskDataProps) {
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="cursor-pointer top-0 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-7 h-3 w-3"
+              className="cursor-pointer -mt-1 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
               onClick={() => {
                 displayNav(task.id);
               }}
             />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	 absolute -left-3 " />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move -mt-1 text-sm	 absolute -left-5 " />
           </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
@@ -154,7 +156,12 @@ export default function TaskData({ task }: TaskDataProps) {
               aria-hidden="true"
             />
           </p>
-          <p>{taskColField}</p>
+          <p
+            onClick={() => handleTaskPilot(task.id, task.name)}
+            className="cursor-pointer"
+          >
+            {taskColField}
+          </p>
           <div
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -185,27 +192,27 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="flex">
-        <div className=" bg-white mb-px w-full ml-4 flex items-center justify-between ">
+      <div className="flex group bg-white ml-4 mb-px w-full">
+        <div className="  w-5/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase ml-2 text-xs py-px font-medium  group"
+                  className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
               )
           )}
         </div>
-        <div className="flex w-full bg-white mb-px">
+        <div className="flex pl-20 ">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase  text-gray-400 py-px  font-medium  group"
+                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>

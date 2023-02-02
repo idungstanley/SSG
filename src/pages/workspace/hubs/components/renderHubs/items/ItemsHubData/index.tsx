@@ -1,26 +1,14 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
 import { useGetHubChildren } from "../../../../../../../features/hubs/hubService";
-import TaskData from "../../../../../tasks/component/taskData/TaskData";
 import "../ItemsHubData/wallet.css";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
-import { getTaskListService } from "../../../../../../../features/task/taskService";
 import ListTemplate from "./ListTemplate";
-import { useParams } from "react-router-dom";
 import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
 import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
 import {
@@ -108,21 +96,21 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                     </span>
                   </div>
                 </div>
-              </div>
-              {addNewTaskItem && currentListId === item.id && (
-                <AddNewItem listId={item.id} />
-              )}
-              <div
-                className=""
-                id="newItem"
-                onClick={() => {
-                  dispatch(setAddNewTaskItem(!addNewTaskItem));
-                  dispatch(setCurrentListId(item.id));
-                }}
-              >
-                <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
-                  + New Task
-                </p>
+                {addNewTaskItem && currentListId === item.id && (
+                  <AddNewItem listId={item.id} />
+                )}
+                <div
+                  className=""
+                  id="newItem"
+                  onClick={() => {
+                    dispatch(setAddNewTaskItem(!addNewTaskItem));
+                    dispatch(setCurrentListId(item.id));
+                  }}
+                >
+                  <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                    + New Task
+                  </p>
+                </div>
               </div>
             </>
           );

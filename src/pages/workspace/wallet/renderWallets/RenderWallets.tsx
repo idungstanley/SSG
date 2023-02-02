@@ -40,7 +40,7 @@ function RenderWallets() {
             ))}
           </div>
         </div>
-        <div className="ml-auto">
+        <div>
           <Pilot />
         </div>
       </section>

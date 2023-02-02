@@ -1,9 +1,9 @@
+import React from "react";
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
   setCreateTaskFromTop,
@@ -14,7 +14,6 @@ import { getWalletServices } from '../../../../../../../features/wallet/walletSe
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
 import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
 import ListTemplate from '../ItemsHubData/ListTemplate';
-import WalletSection from './WalletSection';
 
 interface ItemsWalletDataProps {
   walletId: string | null;
