@@ -26,8 +26,39 @@ export interface IDirectoryTemplate {
   directory_id: string;
 }
 
-export interface IDirectoryTemplateRes {
+export interface IDirectoryTemplatesRes {
   data: {
     templates: IDirectoryTemplate[];
+  };
+}
+
+interface ITemplateField {
+  id: string;
+  name: string;
+  type: string;
+  is_title: 1 | 0;
+  is_required: 1 | 0;
+}
+
+export interface IDirectoryTemplateWithFields {
+  id: string;
+  name: string;
+  fields: ITemplateField[];
+}
+
+export interface IDirectoryTemplateRes {
+  data: {
+    template: IDirectoryTemplateWithFields[];
+  };
+}
+
+export interface IDirectoryTemplateItem {
+  id: string;
+  name: string;
+}
+
+export interface IDirectoryTemplateItemsRes {
+  data: {
+    items: IDirectoryTemplateItem[];
   };
 }

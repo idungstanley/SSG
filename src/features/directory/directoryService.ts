@@ -4,7 +4,11 @@ import {
   IDirectoriesRes,
   IDirectory,
   IDirectoryTemplate,
+  IDirectoryTemplateItem,
+  IDirectoryTemplateItemsRes,
   IDirectoryTemplateRes,
+  IDirectoryTemplatesRes,
+  IDirectoryTemplateWithFields,
 } from './directory.interfaces';
 
 // request includes both fetch with and within tree
@@ -90,7 +94,7 @@ export const useCreateDirectoryTemplate = (directoryId: string) => {
 };
 
 export const useGetDirectoryTemplates = (directoryId?: string) =>
-  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplate[]>(
+  useQuery<IDirectoryTemplatesRes, unknown, IDirectoryTemplate[]>(
     ['directory-templates', directoryId || 'root'],
     () =>
       requestNew(
@@ -106,27 +110,40 @@ export const useGetDirectoryTemplates = (directoryId?: string) =>
         true
       ),
     {
-      // enabled: !!directoryId,
       select: (res) => res.data.templates,
     }
   );
 
-export const useGetDirectoryTemplateItems = (
-  directoryId: string,
-  templateId: string
-) =>
-  // ! add types
-  useQuery(
-    ['directory-template-items', templateId],
+export const useGetDirectoryTemplate = (templateId?: string) =>
+  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplateWithFields[]>(
+    ['directory-templates', templateId],
     () =>
       requestNew(
         {
-          url: `directories/${directoryId}/template${templateId}/items`,
+          url: `directory-templates/${templateId}`,
           method: 'GET',
         },
         true
       ),
     {
-      // select: (res) => res.data.template,
+      enabled: !!templateId,
+      select: (res) => res.data.template,
+    }
+  );
+
+export const useGetDirectoryTemplateItems = (templateId: string) =>
+  useQuery<IDirectoryTemplateItemsRes, unknown, IDirectoryTemplateItem[]>(
+    ['directory-template-items', templateId],
+    () =>
+      requestNew(
+        {
+          url: `directory-templates/${templateId}/items`,
+          method: 'GET',
+        },
+        true
+      ),
+    {
+      enabled: !!templateId,
+      select: (res) => res.data.items,
     }
   );
