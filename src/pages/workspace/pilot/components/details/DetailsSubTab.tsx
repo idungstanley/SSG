@@ -38,7 +38,6 @@ export default function DetailsSubTab() {
   const { showPilot, activeSubDetailsTabId } = useAppSelector(
     (state) => state.workspace
   );
-  const dispatch = useDispatch();
 
   const idsFromLS = JSON.parse(localStorage.getItem("subTab") || "[]");
 
