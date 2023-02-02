@@ -4,7 +4,6 @@ import {
   ChevronDownIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
   setCreateTaskFromTop,
