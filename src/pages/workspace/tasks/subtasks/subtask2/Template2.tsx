@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import moment from "moment";
 import {
   setCurrentParentSubTaskId,
   setCurrentParentSubTaskId2,
@@ -21,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
+import { columnsHead } from "../../component/views/ListColumns";
 
 interface TemplateProps {
   task: any;
@@ -80,106 +82,126 @@ export default function Template2({ task }: TemplateProps) {
     }
   };
 
-  return (
-    <div
-      className="group relative bg-white border border-gray-100 hover:bg-slate-800  flex  items-center ml-4"
-      key={task.id}
-    >
-      <span className="flex items-center absolute" style={{ left: "-30px" }}>
-        <input
-          type="checkbox"
-          id="checked-checkbox"
-          className={`opacity-0 transition duration-200 group-hover:opacity-100 cursor-pointer focus:outline-1 focus:ring-transparent rounded-full  focus:border-2 focus:opacity-100`}
-          onClick={() => displayNav(task.id)}
+  const renderData = (taskColField, colfield) => {
+    if (colfield === "assignees" && taskColField.length !== 0) {
+      return (
+        <div className="relative">
+          <div
+            onClick={() => handleAssigneeModal(task.id)}
+            className="cursor-pointer flex ml-2"
+          >
+            {groupAssignee(task.assignees)}
+          </div>
+        </div>
+      );
+    } else if (colfield === "assignees" && taskColField.length === 0) {
+      return (
+        <UserAddOutlined
+          className=" ml-2  text-gray-400 text-xl cursor-pointer "
+          aria-hidden="true"
+          onClick={() => handleAssigneeModal(task.id)}
         />
-
-        <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move	  " />
-      </span>
-      <div className="ml-10" onClick={() => handleShowSubTask(task.id)}>
-        {task.id == showSubTask ? (
-          <span className="flex flex-col">
-            <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
-          </span>
-        ) : (
-          <VscTriangleRight
-            className="flex-shrink-0 h-3"
-            aria-hidden="true"
-            color="rgba(72, 67, 67, 0.64)"
-          />
-        )}
-      </div>
-      <RiCheckboxBlankFill
-        className="pl-1 text-gray-400 text-xs "
-        aria-hidden="true"
-      />
-      <div className="flex items-center w-6/12 group">
-        {/* data and input */}
-        {/* <div onClick={() => handleTaskModal(task.id)}> */}
-        <div>
-          {/* {i == 0 && <h1>Tasks</h1>} */}
-
-          <p className="capitalize text-xs font-semibold leading-8 pl-5	">
-            {task.name}
-          </p>
-        </div>
-
-        {/* iconstask */}
-        <div
-          id="iconWrapper"
-          className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-        >
-          <PlusOutlined
-            className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-            aria-hidden="true"
-            onClick={() => handleCreateSubTask(task.id)}
-          />
-          <EditOutlined
-            className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-            aria-hidden="true"
-          />
-        </div>
-      </div>
-      {/* icons */}
-
-      <div className="flex relative  space-x-10">
-        <span
-          className="absolute rounded-full text-xs text-center"
-          style={{ left: "-58px" }}
-        >
-          {/* assignees here */}
-
-          {task.assignees.length == 0 ? (
-            <UserAddOutlined
-              className=" h-5 w-5 text-gray-400 text-xl cursor-pointer "
-              aria-hidden="true"
-              onClick={() => handleAssigneeModal(task.id)}
+      );
+    } else if (colfield == "created_at") {
+      return (
+        <span className="text-gray-400 pl-12 text-sm font-medium">
+          {moment(taskColField).format("MM/DD")}
+        </span>
+      );
+    } else if (colfield === "name") {
+      return (
+        <div className="flex items-center relative">
+          <div className=" flex items center">
+            <input
+              type="checkbox"
+              id="checked-checkbox"
+              className="cursor-pointer -mt-1 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
+              onClick={() => {
+                displayNav(task.id);
+              }}
             />
-          ) : (
-            <div
-              onClick={() => handleAssigneeModal(task.id)}
-              className="cursor-pointer mt-1 -ml-px"
-            >
-              {groupAssignee(task.assignees)}
-            </div>
-          )}
-        </span>
-        <span
-          className="absolute border-dotted border-gray-300  "
-          style={{ left: "-28px" }}
-        >
-          <CalendarOutlined
-            className="h-5 w-7 text-gray-400"
-            aria-hidden="true"
-          />
-        </span>
-        <span className="border-dotted border-gray-300 ml-5">
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move -mt-1 text-sm	 absolute -left-5 " />
+          </div>
+          <div className="ml-10" onClick={() => handleShowSubTask(task.id)}>
+            {task.id == showSubTask ? (
+              <span className="flex flex-col">
+                <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
+              </span>
+            ) : (
+              <VscTriangleRight
+                className="flex-shrink-0 h-3"
+                aria-hidden="true"
+                color="rgba(72, 67, 67, 0.64)"
+              />
+            )}
+          </div>
+          <p>
+            <RiCheckboxBlankFill
+              className="pl-px text-gray-400 text-xs"
+              aria-hidden="true"
+            />
+          </p>
+          <p>{taskColField}</p>
+          <div
+            id="iconWrapper"
+            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+          >
+            <PlusOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+              aria-hidden="true"
+              onClick={() => handleCreateSubTask(task.id)}
+            />
+            <EditOutlined
+              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      );
+    } else if (colfield === "priority") {
+      return (
+        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
           <FlagOutlined
-            className="h-5 w-7  text-gray-400 ml-12 pl-6"
+            className="h-5 w-7  text-gray-400 "
             aria-hidden="true"
           />
         </span>
+      );
+    } else return taskColField;
+  };
+
+  return (
+    <>
+      <div className="flex group bg-white ml-4 mb-px w-full">
+        <div className="  w-5/12 flex items-center justify-between ">
+          {columnsHead.map(
+            (col) =>
+              col.value == "Task" && (
+                <div
+                  key={col.field}
+                  className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
+          )}
+        </div>
+        <div className="flex pl-20 ">
+          {columnsHead.map(
+            (col) =>
+              col.value !== "Task" && (
+                <div
+                  key={col.field}
+                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
+                >
+                  {renderData(task[col.field], col.field)}
+                </div>
+              )
+          )}
+        </div>
+
         {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
       </div>
-    </div>
+    </>
   );
 }
