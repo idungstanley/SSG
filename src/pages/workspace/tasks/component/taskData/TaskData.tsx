@@ -187,7 +187,7 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex bg-white w-full">
         <div className=" bg-white mb-px w-5/12  ml-4 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
