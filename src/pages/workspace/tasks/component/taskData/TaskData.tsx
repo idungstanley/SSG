@@ -192,8 +192,8 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="flex">
-        <div className=" bg-white mb-px w-5/12  ml-4 flex items-center justify-between ">
+      <div className="flex group bg-white ml-4 mb-px w-full">
+        <div className="  w-5/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
@@ -206,7 +206,7 @@ export default function TaskData({ task }: TaskDataProps) {
               )
           )}
         </div>
-        <div className="flex pl-20 bg-white  mb-px">
+        <div className="flex pl-20 ">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
