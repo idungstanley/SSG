@@ -86,7 +86,6 @@ export const getTaskListService = ({ listId }) => {
       onSuccess: (data) => {
         const taskData = data.data.tasks.map((task) => {
           queryClient.setQueryData(['task', task.id], task);
-
           return { ...task };
         });
         dispatch(getTaskData(taskData));
