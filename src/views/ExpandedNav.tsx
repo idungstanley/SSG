@@ -224,7 +224,6 @@ function ExpandedNav() {
               extendedSidebarWidth >= 230 && 'group-hover:bg-green-300'
             }`}
             onMouseDown={startResizing}
-            onMouseUp={(e) => e.preventDefault()}
             style={{
               cursor: 'col-resize',
               width: `${extendedSidebarWidth > 320 ? '4px' : '2px'}`,
@@ -241,7 +240,6 @@ function ExpandedNav() {
               right: `${extendedSidebarWidth < 230 ? '-4px' : '-2px'}`,
             }}
             onMouseDown={startResizing}
-            onMouseUp={(e) => e.preventDefault()}
           ></div>
         </span>
       </section>

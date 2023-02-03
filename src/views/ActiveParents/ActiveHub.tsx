@@ -17,7 +17,6 @@ import {
   useGetSubHub,
 } from '../../features/hubs/hubService';
 import { getHub } from '../../features/hubs/hubSlice';
-import HubData from '../ExtendedBar/HubData';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { getWalletService } from '../../features/wallet/walletService';
 import { useQuery } from '@tanstack/react-query';

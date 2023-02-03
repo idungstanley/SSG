@@ -27,6 +27,8 @@ import {
 } from '../../../features/general/slideOver/slideOverSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
+import WalletModal from '../../../pages/workspace/wallet/components/modals/WalletModal';
+import ListModal from '../../../pages/workspace/lists/components/modals/ListModal';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -99,12 +101,6 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     }
   };
 
-  const handleCreateWallet = () => {
-    if (currSubHubId === getCurrentHubId || hubParentId === getCurrentHubId) {
-      dispatch(setCreateWalletSlideOverVisibility(true));
-    }
-  };
-
   const handleItemAction = (id: string) => {
     dispatch(
       getSubMenu({
@@ -122,7 +118,9 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
             <span className="text-gray-600">
               Create a
               <span
-                onClick={() => handleCreateWallet()}
+                onClick={() =>
+                  dispatch(setCreateWalletSlideOverVisibility(true))
+                }
                 className="mx-1 text-black underline cursor-pointer"
               >
                 Wallet,

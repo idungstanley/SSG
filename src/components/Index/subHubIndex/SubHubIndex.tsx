@@ -39,7 +39,7 @@ export default function SubHubIndex() {
       dispatch(setHubParentId(parent_id))
     );
   }
-  const { hubParentId, showMenuDropdown, currSubHubId, SubMenuId } =
+  const { hubParentId, showMenuDropdown, SubMenuId } =
     useAppSelector((state) => state.hub);
 
   const handleClick = (id: string, name: string) => {
