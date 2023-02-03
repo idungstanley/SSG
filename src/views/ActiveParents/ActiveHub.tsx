@@ -27,6 +27,7 @@ import ActiveSubWallet from './ActiveSubwallet';
 import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
 import ActiveSubHub from './ActiveSubHub';
+import DropdownList from '../../components/ItemsListInSidebar/components/DropdownList';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
@@ -79,7 +80,7 @@ export default function ActiveHub() {
     if (activeItemType === 'hub') {
       return items?.map((hub) => {
         if (hub.id === activeItemId) {
-          return <HubData key={hub.id} />;
+          return <DropdownList key={hub.id} />;
         }
         return null;
       });

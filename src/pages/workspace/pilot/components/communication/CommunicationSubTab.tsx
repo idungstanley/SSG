@@ -1,11 +1,11 @@
-import Icon from '@ant-design/icons/lib/components/Icon';
-import React, { useState } from 'react';
-import { AiOutlineContacts } from 'react-icons/ai';
-import { MdDragIndicator, MdOutlineMarkEmailUnread } from 'react-icons/md';
-import { RiWechatLine } from 'react-icons/ri';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../app/hooks';
-import SubtabDrag from '../SubtabDnd';
+import Icon from "@ant-design/icons/lib/components/Icon";
+import React, { useEffect, useState } from "react";
+import { AiOutlineContacts } from "react-icons/ai";
+import { MdDragIndicator, MdOutlineMarkEmailUnread } from "react-icons/md";
+import { RiWechatLine } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../app/hooks";
+import SubtabDrag from "../SubtabDnd";
 import {
   closestCenter,
   DndContext,
@@ -14,29 +14,29 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+} from "@dnd-kit/sortable";
 
 const communicationOptions = [
   {
     id: 1,
-    label: 'email',
+    label: "email",
     icon: <MdOutlineMarkEmailUnread />,
   },
-  { id: 2, label: 'chat', icon: <RiWechatLine /> },
+  { id: 2, label: "chat", icon: <RiWechatLine /> },
   {
     id: 3,
-    label: 'contact',
+    label: "contact",
     icon: <AiOutlineContacts />,
   },
 ];
 export default function CommunicationSubTab() {
-  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
+  const idsFromLS = JSON.parse(localStorage.getItem("subTab") || "[]");
   const { showPilot, activeSubCommunicationTabId } = useAppSelector(
     (state) => state.workspace
   );
@@ -68,7 +68,7 @@ export default function CommunicationSubTab() {
           const sortArray = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            'subTab',
+            "subTab",
             JSON.stringify([...sortArray.map((i) => i.id)])
           );
 
@@ -86,7 +86,7 @@ export default function CommunicationSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <div
           className={`flex bg-gray-400 pt-0.5 ${
-            showPilot ? 'flex-row' : 'flex-col border'
+            showPilot ? "flex-row" : "flex-col border"
           }`}
         >
           {items.map((item) => (
@@ -96,7 +96,7 @@ export default function CommunicationSubTab() {
               icon={item.icon}
               activeSub={activeSubCommunicationTabId}
               showPilot={showPilot}
-              name={'connect'}
+              name={"connect"}
             />
           ))}
         </div>

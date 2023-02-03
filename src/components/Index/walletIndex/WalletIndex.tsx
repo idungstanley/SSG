@@ -104,10 +104,11 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
       })
     );
   };
+  console.log(data?.data);
 
-  return data?.data?.wallets != null ? (
+  return data?.data?.wallets != null && data?.data?.lists != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data?.wallets.length == 0 && data?.data?.lists.length == 0 && (
+      {data?.data.lists.length === 0 && data?.data.wallets.length === 0 && (
         <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
           <span className="text-gray-600">
             Create a
@@ -137,7 +138,10 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
-              <div id="walletLeft" className="flex items-center justify-center pl-6">
+              <div
+                id="walletLeft"
+                className="flex items-center justify-center pl-6"
+              >
                 {/* showsub1 */}
                 <div
                   onClick={() => handleShowSubWallet(wallet.id)}
