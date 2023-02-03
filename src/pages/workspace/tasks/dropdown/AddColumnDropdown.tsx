@@ -42,12 +42,11 @@ export default function AddColumnDropdown({
         <button type="button">{title}</button>
         {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
         {listItems.map((listItem) => (
-          <>
+          <div key={listItem.name}>
             {column && (
               <p
                 className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full"
-                onClick={() => listItem.onclick}
-                key={listItem.name}
+                onClick={listItem.onclick}
               >
                 {listItem.icons}
                 {listItem.name}
@@ -62,7 +61,7 @@ export default function AddColumnDropdown({
                 {listItem.name}
               </p>
             )}
-          </>
+          </div>
         ))}
       </div>
     </div>

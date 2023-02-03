@@ -36,8 +36,8 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
       <div className="">
         {data?.data.lists.map((item) => {
           return (
-            <>
-              <div key={item.name} className="border p-5 rounded">
+            <div key={item.id}>
+              <div className="border p-5 rounded">
                 <p className="text-xs font-semibold text-gray-400	">{hubName}</p>
                 <div
                   id="listTitle"
@@ -112,7 +112,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                   </p>
                 </div>
               </div>
-            </>
+            </div>
           );
         })}
       </div>
