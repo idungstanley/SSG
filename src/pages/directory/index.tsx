@@ -101,8 +101,11 @@ function Directory() {
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : template && selectedTemplateId ? (
-          <div className="mt-10">
-            <p>Selected template: {template.name}</p>
+          <div className="mt-10 flex gap-3 flex-col">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              {template.name}
+            </h3>
+
             <div className="flex flex-col space-y-4 divide-y divide-gray-200">
               {template.fields.map((field) => (
                 <FieldItem

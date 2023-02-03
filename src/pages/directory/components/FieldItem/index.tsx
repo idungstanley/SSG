@@ -3,6 +3,7 @@ import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { FieldType } from '../../../../features/directory/directory.interfaces';
 import { useUpdateOrAddTemplateField } from '../../../../features/directory/directoryActionService';
 import { useGetDirectoryTemplate } from '../../../../features/directory/directoryService';
+import Checkbox from './Checkbox';
 
 interface FieldItemProps {
   selectedTemplateId: string;
@@ -17,20 +18,21 @@ interface FieldItemProps {
 
 const typeOptions = ['Text', 'Bool', 'Number', 'Date'];
 
+const firstLetterUppercase = (value: string) =>
+  value.at(0)?.toUpperCase() + value.slice(1);
+
 export default function FieldItem({
   selectedTemplateId,
   fieldData,
 }: FieldItemProps) {
   const [name, setName] = useState(fieldData?.name || '');
-  const [type, setType] = useState<FieldType>(
-    (fieldData
-      ? ((fieldData.type.at(0)?.toUpperCase() +
-          fieldData.type.slice(1)) as FieldType)
-      : null) || ('Text' as FieldType)
-  );
-
   const [isRequired, setIsRequired] = useState(!!fieldData?.is_required);
   const [isTitle, setIsTitle] = useState(!!fieldData?.is_title);
+  const [type, setType] = useState<FieldType>(
+    ((fieldData ? firstLetterUppercase(fieldData.type) : null) ||
+      'Text') as FieldType
+  );
+
   const [allowEdit, setAllowEdit] = useState(!fieldData);
 
   const isNewField = !fieldData;
@@ -43,6 +45,7 @@ export default function FieldItem({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // allow edit for actual field on click pencil icon
     if (!isNewField && !allowEdit) {
       return setAllowEdit(true);
     }
@@ -74,7 +77,7 @@ export default function FieldItem({
         fields: [...savedFields, newField],
       });
 
-      // clear inputs
+      // clear input values if it's new filed
       if (isNewField) {
         setName('');
         setType('text');
@@ -82,6 +85,7 @@ export default function FieldItem({
         setIsTitle(false);
       }
 
+      // disable edit if it's enabled and it's actual field
       if (fieldData && allowEdit) {
         setAllowEdit(false);
       }
@@ -118,45 +122,19 @@ export default function FieldItem({
         </select>
       </div>
 
-      <div className="relative flex items-start">
-        <div className="flex h-5 items-center">
-          <input
-            disabled={!allowEdit}
-            checked={isTitle}
-            onChange={(e) => setIsTitle(e.target.checked)}
-            id="title"
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-          />
-        </div>
+      <Checkbox
+        disabled={!allowEdit}
+        label="Title"
+        checked={isTitle}
+        setChecked={setIsTitle}
+      />
 
-        <label
-          htmlFor="title"
-          className="font-medium text-gray-700 ml-3 text-sm"
-        >
-          Title
-        </label>
-      </div>
-
-      <div className="relative flex items-start">
-        <div className="flex h-5 items-center">
-          <input
-            disabled={!allowEdit}
-            checked={isRequired}
-            onChange={(e) => setIsRequired(e.target.checked)}
-            id="Required"
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-          />
-        </div>
-
-        <label
-          htmlFor="Required"
-          className="font-medium text-gray-700 ml-3 text-sm"
-        >
-          Required
-        </label>
-      </div>
+      <Checkbox
+        disabled={!allowEdit}
+        label="Required"
+        checked={isRequired}
+        setChecked={setIsRequired}
+      />
 
       <button
         type="submit"
