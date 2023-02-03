@@ -30,7 +30,8 @@ interface TaskDataProps {
 }
 import { columnsHead } from '../views/ListColumns';
 import moment from 'moment';
-import StatusDropdown from '../../../../../components/status/component/StatusDropdown';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -185,10 +186,11 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === 'priority') {
       return (
         <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
-          <FlagOutlined
+          {/* <FlagOutlined
             className="h-5 w-7  text-gray-400 "
             aria-hidden="true"
-          />
+          /> */}
+          <PriorityDropdown />
         </span>
       );
     } else return taskColField;
@@ -225,7 +227,6 @@ export default function TaskData({ task }: TaskDataProps) {
         </div>
 
         {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-        {/* {updateStatusModalId == task.id ? <StatusDropdown /> : null} */}
       </div>
     </>
   );
