@@ -54,8 +54,8 @@ export const useGetDirectoryTemplates = (directoryId?: string) =>
     }
   );
 
-export const useGetDirectoryTemplate = (templateId?: string) =>
-  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplateWithFields[]>(
+export const useGetDirectoryTemplate = (templateId?: string | null) =>
+  useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplateWithFields>(
     ['directory-template', templateId],
     () =>
       requestNew(

@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
-import { useGetDirectoryTemplates } from '../../features/directory/directoryService';
+import {
+  useGetDirectoryTemplate,
+  useGetDirectoryTemplates,
+} from '../../features/directory/directoryService';
 import { classNames } from '../../utils';
 import Sidebar from '../workspace/sidebar/Sidebar';
+import FieldItem from './components/FieldItem';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 
 const tabs = [
@@ -22,14 +26,22 @@ function Directory() {
   const { directoryId } = useParams();
   const [activeTabId, setActiveTabId] = useState(1);
 
-  const { data: templates, status } = useGetDirectoryTemplates(directoryId);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<null | string>(
+    null
+  );
+
+  const { data: templates, status: templatesStatus } =
+    useGetDirectoryTemplates(directoryId);
+
+  const { data: template, status: templateStatus } =
+    useGetDirectoryTemplate(selectedTemplateId);
 
   return (
     <>
       <Sidebar />
-      <div className="ml-80">
+      <div className="ml-80 w-full h-full">
         {/* nav */}
-        <div className="border-b border-gray-200 w-full h-full">
+        <div className="border-b border-gray-200 w-full">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
               <span
@@ -50,11 +62,11 @@ function Directory() {
         </div>
 
         {/* status checking */}
-        {status === 'loading' ? (
+        {templatesStatus === 'loading' ? (
           <div className="mx-auto w-6 mt-5 justify-center">
             <Spinner size={8} color="#0F70B7" />
           </div>
-        ) : status === 'error' ? (
+        ) : templatesStatus === 'error' ? (
           <FullScreenMessage
             title="Oops, an error occurred :("
             description="Please try again later."
@@ -71,14 +83,40 @@ function Directory() {
           ) : (
             <div className="flex gap-2 items-center">
               {templates.map((template) => (
-                <p key={template.id} className="p-2 underline cursor-pointer">
+                <p
+                  onClick={() => setSelectedTemplateId(template.id)}
+                  key={template.id}
+                  className="p-2 underline cursor-pointer"
+                >
                   {template.name}
                 </p>
               ))}
             </div>
           )
         ) : null}
+
+        {/* template fields list */}
+        {selectedTemplateId && templateStatus === 'loading' ? (
+          <div className="mx-auto w-6 mt-5 justify-center">
+            <Spinner size={8} color="#0F70B7" />
+          </div>
+        ) : template && selectedTemplateId ? (
+          <div className="mt-10">
+            <p>Selected template: {template.name}</p>
+            <div className="flex flex-col space-y-4 divide-y divide-gray-200">
+              {template.fields.map((field) => (
+                <FieldItem
+                  key={field.id}
+                  selectedTemplateId={selectedTemplateId}
+                  fieldData={field}
+                />
+              ))}
+              <FieldItem selectedTemplateId={selectedTemplateId} />
+            </div>
+          </div>
+        ) : null}
       </div>
+
       <CreateDirectorySideOver />
     </>
   );

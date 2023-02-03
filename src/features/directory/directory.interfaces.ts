@@ -37,7 +37,7 @@ export interface IDirectoryTemplatesRes {
 interface ITemplateField {
   id: string;
   name: string;
-  type: string;
+  type: FieldType;
   is_title: 1 | 0;
   is_required: 1 | 0;
 }
@@ -50,7 +50,7 @@ export interface IDirectoryTemplateWithFields {
 
 export interface IDirectoryTemplateRes {
   data: {
-    template: IDirectoryTemplateWithFields[];
+    template: IDirectoryTemplateWithFields;
   };
 }
 

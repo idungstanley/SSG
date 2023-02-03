@@ -62,12 +62,11 @@ export const useCreateDirectoryTemplate = (directoryId?: string) => {
 const updateOrAddTemplateField = (data: {
   templateId: string;
   fields: {
-    id?: string;
+    id: string;
     name: string;
-    title: string;
     type: FieldType;
-    isRequired: boolean;
-    isTitle: boolean;
+    isRequired: 1 | 0;
+    isTitle: 1 | 0;
   }[];
 }) => {
   const { templateId, fields } = data;
@@ -78,12 +77,11 @@ const updateOrAddTemplateField = (data: {
       method: 'PUT',
       data: {
         fields: fields.map((field) => ({
-          id: field.id || '',
-          title: field.title,
+          id: field.id,
           name: field.name,
           type: field.type,
-          is_title: field.isTitle ? 1 : 0,
-          is_required: field.isRequired ? 1 : 0,
+          is_title: field.isTitle,
+          is_required: field.isRequired,
         })),
       },
     },

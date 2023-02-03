@@ -2,7 +2,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import React, { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import SideOver from '../../../../components/SideOver';
-import { useCreateDirectory } from '../../../../features/directory/directoryService';
+import { useCreateDirectory } from '../../../../features/directory/directoryActionService';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 
 export default function Watchers() {
