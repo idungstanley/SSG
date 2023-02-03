@@ -222,17 +222,13 @@ export default function ActiveHub() {
                       />
                       <span className="ml-4 overflow-hidden">
                         <h4
-                          className="font-medium tracking-wider capitalize truncate"
+                          className="tracking-wider capitalize truncate"
                           style={{ fontSize: '10px' }}
                         >
                           {i.name}
                         </h4>
                       </span>
                     </div>
-                  </div>
-                  <div className="flex items-center">
-                    {(activeItemType != 'hub' && activeItemType != null) && <span className="">/</span>}
-                    <span>{displayClickedParent()}</span>
                   </div>
                 </div>
                 <div
@@ -242,6 +238,9 @@ export default function ActiveHub() {
                 >
                   <MenuDropdown />
                 </div>
+              </div>
+              <div className="w-full border bg-green-50 flex items-center">
+                {displayClickedParent()}
               </div>
               <hr />
               <div>{displayActiveItem()}</div>

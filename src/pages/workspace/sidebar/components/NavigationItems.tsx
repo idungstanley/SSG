@@ -84,7 +84,7 @@ export default function NavigationItems() {
               className={classNames(
                 item.href === pathname
                   ? "bg-green-100 text-gray-900"
-                  : "text-gray-600 hover:text-gray-900",
+                  : "hover:text-gray-900",
                 "flex items-center pl-4 py-2 text-base relative font-medium hover:bg-gray-100"
               )}
             >
@@ -114,7 +114,7 @@ export default function NavigationItems() {
                 <p
                   style={{ fontSize: "10px" }}
                   className={classNames(
-                    item.href === pathname ? "text-green-500" : "text-gray-500",
+                    item.href === pathname ? "text-green-500" : "",
                     "tracking-wider leading-3 truncate"
                   )}
                 >
@@ -128,8 +128,8 @@ export default function NavigationItems() {
               to={item.href}
               className={classNames(
                 item.href === pathname
-                  ? "bg-green-100 text-gray-900 mr-0"
-                  : "text-gray-600 hover:text-gray-900",
+                  ? "bg-green-100 text-black mr-0"
+                  : "hover:text-gray-900",
                 "flex items-center relative pl-4 py-2 text-base font-medium hover:bg-gray-100"
               )}
             >
@@ -159,7 +159,7 @@ export default function NavigationItems() {
                 <p
                   style={{ fontSize: "10px" }}
                   className={classNames(
-                    item.href === pathname ? "text-green-500" : "text-gray-500",
+                    item.href === pathname ? "text-green-500" : "",
                     "tracking-wider truncate leading-3"
                   )}
                 >
@@ -171,10 +171,10 @@ export default function NavigationItems() {
         )}
         <div
           onClick={() => setShowMore((prev) => !prev)}
-          className="flex items-center w-full pl-4 cursor-pointer py-1 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          className="flex items-center w-full pl-4 cursor-pointer py-1 text-base font-medium hover:bg-gray-100 hover:text-gray-900"
         >
           <div
-            className="flex-shrink-0 w-4 h-4 mr-4 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            className="flex-shrink-0 w-4 h-4 mr-4 hover:text-gray-900 hover:bg-gray-100"
             aria-hidden="true"
           >
             {showLessOrMore[showMore ? 0 : 1].icon}

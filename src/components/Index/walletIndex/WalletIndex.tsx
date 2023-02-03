@@ -114,20 +114,20 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {walletAndListData?.data.lists.length === 0 &&
         walletAndListData?.data.wallets.length === 0 && (
-          <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
-            <span className="text-gray-600">
+          <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8 tracking-wider capitalize truncate">
+            <span>
               Create a
               <span
                 onClick={() =>
                   dispatch(setCreateWalletSlideOverVisibility(true))
                 }
-                className="mx-1 text-black underline cursor-pointer"
+                className="mx-1 underline cursor-pointer"
               >
                 Wallet,
               </span>
               <span
                 onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-                className="text-black underline cursor-pointer"
+                className="underline cursor-pointer"
               >
                 List
               </span>
@@ -139,7 +139,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
           <div key={wallet.id}>
             <section
               className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-                wallet.id === activeItemId && 'bg-green-100 text-black'
+                wallet.id === activeItemId && 'bg-green-100 text-black font-medium'
               }`}
             >
               {wallet.id === activeItemId && (
@@ -157,7 +157,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   {showSubWallet === wallet.id ? (
                     <>
                       <VscTriangleDown
-                        className="flex-shrink-0 h-3"
+                        className="flex-shrink-0 h-2"
                         aria-hidden="true"
                         color="rgba(72, 67, 67, 0.64)"
                       />
@@ -166,7 +166,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   ) : (
                     <>
                       <VscTriangleRight
-                        className="flex-shrink-0 h-3"
+                        className="flex-shrink-0 h-2"
                         aria-hidden="true"
                         color="rgba(72, 67, 67, 0.64)"
                       />
@@ -179,7 +179,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
                 >
                   <p
-                    className="font-medium tracking-wider capitalize truncate cursor-pointer"
+                    className="tracking-wider capitalize truncate cursor-pointer"
                     style={{ fontSize: '12px' }}
                   >
                     {wallet.name}
@@ -189,7 +189,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
 
               <div
                 id="walletRight"
-                className="flex items-center space-x-1 text-black opacity-0 group-hover:opacity-100"
+                className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"

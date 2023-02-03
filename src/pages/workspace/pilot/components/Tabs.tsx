@@ -38,13 +38,6 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
-interface IItem {
-  id: number;
-  name: string;
-  source: any;
-  subTab?: any;
-}
-
 const pilotOptions = [
   {
     id: 1,

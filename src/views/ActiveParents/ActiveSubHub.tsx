@@ -86,16 +86,13 @@ export default function ActiveSubHub() {
                   id="subhubleft"
                   className="flex items-center justify-center"
                 >
-                  {/* showsub1 */}
                   <div className="flex items-center flex-1 min-w-0">
-                    <span className="overflow-hidden">
                       <h4
-                        className="font-medium tracking-wider capitalize truncate"
+                        className="tracking-wider capitalize truncate"
                         style={{ fontSize: '10px' }}
                       >
                         {subhub.name}
                       </h4>
-                    </span>
                   </div>
                 </div>
               </section>

@@ -139,22 +139,22 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}
-          className={`flex relative flex-col ${i.id === showChildren}`}
+          className={`flex relative flex-col ${
+            i.id === showChildren
+          }`}
           onMouseEnter={() => handleMouseOver(index)}
           onMouseLeave={handleMouseOut}
         >
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
-              i.id === activeItemId
-                ? 'bg-green-100 text-green-500'
-                : 'text-black'
+              i.id === activeItemId && 'bg-green-100 text-green-500'
             }`}
             tabIndex={0}
             onClick={() => handleClick(i.id)}
           >
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
-                i.id === activeItemId ? 'text-green-500' : 'text-black-500'
+                i.id === activeItemId && 'text-green-500'
               }`}
             >
               {i.id === activeItemId && (
@@ -168,14 +168,14 @@ export default function ItemsListInSidebar({
                   {i.id === showChildren ? (
                     <span className="flex flex-col">
                       <VscTriangleDown
-                        className="flex-shrink-0 h-3"
+                        className="flex-shrink-0 h-2"
                         aria-hidden="true"
                         color="rgba(72, 67, 67, 0.64)"
                       />
                     </span>
                   ) : (
                     <VscTriangleRight
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -196,7 +196,7 @@ export default function ItemsListInSidebar({
                   />
                   <span className="ml-4 overflow-hidden">
                     <a
-                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
+                      className="tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
@@ -210,12 +210,12 @@ export default function ItemsListInSidebar({
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
                   onClick={(e) => handleHubSettings(i.id, i.name, e)}
-                  className="text-black cursor-pointer"
+                  className="cursor-pointer"
                   id="menusettings"
                 />
                 <AiOutlinePlus
                   onClick={() => handleItemAction(i.id)}
-                  className="text-black cursor-pointer"
+                  className="cursor-pointer"
                 />
               </div>
             )}
