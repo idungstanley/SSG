@@ -10,6 +10,7 @@ import { classNames } from '../../utils';
 import Sidebar from '../workspace/sidebar/Sidebar';
 import FieldItem from './components/FieldItem';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
+import TemplateItems from './components/TemplateItems';
 
 const tabs = [
   {
@@ -61,62 +62,75 @@ function Directory() {
           </nav>
         </div>
 
-        {/* status checking */}
-        {templatesStatus === 'loading' ? (
-          <div className="mx-auto w-6 mt-5 justify-center">
-            <Spinner size={8} color="#0F70B7" />
-          </div>
-        ) : templatesStatus === 'error' ? (
-          <FullScreenMessage
-            title="Oops, an error occurred :("
-            description="Please try again later."
-          />
-        ) : null}
-
-        {/* templates list */}
-        {templates ? (
-          !templates.length ? (
+        <div className="flex flex-col items-start py-2 mr-96">
+          {/* status checking */}
+          {templatesStatus === 'loading' ? (
+            <div className="mx-auto w-6 mt-5 justify-center">
+              <Spinner size={8} color="#0F70B7" />
+            </div>
+          ) : templatesStatus === 'error' ? (
             <FullScreenMessage
-              title="No records yet :("
-              description="Create one."
+              title="Oops, an error occurred :("
+              description="Please try again later."
             />
-          ) : (
-            <div className="flex gap-2 items-center">
-              {templates.map((template) => (
-                <p
-                  onClick={() => setSelectedTemplateId(template.id)}
-                  key={template.id}
-                  className="p-2 underline cursor-pointer"
-                >
-                  {template.name}
-                </p>
-              ))}
-            </div>
-          )
-        ) : null}
+          ) : null}
 
-        {/* template fields list */}
-        {selectedTemplateId && templateStatus === 'loading' ? (
-          <div className="mx-auto w-6 mt-5 justify-center">
-            <Spinner size={8} color="#0F70B7" />
-          </div>
-        ) : template && selectedTemplateId ? (
-          <div className="mt-10 flex gap-3 flex-col">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              {template.name}
-            </h3>
+          {/* templates list */}
+          {templates ? (
+            !templates.length ? (
+              <FullScreenMessage
+                title="No records yet :("
+                description="Create one."
+              />
+            ) : (
+              <div className="flex gap-3 flex-col">
+                {templates.map((template) => (
+                  <p
+                    onClick={() =>
+                      setSelectedTemplateId((prev) =>
+                        prev === template.id ? null : template.id
+                      )
+                    }
+                    key={template.id}
+                    className={classNames(
+                      'border p-2 rounded-xl cursor-pointer text-black border-gray-700 hover:border-black',
+                      selectedTemplateId === template.id ? 'bg-indigo-200' : ''
+                    )}
+                  >
+                    {template.name}
+                  </p>
+                ))}
+              </div>
+            )
+          ) : null}
 
-            <div className="flex flex-col space-y-4 divide-y divide-gray-200">
-              {template.fields.map((field) => (
-                <FieldItem
-                  key={field.id}
-                  selectedTemplateId={selectedTemplateId}
-                  fieldData={field}
-                />
-              ))}
-              <FieldItem selectedTemplateId={selectedTemplateId} />
+          {/* template fields list */}
+          {selectedTemplateId && templateStatus === 'loading' ? (
+            <div className="mx-auto w-6 mt-5 justify-center">
+              <Spinner size={8} color="#0F70B7" />
             </div>
-          </div>
+          ) : template && selectedTemplateId ? (
+            <div className="mt-10 flex flex-col">
+              <h3 className="text-lg font-medium uppercase leading-6 text-gray-900 border-b border-gray-200 pb-2">
+                {template.name}
+              </h3>
+
+              <div className="flex flex-col space-y-4 divide-y divide-gray-200">
+                {template.fields.map((field) => (
+                  <FieldItem
+                    key={field.id}
+                    selectedTemplateId={selectedTemplateId}
+                    fieldData={field}
+                  />
+                ))}
+                <FieldItem selectedTemplateId={selectedTemplateId} />
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        {selectedTemplateId ? (
+          <TemplateItems selectedTemplateId={selectedTemplateId} />
         ) : null}
       </div>
 

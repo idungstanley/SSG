@@ -34,7 +34,7 @@ export interface IDirectoryTemplatesRes {
   };
 }
 
-interface ITemplateField {
+export interface ITemplateField {
   id: string;
   name: string;
   type: FieldType;

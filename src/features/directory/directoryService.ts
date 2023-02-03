@@ -71,7 +71,7 @@ export const useGetDirectoryTemplate = (templateId?: string | null) =>
     }
   );
 
-export const useGetDirectoryTemplateItems = (templateId: string) =>
+export const useGetDirectoryTemplateItems = (templateId: string | null) =>
   useQuery<IDirectoryTemplateItemsRes, unknown, IDirectoryTemplateItem[]>(
     ['directory-template-items', templateId],
     () =>
