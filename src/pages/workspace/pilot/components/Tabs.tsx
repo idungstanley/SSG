@@ -12,6 +12,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useAppSelector } from "../../../../app/hooks";
 import { useDispatch } from "react-redux";
 import {
+  setActiveTabId,
   setPilotWidth,
   setShowPilot,
   setShowPilotIconView,
@@ -36,11 +37,6 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-
-interface TabProps {
-  activeTabId: number;
-  setActiveTabId: (i: number) => void;
-}
 
 interface IItem {
   id: number;
@@ -90,7 +86,7 @@ const pilotOptions = [
     source: checklistIcon,
   },
 ];
-function Tab({ activeTabId, setActiveTabId }: TabProps) {
+function Tab() {
   const dispatch = useDispatch();
   const {
     showPilot,
@@ -101,7 +97,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
   } = useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const [scrollTop, setScrollTop] = useState<string>("");
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -125,7 +120,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
     },
     [isResizing]
   );
-  console.log(pilotWidth);
   React.useEffect(() => {
     window.addEventListener("mousemove", resize);
     window.addEventListener("mouseup", stopResizing);
@@ -134,9 +128,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
       window.removeEventListener("mouseup", stopResizing);
     };
   }, [resize, stopResizing, pilotWidth]);
-  const handleClick = (tabId: number) => {
-    setActiveTabId(tabId);
-  };
   const handleShowPilot = () => {
     if (showPilot) {
       dispatch(setShowPilot(false));
@@ -275,8 +266,6 @@ function Tab({ activeTabId, setActiveTabId }: TabProps) {
                 id={item.id}
                 name={item.name}
                 source={item.source}
-                activeTabId={activeTabId}
-                setActiveTabId={setActiveTabId}
                 showPilot={showPilot}
                 showPilotIconView={showPilotIconView}
                 subTab={item.subTab}
