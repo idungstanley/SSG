@@ -13,9 +13,10 @@ import { setCreateListSlideOverVisibility } from '../../../../../features/genera
 function ListModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown, showMenuDropdownType } = useAppSelector(
-    (state) => state.hub
-  );
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+
+  const { showMenuDropdown, showMenuDropdownType, currSubHubId, hubParentId } =
+    useAppSelector((state) => state.hub);
   const { showCreateListSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
@@ -54,7 +55,9 @@ function ListModal() {
           ? showMenuDropdown
           : null || showMenuDropdownType == 'subhub'
           ? showMenuDropdown
-          : null,
+          : null || currSubHubId !== null
+          ? currSubHubId
+          : currentItemId,
       walletId:
         showMenuDropdownType == 'wallet'
           ? showMenuDropdown

@@ -8,6 +8,7 @@ interface workspaceState {
   activePlaceId: number | boolean;
   showExtendedBar: boolean;
   sidebarWidth: number;
+  pilotWidth: number;
   extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
@@ -23,6 +24,7 @@ interface workspaceState {
   currentWalletName: string | null;
   showPilot: boolean;
   showPilotIconView: boolean;
+  activeTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
@@ -36,6 +38,7 @@ const initialState: workspaceState = {
   activePlaceId: 0,
   showExtendedBar: false,
   sidebarWidth: 300,
+  pilotWidth: 400,
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
@@ -51,8 +54,9 @@ const initialState: workspaceState = {
   currentWalletName: null,
   showPilot: false,
   showPilotIconView: false,
+  activeTabId: 0,
   activeSubDetailsTabId: 1,
-  activeSubTimeClockTabId: 1,
+  activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
 };
 
@@ -78,6 +82,9 @@ export const wsSlice = createSlice({
     },
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
+    },
+    setPilotWidth(state, action) {
+      state.pilotWidth = action.payload;
     },
     setShowPilot(state, action) {
       state.showPilot = action.payload;
@@ -143,6 +150,9 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action) {
       state.activeSubDetailsTabId = action.payload;
     },
+    setActiveTabId(state, action) {
+      state.activeTabId = action.payload;
+    },
     setActiveSubTimeClockTabId(state, action) {
       state.activeSubTimeClockTabId = action.payload;
     },
@@ -185,6 +195,8 @@ export const {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
+  setPilotWidth,
+  setActiveTabId,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

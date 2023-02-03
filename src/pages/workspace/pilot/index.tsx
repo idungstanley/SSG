@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAppSelector } from "../../../app/hooks";
-import Tab from "./components/Tab";
+import Tab from "./components/Tabs";
 import History from "../../newExplorer/components/Pilot/components/History";
 import Permissions from "../../newExplorer/components/Pilot/components/Permissions";
 import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
@@ -13,7 +13,8 @@ import TimeClock from "./components/timeClock/subtabs/TimeClock";
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
-} from "../../../features/workspace/workspaceSlice";
+  setActiveTabId,
+} from '../../../features/workspace/workspaceSlice';
 
 const sections = [
   {
@@ -47,18 +48,18 @@ const sections = [
 ];
 
 export default function Pilot() {
-  const [activeTabId, setActiveTabId] = useState<number>(-1);
   const dispatch = useDispatch();
   const {
     showPilot,
     activeSubCommunicationTabId,
     activeItemId,
     activeSubDetailsTabId,
+    activeTabId,
   } = useAppSelector((state) => state.workspace);
   const hoverRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (activeItemId != null) {
-      setActiveTabId(4);
+      dispatch(setActiveTabId(4));
     }
     const checkHoverOutside = () => {
       if (showPilot === false && hoverRef.current) {
@@ -91,7 +92,7 @@ export default function Pilot() {
       ref={hoverRef}
     >
       {/* navigation */}
-      <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <Tab />
       {/* main section depends of active tab */}
       <div>{selectedSection ? selectedSection.element : null}</div>
     </div>

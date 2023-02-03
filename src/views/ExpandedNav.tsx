@@ -15,7 +15,6 @@ import {
 import emailIcon from '../assets/branding/email-icon.png';
 import hubIcon from '../assets/branding/hub.png';
 import InboxIcon from '../assets/branding/inbox.png';
-import filesIcon from '../assets/branding/file.png';
 import timeClockIcon from '../assets/branding/timeclock.png';
 import trackerIcon from '../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
@@ -113,16 +112,19 @@ function ExpandedNav() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
+  if (activePlaceId === (0 || true)) {
+    dispatch(setShowExtendedBar(false));
+    dispatch(setExtendedSidebarWidth(240));
+  }
   return (
     <div
       className="relative flex-none"
       ref={sidebarRef}
       style={
         showExtendedBar
-          ? { maxWidth: 320, width: extendedSidebarWidth, minWidth: '230px' }
+          ? { maxWidth: "320px", width: extendedSidebarWidth, minWidth: '230px' }
           : { width: '1px', minWidth: '1px' }
       }
-      // onMouseDown={(e) => e.preventDefault()}
     >
       <span className="absolute z-50 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
         {showExtendedBar && (
@@ -132,7 +134,11 @@ function ExpandedNav() {
           />
         )}
       </span>
-      <section className="z-10 h-screen overflow-x-hidden overflow-y-auto border-r border-gray-300">
+      <section
+        className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${
+          isResizing ? 'border-gray-500' : 'border-gray-300'
+        }`}
+      >
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
@@ -218,7 +224,6 @@ function ExpandedNav() {
               extendedSidebarWidth >= 230 && 'group-hover:bg-green-300'
             }`}
             onMouseDown={startResizing}
-            onMouseUp={(e) => e.preventDefault()}
             style={{
               cursor: 'col-resize',
               width: `${extendedSidebarWidth > 320 ? '4px' : '2px'}`,
@@ -234,6 +239,7 @@ function ExpandedNav() {
               width: `${extendedSidebarWidth < 230 ? '4px' : '2px'}`,
               right: `${extendedSidebarWidth < 230 ? '-4px' : '-2px'}`,
             }}
+            onMouseDown={startResizing}
           ></div>
         </span>
       </section>
