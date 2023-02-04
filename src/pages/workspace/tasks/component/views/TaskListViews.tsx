@@ -22,7 +22,10 @@ export default function TaskListViews() {
   };
 
   return (
-    <div className="flex items-center justify-between relative w-12/12">
+    <div
+      className="flex items-center justify-between sticky top-0 pt-5 bg-gray-100 z-20 w-12/12 "
+      style={{ backgroundColor: "#e1e4e5" }}
+    >
       <div className="flex">
         <div className=" flex items-center items-center ">
           <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
@@ -45,13 +48,14 @@ export default function TaskListViews() {
             </span>
           </div>
         </div>
-        <div className="relative flex     items-center ">
+        <div className="relative w-6/12 flex     items-center ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
                 <div
                   key={col.field}
-                  className="flex mt-1 items-center uppercase   text-gray-400 text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                  className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                  style={{ color: "#78828d", fontSize: "11px" }}
                 >
                   {col.value}
                 </div>
@@ -66,19 +70,23 @@ export default function TaskListViews() {
             col.value !== "Task" && (
               <div
                 key={col.field}
-                className="flex px-3 items-center uppercase   text-gray-400 text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                style={{ color: "#78828d", fontSize: "11px" }}
               >
                 {col.value}
               </div>
             )
         )}
       </div>
-      <span className=" flex absolute right-0 items-center h-5  text-gray-400 text-xs  rounded-full p-1 font-semibold group">
+      <span
+        className=" flex absolute z-30 right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+        style={{ color: "#78828d" }}
+      >
         <FiPlusCircle
           className=" font-black hover:bg-white	"
           onClick={() => handleDropDown()}
         />
-        <span className="text-sm">
+        <span className="text-sm z-30">
           {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
         </span>
       </span>

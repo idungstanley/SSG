@@ -38,22 +38,31 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
           return (
             <div key={item.id}>
               <div className="border p-5 rounded">
-                <p className="text-xs font-semibold text-gray-400	">{hubName}</p>
                 <div
                   id="listTitle"
                   className="flex items-center justify-between"
                 >
-                  <div className="group flex items-center justify-center text-gray-400">
+                  <div
+                    className="group flex items-center justify-center "
+                    style={{ color: "#78828d", fontSize: "11px" }}
+                  >
                     <ChevronDownIcon
                       className="flex-shrink-0 w-5 h-4"
                       aria-hidden="true"
                     />
-                    <p className="text-xs font-medium text-black font-sans">
+                    {/* <p className="text-xs font-medium text-black font-sans">
                       {item.name}
+                    </p> */}
+                    <p
+                      className="text-base font-semibold text-black	"
+                      style={{ backgroundColor: "#e1e4e5" }}
+                    >
+                      {hubName}
                     </p>
 
                     <InformationCircleIcon
-                      className="flex-shrink-0 w-5 h-4 ml-1 text-gray-400"
+                      className="flex-shrink-0 w-5 h-4 ml-1 "
+                      style={{ color: "#78828d", fontSize: "11px" }}
                       aria-hidden="true"
                     />
                     <div
@@ -64,32 +73,46 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                         dispatch(setCreateTaskFromTop(!createTaskFromTop));
                       }}
                     >
-                      <p className="capitalize px-1 py-1 text-xs cursor-pointer ">
+                      <p
+                        className="uppercase px-1 py-1 text-xs font-medium cursor-pointer hover:bg-gray-200"
+                        style={{ color: "#78828d", fontSize: "11px" }}
+                      >
                         + New Task
                       </p>
                     </div>
 
-                    <p className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
+                    <p
+                      className="px-1 py-1 text-xs  cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200 uppercase font-medium  "
+                      style={{ color: "#78828d", fontSize: "11px" }}
+                    >
                       Add Description
                     </p>
-                    <p className="px-1 py-1 text-xs rou cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200  ">
+                    <p
+                      className="px-1 py-1 text-xs rou cursor-pointer opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-gray-200 uppercase font-medium  "
+                      style={{ color: "#78828d", fontSize: "11px" }}
+                    >
                       Add Comment
                     </p>
                   </div>
-
                   <div className="flex items-center justify-center space-x-1 text-gray-400 text-xs">
                     <CheckIcon
-                      className="flex-shrink-0 w-5 h-4 text-gray-400"
+                      className="flex-shrink-0 w-5 h-4 uppercase font-medium "
                       aria-hidden="true"
+                      style={{ color: "#78828d", fontSize: "11px" }}
                     />
-                    <p>Show Closed</p>
+                    <p
+                      className="uppercase font-medium"
+                      style={{ color: "#78828d", fontSize: "11px" }}
+                    >
+                      Show Closed
+                    </p>
                   </div>
                 </div>
                 {createTaskFromTop && currentListId === item.id && (
                   <AddNewItem listId={data.id} />
                 )}
                 <div>
-                  <div className="mt-5 ">
+                  <div className=" ">
                     <TaskListViews />
                     <span>
                       <ListTemplate listId={item.id} />
@@ -107,7 +130,10 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                     dispatch(setCurrentListId(item.id));
                   }}
                 >
-                  <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                  <p
+                    className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold "
+                    style={{ color: "#78828d", fontSize: "11px" }}
+                  >
                     + New Task
                   </p>
                 </div>
