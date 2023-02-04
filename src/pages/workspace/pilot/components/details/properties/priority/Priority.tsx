@@ -1,10 +1,15 @@
 import React from 'react';
 import PriorityDropdown from '../../../../../../../components/priority/PriorityDropdown';
+import Details from '../../../../../../../components/ItemPreviewSidebar/Components/Details';
 
-export default function Priority() {
+interface PriorityProps {
+  Details: any;
+}
+
+export default function Priority({ Details }: PriorityProps) {
   return (
-    <div className="text-gray-500 border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
-      <PriorityDropdown />
+    <div className=" p-1 ml-1">
+      <PriorityDropdown TaskCurrentPriority={Details?.priority} />
     </div>
   );
 }

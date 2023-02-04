@@ -16,10 +16,14 @@ export default function Status({ Details }: StatusDetailsProps) {
   const dispatch = useDispatch();
   const StatusData = Details?.status;
 
- UseUpdateTaskStatusService({
+  const { status } = UseUpdateTaskStatusService({
     task_id: Details?.id,
     statusDataUpdate: complete,
   });
+
+  if (status == 'success') {
+    setComplete('');
+  }
 
   const handleStatusBg = () => {
     if (StatusData == 'todo') {
@@ -71,7 +75,7 @@ export default function Status({ Details }: StatusDetailsProps) {
         <ToolTip tooltip="Set to complete">
           <button
             className=" p-2 text-xs rounded-md border border-gray-300 hover:border-green-300"
-            onClick={() => setComplete('complete')}
+            onClick={() => setComplete('completed')}
           >
             <AiOutlineCheck className="hover:border-green-300" />
           </button>

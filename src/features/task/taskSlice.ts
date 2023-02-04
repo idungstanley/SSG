@@ -44,6 +44,8 @@ interface TaskState {
   openUpdateEntryId: null;
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
+  currentTaskStatusId: null;
+  currentTaskPriorityId: null;
 }
 
 const initialState: TaskState = {
@@ -72,6 +74,8 @@ const initialState: TaskState = {
   openUpdateEntryId: null,
   updateStatusModalId: null,
   updateStatusModalIdForPilot: null,
+  currentTaskStatusId: null,
+  currentTaskPriorityId: null,
 };
 
 export const taskSlice = createSlice({
@@ -143,6 +147,12 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId4(state, action) {
       state.currentParentSubTaskId4 = action.payload;
     },
+    setCurrentTaskStatusId(state, action) {
+      state.currentTaskStatusId = action.payload;
+    },
+    setCurrentTaskPriorityId(state, action) {
+      state.currentTaskPriorityId = action.payload;
+    },
     setUpdateEntries(state, action) {
       state.initial_description = action.payload.initial_description;
       state.initial_start_date = action.payload.initial_start_date;
@@ -179,5 +189,7 @@ export const {
   setCurrentParentSubTaskId4,
   setUpdateEntries,
   setUpdateStatusModalId,
+  setCurrentTaskStatusId,
+  setCurrentTaskPriorityId,
 } = taskSlice.actions;
 export default taskSlice.reducer;

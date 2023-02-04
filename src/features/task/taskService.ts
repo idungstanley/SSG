@@ -3,6 +3,7 @@ import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
+import { UpdateTaskProps } from './interface.tasks';
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -54,10 +55,14 @@ export const getOneTaskServices = ({ task_id }) => {
   );
 };
 
-export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
+export const UseUpdateTaskStatusService = ({
+  task_id,
+  statusDataUpdate,
+  priorityDataUpdate,
+}: UpdateTaskProps) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id: task_id, statusDataUpdate }],
+    ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
     async () => {
       const data = requestNew(
         {
@@ -65,6 +70,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
           method: 'PUT',
           params: {
             status: statusDataUpdate,
+            // priority: priorityDataUpdate,
           },
         },
         true
@@ -72,7 +78,38 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }) => {
       return data;
     },
     {
-      enabled: statusDataUpdate != '',
+      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
+      enabled: task_id != null && statusDataUpdate !== '',
+      onSuccess: () => {
+        queryClient.invalidateQueries(['task']);
+      },
+    }
+  );
+};
+
+export const UseUpdateTaskStatusServices = ({
+  task_id,
+  priorityDataUpdate,
+}: UpdateTaskProps) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id, priorityDataUpdate }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `at/tasks/${task_id}`,
+          method: 'PUT',
+          params: {
+            priority: priorityDataUpdate,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
+      enabled: task_id != null && priorityDataUpdate !== '',
       onSuccess: () => {
         queryClient.invalidateQueries(['task']);
       },

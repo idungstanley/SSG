@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { classNames } from '../../utils';
-import { FlagOutlined } from '@ant-design/icons';
+import { AiFillFlag } from 'react-icons/ai';
+import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
+import { useAppSelector } from '../../app/hooks';
 
 interface priorityType {
   id: number;
@@ -10,8 +12,15 @@ interface priorityType {
   color: string;
   bg: string;
 }
-export default function PriorityDropdown() {
+
+interface TaskCurrentPriorityProps {
+  TaskCurrentPriority: string;
+}
+export default function PriorityDropdown({
+  TaskCurrentPriority,
+}: TaskCurrentPriorityProps) {
   const [priorityValue, setPriority] = useState('');
+  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
@@ -29,7 +38,7 @@ export default function PriorityDropdown() {
         setPriority('normal');
       },
       color: '#6fddff',
-      bg: 'purple',
+      bg: 'blue',
     },
     {
       id: 3,
@@ -50,15 +59,43 @@ export default function PriorityDropdown() {
       bg: 'red',
     },
   ];
+  const { status } = UseUpdateTaskStatusServices({
+    task_id: currentTaskPriorityId,
+    priorityDataUpdate: priorityValue,
+  });
+
+  if (status == 'success') {
+    setPriority('');
+  }
+  const setPriorityColor = (priority: string) => {
+    if (priority == null || priority == 'low') {
+      return (
+        <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />
+      );
+    } else if (priority == 'normal') {
+      return (
+        <AiFillFlag className="h-5 w-7  text-blue-500 " aria-hidden="true" />
+      );
+    } else if (priority == 'high') {
+      return (
+        <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />
+      );
+    } else if (priority == 'urgent') {
+      return (
+        <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />
+      );
+    }
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          {/* {setStatusColor(TaskCurrentStatus)} */}
-          <FlagOutlined
+          {setPriorityColor(TaskCurrentPriority)}
+          {/* <AiFillFlag
             className="h-5 w-7  text-gray-400 "
             aria-hidden="true"
-          />
+          /> */}
         </Menu.Button>
       </div>
 
@@ -85,12 +122,7 @@ export default function PriorityDropdown() {
                   onClick={i.handleClick}
                 >
                   <p>
-                    {/* <RiCheckboxBlankFill
-                      className="pl-px text-xs "
-                      aria-hidden="true"
-                      style={{ color: `${i.color}` }}
-                    /> */}
-                    <FlagOutlined
+                    <AiFillFlag
                       className="h-5 w-7  "
                       aria-hidden="true"
                       style={{ color: `${i.color}` }}

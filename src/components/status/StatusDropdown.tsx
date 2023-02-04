@@ -4,9 +4,7 @@ import { classNames } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  UseUpdateTaskStatusService
-} from '../../features/task/taskService';
+import { UseUpdateTaskStatusService } from '../../features/task/taskService';
 interface statusType {
   id: number;
   title: string;
@@ -23,7 +21,6 @@ export default function StatusDropdown({
   TaskCurrentStatus,
 }: StatusDropdownProps) {
   const [statusValue, setStatus] = useState('');
-
   const statusList: statusType[] = [
     {
       id: 1,
@@ -63,12 +60,12 @@ export default function StatusDropdown({
     },
   ];
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
   //update task status
 
-  const { data: updateTaskStatus, status } = UseUpdateTaskStatusService({
-    task_id: activeItemId,
+  const { status } = UseUpdateTaskStatusService({
+    task_id: currentTaskStatusId,
     statusDataUpdate: statusValue,
   });
 

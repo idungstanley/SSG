@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
+  setCurrentTaskPriorityId,
+  setCurrentTaskStatusId,
   setGetSubTaskId,
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
-  setUpdateStatusModalId,
 } from '../../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
 
-import {
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
 import AssignTask from '../../assignTask/AssignTask';
@@ -35,17 +30,15 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const { myTaskData } = useAppSelector((state) => state.task);
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
-    updateStatusModalId,
   } = useAppSelector((state) => state.task);
-  // const [openTaskModal, setOpenTaskModal] = useState(false);
 
-  const displayNav: any = (id: string) => {
+  const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
@@ -59,7 +52,13 @@ export default function TaskData({ task }: TaskDataProps) {
         activeItemName: name,
       })
     );
-    // dispatch(ilotTrigger)
+  };
+
+  const handleTaskStatus = (id: string) => {
+    dispatch(setCurrentTaskStatusId(id));
+  };
+  const handleTaskPriority = (id: string) => {
+    dispatch(setCurrentTaskPriorityId(id));
   };
 
   const handleAssigneeModal = (id: string) => {
@@ -154,11 +153,7 @@ export default function TaskData({ task }: TaskDataProps) {
               />
             )}
           </div>
-          <p
-            onClick={() => handleTaskPilot(task.id, task.name)}
-            className="relative"
-          >
-            {/* {setStatusColor(task?.status)} */}
+          <p onClick={() => handleTaskStatus(task.id)} className="relative">
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
           <p
@@ -185,16 +180,25 @@ export default function TaskData({ task }: TaskDataProps) {
       );
     } else if (colfield === 'priority') {
       return (
-        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
-          {/* <FlagOutlined
-            className="h-5 w-7  text-gray-400 "
-            aria-hidden="true"
-          /> */}
-          <PriorityDropdown />
+        <span
+          className="relative ml-12 pl-5 border-dotted border-gray-300 "
+          onClick={() => handleTaskPriority(task.id)}
+        >
+          <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
       );
     } else return taskColField;
   };
+
+  // const groupTaskByStatus = (arr, keyToReGroupBy) => {
+  //   return arr.reduce(function (reGroup, x) {
+  //     (reGroup[x[keyToReGroupBy]] = reGroup[x[keyToReGroupBy]] || []).push(x);
+  //     return reGroup;
+  //   }, {});
+  // };
+  // console.log(task?.status);
+
+  // console.log(groupTaskByStatus(myTaskData, 'in progress'));
 
   return (
     <>

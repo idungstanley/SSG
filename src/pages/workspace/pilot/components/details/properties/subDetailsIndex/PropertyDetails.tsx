@@ -25,7 +25,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           <Status Details={Details} />
           {/* </ToolTip> */}
           <ToolTip tooltip="Priority">
-            <Priority />
+            <Priority Details={Details} />
           </ToolTip>
         </section>
         <section className="flex items-center justify-center space-x-3">
