@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 export default function SubHubIndex() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showSubChildren, setShowSubChidren] = useState<string | null>(null);
   const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
   );
@@ -38,10 +39,12 @@ export default function SubHubIndex() {
       dispatch(setHubParentId(parent_id))
     );
   }
-  const { hubParentId, showMenuDropdown, currSubHubId, SubMenuId } =
-    useAppSelector((state) => state.hub);
+  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector(
+    (state) => state.hub
+  );
 
   const handleClick = (id: string, name: string) => {
+    setShowSubChidren(id);
     dispatch(
       setActiveItem({
         activeItemType: 'subhub',
@@ -55,13 +58,8 @@ export default function SubHubIndex() {
         currSubHubIdType: 'subhub',
       })
     );
-    if (currSubHubId === id) {
-      return dispatch(
-        getCurrSubHubId({
-          currSubHubId: null,
-          currSubHubIdType: null,
-        })
-      );
+    if (showSubChildren === id) {
+      return setShowSubChidren(null);
     }
   };
 
@@ -109,10 +107,10 @@ export default function SubHubIndex() {
           <div key={subhub.id}>
             <section
               className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-                subhub.id === activeItemId
-                  ? 'bg-green-100 text-green-500'
-                  : 'text-black'
+                subhub.id === activeItemId &&
+                'bg-green-100 text-black font-medium'
               }`}
+              onClick={() => handleClick(subhub.id, subhub.name)}
             >
               {subhub.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
@@ -125,18 +123,17 @@ export default function SubHubIndex() {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => handleClick(subhub.id, subhub.name)}
                   className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
                 >
-                  {currSubHubId === subhub.id ? (
+                  {showSubChildren === subhub.id ? (
                     <VscTriangleDown
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
                   ) : (
                     <VscTriangleRight
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -157,7 +154,7 @@ export default function SubHubIndex() {
                   />
                   <span className="ml-4 overflow-hidden">
                     <h4
-                      className="font-medium tracking-wider capitalize truncate cursor-pointer"
+                      className="tracking-wider capitalize truncate cursor-pointer"
                       style={{ fontSize: '12px' }}
                       onClick={() => handleLocation(subhub.id, subhub.name)}
                     >
@@ -181,7 +178,7 @@ export default function SubHubIndex() {
                 />
               </div>
             </section>
-            {currSubHubId === subhub.id ? <SHubDropdownList /> : null}
+            {showSubChildren === subhub.id ? <SHubDropdownList /> : null}
             {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
             {SubMenuId === subhub.id ? <SubDropdown /> : null}
           </div>

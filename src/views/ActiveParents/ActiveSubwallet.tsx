@@ -62,7 +62,7 @@ function ActiveSubWallet({
                 <div className="flex items-center cursor-pointer hover:underline hover:decoration-dashed">
                   <div onClick={() => handleLocation(wallet.id)}>
                     <p
-                      className="ml-2 font-medium tracking-wider capitalize truncate"
+                      className="ml-2 tracking-wider capitalize truncate"
                       style={{ fontSize: '10px' }}
                     >
                       {wallet.name.length > 10

@@ -37,6 +37,9 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
         {data?.data.lists.map((item) => {
           return (
             <div key={item.id} className="border p-5 rounded-xl relative">
+              {/* <p className="text-xs font-semibold text-gray-400 capitalize">
+                {item.name}
+              </p> */}
               <div
                 className=" absolute  left-0 top-0 h-full w-1 rounded-l-md"
                 style={{ backgroundColor: "#78828d" }}
@@ -52,9 +55,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                     className="flex-shrink-0 w-5 h-4"
                     aria-hidden="true"
                   />
-                  {/* <p className="text-xs font-medium text-black font-sans">
-                      {item.name}
-                    </p> */}
+
                   <p
                     className="text-base font-semibold text-black	"
                     style={{ backgroundColor: "#e1e4e5" }}

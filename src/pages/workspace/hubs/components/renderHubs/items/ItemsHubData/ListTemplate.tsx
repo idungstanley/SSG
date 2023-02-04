@@ -1,9 +1,3 @@
-import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
 import React from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { RiCheckboxBlankFill } from 'react-icons/ri';

@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
+import hubIcon from '../../assets/branding/hub.png';
 import {
   setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
@@ -34,8 +35,9 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType, SubMenuType, SubMenuId } =
-    useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, SubMenuType, SubMenuId } = useAppSelector(
+    (state) => state.hub
+  );
   const {
     showCreateSubWalletSlideOver,
     showEditHubSlideOver,
@@ -92,9 +94,7 @@ export default function SubDropdown() {
       handleClick: () => {
         dispatch(setCreateSubHubSlideOverVisibility(true));
       },
-      icon: (
-        <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
-      ),
+      icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
       isVisible:
         showMenuDropdownType == 'hubs'
           ? true

@@ -31,16 +31,25 @@ export default function ListSection({ data }: any) {
   return (
     <section id="listcard" className=" m-1 bg-white last " key={data.id}>
       <div
-        className="border p-5 rounded"
+        className="border p-5 rounded relative"
         style={{ backgroundColor: "#e1e4e5" }}
       >
+        <div
+          className=" absolute  left-0 top-0 h-full w-1 rounded-l-md"
+          style={{ backgroundColor: "#78828d" }}
+        >
+          <p className="opacity-0">t</p>
+        </div>
         <div id="listTitle" className="flex items-center justify-between">
           <div className="group flex items-center justify-center text-gray-400">
             <ChevronDownIcon
               className="flex-shrink-0 w-5 h-4"
               aria-hidden="true"
             />
-            <p className="text-xs font-medium text-black font-sans capitalize">
+            <p
+              className="text-base font-semibold text-black	"
+              style={{ backgroundColor: "#e1e4e5" }}
+            >
               {data.name}
             </p>
 

@@ -105,7 +105,7 @@ export default function Template5({ task }: TemplateProps) {
       );
     } else if (colfield == "created_at") {
       return (
-        <span className="text-gray-400 pl-12 text-sm font-medium">
+        <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField).format("MM/DD")}
         </span>
       );
@@ -123,28 +123,29 @@ export default function Template5({ task }: TemplateProps) {
             />
             <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move -mt-1 text-sm	 absolute -left-5 " />
           </div>
-
-          <p>
-            <RiCheckboxBlankFill
-              className="pl-px text-gray-400 text-xs"
-              aria-hidden="true"
-            />
-          </p>
-          <p>{taskColField}</p>
-          <div
-            id="iconWrapper"
-            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-          >
-            <EditOutlined
-              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-              aria-hidden="true"
-            />
+          <div className="flex items-center ml-28">
+            <p>
+              <RiCheckboxBlankFill
+                className="pl-px text-gray-400 text-xs"
+                aria-hidden="true"
+              />
+            </p>
+            <p className="cursor-pointer">{taskColField}</p>
+            <div
+              id="iconWrapper"
+              className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+            >
+              <EditOutlined
+                className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
+                aria-hidden="true"
+              />
+            </div>
           </div>
         </div>
       );
     } else if (colfield === "priority") {
       return (
-        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+        <span className="relative border-dotted border-gray-300 ">
           <FlagOutlined
             className="h-5 w-7  text-gray-400 "
             aria-hidden="true"
@@ -156,8 +157,8 @@ export default function Template5({ task }: TemplateProps) {
 
   return (
     <>
-      <div className="flex group bg-white ml-4 mb-px w-full">
-        <div className="  w-5/12 flex items-center justify-between ">
+      <div className="flex justify-between py-1 group bg-white ml-4 mb-px w-12/12">
+        <div className="  w-6/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
@@ -170,13 +171,13 @@ export default function Template5({ task }: TemplateProps) {
               )
           )}
         </div>
-        <div className="flex pl-20 ">
+        <div className="dynamic ">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
+                  className="flex items-center uppercase bg-white   text-gray-400 py-px pl-6 font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>

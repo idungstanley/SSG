@@ -15,6 +15,8 @@ export default function ItemsListsData({ listId }: ItemsListsDataProps) {
     (state) => state.task
   );
 
+  // console.log(data);
+
   return (
     <section>
       {/* lists */}

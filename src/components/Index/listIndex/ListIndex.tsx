@@ -63,9 +63,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
           <div key={list.id}>
             <section
               className={`flex relative justify-between items-center text-sm pl-6 h-8 hover:bg-gray-100 ${
-                list.id === activeItemId
-                  ? 'bg-green-100 text-green-500'
-                  : 'text-black'
+                list.id === activeItemId && 'bg-green-100 text-black font-medium'
               }`}
             >
               {list.id === activeItemId && (
@@ -79,7 +77,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                 <button
                   type="button"
                   onClick={() => handleListLocation(list.id, list.name)}
-                  className="ml-2 font-medium tracking-wider capitalize truncate cursor-pointer"
+                  className="ml-2 tracking-wider capitalize truncate cursor-pointer"
                   style={{ fontSize: '12px' }}
                 >
                   {list.name.length > 10
