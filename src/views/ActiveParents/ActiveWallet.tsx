@@ -115,7 +115,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                       className="ml-2 flex cursor-pointer hover:underline hover:decoration-dashed"
                     >
                       <p
-                        className="font-medium tracking-wider capitalize truncate"
+                        className="tracking-wider capitalize truncate"
                         style={{ fontSize: '10px' }}
                       >
                         {wallet.name}

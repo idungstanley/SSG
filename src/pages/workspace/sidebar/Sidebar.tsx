@@ -168,7 +168,7 @@ export default function Sidebar() {
           <div onScroll={(e) => handleScroll(e)} className="pr-1">
             <section
               className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
-              style={{ minHeight: '0', maxHeight: '460px' }}
+              style={{ minHeight: '0', maxHeight: '80vh' }}
             >
               <Search />
               <NavigationItems />
@@ -180,7 +180,7 @@ export default function Sidebar() {
         <span className="group">
           <div
             className={`absolute top-0 right-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth >= 230 && 'group-hover:bg-green-300'
+              sidebarWidth >= 230 && 'group-hover:bg-green-100'
             }`}
             onMouseDown={startResizing}
             style={{
@@ -190,7 +190,7 @@ export default function Sidebar() {
           ></div>
           <div
             className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth <= 320 && 'group-hover:bg-green-300'
+              sidebarWidth <= 320 && 'group-hover:bg-green-100'
             }`}
             style={{
               cursor: 'col-resize',

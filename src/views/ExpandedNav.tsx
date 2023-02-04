@@ -221,7 +221,7 @@ function ExpandedNav() {
         <span className="group">
           <div
             className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth >= 230 && 'group-hover:bg-green-300'
+              extendedSidebarWidth >= 230 && 'group-hover:bg-green-100'
             }`}
             onMouseDown={startResizing}
             style={{
@@ -232,7 +232,7 @@ function ExpandedNav() {
           ></div>
           <div
             className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth <= 320 && 'group-hover:bg-green-300'
+              extendedSidebarWidth <= 320 && 'group-hover:bg-green-100'
             }`}
             style={{
               cursor: 'col-resize',
