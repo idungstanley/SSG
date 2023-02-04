@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface ImyTaskData {
   id: string;
@@ -25,6 +25,7 @@ interface TaskState {
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
+  taskColumns: any[];
   current_task_id: null;
   listView: boolean;
   tableView: boolean;
@@ -51,6 +52,7 @@ const initialState: TaskState = {
   currTeamMemberId: null,
   removeWatcherId: null,
   myTaskData: [],
+  taskColumns: [],
   current_task_id: null,
   listView: true,
   tableView: false,
@@ -64,14 +66,14 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: '',
+  initial_description: "",
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
 };
 
 export const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -86,6 +88,9 @@ export const taskSlice = createSlice({
       if (taskDataArray) {
         state.myTaskData = taskDataArray;
       }
+    },
+    getTaskColumns(state, action) {
+      state.taskColumns = action.payload;
     },
     getListView(state, action) {
       state.listView = action.payload;
@@ -157,6 +162,7 @@ export const {
   setWatchersData,
   setCurrTeamMemId,
   getTaskData,
+  getTaskColumns,
   getListView,
   getTableView,
   setShowTaskNavigation,

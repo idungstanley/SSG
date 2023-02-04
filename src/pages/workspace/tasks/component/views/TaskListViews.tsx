@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { FiPlusCircle } from "react-icons/fi";
 import { useAppSelector } from "../../../../../app/hooks";
 import AddColumnDropdown from "../../dropdown/AddColumnDropdown";
-import addColumns from "../../../lists/components/renderlist/listDetails/listDetails";
+// import addColumns from "../../../lists/components/renderlist/listDetails/listDetails";
 import { useDispatch } from "react-redux";
-import { setCloseTaskListView } from "../../../../../features/task/taskSlice";
+import {
+  getTaskColumns,
+  setCloseTaskListView,
+} from "../../../../../features/task/taskSlice";
 import "./view.css";
 
 import "../taskData/task.css";
@@ -15,7 +18,10 @@ export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
-  const { myTaskData } = useAppSelector((state) => state.task);
+  const { myTaskData, taskColumns } = useAppSelector((state) => state.task);
+
+  const [taskCol, setTaskCol] = useState(columnsHead);
+  dispatch(getTaskColumns(taskCol));
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
@@ -49,9 +55,10 @@ export default function TaskListViews() {
           </div>
         </div>
         <div className="relative w-6/12 flex     items-center ">
-          {columnsHead.map(
+          {taskColumns.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == "Task" &&
+              !col.hidden && (
                 <div
                   key={col.field}
                   className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
@@ -65,9 +72,10 @@ export default function TaskListViews() {
       </div>
 
       <div className="grid dynamic  justify-between">
-        {columnsHead.map(
+        {taskColumns.map(
           (col) =>
-            col.value !== "Task" && (
+            col.value !== "Task" &&
+            !col.hidden && (
               <div
                 key={col.field}
                 className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
@@ -87,7 +95,7 @@ export default function TaskListViews() {
           onClick={() => handleDropDown()}
         />
         <span className="text-sm z-30">
-          {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
+          {dropDown && <AddColumnDropdown title="" listItems={taskColumns} />}
         </span>
       </span>
     </div>

@@ -12,7 +12,6 @@ import { setActiveItem } from "../../../../../features/workspace/workspaceSlice"
 import { MdDragIndicator } from "react-icons/md";
 import { RiCheckboxBlankFill } from "react-icons/ri";
 import {
-  CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
@@ -38,6 +37,7 @@ export default function TaskData({ task }: TaskDataProps) {
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
+    taskColumns,
   } = useAppSelector((state) => state.task);
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
@@ -117,7 +117,7 @@ export default function TaskData({ task }: TaskDataProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField).format("MM/DD")}
@@ -198,7 +198,8 @@ export default function TaskData({ task }: TaskDataProps) {
         <div className=" flex w-6/12  items-center ">
           {columnsHead.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == "Task" &&
+              !col.hidden && (
                 <div
                   key={col.field}
                   className="flex items-center capitalize ml-2 text-xs font-medium  group"
@@ -211,7 +212,8 @@ export default function TaskData({ task }: TaskDataProps) {
         <div className=" dynamic ">
           {columnsHead.map(
             (col) =>
-              col.value !== "Task" && (
+              col.value !== "Task" &&
+              !col.hidden && (
                 <div
                   key={col.field}
                   className=" items-center uppercase    text-gray-400 py-px   font-medium  group"

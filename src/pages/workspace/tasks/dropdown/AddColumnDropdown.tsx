@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { getTaskColumns } from "../../../../features/task/taskSlice";
 
 interface Icolumn {
   name: string;
@@ -10,7 +12,7 @@ interface Icolumn {
 
 interface CustomDropdownProps {
   title: string;
-  listItems: Icolumn[];
+  listItems: any[];
 }
 
 export default function AddColumnDropdown({
@@ -18,6 +20,30 @@ export default function AddColumnDropdown({
   listItems,
 }: CustomDropdownProps) {
   const [column, setColumn] = useState(true);
+  const { taskColumns } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
+  const [colH, setColH] = useState(taskColumns);
+
+  const hidden = (colField) => {
+    const taskCollArr: any = [];
+     taskColumns.map((colHidden) => {
+      if (colField == colHidden.field) {
+        const newObj = {
+          ...colHidden,
+          hidden: !colHidden.hidden,
+        };
+        taskCollArr.push(newObj);
+      } else taskCollArr.push(colHidden);
+    });
+    console.log(taskCollArr);
+    setColH(taskCollArr);
+    dispatch(getTaskColumns(taskCollArr));
+  };
+
+  // console.log(colH);
+  // console.log(taskColumns);
+
   return (
     <div className="relative">
       <div
@@ -42,23 +68,23 @@ export default function AddColumnDropdown({
         <button type="button">{title}</button>
         {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
         {listItems.map((listItem) => (
-          <div key={listItem.name}>
+          <div key={listItem.field}>
             {column && (
               <p
                 className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full z-30"
-                onClick={listItem.onclick}
+                // onClick={listItem.onclick}
               >
-                {listItem.icons}
+                {/* {listItem.icons} */}
                 {listItem.name}
               </p>
             )}
             {!column && (
               <p
                 className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 z-30 w-full"
-                onClick={() => listItem.onclick}
-                key={listItem.name}
+                onClick={() => hidden(listItem.field)}
+                key={listItem.field}
               >
-                {listItem.name}
+                {listItem.value}
               </p>
             )}
           </div>
