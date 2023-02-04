@@ -1,10 +1,6 @@
 import { useAppDispatch } from "../../../../../app/hooks";
 import React, { useState } from "react";
-<<<<<<< Updated upstream
 import { getTaskColumns } from "../../../../../features/task/taskSlice";
-=======
-// import { getTaskColumns } from "../../../../../features/task/taskSlice";
->>>>>>> Stashed changes
 
 export const columnsHead:
   | {
