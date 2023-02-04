@@ -88,7 +88,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
-        <span key={newData.id} className="">
+        <span key={newData.id}>
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -106,7 +106,7 @@ export default function TaskData({ task }: TaskDataProps) {
         <div className="relative">
           <div
             onClick={() => handleAssigneeModal(task.id)}
-            className="cursor-pointer flex ml-2"
+            className="cursor-pointer flex "
           >
             {groupAssignee(task.assignees)}
           </div>
@@ -115,30 +115,30 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" ml-2  text-gray-400 text-xl cursor-pointer "
+          className=" ml-2 text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
     } else if (colfield == 'created_at') {
       return (
-        <span className="text-gray-400 pl-12 text-sm font-medium">
+        <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField).format('MM/DD')}
         </span>
       );
     } else if (colfield === 'name') {
       return (
-        <div className="flex items-center relative">
-          <div className=" flex items center">
+        <div className="flex items-center relative ">
+          <div className=" flex items-center">
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="cursor-pointer -mt-1 absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
+              className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
               onClick={() => {
                 displayNav(task.id);
               }}
             />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move -mt-1 text-sm	 absolute -left-5 " />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
           </div>
           <div onClick={() => handleGetSubTask(task.id)} className="">
             {task.id == getSubTaskId ? (
@@ -153,35 +153,37 @@ export default function TaskData({ task }: TaskDataProps) {
               />
             )}
           </div>
-          <p onClick={() => handleTaskStatus(task.id)} className="relative">
-            <StatusDropdown TaskCurrentStatus={task?.status} />
-          </p>
-          <p
-            onClick={() => handleTaskPilot(task.id, task.name)}
-            className="cursor-pointer"
-          >
-            {taskColField}
-          </p>
-          <div
-            id="iconWrapper"
-            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-          >
-            <PlusOutlined
-              className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
-              aria-hidden="true"
-              onClick={() => handleCreateSubTask(task.id)}
-            />
-            <EditOutlined
-              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-              aria-hidden="true"
-            />
+          <div className="flex items-center">
+            <p onClick={() => handleTaskStatus(task.id)} className="relative">
+              <StatusDropdown TaskCurrentStatus={task?.status} />
+            </p>
+            <p
+              onClick={() => handleTaskPilot(task.id, task.name)}
+              className="cursor-pointer "
+            >
+              {taskColField}
+            </p>
+            <div
+              id="iconWrapper"
+              className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+            >
+              <PlusOutlined
+                className="cursor-pointer  pt-1 text-xs h-6 w-6 text-black"
+                aria-hidden="true"
+                onClick={() => handleCreateSubTask(task.id)}
+              />
+              <EditOutlined
+                className="cursor-pointer  text-xs h-4 w-4 text-black"
+                aria-hidden="true"
+              />
+            </div>
           </div>
         </div>
       );
     } else if (colfield === 'priority') {
       return (
         <span
-          className="relative ml-12 pl-5 border-dotted border-gray-300 "
+          className="relative  border-dotted border-gray-300 "
           onClick={() => handleTaskPriority(task.id)}
         >
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
@@ -202,27 +204,28 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="flex group bg-white ml-4 mb-px w-full">
-        <div className="  w-5/12 flex items-center justify-between ">
+      <div className="flex z-10 justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1">
+        <div className=" flex w-6/12  items-center ">
           {columnsHead.map(
             (col) =>
               col.value == 'Task' && (
                 <div
                   key={col.field}
-                  className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
+                  className="flex items-center capitalize ml-2 text-xs font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>
               )
           )}
         </div>
-        <div className="flex pl-20 ">
+        <div className=" dynamic ">
           {columnsHead.map(
             (col) =>
               col.value !== 'Task' && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
+                  className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                  style={{ width: '50px', marginLeft: '25%' }}
                 >
                   {renderData(task[col.field], col.field)}
                 </div>

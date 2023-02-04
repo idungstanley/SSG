@@ -57,7 +57,7 @@ export default function Status({ Details }: StatusDetailsProps) {
       <div className="flex space-x-0.5">
         <ToolTip tooltip="Current status">
           <button
-            className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer w-20 h-8`}
+            className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
             onClick={() => dispatch(setUpdateStatusModalId(Details?.id))}
           >
             {handleStatusMessage(Details?.status)}

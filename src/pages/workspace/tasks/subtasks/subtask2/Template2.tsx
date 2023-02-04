@@ -104,7 +104,7 @@ export default function Template2({ task }: TemplateProps) {
       );
     } else if (colfield == "created_at") {
       return (
-        <span className="text-gray-400 pl-12 text-sm font-medium">
+        <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField).format("MM/DD")}
         </span>
       );
@@ -160,7 +160,7 @@ export default function Template2({ task }: TemplateProps) {
       );
     } else if (colfield === "priority") {
       return (
-        <span className="relative ml-12 pl-5 border-dotted border-gray-300 ">
+        <span className="relative border-dotted border-gray-300 ">
           <FlagOutlined
             className="h-5 w-7  text-gray-400 "
             aria-hidden="true"
@@ -172,8 +172,8 @@ export default function Template2({ task }: TemplateProps) {
 
   return (
     <>
-      <div className="flex group bg-white ml-4 mb-px w-full">
-        <div className="  w-5/12 flex items-center justify-between ">
+      <div className="flex group justify-between bg-white ml-4 mb-px w-12/12 py-1">
+        <div className="  w-6/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
               col.value == "Task" && (
@@ -186,13 +186,13 @@ export default function Template2({ task }: TemplateProps) {
               )
           )}
         </div>
-        <div className="flex pl-20 ">
+        <div className="dynamic ">
           {columnsHead.map(
             (col) =>
               col.value !== "Task" && (
                 <div
                   key={col.field}
-                  className="flex items-center uppercase bg-white   text-gray-400 py-px  font-medium  group"
+                  className="flex items-center uppercase pl-6  text-gray-400 py-px  font-medium  group"
                 >
                   {renderData(task[col.field], col.field)}
                 </div>

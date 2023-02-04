@@ -109,7 +109,7 @@ export default function PriorityDropdown({
         leaveTo="transform opacity-0 scale-95"
         // show={sidebarSettings}
       >
-        <Menu.Items className="origin-top-right absolute z-20 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+        <Menu.Items className="origin-top-right absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
           {priorityList.map((i) => (
             <Menu.Item key={i.id}>
               {({ active }) => (
