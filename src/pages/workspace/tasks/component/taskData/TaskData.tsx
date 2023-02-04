@@ -85,7 +85,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const groupAssignee = (data) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
-        <span key={newData.id} className="">
+        <span key={newData.id}>
           <AvatarWithInitials
             initials={newData.initials}
             backgroundColour={newData.colour}
@@ -112,7 +112,7 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" pl-3 text-gray-400 text-xl cursor-pointer "
+          className=" ml-2 text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -125,7 +125,7 @@ export default function TaskData({ task }: TaskDataProps) {
       );
     } else if (colfield === "name") {
       return (
-        <div className="flex items-center relative">
+        <div className="flex items-center relative ">
           <div className=" flex items-center">
             <input
               type="checkbox"
@@ -159,7 +159,7 @@ export default function TaskData({ task }: TaskDataProps) {
             </p>
             <p
               onClick={() => handleTaskPilot(task.id, task.name)}
-              className="cursor-pointer"
+              className="cursor-pointer "
             >
               {taskColField}
             </p>
@@ -194,7 +194,7 @@ export default function TaskData({ task }: TaskDataProps) {
 
   return (
     <>
-      <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1">
+      <div className="flex z-10 sticky top-10  justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1">
         <div className=" flex w-6/12  items-center ">
           {columnsHead.map(
             (col) =>

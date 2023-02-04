@@ -71,14 +71,15 @@ export default function TaskListViews() {
               <div
                 key={col.field}
                 className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                style={{ color: "#78828d", fontSize: "11px" }}>
+                style={{ color: "#78828d", fontSize: "11px" }}
+              >
                 {col.value}
               </div>
             )
         )}
       </div>
       <span
-        className=" flex absolute z-30 right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+        className=" flex absolute z-50 right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
         style={{ color: "#78828d" }}
       >
         <FiPlusCircle
