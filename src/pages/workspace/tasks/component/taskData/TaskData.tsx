@@ -38,6 +38,7 @@ export default function TaskData({ task }: TaskDataProps) {
     currentParentTaskId,
     getSubTaskId,
     taskColumns,
+    hideTask,
   } = useAppSelector((state) => state.task);
   const [openTaskModal, setOpenTaskModal] = useState(false);
 
@@ -196,33 +197,60 @@ export default function TaskData({ task }: TaskDataProps) {
     <>
       <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1">
         <div className=" flex w-6/12  items-center ">
-          {columnsHead.map(
-            (col) =>
-              col.value == "Task" &&
-              !col.hidden && (
-                <div
-                  key={col.field}
-                  className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                >
-                  {renderData(task[col.field], col.field)}
-                </div>
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
               )
-          )}
+            : taskColumns.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )}
         </div>
         <div className=" dynamic ">
-          {columnsHead.map(
-            (col) =>
-              col.value !== "Task" &&
-              !col.hidden && (
-                <div
-                  key={col.field}
-                  className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                  style={{ width: "50px", marginLeft: "25%" }}
-                >
-                  {renderData(task[col.field], col.field)}
-                </div>
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value !== "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: "50px", marginLeft: "25%" }}
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
               )
-          )}
+            : columnsHead.map(
+                (col) =>
+                  col.value !== "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: "50px", marginLeft: "25%" }}
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )}
         </div>
 
         {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}

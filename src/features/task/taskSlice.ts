@@ -26,6 +26,7 @@ interface TaskState {
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
   taskColumns: any[];
+  hideTask: any[];
   current_task_id: null;
   listView: boolean;
   tableView: boolean;
@@ -53,6 +54,7 @@ const initialState: TaskState = {
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
+  hideTask: [],
   current_task_id: null,
   listView: true,
   tableView: false,
@@ -89,9 +91,38 @@ export const taskSlice = createSlice({
         state.myTaskData = taskDataArray;
       }
     },
+
     getTaskColumns(state, action) {
       state.taskColumns = action.payload;
     },
+    hideTaskColumns(state, action) {
+      return {
+        ...state,
+        hideTask:
+          state.hideTask.length != 0
+            ? state.hideTask.map((prev) => {
+                if (prev.field === action.payload) {
+                  return {
+                    ...prev,
+                    hidden: !prev.hidden,
+                  };
+                } else {
+                  return prev;
+                }
+              })
+            : state.taskColumns.map((prev) => {
+                if (prev.field === action.payload) {
+                  return {
+                    ...prev,
+                    hidden: !prev.hidden,
+                  };
+                } else {
+                  return prev;
+                }
+              }),
+      };
+    },
+
     getListView(state, action) {
       state.listView = action.payload;
     },
@@ -173,6 +204,7 @@ export const {
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
+  hideTaskColumns,
   setCurrentParentSubTaskId,
   setCurrentParentSubTaskId2,
   setCurrentParentSubTaskId3,

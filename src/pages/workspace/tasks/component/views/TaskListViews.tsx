@@ -18,7 +18,9 @@ export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
-  const { myTaskData, taskColumns } = useAppSelector((state) => state.task);
+  const { myTaskData, taskColumns, hideTask } = useAppSelector(
+    (state) => state.task
+  );
 
   const [taskCol, setTaskCol] = useState(columnsHead);
   dispatch(getTaskColumns(taskCol));
@@ -55,36 +57,64 @@ export default function TaskListViews() {
           </div>
         </div>
         <div className="relative w-6/12 flex     items-center ">
-          {taskColumns.map(
-            (col) =>
-              col.value == "Task" &&
-              !col.hidden && (
-                <div
-                  key={col.field}
-                  className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                  style={{ color: "#78828d", fontSize: "11px" }}
-                >
-                  {col.value}
-                </div>
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                      style={{ color: "#78828d", fontSize: "11px" }}
+                    >
+                      {col.value}
+                    </div>
+                  )
               )
-          )}
+            : taskColumns.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                      style={{ color: "#78828d", fontSize: "11px" }}
+                    >
+                      {col.value}
+                    </div>
+                  )
+              )}
         </div>
       </div>
 
       <div className="grid dynamic  justify-between">
-        {taskColumns.map(
-          (col) =>
-            col.value !== "Task" &&
-            !col.hidden && (
-              <div
-                key={col.field}
-                className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                style={{ color: "#78828d", fontSize: "11px" }}
-              >
-                {col.value}
-              </div>
+        {hideTask.length
+          ? hideTask.map(
+              (col) =>
+                col.value !== "Task" &&
+                !col.hidden && (
+                  <div
+                    key={col.field}
+                    className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                    style={{ color: "#78828d", fontSize: "11px" }}
+                  >
+                    {col.value}
+                  </div>
+                )
             )
-        )}
+          : taskColumns.map(
+              (col) =>
+                col.value !== "Task" &&
+                !col.hidden && (
+                  <div
+                    key={col.field}
+                    className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                    style={{ color: "#78828d", fontSize: "11px" }}
+                  >
+                    {col.value}
+                  </div>
+                )
+            )}
       </div>
       <span
         className=" flex absolute z-30 right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
