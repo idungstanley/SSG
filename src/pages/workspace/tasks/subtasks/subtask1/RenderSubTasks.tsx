@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getTaskListService2 } from '../../../../../features/task/taskService';
-import SubTask from '../create/SubTask';
-import Template from './Template';
-import RendersubTask2 from '../subtask2/RendersubTask2';
+import React, { useState } from "react";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getTaskListService2 } from "../../../../../features/task/taskService";
+import SubTask from "../create/SubTask";
+import Template from "./Template";
+import RendersubTask2 from "../subtask2/RendersubTask2";
 
 export default function RenderSubTasks() {
   const navigate = useNavigate();

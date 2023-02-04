@@ -18,12 +18,15 @@ import EntryList from './entryLists/EntryList';
 export default function TimeEntries() {
   const [showEntries, setShowEntries] = useState(false);
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeItemName, activeItemType } = useAppSelector(
+    (state) => state.workspace
+  );
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
 
-  const { data: getEntries } = GetTimeEntriesService({
+  const { data: getEntries, refetch } = GetTimeEntriesService({
     taskId: currentTaskIdForPilot,
+    trigger: activeItemType,
   });
 
   StartTimeEntryService({
@@ -42,6 +45,11 @@ export default function TimeEntries() {
       setStopTimeClock(!stopTimeClock);
     }
   };
+
+  const handleShowEntries = () => {
+    setShowEntries(!showEntries);
+    refetch();
+  };
   const totalDuration = getEntries?.data.total_duration;
   return (
     <div className="mt-6 p-2 rounded-t-md">
@@ -56,7 +64,7 @@ export default function TimeEntries() {
           <div
             id="taskUser"
             className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 hover:bg-gray-200 cursor-pointer"
-            onClick={() => setShowEntries(!showEntries)}
+            onClick={() => handleShowEntries()}
           >
             <div className="p-2 flex items-center justify-start space-x-1 cursor-pointer">
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
@@ -103,7 +111,11 @@ export default function TimeEntries() {
                   aria-hidden="true"
                 />
               )}
-              <Timer active={startTimeClicked} duration={null}>
+              <Timer
+                active={startTimeClicked}
+                duration={null}
+                // onStop={HandleStopTimer}
+              >
                 <Timecode />
               </Timer>
             </div>

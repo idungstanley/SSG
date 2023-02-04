@@ -13,9 +13,9 @@ import { useDispatch } from 'react-redux';
 function WalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown } = useAppSelector(
-    (state) => state.hub
-  );
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdownType, showMenuDropdown, currSubHubId } =
+    useAppSelector((state) => state.hub);
   const { showCreateWalletSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
@@ -48,7 +48,8 @@ function WalletModal() {
       name,
       hubID:
         (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
+        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
+        (currSubHubId !== null ? currSubHubId : currentItemId),
       walletId:
         (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null),

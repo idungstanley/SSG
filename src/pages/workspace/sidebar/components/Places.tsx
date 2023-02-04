@@ -89,7 +89,7 @@ function Places() {
       ),
     },
     {
-      name: 'hubs',
+      name: 'Tasks',
       id: 2,
       place: <Hubs />,
       source: hubIcon,
@@ -233,7 +233,7 @@ function Places() {
               key={item.id}
               className={`flex pl-4 z-20 pr-2 items-center hover:bg-gray-100 ${
                 activePlaceId === item.id && 'ml-0 bg-gray-200 sticky top-0'
-              } text-gray-600 cursor-pointer h-14 relative top-0`}
+              } cursor-pointer h-14 relative top-0`}
               onMouseEnter={() => handleMouseOver(index)}
               onMouseLeave={handleMouseOut}
             >
@@ -306,12 +306,12 @@ function Places() {
                       showSidebar ? 'block' : 'hidden'
                     } flex items-center space-x-1`}
                   >
+                    {item.plusIcon}
                     <MagnifyingGlassIcon
                       className="w-3 h-4"
                       aria-hidden="true"
                       onClick={() => dispatch(setSearchIsActive('TOGGLE'))}
                     />
-                    {isHovering === index && item.plusIcon}
                   </span>
                 )}
                 <span className={`${showSidebar ? 'block' : 'hidden'}`}>

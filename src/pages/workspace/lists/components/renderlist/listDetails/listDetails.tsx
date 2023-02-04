@@ -37,14 +37,14 @@ const addColumns: Icolumn[] = [
     },
   },
   {
-    name: "Progress (Auto)",
+    name: "Progress (Manual)",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
     },
   },
   {
-    name: "Progress (Auto)",
+    name: "Progress (Aut.)",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");
@@ -59,69 +59,6 @@ const addColumns: Icolumn[] = [
   },
   {
     name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress (Auto)",
-    icons: <MdArrowDropDownCircle />,
-    onclick: () => {
-      console.log("great");
-    },
-  },
-  {
-    name: "Progress",
     icons: <MdArrowDropDownCircle />,
     onclick: () => {
       console.log("great");

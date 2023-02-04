@@ -15,7 +15,6 @@ import {
 import emailIcon from '../assets/branding/email-icon.png';
 import hubIcon from '../assets/branding/hub.png';
 import InboxIcon from '../assets/branding/inbox.png';
-import filesIcon from '../assets/branding/file.png';
 import timeClockIcon from '../assets/branding/timeclock.png';
 import trackerIcon from '../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
@@ -113,7 +112,7 @@ function ExpandedNav() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
-  if (extendedSidebarWidth < 140 || activePlaceId === (0 || true)) {
+  if (activePlaceId === (0 || true)) {
     dispatch(setShowExtendedBar(false));
     dispatch(setExtendedSidebarWidth(240));
   }
@@ -123,12 +122,11 @@ function ExpandedNav() {
       ref={sidebarRef}
       style={
         showExtendedBar
-          ? { maxWidth: 321, width: extendedSidebarWidth, minWidth: '100px' }
+          ? { maxWidth: "320px", width: extendedSidebarWidth, minWidth: '230px' }
           : { width: '1px', minWidth: '1px' }
       }
-      // onMouseDown={(e) => e.preventDefault()}
     >
-      <span className="absolute z-20 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
+      <span className="absolute z-50 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
         {showExtendedBar && (
           <RiArrowLeftSLine
             className="text-sm text-white"
@@ -136,7 +134,11 @@ function ExpandedNav() {
           />
         )}
       </span>
-      <section className="z-10 h-screen overflow-x-hidden overflow-y-auto border-r border-gray-400">
+      <section
+        className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${
+          isResizing ? 'border-gray-500' : 'border-gray-300'
+        }`}
+      >
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
@@ -216,11 +218,30 @@ function ExpandedNav() {
               )
           )}
         </div>
-        <div
-          className="absolute top-0 bottom-0 right-0 h-full border-r-2 border-transparent justify-self-end shrink-0 hover:border-gray-600 grow-0 cursor-all-scroll hover:bg-green-100"
-          onMouseDown={startResizing}
-          style={{ cursor: 'col-resize', width: '4px' }}
-        ></div>
+        <span className="group">
+          <div
+            className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+              extendedSidebarWidth >= 230 && 'group-hover:bg-green-100'
+            }`}
+            onMouseDown={startResizing}
+            style={{
+              cursor: 'col-resize',
+              width: `${extendedSidebarWidth > 320 ? '4px' : '2px'}`,
+              right: '0.5px',
+            }}
+          ></div>
+          <div
+            className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
+              extendedSidebarWidth <= 320 && 'group-hover:bg-green-100'
+            }`}
+            style={{
+              cursor: 'col-resize',
+              width: `${extendedSidebarWidth < 230 ? '4px' : '2px'}`,
+              right: `${extendedSidebarWidth < 230 ? '-4px' : '-2px'}`,
+            }}
+            onMouseDown={startResizing}
+          ></div>
+        </span>
       </section>
     </div>
   );

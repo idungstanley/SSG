@@ -1,17 +1,11 @@
-import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import React from "react";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { useAppSelector } from "../../../../../../../app/hooks";
-import { getTaskListService } from "../../../../../../../features/task/taskService";
-import TaskData from "../../../../../tasks/component/taskData/TaskData";
-import SubTask from "../../../../../tasks/subtasks/create/SubTask";
-import RenderSubTasks from "../../../../../tasks/subtasks/subtask1/RenderSubTasks";
+import React from 'react';
+import { MdDragIndicator } from 'react-icons/md';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { useAppSelector } from '../../../../../../../app/hooks';
+import { getTaskListService } from '../../../../../../../features/task/taskService';
+import TaskData from '../../../../../tasks/component/taskData/TaskData';
+import SubTask from '../../../../../tasks/subtasks/create/SubTask';
+import RenderSubTasks from '../../../../../tasks/subtasks/subtask1/RenderSubTasks';
 
 interface listIdprops {
   listId: string;
@@ -19,22 +13,15 @@ interface listIdprops {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  const {
-    myTaskData,
-    listView,
-    tableView,
-    addNewTaskItem,
-    showTaskNavigation,
-    closeTaskListView,
-    currentParentTaskId,
-    getSubTaskId,
-  } = useAppSelector((state) => state.task);
+  const { currentParentTaskId, getSubTaskId } = useAppSelector(
+    (state) => state.task
+  );
 
   return (
     <div className="">
       {data?.data.tasks.map((task) => {
         return (
-          <div key={task.id} className="">
+          <div key={task.id} className="capitalize">
             <TaskData task={task} />
             {currentParentTaskId === task.id ? (
               <div>

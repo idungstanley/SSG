@@ -4,6 +4,7 @@
 
 @import url('./Spinner.css');
 @import url('./Tooltip.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat&display=swap');
 
 * {
   margin: 0;
@@ -13,11 +14,12 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #4e5258;
 }
 
 html {
@@ -46,8 +48,11 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
+  padding: 0 20px;
+  background-color: #fff;
+  border: gray;
 }
 
 ::-webkit-scrollbar-track {
@@ -55,11 +60,11 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(201, 201, 201);
+  background-color: #8a878786;
   border-radius: 30px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(153, 153, 153, 0.493);
+  background-color: #8a8787e9;
   width: 10px;
 }

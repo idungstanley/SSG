@@ -20,8 +20,8 @@ function RenderWallets() {
   const { data } = getWalletServices({ parentId: walletId });
 
   return (
-    <div className="overflow-auto h-screen">
-      <section id="nav">
+    <div className="h-screen">
+      <section id="nav" className="capitalize">
         <ListNav
           navName={currentWalletName}
           viewsList="List"
@@ -40,7 +40,7 @@ function RenderWallets() {
             ))}
           </div>
         </div>
-        <div className="ml-auto">
+        <div>
           <Pilot />
         </div>
       </section>

@@ -1,0 +1,5 @@
+.dynamic {
+  display: grid;
+  grid-auto-columns: 100px;
+  grid-auto-flow: column;
+}

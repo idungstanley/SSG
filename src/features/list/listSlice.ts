@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface ListState {
   list: string[];
   currentListId: null;
+  createTaskFromTop: boolean;
   delList: boolean;
   archiveList: boolean;
   toggleArchiveList: boolean;
@@ -11,13 +12,14 @@ interface ListState {
 const initialState: ListState = {
   list: [],
   currentListId: null,
+  createTaskFromTop: false,
   delList: false,
   archiveList: false,
   toggleArchiveList: false,
 };
 
 export const listSlice = createSlice({
-  name: 'list',
+  name: "list",
   initialState,
   reducers: {
     createList(state, action) {
@@ -38,6 +40,9 @@ export const listSlice = createSlice({
     setCurrentListId(state, action) {
       state.currentListId = action.payload;
     },
+    setCreateTaskFromTop(state, action) {
+      state.createTaskFromTop = action.payload;
+    },
     checkIfList: (state) => state,
   },
 });
@@ -47,6 +52,7 @@ export const {
   checkIfList,
   getList,
   setCurrentListId,
+  setCreateTaskFromTop,
   setDeleteList,
   setArchiveList,
   setToggleArchiveList,

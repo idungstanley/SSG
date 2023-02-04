@@ -1,35 +1,78 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import SubTask from '../../../../../../tasks/subtasks/create/SubTask';
+import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
+import ToolTip from '../../../../../../../components/Tooltip';
+import Status from '../status/Status';
+import Priority from '../priority/Priority';
+import CustomReference from '../customReference/CustomReference';
+import EntitySettings from '../entitySettings/EntitySettings';
+import Share from '../share/Share';
+import Assignees from '../assignees/Assignees';
+import Subscribers from '../subscribers/Subscribers';
+import { AvatarWithInitials } from '../../../../../../../components';
 
-interface DetailsIndexProps {
-  taskDetails: any;
+interface PropertyDetailsProps {
+  Details: any;
 }
-export default function SubDetails({ taskDetails }: DetailsIndexProps) {
+export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
   return (
     <>
-      <section className="p-2" key={taskDetails?.id}>
+      <div className="flex items-center justify-between p-2">
+        <section className="flex items-center space-x-3">
+          {/* <ToolTip tooltip="Status"> */}
+          <Status Details={Details} />
+          {/* </ToolTip> */}
+          <ToolTip tooltip="Priority">
+            <Priority Details={Details} />
+          </ToolTip>
+        </section>
+        <section className="flex items-center justify-center space-x-3">
+          <CustomReference />
+          <ToolTip tooltip="Share">
+            <Share />
+          </ToolTip>
+          <EntitySettings />
+        </section>
+      </div>
+      <section className="flex items-center mt-3 space-x-2">
+        <ToolTip tooltip="Assignees">
+          <Assignees />
+        </ToolTip>
+        <span className="text-gray-300">|</span>
+        <ToolTip tooltip="Subscribers">
+          <Subscribers />
+        </ToolTip>
+        <span className="text-gray-300">|</span>
+        <AvatarWithInitials
+          initials="DN"
+          backgroundColour="blue"
+          roundedStyle="rounded"
+          height="h-5"
+          width="w-5"
+        />
+      </section>
+      <section className="p-2" key={Details?.id}>
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>{taskDetails?.name}</p>
+            <p className="capitalize">{Details?.name}</p>
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md h-20">
-            <p>{taskDetails?.description}</p>
+            <p>{Details?.description}</p>
           </div>
         </div>
         {/* created time */}
         <div id="created time" className="mt-2">
           <label className="text-xs text-gray-500">Created</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>{moment(taskDetails?.created_at).format('MMM DD, hh:mm a')}</p>
+            <p>{moment(Details?.created_at).format('MMM DD, hh:mm a')}</p>
           </div>
         </div>
         {/* due date */}

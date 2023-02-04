@@ -27,6 +27,7 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
   const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const handleListLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
@@ -60,7 +61,14 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>
-            <section className="flex justify-between items-center text-sm pl-6 ml-0.5 h-8 hover:bg-gray-100">
+            <section
+              className={`flex relative justify-between items-center text-sm pl-6 h-8 hover:bg-gray-100 ${
+                list.id === activeItemId && 'bg-green-100 text-black font-medium'
+              }`}
+            >
+              {list.id === activeItemId && (
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
+              )}
               <div className="flex items-center justify-center space-x-1">
                 <BsListUl
                   className="flex-shrink-0 w-5 h-3"
@@ -69,8 +77,8 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
                 <button
                   type="button"
                   onClick={() => handleListLocation(list.id, list.name)}
-                  className="ml-2 tracking-wider capitalize"
-                  style={{ fontSize: '10px' }}
+                  className="ml-2 tracking-wider capitalize truncate cursor-pointer"
+                  style={{ fontSize: '12px' }}
                 >
                   {list.name.length > 10
                     ? list.name.substr(0, 10) + '...'

@@ -42,6 +42,10 @@ interface TaskState {
   initial_start_date: null;
   initial_end_date: null;
   openUpdateEntryId: null;
+  updateStatusModalId: null;
+  updateStatusModalIdForPilot: null;
+  currentTaskStatusId: null;
+  currentTaskPriorityId: null;
 }
 
 const initialState: TaskState = {
@@ -68,6 +72,10 @@ const initialState: TaskState = {
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
+  updateStatusModalId: null,
+  updateStatusModalIdForPilot: null,
+  currentTaskStatusId: null,
+  currentTaskPriorityId: null,
 };
 
 export const taskSlice = createSlice({
@@ -139,13 +147,21 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId4(state, action) {
       state.currentParentSubTaskId4 = action.payload;
     },
+    setCurrentTaskStatusId(state, action) {
+      state.currentTaskStatusId = action.payload;
+    },
+    setCurrentTaskPriorityId(state, action) {
+      state.currentTaskPriorityId = action.payload;
+    },
     setUpdateEntries(state, action) {
       state.initial_description = action.payload.initial_description;
       state.initial_start_date = action.payload.initial_start_date;
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-
+    setUpdateStatusModalId(state, action) {
+      state.updateStatusModalId = action.payload;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -172,5 +188,8 @@ export const {
   setCurrentParentSubTaskId3,
   setCurrentParentSubTaskId4,
   setUpdateEntries,
+  setUpdateStatusModalId,
+  setCurrentTaskStatusId,
+  setCurrentTaskPriorityId,
 } = taskSlice.actions;
 export default taskSlice.reducer;

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface workspaceState {
   workspace: string[];
@@ -8,6 +8,7 @@ interface workspaceState {
   activePlaceId: number | boolean;
   showExtendedBar: boolean;
   sidebarWidth: number;
+  pilotWidth: number;
   extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
@@ -23,8 +24,10 @@ interface workspaceState {
   currentWalletName: string | null;
   showPilot: boolean;
   showPilotIconView: boolean;
+  activeTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
+  activeSubTimeClockTabId: number | null;
 }
 
 const initialState: workspaceState = {
@@ -35,6 +38,7 @@ const initialState: workspaceState = {
   activePlaceId: 0,
   showExtendedBar: false,
   sidebarWidth: 300,
+  pilotWidth: 400,
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
@@ -50,19 +54,21 @@ const initialState: workspaceState = {
   currentWalletName: null,
   showPilot: false,
   showPilotIconView: false,
-  activeSubDetailsTabId: 0,
-  activeSubCommunicationTabId: 0,
+  activeTabId: 0,
+  activeSubDetailsTabId: 1,
+  activeSubTimeClockTabId: 0,
+  activeSubCommunicationTabId: 1,
 };
 
 export const wsSlice = createSlice({
-  name: 'workspace',
+  name: "workspace",
   initialState,
   reducers: {
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      if (action.payload === 'CHANGE') {
+      if (action.payload === "CHANGE") {
         return {
           ...state,
           showSidebar: !state.showSidebar,
@@ -77,6 +83,9 @@ export const wsSlice = createSlice({
     setSidebarWidth(state, action) {
       state.sidebarWidth = action.payload;
     },
+    setPilotWidth(state, action) {
+      state.pilotWidth = action.payload;
+    },
     setShowPilot(state, action) {
       state.showPilot = action.payload;
     },
@@ -87,7 +96,7 @@ export const wsSlice = createSlice({
       state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -95,7 +104,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
@@ -141,6 +150,12 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action) {
       state.activeSubDetailsTabId = action.payload;
     },
+    setActiveTabId(state, action) {
+      state.activeTabId = action.payload;
+    },
+    setActiveSubTimeClockTabId(state, action) {
+      state.activeSubTimeClockTabId = action.payload;
+    },
     setCurrentWalletName(state, action) {
       state.currentWalletName = action.payload;
     },
@@ -179,6 +194,9 @@ export const {
   setShowPilotIconView,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
+  setActiveSubTimeClockTabId,
+  setPilotWidth,
+  setActiveTabId,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
