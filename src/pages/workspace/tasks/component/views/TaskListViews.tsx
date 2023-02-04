@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { FiPlusCircle } from 'react-icons/fi';
-import { useAppSelector } from '../../../../../app/hooks';
-import AddColumnDropdown from '../../dropdown/AddColumnDropdown';
+import React, { useState } from "react";
+import { FiPlusCircle } from "react-icons/fi";
+import { useAppSelector } from "../../../../../app/hooks";
+import AddColumnDropdown from "../../dropdown/AddColumnDropdown";
 // import addColumns from '../../../lists/components/renderlist/listDetails/listDetails';
-import { useDispatch } from 'react-redux';
-import { getTaskColumns, setCloseTaskListView } from '../../../../../features/task/taskSlice';
-import './view.css';
+import { useDispatch } from "react-redux";
+import {
+  getTaskColumns,
+  setCloseTaskListView,
+} from "../../../../../features/task/taskSlice";
+import "./view.css";
 
-import '../taskData/task.css';
-import { IoIosArrowDropdown } from 'react-icons/io';
-import { columnsHead } from './ListColumns';
+import "../taskData/task.css";
+import { IoIosArrowDropdown } from "react-icons/io";
+import { columnsHead } from "./ListColumns";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -29,14 +32,14 @@ export default function TaskListViews() {
   return (
     <div
       className="flex items-center justify-between pt-5 bg-gray-100 z-20 w-12/12 "
-      style={{ backgroundColor: '#e1e4e5' }}
+      style={{ backgroundColor: "#e1e4e5" }}
     >
       <div className="flex">
         <div className=" flex items-center ">
           <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
             <IoIosArrowDropdown
               className={` text-gray-400 text-sm hover:text-gray-200  ${
-                closeTaskListView === false ? 'rotateimg90' : null
+                closeTaskListView === false ? "rotateimg90" : null
               }`}
               aria-hidden="true"
               onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
@@ -68,7 +71,7 @@ export default function TaskListViews() {
                     </div>
                   )
               )
-            : taskColumns.map(
+            : columnsHead.map(
                 (col) =>
                   col.value == "Task" &&
                   !col.hidden && (
@@ -99,7 +102,7 @@ export default function TaskListViews() {
                   </div>
                 )
             )
-          : taskColumns.map(
+          : columnsHead.map(
               (col) =>
                 col.value !== "Task" &&
                 !col.hidden && (
@@ -115,7 +118,7 @@ export default function TaskListViews() {
       </div>
       <span
         className=" flex absolute  right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
-        style={{ color: '#78828d' }}
+        style={{ color: "#78828d" }}
       >
         <FiPlusCircle
           className=" font-black hover:bg-white	"

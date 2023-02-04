@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -9,24 +9,24 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { MdDragIndicator } from 'react-icons/md';
+} from "../../../../../features/task/taskSlice";
+import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
+import { MdDragIndicator } from "react-icons/md";
 
-import { EditOutlined, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
+import { EditOutlined, PlusOutlined, UserAddOutlined } from "@ant-design/icons";
+import { useAppSelector } from "../../../../../app/hooks";
 // import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import './task.css';
+import AssignTask from "../../assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../components";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import "./task.css";
 interface TaskDataProps {
   task: any;
 }
-import { columnsHead } from '../views/ListColumns';
-import moment from 'moment';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import { columnsHead } from "../views/ListColumns";
+import moment from "moment";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'task',
+        activeItemType: "task",
         activeItemName: name,
       })
     );
@@ -103,7 +103,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
+    if (colfield === "assignees" && taskColField.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -114,7 +114,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'assignees' && taskColField.length === 0) {
+    } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
           className=" ml-2 text-gray-400 text-xl cursor-pointer "
@@ -125,10 +125,10 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format('MM/DD')}
+          {moment(taskColField).format("MM/DD")}
         </span>
       );
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
           <div className=" flex items-center">
@@ -182,7 +182,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -249,7 +249,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     </div>
                   )
               )
-            : columnsHead.map(
+            : taskColumns.map(
                 (col) =>
                   col.value !== "Task" &&
                   !col.hidden && (

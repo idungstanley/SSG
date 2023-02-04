@@ -23,6 +23,7 @@ function RenderList() {
   const {
     myTaskData,
     taskColumns,
+
     listView,
     tableView,
     addNewTaskItem,
@@ -34,6 +35,8 @@ function RenderList() {
   const { data: listDetailsData } = getTaskListService({ listId });
 
   const editable = myTaskData.map((o) => ({ ...o }));
+
+  console.log(taskColumns);
 
   useEffect(() => {
     const hidden = (col) => {
