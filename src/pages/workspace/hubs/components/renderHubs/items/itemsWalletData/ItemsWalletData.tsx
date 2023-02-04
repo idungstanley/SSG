@@ -3,17 +3,17 @@ import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+} from "@heroicons/react/24/outline";
+import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
 import {
   setCreateTaskFromTop,
   setCurrentListId,
-} from '../../../../../../../features/list/listSlice';
-import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
-import { getWalletServices } from '../../../../../../../features/wallet/walletService';
-import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
-import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
-import ListTemplate from '../ItemsHubData/ListTemplate';
+} from "../../../../../../../features/list/listSlice";
+import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
+import { getWalletServices } from "../../../../../../../features/wallet/walletService";
+import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
+import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
+import ListTemplate from "../ItemsHubData/ListTemplate";
 
 interface ItemsWalletDataProps {
   walletId: string | null;
@@ -40,7 +40,7 @@ export default function ItemsWalletData({
       <div>
         {data?.data.lists.map((item) => {
           return (
-            <div key={item.id} className="border p-5 rounded">
+            <div key={item.id} className="border rounded">
               <p className="text-xs font-semibold text-gray-400 capitalize">
                 {walletName}
               </p>
@@ -90,7 +90,7 @@ export default function ItemsWalletData({
                 <AddNewItem listId={item.id} />
               )}
               <div>
-                <div className="mt-5 ">
+                <div className="">
                   <TaskListViews />
                   <span>
                     <ListTemplate listId={item.id} />
