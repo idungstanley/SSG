@@ -205,8 +205,8 @@ export default function TaskData({ task }: TaskDataProps) {
   // console.log(groupTaskByStatus(myTaskData, 'in progress'));
 
   return (
-    <>
-      <div className="flex z-10 justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1">
+    <div className="relative ">
+      <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
         <div className=" flex w-6/12  items-center ">
           {hideTask.length
             ? hideTask.map(
@@ -263,9 +263,10 @@ export default function TaskData({ task }: TaskDataProps) {
                   )
               )}
         </div>
-
-        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
       </div>
-    </>
+      <span className="absolute z-30 shadow-2xl left-0 z-30 right-0 ">
+        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+      </span>
+    </div>
   );
 }
