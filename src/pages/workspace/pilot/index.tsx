@@ -83,7 +83,7 @@ export default function Pilot() {
   );
   return (
     <div
-      className={`flex h-full ease-in-out delay-300 duration-300 transition-all transform bg-white border ${
+      className={`flex h-full ease-in-out overflow-y-auto delay-300 duration-300 transition-all transform bg-white border ${
         !showPilot && selectedSection
           ? 'flex-row fixed z-40 top-16 right-0'
           : 'flex-col'

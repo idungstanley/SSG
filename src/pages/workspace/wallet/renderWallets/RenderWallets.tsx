@@ -20,7 +20,7 @@ function RenderWallets() {
   const { data } = getWalletServices({ parentId: walletId });
 
   return (
-    <div className="overflow-auto h-screen">
+    <div className="h-screen">
       <section id="nav" className="capitalize">
         <ListNav
           navName={currentWalletName}
