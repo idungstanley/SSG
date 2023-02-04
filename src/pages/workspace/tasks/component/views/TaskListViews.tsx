@@ -79,14 +79,14 @@ export default function TaskListViews() {
         )}
       </div>
       <span
-        className=" flex absolute z-50 right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+        className=" flex absolute  right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
         style={{ color: "#78828d" }}
       >
         <FiPlusCircle
           className=" font-black hover:bg-white	"
           onClick={() => handleDropDown()}
         />
-        <span className="text-sm z-30">
+        <span className="text-sm">
           {dropDown && <AddColumnDropdown title="" listItems={addColumns} />}
         </span>
       </span>

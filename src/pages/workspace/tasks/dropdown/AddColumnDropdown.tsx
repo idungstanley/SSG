@@ -19,12 +19,12 @@ export default function AddColumnDropdown({
 }: CustomDropdownProps) {
   const [column, setColumn] = useState(true);
   return (
-    <div className="relative z-50 ">
+    <div className="relative ">
       <div
-        className=" absolute  border-2 right-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto z-50 h-auto"
+        className=" absolute   border-2  right-0 mt-9 w-56 rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto "
         style={{ height: "300px" }}
       >
-        <div className="flex z-50 py-2 px-2 justify-around">
+        <div className="flex  py-2 px-2 justify-around">
           <p onClick={() => setColumn(!column)}>Show/Hide</p>
           <p onClick={() => setColumn(!column)}>New Column</p>
         </div>
@@ -45,7 +45,7 @@ export default function AddColumnDropdown({
           <div key={listItem.name}>
             {column && (
               <p
-                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full z-30"
+                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full "
                 onClick={listItem.onclick}
               >
                 {listItem.icons}
@@ -54,7 +54,7 @@ export default function AddColumnDropdown({
             )}
             {!column && (
               <p
-                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 z-30 w-full"
+                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300  w-full"
                 onClick={() => listItem.onclick}
                 key={listItem.name}
               >

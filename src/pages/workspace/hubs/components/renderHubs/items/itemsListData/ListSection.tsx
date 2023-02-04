@@ -46,7 +46,10 @@ export default function ListSection({ data }: any) {
               className="flex-shrink-0 w-5 h-4"
               aria-hidden="true"
             />
-            <p className="text-xs font-medium text-black font-sans capitalize">
+            <p
+              className="text-base font-semibold text-black	"
+              style={{ backgroundColor: "#e1e4e5" }}
+            >
               {data.name}
             </p>
 
