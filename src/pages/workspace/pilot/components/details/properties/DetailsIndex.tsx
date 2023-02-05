@@ -1,22 +1,22 @@
-import React from 'react';
-import Status from './status/Status';
-import Priority from './priority/Priority';
-import CustomReference from './customReference/CustomReference';
-import Share from './share/Share';
-import EntitySettings from './entitySettings/EntitySettings';
-import Assignees from './assignees/Assignees';
-import Subscribers from './subscribers/Subscribers';
-import { AvatarWithInitials } from '../../../../../../components';
-import SubDetails from './subDetailsType/tasks/SubDetails';
-import HubSubDetails from './subDetailsType/hubs/HubSubDetails';
-import { useAppSelector } from '../../../../../../app/hooks';
-import WalletSubDetails from './subDetailsType/wallets/WalletSubDetails';
-import ListSubDetails from './subDetailsType/lists/ListSubDetails';
-import { UseGetHubDetails } from '../../../../../../features/hubs/hubService';
-import { UseGetWalletDetails } from '../../../../../../features/wallet/walletService';
-import { UseGetListDetails } from '../../../../../../features/list/listService';
-import { getOneTaskServices } from '../../../../../../features/task/taskService';
-import ToolTip from '../../../../../../components/Tooltip';
+import React from "react";
+import Status from "./status/Status";
+import Priority from "./priority/Priority";
+import CustomReference from "./customReference/CustomReference";
+import Share from "./share/Share";
+import EntitySettings from "./entitySettings/EntitySettings";
+import Assignees from "./assignees/Assignees";
+import Subscribers from "./subscribers/Subscribers";
+import { AvatarWithInitials } from "../../../../../../components";
+import SubDetails from "./subDetailsType/tasks/SubDetails";
+import HubSubDetails from "./subDetailsType/hubs/HubSubDetails";
+import { useAppSelector } from "../../../../../../app/hooks";
+import WalletSubDetails from "./subDetailsType/wallets/WalletSubDetails";
+import ListSubDetails from "./subDetailsType/lists/ListSubDetails";
+import { UseGetHubDetails } from "../../../../../../features/hubs/hubService";
+import { UseGetWalletDetails } from "../../../../../../features/wallet/walletService";
+import { UseGetListDetails } from "../../../../../../features/list/listService";
+import { getOneTaskServices } from "../../../../../../features/task/taskService";
+import ToolTip from "../../../../../../components/Tooltip";
 
 export default function DetailsIndex() {
   const { activeItemId, activeItemType } = useAppSelector(
@@ -36,24 +36,25 @@ export default function DetailsIndex() {
     activeItemType,
   });
   const { data: task } = getOneTaskServices({ task_id: currentTaskIdForPilot });
+
   const taskDetails = task?.data.task;
   const hubDetails = hub?.data.hub;
   const walletDetails = wallet?.data.wallet;
   const listDetails = list?.data.list;
 
   const showDetailsType = () => {
-    if (activeItemType == 'hub' || activeItemType == 'subhub') {
+    if (activeItemType == "hub" || activeItemType == "subhub") {
       return <HubSubDetails hubDetails={hubDetails} key={hubDetails?.id} />;
-    } else if (activeItemType == 'task') {
+    } else if (activeItemType == "task") {
       return <SubDetails taskDetails={taskDetails} key={taskDetails?.id} />;
-    } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
+    } else if (activeItemType == "wallet" || activeItemType == "subWallet") {
       return (
         <WalletSubDetails
           walletDetails={walletDetails}
           key={walletDetails?.id}
         />
       );
-    } else if (activeItemType == 'list') {
+    } else if (activeItemType == "list") {
       return <ListSubDetails listDetails={listDetails} key={listDetails?.id} />;
     }
   };

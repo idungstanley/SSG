@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getOneTaskServices } from "../taskService";
 
 export interface ImyTaskData {
   //   id: string;
@@ -23,28 +24,30 @@ interface checklistState {
 }
 
 const initialState: checklistState = {
-  checklist: [
-    {
-      name: "Checklist",
-    },
-    {
-      name: "Checklist",
-    },
-  ],
+  checklist: [],
 };
 
 export const checklistSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    createchecklistSlice(state, action) {
-      state.checklist.push(action.payload);
-    },
-    // getchecklist(state, { payload }) {
-    //   state.checklist.push(payload);
+    // createchecklistSlice(state, action) {
+    //   // state.checklist.push(action.payload);
+    //   console.log(state.checklist);
     // },
+    getchecklist(state, { payload }) {
+      console.log(state.checklist);
+      const { data: task } = getOneTaskServices({ task_id: payload });
+      const singleTask = task?.data.task;
+      const task_checklists = singleTask?.task_checklists;
+      state.checklist = task_checklists;
+      // return task_checklists;
+    },
   },
 });
 
-export const { createchecklistSlice } = checklistSlice.actions;
+export const { getchecklist } = checklistSlice.actions;
+
+export const selectChecklists = (initialState) => initialState.checklist;
+
 export default checklistSlice.reducer;
