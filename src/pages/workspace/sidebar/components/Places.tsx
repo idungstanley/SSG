@@ -14,7 +14,6 @@ import Inbox from '../../inbox';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
 import InboxIcon from '../../../../assets/branding/inbox.png';
-import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
 import routePlanner from '../../../../assets/branding/gis_route.png';

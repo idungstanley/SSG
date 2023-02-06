@@ -133,7 +133,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
                     <VscTriangleRight
                       className="flex-shrink-0 h-2"
                       aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
+                      color="#BBBDC0"
                     />
                     <FaFolder color="rgba(72, 67, 67, 0.64)" />
                   </div>

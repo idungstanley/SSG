@@ -61,7 +61,7 @@ export default function TabDrag({
           id === activeTabId
             ? 'bg-gray-300 text-black'
             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-          showPilot ? 'border-y-2 border gap-2 pr-6' : 'py-3 px-3',
+          showPilot ? 'border gap-2 pr-6' : 'py-3 px-3',
           showPilotIconView ? 'w-12' : '',
           'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
         )}
