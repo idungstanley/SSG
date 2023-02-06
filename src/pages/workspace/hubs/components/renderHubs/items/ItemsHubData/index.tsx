@@ -134,7 +134,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                 }}
               >
                 <p
-                  className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold "
+                  className=" text-xs   mt-1 cursor-pointer ml-9 font-semibold "
                   style={{ color: "#78828d", fontSize: "11px" }}
                 >
                   + New Task

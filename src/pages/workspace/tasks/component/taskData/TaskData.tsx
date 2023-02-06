@@ -59,6 +59,7 @@ export default function TaskData({ task }: TaskDataProps) {
   const handleTaskStatus = (id: string) => {
     dispatch(setCurrentTaskStatusId(id));
   };
+
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
@@ -128,6 +129,44 @@ export default function TaskData({ task }: TaskDataProps) {
           {moment(taskColField).format("MM/DD")}
         </span>
       );
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
+        return (
+          <div
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 bg-gray-400 w-20 absolute text-center"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "in progress") {
+        return (
+          <div
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 bg-gray-400 w-20 absolute text-center"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "archived") {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1 bg-gray-400 w-20 absolute"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "todo") {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      }
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
@@ -142,21 +181,30 @@ export default function TaskData({ task }: TaskDataProps) {
             />
             <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
           </div>
-          <div onClick={() => handleGetSubTask(task.id)} className="">
+          <div
+            onClick={() => handleGetSubTask(task.id)}
+            className="items-center"
+          >
             {task.id == getSubTaskId ? (
               <span className="flex flex-col">
-                <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
+                <VscTriangleDown
+                  className="flex-shrink-0 h-2"
+                  color="rgba(72, 67, 67, 0.64)"
+                />
               </span>
             ) : (
               <VscTriangleRight
-                className="flex-shrink-0 h-3"
+                className="flex-shrink-0 h-2"
                 aria-hidden="true"
                 color="rgba(72, 67, 67, 0.64)"
               />
             )}
           </div>
           <div className="flex items-center">
-            <p onClick={() => handleTaskStatus(task.id)} className="relative">
+            <p
+              onClick={() => handleTaskStatus(task.id)}
+              className="relative pt-1 pr-1"
+            >
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <p
@@ -182,7 +230,15 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    }
+    // else if (colfield == "description") {
+    //   return (
+    //     <span className="text-gray-400 text-sm font-medium">
+    //       <p>jkhsbdfkjsbvkjrghdfbvjkhrf</p>
+    //     </span>
+    //   );
+    // }
+    else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "

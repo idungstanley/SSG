@@ -111,7 +111,7 @@ export default function ItemsWalletData({
                   dispatch(setCurrentListId(item.id));
                 }}
               >
-                <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                <p className="text-xs   mt-1 cursor-pointer ml-9 font-semibold text-gray-400">
                   + New Task
                 </p>
               </div>

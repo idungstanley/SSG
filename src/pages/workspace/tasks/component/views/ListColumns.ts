@@ -52,7 +52,7 @@ export const columnsHead:
   {
     field: "status",
     value: "Status",
-    hidden: true,
+    hidden: false,
     onclick: () => {
       alert("great");
     },
