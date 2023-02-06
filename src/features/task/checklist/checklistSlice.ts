@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, TaskAbortError } from "@reduxjs/toolkit";
 import { stat } from "fs";
 import { getOneTaskServices } from "../taskService";
 import { getaTaskServices } from "./checklistService";
@@ -6,6 +6,7 @@ import { getaTaskServices } from "./checklistService";
 export interface ImyTaskData {
   //   id: string;
   name: string;
+  taskId: any;
   //   description: string | null;
   //   list_id: string;
   //   parent_id: string | null;
@@ -23,20 +24,14 @@ export interface ImyTaskData {
 
 interface checklistState {
   checklist: any[];
+  addnew: any;
+  taskId: any;
 }
 
 const initialState: checklistState = {
-  checklist: [
-    {
-      name: "Checklist",
-    },
-    {
-      name: "Checklist",
-    },
-    {
-      name: "Checklist",
-    },
-  ],
+  checklist: [],
+  addnew: null,
+  taskId: null,
 };
 
 export const checklistSlice = createSlice({
@@ -47,15 +42,25 @@ export const checklistSlice = createSlice({
     //   // state.checklist.push(action.payload);
     //   console.log(state.checklist);
     // },
+    checkLists(state, { payload }) {
+      const { data: task } = getOneTaskServices({ task_id: payload });
+      const singleTask = task?.data.task;
+      const task_checklists = singleTask?.task_checklists;
+      state.checklist = task_checklists;
+    },
     getchecklist(state, { payload }) {
       state.checklist = payload;
     },
     updateList(state, action) {
       state.checklist.push(action.payload);
     },
+    getTaskId(state, action) {
+      state.taskId = action.payload;
+    },
   },
 });
 
-export const { getchecklist, updateList } = checklistSlice.actions;
+export const { getchecklist, updateList, getTaskId, checkLists } =
+  checklistSlice.actions;
 
 export default checklistSlice.reducer;

@@ -3,6 +3,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../app/hooks";
 import {
+  checkLists,
   getchecklist,
   updateList,
 } from "../../../../../features/task/checklist/checklistSlice";
@@ -18,6 +19,12 @@ export default function Checklist() {
   const dispatch = useDispatch();
   const { checklist } = useAppSelector((state) => state.checklist);
   const [checklists, setChecklists] = useState<any>(checklist);
+  const { currentParentTaskId } = useAppSelector((state) => state.task);
+
+  dispatch(checkLists(currentParentTaskId));
+  // const task = data?.data.task;
+  // const task_lists = task.task_checklists;
+  // console.log(task_lists);
 
   useEffect(() => {
     setChecklists(checklist);
