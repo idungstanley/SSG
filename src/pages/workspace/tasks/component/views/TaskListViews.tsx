@@ -9,13 +9,11 @@ import {
   setCloseTaskListView,
 } from "../../../../../features/task/taskSlice";
 import "./view.css";
-
 import "../taskData/task.css";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { columnsHead } from "./ListColumns";
 import { MdDragIndicator } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
-
 export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
@@ -66,7 +64,7 @@ export default function TaskListViews() {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                      className="flex mt-1 items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
                       style={{ color: "#78828d", fontSize: "11px" }}
                     >
                       {col.value}
@@ -79,7 +77,7 @@ export default function TaskListViews() {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-400 hover:text-gray-50 group"
+                      className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
                       style={{ color: "#78828d", fontSize: "10px" }}
                     >
                       {col.value}
@@ -89,7 +87,7 @@ export default function TaskListViews() {
         </div>
       </div>
 
-      <div className="grid dynamic  justify-between">
+      <div className="grid dynamic  justify-between mr-10">
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -97,7 +95,7 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-200 hover:text-gray-50 group"
+                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-200 hover:text-gray-50 border-r-2  border-gray-400 group"
                     style={{ color: "#78828d", fontSize: "10px" }}
                   >
                     {col.value}
@@ -110,7 +108,7 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-200  hover:text-gray-50 group"
+                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-200  hover:text-gray-50 hover:border-r-2  border-gray-400  group"
                     style={{
                       color: "#78828d",
                       fontSize: "10px",
@@ -123,7 +121,7 @@ export default function TaskListViews() {
                       {col.value}
                     </span>
                     <span>
-                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-pointer text-sm" />
+                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                     </span>
                   </div>
                 )

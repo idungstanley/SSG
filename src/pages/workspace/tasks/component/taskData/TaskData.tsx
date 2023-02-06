@@ -234,7 +234,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   )
               )}
         </div>
-        <div className=" dynamic ">
+        <div className=" dynamic mr-10 ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
