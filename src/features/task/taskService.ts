@@ -55,6 +55,31 @@ export const getOneTaskServices = ({ task_id }) => {
   );
 };
 
+//create checklist
+export const UseCreateCheckList = ({ task_id, trigger }) => {
+  // const queryClient = useQueryClient();
+  console.log(trigger);
+  return useQuery(
+    ['task'],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/checklist`,
+          method: 'POST',
+          params: {
+            name: 'Checklist',
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: trigger != false,
+    }
+  );
+};
+
 export const UseUpdateTaskStatusService = ({
   task_id,
   statusDataUpdate,
