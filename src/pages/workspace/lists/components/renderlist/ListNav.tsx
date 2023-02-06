@@ -6,10 +6,14 @@ import { getListView } from "../../../../../features/task/taskSlice";
 import { getTableView } from "../../../../../features/task/taskSlice";
 import TaskMenu from "../../../tasks/component/taskMenu/TaskMenu";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { BsListStars } from "react-icons/bs";
+import { BsLayers, BsListStars } from "react-icons/bs";
 import { CiViewTable } from "react-icons/ci";
 import { VscEllipsis } from "react-icons/vsc";
 import { GrFormSearch } from "react-icons/gr";
+import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
+import { TbSubtask } from "react-icons/tb";
+import { IoPeopleOutline } from "react-icons/io5";
+import { BiShow } from "react-icons/bi";
 
 interface ListNavProps {
   navName?: string | null;
@@ -137,18 +141,48 @@ function ListNav({
             className="border-transparent focus:border-transparent focus:ring-0 font-bold"
             style={{ fontSize: "11px" }}
           />{" "}
-          <span className="border-r pr-2 border-gray-400	 ">
-            <VscEllipsis />
+          <span className=" p-1 border-gray-400	hover:bg-gray-200  rounded space-x-2">
+            <VscEllipsis className=" border-r" />
           </span>
         </div>
         <div className="flex items-center gap-5 text-xs font-bold">
-          <p>filter</p>
-          <p>Group by: Status</p>
-          <p>Subtask</p>
-          <p>Me</p>
-          <p>Assignee</p>
-          <p>show</p>
-          <span className=" ">
+          <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+            <span>
+              <MdFilterList />
+            </span>
+            filter
+          </p>
+          <p className="flex items-center gap-1 bg-blue-100	p-1 rounded text-blue-600 cursor-pointer hover:text-blue-800 rounded">
+            <span>
+              <BsLayers />
+            </span>
+            Group by: Status
+          </p>
+          <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+            <span>
+              <TbSubtask />
+            </span>
+            Subtask
+          </p>
+          <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+            <span>
+              <MdOutlinePersonOutline />
+            </span>
+            Me
+          </p>
+          <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+            <span>
+              <IoPeopleOutline />
+            </span>
+            Assignee
+          </p>
+          <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+            <span>
+              <BiShow />
+            </span>
+            show
+          </p>
+          <span className="hover:bg-gray-200 p-1 rounded ">
             <VscEllipsis />
           </span>
         </div>
