@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../app/hooks";
-import { getchecklist } from "../../../../../features/task/checklist/checklistSlice";
 import {
-  createChecklist,
-  createChecklistService,
-} from "../../../../../features/task/checklist/checklistService";
+  getchecklist,
+  updateList,
+} from "../../../../../features/task/checklist/checklistSlice";
+import { createChecklistService } from "../../../../../features/task/checklist/checklistService";
 import { getOneTaskServices } from "../../../../../features/task/taskService";
 import { getaTaskServices } from "../../../../../features/task/checklist/checklistService";
 
@@ -16,44 +16,20 @@ type checklistItem = {
 
 export default function Checklist() {
   const dispatch = useDispatch();
-  const [checklists, setChecklists] = useState<any>(null);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  getaTaskServices(currentTaskIdForPilot);
-
-  // const { data: task } = getOneTaskServices({ task_id: currentTaskIdForPilot });
-  // const singleTask = task?.data.task;
-  // const task_checklists = singleTask?.task_checklists;
-
-  // dispatch(getchecklist(currentTaskIdForPilot));
-
   const { checklist } = useAppSelector((state) => state.checklist);
+  const [checklists, setChecklists] = useState<any>(checklist);
+
   useEffect(() => {
     setChecklists(checklist);
   }, [checklists, checklist]);
-  // setChecklists(checklist);
 
   const addChecklist = () => {
-    const newChecklist: checklistItem = {
-      name: "Checklist",
-    };
-    const data = {
-      taskId: currentTaskIdForPilot,
-      name: "Checklist",
-    };
-    createChecklist(data);
-    // createChecklistService(data);
+    dispatch(
+      updateList({
+        name: "Checklist",
+      })
+    );
   };
-
-  // const updateList = () => {
-  //   const { data: task } = getaTaskServices({
-  //     task_id: currentTaskIdForPilot,
-  //   });
-  //   const singleTask = task?.data.task;
-  //   const task_checklists = singleTask?.task_checklists;
-  //   setChecklists(task_checklists);
-
-  // };
-
   return (
     <>
       <div>
