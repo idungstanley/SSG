@@ -5,21 +5,6 @@ import { useDispatch } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getchecklist } from "./checklistSlice";
 
-export const createChecklistService = (data) => {
-  const { taskId } = data;
-  const response = requestNew(
-    {
-      url: `/at/tasks/${taskId}/checklist`,
-      method: "POST",
-      data: {
-        name: data.name,
-      },
-    },
-    true
-  );
-  return response;
-};
-
 export const getaTaskServices = ({ task_id }) => {
   const dispatch = useDispatch();
   const onSuccess = (data) => {
@@ -57,4 +42,26 @@ export const getChecklist = async (task_id) => {
     true
   );
   return data?.data.task.task_checklists;
+};
+
+export const UseCreateChecklist = ({ task_id, trigger }) => {
+  return useQuery(
+    ["task"],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/checklist`,
+          method: "POST",
+          params: {
+            name: "Checklist",
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: trigger != false,
+    }
+  );
 };

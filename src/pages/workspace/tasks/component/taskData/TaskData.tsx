@@ -25,13 +25,8 @@ interface TaskDataProps {
 }
 import { columnsHead } from "../views/ListColumns";
 import moment from "moment";
-import {
-  getaTaskServices,
-  getChecklist,
-} from "../../../../../features/task/checklist/checklistService";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import { getTaskId } from "../../../../../features/task/checklist/checklistSlice";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -59,7 +54,6 @@ export default function TaskData({ task }: TaskDataProps) {
         activeItemName: name,
       })
     );
-    dispatch(getTaskId(id));
   };
 
   const handleTaskStatus = (id: string) => {

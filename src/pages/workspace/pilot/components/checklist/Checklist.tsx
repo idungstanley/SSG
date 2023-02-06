@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../app/hooks";
+import { getchecklist } from "../../../../../features/task/checklist/checklistSlice";
 import {
-  checkLists,
-  getchecklist,
-  updateList,
-} from "../../../../../features/task/checklist/checklistSlice";
-import { createChecklistService } from "../../../../../features/task/checklist/checklistService";
-import { getOneTaskServices } from "../../../../../features/task/taskService";
-import { getaTaskServices } from "../../../../../features/task/checklist/checklistService";
+  createChecklistService,
+  getOneTaskServices,
+} from "../../../../../features/task/taskService";
+import { UseCreateChecklist } from "../../../../../features/task/checklist/checklistService";
 
 type checklistItem = {
   name: string;
@@ -17,38 +15,43 @@ type checklistItem = {
 
 export default function Checklist() {
   const dispatch = useDispatch();
+  const [checklists, setChecklists] = useState<any>(null);
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
+  const [updateChecklist, setUpdateChecklist] = useState<boolean>(false);
+  dispatch(getchecklist(currentTaskIdForPilot));
+
+  const { data, status } = UseCreateChecklist({
+    task_id: currentTaskIdForPilot,
+    trigger: triggerCreate,
+  });
+
+  // console.log(status);
+  const { data: task, refetch } = getOneTaskServices({
+    task_id: currentTaskIdForPilot,
+  });
+  console.log(task?.data.task.task_checklists);
+  if (status == "success") {
+    refetch();
+  }
+
   const { checklist } = useAppSelector((state) => state.checklist);
-  const [checklists, setChecklists] = useState<any>(checklist);
-  const { currentParentTaskId } = useAppSelector((state) => state.task);
-
-  dispatch(checkLists(currentParentTaskId));
-  // const task = data?.data.task;
-  // const task_lists = task.task_checklists;
-  // console.log(task_lists);
-
   useEffect(() => {
     setChecklists(checklist);
   }, [checklists, checklist]);
 
-  const addChecklist = () => {
-    dispatch(
-      updateList({
-        name: "Checklist",
-      })
-    );
-  };
   return (
     <>
       <div>
         <button
           className="px-5  py-2.5 text-xl cursor-pointer"
-          onClick={addChecklist}
+          onClick={() => setTriggerCreate(true)}
         >
           + ADD CHECKLIST
         </button>
         <div>
-          {checklists &&
-            checklists.map((item, index) => {
+          {task?.data.task.task_checklists &&
+            task?.data.task.task_checklists.map((item, index) => {
               return (
                 <div key={index}>
                   <div className="flex items-center">

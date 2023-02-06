@@ -55,6 +55,34 @@ export const getOneTaskServices = ({ task_id }) => {
   );
 };
 
+export const createChecklistService = (query) => {
+  const queryClient = useQueryClient();
+  const { taskId } = query;
+  console.log(query.trigger);
+  return useQuery(
+    ["task", taskId],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `/at/tasks/${taskId}/checklist`,
+          method: "POST",
+          params: {
+            name: query.name,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: query.trigger == true,
+      onSuccess: () => {
+        queryClient.invalidateQueries(["task"]);
+      },
+    }
+  );
+};
+
 export const UseUpdateTaskStatusService = ({
   task_id,
   statusDataUpdate,
