@@ -34,7 +34,7 @@ export default function ItemsWalletData({
   return (
     <section>
       {/* wallets */}
-      <div>{data?.data.wallets.map((item) => item.name)}</div>
+      {/* <div>{data?.data.wallets.map((item) => item.name)}</div> */}
 
       {/* lists */}
       <div>

@@ -13,6 +13,8 @@ import "./view.css";
 import "../taskData/task.css";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { columnsHead } from "./ListColumns";
+import { MdDragIndicator } from "react-icons/md";
+import { FaSort } from "react-icons/fa";
 
 export default function TaskListViews() {
   const dispatch = useDispatch();
@@ -77,8 +79,8 @@ export default function TaskListViews() {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className="flex mt-1 items-center uppercase    text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                      style={{ color: "#78828d", fontSize: "11px" }}
+                      className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-400 hover:text-gray-50 group"
+                      style={{ color: "#78828d", fontSize: "10px" }}
                     >
                       {col.value}
                     </div>
@@ -95,8 +97,8 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                    style={{ color: "#78828d", fontSize: "11px" }}
+                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-200 hover:text-gray-50 group"
+                    style={{ color: "#78828d", fontSize: "10px" }}
                   >
                     {col.value}
                   </div>
@@ -108,20 +110,31 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex px-3 items-center uppercase  text-xs mt-1 font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                    style={{ color: "#78828d", fontSize: "11px" }}
+                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-200  hover:text-gray-50 group"
+                    style={{
+                      color: "#78828d",
+                      fontSize: "10px",
+                    }}
                   >
-                    {col.value}
+                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                      <MdDragIndicator />
+                    </span>
+                    <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                      {col.value}
+                    </span>
+                    <span>
+                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-pointer text-sm" />
+                    </span>
                   </div>
                 )
             )}
       </div>
       <span
-        className=" flex absolute  right-0 items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+        className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
         style={{ color: "#78828d" }}
       >
         <FiPlusCircle
-          className=" font-black hover:bg-white	"
+          className=" font-black hover:bg-white 	"
           onClick={() => handleDropDown()}
         />
         <span className="text-sm z-30">
