@@ -34,7 +34,7 @@ export default function TabDrag({
     id,
   });
   const dispatch = useDispatch();
-  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const { activeTabId, showPilotListView } = useAppSelector((state) => state.workspace);
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
@@ -63,12 +63,19 @@ export default function TabDrag({
             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
           showPilot ? 'border gap-2 pr-6' : 'py-3 px-3',
           showPilotIconView ? 'w-12' : '',
-          'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex justify-center transition'
+          !showPilotIconView && !showPilotListView ? 'justify-center' : '',
+          'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex transition'
         )}
         aria-current={id === activeTabId ? 'page' : undefined}
       >
         {id === activeTabId && (
-          <span className="absolute top-0 left-0 right-0 bg-green-500 h-0.5 w-fit"></span>
+          <span
+            className={`absolute bg-green-500 ${
+              showPilotListView
+                ? 'top-0 left-0 bottom-0 w-1'
+                : 'top-0 left-0 right-0 h-0.5 w-fit'
+            }`}
+          ></span>
         )}
         <div className="flex items-center">
           <span

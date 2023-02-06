@@ -16,6 +16,7 @@ import {
   setPilotWidth,
   setShowPilot,
   setShowPilotIconView,
+  setShowPilotListView,
 } from '../../../../features/workspace/workspaceSlice';
 // import { MdDragIndicator } from 'react-icons/md';
 import { TfiLayoutListThumb } from 'react-icons/tfi';
@@ -104,6 +105,13 @@ function Tab() {
       dispatch(setShowPilotIconView(true));
     }
   };
+  const handleShowPilotListView = () => {
+    if (showPilotListView) {
+      dispatch(setShowPilotListView(false));
+    } else {
+      dispatch(setShowPilotListView(true));
+    }
+  };
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [items, setItems] = useState(
@@ -153,7 +161,7 @@ function Tab() {
         aria-label="Tabs"
         style={showPilot ? { width: '400px' } : { width: '48px' }}
       >
-        <section className="flex justify-between items-center h-12">
+        <section className="flex justify-between border items-center h-12">
           {activeItemName && showPilot && (
             <div
               id="entity"
@@ -186,8 +194,8 @@ function Tab() {
         </section>
         <div
           className={`flex flex-wrap relative divide-x ${
-            showPilot ? 'flex-row' : 'flex-col'
-          }`}
+            !showPilotListView && !showPilotIconView && 'flex-row'
+          } ${showPilotListView && 'flex-col'}`}
         >
           {showPilot && (
             <span className="z-10 text-xs border flex flex-col w-8 justify-between items-center">
@@ -200,10 +208,9 @@ function Tab() {
                 }`}
               />
               <TfiLayoutListThumb
+                onClick={() => handleShowPilotListView()}
                 className={`w-4 h-4 flex flex-col w-8 justify-between items-center hover:text-green-500 ${
-                  showPilotListView
-                    ? 'text-green-500'
-                    : ''
+                  showPilotListView ? 'text-green-500' : ''
                 }`}
               />
             </span>
