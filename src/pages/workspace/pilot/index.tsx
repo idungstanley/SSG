@@ -1,20 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useAppSelector } from "../../../app/hooks";
-import Tab from "./components/Tabs";
-import History from "../../newExplorer/components/Pilot/components/History";
-import Permissions from "../../newExplorer/components/Pilot/components/Permissions";
-import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
-import ChatForPilot from "../../../components/Chat/ChatForPilot";
-import Commnunication from "./components/communication/Communication";
-import Details from "./components/details/Details";
-import Checklist from "./components/checklist/Checklist";
-import { useDispatch } from "react-redux";
-import TimeClock from "./components/timeClock/subtabs/TimeClock";
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useAppSelector } from '../../../app/hooks';
+import Tab from './components/Tabs';
+import History from '../../newExplorer/components/Pilot/components/History';
+import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
+import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
+import Commnunication from './components/communication/Communication';
+import Details from './components/details/Details';
+import Checklist from './components/checklist/Checklist';
+import { useDispatch } from 'react-redux';
+import TimeClock from './components/timeClock/subtabs/TimeClock';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
-  setPilotWidth,
-} from "../../../features/workspace/workspaceSlice";
+  setActiveTabId,
+} from '../../../features/workspace/workspaceSlice';
 
 const sections = [
   {
@@ -48,18 +47,18 @@ const sections = [
 ];
 
 export default function Pilot() {
-  const [activeTabId, setActiveTabId] = useState<number>(-1);
   const dispatch = useDispatch();
   const {
     showPilot,
     activeSubCommunicationTabId,
     activeItemId,
     activeSubDetailsTabId,
+    activeTabId,
   } = useAppSelector((state) => state.workspace);
   const hoverRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (activeItemId != null) {
-      setActiveTabId(4);
+      dispatch(setActiveTabId(4));
     }
     const checkHoverOutside = () => {
       if (showPilot === false && hoverRef.current) {
@@ -67,9 +66,9 @@ export default function Pilot() {
         dispatch(setActiveSubDetailsTabId(null));
       }
     };
-    hoverRef.current?.addEventListener("mouseleave", checkHoverOutside);
+    hoverRef.current?.addEventListener('mouseleave', checkHoverOutside);
     return () => {
-      hoverRef.current?.removeEventListener("mouseleave", checkHoverOutside);
+      hoverRef.current?.removeEventListener('mouseleave', checkHoverOutside);
     };
   }, [
     activeSubCommunicationTabId,
@@ -84,15 +83,15 @@ export default function Pilot() {
   );
   return (
     <div
-      className={`flex h-full ease-in-out delay-300 duration-300 transition-all transform bg-white border ${
+      className={`flex h-full ease-in-out overflow-y-auto delay-300 duration-300 transition-all transform bg-white border ${
         !showPilot && selectedSection
-          ? "flex-row fixed z-40 top-16 right-0"
-          : "flex-col"
+          ? 'flex-row fixed z-40 top-16 right-0'
+          : 'flex-col'
       }`}
       ref={hoverRef}
     >
       {/* navigation */}
-      <Tab activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <Tab />
       {/* main section depends of active tab */}
       <div>{selectedSection ? selectedSection.element : null}</div>
     </div>

@@ -1,8 +1,9 @@
 import requestNew from "../../app/requestNew";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAppDispatch } from "../../app/hooks";
 import { getTaskData, setToggleAssignCurrentTaskId } from "./taskSlice";
 import { useDispatch } from "react-redux";
+import { UpdateTaskProps } from "./interface.tasks";
 
 export const createTaskService = (data) => {
   const response = requestNew(
@@ -35,7 +36,7 @@ export const getOneTaskService = (data) => {
 
 //getOneTask
 export const getOneTaskServices = ({ task_id }) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ["task", { task_id: task_id }],
     async () => {
@@ -50,13 +51,68 @@ export const getOneTaskServices = ({ task_id }) => {
     },
     {
       enabled: task_id != null,
-      // onSuccess: (data) => {
-      //   const taskData = data.data.tasks.map((task) => {
-      //     queryClient.setQueryData(['task', task.id], task);
-      //     return { ...task };
-      //   });
-      //   dispatch(getTaskData(taskData));
-      // },
+    }
+  );
+};
+
+export const UseUpdateTaskStatusService = ({
+  task_id,
+  statusDataUpdate,
+  priorityDataUpdate,
+}: UpdateTaskProps) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["task", { task_id, statusDataUpdate, priorityDataUpdate }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `at/tasks/${task_id}`,
+          method: "PUT",
+          params: {
+            status: statusDataUpdate,
+            // priority: priorityDataUpdate,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
+      enabled: task_id != null && statusDataUpdate !== "",
+      onSuccess: () => {
+        queryClient.invalidateQueries(["task"]);
+      },
+    }
+  );
+};
+
+export const UseUpdateTaskStatusServices = ({
+  task_id,
+  priorityDataUpdate,
+}: UpdateTaskProps) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["task", { task_id, priorityDataUpdate }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `at/tasks/${task_id}`,
+          method: "PUT",
+          params: {
+            priority: priorityDataUpdate,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
+      enabled: task_id != null && priorityDataUpdate !== "",
+      onSuccess: () => {
+        queryClient.invalidateQueries(["task"]);
+      },
     }
   );
 };

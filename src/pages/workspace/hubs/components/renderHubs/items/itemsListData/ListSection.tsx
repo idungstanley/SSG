@@ -2,23 +2,23 @@ import {
   CalendarOutlined,
   FlagOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import React from 'react';
-import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
-import ItemsListsData from './ItemsListsData';
-import '../ItemsHubData/wallet.css';
-import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
+} from "@heroicons/react/24/outline";
+import React from "react";
+import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
+import ItemsListsData from "./ItemsListsData";
+import "../ItemsHubData/wallet.css";
+import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
+import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
+import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice";
 import {
   setCreateTaskFromTop,
   setCurrentListId,
-} from '../../../../../../../features/list/listSlice';
+} from "../../../../../../../features/list/listSlice";
 
 export default function ListSection({ data }: any) {
   const { addNewTaskItem } = useAppSelector((state) => state.task);
@@ -30,14 +30,26 @@ export default function ListSection({ data }: any) {
 
   return (
     <section id="listcard" className=" m-1 bg-white last " key={data.id}>
-      <div className="border p-5 rounded bg-gray-100">
+      <div
+        className="border p-5 rounded relative"
+        style={{ backgroundColor: "#e1e4e5" }}
+      >
+        <div
+          className=" absolute  left-0 top-0 h-full w-1 rounded-l-md"
+          style={{ backgroundColor: "#78828d" }}
+        >
+          <p className="opacity-0">t</p>
+        </div>
         <div id="listTitle" className="flex items-center justify-between">
           <div className="group flex items-center justify-center text-gray-400">
             <ChevronDownIcon
               className="flex-shrink-0 w-5 h-4"
               aria-hidden="true"
             />
-            <p className="text-xs font-medium text-black font-sans capitalize">
+            <p
+              className="text-base font-semibold text-black	"
+              style={{ backgroundColor: "#e1e4e5" }}
+            >
               {data.name}
             </p>
 
@@ -76,9 +88,8 @@ export default function ListSection({ data }: any) {
         {createTaskFromTop && currentListId === data.id && (
           <AddNewItem listId={data.id} />
         )}
-
         {/* card */}
-        <div className="mt-5">
+        <div className="">
           {/* data and input */}
           <TaskListViews />
           <div>{<ItemsListsData listId={data.id} />}</div>

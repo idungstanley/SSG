@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface ImyTaskData {
   id: string;
@@ -25,6 +25,8 @@ interface TaskState {
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
+  taskColumns: any[];
+  hideTask: any[];
   current_task_id: null;
   listView: boolean;
   tableView: boolean;
@@ -42,6 +44,10 @@ interface TaskState {
   initial_start_date: null;
   initial_end_date: null;
   openUpdateEntryId: null;
+  updateStatusModalId: null;
+  updateStatusModalIdForPilot: null;
+  currentTaskStatusId: null;
+  currentTaskPriorityId: null;
 }
 
 const initialState: TaskState = {
@@ -51,6 +57,8 @@ const initialState: TaskState = {
   currTeamMemberId: null,
   removeWatcherId: null,
   myTaskData: [],
+  taskColumns: [],
+  hideTask: [],
   current_task_id: null,
   listView: true,
   tableView: false,
@@ -64,14 +72,18 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: '',
+  initial_description: "",
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
+  updateStatusModalId: null,
+  updateStatusModalIdForPilot: null,
+  currentTaskStatusId: null,
+  currentTaskPriorityId: null,
 };
 
 export const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -87,6 +99,38 @@ export const taskSlice = createSlice({
         state.myTaskData = taskDataArray;
       }
     },
+
+    getTaskColumns(state, action) {
+      state.taskColumns = action.payload;
+    },
+    hideTaskColumns(state, action) {
+      return {
+        ...state,
+        hideTask:
+          state.hideTask.length != 0
+            ? state.hideTask.map((prev) => {
+                if (prev.field === action.payload) {
+                  return {
+                    ...prev,
+                    hidden: !prev.hidden,
+                  };
+                } else {
+                  return prev;
+                }
+              })
+            : state.taskColumns.map((prev) => {
+                if (prev.field === action.payload) {
+                  return {
+                    ...prev,
+                    hidden: !prev.hidden,
+                  };
+                } else {
+                  return prev;
+                }
+              }),
+      };
+    },
+
     getListView(state, action) {
       state.listView = action.payload;
     },
@@ -139,13 +183,21 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId4(state, action) {
       state.currentParentSubTaskId4 = action.payload;
     },
+    setCurrentTaskStatusId(state, action) {
+      state.currentTaskStatusId = action.payload;
+    },
+    setCurrentTaskPriorityId(state, action) {
+      state.currentTaskPriorityId = action.payload;
+    },
     setUpdateEntries(state, action) {
       state.initial_description = action.payload.initial_description;
       state.initial_start_date = action.payload.initial_start_date;
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-
+    setUpdateStatusModalId(state, action) {
+      state.updateStatusModalId = action.payload;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -157,6 +209,7 @@ export const {
   setWatchersData,
   setCurrTeamMemId,
   getTaskData,
+  getTaskColumns,
   getListView,
   getTableView,
   setShowTaskNavigation,
@@ -167,10 +220,14 @@ export const {
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
+  hideTaskColumns,
   setCurrentParentSubTaskId,
   setCurrentParentSubTaskId2,
   setCurrentParentSubTaskId3,
   setCurrentParentSubTaskId4,
   setUpdateEntries,
+  setUpdateStatusModalId,
+  setCurrentTaskStatusId,
+  setCurrentTaskPriorityId,
 } = taskSlice.actions;
 export default taskSlice.reducer;

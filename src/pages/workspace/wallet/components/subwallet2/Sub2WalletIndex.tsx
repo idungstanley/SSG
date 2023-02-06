@@ -103,7 +103,8 @@ function Sub2WalletIndex({
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between space-x-1 text-sm h-8 group ${padding} py-1.5 hover:bg-gray-100 ${
-              wallet.id === activeItemId && 'bg-green-50 text-green-500'
+              wallet.id === activeItemId &&
+              'bg-green-100 text-black font-medium'
             }`}
           >
             {wallet.id === activeItemId && (
@@ -114,7 +115,7 @@ function Sub2WalletIndex({
                 {showSubWallet3 === wallet.id ? (
                   <div className="flex items-center">
                     <VscTriangleDown
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -123,7 +124,7 @@ function Sub2WalletIndex({
                 ) : (
                   <div className="flex items-center">
                     <VscTriangleRight
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -132,7 +133,10 @@ function Sub2WalletIndex({
                 )}
               </div>
               <div onClick={() => handleLocation(wallet.id)}>
-                <p className="ml-2" style={{ fontSize: '10px' }}>
+                <p
+                  className="ml-2 tracking-wider capitalize truncate cursor-pointer"
+                  style={{ fontSize: '12px' }}
+                >
                   {wallet.name.length > 10
                     ? wallet.name.substr(0, 10) + '...'
                     : wallet.name}

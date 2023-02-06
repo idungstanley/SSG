@@ -4,7 +4,10 @@ import ItemsHubData from ".";
 export default function TaskListSections({ data }: any) {
   return (
     <section id="listcard" className="  bg-white " key={data.id}>
-      <div className="block  bg-gray-100 m-1 rounded">
+      <div
+        className="block  m-1 rounded"
+        style={{ backgroundColor: "#e1e4e5" }}
+      >
         <div className=" capitalize ">
           <ItemsHubData hubId={data.id} hubName={data.name} />
         </div>

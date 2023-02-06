@@ -122,7 +122,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
                 {showSubWallet2 === wallet.id ? (
                   <div className="flex items-center">
                     <VscTriangleDown
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -131,7 +131,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
                 ) : (
                   <div className="flex items-center">
                     <VscTriangleRight
-                      className="flex-shrink-0 h-3"
+                      className="flex-shrink-0 h-2"
                       aria-hidden="true"
                       color="rgba(72, 67, 67, 0.64)"
                     />
@@ -182,15 +182,13 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
         <div key={list.id}>
           <section
             className={`relative flex items-center justify-between h-8 pr-6 space-x-1 text-sm hover:bg-gray-100 group ${
-              list.id === activeItemId
-                ? 'bg-green-100 text-green-500'
-                : 'text-black'
+              list.id === activeItemId && 'bg-green-100 text-black font-medium'
             }`}
           >
             {list.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
             )}
-            <div className="flex items-center pl-8 space-x-1">
+            <div className="flex items-center pl-8 space-x-1 tracking-wider capitalize truncate cursor-pointer">
               <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
               <div onClick={() => handleListLocation(list.id, list.name)}>
                 {list.name}
