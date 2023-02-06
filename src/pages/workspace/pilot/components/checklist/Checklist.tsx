@@ -3,7 +3,10 @@ import { BsThreeDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../app/hooks";
 import { getchecklist } from "../../../../../features/task/checklist/checklistSlice";
-import { createChecklistService } from "../../../../../features/task/checklist/checklistService";
+import {
+  createChecklist,
+  createChecklistService,
+} from "../../../../../features/task/checklist/checklistService";
 import { getOneTaskServices } from "../../../../../features/task/taskService";
 import { getaTaskServices } from "../../../../../features/task/checklist/checklistService";
 
@@ -15,11 +18,13 @@ export default function Checklist() {
   const dispatch = useDispatch();
   const [checklists, setChecklists] = useState<any>(null);
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  getaTaskServices(currentTaskIdForPilot);
+
   // const { data: task } = getOneTaskServices({ task_id: currentTaskIdForPilot });
   // const singleTask = task?.data.task;
   // const task_checklists = singleTask?.task_checklists;
 
-  dispatch(getchecklist(currentTaskIdForPilot));
+  // dispatch(getchecklist(currentTaskIdForPilot));
 
   const { checklist } = useAppSelector((state) => state.checklist);
   useEffect(() => {
@@ -35,7 +40,8 @@ export default function Checklist() {
       taskId: currentTaskIdForPilot,
       name: "Checklist",
     };
-    createChecklistService(data);
+    createChecklist(data);
+    // createChecklistService(data);
   };
 
   // const updateList = () => {

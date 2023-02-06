@@ -29,6 +29,7 @@ interface TaskDataProps {
 }
 import { columnsHead } from "../views/ListColumns";
 import moment from "moment";
+import { getaTaskServices } from "../../../../../features/task/checklist/checklistService";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskPilot = (id: string, name: string) => {
+  const handleTaskPilot = (id: any, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
       setActiveItem({
