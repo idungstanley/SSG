@@ -35,26 +35,29 @@ export default function PlaceItem({
     <li
       className={classNames(
         !isActivePlace ? 'hover:bg-gray-100' : '',
-        'group focus:flex flex-col w-full px-2 py-3.5 items-center',
+        'focus:flex flex-col w-full px-2 py-5 items-center',
         bottomContent ? 'gap-2' : ''
       )}
     >
-      <div className=" flex justify-between w-full">
+      <div className="flex justify-between w-full">
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
-          className="flex gap-5 items-center w-full cursor-pointer uppercase"
+          className={classNames(
+            'flex gap-5 items-center w-full cursor-pointer uppercase text-xs',
+            isActivePlace ? 'justify-center' : ''
+          )}
         >
           {icon}
           {label}
         </div>
-        <div className="flex gap-2 items-center group-hover:opacity-100 opacity-0 transition">
+        <div className="flex gap-2 items-center">
           {rightContent}
 
           <span onClick={isActivePlace ? resetSelectedPlace : onClick}>
             {isActivePlace ? (
-              <ChevronDownIcon className="h-5 w-5 cursor-pointer" />
+              <ChevronDownIcon className="h-5 w-5 cursor-pointer text-gray-500" />
             ) : (
-              <ChevronRightIcon className="h-5 w-5 cursor-pointer" />
+              <ChevronRightIcon className="h-5 w-5 cursor-pointer text-gray-500" />
             )}
           </span>
         </div>
