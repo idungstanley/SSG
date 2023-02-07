@@ -95,7 +95,7 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-300 hover:text-gray-50 border-r-2  border-gray-400 group"
+                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-300 hover:text-gray-50  border-gray-400 group"
                     style={{ color: "#78828d", fontSize: "10px" }}
                   >
                     {col.value}
@@ -108,7 +108,7 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50 hover:border-r-2  border-gray-400  group"
+                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                     style={{
                       color: "#78828d",
                       fontSize: "10px",
