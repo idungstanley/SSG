@@ -37,7 +37,7 @@ export default function CreateTag() {
       <input
         type="text"
         placeholder="Create New Tag"
-        className="w-full relative text-sm rounded-md border-gray-300 shadow-sm ring-0 focus:ring-0"
+        className="w-full relative text-sm rounded-md border-gray-300 border-transparent focus:border-transparent  ring-0 focus:ring-0"
         name="name"
         onChange={handleTagChange}
       />
