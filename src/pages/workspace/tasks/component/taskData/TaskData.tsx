@@ -48,7 +48,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskPilot = (id: string, name: string) => {
+  const handleTaskPilot = (id: any, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
       setActiveItem({

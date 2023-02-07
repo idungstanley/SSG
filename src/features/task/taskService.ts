@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
@@ -74,7 +74,7 @@ export const UseCreateCheckList = ({ task_id, trigger }) => {
       return data;
     },
     {
-      enabled: trigger != false,
+      enabled: !!trigger,
     }
   );
 };
@@ -174,9 +174,9 @@ export const getTaskListService = ({ listId }) => {
 // getTaskListService();
 
 export const getTaskListService2 = (query: { parentId: string | null }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {
@@ -222,7 +222,7 @@ export const createTimeEntriesService = (data) => {
 };
 
 export const StartTimeEntryService = (query) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { query: query.taskId }],
     async () => {
@@ -272,7 +272,7 @@ export const EndTimeEntriesService = (data) => {
 };
 
 export const GetTimeEntriesService = ({ taskId, trigger }) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
     ['timeclock', { taskId: taskId }],
@@ -438,7 +438,6 @@ export const RemoveWatcherService = ({ query }) => {
 //Assign task to team member
 export const UseAssignTaskService = ({ task_id, team_member_id }) => {
   const dispatch = useDispatch();
-  console.log(task_id, team_member_id);
   const queryClient = useQueryClient();
   return useQuery(
     ['assign', { team_member_id: team_member_id }],

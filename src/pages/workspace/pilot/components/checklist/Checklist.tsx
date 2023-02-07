@@ -1,80 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
-import {
-  getOneTaskServices,
-  UseCreateCheckList,
-} from '../../../../../features/task/taskService';
+import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
-// import { useDispatch } from "react-redux";
-// import { useAppSelector } from '../../../../../app/hooks';
-// import { createchecklistSlice } from "../../../../../features/task/checklist/checklistSlice";
+import { getchecklist } from '../../../../../features/task/checklist/checklistSlice';
+import { getOneTaskServices } from '../../../../../features/task/taskService';
+import { UseCreateChecklist } from '../../../../../features/task/checklist/checklistService';
+import ChecklistItem from './ChecklistItem';
+
+type checklistItem = {
+  name: string;
+};
 
 export default function Checklist() {
-  // const dispatch = useDispatch();
-  // const { checklist } = useAppSelector((state) => state.checklist);
+  const dispatch = useDispatch();
+  const [checklists, setChecklists] = useState<any>(null);
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
+  const [updateChecklist, setUpdateChecklist] = useState<boolean>(false);
+  dispatch(getchecklist(currentTaskIdForPilot));
 
-  // type checklistItem = {
-  //   name: string;
-  // };
-  // const [checklists, setChecklists] = useState<any>(checklist);
-  // const addChecklist = () => {
-  //   const newChecklist: checklistItem = {
-  //     name: "Checklist",
-  //   };
-  //   const data = {
-  //     taskId: "586b2551-6d4a-4a62-9b5a-066eac5716f1",
-  //     name: "Checklist",
-  //   };
-  //   // createChecklistService(data);
-  //   dispatch(createchecklistSlice(newChecklist));
-  //   setChecklists(checklist);
-  //   console.log(checklist);
-  // };
-
-  const [triggerCreateChecklist, setTriggerCreateChecklist] = useState(false);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-
-  const { data: task } = getOneTaskServices({
-    task_id: activeItemId,
+  const { data, status } = UseCreateChecklist({
+    task_id: currentTaskIdForPilot,
+    trigger: triggerCreate,
   });
-  const { data } = UseCreateCheckList({
-    task_id: activeItemId,
-    trigger: triggerCreateChecklist,
+
+  // console.log(status);
+  const { data: task, refetch } = getOneTaskServices({
+    task_id: currentTaskIdForPilot,
   });
-  // console.log(data?.data);
+  // console.log(task?.data.task.task_checklists);
+  if (status == 'success') {
+    refetch();
+  }
+
+  const { checklist } = useAppSelector((state) => state.checklist);
+  useEffect(() => {
+    setChecklists(checklist);
+    setTriggerCreate(false);
+  }, [checklists, checklist]);
+
   return (
     <>
       <div>
         <button
           className="px-5  py-2.5 text-xl cursor-pointer"
-          onClick={() => setTriggerCreateChecklist(true)}
+          onClick={() => setTriggerCreate(true)}
         >
           + ADD CHECKLIST
         </button>
         <div>
-          {/* {checklists.map((item, index) => {
-            return (
-              <div key={index}>
-                <div className="flex items-center">
-                  <h1 className="px-5 text-xl">{item.name}(0/0)</h1>
-                  <div className="opacity-0 hover:opacity-100 cursor-pointer">
-                    <BsThreeDots />
+          {task?.data.task.task_checklists &&
+            task?.data.task.task_checklists.map((item, index) => {
+              // console.log(item.id);
+              return (
+                <div key={index}>
+                  <div className="flex items-center">
+                    <h1 className="px-5 text-xl">{item.name}(0/0)</h1>
+                    <div className="opacity-0 hover:opacity-100 cursor-pointer">
+                      <BsThreeDots />
+                    </div>
                   </div>
+                  <ChecklistItem Item={item.items} checklistId={item.id} />
                 </div>
-                <span className="flex items-center">
-                  <label className="text-xl px-5">+</label>
-                  <input
-                    type="text"
-                    className="border-none hover:boder-none hover:outline-none"
-                    placeholder="New Checklist Item"
-                  />
-                  <div className="opacity-0 hover:opacity-100">
-                    <BsThreeDots />
-                  </div>
-                </span>
-              </div>
-            );
-          })} */}
+              );
+            })}
         </div>
       </div>
     </>
