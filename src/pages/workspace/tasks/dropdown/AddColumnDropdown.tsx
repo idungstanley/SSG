@@ -22,7 +22,7 @@ export default function AddColumnDropdown({
   title,
   listItems,
 }: CustomDropdownProps) {
-  const [column, setColumn] = useState(true);
+  const [column, setColumn] = useState(false);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
@@ -73,7 +73,7 @@ export default function AddColumnDropdown({
                 // onClick={listItem.onclick}
               >
                 {/* {listItem.icons} */}
-                {listItem.name}
+                {/* {listItem.value} */}
               </p>
             )}
             {!column && (

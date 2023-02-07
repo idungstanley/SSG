@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import communicationIcon from '../../../../assets/branding/communication.png';
 import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
@@ -6,14 +6,11 @@ import automationIcon from '../../../../assets/branding/automation.png';
 import timeclockIcon from '../../../../assets/branding/timeclock.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
-import { classNames } from '../../../../utils';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
-  setActiveTabId,
-  setPilotWidth,
   setShowPilot,
   setShowPilotIconView,
   setShowPilotListView,
@@ -201,7 +198,7 @@ function Tab() {
             <span className="z-10 text-xs border flex flex-col w-8 justify-between items-center">
               <HiChevronDoubleUp
                 onClick={() => handleShowPilotIconView()}
-                className={`w-4 h-4 border flex flex-col w-8 justify-between items-center hover:text-green-500 ${
+                className={`w-4 h-4 border flex flex-col justify-between items-center hover:text-green-500 ${
                   showPilotIconView
                     ? 'text-green-500 transform -rotate-180'
                     : ''
@@ -209,7 +206,7 @@ function Tab() {
               />
               <TfiLayoutListThumb
                 onClick={() => handleShowPilotListView()}
-                className={`w-4 h-4 flex flex-col w-8 justify-between cursor-pointer items-center hover:text-green-500 ${
+                className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
                   showPilotListView ? 'text-green-500' : ''
                 }`}
               />

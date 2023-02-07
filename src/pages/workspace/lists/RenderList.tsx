@@ -16,6 +16,7 @@ import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction
 import SubTask from "../tasks/subtasks/create/SubTask";
 import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
 import Pilot from "../pilot";
+import ListFilter from "./components/renderlist/listDetails/ListFilter";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -103,8 +104,8 @@ function RenderList() {
   }, [myTaskData]);
 
   return (
-    <div className="h-screen overflow-hidden relative">
-      <section id="nav" className="capitalize">
+    <div className=" overflow-hidden relative">
+      <section id="nav" className="capitalize ">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
           viewsList="List"
@@ -112,12 +113,13 @@ function RenderList() {
           viewsList2="Board"
           changeViews="View"
         />
+        <ListFilter />
       </section>
       <section className="flex h-full w-full">
-        <div className="mt-3 p-3 w-full overflow-y-scroll">
+        <div className="  w-full overflow-y-scroll">
           <div
             className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: "#eee" }}
+            style={{ backgroundColor: "#e1e4e5" }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
