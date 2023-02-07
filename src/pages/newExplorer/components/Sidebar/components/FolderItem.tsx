@@ -6,14 +6,12 @@ import {
   ShareIcon,
   ArrowUpTrayIcon,
   ClipboardIcon,
-  AdjustmentsVerticalIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
-  setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
@@ -65,7 +63,7 @@ export default function FolderItem({
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    zIndex: isDragging ? 1 : 0,
+    zIndex: isDragging ? 1 : undefined,
   };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
@@ -123,18 +121,6 @@ export default function FolderItem({
       onClick: handleShowShare,
     },
     {
-      label: 'Pilot',
-      onClick: () =>
-        dispatch(
-          setShowPilotSideOver({
-            id,
-            type: 'folder',
-            show: true,
-          })
-        ),
-      icon: <AdjustmentsVerticalIcon className="w-5 h-5" aria-hidden="true" />,
-    },
-    {
       label: 'Delete',
       onClick: handleDelete,
       icon: <TrashIcon className="w-5 h-5" aria-hidden="true" />,
@@ -180,7 +166,7 @@ export default function FolderItem({
           <p>{name}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
+      <div className="flex items-center gap-2">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>

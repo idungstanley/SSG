@@ -3,7 +3,6 @@ import {
   TrashIcon,
   ShareIcon,
   MagnifyingGlassIcon,
-  AdjustmentsVerticalIcon,
   MagnifyingGlassMinusIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
@@ -18,7 +17,6 @@ import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
 import {
-  setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import Search from '../../../../../Search';
@@ -105,19 +103,6 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
       onClick: handleCopy,
       label: 'Copy',
       disabled: selectedIds.length === 0,
-    },
-    {
-      label: 'Pilot',
-      onClick: () =>
-        dispatch(
-          setShowPilotSideOver({
-            id: selectedFileId || '',
-            type: 'file',
-            show: true,
-          })
-        ),
-      icon: <AdjustmentsVerticalIcon className="w-5 h-5" aria-hidden="true" />,
-      disabled: !selectedFileId,
     },
   ];
 

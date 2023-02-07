@@ -120,7 +120,7 @@ export default function ExtendedBar() {
         }
       />
 
-      <aside className="mb-2 overflow-hidden">
+      <aside className="mb-2">
         {/* header */}
         {status === 'loading' ? (
           <div className="mx-auto w-6 mt-8 justify-center">
