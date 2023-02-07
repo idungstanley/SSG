@@ -18,12 +18,12 @@ import {
   setSelectedFolderId,
 } from '../../../../features/explorer/explorerSlice';
 import {
-  FolderOpenIcon,
   FolderPlusIcon,
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
 import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
+import cabinetIcon from '../../../../assets/icons/cabinet.svg';
 
 const stringifyFolders = (
   query: string,
@@ -93,7 +93,9 @@ export default function ExtendedBar() {
     <>
       <PlaceItem
         label="Cabinet"
-        icon={<FolderOpenIcon className="h-5 w-5" />}
+        icon={
+          <img src={cabinetIcon} alt={'cabinet' + 'Icon'} className="h-4 w-4" />
+        }
         rightContent={
           <div className="flex gap-2">
             <Dropdown config={configForDropdown} iconType="plus" />

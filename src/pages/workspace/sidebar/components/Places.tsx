@@ -8,7 +8,6 @@ import Inbox from '../../inbox';
 import hubIcon from '../../../../assets/branding/hub.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
@@ -23,6 +22,7 @@ import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
 // import formsIcon from '../../../../assets/branding/forms-icon.png';
 import commerceIcon from '../../../../assets/branding/commerce.png';
 import libraryIcon from '../../../../assets/icons/library.svg';
+import cabinetIcon from '../../../../assets/icons/cabinet.svg';
 
 const places = [
   {
@@ -47,7 +47,7 @@ const places = [
     name: 'Cabinet',
     id: 4,
     place: <ExtendedBar />,
-    icon: <FolderOpenIcon className="h-4 w-4" />,
+    source: cabinetIcon,
     link: 'new-explorer',
   },
   {
