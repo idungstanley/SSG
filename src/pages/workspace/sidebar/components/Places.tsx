@@ -8,7 +8,7 @@ import Inbox from '../../inbox';
 import hubIcon from '../../../../assets/branding/hub.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { FolderOpenIcon, HomeIcon } from '@heroicons/react/24/outline';
+import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../newExplorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
@@ -22,6 +22,7 @@ import routePlanner from '../../../../assets/branding/gis_route.png';
 import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
 // import formsIcon from '../../../../assets/branding/forms-icon.png';
 import commerceIcon from '../../../../assets/branding/commerce.png';
+import libraryIcon from '../../../../assets/icons/library.svg';
 
 const places = [
   {
@@ -53,8 +54,7 @@ const places = [
     name: 'Library',
     id: 5,
     place: <Directory />,
-    icon: <HomeIcon className="h-4 w-4" />,
-    // source: formsIcon,
+    source: libraryIcon,
     link: 'directory',
   },
   {
@@ -132,7 +132,7 @@ function Places() {
                 ) : (
                   <img
                     src={place.source}
-                    alt={name + 'icon'}
+                    alt={place.name + 'Icon'}
                     className="h-4 w-4"
                   />
                 )
