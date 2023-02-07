@@ -37,9 +37,6 @@ export const columnsHead:
     field: "created_at",
     value: "Created at",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "description",
