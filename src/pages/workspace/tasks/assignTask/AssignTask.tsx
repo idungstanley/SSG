@@ -1,20 +1,20 @@
-import React, { useRef } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { AvatarWithInitials } from '../../../../components';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { useAppSelector } from '../../../../app/hooks';
+import React, { useRef } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { AvatarWithInitials } from "../../../../components";
+import { useGetTeamMembers } from "../../../../features/settings/teamMembers/teamMemberService";
+import { useAppSelector } from "../../../../app/hooks";
 import {
   setCurrTeamMemId,
   setToggleAssignCurrentTaskId,
-} from '../../../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
-import { TrashIcon } from '@heroicons/react/24/outline';
+} from "../../../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 import {
   UseAssignTaskService,
   UseUnAssignTaskService,
   getOneTaskServices,
-} from '../../../../features/task/taskService';
+} from "../../../../features/task/taskService";
 
 export default function AssignTask() {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export default function AssignTask() {
   const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: "",
   });
   const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
     (state) => state.task
@@ -58,15 +58,15 @@ export default function AssignTask() {
   //   }
   // };
   return (
-    <div className="">
+    <div className="relative">
       <section
-        className="absolute top-10 z-20 -mt-12 w-60 rounded-md shadow-lg bg-gray-100"
+        className="absolute top-10 right-0 z-20  w-60 rounded-md shadow-lg bg-gray-100"
         ref={assigneeRef}
         id="assignModal"
         // onClick={(e) => handleAssignModal(e)}
       >
         <div className="text-xs">
-          <section className="flex relative w-full ">
+          <section className="flex relative">
             <AiOutlineSearch className="h-5 w-5 absolute right-3 top-3" />
             <input
               type="text"
