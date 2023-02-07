@@ -95,10 +95,21 @@ export default function TaskListViews() {
                 !col.hidden && (
                   <div
                     key={col.field}
-                    className="flex  items-center uppercase  text-xs mt-1 font-bold  hover:bg-gray-300 hover:text-gray-50  border-gray-400 group"
-                    style={{ color: "#78828d", fontSize: "10px" }}
+                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
+                    style={{
+                      color: "#78828d",
+                      fontSize: "10px",
+                    }}
                   >
-                    {col.value}
+                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                      <MdDragIndicator />
+                    </span>
+                    <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                      {col.value}
+                    </span>
+                    <span>
+                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                    </span>
                   </div>
                 )
             )
