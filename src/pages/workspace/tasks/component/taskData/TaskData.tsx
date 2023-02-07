@@ -122,7 +122,7 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className="  text-gray-400 text-xl cursor-pointer "
+          className=" ml-2 text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -146,7 +146,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'in progress') {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1  w-20 absolute text-center"
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -155,7 +155,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'archived') {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1 w-20 absolute"
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -238,7 +238,15 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    }
+    // else if (colfield == "description") {
+    //   return (
+    //     <span className="text-gray-400 text-sm font-medium">
+    //       <p>jkhsbdfkjsbvkjrghdfbvjkhrf</p>
+    //     </span>
+    //   );
+    // }
+    else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -290,7 +298,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   )
               )}
         </div>
-        <div className=" dynamic mr-10 ">
+        <div className=" dynamic ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
@@ -299,7 +307,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px', marginLeft: '35%' }}
+                      style={{ width: '50px' }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>
@@ -311,8 +319,8 @@ export default function TaskData({ task }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className=" relative items-center uppercase    text-gray-400 py-px   font-medium text-ellipsis	overflow-hidden	  group"
-                      style={{ width: '50px', marginLeft: '35%' }}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: '50px' }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>
