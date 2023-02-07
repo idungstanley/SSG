@@ -86,14 +86,14 @@ export default function ActiveHub() {
     } else if (activeItemType === 'subhub') {
       return subHubData?.map((subHub) => {
         if (subHub.id === activeItemId) {
-          return <SHubDropdownList key={subHub.id} marginLeft="ml-0" />;
+          return <SHubDropdownList key={subHub.id} />;
         }
         return null;
       });
     } else if (activeItemType === 'wallet') {
       return walletData?.map((wallet) => {
         if (wallet.id === activeItemId) {
-          return <SubWalletIndex key={wallet.id} padding="pl-0" />;
+          return <SubWalletIndex key={wallet.id} paddingLeft="0" />;
         }
         return null;
       });
@@ -104,7 +104,7 @@ export default function ActiveHub() {
             <Sub2WalletIndex
               key={subWallet.id}
               currWalId={subWallet.id}
-              padding="pl-0"
+              paddingLeft="0"
             />
           );
         }

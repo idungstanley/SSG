@@ -33,9 +33,14 @@ import ListModal from '../../../pages/workspace/lists/components/modals/ListModa
 interface WalletIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
+  paddingLeft?: string;
 }
 
-function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
+function WalletIndex({
+  showHubList,
+  getCurrentHubId,
+  paddingLeft = '26',
+}: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -148,7 +153,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               )}
               <div
                 id="walletLeft"
-                className="flex items-center justify-center pl-6"
+                className="flex items-center justify-center"
+                style={{ paddingLeft: `${paddingLeft}px` }}
               >
                 {/* showsub1 */}
                 <div
@@ -177,7 +183,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 </div>
                 <div
                   onClick={() => handleLocation(wallet.id, wallet.name)}
-                  className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
+                  className="cursor-pointer hover:underline hover:decoration-dashed"
+                  style={{ marginLeft: '17px' }}
                 >
                   <p
                     className="tracking-wider capitalize truncate cursor-pointer"
@@ -205,7 +212,11 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 />
               </div>
             </section>
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex /> : null}</div>
+            <div>
+              {showSubWallet === wallet.id ? (
+                <SubWalletIndex paddingLeft="50" />
+              ) : null}
+            </div>
             {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
             {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>

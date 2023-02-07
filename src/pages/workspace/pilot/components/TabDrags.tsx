@@ -5,6 +5,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../app/hooks';
+import { GrDrag } from 'react-icons/gr';
 
 interface TabProps {
   id: number;
@@ -34,7 +35,9 @@ export default function TabDrag({
     id,
   });
   const dispatch = useDispatch();
-  const { activeTabId, showPilotListView } = useAppSelector((state) => state.workspace);
+  const { activeTabId, showPilotListView } = useAppSelector(
+    (state) => state.workspace
+  );
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
@@ -82,11 +85,11 @@ export default function TabDrag({
             ref={setNodeRef}
             {...attributes}
             {...listeners}
-            className={`text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
+            className={`text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100 ${
               showPilot ? 'block' : 'hidden'
             }`}
           >
-            <MdDragIndicator />
+            <GrDrag className="text-base text-gray-200 opacity-30 w-3 h-3" />
           </span>
           <img src={source} alt="" className="w-4 h-4" />
         </div>

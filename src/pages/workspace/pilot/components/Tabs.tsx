@@ -161,7 +161,7 @@ function Tab() {
         aria-label="Tabs"
         style={showPilot ? { width: '400px' } : { width: '48px' }}
       >
-        <section className="flex justify-between border items-center h-12">
+        <section className="flex pl-2 justify-between border items-center h-12">
           {activeItemName && showPilot && (
             <div
               id="entity"
@@ -209,7 +209,7 @@ function Tab() {
               />
               <TfiLayoutListThumb
                 onClick={() => handleShowPilotListView()}
-                className={`w-4 h-4 flex flex-col w-8 justify-between items-center hover:text-green-500 ${
+                className={`w-4 h-4 flex flex-col w-8 justify-between cursor-pointer items-center hover:text-green-500 ${
                   showPilotListView ? 'text-green-500' : ''
                 }`}
               />

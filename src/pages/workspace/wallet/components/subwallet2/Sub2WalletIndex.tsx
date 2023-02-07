@@ -21,12 +21,12 @@ import LastListIndex from './LastListIndex';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 
 interface Sub2WalletIndexProps {
-  padding?: string;
+  paddingLeft?: string;
   currWalId?: string;
 }
 
 function Sub2WalletIndex({
-  padding = 'pl-14',
+  paddingLeft = '56',
   currWalId,
 }: Sub2WalletIndexProps) {
   const dispatch = useDispatch();
@@ -102,10 +102,11 @@ function Sub2WalletIndex({
       {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
-            className={`flex relative items-center justify-between space-x-1 text-sm h-8 group ${padding} py-1.5 hover:bg-gray-100 ${
+            className={`flex relative items-center justify-between space-x-1 text-sm h-8 group py-1.5 hover:bg-gray-100 ${
               wallet.id === activeItemId &&
               'bg-green-100 text-black font-medium'
             }`}
+            style={{ paddingLeft: `${paddingLeft}px` }}
           >
             {wallet.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
