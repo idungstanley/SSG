@@ -139,9 +139,7 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}
-          className={`flex relative flex-col ${
-            i.id === showChildren
-          }`}
+          className={`flex relative flex-col ${i.id === showChildren}`}
           onMouseEnter={() => handleMouseOver(index)}
           onMouseLeave={handleMouseOut}
         >
@@ -177,7 +175,7 @@ export default function ItemsListInSidebar({
                     <VscTriangleRight
                       className="flex-shrink-0 h-2"
                       aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
+                      color="#BBBDC0"
                     />
                   )}
                 </div>

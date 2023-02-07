@@ -64,6 +64,7 @@ export default function Pilot() {
       if (showPilot === false && hoverRef.current) {
         dispatch(setActiveSubCommunicationTabId(null));
         dispatch(setActiveSubDetailsTabId(null));
+        dispatch(setActiveTabId(0));
       }
     };
     hoverRef.current?.addEventListener('mouseleave', checkHoverOutside);

@@ -33,9 +33,14 @@ import ListModal from '../../../pages/workspace/lists/components/modals/ListModa
 interface WalletIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
+  paddingLeft?: string;
 }
 
-function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
+function WalletIndex({
+  showHubList,
+  getCurrentHubId,
+  paddingLeft = '26',
+}: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -139,7 +144,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
           <div key={wallet.id}>
             <section
               className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-                wallet.id === activeItemId && 'bg-green-100 text-black font-medium'
+                wallet.id === activeItemId &&
+                'bg-green-100 text-black font-medium'
               }`}
             >
               {wallet.id === activeItemId && (
@@ -147,7 +153,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
               )}
               <div
                 id="walletLeft"
-                className="flex items-center justify-center pl-6"
+                className="flex items-center justify-center"
+                style={{ paddingLeft: `${paddingLeft}px` }}
               >
                 {/* showsub1 */}
                 <div
@@ -168,7 +175,7 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                       <VscTriangleRight
                         className="flex-shrink-0 h-2"
                         aria-hidden="true"
-                        color="rgba(72, 67, 67, 0.64)"
+                        color="#BBBDC0"
                       />
                       <FaFolder color="rgba(72, 67, 67, 0.64)" />
                     </>
@@ -176,7 +183,8 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 </div>
                 <div
                   onClick={() => handleLocation(wallet.id, wallet.name)}
-                  className="ml-2 cursor-pointer hover:underline hover:decoration-dashed"
+                  className="cursor-pointer hover:underline hover:decoration-dashed"
+                  style={{ marginLeft: '17px' }}
                 >
                   <p
                     className="tracking-wider capitalize truncate cursor-pointer"
@@ -204,7 +212,11 @@ function WalletIndex({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 />
               </div>
             </section>
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex /> : null}</div>
+            <div>
+              {showSubWallet === wallet.id ? (
+                <SubWalletIndex paddingLeft="50" />
+              ) : null}
+            </div>
             {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
             {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>

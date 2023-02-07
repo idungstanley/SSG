@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface workspaceState {
   workspace: string[];
@@ -24,6 +24,7 @@ interface workspaceState {
   currentWalletName: string | null;
   showPilot: boolean;
   showPilotIconView: boolean;
+  showPilotListView: boolean;
   activeTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
@@ -54,6 +55,7 @@ const initialState: workspaceState = {
   currentWalletName: null,
   showPilot: false,
   showPilotIconView: false,
+  showPilotListView: false,
   activeTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
@@ -61,14 +63,14 @@ const initialState: workspaceState = {
 };
 
 export const wsSlice = createSlice({
-  name: "workspace",
+  name: 'workspace',
   initialState,
   reducers: {
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      if (action.payload === "CHANGE") {
+      if (action.payload === 'CHANGE') {
         return {
           ...state,
           showSidebar: !state.showSidebar,
@@ -92,11 +94,14 @@ export const wsSlice = createSlice({
     setShowPilotIconView(state, action) {
       state.showPilotIconView = action.payload;
     },
+    setShowPilotListView(state, action) {
+      state.showPilotListView = action.payload;
+    },
     setExtendedSidebarWidth(state, action) {
       state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -104,7 +109,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
@@ -196,6 +201,7 @@ export const {
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
   setPilotWidth,
+  setShowPilotListView,
   setActiveTabId,
 } = wsSlice.actions;
 

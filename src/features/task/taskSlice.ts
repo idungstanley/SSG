@@ -20,7 +20,7 @@ export interface ImyTaskData {
 
 interface TaskState {
   task: string[];
-  currentTaskIdForPilot: null;
+  currentTaskIdForPilot: any;
   watchersData: string[];
   removeWatcherId: null;
   currTeamMemberId: null;

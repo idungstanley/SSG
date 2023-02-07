@@ -117,13 +117,14 @@ export default function SubHubIndex() {
               )}
               <div
                 id="subhubleft"
-                className="flex items-center justify-center pl-3 "
+                className="flex items-center justify-center"
+                style={{paddingLeft: "26px"}}
               >
                 {/* showsub1 */}
                 <div
                   role="button"
                   tabIndex={0}
-                  className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
+                  className="flex items-center py-1.5 justify-start overflow-y-hidden text-sm"
                 >
                   {showSubChildren === subhub.id ? (
                     <VscTriangleDown
@@ -135,7 +136,7 @@ export default function SubHubIndex() {
                     <VscTriangleRight
                       className="flex-shrink-0 h-2"
                       aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
+                      color="#BBBDC0"
                     />
                   )}
                 </div>
