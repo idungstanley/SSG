@@ -17,7 +17,6 @@ type checklistItem = {
 };
 
 export default function Checklist() {
-  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const createChecklist = useMutation(UseCreateClistService, {
