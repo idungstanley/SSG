@@ -509,6 +509,9 @@ export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }) => {
     {
       initialData: queryClient.getQueryData(['tags', tagId]),
       enabled: !!tagId,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['tags']);
+      },
     }
   );
 };

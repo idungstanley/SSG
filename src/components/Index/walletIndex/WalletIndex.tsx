@@ -119,7 +119,10 @@ function WalletIndex({
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {walletAndListData?.data.lists.length === 0 &&
         walletAndListData?.data.wallets.length === 0 && (
-          <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8 tracking-wider capitalize truncate">
+          <div
+            className="flex space-x-1 text-xs py-1.5 h-8 tracking-wider capitalize truncate"
+            style={{ paddingLeft: `${paddingLeft}px` }}
+          >
             <span>
               Create a
               <span

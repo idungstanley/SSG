@@ -26,6 +26,14 @@ export const columnsHead:
     },
   },
   {
+    field: "tags",
+    value: "Tags",
+    hidden: false,
+    onclick: () => {
+      alert("great");
+    },
+  },
+  {
     field: "priority",
     value: "Priority",
     hidden: false,
