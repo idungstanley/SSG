@@ -34,11 +34,11 @@ export default function ItemsWalletData({
   return (
     <section>
       {/* wallets */}
-      <div>{data?.data.wallets.map((item) => item.name)}</div>
+      {/* <div>{data?.data.wallets.map((item) => item.name)}</div> */}
 
       {/* lists */}
       <div>
-        {data?.data.lists.map((item) => {
+        {data?.data.lists?.map((item) => {
           return (
             <div key={item.id} className="border rounded">
               <p className="text-xs font-semibold text-gray-400 capitalize">
@@ -111,7 +111,8 @@ export default function ItemsWalletData({
                   dispatch(setCurrentListId(item.id));
                 }}
               >
-                <p className="pl-2 text-xs   mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+                <p className="text-xs   mt-1 cursor-pointer ml-7 font-semibold text-gray-400 hover:bg-gray-300 px-1 rounded-md border-1"
+                style={{ color: "#78828d", fontSize: "11px", width: "70px" }}>
                   + New Task
                 </p>
               </div>

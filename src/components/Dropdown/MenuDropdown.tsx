@@ -171,7 +171,7 @@ export default function MenuDropdown() {
         dispatch(setSubDropdownMenu(!SubDropdownMenu));
       },
       icon: (
-        <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
+        <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />
       ),
       isVisible: true,
     },
@@ -350,12 +350,15 @@ export default function MenuDropdown() {
 
   return (
     <div className="" ref={ref}>
-      <div className="absolute z-50 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg bottom-20 left-5 ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <div
+        className="absolute z-50 w-56 p-2 origin-top-right bg-white rounded-md bottom-20 left-5 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: "200px" }}
+      >
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center px-4 py-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-100"
+                className="flex items-center cursor-pointer p-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-200 rounded-md"
                 onClick={item.handleClick}
               >
                 {item.icon}

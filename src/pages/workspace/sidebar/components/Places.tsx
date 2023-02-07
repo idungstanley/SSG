@@ -14,7 +14,6 @@ import Inbox from '../../inbox';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
 import InboxIcon from '../../../../assets/branding/inbox.png';
-import filesIcon from '../../../../assets/branding/file.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
 import routePlanner from '../../../../assets/branding/gis_route.png';
@@ -233,7 +232,7 @@ function Places() {
               key={item.id}
               className={`flex pl-4 z-20 pr-2 items-center hover:bg-gray-100 ${
                 activePlaceId === item.id && 'ml-0 bg-gray-200 sticky top-0'
-              } cursor-pointer h-14 relative top-0`}
+              } cursor-pointer h-14 relative`}
               onMouseEnter={() => handleMouseOver(index)}
               onMouseLeave={handleMouseOut}
             >
@@ -325,6 +324,7 @@ function Places() {
                     <FiChevronRight
                       className="flex-shrink-0 w-5 h-5"
                       aria-hidden="true"
+                      color="#BBBDC0"
                       onClick={() => handleClick(item.id)}
                     />
                   )}

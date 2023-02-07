@@ -1,4 +1,5 @@
 import requestNew from '../../app/requestNew';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface IData {
   name: string | number;
@@ -19,7 +20,6 @@ export const createWorkspaceService = (data: IData) => {
     },
     true
   );
-  console.log(response);
   return response;
 };
 
@@ -43,4 +43,47 @@ export const checkIfWorkspaceService = async () => {
     true
   );
   return response;
+};
+
+//tags
+export const UseCreateTagService = ({ name }) => {
+  const url = 'tags';
+  const response = requestNew(
+    {
+      url,
+      method: 'POST',
+      data: {
+        name: name,
+      },
+    },
+    true
+  );
+  return response;
+};
+
+export const UseGetAllTagsService = () => {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ['tags'],
+    async () => {
+      const data = await requestNew(
+        {
+          url: 'tags',
+          method: 'GET',
+        },
+        true
+      );
+      return data;
+    },
+    {
+      // enabled: !!trigger,
+      // onSuccess: (data) => {
+      //   // data.data.inboxes.map((inbox) =>
+      //   //   queryClient.setQueryData(['inbox', inbox.id], inbox)
+      //   // );
+      //   return data;
+      // },
+    }
+  );
 };

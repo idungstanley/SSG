@@ -1,18 +1,18 @@
-import { AiOutlineSearch } from 'react-icons/ai';
-import React from 'react';
-import { AvatarWithInitials, StatusDot } from '../../../../../components';
-import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { AiOutlineSearch } from "react-icons/ai";
+import React from "react";
+import { AvatarWithInitials, StatusDot } from "../../../../../components";
+import { useGetTeamMembers } from "../../../../../features/settings/teamMembers/teamMemberService";
 import {
   setCurrTeamMemId,
   setRmWatcher,
-} from '../../../../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
+} from "../../../../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
 import {
   AddWatcherService,
   RemoveWatcherService,
-} from '../../../../../features/task/taskService';
-import { useAppSelector } from '../../../../../app/hooks';
-import { TrashIcon } from '@heroicons/react/24/outline';
+} from "../../../../../features/task/taskService";
+import { useAppSelector } from "../../../../../app/hooks";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 interface DropdownProps {
   taskId: string | undefined;
@@ -23,7 +23,7 @@ export default function Dropdown({ taskId }: DropdownProps) {
 
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: "",
   });
 
   const currTeamMemberId = useAppSelector(
@@ -43,7 +43,7 @@ export default function Dropdown({ taskId }: DropdownProps) {
     query: [currTeamMemberDelId, taskId],
   });
 
-  if (status === 'success') {
+  if (status === "success") {
     dispatch(setRmWatcher(null));
   }
   return (
