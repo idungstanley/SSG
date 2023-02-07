@@ -145,7 +145,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
                 className="cursor-pointer hover:underline hover:decoration-dashed"
               >
                 <p
-                  className="ml-2 font-medium tracking-wider capitalize truncate"
+                  className="ml-4 font-medium tracking-wider capitalize truncate"
                   style={{ fontSize: '12px' }}
                 >
                   {wallet.name.length > 10
@@ -182,14 +182,15 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
           <section
-            className={`relative flex items-center justify-between h-8 pr-6 space-x-1 hover:bg-gray-100 group ${
+            className={`relative flex items-center justify-between h-8 space-x-1 hover:bg-gray-100 group ${
               list.id === activeItemId && 'bg-green-100 text-black font-medium'
             }`}
+            style={{ paddingLeft: `${paddingLeft}px` }}
           >
             {list.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
             )}
-            <div className="flex items-center pl-8 space-x-1 tracking-wider capitalize truncate cursor-pointer">
+            <div className="flex items-center space-x-1 tracking-wider capitalize truncate cursor-pointer">
               <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
               <div
                 onClick={() => handleListLocation(list.id, list.name)}
