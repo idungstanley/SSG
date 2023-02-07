@@ -17,6 +17,16 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
+  const groupTags = (arr) => {
+    return arr.map((item) => {
+      return Array.isArray(item) ? (
+        <div>{groupTags(item)}</div>
+      ) : (
+        <div>{item.name}</div>
+      );
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between p-2">
@@ -86,7 +96,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="tags" className="mt-2">
           <label className="text-xs text-gray-500">Tags</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>Also workspace tag</p>
+            <p> {groupTags(Details?.tags)}</p>
           </div>
         </div>
         {/* create subtask */}
