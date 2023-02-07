@@ -16,9 +16,7 @@ import { useMultipleDeleteFiles } from '../../../../../../../../features/explore
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
-import {
-  setShowShareSideOver,
-} from '../../../../../../../../features/general/slideOver/slideOverSlice';
+import { setShowShareSideOver } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import Search from '../../../../../Search';
 import Sorting from '../FilesList/components/Sorting';
 import { useCopyItems } from '../../../../../../../../features/explorer/explorerActionsService';
