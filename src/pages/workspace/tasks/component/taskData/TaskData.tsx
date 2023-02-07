@@ -119,7 +119,7 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" ml-2 text-gray-400 text-xl cursor-pointer "
+          className="  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -291,7 +291,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   )
               )}
         </div>
-        <div className=" dynamic ">
+        <div className=" dynamic mr-10 ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
@@ -300,7 +300,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px", marginLeft: "25%" }}
+                      style={{ width: "50px", marginLeft: "35%" }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>
@@ -312,8 +312,8 @@ export default function TaskData({ task }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px", marginLeft: "25%" }}
+                      className=" relative items-center uppercase    text-gray-400 py-px   font-medium text-ellipsis	overflow-hidden	  group"
+                      style={{ width: "50px", marginLeft: "35%" }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>

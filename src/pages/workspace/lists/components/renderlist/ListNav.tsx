@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Button } from '../../../../../components';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { getListView } from '../../../../../features/task/taskSlice';
-import { getTableView } from '../../../../../features/task/taskSlice';
-import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
-import { Bars3Icon } from '@heroicons/react/24/outline';
-import { BsListStars } from 'react-icons/bs';
-import { CiViewTable } from 'react-icons/ci';
+import React, { useState } from "react";
+import { EllipsisOutlined } from "@ant-design/icons";
+import { Button } from "../../../../../components";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { getListView } from "../../../../../features/task/taskSlice";
+import { getTableView } from "../../../../../features/task/taskSlice";
+import TaskMenu from "../../../tasks/component/taskMenu/TaskMenu";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import { BsLayers, BsListStars } from "react-icons/bs";
+import { CiViewTable } from "react-icons/ci";
+import { VscEllipsis } from "react-icons/vsc";
+import { GrFormSearch } from "react-icons/gr";
+import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
+import { TbSubtask } from "react-icons/tb";
+import { IoPeopleOutline } from "react-icons/io5";
+import { BiShow } from "react-icons/bi";
+import ListFilter from "./listDetails/ListFilter";
 
 interface ListNavProps {
   navName?: string | null;
@@ -46,12 +53,12 @@ function ListNav({
     <>
       <div className="w-full">
         {showTaskNavigation && (
-          <span className="absolute w-full transition duration-300 ease-in-out">
+          <span className="w-12/12 transition duration-300 ease-in-out">
             <TaskMenu />
           </span>
         )}
       </div>
-      <nav className="flex items-center justify-between p-3 overflow-hidden bg-white border border-gray-200" style={{height: '61px'}}>
+      <nav className="flex items-center justify-between border-b p-3 overflow-hidden bg-white   ">
         <section className="flex items-center justify-start space-x-2 text-gray-500">
           <span className="space-x-2">
             <span className="font-bold">{navName}</span>
@@ -121,11 +128,12 @@ function ListNav({
             @mentions
           </span>
           <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
-            {' '}
+            {" "}
             <EllipsisOutlined />
           </span>
         </section>
       </nav>
+      <ListFilter />
     </>
   );
 }
