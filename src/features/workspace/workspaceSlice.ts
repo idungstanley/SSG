@@ -24,11 +24,11 @@ interface workspaceState {
   currentWalletName: string | null;
   showPilot: boolean;
   showPilotIconView: boolean;
+  showPilotListView: boolean;
   activeTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
-  getAllTagsTrigger: boolean;
 }
 
 const initialState: workspaceState = {
@@ -55,11 +55,11 @@ const initialState: workspaceState = {
   currentWalletName: null,
   showPilot: false,
   showPilotIconView: false,
+  showPilotListView: false,
   activeTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
-  getAllTagsTrigger: false,
 };
 
 export const wsSlice = createSlice({
@@ -93,6 +93,9 @@ export const wsSlice = createSlice({
     },
     setShowPilotIconView(state, action) {
       state.showPilotIconView = action.payload;
+    },
+    setShowPilotListView(state, action) {
+      state.showPilotListView = action.payload;
     },
     setExtendedSidebarWidth(state, action) {
       state.extendedSidebarWidth = action.payload;
@@ -168,10 +171,6 @@ export const wsSlice = createSlice({
       state.currentItemId = null;
       state.currentItemType = null;
     },
-
-    setGetAllTagsTrigger(state, action) {
-      state.getAllTagsTrigger = action.payload;
-    },
     checkIfWs: (state) => state,
   },
 });
@@ -202,8 +201,8 @@ export const {
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
   setPilotWidth,
+  setShowPilotListView,
   setActiveTabId,
-  setGetAllTagsTrigger,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

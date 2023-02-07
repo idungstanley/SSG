@@ -22,10 +22,10 @@ import { useAppSelector } from '../../../../../app/hooks';
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 
 interface SubWalletIndexProps {
-  padding?: string;
+  paddingLeft?: string;
 }
 
-function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector(
     (state) => state.wallet
@@ -109,9 +109,10 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
       {subwallet?.data?.wallets.map((wallet) => (
         <div key={wallet.id}>
           <section
-            className={`flex relative items-center justify-between group ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
+            className={`flex relative items-center justify-between group h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
               wallet.id === activeItemId && 'bg-green-100 text-black'
             }`}
+            style={{ fontSize: '12px', paddingLeft: `${paddingLeft}px` }}
           >
             {wallet.id === activeItemId && (
               <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
@@ -133,7 +134,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
                     <VscTriangleRight
                       className="flex-shrink-0 h-2"
                       aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
+                      color="#BBBDC0"
                     />
                     <FaFolder color="rgba(72, 67, 67, 0.64)" />
                   </div>
@@ -145,7 +146,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
               >
                 <p
                   className="ml-2 font-medium tracking-wider capitalize truncate"
-                  style={{ fontSize: '10px' }}
+                  style={{ fontSize: '12px' }}
                 >
                   {wallet.name.length > 10
                     ? wallet.name.substr(0, 10) + '...'
@@ -171,7 +172,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
           </section>
           <div>
             {showSubWallet2 === wallet.id ? (
-              <Sub2WalletIndex currWalId={currWalId} />
+              <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" />
             ) : null}
           </div>
           {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
@@ -181,7 +182,7 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
       {subwallet?.data?.lists.map((list) => (
         <div key={list.id}>
           <section
-            className={`relative flex items-center justify-between h-8 pr-6 space-x-1 text-sm hover:bg-gray-100 group ${
+            className={`relative flex items-center justify-between h-8 pr-6 space-x-1 hover:bg-gray-100 group ${
               list.id === activeItemId && 'bg-green-100 text-black font-medium'
             }`}
           >
@@ -190,7 +191,11 @@ function SubWalletIndex({ padding = 'pl-8' }: SubWalletIndexProps) {
             )}
             <div className="flex items-center pl-8 space-x-1 tracking-wider capitalize truncate cursor-pointer">
               <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
-              <div onClick={() => handleListLocation(list.id, list.name)}>
+              <div
+                onClick={() => handleListLocation(list.id, list.name)}
+                style={{ fontSize: '12px' }}
+                className="tracking-wider capitalize truncate cursor-pointer"
+              >
                 {list.name}
               </div>
             </div>

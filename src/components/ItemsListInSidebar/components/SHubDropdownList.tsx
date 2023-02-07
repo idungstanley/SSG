@@ -6,19 +6,16 @@ import { useAppSelector } from '../../../app/hooks';
 import WalletModal from '../../../pages/workspace/wallet/components/modals/WalletModal';
 import ListModal from '../../../pages/workspace/lists/components/modals/ListModal';
 
-interface SubHubIndexProps {
-  marginLeft?: string;
-}
-export default function SHubDropdownList({ marginLeft = 'pl-0' }: SubHubIndexProps) {
+export default function SHubDropdownList() {
   const { currSubHubId, currSubHubIdType } = useAppSelector(
     (state) => state.hub
   );
 
   return currSubHubIdType === 'subhub' ? (
     <>
-      <div className={`${marginLeft}`}>
-        <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} />
-        <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} />
+      <div>
+        <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="52" />
+        <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="52" />
         <WalletModal />
         <ListModal />
       </div>

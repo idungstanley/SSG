@@ -170,12 +170,15 @@ export default function SubDropdown() {
   ];
   return (
     <div className="" ref={ref}>
-      <div className="fixed z-50 w-56 py-1 origin-top-right bg-white rounded-md shadow-lg top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <div
+        className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md  top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: "200px" }}
+      >
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center px-4 py-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-100"
+                className="flex items-center cursor-pointer p-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-200 rounded-md"
                 onClick={item.handleClick}
               >
                 {item.icon}

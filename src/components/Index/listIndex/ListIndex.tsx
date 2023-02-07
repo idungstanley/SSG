@@ -20,9 +20,14 @@ import {
 interface ListIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
+  paddingLeft?: string;
 }
 
-function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
+function ListIndex({
+  showHubList,
+  getCurrentHubId,
+  paddingLeft = '26',
+}: ListIndexProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
@@ -62,9 +67,11 @@ function ListIndex({ showHubList, getCurrentHubId }: ListIndexProps) {
         data?.data?.lists.map((list) => (
           <div key={list.id}>
             <section
-              className={`flex relative justify-between items-center text-sm pl-6 h-8 hover:bg-gray-100 ${
-                list.id === activeItemId && 'bg-green-100 text-black font-medium'
+              className={`flex relative justify-between items-center text-sm h-8 hover:bg-gray-100 ${
+                list.id === activeItemId &&
+                'bg-green-100 text-black font-medium'
               }`}
+              style={{ paddingLeft: `${paddingLeft}px` }}
             >
               {list.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
