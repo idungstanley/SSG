@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { UseCreateTagService } from '../../features/workspace/workspaceService';
-import Button from '../Button';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 export default function CreateTag() {

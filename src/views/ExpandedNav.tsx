@@ -26,6 +26,7 @@ import { IoMdCloseCircle } from 'react-icons/io';
 import Extendedbar from '../pages/newExplorer/components/Sidebar';
 import { BiCabinet } from 'react-icons/bi';
 import { IoSearchCircleOutline } from 'react-icons/io5';
+import ResizeBorder from '../components/ResizeBorder';
 
 const secondaryNavigation = [
   {
@@ -82,6 +83,8 @@ function ExpandedNav() {
   } = useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const MIN_SIDEBAR_WIDTH = 230;
+  const MAX_SIDEBAR_WIDTH = 320;
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -122,7 +125,11 @@ function ExpandedNav() {
       ref={sidebarRef}
       style={
         showExtendedBar
-          ? { maxWidth: "320px", width: extendedSidebarWidth, minWidth: '230px' }
+          ? {
+              maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
+              width: extendedSidebarWidth,
+              minWidth: `${MIN_SIDEBAR_WIDTH}px`,
+            }
           : { width: '1px', minWidth: '1px' }
       }
     >
@@ -242,6 +249,12 @@ function ExpandedNav() {
             onMouseDown={startResizing}
           ></div>
         </span>
+        <ResizeBorder
+          width={extendedSidebarWidth}
+          minWidth={MIN_SIDEBAR_WIDTH}
+          maxWidth={MAX_SIDEBAR_WIDTH}
+          startResizing={startResizing}
+        />
       </section>
     </div>
   );

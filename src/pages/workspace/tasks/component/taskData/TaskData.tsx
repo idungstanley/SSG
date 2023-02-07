@@ -107,6 +107,24 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
+  function groupTags(arr) {
+    return arr.forEach(function (item) {
+      if (Array.isArray(item)) {
+        groupTags(item);
+      } else {
+        console.log(item.name);
+        return (
+          <div
+          // className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
+          // style={{ marginTop: '-4px', marginLeft: '-30px' }}
+          >
+            {item.name}
+          </div>
+        );
+      }
+    });
+  }
+
   const renderData = (taskColField, colfield) => {
     if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
@@ -119,6 +137,8 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
+    } else if (colfield === 'tags') {
+      return <div> {groupTags(task.tags)}</div>;
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined

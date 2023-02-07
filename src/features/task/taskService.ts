@@ -162,7 +162,6 @@ export const getTaskListService = ({ listId }) => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         const taskData = data.data.tasks.map((task) => {
           queryClient.setQueryData(['task', task.id], task);
           return { ...task };
@@ -510,6 +509,9 @@ export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }) => {
     {
       initialData: queryClient.getQueryData(['tags', tagId]),
       enabled: !!tagId,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['tags']);
+      },
     }
   );
 };
