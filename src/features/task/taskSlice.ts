@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface ImyTaskData {
   id: string;
@@ -48,6 +48,7 @@ interface TaskState {
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: null;
   currentTaskPriorityId: null;
+  currentTaskIdForTag: null;
 }
 
 const initialState: TaskState = {
@@ -72,7 +73,7 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: "",
+  initial_description: '',
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
@@ -80,10 +81,11 @@ const initialState: TaskState = {
   updateStatusModalIdForPilot: null,
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
+  currentTaskIdForTag: null,
 };
 
 export const taskSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -198,6 +200,9 @@ export const taskSlice = createSlice({
     setUpdateStatusModalId(state, action) {
       state.updateStatusModalId = action.payload;
     },
+    setCurrentTaskIdForTag(state, action) {
+      state.currentTaskIdForTag = action.payload;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -229,5 +234,6 @@ export const {
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
+  setCurrentTaskIdForTag,
 } = taskSlice.actions;
 export default taskSlice.reducer;

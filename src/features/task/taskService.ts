@@ -486,3 +486,29 @@ export const UseUnAssignTaskService = ({
     }
   );
 };
+
+//assign tags
+export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['tags', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `tags/${tagId}/assign`,
+          method: 'POST',
+          params: {
+            type: 'task',
+            id: currentTaskIdForTag,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(['tags', tagId]),
+      enabled: !!tagId,
+    }
+  );
+};

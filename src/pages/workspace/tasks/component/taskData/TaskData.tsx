@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import {
   setCurrentParentTaskId,
   setCurrentTaskId,
+  setCurrentTaskIdForTag,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setGetSubTaskId,
@@ -33,7 +34,7 @@ import TagModal from "../../../../../components/tags/TagModal";
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   // const { myTaskData } = useAppSelector((state) => state.task);
-  // console.log(task);
+  console.log(task);
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
@@ -229,6 +230,10 @@ export default function TaskData({ task }: TaskDataProps) {
                 aria-hidden="true"
                 onClick={() => handleCreateSubTask(task.id)}
               />
+              {/* tag here */}
+              <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
+                <TagModal />
+              </button>
             </div>
           </div>
         </div>
