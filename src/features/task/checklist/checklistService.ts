@@ -65,3 +65,30 @@ export const UseCreateChecklist = ({ task_id, trigger }) => {
     }
   );
 };
+
+export const UseCreateChecklistItem = ({
+  task_id,
+  checklistId,
+  triggerItem,
+  name,
+}) => {
+  return useQuery(
+    ["item"],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `at/tasks/${task_id}/checklist/${checklistId}`,
+          method: "POST",
+          params: {
+            name: name,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: triggerItem != false,
+    }
+  );
+};

@@ -8,6 +8,7 @@ import {
   getOneTaskServices,
 } from "../../../../../features/task/taskService";
 import { UseCreateChecklist } from "../../../../../features/task/checklist/checklistService";
+import ChecklistItem from "./ChecklistItem";
 
 type checklistItem = {
   name: string;
@@ -30,7 +31,7 @@ export default function Checklist() {
   const { data: task, refetch } = getOneTaskServices({
     task_id: currentTaskIdForPilot,
   });
-  console.log(task?.data.task.task_checklists);
+  // console.log(task?.data.task.task_checklists);
   if (status == "success") {
     refetch();
   }
@@ -38,6 +39,7 @@ export default function Checklist() {
   const { checklist } = useAppSelector((state) => state.checklist);
   useEffect(() => {
     setChecklists(checklist);
+    setTriggerCreate(false);
   }, [checklists, checklist]);
 
   return (
@@ -52,25 +54,16 @@ export default function Checklist() {
         <div>
           {task?.data.task.task_checklists &&
             task?.data.task.task_checklists.map((item, index) => {
+              // console.log(item.id);
               return (
                 <div key={index}>
                   <div className="flex items-center">
-                    <h1 className="px-5 text-xl">{item.name}(0/0)</h1>
+                    <h1 className="px-5 text-xl">{item.id}(0/0)</h1>
                     <div className="opacity-0 hover:opacity-100 cursor-pointer">
                       <BsThreeDots />
                     </div>
                   </div>
-                  <span className="flex items-center">
-                    <label className="text-xl px-5">+</label>
-                    <input
-                      type="text"
-                      className="border-none hover:boder-none hover:outline-none"
-                      placeholder="New Checklist Item"
-                    />
-                    <div className="opacity-0 hover:opacity-100 cursor-pointer">
-                      <BsThreeDots />
-                    </div>
-                  </span>
+                  <ChecklistItem Item={item.items} checklistId={item.id} />
                 </div>
               );
             })}
