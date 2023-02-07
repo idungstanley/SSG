@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
-import { AiOutlineTags } from 'react-icons/ai';
+import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
 import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
 import { Spinner } from '../../common';
 import CreateTag from './CreateTag';
@@ -41,16 +40,19 @@ export default function TagModal() {
           {tagList.map((tags) => (
             <Menu.Item key={tags.id}>
               {({ active }) => (
-                <button
-                  type="button"
-                  className={classNames(
-                    active ? 'bg-gray-300' : '',
-                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
-                  )}
-                  // onClick={tags.handleClick}
-                >
-                  <p>{tags.name}</p>
-                </button>
+                <div className="flex items-center hover:bg-gray-300 text-gray-600">
+                  <button
+                    type="button"
+                    className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
+
+                    // onClick={tags.handleClick}
+                  >
+                    <p>{tags.name}</p>
+                  </button>
+                  <button>
+                    <AiOutlineEllipsis className="text-sm" />
+                  </button>
+                </div>
               )}
             </Menu.Item>
           ))}
