@@ -1,54 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { UseCreateChecklistItem } from "../../../../../features/task/checklist/checklistService";
-import { useAppSelector } from "../../../../../app/hooks";
-import { getOneTaskServices } from "../../../../../features/task/taskService";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UseCreatelistItemService } from "../../../../../features/task/checklist/checklistService";
+import { GrDrag } from "react-icons/gr";
 
 function ChecklistItem({ Item, checklistId }: any) {
+  const queryClient = useQueryClient();
   const [newItem, setNewItem] = useState<any>("");
-  const [trigger, setTrigger] = useState<any>(false);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const [items, setItems] = useState<any>(Item);
-
-  const { data: checklistItem, status } = UseCreateChecklistItem({
-    task_id: currentTaskIdForPilot,
-    checklistId: checklistId,
-    triggerItem: trigger,
-    name: newItem,
+  const createChecklist = useMutation(UseCreatelistItemService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
-  // console.log(checklistItem);
-  useEffect(() => {
-    if (checklistItem != undefined && checklistItem.success) {
-      const newArr = [...items];
-      // console.log(newArr);
-      // newArr.push(checklistItem.datatask_checklist_item);
-    }
-  }, [checklistItem]);
 
-  const handleSubmit = (e) => {
-    setTrigger(true);
+  const handleSubmit = async () => {
+    await createChecklist.mutateAsync({
+      name: newItem,
+      checklist_id: checklistId,
+    });
     setNewItem("");
-    // console.log(currentTaskIdForPilot);
-    // setNewItem(e.target.value);
   };
+
   return (
     <div>
       <span className="flex items-center">
         <label className="text-xl px-5">+</label>
         <input
           type="text"
-          className="border-none hover:boder-none hover:outline-none"
+          className="border-none hover:boder-none hover:outline-none focus:outline-none h-8 my-1"
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
-          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit(e) : null)}
+          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : null)}
         />
-        <div className="opacity-0 hover:opacity-100 cursor-pointer">
-          <BsThreeDots />
-        </div>
       </span>
-      {items.map((item) => {
-        return <h1 key={item.id}>{item.name}</h1>;
+      {Item.map((item) => {
+        return (
+          <div
+            key={item.id}
+            className="flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5"
+          >
+            <span className="text-gray-200 justify-center cursor-move opacity-100 group-hover:opacity-100">
+              <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
+            </span>
+            <input type="checkbox" className="rounded-lg mx-3" />
+            <h1 className="cursor-pointer">{item.name}</h1>
+          </div>
+        );
       })}
     </div>
   );

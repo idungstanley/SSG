@@ -1,63 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { BsThreeDots } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../app/hooks';
-import { getchecklist } from '../../../../../features/task/checklist/checklistSlice';
-import { getOneTaskServices } from '../../../../../features/task/taskService';
-import { UseCreateChecklist } from '../../../../../features/task/checklist/checklistService';
-import ChecklistItem from './ChecklistItem';
+import React, { useState, useEffect } from "react";
+import { BsThreeDots } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../app/hooks";
+import {
+  UseCreateClistService,
+  UseGetAllClistService,
+} from "../../../../../features/task/checklist/checklistService";
+import ChecklistItem from "./ChecklistItem";
+import { Spinner } from "../../../../../common";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ChecklistSubtab from "./ChecklistSubtab";
+import ChecklistModal from "./ChecklistModal";
 
 type checklistItem = {
   name: string;
 };
 
 export default function Checklist() {
-  const dispatch = useDispatch();
-  const [checklists, setChecklists] = useState<any>(null);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
   const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
-  const [updateChecklist, setUpdateChecklist] = useState<boolean>(false);
-  dispatch(getchecklist(currentTaskIdForPilot));
+  const queryClient = useQueryClient();
 
-  const { data, status } = UseCreateChecklist({
-    task_id: currentTaskIdForPilot,
-    trigger: triggerCreate,
+  const createChecklist = useMutation(UseCreateClistService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
 
-  // console.log(status);
-  const { data: task, refetch } = getOneTaskServices({
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  console.log(currentTaskIdForPilot);
+  const { data, status, refetch } = UseGetAllClistService({
     task_id: currentTaskIdForPilot,
   });
-  // console.log(task?.data.task.task_checklists);
-  if (status == 'success') {
-    refetch();
+  const task_checklist = data?.data.task.checklists;
+  const [checklists, setChecklists] = useState(task_checklist);
+  console.log(data);
+
+  if (status == "loading") {
+    <Spinner size={20} color={"blue"} />;
   }
+  console.log(status);
+  const handleSubmit = async () => {
+    await createChecklist.mutateAsync({
+      task_id: currentTaskIdForPilot,
+    });
+  };
 
-  const { checklist } = useAppSelector((state) => state.checklist);
-  useEffect(() => {
-    setChecklists(checklist);
-    setTriggerCreate(false);
-  }, [checklists, checklist]);
-
-  return (
-    <>
+  return status == "success" ? (
+    <div className="mx-3">
+      <ChecklistSubtab />
       <div>
         <button
           className="px-5  py-2.5 text-xl cursor-pointer"
-          onClick={() => setTriggerCreate(true)}
+          onClick={handleSubmit}
         >
           + ADD CHECKLIST
         </button>
         <div>
-          {task?.data.task.task_checklists &&
-            task?.data.task.task_checklists.map((item, index) => {
-              // console.log(item.id);
+          {task_checklist &&
+            task_checklist.map((item, index) => {
+              const done = item.items.filter((e) => e.is_done);
               return (
                 <div key={index}>
                   <div className="flex items-center">
-                    <h1 className="px-5 text-xl">{item.name}(0/0)</h1>
-                    <div className="opacity-0 hover:opacity-100 cursor-pointer">
-                      <BsThreeDots />
+                    <h1 className="px-5 text-lg">
+                      {item.name}({done.length}/{item.items.length})
+                    </h1>
+                    <div>
+                      <ChecklistModal />
                     </div>
                   </div>
                   <ChecklistItem Item={item.items} checklistId={item.id} />
@@ -66,6 +75,6 @@ export default function Checklist() {
             })}
         </div>
       </div>
-    </>
-  );
+    </div>
+  ) : null;
 }

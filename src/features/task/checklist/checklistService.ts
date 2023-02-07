@@ -3,92 +3,49 @@ import requestNew from "../../../app/requestNew";
 import { useDispatch } from "react-redux";
 // import { getchecklist } from "./checklistSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getchecklist } from "./checklistSlice";
 
-export const getaTaskServices = ({ task_id }) => {
-  const dispatch = useDispatch();
-  const onSuccess = (data) => {
-    const taskData = data.data.task;
-    const checkLists = taskData.task_checklists;
-    console.log(checkLists);
-    dispatch(getchecklist(checkLists));
-  };
-  return useQuery(
-    ["task", { task_id: task_id }],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}`,
-          method: "GET",
-        },
-        true
-      );
-      return data;
-    },
+export const UseCreateClistService = ({ task_id }: any) => {
+  const url = `/checklists`;
+  const response = requestNew(
     {
-      enabled: task_id != null,
-      onSuccess,
-    }
-  );
-};
-
-export const getChecklist = async (task_id) => {
-  const dispatch = useDispatch();
-  const data = await requestNew(
-    {
-      url: `at/tasks/${task_id}`,
-      method: "GET",
+      url,
+      method: "POST",
+      data: {
+        name: "Checklist",
+        id: task_id,
+        type: "task",
+      },
     },
     true
   );
-  return data?.data.task.task_checklists;
+  return response;
 };
 
-export const UseCreateChecklist = ({ task_id, trigger }) => {
-  return useQuery(
-    ["task"],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}/checklist`,
-          method: "POST",
-          params: {
-            name: "Checklist",
-          },
-        },
-        true
-      );
-      return data;
-    },
-    {
-      enabled: trigger != false,
-    }
-  );
+export const UseGetAllClistService = ({ task_id }) => {
+  const queryClient = useQueryClient();
+  return useQuery(["clist", { task_id }], async () => {
+    const data = await requestNew(
+      {
+        url: `at/tasks/${task_id}`,
+        method: "GET",
+      },
+      true
+    );
+    return data;
+  });
 };
 
-export const UseCreateChecklistItem = ({
-  task_id,
-  checklistId,
-  triggerItem,
-  name,
-}) => {
-  return useQuery(
-    ["item"],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}/checklist/${checklistId}`,
-          method: "POST",
-          params: {
-            name: name,
-          },
-        },
-        true
-      );
-      return data;
-    },
+export const UseCreatelistItemService = ({ checklist_id, name }: any) => {
+  const url = `/checklists/${checklist_id}`;
+  const response = requestNew(
     {
-      enabled: triggerItem != false,
-    }
+      url,
+      method: "POST",
+      data: {
+        name: name,
+      },
+    },
+    true
   );
+  return response;
 };
