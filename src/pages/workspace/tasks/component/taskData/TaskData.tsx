@@ -34,7 +34,7 @@ import TagModal from '../../../../../components/tags/TagModal';
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   // const { myTaskData } = useAppSelector((state) => state.task);
-  console.log(task);
+  // console.log(task);
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
