@@ -107,7 +107,11 @@ export default function ListSection({ data }: any) {
             dispatch(setCurrentListId(data.id));
           }}
         >
-          <p className=" text-xs   mt-1 cursor-pointer ml-9 font-semibold text-gray-400">
+          <p
+            className=" text-xs   mt-1 cursor-pointer ml-7 font-semibold text-gray-400
+          hover:bg-gray-300 px-1 rounded-md border-1"
+            style={{ color: "#78828d", fontSize: "11px", width: "70px" }}
+          >
             + New Task
           </p>
         </div>

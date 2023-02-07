@@ -13,12 +13,13 @@ import {
 import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
 import { MdDragIndicator } from "react-icons/md";
 
-import { EditOutlined, PlusOutlined, UserAddOutlined } from "@ant-design/icons";
+import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../../../../../app/hooks";
 // import { useNavigate } from 'react-router-dom';
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
 import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { FiEdit2 } from "react-icons/fi";
 import "./task.css";
 interface TaskDataProps {
   task: any;
@@ -217,14 +218,14 @@ export default function TaskData({ task }: TaskDataProps) {
               id="iconWrapper"
               className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
             >
+              <FiEdit2
+                className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
+                aria-hidden="true"
+              />
               <PlusOutlined
-                className="cursor-pointer  pt-1 text-xs h-6 w-6 text-black"
+                className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
                 aria-hidden="true"
                 onClick={() => handleCreateSubTask(task.id)}
-              />
-              <EditOutlined
-                className="cursor-pointer  text-xs h-4 w-4 text-black"
-                aria-hidden="true"
               />
             </div>
           </div>

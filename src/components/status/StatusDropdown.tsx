@@ -33,7 +33,7 @@ export default function StatusDropdown({
     },
     {
       id: 2,
-      title: "In-Progress",
+      title: "In Progress",
       handleClick: () => {
         setStatus("in progress");
       },
