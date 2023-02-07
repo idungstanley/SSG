@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface workspaceState {
   workspace: string[];
@@ -28,6 +28,7 @@ interface workspaceState {
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
+  getAllTagsTrigger: boolean;
 }
 
 const initialState: workspaceState = {
@@ -58,17 +59,18 @@ const initialState: workspaceState = {
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
+  getAllTagsTrigger: false,
 };
 
 export const wsSlice = createSlice({
-  name: "workspace",
+  name: 'workspace',
   initialState,
   reducers: {
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      if (action.payload === "CHANGE") {
+      if (action.payload === 'CHANGE') {
         return {
           ...state,
           showSidebar: !state.showSidebar,
@@ -96,7 +98,7 @@ export const wsSlice = createSlice({
       state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -104,7 +106,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
@@ -166,6 +168,10 @@ export const wsSlice = createSlice({
       state.currentItemId = null;
       state.currentItemType = null;
     },
+
+    setGetAllTagsTrigger(state, action) {
+      state.getAllTagsTrigger = action.payload;
+    },
     checkIfWs: (state) => state,
   },
 });
@@ -197,6 +203,7 @@ export const {
   setActiveSubTimeClockTabId,
   setPilotWidth,
   setActiveTabId,
+  setGetAllTagsTrigger,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

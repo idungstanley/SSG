@@ -41,7 +41,7 @@ export default function Checklist() {
     task_id: activeItemId,
     trigger: triggerCreateChecklist,
   });
-  console.log(data?.data);
+  // console.log(data?.data);
   return (
     <>
       <div>

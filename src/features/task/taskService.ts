@@ -58,7 +58,6 @@ export const getOneTaskServices = ({ task_id }) => {
 //create checklist
 export const UseCreateCheckList = ({ task_id, trigger }) => {
   // const queryClient = useQueryClient();
-  console.log(trigger);
   return useQuery(
     ['task'],
     async () => {
