@@ -13,33 +13,21 @@ export const columnsHead:
     field: "name",
     value: "Task",
     hidden: false,
-    // onclick: (e, listItemHidden) => {
-    //   e == "Task" ? listItemHidden == !listItemHidden : null;
-    // },
   },
   {
     field: "assignees",
     value: "Assignees",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "tags",
     value: "Tags",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "priority",
     value: "Priority",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "created_at",
@@ -50,48 +38,30 @@ export const columnsHead:
     field: "description",
     value: "Description",
     hidden: true,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "status",
     value: "Status",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "start_date",
     value: " Start Date",
     hidden: true,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "end_date",
     value: "End Date",
     hidden: true,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "updated_at",
     value: "Updated at",
     hidden: false,
-    onclick: () => {
-      alert("great");
-    },
   },
   {
     field: "archived_at",
     value: "Archived at",
     hidden: true,
-    onclick: () => {
-      alert("great");
-    },
   },
 ];
