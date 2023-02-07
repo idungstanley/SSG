@@ -36,9 +36,10 @@ export default function Table({
               onChange={toggleAll}
             />
           </th>
+          {/* eye */}
           <th
             scope="col"
-            className="px-3 py-2 uppercase text-left text-sm font-normal text-gray-400"
+            className="px-3 pl-5 py-2 uppercase text-left text-sm font-normal text-gray-400"
           />
           <th
             scope="col"

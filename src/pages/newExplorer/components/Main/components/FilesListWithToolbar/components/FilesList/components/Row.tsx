@@ -21,6 +21,7 @@ import {
   EyeSlashIcon,
 } from '@heroicons/react/24/outline';
 import ToolTip from '../../../../../../../../../components/Tooltip';
+import { classNames } from '../../../../../../../../../utils';
 
 interface RowProps {
   fileId: string;
@@ -101,13 +102,11 @@ export default function Row({ fileId }: RowProps) {
     <tr
       style={style}
       key={file.id}
-      className={`${
-        selectedIds.includes(file.id) ? 'bg-green-100 hover:bg-green-200' : null
-      }
-        ${
-          selectedFileId === file.id ? 'bg-green-100 hover:bg-green-100' : null
-        } 
-         cursor-pointer hover:bg-gray-50 group`}
+      className={classNames(
+        selectedIds.includes(file.id) ? 'bg-green-100 hover:bg-green-200' : '',
+        selectedFileId === file.id ? 'bg-green-100 hover:bg-green-100' : '',
+        'cursor-pointer hover:bg-gray-50 group'
+      )}
       onClick={(e) => onClickRow(e, file.id)}
     >
       <td className="relative w-8 px-2">
@@ -123,29 +122,9 @@ export default function Row({ fileId }: RowProps) {
         />
       </td>
 
-      {/* move row by grabbing this icon */}
-      <td
-        {...listeners}
-        {...attributes}
-        ref={setNodeRef}
-        className="whitespace-nowrap py-2 px-2 text-sm text-gray-500"
-      >
-        <ArrowsUpDownIcon
-          className="h-5 w-5 text-gray-300"
-          aria-hidden="true"
-        />
-      </td>
-
-      <td className="py-2 text-sm font-medium flex gap-4 items-center px-2 justify-between text-gray-700">
-        <div className="flex items-center gap-2 truncate">
-          <FileIcon extensionKey={file.file_format.extension} size={4} />
-          <span className="truncate text-sm pt-0.5 flex justify-between">
-            {file.display_name}
-          </span>
-        </div>
-
-        {/* show eye icon if preview toggle enabled */}
-        {!showPreview ? (
+      {/* show eye icon if preview toggle enabled */}
+      {!showPreview ? (
+        <td>
           <ToolTip
             tooltip={fastPreview.fileId ? 'Hide preview' : 'Show preview'}
           >
@@ -159,7 +138,7 @@ export default function Row({ fileId }: RowProps) {
                   )
                 )
               }
-              className="transition text-gray-500"
+              className="transition text-gray-500 flex justify-center w-full"
             >
               {fastPreview.fileId === file.id ? (
                 <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
@@ -171,7 +150,32 @@ export default function Row({ fileId }: RowProps) {
               ) : null}
             </span>
           </ToolTip>
-        ) : null}
+        </td>
+      ) : null}
+
+      <td className="py-2 text-sm font-medium flex justify-between gap-4 items-center px-2 text-gray-700">
+        <div className="flex items-center gap-2 truncate">
+          <FileIcon extensionKey={file.file_format.extension} size={4} />
+          <span className="truncate text-sm pt-0.5 flex justify-between">
+            {file.display_name}
+          </span>
+        </div>
+
+        {/* move row by grabbing this icon */}
+        <span
+          ref={setNodeRef}
+          {...listeners}
+          {...attributes}
+          className="whitespace-nowrap py-2 px-2 text-sm text-gray-500"
+        >
+          <ArrowsUpDownIcon
+            className={classNames(
+              selectedFileId === file.id ? 'text-gray-500' : 'text-gray-300',
+              'h-5 w-5'
+            )}
+            aria-hidden="true"
+          />
+        </span>
       </td>
 
       <td className="whitespace-nowrap py-2 px-2 text-sm text-gray-500">
