@@ -3,37 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 
-const checklistOptions = [
-  {
-    id: 1,
-    name: "New Item",
-    handleClick: () => {
-      console.log("New Item");
-    },
-  },
-  {
-    id: 2,
-    name: "Rename",
-    handleClick: () => {
-      console.log("Rename");
-    },
-  },
-  {
-    id: 3,
-    name: "Delete Checklist",
-    handleClick: () => {
-      console.log("Delete Checklist");
-    },
-  },
-  {
-    id: 4,
-    name: "Move down",
-    handleClick: () => {
-      console.log("Move Down");
-    },
-  },
-];
-export default function ChecklistModal() {
+export default function ChecklistModal({ options }: any) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -51,7 +21,7 @@ export default function ChecklistModal() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="origin-top-right absolute z-20 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-20">
-          {checklistOptions.map((option) => (
+          {options.map((option) => (
             <Menu.Item key={option.id}>
               {({ active }) => (
                 <div className="flex items-center hover:bg-gray-300 text-gray-600">

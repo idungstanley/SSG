@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UseCreatelistItemService } from "../../../../../features/task/checklist/checklistService";
+import { UseCreatelistItemService } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
+import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
+import ChecklistModal from "./ChecklistModal";
+import { completeOptions } from "../ModalOptions";
 
 function ChecklistItem({ Item, checklistId }: any) {
   const queryClient = useQueryClient();
@@ -43,8 +46,18 @@ function ChecklistItem({ Item, checklistId }: any) {
             <span className="text-gray-200 justify-center cursor-move opacity-100 group-hover:opacity-100">
               <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
             </span>
-            <input type="checkbox" className="rounded-lg mx-3" />
+            <input
+              type="checkbox"
+              // checked={item.is_done}
+              className="rounded-lg mx-3"
+            />
             <h1 className="cursor-pointer">{item.name}</h1>
+            <span className="p-1 border-2 border-dotted rounded-full mx-2">
+              <img className="w-4 h-4" src={assign} alt="assign" />
+            </span>
+            <div>
+              <ChecklistModal options={completeOptions} />
+            </div>
           </div>
         );
       })}

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { MdAddToPhotos, MdDragIndicator } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../../app/hooks";
-import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import SubtabDrag from "../SubtabDnd";
+import { useAppSelector } from "../../../../../../app/hooks";
+// import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
+import propertiesIcon from "../../../../../../assets/branding/properties-icon.png";
+import SubtabDrag from "../../SubtabDnd";
 import {
   closestCenter,
   DndContext,
@@ -20,7 +21,7 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
-const DetailOptions = [
+const ChecklistOptions = [
   {
     id: 1,
     name: "Properties",
@@ -34,7 +35,7 @@ const DetailOptions = [
 ];
 
 export default function ChecklistSubtab() {
-  const { showPilot, activeSubDetailsTabId } = useAppSelector(
+  const { showPilot, activeSubChecklistTabId } = useAppSelector(
     (state) => state.workspace
   );
 
@@ -48,7 +49,7 @@ export default function ChecklistSubtab() {
   );
 
   const [items, setItems] = useState(
-    DetailOptions.sort(
+    ChecklistOptions.sort(
       (a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
     )
   );
@@ -90,24 +91,24 @@ export default function ChecklistSubtab() {
               showPilot ? "flex-row" : "flex-col"
             }`}
           >
-            {DetailOptions.map((item) =>
+            {ChecklistOptions.map((item) =>
               item.icon ? (
                 <SubtabDrag
                   key={item.id}
                   id={item.id}
                   icon={item.icon}
-                  activeSub={activeSubDetailsTabId}
+                  activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
-                  name={"details"}
+                  name={"Checklist"}
                 />
               ) : (
                 <SubtabDrag
                   key={item.id}
                   id={item.id}
-                  activeSub={activeSubDetailsTabId}
+                  activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
                   source={item.source}
-                  name={"details"}
+                  name={"Checklist"}
                 />
               )
             )}

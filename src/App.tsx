@@ -16,7 +16,7 @@ function App() {
         position="bottom-left"
         toastOptions={{
           style: {
-            width: "10px",
+            width: "200px",
           },
         }}
       />
