@@ -5,8 +5,7 @@ import {
   useGetChat,
 } from '../../../../../features/chat/chatService';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
-import { ISelectedData } from '../../../../PermissionManagement';
-import SelectMenuTeamMembers from '../../../../selectMenu';
+import SelectMenuTeamMembers, { ISelectedData } from '../../../../selectMenu';
 
 interface AddNewProps {
   chatId: string;

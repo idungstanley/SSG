@@ -109,7 +109,7 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id: string, name: string, e) => {
+  const handleHubSettings = (id: string, name: string) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -119,7 +119,7 @@ export default function ItemsListInSidebar({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if (id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -209,7 +209,7 @@ export default function ItemsListInSidebar({
             {isHovering === index && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={() => handleHubSettings(i.id, i.name)}
                   className="text-black cursor-pointer"
                   id="menusettings"
                 />

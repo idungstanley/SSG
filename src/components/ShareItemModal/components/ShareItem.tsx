@@ -3,8 +3,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { Spinner } from '../../../common';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useShareItem } from '../../../features/shared/sharedService';
-import { ISelectedData } from '../../PermissionManagement';
-import SelectMenuTeamMembers from '../../selectMenu';
+import SelectMenuTeamMembers, { ISelectedData } from '../../selectMenu';
 
 export default function ShareItem() {
   const { shareSideOver } = useAppSelector((state) => state.slideOver);

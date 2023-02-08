@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
-import { ISelectedData } from '../../../../../../../components/PermissionManagement';
-import SelectMenuTeamMembers from '../../../../../../../components/selectMenu';
+import SelectMenuTeamMembers, { ISelectedData } from '../../../../../../../components/selectMenu';
 import { useGetTeamMembersOrGroups } from '../../../../../../../features/inbox/inboxSettingsService';
 import { useAddAccessForData } from '../../../../../../../features/permissions/permissionsService';
 

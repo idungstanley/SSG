@@ -2,10 +2,10 @@ import React from 'react';
 
 interface statusType {
   on?: string | JSX.Element;
-  colour: string;
-  size: number;
-  ringSize: number;
-  top: boolean;
+  colour?: string;
+  size?: number;
+  ringSize?: number;
+  top?: boolean;
 }
 
 function StatusDot({ on, colour, size, ringSize, top }: statusType) {
@@ -21,12 +21,5 @@ function StatusDot({ on, colour, size, ringSize, top }: statusType) {
     </span>
   );
 }
-
-StatusDot.defaultProps = {
-  size: 2.5,
-  colour: '#4ADE80',
-  ringSize: 2,
-  top: true,
-};
 
 export default StatusDot;
