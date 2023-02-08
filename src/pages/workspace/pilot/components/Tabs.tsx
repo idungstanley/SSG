@@ -4,10 +4,11 @@ import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
 import automationIcon from '../../../../assets/branding/automation.png';
 import timeclockIcon from '../../../../assets/branding/timeclock.png';
+import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BsThreeDots } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -178,15 +179,17 @@ function Tab() {
               showPilot ? 'flex-row py-2' : 'flex-col gap-1'
             }`}
           >
-            <HiChevronDoubleRight
+            <img
+              src={compactArrowIcon}
+              alt=""
               onClick={() => handleShowPilot()}
               className={`cursor-pointer ${
                 showPilot
-                  ? 'translate-x-4 skew-y-3'
+                  ? 'translate-x-4 skew-y-3 w-3 h-3'
                   : 'transform -rotate-180 mb-1'
               }`}
             />
-            <BsThreeDotsVertical />
+            <BsThreeDots />
           </div>
         </section>
         <div
