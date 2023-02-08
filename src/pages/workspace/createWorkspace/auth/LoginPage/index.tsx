@@ -1,109 +1,48 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
-import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login';
-import { gapi } from 'gapi-script';
-import {
-  loginService,
-  loginGoogleService,
-} from '../../../../../features/auth/authService';
+import { useLoginService } from '../../../../../features/auth/authService';
 import { setAuthData } from '../../../../../features/auth/authSlice';
 import Form from '../../../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
 import { formikConfig } from '../../../../../components/Comments/components/componentType';
+import { useAppDispatch } from '../../../../../app/hooks';
+import GoogleLogin from '../../GoogleLogin';
 
 function LoginPage() {
-  const dispatch = useDispatch();
-  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const dispatch = useAppDispatch();
 
-  const loginMutation = useMutation(loginService, {
-    onSuccess: (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
+  const { mutate: onLogin, data } = useLoginService();
+
+  useEffect(() => {
+    if (data) {
+      const { user } = data.data;
+      const { default_workspace_id } = user;
+      const { accessToken, token } = data.data.token;
+      const { user_id } = token;
+
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('accessToken', JSON.stringify(accessToken));
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
-      );
-      localStorage.setItem(
-        'currentUserId',
-        JSON.stringify(successData.data.token.token.user_id)
+        JSON.stringify(default_workspace_id)
       );
       dispatch(
         setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
+          user,
+          accessToken,
+          currentWorkspaceId: default_workspace_id,
+          currentUserId: user_id,
         })
       );
-    },
-  });
-
-  const loginGoogleMutation = useMutation(loginGoogleService, {
-    onSuccess: (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
-      );
-      dispatch(
-        setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
-        })
-      );
-    },
-  });
+    }
+  }, [data]);
 
   const onSubmit = (values: { email: string; password: string }) => {
-    loginMutation.mutate({
+    onLogin({
       email: values.email,
       password: values.password,
     });
-  };
-
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        scope: 'email',
-      });
-    }
-
-    gapi.load('client:auth2', start);
-  }, []);
-
-  const handleGoogleLogin = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) => {
-    if (response.code) {
-      loginGoogleMutation.mutate({
-        code: response.code,
-      });
-    } else {
-      // error handler
-    }
-  };
-
-  const handleGoogleFailure = (error: unknown) => {
-    // fail handler: todo delete console log
-    // eslint-disable-next-line no-console
-    console.log(error);
   };
 
   const formikConfig: formikConfig = {
@@ -130,25 +69,7 @@ function LoginPage() {
             formikConfig={formikConfig}
           />
 
-          {GOOGLE_CLIENT_ID ? (
-            <GoogleLogin
-              clientId={GOOGLE_CLIENT_ID}
-              onSuccess={handleGoogleLogin}
-              onFailure={handleGoogleFailure}
-              cookiePolicy="single_host_origin"
-              responseType="code"
-              redirectUri="postmessage"
-              render={(renderProps) => (
-                <button
-                  type="button"
-                  onClick={renderProps.onClick}
-                  className="w-full mt-5 text-sm text-center text-gray-500 hover:text-gray-600"
-                >
-                  Or sign in with Google
-                </button>
-              )}
-            />
-          ) : null}
+          <GoogleLogin title="Or sign in with Google" />
         </div>
         <Help />
       </div>
