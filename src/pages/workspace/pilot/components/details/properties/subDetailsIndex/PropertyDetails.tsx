@@ -17,13 +17,21 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
+  const groupTags = (arr) => {
+    return arr?.map((item) => {
+      return Array.isArray(item) ? (
+        <div>{groupTags(item)}</div>
+      ) : (
+        <div style={{ backgroundColor: `${item.color}` }}>{item.name}</div>
+      );
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
-          {/* <ToolTip tooltip="Status"> */}
           <Status Details={Details} />
-          {/* </ToolTip> */}
           <ToolTip tooltip="Priority">
             <Priority Details={Details} />
           </ToolTip>
@@ -86,7 +94,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="tags" className="mt-2">
           <label className="text-xs text-gray-500">Tags</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>Also workspace tag</p>
+            <p> {groupTags(Details?.tags)}</p>
           </div>
         </div>
         {/* create subtask */}
