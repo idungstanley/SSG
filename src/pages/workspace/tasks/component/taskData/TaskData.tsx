@@ -112,7 +112,7 @@ export default function TaskData({ task }: TaskDataProps) {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
-        <div>{item.name}</div>
+        <div style={{ color: `${item.color}` }}>{item.name}</div>
       );
     });
   };
@@ -129,8 +129,9 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'tags') {
-      return <div> {groupTags(task.tags)}</div>;
+      // }
+      //  else if (colfield === 'tags') {
+      //   return <div> {groupTags(task.tags)}</div>;
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
@@ -149,7 +150,7 @@ export default function TaskData({ task }: TaskDataProps) {
       if (taskColField == 'completed') {
         return (
           <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -158,7 +159,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'in progress') {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -167,16 +168,25 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'archived') {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
+      } else if (taskColField == 'new') {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full"
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+          >
+            <p>Todo</p>
+          </div>
+        );
       } else if (taskColField == 'todo') {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -247,9 +257,13 @@ export default function TaskData({ task }: TaskDataProps) {
                 <TagModal />
               </button>
             </div>
+            {/* tags goes here */}
+            {/* <div> {groupTags(task.tags)}</div>; */}
           </div>
         </div>
       );
+    } else if (colfield === 'tags') {
+      return <div> {groupTags(task.tags)}</div>;
     }
     // else if (colfield == "description") {
     //   return (
@@ -283,38 +297,68 @@ export default function TaskData({ task }: TaskDataProps) {
   return (
     <div className="relative ">
       <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
-        <div className=" flex w-6/12  items-center ">
-          {hideTask.length
-            ? hideTask.map(
-                (col) =>
-                  col.value == 'Task' &&
-                  !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
-                      {renderData(task[col.field], col.field)}
-                    </div>
-                  )
-              )
-            : taskColumns.map(
-                (col) =>
-                  col.value == 'Task' &&
-                  !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
-                      {renderData(task[col.field], col.field)}
-                    </div>
-                  )
-              )}
+        <div className=" flex justify-between w-6/12 items-center ">
+          <div className="w-5/6">
+            {hideTask.length
+              ? hideTask.map(
+                  (col) =>
+                    col.value == 'Task' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )
+              : taskColumns.map(
+                  (col) =>
+                    col.value == 'Task' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )}
+          </div>
+          <div id="tags" className="w-1/6">
+            {hideTask.length
+              ? hideTask.map(
+                  (col) =>
+                    col.value == 'Tags' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )
+              : taskColumns.map(
+                  (col) =>
+                    col.value == 'Tags' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )}
+          </div>
         </div>
         <div className=" dynamic ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
                   col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -328,6 +372,7 @@ export default function TaskData({ task }: TaskDataProps) {
             : taskColumns.map(
                 (col) =>
                   col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
