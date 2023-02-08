@@ -9,7 +9,7 @@ import hubIcon from '../../../../assets/branding/hub.png';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ExtendedBar from '../../../newExplorer/components/Sidebar';
+import ExtendedBar from '../../../explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
 import Directory from '../../../directory/components/Sidebar';
 import { FaWpforms } from 'react-icons/fa';
@@ -48,7 +48,7 @@ const places = [
     id: 4,
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'new-explorer',
+    link: 'explorer',
   },
   {
     name: 'Library',

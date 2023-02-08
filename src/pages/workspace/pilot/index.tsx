@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import Tab from './components/Tabs';
-import History from '../../newExplorer/components/Pilot/components/History';
-import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
+import History from '../../explorer/components/Pilot/components/History';
+import Permissions from '../../explorer/components/Pilot/components/Permissions';
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import ChatForPilot from '../../../components/Chat/ChatForPilot';
 import Commnunication from './components/communication/Communication';

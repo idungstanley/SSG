@@ -12,20 +12,8 @@ import ExpandedNav from '../../views/ExpandedNav';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
 
-export default function NewExplorerPage() {
-  const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
-    (state) => state.workspace
-  );
-
-  const paddingStyles = () => {
-    if (showSidebar && sidebarWidth > 54) {
-      return { paddingLeft: `min(${sidebarWidth}px, 321px)` };
-    } else if (sidebarWidth < 55) {
-      return { paddingLeft: `${54}px` };
-    } else {
-      return { paddingLeft: `${54}px` };
-    }
-  };
+export default function ExplorerPage() {
+  const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
   return (
     <>
@@ -35,7 +23,7 @@ export default function NewExplorerPage() {
           <Sidebar />
 
           {/* header */}
-          <div className="flex w-full flex-row" style={paddingStyles()}>
+          <div className="ml-80 flex w-full flex-row">
             {showExtendedBar && <ExpandedNav />}
             <section className="w-full h-full">
               <Header />

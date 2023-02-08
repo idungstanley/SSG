@@ -103,7 +103,7 @@ export default function DragContext({ children }: DragContextProps) {
       // reset selected folder if it moved to root
       if (activeId === selectedFolderId) {
         dispatch(resetSelectedItem());
-        navigate('/new-explorer');
+        navigate('/explorer');
       }
 
       // moving file / folder request data

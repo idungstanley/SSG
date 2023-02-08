@@ -36,7 +36,7 @@ export default function FoldersList({
   const handleClickFolder = (folderId: string, parentId: string | null) => {
     const isActiveFolder = selectedFolderId === folderId;
     dispatch(setSelectedFolderId(isActiveFolder ? parentId : folderId));
-    navigate(`/new-explorer/${isActiveFolder ? parentId || '' : folderId}`, {
+    navigate(`/explorer/${isActiveFolder ? parentId || '' : folderId}`, {
       replace: true,
     });
 

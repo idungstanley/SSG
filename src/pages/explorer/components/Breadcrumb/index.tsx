@@ -43,7 +43,7 @@ export default function BreadcrumbSection() {
         ...folder.ancestors.map((ancestor) => ({
           name: ancestor.name,
           current: false,
-          href: `/new-explorer/${ancestor.id}`,
+          href: `/explorer/${ancestor.id}`,
         })),
         ...[{ name: folder.name, current: true, href: null }],
       ]
@@ -68,7 +68,7 @@ export default function BreadcrumbSection() {
         rootIcon={
           <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
         }
-        rootIconHref="/new-explorer"
+        rootIconHref="/explorer"
       />
     </div>
   );

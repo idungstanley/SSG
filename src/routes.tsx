@@ -52,7 +52,7 @@ import Calendar from './pages/workspace/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
 import Home from './pages/workspace/home/Home';
-import NewExplorerPage from './pages/newExplorer';
+import ExplorerPage from './pages/explorer';
 import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
 
@@ -105,8 +105,8 @@ export const routes = (user: IUser | null) =>
         <Navigate to="/auth/register" />
       ),
     },
-    { path: 'new-explorer', element: <NewExplorerPage /> },
-    { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
+    { path: 'explorer', element: <ExplorerPage /> },
+    { path: 'explorer/:folderId', element: <ExplorerPage /> },
     { path: 'directory', element: <Directory /> },
     { path: 'directory/case', element: <Directory /> },
     { path: 'directory/shelf', element: <Directory /> },

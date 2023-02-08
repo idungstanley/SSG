@@ -77,7 +77,7 @@ export default function FolderItem({
     });
     if (isActiveFolder) {
       dispatch(resetSelectedItem());
-      navigate('/new-explorer', { replace: true });
+      navigate('/explorer', { replace: true });
     }
   };
 
