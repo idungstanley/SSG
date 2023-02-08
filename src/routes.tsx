@@ -10,7 +10,6 @@ import LoginPage from './pages/workspace/createWorkspace/auth/LoginPage';
 import RegisterPage from './pages/workspace/createWorkspace/auth/RegisterPage';
 
 // Main
-import ExplorerPage from './pages/explorer/ExplorerPage';
 import SearchPage from './pages/search/SearchPage';
 
 // Inboxes
@@ -125,8 +124,6 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: '/', element: <Navigate to="/workspace" /> },
-        { path: 'explorer', element: <ExplorerPage /> },
-        { path: 'explorer/:folderId', element: <ExplorerPage /> },
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox,
