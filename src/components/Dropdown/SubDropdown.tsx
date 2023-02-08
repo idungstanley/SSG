@@ -48,7 +48,7 @@ export default function SubDropdown() {
   } = useAppSelector((state) => state.slideOver);
   const ref = useRef<any>();
   useEffect(() => {
-    const checkClickedOutSide = (e) => {
+    const checkClickedOutSide = (e: MouseEvent) => {
       if (SubMenuId != null && ref.current && !ref.current.contains(e.target)) {
         if (
           showCreateSubWalletSlideOver === false &&
