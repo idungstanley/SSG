@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  ImyTaskData,
   setCurrentParentTaskId,
   setCurrentTaskId,
   setCurrentTaskIdForTag,
@@ -23,7 +24,7 @@ import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { FiEdit2 } from 'react-icons/fi';
 import './task.css';
 interface TaskDataProps {
-  task: any;
+  task: ImyTaskData;
 }
 // import { columnsHead } from '../views/ListColumns';
 import moment from 'moment';
@@ -33,8 +34,6 @@ import TagModal from '../../../../../components/tags/TagModal';
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
-  // const { myTaskData } = useAppSelector((state) => state.task);
-  console.log(task);
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
@@ -49,7 +48,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskPilot = (id: any, name: string) => {
+  const handleTaskPilot = (id: string, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
       setActiveItem({
@@ -92,7 +91,7 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (data: [{id: string, initials: string, colour: string}]) => {
     return data?.map((newData) => (
       <div key={newData.id} className="relative">
         <span key={newData.id}>

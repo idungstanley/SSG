@@ -4,11 +4,12 @@ import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
 import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
 import { Spinner } from '../../common';
 import CreateTag from './CreateTag';
-import { useAppSelector } from '../../app/hooks';
 import { UseAssignTagToTask } from '../../features/task/taskService';
+import { dataProps } from '../Index/walletIndex/WalletIndex';
+import { useAppSelector } from '../../app/hooks';
 
 export default function TagModal() {
-  const [tagId, setTagId] = useState(null);
+  const [tagId, setTagId] = useState<string | null>(null);
   const { currentTaskIdForTag } = useAppSelector((state) => state.task);
   //get all tags
   const { data, status } = UseGetAllTagsService();
@@ -23,11 +24,7 @@ export default function TagModal() {
     tagId,
     currentTaskIdForTag,
   });
-
   console.log(assignTag);
-  // if (status == 'success') {
-  //   setTagId(null);
-  // }
 
   return status == 'success' ? (
     <Menu as="div" className="relative inline-block text-left">
@@ -52,9 +49,9 @@ export default function TagModal() {
             <CreateTag />
           </div>
           <div className="h-52 overflow-auto ">
-            {tagList.map((tags) => (
+            {tagList.map((tags: dataProps) => (
               <Menu.Item key={tags.id}>
-                {({ active }) => (
+                {() => (
                   <div className="flex items-center hover:bg-gray-300 text-gray-600">
                     <button
                       type="button"

@@ -1,53 +1,33 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
 import {
-  setCurrentParentSubTaskId,
-  setCurrentParentSubTaskId3,
-  setCurrentParentSubTaskId4,
-  setCurrentParentTaskId,
+  ImyTaskData,
   setCurrentTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
-import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
-import moment from "moment";
+} from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import { MdDragIndicator } from 'react-icons/md';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { EditOutlined, FlagOutlined, UserAddOutlined } from '@ant-design/icons';
+import { AvatarWithInitials } from '../../../../../components';
+import AssignTask from '../../assignTask/AssignTask';
+import { columnsHead } from '../../component/views/ListColumns';
+import moment from 'moment';
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
 
 export default function Template5({ task }: TemplateProps) {
   const dispatch = useDispatch();
-
-  const [showSubTask, setShowSubTask] = useState<string | null>(null);
-
-  const { showTaskNavigation, toggleAssignCurrentTaskId, currentParentTaskId } =
-    useAppSelector((state) => state.task);
+  const { showTaskNavigation, toggleAssignCurrentTaskId } = useAppSelector(
+    (state) => state.task
+  );
 
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
-  };
-
-  const handleCreateSubTask = (id: string) => {
-    if (id == currentParentTaskId) {
-      dispatch(setCurrentParentTaskId(null));
-    } else {
-      dispatch(setCurrentParentTaskId(id));
-    }
   };
 
   const handleAssigneeModal = (id: string) => {
@@ -58,7 +38,9 @@ export default function Template5({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (
+    data: [{ id: string; initials: string; colour: string }]
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">
@@ -72,19 +54,23 @@ export default function Template5({ task }: TemplateProps) {
       </>
     ));
   };
+  interface Iassignee {
+    id: string;
+    initials: string;
+    colour: string;
+  }
 
-  const handleShowSubTask = (id: string) => {
-    if (id == showSubTask) {
-      setShowSubTask(null);
-      dispatch(setCurrentParentSubTaskId4(null));
-    } else {
-      setShowSubTask(id);
-      dispatch(setCurrentParentSubTaskId4(id));
-    }
-  };
-
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | null
+      | [{ id: string; initials: string; colour: string }],
+    colfield: string
+  ) => {
+    if (
+      colfield === 'assignees' &&
+      (taskColField as Array<Iassignee>)?.length !== 0
+    ) {
       return (
         <div className="relative">
           <div
@@ -95,7 +81,10 @@ export default function Template5({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (
+      colfield === 'assignees' &&
+      (taskColField as Array<Iassignee>)?.length === 0
+    ) {
       return (
         <UserAddOutlined
           className=" ml-2  text-gray-400 text-xl cursor-pointer "
@@ -103,13 +92,13 @@ export default function Template5({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield == 'created_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as string).format('MM/DD')}
         </span>
       );
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -130,7 +119,7 @@ export default function Template5({ task }: TemplateProps) {
                 aria-hidden="true"
               />
             </p>
-            <p className="cursor-pointer">{taskColField}</p>
+            <p className="cursor-pointer">{taskColField as string}</p>
             <div
               id="iconWrapper"
               className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -143,7 +132,7 @@ export default function Template5({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span className="relative border-dotted border-gray-300 ">
           <FlagOutlined
@@ -161,25 +150,25 @@ export default function Template5({ task }: TemplateProps) {
         <div className="  w-6/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == 'Task' && (
                 <div
                   key={col.field}
                   className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
                 >
-                  {renderData(task[col.field], col.field)}
+                  {renderData(task[col.field as keyof ImyTaskData], col.field)}
                 </div>
               )
           )}
         </div>
-        <div className="dynamic ">
+        <div className="dynamic">
           {columnsHead.map(
             (col) =>
-              col.value !== "Task" && (
+              col.value !== 'Task' && (
                 <div
                   key={col.field}
                   className="flex items-center uppercase bg-white   text-gray-400 py-px pl-6 font-medium  group"
                 >
-                  {renderData(task[col.field], col.field)}
+                  {renderData(task[col.field as keyof ImyTaskData], col.field)}
                 </div>
               )
           )}

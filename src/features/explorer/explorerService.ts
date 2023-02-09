@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import requestForBuffer from '../../app/requestForBuffer';
 import { IExplorerAndSharedData } from '../shared/shared.interfaces';
+import { explorerItemType } from '../../types';
 
 // Get folder
 export const useGetFolder = (
@@ -227,3 +228,47 @@ export const useGetFileBuffers = (id: string | null, contentType: string) => {
     status: response.status,
   };
 };
+
+// trashed files / folders
+export const useGetTrashedExplorerFolders = () =>
+  useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
+    ['trashed-explorer-folders'],
+    () =>
+      requestNew({
+        url: 'folders/trashed',
+        method: 'GET',
+      }),
+    {
+      select: (res) => res.data.folders,
+    }
+  );
+
+export const useGetTrashedExplorerFiles = () =>
+  useQuery<IExplorerFilesRes, unknown, IExplorerFile[]>(
+    ['trashed-explorer-files'],
+    () =>
+      requestNew({
+        url: 'files/trashed',
+        method: 'GET',
+      }),
+    {
+      select: (res) => res.data.files,
+    }
+  );
+
+const restoreExplorerItem = (data: {
+  type: explorerItemType;
+  itemId: string;
+}) => {
+  const { type, itemId } = data;
+
+  const response = requestNew({
+    url: `${type}s/${itemId}/restore`,
+    method: 'POST',
+  });
+  return response;
+};
+
+export const useRestoreExplorerItem = () => useMutation(restoreExplorerItem);
+// ? invalidate queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
+// ? invalidate queryClient.invalidateQueries(folderId ? ['explorer-folder', folderId] : ['explorer-folders']);

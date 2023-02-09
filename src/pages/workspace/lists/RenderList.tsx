@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getTaskListService } from "../../../features/task/taskService";
 import ListNav from "./components/renderlist/ListNav";
@@ -40,7 +40,7 @@ function RenderList() {
   console.log(taskColumns);
 
   useEffect(() => {
-    const hidden = (col) => {
+    const hidden = (col: string) => {
       if (col == "id") {
         return true;
       }
@@ -87,7 +87,6 @@ function RenderList() {
     const columnHead: string[][] = [];
     const singleObj = editable[0];
     singleObj && columnHead.push(Object.keys(singleObj));
-    const columnsHead: any = [];
     columnHead[0]?.map((column) => {
       if (column !== "id") {
         const singleColumn = {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
+  ImyTaskData,
   setCurrentParentSubTaskId3,
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -12,7 +13,6 @@ import { MdDragIndicator } from "react-icons/md";
 import { RiCheckboxBlankFill } from "react-icons/ri";
 import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
 import {
-  CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
@@ -22,9 +22,10 @@ import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
 import { columnsHead } from "../../component/views/ListColumns";
 import moment from "moment";
+import { groupAssigneeProps } from "../subtask1/Template";
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
 
 export default function Template3({ task }: TemplateProps) {
@@ -56,7 +57,7 @@ export default function Template3({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (data: groupAssigneeProps[]) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">
@@ -81,7 +82,7 @@ export default function Template3({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield) => {
+  const renderData = (taskColField, colfield: string) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
         <div className="relative">

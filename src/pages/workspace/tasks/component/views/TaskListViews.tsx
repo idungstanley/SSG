@@ -22,8 +22,8 @@ export default function TaskListViews() {
     (state) => state.task
   );
 
-  const [taskCol, setTaskCol] = useState(columnsHead);
-  dispatch(getTaskColumns(taskCol));
+  // const [taskCol, setTaskCol] = useState(columnsHead);
+  dispatch(getTaskColumns(columnsHead));
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);

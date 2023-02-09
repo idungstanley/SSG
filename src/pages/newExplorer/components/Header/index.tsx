@@ -7,37 +7,9 @@ import {
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
-import ToolTip from '../../../../components/Tooltip';
-// import {
-//   ArrowLeftCircleIcon,
-//   ArrowRightCircleIcon,
-// } from '@heroicons/react/24/solid';
 
 export default function Header() {
   const dispatch = useAppDispatch();
-
-  // const navigationButtons = [
-  //   {
-  //     id: 1,
-  //     onClick: () => ({}),
-  //     icon: (
-  //       <ArrowLeftCircleIcon
-  //         className="h-8 w-8 text-gray-400"
-  //         aria-hidden="true"
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-  //     onClick: () => ({}),
-  //     icon: (
-  //       <ArrowRightCircleIcon
-  //         className="h-8 w-8 text-gray-400"
-  //         aria-hidden="true"
-  //       />
-  //     ),
-  //   },
-  // ];
 
   const rightItems = [
     {

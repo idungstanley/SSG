@@ -3,10 +3,7 @@ import {
   TrashIcon,
   ShareIcon,
   MagnifyingGlassIcon,
-  ArrowDownTrayIcon,
-  AdjustmentsVerticalIcon,
   MagnifyingGlassMinusIcon,
-  ClipboardIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -19,10 +16,7 @@ import { useMultipleDeleteFiles } from '../../../../../../../../features/explore
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 import { DownloadFile } from '../../../../../../../../app/helpers';
-import {
-  setShowPilotSideOver,
-  setShowShareSideOver,
-} from '../../../../../../../../features/general/slideOver/slideOverSlice';
+import { setShowShareSideOver } from '../../../../../../../../features/general/slideOver/slideOverSlice';
 import Search from '../../../../../Search';
 import Sorting from '../FilesList/components/Sorting';
 import { useCopyItems } from '../../../../../../../../features/explorer/explorerActionsService';
@@ -108,19 +102,6 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
       label: 'Copy',
       disabled: selectedIds.length === 0,
     },
-    {
-      label: 'Pilot',
-      onClick: () =>
-        dispatch(
-          setShowPilotSideOver({
-            id: selectedFileId || '',
-            type: 'file',
-            show: true,
-          })
-        ),
-      icon: <AdjustmentsVerticalIcon className="w-5 h-5" aria-hidden="true" />,
-      disabled: !selectedFileId,
-    },
   ];
 
   return (
@@ -164,13 +145,13 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
             <Sorting />
           </Tooltip>
           {/* badge (items length and current index) */}
-          <div className="flex gap-1.5 items-center text-sm border border-gray-300 rounded bg-green-100 px-2.5 font-semibold text-gray-800">
+          <div className="flex gap-1.5 items-center text-sm rounded bg-green-100 px-2.5 font-semibold text-gray-800">
             {currentFileIndex ? (
               <>
                 <span className="text-primary-500">
                   {stringifyNumber(currentFileIndex)}
                 </span>
-                <span>/</span>
+                <span>of</span>
               </>
             ) : null}
             <span>{stringifyNumber(data.length)}</span>

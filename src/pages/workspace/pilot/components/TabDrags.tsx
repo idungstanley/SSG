@@ -1,6 +1,5 @@
 import React from 'react';
 import { classNames } from '../../../../utils';
-import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
@@ -11,9 +10,9 @@ interface TabProps {
   id: number;
   name: string;
   source: string | undefined;
-  showPilot?: any;
-  showPilotIconView?: any;
-  subTab?: any;
+  showPilot?: boolean;
+  showPilotIconView?: boolean;
+  subTab?: JSX.Element;
 }
 
 export default function TabDrag({
@@ -36,7 +35,7 @@ export default function TabDrag({
   });
   const dispatch = useDispatch();
   const { activeTabId, showPilotListView } = useAppSelector(
-    (state) => state.workspace
+    state=> state.workspace
   );
   const style = {
     transform: transform

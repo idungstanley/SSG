@@ -27,13 +27,16 @@ import {
 } from '../../../features/general/slideOver/slideOverSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
-import WalletModal from '../../../pages/workspace/wallet/components/modals/WalletModal';
-import ListModal from '../../../pages/workspace/lists/components/modals/ListModal';
 
 interface WalletIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
   paddingLeft?: string;
+}
+
+export interface dataProps {
+  id: string;
+  name: string;
 }
 
 function WalletIndex({
@@ -44,7 +47,7 @@ function WalletIndex({
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { SubMenuId, showMenuDropdown, currSubHubId, hubParentId } =
+  const { SubMenuId, showMenuDropdown } =
     useAppSelector((state) => state.hub);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
@@ -55,7 +58,7 @@ function WalletIndex({
   });
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, name, type = 'wallet') => {
+  const handleLocation = (id: string, name: string, type = 'wallet') => {
     dispatch(setShowHub(true));
     navigate(`/workspace/wallet/${id}`);
     setShowSubWallet(id);
@@ -91,7 +94,11 @@ function WalletIndex({
       );
     }
   };
-  const handleWalletSettings = (id: string, name: string, e) => {
+  const handleWalletSettings = (
+    id: string,
+    name: string,
+    e: React.MouseEvent<SVGElement>
+  ) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -100,7 +107,7 @@ function WalletIndex({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -143,7 +150,7 @@ function WalletIndex({
           </div>
         )}
       {data?.data?.wallets.length !== 0 &&
-        data?.data?.wallets.map((wallet) => (
+        data?.data?.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>
             <section
               className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${

@@ -7,19 +7,14 @@ import { getOneTaskServices } from '../../../../../features/task/taskService';
 import { UseCreateChecklist } from '../../../../../features/task/checklist/checklistService';
 import ChecklistItem from './ChecklistItem';
 
-type checklistItem = {
-  name: string;
-};
-
 export default function Checklist() {
   const dispatch = useDispatch();
-  const [checklists, setChecklists] = useState<any>(null);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const [checklists, setChecklists] = useState<null | string[]>(null);
+  const { currentTaskIdForPilot } = useAppSelector(state => state.task);
   const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
-  const [updateChecklist, setUpdateChecklist] = useState<boolean>(false);
   dispatch(getchecklist(currentTaskIdForPilot));
 
-  const { data, status } = UseCreateChecklist({
+  const { status } = UseCreateChecklist({
     task_id: currentTaskIdForPilot,
     trigger: triggerCreate,
   });
@@ -50,7 +45,7 @@ export default function Checklist() {
         </button>
         <div>
           {task?.data.task.task_checklists &&
-            task?.data.task.task_checklists.map((item, index) => {
+            task?.data.task.task_checklists.map((item: {[key: string]: string}, index: number) => {
               // console.log(item.id);
               return (
                 <div key={index}>

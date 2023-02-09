@@ -1,33 +1,31 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import moment from "moment";
+import React, { ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import moment, { MomentInput } from 'moment';
 import {
-  setCurrentParentSubTaskId,
   setCurrentParentSubTaskId2,
   setCurrentParentTaskId,
   setCurrentTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+} from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import { MdDragIndicator } from 'react-icons/md';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import {
-  CalendarOutlined,
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from "@ant-design/icons";
-import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
+} from '@ant-design/icons';
+import { AvatarWithInitials } from '../../../../../components';
+import AssignTask from '../../assignTask/AssignTask';
+import { columnsHead } from '../../component/views/ListColumns';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
-
 export default function Template2({ task }: TemplateProps) {
   const dispatch = useDispatch();
 
@@ -57,7 +55,9 @@ export default function Template2({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (
+    data: [{ id: string; initials: string; colour: string }]
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">
@@ -82,8 +82,8 @@ export default function Template2({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (taskColField: string, colfield: string): taskColField is keyof ImyTaskData => {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -94,7 +94,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
           className=" ml-2  text-gray-400 text-xl cursor-pointer "
@@ -102,13 +102,13 @@ export default function Template2({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield == 'created_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -141,7 +141,7 @@ export default function Template2({ task }: TemplateProps) {
               aria-hidden="true"
             />
           </p>
-          <p>{taskColField}</p>
+          <p>{taskColField as ReactNode}</p>
           <div
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -158,7 +158,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span className="relative border-dotted border-gray-300 ">
           <FlagOutlined
@@ -176,12 +176,17 @@ export default function Template2({ task }: TemplateProps) {
         <div className="  w-6/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == 'Task' && (
                 <div
                   key={col.field}
                   className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
                 >
-                  {renderData(task[col.field], col.field)}
+                  {
+                    renderData(
+                      task[col.field],
+                      col.field
+                    ) as ReactNode
+                  }
                 </div>
               )
           )}
@@ -189,12 +194,17 @@ export default function Template2({ task }: TemplateProps) {
         <div className="dynamic ">
           {columnsHead.map(
             (col) =>
-              col.value !== "Task" && (
+              col.value !== 'Task' && (
                 <div
                   key={col.field}
                   className="flex items-center uppercase pl-6  text-gray-400 py-px  font-medium  group"
                 >
-                  {renderData(task[col.field], col.field)}
+                  {
+                    renderData(
+                      task[col.field as keyof ImyTaskData],
+                      col.field
+                    ) as ReactNode
+                  }
                 </div>
               )
           )}

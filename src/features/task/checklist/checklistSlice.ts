@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getOneTaskServices } from "../taskService";
+import { createSlice } from '@reduxjs/toolkit';
+import { getOneTaskServices } from '../taskService';
 
 export interface ImyTaskData {
   //   id: string;
@@ -20,7 +20,7 @@ export interface ImyTaskData {
 }
 
 interface checklistState {
-  checklist: any[];
+  checklist: string[];
 }
 
 const initialState: checklistState = {
@@ -28,16 +28,15 @@ const initialState: checklistState = {
 };
 
 export const checklistSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState,
   reducers: {
     getchecklist(state, { payload }) {
       console.log(state.checklist);
-      const { data: task, status } = getOneTaskServices({ task_id: payload });
+      const { data: task } = getOneTaskServices({ task_id: payload });
       const singleTask = task?.data.task;
       const task_checklists = singleTask?.task_checklists;
       state.checklist = task_checklists;
-      // return task_checklists;
     },
   },
 });

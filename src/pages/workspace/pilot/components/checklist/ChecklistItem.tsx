@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
-import { UseCreateChecklistItem } from "../../../../../features/task/checklist/checklistService";
-import { useAppSelector } from "../../../../../app/hooks";
-import { getOneTaskServices } from "../../../../../features/task/taskService";
+import React, { useState } from 'react';
+import { BsThreeDots } from 'react-icons/bs';
+import { UseCreateChecklistItem } from '../../../../../features/task/checklist/checklistService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 
-function ChecklistItem({ Item, checklistId }: any) {
-  const [newItem, setNewItem] = useState<any>("");
-  const [trigger, setTrigger] = useState<any>(false);
+interface checkListProps {
+  Item: dataProps[];
+  checklistId: string;
+}
+function ChecklistItem({ Item, checklistId }: checkListProps) {
+  const [newItem, setNewItem] = useState<string>('');
+  const [trigger, setTrigger] = useState<boolean>(false);
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const [items, setItems] = useState<any>(Item);
+  // const [items, setItems] = useState<Array<dataProps>>(Item);
 
-  const { data: checklistItem, status } = UseCreateChecklistItem({
+  const { data: checklistItem } = UseCreateChecklistItem({
     task_id: currentTaskIdForPilot,
     checklistId: checklistId,
     triggerItem: trigger,
     name: newItem,
   });
-  // console.log(checklistItem);
-  useEffect(() => {
-    if (checklistItem != undefined && checklistItem.success) {
-      const newArr = [...items];
-      // console.log(newArr);
-      // newArr.push(checklistItem.datatask_checklist_item);
-    }
-  }, [checklistItem]);
+  console.log(checklistItem);
 
-  const handleSubmit = (e) => {
+  // useEffect(() => {
+  //   if (checklistItem != undefined && checklistItem.success) {
+  //     const newArr = [...Item];
+  //     return newArr;
+  //   }
+  // }, [checklistItem]);
+
+  const handleSubmit = () => {
     setTrigger(true);
-    setNewItem("");
-    // console.log(currentTaskIdForPilot);
-    // setNewItem(e.target.value);
+    setNewItem('');
   };
   return (
     <div>
@@ -41,13 +43,13 @@ function ChecklistItem({ Item, checklistId }: any) {
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
-          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit(e) : null)}
+          onKeyDown={(e) => (e.key == 'Enter' ? handleSubmit() : null)}
         />
         <div className="opacity-0 hover:opacity-100 cursor-pointer">
           <BsThreeDots />
         </div>
       </span>
-      {items.map((item) => {
+      {Item.map((item: dataProps) => {
         return <h1 key={item.id}>{item.name}</h1>;
       })}
     </div>

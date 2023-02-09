@@ -2,7 +2,6 @@ import React, { Fragment, ReactNode } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Button from './Button';
-import { useAppSelector } from '../app/hooks';
 
 interface SlideOverProps {
   show: boolean;

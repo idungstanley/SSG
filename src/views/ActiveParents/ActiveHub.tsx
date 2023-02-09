@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-// import PlusDropDown from '../pages/workspace/hubs/components/PlusDropDown';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
-// import DropdownList from '../components/ItemsListInSidebar/components/DropdownList';
 import {
   resetCurrentItem,
   setCurrentItem,
@@ -27,6 +25,7 @@ import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
 import ActiveSubHub from './ActiveSubHub';
 import DropdownList from '../../components/ItemsListInSidebar/components/DropdownList';
+import { dataProps } from '../../components/Index/walletIndex/WalletIndex';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
@@ -39,7 +38,7 @@ export default function ActiveHub() {
     queryKey: ['subwalletlist', [currentWalletId]],
     queryFn: getWalletService,
   });
-  const { data: subHub, status: subHubStatus } = useGetSubHub({
+  const { data: subHub } = useGetSubHub({
     parentId: currentItemId,
   });
   const subHubData = subHub?.data.hubs;
@@ -98,7 +97,7 @@ export default function ActiveHub() {
         return null;
       });
     } else if (activeItemType === 'subWallet') {
-      return subWalletData?.map((subWallet) => {
+      return subWalletData?.map((subWallet: dataProps) => {
         if (subWallet.id === activeItemId) {
           return (
             <Sub2WalletIndex
@@ -116,14 +115,14 @@ export default function ActiveHub() {
 
   const displayClickedParent = () => {
     if (activeItemType === 'subhub') {
-      return subHubData?.map((subHub) => {
+      return subHubData?.map((subHub: dataProps) => {
         if (subHub.id === activeItemId) {
           return <ActiveSubHub key={subHub.id} />;
         }
         return null;
       });
     } else if (activeItemType === 'wallet') {
-      return walletData?.map((wallet) => {
+      return walletData?.map((wallet: dataProps) => {
         if (wallet.id === activeItemId) {
           return (
             <ActiveWallet
@@ -135,7 +134,7 @@ export default function ActiveHub() {
         }
       });
     } else if (activeItemType === 'subWallet') {
-      return subWalletData?.map((subWallet) => {
+      return subWalletData?.map((subWallet: dataProps) => {
         if (subWallet.id === activeItemId) {
           return (
             <ActiveSubWallet

@@ -4,12 +4,7 @@ import {
   PlusIcon,
   PencilIcon,
   ShareIcon,
-  ArrowsUpDownIcon,
   ArrowUpTrayIcon,
-  AdjustmentsVerticalIcon,
-  FolderIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
   ClipboardIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
@@ -17,7 +12,6 @@ import { classNames } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
-  setShowPilotSideOver,
   setShowShareSideOver,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
@@ -30,7 +24,7 @@ import { DownloadFile } from '../../../../../app/helpers';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { TbArrowRotaryFirstLeft, TbArrowsUpDown } from 'react-icons/tb';
+import { MdDragIndicator } from 'react-icons/md';
 
 interface FolderItemProps {
   id: string;
@@ -38,7 +32,7 @@ interface FolderItemProps {
   parentId: string | null;
   handleClickFolder: (i: string, parentId: string | null) => void;
   isActiveFolder: boolean;
-  haveAncestors: boolean;
+  haveActiveChild: boolean;
 }
 
 export default function FolderItem({
@@ -46,7 +40,7 @@ export default function FolderItem({
   name,
   parentId,
   handleClickFolder,
-  haveAncestors,
+  haveActiveChild,
   isActiveFolder,
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
@@ -57,6 +51,7 @@ export default function FolderItem({
     listeners,
     setNodeRef: draggableRef,
     transform,
+    isDragging,
   } = useDraggable({ id, data: { parentId, isFolder: true } });
 
   const { isOver, setNodeRef: droppableRef } = useDroppable({
@@ -68,6 +63,7 @@ export default function FolderItem({
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
+    zIndex: isDragging ? 1 : undefined,
   };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
@@ -125,18 +121,6 @@ export default function FolderItem({
       onClick: handleShowShare,
     },
     {
-      label: 'Pilot',
-      onClick: () =>
-        dispatch(
-          setShowPilotSideOver({
-            id,
-            type: 'folder',
-            show: true,
-          })
-        ),
-      icon: <TbArrowsUpDown className="w-5 h-5" aria-hidden="true" />,
-    },
-    {
       label: 'Delete',
       onClick: handleDelete,
       icon: <TrashIcon className="w-5 h-5" aria-hidden="true" />,
@@ -146,48 +130,43 @@ export default function FolderItem({
   return (
     <div
       className={classNames(
-        'group flex relative justify-between w-full items-center py-1.5',
-        isActiveFolder && parentId === null ? 'bg-green-50 text-black' : '',
+        'group flex relative bg-white justify-between w-full items-center py-1.5 hover:bg-gray-100',
+        isActiveFolder && parentId === null ? 'bg-green-200 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''
       )}
       ref={droppableRef}
       style={style}
       title={name}
     >
-      {isActiveFolder && parentId === null && (
-        <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
-      )}
       <div
         onClick={() => handleClickFolder(id, parentId)}
         className="flex items-center cursor-pointer ml-0.5"
       >
-        {isActiveFolder || haveAncestors ? (
-          <>
-            <VscTriangleDown
-              className="flex-shrink-0 h-3 text-xs mr-0.5"
-              color="rgb(95,99,104)"
-              aria-hidden="true"
-            />
-            <FaFolderOpen className="text-green-500" />
-          </>
-        ) : (
-          <>
-            <VscTriangleRight
-              className="flex-shrink-0 h-3 text-xs"
-              color="rgb(95,99,104)"
-              aria-hidden="true"
-            />
-            <FaFolder color="rgb(95,99,104)" />
-          </>
-        )}
-        <div
-          className="ml-2 font-semibold tracking-wider capitalize"
-          style={{ fontSize: '10px' }}
-        >
+        <div className="flex items-center gap-2">
+          {isActiveFolder || haveActiveChild ? (
+            <>
+              <VscTriangleDown
+                className="h-4 w-4 text-gray-600"
+                aria-hidden="true"
+              />
+              <FaFolderOpen className="text-green-500" />
+            </>
+          ) : (
+            <>
+              <VscTriangleRight
+                className="h-4 w-4 text-gray-600"
+                aria-hidden="true"
+              />
+              <FaFolder color="rgb(95,99,104)" />
+            </>
+          )}
+        </div>
+
+        <div className="ml-2 text-sm font-medium tracking-wider capitalize">
           <p>{name}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
+      <div className="flex items-center gap-2">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
           onClick={() =>
@@ -197,7 +176,7 @@ export default function FolderItem({
           aria-hidden="true"
         />
         <div ref={draggableRef} {...listeners} {...attributes}>
-          <TbArrowsUpDown aria-hidden="true" className="cursor-move" />
+          <MdDragIndicator aria-hidden="true" className="cursor-move" />
         </div>
       </div>
     </div>

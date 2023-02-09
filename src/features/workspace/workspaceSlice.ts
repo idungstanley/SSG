@@ -5,7 +5,7 @@ interface workspaceState {
   showSidebar: boolean;
   currentItemId: string | null;
   currentItemType?: string | null;
-  activePlaceId: number | boolean;
+  activePlaceId: number | null;
   showExtendedBar: boolean;
   sidebarWidth: number;
   pilotWidth: number;
@@ -36,7 +36,7 @@ const initialState: workspaceState = {
   showSidebar: true,
   currentItemId: null,
   currentItemType: null,
-  activePlaceId: 0,
+  activePlaceId: null,
   showExtendedBar: false,
   sidebarWidth: 300,
   pilotWidth: 400,
@@ -132,10 +132,7 @@ export const wsSlice = createSlice({
       state.showWallet = action.payload;
     },
     setActivePlaceId: (state, action) => {
-      return {
-        ...state,
-        activePlaceId: state.activePlaceId === action.payload || action.payload,
-      };
+      state.activePlaceId = action.payload;
     },
     setCurrentItem(state, action) {
       state.currentItemId = action.payload.currentItemId;

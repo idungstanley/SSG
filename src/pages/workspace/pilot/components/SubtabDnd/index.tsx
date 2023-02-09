@@ -1,5 +1,4 @@
 import React from "react";
-import { classNames } from "../../../../../utils";
 import { MdDragIndicator } from "react-icons/md";
 import { useSortable } from "@dnd-kit/sortable";
 import { useDispatch } from "react-redux";
@@ -10,11 +9,11 @@ import {
 
 interface TabProps {
   id: number;
-  icon?: any;
-  showPilot?: any;
-  activeSub?: any;
+  icon?: JSX.Element;
+  showPilot?: boolean;
+  activeSub?: number;
   name: string;
-  source?: any;
+  source?: string;
 }
 
 export default function SubtabDrag({

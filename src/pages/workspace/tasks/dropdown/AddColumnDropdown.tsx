@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch } from "../../../../app/hooks";
 import {
-  getTaskColumns,
   hideTaskColumns,
 } from "../../../../features/task/taskSlice";
-
-interface Icolumn {
-  name: string;
-  icons: JSX.Element;
-  onclick: () => void;
-}
+import { listColumnProps } from "../component/views/ListColumns";
 
 interface CustomDropdownProps {
   title: string;
-  listItems: any[];
+  listItems: listColumnProps[];
 }
 
 export default function AddColumnDropdown({
@@ -23,24 +17,7 @@ export default function AddColumnDropdown({
   listItems,
 }: CustomDropdownProps) {
   const [column, setColumn] = useState(false);
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
-
-  // const hidden = (colField) => {
-  //   const taskCollArr: any = [];
-  //   taskColumns.map((colHidden) => {
-  //     if (colField == colHidden.field) {
-  //       const newObj = {
-  //         ...colHidden,
-  //         hidden: !colHidden.hidden,
-  //       };
-  //       taskCollArr.push(newObj);
-  //     } else taskCollArr.push(colHidden);
-  //   });
-  //   console.log(taskCollArr);
-  //   setColH(taskCollArr);
-  //   dispatch(getTaskColumns(taskCollArr));
-  // };
 
   return (
     <div className="relative ">
@@ -70,10 +47,7 @@ export default function AddColumnDropdown({
             {column && (
               <p
                 className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full z-30"
-                // onClick={listItem.onclick}
               >
-                {/* {listItem.icons} */}
-                {/* {listItem.value} */}
               </p>
             )}
             {!column && (

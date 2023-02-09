@@ -1,7 +1,6 @@
 import React, { memo, useRef, useState } from 'react';
 import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../pages/workspace/dashboard';
-import Directory from '../pages/workspace/directory';
 import Favourites from '../pages/workspace/favorites';
 import Files from '../pages/workspace/files';
 import Inbox from '../pages/workspace/inbox';
@@ -68,7 +67,7 @@ const secondaryNavigation = [
   {
     name: 'tracker',
     id: 7,
-    place: <Directory />,
+    place: <Favourites />,
     source: trackerIcon,
   },
 ];
@@ -186,7 +185,7 @@ function ExpandedNav() {
                           onClick={() => dispatch(setShowModal(true))}
                         />
                         <IoSearchCircleOutline
-                          className="w-2.5 h-2.5 mr-1 h-4"
+                          className="w-2.5 mr-1 h-4"
                           aria-hidden="true"
                           onClick={() =>
                             dispatch(setIsExtSearchActive('TOGGLE'))

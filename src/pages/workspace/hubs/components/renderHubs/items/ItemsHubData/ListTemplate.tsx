@@ -1,7 +1,6 @@
 import React from "react";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
 import { useAppSelector } from "../../../../../../../app/hooks";
+import { dataProps } from "../../../../../../../components/Index/walletIndex/WalletIndex";
 import { getTaskListService } from "../../../../../../../features/task/taskService";
 import TaskData from "../../../../../tasks/component/taskData/TaskData";
 import SubTask from "../../../../../tasks/subtasks/create/SubTask";
@@ -19,7 +18,7 @@ export default function ListTemplate({ listId }: listIdprops) {
 
   return (
     <div className="">
-      {data?.data.tasks.map((task) => {
+      {data?.data.tasks.map((task: dataProps) => {
         return (
           <div key={task.id} className="capitalize">
             <TaskData task={task} />

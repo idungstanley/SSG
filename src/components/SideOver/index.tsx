@@ -20,8 +20,8 @@ export default function SideOver({
 }: SideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <div className="absolute inset-0 top-20" />
+      <Dialog as="div" className="relative" style={{ zIndex: 101 }} onClose={onClose}>
+        <div className="absolute inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">

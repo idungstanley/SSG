@@ -37,7 +37,6 @@ function ListNav({
   const toggleView = () => {
     setListView((prev) => !prev);
     setTableView((prev) => !prev);
-
     dispatch(getListView(listView));
     dispatch(getTableView(TableView));
   };

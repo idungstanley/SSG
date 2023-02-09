@@ -5,7 +5,6 @@ import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
   setCreateSubWalletSlideOverVisibility,
-  setCreateWalletSlideOverVisibility,
 } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
   setSubDropdownMenu,

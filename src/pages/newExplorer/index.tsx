@@ -11,7 +11,6 @@ import { useAppSelector } from '../../app/hooks';
 import ExpandedNav from '../../views/ExpandedNav';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
-import Pilot from './components/Pilot';
 
 export default function NewExplorerPage() {
   const { showSidebar, sidebarWidth, showExtendedBar } = useAppSelector(
@@ -38,10 +37,10 @@ export default function NewExplorerPage() {
           {/* header */}
           <div className="flex w-full flex-row" style={paddingStyles()}>
             {showExtendedBar && <ExpandedNav />}
-            <section className="grid w-full grid-rows-mainContent">
+            <section className="w-full h-full">
               <Header />
 
-              <div className="grid grid-rows-mainContent">
+              <div className="grid h-full grid-rows-mainContent">
                 {/* Breadcrumb */}
                 <BreadcrumbSection />
                 {/* files list & file preview */}
@@ -57,7 +56,6 @@ export default function NewExplorerPage() {
       <Watchers />
       <Comments />
       <ShareItemModal />
-      <Pilot />
     </>
   );
 }

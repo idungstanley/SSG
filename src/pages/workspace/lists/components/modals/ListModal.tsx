@@ -15,7 +15,7 @@ function ListModal() {
   const dispatch = useDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
 
-  const { showMenuDropdown, showMenuDropdownType, currSubHubId, hubParentId } =
+  const { showMenuDropdown, showMenuDropdownType, currSubHubId } =
     useAppSelector((state) => state.hub);
   const { showCreateListSlideOver } = useAppSelector(
     (state) => state.slideOver

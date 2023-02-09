@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 
 export interface ImyTaskData {
   id: string;
@@ -9,24 +10,23 @@ export interface ImyTaskData {
   priority: string | null;
   start_date: string | null;
   end_date: string | null;
-  assignees: string[];
-  group_assignees: string[];
+  status: string | null;
+  assignees: [{ id: string; initials: string; colour: string }];
   updated_at: string;
   created_at: string;
   archived_at: string | null;
   deleted_at: string | null;
-  directory_items: string[];
 }
 
 interface TaskState {
   task: string[];
-  currentTaskIdForPilot: any;
+  currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null;
   currTeamMemberId: null;
   myTaskData: ImyTaskData[];
-  taskColumns: any[];
-  hideTask: any[];
+  taskColumns: listColumnProps[];
+  hideTask: listColumnProps[];
   current_task_id: null;
   listView: boolean;
   tableView: boolean;

@@ -13,7 +13,14 @@ import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 
 interface PropertyDetailsProps {
-  Details: any;
+  Details: {
+    id: string;
+    name: string;
+    description: string;
+    created_at: string;
+    status: string;
+    priority: string;
+  };
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);

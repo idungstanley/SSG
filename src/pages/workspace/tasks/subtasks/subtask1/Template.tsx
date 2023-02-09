@@ -1,30 +1,37 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
+  ImyTaskData,
   setCurrentParentSubTaskId,
   setCurrentParentTaskId,
   setCurrentTaskId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+} from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import { MdDragIndicator } from 'react-icons/md';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import {
   EditOutlined,
   FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
-} from "@ant-design/icons";
-import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
-import "../create/subtask.css";
-import { columnsHead } from "../../component/views/ListColumns";
-import moment from "moment";
+} from '@ant-design/icons';
+import { AvatarWithInitials } from '../../../../../components';
+import AssignTask from '../../assignTask/AssignTask';
+import '../create/subtask.css';
+import { columnsHead } from '../../component/views/ListColumns';
+import moment from 'moment';
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
+}
+
+export interface groupAssigneeProps {
+  id: string;
+  initials: string;
+  colour: string;
 }
 
 export default function Template({ task }: TemplateProps) {
@@ -56,7 +63,7 @@ export default function Template({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (data: groupAssigneeProps[]) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1 ">
@@ -81,8 +88,8 @@ export default function Template({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (taskColField, colfield: string) => {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -93,7 +100,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
@@ -101,13 +108,13 @@ export default function Template({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield == 'created_at') {
       return (
         <span className="text-gray-400  text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField).format('MM/DD')}
         </span>
       );
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -157,7 +164,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span className="relative  border-dotted border-gray-300 ">
           <FlagOutlined
@@ -175,7 +182,7 @@ export default function Template({ task }: TemplateProps) {
         <div className="  w-6/12 flex items-center justify-between ">
           {columnsHead.map(
             (col) =>
-              col.value == "Task" && (
+              col.value == 'Task' && (
                 <div
                   key={col.field}
                   className="flex  items-center capitalize ml-2 text-xs  font-medium  group"
@@ -188,7 +195,7 @@ export default function Template({ task }: TemplateProps) {
         <div className="dynamic ">
           {columnsHead.map(
             (col) =>
-              col.value !== "Task" && (
+              col.value !== 'Task' && (
                 <div
                   key={col.field}
                   className="flex items-center uppercase bg-white pl-6  text-gray-400 py-px  font-medium  group"

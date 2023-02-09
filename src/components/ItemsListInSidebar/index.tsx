@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
-  resetCurrentItem,
   setActiveItem,
   setCurrentItem,
   setShowHub,
@@ -109,7 +108,11 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleHubSettings = (id: string, name: string, e) => {
+  const handleHubSettings = (
+    id: string,
+    name: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ): void => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -119,7 +122,7 @@ export default function ItemsListInSidebar({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -207,7 +210,9 @@ export default function ItemsListInSidebar({
             {isHovering === index && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={(e) =>
+                    handleHubSettings(i.id, i.name, e)
+                  }
                   className="cursor-pointer"
                   id="menusettings"
                 />
