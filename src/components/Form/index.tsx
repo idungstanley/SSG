@@ -45,10 +45,14 @@ export default function Form({
           id={i}
           type={i === 'name' ? 'text' : i}
           placeholder={`Enter ${i}`}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...formik.getFieldProps(i)}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
-          message={(formik.touched[i] && formik.errors[i]) ? formik.errors[i] : null}
+          message={
+            formik.touched[i as keyof typeof formik.touched] &&
+            formik.errors[i as keyof typeof formik.errors]
+              ? formik.errors[i as keyof typeof formik.errors]
+              : undefined
+          }
           handleSubmit={formik.submitCount}
           isNewPassword={formikConfig.buttonTitle === 'Sign Up'}
         />

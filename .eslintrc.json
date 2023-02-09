@@ -45,7 +45,6 @@
         "@typescript-eslint/strict-boolean-expressions": 0,
         "no-var": 2,
         "no-loop-func": "off",
-        "react/forbid-prop-types": "off",
         "no-nested-ternary": "off",
         "import/prefer-default-export": "off",
         "no-param-reassign": [2, { "props": false }],

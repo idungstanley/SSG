@@ -85,7 +85,8 @@ export default function MenuDropdown() {
       if (
         showMenuDropdown != null &&
         ref.current &&
-        !ref.current.contains(e.target as HTMLButtonElement)
+        e.target &&
+        !ref.current.contains(e.target as Node)
       ) {
         if (
           showCreateSubWalletSlideOver === false &&

@@ -6,8 +6,7 @@ import {
 } from '../../../features/general/watchers/watchersService';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { itemType } from '../../../types';
-import { ISelectedData } from '../../PermissionManagement';
-import SelectMenuTeamMembers from '../../selectMenu';
+import SelectMenuTeamMembers, { ISelectedData } from '../../selectMenu';
 
 interface AddNewProps {
   item: { type: itemType; id: string };

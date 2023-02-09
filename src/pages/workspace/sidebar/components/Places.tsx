@@ -30,8 +30,7 @@ import {
 import { IoMdCloseCircle } from 'react-icons/io';
 import { GoSettings } from 'react-icons/go';
 import { useParams } from 'react-router-dom';
-import Extendedbar from '../../../newExplorer/components/Sidebar';
-// import { setQuery } from '../../../../features/explorer/explorerSlice';
+import ExtendedBar from '../../../explorer/components/Sidebar';
 import Dropdown from '../../../../components/Dropdown/index';
 import {
   setCreateInboxSlideOverVisibility,
@@ -111,7 +110,7 @@ function Places() {
     {
       name: 'Cabinet',
       id: 4,
-      place: <Extendedbar />,
+      place: <ExtendedBar />,
       icon: <BiCabinet className="h-5 mr-4 text-lg" />,
       plusIcon: <Dropdown config={configForDropdown} iconType="plus" />,
     },

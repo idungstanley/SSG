@@ -10,7 +10,6 @@ import LoginPage from './pages/workspace/createWorkspace/auth/LoginPage';
 import RegisterPage from './pages/workspace/createWorkspace/auth/RegisterPage';
 
 // Main
-import ExplorerPage from './pages/explorer/ExplorerPage';
 import SearchPage from './pages/search/SearchPage';
 
 // Inboxes
@@ -53,7 +52,7 @@ import Calendar from './pages/workspace/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
 import Home from './pages/workspace/home/Home';
-import NewExplorerPage from './pages/newExplorer';
+import ExplorerPage from './pages/explorer';
 import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
 
@@ -106,8 +105,8 @@ export const routes = (user: IUser | null) =>
         <Navigate to="/auth/register" />
       ),
     },
-    { path: 'new-explorer', element: <NewExplorerPage /> },
-    { path: 'new-explorer/:folderId', element: <NewExplorerPage /> },
+    { path: 'explorer', element: <ExplorerPage /> },
+    { path: 'explorer/:folderId', element: <ExplorerPage /> },
     { path: 'directory', element: <Directory /> },
     { path: 'directory/case', element: <Directory /> },
     { path: 'directory/shelf', element: <Directory /> },
@@ -125,8 +124,6 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: '/', element: <Navigate to="/workspace" /> },
-        { path: 'explorer', element: <ExplorerPage /> },
-        { path: 'explorer/:folderId', element: <ExplorerPage /> },
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox,
