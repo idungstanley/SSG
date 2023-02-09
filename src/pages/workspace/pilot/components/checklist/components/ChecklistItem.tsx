@@ -44,7 +44,7 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
       is_done: done,
     });
 
-  const isDone = (id, done) => {
+  const isDone = (id: string, done: number) => {
     setItemId(id);
     done === 0 ? setDone(1) : setDone(0);
     dispatch(setTriggerItemtUpdate(true));
@@ -64,7 +64,7 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
           onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : null)}
         />
       </span>
-      {Item.map((item) => {
+      {Item.map((item: { id: string; is_done: number; name: string }) => {
         return (
           <div
             key={item.id}

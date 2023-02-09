@@ -82,68 +82,75 @@ export default function ChecklistIndex() {
         </button>
         <div>
           {task_checklist &&
-            task_checklist.map((item, index) => {
-              const done = item.items.filter((e) => e.is_done);
-              return (
-                <div key={index}>
-                  <div className="flex items-center">
-                    <span className="px-5 text-lg flex items-center">
-                      <div className="mx-1">
-                        <BiCaretRight
-                          onClick={() => {
-                            setArrowDown(!arrowDown);
-                            setItemId(item.id);
-                            setShowChildren(!showChildren);
-                          }}
-                          className={`${
-                            arrowDown && itemId == item.id
-                              ? "transform rotate-90"
-                              : ""
-                          } cursor-pointer`}
+            task_checklist.map(
+              (
+                item: { id: string; name: string; items: [] },
+                index: number
+              ) => {
+                const done = item.items.filter(
+                  (elem: { is_done: number }) => elem.is_done
+                );
+                return (
+                  <div key={index}>
+                    <div className="flex items-center">
+                      <span className="px-5 text-lg flex items-center">
+                        <div className="mx-1">
+                          <BiCaretRight
+                            onClick={() => {
+                              setArrowDown(!arrowDown);
+                              setItemId(item.id);
+                              setShowChildren(!showChildren);
+                            }}
+                            className={`${
+                              arrowDown && itemId == item.id
+                                ? "transform rotate-90"
+                                : ""
+                            } cursor-pointer`}
+                          />
+                        </div>
+                        {editing && itemId === item.id ? (
+                          <form onSubmit={(e) => handleEdit(e, item.id)}>
+                            <input
+                              type="text"
+                              value={checklistName}
+                              onChange={(e) => setChecklistName(e.target.value)}
+                            />
+                          </form>
+                        ) : (
+                          <h1
+                            onClick={() => {
+                              setItemId(item.id);
+                              editChecklist(item.name);
+                            }}
+                          >
+                            {item.name}
+                          </h1>
+                        )}
+                        <label>
+                          ({done.length}/{item.items.length})
+                        </label>
+                      </span>
+                      <div>
+                        <ChecklistModal
+                          options={
+                            item.items.length === 0
+                              ? lessOptions
+                              : completeOptions
+                          }
                         />
                       </div>
-                      {editing && itemId === item.id ? (
-                        <form onSubmit={(e) => handleEdit(e, item.id)}>
-                          <input
-                            type="text"
-                            value={checklistName}
-                            onChange={(e) => setChecklistName(e.target.value)}
-                          />
-                        </form>
-                      ) : (
-                        <h1
-                          onClick={() => {
-                            setItemId(item.id);
-                            editChecklist(item.name);
-                          }}
-                        >
-                          {item.name}
-                        </h1>
-                      )}
-                      <label>
-                        ({done.length}/{item.items.length})
-                      </label>
-                    </span>
-                    <div>
-                      <ChecklistModal
-                        options={
-                          item.items.length === 0
-                            ? lessOptions
-                            : completeOptions
-                        }
-                      />
                     </div>
+                    {showChildren && itemId == item.id ? (
+                      <ChecklistItem
+                        Item={item.items}
+                        checklistId={item.id}
+                        refetch={refetch}
+                      />
+                    ) : null}
                   </div>
-                  {showChildren && itemId == item.id ? (
-                    <ChecklistItem
-                      Item={item.items}
-                      checklistId={item.id}
-                      refetch={refetch}
-                    />
-                  ) : null}
-                </div>
-              );
-            })}
+                );
+              }
+            )}
         </div>
       </div>
     </div>

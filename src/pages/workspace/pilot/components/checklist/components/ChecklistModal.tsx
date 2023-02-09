@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { BsThreeDots } from 'react-icons/bs';
+import React, { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { BsThreeDots } from "react-icons/bs";
 
 interface ChecklistModalProps {
   options: {
-    id: string;
+    id: number;
     handleClick: () => void;
     name: string;
   }[];
