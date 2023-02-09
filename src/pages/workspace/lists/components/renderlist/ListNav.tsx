@@ -51,7 +51,9 @@ function ListNav({
           </span>
         )}
       </div>
-      <nav className="flex items-center justify-between border-b p-3 overflow-hidden bg-white   ">
+      <nav className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
+      style={{padding: "15px"}}
+      >
         <section className="flex items-center justify-start space-x-2 text-gray-500">
           <span className="space-x-2">
             <span className="font-bold">{navName}</span>

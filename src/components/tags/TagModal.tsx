@@ -23,8 +23,6 @@ export default function TagModal() {
     tagId,
     currentTaskIdForTag,
   });
-
-  console.log(assignTag);
   // if (status == 'success') {
   //   setTagId(null);
   // }

@@ -22,7 +22,6 @@ interface ItemsHubDataProps {
 }
 export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
   const { data } = useGetHubChildren({ query: hubId });
-
   const dispatch = useAppDispatch();
 
   const { addNewTaskItem } = useAppSelector((state) => state.task);
@@ -116,7 +115,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
               )}
               <div>
                 <div>
-                  <TaskListViews />
+                  <TaskListViews listId={item.id} />
                   <span>
                     <ListTemplate listId={item.id} />
                   </span>
