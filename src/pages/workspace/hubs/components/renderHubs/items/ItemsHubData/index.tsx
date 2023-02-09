@@ -31,7 +31,6 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
   const { currentListId, createTaskFromTop } = useAppSelector(
     (state) => state.list
   );
-  
 
   return (
     <section>
