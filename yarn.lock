@@ -11627,7 +11627,7 @@ react-timecode@^1.2.0:
 
 react-timer-wrapper@^0.4.1:
   version "0.4.1"
-  resolved "https://registry.npmjs.org/react-timer-wrapper/-/react-timer-wrapper-0.4.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-timer-wrapper/-/react-timer-wrapper-0.4.1.tgz#021a068797903b023d503a7f6f233e6b23a9acd5"
   integrity sha512-8hG5Q02+73xlLzPneYnspZfhiQ7+9mJyoEdA9khkYuen6sWHMfpraOBGGAgRtTqHu/tp3dIwsr8Yfku2iFjKYw==
   dependencies:
     clean-react-props "^0.4.0"

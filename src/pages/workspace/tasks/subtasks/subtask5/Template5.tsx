@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  ImyTaskData,
   setCurrentParentSubTaskId,
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -42,13 +43,13 @@ export default function Template({ task }: TemplateProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleCreateSubTask = (id: string) => {
-    if (id == currentParentTaskId) {
-      dispatch(setCurrentParentTaskId(null));
-    } else {
-      dispatch(setCurrentParentTaskId(id));
-    }
-  };
+  // const handleCreateSubTask = (id: string) => {
+  //   if (id == currentParentTaskId) {
+  //     dispatch(setCurrentParentTaskId(null));
+  //   } else {
+  //     dispatch(setCurrentParentTaskId(id));
+  //   }
+  // };
 
   const handleTaskStatus = (id: string) => {
     dispatch(setCurrentTaskStatusId(id));

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { AvatarWithInitials } from '../../../../components';
-import { EditOutlined, TagOutlined } from '@ant-design/icons';
+import { TagOutlined } from '@ant-design/icons';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import {
   EndTimeEntriesService,
   GetTimeEntriesService,

@@ -12,7 +12,7 @@ interface TabProps {
   id: number;
   icon?: JSX.Element;
   showPilot?: boolean;
-  activeSub?: number;
+  activeSub?: number | null;
   name: string;
   source?: string;
 }

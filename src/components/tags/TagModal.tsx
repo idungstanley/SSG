@@ -1,16 +1,19 @@
-import React, { Fragment, useState } from 'react';
+import React, {
+  Fragment,
+  // useState
+} from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
 import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
 import { Spinner } from '../../common';
 import CreateTag from './CreateTag';
-import { UseAssignTagToTask } from '../../features/task/taskService';
+// import { UseAssignTagToTask } from '../../features/task/taskService';
 import { dataProps } from '../Index/walletIndex/WalletIndex';
-import { useAppSelector } from '../../app/hooks';
+// import { useAppSelector } from '../../app/hooks';
 
 export default function TagModal() {
-  const [tagId, setTagId] = useState<string | null>(null);
-  const { currentTaskIdForTag } = useAppSelector((state) => state.task);
+  // const [tagId, setTagId] = useState<string | null>(null);
+  // const { currentTaskIdForTag } = useAppSelector((state) => state.task);
   //get all tags
   const { data, status } = UseGetAllTagsService();
 
@@ -20,11 +23,10 @@ export default function TagModal() {
     <Spinner size={10} color={'blue'} />;
   }
 
-  const { data: assignTag } = UseAssignTagToTask({
-    tagId,
-    currentTaskIdForTag,
-  });
-  console.log(assignTag);
+  // const { data: assignTag } = UseAssignTagToTask({
+  //   tagId,
+  //   currentTaskIdForTag,
+  // });
 
   return status == 'success' ? (
     <Menu as="div" className="relative inline-block text-left">
@@ -56,7 +58,7 @@ export default function TagModal() {
                     <button
                       type="button"
                       className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
-                      onClick={() => setTagId(tags.id)}
+                      // onClick={() => setTagId(tags.id)}
                     >
                       <p>{tags.name}</p>
                     </button>

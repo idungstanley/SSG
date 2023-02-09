@@ -28,8 +28,6 @@ export default function DetailsIndex() {
   const walletDetails = wallet?.data.wallet;
   const listDetails = list?.data.list;
 
-  console.log(taskDetails);
-
   const showDetailsType = () => {
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
       return <PropertyDetails Details={hubDetails} key={hubDetails?.id} />;

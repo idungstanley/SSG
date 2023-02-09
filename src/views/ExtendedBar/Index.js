@@ -1,6 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-// import { IResponseGetHubs } from './hubs.interfaces';
 
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
@@ -18,7 +17,6 @@ export const useGetHubList = () => {
       ),
     {
       onSuccess: (data) => {
-        console.log(data);
         data.data.hubs.map((hub) =>
           queryClient.setQueryData(['hub', hub.id], hub)
         );

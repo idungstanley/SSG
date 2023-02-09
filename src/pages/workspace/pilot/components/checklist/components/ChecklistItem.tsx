@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
@@ -11,7 +10,6 @@ import ChecklistModal from "./ChecklistModal";
 import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import State from "pusher-js/types/src/core/http/state";
 
 function ChecklistItem({ Item, checklistId, refetch }: any) {
   const queryClient = useQueryClient();
@@ -45,7 +43,6 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
       itemId: itemId,
       is_done: done,
     });
-  console.log(updateStatus);
 
   const isDone = (id, done) => {
     setItemId(id);

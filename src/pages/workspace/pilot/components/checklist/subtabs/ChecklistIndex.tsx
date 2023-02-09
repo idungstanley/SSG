@@ -4,7 +4,6 @@ import { useAppSelector } from "../../../../../../app/hooks";
 import {
   UseCreateClistService,
   UseGetAllClistService,
-  UseUpdateChecklistService,
 } from "../../../../../../features/task/checklist/checklistService";
 import ChecklistItem from "../components/ChecklistItem";
 import { Spinner } from "../../../../../../common";
@@ -14,10 +13,6 @@ import { lessOptions } from "../ModalOptions";
 import { completeOptions } from "../ModalOptions";
 import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 import { BiCaretRight } from "react-icons/bi";
-
-type checklistItem = {
-  name: string;
-};
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
@@ -33,7 +28,6 @@ export default function ChecklistIndex() {
 
   // Redux states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { triggerChecklistUpdate } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -55,20 +49,19 @@ export default function ChecklistIndex() {
   const task_checklist = data?.data.task.checklists;
 
   // Update Checklist
-  const { data: updateRes, status: updateStatus } = UseUpdateChecklistService({
-    checklist_id: checklistId,
-    name: checklistName,
-    triggerUpdate: triggerChecklistUpdate,
-  });
+  // const { data: updateRes, status: updateStatus } = UseUpdateChecklistService({
+  //   checklist_id: checklistId,
+  //   name: checklistName,
+  //   triggerUpdate: triggerChecklistUpdate,
+  // });
 
-  const editChecklist = (name) => {
+  const editChecklist = (name: string) => {
     setChecklistName(name);
     setEditing(true);
   };
 
   const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
-    console.log(checklistName);
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
     setChecklistId(id);

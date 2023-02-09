@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Menu, Transition, Dialog } from '@headlessui/react';
+import { Transition, Dialog } from '@headlessui/react';
 import { BiTrash } from 'react-icons/bi';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { HiOutlinePencil } from 'react-icons/hi';
@@ -21,10 +21,9 @@ interface itemsType {
 
 interface EditTagModalProps {
   tagId: string | null;
-  taskId: string | null;
 }
 
-export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
+export default function EditTagModal({ tagId }: EditTagModalProps) {
   const dispatch = useDispatch();
   const { showTagColorDialogueBox } = useAppSelector((state) => state.task);
   const EditTagOptions: itemsType[] = [

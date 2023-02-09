@@ -20,8 +20,7 @@ import routePlanner from '../../../../assets/branding/gis_route.png';
 import alsoHRIcon from '../../../../assets/branding/alsohr-icon.png';
 import formsIcon from '../../../../assets/branding/forms-icon.png';
 import commerceIcon from '../../../../assets/branding/commerce.png';
-import { useAppSelector } from '../../../../app/hooks';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { BsPlusLg } from 'react-icons/bs';
 import {
   FolderPlusIcon,
@@ -44,8 +43,7 @@ function Places() {
     (state) => state.workspace
   );
   const { folderId } = useParams();
-  // const { query } = useAppSelector((state) => state.explorer);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleClick = (id: number) => {
     dispatch(setActivePlaceId(id));
   };
@@ -75,7 +73,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -124,7 +122,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -138,7 +136,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -152,7 +150,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -166,7 +164,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -180,7 +178,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -194,7 +192,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },
@@ -208,7 +206,7 @@ function Places() {
           className="w-2.5 h-2.5"
           aria-hidden="true"
           color="black"
-          onClick={() => console.log('stan')}
+          onClick={() => ({})}
         />
       ),
     },

@@ -25,7 +25,7 @@ export const UseCreateClistService = ({ task_id }: { task_id: string }) => {
   return response;
 };
 
-export const UseGetAllClistService = ({ task_id }: {task_id: string}) => {
+export const UseGetAllClistService = ({ task_id }: {task_id: string }) => {
   return useQuery(['clist', { task_id }], async () => {
     const data = await requestNew(
       {
