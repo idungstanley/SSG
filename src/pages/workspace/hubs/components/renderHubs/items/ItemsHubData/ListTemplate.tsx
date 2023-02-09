@@ -13,12 +13,11 @@ interface listIdprops {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  const { currentParentTaskId, getSubTaskId } = useAppSelector(
-    (state) => state.task
-  );
+  const { currentParentTaskId, getSubTaskId, closeTaskListView } =
+    useAppSelector((state) => state.task);
 
   return (
-    <div className="">
+    <div>
       {data?.data.tasks.map((task) => {
         return (
           <div key={task.id} className="capitalize">

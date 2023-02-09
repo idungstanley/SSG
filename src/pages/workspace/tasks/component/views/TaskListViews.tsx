@@ -14,6 +14,7 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { columnsHead } from "./ListColumns";
 import { MdDragIndicator } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
+
 export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
@@ -147,7 +148,12 @@ export default function TaskListViews() {
           onClick={() => handleDropDown()}
         />
         <span className="text-sm z-30">
-          {dropDown && <AddColumnDropdown title="" listItems={taskColumns} />}
+          {dropDown && (
+            <AddColumnDropdown
+              title=""
+              listItems={hideTask.length ? hideTask : taskColumns}
+            />
+          )}
         </span>
       </span>
     </div>

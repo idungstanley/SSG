@@ -20,7 +20,7 @@ import { useAppSelector } from "../../../../../app/hooks";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
 import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
-import { FiEdit2 } from "react-icons/fi";
+import { FiArrowRight, FiEdit2 } from "react-icons/fi";
 import "./task.css";
 interface TaskDataProps {
   task: any;
@@ -30,6 +30,12 @@ import moment from "moment";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import TagModal from "../../../../../components/tags/TagModal";
+import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
+import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
+import {
+  ArrowRightCircleIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -129,8 +135,6 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === "tags") {
-      return <div> {groupTags(taskColField)}</div>;
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
@@ -139,6 +143,8 @@ export default function TaskData({ task }: TaskDataProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
+    } else if (colfield === "tags") {
+      return <div> {groupTags(taskColField)}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
@@ -182,6 +188,15 @@ export default function TaskData({ task }: TaskDataProps) {
             {taskColField}
           </div>
         );
+      } else {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            TODO
+          </div>
+        );
       }
     } else if (colfield === "name") {
       return (
@@ -202,18 +217,24 @@ export default function TaskData({ task }: TaskDataProps) {
             className="items-center"
           >
             {task.id == getSubTaskId ? (
-              <span className="flex flex-col">
-                <VscTriangleDown
+              <span>
+                <img
+                  src={ArrowDown}
+                  style={{ width: "6px", marginRight: "2px" }}
                   className="flex-shrink-0 h-2"
+                  aria-hidden="true"
                   color="rgba(72, 67, 67, 0.64)"
                 />
               </span>
             ) : (
-              <VscTriangleRight
-                className="flex-shrink-0 h-2"
-                aria-hidden="true"
-                color="rgba(72, 67, 67, 0.64)"
-              />
+              <span>
+                <img
+                  src={ArrowRigt}
+                  style={{ width: "5px", marginRight: "2px" }}
+                  className="flex-shrink-0 h-2"
+                  color="rgba(72, 67, 67, 0.64)"
+                />
+              </span>
             )}
           </div>
           <div className="flex items-center">
@@ -250,15 +271,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    }
-    // else if (colfield == "description") {
-    //   return (
-    //     <span className="text-gray-400 text-sm font-medium">
-    //       <p>jkhsbdfkjsbvkjrghdfbvjkhrf</p>
-    //     </span>
-    //   );
-    // }
-    else if (colfield === "priority") {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
