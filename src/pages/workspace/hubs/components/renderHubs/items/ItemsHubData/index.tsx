@@ -29,6 +29,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
   const { currentListId, createTaskFromTop } = useAppSelector(
     (state) => state.list
   );
+  const { closeTaskListView } = useAppSelector((state) => state.task);
 
   return (
     <section>
@@ -115,7 +116,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                 <AddNewItem listId={data.id} />
               )}
               <div>
-                <div className=" ">
+                <div>
                   <TaskListViews />
                   <span>
                     <ListTemplate listId={item.id} />
