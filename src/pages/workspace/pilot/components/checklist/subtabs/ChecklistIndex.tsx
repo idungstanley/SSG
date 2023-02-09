@@ -13,7 +13,7 @@ import ChecklistModal from "../components/ChecklistModal";
 import { lessOptions } from "../ModalOptions";
 import { completeOptions } from "../ModalOptions";
 import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import { Disclosure, Transition } from "@headlessui/react";
+import { BiCaretRight } from "react-icons/bi";
 
 type checklistItem = {
   name: string;
@@ -28,6 +28,8 @@ export default function ChecklistIndex() {
   const [editing, setEditing] = useState<boolean>(false);
   const [itemId, setItemId] = useState<string>("");
   const [checklistId, setChecklistId] = useState<string>("");
+  const [showChildren, setShowChildren] = useState<boolean>(false);
+  const [arrowDown, setArrowDown] = useState<boolean>(false);
 
   // Redux states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
@@ -93,6 +95,20 @@ export default function ChecklistIndex() {
                 <div key={index}>
                   <div className="flex items-center">
                     <span className="px-5 text-lg flex items-center">
+                      <div className="mx-1">
+                        <BiCaretRight
+                          onClick={() => {
+                            setArrowDown(!arrowDown);
+                            setItemId(item.id);
+                            setShowChildren(!showChildren);
+                          }}
+                          className={`${
+                            arrowDown && itemId == item.id
+                              ? "transform rotate-90"
+                              : ""
+                          } cursor-pointer`}
+                        />
+                      </div>
                       {editing && itemId === item.id ? (
                         <form onSubmit={(e) => handleEdit(e, item.id)}>
                           <input
@@ -125,49 +141,13 @@ export default function ChecklistIndex() {
                       />
                     </div>
                   </div>
-                  <ChecklistItem Item={item.items} checklistId={item.id} />
-                  {/* ===============================  */}
-                  <Disclosure>
-                    <Disclosure.Button>btn</Disclosure.Button>
-                    <span className="px-5 text-lg flex items-center">
-                      {editing && itemId === item.id ? (
-                        <form onSubmit={(e) => handleEdit(e, item.id)}>
-                          <input
-                            type="text"
-                            value={checklistName}
-                            onChange={(e) => setChecklistName(e.target.value)}
-                          />
-                        </form>
-                      ) : (
-                        <h1
-                          onClick={() => {
-                            setItemId(item.id);
-                            editChecklist(item.name);
-                          }}
-                        >
-                          {item.name}
-                        </h1>
-                      )}
-                      <label>
-                        ({done.length}/{item.items.length})
-                      </label>
-                    </span>
-                    <Transition
-                      enter="transition duration-100 ease-out"
-                      enterFrom="transform scale-95 opacity-0"
-                      enterTo="transform scale-100 opacity-100"
-                      leave="transition duration-75 ease-out"
-                      leaveFrom="transform scale-100 opacity-100"
-                      leaveTo="transform scale-95 opacity-0"
-                    >
-                      <Disclosure.Panel>
-                        <ChecklistItem
-                          Item={item.items}
-                          checklistId={item.id}
-                        />
-                      </Disclosure.Panel>
-                    </Transition>
-                  </Disclosure>
+                  {showChildren && itemId == item.id ? (
+                    <ChecklistItem
+                      Item={item.items}
+                      checklistId={item.id}
+                      refetch={refetch}
+                    />
+                  ) : null}
                 </div>
               );
             })}

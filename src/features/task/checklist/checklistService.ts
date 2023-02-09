@@ -3,7 +3,10 @@ import requestNew from "../../../app/requestNew";
 import { useDispatch } from "react-redux";
 // import { getchecklist } from "./checklistSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { setTriggerChecklistUpdate } from "./checklistSlice";
+import {
+  setTriggerChecklistUpdate,
+  setTriggerItemtUpdate,
+} from "./checklistSlice";
 
 export const UseCreateClistService = ({ task_id }: any) => {
   const url = `/checklists`;
@@ -77,6 +80,41 @@ export const UseUpdateChecklistService = ({
       enabled: checklist_id != null && triggerUpdate !== false,
       onSuccess: () => {
         dispatch(setTriggerChecklistUpdate(false));
+      },
+    }
+  );
+};
+
+export const UseUpdateChecklistItemService = ({
+  checklist_id,
+  // name,
+  triggerItemUpdate,
+  itemId,
+  is_done,
+}: any) => {
+  console.log(triggerItemUpdate);
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  return useQuery(
+    ["edit-item", { itemId }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `/checklists/${checklist_id}/item/${itemId}`,
+          method: "PUT",
+          params: {
+            is_done: is_done,
+            // name: "Deen",
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: checklist_id != null && triggerItemUpdate !== false,
+      onSuccess: () => {
+        dispatch(setTriggerItemtUpdate(false));
       },
     }
   );

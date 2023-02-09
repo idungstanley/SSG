@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UseCreatelistItemService } from "../../../../../../features/task/checklist/checklistService";
+import {
+  UseCreatelistItemService,
+  UseUpdateChecklistItemService,
+} from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
 import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
 import ChecklistModal from "./ChecklistModal";
 import { completeOptions } from "../ModalOptions";
+import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
+import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
+import State from "pusher-js/types/src/core/http/state";
 
-function ChecklistItem({ Item, checklistId }: any) {
+function ChecklistItem({ Item, checklistId, refetch }: any) {
   const queryClient = useQueryClient();
-  const [newItem, setNewItem] = useState<any>("");
+  const dispatch = useAppDispatch();
+  const [newItem, setNewItem] = useState<string>("");
+  // const [editName, setEditName] = useState<string>("");
+  const [itemId, setItemId] = useState<any>("");
+  const [done, setDone] = useState<number>(0);
+
+  const { triggerItemUpdate } = useAppSelector((state) => state.checklist);
+
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -18,10 +31,27 @@ function ChecklistItem({ Item, checklistId }: any) {
 
   const handleSubmit = async () => {
     await createChecklist.mutateAsync({
-      name: newItem,
       checklist_id: checklistId,
+      name: newItem,
     });
     setNewItem("");
+  };
+
+  const { data: updateRes, status: updateStatus } =
+    UseUpdateChecklistItemService({
+      checklist_id: checklistId,
+      // name: editName,
+      triggerItemUpdate: triggerItemUpdate,
+      itemId: itemId,
+      is_done: done,
+    });
+  console.log(updateStatus);
+
+  const isDone = (id, done) => {
+    setItemId(id);
+    done === 0 ? setDone(1) : setDone(0);
+    dispatch(setTriggerItemtUpdate(true));
+    refetch();
   };
 
   return (
@@ -48,8 +78,12 @@ function ChecklistItem({ Item, checklistId }: any) {
             </span>
             <input
               type="checkbox"
-              // checked={item.is_done}
+              checked={item.is_done == 0 ? false : true}
               className="rounded-lg mx-3"
+              onChange={() => {
+                setItemId(item.id);
+                isDone(item.id, item.is_done);
+              }}
             />
             <h1 className="cursor-pointer">{item.name}</h1>
             <span className="p-1 border-2 border-dotted rounded-full mx-2">

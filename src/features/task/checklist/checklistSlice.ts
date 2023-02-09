@@ -4,11 +4,13 @@ import { getOneTaskServices } from "../taskService";
 interface checklistState {
   checklist: any[];
   triggerChecklistUpdate: boolean;
+  triggerItemUpdate: boolean;
 }
 
 const initialState: checklistState = {
   checklist: [],
   triggerChecklistUpdate: false,
+  triggerItemUpdate: false,
 };
 
 export const checklistSlice = createSlice({
@@ -25,11 +27,17 @@ export const checklistSlice = createSlice({
     setTriggerChecklistUpdate(state, { payload }) {
       state.triggerChecklistUpdate = payload;
     },
+    setTriggerItemtUpdate(state, { payload }) {
+      state.triggerItemUpdate = payload;
+    },
   },
 });
 
-export const { getchecklist, setTriggerChecklistUpdate } =
-  checklistSlice.actions;
+export const {
+  getchecklist,
+  setTriggerChecklistUpdate,
+  setTriggerItemtUpdate,
+} = checklistSlice.actions;
 
 export const selectChecklists = (initialState) => initialState.checklist;
 
