@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
-  getTaskColumns,
   setAddNewTaskItem,
 } from '../../../features/task/taskSlice';
 import TaskTableView from '../tasks/component/views/TaskTableView';
@@ -23,8 +22,6 @@ function RenderList() {
   const { listId } = useParams();
   const {
     myTaskData,
-    taskColumns,
-
     listView,
     tableView,
     addNewTaskItem,
@@ -34,6 +31,7 @@ function RenderList() {
   } = useAppSelector((state) => state.task);
 
   const { data: listDetailsData } = getTaskListService({ listId });
+
   return (
     <div className=" overflow-hidden relative">
       <section id="nav" className="capitalize ">
@@ -63,7 +61,7 @@ function RenderList() {
               </div>
             )}
 
-            {listView && <TaskListViews />}
+            {listView && <TaskListViews listId={listId} />}
 
             {listView &&
               myTaskData?.map((task) => (

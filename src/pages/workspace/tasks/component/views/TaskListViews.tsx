@@ -14,14 +14,14 @@ import { IoIosArrowDropdown } from 'react-icons/io';
 import { columnsHead } from './ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
-export default function TaskListViews() {
+
+export default function TaskListViews({ listId }: { listId?: string }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { myTaskData, taskColumns, hideTask } = useAppSelector(
     (state) => state.task
   );
-
   const [taskCol, setTaskCol] = useState(columnsHead);
   dispatch(getTaskColumns(taskCol));
 
@@ -31,7 +31,7 @@ export default function TaskListViews() {
 
   return (
     <div
-      className="flex items-center justify-between pt-5 bg-gray-100 z-20 w-12/12 "
+      className="flex items-center justify-between pt-5 bg-gray-100 z-20 w-12/12"
       style={{ backgroundColor: '#e1e4e5' }}
     >
       <div className="flex">

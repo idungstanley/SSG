@@ -6,14 +6,14 @@
 .tooltip::after {
   width:auto;
   --scale: 0;
-  --arrow-size: 1px;
+  --arrow-size: 0.2px;
   --tooltip-color: #333;
   position: absolute;
   top: -0.25rem;
   left: 50%;
   transform: translateX(-50%) translateY(var(--translate-y, 0))
     scale(var(--scale));
-  transition: 300ms transform;
+  transition: 100ms transform;
   box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
   transform-origin: bottom center;
 }

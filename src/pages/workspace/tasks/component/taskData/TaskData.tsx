@@ -14,21 +14,16 @@ import {
 } from '../../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
-import { RiArrowRightSFill } from 'react-icons/ri';
 import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
 import AssignTask from '../../assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../components';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { FiArrowRight, FiEdit2 } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 import './task.css';
 interface TaskDataProps {
   task: any;
 }
-// import { columnsHead } from '../views/ListColumns';
-
-import { AiOutlineEllipsis } from 'react-icons/ai';
 import { IoCloseSharp } from 'react-icons/io5';
 import ToolTip from '../../../../../components/Tooltip';
 import EditTagModal from '../../../../../components/tags/EditTagModal';
@@ -39,15 +34,9 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import TagModal from '../../../../../components/tags/TagModal';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import {
-  ArrowRightCircleIcon,
-  ArrowRightIcon,
-} from '@heroicons/react/24/outline';
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
-  // const { myTaskData } = useAppSelector((state) => state.task);
-  // console.log(task);
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
