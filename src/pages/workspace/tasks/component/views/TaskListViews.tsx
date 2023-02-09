@@ -149,7 +149,12 @@ export default function TaskListViews() {
           onClick={() => handleDropDown()}
         />
         <span className="text-sm z-30">
-          {dropDown && <AddColumnDropdown title="" listItems={taskColumns} />}
+          {dropDown && (
+            <AddColumnDropdown
+              title=""
+              listItems={hideTask.length ? hideTask : taskColumns}
+            />
+          )}
         </span>
       </span>
     </div>
