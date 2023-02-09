@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface ImyTaskData {
   id: string;
@@ -30,6 +30,7 @@ interface TaskState {
   current_task_id: null;
   listView: boolean;
   tableView: boolean;
+  boardView: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
@@ -49,6 +50,9 @@ interface TaskState {
   currentTaskStatusId: null;
   currentTaskPriorityId: null;
   currentTaskIdForTag: null;
+  unAssignTadId: null;
+  renameTagId: null;
+  showTagColorDialogueBox: boolean;
 }
 
 const initialState: TaskState = {
@@ -63,6 +67,7 @@ const initialState: TaskState = {
   current_task_id: null,
   listView: true,
   tableView: false,
+  boardView: false,
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
@@ -73,7 +78,7 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: '',
+  initial_description: "",
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
@@ -82,10 +87,13 @@ const initialState: TaskState = {
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
   currentTaskIdForTag: null,
+  unAssignTadId: null,
+  renameTagId: null,
+  showTagColorDialogueBox: false,
 };
 
 export const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -141,6 +149,9 @@ export const taskSlice = createSlice({
     },
     getTableView(state, action) {
       state.tableView = action.payload;
+    },
+    getBoardView(state, action) {
+      state.boardView = action.payload;
     },
 
     setShowTaskNavigation(state, action) {
@@ -203,6 +214,16 @@ export const taskSlice = createSlice({
     setCurrentTaskIdForTag(state, action) {
       state.currentTaskIdForTag = action.payload;
     },
+    setRenameTagId(state, action) {
+      state.renameTagId = action.payload;
+    },
+    setShowTagColorDialogBox(state, action) {
+      state.showTagColorDialogueBox = action.payload;
+    },
+    triggerUnassignTag(state, action) {
+      state.unAssignTadId = action.payload.unAssignTadId;
+      state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -217,6 +238,7 @@ export const {
   getTaskColumns,
   getListView,
   getTableView,
+  getBoardView,
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
@@ -234,6 +256,9 @@ export const {
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
+  triggerUnassignTag,
   setCurrentTaskIdForTag,
+  setRenameTagId,
+  setShowTagColorDialogBox,
 } = taskSlice.actions;
 export default taskSlice.reducer;

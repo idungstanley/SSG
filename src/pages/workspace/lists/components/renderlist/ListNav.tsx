@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Button } from '../../../../../components';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { getListView } from '../../../../../features/task/taskSlice';
-import { getTableView } from '../../../../../features/task/taskSlice';
-import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
-import { Bars3Icon } from '@heroicons/react/24/outline';
-import { BsListStars } from 'react-icons/bs';
-import { CiViewTable } from 'react-icons/ci';
+import React, { useState } from "react";
+import { EllipsisOutlined } from "@ant-design/icons";
+import { Button } from "../../../../../components";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import {
+  getBoardView,
+  getListView,
+} from "../../../../../features/task/taskSlice";
+import { getTableView } from "../../../../../features/task/taskSlice";
+import TaskMenu from "../../../tasks/component/taskMenu/TaskMenu";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import { BsListStars } from "react-icons/bs";
+import { CiViewTable } from "react-icons/ci";
 
 interface ListNavProps {
   navName?: string | null;
@@ -31,15 +34,29 @@ function ListNav({
   const [listView, setListView] = useState(true);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
   const [TableView, setTableView] = useState(false);
+  const [boardView, setBoardView] = useState(false);
 
   const dispatch = useAppDispatch();
 
   const toggleView = () => {
     setListView((prev) => !prev);
     setTableView((prev) => !prev);
-
-    dispatch(getListView(listView));
-    dispatch(getTableView(TableView));
+    setBoardView((prev) => !prev);
+  };
+  const handleBoardView = () => {
+    dispatch(getBoardView(true));
+    dispatch(getTableView(false));
+    dispatch(getListView(false));
+  };
+  const handleTableView = () => {
+    dispatch(getTableView(true));
+    dispatch(getBoardView(false));
+    dispatch(getListView(false));
+  };
+  const handleListView = () => {
+    dispatch(getListView(true));
+    dispatch(getBoardView(false));
+    dispatch(getTableView(false));
   };
 
   return (
@@ -51,7 +68,9 @@ function ListNav({
           </span>
         )}
       </div>
-      <nav className="flex items-center justify-between border-b p-3 overflow-hidden bg-white   ">
+      <nav className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
+      style={{padding: "15px"}}
+      >
         <section className="flex items-center justify-start space-x-2 text-gray-500">
           <span className="space-x-2">
             <span className="font-bold">{navName}</span>
@@ -65,7 +84,7 @@ function ListNav({
             </span>
             <span
               className="flex items-center text-sm hover:bg-gray-100"
-              onClick={toggleView}
+              onClick={handleListView}
             >
               {viewsList}
             </span>
@@ -79,12 +98,15 @@ function ListNav({
             </span>
             <span
               className="flex items-center text-sm hover:bg-gray-100"
-              onClick={toggleView}
+              onClick={handleTableView}
             >
               {viewsList1}
             </span>
           </span>
-          <span className="flex items-center justify-start space-x-1">
+          <span
+            className="flex items-center justify-start space-x-1"
+            onClick={handleBoardView}
+          >
             <span>
               <BsListStars
                 className="flex-shrink-0 w-5 h-4"
@@ -121,7 +143,7 @@ function ListNav({
             @mentions
           </span>
           <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
-            {' '}
+            {" "}
             <EllipsisOutlined />
           </span>
         </section>

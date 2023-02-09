@@ -265,7 +265,7 @@ function Places() {
                     } leading-3 uppercase truncate tracking-wider ${
                       activePlaceId === item.id && 'text-black font-bold'
                     }`}
-                    style={{ fontSize: '11px' }}
+                    style={{ fontSize: '14px' }}
                   >
                     {item.name}
                   </span>

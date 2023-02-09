@@ -507,8 +507,38 @@ export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }) => {
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['tags', tagId]),
       enabled: !!tagId,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['task']);
+      },
+    }
+  );
+};
+
+//unassign tags
+export const UseUnAssignTagFromTask = ({ tagId, currentTaskIdForTag }) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['tags', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `tags/${tagId}/unassign`,
+          method: 'POST',
+          params: {
+            type: 'task',
+            id: currentTaskIdForTag,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: !!tagId,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['task']);
+      },
     }
   );
 };

@@ -1,30 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getOneTaskServices } from "../taskService";
 
-export interface ImyTaskData {
-  //   id: string;
-  name: string;
-  //   description: string | null;
-  //   list_id: string;
-  //   parent_id: string | null;
-  //   priority: string | null;
-  //   start_date: string | null;
-  //   end_date: string | null;
-  //   assignees: string[];
-  //   group_assignees: string[];
-  //   updated_at: string;
-  //   created_at: string;
-  //   archived_at: string | null;
-  //   deleted_at: string | null;
-  //   directory_items: string[];
-}
-
 interface checklistState {
   checklist: any[];
+  triggerChecklistUpdate: boolean;
+  triggerItemUpdate: boolean;
 }
 
 const initialState: checklistState = {
   checklist: [],
+  triggerChecklistUpdate: false,
+  triggerItemUpdate: false,
 };
 
 export const checklistSlice = createSlice({
@@ -37,12 +23,21 @@ export const checklistSlice = createSlice({
       const singleTask = task?.data.task;
       const task_checklists = singleTask?.task_checklists;
       state.checklist = task_checklists;
-      // return task_checklists;
+    },
+    setTriggerChecklistUpdate(state, { payload }) {
+      state.triggerChecklistUpdate = payload;
+    },
+    setTriggerItemtUpdate(state, { payload }) {
+      state.triggerItemUpdate = payload;
     },
   },
 });
 
-export const { getchecklist } = checklistSlice.actions;
+export const {
+  getchecklist,
+  setTriggerChecklistUpdate,
+  setTriggerItemtUpdate,
+} = checklistSlice.actions;
 
 export const selectChecklists = (initialState) => initialState.checklist;
 

@@ -20,6 +20,7 @@ import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
 import FooterTabs from './components/FooterTabs';
+import ResizeBorder from '../../../components/ResizeBorder';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -32,6 +33,8 @@ export default function Sidebar() {
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
+  const MIN_SIDEBAR_WIDTH = 230;
+  const MAX_SIDEBAR_WIDTH = 320;
 
   const stopResizing = React.useCallback(() => {
     setIsResizing(false);
@@ -84,8 +87,16 @@ export default function Sidebar() {
         ref={sidebarRef}
         style={
           showSidebar
-            ? { maxWidth: 321, width: sidebarWidth, minWidth: '230px' }
-            : { width: '54px', minWidth: '54px', maxWidth: 321 }
+            ? {
+                maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
+                width: sidebarWidth,
+                minWidth: `${MIN_SIDEBAR_WIDTH}px`,
+              }
+            : {
+                width: '54px',
+                minWidth: '54px',
+                maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
+              }
         }
       >
         <Modal />
@@ -165,7 +176,7 @@ export default function Sidebar() {
               )}
             </div>
           </div>
-          <div onScroll={(e) => handleScroll(e)} className="pr-1">
+          <div onScroll={(e) => handleScroll(e)} className="pr-0.5">
             <section
               className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
               style={{ minHeight: '0', maxHeight: '80vh' }}
@@ -177,29 +188,7 @@ export default function Sidebar() {
           </div>
         </div>
         <FooterTabs />
-        <span className="group">
-          <div
-            className={`absolute top-0 right-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth >= 230 && 'group-hover:bg-green-100'
-            }`}
-            onMouseDown={startResizing}
-            style={{
-              cursor: 'col-resize',
-              width: `${sidebarWidth > 320 ? '4px' : '2px'}`,
-            }}
-          ></div>
-          <div
-            className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              sidebarWidth <= 320 && 'group-hover:bg-green-100'
-            }`}
-            style={{
-              cursor: 'col-resize',
-              width: `${sidebarWidth < 230 ? '4px' : '2px'}`,
-              right: `${sidebarWidth < 230 ? '-4.8px' : '-2.8px'}`,
-            }}
-            onMouseDown={startResizing}
-          ></div>
-        </span>
+        <ResizeBorder width={sidebarWidth} minWidth={MIN_SIDEBAR_WIDTH} maxWidth={MAX_SIDEBAR_WIDTH} startResizing={startResizing}/>
       </div>
     </>
   );

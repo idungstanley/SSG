@@ -17,13 +17,30 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
+  const groupTags = (arr) => {
+    return arr?.map((item) => {
+      return Array.isArray(item) ? (
+        <span className="flex">{groupTags(item)}</span>
+      ) : (
+        <>
+          <span
+            className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
+              item.name.length > 10 ? 'object-contain' : 'w-20'
+            }`}
+            style={{ backgroundColor: `${item.color}` }}
+          >
+            {item.name}
+          </span>
+        </>
+      );
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
-          {/* <ToolTip tooltip="Status"> */}
           <Status Details={Details} />
-          {/* </ToolTip> */}
           <ToolTip tooltip="Priority">
             <Priority Details={Details} />
           </ToolTip>
@@ -54,6 +71,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         />
       </section>
       <section className="p-2" key={Details?.id}>
+        {/* tags */}
+        <div id="tags" className="mt-2">
+          <label className="text-xs text-gray-500">Tags</label>
+          <div className="border p-1 bg-gray-100 border-white rounded-md">
+            <p> {groupTags(Details?.tags)}</p>
+          </div>
+        </div>
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
@@ -82,13 +106,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <p>Dec 31 2022</p>
           </div>
         </div>
-        {/* tags */}
-        <div id="tags" className="mt-2">
-          <label className="text-xs text-gray-500">Tags</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p>Also workspace tag</p>
-          </div>
-        </div>
+
         {/* create subtask */}
         <div id="create subtask" className="mt-2">
           <div
