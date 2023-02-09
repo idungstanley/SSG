@@ -4,9 +4,7 @@ import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  setAddNewTaskItem,
-} from '../../../features/task/taskSlice';
+import { setAddNewTaskItem } from '../../../features/task/taskSlice';
 import TaskTableView from '../tasks/component/views/TaskTableView';
 import TaskListViews from '../tasks/component/views/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
@@ -16,6 +14,7 @@ import SubTask from '../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import Pilot from '../pilot';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
+import Board from '../tasks/component/views/Board';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -24,6 +23,7 @@ function RenderList() {
     myTaskData,
     listView,
     tableView,
+    boardView,
     addNewTaskItem,
     closeTaskListView,
     currentParentTaskId,
@@ -61,7 +61,8 @@ function RenderList() {
               </div>
             )}
 
-            {listView && <TaskListViews listId={listId} />}
+            {boardView && <Board />}
+            {listView && <TaskListViews />}
 
             {listView &&
               myTaskData?.map((task) => (

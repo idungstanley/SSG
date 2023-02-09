@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../app/hooks';
 import AddColumnDropdown from '../../dropdown/AddColumnDropdown';
-// import addColumns from '../../../lists/components/renderlist/listDetails/listDetails';
 import { useDispatch } from 'react-redux';
 import {
   getTaskColumns,
@@ -15,148 +14,147 @@ import { columnsHead } from './ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 
-export default function TaskListViews({ listId }: { listId?: string }) {
+export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { myTaskData, taskColumns, hideTask } = useAppSelector(
     (state) => state.task
   );
-  const [taskCol, setTaskCol] = useState(columnsHead);
-  dispatch(getTaskColumns(taskCol));
+
+  dispatch(getTaskColumns(columnsHead));
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
   };
 
   return (
-    <div
-      className="flex items-center justify-between pt-5 bg-gray-100 z-20 w-12/12"
-      style={{ backgroundColor: '#e1e4e5' }}
-    >
-      <div className="flex">
-        <div className=" flex items-center ">
-          <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
-            <IoIosArrowDropdown
-              className={` text-gray-400 text-sm hover:text-gray-200  ${
-                closeTaskListView === false ? 'rotateimg90' : null
-              }`}
-              aria-hidden="true"
-              onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
-            />
-          </span>
-          <div className="flex items-center justify-center cursor-pointer relative">
-            <div className="group flex items-center">
-              <span className="text-xs text-black p-1 bg-gray-300 pr-2">
-                OPEN
+    <div className="oveflow-x-auto">
+      <div
+        className="flex overflow-x-auto items-center justify-between pt-5 bg-gray-100 z-20 w-12/12 "
+        style={{ backgroundColor: '#e1e4e5' }}
+      >
+        <div className="flex">
+          <div className=" flex items-center ">
+            <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
+              <IoIosArrowDropdown
+                className={` text-gray-400 text-sm hover:text-gray-200  ${
+                  closeTaskListView === false ? 'rotateimg90' : null
+                }`}
+                aria-hidden="true"
+                onClick={() =>
+                  dispatch(setCloseTaskListView(!closeTaskListView))
+                }
+              />
+            </span>
+            <div className="flex items-center justify-center cursor-pointer relative">
+              <div className="group flex items-center">
+                <span className="text-xs text-black p-1 bg-gray-300 pr-2">
+                  OPEN
+                </span>
+              </div>
+              <span className="text-xs text-gray-400 mt-1	ml-1">
+                {myTaskData?.length}
               </span>
             </div>
-            <span className="text-xs text-gray-400 mt-1	ml-1">
-              {myTaskData?.length}
-            </span>
+          </div>
+          <div className="relative w-6/12 flex     items-center ">
+            {hideTask.length
+              ? hideTask.map(
+                  (col) =>
+                    col.value == 'Task' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex mt-1 items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                        style={{ color: '#78828d', fontSize: '11px' }}
+                      >
+                        {col.value}
+                      </div>
+                    )
+                )
+              : columnsHead.map(
+                  (col) =>
+                    col.value == 'Task' &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
+                        style={{ color: '#78828d', fontSize: '10px' }}
+                      >
+                        {col.value}
+                      </div>
+                    )
+                )}
           </div>
         </div>
-        <div className="relative w-6/12 flex     items-center ">
+
+        <div className="grid dynamic  justify-between mr-10">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className="flex mt-1 items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                      style={{ color: '#78828d', fontSize: '11px' }}
+                      className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
+                      style={{
+                        color: '#78828d',
+                        fontSize: '10px',
+                      }}
                     >
-                      {col.value}
+                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                        <MdDragIndicator />
+                      </span>
+                      <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                        {col.value}
+                      </span>
+                      <span>
+                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                      </span>
                     </div>
                   )
               )
             : columnsHead.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
-                      style={{ color: '#78828d', fontSize: '10px' }}
+                      className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
+                      style={{
+                        color: '#78828d',
+                        fontSize: '10px',
+                      }}
                     >
-                      {col.value}
+                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                        <MdDragIndicator />
+                      </span>
+                      <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                        {col.value}
+                      </span>
+                      <span>
+                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                      </span>
                     </div>
                   )
               )}
         </div>
-      </div>
-
-      <div className="grid dynamic  justify-between mr-10">
-        {hideTask.length
-          ? hideTask.map(
-              (col) =>
-                col.value !== 'Task' &&
-                col.value !== 'Tags' &&
-                !col.hidden && (
-                  <div
-                    key={col.field}
-                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                    style={{
-                      color: '#78828d',
-                      fontSize: '10px',
-                    }}
-                  >
-                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
-                      <MdDragIndicator />
-                    </span>
-                    <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
-                      {col.value}
-                    </span>
-                    <span>
-                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                    </span>
-                  </div>
-                )
-            )
-          : columnsHead.map(
-              (col) =>
-                col.value !== 'Task' &&
-                col.value !== 'Tags' &&
-                !col.hidden && (
-                  <div
-                    key={col.field}
-                    className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                    style={{
-                      color: '#78828d',
-                      fontSize: '10px',
-                    }}
-                  >
-                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
-                      <MdDragIndicator />
-                    </span>
-                    <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
-                      {col.value}
-                    </span>
-                    <span>
-                      <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                    </span>
-                  </div>
-                )
-            )}
-      </div>
-      <span
-        className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
-        style={{ color: '#78828d' }}
-      >
-        <FiPlusCircle
-          className=" font-black hover:bg-white 	"
-          onClick={() => handleDropDown()}
-        />
-        <span className="text-sm z-30">
-          {dropDown && (
-            <AddColumnDropdown
-              title=""
-              listItems={hideTask.length ? hideTask : taskColumns}
-            />
-          )}
+        <span
+          className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+          style={{ color: '#78828d' }}
+        >
+          <FiPlusCircle
+            className=" font-black hover:bg-white 	"
+            onClick={() => handleDropDown()}
+          />
+          <span className="text-sm z-30">
+            {dropDown && <AddColumnDropdown title="" listItems={taskColumns} />}
+          </span>
         </span>
-      </span>
+      </div>
     </div>
   );
 }
