@@ -16,7 +16,7 @@ export default function RenderSubTasks() {
 
   return (
     <>
-      {data?.data.tasks.map((task: dataProps) => (
+      {data?.data.tasks.map((task: any) => (
         <section key={task.id}>
           <Template task={task} />
           <div>

@@ -3,9 +3,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { AvatarWithInitials } from "../../../../components";
 import { useGetTeamMembers } from "../../../../features/settings/teamMembers/teamMemberService";
 import { useAppSelector } from "../../../../app/hooks";
-import {
-  setCurrTeamMemId,
-} from "../../../../features/task/taskSlice";
+import { setCurrTeamMemId } from "../../../../features/task/taskSlice";
 import { useDispatch } from "react-redux";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
@@ -43,7 +41,7 @@ export default function AssignTask() {
   });
 
   const assignedUser = getTaskAssignees?.data.task.assignees.map(
-    ({ id }: {id: string}) => id
+    ({ id }: { id: string }) => id
   );
 
   const handleUnAssign = (id: string) => {
@@ -59,7 +57,7 @@ export default function AssignTask() {
   return (
     <div className="relative">
       <section
-        className="absolute top-10 right-0 z-20  w-60 rounded-md shadow-lg bg-gray-100"
+        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100"
         ref={assigneeRef}
         id="assignModal"
         // onClick={(e) => handleAssignModal(e)}
