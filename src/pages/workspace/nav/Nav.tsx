@@ -1,6 +1,6 @@
 import React from 'react';
-import { EllipsisOutlined } from '@ant-design/icons';
 import { Button } from '../../../components';
+import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 
 interface navProps {
   navName: string | null;
@@ -39,8 +39,10 @@ function Nav({ navName, newd, Cleared, Assigned, buttonLabel }: navProps) {
           @mentions
         </span>
         <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
-          {' '}
-          <EllipsisOutlined />
+          <EllipsisHorizontalCircleIcon
+            className="h-5 w-5"
+            aria-hidden="true"
+          />
         </span>
       </section>
     </nav>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
-import { UserAddOutlined, FlagOutlined } from '@ant-design/icons';
 import { BsTags } from 'react-icons/bs';
 import { TbSubtask } from 'react-icons/tb';
 import {
@@ -13,6 +12,7 @@ import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 import { BiMerge, BiEdit } from 'react-icons/bi';
+import { FlagIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 const TaskIcons = [
   {
@@ -23,7 +23,7 @@ const TaskIcons = [
   },
   {
     id: 2,
-    icons: <UserAddOutlined />,
+    icons: <UserPlusIcon />,
     handleClick: () => ({}),
     isVisible: true,
   },
@@ -71,7 +71,7 @@ const TaskIcons = [
   },
   {
     id: 10,
-    icons: <FlagOutlined />,
+    icons: <FlagIcon />,
     handleClick: () => ({}),
     isVisible: true,
   },

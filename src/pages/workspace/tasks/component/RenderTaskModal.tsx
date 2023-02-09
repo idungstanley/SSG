@@ -1,13 +1,15 @@
 import {
-  CalendarOutlined,
-  CaretDownFilled,
-  CloudUploadOutlined,
-  EllipsisOutlined,
-  FlagOutlined,
-  UserAddOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-import { CheckIcon, PlayIcon, StopIcon } from '@heroicons/react/24/outline';
+  CalendarIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  CloudArrowUpIcon,
+  EllipsisHorizontalIcon,
+  FlagIcon,
+  PlayIcon,
+  StopIcon,
+  UserPlusIcon,
+  VideoCameraIcon,
+} from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -118,13 +120,13 @@ function RenderTaskModal() {
                     <p className="text-sm text-gray-400">MARK COMPLETE</p>
                   </div>
                   <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
-                    <UserAddOutlined
+                    <UserPlusIcon
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
                   <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
-                    <FlagOutlined
+                    <FlagIcon
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
@@ -147,7 +149,7 @@ function RenderTaskModal() {
                     <p className="text-sm text-gray-400">Share</p>
                   </div>
                   <div>
-                    <EllipsisOutlined
+                    <EllipsisHorizontalIcon
                       className="flex-shrink-0 h-7 w-7 text-gray-400 text-4xl mb-5"
                       aria-hidden="true"
                     />
@@ -192,7 +194,7 @@ function RenderTaskModal() {
                         </Timer>
                       </div>
                       <div className="relative">
-                        <CaretDownFilled
+                        <ChevronDownIcon
                           className="h-5 w-7 text-gray-300"
                           aria-hidden="true"
                           onClick={() => setShowTimeEntries(!showTimeEntries)}
@@ -215,13 +217,13 @@ function RenderTaskModal() {
                     </div>
                   </div>
                   <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
-                    <CalendarOutlined
+                    <CalendarIcon
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
                   </span>
                   <span className="border-dotted border-gray-300 border-2 rounded-full p-1 ml-1">
-                    <VideoCameraOutlined
+                    <VideoCameraIcon
                       className="h-5 w-7 text-gray-400"
                       aria-hidden="true"
                     />
@@ -266,7 +268,7 @@ function RenderTaskModal() {
               id="leftfooter"
               className="w-1/2 border-gray-100  border-r-2 flex  justify-center items-center space-x-1"
             >
-              <CloudUploadOutlined
+              <CloudArrowUpIcon
                 className="flex-shrink-0 w-7 text-gray-400"
                 aria-hidden="true"
               />

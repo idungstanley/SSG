@@ -12,17 +12,17 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { MdDragIndicator } from 'react-icons/md';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import {
-  EditOutlined,
-  FlagOutlined,
-  PlusOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
 import { AvatarWithInitials } from '../../../../../components';
 import AssignTask from '../../assignTask/AssignTask';
 import { columnsHead } from '../../component/views/ListColumns';
 import moment from 'moment';
 import { groupAssigneeProps } from '../subtask1/Template';
+import {
+  FlagIcon,
+  PencilIcon,
+  PlusIcon,
+  UserPlusIcon,
+} from '@heroicons/react/24/outline';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -82,7 +82,7 @@ export default function Template4({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield: string) => {
+  const renderData = (taskColField: string, colfield: string) => {
     if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
@@ -96,7 +96,7 @@ export default function Template4({ task }: TemplateProps) {
       );
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
-        <UserAddOutlined
+        <UserPlusIcon
           className=" ml-2  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
@@ -146,12 +146,12 @@ export default function Template4({ task }: TemplateProps) {
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
           >
-            <PlusOutlined
+            <PlusIcon
               className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
               aria-hidden="true"
               onClick={() => handleCreateSubTask(task.id)}
             />
-            <EditOutlined
+            <PencilIcon
               className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
               aria-hidden="true"
             />
@@ -161,10 +161,7 @@ export default function Template4({ task }: TemplateProps) {
     } else if (colfield === 'priority') {
       return (
         <span className="relative border-dotted border-gray-300 ">
-          <FlagOutlined
-            className="h-5 w-7  text-gray-400 "
-            aria-hidden="true"
-          />
+          <FlagIcon className="h-5 w-7  text-gray-400 " aria-hidden="true" />
         </span>
       );
     } else return taskColField;
