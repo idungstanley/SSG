@@ -80,18 +80,21 @@ export default function Pilot() {
     [activeTabId]
   );
   return (
-    <div
-      className={`flex h-full ease-in-out overflow-y-auto delay-300 duration-300 transition-all transform bg-white border-l ${
-        !showPilot && selectedSection
-          ? 'flex-row fixed z-40 top-16 right-0'
-          : 'flex-col'
-      }`}
-      ref={hoverRef}
-    >
-      {/* navigation */}
-      <Tab />
-      {/* main section depends of active tab */}
-      <div>{selectedSection ? selectedSection.element : null}</div>
+    <div className="pr-0.5">
+      <div
+        className={`flex ease-in-out overflow-y-auto pr-1  duration-300 transition-all transform bg-white border-l border-r h-screen ${
+          !showPilot && selectedSection
+            ? 'flex-row fixed z-40 top-16 right-0'
+            : 'flex-col'
+        }`}
+        ref={hoverRef}
+        style={{ minHeight: '0', maxHeight: '100vh' }}
+      >
+        {/* navigation */}
+        <Tab />
+        {/* main section depends of active tab */}
+        <div>{selectedSection ? selectedSection.element : null}</div>
+      </div>
     </div>
   );
 }

@@ -13,19 +13,23 @@ function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
-    return (
-      <div className="h-screen">
-        <section id="nav" className="capitalize">
-          <ListNav
-            navName={activeItemName}
-            viewsList="List"
-            viewsList2="Board"
-            changeViews="View"
-          />
-        </section>
-        <section className="flex w-full h-full bg-white">
-          {/* ListList */}
-          <div className="w-full overflow-y-scroll">
+  return (
+    <div className="h-screen">
+      <section id="nav" className="capitalize">
+        <ListNav
+          navName={activeItemName}
+          viewsList="List"
+          viewsList2="Board"
+          changeViews="View"
+        />
+      </section>
+      <section className="flex w-full h-full bg-white">
+        {/* ListList */}
+        <div className="pr-1 pt-0.5 w-full h-full">
+          <div
+            className="w-full  overflow-y-scroll"
+            style={{ minHeight: '0', maxHeight: '100vh' }}
+          >
             <div className="w-full">
               <ListFilter />
             </div>
@@ -41,13 +45,13 @@ function RenderHubs() {
               })}
             </div>
           </div>
-
-          <div>
-            <Pilot />
-          </div>
-        </section>
-      </div>
-    );
+        </div>
+        <div>
+          <Pilot />
+        </div>
+      </section>
+    </div>
+  );
 }
 
 export default RenderHubs;
