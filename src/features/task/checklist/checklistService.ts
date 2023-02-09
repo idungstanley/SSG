@@ -92,7 +92,7 @@ export const UseUpdateChecklistItemService = ({
 }: {
   triggerItemUpdate: boolean;
   itemId: string;
-  is_done: string;
+  is_done: number;
   checklist_id: string;
 }) => {
   const dispatch = useDispatch();

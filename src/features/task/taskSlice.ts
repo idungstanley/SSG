@@ -10,12 +10,12 @@ export interface ImyTaskData {
   priority: string | null;
   start_date: string | null;
   end_date: string | null;
-  status: string | null;
-  assignees: [{ id: string; initials: string; colour: string }];
-  updated_at: string;
-  created_at: string;
-  archived_at: string | null;
-  deleted_at: string | null;
+  status?: string | null;
+  assignees?: [{ id: string; initials: string; colour: string }];
+  updated_at?: string;
+  created_at?: string;
+  archived_at?: string | null;
+  deleted_at?: string | null;
 }
 
 interface TaskState {

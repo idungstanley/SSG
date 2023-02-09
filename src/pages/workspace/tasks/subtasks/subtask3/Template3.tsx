@@ -24,6 +24,7 @@ import AssignTask from "../../assignTask/AssignTask";
 import moment from "moment";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import { groupAssigneeProps } from "../subtask1/Template";
 
 interface TemplateProps {
   task: ImyTaskData;

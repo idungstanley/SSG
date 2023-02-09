@@ -27,7 +27,7 @@ export const createHubService = (data: {
 };
 
 // get all hubs
-export const useGetHubList = ({ query }: { query: string | null }) => {
+export const useGetHubList = ({ query }: { query: number | null }) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
