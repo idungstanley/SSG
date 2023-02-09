@@ -19,6 +19,7 @@ import {
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import LastListIndex from './LastListIndex';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
+import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 
 interface Sub2WalletIndexProps {
   paddingLeft?: string;
@@ -60,7 +61,10 @@ function Sub2WalletIndex({
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 
-  const handleWalletSettings = (id: string, e) => {
+  const handleWalletSettings = (
+    id: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -68,7 +72,7 @@ function Sub2WalletIndex({
       })
     );
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -83,7 +87,10 @@ function Sub2WalletIndex({
     );
   };
 
-  const handleListSettings = (id: string, e) => {
+  const handleListSettings = (
+    id: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -91,7 +98,7 @@ function Sub2WalletIndex({
       })
     );
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -99,7 +106,7 @@ function Sub2WalletIndex({
 
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet) => (
+      {subwallet?.data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between space-x-1 text-sm h-8 group py-1.5 hover:bg-gray-100 ${
@@ -167,7 +174,7 @@ function Sub2WalletIndex({
           ) : null}
         </div>
       ))}
-      {subwallet?.data?.lists.map((list) => (
+      {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
           <section className="flex items-center justify-between h-8 mr-6 space-x-1 text-sm pl-14 hover:bg-gray-100 group">
             <div className="flex items-center space-x-1">

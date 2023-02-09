@@ -114,7 +114,7 @@ export const useEditHubService = (data: {
 
 //Delete a Hub
 export const UseDeleteHubService = (data: {
-  query: string;
+  query: string | null;
   delHub: boolean;
 }) => {
   const dispatch = useDispatch();
@@ -146,7 +146,7 @@ export const UseDeleteHubService = (data: {
 
 //archive hub
 export const ArchiveHubService = (hub: {
-  query: string;
+  query: string | null;
   archiveHub: boolean;
 }) => {
   const hubid = hub.query;

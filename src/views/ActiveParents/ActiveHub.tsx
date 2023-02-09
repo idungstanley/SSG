@@ -17,7 +17,6 @@ import {
 import { getHub } from '../../features/hubs/hubSlice';
 import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { getWalletService } from '../../features/wallet/walletService';
-import { useQuery } from '@tanstack/react-query';
 import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
@@ -34,10 +33,11 @@ export default function ActiveHub() {
     useAppSelector((state) => state.workspace);
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
-  const { data: subwallet } = useQuery({
-    queryKey: ['subwalletlist', [currentWalletId]],
-    queryFn: getWalletService,
-  });
+  // const { data: subwallet } = useQuery({
+  //   queryKey: ['subwalletlist', [currentWalletId]],
+  //   queryFn: getWalletService,
+  // });
+  const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
     parentId: currentItemId,
   });
