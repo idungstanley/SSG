@@ -10,10 +10,11 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
+  triggerUnassignTag,
 } from '../../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
-
+import { RiArrowRightSFill } from 'react-icons/ri';
 import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,11 @@ import moment from 'moment';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import TagModal from '../../../../../components/tags/TagModal';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import { IoCloseSharp } from 'react-icons/io5';
+import ToolTip from '../../../../../components/Tooltip';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -42,6 +48,8 @@ export default function TaskData({ task }: TaskDataProps) {
     getSubTaskId,
     taskColumns,
     hideTask,
+    showTagColorDialogueBox,
+    renameTagId,
   } = useAppSelector((state) => state.task);
 
   const displayNav = (id: string) => {
@@ -49,7 +57,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskPilot = (id: any, name: string) => {
+  const handleTaskPilot = (id: string, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
       setActiveItem({
@@ -112,7 +120,49 @@ export default function TaskData({ task }: TaskDataProps) {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
-        <div style={{ color: `${item.color}` }}>{item.name}</div>
+        <>
+          <div
+            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
+              item.name.length > 10 ? 'object-contain' : 'w-20'
+            }`}
+            style={{ backgroundColor: `${item.color}` }}
+          >
+            <div className="flex items-center">
+              <p> {item.name}</p>
+              {renameTagId == item.id && (
+                <form>
+                  <input
+                    type="text"
+                    placeholder="tagedit name"
+                    className="text-gray-400 h-7 object-contain"
+                  />
+                </form>
+              )}
+            </div>
+            <ToolTip tooltip="edit tag">
+              <button>
+                <EditTagModal tagId={item.id} taskId={task.id} />
+              </button>
+            </ToolTip>
+
+            <ToolTip tooltip="unassign tag">
+              <button
+                onClick={() =>
+                  dispatch(
+                    triggerUnassignTag({
+                      unAssignTadId: item.id,
+                      currentTaskIdForTag: task.id,
+                    })
+                  )
+                }
+              >
+                <IoCloseSharp />
+              </button>
+            </ToolTip>
+            {showTagColorDialogueBox && <ColorsModal />}
+          </div>
+          {/* <span>{arr.length}</span> */}
+        </>
       );
     });
   };

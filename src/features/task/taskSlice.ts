@@ -49,6 +49,9 @@ interface TaskState {
   currentTaskStatusId: null;
   currentTaskPriorityId: null;
   currentTaskIdForTag: null;
+  unAssignTadId: null;
+  renameTagId: null;
+  showTagColorDialogueBox: boolean;
 }
 
 const initialState: TaskState = {
@@ -82,6 +85,9 @@ const initialState: TaskState = {
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
   currentTaskIdForTag: null,
+  unAssignTadId: null,
+  renameTagId: null,
+  showTagColorDialogueBox: false,
 };
 
 export const taskSlice = createSlice({
@@ -203,6 +209,16 @@ export const taskSlice = createSlice({
     setCurrentTaskIdForTag(state, action) {
       state.currentTaskIdForTag = action.payload;
     },
+    setRenameTagId(state, action) {
+      state.renameTagId = action.payload;
+    },
+    setShowTagColorDialogBox(state, action) {
+      state.showTagColorDialogueBox = action.payload;
+    },
+    triggerUnassignTag(state, action) {
+      state.unAssignTadId = action.payload.unAssignTadId;
+      state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+    },
     checkIfTask: (state) => state,
   },
 });
@@ -234,6 +250,9 @@ export const {
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
+  triggerUnassignTag,
   setCurrentTaskIdForTag,
+  setRenameTagId,
+  setShowTagColorDialogBox,
 } = taskSlice.actions;
 export default taskSlice.reducer;

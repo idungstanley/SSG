@@ -5,11 +5,16 @@ import { UseGetAllTagsService } from '../../features/workspace/workspaceService'
 import { Spinner } from '../../common';
 import CreateTag from './CreateTag';
 import { useAppSelector } from '../../app/hooks';
-import { UseAssignTagToTask } from '../../features/task/taskService';
+import {
+  UseAssignTagToTask,
+  UseUnAssignTagFromTask,
+} from '../../features/task/taskService';
 
 export default function TagModal() {
   const [tagId, setTagId] = useState(null);
-  const { currentTaskIdForTag } = useAppSelector((state) => state.task);
+  const { currentTaskIdForTag, unAssignTadId } = useAppSelector(
+    (state) => state.task
+  );
   //get all tags
   const { data, status } = UseGetAllTagsService();
 
@@ -24,10 +29,10 @@ export default function TagModal() {
     currentTaskIdForTag,
   });
 
-  console.log(assignTag);
-  // if (status == 'success') {
-  //   setTagId(null);
-  // }
+  const { data: unAssignTag } = UseUnAssignTagFromTask({
+    tagId: unAssignTadId,
+    currentTaskIdForTag,
+  });
 
   return status == 'success' ? (
     <Menu as="div" className="relative inline-block text-left">
