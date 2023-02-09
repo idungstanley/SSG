@@ -176,7 +176,7 @@ export default function Sidebar() {
               )}
             </div>
           </div>
-          <div onScroll={(e) => handleScroll(e)} className="pr-1">
+          <div onScroll={(e) => handleScroll(e)} className="pr-0.5">
             <section
               className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
               style={{ minHeight: '0', maxHeight: '80vh' }}

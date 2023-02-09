@@ -1,10 +1,9 @@
-import React from "react";
-import { useAppSelector } from "../../../../../../../app/hooks";
-import { dataProps } from "../../../../../../../components/Index/walletIndex/WalletIndex";
-import { getTaskListService } from "../../../../../../../features/task/taskService";
-import TaskData from "../../../../../tasks/component/taskData/TaskData";
-import SubTask from "../../../../../tasks/subtasks/create/SubTask";
-import RenderSubTasks from "../../../../../tasks/subtasks/subtask1/RenderSubTasks";
+import React from 'react';
+import { useAppSelector } from '../../../../../../../app/hooks';
+import { getTaskListService } from '../../../../../../../features/task/taskService';
+import TaskData from '../../../../../tasks/component/taskData/TaskData';
+import SubTask from '../../../../../tasks/subtasks/create/SubTask';
+import RenderSubTasks from '../../../../../tasks/subtasks/subtask1/RenderSubTasks';
 
 interface listIdprops {
   listId: string;

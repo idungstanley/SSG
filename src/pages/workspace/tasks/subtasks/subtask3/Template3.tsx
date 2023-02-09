@@ -5,24 +5,25 @@ import {
   setCurrentParentSubTaskId3,
   setCurrentParentTaskId,
   setCurrentTaskId,
+  setCurrentTaskPriorityId,
+  setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
 } from "../../../../../features/task/taskSlice";
 import { useAppSelector } from "../../../../../app/hooks";
 import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { FiEdit2 } from "react-icons/fi";
+import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
+import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import {
-  EditOutlined,
-  FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
 import moment from "moment";
-import { groupAssigneeProps } from "../subtask1/Template";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -33,8 +34,13 @@ export default function Template3({ task }: TemplateProps) {
 
   const [showSubTask, setShowSubTask] = useState<string | null>(null);
 
-  const { showTaskNavigation, toggleAssignCurrentTaskId, currentParentTaskId } =
-    useAppSelector((state) => state.task);
+  const {
+    showTaskNavigation,
+    toggleAssignCurrentTaskId,
+    currentParentTaskId,
+    hideTask,
+    taskColumns,
+  } = useAppSelector((state) => state.task);
 
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
@@ -72,6 +78,10 @@ export default function Template3({ task }: TemplateProps) {
     ));
   };
 
+  const handleTaskStatus = (id: string) => {
+    dispatch(setCurrentTaskStatusId(id));
+  };
+
   const handleShowSubTask = (id: string) => {
     if (id == showSubTask) {
       setShowSubTask(null);
@@ -82,7 +92,21 @@ export default function Template3({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield: string) => {
+  const groupTags = (arr) => {
+    return arr.map((item) => {
+      return Array.isArray(item) ? (
+        <div>{groupTags(item)}</div>
+      ) : (
+        <div>{item.name}</div>
+      );
+    });
+  };
+
+  const handleTaskPriority = (id: string) => {
+    dispatch(setCurrentTaskPriorityId(id));
+  };
+
+  const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
         <div className="relative">
@@ -97,17 +121,66 @@ export default function Template3({ task }: TemplateProps) {
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <UserAddOutlined
-          className=" ml-2  text-gray-400 text-xl cursor-pointer "
+          className=" pl-3  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield == "created_at") {
+    } else if (colfield === "tags") {
+      return <div> {groupTags(taskColField)}</div>;
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField).format("MM/DD")}
         </span>
       );
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
+        return (
+          <div
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "in progress") {
+        return (
+          <div
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "archived") {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else if (taskColField == "todo") {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            {taskColField}
+          </div>
+        );
+      } else {
+        return (
+          <div
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+          >
+            TODO
+          </div>
+        );
+      }
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative">
@@ -124,84 +197,124 @@ export default function Template3({ task }: TemplateProps) {
           </div>
           <div className="ml-16" onClick={() => handleShowSubTask(task.id)}>
             {task.id == showSubTask ? (
-              <span className="flex flex-col">
-                <VscTriangleDown color="rgba(72, 67, 67, 0.64)" />
+              <span>
+                <img
+                  src={ArrowDown}
+                  style={{ width: "6px", marginRight: "2px" }}
+                  className="flex-shrink-0 h-2"
+                  aria-hidden="true"
+                  color="rgba(72, 67, 67, 0.64)"
+                />
               </span>
             ) : (
-              <VscTriangleRight
-                className="flex-shrink-0 h-3"
-                aria-hidden="true"
-                color="rgba(72, 67, 67, 0.64)"
-              />
+              <span>
+                <img
+                  src={ArrowRigt}
+                  style={{ width: "5px", marginRight: "2px" }}
+                  className="flex-shrink-0 h-2"
+                  color="rgba(72, 67, 67, 0.64)"
+                />
+              </span>
             )}
           </div>
-          <p>
-            <RiCheckboxBlankFill
-              className="pl-px text-gray-400 text-xs"
-              aria-hidden="true"
-            />
+          <p
+            onClick={() => handleTaskStatus(task.id)}
+            className="relative pt-1 pr-1"
+          >
+            <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
           <p>{taskColField}</p>
           <div
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
           >
+            <FiEdit2
+              className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
+              aria-hidden="true"
+            />
             <PlusOutlined
-              className="cursor-pointer flex-shrink-0 text-xs h-6 w-6 text-black"
+              className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
               aria-hidden="true"
               onClick={() => handleCreateSubTask(task.id)}
-            />
-            <EditOutlined
-              className="cursor-pointer flex-shrink-0 text-xs h-4 w-4 text-black"
-              aria-hidden="true"
             />
           </div>
         </div>
       );
     } else if (colfield === "priority") {
       return (
-        <span className="relative border-dotted border-gray-300 ">
-          <FlagOutlined
-            className="h-5 w-7  text-gray-400 "
-            aria-hidden="true"
-          />
+        <span
+          className="relative  border-dotted border-gray-300 "
+          onClick={() => handleTaskPriority(task.id)}
+        >
+          <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
       );
     } else return taskColField;
   };
 
   return (
-    <>
-      <div className="flex justify-between group bg-white ml-4 mb-px w-12/12 py-1">
-        <div className="  w-6/12 flex items-center justify-between ">
-          {columnsHead.map(
-            (col) =>
-              col.value == "Task" && (
-                <div
-                  key={col.field}
-                  className="flex bg-white items-center capitalize ml-2 text-xs py-px font-medium  group"
-                >
-                  {renderData(task[col.field], col.field)}
-                </div>
+    <div className="relative ">
+      <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
+        <div className=" flex w-6/12  items-center ">
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
               )
-          )}
+            : taskColumns.map(
+                (col) =>
+                  col.value == "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )}
         </div>
-        <div className="dynamic ">
-          {columnsHead.map(
-            (col) =>
-              col.value !== "Task" && (
-                <div
-                  key={col.field}
-                  className="flex items-center uppercase bg-white   text-gray-400 py-px pl-6 font-medium  group"
-                >
-                  {renderData(task[col.field], col.field)}
-                </div>
+        <div className=" dynamic ">
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value !== "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: "50px" }}
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
               )
-          )}
+            : taskColumns.map(
+                (col) =>
+                  col.value !== "Task" &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: "50px" }}
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )}
         </div>
-
-        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
       </div>
-    </>
+      <span className="absolute shadow-2xl left-0 z-30 right-0 ">
+        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+      </span>
+    </div>
   );
 }

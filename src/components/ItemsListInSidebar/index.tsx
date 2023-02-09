@@ -5,6 +5,7 @@ import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
   setActiveItem,
+  setActiveTabId,
   setCurrentItem,
   setShowHub,
   setShowPilot,
@@ -80,6 +81,7 @@ export default function ItemsListInSidebar({
       })
     );
     dispatch(setShowPilot(true));
+    dispatch(setActiveTabId(4));
     navigate(`/workspace/hub/${id}`);
   };
 
