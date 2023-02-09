@@ -10,10 +10,11 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
+  triggerUnassignTag,
 } from "../../../../../features/task/taskSlice";
 import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
 import { MdDragIndicator } from "react-icons/md";
-
+import { RiArrowRightSFill } from "react-icons/ri";
 import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../../../../../app/hooks";
 // import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,12 @@ interface TaskDataProps {
   task: any;
 }
 // import { columnsHead } from '../views/ListColumns';
+
+import { AiOutlineEllipsis } from "react-icons/ai";
+import { IoCloseSharp } from "react-icons/io5";
+import ToolTip from "../../../../../components/Tooltip";
+import EditTagModal from "../../../../../components/tags/EditTagModal";
+import ColorsModal from "../../../../../components/tags/ColorsModal";
 import moment from "moment";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
@@ -48,6 +55,8 @@ export default function TaskData({ task }: TaskDataProps) {
     getSubTaskId,
     taskColumns,
     hideTask,
+    showTagColorDialogueBox,
+    renameTagId,
   } = useAppSelector((state) => state.task);
 
   const displayNav = (id: string) => {
@@ -55,7 +64,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleTaskPilot = (id: any, name: string) => {
+  const handleTaskPilot = (id: string, name: string) => {
     dispatch(setTaskIdForPilot(id));
     dispatch(
       setActiveItem({
@@ -118,7 +127,49 @@ export default function TaskData({ task }: TaskDataProps) {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
-        <div>{item.name}</div>
+        <>
+          <div
+            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
+              item.name.length > 10 ? "object-contain" : "w-20"
+            }`}
+            style={{ backgroundColor: `${item.color}` }}
+          >
+            <div className="flex items-center">
+              <p> {item.name}</p>
+              {renameTagId == item.id && (
+                <form>
+                  <input
+                    type="text"
+                    placeholder="tagedit name"
+                    className="text-gray-400 h-7 object-contain"
+                  />
+                </form>
+              )}
+            </div>
+            <ToolTip tooltip="edit tag">
+              <button>
+                <EditTagModal tagId={item.id} taskId={task.id} />
+              </button>
+            </ToolTip>
+
+            <ToolTip tooltip="unassign tag">
+              <button
+                onClick={() =>
+                  dispatch(
+                    triggerUnassignTag({
+                      unAssignTadId: item.id,
+                      currentTaskIdForTag: task.id,
+                    })
+                  )
+                }
+              >
+                <IoCloseSharp />
+              </button>
+            </ToolTip>
+            {showTagColorDialogueBox && <ColorsModal />}
+          </div>
+          {/* <span>{arr.length}</span> */}
+        </>
       );
     });
   };
@@ -273,17 +324,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'tags') {
-      return <div> {groupTags(task.tags)}</div>;
-    }
-    // else if (colfield == "description") {
-    //   return (
-    //     <span className="text-gray-400 text-sm font-medium">
-    //       <p>jkhsbdfkjsbvkjrghdfbvjkhrf</p>
-    //     </span>
-    //   );
-    // }
-    else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -313,7 +354,7 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == 'Task' &&
+                    col.value == "Task" &&
                     !col.hidden && (
                       <div
                         key={col.field}
@@ -325,7 +366,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == 'Task' &&
+                    col.value == "Task" &&
                     !col.hidden && (
                       <div
                         key={col.field}
@@ -340,7 +381,7 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == 'Tags' &&
+                    col.value == "Tags" &&
                     !col.hidden && (
                       <div
                         key={col.field}
@@ -352,7 +393,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == 'Tags' &&
+                    col.value == "Tags" &&
                     !col.hidden && (
                       <div
                         key={col.field}
@@ -368,8 +409,8 @@ export default function TaskData({ task }: TaskDataProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -382,8 +423,8 @@ export default function TaskData({ task }: TaskDataProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
