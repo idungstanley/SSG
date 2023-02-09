@@ -3,10 +3,10 @@ import { useAppSelector } from '../../../app/hooks';
 import Tab from './components/Tabs';
 import History from '../../newExplorer/components/Pilot/components/History';
 import Permissions from '../../newExplorer/components/Pilot/components/Permissions';
+import Checklists from './components/checklist/components/Checklist';
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
-import Checklist from './components/checklist/Checklist';
 import { useDispatch } from 'react-redux';
 import TimeClock from './components/timeClock/subtabs/TimeClock';
 import {
@@ -42,7 +42,7 @@ const sections = [
   },
   {
     id: 7,
-    element: <Checklist />,
+    element: <Checklists />,
   },
 ];
 

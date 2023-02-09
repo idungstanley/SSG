@@ -8,7 +8,6 @@ import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
-import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
 import { BsThreeDots } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -17,12 +16,11 @@ import {
   setShowPilotIconView,
   setShowPilotListView,
 } from '../../../../features/workspace/workspaceSlice';
-// import { MdDragIndicator } from 'react-icons/md';
-import { TfiLayoutListThumb } from 'react-icons/tfi';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
 import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 import TabDrag from './TabDrags';
+import ChecklistSubtab from './checklist/subtabs/ChecklistSubtab';
 import {
   closestCenter,
   DndContext,
@@ -78,6 +76,7 @@ const pilotOptions = [
     id: 7,
     name: 'Checklist',
     source: checklistIcon,
+    subTab: <ChecklistSubtab />,
   },
 ];
 function Tab() {

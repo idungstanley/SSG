@@ -4,6 +4,7 @@ import { MdDragIndicator } from "react-icons/md";
 import { useSortable } from "@dnd-kit/sortable";
 import { useDispatch } from "react-redux";
 import {
+  setActiveSubChecklistTabId,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
 } from "../../../../../features/workspace/workspaceSlice";
@@ -52,6 +53,8 @@ export default function SubtabDrag({
       dispatch(setActiveSubCommunicationTabId(id));
     } else if (name === "details") {
       dispatch(setActiveSubDetailsTabId(id));
+    } else if (name === "Checklist") {
+      dispatch(setActiveSubChecklistTabId(id));
     }
   };
 
