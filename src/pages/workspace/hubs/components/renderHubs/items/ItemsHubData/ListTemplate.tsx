@@ -17,7 +17,7 @@ export default function ListTemplate({ listId }: listIdprops) {
     useAppSelector((state) => state.task);
 
   return (
-    <div className="">
+    <div>
       {data?.data.tasks.map((task) => {
         return (
           <div key={task.id} className="capitalize">

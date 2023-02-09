@@ -25,11 +25,13 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
 
   const dispatch = useAppDispatch();
 
-  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const { addNewTaskItem, closeTaskListView } = useAppSelector(
+    (state) => state.task
+  );
   const { currentListId, createTaskFromTop } = useAppSelector(
     (state) => state.list
   );
-  const { closeTaskListView } = useAppSelector((state) => state.task);
+  
 
   return (
     <section>
