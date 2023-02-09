@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
+  ImyTaskData,
   setCurrentParentSubTaskId,
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -11,21 +12,17 @@ import {
 } from "../../../../../features/task/taskSlice";
 import { useAppSelector } from "../../../../../app/hooks";
 import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
 import { FiEdit2 } from "react-icons/fi";
-import { EditOutlined, PlusOutlined, UserAddOutlined } from "@ant-design/icons";
+import { UserAddOutlined } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
 import "../create/subtask.css";
-import { columnsHead } from "../../component/views/ListColumns";
 import moment from "moment";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
 
 export default function Template({ task }: TemplateProps) {
@@ -66,7 +63,9 @@ export default function Template({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (
+    data: [{ id: string; initials: string; colour: string }]
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1 ">
@@ -80,6 +79,11 @@ export default function Template({ task }: TemplateProps) {
       </>
     ));
   };
+  interface Iassignee {
+    id: string;
+    initials: string;
+    colour: string;
+  }
 
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -117,7 +121,10 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (
+      colfield === 'assignees' &&
+      (taskColField as Array<Iassignee>)?.length === 0
+    ) {
       return (
         <UserAddOutlined
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
@@ -130,7 +137,7 @@ export default function Template({ task }: TemplateProps) {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as string).format('MM/DD')}
         </span>
       );
     } else if (colfield == "status") {
@@ -213,7 +220,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "

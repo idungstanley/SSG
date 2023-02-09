@@ -1,7 +1,8 @@
 import React from "react";
 import ItemsHubData from ".";
+import { dataProps } from "../../../../../../../components/Index/walletIndex/WalletIndex";
 
-export default function TaskListSections({ data }: any) {
+export default function TaskListSections({ data }: {data:dataProps}) {
   return (
     <section id="listcard" className="  bg-white " key={data.id}>
       <div

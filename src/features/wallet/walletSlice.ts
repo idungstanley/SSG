@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+interface walletProps {
+  id: string;
+  isOpen: boolean;
+}
 interface WalletState {
-  wallet: any[];
+  wallet: walletProps[];
   currentWalletParentId: null;
   currentWalletParentType: null;
   delWallet: boolean;

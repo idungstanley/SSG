@@ -15,7 +15,7 @@ export default function ClockInOutIndex() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
   const [isBillable, setIsBillable] = useState(false);
-  const { activeItemId, activeItemType } = useAppSelector(
+  const { activeItemId } = useAppSelector(
     (state) => state.workspace
   );
 

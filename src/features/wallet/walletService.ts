@@ -25,21 +25,22 @@ export const createWalletService = (data: {
 };
 
 // // get wallets
-export const getWalletService = (data) => {
-  const parentId = data.queryKey[1][0];
-  const response = requestNew(
-    {
-      url: 'at/wallets',
-      method: 'GET',
-      params: {
-        parent_id: parentId, //this returns for subwallet
-        // hub_id: //this is the hub id
-        // is_archived: //toggle archive
+export const getWalletService = (currentWalletId: string | null) => {
+  return useQuery(['wallet', currentWalletId], async () => {
+    const response = await requestNew(
+      {
+        url: 'at/wallets',
+        method: 'GET',
+        params: {
+          parent_id: currentWalletId, //this returns for subwallet
+          // hub_id: //this is the hub id
+          // is_archived: //toggle archive
+        },
       },
-    },
-    true
-  );
-  return response;
+      true
+    );
+    return response;
+  });
 };
 
 export const getWalletServices = (data: {
@@ -90,7 +91,10 @@ export const UseEditWalletService = (data: {
 };
 
 //del wallet
-export const UseDeleteWalletService = (data) => {
+export const UseDeleteWalletService = (data: {
+  query: string | null;
+  delWallet: boolean;
+}) => {
   const dispatch = useDispatch();
   const walletId = data.query;
   const queryClient = useQueryClient();
@@ -117,7 +121,10 @@ export const UseDeleteWalletService = (data) => {
 };
 
 //archive wallet
-export const UseArchiveWalletService = (wallet) => {
+export const UseArchiveWalletService = (wallet: {
+  query: boolean | null;
+  archiveWallet: boolean;
+}) => {
   const walletId = wallet.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -146,7 +153,10 @@ export const UseArchiveWalletService = (wallet) => {
 };
 
 //get walllet details
-export const UseGetWalletDetails = (query) => {
+export const UseGetWalletDetails = (query: {
+  activeItemId: string;
+  activeItemType: string;
+}) => {
   return useQuery(
     ['hubs', query],
     async () => {

@@ -18,6 +18,9 @@ module.exports = {
       gridTemplateColumns: {
         mainLayout: '300px 1fr',
         sidebarItem: 'auto 1fr auto',
+        frFrAuto: '1fr 1fr auto',
+        frAuto: '1fr auto',
+        autoFr: 'auto 1fr',
       },
       gridTemplateRows: {
         mainContent: 'auto 1fr',

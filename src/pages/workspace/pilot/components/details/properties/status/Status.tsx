@@ -7,7 +7,13 @@ import { setUpdateStatusModalId } from '../../../../../../../features/task/taskS
 import { UseUpdateTaskStatusService } from '../../../../../../../features/task/taskService';
 
 interface StatusDetailsProps {
-  Details: any;
+  Details: {
+    id: string;
+    name: string;
+    description: string;
+    created_at: string;
+    status: string;
+  };
 }
 
 export default function Status({ Details }: StatusDetailsProps) {

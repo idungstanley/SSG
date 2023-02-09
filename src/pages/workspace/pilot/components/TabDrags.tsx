@@ -1,6 +1,5 @@
 import React from 'react';
 import { classNames } from '../../../../utils';
-import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
@@ -11,9 +10,9 @@ interface TabProps {
   id: number;
   name: string;
   source: string | undefined;
-  showPilot?: any;
-  showPilotIconView?: any;
-  subTab?: any;
+  showPilot?: boolean;
+  showPilotIconView?: boolean;
+  subTab?: JSX.Element;
 }
 
 export default function TabDrag({
@@ -35,7 +34,7 @@ export default function TabDrag({
     id,
   });
   const dispatch = useDispatch();
-  const { activeTabId, showPilotListView } = useAppSelector(
+  const { activeTabId } = useAppSelector(
     (state) => state.workspace
   );
   const style = {
@@ -64,9 +63,8 @@ export default function TabDrag({
           id === activeTabId
             ? 'bg-gray-300 text-black'
             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-          showPilot ? 'border gap-2 pr-6' : 'py-3 px-3',
-          showPilotIconView ? 'w-12' : '',
-          !showPilotIconView && !showPilotListView ? 'justify-center' : '',
+          showPilot ? 'gap-2 pr-6' : 'py-3 px-3',
+          showPilotIconView ? 'w-12 justify-center' : '',
           'relative group py-2 font-medium h-fit flex-grow items-center cursor-pointer flex transition'
         )}
         aria-current={id === activeTabId ? 'page' : undefined}
@@ -74,13 +72,13 @@ export default function TabDrag({
         {id === activeTabId && (
           <span
             className={`absolute bg-green-500 ${
-              showPilotListView
-                ? 'top-0 left-0 bottom-0 w-1'
-                : 'top-0 left-0 right-0 h-0.5 w-fit'
+              showPilotIconView
+                ? 'top-0 left-0 right-0 h-0.5 w-fit'
+                : 'top-0 left-0 bottom-0 w-1'
             }`}
           ></span>
         )}
-        <div className="flex items-center">
+        <div className="flex items-center ml-1">
           <span
             ref={setNodeRef}
             {...attributes}

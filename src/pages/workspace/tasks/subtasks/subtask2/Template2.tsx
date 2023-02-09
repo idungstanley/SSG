@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import moment from "moment";
+import React, { ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import moment, { MomentInput } from 'moment';
 import {
-  setCurrentParentSubTaskId,
+  ImyTaskData,
   setCurrentParentSubTaskId2,
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -17,21 +17,17 @@ import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import { FiEdit2 } from "react-icons/fi";
 import {
-  EditOutlined,
-  FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
-
 export default function Template2({ task }: TemplateProps) {
   const dispatch = useDispatch();
 
@@ -66,7 +62,9 @@ export default function Template2({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (
+    data: [{ id: string; initials: string; colour: string }]
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">
@@ -121,7 +119,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserAddOutlined
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
@@ -134,7 +132,7 @@ export default function Template2({ task }: TemplateProps) {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
     } else if (colfield == "status") {
@@ -226,7 +224,7 @@ export default function Template2({ task }: TemplateProps) {
           >
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
-          <p>{taskColField}</p>
+          <p>{taskColField as ReactNode}</p>
           <div
             id="iconWrapper"
             className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -243,7 +241,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "

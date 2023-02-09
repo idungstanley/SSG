@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
+  ImyTaskData,
   setCurrentParentSubTaskId3,
   setCurrentParentTaskId,
   setCurrentTaskId,
@@ -12,25 +13,21 @@ import {
 import { useAppSelector } from "../../../../../app/hooks";
 import { MdDragIndicator } from "react-icons/md";
 import { FiEdit2 } from "react-icons/fi";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import {
-  CalendarOutlined,
-  EditOutlined,
-  FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
 import moment from "moment";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import { groupAssigneeProps } from "../subtask1/Template";
 
 interface TemplateProps {
-  task: any;
+  task: ImyTaskData;
 }
 
 export default function Template3({ task }: TemplateProps) {
@@ -67,7 +64,7 @@ export default function Template3({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data) => {
+  const groupAssignee = (data: groupAssigneeProps[]) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">

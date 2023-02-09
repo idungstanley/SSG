@@ -30,8 +30,11 @@ function RenderWallets() {
         />
       </section>
       <section className="flex h-full w-full">
-        <div className="w-full overflow-y-scroll">
-          <div>
+        <div className=" w-full pr-1 pt-0.5">
+          <div
+            className="w-full overflow-y-scroll"
+            style={{ minHeight: '0', maxHeight: '80vh' }}
+          >
             {data?.data.wallets.map((data) => (
               <WalletSection data={data} key={data.id} />
             ))}

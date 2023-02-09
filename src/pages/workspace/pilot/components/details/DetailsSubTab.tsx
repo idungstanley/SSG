@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { MdAddToPhotos, MdDragIndicator } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { MdAddToPhotos } from "react-icons/md";
 import { useAppSelector } from "../../../../../app/hooks";
 import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import { setActiveSubDetailsTabId } from "../../../../../features/workspace/workspaceSlice";
 import SubtabDrag from "../SubtabDnd";
 import {
   closestCenter,

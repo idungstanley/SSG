@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { FiPlusCircle } from "react-icons/fi";
-import { useAppSelector } from "../../../../../app/hooks";
-import AddColumnDropdown from "../../dropdown/AddColumnDropdown";
-// import addColumns from '../../../lists/components/renderlist/listDetails/listDetails';
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { FiPlusCircle } from 'react-icons/fi';
+import { useAppSelector } from '../../../../../app/hooks';
+import AddColumnDropdown from '../../dropdown/AddColumnDropdown';
+import { useDispatch } from 'react-redux';
 import {
   getTaskColumns,
   setCloseTaskListView,
@@ -23,8 +22,7 @@ export default function TaskListViews() {
     (state) => state.task
   );
 
-  const [taskCol, setTaskCol] = useState(columnsHead);
-  dispatch(getTaskColumns(taskCol));
+  dispatch(getTaskColumns(columnsHead));
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
@@ -34,14 +32,14 @@ export default function TaskListViews() {
     <div className="oveflow-x-auto">
       <div
         className="flex overflow-x-auto items-center justify-between pt-5 bg-gray-100 z-20 w-12/12 "
-        style={{ backgroundColor: "#e1e4e5" }}
+        style={{ backgroundColor: '#e1e4e5' }}
       >
         <div className="flex">
           <div className=" flex items-center ">
             <span className="bg-gray-200 hover:bg-gray-400 rounded-full p-px ">
               <IoIosArrowDropdown
                 className={` text-gray-400 text-sm hover:text-gray-200  ${
-                  closeTaskListView === false ? "rotateimg90" : null
+                  closeTaskListView === false ? 'rotateimg90' : null
                 }`}
                 aria-hidden="true"
                 onClick={() =>
@@ -64,12 +62,12 @@ export default function TaskListViews() {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == "Task" &&
+                    col.value == 'Task' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex mt-1 items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                        style={{ color: "#78828d", fontSize: "11px" }}
+                        style={{ color: '#78828d', fontSize: '11px' }}
                       >
                         {col.value}
                       </div>
@@ -77,12 +75,12 @@ export default function TaskListViews() {
                 )
               : columnsHead.map(
                   (col) =>
-                    col.value == "Task" &&
+                    col.value == 'Task' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
-                        style={{ color: "#78828d", fontSize: "10px" }}
+                        style={{ color: '#78828d', fontSize: '10px' }}
                       >
                         {col.value}
                       </div>
@@ -95,15 +93,15 @@ export default function TaskListViews() {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
-                        color: "#78828d",
-                        fontSize: "10px",
+                        color: '#78828d',
+                        fontSize: '10px',
                       }}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
@@ -120,15 +118,15 @@ export default function TaskListViews() {
               )
             : columnsHead.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className="flex justify-around hover:bg-clip-border	 items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
-                        color: "#78828d",
-                        fontSize: "10px",
+                        color: '#78828d',
+                        fontSize: '10px',
                       }}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
@@ -146,7 +144,7 @@ export default function TaskListViews() {
         </div>
         <span
           className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
-          style={{ color: "#78828d" }}
+          style={{ color: '#78828d' }}
         >
           <FiPlusCircle
             className=" font-black hover:bg-white 	"

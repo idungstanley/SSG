@@ -4,10 +4,11 @@ import logsIcon from '../../../../assets/branding/logs.png';
 import detailIcon from '../../../../assets/branding/detail.png';
 import automationIcon from '../../../../assets/branding/automation.png';
 import timeclockIcon from '../../../../assets/branding/timeclock.png';
+import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
-import { HiChevronDoubleRight, HiChevronDoubleUp } from 'react-icons/hi';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
+import { BsThreeDots } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -15,12 +16,11 @@ import {
   setShowPilotIconView,
   setShowPilotListView,
 } from '../../../../features/workspace/workspaceSlice';
-// import { MdDragIndicator } from 'react-icons/md';
-import { TfiLayoutListThumb } from 'react-icons/tfi';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
 import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 import TabDrag from './TabDrags';
+import ChecklistSubtab from './checklist/subtabs/ChecklistSubtab';
 import {
   closestCenter,
   DndContext,
@@ -76,6 +76,7 @@ const pilotOptions = [
     id: 7,
     name: 'Checklist',
     source: checklistIcon,
+    subTab: <ChecklistSubtab />,
   },
 ];
 function Tab() {
@@ -158,60 +159,50 @@ function Tab() {
         aria-label="Tabs"
         style={showPilot ? { width: '400px' } : { width: '48px' }}
       >
-        <section className="flex pl-2 justify-between border items-center h-12">
-          {activeItemName && showPilot && (
-            <div
-              id="entity"
-              className="flex -mb-3 py-2 pl-1 text-xs capitalize"
-            >
-              <p className="text-gray-600">
-                {activeItemType && activeItemType}
-              </p>
-              <p>:</p>
-              <p className="pl-1 text-gray-500 capitalize">
-                {activeItemName && activeItemName}
-              </p>
-            </div>
-          )}
+        <section
+          className={`flex justify-between border-b items-center h-12 ${
+            showPilot && 'pr-2'
+          }`}
+        >
+          <div className="flex items-center">
+            {activeItemName && showPilot && (
+              <div
+                id="entity"
+                className="flex py-2 font-bold items-center pl-1 text-xs capitalize"
+              >
+                <p className="text-gray-600">
+                  {activeItemType && activeItemType}
+                </p>
+                <p>:</p>
+                <p className="pl-1 text-gray-500 capitalize">
+                  {activeItemName && activeItemName}
+                </p>
+              </div>
+            )}
+          </div>
           <div
-            className={`flex items-center h-fit px-2 ${
-              showPilot ? 'flex-row py-2' : 'flex-col gap-1'
+            className={`flex items-center h-fit  ${
+              showPilot ? 'flex-row py-2 space-x-1' : 'flex-col pr-4'
             }`}
           >
-            <HiChevronDoubleRight
+            <img
+              src={compactArrowIcon}
+              alt=""
               onClick={() => handleShowPilot()}
-              className={`cursor-pointer ${
+              className={`cursor-pointer w-3 h-3 ${
                 showPilot
                   ? 'translate-x-4 skew-y-3'
                   : 'transform -rotate-180 mb-1'
               }`}
             />
-            <BsThreeDotsVertical />
+            <BsThreeDots />
           </div>
         </section>
         <div
-          className={`flex flex-wrap relative divide-x ${
-            !showPilotListView && !showPilotIconView && 'flex-row'
-          } ${showPilotListView && 'flex-col'}`}
+          className={`flex flex-wrap relative divide-y divide-x ${
+            showPilotIconView ? 'flex-row' : 'flex-col'
+          }`}
         >
-          {showPilot && (
-            <span className="z-10 text-xs border flex flex-col w-8 justify-between items-center">
-              <HiChevronDoubleUp
-                onClick={() => handleShowPilotIconView()}
-                className={`w-4 h-4 border flex flex-col justify-between items-center hover:text-green-500 ${
-                  showPilotIconView
-                    ? 'text-green-500 transform -rotate-180'
-                    : ''
-                }`}
-              />
-              <TfiLayoutListThumb
-                onClick={() => handleShowPilotListView()}
-                className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
-                  showPilotListView ? 'text-green-500' : ''
-                }`}
-              />
-            </span>
-          )}
           <SortableContext strategy={rectSortingStrategy} items={items}>
             {items.map((item) => (
               <TabDrag
@@ -225,7 +216,26 @@ function Tab() {
               />
             ))}
           </SortableContext>
+          {showPilot && (
+            <span
+              className={`z-10 text-xs flex w-8 justify-center items-center ${
+                !showPilotIconView && 'absolute top-2 right-0'
+              }`}
+            >
+              <img
+                src={listIcon}
+                alt=""
+                onClick={() => handleShowPilotIconView()}
+                className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
+                  showPilotIconView
+                    ? 'text-green-500 transform -rotate-180'
+                    : ''
+                }`}
+              />
+            </span>
+          )}
         </div>
+        <hr />
       </div>
     </DndContext>
   );

@@ -3,45 +3,53 @@ import React, {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState,
+  // useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  // useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
-import ItemPreviewSidebar from '../../../../components/ItemPreviewSidebar';
+// import ItemPreviewSidebar from '../../../../components/ItemPreviewSidebar';
 import {
   resetSelectedFilesAndFolders,
-  setSelectedFiles,
-  setSelectedFolders,
-  setSelectedItem,
+  // setSelectedFiles,
+  // setSelectedFolders,
+  // setSelectedItem,
 } from '../../../../features/explorer/explorerSlice';
 import {
-  useGetFile,
-  useGetFolder,
+  // useGetFile,
+  // useGetFolder,
   useGetSharedFilesAndFolders,
 } from '../../../../features/shared/sharedService';
-import { explorerItemType } from '../../../../types';
-import { IItem } from '../../../explorer/ExplorerPage/components/ListItems';
-import Grid from '../../../explorer/ExplorerPage/components/ListItems/Grid';
-import Table from '../../../explorer/ExplorerPage/components/ListItems/Table';
-import { sortItems } from '../../../explorer/ExplorerPage/components/Toolbar/components/SortingItems';
+// import { explorerItemType } from '../../../../types';
+
+interface IItem {
+  icon: string;
+  name: string;
+  created_at: string;
+  size: '-' | number;
+  item_type: 'folder' | 'file';
+  id: string;
+  updated_at: string;
+}
 
 export default function SharedTable() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { folderId } = useParams();
   const checkbox = useRef<{ indeterminate: boolean }>(null);
-  const [checked, setChecked] = useState(false);
-  const [indeterminate, setIndeterminate] = useState(false);
+  // const [checked, setChecked] = useState(false);
+  // const [indeterminate, setIndeterminate] = useState(false);
   const {
     selectedFileIds,
     selectedFolderIds,
-    selectedSortingId,
-    selectedViewId,
-    selectedItemId,
-    selectedItemType,
+    // selectedSortingId,
+    // selectedItemId,
+    // selectedItemType,
   } = useAppSelector((state) => state.explorer);
   const selectedItems = [...selectedFileIds, ...selectedFolderIds];
 
@@ -89,9 +97,9 @@ export default function SharedTable() {
       selectedItems.length === items.length &&
       +selectedItems.length + +items.length > 0
     ) {
-      setChecked(selectedItems.length === items.length);
+      // setChecked(selectedItems.length === items.length);
     }
-    setIndeterminate(isIndeterminate);
+    // setIndeterminate(isIndeterminate);
     if (checkbox.current) {
       checkbox.current.indeterminate = isIndeterminate;
     }
@@ -100,104 +108,90 @@ export default function SharedTable() {
   useEffect(() => {
     if (selectedItems.length) {
       dispatch(resetSelectedFilesAndFolders());
-      setChecked(false);
+      // setChecked(false);
     }
   }, [folderId]);
 
-  function toggleAll() {
-    if (checked || indeterminate) {
-      dispatch(resetSelectedFilesAndFolders());
-    } else {
-      dispatch(
-        setSelectedFiles([
-          ...items.filter((i) => i.item_type === 'file').map((i) => i.id),
-        ])
-      );
-      dispatch(
-        setSelectedFolders([
-          ...items.filter((i) => i.item_type === 'folder').map((i) => i.id),
-        ])
-      );
-    }
+  // function toggleAll() {
+  //   if (checked || indeterminate) {
+  //     dispatch(resetSelectedFilesAndFolders());
+  //   } else {
+  //     dispatch(
+  //       setSelectedFiles([
+  //         ...items.filter((i) => i.item_type === 'file').map((i) => i.id),
+  //       ])
+  //     );
+  //     dispatch(
+  //       setSelectedFolders([
+  //         ...items.filter((i) => i.item_type === 'folder').map((i) => i.id),
+  //       ])
+  //     );
+  //   }
 
-    setChecked(!checked && !indeterminate);
-    setIndeterminate(false);
-  }
+  //   setChecked(!checked && !indeterminate);
+  //   setIndeterminate(false);
+  // }
 
-  const handleClick = (
-    e:
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>
-      | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    itemId: string,
-    type: explorerItemType
-  ) => {
-    const target = e.target as HTMLButtonElement;
+  // const handleClick = (
+  //   e:
+  //     | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  //     | React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+  //   itemId: string,
+  //   type: explorerItemType
+  // ) => {
+  //   const target = e.target as HTMLButtonElement;
 
-    if (selectedItems.length && !target.value) {
-      dispatch(resetSelectedFilesAndFolders());
-    }
+  //   if (selectedItems.length && !target.value) {
+  //     dispatch(resetSelectedFilesAndFolders());
+  //   }
 
-    if (!target.value && selectedFolderIds.includes(itemId)) {
-      navigate(`/explorer/${itemId}`, { replace: true });
-      dispatch(resetSelectedFilesAndFolders());
-      setChecked(false);
-    }
+  //   if (!target.value && selectedFolderIds.includes(itemId)) {
+  //     navigate(`/explorer/${itemId}`, { replace: true });
+  //     dispatch(resetSelectedFilesAndFolders());
+  //     setChecked(false);
+  //   }
 
-    if (!target.value) {
-      dispatch(
-        setSelectedItem({
-          selectedItemId: itemId,
-          selectedItemType: type,
-        })
-      );
-      dispatch(
-        type === 'file'
-          ? setSelectedFiles([itemId])
-          : setSelectedFolders([itemId])
-      );
-    }
-  };
+  //   if (!target.value) {
+  //     dispatch(
+  //       setSelectedItem({
+  //         selectedItemId: itemId,
+  //         selectedItemType: type,
+  //       })
+  //     );
+  //     dispatch(
+  //       type === 'file'
+  //         ? setSelectedFiles([itemId])
+  //         : setSelectedFolders([itemId])
+  //     );
+  //   }
+  // };
 
-  const handleChangeItem = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    itemId: string,
-    type: string
-  ) => {
-    if (!e.target.checked) {
-      dispatch(
-        type === 'file'
-          ? setSelectedFiles([...selectedFileIds.filter((i) => i !== itemId)])
-          : setSelectedFolders([
-              ...selectedFolderIds.filter((i) => i !== itemId),
-            ])
-      );
-    } else {
-      dispatch(
-        type === 'file'
-          ? setSelectedFiles([...selectedFileIds, itemId])
-          : setSelectedFolders([...selectedFolderIds, itemId])
-      );
-    }
-  };
+  // const handleChangeItem = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   itemId: string,
+  //   type: string
+  // ) => {
+  //   if (!e.target.checked) {
+  //     dispatch(
+  //       type === 'file'
+  //         ? setSelectedFiles([...selectedFileIds.filter((i) => i !== itemId)])
+  //         : setSelectedFolders([
+  //             ...selectedFolderIds.filter((i) => i !== itemId),
+  //           ])
+  //     );
+  //   } else {
+  //     dispatch(
+  //       type === 'file'
+  //         ? setSelectedFiles([...selectedFileIds, itemId])
+  //         : setSelectedFolders([...selectedFolderIds, itemId])
+  //     );
+  //   }
+  // };
 
-  const sortedItems = useMemo(
-    () => [
-      ...sortItems(
-        items?.filter((i) => i.item_type === 'folder'),
-        selectedSortingId
-      ),
-      ...sortItems(
-        items?.filter((i) => i.item_type === 'file'),
-        selectedSortingId
-      ),
-    ],
-    [data, selectedSortingId]
-  );
-
-  const { data: item } =
-    selectedItemType === 'file'
-      ? useGetFile(selectedItemId)
-      : useGetFolder(selectedItemId);
+  // const { data: item } =
+  //   selectedItemType === 'file'
+  //     ? useGetFile(selectedItemId)
+  //     : useGetFolder(selectedItemId);
 
   return status.files === 'loading' || status.folders === 'loading' ? (
     <div className="mx-auto w-6 mt-10 justify-center">
@@ -215,13 +209,13 @@ export default function SharedTable() {
     />
   ) : (
     <div className="flex flex-col h-full px-3 md:px-0">
-      {selectedItemId ? (
+      {/* {selectedItemId ? (
         <ItemPreviewSidebar item={item} type={selectedItemType} />
-      ) : null}
+      ) : null} */}
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className="relative overflow-hidden">
-            {selectedViewId === 1 ? (
+            {/* {selectedViewId === 1 ? (
               <Table
                 checkbox={checkbox}
                 checked={checked}
@@ -241,7 +235,7 @@ export default function SharedTable() {
                 handleChangeItem={handleChangeItem}
                 handleClick={handleClick}
               />
-            )}
+            )} */}
           </div>
         </div>
       </div>

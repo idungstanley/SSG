@@ -5,7 +5,6 @@ import { useGetTeamMembers } from "../../../../features/settings/teamMembers/tea
 import { useAppSelector } from "../../../../app/hooks";
 import {
   setCurrTeamMemId,
-  setToggleAssignCurrentTaskId,
 } from "../../../../features/task/taskSlice";
 import { useDispatch } from "react-redux";
 import { TrashIcon } from "@heroicons/react/24/outline";
@@ -44,7 +43,7 @@ export default function AssignTask() {
   });
 
   const assignedUser = getTaskAssignees?.data.task.assignees.map(
-    ({ id }) => id
+    ({ id }: {id: string}) => id
   );
 
   const handleUnAssign = (id: string) => {

@@ -29,7 +29,7 @@ export default function Sidebar() {
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const [scrollTop, setScrollTop] = useState<string>('');
+  const [scrollTop, setScrollTop] = useState<number | null>(null);
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -41,7 +41,7 @@ export default function Sidebar() {
   }, []);
 
   const resize = React.useCallback(
-    (mouseMoveEvent) => {
+    (mouseMoveEvent: MouseEvent): void => {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
@@ -64,7 +64,7 @@ export default function Sidebar() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing, sidebarWidth]);
-  const handleScroll = (event) => {
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>): void => {
     setScrollTop(event.currentTarget.scrollTop);
   };
   const handleShowSidebar = () => {
@@ -102,8 +102,8 @@ export default function Sidebar() {
         <Modal />
         <SubHubModal />
         <span
-          className={`absolute -right-2 top-3 z-50 bg-white rounded-full border-2 border-inherit ${
-            activePlaceId === true || activePlaceId === 0 ? 'hidden' : 'block'
+          className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
+            !activePlaceId ? 'hidden' : 'block'
           }`}
         >
           {!showExtendedBar && (
@@ -129,7 +129,7 @@ export default function Sidebar() {
                     : 'flex-col space-y-1 justify-center'
                 }`}
               >
-                {scrollTop > '108' ? (
+                {scrollTop != null && scrollTop > 108 ? (
                   <span className="relative h-4 w-4 mr-0.5 cursor-pointer">
                     <p
                       className="flex items-center justify-center px-0.5 h-2.5 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
@@ -153,7 +153,7 @@ export default function Sidebar() {
                   initials={workspaceName
                     .split(' ')
                     .slice(0, 2)
-                    .map((word) => word[0])
+                    .map((word: string) => word[0])
                     .join('')
                     .toUpperCase()}
                   height="h-5"
@@ -176,7 +176,7 @@ export default function Sidebar() {
               )}
             </div>
           </div>
-          <div onScroll={(e) => handleScroll(e)} className="pr-1">
+          <div onScroll={(e) => handleScroll(e)} className="pr-0.5">
             <section
               className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
               style={{ minHeight: '0', maxHeight: '80vh' }}
@@ -188,7 +188,12 @@ export default function Sidebar() {
           </div>
         </div>
         <FooterTabs />
-        <ResizeBorder width={sidebarWidth} minWidth={MIN_SIDEBAR_WIDTH} maxWidth={MAX_SIDEBAR_WIDTH} startResizing={startResizing}/>
+        <ResizeBorder
+          width={sidebarWidth}
+          minWidth={MIN_SIDEBAR_WIDTH}
+          maxWidth={MAX_SIDEBAR_WIDTH}
+          startResizing={startResizing}
+        />
       </div>
     </>
   );
