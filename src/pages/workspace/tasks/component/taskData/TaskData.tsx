@@ -307,15 +307,16 @@ export default function TaskData({ task }: TaskDataProps) {
               id="iconWrapper"
               className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
             >
-              <FiEdit2
-                className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
-                aria-hidden="true"
-              />
-              <PlusOutlined
-                className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
-                aria-hidden="true"
-                onClick={() => handleCreateSubTask(task.id)}
-              />
+              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
+              </span>
+              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                <PlusOutlined
+                  className="  w-3  text-gray-500   "
+                  aria-hidden="true"
+                  onClick={() => handleCreateSubTask(task.id)}
+                />
+              </span>
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
                 <TagModal />
@@ -338,20 +339,10 @@ export default function TaskData({ task }: TaskDataProps) {
     } else return taskColField;
   };
 
-  // const groupTaskByStatus = (arr, keyToReGroupBy) => {
-  //   return arr.reduce(function (reGroup, x) {
-  //     (reGroup[x[keyToReGroupBy]] = reGroup[x[keyToReGroupBy]] || []).push(x);
-  //     return reGroup;
-  //   }, {});
-  // };
-  // console.log(task?.status);
-
-  // console.log(groupTaskByStatus(myTaskData, 'in progress'));
-
   return (
     <div className="relative ">
       <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
-        <div className=" flex justify-between w-6/12 items-center ">
+        <div className=" flex justify-between w-6/12 pr-24 items-center ">
           <div className="w-5/6">
             {hideTask.length
               ? hideTask.map(
