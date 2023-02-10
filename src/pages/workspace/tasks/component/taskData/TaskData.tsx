@@ -247,7 +247,7 @@ export default function TaskData({ task }: TaskDataProps) {
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
             style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
-            TODO
+            Todo
           </div>
         );
       }
@@ -295,7 +295,7 @@ export default function TaskData({ task }: TaskDataProps) {
               onClick={() => handleTaskStatus(task.id)}
               className="relative pt-1 pr-1"
             >
-              <StatusDropdown TaskCurrentStatus={task?.status}/>
+              <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <p
               onClick={() => handleTaskPilot(task.id, task.name)}
