@@ -24,9 +24,7 @@ import { DiDropbox } from "react-icons/di";
 import { TbWorld } from "react-icons/tb";
 import { useState } from "react";
 import { useAppDispatch } from "../../../../app/hooks";
-import {
-  hideTaskColumns,
-} from "../../../../features/task/taskSlice";
+import { hideTaskColumns } from "../../../../features/task/taskSlice";
 import { listColumnProps } from "../component/views/ListColumns";
 
 interface CustomDropdownProps {
@@ -44,7 +42,7 @@ export default function AddColumnDropdown({
   return (
     <div className="relative">
       <div
-        className=" absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto "
+        className=" scrollbarDynCol absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1   "
         style={{ height: "50vh" }}
       >
         <div className="flex  py-2 px-2 justify-around">

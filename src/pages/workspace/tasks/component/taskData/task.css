@@ -11,3 +11,13 @@
   padding-left: 20px;
   color: red;
 }
+
+.scrollbarDynCol {
+  min-height: 500px;
+  max-height: 500px;
+  background: #fff;
+  overflow-y: hidden;
+}
+.scrollbarDynCol:hover {
+  overflow-y: auto;
+}
