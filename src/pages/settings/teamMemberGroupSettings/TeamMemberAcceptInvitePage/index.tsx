@@ -7,9 +7,10 @@ import NotFoundPage from '../../../NotFoundPage';
 
 export default function TeamMemberAcceptInvite() {
   const { inviteCode } = useParams();
-  inviteCode
-    ? localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode))
-    : '';
+  if (inviteCode) {
+    localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
+  }
+
   const { status, data } = useAcceptTeamMemberInvite();
 
   console.log(data);
