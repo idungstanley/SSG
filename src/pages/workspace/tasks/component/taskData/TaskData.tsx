@@ -295,7 +295,7 @@ export default function TaskData({ task }: TaskDataProps) {
               onClick={() => handleTaskStatus(task.id)}
               className="relative pt-1 pr-1"
             >
-              <StatusDropdown TaskCurrentStatus={task?.status} />
+              <StatusDropdown TaskCurrentStatus={task?.status}/>
             </p>
             <p
               onClick={() => handleTaskPilot(task.id, task.name)}
