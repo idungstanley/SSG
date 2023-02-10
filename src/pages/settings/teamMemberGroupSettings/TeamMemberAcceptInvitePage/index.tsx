@@ -2,33 +2,36 @@ import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useAcceptTeamMemberInvite } from '../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import { Spinner } from '../../../../common';
-import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
+import RegisterPage from '../../../workspace/createWorkspace/auth/RegisterPage/index';
+import NotFoundPage from '../../../NotFoundPage';
 
 export default function TeamMemberAcceptInvite() {
   const { inviteCode } = useParams();
   inviteCode
     ? localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode))
     : '';
-  const { status } = useAcceptTeamMemberInvite();
-  setTimeout(() => {
-    if (status === 'loading') {
-      window.location.reload();
-    }
-  }, 2000);
+  const { status, data } = useAcceptTeamMemberInvite();
 
-  if (status === 'success') {
-    localStorage.removeItem('teamMemberInviteCode');
+  console.log(data);
+
+  if (status == 'loading') {
+    return (
+      <div className="flex justify-center relative top-52 bottom-52">
+        <Spinner size={10} color={'#6B7280'} />
+      </div>
+    );
   }
-  return status === 'loading' ? (
-    <div className="flex justify-center relative top-52 bottom-52">
-      <Spinner size={10} color={'#6B7280'} />
-    </div>
+
+  if (status == 'success') {
+    localStorage.setItem('user', JSON.stringify(data?.data.user));
+  }
+
+  return data?.message === 'Unauthenticated' ? (
+    <RegisterPage />
   ) : status === 'success' ? (
     <Navigate to="/workspace" />
   ) : (
-    <FullScreenMessage
-      title="Oops, an error occurred :("
-      description="Please try again later."
-    />
+    <NotFoundPage />
   );
 }
+//  https://dev.alsoworkspace.com/accept-invite/81444843fb4412b4b24680363ff266e4fcc67f5397
