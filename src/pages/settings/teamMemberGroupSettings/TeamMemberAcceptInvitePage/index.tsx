@@ -7,6 +7,7 @@ import NotFoundPage from '../../../NotFoundPage';
 
 export default function TeamMemberAcceptInvite() {
   const { inviteCode } = useParams();
+
   if (inviteCode) {
     localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
   }
@@ -23,16 +24,13 @@ export default function TeamMemberAcceptInvite() {
     );
   }
 
+  if (data?.message === 'Unauthenticated') {
+    <RegisterPage />;
+  }
+
   if (status == 'success') {
     localStorage.setItem('user', JSON.stringify(data?.data.user));
   }
 
-  return data?.message === 'Unauthenticated' ? (
-    <RegisterPage />
-  ) : status === 'success' ? (
-    <Navigate to="/workspace" />
-  ) : (
-    <NotFoundPage />
-  );
+  return status === 'success' ? <Navigate to="/workspace" /> : <NotFoundPage />;
 }
-//  https://dev.alsoworkspace.com/accept-invite/81444843fb4412b4b24680363ff266e4fcc67f5397
