@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
   UseUpdateChecklistItemService,
@@ -11,12 +14,18 @@ import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 
-function ChecklistItem({ Item, checklistId, refetch }: any) {
+interface checklist {
+  Item: [];
+  checklistId: string;
+  refetch: any;
+}
+
+function ChecklistItem({ Item, checklistId, refetch }: checklist) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
   // const [editName, setEditName] = useState<string>("");
-  const [itemId, setItemId] = useState<any>("");
+  const [itemId, setItemId] = useState<string>("");
   const [done, setDone] = useState<number>(0);
 
   const { triggerItemUpdate } = useAppSelector((state) => state.checklist);
@@ -35,14 +44,13 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
     setNewItem("");
   };
 
-  const { data: updateRes, status: updateStatus } =
-    UseUpdateChecklistItemService({
-      checklist_id: checklistId,
-      // name: editName,
-      triggerItemUpdate: triggerItemUpdate,
-      itemId: itemId,
-      is_done: done,
-    });
+  UseUpdateChecklistItemService({
+    checklist_id: checklistId,
+    // name: editName,
+    triggerItemUpdate: triggerItemUpdate,
+    itemId: itemId,
+    is_done: done,
+  });
 
   const isDone = (id: string, done: number) => {
     setItemId(id);

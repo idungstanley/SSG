@@ -22,7 +22,7 @@ export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
   const [itemId, setItemId] = useState<string>("");
-  const [checklistId, setChecklistId] = useState<string>("");
+  // const [checklistId, setChecklistId] = useState<string>("");
   const [showChildren, setShowChildren] = useState<boolean>(false);
   const [arrowDown, setArrowDown] = useState<boolean>(false);
 
@@ -60,11 +60,11 @@ export default function ChecklistIndex() {
     setEditing(true);
   };
 
-  const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
+  const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
-    setChecklistId(id);
+    // setChecklistId(id);
     refetch();
   };
 
@@ -109,7 +109,7 @@ export default function ChecklistIndex() {
                           />
                         </div>
                         {editing && itemId === item.id ? (
-                          <form onSubmit={(e) => handleEdit(e, item.id)}>
+                          <form onSubmit={(e) => handleEdit(e)}>
                             <input
                               type="text"
                               value={checklistName}
