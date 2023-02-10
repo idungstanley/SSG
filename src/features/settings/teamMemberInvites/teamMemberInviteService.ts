@@ -79,10 +79,10 @@ export const useAcceptTeamMemberInvite = () => {
         },
         true
       );
-      return data.data;
+      return data;
     },
     {
-      initialData: queryClient.getQueryData(['team_member_invite', inviteCode]),
+      // initialData: queryClient.getQueryData(['team_member_invite', inviteCode]),
       enabled: inviteCode != null,
     }
   );
