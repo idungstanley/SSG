@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useAcceptTeamMemberInvite } from '../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import { Spinner } from '../../../../common';
@@ -8,9 +8,16 @@ import NotFoundPage from '../../../NotFoundPage';
 export default function TeamMemberAcceptInvite() {
   const { inviteCode } = useParams();
 
-  if (inviteCode) {
-    localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
-  }
+  useEffect((): any => {
+    const token = JSON.parse(localStorage.getItem('accessToken') as string);
+    if (inviteCode) {
+      localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
+    }
+
+    if (!token) {
+      return <RegisterPage />;
+    }
+  }, [inviteCode]);
 
   const { status, data } = useAcceptTeamMemberInvite();
 
@@ -24,13 +31,8 @@ export default function TeamMemberAcceptInvite() {
     );
   }
 
-  if (data?.message === 'Unauthenticated') {
-    <RegisterPage />;
-  }
-
   if (status == 'success') {
     localStorage.setItem('user', JSON.stringify(data?.data.user));
   }
-
   return status === 'success' ? <Navigate to="/workspace" /> : <NotFoundPage />;
 }
