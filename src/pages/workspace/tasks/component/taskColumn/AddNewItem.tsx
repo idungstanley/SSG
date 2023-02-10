@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
-import { Button } from '../../../../../components';
-import { FaGlobeAfrica, FaTimes } from 'react-icons/fa';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createTaskService } from '../../../../../features/task/taskService';
-import { CalendarIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import React, { useState } from "react";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { setAddNewTaskItem } from "../../../../../features/task/taskSlice";
+import { Button } from "../../../../../components";
+import { FaGlobeAfrica, FaTimes } from "react-icons/fa";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createTaskService } from "../../../../../features/task/taskService";
+import { CalendarIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 interface AddNewItemProps {
   listId: string | undefined;
@@ -23,7 +23,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
     },
   });
   const defaultTaskFormState = {
-    name: '',
+    name: "",
   };
 
   const [formState, setFormState] = useState(defaultTaskFormState);
@@ -44,7 +44,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
     });
   };
   return (
-    <div className="bg-white border border-sky-500  ml-5 flex  items-center">
+    <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center">
       <div className="flex items-center w-10/12">
         {/* data and input */}
         <div>
@@ -53,7 +53,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
             name="name"
             onChange={(e) => handleTaskChange(e)}
             placeholder="Click to add task"
-            className=" border-transparent focus:border-transparent focus:ring-0"
+            className=" border-transparent h-9 text-xs  focus:border-transparent focus:ring-0"
           />
         </div>
       </div>

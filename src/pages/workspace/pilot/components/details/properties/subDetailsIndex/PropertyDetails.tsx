@@ -20,6 +20,7 @@ interface PropertyDetailsProps {
     created_at: string;
     status: string;
     priority: string;
+    tags: any
   };
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {

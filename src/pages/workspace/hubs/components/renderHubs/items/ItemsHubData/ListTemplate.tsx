@@ -1,12 +1,18 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { getTaskListService } from '../../../../../../../features/task/taskService';
+import { ImyTaskData } from '../../../../../../../features/task/taskSlice';
 import TaskData from '../../../../../tasks/component/taskData/TaskData';
 import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../../../../../tasks/subtasks/subtask1/RenderSubTasks';
 
 interface listIdprops {
   listId: string;
+}
+
+export interface dataProps {
+  id: string;
+  name: string;
 }
 
 export default function ListTemplate({ listId }: listIdprops) {
@@ -17,7 +23,7 @@ export default function ListTemplate({ listId }: listIdprops) {
 
   return (
     <div className="">
-      {data?.data.tasks.map((task: dataProps) => {
+      {data?.data.tasks.map((task: ImyTaskData) => {
         return (
           <div key={task.id} className="capitalize">
             <TaskData task={task} />

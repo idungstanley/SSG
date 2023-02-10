@@ -5,7 +5,7 @@ interface workspaceState {
   showSidebar: boolean;
   currentItemId: string | null;
   currentItemType?: string | null;
-  activePlaceId: number | null;
+  activePlaceId: number | null | any;
   showExtendedBar: boolean;
   sidebarWidth: number;
   pilotWidth: number;

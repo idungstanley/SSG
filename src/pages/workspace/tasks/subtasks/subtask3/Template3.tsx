@@ -5,22 +5,25 @@ import {
   setCurrentParentSubTaskId3,
   setCurrentParentTaskId,
   setCurrentTaskId,
+  setCurrentTaskIdForTag,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
-import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
-import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import { AvatarWithInitials } from '../../../../../components';
-import AssignTask from '../../assignTask/AssignTask';
-import moment from 'moment';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
+import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
+import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
+import { AvatarWithInitials } from "../../../../../components";
+import AssignTask from "../../assignTask/AssignTask";
+import moment from "moment";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import { groupAssigneeProps } from "../subtask1/Template";
+import TagModal from "../../../../../components/tags/TagModal";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -117,8 +120,8 @@ export default function Template3({ task }: TemplateProps) {
       );
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
-        <UserPlusIcon
-          className=" pl-3  text-gray-400 text-xl cursor-pointer "
+        <UserAddOutlined
+          className="   text-gray-400 text-xl cursor-pointer ml-2 "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -223,17 +226,22 @@ export default function Template3({ task }: TemplateProps) {
           <p>{taskColField}</p>
           <div
             id="iconWrapper"
-            className="flex items-start pt-1 space-x-1 ml-1 opacity-0  group-hover:opacity-100"
+            className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
           >
-            <FiEdit2
-              className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
-              aria-hidden="true"
-            />
-            <PlusIcon
-              className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
-              aria-hidden="true"
-              onClick={() => handleCreateSubTask(task.id)}
-            />
+            <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+              <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
+            </span>
+            <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+              <PlusOutlined
+                className="  w-3  text-gray-500   "
+                aria-hidden="true"
+                onClick={() => handleCreateSubTask(task.id)}
+              />
+            </span>
+            {/* tag here */}
+            <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
+              <TagModal />
+            </button>
           </div>
         </div>
       );
@@ -252,38 +260,68 @@ export default function Template3({ task }: TemplateProps) {
   return (
     <div className="relative ">
       <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
-        <div className=" flex w-6/12  items-center ">
-          {hideTask.length
-            ? hideTask.map(
-                (col) =>
-                  col.value == 'Task' &&
-                  !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
-                      {renderData(task[col.field], col.field)}
-                    </div>
-                  )
-              )
-            : taskColumns.map(
-                (col) =>
-                  col.value == 'Task' &&
-                  !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
-                      {renderData(task[col.field], col.field)}
-                    </div>
-                  )
-              )}
+        <div className=" flex justify-between w-6/12 items-center ">
+          <div className="w-5/6">
+            {hideTask.length
+              ? hideTask.map(
+                  (col) =>
+                    col.value == "Task" &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )
+              : taskColumns.map(
+                  (col) =>
+                    col.value == "Task" &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )}
+          </div>
+          <div id="tags" className="w-1/6">
+            {hideTask.length
+              ? hideTask.map(
+                  (col) =>
+                    col.value == "Tags" &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )
+              : taskColumns.map(
+                  (col) =>
+                    col.value == "Tags" &&
+                    !col.hidden && (
+                      <div
+                        key={col.field}
+                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                      >
+                        {renderData(task[col.field], col.field)}
+                      </div>
+                    )
+                )}
+          </div>
         </div>
         <div className=" dynamic ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -296,7 +334,8 @@ export default function Template3({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -309,9 +348,6 @@ export default function Template3({ task }: TemplateProps) {
               )}
         </div>
       </div>
-      <span className="absolute shadow-2xl left-0 z-30 right-0 ">
-        {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-      </span>
     </div>
   );
 }

@@ -25,7 +25,7 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (name: string, value: string) => void;
+  setFormState:any;
   formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
@@ -42,7 +42,7 @@ function TimeEntriesDropdown({
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
   const { activeItemType } = useAppSelector((state) => state.workspace);
   const [getTEId, setTEId] = useState('');
   const [triggerDel, setTriggerDel] = useState(false);

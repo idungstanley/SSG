@@ -102,7 +102,7 @@ export default function Sidebar() {
         <Modal />
         <SubHubModal />
         <span
-          className={`absolute -right-2 top-16 z-20 bg-white rounded-full border-2 border-inherit ${
+          className={`absolute -right-2 top-16 z-30 bg-white rounded-full border-2 border-inherit ${
             !activePlaceId ? 'hidden' : 'block'
           }`}
         >

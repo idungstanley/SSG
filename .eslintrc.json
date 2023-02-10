@@ -1,67 +1,69 @@
 {
-    "env": {
-        "node": true,
-        "commonjs": true,
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "overrides": [
-    ],
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
     "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module",
-        "parser": "@typescript-eslint/parser",
-        // "project": "./tsconfig.json",
-        "allowImportExportEverywhere": true
-    },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
+    "project": "./tsconfig.json",
+    "allowImportExportEverywhere": true
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    // "@typescript-eslint/no-explicit-any": "error",
+    // "@typescript-eslint/no-unused-vars": "error",
+    "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
+    "no-empty": "error",
+    "linebreak-style": 0,
+    "no-console": "warn",
+    "semi-spacing": ["error", { "before": false, "after": true }],
+    "space-infix-ops": "error",
+    "key-spacing": [
+      "error",
+      { "mode": "strict", "afterColon": true, "beforeColon": false }
     ],
-    "rules": {
-        "@typescript-eslint/no-explicit-any": "error",
-        "@typescript-eslint/no-unused-vars": "error",
-        "no-multi-spaces": ["error", {"ignoreEOLComments": true}],
-        "no-empty": "error",
-        "linebreak-style":0,
-        "no-console":"warn",
-        "semi-spacing": ["error", {"before": false, "after": true}],
-        "space-infix-ops":"error",
-        "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],
-        "@typescript-eslint/explicit-module-boundary-types":"off",
-        "semi": "error",
-        "no-multiple-empty-lines":["error", { "max": 1, "maxEOF": 0 }],
-        "no-trailing-spaces":"error",
-        "@typescript-eslint/semi": "error",
-        "@typescript-eslint/comma-dangle": 0,
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/space-before-function-paren": ["error", {"named": "ignore", "asyncArrow": "ignore"}],
-        "@typescript-eslint/strict-boolean-expressions": 0,
-        "no-var": 2,
-        "no-loop-func": "off",
-        "no-nested-ternary": "off",
-        "import/prefer-default-export": "off",
-        "no-param-reassign": [2, { "props": false }],
-        "import/no-named-as-default": 0,
-        "import/no-named-as-default-member": 0,
-        "react/function-component-definition": [
-        2,
-        {
-            "namedComponents": "function-declaration"
-        }
-        ],
-        "max-len": [
-        "error",
-        {
-            "code": 500
-        }
-        ],
-        "jsx-quotes": [2, "prefer-double"]
-    }
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "semi": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+    "no-trailing-spaces": "error",
+    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/comma-dangle": 0,
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/space-before-function-paren": [
+      "error",
+      { "named": "ignore", "asyncArrow": "ignore" }
+    ],
+    "@typescript-eslint/strict-boolean-expressions": 0,
+    "no-var": 2,
+    "no-loop-func": "off",
+    "no-nested-ternary": "off",
+    "import/prefer-default-export": "off",
+    "no-param-reassign": [2, { "props": false }],
+    "import/no-named-as-default": 0,
+    "import/no-named-as-default-member": 0,
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "function-declaration"
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 500
+      }
+    ],
+    "jsx-quotes": [2, "prefer-double"]
+  }
 }
