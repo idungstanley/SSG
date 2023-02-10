@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { PlusIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineEllipsis } from 'react-icons/ai';
+import { BsPlusLg } from 'react-icons/bs';
 
 interface IDropdownItem {
   label: string;
@@ -32,7 +32,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
               aria-hidden="true"
             />
           ) : (
-            <PlusIcon className="w-5 h-5" aria-hidden="true" />
+            <BsPlusLg className="w-2.5 h-2.5" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>

@@ -16,7 +16,6 @@ import { MdDragIndicator } from "react-icons/md";
 import { FiEdit2 } from "react-icons/fi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
 import "../create/subtask.css";
 import moment from "moment";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
