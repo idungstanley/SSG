@@ -147,13 +147,15 @@ function RegisterPage() {
   const checkboxConfig = [
     {
       id: 'First',
-      label: 'By checking this box, you agree to receive emails for marketing from Also Workspace',
+      label:
+        'By checking this box, you agree to receive emails for marketing from Also Workspace',
       value: firstCheckbox,
       onChange: () => setFirstCheckbox(!firstCheckbox),
     },
     {
       id: 'Second',
-      label: 'By checking this box, you agree to our Terms of Service and Privacy Policy, and consent to data transfer, hosting, and processing outside of the UK.',
+      label:
+        'By checking this box, you agree to our Terms of Service and Privacy Policy, and consent to data transfer, hosting, and processing outside of the UK.',
       value: secondCheckbox,
       onChange: () => setSecondCheckbox(!secondCheckbox),
     },
