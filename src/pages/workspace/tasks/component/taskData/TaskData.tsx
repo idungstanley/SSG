@@ -22,9 +22,6 @@ import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
 import { FiEdit2 } from "react-icons/fi";
 import "./task.css";
-interface TaskDataProps {
-  task: ImyTaskData;
-}
 import { IoCloseSharp } from "react-icons/io5";
 import ToolTip from "../../../../../components/Tooltip";
 import EditTagModal from "../../../../../components/tags/EditTagModal";
@@ -36,6 +33,9 @@ import TagModal from "../../../../../components/tags/TagModal";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 
+interface TaskDataProps {
+  task: ImyTaskData;
+}
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const {
