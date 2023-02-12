@@ -1,19 +1,19 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { getTaskListService } from '../../../features/task/taskService';
-import ListNav from './components/renderlist/ListNav';
-import { useAppSelector } from '../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setAddNewTaskItem } from '../../../features/task/taskSlice';
-import TaskListViews from '../tasks/component/views/TaskListViews';
-import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
-import TaskData from '../tasks/component/taskData/TaskData';
-import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
-import SubTask from '../tasks/subtasks/create/SubTask';
-import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
-import Pilot from '../pilot';
-import ListFilter from './components/renderlist/listDetails/ListFilter';
-import Board from '../tasks/component/views/Board';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { getTaskListService } from "../../../features/task/taskService";
+import ListNav from "./components/renderlist/ListNav";
+import { useAppSelector } from "../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { setAddNewTaskItem } from "../../../features/task/taskSlice";
+import TaskListViews from "../tasks/component/views/TaskListViews";
+import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
+import TaskData from "../tasks/component/taskData/TaskData";
+import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction";
+import SubTask from "../tasks/subtasks/create/SubTask";
+import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
+import Pilot from "../pilot";
+import ListFilter from "./components/renderlist/listDetails/ListFilter";
+import Board from "../tasks/component/views/Board";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function RenderList() {
   const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
-    <div className=" overflow-hidden relative">
+    <div className=" overflow-x-auto  relative">
       <section id="nav" className="capitalize ">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
@@ -46,7 +46,7 @@ function RenderList() {
         <div className="  w-full overflow-y-scroll">
           <div
             className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: '#e1e4e5' }}
+            style={{ backgroundColor: "#e1e4e5" }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
