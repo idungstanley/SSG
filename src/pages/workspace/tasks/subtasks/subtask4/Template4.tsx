@@ -13,19 +13,14 @@ import {
 } from "../../../../../features/task/taskSlice";
 import { useAppSelector } from "../../../../../app/hooks";
 import { MdDragIndicator } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import { FiEdit2 } from "react-icons/fi";
 import {
-  EditOutlined,
-  FlagOutlined,
   PlusOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
-import { columnsHead } from "../../component/views/ListColumns";
 import moment from "moment";
 import { groupAssigneeProps } from "../subtask1/Template";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";

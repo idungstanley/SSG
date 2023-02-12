@@ -94,7 +94,7 @@ function Places() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { activePlaceId } = useAppSelector((state) => state.workspace);
+  const { activePlaceId, showSidebar } = useAppSelector((state) => state.workspace);
 
   const handleClick = (id: number, link?: string) => {
     dispatch(setActivePlaceId(id));
@@ -122,7 +122,7 @@ function Places() {
     >
       {places.map((place) => (
         <div key={place.id}>
-          {place.id === activePlaceId ? (
+          {showSidebar && place.id === activePlaceId ? (
             place.place
           ) : (
             <PlaceItem
