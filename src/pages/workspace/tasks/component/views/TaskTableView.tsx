@@ -281,46 +281,31 @@ function TaskTableView() {
     } else if (colfield == "status") {
       if (taskColField == "completed") {
         return (
-          <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
-          >
+          <div className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center ">
             {taskColField}
           </div>
         );
       } else if (taskColField == "in progress") {
         return (
-          <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
-          >
+          <div className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center ">
             {taskColField}
           </div>
         );
       } else if (taskColField == "archived") {
         return (
-          <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
-          >
+          <div className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute ">
             {taskColField}
           </div>
         );
       } else if (taskColField == "todo") {
         return (
-          <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
-          >
+          <div className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute ">
             {taskColField}
           </div>
         );
       } else {
         return (
-          <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
-          >
+          <div className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute ">
             Todo
           </div>
         );
@@ -396,7 +381,7 @@ function TaskTableView() {
                             !columns.hidden && (
                               <th
                                 scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
                                 key={columns.field}
                               >
                                 {columns.value}
@@ -408,7 +393,7 @@ function TaskTableView() {
                             !columns.hidden && (
                               <th
                                 scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
                                 key={columns.field}
                               >
                                 {columns.value}
@@ -425,7 +410,7 @@ function TaskTableView() {
                           (col) =>
                             !col.hidden && (
                               <td
-                                className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap"
+                                className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
                                 key={col.field}
                               >
                                 {renderData(task[col.field], col.field)}
