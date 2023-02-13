@@ -8,13 +8,13 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-} from "../../../../../features/task/taskSlice";
-import moment from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { FiEdit2 } from "react-icons/fi";
-import { UserAddOutlined } from "@ant-design/icons";
-import { MdDragIndicator } from "react-icons/md";
+} from '../../../../../features/task/taskSlice';
+import moment from 'moment';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { FiEdit2 } from 'react-icons/fi';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
+import { MdDragIndicator } from 'react-icons/md';
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
@@ -56,7 +56,7 @@ function TaskTableView() {
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <>
-          <UserAddOutlined
+          <UserPlusIcon
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
           />
