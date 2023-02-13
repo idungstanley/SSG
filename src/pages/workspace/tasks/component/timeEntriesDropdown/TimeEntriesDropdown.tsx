@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CurrencyDollarIcon,
   NoSymbolIcon,
   PencilIcon,
   TagIcon,
   TrashIcon,
-} from '@heroicons/react/24/outline';
-import moment from 'moment';
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
+} from "@heroicons/react/24/outline";
+import moment from "moment";
+import Timer from "react-timer-wrapper";
+import Timecode from "react-timecode";
 import {
   GetTimeEntriesService,
   DeleteTimeEntriesService,
-} from '../../../../../features/task/taskService';
-import { AvatarWithInitials } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import { PlayCircleIcon } from '@heroicons/react/24/solid';
+} from "../../../../../features/task/taskService";
+import { AvatarWithInitials } from "../../../../../components";
+import { useAppSelector } from "../../../../../app/hooks";
+import { PlayCircleIcon } from "@heroicons/react/24/solid";
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -25,7 +25,7 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (name: string, value: string) => void;
+  setFormState: (value: string) => void;
   formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
@@ -42,12 +42,14 @@ function TimeEntriesDropdown({
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(
+    false
+  );
   const { activeItemType } = useAppSelector((state) => state.workspace);
-  const [getTEId, setTEId] = useState('');
+  const [getTEId, setTEId] = useState("");
   const [triggerDel, setTriggerDel] = useState(false);
 
-  queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
+  queryClient.invalidateQueries({ queryKey: ["getTimeEntries"] });
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId,
@@ -55,16 +57,16 @@ function TimeEntriesDropdown({
   });
 
   useQuery({
-    queryKey: ['delTE', getTEId],
+    queryKey: ["delTE", getTEId],
     queryFn: DeleteTimeEntriesService,
     enabled: triggerDel,
   });
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
+    // setFormState({
+    //   ...formState,
+    //   [e.target.name]: e.target.value,
+    // });
   };
 
   const handleUpdateEntry = (id: string | boolean) => {
@@ -102,7 +104,7 @@ function TimeEntriesDropdown({
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
               <p>Me</p>
             </div>
-            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc(totalDuration * 1000).format("HH:mm:ss")}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
@@ -125,8 +127,8 @@ function TimeEntriesDropdown({
                     id="left"
                     className="flex items-center space-x-3 text-xs"
                   >
-                    <p>{moment.utc(duration * 1000).format('HH:mm:ss')}</p>
-                    <p>{moment(start_date).format('MMM D')}</p>
+                    <p>{moment.utc(duration * 1000).format("HH:mm:ss")}</p>
+                    <p>{moment(start_date).format("MMM D")}</p>
                   </div>
                   <div
                     id="right"
@@ -210,8 +212,8 @@ function TimeEntriesDropdown({
               <CurrencyDollarIcon
                 className={`${
                   isBillable
-                    ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
-                    : 'text-white cursor-pointer text-xl rounded-full h-7'
+                    ? "bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl"
+                    : "text-white cursor-pointer text-xl rounded-full h-7"
                 }`}
                 aria-hidden="true"
                 onClick={() => setIsBillable(!isBillable)}
