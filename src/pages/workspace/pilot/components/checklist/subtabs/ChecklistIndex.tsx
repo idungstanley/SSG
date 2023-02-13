@@ -78,8 +78,8 @@ export default function ChecklistIndex() {
   }
   return status == "success" ? (
     <div className="p-1">
-      <div className="border-2 flex justify-center items-center text-center">
-        <h1 className="text-xl">Checklists</h1>
+      <div className="border-2 flex justify-between items-center text-center py-2">
+        <h1 className="text-xl ml-8">Checklists</h1>
         <div
           className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
           onClick={handleSubmit}
@@ -89,7 +89,7 @@ export default function ChecklistIndex() {
       </div>
       <div>
         {task_checklist.length > 0
-          ? task_checklist.map((item, index) => {
+          ? task_checklist.map((item) => {
               const done = item.items.filter((e) => e.is_done);
               return (
                 <Disclosure key={item.id}>

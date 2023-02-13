@@ -17,7 +17,7 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
   const [itemId, setItemId] = useState<any>("");
-  const [done, setDone] = useState<number>(404);
+  const [done, setDone] = useState<number>(0);
   const [editItemName, setEditItemName] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>("");
   const [editName, setEditName] = useState<string>("");
@@ -44,23 +44,28 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
       name: editName,
       triggerItemUpdate: triggerItemUpdate,
       itemId: itemId,
-      is_done: done,
+      done,
     });
 
-  if (updateStatus === "success") {
-    refetch();
-  }
+  // if (updateStatus === "success") {
+  //   refetch();
+  // }
 
-  const isDone = (id: string, done: number) => {
+  const isDone = (id: string, done: number, name) => {
     setItemId(id);
+    setEditName(name);
     done === 0 ? setDone(1) : setDone(0);
     dispatch(setTriggerItemtUpdate(true));
+    refetch();
   };
 
-  const handleEditItemName = (id: string) => {
+  const handleEditItemName = (id: string, done: number) => {
+    console.log(editName);
     setItemId(id);
+    setDone(done);
     dispatch(setTriggerItemtUpdate(true));
     setEditItemName(false);
+    refetch();
   };
 
   return (
@@ -87,8 +92,13 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
                   className="ml-6 w-50 h-8 border-none hover:boder-none hover:outline-none focus:outline-none"
                   type="text"
                   value={editName}
-                  onKeyDown={(e) =>
-                    e.key == "Enter" ? handleEditItemName(item.id) : null
+                  onKeyDown={
+                    (e) => {
+                      if (e.key === "Enter") {
+                        handleEditItemName(item.id, item.is_done);
+                      }
+                    }
+                    // e.key == "Enter" ? handleEditItemName(item.id) : null
                   }
                   onChange={(e) => setEditName(e.target.value)}
                 />
@@ -104,7 +114,7 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
                   className="rounded-lg mx-3"
                   onChange={() => {
                     setItemId(item.id);
-                    isDone(item.id, item.is_done);
+                    isDone(item.id, item.is_done, item.name);
                   }}
                 />
                 <h1

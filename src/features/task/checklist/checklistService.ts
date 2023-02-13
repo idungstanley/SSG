@@ -26,7 +26,7 @@ export const UseCreateClistService = ({ task_id }: { task_id: string }) => {
 };
 
 export const UseGetAllClistService = ({ task_id }: { task_id: string }) => {
-  return useQuery(["clist", { task_id }], async () => {
+  return useQuery(["checklist", { task_id }], async () => {
     const data = await requestNew(
       {
         url: `at/tasks/${task_id}`,
@@ -98,43 +98,30 @@ export const UseUpdateChecklistItemService = ({
   name,
   triggerItemUpdate,
   itemId,
-  is_done,
+  done,
 }: {
   triggerItemUpdate: boolean;
   itemId: string;
-  is_done?: number;
+  done: number;
   checklist_id: string;
-  name?: string;
+  name: string;
 }) => {
   const dispatch = useDispatch();
   return useQuery(
-    ["edit-item", { itemId }],
+    ["checklist", { itemId, done, name }],
     async () => {
-      if (is_done === 404) {
-        const data = requestNew(
-          {
-            url: `/checklists/${checklist_id}/item/${itemId}`,
-            method: "PUT",
-            params: {
-              name: name,
-            },
+      const data = requestNew(
+        {
+          url: `/checklists/${checklist_id}/item/${itemId}`,
+          method: "PUT",
+          params: {
+            name: name,
+            is_done: done,
           },
-          true
-        );
-        return data;
-      } else {
-        const data = requestNew(
-          {
-            url: `/checklists/${checklist_id}/item/${itemId}`,
-            method: "PUT",
-            params: {
-              is_done: is_done,
-            },
-          },
-          true
-        );
-        return data;
-      }
+        },
+        true
+      );
+      return data;
     },
     {
       enabled: checklist_id != null && triggerItemUpdate !== false,
