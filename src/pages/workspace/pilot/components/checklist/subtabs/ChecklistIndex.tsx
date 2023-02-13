@@ -1,37 +1,33 @@
-import React, { useState, FormEvent } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../../../app/hooks";
+import React, { useState, FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../../../app/hooks';
 import {
   UseCreateClistService,
   UseGetAllClistService,
   UseUpdateChecklistService,
-} from "../../../../../../features/task/checklist/checklistService";
-import ChecklistItem from "../components/ChecklistItem";
-import { Spinner } from "../../../../../../common";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ChecklistModal from "../components/ChecklistModal";
-import { lessOptions } from "../ModalOptions";
-import { completeOptions } from "../ModalOptions";
-import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import { BiCaretRight } from "react-icons/bi";
-
-type checklistItem = {
-  name: string;
-};
+} from '../../../../../../features/task/checklist/checklistService';
+import ChecklistItem from '../components/ChecklistItem';
+import { Spinner } from '../../../../../../common';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ChecklistModal from '../components/ChecklistModal';
+import { lessOptions } from '../ModalOptions';
+import { completeOptions } from '../ModalOptions';
+import { setTriggerChecklistUpdate } from '../../../../../../features/task/checklist/checklistSlice';
+import { BiCaretRight } from 'react-icons/bi';
+import { GoPlus } from 'react-icons/go';
+import { Disclosure } from '@headlessui/react';
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
   // Local states
-  const [checklistName, setChecklistName] = useState<string>("");
+  const [checklistName, setChecklistName] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<string>("");
-  const [checklistId, setChecklistId] = useState<string>("");
-  const [showChildren, setShowChildren] = useState<boolean>(false);
-  const [arrowDown, setArrowDown] = useState<boolean>(false);
+  const [itemId, setItemId] = useState<string>('');
+  const [checklistId, setChecklistId] = useState<string>('');
 
-  // Redux states
+  // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
   const { triggerChecklistUpdate } = useAppSelector((state) => state.checklist);
 
@@ -55,103 +51,111 @@ export default function ChecklistIndex() {
   const task_checklist = data?.data.task.checklists;
 
   // Update Checklist
-  const { data: updateRes, status: updateStatus } = UseUpdateChecklistService({
+  const { status: updateStatus } = UseUpdateChecklistService({
     checklist_id: checklistId,
     name: checklistName,
     triggerUpdate: triggerChecklistUpdate,
   });
 
-  const editChecklist = (name) => {
+  if (updateStatus === 'success') {
+    refetch();
+  }
+
+  const editChecklist = (name: string) => {
     setChecklistName(name);
     setEditing(true);
   };
 
   const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
-    console.log(checklistName);
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
     setChecklistId(id);
-    refetch();
   };
 
-  if (status == "loading") {
-    <Spinner size={20} color={"blue"} />;
+  if (status == 'loading') {
+    <Spinner size={20} color={'blue'} />;
   }
-  return status == "success" ? (
-    <div className="mx-3">
-      <div>
-        <button
-          className="px-5  py-2.5 text-xl cursor-pointer"
+  return status == 'success' ? (
+    <div className="p-1">
+      <div className="border-2 flex justify-center items-center text-center">
+        <h1 className="text-xl">Checklists</h1>
+        <div
+          className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
           onClick={handleSubmit}
         >
-          + ADD CHECKLIST
-        </button>
-        <div>
-          {task_checklist &&
-            task_checklist.map((item, index) => {
+          <GoPlus className="w-3 h-3" />
+        </div>
+      </div>
+      <div>
+        {task_checklist.length > 0
+          ? task_checklist.map((item) => {
               const done = item.items.filter((e) => e.is_done);
               return (
-                <div key={index}>
-                  <div className="flex items-center">
-                    <span className="px-5 text-lg flex items-center">
-                      <div className="mx-1">
-                        <BiCaretRight
-                          onClick={() => {
-                            setArrowDown(!arrowDown);
-                            setItemId(item.id);
-                            setShowChildren(!showChildren);
-                          }}
-                          className={`${
-                            arrowDown && itemId == item.id
-                              ? "transform rotate-90"
-                              : ""
-                          } cursor-pointer`}
-                        />
-                      </div>
-                      {editing && itemId === item.id ? (
-                        <form onSubmit={(e) => handleEdit(e, item.id)}>
-                          <input
-                            type="text"
-                            value={checklistName}
-                            onChange={(e) => setChecklistName(e.target.value)}
-                          />
-                        </form>
-                      ) : (
-                        <h1
-                          onClick={() => {
-                            setItemId(item.id);
-                            editChecklist(item.name);
-                          }}
-                        >
-                          {item.name}
-                        </h1>
-                      )}
-                      <label>
-                        ({done.length}/{item.items.length})
-                      </label>
-                    </span>
+                <Disclosure key={item.id}>
+                  {({ open }) => (
                     <div>
-                      <ChecklistModal
-                        options={
-                          item.items.length === 0
-                            ? lessOptions
-                            : completeOptions
-                        }
-                      />
+                      <div className="group flex items-center border-2 border-t-0 p-1 hover:text-gray-700 hover:bg-gray-200 cursor-pointer">
+                        <span className="px-5 flex items-center">
+                          <Disclosure.Button>
+                            <div className="mx-1">
+                              <BiCaretRight
+                                className={
+                                  open ? 'rotate-90 transform w-4 h-4' : ''
+                                }
+                              />
+                            </div>
+                          </Disclosure.Button>
+                          <div>
+                            {editing && itemId === item.id ? (
+                              <form onSubmit={(e) => handleEdit(e, item.id)}>
+                                <input
+                                  type="text"
+                                  value={checklistName}
+                                  onChange={(e) =>
+                                    setChecklistName(e.target.value)
+                                  }
+                                />
+                              </form>
+                            ) : (
+                              <h1
+                                className="cursor-text"
+                                onClick={() => {
+                                  setItemId(item.id);
+                                  editChecklist(item.name);
+                                }}
+                              >
+                                {item.name}
+                              </h1>
+                            )}
+                          </div>
+                          <label>
+                            ({done.length}/{item.items.length})
+                          </label>
+                        </span>
+                        <div className="opacity-0 group-hover:opacity-100">
+                          <ChecklistModal
+                            options={
+                              item.items.length === 0
+                                ? lessOptions
+                                : completeOptions
+                            }
+                          />
+                        </div>
+                      </div>
+                      <Disclosure.Panel className="ml-6">
+                        <ChecklistItem
+                          Item={item.items}
+                          checklistId={item.id}
+                          refetch={refetch}
+                        />
+                      </Disclosure.Panel>
                     </div>
-                  </div>
-                  {showChildren && itemId == item.id ? (
-                    <ChecklistItem
-                      Item={item.items}
-                      checklistId={item.id}
-                      refetch={refetch}
-                    />
-                  ) : null}
-                </div>
+                  )}
+                </Disclosure>
               );
-            })}
-        </div>
+            })
+          : 'This task has no Checklist, click on the plus sign to create one'}
       </div>
     </div>
   ) : null;

@@ -42,7 +42,7 @@ export default function ItemsListInSidebar({
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, activeItemId } = useAppSelector(
+  const { currentItemId, activeItemId, showSidebar } = useAppSelector(
     (state) => state.workspace
   );
 
@@ -167,24 +167,32 @@ export default function ItemsListInSidebar({
                 role="button"
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
-                <div className="mr-0.5">
-                  {i.id === showChildren ? (
-                    <span className="flex flex-col">
-                      <VscTriangleDown
+                {showSidebar && (
+                  <div
+                    className="mr-0.5"
+                  >
+                    {i.id === showChildren ? (
+                      <span className="flex flex-col">
+                        <VscTriangleDown
+                          className="flex-shrink-0 h-2"
+                          aria-hidden="true"
+                          color="rgba(72, 67, 67, 0.64)"
+                        />
+                      </span>
+                    ) : (
+                      <VscTriangleRight
                         className="flex-shrink-0 h-2"
                         aria-hidden="true"
-                        color="rgba(72, 67, 67, 0.64)"
+                        color="#BBBDC0"
                       />
-                    </span>
-                  ) : (
-                    <VscTriangleRight
-                      className="flex-shrink-0 h-2"
-                      aria-hidden="true"
-                      color="#BBBDC0"
-                    />
-                  )}
-                </div>
-                <div className="flex items-center flex-1 min-w-0">
+                    )}
+                  </div>
+                )}
+
+                <div
+                  className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}
+                  onClick={() => handleLocation(i.id, i.name)}
+                >
                   <AvatarWithInitials
                     initials={i.name
                       .split(' ')
@@ -192,8 +200,8 @@ export default function ItemsListInSidebar({
                       .map((word) => word[0])
                       .join('')
                       .toUpperCase()}
-                    height="h-4"
-                    width="w-4"
+                    height={showSidebar ? 'h-4' : 'h-6'}
+                    width={showSidebar ? 'w-4' : 'w-6'}
                     backgroundColour="blue"
                     roundedStyle="rounded"
                   />
@@ -209,12 +217,10 @@ export default function ItemsListInSidebar({
                 </div>
               </div>
             </div>
-            {isHovering === index && (
+            {isHovering === index && showSidebar && (
               <div className="flex items-center pr-1 space-x-1">
                 <AiOutlineEllipsis
-                  onClick={(e) =>
-                    handleHubSettings(i.id, i.name, e)
-                  }
+                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="cursor-pointer"
                   id="menusettings"
                 />
@@ -225,9 +231,9 @@ export default function ItemsListInSidebar({
               </div>
             )}
           </div>
-          {showChildren === i.id ? <DropdownList /> : null}
-          {showMenuDropdown === i.id ? <MenuDropdown /> : null}
-          {SubMenuId === i.id ? <SubDropdown /> : null}
+          {showChildren === i.id && showSidebar ? <DropdownList /> : null}
+          {showMenuDropdown === i.id && showSidebar ? <MenuDropdown /> : null}
+          {SubMenuId === i.id && showSidebar ? <SubDropdown /> : null}
         </li>
       ))}
     </ul>

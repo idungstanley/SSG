@@ -1,26 +1,24 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import {
   ImyTaskData,
-  setCurrentParentSubTaskId,
-  setCurrentParentTaskId,
   setCurrentTaskId,
   setCurrentTaskIdForTag,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import { MdDragIndicator } from "react-icons/md";
-import { FiEdit2 } from "react-icons/fi";
-import { UserAddOutlined } from "@ant-design/icons";
-import { AvatarWithInitials } from "../../../../../components";
-import "../create/subtask.css";
-import moment from "moment";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
+} from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import { MdDragIndicator } from 'react-icons/md';
+import { FiEdit2 } from 'react-icons/fi';
+import { AvatarWithInitials } from '../../../../../components';
+import '../create/subtask.css';
+import moment from 'moment';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
+import TagModal from '../../../../../components/tags/TagModal';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -29,12 +27,9 @@ interface TemplateProps {
 export default function Template({ task }: TemplateProps) {
   const dispatch = useDispatch();
 
-  const [showSubTask, setShowSubTask] = useState<string | null>(null);
-
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
-    currentParentTaskId,
     taskColumns,
     hideTask,
   } = useAppSelector((state) => state.task);
@@ -44,13 +39,13 @@ export default function Template({ task }: TemplateProps) {
     dispatch(setCurrentTaskId(id));
   };
 
-  const handleCreateSubTask = (id: string) => {
-    if (id == currentParentTaskId) {
-      dispatch(setCurrentParentTaskId(null));
-    } else {
-      dispatch(setCurrentParentTaskId(id));
-    }
-  };
+  // const handleCreateSubTask = (id: string) => {
+  //   if (id == currentParentTaskId) {
+  //     dispatch(setCurrentParentTaskId(null));
+  //   } else {
+  //     dispatch(setCurrentParentTaskId(id));
+  //   }
+  // };
 
   const handleTaskStatus = (id: string) => {
     dispatch(setCurrentTaskStatusId(id));
@@ -100,18 +95,18 @@ export default function Template({ task }: TemplateProps) {
     });
   };
 
-  const handleShowSubTask = (id: string) => {
-    if (id == showSubTask) {
-      setShowSubTask(null);
-      dispatch(setCurrentParentSubTaskId(null));
-    } else {
-      setShowSubTask(id);
-      dispatch(setCurrentParentSubTaskId(id));
-    }
-  };
+  // const handleShowSubTask = (id: string) => {
+  //   if (id == showSubTask) {
+  //     setShowSubTask(null);
+  //     dispatch(setCurrentParentSubTaskId(null));
+  //   } else {
+  //     setShowSubTask(id);
+  //     dispatch(setCurrentParentSubTaskId(id));
+  //   }
+  // };
 
   const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -123,57 +118,57 @@ export default function Template({ task }: TemplateProps) {
         </div>
       );
     } else if (
-      colfield === "assignees" &&
+      colfield === 'assignees' &&
       (taskColField as Array<Iassignee>)?.length === 0
     ) {
       return (
-        <UserAddOutlined
-          className=" ml-2  text-gray-400 text-xl cursor-pointer "
+        <UserPlusIcon
+          className=" pl-3  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield === "tags") {
+    } else if (colfield === 'tags') {
       return <div> {groupTags(taskColField)}</div>;
-    } else if (colfield == "created_at" || colfield == "updated_at") {
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as string).format("MM/DD")}
+          {moment(taskColField as string).format('MM/DD')}
         </span>
       );
-    } else if (colfield == "status") {
-      if (taskColField == "completed") {
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
         return (
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "in progress") {
+      } else if (taskColField == 'in progress') {
         return (
           <div
             className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -182,13 +177,13 @@ export default function Template({ task }: TemplateProps) {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             TODO
           </div>
         );
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -225,7 +220,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -240,73 +235,15 @@ export default function Template({ task }: TemplateProps) {
   return (
     <div className="relative ">
       <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
-        <div className=" flex justify-between w-6/12 items-center ">
-          <div className="w-5/6">
-            {hideTask.length
-              ? hideTask.map(
-                  (col) =>
-                    col.value == "Task" &&
-                    !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                      >
-                        {renderData(task[col.field], col.field)}
-                      </div>
-                    )
-                )
-              : taskColumns.map(
-                  (col) =>
-                    col.value == "Task" &&
-                    !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                      >
-                        {renderData(task[col.field], col.field)}
-                      </div>
-                    )
-                )}
-          </div>
-          <div id="tags" className="w-1/6">
-            {hideTask.length
-              ? hideTask.map(
-                  (col) =>
-                    col.value == "Tags" &&
-                    !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                      >
-                        {renderData(task[col.field], col.field)}
-                      </div>
-                    )
-                )
-              : taskColumns.map(
-                  (col) =>
-                    col.value == "Tags" &&
-                    !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                      >
-                        {renderData(task[col.field], col.field)}
-                      </div>
-                    )
-                )}
-          </div>
-        </div>
-        <div className=" dynamic ">
+        <div className=" flex w-6/12  items-center ">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value == 'Task' &&
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
                       {renderData(task[col.field], col.field)}
                     </div>
@@ -314,13 +251,40 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value == 'Task' &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )}
+        </div>
+        <div className=" dynamic ">
+          {hideTask.length
+            ? hideTask.map(
+                (col) =>
+                  col.value !== 'Task' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      style={{ width: '50px' }}
+                    >
+                      {renderData(task[col.field], col.field)}
+                    </div>
+                  )
+              )
+            : taskColumns.map(
+                (col) =>
+                  col.value !== 'Task' &&
+                  !col.hidden && (
+                    <div
+                      key={col.field}
+                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      style={{ width: '50px' }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>

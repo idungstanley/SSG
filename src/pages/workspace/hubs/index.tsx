@@ -14,6 +14,7 @@ import Dropdown from '../../../components/Dropdown/index';
 function Hubs() {
   const dispatch = useDispatch();
   const { toggleArchive } = useAppSelector((state) => state.hub);
+  const { showSidebar } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetHubList({
     query: toggleArchive,
   });
@@ -32,7 +33,7 @@ function Hubs() {
   return (
     <>
       <PlaceItem
-        label="Hubs"
+        label="TASK"
         icon={<img src={hubIcon} alt="Hub Icon" className="h-4 w-4" />}
         rightContent={
           <div className="flex gap-2">
@@ -40,11 +41,17 @@ function Hubs() {
           </div>
         }
       />
-      <div className="pl-4 hover:bg-gray-100 flex justify-between items-center">
+      <div className={`${showSidebar ? 'pl-4' : 'pl-3'} hover:bg-gray-100 flex justify-between items-center`}>
         <div className="flex items-center content-center self-center py-2">
-          <img src={everythingIcon} alt="Hub Icon" className="h-4 mr-4" />
+          <img
+            src={everythingIcon}
+            alt="Hub Icon"
+            className={`${showSidebar ? 'h-4 mr-4' : 'h-6 w-6'} `}
+          />
           <p
-            className="tracking-wider capitalize truncate"
+            className={`${
+              showSidebar ? 'block' : 'hidden'
+            } tracking-wider capitalize truncate`}
             style={{ fontSize: '12px' }}
           >
             Everything
