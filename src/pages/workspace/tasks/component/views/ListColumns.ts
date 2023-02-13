@@ -13,7 +13,7 @@ export const columnsHead: listColumnProps[] = [
   {
     field: "assignees",
     value: "Assignees",
-    hidden: true,
+    hidden: false,
   },
   {
     field: "tags",
@@ -38,7 +38,7 @@ export const columnsHead: listColumnProps[] = [
   {
     field: "status",
     value: "Status",
-    hidden: false,
+    hidden: true,
   },
   {
     field: "start_date",

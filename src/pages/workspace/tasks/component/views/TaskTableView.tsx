@@ -103,18 +103,7 @@ function TaskTableView() {
   }
 
   const groupAssignee = (data: groupAssigneeProps[]) => {
-    return data?.map((newData) => (
-      <>
-        <span key={newData.id} className="flex-1 stack2">
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
-        </span>
-      </>
-    ));
+    return data?.map((newData) => alert(newData));
   };
 
   const icons: tableIcons = {
@@ -186,57 +175,6 @@ function TaskTableView() {
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
-  //   const groupTags = (arr) => {
-  //      return arr.map((item) => {
-  //        return Array.isArray(item) ? (
-  //          <div>{groupTags(item)}</div>
-  //        ) : (
-  //          <>
-  //            <div
-  //              className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-  //                item.name.length > 10 ? "object-contain" : "w-20"
-  //              }`}
-  //              style={{ backgroundColor: `${item.color}` }}
-  //            >
-  //              <div className="flex items-center">
-  //                <p> {item.name}</p>
-  //                {renameTagId == item.id && (
-  //                  <form>
-  //                    <input
-  //                      type="text"
-  //                      placeholder="tagedit name"
-  //                      className="text-gray-400 h-7 object-contain"
-  //                    />
-  //                  </form>
-  //                )}
-  //              </div>
-  //              <ToolTip tooltip="edit tag">
-  //                <button>
-  //                  <EditTagModal tagId={item.id} taskId={task.id} />
-  //                </button>
-  //              </ToolTip>
-
-  //              <ToolTip tooltip="unassign tag">
-  //                <button
-  //                  onClick={() =>
-  //                    dispatch(
-  //                      triggerUnassignTag({
-  //                        unAssignTadId: item.id,
-  //                        currentTaskIdForTag: task.id,
-  //                      })
-  //                    )
-  //                  }
-  //                >
-  //                  <IoCloseSharp />
-  //                </button>
-  //              </ToolTip>
-  //              {showTagColorDialogueBox && <ColorsModal />}
-  //            </div>
-  //            {/* <span>{arr.length}</span> */}
-  //          </>
-  //        );
-  //      });
-  //    };
 
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
@@ -244,17 +182,12 @@ function TaskTableView() {
         <>
           <div className="">
             <div
-              onClick={() => handleAssigneeModal(taskColField.id)}
+              //    onClick={() => handleAssigneeModal(taskColField.id)}
               className="cursor-pointer flex "
             >
-              {groupAssignee(taskColField.assignees)}
+              Assinee field
             </div>
           </div>
-          <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == taskColField.id ? (
-              <AssignTask />
-            ) : null}
-          </span>
         </>
       );
     } else if (colfield === "assignees" && taskColField.length === 0) {
@@ -263,13 +196,8 @@ function TaskTableView() {
           <UserAddOutlined
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
-            onClick={() => handleAssigneeModal(taskColField.id)}
+            //   onClick={() => handleAssigneeModal(taskColField.id)}
           />
-          <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == taskColField.id ? (
-              <AssignTask />
-            ) : null}
-          </span>
         </>
       );
     } else if (colfield == "created_at" || colfield == "updated_at") {
@@ -280,35 +208,15 @@ function TaskTableView() {
       );
     } else if (colfield == "status") {
       if (taskColField == "completed") {
-        return (
-          <div className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center ">
-            {taskColField}
-          </div>
-        );
+        return <div>{taskColField}</div>;
       } else if (taskColField == "in progress") {
-        return (
-          <div className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center ">
-            {taskColField}
-          </div>
-        );
+        return <div>{taskColField}</div>;
       } else if (taskColField == "archived") {
-        return (
-          <div className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute ">
-            {taskColField}
-          </div>
-        );
+        return <div>{taskColField}</div>;
       } else if (taskColField == "todo") {
-        return (
-          <div className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute ">
-            {taskColField}
-          </div>
-        );
+        return <div>{taskColField}</div>;
       } else {
-        return (
-          <div className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute ">
-            Todo
-          </div>
-        );
+        return <div>Todo</div>;
       }
     } else if (colfield === "name") {
       return (
@@ -371,7 +279,7 @@ function TaskTableView() {
       <div className="flex flex-col">
         <div className="overflow-x-auto">
           <div className="p-1.5 w-full inline-block align-middle">
-            <div className="overflow-y-auto border rounded-lg">
+            <div className="overflow-y-auto border rounded-lg h-min">
               <table className="min-w-full divide-y divide-gray-500">
                 <thead className="bg-gray-50">
                   <tr>
