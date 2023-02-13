@@ -38,7 +38,6 @@ import { FiEdit2 } from "react-icons/fi";
 import TagModal from "../../../../../components/tags/TagModal";
 
 function TaskTableView() {
-  const defaultMaterialTheme = createTheme();
   const {
     myTaskData,
     hideTask,
@@ -91,46 +90,12 @@ function TaskTableView() {
     render?: ((newData: groupAssigneeProps) => void) | null;
   }
 
-  interface singleColumnProps {
-    title: string;
-    field: string;
-    emptyValue: () => JSX.Element;
-    hidden: boolean | undefined;
-    render: ((newData: groupAssigneeProps) => void) | null;
-  }
-  interface dataProps {
-    assignees: groupAssigneeProps[];
-  }
-
-  const groupAssignee = (data: groupAssigneeProps[]) => {
-    return data?.map((newData) => alert(newData));
-  };
-
-  const icons: tableIcons = {
-    Export: () => <BiExport />,
-    Search: () => null,
-    Filter: () => <AiOutlineFilter />,
-    ViewColumn: () => <BiHide />,
-    Clear: () => <AiOutlineFilter />,
-    SortArrow: () => <FaSort />,
-    DetailPanel: () => <FcParallelTasks />,
-    FirstPage: () => null,
-    LastPage: () => null,
-    NextPage: () => null,
-    PreviousPage: () => null,
-    ResetSearch: () => <MdOutlineCancelScheduleSend />,
-  };
-
   const columnHead: string[][] = [];
   const singleObj: any = editable[0];
   singleObj && columnHead.push(Object.keys(singleObj));
 
   const dynamicColum: ListItem[] = [];
 
-  // const displayNav = (id: string) => {
-  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
-  //   dispatch(setCurrentTaskId(id));
-  // };
 
   columnHead[0]?.map((column) => {
     const singleColumn = {
