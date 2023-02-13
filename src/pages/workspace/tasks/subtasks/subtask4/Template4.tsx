@@ -10,20 +10,19 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import { MdDragIndicator } from "react-icons/md";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-import { FiEdit2 } from "react-icons/fi";
-import { PlusOutlined } from "@ant-design/icons";
-import { AvatarWithInitials } from "../../../../../components";
-import moment from "moment";
-import { groupAssigneeProps } from "../subtask1/Template";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
-import { UserPlusIcon } from '@heroicons/react/24/outline';
+} from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import { MdDragIndicator } from 'react-icons/md';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import { FiEdit2 } from 'react-icons/fi';
+import { AvatarWithInitials } from '../../../../../components';
+import moment from 'moment';
+import { groupAssigneeProps } from '../subtask1/Template';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import TagModal from '../../../../../components/tags/TagModal';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -232,7 +231,7 @@ export default function Template4({ task }: TemplateProps) {
               <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
             </span>
             <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-              <PlusOutlined
+              <PlusIcon
                 className="  w-3  text-gray-500   "
                 aria-hidden="true"
                 onClick={() => handleCreateSubTask(task.id)}

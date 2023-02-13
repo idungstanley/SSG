@@ -193,13 +193,14 @@ function RenderTaskModal() {
                           <Timecode />
                         </Timer>
                       </div>
+
                       <div className="relative">
                         <ChevronDownIcon
                           className="h-5 w-7 text-gray-300"
                           aria-hidden="true"
                           onClick={() => setShowTimeEntries(!showTimeEntries)}
                         />
-                        {showTimeEntries && (
+                        {/* {showTimeEntries && (
                           <TimeEntriesDropdown
                             taskId={taskId}
                             startTimeClicked={startTimeClicked}
@@ -212,7 +213,7 @@ function RenderTaskModal() {
                             // onSubmit={onSubmit}
                             handleTimeTracker={handleTimeTracker}
                           />
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>

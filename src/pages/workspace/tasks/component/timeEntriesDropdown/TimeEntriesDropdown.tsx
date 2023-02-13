@@ -42,7 +42,9 @@ function TimeEntriesDropdown({
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(
+    false
+  );
   const { activeItemType } = useAppSelector((state) => state.workspace);
   const [getTEId, setTEId] = useState('');
   const [triggerDel, setTriggerDel] = useState(false);
@@ -61,10 +63,10 @@ function TimeEntriesDropdown({
   });
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
+    // setFormState({
+    //   ...formState,
+    //   [e.target.name]: e.target.value,
+    // });
   };
 
   const handleUpdateEntry = (id: string | boolean) => {

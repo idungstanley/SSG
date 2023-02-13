@@ -61,11 +61,11 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco start --openssl-legacy-provider ",
+    "start": "craco --openssl-legacy-provider start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "eslint"
+    "lint:ts": "tsc"
   },
   "browserslist": {
     "production": [
@@ -93,17 +93,5 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.3.0"
-  },
-  "main": "craco.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://petrosnieda_work@bitbucket.org/simplesoftwaregroup/frontend-js-web.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://bitbucket.org/simplesoftwaregroup/frontend-js-web/issues"
-  },
-  "homepage": "https://bitbucket.org/simplesoftwaregroup/frontend-js-web#readme"
+  }
 }

@@ -16,22 +16,21 @@ import {
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppSelector } from '../../../../../app/hooks';
-// import { useNavigate } from 'react-router-dom';
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-import { FiEdit2 } from "react-icons/fi";
-import "./task.css";
-import { IoCloseSharp } from "react-icons/io5";
-import ToolTip from "../../../../../components/Tooltip";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import moment from "moment";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
+import { FiEdit2 } from 'react-icons/fi';
+import './task.css';
+import { IoCloseSharp } from 'react-icons/io5';
+import ToolTip from '../../../../../components/Tooltip';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import moment from 'moment';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import TagModal from '../../../../../components/tags/TagModal';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -185,7 +184,7 @@ export default function TaskData({ task }: TaskDataProps) {
       );
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
-        <UserAddOutlined
+        <UserPlusIcon
           className="ml-2 text-gray-400 text-xl cursor-pointer"
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
@@ -306,7 +305,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
                 aria-hidden="true"
               />
-              <PlusOutlined
+              <PlusIcon
                 className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
                 aria-hidden="true"
                 onClick={() => handleCreateSubTask(task.id)}
