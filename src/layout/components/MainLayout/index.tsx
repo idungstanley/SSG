@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 
 import TopMenu from './TopMenu';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
-import Chat from '../../../components/Chat';
 import ProgressBar from './ProgressBar';
 
 function MainLayout() {
@@ -15,7 +14,6 @@ function MainLayout() {
         <div className="flex-1 w-full h-full overflow-hidden">
           <Outlet />
         </div>
-        <Chat />
       </div>
 
       <MyWorkspacesSlideOver />
