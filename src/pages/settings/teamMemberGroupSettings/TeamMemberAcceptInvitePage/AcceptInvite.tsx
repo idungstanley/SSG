@@ -14,14 +14,14 @@ export default function AcceptInvite() {
         Sorry, we couldn’t find the page you’re looking for.
       </p> */}
       <div className="mt-6">
-        {/* <Link
-          to="/workspace"
-          className="text-base font-medium text-indigo-600 hover:text-indigo-500"
-        >
-          Go back home
-          <span aria-hidden="true"> &rarr;</span>
-        </Link> */}
-        <Button onClick={handleAcceptInvite} value="Accept" />
+        <Button
+          buttonStyle="primary"
+          onClick={handleAcceptInvite}
+          label={'Accept'}
+          padding="py-2 px-4"
+          height="h-10"
+          width="w-40"
+        />
       </div>
     </main>
   );

@@ -17,18 +17,25 @@ export default function TeamMemberAcceptInvite() {
 
   const { status, data } = useAcceptTeamMemberInvite();
 
-  if (status == 'loading') {
-    return (
-      <div className="flex justify-center relative top-52 bottom-52">
-        <Spinner size={10} color={'#6B7280'} />
-      </div>
-    );
-  }
+  // if (status == 'loading') {
+  //   return (
+  //     <div className="flex justify-center relative top-52 bottom-52">
+  //       <Spinner size={10} color={'#6B7280'} />
+  //     </div>
+  //   );
+  // }
 
   if (status == 'success') {
     localStorage.setItem('user', JSON.stringify(data?.data.user));
   }
 
-  if (data?.message == 'Unauthenticated') <RegisterPage />;
-  return inviteCode ? <AcceptInvite /> : <NotFoundPage />;
+  // if (data?.message == 'Unauthenticated') <RegisterPage />;
+  // return inviteCode ? <AcceptInvite /> : <NotFoundPage />;
+  return data?.message == 'Unauthenticated' ? (
+    <RegisterPage />
+  ) : inviteCode ? (
+    <AcceptInvite />
+  ) : (
+    <NotFoundPage />
+  );
 }
