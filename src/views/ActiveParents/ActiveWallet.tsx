@@ -30,7 +30,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
 
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));

@@ -29,7 +29,7 @@ function ActiveSubWallet({
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 

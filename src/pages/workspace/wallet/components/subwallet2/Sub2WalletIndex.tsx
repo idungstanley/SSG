@@ -52,12 +52,12 @@ function Sub2WalletIndex({
   const navigate = useNavigate();
   const handleListLocation = (id: string) => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
   };
 
   const handleLocation = (id: string, type = 'sub2wallet') => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 

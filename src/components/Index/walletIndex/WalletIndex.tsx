@@ -60,7 +60,7 @@ function WalletIndex({
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     setShowSubWallet(id);
     dispatch(setCurrentWalletId(id));
     dispatch(

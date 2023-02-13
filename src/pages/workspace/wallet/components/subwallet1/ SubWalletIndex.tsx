@@ -56,14 +56,14 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     setShowSubWallet2(id);
     setCurrWalId(id);
   };
 
   const handleListLocation = (id: string, name: string) => {
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
     dispatch(
       setActiveItem({
         activeItemType: 'list',

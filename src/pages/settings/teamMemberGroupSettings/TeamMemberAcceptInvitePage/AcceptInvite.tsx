@@ -16,7 +16,7 @@ interface AcceptInviteProps {
 export default function AcceptInvite({ user }: AcceptInviteProps) {
   const handleAcceptInvite = () => {
     localStorage.setItem('user', JSON.stringify(user));
-    window.location.href = '/workspace';
+    window.location.href = '/';
   };
   return (
     <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">

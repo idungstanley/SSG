@@ -80,7 +80,7 @@ const config: configData[] = [
 
 export default function Header() {
   const { pathname } = useLocation();
-  const headerData = config.find((i) => `/workspace${i.path}` === pathname);
+  const headerData = config.find((i) => `${i.path}` === pathname);
   return (
     <div className="top-0 flex bg-white shadow">
       {headerData ? (

@@ -81,7 +81,7 @@ export default function Sidebar() {
     <>
       {/* Static sidebar for desktop */}
       <div
-        className={`relative z-10 max-w-xs pr-px border-r border-gray-300 md:fixed md:inset-y-0 lg:flex md:flex-col ${
+        className={`relative z-10 max-w-xs pr-px border-r border-gray-300 lg:flex md:flex-col ${
           isResizing ? 'border-gray-500' : 'border-gray-300'
         }`}
         ref={sidebarRef}

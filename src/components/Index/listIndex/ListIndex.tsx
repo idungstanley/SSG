@@ -36,7 +36,7 @@ function ListIndex({
 
   const handleListLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
     dispatch(
       setActiveItem({
         activeItemType: 'list',

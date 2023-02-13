@@ -3,7 +3,6 @@ import Header from './components/Header';
 import BreadcrumbSection from './components/Breadcrumb';
 import Main from './components/Main';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
-import Sidebar from '../workspace/sidebar/Sidebar';
 import { useAppSelector } from '../../app/hooks';
 import ExpandedNav from '../../views/ExpandedNav';
 import ShareItemModal from '../../components/ShareItemModal';
@@ -15,24 +14,18 @@ export default function ExplorerPage() {
   return (
     <>
       <DragContext>
-        <main className="flex w-full h-full">
-          {/* sidebar */}
-          <Sidebar />
+        <main className="flex w-full h-full flex-row">
+          {showExtendedBar && <ExpandedNav />}
+          <section className="w-full h-full">
+            <Header />
 
-          {/* header */}
-          <div className="ml-80 flex w-full flex-row">
-            {showExtendedBar && <ExpandedNav />}
-            <section className="w-full h-full">
-              <Header />
-
-              <div className="grid h-full grid-rows-mainContent">
-                {/* Breadcrumb */}
-                <BreadcrumbSection />
-                {/* files list & file preview */}
-                <Main />
-              </div>
-            </section>
-          </div>
+            <div className="grid h-full grid-rows-mainContent">
+              {/* Breadcrumb */}
+              <BreadcrumbSection />
+              {/* files list & file preview */}
+              <Main />
+            </div>
+          </section>
         </main>
       </DragContext>
 

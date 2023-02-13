@@ -82,7 +82,7 @@ export default function ItemsListInSidebar({
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/workspace/hub/${id}`);
+    navigate(`/hub/${id}`);
   };
 
   const handleClick = (id: string) => {

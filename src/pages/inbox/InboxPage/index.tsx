@@ -8,7 +8,9 @@ import AssignInboxFileSlideOver from './components/SlideOvers/AssignInboxFileSli
 import UploadModal from '../../../components/UploadModal';
 import { useParams } from 'react-router-dom';
 
-const Watchers = React.lazy(() => import('../../../components/Watchers'));
+const Watchers = React.lazy(
+  () => import('../../../components/Watchers/WatchersForPilot')
+);
 
 function InboxPage() {
   const { inboxId } = useParams();

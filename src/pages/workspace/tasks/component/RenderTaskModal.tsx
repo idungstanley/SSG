@@ -71,7 +71,7 @@ function RenderTaskModal() {
 
   const navigate = useNavigate();
   const closeTaskModal = () => {
-    navigate('/workspace');
+    navigate('/');
   };
 
   const handleTimeTracker = () => {

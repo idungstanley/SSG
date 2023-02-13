@@ -7,7 +7,6 @@ import {
   useGetDirectoryTemplates,
 } from '../../features/directory/directoryService';
 import { classNames } from '../../utils';
-import Sidebar from '../workspace/sidebar/Sidebar';
 import FieldItem from './components/FieldItem';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 import TemplateItems from './components/TemplateItems';
@@ -39,8 +38,7 @@ function Directory() {
 
   return (
     <>
-      <Sidebar />
-      <div className="ml-80 w-full h-full">
+      <div className="w-full h-full">
         {/* nav */}
         <div className="border-b border-gray-200 w-full">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">

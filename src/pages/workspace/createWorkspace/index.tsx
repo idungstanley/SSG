@@ -93,14 +93,14 @@ function CreateWorkspace() {
         pages={[
           {
             name: 'Workspace',
-            href: '/workspace/onboarding',
+            href: '/onboarding',
             current: true,
           },
         ]}
         rootIcon={
           <PlusIcon className="flex-shrink-0 w-5 h-5" aria-hidden="true" />
         }
-        rootIconHref="/workspace/onboarding"
+        rootIconHref="/onboarding"
       />
 
       <section className="flex-1 h-full px-4 pb-10 overflow-y-scroll sm:px-6 lg:px-6 ">

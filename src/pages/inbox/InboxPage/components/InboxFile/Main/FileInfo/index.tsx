@@ -9,7 +9,7 @@ import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
 import Activity from './Activity';
-import Comments from '../../../../../../../components/Comments';
+import Comments from '../../../../../../../components/Comments/CommentsForPilot';
 import { classNames } from '../../../../../../../utils';
 import { useAppSelector } from '../../../../../../../app/hooks';
 

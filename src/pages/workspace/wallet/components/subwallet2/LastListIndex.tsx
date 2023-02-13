@@ -27,7 +27,7 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
   });
   const navigate = useNavigate();
   const handleListLocation = (id: string) => {
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
   };
   const handleListSettings = (id: string, e) => {
     dispatch(

@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React, { memo, ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/hooks';
 import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
 import { classNames } from '../../../../utils';
 
@@ -13,7 +13,7 @@ interface PlaceItemProps {
   bottomContent?: ReactNode;
 }
 
-export default function PlaceItem({
+function PlaceItem({
   label,
   onClick,
   icon,
@@ -22,12 +22,12 @@ export default function PlaceItem({
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSidebar } = useAppSelector((state) => state.workspace);
+
   const isActivePlace = !onClick;
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
-    navigate('/workspace');
+    navigate('/');
   };
 
   return (
@@ -38,7 +38,7 @@ export default function PlaceItem({
         bottomContent ? 'gap-2' : ''
       )}
     >
-      {!showSidebar && isActivePlace && (
+      {isActivePlace && (
         <span className="absolute top-0 left-0 right-0 bg-green-500 h-1"></span>
       )}
       <div className="flex justify-between w-full">
@@ -47,26 +47,25 @@ export default function PlaceItem({
           className={classNames(
             'flex gap-4 items-center content-center self-center',
             isActivePlace ? 'justify-center text-black font-bold' : '',
-            showSidebar && isActivePlace && 'ml-16'
+            isActivePlace && 'ml-16'
           )}
         >
           {icon}
           <span
             className={classNames(
-              showSidebar ? 'block' : 'hidden',
               'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
-              isActivePlace ? 'text-black font-bold' : ''
+              isActivePlace && 'text-black font-bold'
             )}
           >
             {label}
           </span>
         </div>
         <div className="flex gap-2 items-center">
-          {showSidebar && rightContent}
+          {rightContent}
 
           <span
             onClick={isActivePlace ? resetSelectedPlace : onClick}
-            className={classNames(showSidebar ? 'block' : 'hidden')}
+            // className={classNames('hidden')}
           >
             {isActivePlace ? (
               <FiChevronDown className="h-5 w-5 cursor-pointer text-gray-500" />
@@ -80,3 +79,5 @@ export default function PlaceItem({
     </li>
   );
 }
+
+export default memo(PlaceItem);

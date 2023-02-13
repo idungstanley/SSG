@@ -97,7 +97,7 @@ export default function SubHubIndex() {
         activeItemName: name,
       })
     );
-    navigate(`/workspace/hub/${id}`);
+    navigate(`/hub/${id}`);
   };
 
   return currentItemId === hubParentId ? (
