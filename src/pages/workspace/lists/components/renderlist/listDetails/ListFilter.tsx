@@ -1,11 +1,11 @@
-import React from 'react';
-import { BiShow } from 'react-icons/bi';
-import { BsLayers } from 'react-icons/bs';
-import { GrFormSearch } from 'react-icons/gr';
-import { IoPeopleOutline } from 'react-icons/io5';
-import { MdFilterList, MdOutlinePersonOutline } from 'react-icons/md';
-import { TbSubtask } from 'react-icons/tb';
-import { VscEllipsis } from 'react-icons/vsc';
+import React from "react";
+import { BiShow } from "react-icons/bi";
+import { BsLayers } from "react-icons/bs";
+import { GrFormSearch } from "react-icons/gr";
+import { IoPeopleOutline } from "react-icons/io5";
+import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
+import { TbSubtask } from "react-icons/tb";
+import { VscEllipsis } from "react-icons/vsc";
 
 export default function ListFilter() {
   return (
@@ -15,9 +15,9 @@ export default function ListFilter() {
         <input
           type="text"
           placeholder="Search tasks..."
-          className="border-transparent focus:border-transparent focus:ring-0 font-bold"
-          style={{ fontSize: '11px' }}
-        />{' '}
+          className="border-transparent focus:border-transparent h-5 w-full focus:ring-0 font-bold"
+          style={{ fontSize: "11px" }}
+        />{" "}
         <span className=" p-1 border-gray-400	hover:bg-gray-200  rounded ">
           <VscEllipsis className=" border-r" />
         </span>

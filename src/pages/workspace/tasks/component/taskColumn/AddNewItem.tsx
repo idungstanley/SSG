@@ -1,16 +1,12 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import { useDispatch } from "react-redux";
-import { setAddNewTaskItem } from "../../../../../features/task/taskSlice";
-import { Button } from "../../../../../components";
-import {
-  CalendarOutlined,
-  FlagOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
-import { FaTimes } from "react-icons/fa";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTaskService } from "../../../../../features/task/taskService";
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
+import { Button } from '../../../../../components';
+import { FaGlobeAfrica, FaTimes } from 'react-icons/fa';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTaskService } from '../../../../../features/task/taskService';
+import { CalendarIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface AddNewItemProps {
   listId: string | undefined;
@@ -64,31 +60,31 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
       {/* icons */}
       <div className="flex items-center space-x-1">
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserAddOutlined
+          <UserPlusIcon
             className="text-xs h-6 w-6 text-gray-400"
             aria-hidden="true"
           />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserAddOutlined
+          <UserPlusIcon
             className="text-xs h-6 w-6 text-gray-400"
             aria-hidden="true"
           />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserAddOutlined
+          <UserPlusIcon
             className="text-xs h-6 w-6 text-gray-400"
             aria-hidden="true"
           />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-          <CalendarOutlined
+          <CalendarIcon
             className="text-xs h-6 w-6 text-gray-400"
             aria-hidden="true"
           />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-          <FlagOutlined
+          <FaGlobeAfrica
             className="text-xs h-6 w-6 text-gray-400"
             aria-hidden="true"
           />

@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import {
   setShowPilot,
   setShowPilotIconView,
-  setShowPilotListView,
 } from '../../../../features/workspace/workspaceSlice';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
@@ -83,7 +82,6 @@ function Tab() {
   const dispatch = useDispatch();
   const {
     showPilot,
-    showPilotListView,
     showPilotIconView,
     activeItemName,
     activeItemType,
@@ -103,13 +101,13 @@ function Tab() {
       dispatch(setShowPilotIconView(true));
     }
   };
-  const handleShowPilotListView = () => {
-    if (showPilotListView) {
-      dispatch(setShowPilotListView(false));
-    } else {
-      dispatch(setShowPilotListView(true));
-    }
-  };
+  // const handleShowPilotListView = () => {
+  //   if (showPilotListView) {
+  //     dispatch(setShowPilotListView(false));
+  //   } else {
+  //     dispatch(setShowPilotListView(true));
+  //   }
+  // };
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [items, setItems] = useState(

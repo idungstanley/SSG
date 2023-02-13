@@ -1,31 +1,31 @@
-import React, { useState, FormEvent } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../../../app/hooks";
+import React, { useState, FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../../../app/hooks';
 import {
   UseCreateClistService,
   UseGetAllClistService,
   UseUpdateChecklistService,
-} from "../../../../../../features/task/checklist/checklistService";
-import ChecklistItem from "../components/ChecklistItem";
-import { Spinner } from "../../../../../../common";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ChecklistModal from "../components/ChecklistModal";
-import { lessOptions } from "../ModalOptions";
-import { completeOptions } from "../ModalOptions";
-import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import { BiCaretRight } from "react-icons/bi";
-import { GoPlus } from "react-icons/go";
-import { Disclosure } from "@headlessui/react";
+} from '../../../../../../features/task/checklist/checklistService';
+import ChecklistItem from '../components/ChecklistItem';
+import { Spinner } from '../../../../../../common';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ChecklistModal from '../components/ChecklistModal';
+import { lessOptions } from '../ModalOptions';
+import { completeOptions } from '../ModalOptions';
+import { setTriggerChecklistUpdate } from '../../../../../../features/task/checklist/checklistSlice';
+import { BiCaretRight } from 'react-icons/bi';
+import { GoPlus } from 'react-icons/go';
+import { Disclosure } from '@headlessui/react';
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
   // Local states
-  const [checklistName, setChecklistName] = useState<string>("");
+  const [checklistName, setChecklistName] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<string>("");
-  const [checklistId, setChecklistId] = useState<string>("");
+  const [itemId, setItemId] = useState<string>('');
+  const [checklistId, setChecklistId] = useState<string>('');
 
   // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
@@ -51,13 +51,13 @@ export default function ChecklistIndex() {
   const task_checklist = data?.data.task.checklists;
 
   // Update Checklist
-  const { data: updateData, status: updateStatus } = UseUpdateChecklistService({
+  const { status: updateStatus } = UseUpdateChecklistService({
     checklist_id: checklistId,
     name: checklistName,
     triggerUpdate: triggerChecklistUpdate,
   });
 
-  if (updateStatus === "success") {
+  if (updateStatus === 'success') {
     refetch();
   }
 
@@ -73,10 +73,10 @@ export default function ChecklistIndex() {
     setChecklistId(id);
   };
 
-  if (status == "loading") {
-    <Spinner size={20} color={"blue"} />;
+  if (status == 'loading') {
+    <Spinner size={20} color={'blue'} />;
   }
-  return status == "success" ? (
+  return status == 'success' ? (
     <div className="p-1">
       <div className="border-2 flex justify-between items-center text-center py-2">
         <h1 className="text-xl ml-8">Checklists</h1>
@@ -101,7 +101,7 @@ export default function ChecklistIndex() {
                             <div className="mx-1">
                               <BiCaretRight
                                 className={
-                                  open ? "rotate-90 transform w-4 h-4" : ""
+                                  open ? 'rotate-90 transform w-4 h-4' : ''
                                 }
                               />
                             </div>
@@ -155,7 +155,7 @@ export default function ChecklistIndex() {
                 </Disclosure>
               );
             })
-          : "This task has no Checklist, click on the plus sign to create one"}
+          : 'This task has no Checklist, click on the plus sign to create one'}
       </div>
     </div>
   ) : null;

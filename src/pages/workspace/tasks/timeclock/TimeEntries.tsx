@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { AvatarWithInitials } from '../../../../components';
-import { EditOutlined, TagOutlined } from '@ant-design/icons';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import {
   EndTimeEntriesService,
   GetTimeEntriesService,
@@ -121,7 +120,7 @@ export default function TimeEntries() {
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
-                <TagOutlined className="text-white" aria-hidden="true" />
+                <TagIcon className="text-white w-4 h-4" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon
                 // className={`${

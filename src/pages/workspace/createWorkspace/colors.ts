@@ -1,4 +1,3 @@
-
 interface avatarType {
   colour: string;
 }
@@ -22,9 +21,9 @@ export const avatarBg: avatarType[] = [
 ];
 
 export const companySizeBtn: companyArrayType[] = [
-  { label: '1', value: '1' },
+  { label: 'Just me', value: '1' },
   { label: '2-5', value: '2' },
   { label: '6-10', value: '6' },
   { label: '10-25', value: '10' },
-  { label: 'Later', value: 'null' },
+  { label: 'I dont know', value: 'null' },
 ];
