@@ -25,6 +25,11 @@ interface SubWalletIndexProps {
   paddingLeft?: string;
 }
 
+interface dataProps {
+  id: string;
+  name: string;
+}
+
 function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector(
@@ -68,7 +73,11 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
     );
   };
 
-  const handleWalletSettings = (id: string, name: string, e) => {
+  const handleWalletSettings = (
+    id: string,
+    name: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -77,12 +86,16 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
   };
-  const handleListSettings = (id: string, name: string, e) => {
+  const handleListSettings = (
+    id: string,
+    name: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -91,7 +104,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -106,7 +119,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
   };
   return (
     <div>
-      {subwallet?.data?.wallets.map((wallet) => (
+      {subwallet?.data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between group h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
@@ -179,7 +192,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
           {SubMenuId === wallet.id ? <SubDropdown /> : null}
         </div>
       ))}
-      {subwallet?.data?.lists.map((list) => (
+      {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
           <section
             className={`relative flex items-center justify-between h-8 space-x-1 hover:bg-gray-100 group ${

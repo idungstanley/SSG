@@ -6,7 +6,13 @@ import {
 import React from 'react';
 
 interface TaskQuickActionProps {
-  listDetailsData: any;
+  listDetailsData: {
+    data: {
+      list: {
+        name: string;
+      };
+    };
+  };
 }
 
 export default function TaskQuickAction({

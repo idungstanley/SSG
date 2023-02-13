@@ -1,74 +1,74 @@
-import React, { memo, useRef, useState } from 'react';
-import { FaWpforms } from 'react-icons/fa';
-import Dashboard from '../pages/workspace/dashboard';
-import Directory from '../pages/workspace/directory';
-import Favourites from '../pages/workspace/favorites';
-import Files from '../pages/workspace/files';
-import Inbox from '../pages/workspace/inbox';
+import React, { memo, useRef, useState } from "react";
+import { FaWpforms } from "react-icons/fa";
+import Dashboard from "../pages/workspace/dashboard";
+import Favourites from "../pages/workspace/favorites";
+import Files from "../pages/workspace/files";
+import Inbox from "../pages/workspace/inbox";
 import {
   setActivePlaceId,
   setExtendedSidebarWidth,
   setIsExtSearchActive,
   setShowExtendedBar,
   setShowModal,
-} from '../features/workspace/workspaceSlice';
-import emailIcon from '../assets/branding/email-icon.png';
-import hubIcon from '../assets/branding/hub.png';
-import InboxIcon from '../assets/branding/inbox.png';
-import timeClockIcon from '../assets/branding/timeclock.png';
-import trackerIcon from '../assets/branding/tracker-icon.png';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../app/hooks';
-import { BsPlusLg } from 'react-icons/bs';
-import { RiArrowLeftSLine } from 'react-icons/ri';
-import ActiveHub from './ActiveParents/ActiveHub';
-import { IoMdCloseCircle } from 'react-icons/io';
-import Extendedbar from '../pages/newExplorer/components/Sidebar';
-import { BiCabinet } from 'react-icons/bi';
-import { IoSearchCircleOutline } from 'react-icons/io5';
-import ResizeBorder from '../components/ResizeBorder';
+} from "../features/workspace/workspaceSlice";
+import emailIcon from "../assets/branding/email-icon.png";
+import hubIcon from "../assets/branding/hub.png";
+import InboxIcon from "../assets/branding/inbox.png";
+import timeClockIcon from "../assets/branding/timeclock.png";
+import trackerIcon from "../assets/branding/tracker-icon.png";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../app/hooks";
+import { BsPlusLg } from "react-icons/bs";
+import { RiArrowLeftSLine } from "react-icons/ri";
+import ActiveHub from "./ActiveParents/ActiveHub";
+import { IoMdCloseCircle } from "react-icons/io";
+import Extendedbar from "../pages/explorer/components/Sidebar";
+import { BiCabinet } from "react-icons/bi";
+import { IoSearchCircleOutline } from "react-icons/io5";
+import ResizeBorder from "../components/ResizeBorder";
+import { any } from "prop-types";
 
 const secondaryNavigation = [
   {
-    name: 'email',
+    name: "email",
     id: 1,
     place: <Favourites />,
     source: emailIcon,
   },
   {
-    name: 'hubs',
+    name: "hubs",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,
   },
   {
-    name: 'In-tray',
+    name: "In-tray",
     id: 3,
     place: <Inbox />,
     source: InboxIcon,
   },
   {
-    name: 'Cabinet',
+    name: "Cabinet",
     id: 4,
     place: <Extendedbar />,
     icon: <BiCabinet className="h-4 mr-4" />,
   },
   {
-    name: 'forms',
+    name: "forms",
     id: 5,
     place: <Files />,
     icon: <FaWpforms className="h-4 mr-4" />,
   },
   {
-    name: 'time clock',
+    name: "time clock",
     id: 6,
     place: <Dashboard />,
     source: timeClockIcon,
   },
   {
-    name: 'tracker',
+    name: "tracker",
     id: 7,
-    place: <Directory />,
+    place: <Favourites />,
     source: trackerIcon,
   },
 ];
@@ -108,11 +108,11 @@ function ExpandedNav() {
     [isResizing]
   );
   React.useEffect(() => {
-    window.addEventListener('mousemove', resize);
-    window.addEventListener('mouseup', stopResizing);
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
     return () => {
-      window.removeEventListener('mousemove', resize);
-      window.removeEventListener('mouseup', stopResizing);
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
     };
   }, [resize, stopResizing]);
   if (activePlaceId === (0 || true)) {
@@ -130,7 +130,7 @@ function ExpandedNav() {
               width: extendedSidebarWidth,
               minWidth: `${MIN_SIDEBAR_WIDTH}px`,
             }
-          : { width: '1px', minWidth: '1px' }
+          : { width: "1px", minWidth: "1px" }
       }
     >
       <span className="absolute z-50 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
@@ -143,7 +143,7 @@ function ExpandedNav() {
       </span>
       <section
         className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${
-          isResizing ? 'border-gray-500' : 'border-gray-300'
+          isResizing ? "border-gray-500" : "border-gray-300"
         }`}
       >
         <div aria-labelledby="projects-headline">
@@ -154,7 +154,7 @@ function ExpandedNav() {
                   <div className="relative top-0 flex items-center h-8 p-2 text-gray-600 border-b cursor-pointer border-gray">
                     <button
                       className={`${
-                        isExtSearchActive ? 'hidden' : 'flex'
+                        isExtSearchActive ? "hidden" : "flex"
                       } items-center justify-between w-full`}
                       type="button"
                       onClick={() => dispatch(setActivePlaceId(item.id))}
@@ -171,9 +171,9 @@ function ExpandedNav() {
                         )}
                         <span
                           className={` font-semibold leading-3 uppercase truncate tracking-wider ${
-                            activePlaceId === item.id && 'text-black font-bold'
+                            activePlaceId === item.id && "text-black font-bold"
                           }`}
-                          style={{ fontSize: '11px' }}
+                          style={{ fontSize: "11px" }}
                         >
                           {item.name}
                         </span>
@@ -186,10 +186,10 @@ function ExpandedNav() {
                           onClick={() => dispatch(setShowModal(true))}
                         />
                         <IoSearchCircleOutline
-                          className="w-2.5 h-2.5 mr-1 h-4"
+                          className="w-2.5 mr-1 h-4"
                           aria-hidden="true"
                           onClick={() =>
-                            dispatch(setIsExtSearchActive('TOGGLE'))
+                            dispatch(setIsExtSearchActive("TOGGLE"))
                           }
                         />
                       </span>
@@ -197,7 +197,7 @@ function ExpandedNav() {
                     {activePlaceId === item.id && (
                       <div
                         className={`w-full ${
-                          isExtSearchActive ? 'flex' : 'hidden'
+                          isExtSearchActive ? "flex" : "hidden"
                         } relative`}
                       >
                         <input
@@ -210,7 +210,7 @@ function ExpandedNav() {
                         <IoMdCloseCircle
                           className="absolute right-0 w-6 h-4 text-green-500 top-5"
                           onClick={() =>
-                            dispatch(setIsExtSearchActive('TOGGLE'))
+                            dispatch(setIsExtSearchActive("TOGGLE"))
                           }
                         />
                         <IoSearchCircleOutline
@@ -228,23 +228,23 @@ function ExpandedNav() {
         <span className="group">
           <div
             className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth >= 230 && 'group-hover:bg-green-100'
+              extendedSidebarWidth >= 230 && "group-hover:bg-green-100"
             }`}
             onMouseDown={startResizing}
             style={{
-              cursor: 'col-resize',
-              width: `${extendedSidebarWidth > 320 ? '4px' : '2px'}`,
-              right: '0.5px',
+              cursor: "col-resize",
+              width: `${extendedSidebarWidth > 320 ? "4px" : "2px"}`,
+              right: "0.5px",
             }}
           ></div>
           <div
             className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth <= 320 && 'group-hover:bg-green-100'
+              extendedSidebarWidth <= 320 && "group-hover:bg-green-100"
             }`}
             style={{
-              cursor: 'col-resize',
-              width: `${extendedSidebarWidth < 230 ? '4px' : '2px'}`,
-              right: `${extendedSidebarWidth < 230 ? '-4px' : '-2px'}`,
+              cursor: "col-resize",
+              width: `${extendedSidebarWidth < 230 ? "4px" : "2px"}`,
+              right: `${extendedSidebarWidth < 230 ? "-4px" : "-2px"}`,
             }}
             onMouseDown={startResizing}
           ></div>

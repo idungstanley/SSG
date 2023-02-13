@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getWalletService, getWalletServices } from '../../features/wallet/walletService';
-import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
+import { getWalletServices } from '../../features/wallet/walletService';
 import { useDispatch } from 'react-redux';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../app/hooks';
+import { dataProps } from '../../components/Index/walletIndex/WalletIndex';
 
 interface SubWalletIndexProps {
   walletParentId: string | null;
@@ -21,22 +20,12 @@ function ActiveSubWallet({
     (state) => state.wallet
   );
 
-  const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
-  const [currWalId, setCurrWalId] = useState('');
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
     parentId: currentWalletParentId,
   });
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-
-  const handleShowSubWallet = (id: string) => {
-    setShowSubWallet2(id);
-    setCurrWalId(id);
-    if (showSubWallet2 === id) {
-      return setShowSubWallet2(null);
-    }
-  };
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
@@ -44,14 +33,10 @@ function ActiveSubWallet({
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 
-  const handleListLocation = (id: string) => {
-    navigate(`/workspace/list/${id}`);
-  };
-
   return (
     <div>
       {subwallet?.data?.wallets.map(
-        (wallet) =>
+        (wallet: dataProps) =>
           wallet.id === activeItemId && (
             <div key={wallet.id}>
               <section
@@ -73,7 +58,6 @@ function ActiveSubWallet({
                 </div>
               </section>
               <div>
-                {showSubWallet2 === wallet.id ? <Sub2WalletIndex /> : null}
                 {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
               </div>
             </div>

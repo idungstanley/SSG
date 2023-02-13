@@ -2,22 +2,6 @@ import { explorerItemType } from './../../types/index';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 
-// Delete service
-export const deleteService = async (data: {
-  fileIds: string[];
-  folderIds: string[];
-}) => {
-  const response = requestNew({
-    url: 'explorer/multiple-delete',
-    method: 'POST',
-    params: {
-      file_ids: data.fileIds,
-      folder_ids: data.folderIds,
-    },
-  });
-  return response;
-};
-
 // Paste service
 export const pasteService = async (data: {
   copyToFolderId?: string | null;

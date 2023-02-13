@@ -1,22 +1,18 @@
-import { useAppDispatch } from "../../../../../app/hooks";
-import React, { useState } from "react";
-import { getTaskColumns } from "../../../../../features/task/taskSlice";
+export interface listColumnProps {
+  field: string;
+  value: string;
+  hidden: boolean;
+}
 
-export const columnsHead:
-  | {
-      field: string;
-      value: string;
-      hidden: boolean;
-    }[]
-  | any = [
+export const columnsHead: listColumnProps[] = [
   {
-    field: "name",
-    value: "Task",
+    field: 'name',
+    value: 'Task',
     hidden: false,
   },
   {
-    field: "assignees",
-    value: "Assignees",
+    field: 'assignees',
+    value: 'Assignees',
     hidden: false,
   },
   {
@@ -25,43 +21,43 @@ export const columnsHead:
     hidden: false,
   },
   {
-    field: "priority",
-    value: "Priority",
+    field: 'priority',
+    value: 'Priority',
     hidden: false,
   },
   {
-    field: "created_at",
-    value: "Created at",
+    field: 'created_at',
+    value: 'Created at',
     hidden: false,
   },
   {
-    field: "description",
-    value: "Description",
+    field: 'description',
+    value: 'Description',
     hidden: true,
   },
   {
-    field: "status",
-    value: "Status",
+    field: 'status',
+    value: 'Status',
     hidden: false,
   },
   {
-    field: "start_date",
-    value: " Start Date",
+    field: 'start_date',
+    value: ' Start Date',
     hidden: true,
   },
   {
-    field: "end_date",
-    value: "End Date",
+    field: 'end_date',
+    value: 'End Date',
     hidden: true,
   },
   {
-    field: "updated_at",
-    value: "Updated at",
+    field: 'updated_at',
+    value: 'Updated at',
     hidden: false,
   },
   {
-    field: "archived_at",
-    value: "Archived at",
+    field: 'archived_at',
+    value: 'Archived at',
     hidden: true,
   },
 ];

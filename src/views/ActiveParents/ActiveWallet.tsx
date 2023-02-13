@@ -1,15 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetHubWallet } from '../../features/hubs/hubService';
-import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
-import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import {
-  closeMenu,
-  getSubMenu,
-  setshowMenuDropdown,
-} from '../../features/hubs/hubSlice';
+
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
 import {
@@ -31,52 +23,17 @@ interface WalletIndexProps {
 
 function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
-  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  // const [isHovering, setIsHovering] = useState<number>(-1);
-  const [walletParentId, setWalletParentId] = useState('');
   const { data } = useGetHubWallet(getCurrentHubId);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   // const { currentWalletId } = useAppSelector((state) => state.wallet);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, name, type = 'wallet') => {
+  const handleLocation = (id: string, name: string, type = 'wallet') => {
     navigate(`/workspace/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
-  };
-  const handleShowSubWallet = (id: string) => {
-    dispatch(setCurrentWalletId(id));
-    setWalletParentId(id);
-    if (showSubWallet === id) {
-      return setShowSubWallet(null);
-    }
-    setShowSubWallet(id);
-  };
-
-  const handleWalletSettings = (id: string, e) => {
-    // dispatch(setWalletId(id));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'wallet',
-      })
-    );
-    if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
-  const handleItemAction = (id: string) => {
-    dispatch(
-      getSubMenu({
-        SubMenuId: id,
-        SubMenuType: 'wallet',
-      })
-    );
   };
 
   return data?.data?.wallets != null ? (
@@ -123,9 +80,6 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                     </div>
                   </div>
                 </section>
-                <div>
-                  {showSubWallet === wallet.id ? <SubWalletIndex /> : null}
-                </div>
                 {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
                 {SubMenuId === wallet.id ? <SubDropdown /> : null}
               </div>

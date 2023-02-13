@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { getTaskListService2 } from '../../../../../features/task/taskService';
 import SubTask from '../create/SubTask';
 import Template3 from './Template3';
 import RendersubTask4 from '../subtask4/RenderSubTask4';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
 
 interface RenderSubTask2Props {
   parentId: string | null;
 }
 
 export default function RendersubTask3({ parentId }: RenderSubTask2Props) {
-  const navigate = useNavigate();
   const { currentParentTaskId, currentParentSubTaskId3 } = useAppSelector(
     (state) => state.task
   );
@@ -21,16 +19,9 @@ export default function RendersubTask3({ parentId }: RenderSubTask2Props) {
     parentId: parentId,
   });
 
-  const [openTaskModal, setOpenTaskModal] = useState(false);
-
-  const handleTaskModal = (id: string) => {
-    setOpenTaskModal(true);
-    navigate(`/workspace/t/${id}`);
-  };
-
   return (
     <>
-      {data?.data.tasks.map((task) => (
+      {data?.data.tasks.map((task: ImyTaskData) => (
         <section key={task.id}>
           <Template3 task={task} />
           <div>

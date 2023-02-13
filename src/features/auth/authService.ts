@@ -1,13 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { IUser } from './authSlice';
 
 // Login
-export const loginService = (data: { email: string; password: string }) => {
+const loginService = (data: { email: string; password: string }) => {
   const response = requestNew(
     {
       url: 'auth/login',
       method: 'POST',
-      params: {
+      data: {
         email: data.email,
         password: data.password,
       },
@@ -17,16 +18,23 @@ export const loginService = (data: { email: string; password: string }) => {
   return response;
 };
 
+export const useLoginService = () =>
+  useMutation(loginService, {
+    onSuccess: (res: {
+      data: {
+        token: { accessToken: string; token: { user_id: string } };
+        user: IUser;
+      };
+    }) => res.data,
+  });
+
 // Login by Google
-export const loginGoogleService = (data: {
-  code: string;
-  inviteCode?: string;
-}) => {
+const loginGoogleService = (data: { code: string; inviteCode?: string }) => {
   const response = requestNew(
     {
       url: 'auth/social/google',
       method: 'POST',
-      params: {
+      data: {
         code: data.code,
         invite_code: data.inviteCode,
       },
@@ -36,8 +44,18 @@ export const loginGoogleService = (data: {
   return response;
 };
 
+export const useLoginGoogleService = () =>
+  useMutation(loginGoogleService, {
+    onSuccess: (res: {
+      data: {
+        token: { accessToken: string; token: { user_id: string } };
+        user: IUser;
+      };
+    }) => res.data,
+  });
+
 // Register
-export const registerService = (data: {
+const registerService = (data: {
   name: string;
   email: string;
   password: string;
@@ -47,7 +65,7 @@ export const registerService = (data: {
     {
       url: 'auth/register',
       method: 'POST',
-      params: {
+      data: {
         name: data.name,
         email: data.email,
         password: data.password,
@@ -59,6 +77,16 @@ export const registerService = (data: {
   );
   return response;
 };
+
+export const useRegisterService = () =>
+  useMutation(registerService, {
+    onSuccess: (res: {
+      data: {
+        token: { accessToken: string; token: { user_id: string } };
+        user: IUser;
+      };
+    }) => res.data,
+  });
 
 // Logout
 export const logoutService = () => {

@@ -1,23 +1,23 @@
-import requestNew from "../../../app/requestNew";
+import requestNew from '../../../app/requestNew';
 // import { getOneTaskServices } from "../taskService";
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux';
 // import { getchecklist } from "./checklistSlice";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   setTriggerChecklistUpdate,
   setTriggerItemtUpdate,
-} from "./checklistSlice";
+} from './checklistSlice';
 
-export const UseCreateClistService = ({ task_id }: any) => {
+export const UseCreateClistService = ({ task_id }: { task_id: string }) => {
   const url = `/checklists`;
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
-        name: "Checklist",
+        name: 'Checklist',
         id: task_id,
-        type: "task",
+        type: 'task',
       },
     },
     true
@@ -25,13 +25,12 @@ export const UseCreateClistService = ({ task_id }: any) => {
   return response;
 };
 
-export const UseGetAllClistService = ({ task_id }) => {
-  const queryClient = useQueryClient();
-  return useQuery(["clist", { task_id }], async () => {
+export const UseGetAllClistService = ({ task_id }: {task_id: string}) => {
+  return useQuery(['clist', { task_id }], async () => {
     const data = await requestNew(
       {
         url: `at/tasks/${task_id}`,
-        method: "GET",
+        method: 'GET',
       },
       true
     );
@@ -39,12 +38,12 @@ export const UseGetAllClistService = ({ task_id }) => {
   });
 };
 
-export const UseCreatelistItemService = ({ checklist_id, name }: any) => {
+export const UseCreatelistItemService = ({ checklist_id, name }: {checklist_id: string, name: string}) => {
   const url = `/checklists/${checklist_id}`;
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
         name: name,
       },
@@ -58,16 +57,15 @@ export const UseUpdateChecklistService = ({
   checklist_id,
   name,
   triggerUpdate,
-}: any) => {
-  const queryClient = useQueryClient();
+}: {checklist_id: string, name: string, triggerUpdate: boolean}) => {
   const dispatch = useDispatch();
   return useQuery(
-    ["checklist", { checklist_id }],
+    ['checklist', { checklist_id }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
             name: name,
           },
@@ -91,17 +89,20 @@ export const UseUpdateChecklistItemService = ({
   triggerItemUpdate,
   itemId,
   is_done,
-}: any) => {
-  console.log(triggerItemUpdate);
-  const queryClient = useQueryClient();
+}: {
+  triggerItemUpdate: boolean;
+  itemId: string;
+  is_done: number;
+  checklist_id: string;
+}) => {
   const dispatch = useDispatch();
   return useQuery(
-    ["edit-item", { itemId }],
+    ['edit-item', { itemId }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
             is_done: is_done,
             // name: "Deen",

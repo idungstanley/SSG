@@ -50,7 +50,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   return (
     <>
       {/* subtask */}
-      <div className="bg-white border border-sky-500  ml-6 flex items-center">
+      <div className="bg-white border border-sky-500  ml-4 h-10 flex items-center">
         <div className="flex items-center w-9/12">
           {/* data and input */}
           <div>
@@ -59,7 +59,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
               name="name"
               onChange={(e) => handleTaskChange(e)}
               placeholder="Click to add subtask"
-              className="border-transparent focus:border-transparent focus:ring-0 pl-20"
+              className="border-transparent focus:border-transparent h-9 text-xs focus:ring-0 pl-5"
             />
           </div>
         </div>

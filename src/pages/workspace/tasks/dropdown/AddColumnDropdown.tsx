@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsCheck2 } from "react-icons/bs";
 import { BiCaretDownSquare } from "react-icons/bi";
@@ -23,21 +23,13 @@ import { BsArrowUpRight } from "react-icons/bs";
 import { DiDropbox } from "react-icons/di";
 import { TbWorld } from "react-icons/tb";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import {
-  getTaskColumns,
-  hideTaskColumns,
-} from "../../../../features/task/taskSlice";
-
-interface Icolumn {
-  name: string;
-  icons: JSX.Element;
-  onclick: () => void;
-}
+import { useAppDispatch } from "../../../../app/hooks";
+import { hideTaskColumns } from "../../../../features/task/taskSlice";
+import { listColumnProps } from "../component/views/ListColumns";
 
 interface CustomDropdownProps {
   title: string;
-  listItems: any[];
+  listItems: listColumnProps[];
 }
 
 export default function AddColumnDropdown({
@@ -45,29 +37,12 @@ export default function AddColumnDropdown({
   listItems,
 }: CustomDropdownProps) {
   const [column, setColumn] = useState(false);
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
-
-  // const hidden = (colField) => {
-  //   const taskCollArr: any = [];
-  //   taskColumns.map((colHidden) => {
-  //     if (colField == colHidden.field) {
-  //       const newObj = {
-  //         ...colHidden,
-  //         hidden: !colHidden.hidden,
-  //       };
-  //       taskCollArr.push(newObj);
-  //     } else taskCollArr.push(colHidden);
-  //   });
-  //   console.log(taskCollArr);
-  //   setColH(taskCollArr);
-  //   dispatch(getTaskColumns(taskCollArr));
-  // };
 
   return (
     <div className="relative">
       <div
-        className=" absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1 bg-white overflow-y-auto "
+        className=" scrollbarDynCol absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1   "
         style={{ height: "50vh" }}
       >
         <div className="flex  py-2 px-2 justify-around">

@@ -1,7 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-interface Icolumn {
+interface IColumn {
   name: string;
   icons: JSX.Element;
   onclick: () => void;
@@ -9,7 +8,7 @@ interface Icolumn {
 
 interface CustomDropdownProps {
   title: string;
-  listItems: Icolumn[];
+  listItems: IColumn[];
 }
 
 export default function CustomDropdown({

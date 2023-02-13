@@ -14,12 +14,10 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
 import hubIcon from '../../assets/branding/hub.png';
 import {
-  setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
-  setCreateWalletSlideOverVisibility,
 } from '../../features/general/slideOver/slideOverSlice';
 import TaskModal from '../../pages/workspace/tasks/component/TaskModal';
 import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
@@ -48,10 +46,14 @@ export default function SubDropdown() {
     showCreateWalletSlideOver,
     showCreateTaskSlideOver,
   } = useAppSelector((state) => state.slideOver);
-  const ref = useRef<any>();
+  const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    const checkClickedOutSide = (e) => {
-      if (SubMenuId != null && ref.current && !ref.current.contains(e.target)) {
+    const checkClickedOutSide = (e: MouseEvent): void => {
+      if (
+        SubMenuId != null &&
+        ref.current &&
+        !ref.current.contains(e.target as HTMLButtonElement)
+      ) {
         if (
           showCreateSubWalletSlideOver === false &&
           showCreateHubSlideOver === false &&
@@ -172,7 +174,7 @@ export default function SubDropdown() {
     <div className="" ref={ref}>
       <div
         className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md  top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{ boxShadow: '0 1px 10px #00000040', minWidth: "200px" }}
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px' }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (

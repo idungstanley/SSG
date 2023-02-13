@@ -1,48 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
-import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login';
-import { gapi } from 'gapi-script';
-import {
-  registerService,
-  loginGoogleService,
-} from '../../../../../features/auth/authService';
+import { useRegisterService } from '../../../../../features/auth/authService';
 import { setAuthData } from '../../../../../features/auth/authSlice';
 import InviteDetails from './components/InviteDetails';
 import Form from '../../../../../components/Form';
 import Wrapper from '..';
 import Help from '../Help';
 import { formikConfig } from '../../../../../components/Comments/components/componentType';
+import GoogleLogin from '../../GoogleLogin';
+import { useAppDispatch } from '../../../../../app/hooks';
 
 function RegisterPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { inviteCode } = useParams();
-  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-  const registerMutation = useMutation(registerService, {
-    onSuccess: async (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
+  const { mutate: onRegister, data } = useRegisterService();
+
+  useEffect(() => {
+    if (data) {
+      const { user } = data.data;
+      const { default_workspace_id } = user;
+      const { accessToken, token } = data.data.token;
+      const { user_id } = token;
+
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('accessToken', JSON.stringify(accessToken));
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
+        JSON.stringify(default_workspace_id)
       );
-
       dispatch(
         setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
+          user,
+          accessToken,
+          currentWorkspaceId: default_workspace_id,
+          currentUserId: user_id,
         })
       );
 
@@ -54,72 +47,20 @@ function RegisterPage() {
         window.location.href = `/accept-invite/${workspaceInvite}`;
         localStorage.removeItem('teamMemberInviteCode');
       }
-    },
-  });
-
-  const loginGoogleMutation = useMutation(loginGoogleService, {
-    onSuccess: async (successData) => {
-      localStorage.setItem('user', JSON.stringify(successData.data.user));
-      localStorage.setItem(
-        'accessToken',
-        JSON.stringify(successData.data.token.accessToken)
-      );
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(successData.data.user.default_workspace_id)
-      );
-
-      dispatch(
-        setAuthData({
-          user: successData.data.user,
-          accessToken: successData.data.token.accessToken,
-          currentWorkspaceId: successData.data.user.default_workspace_id,
-          currentUserId: successData.data.token.token.user_id,
-        })
-      );
-    },
-  });
+    }
+  }, [data]);
 
   const onSubmit = (values: {
     name?: string;
     email: string;
     password: string;
   }) => {
-    registerMutation.mutate({
+    onRegister({
       name: values.name || '',
       email: values.email,
       password: values.password,
-      // inviteCode
+      inviteCode,
     });
-  };
-
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        scope: 'email',
-      });
-    }
-
-    gapi.load('client:auth2', start);
-  }, []);
-
-  const handleGoogleLogin = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) => {
-    if (response.code) {
-      loginGoogleMutation.mutate({
-        code: response.code,
-        inviteCode,
-      });
-    } else {
-      // error handler
-    }
-  };
-  const handleGoogleFailure = (error: unknown) => {
-    // fail handler: todo delete console log
-    // eslint-disable-next-line no-console
-    console.log(error);
   };
 
   const formikConfig: formikConfig = {
@@ -175,25 +116,7 @@ function RegisterPage() {
             checkboxConfig={checkboxConfig}
           />
 
-          {GOOGLE_CLIENT_ID ? (
-            <GoogleLogin
-              clientId={GOOGLE_CLIENT_ID}
-              onSuccess={handleGoogleLogin}
-              onFailure={handleGoogleFailure}
-              cookiePolicy="single_host_origin"
-              responseType="code"
-              redirectUri="postmessage"
-              render={(renderProps) => (
-                <button
-                  type="button"
-                  onClick={renderProps.onClick}
-                  className="text-center w-full text-sm mt-5 text-gray-500 hover:text-gray-600"
-                >
-                  Or sign up with Google
-                </button>
-              )}
-            />
-          ) : null}
+          <GoogleLogin title="Or sign up with Google" />
         </div>
         <Help />
       </div>

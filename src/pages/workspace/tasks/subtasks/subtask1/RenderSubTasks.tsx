@@ -1,14 +1,12 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { getTaskListService2 } from "../../../../../features/task/taskService";
-import SubTask from "../create/SubTask";
-import Template from "./Template";
-import RendersubTask2 from "../subtask2/RendersubTask2";
+import React from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import { getTaskListService2 } from '../../../../../features/task/taskService';
+import SubTask from '../create/SubTask';
+import Template from './Template';
+import RendersubTask2 from '../subtask2/RendersubTask2';
+import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 
 export default function RenderSubTasks() {
-  const navigate = useNavigate();
   const { getSubTaskId, currentParentTaskId, currentParentSubTaskId } =
     useAppSelector((state) => state.task);
 
@@ -16,16 +14,9 @@ export default function RenderSubTasks() {
     parentId: getSubTaskId,
   });
 
-  const [openTaskModal, setOpenTaskModal] = useState(false);
-
-  const handleTaskModal = (id: string) => {
-    setOpenTaskModal(true);
-    navigate(`/workspace/t/${id}`);
-  };
-
   return (
     <>
-      {data?.data.tasks.map((task) => (
+      {data?.data.tasks.map((task: any) => (
         <section key={task.id}>
           <Template task={task} />
           <div>
