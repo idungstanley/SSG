@@ -25,7 +25,7 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (name: string, value: string) => void;
+  // setFormState: (name: string, value: string) => void;
   formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
@@ -37,8 +37,7 @@ function TimeEntriesDropdown({
   setShowEntries,
   isBillable,
   setIsBillable,
-  setFormState,
-  formState,
+  // setFormState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
@@ -61,10 +60,10 @@ function TimeEntriesDropdown({
   });
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
+    // setFormState({
+    //   ...formState,
+    //   [e.target.name]: e.target.value,
+    // });
   };
 
   const handleUpdateEntry = (id: string | boolean) => {

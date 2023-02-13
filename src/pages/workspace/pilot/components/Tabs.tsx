@@ -35,6 +35,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
+import Dropdown from '../../../../components/Dropdown';
 
 const pilotOptions = [
   {
@@ -78,14 +79,15 @@ const pilotOptions = [
     subTab: <ChecklistSubtab />,
   },
 ];
+
+const dropdownOptions = [
+  { id: 1, label: 'Add HotKeys' },
+  { id: 2, label: 'Remove HotKeys' },
+];
 function Tab() {
   const dispatch = useDispatch();
-  const {
-    showPilot,
-    showPilotIconView,
-    activeItemName,
-    activeItemType,
-  } = useAppSelector((state) => state.workspace);
+  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
+    useAppSelector((state) => state.workspace);
 
   const handleShowPilot = () => {
     if (showPilot) {
@@ -101,13 +103,7 @@ function Tab() {
       dispatch(setShowPilotIconView(true));
     }
   };
-  // const handleShowPilotListView = () => {
-  //   if (showPilotListView) {
-  //     dispatch(setShowPilotListView(false));
-  //   } else {
-  //     dispatch(setShowPilotListView(true));
-  //   }
-  // };
+
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [items, setItems] = useState(
@@ -121,6 +117,10 @@ function Tab() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const handleHotKeys = () => {
+    console.log('dropdown');
+  };
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -193,7 +193,8 @@ function Tab() {
                   : 'transform -rotate-180 mb-1'
               }`}
             />
-            <BsThreeDots />
+            <Dropdown items={dropdownOptions} />
+            {/* <BsThreeDots onClick={handleHotKeys} /> */}
           </div>
         </section>
         <div

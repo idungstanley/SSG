@@ -34,9 +34,7 @@ export default function TabDrag({
     id,
   });
   const dispatch = useDispatch();
-  const { activeTabId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeTabId } = useAppSelector((state) => state.workspace);
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`

@@ -13,16 +13,12 @@ import moment from 'moment';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import { FiEdit2 } from 'react-icons/fi';
-import { UserAddOutlined } from '@ant-design/icons';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { MdDragIndicator } from 'react-icons/md';
 
 function TaskTableView() {
-  const {
-    myTaskData,
-    hideTask,
-    taskColumns,
-    showTaskNavigation,
-  } = useAppSelector((state) => state.task);
+  const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
+    useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
   const displayNav = (id: string) => {
@@ -53,18 +49,14 @@ function TaskTableView() {
       return (
         <>
           <div className="">
-            <div
-              className="cursor-pointer flex "
-            >
-              Assinee field
-            </div>
+            <div className="cursor-pointer flex ">Assinee field</div>
           </div>
         </>
       );
     } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <>
-          <UserAddOutlined
+          <UserPlusIcon
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
           />
