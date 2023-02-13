@@ -10,19 +10,19 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
-import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import { FiEdit2 } from 'react-icons/fi';
-import { PlusOutlined } from '@ant-design/icons';
-import { AvatarWithInitials } from '../../../../../components';
-import moment from 'moment';
-import { groupAssigneeProps } from '../subtask1/Template';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import TagModal from '../../../../../components/tags/TagModal';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
+import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
+import { FiEdit2 } from "react-icons/fi";
+import { PlusOutlined } from "@ant-design/icons";
+import { AvatarWithInitials } from "../../../../../components";
+import moment from "moment";
+import { groupAssigneeProps } from "../subtask1/Template";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import TagModal from "../../../../../components/tags/TagModal";
 import { UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface TemplateProps {

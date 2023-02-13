@@ -1,18 +1,22 @@
 import React, { useMemo } from "react";
+// import AddChecklist from "./subtabs/AddChecklist";
 import AddChecklist from "../subtabs/AddChecklist";
 // import DetailsIndex from "./properties/DetailsIndex";
+// import ChecklistIndex from "./subtabs/ChecklistIndex";
 import ChecklistIndex from "../subtabs/ChecklistIndex";
+// import { useAppSelector } from "../../../../../app/hooks";
 import { useAppSelector } from "../../../../../../app/hooks";
+// import ChecklistSubtab from "./subtabs/ChecklistSubtab";
 import ChecklistSubtab from "../subtabs/ChecklistSubtab";
 
 const DetailOptions = [
   {
     id: 1,
-    element: <ChecklistIndex />,
+    element: <AddChecklist />,
   },
   {
     id: 2,
-    element: <AddChecklist />,
+    element: <ChecklistIndex />,
   },
 ];
 export default function Checklists() {
