@@ -39,14 +39,14 @@ function RegisterPage() {
         })
       );
 
-      // const workspaceInvite = JSON.parse(
-      //   localStorage.getItem('teamMemberInviteCode') as string
-      // );
+      const workspaceInvite = JSON.parse(
+        localStorage.getItem('teamMemberInviteCode') as string
+      );
 
-      // if (workspaceInvite) {
-      //   window.location.href = `/accept-invite/${workspaceInvite}`;
-      //   localStorage.removeItem('teamMemberInviteCode');
-      // }
+      if (workspaceInvite) {
+        window.location.href = `/accept-invite/${workspaceInvite}`;
+        localStorage.removeItem('teamMemberInviteCode');
+      }
     }
   }, [data]);
 
