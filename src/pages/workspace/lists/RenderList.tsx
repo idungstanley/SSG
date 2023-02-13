@@ -5,7 +5,6 @@ import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setAddNewTaskItem } from '../../../features/task/taskSlice';
-import TaskTableView from '../tasks/component/views/TaskTableView';
 import TaskListViews from '../tasks/component/views/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
@@ -22,7 +21,6 @@ function RenderList() {
   const {
     myTaskData,
     listView,
-    tableView,
     boardView,
     addNewTaskItem,
     closeTaskListView,
@@ -54,13 +52,6 @@ function RenderList() {
             {/* card */}
 
             {/* task list logic */}
-
-            {tableView && (
-              <div>
-                <TaskTableView />
-              </div>
-            )}
-
             {boardView && <Board />}
             {listView && <TaskListViews />}
 

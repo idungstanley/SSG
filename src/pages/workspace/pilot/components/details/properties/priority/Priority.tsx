@@ -1,9 +1,14 @@
 import React from 'react';
 import PriorityDropdown from '../../../../../../../components/priority/PriorityDropdown';
-import Details from '../../../../../../../components/ItemPreviewSidebar/Components/Details';
 
 interface PriorityProps {
-  Details: any;
+  Details: {
+    id: string;
+    name: string;
+    description: string;
+    created_at: string;
+    priority: string;
+  };
 }
 
 export default function Priority({ Details }: PriorityProps) {

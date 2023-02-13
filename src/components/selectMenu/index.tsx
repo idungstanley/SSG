@@ -1,7 +1,14 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { classNames } from '../../utils';
-import { ISelectedData } from '../PermissionManagement';
+
+export interface ISelectedData {
+  id: string;
+  name: string;
+  email?: string;
+  accessLevel: string;
+  type: 'member' | 'member-group';
+}
 
 interface SelectMenuTeamMembersProps {
   teamMembers: ISelectedData[];

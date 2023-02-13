@@ -1,9 +1,4 @@
 import {
-  CalendarOutlined,
-  FlagOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
-import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
@@ -19,8 +14,9 @@ import {
   setCreateTaskFromTop,
   setCurrentListId,
 } from "../../../../../../../features/list/listSlice";
+import { dataProps } from "../../../../../../../components/Index/walletIndex/WalletIndex";
 
-export default function ListSection({ data }: any) {
+export default function ListSection({ data }: {data: dataProps}) {
   const { addNewTaskItem } = useAppSelector((state) => state.task);
   const { currentListId, createTaskFromTop } = useAppSelector(
     (state) => state.list

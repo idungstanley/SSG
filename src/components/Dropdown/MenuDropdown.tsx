@@ -81,11 +81,12 @@ export default function MenuDropdown() {
   const { delList, archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    const checkClickedOutSide = (e) => {
+    const checkClickedOutSide = (e: MouseEvent) => {
       if (
         showMenuDropdown != null &&
         ref.current &&
-        !ref.current.contains(e.target)
+        e.target &&
+        !ref.current.contains(e.target as Node)
       ) {
         if (
           showCreateSubWalletSlideOver === false &&

@@ -27,7 +27,7 @@ export const createHubService = (data: {
 };
 
 // get all hubs
-export const useGetHubList = ({ query }) => {
+export const useGetHubList = ({ query }: { query: number | null }) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
@@ -57,11 +57,10 @@ export const useGetHubList = ({ query }) => {
   );
 };
 
-export const useGetHubChildren = ({ query }) => {
-  // const queryClient = useQueryClient();
+export const useGetHubChildren = ({ query }: { query: string }) => {
   const hubId = query;
 
-  return useQuery<any>(['hubs', hubId], async () => {
+  return useQuery(['hubs', hubId], async () => {
     const data = await requestNew(
       {
         url: `at/hubs/${hubId}`,
@@ -74,7 +73,7 @@ export const useGetHubChildren = ({ query }) => {
 };
 
 //get subhub
-export const useGetSubHub = ({ parentId }) => {
+export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
   return useQuery<IResponseGetHubs>(
     ['hubs', { parentId: parentId }],
     () =>
@@ -114,7 +113,10 @@ export const useEditHubService = (data: {
 };
 
 //Delete a Hub
-export const UseDeleteHubService = (data) => {
+export const UseDeleteHubService = (data: {
+  query: string | null;
+  delHub: boolean;
+}) => {
   const dispatch = useDispatch();
   const hubid = data.query;
   const queryClient = useQueryClient();
@@ -143,7 +145,10 @@ export const UseDeleteHubService = (data) => {
 };
 
 //archive hub
-export const ArchiveHubService = (hub) => {
+export const ArchiveHubService = (hub: {
+  query: string | null;
+  archiveHub: boolean;
+}) => {
   const hubid = hub.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -172,7 +177,10 @@ export const ArchiveHubService = (hub) => {
 };
 
 //get hub details
-export const UseGetHubDetails = (query) => {
+export const UseGetHubDetails = (query: {
+  activeItemId: string;
+  activeItemType: string;
+}) => {
   return useQuery(
     ['hubs', query],
     async () => {

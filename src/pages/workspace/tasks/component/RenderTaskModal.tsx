@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { CheckIcon, PlayIcon, StopIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Timer from 'react-timer-wrapper';
 import moment from 'moment';
@@ -29,8 +29,6 @@ function RenderTaskModal() {
   const [showTimeEntries, setShowTimeEntries] = useState(false);
   const [showEntries, setShowEntries] = useState(false);
   const [isBillable, setIsBillable] = useState(false);
-
-  const queryClient = useQueryClient();
 
   const { data: taskData } = useQuery({
     queryKey: ['taskData', taskId],

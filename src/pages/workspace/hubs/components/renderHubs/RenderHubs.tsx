@@ -27,7 +27,7 @@ function RenderHubs() {
         {/* ListList */}
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
-            className="w-full  overflow-y-scroll"
+            className="w-full  scrollbarDynCol"
             style={{ minHeight: '0', maxHeight: '100vh' }}
           >
             <div className="w-full">

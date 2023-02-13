@@ -1,44 +1,38 @@
-import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
-import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
-import { Spinner } from '../../common';
-import CreateTag from './CreateTag';
-import { useAppSelector } from '../../app/hooks';
-import {
-  UseAssignTagToTask,
-  UseUnAssignTagFromTask,
-} from '../../features/task/taskService';
+import React, { Fragment, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
+import { UseGetAllTagsService } from "../../features/workspace/workspaceService";
+import { Spinner } from "../../common";
+import CreateTag from "./CreateTag";
+import { UseAssignTagToTask } from "../../features/task/taskService";
+import { dataProps } from "../Index/walletIndex/WalletIndex";
+import { useAppSelector } from "../../app/hooks";
 
 export default function TagModal() {
-  const [tagId, setTagId] = useState(null);
-  const { currentTaskIdForTag, unAssignTadId } = useAppSelector(
-    (state) => state.task
-  );
+  const [tagId, setTagId] = useState<string | null>(null);
+  const { currentTaskIdForTag } = useAppSelector((state) => state.task);
   //get all tags
   const { data, status } = UseGetAllTagsService();
 
   const tagList = data?.data.tags;
 
-  if (status == 'loading') {
-    <Spinner size={10} color={'blue'} />;
+  if (status == "loading") {
+    <Spinner size={10} color={"blue"} />;
   }
 
   const { data: assignTag } = UseAssignTagToTask({
     tagId,
     currentTaskIdForTag,
   });
+  console.log(assignTag);
 
-  const { data: unAssignTag } = UseUnAssignTagFromTask({
-    tagId: unAssignTadId,
-    currentTaskIdForTag,
-  });
-
-  return status == 'success' ? (
+  return status == "success" ? (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          <AiOutlineTags className="cursor-pointer" />
+          <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+            <AiOutlineTags className="w-3  text-gray-500" />
+          </span>
         </Menu.Button>
       </div>
 
@@ -57,9 +51,9 @@ export default function TagModal() {
             <CreateTag />
           </div>
           <div className="h-52 overflow-auto ">
-            {tagList.map((tags) => (
+            {tagList.map((tags: dataProps) => (
               <Menu.Item key={tags.id}>
-                {({ active }) => (
+                {() => (
                   <div className="flex items-center hover:bg-gray-300 text-gray-600">
                     <button
                       type="button"

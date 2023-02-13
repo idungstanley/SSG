@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { EllipsisOutlined } from "@ant-design/icons";
-import { Button } from "../../../../../components";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import React from 'react';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Button } from '../../../../../components';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   getBoardView,
   getListView,
-} from "../../../../../features/task/taskSlice";
-import { getTableView } from "../../../../../features/task/taskSlice";
-import TaskMenu from "../../../tasks/component/taskMenu/TaskMenu";
-import { Bars3Icon } from "@heroicons/react/24/outline";
-import { BsListStars } from "react-icons/bs";
-import { CiViewTable } from "react-icons/ci";
+} from '../../../../../features/task/taskSlice';
+import { getTableView } from '../../../../../features/task/taskSlice';
+import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
+import { Bars3Icon } from '@heroicons/react/24/outline';
+import { BsListStars } from 'react-icons/bs';
+import { CiViewTable } from 'react-icons/ci';
 
 interface ListNavProps {
   navName?: string | null;
@@ -31,18 +31,9 @@ function ListNav({
   Assigned,
   buttonLabel,
 }: ListNavProps) {
-  const [listView, setListView] = useState(true);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
-  const [TableView, setTableView] = useState(false);
-  const [boardView, setBoardView] = useState(false);
 
   const dispatch = useAppDispatch();
-
-  const toggleView = () => {
-    setListView((prev) => !prev);
-    setTableView((prev) => !prev);
-    setBoardView((prev) => !prev);
-  };
   const handleBoardView = () => {
     dispatch(getBoardView(true));
     dispatch(getTableView(false));
@@ -68,8 +59,9 @@ function ListNav({
           </span>
         )}
       </div>
-      <nav className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
-      style={{padding: "15px"}}
+      <nav
+        className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
+        style={{ padding: '15px' }}
       >
         <section className="flex items-center justify-start space-x-2 text-gray-500">
           <span className="space-x-2">
@@ -143,7 +135,7 @@ function ListNav({
             @mentions
           </span>
           <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
-            {" "}
+            {' '}
             <EllipsisOutlined />
           </span>
         </section>

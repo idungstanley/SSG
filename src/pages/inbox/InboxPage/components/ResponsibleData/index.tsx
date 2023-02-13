@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import SelectMenuTeamMembers from '../../../../../components/selectMenu';
+import SelectMenuTeamMembers, { ISelectedData } from '../../../../../components/selectMenu';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import { Spinner } from '../../../../../common';
 import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
@@ -10,7 +10,6 @@ import {
 } from '../../../../../features/inbox/inboxService';
 import ListItems from './ListItems';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
-import { ISelectedData } from '../../../../../components/PermissionManagement';
 
 interface ResponsibleDataProps {
   setShowModal: (i: boolean) => void;

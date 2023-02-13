@@ -15,7 +15,6 @@ import {
   DeleteTimeEntriesService,
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
-import UpdateTimeEntryDropdown from '../../timeclock/entryLists/UpdateTimeEntryDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
 
 interface TimeEntriesDropdownProps {
@@ -25,7 +24,7 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: any;
+  setFormState:any;
   formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
@@ -42,7 +41,7 @@ function TimeEntriesDropdown({
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState(false);
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
   const { activeItemType } = useAppSelector((state) => state.workspace);
   const [getTEId, setTEId] = useState('');
   const [triggerDel, setTriggerDel] = useState(false);
@@ -67,7 +66,7 @@ function TimeEntriesDropdown({
     });
   };
 
-  const handleUpdateEntry = (id) => {
+  const handleUpdateEntry = (id: string | boolean) => {
     setOpenUpdateEntry(!openUpdateEntry);
     if (openUpdateEntry === id) {
       setOpenUpdateEntry(false);
@@ -76,7 +75,7 @@ function TimeEntriesDropdown({
     }
   };
 
-  const handleDeleteEntry = (id) => {
+  const handleDeleteEntry = (id: string) => {
     setTEId(id);
     setTriggerDel(true);
   };
@@ -107,7 +106,15 @@ function TimeEntriesDropdown({
           {/* render time enteries */}
           {showEntries &&
             getEntries?.data?.time_entries?.map(
-              ({ id, duration, start_date }) => (
+              ({
+                id,
+                duration,
+                start_date,
+              }: {
+                id: string;
+                duration: number;
+                start_date: string;
+              }) => (
                 <section
                   key={id}
                   id="getTimeEntries"
