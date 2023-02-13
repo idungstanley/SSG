@@ -1,27 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../../../../app/hooks";
 
-const columns = [
-  {
-    id: 'open',
-    title: 'open',
-  },
-  {
-    id: 'todo',
-    title: 'To do',
-  },
-];
-
 function Board() {
-  // const state = {
-  //   columns: columns,
-  //   selectedTask: null,
-  // };
-  // const [state, setState] = useState({
-  //   columns: columns,
-  //   selectedTask: null,
-  // });
-
   const { myTaskData } = useAppSelector((state) => state.task);
 
   return (

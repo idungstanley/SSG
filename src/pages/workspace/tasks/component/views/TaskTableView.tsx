@@ -1,158 +1,30 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import MaterialTable from "material-table";
-import { ThemeProvider, createTheme } from "@mui/material";
-import { BiExport } from "react-icons/bi";
-import { BiHide } from "react-icons/bi";
-import { MdDragIndicator, MdOutlineCancelScheduleSend } from "react-icons/md";
-import { FcParallelTasks } from "react-icons/fc";
-import { AiOutlineFilter } from "react-icons/ai";
-import { FaSort } from "react-icons/fa";
-import "../taskData/task.css";
-import { AvatarWithInitials } from "../../../../../components";
-// import {
-//   ImyTaskData,
-//   setCurrentTaskId,
-//   setShowTaskNavigation,
-// } from '../../../../../features/task/taskSlice';
-import { groupAssigneeProps } from "../../subtasks/subtask1/Template";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import '../taskData/task.css';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import {
   setCurrentTaskId,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setToggleAssignCurrentTaskId,
-  triggerUnassignTag,
-} from "../../../../../features/task/taskSlice";
-import AssignTask from "../../assignTask/AssignTask";
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
-import ToolTip from "../../../../../components/Tooltip";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import { IoCloseSharp } from "react-icons/io5";
-import moment from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { FiEdit2 } from "react-icons/fi";
-import TagModal from "../../../../../components/tags/TagModal";
+} from '../../../../../features/task/taskSlice';
+import moment from 'moment';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { FiEdit2 } from 'react-icons/fi';
+import { UserAddOutlined } from '@ant-design/icons';
+import { MdDragIndicator } from 'react-icons/md';
 
 function TaskTableView() {
-  const defaultMaterialTheme = createTheme();
   const {
     myTaskData,
     hideTask,
     taskColumns,
-    toggleAssignCurrentTaskId,
     showTaskNavigation,
   } = useAppSelector((state) => state.task);
-  // const { showTaskNavigation } = useAppSelector((state) => state.task);
-
   const dispatch = useAppDispatch();
 
-  const editable = myTaskData.map((o) => ({ ...o }));
-
-  interface tableIcons {
-    Export: () => JSX.Element;
-    Search: () => null;
-    Filter: () => JSX.Element;
-    ViewColumn: () => JSX.Element;
-    Clear: () => JSX.Element;
-    SortArrow: () => JSX.Element;
-    DetailPanel: () => JSX.Element;
-    FirstPage: () => null;
-    LastPage: () => null;
-    NextPage: () => null;
-    PreviousPage: () => null;
-    ResetSearch: () => JSX.Element;
-  }
-
-  interface ListItem {
-    id?: string;
-    name?: string;
-    description?: string | null;
-    list_id?: string;
-    parent_id?: string | null;
-    priority?: string | null;
-    start_date?: string | null;
-    end_date?: string | null;
-    assignees?: string[];
-    group_assignees?: string[];
-    updated_at?: string;
-    created_at?: string;
-    archived_at?: string | null;
-    deleted_at?: string | null;
-    directory_items?: string[];
-
-    title?: string;
-    field?: string;
-    emptyValue?: () => JSX.Element;
-    hidden?: boolean | undefined;
-    render?: ((newData: groupAssigneeProps) => void) | null;
-  }
-
-  interface singleColumnProps {
-    title: string;
-    field: string;
-    emptyValue: () => JSX.Element;
-    hidden: boolean | undefined;
-    render: ((newData: groupAssigneeProps) => void) | null;
-  }
-  interface dataProps {
-    assignees: groupAssigneeProps[];
-  }
-
-  const groupAssignee = (data: groupAssigneeProps[]) => {
-    return data?.map((newData) => alert(newData));
-  };
-
-  const icons: tableIcons = {
-    Export: () => <BiExport />,
-    Search: () => null,
-    Filter: () => <AiOutlineFilter />,
-    ViewColumn: () => <BiHide />,
-    Clear: () => <AiOutlineFilter />,
-    SortArrow: () => <FaSort />,
-    DetailPanel: () => <FcParallelTasks />,
-    FirstPage: () => null,
-    LastPage: () => null,
-    NextPage: () => null,
-    PreviousPage: () => null,
-    ResetSearch: () => <MdOutlineCancelScheduleSend />,
-  };
-
-  const columnHead: string[][] = [];
-  const singleObj: any = editable[0];
-  singleObj && columnHead.push(Object.keys(singleObj));
-
-  const dynamicColum: ListItem[] = [];
-
-  // const displayNav = (id: string) => {
-  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
-  //   dispatch(setCurrentTaskId(id));
-  // };
-
-  columnHead[0]?.map((column) => {
-    const singleColumn = {
-      title:
-        column.split("_").join(" ").toUpperCase() == "NAME"
-          ? "TASKS"
-          : column.split("_").join(" ").toUpperCase(),
-      field: column,
-      emptyValue: () => <p>-</p>,
-      render:
-        column == "assignees" ? (newData) => renderData(column, newData) : null,
-    };
-    dynamicColum.push(singleColumn);
-  });
-
-  const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
@@ -162,7 +34,7 @@ function TaskTableView() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "task",
+        activeItemType: 'task',
         activeItemName: name,
       })
     );
@@ -177,12 +49,11 @@ function TaskTableView() {
   };
 
   const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <>
           <div className="">
             <div
-              //    onClick={() => handleAssigneeModal(taskColField.id)}
               className="cursor-pointer flex "
             >
               Assinee field
@@ -190,35 +61,34 @@ function TaskTableView() {
           </div>
         </>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <>
           <UserAddOutlined
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
-            //   onClick={() => handleAssigneeModal(taskColField.id)}
           />
         </>
       );
-    } else if (colfield == "created_at" || colfield == "updated_at") {
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField).format('MM/DD')}
         </span>
       );
-    } else if (colfield == "status") {
-      if (taskColField == "completed") {
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "in progress") {
+      } else if (taskColField == 'in progress') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
           <div className=" flex items-center">
@@ -262,7 +132,7 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "

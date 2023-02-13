@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  UseCreatelistItemService,
+  UseCreatelistItemService, UseUpdateChecklistItemService,
 } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
 import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
@@ -10,11 +10,22 @@ import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 
-function ChecklistItem({ Item, checklistId, refetch }: any) {
+interface item{
+  id: string;
+  name: string;
+  is_done: number;
+}
+interface checkListItemProps {
+Item: item[];
+checklistId: string;
+refetch: ()=> void;
+}
+
+function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
-  const [itemId, setItemId] = useState<any>("");
+  const [itemId, setItemId] = useState<string>("");
   const [done, setDone] = useState<number>(404);
   const [editItemName, setEditItemName] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>("");
@@ -36,7 +47,7 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
     setNewItem("");
   };
 
-  const { data: updateRes, status: updateStatus } =
+  const { status: updateStatus } =
     UseUpdateChecklistItemService({
       checklist_id: checklistId,
       name: editName,
