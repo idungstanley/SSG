@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
-  UseUpdateChecklistItemService,
 } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
 import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
@@ -11,14 +9,13 @@ import ChecklistModal from "./ChecklistModal";
 import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import State from "pusher-js/types/src/core/http/state";
 
 function ChecklistItem({ Item, checklistId, refetch }: any) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
   // const [editName, setEditName] = useState<string>("");
-  const [itemId, setItemId] = useState<any>("");
+  const [itemId, setItemId] = useState<string>("");
   const [done, setDone] = useState<number>(0);
 
   const { triggerItemUpdate } = useAppSelector((state) => state.checklist);
@@ -37,15 +34,14 @@ function ChecklistItem({ Item, checklistId, refetch }: any) {
     setNewItem("");
   };
 
-  const { data: updateRes, status: updateStatus } =
-    UseUpdateChecklistItemService({
-      checklist_id: checklistId,
-      // name: editName,
-      triggerItemUpdate: triggerItemUpdate,
-      itemId: itemId,
-      is_done: done,
-    });
-  console.log(updateStatus);
+  // const { data: updateRes, status: updateStatus } =
+  //   UseUpdateChecklistItemService({
+  //     checklist_id: checklistId,
+  //     // name: editName,
+  //     triggerItemUpdate: triggerItemUpdate,
+  //     itemId: itemId,
+  //     is_done: done,
+  //   });
 
   const isDone = (id, done) => {
     setItemId(id);

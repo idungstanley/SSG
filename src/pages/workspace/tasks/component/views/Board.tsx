@@ -1,71 +1,75 @@
-import React, { useState } from "react";
+import React from 'react';
 
 const columns = [
   {
-    id: "open",
-    title: "open",
+    id: 'open',
+    title: 'open',
   },
   {
-    id: "todo",
-    title: "To do",
+    id: 'todo',
+    title: 'To do',
   },
   {
-    id: "New",
-    title: "New",
+    id: 'New',
+    title: 'New',
   },
   {
-    id: "To Discuss",
-    title: "To Discuss",
+    id: 'To Discuss',
+    title: 'To Discuss',
   },
   {
-    id: "Deal with",
-    title: "Deal with",
+    id: 'Deal with',
+    title: 'Deal with',
   },
 ];
 
 const columnBody = [
   {
-    id: "open",
-    title: "task 1",
+    id: 'open',
+    title: 'task 1',
     description:
-      " a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.",
+      ' a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.',
   },
   {
-    id: "todo",
-    title: "task 2",
+    id: 'todo',
+    title: 'task 2',
     description:
-      " a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.",
+      ' a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.',
   },
   {
-    id: "New",
-    title: "task 3",
+    id: 'New',
+    title: 'task 3',
     description:
-      " a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.",
+      ' a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.',
   },
   {
-    id: "To Discuss",
-    title: "task 4",
+    id: 'To Discuss',
+    title: 'task 4',
     description:
-      " a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.",
+      ' a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.',
   },
   {
-    id: "Deal with",
-    title: "task 5",
+    id: 'Deal with',
+    title: 'task 5',
     description:
-      " a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.",
+      ' a usually assigned piece of work often to be finished within a certain time. : something hard or unpleasant that has to be done.',
   },
 ];
 
 function Board() {
-  const [state, setState] = useState({
+  const state = {
     columns: columns,
     selectedTask: null,
-  });
+  };
+  // const [state, setState] = useState({
+  //   columns: columns,
+  //   selectedTask: null,
+  // });
 
-  const [body, setBody] = useState({
-    columnBody: columnBody,
-    selectedTask: null,
-  });
+  // const [body, setBody] = useState({
+  //   columnBody: columnBody,
+  //   selectedTask: null,
+  // });
 
   return (
     <>

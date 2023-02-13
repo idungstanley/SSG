@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import AddTo from "../../attachments/AddTo";
 import AddChecklist from "../subtabs/AddChecklist";
 // import DetailsIndex from "./properties/DetailsIndex";
 import ChecklistIndex from "../subtabs/ChecklistIndex";

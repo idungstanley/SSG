@@ -4,7 +4,7 @@ import { getTaskListService2 } from '../../../../../features/task/taskService';
 import SubTask from '../create/SubTask';
 import Template from './Template';
 import RendersubTask2 from '../subtask2/RendersubTask2';
-import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
 
 export default function RenderSubTasks() {
   const { getSubTaskId, currentParentTaskId, currentParentSubTaskId } =
@@ -16,7 +16,7 @@ export default function RenderSubTasks() {
 
   return (
     <>
-      {data?.data.tasks.map((task: any) => (
+      {data?.data.tasks.map((task: ImyTaskData) => (
         <section key={task.id}>
           <Template task={task} />
           <div>

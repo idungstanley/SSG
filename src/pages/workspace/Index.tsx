@@ -19,7 +19,6 @@ function Index() {
       return { paddingLeft: `${54}px` };
     }
   };
-  console.log(sidebarWidth);
 
   return (
     <div className="flex flex-row">

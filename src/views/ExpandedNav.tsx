@@ -26,7 +26,6 @@ import Extendedbar from "../pages/explorer/components/Sidebar";
 import { BiCabinet } from "react-icons/bi";
 import { IoSearchCircleOutline } from "react-icons/io5";
 import ResizeBorder from "../components/ResizeBorder";
-import { any } from "prop-types";
 
 const secondaryNavigation = [
   {

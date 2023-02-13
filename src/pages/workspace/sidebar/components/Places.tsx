@@ -94,7 +94,7 @@ function Places() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { activePlaceId, showSidebar } = useAppSelector((state) => state.workspace);
+  const { activePlaceId } = useAppSelector((state) => state.workspace);
 
   const handleClick = (id: number, link?: string) => {
     dispatch(setActivePlaceId(id));

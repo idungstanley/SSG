@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import { CalendarOutlined } from '@ant-design/icons';
+import { CalendarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
@@ -98,7 +97,7 @@ function UpdateTimeEntryDropdown({
           id="startDate"
           className="flex items-center justify-start space-x-1 px-4 py-2"
         >
-          <CalendarOutlined className="text-gray-400" aria-hidden="true" />
+          <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
             name="start_date"
@@ -111,7 +110,7 @@ function UpdateTimeEntryDropdown({
           id="endDate"
           className="flex items-center justify-start space-x-1 px-4 py-2"
         >
-          <CalendarOutlined className="text-gray-400" aria-hidden="true" />
+          <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
             placeholder="HH:MM"

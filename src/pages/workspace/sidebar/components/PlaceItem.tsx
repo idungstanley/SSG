@@ -1,4 +1,3 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
