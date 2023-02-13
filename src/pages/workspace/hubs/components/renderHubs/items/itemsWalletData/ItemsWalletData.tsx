@@ -13,7 +13,7 @@ import { setAddNewTaskItem } from "../../../../../../../features/task/taskSlice"
 import { getWalletServices } from "../../../../../../../features/wallet/walletService";
 import AddNewItem from "../../../../../tasks/component/taskColumn/AddNewItem";
 import TaskListViews from "../../../../../tasks/component/views/TaskListViews";
-import ListTemplate from "../ItemsHubData/ListTemplate";
+import ListTemplate, { dataProps } from "../ItemsHubData/ListTemplate";
 
 interface ItemsWalletDataProps {
   walletId: string | null;
@@ -38,7 +38,7 @@ export default function ItemsWalletData({
 
       {/* lists */}
       <div>
-        {data?.data.lists?.map((item) => {
+        {data?.data.lists?.map((item: dataProps) => {
           return (
             <div key={item.id} className="border rounded">
               <p className="text-xs font-semibold text-gray-400 capitalize">

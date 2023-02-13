@@ -57,7 +57,7 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
   );
 };
 
-export const useGetHubChildren = ({ query }: { query: string }) => {
+export const useGetHubChildren = ({ query }: { query: string | null | undefined }) => {
   const hubId = query;
 
   return useQuery(['hubs', hubId], async () => {

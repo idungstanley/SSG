@@ -68,7 +68,7 @@ export default function DetailsSubTab() {
 
           localStorage.setItem(
             "subTab",
-            JSON.stringify([...sortArray.map((i) => i.id)])
+            JSON.stringify([...sortArray.map((i: {id: string}) => i.id)])
           );
 
           return sortArray;
