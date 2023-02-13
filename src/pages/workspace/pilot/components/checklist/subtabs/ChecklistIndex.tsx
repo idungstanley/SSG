@@ -27,7 +27,7 @@ export default function ChecklistIndex() {
   const [itemId, setItemId] = useState<string>("");
   const [checklistId, setChecklistId] = useState<string>("");
 
-  // Redux states
+  // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
   const { triggerChecklistUpdate } = useAppSelector((state) => state.checklist);
 
@@ -51,11 +51,15 @@ export default function ChecklistIndex() {
   const task_checklist = data?.data.task.checklists;
 
   // Update Checklist
-  UseUpdateChecklistService({
+  const { data: updateData, status: updateStatus } = UseUpdateChecklistService({
     checklist_id: checklistId,
     name: checklistName,
     triggerUpdate: triggerChecklistUpdate,
   });
+
+  if (updateStatus === "success") {
+    refetch();
+  }
 
   const editChecklist = (name: string) => {
     setChecklistName(name);
@@ -67,7 +71,6 @@ export default function ChecklistIndex() {
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
     setChecklistId(id);
-    refetch();
   };
 
   if (status == "loading") {

@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 
 export default function ChecklistModal({ options }: any) {
