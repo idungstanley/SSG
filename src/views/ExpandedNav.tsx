@@ -36,7 +36,7 @@ const secondaryNavigation = [
     source: emailIcon,
   },
   {
-    name: "hubs",
+    name: "task",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,

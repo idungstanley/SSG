@@ -32,7 +32,7 @@ const places = [
     source: emailIcon,
   },
   {
-    name: 'Hubs',
+    name: 'TASK',
     id: 2,
     place: <Hubs />,
     source: hubIcon,
@@ -122,7 +122,7 @@ function Places() {
     >
       {places.map((place) => (
         <div key={place.id}>
-          {showSidebar && place.id === activePlaceId ? (
+          {place.id === activePlaceId ? (
             place.place
           ) : (
             <PlaceItem

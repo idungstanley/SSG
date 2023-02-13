@@ -28,7 +28,6 @@ export default function PlaceItem({
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
-
     navigate('/workspace');
   };
 
@@ -36,10 +35,13 @@ export default function PlaceItem({
     <li
       className={classNames(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
-        'focus:flex flex-col w-full pl-4 py-5 items-center',
+        'focus:flex flex-col w-full pl-4 py-5 items-center relative',
         bottomContent ? 'gap-2' : ''
       )}
     >
+      {!showSidebar && isActivePlace && (
+        <span className="absolute top-0 left-0 right-0 bg-green-500 h-1"></span>
+      )}
       <div className="flex justify-between w-full">
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
@@ -61,7 +63,7 @@ export default function PlaceItem({
           </span>
         </div>
         <div className="flex gap-2 items-center">
-          {rightContent}
+          {showSidebar && rightContent}
 
           <span
             onClick={isActivePlace ? resetSelectedPlace : onClick}
@@ -75,7 +77,6 @@ export default function PlaceItem({
           </span>
         </div>
       </div>
-
       {bottomContent}
     </li>
   );
