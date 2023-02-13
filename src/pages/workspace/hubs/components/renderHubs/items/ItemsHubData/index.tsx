@@ -8,7 +8,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
-import ListTemplate from './ListTemplate';
+import ListTemplate, { dataProps } from './ListTemplate';
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
 import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
 import {
@@ -35,7 +35,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
     <section>
       {/* lists */}
       <div className="">
-        {data?.data.lists.map((item) => {
+        {data?.data.lists.map((item: dataProps) => {
           return (
             <div key={item.id} className="border p-5 rounded-xl relative">
               {/* <p className="text-xs font-semibold text-gray-400 capitalize">

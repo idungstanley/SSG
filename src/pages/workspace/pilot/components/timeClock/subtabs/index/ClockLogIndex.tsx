@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../../../../features/task/taskService';
-import EntryList from '../../../../../tasks/timeclock/entryLists/EntryList';
+import EntryList, { entriesProps } from '../../../../../tasks/timeclock/entryLists/EntryList';
 import NoEntriesFound from './NoEntriesFound';
 
 export default function ClockLogIndex() {
@@ -18,9 +18,11 @@ export default function ClockLogIndex() {
       if (getTaskEntries?.data.time_entries.length == 0) {
         return <NoEntriesFound />;
       } else {
-        return getTaskEntries?.data?.time_entries?.map((entries) => (
-          <EntryList entries={entries} key={entries.id} />
-        ));
+        return getTaskEntries?.data?.time_entries?.map(
+          (entries: entriesProps) => (
+            <EntryList entries={entries} key={entries.id} />
+          )
+        );
       }
     else {
       return <NoEntriesFound />;

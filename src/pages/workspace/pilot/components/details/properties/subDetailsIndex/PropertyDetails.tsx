@@ -30,7 +30,7 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]| [tagItem[]]) => {
     return arr?.map((item) => {
       return Array.isArray(item) ? (
         <span className="flex">{groupTags(item)}</span>
