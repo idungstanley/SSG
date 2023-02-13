@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  UseCreatelistItemService, UseUpdateChecklistItemService,
+  UseCreatelistItemService,
+  UseUpdateChecklistItemService,
 } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
 import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
@@ -10,15 +11,15 @@ import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 
-interface item{
+interface item {
   id: string;
   name: string;
   is_done: number;
 }
 interface checkListItemProps {
-Item: item[];
-checklistId: string;
-refetch: ()=> void;
+  Item: item[];
+  checklistId: string;
+  refetch: () => void;
 }
 
 function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
@@ -47,25 +48,23 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     setNewItem("");
   };
 
-  const { status: updateStatus } =
-    UseUpdateChecklistItemService({
-      checklist_id: checklistId,
-      name: editName,
-      triggerItemUpdate: triggerItemUpdate,
-      itemId: itemId,
-      done,
-    });
+  const { status: updateStatus } = UseUpdateChecklistItemService({
+    checklist_id: checklistId,
+    name: editName,
+    triggerItemUpdate: triggerItemUpdate,
+    itemId: itemId,
+    done,
+  });
 
-  // if (updateStatus === "success") {
-  //   refetch();
-  // }
+  if (updateStatus === "success") {
+    refetch();
+  }
 
   const isDone = (id: string, done: number, name) => {
     setItemId(id);
     setEditName(name);
     done === 0 ? setDone(1) : setDone(0);
     dispatch(setTriggerItemtUpdate(true));
-    refetch();
   };
 
   const handleEditItemName = (id: string, done: number) => {
@@ -74,7 +73,6 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));
     setEditItemName(false);
-    refetch();
   };
 
   return (
