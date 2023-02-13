@@ -1,28 +1,24 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import '../taskData/task.css';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import "../taskData/task.css";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
   setCurrentTaskId,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-} from '../../../../../features/task/taskSlice';
-import moment from 'moment';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { FiEdit2 } from 'react-icons/fi';
-import { UserAddOutlined } from '@ant-design/icons';
-import { MdDragIndicator } from 'react-icons/md';
+} from "../../../../../features/task/taskSlice";
+import moment from "moment";
+import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { FiEdit2 } from "react-icons/fi";
+import { UserAddOutlined } from "@ant-design/icons";
+import { MdDragIndicator } from "react-icons/md";
 
 function TaskTableView() {
-  const {
-    myTaskData,
-    hideTask,
-    taskColumns,
-    showTaskNavigation,
-  } = useAppSelector((state) => state.task);
+  const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
+    useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
   const displayNav = (id: string) => {
@@ -34,7 +30,7 @@ function TaskTableView() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'task',
+        activeItemType: "task",
         activeItemName: name,
       })
     );
@@ -49,19 +45,15 @@ function TaskTableView() {
   };
 
   const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
+    if (colfield === "assignees" && taskColField.length !== 0) {
       return (
         <>
           <div className="">
-            <div
-              className="cursor-pointer flex "
-            >
-              Assinee field
-            </div>
+            <div className="cursor-pointer flex ">Assinee field</div>
           </div>
         </>
       );
-    } else if (colfield === 'assignees' && taskColField.length === 0) {
+    } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <>
           <UserAddOutlined
@@ -70,25 +62,25 @@ function TaskTableView() {
           />
         </>
       );
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format('MM/DD')}
+          {moment(taskColField).format("MM/DD")}
         </span>
       );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'in progress') {
+      } else if (taskColField == "in progress") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'archived') {
+      } else if (taskColField == "archived") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'todo') {
+      } else if (taskColField == "todo") {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
           <div className=" flex items-center">
@@ -132,7 +124,7 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
