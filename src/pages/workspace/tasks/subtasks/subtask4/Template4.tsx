@@ -16,10 +16,7 @@ import { MdDragIndicator } from "react-icons/md";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import { FiEdit2 } from "react-icons/fi";
-import {
-  PlusOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
 import { AvatarWithInitials } from "../../../../../components";
 import moment from "moment";
 import { groupAssigneeProps } from "../subtask1/Template";
