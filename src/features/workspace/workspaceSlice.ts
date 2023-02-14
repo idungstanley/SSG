@@ -24,6 +24,8 @@ interface workspaceState {
   currentWalletName: string | null;
   showPilot: boolean;
   showPilotIconView: boolean;
+  showAddHotKeyDropdown: boolean;
+  showRemoveHotKeyDropdown: boolean;
   showPilotListView: boolean;
   activeTabId: number | null;
   activeSubCommunicationTabId: number | null;
@@ -62,17 +64,19 @@ const initialState: workspaceState = {
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
+  showAddHotKeyDropdown: false,
+  showRemoveHotKeyDropdown: false,
 };
 
 export const wsSlice = createSlice({
-  name: "workspace",
+  name: 'workspace',
   initialState,
   reducers: {
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
     setShowSidebar(state, action) {
-      if (action.payload === "CHANGE") {
+      if (action.payload === 'CHANGE') {
         return {
           ...state,
           showSidebar: !state.showSidebar,
@@ -103,7 +107,7 @@ export const wsSlice = createSlice({
       state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -111,7 +115,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === "TOGGLE") {
+      if (action.payload === 'TOGGLE') {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
@@ -120,6 +124,12 @@ export const wsSlice = createSlice({
     },
     setShowModal(state, action) {
       state.showModal = action.payload;
+    },
+    setShowAddHotKeyDropdown(state, action) {
+      state.showAddHotKeyDropdown = action.payload;
+    },
+    setShowRemoveHotKeyDropdown(state, action) {
+      state.showRemoveHotKeyDropdown = action.payload;
     },
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
@@ -206,6 +216,8 @@ export const {
   setShowPilotListView,
   setActiveTabId,
   setActiveSubChecklistTabId,
+  setShowAddHotKeyDropdown,
+  setShowRemoveHotKeyDropdown
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

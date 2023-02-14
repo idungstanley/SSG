@@ -20,16 +20,18 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 
-const ChecklistOptions = [
+export const ChecklistOptions = [
   {
     id: 1,
     name: 'Properties',
     source: propertiesIcon,
+    isVisible: false,
   },
   {
     id: 2,
     label: 'attachments',
     icon: <MdAddToPhotos />,
+    isVisible: false,
   },
 ];
 
@@ -72,6 +74,7 @@ export default function ChecklistSubtab() {
                 source: string;
                 label?: undefined;
                 icon?: undefined;
+                isVisible: boolean
               }
             | {
                 id: number;
@@ -79,6 +82,7 @@ export default function ChecklistSubtab() {
                 icon: JSX.Element;
                 name?: undefined;
                 source?: undefined;
+                isVisible: boolean;
               }
           )[] = arrayMove(items, oldIndex, newIndex);
 
