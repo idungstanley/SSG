@@ -10,6 +10,8 @@ import hubIcon from '../../../assets/branding/hub.png';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { CubeTransparentIcon } from '@heroicons/react/24/outline';
 import Dropdown from '../../../components/Dropdown/index';
+import SubHubModal from './components/SubHubModal';
+import Modal from './components/Modal';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -63,6 +65,9 @@ function Hubs() {
         </div>
       </div>
       <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
+
+      <Modal />
+      <SubHubModal />
     </>
   );
 }

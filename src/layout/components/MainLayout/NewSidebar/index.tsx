@@ -1,4 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setShowSidebar } from '../../../../features/account/accountSlice';
 import FullSidebar from './components/FullSidebar';
 import MinSidebar from './components/MinSidebar';
 import ResizeBorder from './components/ResizeBorder';
@@ -17,8 +19,9 @@ export default function NewSidebar({
   allowSelect,
   setAllowSelect,
 }: SidebarProps) {
+  const dispatch = useAppDispatch();
+  const { showSidebar } = useAppSelector((state) => state.account);
   const [sidebarWidth, setSidebarWidth] = useState(MIN_SIDEBAR_WIDTH);
-  const [showSmall, setShowSmall] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onMouseDown = useCallback(
@@ -39,12 +42,12 @@ export default function NewSidebar({
 
         // actual size is smaller than min
         if (width < MIN_SIDEBAR_WIDTH - RELATIVE_WIDTH) {
-          return setShowSmall(true);
+          return dispatch(setShowSidebar(false));
         }
 
         // sidebar hidden and becomes bigger
         if (width > startX) {
-          setShowSmall(false);
+          dispatch(setShowSidebar(true));
           setSidebarWidth(MIN_SIDEBAR_WIDTH);
         }
 
@@ -87,10 +90,10 @@ export default function NewSidebar({
   return (
     <div ref={sidebarRef} className="flex gap-5 text-center relative">
       {/* show / hide sidebar icon */}
-      <Toggle showSmall={showSmall} setShowSmall={setShowSmall} />
+      <Toggle />
 
       {/* sidebar */}
-      {!showSmall ? (
+      {showSidebar ? (
         <div
           className="h-full relative flex flex-col border-r border-gray-500 px-2 gap-2"
           style={style}

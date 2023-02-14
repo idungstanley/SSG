@@ -11,7 +11,7 @@ export default function Header() {
   const { sidebarSettings } = useAppSelector((state) => state.hub);
 
   return (
-    <div className="flex py-2 items-center border-b border-gray-300 w-full flex-row gap-1">
+    <div className="flex py-2 pr-5 border-b items-center gap-1">
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
       <WorkSpaceSelection />
 

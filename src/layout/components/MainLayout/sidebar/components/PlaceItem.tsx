@@ -65,7 +65,6 @@ function PlaceItem({
 
           <span
             onClick={isActivePlace ? resetSelectedPlace : onClick}
-            // className={classNames('hidden')}
           >
             {isActivePlace ? (
               <FiChevronDown className="h-5 w-5 cursor-pointer text-gray-500" />

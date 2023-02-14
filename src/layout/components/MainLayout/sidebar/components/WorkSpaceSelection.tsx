@@ -13,31 +13,26 @@ function WorkSpaceSelection() {
   return (
     <>
       {showSidebar ? (
-        <div
-          className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
-          style={{ width: 'calc(100% - 120px)' }}
-        >
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-1 w-full">
-              <AvatarWithInitials
-                initials={workspaceName
-                  .split(' ')
-                  .slice(0, 2)
-                  .map((word) => word[0])
-                  .join('')
-                  .toUpperCase()}
-                height="h-5"
-                width="w-5"
-                backgroundColour="#34C6BE"
-                roundedStyle="rounded"
-                textColor="black"
-              />
-              <p className="truncate" style={{ fontSize: '8px' }}>
-                {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
-              </p>
-            </div>
-            <VscTriangleDown className="text-xs text-gray-400" />
+        <div className="flex flex-grow rounded justify-between items-center border border-gray-400 mt-1">
+          <div className="flex items-center space-x-1 w-full">
+            <AvatarWithInitials
+              initials={workspaceName
+                .split(' ')
+                .slice(0, 2)
+                .map((word) => word[0])
+                .join('')
+                .toUpperCase()}
+              height="h-5"
+              width="w-5"
+              backgroundColour="#34C6BE"
+              roundedStyle="rounded"
+              textColor="black"
+            />
+            <p className="truncate" style={{ fontSize: '8px' }}>
+              {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
+            </p>
           </div>
+          <VscTriangleDown className="text-xs text-gray-400" />
         </div>
       ) : (
         <p
