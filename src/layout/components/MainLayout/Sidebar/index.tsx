@@ -26,8 +26,6 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   );
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  console.log({ showSidebar, sidebarWidth, sidebarFromLS });
-
   const onMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const startX = e.clientX;
@@ -70,12 +68,19 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseEnd);
         if (sidebarRef.current) {
-          const sidebarWidth = sidebarRef.current.clientWidth;
+          const width = sidebarRef.current.clientWidth;
+          const sidebarWidth =
+            width >= MAX_SIDEBAR_WIDTH
+              ? MAX_SIDEBAR_WIDTH
+              : width <= MIN_SIDEBAR_WIDTH
+              ? MIN_SIDEBAR_WIDTH
+              : width;
+
           localStorage.setItem(
             'sidebar',
             JSON.stringify({
               sidebarWidth,
-              showSidebar: sidebarWidth >= MIN_SIDEBAR_WIDTH,
+              showSidebar: width >= MIN_SIDEBAR_WIDTH,
             })
           );
         }
