@@ -1,20 +1,21 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import '../taskData/task.css';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import React, { ReactNode } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import "../taskData/task.css";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
   setCurrentTaskId,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-} from '../../../../../features/task/taskSlice';
-import moment from 'moment';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { FiEdit2 } from 'react-icons/fi';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
-import { MdDragIndicator } from 'react-icons/md';
+} from "../../../../../features/task/taskSlice";
+import moment, { MomentInput } from "moment";
+import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { FiEdit2 } from "react-icons/fi";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { MdDragIndicator } from "react-icons/md";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
@@ -30,7 +31,7 @@ function TaskTableView() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'task',
+        activeItemType: "task",
         activeItemName: name,
       })
     );
@@ -44,91 +45,70 @@ function TaskTableView() {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
-      return (
-        <>
-          <div className="">
-            <div className="cursor-pointer flex ">Assinee field</div>
-          </div>
-        </>
-      );
-    } else if (colfield === 'assignees' && taskColField.length === 0) {
-      return (
-        <>
-          <UserPlusIcon
-            className=" ml-2 text-gray-400 text-xl cursor-pointer "
-            aria-hidden="true"
-          />
-        </>
-      );
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+  const renderData = (
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (colfield === "assignees") {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length !== 0 ? (
+        <div className="relative">
+          <div>Assignees Name</div>
+        </div>
+      ) : null;
+    } else if (colfield === "assignees") {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length === 0 ? <p>-</p> : null;
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format('MM/DD')}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'in progress') {
+      } else if (taskColField == "in progress") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'archived') {
+      } else if (taskColField == "archived") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'todo') {
+      } else if (taskColField == "todo") {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
-          <div className=" flex items-center">
-            <input
-              type="checkbox"
-              id="checked-checkbox"
-              className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
-              onClick={() => {
-                displayNav(taskColField.id);
-              }}
-            />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
-          </div>
-
           <div className="flex items-center">
-            <p
-              onClick={() => handleTaskStatus(taskColField.id)}
-              className="relative pt-1 pr-1"
-            >
-              <StatusDropdown TaskCurrentStatus={taskColField?.status} />
-            </p>
-            <p
-              onClick={() =>
-                handleTaskPilot(taskColField.id, taskColField.name)
-              }
-              className="cursor-pointer "
-            >
-              {taskColField}
-            </p>
-            <div
-              id="iconWrapper"
-              className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-            >
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
-              </span>
-              {/* tag here */}
-            </div>
+            <p>{taskColField as ReactNode}</p>
+
             {/* tags goes here */}
             {/* <div> {groupTags(task.tags)}</div>; */}
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(taskColField.id)}
+          onClick={() => handleTaskPriority(taskColField?.id as string)}
         >
           <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
         </span>
@@ -183,7 +163,7 @@ function TaskTableView() {
                                 className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
                                 key={col.field}
                               >
-                                {renderData(task[col.field], col.field)}
+                                {renderData(task[col.field], col.field) as ReactNode}
                               </td>
                             )
                         )}

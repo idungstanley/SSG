@@ -154,7 +154,9 @@ export default function Template3({ task }: TemplateProps) {
           {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
-    } else if (colfield == "status") {
+    } 
+    
+    else if (colfield == "status") {
       if (taskColField == "completed") {
         return (
           <div
