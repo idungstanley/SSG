@@ -132,14 +132,17 @@ export default function Template({ task }: TemplateProps) {
       | Array<{ id: string; initials: string; colour: string }>,
     colfield: string
   ) => {
-    if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length !== 0 ? (
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
+      return (
         <div className="relative">
           <div
             onClick={() => handleAssigneeModal(task.id)}
@@ -148,21 +151,24 @@ export default function Template({ task }: TemplateProps) {
             {groupAssignee(task.assignees)}
           </div>
         </div>
-      ) : null;
-    } else if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length === 0 ? (
+      );
+    } else if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
+      return (
         <UserPlusIcon
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
-      ) : null;
+      );
     } else if (colfield === "tags") {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {

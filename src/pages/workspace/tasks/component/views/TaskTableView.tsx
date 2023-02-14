@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
+  ImyTaskData,
   setCurrentTaskId,
   setCurrentTaskPriorityId,
   setShowTaskNavigation,
@@ -27,6 +28,7 @@ function TaskTableView() {
   const renderData = (
     taskColField:
       | string
+      | ImyTaskData
       | number
       | undefined
       | tagItem[]
@@ -87,9 +89,11 @@ function TaskTableView() {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(taskColField?['id'])}
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
         >
-          <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
+          <PriorityDropdown
+            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
+          />
         </span>
       );
     } else return taskColField;

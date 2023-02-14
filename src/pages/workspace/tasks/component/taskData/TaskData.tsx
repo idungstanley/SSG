@@ -177,14 +177,17 @@ export default function TaskData({ task }: TaskDataProps) {
       | Array<{ id: string; initials: string; colour: string }>,
     colfield: string
   ) => {
-    if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length !== 0 ? (
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
+      return (
         <>
           <div className="">
             <div
@@ -202,21 +205,27 @@ export default function TaskData({ task }: TaskDataProps) {
             {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
           </span>
         </>
-      ) : null;
-    } else if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-      return TCF.length === 0 ? (
+      );
+    } else if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
+      return (
         <UserPlusIcon
           className="ml-2 text-gray-400 text-xl cursor-pointer"
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id as string)}
         />
-      ) : null;
-    } else if (colfield === "tags") {
+      );
+    } 
+    
+    else if (colfield === "tags") {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
