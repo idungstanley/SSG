@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../../../components';
 import { setShowSidebarSettings } from '../../../../../../../features/hubs/hubSlice';
 import ArchiveMenu from '../../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
-import WorkSpaceSelection from '../../../../sidebar/components/WorkSpaceSelection';
+import WorkSpaceSelection from '../../WorkSpaceSelection';
 import MainLogo from '../../../../../../../assets/branding/main-logo.png';
 import { classNames } from '../../../../../../../utils';
 

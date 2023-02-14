@@ -22,7 +22,7 @@ import {
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
-import PlaceItem from '../../../../layout/components/MainLayout/sidebar/components/PlaceItem';
+import PlaceItem from '../../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import cabinetIcon from '../../../../assets/icons/cabinet.svg';
 
 const stringifyFolders = (

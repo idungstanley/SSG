@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Nav from '../../../../pages/workspace/nav/Nav';
+import Nav from '../../../../../pages/workspace/nav/Nav';
 
 interface configData {
   path: string;
@@ -81,6 +81,7 @@ const config: configData[] = [
 export default function Header() {
   const { pathname } = useLocation();
   const headerData = config.find((i) => `${i.path}` === pathname);
+
   return (
     <div className="top-0 flex bg-white shadow">
       {headerData ? (

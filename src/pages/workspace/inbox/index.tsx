@@ -3,7 +3,7 @@ import React from 'react';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useGetActiveInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
-import PlaceItem from '../../../layout/components/MainLayout/sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 
 function Inbox() {
   const { data: dt, status } = useGetActiveInboxes();

@@ -1,7 +1,7 @@
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PlaceItem from '../../../layout/components/MainLayout/sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 
 function Files() {
   return (

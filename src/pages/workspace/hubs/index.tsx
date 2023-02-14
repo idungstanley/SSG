@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
-import PlaceItem from '../../../layout/components/MainLayout/sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import hubIcon from '../../../assets/branding/hub.png';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { CubeTransparentIcon } from '@heroicons/react/24/outline';

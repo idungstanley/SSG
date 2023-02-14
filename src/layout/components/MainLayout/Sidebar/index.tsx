@@ -15,7 +15,7 @@ interface SidebarProps {
   setAllowSelect: (i: boolean) => void;
 }
 
-export default function NewSidebar({
+export default function Sidebar({
   allowSelect,
   setAllowSelect,
 }: SidebarProps) {
