@@ -11,10 +11,6 @@ import {
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { FiEdit2 } from "react-icons/fi";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { MdDragIndicator } from "react-icons/md";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {

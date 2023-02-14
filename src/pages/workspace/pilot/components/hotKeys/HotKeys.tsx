@@ -25,16 +25,17 @@ export default function HotKeys() {
   localStorage.setItem('HotKeys', JSON.stringify(newHotKey));
   const getHotKeys = JSON.parse(localStorage.getItem('HotKeys'));
   console.log(getHotKeys);
-  const AddHotkeys = newHotKey.filter((keys) => keys.isVisible === false);
-  const RemoveHotkeys = newHotKey.filter((keys) => keys.isVisible === true);
+  const addHotkeys = newHotKey.filter((keys) => keys.isVisible === false);
+  const removeHotkeys = newHotKey.filter((keys) => keys.isVisible === true);
   return (
     <div>
-      <div></div>
+      {removeHotkeys.length != 0 ? <div></div> : null}
+
       {showAddHotKeyDropdown && (
-        <CustomDropdown listItems={AddHotkeys} title="Add HotKeys" />
+        <CustomDropdown listItems={addHotkeys} title="Add HotKeys" />
       )}
       {showRemoveHotKeyDropdown && (
-        <CustomDropdown listItems={RemoveHotkeys} title="Add HotKeys" />
+        <CustomDropdown listItems={removeHotkeys} title="Add HotKeys" />
       )}
     </div>
   );

@@ -178,7 +178,6 @@ function Tab() {
       collisionDetection={closestCenter}
       onDragEnd={(e) => handleDragEnd(e)}
     >
-      <HotKeys />
       <div
         className={`gap-4 pb-1`}
         aria-label="Tabs"
@@ -222,6 +221,7 @@ function Tab() {
             />
             <Dropdown items={dropdownOptions} />
           </div>
+          <HotKeys />
         </section>
         <div
           className={`flex flex-wrap relative divide-y divide-x ${
