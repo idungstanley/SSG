@@ -1,5 +1,5 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import { useDispatch } from "react-redux";
 import {
   ImyTaskData,
   setCurrentTaskId,
@@ -8,17 +8,17 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
-import { AvatarWithInitials } from '../../../../../components';
-import '../create/subtask.css';
-import moment from 'moment';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
-import TagModal from '../../../../../components/tags/TagModal';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { AvatarWithInitials } from "../../../../../components";
+import "../create/subtask.css";
+import moment from "moment";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import TagModal from "../../../../../components/tags/TagModal";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -118,7 +118,7 @@ export default function Template({ task }: TemplateProps) {
         </div>
       );
     } else if (
-      colfield === 'assignees' &&
+      colfield === "assignees" &&
       (taskColField as Array<Iassignee>)?.length === 0
     ) {
       return (
@@ -133,7 +133,7 @@ export default function Template({ task }: TemplateProps) {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as string).format('MM/DD')}
+          {moment(taskColField as string).format("MM/DD")}
         </span>
       );
     } else if (colfield == "status") {
@@ -220,7 +220,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -239,7 +239,7 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -251,7 +251,7 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -266,7 +266,7 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -279,7 +279,7 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
