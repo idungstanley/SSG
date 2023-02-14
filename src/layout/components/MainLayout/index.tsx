@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
 import UploadModal from '../../../components/UploadModal';
-// import Sidebar from './sidebar/Sidebar';
+import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
 import NewSidebar from './NewSidebar';
 import { classNames } from '../../../utils';
@@ -28,6 +28,7 @@ function MainLayout() {
             allowSelect={allowSelect}
             setAllowSelect={setAllowSelect}
           />
+          {/* <Sidebar /> */}
 
           <div className="flex flex-col flex-1 grow">
             <Header />

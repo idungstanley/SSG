@@ -1,50 +1,15 @@
+import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+} from '@heroicons/react/24/solid';
 import React, { useCallback, useRef, useState } from 'react';
+import FullSidebar from './components/FullSidebar';
+import MinSidebar from './components/MinSidebar';
+import ResizeBorder from './components/ResizeBorder';
 
-const MIN_SIDEBAR_WIDTH = 200;
+const MIN_SIDEBAR_WIDTH = 230;
 const MAX_SIDEBAR_WIDTH = 400;
 const RELATIVE_WIDTH = 10;
-
-function FullSidebar() {
-  return (
-    <>
-      Sidebar
-      <button className="py-1 px-3 border truncate">
-        icon 1 text 1 csdcsd csdcsdcsd csdcsdcsd
-      </button>
-      <button className="p-1 border">icon 2 text 2</button>
-      <button className="p-1 border">icon 3 text 3</button>
-      <button className="p-1 border">icon 4 text 4</button>
-      <input className="border" placeholder="input" type="text" />
-    </>
-  );
-}
-
-function MinSidebar() {
-  return (
-    <>
-      Sidebar
-      <button className="p-1 border">icon 1</button>
-      <button className="p-1 border">icon 2</button>
-      <button className="p-1 border">icon 3</button>
-    </>
-  );
-}
-
-interface ResizeBorderProps {
-  onMouseDown: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}
-
-function ResizeBorder({ onMouseDown }: ResizeBorderProps) {
-  return (
-    <div
-      style={{ cursor: 'col-resize' }}
-      onMouseDown={(e) => onMouseDown(e)}
-      className="absolute top-0 w-5 h-full -right-2.5 group flex justify-center"
-    >
-      <div className="group-hover:opacity-100 opacity-0 h-full w-1 bg-indigo-500 transition duration-500" />
-    </div>
-  );
-}
 
 interface SidebarProps {
   allowSelect: boolean;
@@ -70,37 +35,40 @@ export default function NewSidebar({
 
         const width = sidebarWidth + e.clientX - startX;
 
+        // actual size is bigger than bax
+        if (width > MAX_SIDEBAR_WIDTH) {
+          return;
+        }
+
+        // actual size is smaller than min
         if (width < MIN_SIDEBAR_WIDTH - RELATIVE_WIDTH) {
-          setShowSmall(true);
+          return setShowSmall(true);
         }
 
-        if (showSmall && width > MIN_SIDEBAR_WIDTH + RELATIVE_WIDTH) {
-          setShowSmall(false);
-        }
-
+        // sidebar hidden and becomes bigger
         if (width > startX) {
           setShowSmall(false);
           setSidebarWidth(MIN_SIDEBAR_WIDTH);
         }
 
-        setSidebarWidth(
+        const correctWidth =
           width >= MAX_SIDEBAR_WIDTH
             ? MAX_SIDEBAR_WIDTH
             : width <= MIN_SIDEBAR_WIDTH
             ? MIN_SIDEBAR_WIDTH
-            : width
-        );
+            : width;
+
+        setSidebarWidth(correctWidth);
       };
 
       const onMouseEnd = () => {
         setAllowSelect(true);
 
         document.removeEventListener('mousemove', onMouseMove);
-        if (sidebarRef.current) {
-          console.log('sidebar:', sidebarRef.current.clientWidth);
-        }
-
         document.removeEventListener('mouseup', onMouseEnd);
+        if (sidebarRef.current) {
+          // console.log('sidebar:', sidebarRef.current.clientWidth);
+        }
       };
 
       document.addEventListener('mousemove', onMouseMove);
@@ -111,20 +79,28 @@ export default function NewSidebar({
 
   const closeOrShowSidebar = () => {
     setShowSmall((prev) => !prev);
-    setSidebarWidth(MIN_SIDEBAR_WIDTH);
+    // if (showSmall) {
+    //   setSidebarWidth(MIN_SIDEBAR_WIDTH);
+    // }
   };
 
   return (
     <div ref={sidebarRef} className="flex gap-5 text-center relative">
+      {/* show / hide sidebar */}
       <div
         onClick={closeOrShowSidebar}
-        className="absolute z-10 bg-indigo-200 top-1 right-1 p-1 cursor-pointer text-sm"
+        className="absolute z-20 text-gray-800 top-1 right-1 cursor-pointer"
       >
-        {showSmall ? 'show' : 'hide'}
+        {showSmall ? (
+          <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
+        ) : (
+          <ChevronDoubleLeftIcon className="w-4 h-4" aria-hidden="true" />
+        )}
       </div>
+
       {!showSmall ? (
         <div
-          className="relative flex flex-col border border-indigo-500 p-2 gap-2"
+          className="relative flex flex-col border-r border-indigo-500 p-2 gap-2"
           style={{
             width: sidebarWidth,
             minWidth: MIN_SIDEBAR_WIDTH + 'px',
