@@ -8,11 +8,7 @@ import {
 } from "./checklistSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const UseCreateClistService = ({
-  task_id,
-}: {
-  task_id: string | null;
-}) => {
+export const UseCreateClistService = ({ task_id }: { task_id: string | null}) => {
   const url = `/checklists`;
   const response = requestNew(
     {
@@ -29,8 +25,8 @@ export const UseCreateClistService = ({
   return response;
 };
 
-export const UseGetAllClistService = ({ task_id }: { task_id: string }) => {
-  return useQuery(["checklist", { task_id }], async () => {
+export const UseGetAllClistService = ({ task_id }: { task_id: string | null}) => {
+  return useQuery(["clist", { task_id }], async () => {
     const data = await requestNew(
       {
         url: `at/tasks/${task_id}`,

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
   UseDeleteChecklistItemService,
@@ -18,13 +15,13 @@ import {
   setTriggerItemtUpdate,
 } from "../../../../../../features/task/checklist/checklistSlice";
 
-interface item {
+export interface itemProps {
   id: string;
   name: string;
   is_done: number;
 }
-interface checkListItemProps {
-  Item: item[];
+export interface checkListItemProps {
+  Item: itemProps[];
   checklistId: string;
   refetch: () => void;
 }
@@ -72,7 +69,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     refetch();
   }
 
-  const isDone = (id: string, done: number, name) => {
+  const isDone = (id: string, done: number, name: string) => {
     setItemId(id);
     setEditName(name);
     done === 0 ? setDone(1) : setDone(0);

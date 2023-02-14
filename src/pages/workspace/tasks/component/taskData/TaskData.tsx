@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   ImyTaskData,
   setCurrentParentTaskId,
@@ -25,13 +25,14 @@ import { IoCloseSharp } from 'react-icons/io5';
 import ToolTip from '../../../../../components/Tooltip';
 import EditTagModal from '../../../../../components/tags/EditTagModal';
 import ColorsModal from '../../../../../components/tags/ColorsModal';
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import TagModal from '../../../../../components/tags/TagModal';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -98,7 +99,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <div key={newData.id} className="">
@@ -114,8 +115,16 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
-  const groupTags = (arr) => {
-    return arr.map((item) => {
+  const groupTags = (
+    arr:
+      | tagItem[]
+      | []
+      | string
+      | [{ id: string; initials: string; colour: string }]
+      | null
+      | undefined
+  ) => {
+    return arr?.map((item: tagItem) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
@@ -166,8 +175,16 @@ export default function TaskData({ task }: TaskDataProps) {
     });
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | [{ id: string; initials: string; colour: string }]
+      | null
+      | undefined
+      | ReactNode,
+    colfield: string
+  ) => {
+    if (colfield === 'assignees' && taskColField?.length !== 0) {
       return (
         <>
           <div className="">
@@ -183,7 +200,7 @@ export default function TaskData({ task }: TaskDataProps) {
           </span>
         </>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField?.length === 0) {
       return (
         <UserPlusIcon
           className="ml-2 text-gray-400 text-xl cursor-pointer"
@@ -196,7 +213,7 @@ export default function TaskData({ task }: TaskDataProps) {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
     } else if (colfield == "status") {
@@ -296,7 +313,7 @@ export default function TaskData({ task }: TaskDataProps) {
               onClick={() => handleTaskPilot(task.id, task.name)}
               className="cursor-pointer "
             >
-              {taskColField}
+              {taskColField as ReactNode}
             </p>
             <div
               id="iconWrapper"
@@ -347,7 +364,10 @@ export default function TaskData({ task }: TaskDataProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(
+                          task[col.field as keyof ImyTaskData],
+                          col.field
+                        )}
                       </div>
                     )
                 )
@@ -359,7 +379,10 @@ export default function TaskData({ task }: TaskDataProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(
+                          task[col.field as keyof ImyTaskData],
+                          col.field
+                        )}
                       </div>
                     )
                 )}

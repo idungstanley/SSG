@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import communicationIcon from "../../../../assets/branding/communication.png";
-import logsIcon from "../../../../assets/branding/logs.png";
-import detailIcon from "../../../../assets/branding/detail.png";
-import automationIcon from "../../../../assets/branding/automation.png";
-import timeclockIcon from "../../../../assets/branding/timeclock.png";
-import compactArrowIcon from "../../../../assets/branding/compact-arrow.png";
-import permissionIcon from "../../../../assets/branding/permission.png";
-import checklistIcon from "../../../../assets/branding/checklist-icon.svg";
-import listIcon from "../../../../assets/branding/icon-and-list-arrow.png";
-import { BsThreeDots } from "react-icons/bs";
-import { useAppSelector } from "../../../../app/hooks";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import communicationIcon from '../../../../assets/branding/communication.png';
+import logsIcon from '../../../../assets/branding/logs.png';
+import detailIcon from '../../../../assets/branding/detail.png';
+import automationIcon from '../../../../assets/branding/automation.png';
+import timeclockIcon from '../../../../assets/branding/timeclock.png';
+import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
+import permissionIcon from '../../../../assets/branding/permission.png';
+import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
+import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
+import { useAppSelector } from '../../../../app/hooks';
+import { useDispatch } from 'react-redux';
 import {
   setShowPilot,
   setShowPilotIconView,
@@ -118,10 +117,6 @@ function Tab() {
     })
   );
 
-  const handleHotKeys = () => {
-    console.log("dropdown");
-  };
-
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
 
@@ -137,8 +132,8 @@ function Tab() {
           const sortArray = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            "pilotSections",
-            JSON.stringify([...sortArray.map((i) => i.id)])
+            'pilotSections',
+            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
           );
           return sortArray;
         });
@@ -194,7 +189,6 @@ function Tab() {
               }`}
             />
             <Dropdown items={dropdownOptions} />
-            {/* <BsThreeDots onClick={handleHotKeys} /> */}
           </div>
         </section>
         <div

@@ -76,9 +76,9 @@ export default function MenuDropdown() {
     showEditHubSlideOver,
     showEditListSlideOver,
     showEditWalletSlideOver,
-  } = useAppSelector((state) => state.slideOver);
-  const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
-  const { delList, archiveList } = useAppSelector((state) => state.list);
+  } = useAppSelector(state => state.slideOver);
+  const { delWallet, archiveWallet } = useAppSelector(state => state.wallet);
+  const { delList, archiveList } = useAppSelector(state => state.list);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {

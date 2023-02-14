@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 interface SubTaskProps {
-  parentTaskId?: string | null;
+  parentTaskId?: string | null ;
 }
 
 function SubTask({ parentTaskId }: SubTaskProps) {

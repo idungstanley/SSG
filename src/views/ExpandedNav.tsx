@@ -91,7 +91,7 @@ function ExpandedNav() {
     setIsResizing(false);
   }, []);
   const resize = React.useCallback(
-    (mouseMoveEvent) => {
+    (mouseMoveEvent: MouseEvent) => {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {

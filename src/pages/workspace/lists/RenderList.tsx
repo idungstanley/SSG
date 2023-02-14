@@ -30,7 +30,7 @@ function RenderList() {
     getSubTaskId,
   } = useAppSelector((state) => state.task);
 
-  const { data: listDetailsData } = getTaskListService({ listId });
+  const { data: listDetailsData } = getTaskListService({ listId } );
 
   return (
     <div className=" overflow-x-auto  relative">

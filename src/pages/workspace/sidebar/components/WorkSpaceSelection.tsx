@@ -22,7 +22,7 @@ const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
                 initials={workspaceName
                   .split(' ')
                   .slice(0, 2)
-                  .map((word) => word[0])
+                  .map((word: string[]) => word[0])
                   .join('')
                   .toUpperCase()}
                 height="h-5"
