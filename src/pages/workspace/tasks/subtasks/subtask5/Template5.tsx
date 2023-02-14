@@ -19,7 +19,6 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import { UserPlusIcon } from '@heroicons/react/24/outline';
 import TagModal from '../../../../../components/tags/TagModal';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -86,7 +85,7 @@ export default function Template({ task }: TemplateProps) {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
+  const groupTags = (arr) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -107,11 +106,7 @@ export default function Template({ task }: TemplateProps) {
   // };
 
   const renderData = (
-    taskColField:
-      | string
-      | []
-      | null
-      | [{ id: string; initials: string; colour: string }] | string[],
+    taskColField,
     colfield: string
   ) => {
     if (colfield === 'assignees' && taskColField?.length !== 0) {
