@@ -37,6 +37,7 @@ import { tagItem } from '../../../pilot/components/details/properties/subDetails
 interface TaskDataProps {
   task: ImyTaskData;
 }
+
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const {

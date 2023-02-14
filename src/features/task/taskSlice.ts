@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { createSlice } from "@reduxjs/toolkit";
+import { listColumnProps } from "../../pages/workspace/tasks/component/views/ListColumns";
 
 export interface ImyTaskData {
   id: string;
