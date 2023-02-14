@@ -9,19 +9,19 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
-import { AvatarWithInitials } from '../../../../../components';
-import AssignTask from '../../assignTask/AssignTask';
-import '../create/subtask.css';
-import moment from 'moment';
-import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
-import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { AvatarWithInitials } from "../../../../../components";
+import AssignTask from "../../assignTask/AssignTask";
+import "../create/subtask.css";
+import moment from "moment";
+import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
+import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -32,6 +32,7 @@ export interface groupAssigneeProps {
   initials: string;
   colour: string;
 }
+[];
 
 export default function Template({ task }: TemplateProps) {
   const dispatch = useDispatch();
@@ -71,7 +72,17 @@ export default function Template({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data: groupAssigneeProps[]) => {
+  const groupAssignee = (
+    data:
+      | [
+          {
+            id: string;
+            initials: string;
+            colour: string;
+          }
+        ]
+      | undefined
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1 ">
@@ -90,8 +101,8 @@ export default function Template({ task }: TemplateProps) {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const groupTags = (arr) => {
-    return arr.map((item) => {
+  const groupTags = (arr:[]) => {
+    return arr.map((item: {name: string} | []) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
@@ -110,7 +121,7 @@ export default function Template({ task }: TemplateProps) {
     }
   };
 
-  const renderData = (taskColField, colfield: string) => {
+  const renderData = (taskColField : [] | string, colfield: string) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
         <div className="relative">
@@ -133,47 +144,47 @@ export default function Template({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield === 'tags') {
-      return <div> {groupTags(taskColField)}</div>;
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+    } else if (colfield === "tags") {
+      return <div> {groupTags(taskColField as [])}</div>;
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format('MM/DD')}
+          {moment(taskColField).format("MM/DD")}
         </span>
       );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
         return (
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'in progress') {
+      } else if (taskColField == "in progress") {
         return (
           <div
             className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'archived') {
+      } else if (taskColField == "archived") {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'todo') {
+      } else if (taskColField == "todo") {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -182,13 +193,13 @@ export default function Template({ task }: TemplateProps) {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             TODO
           </div>
         );
       }
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -207,7 +218,7 @@ export default function Template({ task }: TemplateProps) {
               <span>
                 <img
                   src={ArrowDown}
-                  style={{ width: '6px', marginRight: '2px' }}
+                  style={{ width: "6px", marginRight: "2px" }}
                   className="flex-shrink-0 h-2"
                   aria-hidden="true"
                   color="rgba(72, 67, 67, 0.64)"
@@ -217,7 +228,7 @@ export default function Template({ task }: TemplateProps) {
               <span>
                 <img
                   src={ArrowRigt}
-                  style={{ width: '5px', marginRight: '2px' }}
+                  style={{ width: "5px", marginRight: "2px" }}
                   className="flex-shrink-0 h-2"
                   color="rgba(72, 67, 67, 0.64)"
                 />
@@ -266,7 +277,7 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -278,7 +289,7 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
@@ -293,12 +304,12 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>
@@ -306,12 +317,12 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
                       {renderData(task[col.field], col.field)}
                     </div>

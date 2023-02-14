@@ -207,7 +207,7 @@ function RenderTaskModal() {
                             showEntries={showEntries}
                             isBillable={isBillable}
                             setIsBillable={setIsBillable}
-                            setFormState={setFormState}
+                            // setFormState={setFormState}
                             formState={formState}
                             // onSubmit={onSubmit}
                             handleTimeTracker={handleTimeTracker}
