@@ -5,7 +5,7 @@ import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
 
-export const createTaskService = (data: {name: string, description: string, showMenuDropdown: string | null, getListId: string | undefined, parentTaskId: string}) => {
+export const createTaskService = (data: {name: string, description?: string, showMenuDropdown?: string | null, getListId?: string, parentTaskId?: string}) => {
   const response = requestNew(
     {
       url: 'at/tasks',
