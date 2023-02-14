@@ -11,12 +11,12 @@ export const completeOptions = [
   },
   {
     id: 3,
-    name: "Assign to",
+    name: "Assign all",
     handleClick: () => ({}),
   },
   {
     id: 4,
-    name: "Unassign to",
+    name: "Unassign all",
     handleClick: () => ({}),
   },
   {

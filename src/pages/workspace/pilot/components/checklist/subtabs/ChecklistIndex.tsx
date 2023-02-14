@@ -127,7 +127,11 @@ export default function ChecklistIndex() {
                                 <form onSubmit={(e) => handleEdit(e, item.id)}>
                                   <input
                                     type="text"
-                                    value={checklistName}
+                                    value={
+                                      editing && itemId === item.id
+                                        ? checklistName
+                                        : item.id
+                                    }
                                     onChange={(e) =>
                                       setChecklistName(e.target.value)
                                     }

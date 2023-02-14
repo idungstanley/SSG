@@ -42,9 +42,6 @@ export default function ChecklistModal({
     } else if (option === "Delete Item") {
       handleChecklistItemDel();
     }
-    // option === "Delete Checklist"
-    //   ? handleDelChecklist()
-    //   : handleChecklistItemDel();
   };
   return (
     <Menu as="div" className="relative inline-block text-left">
