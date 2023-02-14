@@ -5,16 +5,9 @@ import PriorityDropdown from "../../../../../components/priority/PriorityDropdow
 import {
   setCurrentTaskId,
   setCurrentTaskPriorityId,
-  setCurrentTaskStatusId,
   setShowTaskNavigation,
-  setTaskIdForPilot,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { FiEdit2 } from "react-icons/fi";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { MdDragIndicator } from "react-icons/md";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
@@ -26,22 +19,8 @@ function TaskTableView() {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: "task",
-        activeItemName: name,
-      })
-    );
-  };
 
-  const handleTaskStatus = (id: string) => {
-    dispatch(setCurrentTaskStatusId(id));
-  };
-
-  const handleTaskPriority = (id: string) => {
+  const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
@@ -108,7 +87,7 @@ function TaskTableView() {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(taskColField?.id as string)}
+          onClick={() => handleTaskPriority(taskColField?['id'])}
         >
           <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
         </span>
@@ -163,7 +142,12 @@ function TaskTableView() {
                                 className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
                                 key={col.field}
                               >
-                                {renderData(task[col.field], col.field) as ReactNode}
+                                {
+                                  renderData(
+                                    task[col.field],
+                                    col.field
+                                  ) as ReactNode
+                                }
                               </td>
                             )
                         )}
