@@ -11,7 +11,7 @@ export default function ResizeBorder({ onMouseDown }: ResizeBorderProps) {
       onMouseDown={(e) => onMouseDown(e)}
       className="absolute top-0 w-5 h-full -right-2.5 group flex justify-center"
     >
-      <div className="group-hover:opacity-100 opacity-0 h-full w-1 bg-indigo-500 transition duration-500" />
+      <div className="group-hover:opacity-100 opacity-0 h-full w-1 bg-green-400 transition duration-500" />
     </div>
   );
 }

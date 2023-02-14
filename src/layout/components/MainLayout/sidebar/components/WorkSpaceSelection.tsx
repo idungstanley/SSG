@@ -18,7 +18,7 @@ function WorkSpaceSelection() {
           style={{ width: 'calc(100% - 120px)' }}
         >
           <div className="flex justify-between items-center">
-            <div className="flex justify-between items-center space-x-1">
+            <div className="flex items-center space-x-1 w-full">
               <AvatarWithInitials
                 initials={workspaceName
                   .split(' ')

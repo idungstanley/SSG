@@ -1,11 +1,8 @@
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-} from '@heroicons/react/24/solid';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import FullSidebar from './components/FullSidebar';
 import MinSidebar from './components/MinSidebar';
 import ResizeBorder from './components/ResizeBorder';
+import Toggle from './components/Toggle';
 
 const MIN_SIDEBAR_WIDTH = 230;
 const MAX_SIDEBAR_WIDTH = 400;
@@ -77,41 +74,32 @@ export default function NewSidebar({
     [allowSelect]
   );
 
-  const closeOrShowSidebar = () => {
-    setShowSmall((prev) => !prev);
-    // if (showSmall) {
-    //   setSidebarWidth(MIN_SIDEBAR_WIDTH);
-    // }
-  };
+  // dynamic width for sidebar
+  const style = useMemo(
+    () => ({
+      width: sidebarWidth + 'px',
+      minWidth: MIN_SIDEBAR_WIDTH + 'px',
+      maxWidth: MAX_SIDEBAR_WIDTH + 'px',
+    }),
+    [sidebarWidth]
+  );
 
   return (
     <div ref={sidebarRef} className="flex gap-5 text-center relative">
-      {/* show / hide sidebar */}
-      <div
-        onClick={closeOrShowSidebar}
-        className="absolute z-20 text-indigo-900 top-5 mt-0.5 right-2 cursor-pointer"
-      >
-        {showSmall ? (
-          <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
-        ) : (
-          <ChevronDoubleLeftIcon className="w-4 h-4" aria-hidden="true" />
-        )}
-      </div>
+      {/* show / hide sidebar icon */}
+      <Toggle showSmall={showSmall} setShowSmall={setShowSmall} />
 
+      {/* sidebar */}
       {!showSmall ? (
         <div
-          className="h-full relative flex flex-col border-r border-indigo-500 px-2 gap-2"
-          style={{
-            width: sidebarWidth,
-            minWidth: MIN_SIDEBAR_WIDTH + 'px',
-            maxWidth: MAX_SIDEBAR_WIDTH + 'px',
-          }}
+          className="h-full relative flex flex-col border-r border-gray-500 px-2 gap-2"
+          style={style}
         >
           <FullSidebar />
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>
       ) : (
-        <div className="relative flex flex-col border border-indigo-500 p-2 gap-2">
+        <div className="relative flex flex-col border border-gray-500 p-2 gap-2">
           <MinSidebar />
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>
