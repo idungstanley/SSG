@@ -143,7 +143,9 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
                 // autoFocus={false}
                 className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36 rounded"
                 type="text"
-                value={item.id == editId && editItemName ? editName : item.name}
+                value={
+                  editItemName && item.id === editId ? editName : item.name
+                }
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleEditItemName(item.id, item.is_done);
@@ -152,7 +154,8 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
                 onChange={(e) => setEditName(e.target.value)}
                 onFocus={() => {
                   setEditItemName(true);
-                  setItemId(item.id);
+                  setEditId(item.id);
+                  setEditName(item.name);
                 }}
               />
               <span className="p-1 border-2 border-dotted rounded-full mx-2">

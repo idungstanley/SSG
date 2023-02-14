@@ -6,7 +6,7 @@ export const completeOptions = [
   },
   {
     id: 2,
-    name: "Rename",
+    name: "Rename Checklist",
     handleClick: () => ({}),
   },
   {

@@ -7,7 +7,8 @@ import {
   setTriggerDelChecklist,
   setTriggererChecklistItemDel,
 } from "../../../../../../features/task/checklist/checklistSlice";
-import { useAppDispatch } from "../../../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
+import { Disclosure } from "@headlessui/react";
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -25,7 +26,6 @@ export default function ChecklistModal({
   checklistItemId,
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
-
   const handleDelChecklist = () => {
     dispatch(setClickChecklistId(checklistId));
     dispatch(setTriggerDelChecklist(true));
@@ -36,10 +36,10 @@ export default function ChecklistModal({
     dispatch(setClickChecklistItemId(checklistItemId));
     dispatch(setTriggererChecklistItemDel(true));
   };
-  const handleOptions = (option: string) => {
-    if (option === "Delete Checklist") {
+  const handleOptions = (option: { name: string; handleClick: () => void }) => {
+    if (option.name === "Delete Checklist") {
       handleDelChecklist();
-    } else if (option === "Delete Item") {
+    } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
     }
   };
@@ -68,10 +68,16 @@ export default function ChecklistModal({
                     type="button"
                     className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
                     onClick={() => {
-                      handleOptions(option.name);
+                      handleOptions(option);
                     }}
                   >
-                    <p>{option.name}</p>
+                    {option.name === "New Item" ? (
+                      <Disclosure.Button>
+                        <p>{option.name}</p>
+                      </Disclosure.Button>
+                    ) : (
+                      <p>{option.name}</p>
+                    )}
                   </button>
                 </div>
               )}

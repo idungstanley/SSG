@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../../app/hooks";
 import {
@@ -11,7 +11,6 @@ import ChecklistItem, { itemProps } from "../components/ChecklistItem";
 import { Spinner } from "../../../../../../common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ChecklistModal from "../components/ChecklistModal";
-import { lessOptions } from "../ModalOptions";
 import { completeOptions } from "../ModalOptions";
 import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 import { BiCaretRight } from "react-icons/bi";
@@ -30,8 +29,11 @@ export default function ChecklistIndex() {
 
   // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { triggerChecklistUpdate, triggerDelChecklist, clickedChecklistId } =
-    useAppSelector((state) => state.checklist);
+  const {
+    triggerChecklistUpdate,
+    triggerDelChecklist,
+    clickedChecklistId,
+  } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -60,7 +62,6 @@ export default function ChecklistIndex() {
   });
 
   if (updateStatus === "success") {
-    setEditing(false);
     refetch();
   }
 
@@ -123,31 +124,24 @@ export default function ChecklistIndex() {
                               </div>
                             </Disclosure.Button>
                             <div>
-                              {editing && itemId === item.id ? (
-                                <form onSubmit={(e) => handleEdit(e, item.id)}>
-                                  <input
-                                    type="text"
-                                    value={
-                                      editing && itemId === item.id
-                                        ? checklistName
-                                        : item.id
-                                    }
-                                    onChange={(e) =>
-                                      setChecklistName(e.target.value)
-                                    }
-                                  />
-                                </form>
-                              ) : (
-                                <h1
-                                  className="cursor-text"
-                                  onClick={() => {
-                                    setItemId(item.id);
+                              <form onSubmit={(e) => handleEdit(e, item.id)}>
+                                <input
+                                  type="text"
+                                  value={
+                                    editing && item.id == itemId
+                                      ? checklistName
+                                      : item.name
+                                  }
+                                  onChange={(e) =>
+                                    setChecklistName(e.target.value)
+                                  }
+                                  onFocus={() => {
                                     editChecklist(item.name);
+                                    setItemId(item.id);
                                   }}
-                                >
-                                  {item.name}
-                                </h1>
-                              )}
+                                  className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-9 w-40 rounded"
+                                />
+                              </form>
                             </div>
                             <label>
                               ({done.length}/{item.items.length})
@@ -155,11 +149,7 @@ export default function ChecklistIndex() {
                           </span>
                           <div className="opacity-0 group-hover:opacity-100">
                             <ChecklistModal
-                              options={
-                                item.items.length === 0
-                                  ? lessOptions
-                                  : completeOptions
-                              }
+                              options={completeOptions}
                               checklistId={""}
                             />
                           </div>
