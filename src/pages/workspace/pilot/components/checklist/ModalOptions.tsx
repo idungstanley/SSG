@@ -21,28 +21,10 @@ export const completeOptions = [
   },
   {
     id: 5,
-    name: "Check all",
-    handleClick: () => ({}),
-  },
-  {
-    id: 6,
-    name: "Uncheck all",
-    handleClick: () => ({}),
-  },
-  {
-    id: 7,
-    name: "Save Template",
-    handleClick: () => ({}),
-  },
-  {
-    id: 8,
-    name: "Delete Item",
-    handleClick: () => ({}),
-  },
-  {
-    id: 9,
-    name: "Move Up",
-    handleClick: () => ({}),
+    name: "Delete Checklist",
+    handleClick: () => {
+      // const dispatch = useAppDispatch();
+    },
   },
 ];
 
@@ -59,12 +41,12 @@ export const lessOptions = [
   },
   {
     id: 3,
-    name: "Delete Checklist",
+    name: "Delete Item",
     handleClick: () => ({}),
   },
   {
     id: 4,
-    name: "Move down",
+    name: "Assign to",
     handleClick: () => ({}),
   },
 ];
