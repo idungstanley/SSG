@@ -47,7 +47,7 @@ const stringifyFolders = (
 export default function ExtendedBar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
-
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { selectedFileId } = useAppSelector((state) => state.explorer);
 
   const [showSearch, setShowSearch] = useState(false);
@@ -120,34 +120,36 @@ export default function ExtendedBar() {
         }
       />
 
-      <aside className="mb-2">
-        {/* header */}
-        {status === 'loading' ? (
-          <div className="mx-auto w-6 mt-8 justify-center">
-            <Spinner size={8} color="#0F70B7" />
-          </div>
-        ) : status === 'error' ? (
-          <FullScreenMessage
-            title="Oops, an error occurred :("
-            description="Please try again later."
-          />
-        ) : null}
-
-        {/* folder list */}
-        {folders ? (
-          folders.length ? (
-            <FoldersList
-              folders={folders}
-              isSearchedResults={!!filteredSearchedFolders?.length}
-            />
-          ) : (
+      {showSidebar ? (
+        <aside className="mb-2">
+          {/* header */}
+          {status === 'loading' ? (
+            <div className="mx-auto w-6 mt-8 justify-center">
+              <Spinner size={8} color="#0F70B7" />
+            </div>
+          ) : status === 'error' ? (
             <FullScreenMessage
-              title="No folders yet."
-              description="Create one."
+              title="Oops, an error occurred :("
+              description="Please try again later."
             />
-          )
-        ) : null}
-      </aside>
+          ) : null}
+
+          {/* folder list */}
+          {folders ? (
+            folders.length ? (
+              <FoldersList
+                folders={folders}
+                isSearchedResults={!!filteredSearchedFolders?.length}
+              />
+            ) : (
+              <FullScreenMessage
+                title="No folders yet."
+                description="Create one."
+              />
+            )
+          ) : null}
+        </aside>
+      ) : null}
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { memo, ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { classNames } from '../../../../../utils';
 
@@ -22,6 +22,7 @@ function PlaceItem({
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const isActivePlace = !onClick;
 
@@ -45,36 +46,38 @@ function PlaceItem({
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
           className={classNames(
-            'flex gap-4 items-center content-center self-center',
-            isActivePlace ? 'justify-center text-black font-bold' : '',
-            isActivePlace && 'ml-16'
+            'flex cursor-pointer gap-4 items-center content-center self-center',
+            isActivePlace && 'justify-center text-black font-bold',
+            isActivePlace && showSidebar && 'ml-16'
           )}
         >
           {icon}
-          <span
-            className={classNames(
-              'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
-              isActivePlace && 'text-black font-bold'
-            )}
-          >
-            {label}
-          </span>
+          {showSidebar ? (
+            <span
+              className={classNames(
+                'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
+                isActivePlace && 'text-black font-bold'
+              )}
+            >
+              {label}
+            </span>
+          ) : null}
         </div>
-        <div className="flex gap-2 items-center">
-          {rightContent}
+        {showSidebar ? (
+          <div className="flex gap-2 items-center">
+            {rightContent}
 
-          <span
-            onClick={isActivePlace ? resetSelectedPlace : onClick}
-          >
-            {isActivePlace ? (
-              <FiChevronDown className="h-5 w-5 cursor-pointer text-gray-500" />
-            ) : (
-              <FiChevronRight className="h-5 w-5 cursor-pointer text-gray-500" />
-            )}
-          </span>
-        </div>
+            <span onClick={isActivePlace ? resetSelectedPlace : onClick}>
+              {isActivePlace ? (
+                <FiChevronDown className="h-5 w-5 cursor-pointer text-gray-500" />
+              ) : (
+                <FiChevronRight className="h-5 w-5 cursor-pointer text-gray-500" />
+              )}
+            </span>
+          </div>
+        ) : null}
       </div>
-      {bottomContent}
+      {showSidebar ? bottomContent : null}
     </li>
   );
 }

@@ -1,5 +1,7 @@
 import React from 'react';
+import FooterTabs from '../../../sidebar/components/FooterTabs';
 import NavigationItems from '../../../sidebar/components/NavigationItems';
+import Places from '../../../sidebar/components/Places';
 import Header from '../FullSidebar/components';
 
 export default function MinSidebar() {
@@ -9,10 +11,10 @@ export default function MinSidebar() {
 
       <section className="relative flex flex-col overflow-scroll">
         <NavigationItems />
-        {/* <Places /> */}
+        <Places />
       </section>
 
-      {/* <FooterTabs /> */}
+      <FooterTabs />
     </>
   );
 }

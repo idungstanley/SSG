@@ -14,24 +14,23 @@ function WorkSpaceSelection() {
     <>
       {showSidebar ? (
         <div className="flex flex-grow rounded justify-between items-center border border-gray-400 mt-1">
-          <div className="flex items-center space-x-1 w-full">
-            <AvatarWithInitials
-              initials={workspaceName
-                .split(' ')
-                .slice(0, 2)
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase()}
-              height="h-5"
-              width="w-5"
-              backgroundColour="#34C6BE"
-              roundedStyle="rounded"
-              textColor="black"
-            />
-            <p className="truncate" style={{ fontSize: '8px' }}>
-              {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
-            </p>
-          </div>
+          <AvatarWithInitials
+            initials={workspaceName
+              .split(' ')
+              .slice(0, 2)
+              .map((word) => word[0])
+              .join('')
+              .toUpperCase()}
+            height="h-5"
+            width="w-5"
+            backgroundColour="#34C6BE"
+            roundedStyle="rounded"
+            textColor="black"
+          />
+          <p className="truncate" style={{ fontSize: '8px' }}>
+            {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
+          </p>
+
           <VscTriangleDown className="text-xs text-gray-400" />
         </div>
       ) : (
