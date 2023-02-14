@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   ImyTaskData,
@@ -19,6 +19,7 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import { UserPlusIcon } from '@heroicons/react/24/outline';
 import TagModal from '../../../../../components/tags/TagModal';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -60,7 +61,7 @@ export default function Template({ task }: TemplateProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <>
@@ -85,7 +86,7 @@ export default function Template({ task }: TemplateProps) {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -105,8 +106,15 @@ export default function Template({ task }: TemplateProps) {
   //   }
   // };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | []
+      | null
+      | [{ id: string; initials: string; colour: string }] | string[],
+    colfield: string
+  ) => {
+    if (colfield === 'assignees' && taskColField?.length !== 0) {
       return (
         <div className="relative">
           <div
@@ -204,7 +212,7 @@ export default function Template({ task }: TemplateProps) {
           >
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
-          <p>{taskColField}</p>
+          <p>{taskColField as ReactNode}</p>
           <div
             id="iconWrapper"
             className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
