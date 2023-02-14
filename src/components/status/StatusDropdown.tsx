@@ -13,7 +13,11 @@ interface statusType {
 }
 
 interface StatusDropdownProps {
-  TaskCurrentStatus: string | null | undefined;
+  TaskCurrentStatus:
+    | string
+    | null
+    | undefined
+    | [{ id: string; initials: string; colour: string }];
 }
 
 export default function StatusDropdown({
@@ -75,7 +79,13 @@ export default function StatusDropdown({
   // console.log(updateTaskStatus);
   // console.log(statusValue);
 
-  const setStatusColor = (status: string | null | undefined) => {
+  const setStatusColor = (
+    status:
+      | string
+      | null
+      | undefined
+      | [{ id: string; initials: string; colour: string }]
+  ) => {
     if (status == "new" || status == "todo") {
       return (
         <RiCheckboxBlankFill
