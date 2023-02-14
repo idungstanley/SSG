@@ -10,7 +10,7 @@ export default function FullSidebar() {
     <>
       <Header />
 
-      <section className="h-full relative flex flex-col overflow-scroll border-b">
+      <section className="relative flex flex-col overflow-scroll">
         <Search />
         <NavigationItems />
         <Places />
