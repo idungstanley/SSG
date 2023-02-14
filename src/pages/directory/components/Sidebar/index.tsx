@@ -8,7 +8,7 @@ import {
 import PlaceItem from '../../../../layout/components/MainLayout/sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../explorer/components/Search';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import DirectoryList from './components/Directories';
 import { classNames } from '../../../../utils';
@@ -56,6 +56,7 @@ function Sidebar() {
   const { pathname } = useLocation();
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState('');
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const configForDropdown = [
     {
@@ -96,12 +97,20 @@ function Sidebar() {
         }
       />
 
-      <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
-      <LibraryNavigation label="Shelf" path="shelf" icon={<BookShelfIcon />} />
-      {isBookShelf ? (
-        <div className="ml-5">
-          <DirectoryList />
-        </div>
+      {showSidebar ? (
+        <>
+          <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
+          <LibraryNavigation
+            label="Shelf"
+            path="shelf"
+            icon={<BookShelfIcon />}
+          />
+          {isBookShelf ? (
+            <div className="ml-5">
+              <DirectoryList />
+            </div>
+          ) : null}
+        </>
       ) : null}
     </>
   );
