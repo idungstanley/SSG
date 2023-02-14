@@ -223,9 +223,7 @@ export default function TaskData({ task }: TaskDataProps) {
           onClick={() => handleAssigneeModal(task.id as string)}
         />
       );
-    } 
-    
-    else if (colfield === "tags") {
+    } else if (colfield === "tags") {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
