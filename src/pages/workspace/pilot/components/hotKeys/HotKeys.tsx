@@ -23,8 +23,8 @@ export default function HotKeys() {
     };
   });
   localStorage.setItem('HotKeys', JSON.stringify(newHotKey));
-  const getHotKeys = JSON.parse(localStorage.getItem('HotKeys'));
-  console.log(getHotKeys);
+  // const getHotKeys = JSON.parse(localStorage.getItem('HotKeys'));
+  // console.log(getHotKeys);
   const addHotkeys = newHotKey.filter((keys) => keys.isVisible === false);
   const removeHotkeys = newHotKey.filter((keys) => keys.isVisible === true);
   return (

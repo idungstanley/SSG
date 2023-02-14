@@ -4,22 +4,20 @@ import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
   ImyTaskData,
-  setCurrentTaskId,
   setCurrentTaskPriorityId,
-  setShowTaskNavigation,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
+  const { myTaskData, hideTask, taskColumns } =
     useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
-  const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!showTaskNavigation));
-    dispatch(setCurrentTaskId(id));
-  };
+  // const displayNav = (id: string) => {
+  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
+  //   dispatch(setCurrentTaskId(id));
+  // };
 
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -29,6 +27,7 @@ function TaskTableView() {
     taskColField:
       | ImyTaskData
       | string
+      | ImyTaskData
       | number
       | undefined
       | tagItem[]
@@ -98,10 +97,10 @@ function TaskTableView() {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority((taskColField as ImyTaskData).id)}
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
         >
           <PriorityDropdown
-            TaskCurrentPriority={(taskColField as ImyTaskData).priority}
+            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
           />
         </span>
       );
