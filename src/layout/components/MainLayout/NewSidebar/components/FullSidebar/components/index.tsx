@@ -5,13 +5,20 @@ import { setShowSidebarSettings } from '../../../../../../../features/hubs/hubSl
 import ArchiveMenu from '../../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
 import WorkSpaceSelection from '../../../../sidebar/components/WorkSpaceSelection';
 import MainLogo from '../../../../../../../assets/branding/main-logo.png';
+import { classNames } from '../../../../../../../utils';
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const { sidebarSettings } = useAppSelector((state) => state.hub);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
-    <div className="flex py-2 pr-5 border-b items-center gap-1">
+    <div
+      className={classNames(
+        'flex py-2 border-b items-center gap-1',
+        !showSidebar ? 'flex-col pb-9' : 'pr-5'
+      )}
+    >
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
       <WorkSpaceSelection />
 

@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../components';
 
 function WorkSpaceSelection() {
-  const { showSidebar } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const getLocalWSName = JSON.parse(
     localStorage.getItem('currentWorkspacename') as string
   );

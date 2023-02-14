@@ -102,7 +102,7 @@ export default function NewSidebar({
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>
       ) : (
-        <div className="relative flex flex-col border border-gray-500 p-2 gap-2">
+        <div className="h-full relative flex flex-col border-r border-gray-500 px-2 gap-2">
           <MinSidebar />
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>

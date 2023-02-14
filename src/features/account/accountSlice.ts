@@ -12,7 +12,7 @@ const initialState: AccountState = {
   settings: {
     showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false,
   },
-  showSidebar: false,
+  showSidebar: true,
 };
 
 export const accountSlice = createSlice({

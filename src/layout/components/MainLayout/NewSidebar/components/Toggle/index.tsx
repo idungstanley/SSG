@@ -5,6 +5,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { classNames } from '../../../../../../utils';
 
 export default function Toggle() {
   const dispatch = useAppDispatch();
@@ -20,9 +21,12 @@ export default function Toggle() {
   return (
     <div
       onClick={closeOrShowSidebar}
-      className="absolute z-20 text-indigo-900 top-6 right-2 cursor-pointer"
+      className={classNames(
+        'absolute z-20 text-indigo-900 cursor-pointer',
+        showSidebar ? 'top-6 right-2 ' : 'top-36 right-6 mr-0.5 mt-1'
+      )}
     >
-      {showSidebar ? (
+      {!showSidebar ? (
         <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
       ) : (
         <ChevronDoubleLeftIcon className="w-4 h-4" aria-hidden="true" />
