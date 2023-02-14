@@ -14,7 +14,7 @@ interface priorityType {
 }
 
 interface TaskCurrentPriorityProps {
-  TaskCurrentPriority: string | null;
+  TaskCurrentPriority: string | null | [{ id: string; initials: string; colour: string; }];
 }
 export default function PriorityDropdown({
   TaskCurrentPriority,
@@ -67,7 +67,7 @@ export default function PriorityDropdown({
   if (status == "success") {
     setPriority("");
   }
-  const setPriorityColor = (priority: string | null) => {
+  const setPriorityColor = (priority: string | null | [{ id: string; initials: string; colour: string; }]) => {
     if (priority == null || priority == "low") {
       return (
         <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />

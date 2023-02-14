@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { ReactNode } from "react";
+import { useDispatch } from "react-redux";
 import {
   ImyTaskData,
   setCurrentTaskId,
@@ -8,17 +8,18 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
-import { AvatarWithInitials } from '../../../../../components';
-import '../create/subtask.css';
-import moment from 'moment';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
-import TagModal from '../../../../../components/tags/TagModal';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { AvatarWithInitials } from "../../../../../components";
+import "../create/subtask.css";
+import moment, { MomentInput } from "moment";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import TagModal from "../../../../../components/tags/TagModal";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -75,17 +76,12 @@ export default function Template({ task }: TemplateProps) {
       </>
     ));
   };
-  interface Iassignee {
-    id: string;
-    initials: string;
-    colour: string;
-  }
 
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -95,21 +91,26 @@ export default function Template({ task }: TemplateProps) {
     });
   };
 
-  // const handleShowSubTask = (id: string) => {
-  //   if (id == showSubTask) {
-  //     setShowSubTask(null);
-  //     dispatch(setCurrentParentSubTaskId(null));
-  //   } else {
-  //     setShowSubTask(id);
-  //     dispatch(setCurrentParentSubTaskId(id));
-  //   }
-  // };
-
   const renderData = (
-    taskColField,
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
     colfield: string
   ) => {
-    if (colfield === 'assignees' && taskColField?.length !== 0) {
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
       return (
         <div className="relative">
           <div
@@ -122,7 +123,13 @@ export default function Template({ task }: TemplateProps) {
       );
     } else if (
       colfield === "assignees" &&
-      (taskColField as Array<Iassignee>)?.length === 0
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
     ) {
       return (
         <UserPlusIcon
@@ -132,11 +139,11 @@ export default function Template({ task }: TemplateProps) {
         />
       );
     } else if (colfield === "tags") {
-      return <div> {groupTags(taskColField)}</div>;
+      return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as string).format("MM/DD")}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
     } else if (colfield == "status") {
@@ -248,7 +255,7 @@ export default function Template({ task }: TemplateProps) {
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
@@ -260,7 +267,7 @@ export default function Template({ task }: TemplateProps) {
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}
@@ -276,7 +283,7 @@ export default function Template({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
@@ -289,7 +296,7 @@ export default function Template({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}
