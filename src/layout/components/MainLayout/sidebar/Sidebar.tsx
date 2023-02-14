@@ -5,22 +5,22 @@ import {
   setShowExtendedBar,
   setShowSidebar,
   setSidebarWidth,
-} from '../../../features/workspace/workspaceSlice';
-import { setShowSidebarSettings } from '../../../features/hubs/hubSlice';
-import MainLogo from '../../../assets/branding/main-logo.png';
-import notificationIcon from '../../../assets/branding/notification-logo.png';
+} from '../../../../features/workspace/workspaceSlice';
+import { setShowSidebarSettings } from '../../../../features/hubs/hubSlice';
+import MainLogo from '../../../../assets/branding/main-logo.png';
+import notificationIcon from '../../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { AvatarWithInitials } from '../../../components';
-import { useAppSelector } from '../../../app/hooks';
+import { AvatarWithInitials } from '../../../../components';
+import { useAppSelector } from '../../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
-import Modal from '../hubs/components/Modal';
-import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
-import Search from '../search';
-import SubHubModal from '../hubs/components/SubHubModal';
+import Modal from '../../../../pages/workspace/hubs/components/Modal';
+import ArchiveMenu from '../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
+import Search from '../../../../pages/workspace/search';
+import SubHubModal from '../../../../pages/workspace/hubs/components/SubHubModal';
 import FooterTabs from './components/FooterTabs';
-import ResizeBorder from '../../../components/ResizeBorder';
+import ResizeBorder from '../../../../components/ResizeBorder';
 
 export default function Sidebar() {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
-import PlaceItem from '../sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/sidebar/components/PlaceItem';
 import hubIcon from '../../../assets/branding/hub.png';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { CubeTransparentIcon } from '@heroicons/react/24/outline';
@@ -41,7 +41,11 @@ function Hubs() {
           </div>
         }
       />
-      <div className={`${showSidebar ? 'pl-4' : 'pl-3'} hover:bg-gray-100 flex justify-between items-center`}>
+      <div
+        className={`${
+          showSidebar ? 'pl-4' : 'pl-3'
+        } hover:bg-gray-100 flex justify-between items-center`}
+      >
         <div className="flex items-center content-center self-center py-2">
           <img
             src={everythingIcon}

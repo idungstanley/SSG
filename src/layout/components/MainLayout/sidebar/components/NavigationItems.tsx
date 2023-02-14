@@ -2,54 +2,54 @@ import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BsCalendar2Minus } from 'react-icons/bs';
-import favoriteIcon from '../../../../assets/branding/Favourite-icon.svg';
-import groupIcon from '../../../../assets/branding/Group.png';
-import notificationIcon from '../../../../assets/branding/notification-logo.png';
-import homeIcon from '../../../../assets/branding/Home-icon.svg';
-import { classNames } from '../../../../utils';
+import favoriteIcon from '../../../../../assets/branding/Favourite-icon.svg';
+import groupIcon from '../../../../../assets/branding/Group.png';
+import notificationIcon from '../../../../../assets/branding/notification-logo.png';
+import homeIcon from '../../../../../assets/branding/Home-icon.svg';
+import { classNames } from '../../../../../utils';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { HiUserGroup } from 'react-icons/hi';
 
 const navigation = [
   {
-    name: "Home",
-    href: "/",
+    name: 'Home',
+    href: '/',
     source: homeIcon,
     alwaysShow: true,
   },
   {
-    name: "Notifications",
-    href: "/notification",
+    name: 'Notifications',
+    href: '/notification',
     source: notificationIcon,
     alwaysShow: true,
   },
   {
-    name: "Calendar",
-    href: "/calendar",
+    name: 'Calendar',
+    href: '/calendar',
     icon: <BsCalendar2Minus className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
-    name: "Community",
-    href: "/community",
+    name: 'Community',
+    href: '/community',
     icon: <HiUserGroup className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
-    name: "Goals",
-    href: "/goals",
+    name: 'Goals',
+    href: '/goals',
     source: groupIcon,
     alwaysShow: false,
   },
   {
-    name: "Dashboards",
-    href: "/dashboard",
+    name: 'Dashboards',
+    href: '/dashboard',
     icon: <MdOutlineDashboard className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
-    name: "Favorites",
-    href: "/favorites",
+    name: 'Favorites',
+    href: '/favorites',
     source: favoriteIcon,
     alwaysShow: false,
   },
@@ -57,11 +57,11 @@ const navigation = [
 
 const showLessOrMore = [
   {
-    name: "Show Less",
+    name: 'Show Less',
     icon: <ArrowUpIcon />,
   },
   {
-    name: "Show More",
+    name: 'Show More',
     icon: <ArrowDownIcon />,
   },
 ];
@@ -80,9 +80,9 @@ export default function NavigationItems() {
               to={item.href}
               className={classNames(
                 item.href === pathname
-                  ? "bg-green-100 text-gray-900"
-                  : "hover:text-gray-900",
-                "flex items-center pl-4 py-2 text-base relative font-medium hover:bg-gray-100"
+                  ? 'bg-green-100 text-gray-900'
+                  : 'hover:text-gray-900',
+                'flex items-center pl-4 py-2 text-base relative font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
@@ -92,16 +92,16 @@ export default function NavigationItems() {
                 <div
                   className={classNames(
                     item.href === pathname
-                      ? "text-gray-500"
-                      : "text-gray-400 hover:text-gray-500 hover:bg-gray-50",
-                    "mr-4 flex-shrink-0 h-4 w-4 relative"
+                      ? 'text-gray-500'
+                      : 'text-gray-400 hover:text-gray-500 hover:bg-gray-50',
+                    'mr-4 flex-shrink-0 h-4 w-4 relative'
                   )}
                   aria-hidden="true"
                 >
-                  {item.name === "Notifications" && (
+                  {item.name === 'Notifications' && (
                     <p
                       className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
-                      style={{ fontSize: "8px", borderRadius: "50px" }}
+                      style={{ fontSize: '8px', borderRadius: '50px' }}
                     >
                       24
                     </p>
@@ -109,10 +109,10 @@ export default function NavigationItems() {
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
                 <p
-                  style={{ fontSize: "10px" }}
+                  style={{ fontSize: '10px' }}
                   className={classNames(
-                    item.href === pathname ? "text-green-500" : "",
-                    "tracking-wider leading-3 truncate"
+                    item.href === pathname ? 'text-green-500' : '',
+                    'tracking-wider leading-3 truncate'
                   )}
                 >
                   {item.name}
@@ -125,9 +125,9 @@ export default function NavigationItems() {
               to={item.href}
               className={classNames(
                 item.href === pathname
-                  ? "bg-green-100 text-black mr-0"
-                  : "hover:text-gray-900",
-                "flex items-center relative pl-4 py-2 text-base font-medium hover:bg-gray-100"
+                  ? 'bg-green-100 text-black mr-0'
+                  : 'hover:text-gray-900',
+                'flex items-center relative pl-4 py-2 text-base font-medium hover:bg-gray-100'
               )}
             >
               {item.href === pathname && (
@@ -137,16 +137,16 @@ export default function NavigationItems() {
                 <div
                   className={classNames(
                     item.href === pathname
-                      ? "text-gray-500"
-                      : "text-gray-400 hover:text-gray-500 hover:bg-gray-50",
-                    "mr-4 flex-shrink-0 h-4 w-4 relative"
+                      ? 'text-gray-500'
+                      : 'text-gray-400 hover:text-gray-500 hover:bg-gray-50',
+                    'mr-4 flex-shrink-0 h-4 w-4 relative'
                   )}
                   aria-hidden="true"
                 >
-                  {item.name === "Notifications" && (
+                  {item.name === 'Notifications' && (
                     <p
                       className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
-                      style={{ fontSize: "8px", borderRadius: "50px" }}
+                      style={{ fontSize: '8px', borderRadius: '50px' }}
                     >
                       24
                     </p>
@@ -154,10 +154,10 @@ export default function NavigationItems() {
                   {item.icon ? item.icon : <img src={item.source} alt="a" />}
                 </div>
                 <p
-                  style={{ fontSize: "10px" }}
+                  style={{ fontSize: '10px' }}
                   className={classNames(
-                    item.href === pathname ? "text-green-500" : "",
-                    "tracking-wider truncate leading-3"
+                    item.href === pathname ? 'text-green-500' : '',
+                    'tracking-wider truncate leading-3'
                   )}
                 >
                   {item.name}
@@ -176,7 +176,7 @@ export default function NavigationItems() {
           >
             {showLessOrMore[showMore ? 0 : 1].icon}
           </div>
-          <p style={{ fontSize: "10px" }} className="tracking-wider truncate">
+          <p style={{ fontSize: '10px' }} className="tracking-wider truncate">
             {showLessOrMore[showMore ? 0 : 1].name}
           </p>
         </div>

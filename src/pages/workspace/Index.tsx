@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { Outlet } from 'react-router-dom';
-import ExpandedNav from '../../views/ExpandedNav';
+import ExpandedNav from '../../layout/components/MainLayout/sidebar/ExpandedNav';
 
 function Index() {
   const { showExtendedBar } = useAppSelector((state) => state.workspace);

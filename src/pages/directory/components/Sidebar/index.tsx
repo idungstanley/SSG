@@ -5,7 +5,7 @@ import {
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
-import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
+import PlaceItem from '../../../../layout/components/MainLayout/sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../explorer/components/Search';
 import { useAppDispatch } from '../../../../app/hooks';

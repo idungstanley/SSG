@@ -5,8 +5,8 @@ import { Outlet } from 'react-router-dom';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
 import UploadModal from '../../../components/UploadModal';
-import Sidebar from '../../../pages/workspace/sidebar/Sidebar';
-import Header from '../../../pages/workspace/sidebar/Header';
+import Sidebar from './sidebar/Sidebar';
+import Header from './sidebar/Header';
 
 function MainLayout() {
   return (
@@ -15,7 +15,6 @@ function MainLayout() {
       {/* <TopMenu /> */}
       <div className="flex h-full">
         <div className="flex flex-row w-full h-full overflow-hidden">
-          <UploadModal />
           <Sidebar />
 
           <div className="flex flex-col flex-1 grow">
@@ -29,6 +28,7 @@ function MainLayout() {
         </div>
       </div>
 
+      <UploadModal />
       <MyWorkspacesSlideOver />
     </div>
   );

@@ -1,9 +1,9 @@
 import React, { memo, ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../../app/hooks';
-import { setActivePlaceId } from '../../../../features/workspace/workspaceSlice';
-import { classNames } from '../../../../utils';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
+import { classNames } from '../../../../../utils';
 
 interface PlaceItemProps {
   label: string;

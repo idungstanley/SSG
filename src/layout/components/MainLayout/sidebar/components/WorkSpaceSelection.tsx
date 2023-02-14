@@ -1,20 +1,21 @@
 import React from 'react';
 import { VscTriangleDown } from 'react-icons/vsc';
-import { useAppSelector } from '../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../components';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.workspace);
-const getLocalWSName = JSON.parse(
-  localStorage.getItem('currentWorkspacename') as string
-);
-const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
+  const getLocalWSName = JSON.parse(
+    localStorage.getItem('currentWorkspacename') as string
+  );
+  const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
 
   return (
     <>
       {showSidebar ? (
-        <div className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
-        style={{width: 'calc(100% - 120px)'}}
+        <div
+          className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
+          style={{ width: 'calc(100% - 120px)' }}
         >
           <div className="flex justify-between items-center">
             <div className="flex justify-between items-center space-x-1">
