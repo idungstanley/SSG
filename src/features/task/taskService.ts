@@ -355,7 +355,7 @@ export const AddTaskWatcherService = (data: {queryKey: string[]}) => {
 };
 
 //Get watcher
-export const UseGetWatcherService = (taskId: {query: string | null}) => {
+export const UseGetWatcherService = (taskId: {query: string | null | undefined}) => {
   const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
@@ -382,7 +382,7 @@ export const UseGetWatcherService = (taskId: {query: string | null}) => {
 };
 
 //Add watcher to task
-export const AddWatcherService = ({ query }: {query: string[]}) => {
+export const AddWatcherService = ({ query }: {query: (string | undefined | null)[]}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['watcher', query],
@@ -412,7 +412,7 @@ export const AddWatcherService = ({ query }: {query: string[]}) => {
 };
 
 //Remove watcher to task
-export const RemoveWatcherService = ({ query }: {query: string[]}) => {
+export const RemoveWatcherService = ({ query }: {query: (string | null | undefined)[]}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['watcher', query],

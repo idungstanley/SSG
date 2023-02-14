@@ -72,9 +72,15 @@ export default function TimeEntries() {
           </div>
           {/* render time enteries */}
           {showEntries &&
-            getEntries?.data?.time_entries?.map((entries: entriesProps) => (
-              <EntryList entries={entries} key={entries.id} />
-            ))}
+            getEntries?.data?.time_entries?.map(
+              (entries: {
+                id: string;
+                duration: number;
+                start_date: string;
+                end_date: string;
+                description: string;
+              }) => <EntryList entries={entries} key={entries.id} />
+            )}
         </section>
         <section
           id="body"

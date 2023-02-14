@@ -23,7 +23,7 @@ interface TaskState {
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null;
-  currTeamMemberId: null;
+  currTeamMemberId: null | string;
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
