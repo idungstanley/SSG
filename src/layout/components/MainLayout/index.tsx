@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 // import TopMenu from './TopMenu';
 import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
 import UploadModal from '../../../components/UploadModal';
-import Sidebar from './sidebar/Sidebar';
+// import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
+import NewSidebar from './NewSidebar';
+import { classNames } from '../../../utils';
 
 function MainLayout() {
+  const [allowSelect, setAllowSelect] = useState(true);
+
   return (
-    <div className="h-full flex flex-col">
+    <div
+      className={classNames(
+        'h-full flex flex-col',
+        !allowSelect && 'select-none'
+      )}
+    >
       <ProgressBar />
       {/* <TopMenu /> */}
       <div className="flex h-full">
         <div className="flex flex-row w-full h-full overflow-hidden">
-          <Sidebar />
+          <NewSidebar
+            allowSelect={allowSelect}
+            setAllowSelect={setAllowSelect}
+          />
 
           <div className="flex flex-col flex-1 grow">
             <Header />
