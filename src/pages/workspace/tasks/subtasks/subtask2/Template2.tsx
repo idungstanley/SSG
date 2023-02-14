@@ -1,6 +1,6 @@
-import React, { ReactNode, useState } from "react";
-import { useDispatch } from "react-redux";
-import moment, { MomentInput } from "moment";
+import React, { ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import moment, { MomentInput } from 'moment';
 import {
   ImyTaskData,
   setCurrentParentSubTaskId2,
@@ -20,7 +20,6 @@ import { AvatarWithInitials } from '../../../../../components';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
-import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -94,7 +93,7 @@ export default function Template2({ task }: TemplateProps) {
     dispatch(setCurrentTaskStatusId(id));
   };
 
-  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
+  const groupTags = (arr) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -116,7 +115,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (colfield === 'assignees' && taskColField.length === 0) {
       return (
         <UserPlusIcon
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
@@ -129,7 +128,7 @@ export default function Template2({ task }: TemplateProps) {
     } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
     } else if (colfield == 'status') {
@@ -238,7 +237,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "

@@ -19,12 +19,10 @@ import { FiEdit2 } from "react-icons/fi";
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { AvatarWithInitials } from "../../../../../components";
 import moment from "moment";
-import { groupAssigneeProps } from "../subtask1/Template";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import TagModal from "../../../../../components/tags/TagModal";
 import { UserPlusIcon } from '@heroicons/react/24/outline';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -95,7 +93,7 @@ export default function Template4({ task }: TemplateProps) {
     dispatch(setCurrentTaskStatusId(id));
   };
 
-  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
+  const groupTags = (arr) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
