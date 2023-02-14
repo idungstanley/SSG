@@ -6,6 +6,7 @@ import {
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { classNames } from '../../../../../../utils';
+import { MIN_SIDEBAR_WIDTH } from '../..';
 
 export default function Toggle() {
   const dispatch = useAppDispatch();
@@ -13,9 +14,13 @@ export default function Toggle() {
 
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
-    // if (showSmall) {
-    //   setSidebarWidth(MIN_SIDEBAR_WIDTH);
-    // }
+    localStorage.setItem(
+      'sidebar',
+      JSON.stringify({
+        sidebarWidth: MIN_SIDEBAR_WIDTH,
+        showSidebar: !showSidebar,
+      })
+    );
   };
 
   return (

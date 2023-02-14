@@ -3,7 +3,7 @@ import Search from '../../../../../../pages/workspace/search';
 import NavigationItems from '../NavigationItems';
 import Places from '../Places';
 import FooterTabs from '../FooterTabs';
-import Header from './components';
+import Header from './components/Header';
 
 export default function FullSidebar() {
   return (

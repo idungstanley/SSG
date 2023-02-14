@@ -6,7 +6,7 @@ import MinSidebar from './components/MinSidebar';
 import ResizeBorder from './components/ResizeBorder';
 import Toggle from './components/Toggle';
 
-const MIN_SIDEBAR_WIDTH = 230;
+export const MIN_SIDEBAR_WIDTH = 230;
 const MAX_SIDEBAR_WIDTH = 400;
 const RELATIVE_WIDTH = 10;
 
@@ -15,14 +15,18 @@ interface SidebarProps {
   setAllowSelect: (i: boolean) => void;
 }
 
-export default function Sidebar({
-  allowSelect,
-  setAllowSelect,
-}: SidebarProps) {
+const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
+  JSON.parse(localStorage.getItem('sidebar') || '""');
+
+export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [sidebarWidth, setSidebarWidth] = useState(MIN_SIDEBAR_WIDTH);
+  const [sidebarWidth, setSidebarWidth] = useState(
+    sidebarFromLS.sidebarWidth || MIN_SIDEBAR_WIDTH
+  );
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  console.log({ showSidebar, sidebarWidth, sidebarFromLS });
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -48,7 +52,6 @@ export default function Sidebar({
         // sidebar hidden and becomes bigger
         if (width > startX) {
           dispatch(setShowSidebar(true));
-          setSidebarWidth(MIN_SIDEBAR_WIDTH);
         }
 
         const correctWidth =
@@ -67,7 +70,14 @@ export default function Sidebar({
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseEnd);
         if (sidebarRef.current) {
-          // console.log('sidebar:', sidebarRef.current.clientWidth);
+          const sidebarWidth = sidebarRef.current.clientWidth;
+          localStorage.setItem(
+            'sidebar',
+            JSON.stringify({
+              sidebarWidth,
+              showSidebar: sidebarWidth >= MIN_SIDEBAR_WIDTH,
+            })
+          );
         }
       };
 

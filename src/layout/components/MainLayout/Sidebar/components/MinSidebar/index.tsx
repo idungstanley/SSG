@@ -2,7 +2,7 @@ import React from 'react';
 import FooterTabs from '../FooterTabs';
 import NavigationItems from '../NavigationItems';
 import Places from '../Places';
-import Header from '../FullSidebar/components';
+import Header from '../FullSidebar/components/Header';
 
 export default function MinSidebar() {
   return (

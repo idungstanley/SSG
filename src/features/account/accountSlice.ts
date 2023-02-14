@@ -3,6 +3,20 @@ import { IUserState } from './account.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview');
 
+// const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
+//   JSON.parse(localStorage.getItem('sidebar') || '""');
+
+const sidebarFromLS = localStorage.getItem('sidebar');
+
+const showSidebar = sidebarFromLS
+  ? (
+      JSON.parse(sidebarFromLS) as {
+        sidebarWidth: number;
+        showSidebar: boolean;
+      }
+    ).showSidebar
+  : true;
+
 interface AccountState {
   settings: IUserState;
   showSidebar: boolean;
@@ -12,7 +26,7 @@ const initialState: AccountState = {
   settings: {
     showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false,
   },
-  showSidebar: true,
+  showSidebar,
 };
 
 export const accountSlice = createSlice({
