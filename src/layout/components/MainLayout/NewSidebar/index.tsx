@@ -89,7 +89,7 @@ export default function NewSidebar({
       {/* show / hide sidebar */}
       <div
         onClick={closeOrShowSidebar}
-        className="absolute z-20 text-gray-800 top-1 right-1 cursor-pointer"
+        className="absolute z-20 text-indigo-900 top-5 mt-0.5 right-2 cursor-pointer"
       >
         {showSmall ? (
           <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
@@ -100,7 +100,7 @@ export default function NewSidebar({
 
       {!showSmall ? (
         <div
-          className="relative flex flex-col border-r border-indigo-500 p-2 gap-2"
+          className="h-full relative flex flex-col border-r border-indigo-500 px-2 gap-2"
           style={{
             width: sidebarWidth,
             minWidth: MIN_SIDEBAR_WIDTH + 'px',

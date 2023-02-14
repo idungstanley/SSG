@@ -1,0 +1,36 @@
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../../../components';
+import { setShowSidebarSettings } from '../../../../../../../features/hubs/hubSlice';
+import ArchiveMenu from '../../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
+import WorkSpaceSelection from '../../../../sidebar/components/WorkSpaceSelection';
+import MainLogo from '../../../../../../../assets/branding/main-logo.png';
+
+export default function Header() {
+  const dispatch = useAppDispatch();
+  const { sidebarSettings } = useAppSelector((state) => state.hub);
+
+  return (
+    <div className="flex py-2 items-center border-b border-gray-300 w-full flex-row gap-1">
+      <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
+      <WorkSpaceSelection />
+
+      {/* cog */}
+      <div
+        className="flex items-center justify-center mt-1"
+        onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}
+      >
+        <ArchiveMenu />
+      </div>
+
+      <span className="mb-1.5">
+        <AvatarWithInitials
+          initials="Also Workspace"
+          height="h-5"
+          width="w-5"
+          backgroundColour="blue"
+        />
+      </span>
+    </div>
+  );
+}
