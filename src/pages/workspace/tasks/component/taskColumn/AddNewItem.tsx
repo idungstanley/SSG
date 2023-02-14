@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import { useDispatch } from "react-redux";
-import { setAddNewTaskItem } from "../../../../../features/task/taskSlice";
-import { Button } from "../../../../../components";
-import { FaGlobeAfrica, FaTimes } from "react-icons/fa";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTaskService } from "../../../../../features/task/taskService";
-import { CalendarIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
+import { Button } from '../../../../../components';
+import { FaGlobeAfrica, FaTimes } from 'react-icons/fa';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTaskService } from '../../../../../features/task/taskService';
+import { CalendarIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface AddNewItemProps {
   listId: string | undefined;

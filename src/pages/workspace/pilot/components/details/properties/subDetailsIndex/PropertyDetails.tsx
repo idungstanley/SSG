@@ -12,6 +12,11 @@ import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 
+interface tagItem {
+  id: string,
+  name: string,
+  color: string
+}
 interface PropertyDetailsProps {
   Details: {
     id: string;
@@ -20,7 +25,7 @@ interface PropertyDetailsProps {
     created_at: string;
     status: string;
     priority: string;
-    tags: any
+    tags: [tagItem[]]
   };
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {

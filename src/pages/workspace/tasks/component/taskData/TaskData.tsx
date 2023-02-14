@@ -12,30 +12,30 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
   triggerUnassignTag,
-} from "../../../../../features/task/taskSlice";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { MdDragIndicator } from "react-icons/md";
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../../../../../app/hooks";
+} from '../../../../../features/task/taskSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { MdDragIndicator } from 'react-icons/md';
+import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-import { FiEdit2 } from "react-icons/fi";
-import "./task.css";
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
+import { FiEdit2 } from 'react-icons/fi';
+import './task.css';
+import { IoCloseSharp } from 'react-icons/io5';
+import ToolTip from '../../../../../components/Tooltip';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import moment from 'moment';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import TagModal from '../../../../../components/tags/TagModal';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+
 interface TaskDataProps {
   task: ImyTaskData;
 }
-import { IoCloseSharp } from "react-icons/io5";
-import ToolTip from "../../../../../components/Tooltip";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import moment from "moment";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const {
@@ -185,16 +185,11 @@ export default function TaskData({ task }: TaskDataProps) {
       );
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
-        <>
-          <UserAddOutlined
-            className=" ml-2 text-gray-400 text-xl cursor-pointer "
-            aria-hidden="true"
-            onClick={() => handleAssigneeModal(task.id)}
-          />
-          <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-          </span>
-        </>
+        <UserPlusIcon
+          className="ml-2 text-gray-400 text-xl cursor-pointer"
+          aria-hidden="true"
+          onClick={() => handleAssigneeModal(task.id)}
+        />
       );
     } else if (colfield === "tags") {
       return <div> {groupTags(taskColField)}</div>;
@@ -208,8 +203,8 @@ export default function TaskData({ task }: TaskDataProps) {
       if (taskColField == "completed") {
         return (
           <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -217,8 +212,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "in progress") {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -226,8 +221,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "archived") {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1 w-20 absolute"
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -307,16 +302,15 @@ export default function TaskData({ task }: TaskDataProps) {
               id="iconWrapper"
               className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
             >
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
-              </span>
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusOutlined
-                  className="  w-3  text-gray-500   "
-                  aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task.id)}
-                />
-              </span>
+              <FiEdit2
+                className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
+                aria-hidden="true"
+              />
+              <PlusIcon
+                className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
+                aria-hidden="true"
+                onClick={() => handleCreateSubTask(task.id)}
+              />
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
                 <TagModal />

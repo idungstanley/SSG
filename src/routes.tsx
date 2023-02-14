@@ -99,11 +99,7 @@ export const routes = (user: IUser | null) =>
     },
     {
       path: 'accept-invite/:inviteCode',
-      element: user ? (
-        <TeamMemberAcceptInvite />
-      ) : (
-        <Navigate to="/auth/register" />
-      ),
+      element: <TeamMemberAcceptInvite />,
     },
     { path: 'explorer', element: <ExplorerPage /> },
     { path: 'explorer/:folderId', element: <ExplorerPage /> },

@@ -13,7 +13,6 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { columnsHead } from "./ListColumns";
 import { MdDragIndicator } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
-import Board from "./Board";
 export default function TaskListViews() {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
@@ -49,11 +48,11 @@ export default function TaskListViews() {
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
               <div className="group flex items-center">
-                <span className="text-xs text-black p-1 bg-gray-300 pr-2">
+                <span className="text-xs rounded-t-md	 text-black p-1 bg-gray-300 pr-2">
                   OPEN
                 </span>
               </div>
-              <span className="text-xs text-gray-400 mt-1	ml-1">
+              <span className="text-xs text-gray-400 	ml-3 mr-px font-bold">
                 {myTaskData?.length}
               </span>
             </div>
@@ -66,7 +65,7 @@ export default function TaskListViews() {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex mt-1 items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
+                        className="flex  items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
                         style={{ color: "#78828d", fontSize: "11px" }}
                       >
                         {col.value}
@@ -79,7 +78,7 @@ export default function TaskListViews() {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex mt-1 items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
+                        className="flex  items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
                         style={{ color: "#78828d", fontSize: "10px" }}
                       >
                         {col.value}

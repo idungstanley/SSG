@@ -1,20 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getOneTaskServices } from '../taskService';
+import { createSlice } from "@reduxjs/toolkit";
+import { getOneTaskServices } from "../taskService";
 
 interface checklistState {
   checklist: string[];
   triggerChecklistUpdate: boolean;
   triggerItemUpdate: boolean;
+  triggerDelChecklist: boolean;
+  clickedChecklistId: string;
+  clickedChecklistItemId: string;
+  triggerDelChecklistItem: boolean;
 }
 
 const initialState: checklistState = {
   checklist: [],
   triggerChecklistUpdate: false,
   triggerItemUpdate: false,
+  triggerDelChecklist: false,
+  clickedChecklistId: "",
+  clickedChecklistItemId: "",
+  triggerDelChecklistItem: false,
 };
 
 export const checklistSlice = createSlice({
-  name: 'task',
+  name: "Checklists",
   initialState,
   reducers: {
     getchecklist(state, { payload }) {
@@ -29,6 +37,18 @@ export const checklistSlice = createSlice({
     setTriggerItemtUpdate(state, { payload }) {
       state.triggerItemUpdate = payload;
     },
+    setTriggerDelChecklist(state, { payload }) {
+      state.triggerDelChecklist = payload;
+    },
+    setClickChecklistId(state, { payload }) {
+      state.clickedChecklistId = payload;
+    },
+    setClickChecklistItemId(state, { payload }) {
+      state.clickedChecklistItemId = payload;
+    },
+    setTriggererChecklistItemDel(state, { payload }) {
+      state.triggerDelChecklistItem = payload;
+    },
   },
 });
 
@@ -36,8 +56,10 @@ export const {
   getchecklist,
   setTriggerChecklistUpdate,
   setTriggerItemtUpdate,
+  setTriggerDelChecklist,
+  setClickChecklistId,
+  setTriggererChecklistItemDel,
+  setClickChecklistItemId,
 } = checklistSlice.actions;
-
-export const selectChecklists = (initialState: {checklist: string[]}) => initialState.checklist;
 
 export default checklistSlice.reducer;

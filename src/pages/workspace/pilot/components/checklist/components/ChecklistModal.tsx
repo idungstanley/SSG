@@ -1,8 +1,17 @@
 import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { BsThreeDots } from "react-icons/bs";
+import {
+  setClickChecklistId,
+  setClickChecklistItemId,
+  setTriggerDelChecklist,
+  setTriggererChecklistItemDel,
+} from "../../../../../../features/task/checklist/checklistSlice";
+import { useAppDispatch } from "../../../../../../app/hooks";
 
 interface ChecklistModalProps {
+  checklistId: string;
+  checklistItemId?: string;
   options: {
     id: number;
     handleClick: () => void;
@@ -10,7 +19,33 @@ interface ChecklistModalProps {
   }[];
 }
 
-export default function ChecklistModal({ options }: ChecklistModalProps) {
+export default function ChecklistModal({
+  options,
+  checklistId,
+  checklistItemId,
+}: ChecklistModalProps) {
+  const dispatch = useAppDispatch();
+
+  const handleDelChecklist = () => {
+    dispatch(setClickChecklistId(checklistId));
+    dispatch(setTriggerDelChecklist(true));
+  };
+
+  const handleChecklistItemDel = () => {
+    dispatch(setClickChecklistId(checklistId));
+    dispatch(setClickChecklistItemId(checklistItemId));
+    dispatch(setTriggererChecklistItemDel(true));
+  };
+  const handleOptions = (option: string) => {
+    if (option === "Delete Checklist") {
+      handleDelChecklist();
+    } else if (option === "Delete Item") {
+      handleChecklistItemDel();
+    }
+    // option === "Delete Checklist"
+    //   ? handleDelChecklist()
+    //   : handleChecklistItemDel();
+  };
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -35,7 +70,9 @@ export default function ChecklistModal({ options }: ChecklistModalProps) {
                   <button
                     type="button"
                     className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
-                    onClick={option.handleClick}
+                    onClick={() => {
+                      handleOptions(option.name);
+                    }}
                   >
                     <p>{option.name}</p>
                   </button>
