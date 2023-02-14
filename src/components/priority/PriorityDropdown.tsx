@@ -67,7 +67,7 @@ export default function PriorityDropdown({
   if (status == "success") {
     setPriority("");
   }
-  const setPriorityColor = (priority: string) => {
+  const setPriorityColor = (priority: string | null) => {
     if (priority == null || priority == "low") {
       return (
         <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />

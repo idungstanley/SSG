@@ -20,6 +20,7 @@ import { AvatarWithInitials } from '../../../../../components';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -59,7 +60,7 @@ export default function Template2({ task }: TemplateProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <>
@@ -93,7 +94,7 @@ export default function Template2({ task }: TemplateProps) {
     dispatch(setCurrentTaskStatusId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -103,7 +104,7 @@ export default function Template2({ task }: TemplateProps) {
     });
   };
 
-  const renderData = (taskColField, colfield) => {
+  const renderData = (taskColField: [] | string, colfield: string) => {
     if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <div className="relative">
