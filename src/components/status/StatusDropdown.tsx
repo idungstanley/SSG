@@ -75,7 +75,7 @@ export default function StatusDropdown({
   // console.log(updateTaskStatus);
   // console.log(statusValue);
 
-  const setStatusColor = (status: string) => {
+  const setStatusColor = (status: string | null | undefined) => {
     if (status == "new" || status == "todo") {
       return (
         <RiCheckboxBlankFill

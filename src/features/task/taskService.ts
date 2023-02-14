@@ -5,7 +5,7 @@ import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
 
-export const createTaskService = (data: {name: string, description?: string, showMenuDropdown?: string | null, getListId?: string, parentTaskId?: string}) => {
+export const createTaskService = (data: {name: string, description?: string, showMenuDropdown?: string | null, getListId?: string, parentTaskId?: string | null}) => {
   const response = requestNew(
     {
       url: 'at/tasks',
@@ -22,7 +22,7 @@ export const createTaskService = (data: {name: string, description?: string, sho
   return response;
 };
 
-export const getOneTaskService = (data: {queryKey: string[]}) => {
+export const getOneTaskService = (data: { queryKey: (string | undefined)[] }) => {
   const taskId = data.queryKey[1];
   const response = requestNew(
     {
@@ -35,7 +35,7 @@ export const getOneTaskService = (data: {queryKey: string[]}) => {
 };
 
 //getOneTask
-export const getOneTaskServices = ({ task_id }: {task_id: string}) => {
+export const getOneTaskServices = ({ task_id }: {task_id: string | null}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
@@ -141,7 +141,7 @@ export const UseUpdateTaskStatusServices = ({
   );
 };
 
-export const getTaskListService = ({ listId }: {listId: string}) => {
+export const getTaskListService = ({ listId }: {listId: string | null | undefined}) => {
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
@@ -205,7 +205,9 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
   );
 };
 
-export const createTimeEntriesService = (data: {queryKey: string[]}) => {
+export const createTimeEntriesService = (data: {
+  queryKey: (string | undefined)[];
+}) => {
   const taskID = data.queryKey[1];
   const response = requestNew(
     {
@@ -221,7 +223,7 @@ export const createTimeEntriesService = (data: {queryKey: string[]}) => {
   return response;
 };
 
-export const StartTimeEntryService = (query: {taskId: string, trigger: boolean}) => {
+export const StartTimeEntryService = (query: {taskId: string | null, trigger: boolean}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { query: query.taskId }],
@@ -248,7 +250,11 @@ export const StartTimeEntryService = (query: {taskId: string, trigger: boolean})
   );
 };
 
-export const EndTimeEntriesService = (data: {description: string, isBillable: string, trigger: boolean}) => {
+export const EndTimeEntriesService = (data: {
+  description: string | undefined;
+  isBillable: string | undefined;
+  trigger: boolean;
+}) => {
   return useQuery(
     ['timeclock'],
     async () => {
@@ -271,7 +277,7 @@ export const EndTimeEntriesService = (data: {description: string, isBillable: st
   );
 };
 
-export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | null, trigger: string | null}) => {
+export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | null | undefined, trigger: string | null | undefined}) => {
   // const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
@@ -296,7 +302,7 @@ export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | nul
   );
 };
 
-export const UpdateTimeEntriesService = (data: {time_entry_id: string, description: string, isBillable: string, start_date: string, end_date: string}) => {
+export const UpdateTimeEntriesService = (data: {time_entry_id: string | undefined, description: string, isBillable: number, start_date: string | null, end_date: string | null}) => {
   const response = requestNew(
     {
       url: `time-entries/${data.time_entry_id}`,
@@ -313,7 +319,7 @@ export const UpdateTimeEntriesService = (data: {time_entry_id: string, descripti
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string | null}) => {
+export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string | null | undefined}) => {
   return useQuery(
     ['timeclock', { data: data.timeEntryDeleteTriggerId }],
     async () => {
@@ -436,7 +442,7 @@ export const RemoveWatcherService = ({ query }: {query: string[]}) => {
 };
 
 //Assign task to team member
-export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: string, team_member_id: string}) => {
+export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: string | null, team_member_id: string | null}) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   return useQuery(
@@ -466,7 +472,7 @@ export const UseUnAssignTaskService = ({
   task_id,
   team_member_id,
   unAssignTrigger,
-}: {task_id: string, team_member_id: string, unAssignTrigger: boolean}) => {
+}: {task_id: string | null, team_member_id: string | null, unAssignTrigger: boolean}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['unassign', { team_member_id: team_member_id }],

@@ -4,7 +4,6 @@ import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import {
-  EndTimeEntriesService,
   GetTimeEntriesService,
   StartTimeEntryService,
 } from '../../../../features/task/taskService';
@@ -33,10 +32,10 @@ export default function TimeEntries() {
     trigger: startTimeClicked,
   });
 
-  EndTimeEntriesService({
-    taskId: currentTaskIdForPilot,
-    trigger: stopTimeClock,
-  });
+  // EndTimeEntriesService({
+  //   taskId: currentTaskIdForPilot,
+  //   trigger: stopTimeClock,
+  // });
 
   const handleTimeTrigger = () => {
     setStartTimeClicked(!startTimeClicked);
@@ -73,7 +72,7 @@ export default function TimeEntries() {
           </div>
           {/* render time enteries */}
           {showEntries &&
-            getEntries?.data?.time_entries?.map((entries) => (
+            getEntries?.data?.time_entries?.map((entries: entriesProps) => (
               <EntryList entries={entries} key={entries.id} />
             ))}
         </section>

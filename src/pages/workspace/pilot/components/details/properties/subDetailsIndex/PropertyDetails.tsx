@@ -12,7 +12,7 @@ import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 
-interface tagItem {
+export interface tagItem {
   id: string,
   name: string,
   color: string

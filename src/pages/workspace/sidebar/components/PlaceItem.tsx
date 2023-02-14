@@ -47,7 +47,7 @@ export default function PlaceItem({
           className={classNames(
             'flex gap-4 items-center content-center self-center',
             isActivePlace ? 'justify-center text-black font-bold' : '',
-            showSidebar && isActivePlace && 'ml-16'
+            showSidebar && isActivePlace ? 'ml-16' : ''
           )}
         >
           {icon}
