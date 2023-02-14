@@ -1,14 +1,22 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  BellIcon,
+  Squares2X2Icon,
+  CalendarIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BsCalendar2Minus } from 'react-icons/bs';
+// import { BsCalendar2Minus } from 'react-icons/bs';
 import favoriteIcon from '../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../assets/branding/Group.png';
-import notificationIcon from '../../../../../assets/branding/notification-logo.png';
+// import notificationIcon from '../../../../../assets/branding/notification-logo.png';
 import homeIcon from '../../../../../assets/branding/Home-icon.svg';
 import { classNames } from '../../../../../utils';
-import { MdOutlineDashboard } from 'react-icons/md';
-import { HiUserGroup } from 'react-icons/hi';
+// import { MdOutlineDashboard } from 'react-icons/md';
+// import { HiUserGroup } from 'react-icons/hi';
+import { useAppSelector } from '../../../../../app/hooks';
 
 const navigation = [
   {
@@ -20,19 +28,19 @@ const navigation = [
   {
     name: 'Notifications',
     href: '/notification',
-    source: notificationIcon,
+    icon: <BellIcon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: true,
   },
   {
     name: 'Calendar',
     href: '/calendar',
-    icon: <BsCalendar2Minus className="text-gray-700 text-l" />,
+    icon: <CalendarIcon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
     name: 'Community',
     href: '/community',
-    icon: <HiUserGroup className="text-gray-700 text-l" />,
+    icon: <UserGroupIcon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
@@ -44,7 +52,7 @@ const navigation = [
   {
     name: 'Dashboards',
     href: '/dashboard',
-    icon: <MdOutlineDashboard className="text-gray-700 text-l" />,
+    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
@@ -58,22 +66,70 @@ const navigation = [
 const showLessOrMore = [
   {
     name: 'Show Less',
-    icon: <ArrowUpIcon />,
+    icon: <ArrowUpIcon className="w-5 h-5" aria-hidden="true" />,
   },
   {
     name: 'Show More',
-    icon: <ArrowDownIcon />,
+    icon: <ArrowDownIcon className="w-5 h-5" aria-hidden="true" />,
   },
 ];
 
-export default function NavigationItems() {
+interface NavigationItemProps {
+  item: {
+    name: string;
+    href: string;
+    alwaysShow: boolean;
+    source?: string;
+    icon?: JSX.Element;
+  };
+  isVisible: boolean;
+}
+
+function NavigationItem({ item, isVisible }: NavigationItemProps) {
   const { pathname } = useLocation();
-  const [showMore, setShowMore] = useState(false);
+  const { showSidebar } = useAppSelector((state) => state.account);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col mt-1">
-      <nav className="flex-1">
-        {navigation.map((item) =>
+    <Link
+      to={item.href}
+      className={classNames(
+        pathname === item.href
+          ? 'bg-green-100 hover:bg-green-200'
+          : 'hover:bg-gray-100',
+        !showSidebar ? 'justify-center' : 'gap-2 items-center',
+        'relative flex cursor-pointer p-2 w-full hover:text-gray-500 '
+      )}
+    >
+      {item.href === pathname ? (
+        <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
+      ) : null}
+
+      {item.icon || (
+        <img className="w-5 h-5" src={item.source} alt={item.name} />
+      )}
+      {showSidebar ? <p className="text-xs truncate">{item.name}</p> : null}
+    </Link>
+  );
+}
+
+export default function NavigationItems() {
+  const [showMore, setShowMore] = useState(false);
+  const { showSidebar } = useAppSelector((state) => state.account);
+
+  return (
+    <nav className="flex flex-col mt-1">
+      {navigation.map((item) => (
+        <NavigationItem
+          key={item.href}
+          item={item}
+          isVisible={item.alwaysShow || showMore}
+        />
+      ))}
+      {/* {navigation.map((item) =>
           showMore ? (
             <Link
               key={item.name}
@@ -165,22 +221,22 @@ export default function NavigationItems() {
               </div>
             </Link>
           ) : null
+        )} */}
+      {/* show less or more button */}
+      <div
+        onClick={() => setShowMore((prev) => !prev)}
+        className={classNames(
+          !showSidebar ? 'justify-center' : 'gap-2 items-center',
+          'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
         )}
-        <div
-          onClick={() => setShowMore((prev) => !prev)}
-          className="flex items-center w-full pl-4 cursor-pointer py-1 text-base font-medium hover:bg-gray-100 hover:text-gray-900"
-        >
-          <div
-            className="flex-shrink-0 w-4 h-4 mr-4 hover:text-gray-900 hover:bg-gray-100"
-            aria-hidden="true"
-          >
-            {showLessOrMore[showMore ? 0 : 1].icon}
-          </div>
-          <p style={{ fontSize: '10px' }} className="tracking-wider truncate">
+      >
+        {showLessOrMore[showMore ? 0 : 1].icon}
+        {showSidebar ? (
+          <p className="text-xs truncate">
             {showLessOrMore[showMore ? 0 : 1].name}
           </p>
-        </div>
-      </nav>
-    </div>
+        ) : null}
+      </div>
+    </nav>
   );
 }

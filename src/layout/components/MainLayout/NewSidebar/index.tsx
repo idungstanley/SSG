@@ -95,14 +95,14 @@ export default function NewSidebar({
       {/* sidebar */}
       {showSidebar ? (
         <div
-          className="h-full relative flex flex-col border-r border-gray-500 px-2 gap-2"
+          className="h-full relative flex flex-col border-r border-gray-500 px-1 gap-2"
           style={style}
         >
           <FullSidebar />
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>
       ) : (
-        <div className="h-full relative flex flex-col border-r border-gray-500 px-2 gap-2">
+        <div className="h-full relative flex flex-col border-r border-gray-500 px-1 gap-2">
           <MinSidebar />
           <ResizeBorder onMouseDown={onMouseDown} />
         </div>
