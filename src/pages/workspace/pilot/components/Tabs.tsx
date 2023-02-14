@@ -221,8 +221,8 @@ function Tab() {
             />
             <Dropdown items={dropdownOptions} />
           </div>
-          <HotKeys />
         </section>
+        <HotKeys />
         <div
           className={`flex flex-wrap relative divide-y divide-x ${
             showPilotIconView ? 'flex-row' : 'flex-col'

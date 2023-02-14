@@ -23,13 +23,29 @@ export default function HotKeys() {
     };
   });
   localStorage.setItem('HotKeys', JSON.stringify(newHotKey));
-  // const getHotKeys = JSON.parse(localStorage.getItem('HotKeys'));
-  // console.log(getHotKeys);
   const addHotkeys = newHotKey.filter((keys) => keys.isVisible === false);
   const removeHotkeys = newHotKey.filter((keys) => keys.isVisible === true);
   return (
-    <div>
-      {removeHotkeys.length != 0 ? <div></div> : null}
+    <div className="">
+      {removeHotkeys.length != 0 ? (
+        <div className="border-b border-gray-200 py-2 px-4">
+          {removeHotkeys.map((item) => (
+            <div key={item.id}>
+              <div className="flex text-sm w-4 h-4 gap-3">
+                {item.icon ? (
+                  item.icon
+                ) : (
+                  <img
+                    src={item.source}
+                    alt={item.name ? item.name : item.label + ' icon'}
+                  />
+                )}
+                {/* <span>{item.label ? item.label : (item as IColumn).name}</span> */}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       {showAddHotKeyDropdown && (
         <CustomDropdown listItems={addHotkeys} title="Add HotKeys" />
