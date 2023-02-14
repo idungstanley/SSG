@@ -115,16 +115,8 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
-  const groupTags = (
-    arr:
-      | tagItem[]
-      | []
-      | string
-      | [{ id: string; initials: string; colour: string }]
-      | null
-      | undefined
-  ) => {
-    return arr?.map((item: tagItem) => {
+  const groupTags = (arr: tagItem[]) => {
+    return arr.map((item: tagItem) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
@@ -175,16 +167,8 @@ export default function TaskData({ task }: TaskDataProps) {
     });
   };
 
-  const renderData = (
-    taskColField:
-      | string
-      | [{ id: string; initials: string; colour: string }]
-      | null
-      | undefined
-      | ReactNode,
-    colfield: string
-  ) => {
-    if (colfield === 'assignees' && taskColField?.length !== 0) {
+  const renderData = (taskColField, colfield: string) => {
+    if (colfield === 'assignees' && taskColField.length !== 0) {
       return (
         <>
           <div className="">
