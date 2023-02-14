@@ -1,10 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import { setTaskIdForPilot } from "../../../../../features/task/taskSlice";
-import moment from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
+import {
+  ImyTaskData,
+  setCurrentTaskId,
+  setCurrentTaskPriorityId,
+  setShowTaskNavigation,
+} from "../../../../../features/task/taskSlice";
+import moment, { MomentInput } from "moment";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns } = useAppSelector(
@@ -12,36 +17,47 @@ function TaskTableView() {
   );
   const dispatch = useAppDispatch();
 
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: "task",
-        activeItemName: name,
-      })
-    );
+  
+
+  const handleTaskPriority = (id: string | undefined | null) => {
+    dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
-      return (
-        <>
-          <div>
-            <div>Assinee name</div>
-          </div>
-        </>
-      );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
-      return (
-        <>
-          <p>-</p>
-        </>
-      );
+  const renderData = (
+    taskColField:
+      | string
+      | ImyTaskData
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (colfield === "assignees") {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length !== 0 ? (
+        <div className="relative">
+          <div>Assignees Name</div>
+        </div>
+      ) : null;
+    } else if (colfield === "assignees") {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length === 0 ? <p>-</p> : null;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
     } else if (colfield == "status") {
@@ -58,73 +74,93 @@ function TaskTableView() {
       }
     } else if (colfield === "name") {
       return (
-        <div>
-          <p
-            onClick={() => handleTaskPilot(taskColField.id, taskColField.name)}
-            className="cursor-pointer "
-          >
-            {taskColField}
-          </p>
+        <div className="flex items-center relative ">
+          <div className="flex items-center">
+            <p>{taskColField as ReactNode}</p>
+
+            {/* tags goes here */}
+            {/* <div> {groupTags(task.tags)}</div>; */}
+          </div>
         </div>
       );
     } else if (colfield === "priority") {
       return (
-        <td>
-          <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
-        </td>
+        <span
+          className="relative  border-dotted border-gray-300 "
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
+        >
+          <PriorityDropdown
+            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
+          />
+        </span>
       );
     } else return taskColField;
   };
 
   return (
     <>
-      <div className="overflow-y-auto border rounded-lg h-min">
-        <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              {hideTask.length
-                ? hideTask.map(
-                    (columns) =>
-                      !columns.hidden && (
-                        <th scope="col" className="" key={columns.field}>
-                          {columns.value}
-                        </th>
-                      )
-                  )
-                : taskColumns.map(
-                    (columns) =>
-                      !columns.hidden && (
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
-                          key={columns.field}
-                        >
-                          {columns.value}
-                        </th>
-                      )
-                  )}
-            </tr>
-          </thead>
-          <tbody className="">
-            {myTaskData.map((task) => {
-              return (
-                <tr key={task.id} className="bg-white hover:bg-gray-200">
-                  {taskColumns.map(
-                    (col) =>
-                      !col.hidden && (
-                        <td
-                          className="px-6 py-2 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
-                          key={col.field}
-                        >
-                          {renderData(task[col.field], col.field)}
-                        </td>
-                      )
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="flex flex-col">
+        <div className="overflow-x-auto">
+          <div className="p-1.5 w-full inline-block align-middle">
+            <div className="overflow-y-auto border rounded-lg h-min">
+              <table className="min-w-full divide-y divide-gray-500">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {hideTask.length
+                      ? hideTask.map(
+                          (columns) =>
+                            !columns.hidden && (
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
+                                key={columns.field}
+                              >
+                                {columns.value}
+                              </th>
+                            )
+                        )
+                      : taskColumns.map(
+                          (columns) =>
+                            !columns.hidden && (
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
+                                key={columns.field}
+                              >
+                                {columns.value}
+                              </th>
+                            )
+                        )}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {myTaskData.map((task) => {
+                    return (
+                      <tr key={task.id}>
+                        {taskColumns.map(
+                          (col) =>
+                            !col.hidden && (
+                              <td
+                                className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
+                                key={col.field}
+                              >
+                                {
+                                  renderData(
+                                    task[col.field],
+                                    col.field
+                                  ) as ReactNode
+                                }
+                              </td>
+                            )
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
