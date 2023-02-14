@@ -3,14 +3,12 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
+  ImyTaskData,
   setCurrentTaskId,
   setCurrentTaskPriorityId,
-  setCurrentTaskStatusId,
   setShowTaskNavigation,
-  setTaskIdForPilot,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
@@ -22,27 +20,14 @@ function TaskTableView() {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: "task",
-        activeItemName: name,
-      })
-    );
-  };
 
-  const handleTaskStatus = (id: string) => {
-    dispatch(setCurrentTaskStatusId(id));
-  };
-
-  const handleTaskPriority = (id: string) => {
+  const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
   const renderData = (
     taskColField:
+      | ImyTaskData
       | string
       | number
       | undefined
@@ -51,7 +36,16 @@ function TaskTableView() {
       | Array<{ id: string; initials: string; colour: string }>,
     colfield: string
   ) => {
-    if (colfield === "assignees") {
+    if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
       const TCF = taskColField as Array<{
         id: string;
         initials: string;
@@ -63,7 +57,7 @@ function TaskTableView() {
           <div>Assignees Name</div>
         </div>
       ) : null;
-    } else if (colfield === "assignees") {
+    } else if (colfield === 'assignees') {
       const TCF = taskColField as Array<{
         id: string;
         initials: string;
@@ -71,25 +65,25 @@ function TaskTableView() {
       }>;
 
       return TCF.length === 0 ? <p>-</p> : null;
-    } else if (colfield == "created_at" || colfield == "updated_at") {
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
-    } else if (colfield == "status") {
-      if (taskColField == "completed") {
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "in progress") {
+      } else if (taskColField == 'in progress') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
           <div className="flex items-center">
@@ -100,13 +94,15 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(taskColField?.id as string)}
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData).id)}
         >
-          <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
+          <PriorityDropdown
+            TaskCurrentPriority={(taskColField as ImyTaskData).priority}
+          />
         </span>
       );
     } else return taskColField;
@@ -159,7 +155,12 @@ function TaskTableView() {
                                 className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
                                 key={col.field}
                               >
-                                {renderData(task[col.field], col.field) as ReactNode}
+                                {
+                                  renderData(
+                                    task[col.field],
+                                    col.field
+                                  ) as ReactNode
+                                }
                               </td>
                             )
                         )}
