@@ -4,9 +4,7 @@ import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
   ImyTaskData,
-  setCurrentTaskId,
   setCurrentTaskPriorityId,
-  setShowTaskNavigation,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
@@ -16,8 +14,6 @@ function TaskTableView() {
     (state) => state.task
   );
   const dispatch = useAppDispatch();
-
-  
 
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -34,26 +30,32 @@ function TaskTableView() {
       | Array<{ id: string; initials: string; colour: string }>,
     colfield: string
   ) => {
-    if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length !== 0 ? (
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
+      return (
         <div className="relative">
-          <div>Assignees Name</div>
+          <div>Assignee Name</div>
         </div>
-      ) : null;
-    } else if (colfield === "assignees") {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length === 0 ? <p>-</p> : null;
+      );
+    } else if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
+      return <p>-</p>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">

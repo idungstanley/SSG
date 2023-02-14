@@ -151,9 +151,7 @@ export default function Template2({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } 
-    
-    else if (colfield === "tags") {
+    } else if (colfield === "tags") {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (

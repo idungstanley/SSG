@@ -14,7 +14,6 @@ import { useAppSelector } from "../../../../../app/hooks";
 import { MdDragIndicator } from "react-icons/md";
 import { FiEdit2 } from "react-icons/fi";
 import { AvatarWithInitials } from "../../../../../components";
-import AssignTask from "../../assignTask/AssignTask";
 import "../create/subtask.css";
 import moment, { MomentInput } from "moment";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
