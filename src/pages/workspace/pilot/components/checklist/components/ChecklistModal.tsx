@@ -60,29 +60,42 @@ export default function ChecklistModal({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="origin-top-right absolute z-20 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-20">
-          {options.map((option) => (
-            <Menu.Item key={option.id}>
-              {() => (
-                <div className="flex items-center hover:bg-gray-300 text-gray-600">
-                  <button
-                    type="button"
-                    className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
-                    onClick={() => {
-                      handleOptions(option);
-                    }}
-                  >
-                    {option.name === "New Item" ? (
-                      <Disclosure.Button>
-                        <p>{option.name}</p>
-                      </Disclosure.Button>
-                    ) : (
+          {options.map((option) =>
+            option.name === "New Item" ? (
+              <Disclosure.Button key={option.id} className="w-full">
+                {() => (
+                  <div className="flex items-center hover:bg-gray-300 text-gray-600 w-full">
+                    <button
+                      type="button"
+                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-full"
+                      onClick={() => {
+                        handleOptions(option);
+                      }}
+                    >
                       <p>{option.name}</p>
-                    )}
-                  </button>
-                </div>
-              )}
-            </Menu.Item>
-          ))}
+                    </button>
+                  </div>
+                )}
+              </Disclosure.Button>
+            ) : (
+              <Menu.Item key={option.id}>
+                {() => (
+                  <div className="flex items-center hover:bg-gray-300 text-gray-600">
+                    <button
+                      type="button"
+                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
+                      onClick={() => {
+                        handleOptions(option);
+                      }}
+                    >
+                      {/* ) : ( */}
+                      <p>{option.name}</p>
+                    </button>
+                  </div>
+                )}
+              </Menu.Item>
+            )
+          )}
         </Menu.Items>
       </Transition>
     </Menu>

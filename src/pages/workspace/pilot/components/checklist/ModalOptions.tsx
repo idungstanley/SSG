@@ -5,11 +5,6 @@ export const completeOptions = [
     handleClick: () => ({}),
   },
   {
-    id: 2,
-    name: "Rename Checklist",
-    handleClick: () => ({}),
-  },
-  {
     id: 3,
     name: "Assign all",
     handleClick: () => ({}),
@@ -31,22 +26,22 @@ export const completeOptions = [
 export const lessOptions = [
   {
     id: 1,
-    name: "New Item",
-    handleClick: () => ({}),
-  },
-  {
-    id: 2,
     name: "Rename",
     handleClick: () => ({}),
   },
   {
+    id: 2,
+    name: "Assign to",
+    handleClick: () => ({}),
+  },
+  {
     id: 3,
-    name: "Delete Item",
+    name: "Unassign",
     handleClick: () => ({}),
   },
   {
     id: 4,
-    name: "Assign to",
+    name: "Delete Item",
     handleClick: () => ({}),
   },
 ];
