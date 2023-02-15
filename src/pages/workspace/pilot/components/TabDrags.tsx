@@ -7,8 +7,8 @@ import { useAppSelector } from '../../../../app/hooks';
 import { GrDrag } from 'react-icons/gr';
 
 interface TabProps {
-  id: number | undefined;
-  name: string | undefined;
+  id: number;
+  name: string;
   source: string | undefined;
   showPilot?: boolean;
   showPilotIconView?: boolean;
@@ -44,9 +44,8 @@ export default function TabDrag({
     zIndex: isDragging ? 1 : undefined,
   };
 
-  const handleClick = (tabId: number | undefined, name: string | undefined) => {
+  const handleClick = (tabId: number) => {
     dispatch(setActiveTabId(tabId));
-    console.log(activeTabId, name);
   };
 
   return (
@@ -57,7 +56,7 @@ export default function TabDrag({
       }`}
     >
       <div
-        onClick={() => handleClick(id, name)}
+        onClick={() => handleClick(id)}
         className={classNames(
           id === activeTabId
             ? 'bg-gray-300 text-black'

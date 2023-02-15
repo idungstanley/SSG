@@ -16,16 +16,21 @@ export default function HotKeys() {
   const { showAddHotKeyDropdown, showRemoveHotKeyDropdown } = useAppSelector(
     (state) => state.workspace
   );
-  const newHotKey = hotKeysTabs.map((keys, index) => {
+  const newHotKey = hotKeysTabs.map(({ name, isVisible }, index) => {
     return {
-      ...keys,
-      id: (keys.id = index + 1),
+      name,
+      isVisible,
+      id: index + 1,
     };
   });
   localStorage.setItem('HotKeys', JSON.stringify(newHotKey));
-  const getKeysStorage = JSON.parse(localStorage.getItem('HotKeys') || '');
-  const addHotkeys = getKeysStorage.filter((keys: IColumn) => keys.isVisible === false);
-  const removeHotkeys = getKeysStorage.filter((keys: IColumn) => keys.isVisible === true);
+  // const getKeysStorage = JSON.parse(localStorage.getItem('HotKeys') || '');
+  const addHotkeys = newHotKey.filter(
+    (keys: IColumn) => keys.isVisible === false
+  );
+  const removeHotkeys = newHotKey.filter(
+    (keys: IColumn) => keys.isVisible === true
+  );
   const handleClick = (id: number | undefined) => {
     // const filteredName = getKeysStorage.filter((key: IColumn) => key.id === id);
     const filteredKeys = newHotKey.map((key: IColumn) => {

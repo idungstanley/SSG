@@ -16,13 +16,13 @@ import {
   setShowPilotIconView,
   setShowRemoveHotKeyDropdown,
 } from '../../../../features/workspace/workspaceSlice';
+import { SiHotjar } from 'react-icons/si';
+import { IoMdRemoveCircle } from 'react-icons/io';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
 import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 import TabDrag from './TabDrags';
 import ChecklistSubtab from './checklist/subtabs/ChecklistSubtab';
-import { SiHotjar } from 'react-icons/si';
-import { IoMdRemoveCircle } from 'react-icons/io';
 import {
   closestCenter,
   DndContext,
@@ -38,23 +38,22 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import Dropdown from '../../../../components/Dropdown';
 import HotKeys from './hotKeys/HotKeys';
-import { IColumn } from '../../tasks/dropdown/CustomDropdown';
+import Dropdown from '../../../../components/Dropdown';
 
-export const pilotOptions: IColumn[] = [
+export const pilotOptions = [
   {
     id: 1,
     name: 'Connect',
     source: communicationIcon,
     subTab: <CommunicationSubTab />,
-    isVisible: true,
+    isVisible: false,
   },
   {
     id: 2,
     name: 'Logs',
     source: logsIcon,
-    isVisible: false,
+    isVisible: true,
   },
   {
     id: 3,
@@ -91,17 +90,31 @@ export const pilotOptions: IColumn[] = [
     isVisible: true,
   },
 ];
-
 function Tab() {
   const dispatch = useDispatch();
   const {
     showPilot,
     showPilotIconView,
-    showAddHotKeyDropdown,
-    showRemoveHotKeyDropdown,
     activeItemName,
+    showRemoveHotKeyDropdown,
+    showAddHotKeyDropdown,
     activeItemType,
   } = useAppSelector((state) => state.workspace);
+
+  const handleShowPilot = () => {
+    if (showPilot) {
+      dispatch(setShowPilot(false));
+    } else {
+      dispatch(setShowPilot(true));
+    }
+  };
+  const handleShowPilotIconView = () => {
+    if (showPilotIconView) {
+      dispatch(setShowPilotIconView(false));
+    } else {
+      dispatch(setShowPilotIconView(true));
+    }
+  };
   const handleRemoveHotKeys = () => {
     dispatch(setShowAddHotKeyDropdown(false));
     dispatch(
@@ -126,21 +139,8 @@ function Tab() {
       onClick: handleRemoveHotKeys,
     },
   ];
-  const handleShowPilot = () => {
-    if (showPilot) {
-      dispatch(setShowPilot(false));
-    } else {
-      dispatch(setShowPilot(true));
-    }
-  };
-  const handleShowPilotIconView = () => {
-    if (showPilotIconView) {
-      dispatch(setShowPilotIconView(false));
-    } else {
-      dispatch(setShowPilotIconView(true));
-    }
-  };
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
+
   const [items, setItems] = useState(
     pilotOptions.sort(
       (a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
@@ -152,19 +152,33 @@ function Tab() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
+
     if (active.id !== over?.id) {
       const findActive = items.find((i) => i.id === active.id);
       const findOver = items.find((i) => i.id === over?.id);
+
       if (findActive && findOver) {
         setItems((items) => {
           const oldIndex = items.indexOf(findActive);
           const newIndex = items.indexOf(findOver);
+
           const sortArray = arrayMove(items, oldIndex, newIndex);
+
           localStorage.setItem(
             'pilotSections',
-            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
+            JSON.stringify([
+              ...sortArray.map(
+                (i: {
+                  id: number;
+                  name: string;
+                  source: string;
+                  subTab: JSX.Element;
+                }) => i.id
+              ),
+            ])
           );
           return sortArray;
         });
