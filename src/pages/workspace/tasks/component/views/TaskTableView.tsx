@@ -11,8 +11,9 @@ import { tagItem } from "../../../pilot/components/details/properties/subDetails
 import { BsArrowsAngleExpand } from "react-icons/bs";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns } =
-    useAppSelector((state) => state.task);
+  const { myTaskData, hideTask, taskColumns } = useAppSelector(
+    (state) => state.task
+  );
   const dispatch = useAppDispatch();
 
   // const displayNav = (id: string) => {
@@ -37,7 +38,7 @@ function TaskTableView() {
     colfield: string
   ) => {
     if (
-      colfield === 'assignees' &&
+      colfield === "assignees" &&
       (
         taskColField as Array<{
           id: string;
@@ -65,7 +66,7 @@ function TaskTableView() {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format('MM/DD')}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
     } else if (colfield == "status") {
@@ -73,14 +74,14 @@ function TaskTableView() {
         return <div className="bg-green-500">{taskColField}</div>;
       } else if (taskColField == "in progress") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'archived') {
+      } else if (taskColField == "archived") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == 'todo') {
+      } else if (taskColField == "todo") {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
           <div className="flex w-11/12 justify-between items-center group">
@@ -91,7 +92,7 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300"
@@ -108,7 +109,7 @@ function TaskTableView() {
   return (
     <>
       <div className="overflow-y-auto border rounded-lg h-min">
-        <table className="w-full divide-y divide-gray-500">
+        <table className="fixed_headers w-full divide-y divide-gray-500">
           <thead className="bg-gray-50">
             <tr>
               <th>
@@ -121,7 +122,7 @@ function TaskTableView() {
                       !columns.hidden && (
                         <th
                           scope="col"
-                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 border-gray-300"
                           key={columns.field}
                         >
                           {columns.value}
@@ -133,7 +134,7 @@ function TaskTableView() {
                       !columns.hidden && (
                         <th
                           scope="col"
-                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2 border-gray-300"
                           key={columns.field}
                         >
                           {columns.value}
@@ -147,22 +148,22 @@ function TaskTableView() {
               return (
                 <tr
                   key={task.id}
-                  className=" bg-gray-50 hover:bg-purple-50 group"
+                  className=" bg-gray-50 hover:bg-purple-100 group"
                 >
-                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white">
+                  <td className=" td-resize px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
                     <input
                       type="checkbox"
                       className="opacity-0 group-hover:opacity-100"
                     />
                   </td>
-                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white">
+                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
                     {index + 1}
                   </td>
                   {taskColumns.map(
                     (col) =>
                       !col.hidden && (
                         <td
-                          className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
+                          className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
                           key={col.field}
                         >
                           {renderData(task[col.field], col.field) as ReactNode}
