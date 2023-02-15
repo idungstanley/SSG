@@ -4,6 +4,7 @@ import { BsThreeDots } from "react-icons/bs";
 import {
   setClickChecklistId,
   setClickChecklistItemId,
+  setToggleAssignChecklistItemId,
   setTriggerDelChecklist,
   setTriggererChecklistItemDel,
 } from "../../../../../../features/task/checklist/checklistSlice";
@@ -42,6 +43,8 @@ export default function ChecklistModal({
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
+    } else if (option.name == "Assign to") {
+      dispatch(setToggleAssignChecklistItemId(checklistItemId));
     }
   };
   return (

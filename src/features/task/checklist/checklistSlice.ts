@@ -9,6 +9,7 @@ interface checklistState {
   clickedChecklistId: string;
   clickedChecklistItemId: string;
   triggerDelChecklistItem: boolean;
+  toggleAssignChecklistItemId: string | null;
 }
 
 const initialState: checklistState = {
@@ -19,6 +20,7 @@ const initialState: checklistState = {
   clickedChecklistId: "",
   clickedChecklistItemId: "",
   triggerDelChecklistItem: false,
+  toggleAssignChecklistItemId: null,
 };
 
 export const checklistSlice = createSlice({
@@ -49,6 +51,9 @@ export const checklistSlice = createSlice({
     setTriggererChecklistItemDel(state, { payload }) {
       state.triggerDelChecklistItem = payload;
     },
+    setToggleAssignChecklistItemId(state, { payload }) {
+      state.toggleAssignChecklistItemId = payload;
+    },
   },
 });
 
@@ -60,6 +65,7 @@ export const {
   setClickChecklistId,
   setTriggererChecklistItemDel,
   setClickChecklistItemId,
+  setToggleAssignChecklistItemId,
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

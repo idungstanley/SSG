@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import routes from "./routes";
 import Prompt from "./common/Prompt";
 import { selectCurrentUser } from "./features/auth/authSlice";
+import "./styles/index.css";
 
 function App() {
   const user = useSelector(selectCurrentUser);
@@ -16,7 +17,7 @@ function App() {
         position="bottom-left"
         toastOptions={{
           style: {
-            width: "20px",
+            width: "100px",
           },
         }}
       />

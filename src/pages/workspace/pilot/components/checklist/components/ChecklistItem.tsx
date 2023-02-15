@@ -7,14 +7,11 @@ import {
 } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
-import assign from "../../../../../../assets/icons/fileFormats/assign.svg";
 import ChecklistModal from "./ChecklistModal";
 import { lessOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
-import {
-  setClickChecklistItemId,
-  setTriggerItemtUpdate,
-} from "../../../../../../features/task/checklist/checklistSlice";
+import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
+import AssignTask from "../../../../tasks/assignTask/AssignTask";
 
 export interface itemProps {
   id: string;
@@ -42,6 +39,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     clickedChecklistId,
     clickedChecklistItemId,
     triggerItemUpdate,
+    toggleAssignChecklistItemId,
   } = useAppSelector((state) => state.checklist);
 
   const createChecklist = useMutation(UseCreatelistItemService, {
@@ -105,61 +103,57 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
           onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : null)}
         />
       </span>
-      {Item.map(
-        (item: {
-          id: string;
-          is_done: number;
-          name: string;
-          assignees: [];
-        }) => {
-          return (
-            <div key={item.id}>
-              <div className="group flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
-                <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
-                  <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
-                </span>
-                <input
-                  type="checkbox"
-                  checked={item.is_done == 0 ? false : true}
-                  className="rounded-lg mx-3"
-                  onChange={() => {
-                    setItemId(item.id);
-                    isDone(item.id, item.is_done, item.name);
-                  }}
-                />
-                <input
-                  className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36 rounded"
-                  type="text"
-                  value={
-                    editItemName && item.id === editId ? editName : item.name
+      {Item.map((item: { id: string; is_done: number; name: string }) => {
+        return (
+          <div key={item.id}>
+            <div className="group flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
+              <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
+                <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
+              </span>
+              <input
+                type="checkbox"
+                checked={item.is_done == 0 ? false : true}
+                className="rounded-lg mx-3"
+                onChange={() => {
+                  setItemId(item.id);
+                  isDone(item.id, item.is_done, item.name);
+                }}
+              />
+              <input
+                className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36 rounded"
+                type="text"
+                value={
+                  editItemName && item.id === editId ? editName : item.name
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEditItemName(item.id, item.is_done);
                   }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleEditItemName(item.id, item.is_done);
-                    }
-                  }}
-                  onChange={(e) => setEditName(e.target.value)}
-                  onFocus={() => {
-                    setEditItemName(true);
-                    setEditId(item.id);
-                    setEditName(item.name);
-                  }}
+                }}
+                onChange={(e) => setEditName(e.target.value)}
+                onFocus={() => {
+                  setEditItemName(true);
+                  setEditId(item.id);
+                  setEditName(item.name);
+                }}
+              />
+              <span className="mx-4 cursor-pointer">
+                <CgProfile />
+              </span>
+              <div className="opacity-0 group-hover:opacity-100">
+                <ChecklistModal
+                  options={lessOptions}
+                  checklistId={checklistId}
+                  checklistItemId={item.id}
                 />
-                <span className="mx-4 cursor-pointer">
-                  <CgProfile />
-                </span>
-                <div className="opacity-0 group-hover:opacity-100">
-                  <ChecklistModal
-                    options={lessOptions}
-                    checklistId={checklistId}
-                    checklistItemId={item.id}
-                  />
-                </div>
               </div>
+              <span className="absolute shadow-2xl  z-30  ">
+                {toggleAssignChecklistItemId == item.id ? <AssignTask /> : null}
+              </span>
             </div>
-          );
-        }
-      )}
+          </div>
+        );
+      })}
     </div>
   );
 }
