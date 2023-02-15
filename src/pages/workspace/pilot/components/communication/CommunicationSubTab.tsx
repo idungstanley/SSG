@@ -20,17 +20,19 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
-const communicationOptions = [
+export const communicationOptions = [
   {
     id: 1,
-    label: "email",
+    name: 'email',
     icon: <MdOutlineMarkEmailUnread />,
+    isVisible: false,
   },
-  { id: 2, label: "chat", icon: <RiWechatLine /> },
+  { id: 2, name: 'chat', icon: <RiWechatLine />, isVisible: false },
   {
     id: 3,
-    label: "contact",
+    name: 'contact',
     icon: <AiOutlineContacts />,
+    isVisible: false,
   },
 ];
 export default function CommunicationSubTab() {

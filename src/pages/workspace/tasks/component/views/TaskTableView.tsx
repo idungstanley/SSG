@@ -11,10 +11,14 @@ import { tagItem } from "../../../pilot/components/details/properties/subDetails
 import { BsArrowsAngleExpand } from "react-icons/bs";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns } = useAppSelector(
-    (state) => state.task
-  );
+  const { myTaskData, hideTask, taskColumns } =
+    useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
+
+  // const displayNav = (id: string) => {
+  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
+  //   dispatch(setCurrentTaskId(id));
+  // };
 
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -22,6 +26,7 @@ function TaskTableView() {
 
   const renderData = (
     taskColField:
+      | ImyTaskData
       | string
       | ImyTaskData
       | number
@@ -32,7 +37,7 @@ function TaskTableView() {
     colfield: string
   ) => {
     if (
-      colfield === "assignees" &&
+      colfield === 'assignees' &&
       (
         taskColField as Array<{
           id: string;
@@ -60,7 +65,7 @@ function TaskTableView() {
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
     } else if (colfield == "status") {
@@ -68,14 +73,14 @@ function TaskTableView() {
         return <div className="bg-green-500">{taskColField}</div>;
       } else if (taskColField == "in progress") {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
           <div className="flex w-11/12 justify-between items-center group">
@@ -86,7 +91,7 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300"

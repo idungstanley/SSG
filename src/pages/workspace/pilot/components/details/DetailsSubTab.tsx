@@ -19,16 +19,18 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
-const DetailOptions = [
+export const DetailOptions = [
   {
     id: 1,
-    name: "Properties",
+    name: 'Properties',
     source: propertiesIcon,
+    isVisible: false,
   },
   {
     id: 2,
-    label: "attachments",
+    name: 'attachments',
     icon: <MdAddToPhotos />,
+    isVisible: false,
   },
 ];
 
