@@ -9,6 +9,7 @@ interface TabProps {
   icon: JSX.Element;
   activeTabId: number;
   setActiveTabId: (i: number) => void;
+  showTabLabel: boolean;
 }
 
 export default function Tab({
@@ -17,6 +18,7 @@ export default function Tab({
   icon,
   activeTabId,
   setActiveTabId,
+  showTabLabel,
 }: TabProps) {
   const {
     attributes,
@@ -65,11 +67,13 @@ export default function Tab({
       </span>
 
       {/* main content */}
-      <div className="grid grid-cols-autoFr gap-2 truncate">
+      <div className="flex items-center gap-2">
         {icon}
-        <p className="truncate" title={label}>
-          {label}
-        </p>
+        {showTabLabel ? (
+          <p className="truncate" title={label}>
+            {label}
+          </p>
+        ) : null}
       </div>
       <div />
     </div>

@@ -179,7 +179,7 @@ function Tab() {
       onDragEnd={(e) => handleDragEnd(e)}
     >
       <div
-        className={`gap-4 pb-1`}
+        className="gap-4 pb-1"
         aria-label="Tabs"
         style={showPilot ? { width: '400px' } : { width: '48px' }}
       >
@@ -205,7 +205,7 @@ function Tab() {
             )}
           </div>
           <div
-            className={`flex items-center h-fit  ${
+            className={`flex items-center h-fit ${
               showPilot ? 'flex-row py-2 space-x-1' : 'flex-col pr-4'
             }`}
           >
