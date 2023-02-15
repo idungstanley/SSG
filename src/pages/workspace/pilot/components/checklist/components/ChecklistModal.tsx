@@ -1,9 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 
-export default function ChecklistModal({ options }: any) {
+interface ChecklistModalProps {
+  options: {
+    id: number;
+    handleClick: () => void;
+    name: string;
+  }[];
+}
+
+export default function ChecklistModal({ options }: ChecklistModalProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -20,10 +27,10 @@ export default function ChecklistModal({ options }: any) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute z-20 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-20">
+        <Menu.Items className="origin-top-right absolute z-20 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
           {options.map((option) => (
             <Menu.Item key={option.id}>
-              {({ active }) => (
+              {() => (
                 <div className="flex items-center hover:bg-gray-300 text-gray-600">
                   <button
                     type="button"

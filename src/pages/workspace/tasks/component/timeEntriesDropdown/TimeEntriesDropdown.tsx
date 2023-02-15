@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
-  EditOutlined,
-  PlayCircleFilled,
-  StopFilled,
-  TagOutlined,
-} from '@ant-design/icons';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
+  CurrencyDollarIcon,
+  NoSymbolIcon,
+  PencilIcon,
+  TagIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import moment from 'moment';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import {
   GetTimeEntriesService,
-  DeleteTimeEntriesService,
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
+import { PlayCircleIcon } from '@heroicons/react/24/solid';
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -24,8 +24,8 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState:any;
-  formState: Record<string, unknown>;
+  // setFormState: (name: string, value: string) => void;
+  // formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
 
@@ -36,15 +36,16 @@ function TimeEntriesDropdown({
   setShowEntries,
   isBillable,
   setIsBillable,
-  setFormState,
-  formState,
+  // setFormState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(
+    false
+  );
   const { activeItemType } = useAppSelector((state) => state.workspace);
-  const [getTEId, setTEId] = useState('');
-  const [triggerDel, setTriggerDel] = useState(false);
+  // const [getTEId, setTEId] = useState('');
+  // const [triggerDel, setTriggerDel] = useState(false);
 
   queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
 
@@ -53,18 +54,11 @@ function TimeEntriesDropdown({
     trigger: activeItemType,
   });
 
-  useQuery({
-    queryKey: ['delTE', getTEId],
-    queryFn: DeleteTimeEntriesService,
-    enabled: triggerDel,
-  });
-
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // useQuery({
+  //   queryKey: ['delTE', getTEId],
+  //   queryFn: DeleteTimeEntriesService,
+  //   enabled: triggerDel,
+  // });
 
   const handleUpdateEntry = (id: string | boolean) => {
     setOpenUpdateEntry(!openUpdateEntry);
@@ -75,10 +69,10 @@ function TimeEntriesDropdown({
     }
   };
 
-  const handleDeleteEntry = (id: string) => {
-    setTEId(id);
-    setTriggerDel(true);
-  };
+  // const handleDeleteEntry = (id: string) => {
+  //   // setTEId(id);
+  //   // setTriggerDel(true);
+  // };
 
   const totalDuration = getEntries?.data.total_duration;
   return (
@@ -132,7 +126,7 @@ function TimeEntriesDropdown({
                     className="flex items-center space-x-2 relative"
                   >
                     <button type="button" onClick={() => handleUpdateEntry(id)}>
-                      <EditOutlined
+                      <PencilIcon
                         className="flex-shrink-0 h-3 w-5 text-gray-400"
                         aria-hidden="true"
                       />
@@ -144,7 +138,7 @@ function TimeEntriesDropdown({
                         taskId={taskId}
                       />
                     ) : null} */}
-                    <button type="button" onClick={() => handleDeleteEntry(id)}>
+                    <button type="button">
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"
                         aria-hidden="true"
@@ -163,7 +157,7 @@ function TimeEntriesDropdown({
             id="timeTrackType"
             className="flex justify-center items-center text-sm h-5"
           >
-            <PlayCircleFilled
+            <PlayCircleIcon
               className="flex-shrink-0 h-3 w-5"
               aria-hidden="true"
             />
@@ -173,7 +167,7 @@ function TimeEntriesDropdown({
             <input
               type="text"
               name="description"
-              onChange={handleEndTimeChange}
+              // onChange={handleEndTimeChange}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
@@ -188,12 +182,12 @@ function TimeEntriesDropdown({
               onClick={handleTimeTracker}
             >
               {startTimeClicked ? (
-                <StopFilled
+                <NoSymbolIcon
                   className="text-red-400 cursor-pointer text-2xl"
                   aria-hidden="true"
                 />
               ) : (
-                <PlayCircleFilled
+                <PlayCircleIcon
                   className="cursor-pointer text-2xl"
                   aria-hidden="true"
                 />
@@ -204,7 +198,7 @@ function TimeEntriesDropdown({
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
-                <TagOutlined className="text-white" aria-hidden="true" />
+                <TagIcon className="text-white" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon
                 className={`${

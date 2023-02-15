@@ -18,6 +18,7 @@ import {
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
+  setCreateWalletSlideOverVisibility,
 } from '../../features/general/slideOver/slideOverSlice';
 import TaskModal from '../../pages/workspace/tasks/component/TaskModal';
 import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
@@ -111,7 +112,11 @@ export default function SubDropdown() {
         (SubMenuType === 'wallet' ? 'Sub Wallet' : '') ||
         (showMenuDropdownType === 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
-        dispatch(setCreateSubWalletSlideOverVisibility(true));
+        if (SubMenuType !== 'wallet' && showMenuDropdownType !== 'wallet') {
+          dispatch(setCreateWalletSlideOverVisibility(true));
+        } else {
+          dispatch(setCreateSubWalletSlideOverVisibility(true));
+        }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:

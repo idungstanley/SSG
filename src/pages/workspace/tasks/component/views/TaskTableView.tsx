@@ -1,259 +1,179 @@
-// import React from 'react';
-// import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-// import MaterialTable from 'material-table';
-// import { ThemeProvider, createTheme } from '@mui/material';
-// import { BiExport } from 'react-icons/bi';
-// import { BiHide } from 'react-icons/bi';
-// import { MdOutlineCancelScheduleSend } from 'react-icons/md';
-// import { FcParallelTasks } from 'react-icons/fc';
-// import { AiOutlineFilter } from 'react-icons/ai';
-// import { FaSort } from 'react-icons/fa';
-// import '../taskData/task.css';
-// import { AvatarWithInitials } from '../../../../../components';
-// // import {
-// //   ImyTaskData,
-// //   setCurrentTaskId,
-// //   setShowTaskNavigation,
-// // } from '../../../../../features/task/taskSlice';
-// import { groupAssigneeProps } from '../../subtasks/subtask1/Template';
+import React, { ReactNode } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import "../taskData/task.css";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import {
+  ImyTaskData,
+  setCurrentTaskPriorityId,
+} from "../../../../../features/task/taskSlice";
+import moment, { MomentInput } from "moment";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
-//   const defaultMaterialTheme = createTheme();
-//   const { myTaskData } = useAppSelector((state) => state.task);
-//   // const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { myTaskData, hideTask, taskColumns } =
+    useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
 
-//   // const dispatch = useAppDispatch();
+  // const displayNav = (id: string) => {
+  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
+  //   dispatch(setCurrentTaskId(id));
+  // };
 
-//   const editable = myTaskData.map((o) => ({ ...o }));
+  const handleTaskPriority = (id: string | undefined | null) => {
+    dispatch(setCurrentTaskPriorityId(id));
+  };
 
-//   interface tableIcons {
-//     Export: () => JSX.Element;
-//     Search: () => null;
-//     Filter: () => JSX.Element;
-//     ViewColumn: () => JSX.Element;
-//     Clear: () => JSX.Element;
-//     SortArrow: () => JSX.Element;
-//     DetailPanel: () => JSX.Element;
-//     FirstPage: () => null;
-//     LastPage: () => null;
-//     NextPage: () => null;
-//     PreviousPage: () => null;
-//     ResetSearch: () => JSX.Element;
-//   }
+  const renderData = (
+    taskColField:
+      | ImyTaskData
+      | string
+      | ImyTaskData
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
 
-//   interface ListItem {
-//     id?: string;
-//     name?: string;
-//     description?: string | null;
-//     list_id?: string;
-//     parent_id?: string | null;
-//     priority?: string | null;
-//     start_date?: string | null;
-//     end_date?: string | null;
-//     assignees?: string[];
-//     group_assignees?: string[];
-//     updated_at?: string;
-//     created_at?: string;
-//     archived_at?: string | null;
-//     deleted_at?: string | null;
-//     directory_items?: string[];
+      return TCF.length !== 0 ? (
+        <div className="relative">
+          <div>Assignees Name</div>
+        </div>
+      ) : null;
+    } else if (colfield === 'assignees') {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
 
-//     title?: string;
-//     field?: string;
-//     emptyValue?: () => JSX.Element;
-//     hidden?: boolean | undefined;
-//     render?: ((newData: groupAssigneeProps) => void) | null;
-//   }
+      return TCF.length === 0 ? <p>-</p> : null;
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+      return (
+        <span className="text-gray-400 text-sm font-medium">
+          {moment(taskColField as MomentInput).format('MM/DD')}
+        </span>
+      );
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
+        return <div>{taskColField}</div>;
+      } else if (taskColField == 'in progress') {
+        return <div>{taskColField}</div>;
+      } else if (taskColField == 'archived') {
+        return <div>{taskColField}</div>;
+      } else if (taskColField == 'todo') {
+        return <div>{taskColField}</div>;
+      } else {
+        return <div>Todo</div>;
+      }
+    } else if (colfield === 'name') {
+      return (
+        <div className="flex items-center relative ">
+          <div className="flex items-center">
+            <p>{taskColField as ReactNode}</p>
 
-//   interface singleColumnProps {
-//     title: string;
-//     field: string;
-//     emptyValue: () => JSX.Element;
-//     hidden: boolean | undefined;
-//     render: ((newData: groupAssigneeProps) => void) | null;
-//   }
+            {/* tags goes here */}
+            {/* <div> {groupTags(task.tags)}</div>; */}
+          </div>
+        </div>
+      );
+    } else if (colfield === 'priority') {
+      return (
+        <span
+          className="relative  border-dotted border-gray-300 "
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
+        >
+          <PriorityDropdown
+            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
+          />
+        </span>
+      );
+    } else return taskColField;
+  };
 
-//   // interface ColumnsHead {
-//   //   id: string;
-//   //   name: string;
-//   //   description: string;
-//   //   list_id: string;
-//   //   parent_id: string;
-//   //   priority: string;
-//   //   start_date: string;
-//   //   end_date: string;
-//   //   assignees: string;
-//   //   group_assignees: string;
-//   //   custom_fields: string;
-//   //   updated_at: string;
-//   //   created_at: string;
-//   //   archived_at: string;
-//   //   deleted_at: string;
-//   //   directory_items: string;
-//   // }
-//   // [];
-
-//   const icons: tableIcons = {
-//     Export: () => <BiExport />,
-//     Search: () => null,
-//     Filter: () => <AiOutlineFilter />,
-//     ViewColumn: () => <BiHide />,
-//     Clear: () => <AiOutlineFilter />,
-//     SortArrow: () => <FaSort />,
-//     DetailPanel: () => <FcParallelTasks />,
-//     FirstPage: () => null,
-//     LastPage: () => null,
-//     NextPage: () => null,
-//     PreviousPage: () => null,
-//     ResetSearch: () => <MdOutlineCancelScheduleSend />,
-//   };
-
-//   const columnHead: string[][] = [];
-//   const singleObj: ListItem = editable[0];
-//   singleObj && columnHead.push(Object.keys(singleObj));
-
-//   const dynamicColum: ListItem[] = [];
-
-//   const groupAssignee = (data: groupAssigneeProps[]) => {
-//     return data?.map((newData) => (
-//       <>
-//         <span key={newData.id} className="flex-1 stack2">
-//           <AvatarWithInitials
-//             initials={newData.initials}
-//             backgroundColour={newData.colour}
-//             height="h-5"
-//             width="w-5"
-//           />
-//         </span>
-//       </>
-//     ));
-//   };
-
-//   const hidden = (col: string) => {
-//     if (col == 'id') {
-//       return true;
-//     }
-//     if (col == 'list_id') {
-//       return true;
-//     }
-//     if (col == 'directory_items') {
-//       return true;
-//     }
-//     if (col == 'parent_id') {
-//       return true;
-//     }
-//     if (col == 'archived_at') {
-//       return true;
-//     }
-//     if (col == 'deleted_at') {
-//       return true;
-//     }
-//     if (col == 'updated_at') {
-//       return true;
-//     }
-//     if (col == 'group_assignees') {
-//       return true;
-//     }
-//     if (col == 'description') {
-//       return true;
-//     }
-//     if (col == 'end_date') {
-//       return true;
-//     }
-//     if (col == 'start_date') {
-//       return true;
-//     }
-//   };
-
-//   interface dataProps {
-//     assignees: groupAssigneeProps[];
-//   }
-
-//   const renderData = (column: string, newData: dataProps) => {
-//     if (column == 'assignees') {
-//       return groupAssignee(newData.assignees);
-//     } else return;
-//   };
-
-//   // const displayNav = (id: string) => {
-//   //   dispatch(setShowTaskNavigation(!showTaskNavigation));
-//   //   dispatch(setCurrentTaskId(id));
-//   // };
-
-//   columnHead[0]?.map((column) => {
-//     const singleColumn: singleColumnProps = {
-//       title:
-//         column.split('_').join(' ').toUpperCase() == 'NAME'
-//           ? 'TASKS'
-//           : column.split('_').join(' ').toUpperCase(),
-//       field: column,
-//       emptyValue: () => <p>-</p>,
-//       hidden: hidden(column),
-//       render:
-//         column == 'assignees' ? (newData) => renderData(column, newData) : null,
-//     };
-//     dynamicColum.push(singleColumn);
-//   });
-
-//   return (
-//     <>
-//       <div>
-//         <ThemeProvider theme={defaultMaterialTheme}>
-//           <MaterialTable
-//             // tableRef={tableRef}
-//             title="{SSG}"
-//             columns={dynamicColum as any}
-//             data={editable ?? []}
-//             //   onSelectionChange={(selectedRow) => {
-//             //     setTimeout(() => {
-//             //       displayNav(selectedRow[0]?.id);
-//             //     }, 1000);
-//             //   }}
-//             //   actions={[
-//             detailPanel={[
-//               {
-//                 tooltip: 'Add Subtask',
-//                 render: () => {
-//                   return (
-//                     <form className="flex justify-between items-center w-10/12 mx-auto">
-//                       <input
-//                         type="text"
-//                         className=" text-black pl-10 border-0"
-//                         placeholder="Enter a subtask name"
-//                       />
-//                       <button
-//                         type="button"
-//                         className="bg-blue-700 px-3 py-1 text-white"
-//                       >
-//                         Save
-//                       </button>
-//                     </form>
-//                   );
-//                 },
-//               },
-//             ]}
-//             options={{
-//               //     tableLayout: "fixed",
-//               searchFieldAlignment: 'right',
-//               // filtering: true,
-//               exportButton: true,
-//               selection: true,
-//               showSelectAllCheckbox: false,
-//               grouping: true,
-//               columnResizable: false,
-//               columnsButton: true,
-//               headerStyle: {
-//                 fontSize: '10px',
-//               },
-//               rowStyle: { fontSize: '10px' },
-//               maxBodyHeight: '300px',
-//             }}
-//             icons={icons}
-//           />
-//         </ThemeProvider>
-//       </div>
-//     </>
-//   );
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="overflow-x-auto">
+          <div className="p-1.5 w-full inline-block align-middle">
+            <div className="overflow-y-auto border rounded-lg h-min">
+              <table className="min-w-full divide-y divide-gray-500">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {hideTask.length
+                      ? hideTask.map(
+                          (columns) =>
+                            !columns.hidden && (
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
+                                key={columns.field}
+                              >
+                                {columns.value}
+                              </th>
+                            )
+                        )
+                      : taskColumns.map(
+                          (columns) =>
+                            !columns.hidden && (
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
+                                key={columns.field}
+                              >
+                                {columns.value}
+                              </th>
+                            )
+                        )}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {myTaskData.map((task) => {
+                    return (
+                      <tr key={task.id}>
+                        {taskColumns.map(
+                          (col) =>
+                            !col.hidden && (
+                              <td
+                                className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
+                                key={col.field}
+                              >
+                                {
+                                  renderData(
+                                    task[col.field],
+                                    col.field
+                                  ) as ReactNode
+                                }
+                              </td>
+                            )
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default TaskTableView;

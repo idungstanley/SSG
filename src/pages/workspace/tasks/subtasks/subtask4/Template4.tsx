@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   ImyTaskData,
@@ -16,16 +16,14 @@ import { MdDragIndicator } from "react-icons/md";
 import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
 import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 import { FiEdit2 } from "react-icons/fi";
-import {
-  PlusOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import { AvatarWithInitials } from "../../../../../components";
-import moment from "moment";
-import { groupAssigneeProps } from "../subtask1/Template";
+import moment, { MomentInput } from "moment";
 import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import TagModal from "../../../../../components/tags/TagModal";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -65,7 +63,9 @@ export default function Template4({ task }: TemplateProps) {
     }
   };
 
-  const groupAssignee = (data: groupAssigneeProps[]) => {
+  const groupAssignee = (
+    data: [{ id: string; initials: string; colour: string }] | undefined
+  ) => {
     return data?.map((newData) => (
       <>
         <span key={newData.id} className="flex-1">
@@ -94,7 +94,7 @@ export default function Template4({ task }: TemplateProps) {
     dispatch(setCurrentTaskStatusId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -108,8 +108,26 @@ export default function Template4({ task }: TemplateProps) {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const renderData = (taskColField, colfield: string) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
       return (
         <div className="relative">
           <div
@@ -120,20 +138,29 @@ export default function Template4({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
       return (
-        <UserAddOutlined
-          className=" ml-2  text-gray-400 text-xl cursor-pointer "
+        <UserPlusIcon
+          className=" pl-3  text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
     } else if (colfield === "tags") {
-      return <div> {groupTags(taskColField)}</div>;
+      return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
     } else if (colfield == "status") {
@@ -225,7 +252,7 @@ export default function Template4({ task }: TemplateProps) {
           >
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
-          <p>{taskColField}</p>
+          <p>{taskColField as ReactNode}</p>
           <div
             id="iconWrapper"
             className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -234,7 +261,7 @@ export default function Template4({ task }: TemplateProps) {
               <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
             </span>
             <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-              <PlusOutlined
+              <PlusIcon
                 className="  w-3  text-gray-500   "
                 aria-hidden="true"
                 onClick={() => handleCreateSubTask(task.id)}
@@ -273,7 +300,7 @@ export default function Template4({ task }: TemplateProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )
@@ -285,7 +312,7 @@ export default function Template4({ task }: TemplateProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )}
@@ -300,7 +327,7 @@ export default function Template4({ task }: TemplateProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )
@@ -312,7 +339,7 @@ export default function Template4({ task }: TemplateProps) {
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )}
@@ -330,7 +357,7 @@ export default function Template4({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
@@ -344,7 +371,7 @@ export default function Template4({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}

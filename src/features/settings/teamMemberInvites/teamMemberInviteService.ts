@@ -67,8 +67,6 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
 
 //Accept team member invite
 export const useAcceptTeamMemberInvite = () => {
-  const queryClient = useQueryClient();
-
   return useQuery(
     ['team_member_invite', inviteCode],
     async () => {
