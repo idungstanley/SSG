@@ -45,13 +45,13 @@ export const UseGetAllClistService = ({
         true
       );
       return data;
+    },
+    {
+      enabled: task_id != null,
+      // onSuccess: () => {
+      //   dispatch(setTriggerChecklistUpdate(false));
+      // },
     }
-    // {
-    //   enabled: task_id != null && triggerGetChecklist,
-    //   onSuccess: () => {
-    //     dispatch(setTriggerChecklistUpdate(false));
-    //   },
-    // }
   );
 };
 

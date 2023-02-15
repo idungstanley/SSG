@@ -36,7 +36,7 @@ export default function ChecklistModal({
     dispatch(setClickChecklistItemId(checklistItemId));
     dispatch(setTriggererChecklistItemDel(true));
   };
-  const handleOptions = (option: { name: string; handleClick: () => void }) => {
+  const handleOptions = (option: { name: string }) => {
     if (option.name === "Delete Checklist") {
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
@@ -67,7 +67,7 @@ export default function ChecklistModal({
                   <div className="flex items-center hover:bg-gray-300 text-gray-600 w-full">
                     <button
                       type="button"
-                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-full"
+                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
                       onClick={() => {
                         handleOptions(option);
                       }}
@@ -88,7 +88,6 @@ export default function ChecklistModal({
                         handleOptions(option);
                       }}
                     >
-                      {/* ) : ( */}
                       <p>{option.name}</p>
                     </button>
                   </div>
