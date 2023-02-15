@@ -15,6 +15,7 @@ import {
 } from '../../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
+import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
 import AssignTask from '../../assignTask/AssignTask';
@@ -29,15 +30,14 @@ import moment, { MomentInput } from 'moment';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import TagModal from '../../../../../components/tags/TagModal';
-import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowRight from '../../../../../../src/assets/branding/ArrowRight.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import { PlusIcon } from '@heroicons/react/24/outline';
 import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
-import AssignModal from '../../../../../components/assign/AssignModal';
 
 interface TaskDataProps {
   task: ImyTaskData;
 }
+
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const {
@@ -193,14 +193,10 @@ export default function TaskData({ task }: TaskDataProps) {
         <>
           <div className="">
             <div
-              onClick={() => handleAssigneeModal(task.id as string)}
+              onClick={() => handleAssigneeModal(task.id)}
               className="cursor-pointer flex "
             >
-              {groupAssignee(
-                task.assignees as
-                  | [{ id: string; initials: string; colour: string }]
-                  | undefined
-              )}
+              {groupAssignee(task.assignees)}
             </div>
           </div>
           <span className="absolute shadow-2xl  z-30  ">
@@ -219,15 +215,16 @@ export default function TaskData({ task }: TaskDataProps) {
       ).length === 0
     ) {
       return (
-        // <UserPlusIcon
-        //   className="ml-2 text-gray-400 text-xl cursor-pointer"
-        //   aria-hidden="true"
-        //   onClick={() => handleAssigneeModal(task.id as string)}
-        // />
-
-        <div onClick={() => dispatch(setToggleAssignCurrentTaskId(task?.id))}>
-          <AssignModal />
-        </div>
+        <>
+          <UserAddOutlined
+            className=" ml-2 text-gray-400 text-xl cursor-pointer "
+            aria-hidden="true"
+            onClick={() => handleAssigneeModal(task.id)}
+          />
+          <span className="absolute shadow-2xl  z-30  ">
+            {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+          </span>
+        </>
       );
     } else if (colfield === 'tags') {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
@@ -241,7 +238,7 @@ export default function TaskData({ task }: TaskDataProps) {
       if (taskColField == 'completed') {
         return (
           <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -250,7 +247,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'in progress') {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
+            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -259,7 +256,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == 'archived') {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1 w-20 absolute"
+            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute h-full"
             style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
@@ -299,7 +296,7 @@ export default function TaskData({ task }: TaskDataProps) {
             <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
           </div>
           <div
-            onClick={() => handleGetSubTask(task.id as string)}
+            onClick={() => handleGetSubTask(task.id)}
             className="items-center"
           >
             {task.id == getSubTaskId ? (
@@ -342,15 +339,16 @@ export default function TaskData({ task }: TaskDataProps) {
               id="iconWrapper"
               className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
             >
-              <FiEdit2
-                className="cursor-pointer  text-xs h-6 w-6 text-black bg-white p-1 border-2 rounded-sm"
-                aria-hidden="true"
-              />
-              <PlusIcon
-                className="cursor-pointer text-xs h-4 w-6 pb-5  text-black bg-white p-1  border-2 rounded-sm"
-                aria-hidden="true"
-                onClick={() => handleCreateSubTask(task.id as string)}
-              />
+              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
+              </span>
+              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                <PlusOutlined
+                  className="  w-3  text-gray-500   "
+                  aria-hidden="true"
+                  onClick={() => handleCreateSubTask(task.id as string)}
+                />
+              </span>
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
                 <TagModal />

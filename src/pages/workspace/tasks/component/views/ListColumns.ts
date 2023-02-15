@@ -38,7 +38,7 @@ export const columnsHead: listColumnProps[] = [
   {
     field: "status",
     value: "Status",
-    hidden: true,
+    hidden: false,
   },
   {
     field: "start_date",
