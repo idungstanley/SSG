@@ -42,9 +42,10 @@ export default function ItemsListInSidebar({
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, activeItemId, showSidebar } = useAppSelector(
+  const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
   );
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const handleMouseOver = (i: number) => {
@@ -168,9 +169,7 @@ export default function ItemsListInSidebar({
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 {showSidebar && (
-                  <div
-                    className="mr-0.5"
-                  >
+                  <div className="mr-0.5">
                     {i.id === showChildren ? (
                       <span className="flex flex-col">
                         <VscTriangleDown
@@ -190,7 +189,9 @@ export default function ItemsListInSidebar({
                 )}
 
                 <div
-                  className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}
+                  className={`flex items-center flex-1 min-w-0 ${
+                    !showSidebar && 'ml-3'
+                  }`}
                   onClick={() => handleLocation(i.id, i.name)}
                 >
                   <AvatarWithInitials

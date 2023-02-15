@@ -11,17 +11,49 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { ChatBubbleLeftEllipsisIcon, ClockIcon, EyeIcon, InformationCircleIcon, LockClosedIcon, SignalIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import { ITab } from '../..';
 import Tab from './components/Tab';
 
+const tabs = [
+  {
+    id: 1,
+    label: 'Details',
+    icon: <InformationCircleIcon className="w-5 h-5" />,
+  },
+  {
+    id: 2,
+    label: 'Logs',
+    icon: <ClockIcon className="w-5 h-5" />,
+  },
+  {
+    id: 3,
+    label: 'Permissions',
+    icon: <LockClosedIcon className="w-5 h-5" />,
+  },
+  {
+    id: 4,
+    label: 'Comments',
+    icon: <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />,
+  },
+  {
+    id: 5,
+    label: 'Watchers',
+    icon: <EyeIcon className="w-5 h-5" />,
+  },
+  {
+    id: 6,
+    label: 'Communication',
+    icon: <SignalIcon className="w-5 h-5" />,
+  },
+];
+
 interface TabsProps {
-  tabs: ITab[];
   activeTabId: number;
   setActiveTabId: (i: number) => void;
 }
 
-export default function Tabs({ tabs, activeTabId, setActiveTabId }: TabsProps) {
+export default function Tabs({ activeTabId, setActiveTabId }: TabsProps) {
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [tabItems, setTabItems] = useState(

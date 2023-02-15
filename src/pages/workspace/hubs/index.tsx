@@ -16,7 +16,7 @@ import Modal from './components/Modal';
 function Hubs() {
   const dispatch = useDispatch();
   const { toggleArchive } = useAppSelector((state) => state.hub);
-  const { showSidebar } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { data, status } = useGetHubList({
     query: toggleArchive,
   });
