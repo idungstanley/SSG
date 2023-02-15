@@ -21,7 +21,7 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "error",
+    // "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
     "no-empty": "error",

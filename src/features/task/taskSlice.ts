@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { number } from "prop-types";
 import { tagItem } from "../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 import { listColumnProps } from "../../pages/workspace/tasks/component/views/ListColumns";
 

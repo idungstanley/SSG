@@ -1,8 +1,9 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import {
+  ImyTaskData,
   setCurrentTaskId,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
@@ -15,14 +16,16 @@ import StatusDropdown from "../../../../../components/status/StatusDropdown";
 import { FiEdit2 } from "react-icons/fi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { MdDragIndicator } from "react-icons/md";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns, showTaskNavigation } =
-    useAppSelector((state) => state.task);
+  const { myTaskData, hideTask, taskColumns } = useAppSelector(
+    (state) => state.task
+  );
   const dispatch = useAppDispatch();
 
   const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!showTaskNavigation));
+    dispatch(setShowTaskNavigation(!setShowTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
   const handleTaskPilot = (id: string, name: string) => {
@@ -47,11 +50,9 @@ function TaskTableView() {
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
       return (
-        <>
-          <div className="">
-            <div className="cursor-pointer flex ">Assinee field</div>
-          </div>
-        </>
+        <div className="relative">
+          <div>Assignee Name</div>
+        </div>
       );
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
@@ -83,42 +84,9 @@ function TaskTableView() {
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
-          <div className=" flex items-center">
-            <input
-              type="checkbox"
-              id="checked-checkbox"
-              className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
-              onClick={() => {
-                displayNav(taskColField.id);
-              }}
-            />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
-          </div>
-
           <div className="flex items-center">
-            <p
-              onClick={() => handleTaskStatus(taskColField.id)}
-              className="relative pt-1 pr-1"
-            >
-              <StatusDropdown TaskCurrentStatus={taskColField?.status} />
-            </p>
-            <p
-              onClick={() =>
-                handleTaskPilot(taskColField.id, taskColField.name)
-              }
-              className="cursor-pointer "
-            >
-              {taskColField}
-            </p>
-            <div
-              id="iconWrapper"
-              className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-            >
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
-              </span>
-              {/* tag here */}
-            </div>
+            <p>{taskColField as ReactNode}</p>
+
             {/* tags goes here */}
             {/* <div> {groupTags(task.tags)}</div>; */}
           </div>
@@ -128,9 +96,11 @@ function TaskTableView() {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(taskColField.id)}
+          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
         >
-          <PriorityDropdown TaskCurrentPriority={taskColField?.priority} />
+          <PriorityDropdown
+            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
+          />
         </span>
       );
     } else return taskColField;
@@ -183,7 +153,12 @@ function TaskTableView() {
                                 className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
                                 key={col.field}
                               >
-                                {renderData(task[col.field], col.field)}
+                                {
+                                  renderData(
+                                    task[col.field],
+                                    col.field
+                                  ) as ReactNode
+                                }
                               </td>
                             )
                         )}
