@@ -247,7 +247,7 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "in progress") {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center h-full"
+            className="capitalize text-xs font-medium bg-purple-500 text-white mb-5 px-1 w-20 absolute text-center h-full"
             style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
