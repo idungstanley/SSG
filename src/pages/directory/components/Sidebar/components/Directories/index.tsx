@@ -8,7 +8,7 @@ function updateNestedArray(
   array: IDirWithChildren[],
   updateFn: (i: IDirWithChildren) => IDirWithChildren,
   idToUpdate?: string
-) {
+): IDirWithChildren[] {
   return !idToUpdate
     ? array
     : array.map((item) => {

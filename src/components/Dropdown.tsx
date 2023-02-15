@@ -6,7 +6,7 @@ import { classNames } from '../utils';
 interface itemType {
   id?: number
   label: string;
-  onClick?: () => void;
+  onClick?: () => void | boolean;
   icon?: string | JSX.Element;
 }
 interface DropDownProps {
@@ -40,7 +40,7 @@ export default function Dropdown({ items }: DropDownProps) {
                     type="button"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'group flex items-center font-medium px-4 py-2 text-sm w-full'
+                      'group flex items-center font-medium gap-2 px-4 py-2 text-sm w-full'
                     )}
                     onClick={item.onClick}
                   >

@@ -10,10 +10,14 @@ import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns } = useAppSelector(
-    (state) => state.task
-  );
+  const { myTaskData, hideTask, taskColumns } =
+    useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
+
+  // const displayNav = (id: string) => {
+  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
+  //   dispatch(setCurrentTaskId(id));
+  // };
 
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -21,6 +25,7 @@ function TaskTableView() {
 
   const renderData = (
     taskColField:
+      | ImyTaskData
       | string
       | ImyTaskData
       | number
@@ -31,22 +36,7 @@ function TaskTableView() {
     colfield: string
   ) => {
     if (
-      colfield === "assignees" &&
-      (
-        taskColField as Array<{
-          id: string;
-          initials: string;
-          colour: string;
-        }>
-      ).length !== 0
-    ) {
-      return (
-        <div className="relative">
-          <div>Assignee Name</div>
-        </div>
-      );
-    } else if (
-      colfield === "assignees" &&
+      colfield === 'assignees' &&
       (
         taskColField as Array<{
           id: string;
@@ -55,26 +45,44 @@ function TaskTableView() {
         }>
       ).length === 0
     ) {
-      return <p>-</p>;
-    } else if (colfield == "created_at" || colfield == "updated_at") {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length !== 0 ? (
+        <div className="relative">
+          <div>Assignee Name</div>
+        </div>
+      ) : null;
+    } else if (colfield === 'assignees') {
+      const TCF = taskColField as Array<{
+        id: string;
+        initials: string;
+        colour: string;
+      }>;
+
+      return TCF.length === 0 ? <p>-</p> : null;
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
-    } else if (colfield == "status") {
-      if (taskColField == "completed") {
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "in progress") {
+      } else if (taskColField == 'in progress') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return <div>{taskColField}</div>;
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return <div>{taskColField}</div>;
       } else {
         return <div>Todo</div>;
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
           <div className="flex items-center">
@@ -85,7 +93,7 @@ function TaskTableView() {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
