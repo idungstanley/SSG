@@ -56,7 +56,7 @@ function TaskTableView() {
     } else if (colfield === "assignees" && taskColField.length === 0) {
       return (
         <>
-          <UserAddOutlined
+          <UserPlusIcon
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
           />

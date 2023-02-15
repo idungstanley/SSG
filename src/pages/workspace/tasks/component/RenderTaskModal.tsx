@@ -19,7 +19,6 @@ import Timecode from 'react-timecode';
 import {
   getOneTaskService,
   createTimeEntriesService,
-  EndTimeEntriesService,
 } from '../../../../features/task/taskService';
 import TimeEntriesDropdown from './timeEntriesDropdown/TimeEntriesDropdown';
 import Watcher from '../watchers/index';
@@ -43,17 +42,17 @@ function RenderTaskModal() {
     enabled: startTimeClicked,
   });
 
-  useQuery({
-    queryKey: ['endTimeClock', taskId],
-    queryFn: EndTimeEntriesService,
-    enabled: stopTimer,
-  });
+  // useQuery({
+  //   queryKey: ['endTimeClock', taskId],
+  //   queryFn: EndTimeEntriesService,
+  //   enabled: stopTimer,
+  // });
 
-  const defaultEndTimeClockFormState = {
-    description: '',
-  };
+  // const defaultEndTimeClockFormState = {
+  //   description: '',
+  // };
 
-  const [formState, setFormState] = useState(defaultEndTimeClockFormState);
+  // const [formState, setFormState] = useState(defaultEndTimeClockFormState);
 
   // const { description } = formState;
   // useMutation(EndTimeEntriesService, {
@@ -207,8 +206,8 @@ function RenderTaskModal() {
                             showEntries={showEntries}
                             isBillable={isBillable}
                             setIsBillable={setIsBillable}
-                            setFormState={setFormState}
-                            formState={formState}
+                            // setFormState={setFormState}
+                            // formState={formState}
                             // onSubmit={onSubmit}
                             handleTimeTracker={handleTimeTracker}
                           />

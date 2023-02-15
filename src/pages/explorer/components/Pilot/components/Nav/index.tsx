@@ -92,7 +92,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
 
           localStorage.setItem(
             'pilotSections',
-            JSON.stringify([...sortArray.map((i) => i.id)])
+            JSON.stringify([...sortArray.map((i: {id:string}) => i.id)])
           );
 
           return sortArray;

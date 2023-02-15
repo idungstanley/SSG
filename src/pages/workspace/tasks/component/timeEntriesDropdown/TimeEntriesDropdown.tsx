@@ -25,7 +25,7 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (value: string) => void;
+  setFormState: (value: any) => void;
   formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }

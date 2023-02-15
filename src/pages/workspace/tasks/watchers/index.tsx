@@ -18,7 +18,11 @@ export default function Watcher({ taskId }: WatcherProps) {
 
   if (status == 'success') {
     dispatch(
-      setWatchersData(getWatchers?.data.watchers.map((id) => id.team_member_id))
+      setWatchersData(
+        getWatchers?.data.watchers.map(
+          (id: { team_member_id: string }) => id.team_member_id
+        )
+      )
     );
   }
 

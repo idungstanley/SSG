@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
-import { AiFillFlag } from 'react-icons/ai';
-import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
+import React, { Fragment, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { classNames } from "../../utils";
+import { AiFillFlag } from "react-icons/ai";
+import { UseUpdateTaskStatusServices } from "../../features/task/taskService";
+import { useAppSelector } from "../../app/hooks";
 
 interface priorityType {
   id: number;
@@ -14,49 +14,49 @@ interface priorityType {
 }
 
 interface TaskCurrentPriorityProps {
-  TaskCurrentPriority: string;
+  TaskCurrentPriority: string | null | [{ id: string; initials: string; colour: string; }];
 }
 export default function PriorityDropdown({
   TaskCurrentPriority,
 }: TaskCurrentPriorityProps) {
-  const [priorityValue, setPriority] = useState('');
+  const [priorityValue, setPriority] = useState("");
   const { currentTaskPriorityId } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
-      title: 'Low',
+      title: "Low",
       handleClick: () => {
-        setPriority('low');
+        setPriority("low");
       },
-      color: '#d3d3d3',
-      bg: 'gray',
+      color: "#d3d3d3",
+      bg: "gray",
     },
     {
       id: 2,
-      title: 'Normal',
+      title: "Normal",
       handleClick: () => {
-        setPriority('normal');
+        setPriority("normal");
       },
-      color: '#6fddff',
-      bg: 'blue',
+      color: "#6fddff",
+      bg: "blue",
     },
     {
       id: 3,
-      title: 'High',
+      title: "High",
       handleClick: () => {
-        setPriority('high');
+        setPriority("high");
       },
-      color: '#f7cb04',
-      bg: 'yellow',
+      color: "#f7cb04",
+      bg: "yellow",
     },
     {
       id: 4,
-      title: 'Urgent',
+      title: "Urgent",
       handleClick: () => {
-        setPriority('urgent');
+        setPriority("urgent");
       },
-      color: '#f32100',
-      bg: 'red',
+      color: "#f32100",
+      bg: "red",
     },
   ];
   const { status } = UseUpdateTaskStatusServices({
@@ -64,23 +64,23 @@ export default function PriorityDropdown({
     priorityDataUpdate: priorityValue,
   });
 
-  if (status == 'success') {
-    setPriority('');
+  if (status == "success") {
+    setPriority("");
   }
-  const setPriorityColor = (priority: string) => {
-    if (priority == null || priority == 'low') {
+  const setPriorityColor = (priority: string | null | [{ id: string; initials: string; colour: string; }]) => {
+    if (priority == null || priority == "low") {
       return (
         <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />
       );
-    } else if (priority == 'normal') {
+    } else if (priority == "normal") {
       return (
         <AiFillFlag className="h-5 w-7  text-blue-500 " aria-hidden="true" />
       );
-    } else if (priority == 'high') {
+    } else if (priority == "high") {
       return (
         <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />
       );
-    } else if (priority == 'urgent') {
+    } else if (priority == "urgent") {
       return (
         <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />
       );
@@ -116,8 +116,8 @@ export default function PriorityDropdown({
                 <button
                   type="button"
                   className={classNames(
-                    active ? `bg-${i.bg}-200` : '',
-                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
+                    active ? `bg-${i.bg}-200` : "",
+                    "flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full"
                   )}
                   onClick={i.handleClick}
                 >

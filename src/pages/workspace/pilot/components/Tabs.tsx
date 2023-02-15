@@ -8,7 +8,6 @@ import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
 import permissionIcon from '../../../../assets/branding/permission.png';
 import checklistIcon from '../../../../assets/branding/checklist-icon.svg';
 import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
-import { BsThreeDots } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -35,6 +34,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
+import Dropdown from '../../../../components/Dropdown';
 
 const pilotOptions = [
   {
@@ -78,14 +78,15 @@ const pilotOptions = [
     subTab: <ChecklistSubtab />,
   },
 ];
+
+const dropdownOptions = [
+  { id: 1, label: 'Add HotKeys' },
+  { id: 2, label: 'Remove HotKeys' },
+];
 function Tab() {
   const dispatch = useDispatch();
-  const {
-    showPilot,
-    showPilotIconView,
-    activeItemName,
-    activeItemType,
-  } = useAppSelector((state) => state.workspace);
+  const { showPilot, showPilotIconView, activeItemName, activeItemType } =
+    useAppSelector((state) => state.workspace);
 
   const handleShowPilot = () => {
     if (showPilot) {
@@ -101,13 +102,7 @@ function Tab() {
       dispatch(setShowPilotIconView(true));
     }
   };
-  // const handleShowPilotListView = () => {
-  //   if (showPilotListView) {
-  //     dispatch(setShowPilotListView(false));
-  //   } else {
-  //     dispatch(setShowPilotListView(true));
-  //   }
-  // };
+
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
 
   const [items, setItems] = useState(
@@ -138,7 +133,7 @@ function Tab() {
 
           localStorage.setItem(
             'pilotSections',
-            JSON.stringify([...sortArray.map((i) => i.id)])
+            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
           );
           return sortArray;
         });
@@ -193,7 +188,7 @@ function Tab() {
                   : 'transform -rotate-180 mb-1'
               }`}
             />
-            <BsThreeDots />
+            <Dropdown items={dropdownOptions} />
           </div>
         </section>
         <div

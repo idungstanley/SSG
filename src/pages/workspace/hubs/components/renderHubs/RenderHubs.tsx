@@ -8,6 +8,7 @@ import Pilot from "../../../pilot";
 import WalletSection from "./items/itemsWalletData/WalletSection";
 import ListSection from "./items/itemsListData/ListSection";
 import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
+import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
 
 function RenderHubs() {
   const { hubId } = useParams();
@@ -34,13 +35,13 @@ function RenderHubs() {
               <ListFilter />
             </div>
             <div>
-              {HubDetail?.data.hubs.map((data) => (
+              {HubDetail?.data.hubs.map((data: dataProps) => (
                 <TaskListSections data={data} key={data.id} />
               ))}
-              {HubDetail?.data.wallets.map((data) => (
+              {HubDetail?.data.wallets.map((data: dataProps) => (
                 <WalletSection data={data} key={data.id} />
               ))}
-              {HubDetail?.data.lists.map((data) => {
+              {HubDetail?.data.lists.map((data: dataProps) => {
                 return <ListSection data={data} key={data.id} />;
               })}
             </div>
