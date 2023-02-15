@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
 import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
+import { setCurrTeamMemId } from './taskSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -498,7 +499,7 @@ export const UseAssignTaskService = ({
   // const queryClient = useQueryClient();
   // console.log(task_id);
   return useQuery(
-    ['assign', { team_member_id: team_member_id, task_id: task_id }],
+    ['task', { team_member_id: team_member_id, task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
@@ -511,10 +512,12 @@ export const UseAssignTaskService = ({
     },
     {
       onSuccess: () => {
+        // queryClient.invalidateQueries(['task']);
         dispatch(setToggleAssignCurrentTaskId(null));
+        dispatch(setCurrTeamMemId(null));
       },
       // initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: !!team_member_id,
+      enabled: !!team_member_id && !!task_id,
     }
   );
 };
@@ -529,9 +532,10 @@ export const UseUnAssignTaskService = ({
   team_member_id: string | null;
   unAssignTrigger: boolean;
 }) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
   return useQuery(
-    ['unassign', { team_member_id: team_member_id }],
+    ['task', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
@@ -543,8 +547,9 @@ export const UseUnAssignTaskService = ({
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['unassign', team_member_id]),
+      // initialData: queryClient.getQueryData(['unassign', team_member_id]),
       enabled: unAssignTrigger,
+      // enabled: !!team_member_id,
     }
   );
 };

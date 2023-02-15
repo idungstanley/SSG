@@ -30,7 +30,7 @@ import moment, { MomentInput } from 'moment';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import TagModal from '../../../../../components/tags/TagModal';
-import ArrowRight from '../../../../../../src/assets/branding/ArrowRight.svg';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
