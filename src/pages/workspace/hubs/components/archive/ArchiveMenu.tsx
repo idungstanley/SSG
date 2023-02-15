@@ -4,12 +4,12 @@ import Setting from '../../../../../assets/branding/setting.png';
 import { cl } from '../../../../../utils';
 import { BsArchive } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setToggleArchive } from '../../../../../features/hubs/hubSlice';
+// import { useDispatch } from 'react-redux';
+// import { setToggleArchive } from '../../../../../features/hubs/hubSlice';
 import { BiWallet } from 'react-icons/bi';
 import { RiListSettingsFill } from 'react-icons/ri';
-import { setToggleArchiveWallet } from '../../../../../features/wallet/walletSlice';
-import { setToggleArchiveList } from '../../../../../features/list/listSlice';
+// import { setToggleArchiveWallet } from '../../../../../features/wallet/walletSlice';
+// import { setToggleArchiveList } from '../../../../../features/list/listSlice';
 
 interface itemsType {
   id: number;
@@ -20,22 +20,22 @@ interface itemsType {
 }
 
 export default function ArchiveMenu() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { sidebarSettings } = useAppSelector((state) => state.hub);
-  const { toggleArchive } = useAppSelector((state) => state.hub);
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
-  const { toggleArchiveList } = useAppSelector((state) => state.list);
+  // const { toggleArchive } = useAppSelector((state) => state.hub);
+  // const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  // const { toggleArchiveList } = useAppSelector((state) => state.list);
 
   const itemsList: itemsType[] = [
     {
       id: 1,
       title: 'Show archived Hubs',
       handleClick: () => {
-        if (toggleArchive === 0) {
-          dispatch(setToggleArchive(1));
-        } else {
-          dispatch(setToggleArchive(0));
-        }
+        // if (toggleArchive === 0) {
+        //   dispatch(setToggleArchive(1));
+        // } else {
+        //   dispatch(setToggleArchive(0));
+        // }
       },
       icon: <BsArchive />,
       isVisible: true,
@@ -44,7 +44,7 @@ export default function ArchiveMenu() {
       id: 2,
       title: 'Show archived Wallet',
       handleClick: () => {
-        dispatch(setToggleArchiveWallet(!toggleArchiveWallet));
+        // dispatch(setToggleArchiveWallet(!toggleArchiveWallet));
       },
       icon: <BiWallet />,
       isVisible: true,
@@ -53,7 +53,7 @@ export default function ArchiveMenu() {
       id: 3,
       title: 'Show archived Lists',
       handleClick: () => {
-        dispatch(setToggleArchiveList(!toggleArchiveList));
+        // dispatch(setToggleArchiveList(!toggleArchiveList));
       },
       icon: <RiListSettingsFill />,
       isVisible: true,
@@ -90,7 +90,8 @@ export default function ArchiveMenu() {
                   )}
                   onClick={i.handleClick}
                 >
-                  {i.icon} <p>{toggleArchive ? 'Hide archived' : i.title}</p>
+                  {i.icon}
+                  {/* {i.icon} <p>{toggleArchive ? 'Hide archived' : i.title}</p> */}
                 </button>
               )}
             </Menu.Item>
