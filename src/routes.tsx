@@ -47,7 +47,7 @@ import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets'
 import RenderList from './pages/workspace/lists/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Calendar from './pages/workspace/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';

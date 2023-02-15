@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAcceptTeamMemberInvite } from '../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import RegisterPage from '../../../workspace/createWorkspace/auth/RegisterPage/index';
-import NotFoundPage from '../../../NotFoundPage';
+import NotFoundPage from '../../../NotFoundPage/NotFoundPage';
 
 import { Button } from '../../../../components';
 export default function TeamMemberAcceptInvite() {
