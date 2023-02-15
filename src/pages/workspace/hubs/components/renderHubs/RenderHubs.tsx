@@ -1,19 +1,39 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useAppSelector } from "../../../../../app/hooks";
-import ListNav from "../../../lists/components/renderlist/ListNav";
-import { useGetHubChildren } from "../../../../../features/hubs/hubService";
-import TaskListSections from "./items/ItemsHubData/TaskListSections";
-import Pilot from "../../../pilot";
-import WalletSection from "./items/itemsWalletData/WalletSection";
-import ListSection from "./items/itemsListData/ListSection";
-import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
-import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import ListNav from '../../../lists/components/renderlist/ListNav';
+import { useGetHubChildren } from '../../../../../features/hubs/hubService';
+import TaskListSections from './items/ItemsHubData/TaskListSections';
+// import Pilot from "../../../pilot";
+import WalletSection from './items/itemsWalletData/WalletSection';
+import ListSection from './items/itemsListData/ListSection';
+import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
+import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
+import Pilot from '../../../../../components/Pilot';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 function RenderHubs() {
+  const dispatch = useAppDispatch();
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
+
+  // set data for pilot
+  useEffect(() => {
+    const selectedItemId = hubId;
+    const selectedItemType = 'hub';
+
+    if (selectedItemId) {
+      dispatch(
+        setShowPilotSideOver({
+          id: selectedItemId,
+          type: selectedItemType,
+          show: true,
+        })
+      );
+    }
+  }, [hubId]);
+
   return (
     <div className="h-full w-full">
       <section id="nav" className="capitalize">

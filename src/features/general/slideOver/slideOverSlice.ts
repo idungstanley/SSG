@@ -37,7 +37,7 @@ type Share = {
 type Pilot = {
   show: boolean;
   id?: string;
-  type?: explorerItemType;
+  type?: itemType;
 };
 type PilotHub = {
   show: boolean;

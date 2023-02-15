@@ -5,6 +5,7 @@ import {
   useGetExplorerFolder,
 } from '../../../../features/explorer/explorerService';
 import { OutputDateTime } from '../../../../app/helpers';
+import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 
 export default function Information() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -16,7 +17,12 @@ export default function Information() {
 
   const { data: file } = useGetExplorerFile(id, type === 'file');
 
-  const data = folder?.data.current_folder || file;
+  const { data: hub } = UseGetHubDetails({
+    activeItemId: id,
+    activeItemType: type,
+  });
+
+  const data = folder?.data.current_folder || file || hub?.data.hub;
 
   const info = [
     {

@@ -25,4 +25,4 @@ export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';
 
 export type explorerItemType = 'folder' | 'file';
 
-export type itemType = 'inbox_file' | 'inbox' | explorerItemType;
+export type itemType = 'inbox_file' | 'inbox' | explorerItemType | 'hub';
