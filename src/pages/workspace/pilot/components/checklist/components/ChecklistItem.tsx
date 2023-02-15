@@ -10,13 +10,13 @@ import { completeOptions } from "../ModalOptions";
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
 import { setTriggerItemtUpdate } from "../../../../../../features/task/checklist/checklistSlice";
 
-interface item{
+export interface itemProps{
   id: string;
   name: string;
   is_done: number;
 }
-interface checkListItemProps {
-Item: item[];
+export interface checkListItemProps {
+Item: itemProps[];
 checklistId: string;
 refetch: ()=> void;
 }

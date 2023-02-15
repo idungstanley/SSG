@@ -7,14 +7,15 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 
-interface EntryListProps {
-  entries: {
-    id: string;
-    duration: number;
-    start_date: string;
-    end_date: string;
-    description: string;
-  };
+export interface entriesProps {
+  id: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  description: string;
+}
+export interface EntryListProps {
+  entries: entriesProps;
 }
 
 export default function EntryList({ entries }: EntryListProps) {

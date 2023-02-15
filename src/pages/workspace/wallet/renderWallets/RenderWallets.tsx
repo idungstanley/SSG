@@ -7,6 +7,7 @@ import Pilot from '../../pilot';
 import { getWalletServices } from '../../../../features/wallet/walletService';
 import WalletSection from '../../hubs/components/renderHubs/items/itemsWalletData/WalletSection';
 import ListSection from '../../hubs/components/renderHubs/items/itemsListData/ListSection';
+import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
 
 function RenderWallets() {
   const { walletId } = useParams();
@@ -35,10 +36,10 @@ function RenderWallets() {
             className="w-full overflow-y-scroll"
             style={{ minHeight: '0', maxHeight: '80vh' }}
           >
-            {data?.data.wallets.map((data) => (
+            {data?.data.wallets.map((data: dataProps) => (
               <WalletSection data={data} key={data.id} />
             ))}
-            {data?.data.lists.map((data) => (
+            {data?.data.lists.map((data: dataProps) => (
               <ListSection data={data} key={data.id} />
             ))}
           </div>

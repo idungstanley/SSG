@@ -25,7 +25,7 @@ export const createListService = (data: {
 };
 
 // get lists
-export const getListService = (data) => {
+export const getListService = (data: {queryKey: (string | undefined)[]}) => {
   const hubID = data.queryKey[1];
   const response = requestNew(
     {
@@ -40,7 +40,7 @@ export const getListService = (data) => {
   return response;
 };
 
-export const getListsListService = (data) => {
+export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
   const walletID = data.queryKey[1];
   const response = requestNew(
     {
@@ -80,7 +80,7 @@ export const getListServices = (data: {
 };
 
 // get list details
-export const getListsDetailsService = (data) => {
+export const getListsDetailsService = (data: { queryKey: (string | undefined)[] }) => {
   const listID = data.queryKey[1];
   const response = requestNew(
     {
@@ -112,7 +112,7 @@ export const UseEditListService = (data: {
 };
 
 //del lists
-export const UseDeleteListService = (data) => {
+export const UseDeleteListService = (data: {query: string | null, delList: boolean}) => {
   const dispatch = useDispatch();
   const listId = data.query;
   const queryClient = useQueryClient();
@@ -139,7 +139,7 @@ export const UseDeleteListService = (data) => {
 };
 
 //archive list
-export const UseArchiveListService = (list) => {
+export const UseArchiveListService = (list: {query: string | undefined | null, archiveList: boolean}) => {
   const listId = list.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -168,7 +168,7 @@ export const UseArchiveListService = (list) => {
 };
 
 //get list details
-export const UseGetListDetails = (query) => {
+export const UseGetListDetails = (query: {activeItemId: string | null | undefined, activeItemType: string | null | undefined}) => {
   return useQuery(
     ['hubs', query],
     async () => {

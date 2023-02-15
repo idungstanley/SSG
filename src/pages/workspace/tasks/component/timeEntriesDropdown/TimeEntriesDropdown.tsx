@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   CurrencyDollarIcon,
   NoSymbolIcon,
@@ -12,7 +12,6 @@ import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import {
   GetTimeEntriesService,
-  DeleteTimeEntriesService,
 } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -25,8 +24,8 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (name: string, value: string) => void;
-  formState: Record<string, unknown>;
+  // setFormState: (name: string, value: string) => void;
+  // formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
 
@@ -37,8 +36,7 @@ function TimeEntriesDropdown({
   setShowEntries,
   isBillable,
   setIsBillable,
-  setFormState,
-  formState,
+  // setFormState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
@@ -46,8 +44,8 @@ function TimeEntriesDropdown({
     false
   );
   const { activeItemType } = useAppSelector((state) => state.workspace);
-  const [getTEId, setTEId] = useState('');
-  const [triggerDel, setTriggerDel] = useState(false);
+  // const [getTEId, setTEId] = useState('');
+  // const [triggerDel, setTriggerDel] = useState(false);
 
   queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
 
@@ -56,18 +54,11 @@ function TimeEntriesDropdown({
     trigger: activeItemType,
   });
 
-  useQuery({
-    queryKey: ['delTE', getTEId],
-    queryFn: DeleteTimeEntriesService,
-    enabled: triggerDel,
-  });
-
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setFormState({
-    //   ...formState,
-    //   [e.target.name]: e.target.value,
-    // });
-  };
+  // useQuery({
+  //   queryKey: ['delTE', getTEId],
+  //   queryFn: DeleteTimeEntriesService,
+  //   enabled: triggerDel,
+  // });
 
   const handleUpdateEntry = (id: string | boolean) => {
     setOpenUpdateEntry(!openUpdateEntry);
@@ -78,10 +69,10 @@ function TimeEntriesDropdown({
     }
   };
 
-  const handleDeleteEntry = (id: string) => {
-    setTEId(id);
-    setTriggerDel(true);
-  };
+  // const handleDeleteEntry = (id: string) => {
+  //   // setTEId(id);
+  //   // setTriggerDel(true);
+  // };
 
   const totalDuration = getEntries?.data.total_duration;
   return (
@@ -147,7 +138,7 @@ function TimeEntriesDropdown({
                         taskId={taskId}
                       />
                     ) : null} */}
-                    <button type="button" onClick={() => handleDeleteEntry(id)}>
+                    <button type="button">
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"
                         aria-hidden="true"
@@ -176,7 +167,7 @@ function TimeEntriesDropdown({
             <input
               type="text"
               name="description"
-              onChange={handleEndTimeChange}
+              // onChange={handleEndTimeChange}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />

@@ -122,7 +122,7 @@ export const UseDeleteWalletService = (data: {
 
 //archive wallet
 export const UseArchiveWalletService = (wallet: {
-  query: boolean | null;
+  query: string | null;
   archiveWallet: boolean;
 }) => {
   const walletId = wallet.query;

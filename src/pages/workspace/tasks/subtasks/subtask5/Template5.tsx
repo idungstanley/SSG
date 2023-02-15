@@ -1,5 +1,5 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { ReactNode } from "react";
+import { useDispatch } from "react-redux";
 import {
   ImyTaskData,
   setCurrentTaskId,
@@ -8,17 +8,18 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setToggleAssignCurrentTaskId,
-} from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
-import { AvatarWithInitials } from '../../../../../components';
-import '../create/subtask.css';
-import moment from 'moment';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
-import TagModal from '../../../../../components/tags/TagModal';
+} from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { AvatarWithInitials } from "../../../../../components";
+import "../create/subtask.css";
+import moment, { MomentInput } from "moment";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import StatusDropdown from "../../../../../components/status/StatusDropdown";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
+import TagModal from "../../../../../components/tags/TagModal";
+import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -60,7 +61,7 @@ export default function Template({ task }: TemplateProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <>
@@ -75,17 +76,12 @@ export default function Template({ task }: TemplateProps) {
       </>
     ));
   };
-  interface Iassignee {
-    id: string;
-    initials: string;
-    colour: string;
-  }
 
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -95,18 +91,26 @@ export default function Template({ task }: TemplateProps) {
     });
   };
 
-  // const handleShowSubTask = (id: string) => {
-  //   if (id == showSubTask) {
-  //     setShowSubTask(null);
-  //     dispatch(setCurrentParentSubTaskId(null));
-  //   } else {
-  //     setShowSubTask(id);
-  //     dispatch(setCurrentParentSubTaskId(id));
-  //   }
-  // };
-
-  const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
       return (
         <div className="relative">
           <div
@@ -118,8 +122,14 @@ export default function Template({ task }: TemplateProps) {
         </div>
       );
     } else if (
-      colfield === 'assignees' &&
-      (taskColField as Array<Iassignee>)?.length === 0
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
     ) {
       return (
         <UserPlusIcon
@@ -128,47 +138,47 @@ export default function Template({ task }: TemplateProps) {
           onClick={() => handleAssigneeModal(task.id)}
         />
       );
-    } else if (colfield === 'tags') {
-      return <div> {groupTags(taskColField)}</div>;
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+    } else if (colfield === "tags") {
+      return <div> {groupTags(taskColField as tagItem[])}</div>;
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as string).format('MM/DD')}
+          {moment(taskColField as MomentInput).format("MM/DD")}
         </span>
       );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
         return (
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'in progress') {
+      } else if (taskColField == "in progress") {
         return (
           <div
             className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'archived') {
+      } else if (taskColField == "archived") {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == 'todo') {
+      } else if (taskColField == "todo") {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -177,13 +187,13 @@ export default function Template({ task }: TemplateProps) {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
+            style={{ marginTop: "-4px", marginLeft: "-30px" }}
           >
             TODO
           </div>
         );
       }
-    } else if (colfield === 'name') {
+    } else if (colfield === "name") {
       return (
         <div className="flex items-center relative">
           <div className=" flex items center">
@@ -204,7 +214,7 @@ export default function Template({ task }: TemplateProps) {
           >
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
-          <p>{taskColField}</p>
+          <p>{taskColField as ReactNode}</p>
           <div
             id="iconWrapper"
             className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
@@ -220,7 +230,7 @@ export default function Template({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === 'priority') {
+    } else if (colfield === "priority") {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -239,25 +249,25 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
             : taskColumns.map(
                 (col) =>
-                  col.value == 'Task' &&
+                  col.value == "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}
@@ -266,27 +276,27 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
+                  col.value !== "Task" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}

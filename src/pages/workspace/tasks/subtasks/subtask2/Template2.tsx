@@ -1,6 +1,6 @@
-import React, { ReactNode, useState } from "react";
-import { useDispatch } from "react-redux";
-import moment, { MomentInput } from "moment";
+import React, { ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import moment, { MomentInput } from 'moment';
 import {
   ImyTaskData,
   setCurrentParentSubTaskId2,
@@ -20,6 +20,7 @@ import { AvatarWithInitials } from '../../../../../components';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -59,7 +60,7 @@ export default function Template2({ task }: TemplateProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <>
@@ -93,7 +94,7 @@ export default function Template2({ task }: TemplateProps) {
     dispatch(setCurrentTaskStatusId(id));
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]) => {
     return arr.map((item) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
@@ -103,8 +104,26 @@ export default function Template2({ task }: TemplateProps) {
     });
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === 'assignees' && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
       return (
         <div className="relative">
           <div
@@ -115,7 +134,16 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
       return (
         <UserPlusIcon
           className=" pl-3  text-gray-400 text-xl cursor-pointer "
@@ -124,11 +152,11 @@ export default function Template2({ task }: TemplateProps) {
         />
       );
     } else if (colfield === 'tags') {
-      return <div> {groupTags(taskColField)}</div>;
+      return <div> {groupTags(taskColField as tagItem[])}</div>;
     } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
     } else if (colfield == 'status') {
@@ -237,7 +265,7 @@ export default function Template2({ task }: TemplateProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
@@ -262,7 +290,7 @@ export default function Template2({ task }: TemplateProps) {
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
@@ -274,7 +302,7 @@ export default function Template2({ task }: TemplateProps) {
                       key={col.field}
                       className="flex items-center capitalize ml-2 text-xs font-medium  group"
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}
@@ -290,7 +318,7 @@ export default function Template2({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: '50px' }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
@@ -303,7 +331,7 @@ export default function Template2({ task }: TemplateProps) {
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: '50px' }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}

@@ -11,7 +11,7 @@ interface HubState {
   archiveHub: boolean;
   sidebarSettings: boolean;
   toggleArchive: number;
-  showMenuDropdown: null;
+  showMenuDropdown: null | string;
   showMenuDropdownType: null;
   SubDropdownMenu: boolean;
   SubMenuId: null;

@@ -5,7 +5,6 @@ import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import {
-  EndTimeEntriesService,
   StartTimeEntryService,
 } from '../../../../../../../features/task/taskService';
 import { useAppSelector } from '../../../../../../../app/hooks';
@@ -21,10 +20,10 @@ export default function ClockInOutIndex() {
     trigger: startTimeClicked,
   });
 
-  EndTimeEntriesService({
-    taskId: activeItemId,
-    trigger: stopTimeClock,
-  });
+  // EndTimeEntriesService({
+  //   taskId: activeItemId,
+  //   trigger: stopTimeClock,
+  // });
 
   const handleTimeTrigger = () => {
     setStartTimeClicked(!startTimeClicked);
