@@ -13,6 +13,7 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import {
   ChatBubbleLeftEllipsisIcon,
+  ClockIcon,
   DocumentTextIcon,
   EyeIcon,
   InformationCircleIcon,
@@ -53,7 +54,12 @@ const tabs = [
     id: 6,
     label: 'Connect',
     icon: <SignalIcon className="w-5 h-5" />,
-  }, // Clock
+  },
+  {
+    id: 7,
+    label: 'Time clock',
+    icon: <ClockIcon className="w-5 h-5" />,
+  },
 ];
 
 interface TabsProps {
@@ -120,7 +126,7 @@ export default function Tabs({
     >
       <nav
         className={cl(
-          'gap-2 grid overflow-hidden w-full pb-5 border-b',
+          'gap-2 grid overflow-x-scroll w-full pb-5 border-b',
           showTabLabel ? 'grid-cols-2' : 'grid-rows-1 grid-flow-col'
         )}
         aria-label="Tabs"

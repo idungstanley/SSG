@@ -15,7 +15,6 @@ import Favorites from '../../../../../pages/workspace/favorites';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
 import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
-import Directory from '../../../../../pages/directory';
 import Files from '../../../../../pages/workspace/files';
 import Dashboard from '../../../../../pages/workspace/dashboard';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,6 +22,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import PlaceItem from './PlaceItem';
+import Sidebar from '../../../../../pages/directory/components/Sidebar';
 
 const places = [
   {
@@ -53,7 +53,7 @@ const places = [
   {
     name: 'Library',
     id: 5,
-    place: <Directory />,
+    place: <Sidebar />,
     source: libraryIcon,
     link: 'directory',
   },
