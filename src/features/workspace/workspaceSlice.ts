@@ -2,14 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface workspaceState {
   workspace: string[];
-  showSidebar: boolean;
   currentItemId: string | null;
   currentItemType?: string | null;
   activePlaceId: number | null | boolean;
-  showExtendedBar: boolean;
-  sidebarWidth: number;
   pilotWidth: number;
-  extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
   showMenuDropDown: boolean;
@@ -36,19 +32,15 @@ interface workspaceState {
 
 const initialState: workspaceState = {
   workspace: [],
-  showSidebar: true,
   currentItemId: null,
   currentItemType: null,
   activePlaceId: null,
-  showExtendedBar: false,
-  sidebarWidth: 300,
   pilotWidth: 400,
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
   showModal: false,
   searchIsActive: false,
-  extendedSidebarWidth: 240,
   isExtSearchActive: false,
   activeItemId: null,
   activeItemType: null,
@@ -75,22 +67,6 @@ export const wsSlice = createSlice({
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
-    setShowSidebar(state, action) {
-      if (action.payload === 'CHANGE') {
-        return {
-          ...state,
-          showSidebar: !state.showSidebar,
-        };
-      } else if (action.payload === true) {
-        state.showSidebar = action.payload;
-      } else if (action.payload === false) {
-        state.showSidebar = action.payload;
-      }
-      state.showSidebar;
-    },
-    setSidebarWidth(state, action) {
-      state.sidebarWidth = action.payload;
-    },
     setPilotWidth(state, action) {
       state.pilotWidth = action.payload;
     },
@@ -102,9 +78,6 @@ export const wsSlice = createSlice({
     },
     setShowPilotListView(state, action) {
       state.showPilotListView = action.payload;
-    },
-    setExtendedSidebarWidth(state, action) {
-      state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
       if (action.payload === 'TOGGLE') {
@@ -133,9 +106,6 @@ export const wsSlice = createSlice({
     },
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
-    },
-    setShowExtendedBar(state, action) {
-      state.showExtendedBar = action.payload;
     },
     setShowHub(state, action) {
       state.showHub = action.payload;
@@ -190,18 +160,14 @@ export const wsSlice = createSlice({
 export const {
   createWorkspace,
   checkIfWs,
-  setShowSidebar,
   setCurrentItem,
   resetCurrentItem,
   setActivePlaceId,
-  setShowExtendedBar,
   setShowHub,
   setShowWallet,
-  setSidebarWidth,
   setShowMenuDropDown,
   setShowModal,
   setSearchIsActive,
-  setExtendedSidebarWidth,
   setIsExtSearchActive,
   setActiveItem,
   setCurrentWalletId,
