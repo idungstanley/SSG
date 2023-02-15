@@ -15,7 +15,7 @@ export default function RemoveAccess({
 }: RemoveAccessProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const type = pilotSideOver.type as 'file' | 'folder';
 
   const { mutate: onRemoveAccess } = useRemoveAccessForData(type, id);
 

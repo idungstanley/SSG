@@ -15,6 +15,7 @@ import ChatForPilot from '../Chat/ChatForPilot';
 import CommentsForPilot from '../Comments/CommentsForPilot';
 import WatchersForPilot from '../Watchers/WatchersForPilot';
 import Tabs from './components/Tabs';
+import TimeClock from '../../pages/workspace/pilot/components/timeClock/TimeClock';
 
 const sections = [
   {
@@ -40,6 +41,10 @@ const sections = [
   {
     id: 6,
     element: <ChatForPilot />,
+  },
+  {
+    id: 7,
+    element: <TimeClock />,
   },
 ];
 

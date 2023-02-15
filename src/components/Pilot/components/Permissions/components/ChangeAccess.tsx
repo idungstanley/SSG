@@ -16,7 +16,7 @@ export default function ChangeAccess({
 }: ChangeAccessProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const type = pilotSideOver.type as 'file' | 'folder';
 
   const { mutate: onChange } = useChangeAccessForData(type, id);
 
