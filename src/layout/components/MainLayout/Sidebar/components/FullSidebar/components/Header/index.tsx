@@ -27,18 +27,20 @@ export default function Header() {
 
       {/* cog */}
       <div
-        className="flex items-center justify-center mt-1"
+        className="mt-3"
         onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}
       >
         <ArchiveMenu />
       </div>
 
-      <AvatarWithInitials
-        initials="AW"
-        height="h-5"
-        width="w-5"
-        backgroundColour="blue"
-      />
+      <span>
+        <AvatarWithInitials
+          initials="AW"
+          height="h-5"
+          width="w-5"
+          backgroundColour="blue"
+        />
+      </span>
     </div>
   );
 }

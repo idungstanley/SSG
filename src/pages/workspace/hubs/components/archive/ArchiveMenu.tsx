@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import Setting from '../../../../../assets/branding/setting.png';
 import { cl } from '../../../../../utils';
 import { BsArchive } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -8,6 +7,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 // import { setToggleArchive } from '../../../../../features/hubs/hubSlice';
 import { BiWallet } from 'react-icons/bi';
 import { RiListSettingsFill } from 'react-icons/ri';
+import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 // import { setToggleArchiveWallet } from '../../../../../features/wallet/walletSlice';
 // import { setToggleArchiveList } from '../../../../../features/list/listSlice';
 
@@ -61,12 +61,10 @@ export default function ArchiveMenu() {
   ];
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="flex text-sm text-gray-400">
-          <img className="w-auto h-6" src={Setting} alt="Workflow" />
-        </Menu.Button>
-      </div>
+    <Menu as="div" className="relative text-left">
+      <Menu.Button className="text-sm text-gray-700">
+        <Cog6ToothIcon className="w-5 h-5" aria-hidden />
+      </Menu.Button>
 
       <Transition
         as={Fragment}
