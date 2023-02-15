@@ -43,7 +43,10 @@ export default function HotKeys() {
                 {item.icon ? (
                   item.icon
                 ) : (
-                  <img src={item.source} alt={item.name + ' icon'} />
+                  <img
+                    src={(item as IColumn).source}
+                    alt={item.name + ' icon'}
+                  />
                 )}
               </div>
             </div>
