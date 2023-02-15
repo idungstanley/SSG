@@ -15,7 +15,7 @@ function RenderHubs() {
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
   return (
-    <div className="h-screen">
+    <div className="h-full w-full">
       <section id="nav" className="capitalize">
         <ListNav
           navName={activeItemName}

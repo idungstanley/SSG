@@ -48,7 +48,7 @@ export default function Pilot() {
   const showFullPilot = pilotSideOver.show;
 
   useEffect(() => {
-    // reset active tab on unmount
+    // reset active tab and current item id on unmount
     return () => {
       setActiveTabId(1);
       dispatch(setShowPilotSideOver({ show: true }));

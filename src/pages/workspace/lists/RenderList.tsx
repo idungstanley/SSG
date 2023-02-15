@@ -33,7 +33,7 @@ function RenderList() {
   const { data: listDetailsData } = getTaskListService({ listId } );
 
   return (
-    <div className=" overflow-x-auto  relative">
+    <div className="w-full relative">
       <section id="nav" className="capitalize ">
         <ListNav
           navName={listDetailsData?.data?.list?.name}

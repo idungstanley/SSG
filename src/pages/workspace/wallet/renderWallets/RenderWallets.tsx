@@ -21,7 +21,7 @@ function RenderWallets() {
   const { data } = getWalletServices({ parentId: walletId });
 
   return (
-    <div className="h-screen">
+    <div className="h-full w-full">
       <section id="nav" className="capitalize">
         <ListNav
           navName={currentWalletName}
