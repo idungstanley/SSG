@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../../../utils';
@@ -15,7 +15,7 @@ export default function Main() {
   );
 
   // set data for pilot
-  useMemo(() => {
+  useEffect(() => {
     const selectedItemId = selectedFileId || selectedFolderId;
     const selectedItemType = selectedFileId ? 'file' : 'folder';
 

@@ -10,6 +10,7 @@ import { setShowPilotSideOver } from '../../features/general/slideOver/slideOver
 import History from '../../pages/explorer/components/Pilot/components/History';
 import Information from '../../pages/explorer/components/Pilot/components/Information';
 import Permissions from '../../pages/explorer/components/Pilot/components/Permissions';
+import { cl } from '../../utils';
 import ChatForPilot from '../Chat/ChatForPilot';
 import CommentsForPilot from '../Comments/CommentsForPilot';
 import WatchersForPilot from '../Watchers/WatchersForPilot';
@@ -60,7 +61,7 @@ export default function Pilot() {
     // reset active tab and current item id on unmount
     return () => {
       setActiveTabId(1);
-      dispatch(setShowPilotSideOver({ show: true }));
+      // dispatch(setShowPilotSideOver({ show: true }));
     };
   }, []);
 
@@ -88,7 +89,9 @@ export default function Pilot() {
   };
 
   return pilotSideOver.id ? (
-    <div className="p-2 border-l h-full">
+    <div
+      className={cl('p-2 border-l h-full', showFullPilot && 'w-134 min-w-134')}
+    >
       {/* show / hide pilot toggle */}
       <div className="w-full flex justify-between items-center">
         <button type="button" onClick={togglePilot} className="text-gray-500">
@@ -107,16 +110,16 @@ export default function Pilot() {
             className="text-gray-500"
           >
             {showTabLabel ? (
-              <ChevronDoubleDownIcon className="w-5 h-5" />
-            ) : (
               <ChevronDoubleUpIcon className="w-5 h-5" />
+            ) : (
+              <ChevronDoubleDownIcon className="w-5 h-5" />
             )}
           </button>
         ) : null}
       </div>
 
       {showFullPilot ? (
-        <div className="flex flex-col mt-2">
+        <div className="flex flex-col mt-2 h-full">
           {/* tab items */}
           <Tabs
             showTabLabel={showTabLabel}
