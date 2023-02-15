@@ -19,14 +19,11 @@ function MainLayout() {
       <div className="flex h-full">
         <div className="flex flex-row w-full h-full overflow-hidden">
           <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
-          {/* <Sidebar /> */}
 
           <div className="flex flex-col flex-1 grow">
             <Header />
             <main className="flex-1">
-              <div className="mx-auto sm:px-0">
-                <Outlet />
-              </div>
+              <Outlet />
             </main>
           </div>
         </div>
