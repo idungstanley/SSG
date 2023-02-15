@@ -44,8 +44,9 @@ export default function TabDrag({
     zIndex: isDragging ? 1 : undefined,
   };
 
-  const handleClick = (tabId: number | undefined) => {
+  const handleClick = (tabId: number | undefined, name: string | undefined) => {
     dispatch(setActiveTabId(tabId));
+    console.log(activeTabId, name);
   };
 
   return (
@@ -56,7 +57,7 @@ export default function TabDrag({
       }`}
     >
       <div
-        onClick={() => handleClick(id)}
+        onClick={() => handleClick(id, name)}
         className={classNames(
           id === activeTabId
             ? 'bg-gray-300 text-black'

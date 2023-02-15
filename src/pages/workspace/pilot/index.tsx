@@ -82,7 +82,7 @@ export default function Pilot() {
   return (
     <div className="pr-0.5">
       <div
-        className={`flex ease-in-out overflow-y-auto pr-1  transition-all transform bg-white border-l border-r h-screen ${
+        className={`flex ease-in-out overflow-y-auto pr-1 transition-all transform bg-white border-l border-r h-screen ${
           !showPilot && selectedSection
             ? 'flex-row fixed z-40 top-16 right-0'
             : 'flex-col'
