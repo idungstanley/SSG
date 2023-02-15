@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 // import { getListsListService } from '../../../../features/list/listService';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
-import Pilot from '../../pilot';
+// import Pilot from '../../pilot';
 import { getWalletServices } from '../../../../features/wallet/walletService';
 import WalletSection from '../../hubs/components/renderHubs/items/itemsWalletData/WalletSection';
 import ListSection from '../../hubs/components/renderHubs/items/itemsListData/ListSection';
 import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
+import Pilot from '../../../../components/Pilot';
 
 function RenderWallets() {
   const { walletId } = useParams();

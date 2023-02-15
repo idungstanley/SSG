@@ -6,6 +6,8 @@ import {
 } from '../../../../features/explorer/explorerService';
 import { OutputDateTime } from '../../../../app/helpers';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../features/list/listService';
 
 export default function Information() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -22,14 +24,31 @@ export default function Information() {
     activeItemType: type,
   });
 
-  const data = folder?.data.current_folder || file || hub?.data.hub;
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId: id,
+    activeItemType: type,
+  });
+
+  const { data: list } = UseGetListDetails({
+    activeItemId: id,
+    activeItemType: type,
+  });
+
+  const data =
+    folder?.data.current_folder ||
+    file ||
+    wallet?.data.wallet ||
+    list?.data.list ||
+    hub?.data.hub;
 
   const info = [
     {
+      id: 1,
       key: 'Last modified at',
       value: data && OutputDateTime(data.updated_at),
     },
     {
+      id: 2,
       key: 'Created at',
       value: data && OutputDateTime(data.created_at),
     },
@@ -40,7 +59,7 @@ export default function Information() {
       {data ? (
         <div className="flex border-b flex-col justify-center text-sm font-medium divide-y divide-gray-200">
           {info.map((item) => (
-            <div key={item.key} className="flex py-3 justify-between">
+            <div key={item.id} className="flex py-3 justify-between">
               <p className="text-gray-500">{item.key}</p>
               <span className="text-gray-700">{item.value}</span>
             </div>

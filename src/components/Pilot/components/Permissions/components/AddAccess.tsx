@@ -12,7 +12,7 @@ interface AddAccessProps {
 export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const selectedId = pilotSideOver.id;
-  const selectedType = pilotSideOver.type;
+  const selectedType = pilotSideOver.type as 'file' | 'folder';
 
   const { data: dt } = useGetTeamMembersOrGroups({
     query: '',

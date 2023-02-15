@@ -11,10 +11,11 @@ import TaskData from "../tasks/component/taskData/TaskData";
 import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction";
 import SubTask from "../tasks/subtasks/create/SubTask";
 import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
-import Pilot from "../pilot";
+// import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
 import TaskTableView from "../tasks/component/views/TaskTableView";
+import Pilot from "../../../components/Pilot";
 
 function RenderList() {
   const dispatch = useDispatch();

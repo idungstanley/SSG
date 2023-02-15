@@ -17,6 +17,7 @@ export default function History() {
   return (
     <div className="h-full flex-1">
       <div className="relative h-full">
+        {/* status checking */}
         {status === 'error' ? (
           <FullScreenMessage
             title="Oops, an error occurred :("
@@ -28,33 +29,46 @@ export default function History() {
           </div>
         ) : (
           <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col">
-            <ul className="divide-y divide-gray-200 h-full flex-1">
-              {logs?.map((activityLog) => (
-                <li
-                  key={activityLog.id}
-                  className="py-2 flex justify-between items-center"
-                >
-                  <div className="flex items-center">
-                    <InitialsAvatar
-                      size={10}
-                      colour={activityLog.team_member.colour}
-                      initials={activityLog.team_member.initials}
-                    />
+            {/* message if logs are empty */}
+            {logs ? (
+              !logs.length ? (
+                <FullScreenMessage
+                  title="NO logs yet"
+                  description="Do any action."
+                />
+              ) : (
+                <ul className="divide-y divide-gray-200 h-full flex-1">
+                  {/* logs list */}
+                  {logs.map((activityLog) => (
+                    <li
+                      key={activityLog.id}
+                      className="py-2 flex justify-between items-center"
+                    >
+                      <div className="flex items-center">
+                        <InitialsAvatar
+                          size={10}
+                          colour={activityLog.team_member.colour}
+                          initials={activityLog.team_member.initials}
+                        />
 
-                    <div className="ml-3">
-                      <p className="text-indigo-600">
-                        {activityLog.team_member.name}
+                        <div className="ml-3">
+                          <p className="text-indigo-600">
+                            {activityLog.team_member.name}
+                          </p>
+                          <p className="text-gray-400">
+                            {activityLog.category}
+                          </p>
+                        </div>
+                      </div>
+
+                      <p className="text-gray-400 text-sm">
+                        {OutputDateTime(activityLog.created_at)}
                       </p>
-                      <p className="text-gray-400">{activityLog.category}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-gray-400 text-sm">
-                    {OutputDateTime(activityLog.created_at)}
-                  </p>
-                </li>
-              ))}
-            </ul>
+                    </li>
+                  ))}
+                </ul>
+              )
+            ) : null}
           </div>
         )}
       </div>
