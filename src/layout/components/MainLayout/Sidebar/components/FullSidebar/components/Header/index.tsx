@@ -33,14 +33,12 @@ export default function Header() {
         <ArchiveMenu />
       </div>
 
-      <span className="mb-1.5">
-        <AvatarWithInitials
-          initials="Also Workspace"
-          height="h-5"
-          width="w-5"
-          backgroundColour="blue"
-        />
-      </span>
+      <AvatarWithInitials
+        initials="AW"
+        height="h-5"
+        width="w-5"
+        backgroundColour="blue"
+      />
     </div>
   );
 }

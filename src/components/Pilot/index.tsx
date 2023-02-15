@@ -1,6 +1,8 @@
 import {
+  ChevronDoubleDownIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  ChevronDoubleUpIcon,
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -40,10 +42,17 @@ const sections = [
   },
 ];
 
+const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
+  localStorage.getItem('pilot') || '""'
+);
+
+const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
+
 export default function Pilot() {
   const dispatch = useAppDispatch();
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const [activeTabId, setActiveTabId] = useState(1);
+  const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
 
   const showFullPilot = pilotSideOver.show;
 
@@ -64,20 +73,56 @@ export default function Pilot() {
     dispatch(setShowPilotSideOver({ ...pilotSideOver, show: !showFullPilot }));
   };
 
+  const toggleShowTabLabel = () => {
+    setShowTabLabel((prev) => {
+      localStorage.setItem(
+        'pilot',
+        JSON.stringify({
+          ...pilotFromLS,
+          showTabLabel: !prev,
+        })
+      );
+
+      return !prev;
+    });
+  };
+
   return pilotSideOver.id ? (
     <div className="p-2 border-l h-full">
-      <button type="button" onClick={togglePilot} className="text-gray-500">
+      {/* show / hide pilot toggle */}
+      <div className="w-full flex justify-between items-center">
+        <button type="button" onClick={togglePilot} className="text-gray-500">
+          {showFullPilot ? (
+            <ChevronDoubleRightIcon className="w-5 h-5" />
+          ) : (
+            <ChevronDoubleLeftIcon className="w-5 h-5" />
+          )}
+        </button>
+
+        {/* icon + label / icon views toggle */}
         {showFullPilot ? (
-          <ChevronDoubleRightIcon className="w-5 h-5" />
-        ) : (
-          <ChevronDoubleLeftIcon className="w-5 h-5" />
-        )}
-      </button>
+          <button
+            type="button"
+            onClick={toggleShowTabLabel}
+            className="text-gray-500"
+          >
+            {showTabLabel ? (
+              <ChevronDoubleDownIcon className="w-5 h-5" />
+            ) : (
+              <ChevronDoubleUpIcon className="w-5 h-5" />
+            )}
+          </button>
+        ) : null}
+      </div>
 
       {showFullPilot ? (
         <div className="flex flex-col mt-2">
           {/* tab items */}
-          <Tabs activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+          <Tabs
+            showTabLabel={showTabLabel}
+            activeTabId={activeTabId}
+            setActiveTabId={setActiveTabId}
+          />
 
           {/* main section depends of active tab */}
           {activeSection ? activeSection.element : null}

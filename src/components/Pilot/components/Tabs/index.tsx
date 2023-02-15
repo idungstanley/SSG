@@ -11,8 +11,16 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { ChatBubbleLeftEllipsisIcon, ClockIcon, EyeIcon, InformationCircleIcon, LockClosedIcon, SignalIcon } from '@heroicons/react/24/outline';
+import {
+  ChatBubbleLeftEllipsisIcon,
+  DocumentTextIcon,
+  EyeIcon,
+  InformationCircleIcon,
+  SignalIcon,
+} from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
+import { TbShield } from 'react-icons/tb';
+import { cl } from '../../../../utils';
 import Tab from './components/Tab';
 
 const tabs = [
@@ -24,12 +32,12 @@ const tabs = [
   {
     id: 2,
     label: 'Logs',
-    icon: <ClockIcon className="w-5 h-5" />,
+    icon: <DocumentTextIcon className="w-5 h-5" />,
   },
   {
     id: 3,
     label: 'Permissions',
-    icon: <LockClosedIcon className="w-5 h-5" />,
+    icon: <TbShield className="w-5 h-5" />,
   },
   {
     id: 4,
@@ -43,21 +51,30 @@ const tabs = [
   },
   {
     id: 6,
-    label: 'Communication',
+    label: 'Connect',
     icon: <SignalIcon className="w-5 h-5" />,
-  },
+  }, // Clock
 ];
 
 interface TabsProps {
   activeTabId: number;
   setActiveTabId: (i: number) => void;
+  showTabLabel: boolean;
 }
 
-export default function Tabs({ activeTabId, setActiveTabId }: TabsProps) {
-  const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
+const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
+  localStorage.getItem('pilot') || '""'
+);
 
+const tabIdsFromLS = pilotFromLS.tabOrder || [];
+
+export default function Tabs({
+  activeTabId,
+  setActiveTabId,
+  showTabLabel,
+}: TabsProps) {
   const [tabItems, setTabItems] = useState(
-    tabs.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)) // set tabs position as in localStorage
+    tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
 
   const sensors = useSensors(
@@ -82,8 +99,11 @@ export default function Tabs({ activeTabId, setActiveTabId }: TabsProps) {
           const sortArray = arrayMove(tabItems, oldIndex, newIndex);
 
           localStorage.setItem(
-            'pilotSections',
-            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
+            'pilot',
+            JSON.stringify({
+              ...pilotFromLS,
+              tabOrder: [...sortArray.map((i: { id: string }) => i.id)],
+            })
           );
 
           return sortArray;
@@ -99,7 +119,10 @@ export default function Tabs({ activeTabId, setActiveTabId }: TabsProps) {
       onDragEnd={(e) => handleDragEnd(e)}
     >
       <nav
-        className="gap-2 grid grid-cols-3 overflow-hidden w-full pb-5 border-b"
+        className={cl(
+          'gap-2 grid  overflow-hidden w-full pb-5 border-b',
+          showTabLabel ? 'grid-cols-2' : 'grid-rows-1'
+        )}
         aria-label="Tabs"
       >
         <SortableContext strategy={rectSortingStrategy} items={tabItems}>
@@ -111,6 +134,7 @@ export default function Tabs({ activeTabId, setActiveTabId }: TabsProps) {
               label={tab.label}
               activeTabId={activeTabId}
               setActiveTabId={setActiveTabId}
+              showTabLabel={showTabLabel}
             />
           ))}
         </SortableContext>
