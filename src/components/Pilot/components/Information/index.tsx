@@ -1,10 +1,10 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../../app/hooks';
 import {
   useGetExplorerFile,
   useGetExplorerFolder,
-} from '../../../../../features/explorer/explorerService';
-import { OutputDateTime } from '../../../../../app/helpers';
+} from '../../../../features/explorer/explorerService';
+import { OutputDateTime } from '../../../../app/helpers';
 
 export default function Information() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);

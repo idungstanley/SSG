@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import { useRemoveAccessForData } from '../../../../../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { useRemoveAccessForData } from '../../../../../features/permissions/permissionsService';
 
 interface RemoveAccessProps {
   itemType: 'member' | 'member-group';

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import SelectMenuTeamMembers, { ISelectedData } from '../../../../../../../components/selectMenu';
-import { useGetTeamMembersOrGroups } from '../../../../../../../features/inbox/inboxSettingsService';
-import { useAddAccessForData } from '../../../../../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../../../app/hooks';
+import SelectMenuTeamMembers, { ISelectedData } from '../../../../selectMenu';
+import { useGetTeamMembersOrGroups } from '../../../../../features/inbox/inboxSettingsService';
+import { useAddAccessForData } from '../../../../../features/permissions/permissionsService';
 
 interface AddAccessProps {
   type: 'member' | 'member-group';

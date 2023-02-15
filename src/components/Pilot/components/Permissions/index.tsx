@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
-import { Spinner } from '../../../../../../common';
-import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
-import { useGetItemAccess } from '../../../../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../../app/hooks';
+import { Spinner } from '../../../../common';
+import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
+import { useGetItemAccess } from '../../../../features/permissions/permissionsService';
 import AddAccess from './components/AddAccess';
 import MembersList from './components/MembersList';
 

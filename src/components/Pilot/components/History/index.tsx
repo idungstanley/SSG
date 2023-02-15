@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
-import { InitialsAvatar, Spinner } from '../../../../../common';
-import { useGetItemHistory } from '../../../../../features/general/history/historyService';
-import { OutputDateTime } from '../../../../../app/helpers';
+import { useAppSelector } from '../../../../app/hooks';
+import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
+import { InitialsAvatar, Spinner } from '../../../../common';
+import { useGetItemHistory } from '../../../../features/general/history/historyService';
+import { OutputDateTime } from '../../../../app/helpers';
 
 export default function History() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);

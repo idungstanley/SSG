@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import { SelectMenuSimple } from '../../../../../../../components';
-import { useChangeAccessForData } from '../../../../../../../features/permissions/permissionsService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { SelectMenuSimple } from '../../../..';
+import { useChangeAccessForData } from '../../../../../features/permissions/permissionsService';
 
 interface ChangeAccessProps {
   actualAccess: string;

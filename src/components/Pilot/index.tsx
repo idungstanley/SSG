@@ -7,9 +7,9 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
-import History from '../../pages/explorer/components/Pilot/components/History';
-import Information from '../../pages/explorer/components/Pilot/components/Information';
-import Permissions from '../../pages/explorer/components/Pilot/components/Permissions';
+import History from './components/History';
+import Information from './components/Information';
+import Permissions from './components/Permissions';
 import { cl } from '../../utils';
 import ChatForPilot from '../Chat/ChatForPilot';
 import CommentsForPilot from '../Comments/CommentsForPilot';
@@ -61,7 +61,7 @@ export default function Pilot() {
     // reset active tab and current item id on unmount
     return () => {
       setActiveTabId(1);
-      // dispatch(setShowPilotSideOver({ show: true }));
+      dispatch(setShowPilotSideOver({ show: true }));
     };
   }, []);
 

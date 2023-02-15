@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../app/hooks';
 import ChangeAccess from './ChangeAccess';
-import { IPermissionMember } from '../../../../../../../features/permissions/permissions.interfaces';
+import { IPermissionMember } from '../../../../../features/permissions/permissions.interfaces';
 import RemoveAccess from './RemoveAccess';
 
 interface MemberProps {

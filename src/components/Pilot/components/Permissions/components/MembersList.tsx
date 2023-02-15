@@ -1,5 +1,5 @@
 import React from 'react';
-import { IPermissionMember } from '../../../../../../../features/permissions/permissions.interfaces';
+import { IPermissionMember } from '../../../../../features/permissions/permissions.interfaces';
 import MemberItem from './MemberItem';
 
 interface MembersListProps {
