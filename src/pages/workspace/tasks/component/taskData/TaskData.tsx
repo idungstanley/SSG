@@ -31,8 +31,9 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import TagModal from '../../../../../components/tags/TagModal';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import AssignModal from '../../../../../components/assign/AssignModal';
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -75,11 +76,12 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
+    // console.log(id);
+    // if (toggleAssignCurrentTaskId == id) {
+    //   dispatch(setToggleAssignCurrentTaskId(null));
+    // } else {
+    dispatch(setToggleAssignCurrentTaskId(id));
+    // }
   };
 
   const handleGetSubTask = (id: string) => {
@@ -217,11 +219,15 @@ export default function TaskData({ task }: TaskDataProps) {
       ).length === 0
     ) {
       return (
-        <UserPlusIcon
-          className="ml-2 text-gray-400 text-xl cursor-pointer"
-          aria-hidden="true"
-          onClick={() => handleAssigneeModal(task.id as string)}
-        />
+        // <UserPlusIcon
+        //   className="ml-2 text-gray-400 text-xl cursor-pointer"
+        //   aria-hidden="true"
+        //   onClick={() => handleAssigneeModal(task.id as string)}
+        // />
+
+        <div onClick={() => dispatch(setToggleAssignCurrentTaskId(task?.id))}>
+          <AssignModal />
+        </div>
       );
     } else if (colfield === 'tags') {
       return <div> {groupTags(taskColField as tagItem[])}</div>;
