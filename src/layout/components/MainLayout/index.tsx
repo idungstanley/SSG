@@ -22,9 +22,8 @@ function MainLayout() {
 
           <div className="flex flex-col flex-1 grow">
             <Header />
-            <main className="flex-1">
-              <Outlet />
-            </main>
+
+            <Outlet />
           </div>
         </div>
       </div>

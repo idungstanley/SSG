@@ -38,12 +38,13 @@ export default function HotKeys() {
             <div key={item.id}>
               <div
                 className="flex text-sm w-4 h-4"
-                onClick={() => console.log('stan has clicked on ' + item.name)}
+                // onClick={() => console.log('stan has clicked on ' + item.name)}
               >
                 {item.icon ? (
                   item.icon
                 ) : (
-                  <img src={item.source} alt={item.name + ' icon'} />
+                  <></>
+                  // <img src={item.source} alt={item.name + ' icon'} />
                 )}
               </div>
             </div>
