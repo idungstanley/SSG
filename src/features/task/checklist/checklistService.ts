@@ -210,3 +210,68 @@ export const UseDeleteChecklistItemService = (data: {
     }
   );
 };
+
+// Assign Checklist Item
+export const UseAssignChecklistItemService = ({
+  checklist_id,
+  itemId,
+  team_member_id,
+}: {
+  checklist_id: string | null;
+  itemId: string | null;
+  team_member_id: string | null;
+}) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["assign", { team_member_id: team_member_id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
+          method: "POST",
+        },
+        true
+      );
+      return data;
+    },
+    {
+      onSuccess: () => {
+        // dispatch(setToggleAssignCurrentTaskId(null));
+      },
+      initialData: queryClient.getQueryData(["assign", team_member_id]),
+      enabled: team_member_id != null,
+    }
+  );
+};
+
+export const UseUnAssignChecklistItemService = ({
+  checklist_id,
+  itemId,
+  team_member_id,
+  triggerUnassign,
+}: {
+  checklist_id: string | null;
+  itemId: string | null;
+  team_member_id: string | null;
+  triggerUnassign: boolean;
+}) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["unassign", { team_member_id: team_member_id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
+          method: "POST",
+        },
+        true
+      );
+      return data;
+    },
+    {
+      initialData: queryClient.getQueryData(["unassign", team_member_id]),
+      enabled: triggerUnassign,
+    }
+  );
+};

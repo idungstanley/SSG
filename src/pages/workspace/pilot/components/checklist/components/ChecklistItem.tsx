@@ -145,9 +145,8 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
                     setEditName(item.name);
                   }}
                 />
-                <span className="mx-4">
+                <span className="mx-4 cursor-pointer">
                   <CgProfile />
-                  {/* <h1>{item.assignees.length}</h1> */}
                 </span>
                 <div className="opacity-0 group-hover:opacity-100">
                   <ChecklistModal

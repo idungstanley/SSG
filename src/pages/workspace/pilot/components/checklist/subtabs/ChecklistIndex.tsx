@@ -29,11 +29,8 @@ export default function ChecklistIndex() {
 
   // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const {
-    triggerChecklistUpdate,
-    triggerDelChecklist,
-    clickedChecklistId,
-  } = useAppSelector((state) => state.checklist);
+  const { triggerChecklistUpdate, triggerDelChecklist, clickedChecklistId } =
+    useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -150,7 +147,7 @@ export default function ChecklistIndex() {
                           <div className="opacity-0 group-hover:opacity-100">
                             <ChecklistModal
                               options={completeOptions}
-                              checklistId={""}
+                              checklistId={item.id}
                             />
                           </div>
                         </div>

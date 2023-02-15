@@ -16,11 +16,10 @@ function App() {
         position="bottom-left"
         toastOptions={{
           style: {
-            width: "200px",
+            width: "20px",
           },
         }}
       />
-
       <Prompt />
     </div>
   );

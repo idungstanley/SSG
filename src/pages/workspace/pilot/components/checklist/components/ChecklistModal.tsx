@@ -27,6 +27,7 @@ export default function ChecklistModal({
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
   const handleDelChecklist = () => {
+    console.log(checklistId);
     dispatch(setClickChecklistId(checklistId));
     dispatch(setTriggerDelChecklist(true));
   };
@@ -63,19 +64,21 @@ export default function ChecklistModal({
           {options.map((option) =>
             option.name === "New Item" ? (
               <Disclosure.Button key={option.id} className="w-full">
-                {() => (
-                  <div className="flex items-center hover:bg-gray-300 text-gray-600 w-full">
-                    <button
-                      type="button"
-                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
-                      onClick={() => {
-                        handleOptions(option);
-                      }}
-                    >
-                      <p>{option.name}</p>
-                    </button>
-                  </div>
-                )}
+                <Menu.Button className="flex text-sm text-gray-400 w-full">
+                  {() => (
+                    <div className="flex items-center hover:bg-gray-300 text-gray-600 w-full">
+                      <button
+                        type="button"
+                        className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
+                        onClick={() => {
+                          handleOptions(option);
+                        }}
+                      >
+                        <p>{option.name}</p>
+                      </button>
+                    </div>
+                  )}
+                </Menu.Button>
               </Disclosure.Button>
             ) : (
               <Menu.Item key={option.id}>
