@@ -4,9 +4,10 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { classNames } from '../utils';
 
 interface itemType {
+  id?: number
   label: string;
-  onClick: () => void;
-  icon: string | JSX.Element;
+  onClick?: () => void | boolean;
+  icon?: string | JSX.Element;
 }
 interface DropDownProps {
   items: itemType[];
@@ -30,7 +31,7 @@ export default function Dropdown({ items }: DropDownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="fixed right-8 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {items.map((item) => (
               <Menu.Item key={item.label}>
@@ -39,7 +40,7 @@ export default function Dropdown({ items }: DropDownProps) {
                     type="button"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'group flex items-center font-medium px-4 py-2 text-sm w-full'
+                      'group flex items-center font-medium gap-2 px-4 py-2 text-sm w-full'
                     )}
                     onClick={item.onClick}
                   >

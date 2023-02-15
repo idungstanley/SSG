@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSortable } from "@dnd-kit/sortable";
+import React from 'react';
+import { useSortable } from '@dnd-kit/sortable';
 
 export default function SortMe({
   id,
@@ -9,8 +9,8 @@ export default function SortMe({
 }: {
   id: number;
   label: string;
-  showPilot: any;
-  showPilotIconView: any;
+  showPilot: boolean;
+  showPilotIconView: boolean;
 }) {
   const {
     attributes,
@@ -27,15 +27,15 @@ export default function SortMe({
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
     transition,
-    borderColor: isDragging ? "red" : undefined,
+    borderColor: isDragging ? 'red' : undefined,
     zIndex: isDragging ? 1 : undefined,
   };
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <p
-        className={`text-xs ${showPilot ? "block" : "hidden"} ${
-          showPilotIconView ? "hidden" : "block"
+        className={`text-xs ${showPilot ? 'block' : 'hidden'} ${
+          showPilotIconView ? 'hidden' : 'block'
         }`}
       >
         {label}

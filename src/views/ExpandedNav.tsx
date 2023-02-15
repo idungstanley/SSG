@@ -26,7 +26,6 @@ import Extendedbar from "../pages/explorer/components/Sidebar";
 import { BiCabinet } from "react-icons/bi";
 import { IoSearchCircleOutline } from "react-icons/io5";
 import ResizeBorder from "../components/ResizeBorder";
-import { any } from "prop-types";
 
 const secondaryNavigation = [
   {
@@ -36,7 +35,7 @@ const secondaryNavigation = [
     source: emailIcon,
   },
   {
-    name: "hubs",
+    name: "task",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,
@@ -92,7 +91,7 @@ function ExpandedNav() {
     setIsResizing(false);
   }, []);
   const resize = React.useCallback(
-    (mouseMoveEvent) => {
+    (mouseMoveEvent: MouseEvent) => {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {

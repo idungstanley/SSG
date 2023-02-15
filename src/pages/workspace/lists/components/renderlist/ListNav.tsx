@@ -1,5 +1,4 @@
 import React from 'react';
-import { EllipsisOutlined } from '@ant-design/icons';
 import { Button } from '../../../../../components';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
@@ -8,7 +7,10 @@ import {
 } from '../../../../../features/task/taskSlice';
 import { getTableView } from '../../../../../features/task/taskSlice';
 import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  EllipsisHorizontalCircleIcon,
+} from '@heroicons/react/24/outline';
 import { BsListStars } from 'react-icons/bs';
 import { CiViewTable } from 'react-icons/ci';
 
@@ -135,8 +137,10 @@ function ListNav({
             @mentions
           </span>
           <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
-            {' '}
-            <EllipsisOutlined />
+            <EllipsisHorizontalCircleIcon
+              className="h-5 w-5"
+              aria-hidden="true"
+            />
           </span>
         </section>
       </nav>

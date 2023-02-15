@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { createSlice } from "@reduxjs/toolkit";
+import { tagItem } from "../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails";
+import { listColumnProps } from "../../pages/workspace/tasks/component/views/ListColumns";
 
 export interface ImyTaskData {
   id: string;
@@ -7,7 +8,7 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null;
+  priority: string | null | [{ id: string; initials: string; colour: string; }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
@@ -16,6 +17,13 @@ export interface ImyTaskData {
   created_at?: string;
   archived_at?: string | null;
   deleted_at?: string | null;
+  [key: string]:
+    | string
+    | number
+    | undefined
+    | null
+    | [{ id: string; initials: string; colour: string }]
+    | tagItem[];
 }
 
 interface TaskState {
@@ -23,7 +31,7 @@ interface TaskState {
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null;
-  currTeamMemberId: null;
+  currTeamMemberId: null | string;
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];

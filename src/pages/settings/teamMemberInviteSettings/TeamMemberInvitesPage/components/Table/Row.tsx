@@ -111,6 +111,11 @@ export default function Row({ teamMemberInviteId }: RowProps) {
   return teamMemberInvite ? (
     <tr key={teamMemberInvite.id}>
       <td className="whitespace-nowrap pl-4 sm:pl-6 px-3 py-4 text-sm">
+        <div className="font-medium text-gray-900 capitalize">
+          {teamMemberInvite.name ? teamMemberInvite.name : '-'}
+        </div>
+      </td>
+      <td className="whitespace-nowrap pl-4 sm:pl-6 px-3 py-4 text-sm">
         <div className="font-medium text-gray-900">
           {teamMemberInvite.email}
         </div>

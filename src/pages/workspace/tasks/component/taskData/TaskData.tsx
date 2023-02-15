@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   ImyTaskData,
   setCurrentParentTaskId,
@@ -12,29 +12,31 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
   triggerUnassignTag,
-} from "../../../../../features/task/taskSlice";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { MdDragIndicator } from "react-icons/md";
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../../../../../app/hooks";
+} from '../../../../../features/task/taskSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { MdDragIndicator } from 'react-icons/md';
+import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
+import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-import { FiEdit2 } from "react-icons/fi";
-import "./task.css";
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
+import { FiEdit2 } from 'react-icons/fi';
+import './task.css';
+import { IoCloseSharp } from 'react-icons/io5';
+import ToolTip from '../../../../../components/Tooltip';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import moment, { MomentInput } from 'moment';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import TagModal from '../../../../../components/tags/TagModal';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+
 interface TaskDataProps {
   task: ImyTaskData;
 }
-import { IoCloseSharp } from "react-icons/io5";
-import ToolTip from "../../../../../components/Tooltip";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import moment from "moment";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
 
 export default function TaskData({ task }: TaskDataProps) {
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ export default function TaskData({ task }: TaskDataProps) {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "task",
+        activeItemType: 'task',
         activeItemName: name,
       })
     );
@@ -74,11 +76,12 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
+    // console.log(id);
+    // if (toggleAssignCurrentTaskId == id) {
+    //   dispatch(setToggleAssignCurrentTaskId(null));
+    // } else {
+    dispatch(setToggleAssignCurrentTaskId(id));
+    // }
   };
 
   const handleGetSubTask = (id: string) => {
@@ -98,7 +101,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }]
+    data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
       <div key={newData.id} className="">
@@ -114,15 +117,15 @@ export default function TaskData({ task }: TaskDataProps) {
     ));
   };
 
-  const groupTags = (arr) => {
-    return arr.map((item) => {
+  const groupTags = (arr: tagItem[]) => {
+    return arr.map((item: tagItem) => {
       return Array.isArray(item) ? (
         <div>{groupTags(item)}</div>
       ) : (
         <>
           <div
             className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? "object-contain" : "w-20"
+              item.name.length > 10 ? 'object-contain' : 'w-20'
             }`}
             style={{ backgroundColor: `${item.color}` }}
           >
@@ -140,7 +143,7 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
             <ToolTip tooltip="edit tag">
               <button>
-                <EditTagModal tagId={item.id} taskId={task.id} />
+                <EditTagModal tagId={item.id} />
               </button>
             </ToolTip>
 
@@ -166,8 +169,26 @@ export default function TaskData({ task }: TaskDataProps) {
     });
   };
 
-  const renderData = (taskColField, colfield) => {
-    if (colfield === "assignees" && taskColField.length !== 0) {
+  const renderData = (
+    taskColField:
+      | string
+      | number
+      | undefined
+      | tagItem[]
+      | null
+      | Array<{ id: string; initials: string; colour: string }>,
+    colfield: string
+  ) => {
+    if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length !== 0
+    ) {
       return (
         <>
           <div className="">
@@ -183,7 +204,16 @@ export default function TaskData({ task }: TaskDataProps) {
           </span>
         </>
       );
-    } else if (colfield === "assignees" && taskColField.length === 0) {
+    } else if (
+      colfield === 'assignees' &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
+      ).length === 0
+    ) {
       return (
         <>
           <UserAddOutlined
@@ -196,47 +226,47 @@ export default function TaskData({ task }: TaskDataProps) {
           </span>
         </>
       );
-    } else if (colfield === "tags") {
-      return <div> {groupTags(taskColField)}</div>;
-    } else if (colfield == "created_at" || colfield == "updated_at") {
+    } else if (colfield === 'tags') {
+      return <div> {groupTags(taskColField as tagItem[])}</div>;
+    } else if (colfield == 'created_at' || colfield == 'updated_at') {
       return (
         <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
-    } else if (colfield == "status") {
-      if (taskColField == "completed") {
+    } else if (colfield == 'status') {
+      if (taskColField == 'completed') {
         return (
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "in progress") {
+      } else if (taskColField == 'in progress') {
         return (
           <div
             className="capitalize text-xs font-medium bg-purple-500 text-white py-2.5 mb-5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "archived") {
+      } else if (taskColField == 'archived') {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         );
-      } else if (taskColField == "todo") {
+      } else if (taskColField == 'todo') {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -245,13 +275,13 @@ export default function TaskData({ task }: TaskDataProps) {
         return (
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}
           >
             Todo
           </div>
         );
       }
-    } else if (colfield === "name") {
+    } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
           <div className=" flex items-center">
@@ -260,7 +290,7 @@ export default function TaskData({ task }: TaskDataProps) {
               id="checked-checkbox"
               className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
               onClick={() => {
-                displayNav(task.id);
+                displayNav(task.id as string);
               }}
             />
             <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
@@ -273,7 +303,7 @@ export default function TaskData({ task }: TaskDataProps) {
               <span>
                 <img
                   src={ArrowDown}
-                  style={{ width: "6px", marginRight: "2px" }}
+                  style={{ width: '6px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   aria-hidden="true"
                   color="rgba(72, 67, 67, 0.64)"
@@ -283,7 +313,7 @@ export default function TaskData({ task }: TaskDataProps) {
               <span>
                 <img
                   src={ArrowRigt}
-                  style={{ width: "5px", marginRight: "2px" }}
+                  style={{ width: '5px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   color="rgba(72, 67, 67, 0.64)"
                 />
@@ -292,16 +322,18 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
           <div className="flex items-center">
             <p
-              onClick={() => handleTaskStatus(task.id)}
+              onClick={() => handleTaskStatus(task.id as string)}
               className="relative pt-1 pr-1"
             >
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <p
-              onClick={() => handleTaskPilot(task.id, task.name)}
+              onClick={() =>
+                handleTaskPilot(task.id as string, task.name as string)
+              }
               className="cursor-pointer "
             >
-              {taskColField}
+              {taskColField as ReactNode}
             </p>
             <div
               id="iconWrapper"
@@ -314,7 +346,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 <PlusOutlined
                   className="  w-3  text-gray-500   "
                   aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task.id)}
+                  onClick={() => handleCreateSubTask(task.id as string)}
                 />
               </span>
               {/* tag here */}
@@ -327,11 +359,11 @@ export default function TaskData({ task }: TaskDataProps) {
           </div>
         </div>
       );
-    } else if (colfield === "priority") {
+    } else if (colfield === 'priority') {
       return (
         <span
           className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(task.id)}
+          onClick={() => handleTaskPriority(task.id as string)}
         >
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
@@ -347,25 +379,25 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == "Task" &&
+                    col.value == 'Task' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == "Task" &&
+                    col.value == 'Task' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )}
@@ -374,25 +406,25 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == "Tags" &&
+                    col.value == 'Tags' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == "Tags" &&
+                    col.value == 'Tags' &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field)}
+                        {renderData(task[col.field], col.field) as ReactNode}
                       </div>
                     )
                 )}
@@ -402,29 +434,29 @@ export default function TaskData({ task }: TaskDataProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      style={{ width: '50px' }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== "Task" &&
-                  col.value !== "Tags" &&
+                  col.value !== 'Task' &&
+                  col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      style={{ width: '50px' }}
                     >
-                      {renderData(task[col.field], col.field)}
+                      {renderData(task[col.field], col.field) as ReactNode}
                     </div>
                   )
               )}

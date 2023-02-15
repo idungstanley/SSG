@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { BsStopCircle } from 'react-icons/bs';
-import { TagOutlined } from '@ant-design/icons';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import {
-  EndTimeEntriesService,
   StartTimeEntryService,
 } from '../../../../../../../features/task/taskService';
 import { useAppSelector } from '../../../../../../../app/hooks';
@@ -15,19 +13,17 @@ export default function ClockInOutIndex() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
   const [isBillable, setIsBillable] = useState(false);
-  const { activeItemId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   StartTimeEntryService({
     taskId: activeItemId,
     trigger: startTimeClicked,
   });
 
-  EndTimeEntriesService({
-    taskId: activeItemId,
-    trigger: stopTimeClock,
-  });
+  // EndTimeEntriesService({
+  //   taskId: activeItemId,
+  //   trigger: stopTimeClock,
+  // });
 
   const handleTimeTrigger = () => {
     setStartTimeClicked(!startTimeClicked);
@@ -81,7 +77,7 @@ export default function ClockInOutIndex() {
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
-                <TagOutlined className="text-white" aria-hidden="true" />
+                <TagIcon className="h-5 w-5 text-whit" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon
                 className={`${

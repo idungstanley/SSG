@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -63,7 +63,7 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string, name: string, e) => {
+  const handleShowMenu = (id: string, name: string, e: MouseEvent) => {
     dispatch(getCurrHubId(id));
     dispatch(
       setshowMenuDropdown({
@@ -73,7 +73,7 @@ export default function SubHubIndex() {
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }

@@ -122,7 +122,7 @@ export const UseDeleteWalletService = (data: {
 
 //archive wallet
 export const UseArchiveWalletService = (wallet: {
-  query: boolean | null;
+  query: string | null;
   archiveWallet: boolean;
 }) => {
   const walletId = wallet.query;
@@ -152,10 +152,10 @@ export const UseArchiveWalletService = (wallet: {
   );
 };
 
-//get walllet details
+//get wallet details
 export const UseGetWalletDetails = (query: {
-  activeItemId: string;
-  activeItemType: string;
+  activeItemId: string | null;
+  activeItemType: string | null;
 }) => {
   return useQuery(
     ['hubs', query],
@@ -170,7 +170,7 @@ export const UseGetWalletDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'wallet',
+      enabled: query.activeItemType === 'wallet' && !!query.activeItemId,
     }
   );
 };

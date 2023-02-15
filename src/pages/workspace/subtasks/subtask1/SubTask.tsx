@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  CalendarOutlined,
-  FlagOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
 import { Button } from "../../../../components";
 import { createTaskService } from "../../../../features/task/taskService";
 import { FaTimes } from "react-icons/fa";
+import { CalendarIcon, FlagIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 interface SubTaskProps {
   parentTaskId?: string;
@@ -63,31 +59,31 @@ function SubTask({ parentTaskId }: SubTaskProps) {
 
         <div className="flex items-center space-x-1">
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserAddOutlined
+            <UserPlusIcon
               className="text-xs h-6 w-6 text-gray-400"
               aria-hidden="true"
             />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserAddOutlined
+            <UserPlusIcon
               className="text-xs h-6 w-6 text-gray-400"
               aria-hidden="true"
             />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserAddOutlined
+            <UserPlusIcon
               className="text-xs h-6 w-6 text-gray-400"
               aria-hidden="true"
             />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-            <CalendarOutlined
+            <CalendarIcon
               className="text-xs h-6 w-6 text-gray-400"
               aria-hidden="true"
             />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-            <FlagOutlined
+            <FlagIcon
               className="text-xs h-6 w-6 text-gray-400"
               aria-hidden="true"
             />

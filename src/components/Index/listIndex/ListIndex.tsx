@@ -45,7 +45,11 @@ function ListIndex({
       })
     );
   };
-  const handleListSettings = (id: string, name: string, e) => {
+  const handleListSettings = (
+    id: string,
+    name: string,
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+  ) => {
     dispatch(setCurrentListId(id));
     dispatch(
       setshowMenuDropdown({
@@ -55,7 +59,7 @@ function ListIndex({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if (e.target.id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }

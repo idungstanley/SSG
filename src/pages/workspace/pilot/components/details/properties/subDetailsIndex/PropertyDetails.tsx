@@ -12,6 +12,11 @@ import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 
+export interface tagItem {
+  id: string,
+  name: string,
+  color: string
+}
 interface PropertyDetailsProps {
   Details: {
     id: string;
@@ -20,12 +25,12 @@ interface PropertyDetailsProps {
     created_at: string;
     status: string;
     priority: string;
-    tags: any
+    tags: [tagItem[]]
   };
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]| [tagItem[]]) => {
     return arr?.map((item) => {
       return Array.isArray(item) ? (
         <span className="flex">{groupTags(item)}</span>

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { EditOutlined } from '@ant-design/icons';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
 import { setUpdateEntries } from '../../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 
-interface EntryListProps {
-  entries: {
-    id: string;
-    duration: number;
-    start_date: string;
-    end_date: string;
-    description: string;
-  };
+export interface entriesProps {
+  id: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  description: string;
+}
+export interface EntryListProps {
+  entries: entriesProps;
 }
 
 export default function EntryList({ entries }: EntryListProps) {
@@ -67,7 +67,7 @@ export default function EntryList({ entries }: EntryListProps) {
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
-          <EditOutlined
+          <PencilIcon
             className="flex-shrink-0 h-3 w-5 text-gray-400"
             aria-hidden="true"
           />

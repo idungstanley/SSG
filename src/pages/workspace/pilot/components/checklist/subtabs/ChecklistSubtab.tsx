@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { MdAddToPhotos, MdDragIndicator } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../../../app/hooks";
+import React, { useState } from 'react';
+import { MdAddToPhotos } from 'react-icons/md';
+import { useAppSelector } from '../../../../../../app/hooks';
 // import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import propertiesIcon from "../../../../../../assets/branding/properties-icon.png";
-import SubtabDrag from "../../SubtabDnd";
+import propertiesIcon from '../../../../../../assets/branding/properties-icon.png';
+import SubtabDrag from '../../SubtabDnd';
 import {
   closestCenter,
   DndContext,
@@ -13,24 +12,26 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+} from '@dnd-kit/sortable';
 
-const ChecklistOptions = [
+export const ChecklistOptions = [
   {
     id: 1,
-    name: "Properties",
+    name: 'Properties',
     source: propertiesIcon,
+    isVisible: false,
   },
   {
     id: 2,
-    label: "attachments",
+    label: 'attachments',
     icon: <MdAddToPhotos />,
+    isVisible: false,
   },
 ];
 
@@ -39,7 +40,7 @@ export default function ChecklistSubtab() {
     (state) => state.workspace
   );
 
-  const idsFromLS = JSON.parse(localStorage.getItem("subTab") || "[]");
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -66,10 +67,27 @@ export default function ChecklistSubtab() {
           const oldIndex = items.indexOf(findActive);
           const newIndex = items.indexOf(findOver);
 
-          const sortArray = arrayMove(items, oldIndex, newIndex);
+          const sortArray: (
+            | {
+                id: number;
+                name: string;
+                source: string;
+                label?: undefined;
+                icon?: undefined;
+                isVisible: boolean
+              }
+            | {
+                id: number;
+                label: string;
+                icon: JSX.Element;
+                name?: undefined;
+                source?: undefined;
+                isVisible: boolean;
+              }
+          )[] = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            "subTab",
+            'subTab',
             JSON.stringify([...sortArray.map((i) => i.id)])
           );
 
@@ -88,7 +106,7 @@ export default function ChecklistSubtab() {
         <section>
           <div
             className={`flex bg-gray-400 pt-0.5 ${
-              showPilot ? "flex-row" : "flex-col"
+              showPilot ? 'flex-row' : 'flex-col'
             }`}
           >
             {ChecklistOptions.map((item) =>
@@ -99,7 +117,7 @@ export default function ChecklistSubtab() {
                   icon={item.icon}
                   activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
-                  name={"Checklist"}
+                  name={'Checklist'}
                 />
               ) : (
                 <SubtabDrag
@@ -108,7 +126,7 @@ export default function ChecklistSubtab() {
                   activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
                   source={item.source}
-                  name={"Checklist"}
+                  name={'Checklist'}
                 />
               )
             )}

@@ -57,7 +57,7 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
   );
 };
 
-export const useGetHubChildren = ({ query }: { query: string }) => {
+export const useGetHubChildren = ({ query }: { query: string | null | undefined }) => {
   const hubId = query;
 
   return useQuery(['hubs', hubId], async () => {
@@ -178,8 +178,8 @@ export const ArchiveHubService = (hub: {
 
 //get hub details
 export const UseGetHubDetails = (query: {
-  activeItemId: string;
-  activeItemType: string;
+  activeItemId: string | null;
+  activeItemType: string | null;
 }) => {
   return useQuery(
     ['hubs', query],
@@ -195,7 +195,8 @@ export const UseGetHubDetails = (query: {
     },
     {
       enabled:
-        query.activeItemType === 'hub' || query.activeItemType === 'subhub',
+        (query.activeItemType === 'hub' || query.activeItemType === 'subhub') &&
+        !!query.activeItemId,
     }
   );
 };

@@ -67,8 +67,6 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
 
 //Accept team member invite
 export const useAcceptTeamMemberInvite = () => {
-  const queryClient = useQueryClient();
-
   return useQuery(
     ['team_member_invite', inviteCode],
     async () => {
@@ -82,6 +80,13 @@ export const useAcceptTeamMemberInvite = () => {
       return data;
     },
     {
+      onSuccess: (data) => {
+        localStorage.setItem('user', JSON.stringify(data?.data.user));
+             localStorage.setItem(
+               'currentWorkspaceId',
+               JSON.stringify(data?.data.user.default_workspace_id)
+             );
+      },
       // initialData: queryClient.getQueryData(['team_member_invite', inviteCode]),
       enabled: inviteCode != null,
     }
@@ -135,6 +140,7 @@ export function useResendTeamMemberInvite(teamMemberId: string) {
 export const createTeamMemberInviteService = async (data: {
   email: string;
   teamMemberRoleKey: string;
+  name: string;
 }) => {
   const response = requestNew(
     {
@@ -142,6 +148,7 @@ export const createTeamMemberInviteService = async (data: {
       method: 'POST',
       params: {
         email: data.email,
+        name: data.name,
         team_member_role_key: data.teamMemberRoleKey,
       },
     },
