@@ -81,14 +81,14 @@ export const pilotOptions: IColumn[] = [
     name: 'TimeClock',
     source: timeclockIcon,
     subTab: <TimeSubTab />,
-    isVisible: false,
+    isVisible: true,
   },
   {
     id: 7,
     name: 'Checklist',
     source: checklistIcon,
     subTab: <ChecklistSubtab />,
-    isVisible: false,
+    isVisible: true,
   },
 ];
 

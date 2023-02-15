@@ -14,11 +14,13 @@ export interface IColumn {
 interface CustomDropdownProps {
   title: string;
   listItems: IColumn[];
+  handleClick: (id: number | undefined) => void;
 }
 
 export default function CustomDropdown({
   title,
   listItems,
+  handleClick,
 }: CustomDropdownProps) {
   return (
     <div className="">
@@ -26,7 +28,11 @@ export default function CustomDropdown({
         <button type="button">{title}</button>
         {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
         {listItems.map((listItem) => (
-          <div key={listItem.name} className="hover:bg-gray-300 w-full">
+          <div
+            key={listItem.name}
+            className="hover:bg-gray-300 w-full"
+            onClick={() => handleClick(listItem.id)}
+          >
             <button
               type="button"
               className="capitalize flex cursor-pointer p-2 items-center gap-2"
