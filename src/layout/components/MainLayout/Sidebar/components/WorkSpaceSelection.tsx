@@ -5,22 +5,23 @@ import { AvatarWithInitials } from '../../../../../components';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.account);
-  const getLocalWSName = JSON.parse(
-    localStorage.getItem('currentWorkspacename') as string
-  );
-  const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
+  // const getLocalWSName = JSON.parse(
+  //   localStorage.getItem('currentWorkspacename') as string
+  // );
+  // const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
+  const workspaceName = 'Also Workspace';
+  const initials = workspaceName
+    .split(' ')
+    .map((i) => i.charAt(0))
+    .join('')
+    .toUpperCase();
 
   return (
     <>
       {showSidebar ? (
         <div className="flex flex-grow rounded justify-between items-center border border-gray-400 mt-1">
           <AvatarWithInitials
-            initials={workspaceName
-              .split(' ')
-              .slice(0, 2)
-              .map((word) => word[0])
-              .join('')
-              .toUpperCase()}
+            initials={initials}
             height="h-5"
             width="w-5"
             backgroundColour="#34C6BE"
