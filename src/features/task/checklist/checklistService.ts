@@ -1,12 +1,14 @@
 import requestNew from "../../../app/requestNew";
 import { useDispatch } from "react-redux";
 import {
+  setToggleAssignChecklistItemId,
   setTriggerChecklistUpdate,
   setTriggerDelChecklist,
   setTriggererChecklistItemDel,
   setTriggerItemtUpdate,
 } from "./checklistSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAppDispatch } from "../../../app/hooks";
 
 export const UseCreateClistService = ({
   task_id,
@@ -256,6 +258,7 @@ export const UseUnAssignChecklistItemService = ({
   team_member_id: string | null;
   triggerUnassign: boolean;
 }) => {
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useQuery(
     ["unassign", { team_member_id: team_member_id }],
@@ -270,8 +273,10 @@ export const UseUnAssignChecklistItemService = ({
       return data;
     },
     {
-      initialData: queryClient.getQueryData(["unassign", team_member_id]),
-      enabled: triggerUnassign,
+      onSuccess: () => {
+        dispatch(setToggleAssignChecklistItemId(null));
+      },
+      enabled: !!team_member_id,
     }
   );
 };
