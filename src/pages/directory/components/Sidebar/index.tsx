@@ -11,7 +11,7 @@ import Search from '../../../explorer/components/Search';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import DirectoryList from './components/Directories';
-import { classNames } from '../../../../utils';
+import { cl } from '../../../../utils';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
 import libraryIcon from '../../../../assets/icons/library.svg';
@@ -137,7 +137,7 @@ function LibraryNavigation({ label, path, icon }: LibraryNavigationProps) {
   return (
     <div
       onClick={onClick}
-      className={classNames(
+      className={cl(
         'hover:bg-gray-100 flex w-full p-1 gap-2 items-center cursor-pointer',
         isActive ? 'bg-gray-100' : ''
       )}

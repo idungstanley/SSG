@@ -8,7 +8,7 @@ import {
   useGetShareLink,
 } from '../../../../../features/shared/sharedService';
 import { useDebounce } from '../../../../../hooks';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 
 interface AddFolderToLinkProps {
   shareLinkId: string;
@@ -86,7 +86,7 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
                 key={folder.id}
                 value={folder}
                 className={({ active }) =>
-                  classNames(
+                  cl(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
                     active ? 'bg-indigo-600 text-white' : 'text-gray-900'
                   )
@@ -95,7 +95,7 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
                 {({ active, selected }) => (
                   <>
                     <span
-                      className={classNames(
+                      className={cl(
                         'block truncate',
                         selected ? 'font-semibold' : ''
                       )}
@@ -105,7 +105,7 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
 
                     {selected && (
                       <span
-                        className={classNames(
+                        className={cl(
                           'absolute inset-y-0 right-0 flex items-center pr-4',
                           active ? 'text-white' : 'text-indigo-600'
                         )}

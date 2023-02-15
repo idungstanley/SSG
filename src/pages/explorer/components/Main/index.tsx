@@ -4,7 +4,7 @@ import {
 } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
-import { classNames } from '../../../../utils';
+import { cl } from '../../../../utils';
 import Pilot from '../Pilot';
 
 import FilePreview from './components/FilePreview';
@@ -38,7 +38,7 @@ export default function Main() {
     : 'grid-cols-1';
 
   return (
-    <div className={classNames('border-t grid', gridCols)}>
+    <div className={cl('border-t grid', gridCols)}>
       <FilesListWithToolbar />
 
       {/* file preview */}
@@ -46,10 +46,7 @@ export default function Main() {
 
       {showPilot ? (
         <div
-          className={classNames(
-            showPilot ? 'space-y-2' : '',
-            'p-2 border-l h-full'
-          )}
+          className={cl(showPilot ? 'space-y-2' : '', 'p-2 border-l h-full')}
         >
           <button
             type="button"

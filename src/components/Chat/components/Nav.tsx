@@ -7,7 +7,7 @@ import {
 import { useAppDispatch } from '../../../app/hooks';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 import ToolTip from '../../Tooltip';
-import { classNames } from '../../../utils';
+import { cl } from '../../../utils';
 
 const navItems = [
   {
@@ -53,7 +53,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
             <button
               onClick={() => setActiveTabId(tab.id)}
               type="button"
-              className={classNames(
+              className={cl(
                 'inline-flex items-center p-1 focus:outline-none ring-0 focus:ring-0',
                 activeTabId === tab.id
                   ? 'text-indigo-500 hover:text-indigo-700'

@@ -8,7 +8,7 @@ import {
   usePinOrUnpinInbox,
   useRestoreOrDeleteInbox,
 } from '../../../../../../features/inbox/inboxesService';
-import { classNames } from '../../../../../../utils';
+import { cl } from '../../../../../../utils';
 import { inboxType } from '../../../../../../types';
 
 interface MenuProps {
@@ -113,7 +113,7 @@ export default function Menu({ inboxId, type }: MenuProps) {
                     <button
                       onClick={i.onClick}
                       type="button"
-                      className={classNames(
+                      className={cl(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block w-full px-4 py-2 text-sm text-left'
                       )}

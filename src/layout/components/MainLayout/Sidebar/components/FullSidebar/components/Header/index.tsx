@@ -8,7 +8,7 @@ import { setShowSidebarSettings } from '../../../../../../../../features/hubs/hu
 import ArchiveMenu from '../../../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
 import WorkSpaceSelection from '../../../WorkSpaceSelection';
 import MainLogo from '../../../../../../../../assets/branding/main-logo.png';
-import { classNames } from '../../../../../../../../utils';
+import { cl } from '../../../../../../../../utils';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <div
-      className={classNames(
+      className={cl(
         'flex py-2 border-b items-center gap-1',
         !showSidebar ? 'flex-col pb-9' : 'pr-6'
       )}

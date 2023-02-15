@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 
 export default function DropdownMenuForMessage() {
   const options = [
@@ -43,7 +43,7 @@ export default function DropdownMenuForMessage() {
               {({ active }) => (
                 <button
                   onClick={option.onClick}
-                  className={classNames(
+                  className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm w-full text-left'
                   )}

@@ -21,7 +21,7 @@ import {
   EyeSlashIcon,
 } from '@heroicons/react/24/outline';
 import ToolTip from '../../../../../../../../../components/Tooltip';
-import { classNames } from '../../../../../../../../../utils';
+import { cl } from '../../../../../../../../../utils';
 
 interface RowProps {
   fileId: string;
@@ -102,7 +102,7 @@ export default function Row({ fileId }: RowProps) {
     <tr
       style={style}
       key={file.id}
-      className={classNames(
+      className={cl(
         selectedIds.includes(file.id) ? 'bg-green-100 hover:bg-green-200' : '',
         selectedFileId === file.id ? 'bg-green-100 hover:bg-green-100' : '',
         'cursor-pointer hover:bg-gray-50 group'
@@ -169,7 +169,7 @@ export default function Row({ fileId }: RowProps) {
           className="whitespace-nowrap py-2 px-2 text-sm text-gray-500"
         >
           <ArrowsUpDownIcon
-            className={classNames(
+            className={cl(
               selectedFileId === file.id ? 'text-gray-500' : 'text-gray-300',
               'h-5 w-5'
             )}

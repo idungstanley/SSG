@@ -15,7 +15,7 @@ import { FileIcon, Spinner } from '../../../../../../common';
 import { setCurrentInboxFile } from '../../../../../../features/inbox/inboxSlice';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 import { setShowUploadModal } from '../../../../../../features/general/uploadFile/uploadFileSlice';
-import { classNames } from '../../../../../../utils';
+import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 
 interface IInboxFiles {
@@ -241,7 +241,7 @@ export default function TableWithSelection() {
                       />
                     </td>
                     <td
-                      className={classNames(
+                      className={cl(
                         'whitespace-nowrap py-4 pr-3 text-sm font-medium',
                         selectedFiles.includes(item.id)
                           ? 'text-indigo-600'

@@ -7,18 +7,13 @@ import ProgressBar from './ProgressBar';
 import UploadModal from '../../../components/UploadModal';
 import Header from './Sidebar/components/Header';
 import Sidebar from './Sidebar';
-import { classNames } from '../../../utils';
+import { cl } from '../../../utils';
 
 function MainLayout() {
   const [allowSelect, setAllowSelect] = useState(true);
 
   return (
-    <div
-      className={classNames(
-        'h-full flex flex-col',
-        !allowSelect && 'select-none'
-      )}
-    >
+    <div className={cl('h-full flex flex-col', !allowSelect && 'select-none')}>
       <ProgressBar />
       {/* <TopMenu /> */}
       <div className="flex h-full">

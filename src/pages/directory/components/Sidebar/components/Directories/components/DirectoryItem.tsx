@@ -3,7 +3,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { AiOutlineBranches } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useNavigate, useParams } from 'react-router-dom';
-import { classNames } from '../../../../../../../utils';
+import { cl } from '../../../../../../../utils';
 
 interface DirectoryItemProps {
   id: string;
@@ -24,7 +24,7 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
 
   return (
     <div
-      className={classNames(
+      className={cl(
         'group hover:bg-gray-100 flex w-full p-1 justify-between items-center',
         directoryId === id ? 'bg-green-200' : ''
       )}
@@ -57,7 +57,7 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
 
 //       {/* templates */}
 //       {/* <div
-//                 className={classNames(
+//                 className={cl(
 //                   'ml-6',
 //                   directory.templates.length > 0 ? 'mt-2' : ''
 //                 )}

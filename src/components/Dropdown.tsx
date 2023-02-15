@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
-import { classNames } from '../utils';
+import { cl } from '../utils';
 
 interface itemType {
   label: string;
@@ -37,7 +37,7 @@ export default function Dropdown({ items }: DropDownProps) {
                 {({ active }) => (
                   <button
                     type="button"
-                    className={classNames(
+                    className={cl(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'group flex items-center font-medium px-4 py-2 text-sm w-full'
                     )}

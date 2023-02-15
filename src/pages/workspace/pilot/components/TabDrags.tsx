@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames } from '../../../../utils';
+import { cl } from '../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
@@ -34,9 +34,7 @@ export default function TabDrag({
     id,
   });
   const dispatch = useDispatch();
-  const { activeTabId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeTabId } = useAppSelector((state) => state.workspace);
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
@@ -59,7 +57,7 @@ export default function TabDrag({
     >
       <div
         onClick={() => handleClick(id)}
-        className={classNames(
+        className={cl(
           id === activeTabId
             ? 'bg-gray-300 text-black'
             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',

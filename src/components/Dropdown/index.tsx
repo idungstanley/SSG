@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { BsPlusLg } from 'react-icons/bs';
@@ -52,7 +52,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
               {({ active }) => (
                 <button
                   onClick={i.link ? () => navigate(i.link || '') : i.onClick}
-                  className={classNames(
+                  className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'px-4 py-2 text-sm flex w-full items-center gap-3'
                   )}

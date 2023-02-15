@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
@@ -115,7 +115,7 @@ export default function PriorityDropdown({
               {({ active }) => (
                 <button
                   type="button"
-                  className={classNames(
+                  className={cl(
                     active ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}

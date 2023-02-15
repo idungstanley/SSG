@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { IStringifiedFile } from '../index';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { setSelectedSorting } from '../../../../../../../../../features/explorer/explorerSlice';
-import { classNames } from '../../../../../../../../../utils';
+import { cl } from '../../../../../../../../../utils';
 
 export const sortItems = (items: IStringifiedFile[], sortType: number) =>
   items.sort((a, b) =>
@@ -153,7 +153,7 @@ export default function Sorting() {
               {({ active }) => (
                 <button
                   type="button"
-                  className={classNames(
+                  className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full',
                     selectedSortingId === i.id

@@ -3,7 +3,7 @@ import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 
 interface PlaceItemProps {
   label: string;
@@ -33,7 +33,7 @@ function PlaceItem({
 
   return (
     <li
-      className={classNames(
+      className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
         'focus:flex flex-col w-full pl-4 py-5 items-center relative',
         bottomContent ? 'gap-2' : ''
@@ -45,7 +45,7 @@ function PlaceItem({
       <div className="flex justify-between w-full">
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
-          className={classNames(
+          className={cl(
             'flex cursor-pointer gap-4 items-center content-center self-center',
             isActivePlace && 'justify-center text-black font-bold',
             isActivePlace && showSidebar && 'ml-16'
@@ -54,7 +54,7 @@ function PlaceItem({
           {icon}
           {showSidebar ? (
             <span
-              className={classNames(
+              className={cl(
                 'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
                 isActivePlace && 'text-black font-bold'
               )}

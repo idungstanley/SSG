@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../assets/branding/Group.png';
 import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
-import { classNames } from '../../../../../../utils';
+import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
 
@@ -87,7 +87,7 @@ export default function NavigationItems() {
       {/* show less or more button */}
       <div
         onClick={() => setShowMore((prev) => !prev)}
-        className={classNames(
+        className={cl(
           !showSidebar ? 'justify-center' : 'gap-2 items-center',
           'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
         )}

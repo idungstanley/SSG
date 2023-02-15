@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../../../../../../app/hooks';
-import { classNames } from '../../../../../../../utils';
+import { cl } from '../../../../../../../utils';
 
 interface NavigationItemProps {
   item: {
@@ -29,7 +29,7 @@ export default function NavigationItem({
   return (
     <Link
       to={item.href}
-      className={classNames(
+      className={cl(
         pathname === item.href
           ? 'bg-green-100 hover:bg-green-200'
           : 'hover:bg-gray-100',

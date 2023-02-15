@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 import { expiresIn } from '../../features/shared/shared.interfaces';
 
 interface IOption {
@@ -71,7 +71,7 @@ export default function SelectMenuSimple({
                   <Listbox.Option
                     key={option.id}
                     className={({ active }) =>
-                      classNames(
+                      cl(
                         active ? 'text-white bg-primary-600' : 'text-gray-900',
                         'cursor-pointer select-none relative py-2 pl-8 pr-4'
                       )
@@ -81,7 +81,7 @@ export default function SelectMenuSimple({
                     {({ active }) => (
                       <>
                         <span
-                          className={classNames(
+                          className={cl(
                             selectedId === option.id
                               ? 'font-semibold'
                               : 'font-normal',
@@ -93,7 +93,7 @@ export default function SelectMenuSimple({
 
                         {selectedId === option.id ? (
                           <span
-                            className={classNames(
+                            className={cl(
                               active ? 'text-white' : 'text-primary-600',
                               'absolute inset-y-0 left-0 flex items-center pl-1.5'
                             )}
