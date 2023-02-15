@@ -72,7 +72,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco --openssl-legacy-provider start",
+    "start": "craco start --openssl-legacy-provider",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
