@@ -37,8 +37,8 @@ function TimeEntriesDropdown({
   setShowEntries,
   isBillable,
   setIsBillable,
-  setFormState,
-  formState,
+  // setFormState,
+  // formState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
@@ -61,13 +61,6 @@ function TimeEntriesDropdown({
     queryFn: DeleteTimeEntriesService,
     enabled: triggerDel,
   });
-
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setFormState({
-    //   ...formState,
-    //   [e.target.name]: e.target.value,
-    // });
-  };
 
   const handleUpdateEntry = (id: string | boolean) => {
     setOpenUpdateEntry(!openUpdateEntry);

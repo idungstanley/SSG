@@ -1,51 +1,40 @@
 import React, { ReactNode } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { useAppSelector } from "../../../../../app/hooks";
 import "../taskData/task.css";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import {
-  ImyTaskData,
-  setCurrentTaskId,
-  setCurrentTaskPriorityId,
-  setCurrentTaskStatusId,
-  setShowTaskNavigation,
-  setTaskIdForPilot,
-} from "../../../../../features/task/taskSlice";
+import { ImyTaskData } from "../../../../../features/task/taskSlice";
 import moment from "moment";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { FiEdit2 } from "react-icons/fi";
-import { UserAddOutlined } from "@ant-design/icons";
-import { MdDragIndicator } from "react-icons/md";
+// import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns } = useAppSelector(
     (state) => state.task
   );
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!setShowTaskNavigation));
-    dispatch(setCurrentTaskId(id));
-  };
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: "task",
-        activeItemName: name,
-      })
-    );
-  };
+  // const displayNav = (id: string) => {
+  //   dispatch(setShowTaskNavigation(!setShowTaskNavigation));
+  //   dispatch(setCurrentTaskId(id));
+  // };
+  // const handleTaskPilot = (id: string, name: string) => {
+  //   dispatch(setTaskIdForPilot(id));
+  //   dispatch(
+  //     setActiveItem({
+  //       activeItemId: id,
+  //       activeItemType: "task",
+  //       activeItemName: name,
+  //     })
+  //   );
+  // };
 
-  const handleTaskStatus = (id: string) => {
-    dispatch(setCurrentTaskStatusId(id));
-  };
+  // const handleTaskStatus = (id: string) => {
+  //   dispatch(setCurrentTaskStatusId(id));
+  // };
 
-  const handleTaskPriority = (id: string) => {
-    dispatch(setCurrentTaskPriorityId(id));
-  };
+  // const handleTaskPriority = (id: string) => {
+  //   dispatch(setCurrentTaskPriorityId(id));
+  // };
 
   const renderData = (taskColField, colfield) => {
     if (colfield === "assignees" && taskColField.length !== 0) {
