@@ -15,14 +15,16 @@ interface SidebarProps {
   setAllowSelect: (i: boolean) => void;
 }
 
+// getting sidebar width from localStorage
 const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
   JSON.parse(localStorage.getItem('sidebar') || '""');
+const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
   const [sidebarWidth, setSidebarWidth] = useState(
-    sidebarFromLS.sidebarWidth || MIN_SIDEBAR_WIDTH
+    sidebarWidthFromLS || MIN_SIDEBAR_WIDTH
   );
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +37,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
           setAllowSelect(false);
         }
 
+        // current width
         const width = sidebarWidth + e.clientX - startX;
 
         // actual size is bigger than bax
@@ -52,14 +55,15 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
           dispatch(setShowSidebar(true));
         }
 
-        const correctWidth =
+        // adjusted width according to min and max values
+        const adjustedWidth =
           width >= MAX_SIDEBAR_WIDTH
             ? MAX_SIDEBAR_WIDTH
             : width <= MIN_SIDEBAR_WIDTH
             ? MIN_SIDEBAR_WIDTH
             : width;
 
-        setSidebarWidth(correctWidth);
+        setSidebarWidth(adjustedWidth);
       };
 
       const onMouseEnd = () => {
@@ -67,9 +71,11 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
 
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseEnd);
+
+        // saving current sidebar size to localStorage
         if (sidebarRef.current) {
           const width = sidebarRef.current.clientWidth;
-          const sidebarWidth =
+          const adjustedWidth =
             width >= MAX_SIDEBAR_WIDTH
               ? MAX_SIDEBAR_WIDTH
               : width <= MIN_SIDEBAR_WIDTH
@@ -79,7 +85,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
           localStorage.setItem(
             'sidebar',
             JSON.stringify({
-              sidebarWidth,
+              adjustedWidth,
               showSidebar: width >= MIN_SIDEBAR_WIDTH,
             })
           );

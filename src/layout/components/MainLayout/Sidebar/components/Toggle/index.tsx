@@ -5,7 +5,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { classNames } from '../../../../../../utils';
+import { cl } from '../../../../../../utils';
 import { MIN_SIDEBAR_WIDTH } from '../..';
 
 export default function Toggle() {
@@ -14,6 +14,8 @@ export default function Toggle() {
 
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
+
+    // saving sidebar data with MIN size to localStorage
     localStorage.setItem(
       'sidebar',
       JSON.stringify({
@@ -26,7 +28,7 @@ export default function Toggle() {
   return (
     <div
       onClick={closeOrShowSidebar}
-      className={classNames(
+      className={cl(
         'absolute z-20 text-indigo-900 cursor-pointer',
         showSidebar ? 'top-6 right-2' : 'top-36 right-6 -mr-0.5 mt-1'
       )}
