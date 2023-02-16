@@ -13,6 +13,7 @@ export default function TeamMemberAcceptInvite() {
     if (inviteCode) {
       localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
     }
+
     if (!token) {
       <RegisterPage />;
     }
@@ -20,14 +21,11 @@ export default function TeamMemberAcceptInvite() {
 
   const { data } = useAcceptTeamMemberInvite();
 
-  console.log(data);
-
   const handleAcceptInvite = () => {
-    // if (status == 'success') {
-    //   localStorage.setItem('user', JSON.stringify(data?.data.user));
-    //   localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
-    // }
-    window.location.href = '/workspace';
+    if (data?.data) {
+      localStorage.setItem('user', JSON.stringify(data?.data.user));
+      window.location.href = '/workspace';
+    }
   };
 
   return inviteCode ? (
