@@ -8,7 +8,7 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string; }];
+  priority: string | null | [{ id: string; initials: string; colour: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
@@ -61,6 +61,7 @@ interface TaskState {
   unAssignTadId: null;
   renameTagId: null;
   showTagColorDialogueBox: boolean;
+  triggerAsssignTask: boolean;
 }
 
 const initialState: TaskState = {
@@ -98,6 +99,7 @@ const initialState: TaskState = {
   unAssignTadId: null,
   renameTagId: null,
   showTagColorDialogueBox: false,
+  triggerAsssignTask: false,
 };
 
 export const taskSlice = createSlice({
@@ -233,6 +235,9 @@ export const taskSlice = createSlice({
       state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
     },
     checkIfTask: (state) => state,
+    setTriggerAsssignTask(state, { payload }) {
+      state.triggerAsssignTask = payload;
+    },
   },
 });
 
@@ -268,5 +273,6 @@ export const {
   setCurrentTaskIdForTag,
   setRenameTagId,
   setShowTagColorDialogBox,
+  setTriggerAsssignTask,
 } = taskSlice.actions;
 export default taskSlice.reducer;
