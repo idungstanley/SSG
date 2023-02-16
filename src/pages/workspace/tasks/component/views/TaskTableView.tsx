@@ -25,16 +25,37 @@ function TaskTableView() {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
+  const groupAssignee = (
+    data:
+      | [
+          {
+            id: string;
+            initials: string;
+            colour: string;
+            name: string;
+          }
+        ]
+      | undefined
+  ) => {
+    console.log("data", data);
+    return data?.map((newData) => {
+      return (
+        <>
+          <p key={newData.id}>{newData.name}</p>
+        </>
+      );
+    });
+  };
+
   const renderData = (
     taskColField:
       | ImyTaskData
       | string
-      | ImyTaskData
       | number
       | undefined
       | tagItem[]
       | null
-      | Array<{ id: string; initials: string; colour: string }>,
+      | Array<{ id: string; initials: string; colour: string; name: string }>,
     colfield: string
   ) => {
     if (
@@ -44,12 +65,13 @@ function TaskTableView() {
           id: string;
           initials: string;
           colour: string;
+          name: string;
         }>
       ).length !== 0
     ) {
       return (
         <div className="relative">
-          <div>Assignee Name</div>
+          {groupAssignee((taskColField as ImyTaskData)?.assignees)}
         </div>
       );
     } else if (
