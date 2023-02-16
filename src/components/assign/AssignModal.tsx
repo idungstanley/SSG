@@ -27,6 +27,7 @@ export default function AssignModal() {
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
+    triggerAsssignTask: false,
   });
 
   const { data: getTaskAssignees } = getOneTaskServices({
