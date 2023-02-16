@@ -223,7 +223,6 @@ export const UseAssignChecklistItemService = ({
   itemId: string | null;
   team_member_id: string | null;
 }) => {
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   return useQuery(
     ["assign", { team_member_id: team_member_id }],
@@ -259,7 +258,6 @@ export const UseUnAssignChecklistItemService = ({
   triggerUnassign: boolean;
 }) => {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
   return useQuery(
     ["unassign", { team_member_id: team_member_id }],
     async () => {
@@ -276,7 +274,7 @@ export const UseUnAssignChecklistItemService = ({
       onSuccess: () => {
         dispatch(setToggleAssignChecklistItemId(null));
       },
-      enabled: !!team_member_id,
+      enabled: !!team_member_id && triggerUnassign,
     }
   );
 };

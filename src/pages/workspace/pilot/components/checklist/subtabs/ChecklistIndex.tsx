@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useEffect } from "react";
+import React, { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../../app/hooks";
 import {
@@ -72,6 +72,7 @@ export default function ChecklistIndex() {
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
     setChecklistId(id);
+    setItemId(id);
   };
 
   UseDeleteChecklistService({
