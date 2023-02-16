@@ -20,7 +20,7 @@ export default function MenuWithTransition({
   return (
     <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="flex p-1 text-sm text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+        <Menu.Button className="flex p-1 text-sm text-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           {icon}
         </Menu.Button>
       </div>

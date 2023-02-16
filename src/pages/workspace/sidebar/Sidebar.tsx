@@ -16,11 +16,12 @@ import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
 import Modal from '../hubs/components/Modal';
-import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
+// import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
 import FooterTabs from './components/FooterTabs';
 import ResizeBorder from '../../../components/ResizeBorder';
+import TeamSettings from '../workspaceSettings/components/TeamSettings';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -146,7 +147,8 @@ export default function Sidebar() {
                     dispatch(setShowSidebarSettings(!sidebarSettings))
                   }
                 >
-                  <ArchiveMenu />
+                  {/* <ArchiveMenu /> */}
+                  <TeamSettings />
                 </div>
 
                 <AvatarWithInitials
