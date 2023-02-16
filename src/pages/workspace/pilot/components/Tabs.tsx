@@ -159,7 +159,6 @@ function Tab() {
     if (active.id !== over?.id) {
       const findActive = items.find((i) => i.id === active.id);
       const findOver = items.find((i) => i.id === over?.id);
-
       if (findActive && findOver) {
         setItems((items) => {
           const oldIndex = items.indexOf(findActive);

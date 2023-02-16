@@ -1,4 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../app/hooks';
+import {
+  setShowAddHotKeyDropdown,
+  setShowRemoveHotKeyDropdown,
+} from '../../../../features/workspace/workspaceSlice';
 
 export interface IColumn {
   name: string;
@@ -13,7 +19,7 @@ export interface IColumn {
 
 interface CustomDropdownProps {
   title: string;
-  listItems: IColumn[];
+  listItems: IColumn[] | undefined;
   handleClick: (id: number | undefined) => void;
 }
 
@@ -22,12 +28,34 @@ export default function CustomDropdown({
   listItems,
   handleClick,
 }: CustomDropdownProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
+  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown } = useAppSelector(
+    (state) => state.workspace
+  );
+  useEffect(() => {
+    const checkClickedOutSide = (e: MouseEvent) => {
+      if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
+        if (showAddHotKeyDropdown === true) {
+          dispatch(setShowAddHotKeyDropdown(false));
+        } else if (showRemoveHotKeyDropdown === true) {
+          dispatch(setShowRemoveHotKeyDropdown(false));
+        }
+      }
+    };
+    document.addEventListener('click', checkClickedOutSide);
+    return () => {
+      document.removeEventListener('click', checkClickedOutSide);
+    };
+  }, []);
   return (
-    <div className="">
-      <div className="overflow-y-auto border-gray-200 border absolute bottom-20 top-16 z-50 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white">
-        <button type="button">{title}</button>
+    <div className="h-auto" ref={ref}>
+      <div className="overflow-y-auto h-auto border-gray-200 border absolute top-24 z-50 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white">
+        <button type="button" className="p-2 font-semibold">
+          {title}
+        </button>
         {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
-        {listItems.map((listItem) => (
+        {listItems?.map((listItem) => (
           <div
             key={listItem.name}
             className="hover:bg-gray-300 w-full"
@@ -55,6 +83,9 @@ export default function CustomDropdown({
             {/* <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" /> */}
           </div>
         ))}
+        {listItems?.length === 0 && (
+          <div className="text-sm p-2 font-medium">There is no Item on this list. . .</div>
+        )}
       </div>
     </div>
   );
