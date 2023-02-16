@@ -3,7 +3,10 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { AvatarWithInitials } from "../../../../components";
 import { useGetTeamMembers } from "../../../../features/settings/teamMembers/teamMemberService";
 import { useAppSelector } from "../../../../app/hooks";
-import { setCurrTeamMemId } from "../../../../features/task/taskSlice";
+import {
+  setCurrTeamMemId,
+  setTriggerAsssignTask,
+} from "../../../../features/task/taskSlice";
 import { useDispatch } from "react-redux";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
@@ -21,13 +24,13 @@ export default function AssignTask() {
     page: 0,
     query: "",
   });
-  const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
-    (state) => state.task
-  );
+  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
+    useAppSelector((state) => state.task);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
+    triggerAsssignTask: triggerAsssignTask,
   });
 
   UseUnAssignTaskService({
@@ -80,7 +83,10 @@ export default function AssignTask() {
               <div className="flex items-center justify-between cursor-pointer">
                 <div
                   className="relative flex items-center cursor-pointer  space-x-2"
-                  onClick={() => dispatch(setCurrTeamMemId(item.id))}
+                  onClick={() => {
+                    dispatch(setCurrTeamMemId(item.id));
+                    dispatch(setTriggerAsssignTask(true));
+                  }}
                 >
                   <AvatarWithInitials
                     initials={item.initials}
@@ -88,7 +94,7 @@ export default function AssignTask() {
                     height="h-5"
                     width="w-5"
                   />
-                  <p className="text-lg">
+                  <p className="text-xs">
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>

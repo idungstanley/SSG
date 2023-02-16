@@ -8,6 +8,7 @@ import {
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
+import { BsArrowsAngleExpand } from "react-icons/bs";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns } =
@@ -43,37 +44,34 @@ function TaskTableView() {
           initials: string;
           colour: string;
         }>
+      ).length !== 0
+    ) {
+      return (
+        <div className="relative">
+          <div>Assignee Name</div>
+        </div>
+      );
+    } else if (
+      colfield === "assignees" &&
+      (
+        taskColField as Array<{
+          id: string;
+          initials: string;
+          colour: string;
+        }>
       ).length === 0
     ) {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length !== 0 ? (
-        <div className="relative">
-          <div>Assignees Name</div>
-        </div>
-      ) : null;
-    } else if (colfield === 'assignees') {
-      const TCF = taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>;
-
-      return TCF.length === 0 ? <p>-</p> : null;
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
+      return <p>-</p>;
+    } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
-        return <div>{taskColField}</div>;
-      } else if (taskColField == 'in progress') {
+    } else if (colfield == "status") {
+      if (taskColField == "completed") {
+        return <div className="bg-green-500">{taskColField}</div>;
+      } else if (taskColField == "in progress") {
         return <div>{taskColField}</div>;
       } else if (taskColField == 'archived') {
         return <div>{taskColField}</div>;
@@ -85,18 +83,18 @@ function TaskTableView() {
     } else if (colfield === 'name') {
       return (
         <div className="flex items-center relative ">
-          <div className="flex items-center">
+          <div className="flex w-11/12 justify-between items-center group">
             <p>{taskColField as ReactNode}</p>
-
-            {/* tags goes here */}
-            {/* <div> {groupTags(task.tags)}</div>; */}
+            <p className="group-hover:bg-gray-300 p-2 cursor-pointer">
+              <BsArrowsAngleExpand />
+            </p>
           </div>
         </div>
       );
     } else if (colfield === 'priority') {
       return (
         <span
-          className="relative  border-dotted border-gray-300 "
+          className="relative  border-dotted border-gray-300"
           onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
         >
           <PriorityDropdown
@@ -109,68 +107,73 @@ function TaskTableView() {
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="overflow-x-auto">
-          <div className="p-1.5 w-full inline-block align-middle">
-            <div className="overflow-y-auto border rounded-lg h-min">
-              <table className="min-w-full divide-y divide-gray-500">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {hideTask.length
-                      ? hideTask.map(
-                          (columns) =>
-                            !columns.hidden && (
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
-                                key={columns.field}
-                              >
-                                {columns.value}
-                              </th>
-                            )
-                        )
-                      : taskColumns.map(
-                          (columns) =>
-                            !columns.hidden && (
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
-                                key={columns.field}
-                              >
-                                {columns.value}
-                              </th>
-                            )
-                        )}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {myTaskData.map((task) => {
-                    return (
-                      <tr key={task.id}>
-                        {taskColumns.map(
-                          (col) =>
-                            !col.hidden && (
-                              <td
-                                className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
-                                key={col.field}
-                              >
-                                {
-                                  renderData(
-                                    task[col.field],
-                                    col.field
-                                  ) as ReactNode
-                                }
-                              </td>
-                            )
-                        )}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <div className="overflow-y-auto border rounded-lg h-min">
+        <table className="w-full divide-y divide-gray-500">
+          <thead className="bg-gray-50">
+            <tr>
+              <th>
+                <input type="checkbox" className="opacity-0" />
+              </th>
+              <th>#</th>
+              {hideTask.length
+                ? hideTask.map(
+                    (columns) =>
+                      !columns.hidden && (
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 "
+                          key={columns.field}
+                        >
+                          {columns.value}
+                        </th>
+                      )
+                  )
+                : taskColumns.map(
+                    (columns) =>
+                      !columns.hidden && (
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2"
+                          key={columns.field}
+                        >
+                          {columns.value}
+                        </th>
+                      )
+                  )}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {myTaskData.map((task, index) => {
+              return (
+                <tr
+                  key={task.id}
+                  className=" bg-gray-50 hover:bg-purple-50 group"
+                >
+                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white">
+                    <input
+                      type="checkbox"
+                      className="opacity-0 group-hover:opacity-100"
+                    />
+                  </td>
+                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white">
+                    {index + 1}
+                  </td>
+                  {taskColumns.map(
+                    (col) =>
+                      !col.hidden && (
+                        <td
+                          className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-white"
+                          key={col.field}
+                        >
+                          {renderData(task[col.field], col.field) as ReactNode}
+                        </td>
+                      )
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </>
   );

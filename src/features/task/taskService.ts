@@ -1,15 +1,25 @@
-import requestNew from '../../app/requestNew';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../../app/hooks';
-import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
-import { useDispatch } from 'react-redux';
-import { UpdateTaskProps } from './interface.tasks';
+import requestNew from "../../app/requestNew";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAppDispatch } from "../../app/hooks";
+import {
+  getTaskData,
+  setToggleAssignCurrentTaskId,
+  setTriggerAsssignTask,
+} from "./taskSlice";
+import { useDispatch } from "react-redux";
+import { UpdateTaskProps } from "./interface.tasks";
 
-export const createTaskService = (data: {name: string, description?: string, showMenuDropdown?: string | null, getListId?: string, parentTaskId?: string | null}) => {
+export const createTaskService = (data: {
+  name: string;
+  description?: string;
+  showMenuDropdown?: string | null;
+  getListId?: string;
+  parentTaskId?: string | null;
+}) => {
   const response = requestNew(
     {
-      url: 'at/tasks',
-      method: 'POST',
+      url: "at/tasks",
+      method: "POST",
       data: {
         name: data.name,
         description: data.description,
@@ -22,12 +32,14 @@ export const createTaskService = (data: {name: string, description?: string, sho
   return response;
 };
 
-export const getOneTaskService = (data: { queryKey: (string | undefined)[] }) => {
+export const getOneTaskService = (data: {
+  queryKey: (string | undefined)[];
+}) => {
   const taskId = data.queryKey[1];
   const response = requestNew(
     {
       url: `at/tasks/${taskId}`,
-      method: 'GET',
+      method: "GET",
     },
     true
   );
@@ -35,15 +47,15 @@ export const getOneTaskService = (data: { queryKey: (string | undefined)[] }) =>
 };
 
 //getOneTask
-export const getOneTaskServices = ({ task_id }: {task_id: string | null}) => {
+export const getOneTaskServices = ({ task_id }: { task_id: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id: task_id }],
+    ["task", { task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
           url: `at/tasks/${task_id}`,
-          method: 'GET',
+          method: "GET",
         },
         true
       );
@@ -56,17 +68,23 @@ export const getOneTaskServices = ({ task_id }: {task_id: string | null}) => {
 };
 
 //create checklist
-export const UseCreateCheckList = ({ task_id, trigger }: {task_id: string, trigger: boolean}) => {
+export const UseCreateCheckList = ({
+  task_id,
+  trigger,
+}: {
+  task_id: string;
+  trigger: boolean;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
-    ['task'],
+    ["task"],
     async () => {
       const data = await requestNew(
         {
           url: `at/tasks/${task_id}/checklist`,
-          method: 'POST',
+          method: "POST",
           params: {
-            name: 'Checklist',
+            name: "Checklist",
           },
         },
         true
@@ -86,12 +104,12 @@ export const UseUpdateTaskStatusService = ({
 }: UpdateTaskProps) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
+    ["task", { task_id, statusDataUpdate, priorityDataUpdate }],
     async () => {
       const data = requestNew(
         {
           url: `at/tasks/${task_id}`,
-          method: 'PUT',
+          method: "PUT",
           params: {
             status: statusDataUpdate,
             // priority: priorityDataUpdate,
@@ -103,9 +121,9 @@ export const UseUpdateTaskStatusService = ({
     },
     {
       // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && statusDataUpdate !== '',
+      enabled: task_id != null && statusDataUpdate !== "",
       onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(["task"]);
       },
     }
   );
@@ -117,12 +135,12 @@ export const UseUpdateTaskStatusServices = ({
 }: UpdateTaskProps) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id, priorityDataUpdate }],
+    ["task", { task_id, priorityDataUpdate }],
     async () => {
       const data = requestNew(
         {
           url: `at/tasks/${task_id}`,
-          method: 'PUT',
+          method: "PUT",
           params: {
             priority: priorityDataUpdate,
           },
@@ -133,25 +151,29 @@ export const UseUpdateTaskStatusServices = ({
     },
     {
       // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && priorityDataUpdate !== '',
+      enabled: task_id != null && priorityDataUpdate !== "",
       onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(["task"]);
       },
     }
   );
 };
 
-export const getTaskListService = ({ listId }: {listId: string | null | undefined}) => {
+export const getTaskListService = ({
+  listId,
+}: {
+  listId: string | null | undefined;
+}) => {
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { listId: listId }],
+    ["task", { listId: listId }],
     async () => {
       const data = await requestNew(
         {
-          url: 'at/tasks/list',
-          method: 'POST',
+          url: "at/tasks/list",
+          method: "POST",
           params: {
             list_id: listId,
           },
@@ -163,7 +185,7 @@ export const getTaskListService = ({ listId }: {listId: string | null | undefine
     {
       onSuccess: (data) => {
         const taskData = data.data.tasks.map((task: { id: string }) => {
-          queryClient.setQueryData(['task', task.id], task);
+          queryClient.setQueryData(["task", task.id], task);
           return { ...task };
         });
         dispatch(getTaskData(taskData));
@@ -178,12 +200,12 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
 
   // const queryClient = useQueryClient();
   return useQuery(
-    ['task', { query: query.parentId }],
+    ["task", { query: query.parentId }],
     async () => {
       const data = await requestNew(
         {
-          url: 'at/tasks/list',
-          method: 'POST',
+          url: "at/tasks/list",
+          method: "POST",
           params: {
             parent_id: query.parentId,
           },
@@ -211,10 +233,10 @@ export const createTimeEntriesService = (data: {
   const taskID = data.queryKey[1];
   const response = requestNew(
     {
-      url: 'time-entries/start',
-      method: 'POST',
+      url: "time-entries/start",
+      method: "POST",
       params: {
-        type: 'task',
+        type: "task",
         id: taskID,
       },
     },
@@ -223,17 +245,20 @@ export const createTimeEntriesService = (data: {
   return response;
 };
 
-export const StartTimeEntryService = (query: {taskId: string | null, trigger: boolean}) => {
+export const StartTimeEntryService = (query: {
+  taskId: string | null;
+  trigger: boolean;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
-    ['timeclock', { query: query.taskId }],
+    ["timeclock", { query: query.taskId }],
     async () => {
       const data = await requestNew(
         {
-          url: 'time-entries/start',
-          method: 'POST',
+          url: "time-entries/start",
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: query.taskId,
           },
         },
@@ -256,12 +281,12 @@ export const EndTimeEntriesService = (data: {
   trigger: boolean;
 }) => {
   return useQuery(
-    ['timeclock'],
+    ["timeclock"],
     async () => {
       const response = requestNew(
         {
-          url: 'time-entries/stop',
-          method: 'POST',
+          url: "time-entries/stop",
+          method: "POST",
           params: {
             description: data.description,
             is_billable: data.isBillable,
@@ -277,18 +302,24 @@ export const EndTimeEntriesService = (data: {
   );
 };
 
-export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | null | undefined, trigger: string | null | undefined}) => {
+export const GetTimeEntriesService = ({
+  taskId,
+  trigger,
+}: {
+  taskId: string | null | undefined;
+  trigger: string | null | undefined;
+}) => {
   // const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
-    ['timeclock', { taskId: taskId }],
+    ["timeclock", { taskId: taskId }],
     async () => {
       const data = await requestNew(
         {
-          url: 'time-entries',
-          method: 'GET',
+          url: "time-entries",
+          method: "GET",
           params: {
-            type: 'task',
+            type: "task",
             id: taskId,
           },
         },
@@ -297,16 +328,22 @@ export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | nul
       return data;
     },
     {
-      enabled: trigger == 'task',
+      enabled: trigger == "task",
     }
   );
 };
 
-export const UpdateTimeEntriesService = (data: {time_entry_id: string | undefined, description: string, isBillable: number, start_date: string | null, end_date: string | null}) => {
+export const UpdateTimeEntriesService = (data: {
+  time_entry_id: string | undefined;
+  description: string;
+  isBillable: number;
+  start_date: string | null;
+  end_date: string | null;
+}) => {
   const response = requestNew(
     {
       url: `time-entries/${data.time_entry_id}`,
-      method: 'PUT',
+      method: "PUT",
       params: {
         description: data.description,
         is_billable: data.isBillable,
@@ -319,14 +356,16 @@ export const UpdateTimeEntriesService = (data: {time_entry_id: string | undefine
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string | null | undefined}) => {
+export const DeleteTimeEntriesService = (data: {
+  timeEntryDeleteTriggerId: string | null | undefined;
+}) => {
   return useQuery(
-    ['timeclock', { data: data.timeEntryDeleteTriggerId }],
+    ["timeclock", { data: data.timeEntryDeleteTriggerId }],
     async () => {
       const response = requestNew(
         {
           url: `time-entries/${data.timeEntryDeleteTriggerId}`,
-          method: 'DELETE',
+          method: "DELETE",
         },
         true
       );
@@ -338,14 +377,14 @@ export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string
   );
 };
 
-export const AddTaskWatcherService = (data: {queryKey: string[]}) => {
+export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];
   const response = requestNew(
     {
-      url: 'watch',
-      method: 'POST',
+      url: "watch",
+      method: "POST",
       params: {
-        type: 'task',
+        type: "task",
         id: taskID,
       },
     },
@@ -355,18 +394,20 @@ export const AddTaskWatcherService = (data: {queryKey: string[]}) => {
 };
 
 //Get watcher
-export const UseGetWatcherService = (taskId: {query: string | null | undefined}) => {
+export const UseGetWatcherService = (taskId: {
+  query: string | null | undefined;
+}) => {
   const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
-    ['watcher', taskId],
+    ["watcher", taskId],
     async () => {
       const data = await requestNew(
         {
-          url: 'watch',
-          method: 'GET',
+          url: "watch",
+          method: "GET",
           params: {
-            type: 'task',
+            type: "task",
             id: taskId.query,
           },
         },
@@ -375,24 +416,28 @@ export const UseGetWatcherService = (taskId: {query: string | null | undefined})
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['watcher', taskId]),
+      initialData: queryClient.getQueryData(["watcher", taskId]),
       enabled: taskId != null,
     }
   );
 };
 
 //Add watcher to task
-export const AddWatcherService = ({ query }: {query: (string | undefined | null)[]}) => {
+export const AddWatcherService = ({
+  query,
+}: {
+  query: (string | undefined | null)[];
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['watcher', query],
+    ["watcher", query],
     async () => {
       const data = await requestNew(
         {
-          url: 'watch',
-          method: 'POST',
+          url: "watch",
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: query[1],
             team_member_ids: [query[0]],
           },
@@ -403,26 +448,30 @@ export const AddWatcherService = ({ query }: {query: (string | undefined | null)
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['watcher']);
+        queryClient.invalidateQueries(["watcher"]);
       },
-      initialData: queryClient.getQueryData(['watcher', query]),
+      initialData: queryClient.getQueryData(["watcher", query]),
       enabled: query[0] != null,
     }
   );
 };
 
 //Remove watcher to task
-export const RemoveWatcherService = ({ query }: {query: (string | null | undefined)[]}) => {
+export const RemoveWatcherService = ({
+  query,
+}: {
+  query: (string | null | undefined)[];
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['watcher', query],
+    ["watcher", query],
     async () => {
       const data = await requestNew(
         {
-          url: 'watch/remove',
-          method: 'POST',
+          url: "watch/remove",
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: query[1],
             team_member_ids: [query[0]],
           },
@@ -433,25 +482,34 @@ export const RemoveWatcherService = ({ query }: {query: (string | null | undefin
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['watcher']);
+        queryClient.invalidateQueries(["watcher"]);
       },
-      initialData: queryClient.getQueryData(['watcher', query]),
+      initialData: queryClient.getQueryData(["watcher", query]),
       enabled: query[0] != null,
     }
   );
 };
 
 //Assign task to team member
-export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: string | null, team_member_id: string | null}) => {
+export const UseAssignTaskService = ({
+  task_id,
+  team_member_id,
+  triggerAsssignTask,
+}: {
+  task_id: string | null;
+  team_member_id: string | null;
+  triggerAsssignTask: boolean;
+}) => {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  // console.log(task_id);
   return useQuery(
-    ['assign', { team_member_id: team_member_id }],
+    ["assign", { team_member_id: team_member_id, task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
           url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
-          method: 'POST',
+          method: "POST",
         },
         true
       );
@@ -460,9 +518,10 @@ export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: stri
     {
       onSuccess: () => {
         dispatch(setToggleAssignCurrentTaskId(null));
+        dispatch(setTriggerAsssignTask(false));
       },
-      initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: team_member_id != null,
+      // initialData: queryClient.getQueryData(['assign', team_member_id]),
+      enabled: !!team_member_id && triggerAsssignTask,
     }
   );
 };
@@ -472,39 +531,49 @@ export const UseUnAssignTaskService = ({
   task_id,
   team_member_id,
   unAssignTrigger,
-}: {task_id: string | null, team_member_id: string | null, unAssignTrigger: boolean}) => {
+}: {
+  task_id: string | null;
+  team_member_id: string | null;
+  unAssignTrigger: boolean;
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['unassign', { team_member_id: team_member_id }],
+    ["unassign", { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
           url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
-          method: 'POST',
+          method: "POST",
         },
         true
       );
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['unassign', team_member_id]),
+      initialData: queryClient.getQueryData(["unassign", team_member_id]),
       enabled: unAssignTrigger,
     }
   );
 };
 
 //assign tags
-export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }: {tagId: string, currentTaskIdForTag: string}) => {
+export const UseAssignTagToTask = ({
+  tagId,
+  currentTaskIdForTag,
+}: {
+  tagId: string;
+  currentTaskIdForTag: string;
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['tags', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    ["tags", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {
       const data = await requestNew(
         {
           url: `tags/${tagId}/assign`,
-          method: 'POST',
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: currentTaskIdForTag,
           },
         },
@@ -515,7 +584,7 @@ export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }: {tagId: strin
     {
       enabled: !!tagId,
       onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(["task"]);
       },
     }
   );
@@ -531,14 +600,14 @@ export const UseUnAssignTagFromTask = ({
 }) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ['tags', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    ["tags", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {
       const data = await requestNew(
         {
           url: `tags/${tagId}/unassign`,
-          method: 'POST',
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: currentTaskIdForTag,
           },
         },
@@ -549,7 +618,7 @@ export const UseUnAssignTagFromTask = ({
     {
       enabled: !!tagId,
       onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(["task"]);
       },
     }
   );
