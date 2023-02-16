@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   CurrencyDollarIcon,
   NoSymbolIcon,
@@ -12,11 +12,10 @@ import Timer from "react-timer-wrapper";
 import Timecode from "react-timecode";
 import {
   GetTimeEntriesService,
-  DeleteTimeEntriesService,
-} from "../../../../../features/task/taskService";
-import { AvatarWithInitials } from "../../../../../components";
-import { useAppSelector } from "../../../../../app/hooks";
-import { PlayCircleIcon } from "@heroicons/react/24/solid";
+} from '../../../../../features/task/taskService';
+import { AvatarWithInitials } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
+import { PlayCircleIcon } from '@heroicons/react/24/solid';
 
 interface TimeEntriesDropdownProps {
   taskId: string | undefined;
@@ -25,8 +24,8 @@ interface TimeEntriesDropdownProps {
   setShowEntries: (value: boolean) => void;
   isBillable: boolean;
   setIsBillable: (value: boolean) => void;
-  setFormState: (value: any) => void;
-  formState: Record<string, unknown>;
+  // setFormState: (name: string, value: string) => void;
+  // formState: Record<string, unknown>;
   handleTimeTracker: () => void;
 }
 
@@ -38,7 +37,6 @@ function TimeEntriesDropdown({
   isBillable,
   setIsBillable,
   // setFormState,
-  // formState,
   handleTimeTracker,
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
@@ -46,8 +44,8 @@ function TimeEntriesDropdown({
     false
   );
   const { activeItemType } = useAppSelector((state) => state.workspace);
-  const [getTEId, setTEId] = useState("");
-  const [triggerDel, setTriggerDel] = useState(false);
+  // const [getTEId, setTEId] = useState('');
+  // const [triggerDel, setTriggerDel] = useState(false);
 
   queryClient.invalidateQueries({ queryKey: ["getTimeEntries"] });
 
@@ -56,11 +54,11 @@ function TimeEntriesDropdown({
     trigger: activeItemType,
   });
 
-  useQuery({
-    queryKey: ["delTE", getTEId],
-    queryFn: DeleteTimeEntriesService,
-    enabled: triggerDel,
-  });
+  // useQuery({
+  //   queryKey: ['delTE', getTEId],
+  //   queryFn: DeleteTimeEntriesService,
+  //   enabled: triggerDel,
+  // });
 
   const handleUpdateEntry = (id: string | boolean) => {
     setOpenUpdateEntry(!openUpdateEntry);
@@ -71,10 +69,10 @@ function TimeEntriesDropdown({
     }
   };
 
-  const handleDeleteEntry = (id: string) => {
-    setTEId(id);
-    setTriggerDel(true);
-  };
+  // const handleDeleteEntry = (id: string) => {
+  //   // setTEId(id);
+  //   // setTriggerDel(true);
+  // };
 
   const totalDuration = getEntries?.data.total_duration;
   return (
@@ -123,7 +121,7 @@ function TimeEntriesDropdown({
                     <p>{moment.utc(duration * 1000).format("HH:mm:ss")}</p>
                     <p>{moment(start_date).format("MMM D")}</p>
                   </div>
-                  <div
+[1:03 PM, 2/16/2023] Nich Uk Line: <div
                     id="right"
                     className="flex items-center space-x-2 relative"
                   >
@@ -140,7 +138,7 @@ function TimeEntriesDropdown({
                         taskId={taskId}
                       />
                     ) : null} */}
-                    <button type="button" onClick={() => handleDeleteEntry(id)}>
+                    <button type="button">
                       <TrashIcon
                         className="flex-shrink-0 h-3 w-5 text-red-400"
                         aria-hidden="true"
@@ -169,7 +167,7 @@ function TimeEntriesDropdown({
             <input
               type="text"
               name="description"
-              onChange={handleEndTimeChange}
+              // onChange={handleEndTimeChange}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />

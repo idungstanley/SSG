@@ -1,35 +1,36 @@
-import React, { useState, FormEvent } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../../app/hooks';
+import React, { useState, FormEvent } from "react";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../../app/hooks";
 import {
   UseCreateClistService,
+  UseDeleteChecklistService,
   UseGetAllClistService,
   UseUpdateChecklistService,
-} from '../../../../../../features/task/checklist/checklistService';
-import ChecklistItem, { itemProps } from '../components/ChecklistItem';
-import { Spinner } from '../../../../../../common';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import ChecklistModal from '../components/ChecklistModal';
-import { lessOptions } from '../ModalOptions';
-import { completeOptions } from '../ModalOptions';
-import { setTriggerChecklistUpdate } from '../../../../../../features/task/checklist/checklistSlice';
-import { BiCaretRight } from 'react-icons/bi';
-import { GoPlus } from 'react-icons/go';
-import { Disclosure } from '@headlessui/react';
+} from "../../../../../../features/task/checklist/checklistService";
+import ChecklistItem, { itemProps } from "../components/ChecklistItem";
+import { Spinner } from "../../../../../../common";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ChecklistModal from "../components/ChecklistModal";
+import { completeOptions } from "../ModalOptions";
+import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
+import { BiCaretRight } from "react-icons/bi";
+import { GoPlus } from "react-icons/go";
+import { Disclosure } from "@headlessui/react";
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
   // Local states
-  const [checklistName, setChecklistName] = useState<string>('');
+  const [checklistName, setChecklistName] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<string>('');
-  const [checklistId, setChecklistId] = useState<string>('');
+  const [itemId, setItemId] = useState<string>("");
+  const [checklistId, setChecklistId] = useState<string>("");
 
   // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { triggerChecklistUpdate } = useAppSelector((state) => state.checklist);
+  const { triggerChecklistUpdate, triggerDelChecklist, clickedChecklistId } =
+    useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -57,7 +58,7 @@ export default function ChecklistIndex() {
     triggerUpdate: triggerChecklistUpdate,
   });
 
-  if (updateStatus === 'success') {
+  if (updateStatus === "success") {
     refetch();
   }
 
@@ -71,12 +72,18 @@ export default function ChecklistIndex() {
     dispatch(setTriggerChecklistUpdate(true));
     setEditing(false);
     setChecklistId(id);
+    setItemId(id);
   };
 
-  if (status == 'loading') {
-    <Spinner size={20} color={'blue'} />;
+  UseDeleteChecklistService({
+    query: clickedChecklistId,
+    delChecklist: triggerDelChecklist,
+  });
+
+  if (status == "loading") {
+    <Spinner size={20} color={"blue"} />;
   }
-  return status == 'success' ? (
+  return status == "success" ? (
     <div className="p-1">
       <div className="border-2 flex justify-between items-center text-center py-2">
         <h1 className="text-xl ml-8">Checklists</h1>
@@ -90,7 +97,12 @@ export default function ChecklistIndex() {
       <div>
         {task_checklist.length > 0
           ? task_checklist.map(
-              (item: { id: string; name: string; is_done: number, items: itemProps[] }) => {
+              (item: {
+                id: string;
+                name: string;
+                is_done: number;
+                items: itemProps[];
+              }) => {
                 const done = item.items.filter(
                   (e: { is_done: number }) => e.is_done
                 );
@@ -104,33 +116,30 @@ export default function ChecklistIndex() {
                               <div className="mx-1">
                                 <BiCaretRight
                                   className={
-                                    open ? 'rotate-90 transform w-4 h-4' : ''
+                                    open ? "rotate-90 transform w-4 h-4" : ""
                                   }
                                 />
                               </div>
                             </Disclosure.Button>
                             <div>
-                              {editing && itemId === item.id ? (
-                                <form onSubmit={(e) => handleEdit(e, item.id)}>
-                                  <input
-                                    type="text"
-                                    value={checklistName}
-                                    onChange={(e) =>
-                                      setChecklistName(e.target.value)
-                                    }
-                                  />
-                                </form>
-                              ) : (
-                                <h1
-                                  className="cursor-text"
-                                  onClick={() => {
-                                    setItemId(item.id);
+                              <form onSubmit={(e) => handleEdit(e, item.id)}>
+                                <input
+                                  type="text"
+                                  value={
+                                    editing && item.id == itemId
+                                      ? checklistName
+                                      : item.name
+                                  }
+                                  onChange={(e) =>
+                                    setChecklistName(e.target.value)
+                                  }
+                                  onFocus={() => {
                                     editChecklist(item.name);
+                                    setItemId(item.id);
                                   }}
-                                >
-                                  {item.name}
-                                </h1>
-                              )}
+                                  className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-9 w-40 rounded"
+                                />
+                              </form>
                             </div>
                             <label>
                               ({done.length}/{item.items.length})
@@ -138,11 +147,8 @@ export default function ChecklistIndex() {
                           </span>
                           <div className="opacity-0 group-hover:opacity-100">
                             <ChecklistModal
-                              options={
-                                item.items.length === 0
-                                  ? lessOptions
-                                  : completeOptions
-                              }
+                              options={completeOptions}
+                              checklistId={item.id}
                             />
                           </div>
                         </div>
@@ -159,7 +165,7 @@ export default function ChecklistIndex() {
                 );
               }
             )
-          : 'This task has no Checklist, click on the plus sign to create one'}
+          : "This task has no Checklist, click on the plus sign to create one"}
       </div>
     </div>
   ) : null;

@@ -1,11 +1,21 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
-import { getTaskData, setToggleAssignCurrentTaskId } from './taskSlice';
+import {
+  getTaskData,
+  setToggleAssignCurrentTaskId,
+  setTriggerAsssignTask,
+} from './taskSlice';
 import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
 
-export const createTaskService = (data: {name: string, description?: string, showMenuDropdown?: string | null, getListId?: string, parentTaskId?: string | null}) => {
+export const createTaskService = (data: {
+  name: string;
+  description?: string;
+  showMenuDropdown?: string | null;
+  getListId?: string;
+  parentTaskId?: string | null;
+}) => {
   const response = requestNew(
     {
       url: 'at/tasks',
@@ -22,7 +32,9 @@ export const createTaskService = (data: {name: string, description?: string, sho
   return response;
 };
 
-export const getOneTaskService = (data: { queryKey: (string | undefined)[] }) => {
+export const getOneTaskService = (data: {
+  queryKey: (string | undefined)[];
+}) => {
   const taskId = data.queryKey[1];
   const response = requestNew(
     {
@@ -35,7 +47,7 @@ export const getOneTaskService = (data: { queryKey: (string | undefined)[] }) =>
 };
 
 //getOneTask
-export const getOneTaskServices = ({ task_id }: {task_id: string | null}) => {
+export const getOneTaskServices = ({ task_id }: { task_id: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
@@ -56,7 +68,13 @@ export const getOneTaskServices = ({ task_id }: {task_id: string | null}) => {
 };
 
 //create checklist
-export const UseCreateCheckList = ({ task_id, trigger }: {task_id: string, trigger: boolean}) => {
+export const UseCreateCheckList = ({
+  task_id,
+  trigger,
+}: {
+  task_id: string;
+  trigger: boolean;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['task'],
@@ -141,7 +159,11 @@ export const UseUpdateTaskStatusServices = ({
   );
 };
 
-export const getTaskListService = ({ listId }: {listId: string | null | undefined}) => {
+export const getTaskListService = ({
+  listId,
+}: {
+  listId: string | null | undefined;
+}) => {
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
@@ -223,7 +245,10 @@ export const createTimeEntriesService = (data: {
   return response;
 };
 
-export const StartTimeEntryService = (query: {taskId: string | null, trigger: boolean}) => {
+export const StartTimeEntryService = (query: {
+  taskId: string | null;
+  trigger: boolean;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { query: query.taskId }],
@@ -277,7 +302,13 @@ export const EndTimeEntriesService = (data: {
   );
 };
 
-export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | null | undefined, trigger: string | null | undefined}) => {
+export const GetTimeEntriesService = ({
+  taskId,
+  trigger,
+}: {
+  taskId: string | null | undefined;
+  trigger: string | null | undefined;
+}) => {
   // const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
@@ -302,7 +333,13 @@ export const GetTimeEntriesService = ({ taskId, trigger }: {taskId: string | nul
   );
 };
 
-export const UpdateTimeEntriesService = (data: {time_entry_id: string | undefined, description: string, isBillable: number, start_date: string | null, end_date: string | null}) => {
+export const UpdateTimeEntriesService = (data: {
+  time_entry_id: string | undefined;
+  description: string;
+  isBillable: number;
+  start_date: string | null;
+  end_date: string | null;
+}) => {
   const response = requestNew(
     {
       url: `time-entries/${data.time_entry_id}`,
@@ -319,7 +356,9 @@ export const UpdateTimeEntriesService = (data: {time_entry_id: string | undefine
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string | null | undefined}) => {
+export const DeleteTimeEntriesService = (data: {
+  timeEntryDeleteTriggerId: string | null | undefined;
+}) => {
   return useQuery(
     ['timeclock', { data: data.timeEntryDeleteTriggerId }],
     async () => {
@@ -338,7 +377,7 @@ export const DeleteTimeEntriesService = (data: {timeEntryDeleteTriggerId: string
   );
 };
 
-export const AddTaskWatcherService = (data: {queryKey: string[]}) => {
+export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];
   const response = requestNew(
     {
@@ -355,7 +394,9 @@ export const AddTaskWatcherService = (data: {queryKey: string[]}) => {
 };
 
 //Get watcher
-export const UseGetWatcherService = (taskId: {query: string | null | undefined}) => {
+export const UseGetWatcherService = (taskId: {
+  query: string | null | undefined;
+}) => {
   const queryClient = useQueryClient();
   // const dispatch = useDispatch();
   return useQuery(
@@ -382,7 +423,11 @@ export const UseGetWatcherService = (taskId: {query: string | null | undefined})
 };
 
 //Add watcher to task
-export const AddWatcherService = ({ query }: {query: (string | undefined | null)[]}) => {
+export const AddWatcherService = ({
+  query,
+}: {
+  query: (string | undefined | null)[];
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['watcher', query],
@@ -412,7 +457,11 @@ export const AddWatcherService = ({ query }: {query: (string | undefined | null)
 };
 
 //Remove watcher to task
-export const RemoveWatcherService = ({ query }: {query: (string | null | undefined)[]}) => {
+export const RemoveWatcherService = ({
+  query,
+}: {
+  query: (string | null | undefined)[];
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['watcher', query],
@@ -442,11 +491,20 @@ export const RemoveWatcherService = ({ query }: {query: (string | null | undefin
 };
 
 //Assign task to team member
-export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: string | null, team_member_id: string | null}) => {
+export const UseAssignTaskService = ({
+  task_id,
+  team_member_id,
+  triggerAsssignTask,
+}: {
+  task_id: string | null;
+  team_member_id: string | null;
+  triggerAsssignTask: boolean;
+}) => {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  // console.log(task_id);
   return useQuery(
-    ['assign', { team_member_id: team_member_id }],
+    ['task', { team_member_id: team_member_id, task_id: task_id }],
     async () => {
       const data = await requestNew(
         {
@@ -459,10 +517,12 @@ export const UseAssignTaskService = ({ task_id, team_member_id }: {task_id: stri
     },
     {
       onSuccess: () => {
+        // queryClient.invalidateQueries(['task']);
         dispatch(setToggleAssignCurrentTaskId(null));
+        dispatch(setTriggerAsssignTask(false));
       },
-      initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: team_member_id != null,
+      // initialData: queryClient.getQueryData(['assign', team_member_id]),
+      enabled: !!team_member_id && triggerAsssignTask,
     }
   );
 };
@@ -472,10 +532,15 @@ export const UseUnAssignTaskService = ({
   task_id,
   team_member_id,
   unAssignTrigger,
-}: {task_id: string | null, team_member_id: string | null, unAssignTrigger: boolean}) => {
-  const queryClient = useQueryClient();
+}: {
+  task_id: string | null;
+  team_member_id: string | null;
+  unAssignTrigger: boolean;
+}) => {
+  // const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
   return useQuery(
-    ['unassign', { team_member_id: team_member_id }],
+    ['task', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
@@ -487,14 +552,20 @@ export const UseUnAssignTaskService = ({
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['unassign', team_member_id]),
       enabled: unAssignTrigger,
+      // enabled: !!team_member_id,
     }
   );
 };
 
 //assign tags
-export const UseAssignTagToTask = ({ tagId, currentTaskIdForTag }: {tagId: string, currentTaskIdForTag: string}) => {
+export const UseAssignTagToTask = ({
+  tagId,
+  currentTaskIdForTag,
+}: {
+  tagId: string | null;
+  currentTaskIdForTag: string | null;
+}) => {
   const queryClient = useQueryClient();
   return useQuery(
     ['tags', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
