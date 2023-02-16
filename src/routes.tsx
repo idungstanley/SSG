@@ -123,6 +123,23 @@ export const routes = (user: IUser | null) =>
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox,
+      ],
+    },
+    {
+      path: 'workspace',
+      element: user ? (
+        user.default_workspace_id ? (
+          <Index />
+        ) : (
+          <Navigate to="/workspace/onboarding" />
+        )
+      ) : (
+        <Navigate to="/auth/login" />
+      ),
+      children: [
+        { path: '', element: <Home /> },
+        { path: 'notification', element: <Notification /> },
+        { path: 'community', element: <Community /> },
         { path: 'settings/permissions', element: <PermissionsPage /> },
         { path: 'settings/team-members', element: <TeamMembersPage /> },
         {
@@ -141,23 +158,6 @@ export const routes = (user: IUser | null) =>
           path: 'settings/team-members/groups/:teamMemberGroupId/members',
           element: <TeamMemberGroupMembersPage />,
         },
-      ],
-    },
-    {
-      path: 'workspace',
-      element: user ? (
-        user.default_workspace_id ? (
-          <Index />
-        ) : (
-          <Navigate to="/workspace/onboarding" />
-        )
-      ) : (
-        <Navigate to="/auth/login" />
-      ),
-      children: [
-        { path: '', element: <Home /> },
-        { path: 'notification', element: <Notification /> },
-        { path: 'community', element: <Community /> },
         { path: 'calendar', element: <Calendar /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'favorites', element: <Favorites /> },
