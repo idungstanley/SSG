@@ -8,7 +8,7 @@ import {
   setTriggerDelChecklist,
   setTriggererChecklistItemDel,
 } from "../../../../../../features/task/checklist/checklistSlice";
-import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
+import { useAppDispatch } from "../../../../../../app/hooks";
 import { Disclosure } from "@headlessui/react";
 
 interface ChecklistModalProps {

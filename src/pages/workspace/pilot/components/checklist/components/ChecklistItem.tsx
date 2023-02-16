@@ -28,7 +28,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
-  const [itemId, setItemId] = useState<any>("");
+  const [itemId, setItemId] = useState<string>("");
   const [done, setDone] = useState<number>(0);
   const [editItemName, setEditItemName] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>("");
@@ -83,7 +83,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     setEditItemName(false);
   };
 
-  const { status: theStatus } = UseDeleteChecklistItemService({
+  UseDeleteChecklistItemService({
     query: clickedChecklistId,
     itemId: clickedChecklistItemId,
     delItem: triggerDelChecklistItem,
