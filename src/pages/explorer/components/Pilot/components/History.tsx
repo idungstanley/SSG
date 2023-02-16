@@ -1,9 +1,9 @@
-import React from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
-import { InitialsAvatar, Spinner } from '../../../../../common';
-import { useGetItemHistory } from '../../../../../features/general/history/historyService';
-import { OutputDateTime } from '../../../../../app/helpers';
+import React from "react";
+import { useAppSelector } from "../../../../../app/hooks";
+import FullScreenMessage from "../../../../../components/CenterMessage/FullScreenMessage";
+import { InitialsAvatar, Spinner } from "../../../../../common";
+import { useGetItemHistory } from "../../../../../features/general/history/historyService";
+import { OutputDateTime } from "../../../../../app/helpers";
 
 export default function History() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -17,12 +17,12 @@ export default function History() {
   return (
     <div className="h-full flex-1">
       <div className="relative h-full">
-        {status === 'error' ? (
+        {status === "error" ? (
           <FullScreenMessage
             title="Oops, an error occurred :("
             description="Please try again later."
           />
-        ) : status === 'loading' ? (
+        ) : status === "loading" ? (
           <div className="mx-auto w-6 justify-center mt-12">
             <Spinner size={8} color="#0F70B7" />
           </div>

@@ -1,17 +1,20 @@
-import React, { useRef } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { AvatarWithInitials } from '../../../../components';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { useAppSelector } from '../../../../app/hooks';
-import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import React, { useRef } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { AvatarWithInitials } from "../../../../components";
+import { useGetTeamMembers } from "../../../../features/settings/teamMembers/teamMemberService";
+import { useAppSelector } from "../../../../app/hooks";
+import {
+  setCurrTeamMemId,
+  setTriggerAsssignTask,
+} from "../../../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 import {
   UseAssignTaskService,
   UseUnAssignTaskService,
   getOneTaskServices,
-} from '../../../../features/task/taskService';
+} from "../../../../features/task/taskService";
 
 export default function AssignTask() {
   const dispatch = useDispatch();
@@ -19,15 +22,15 @@ export default function AssignTask() {
   const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: "",
   });
-  const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
-    (state) => state.task
-  );
+  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
+    useAppSelector((state) => state.task);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
+    triggerAsssignTask: triggerAsssignTask,
   });
 
   UseUnAssignTaskService({
@@ -80,7 +83,10 @@ export default function AssignTask() {
               <div className="flex items-center justify-between cursor-pointer">
                 <div
                   className="relative flex items-center cursor-pointer  space-x-2"
-                  onClick={() => dispatch(setCurrTeamMemId(item.id))}
+                  onClick={() => {
+                    dispatch(setCurrTeamMemId(item.id));
+                    dispatch(setTriggerAsssignTask(true));
+                  }}
                 >
                   <AvatarWithInitials
                     initials={item.initials}
