@@ -37,3 +37,8 @@ textarea {
   overflow: auto;
   min-width: 70px;
 }
+
+.fgoverflow {
+  width: 1100px;
+  overflow-x: auto;
+}

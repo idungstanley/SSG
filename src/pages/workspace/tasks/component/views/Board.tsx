@@ -3,26 +3,28 @@ import { useAppSelector } from "../../../../../app/hooks";
 
 function Board() {
   const { myTaskData } = useAppSelector((state) => state.task);
+  console.log(myTaskData);
 
   return (
-    <>
-      <div className="flex flex-wrap gap-5 relative overflow-x-auto">
+    <div className=" m-auto fgoverflow ">
+      <div className="flex  gap-5  ">
         {myTaskData.map((column) => (
           <div
             key={column.id}
-            className=" w-2/6  h-20 rounded shadow-md overflow-x-auto "
+            className=" rounded shadow-md  "
+            style={{ width: "500px" }}
           >
-            <div className="bg-gray-400 h-1 rounded-t-sm 	"></div>
-            <h2 className="  text-xs uppercase bg-white h-10 pt-3 px-2 py-1 rounded font-bold">
+            <div className="bg-gray-400 w-56 h-1 rounded-t-sm 	"></div>
+            <h2 className="  text-xs uppercase bg-white h-10 w-56 pt-3 px-2 py-1 rounded font-bold">
               {column.status}
+            </h2>
+            <h2 className="  text-xs uppercase bg-white w-56 mb-5 h-10 mt-3 px-2 py-1 rounded font-bold">
+              {column.name}
             </h2>
           </div>
         ))}
-        <div>
-          <p>hi</p>
-        </div>
       </div>
-    </>
+    </div>
   );
 }
 
