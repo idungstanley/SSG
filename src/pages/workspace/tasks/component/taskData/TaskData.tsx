@@ -76,12 +76,11 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   const handleAssigneeModal = (id: string) => {
-    // console.log(id);
-    // if (toggleAssignCurrentTaskId == id) {
-    //   dispatch(setToggleAssignCurrentTaskId(null));
-    // } else {
-    dispatch(setToggleAssignCurrentTaskId(id));
-    // }
+    if (toggleAssignCurrentTaskId == id) {
+      dispatch(setToggleAssignCurrentTaskId(null));
+    } else {
+      dispatch(setToggleAssignCurrentTaskId(id));
+    }
   };
 
   const handleGetSubTask = (id: string) => {

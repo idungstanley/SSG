@@ -5,21 +5,34 @@ import PriorityDropdown from "../../../../../components/priority/PriorityDropdow
 import {
   ImyTaskData,
   setCurrentTaskPriorityId,
+  setToggleAssignCurrentTaskId,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 import { BsArrowsAngleExpand } from "react-icons/bs";
+import AssignTask from "../../assignTask/AssignTask";
+// import AssignTask from "../../assignTask/AssignTask";
 
 function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns } = useAppSelector(
-    (state) => state.task
-  );
+  const { myTaskData, hideTask, taskColumns, toggleAssignCurrentTaskId } =
+    useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
   // const displayNav = (id: string) => {
   //   dispatch(setShowTaskNavigation(!showTaskNavigation));
   //   dispatch(setCurrentTaskId(id));
   // };
+  // const [taskId, setTaskId] = useState("");
+  const handleAssigneeModal = (id: string | undefined) => {
+    if (toggleAssignCurrentTaskId == id) {
+      dispatch(setToggleAssignCurrentTaskId(null));
+    } else {
+      dispatch(setToggleAssignCurrentTaskId(id));
+    }
+  };
+
+  // console.log("taskIdState", taskId);
+  // console.log("currentAssig", toggleAssignCurrentTaskId);
 
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
@@ -37,11 +50,14 @@ function TaskTableView() {
         ]
       | undefined
   ) => {
-    console.log("data", data);
-    return data?.map((newData) => {
+    return data?.map((newData, index) => {
       return (
         <>
-          <p key={newData.id}>{newData.name}</p>
+          {data.length !== index + 1 ? (
+            <p key={index}>{newData.name},</p>
+          ) : (
+            <p key={index}>{newData.name}</p>
+          )}
         </>
       );
     });
@@ -56,7 +72,8 @@ function TaskTableView() {
       | tagItem[]
       | null
       | Array<{ id: string; initials: string; colour: string; name: string }>,
-    colfield: string
+    colfield: string,
+    task?: ImyTaskData
   ) => {
     if (
       colfield === "assignees" &&
@@ -69,10 +86,23 @@ function TaskTableView() {
         }>
       ).length !== 0
     ) {
+      const taskColFieldSetType = taskColField as [
+        { id: string; initials: string; colour: string; name: string }
+      ];
       return (
-        <div className="relative">
-          {groupAssignee((taskColField as ImyTaskData)?.assignees)}
-        </div>
+        <>
+          <div
+            className="cursor-pointer flex "
+            onClick={() => handleAssigneeModal(task?.id)}
+          >
+            <div className="flex gap-3">
+              {groupAssignee(taskColFieldSetType)}
+            </div>
+            <span className="absolute shadow-2xl  z-30 mt-6 ">
+              {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
+            </span>
+          </div>
+        </>
       );
     } else if (
       colfield === "assignees" &&
@@ -84,7 +114,17 @@ function TaskTableView() {
         }>
       ).length === 0
     ) {
-      return <p>-</p>;
+      return (
+        <div
+          className="cursor-pointer flex "
+          onClick={() => handleAssigneeModal(task?.id)}
+        >
+          <p className="opacity-0">Not Assinged</p>
+          <span className="absolute shadow-2xl  z-30 mt-6 ">
+            {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
+          </span>
+        </div>
+      );
     } else if (colfield == "created_at" || colfield == "updated_at") {
       return (
         <span className="text-gray-400 text-sm font-medium">
@@ -93,22 +133,24 @@ function TaskTableView() {
       );
     } else if (colfield == "status") {
       if (taskColField == "completed") {
-        return <div className="bg-green-500">{taskColField}</div>;
+        return (
+          <p className="bg-green-500 rounded pl-2 min-w-fit">{taskColField}</p>
+        );
       } else if (taskColField == "in progress") {
-        return <div>{taskColField}</div>;
+        return <div className="bg-purple-500 rounded pl-2">{taskColField}</div>;
       } else if (taskColField == "archived") {
-        return <div>{taskColField}</div>;
+        return <div className="bg-yellow-500 rounded pl-2">{taskColField}</div>;
       } else if (taskColField == "todo") {
-        return <div>{taskColField}</div>;
+        return <div className="bg-gray-400  rounded pl-2">{taskColField}</div>;
       } else {
-        return <div>Todo</div>;
+        return <div className="bg-gray-400 rounded pl-2">Todo</div>;
       }
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
           <div className="flex w-11/12 justify-between items-center group">
             <p>{taskColField as ReactNode}</p>
-            <p className="group-hover:bg-gray-300 p-2 cursor-pointer">
+            <p className="opacity-0 bg-gray-300 hover:bg-gray-400 group-hover:opacity-100 p-2 cursor-pointer">
               <BsArrowsAngleExpand />
             </p>
           </div>
@@ -118,11 +160,9 @@ function TaskTableView() {
       return (
         <span
           className="relative  border-dotted border-gray-300"
-          onClick={() => handleTaskPriority((taskColField as ImyTaskData)?.id)}
+          onClick={() => handleTaskPriority(task?.id)}
         >
-          <PriorityDropdown
-            TaskCurrentPriority={(taskColField as ImyTaskData)?.priority}
-          />
+          <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
       );
     } else return taskColField;
@@ -185,10 +225,16 @@ function TaskTableView() {
                     (col) =>
                       !col.hidden && (
                         <td
-                          className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
+                          className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
                           key={col.field}
                         >
-                          {renderData(task[col.field], col.field) as ReactNode}
+                          {
+                            renderData(
+                              task[col.field],
+                              col.field,
+                              task
+                            ) as ReactNode
+                          }
                         </td>
                       )
                   )}
