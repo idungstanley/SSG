@@ -1,8 +1,8 @@
 import React from 'react';
 
 export interface IColumn {
-  name?: string;
-  id?: number;
+  name: string;
+  id: number;
   label?: string;
   source?: string;
   subTab?: JSX.Element;

@@ -18,6 +18,7 @@ function InviteTeamMemberSlideOver() {
   // Form state
   const defaultFormState = {
     email: '',
+    name: '',
   };
 
   const [formState, setFormState] = useState(defaultFormState);
@@ -27,7 +28,7 @@ function InviteTeamMemberSlideOver() {
     (state) => state.slideOver
   );
 
-  const { email } = formState;
+  const { email, name } = formState;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
@@ -56,6 +57,7 @@ function InviteTeamMemberSlideOver() {
   const onSubmit = async () => {
     createTeamMemberInviteMutation.mutate({
       email,
+      name,
       teamMemberRoleKey: selectedRoleKey || '',
     });
   };
@@ -80,6 +82,17 @@ function InviteTeamMemberSlideOver() {
               ]}
               onChange={onChangeRole}
               selectedId={selectedRoleKey || ''}
+            />
+          </div>
+          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+            <Input
+              label="Name"
+              placeholder="Name"
+              name="name"
+              value={name}
+              type="text"
+              hint="The invite will be sent here."
+              onChange={onChange}
             />
           </div>
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">

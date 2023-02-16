@@ -1,20 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './styles/index.css';
-import { Provider } from 'react-redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./styles/index.css";
+import { Provider } from "react-redux";
 import {
   QueryClientProvider,
   QueryClient,
   QueryCache,
   MutationCache,
-} from '@tanstack/react-query';
+} from "@tanstack/react-query";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import toast from 'react-hot-toast';
-import App from './App';
-import { store } from './app/store';
-import Toast from './common/Toast';
-import { IErrorRequest, ISuccessRequest } from './types';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import toast from "react-hot-toast";
+import App from "./App";
+import { store } from "./app/store";
+import Toast from "./common/Toast";
+import { IErrorRequest, ISuccessRequest } from "./types";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
@@ -22,7 +22,7 @@ const onError = (error: unknown): unknown => {
   let body: string;
 
   if (!error) {
-    title = 'Oops! An internal server error occurred.';
+    title = "Oops! An internal server error occurred.";
     toast.custom((t) => (
       <Toast type="error" title={title} body={body} toastId={t.id} />
     ));
@@ -30,14 +30,14 @@ const onError = (error: unknown): unknown => {
   }
 
   if (typedError.status === 403) {
-    title = 'Oops! You are not authorized to perform this action.';
+    title = "Oops! You are not authorized to perform this action.";
   } else if (typedError.status === 401) {
     title =
-      'Oops! You are no longer authenticated. Please logout and login again.';
+      "Oops! You are no longer authenticated. Please logout and login again.";
   } else if (typedError.status === 500 || !typedError) {
-    title = 'Oops! An internal server error occurred.';
+    title = "Oops! An internal server error occurred.";
   } else if (typedError.status === 404) {
-    title = 'Oops! Resource not found.';
+    title = "Oops! Resource not found.";
   } else if (typedError?.data?.message) {
     title = typedError?.data?.message.title;
     body = typedError?.data?.message.body;
@@ -64,7 +64,7 @@ const onSuccess = (data: unknown): unknown => {
     title = typedSuccess?.message.title;
     body = typedSuccess?.message.body;
   } else {
-    title = 'Success';
+    title = "Success";
   }
 
   toast.custom((t) => (
@@ -91,7 +91,7 @@ const queryClient = new QueryClient({
   }),
 });
 
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -106,5 +106,5 @@ ReactDOM.render(
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

@@ -6,10 +6,10 @@ import {
   PencilIcon,
   TagIcon,
   TrashIcon,
-} from '@heroicons/react/24/outline';
-import moment from 'moment';
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
+} from "@heroicons/react/24/outline";
+import moment from "moment";
+import Timer from "react-timer-wrapper";
+import Timecode from "react-timecode";
 import {
   GetTimeEntriesService,
 } from '../../../../../features/task/taskService';
@@ -47,7 +47,7 @@ function TimeEntriesDropdown({
   // const [getTEId, setTEId] = useState('');
   // const [triggerDel, setTriggerDel] = useState(false);
 
-  queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
+  queryClient.invalidateQueries({ queryKey: ["getTimeEntries"] });
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId,
@@ -95,7 +95,7 @@ function TimeEntriesDropdown({
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
               <p>Me</p>
             </div>
-            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc(totalDuration * 1000).format("HH:mm:ss")}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
@@ -118,8 +118,8 @@ function TimeEntriesDropdown({
                     id="left"
                     className="flex items-center space-x-3 text-xs"
                   >
-                    <p>{moment.utc(duration * 1000).format('HH:mm:ss')}</p>
-                    <p>{moment(start_date).format('MMM D')}</p>
+                    <p>{moment.utc(duration * 1000).format("HH:mm:ss")}</p>
+                    <p>{moment(start_date).format("MMM D")}</p>
                   </div>
                   <div
                     id="right"
@@ -203,8 +203,8 @@ function TimeEntriesDropdown({
               <CurrencyDollarIcon
                 className={`${
                   isBillable
-                    ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
-                    : 'text-white cursor-pointer text-xl rounded-full h-7'
+                    ? "bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl"
+                    : "text-white cursor-pointer text-xl rounded-full h-7"
                 }`}
                 aria-hidden="true"
                 onClick={() => setIsBillable(!isBillable)}
