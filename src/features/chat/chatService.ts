@@ -11,7 +11,7 @@ import {
 
 export const useGetChats = (data: {
   type?: itemType;
-  id?: string;
+  id?: string | null;
 }) =>
   useQuery<IChatsRes, unknown, IChatFromList[]>(
     ['chats', data.id],
@@ -50,7 +50,7 @@ export const useGetChat = (id: string | null) =>
     }
   );
 
-const createChat = (data: { id: string; name: string; type: itemType }) => {
+const createChat = (data: { id?: string | null; name?: string; type?: itemType }) => {
   const request = requestNew(
     {
       url: 'chats',
@@ -62,7 +62,7 @@ const createChat = (data: { id: string; name: string; type: itemType }) => {
   return request;
 };
 
-export const useCreateChat = (id?: string) => {
+export const useCreateChat = (id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(createChat, {

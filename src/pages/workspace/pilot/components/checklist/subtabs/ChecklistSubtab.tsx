@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { MdAddToPhotos } from 'react-icons/md';
 import { useAppSelector } from '../../../../../../app/hooks';
 // import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import propertiesIcon from '../../../../../../assets/branding/properties-icon.png';
 import SubtabDrag from '../../SubtabDnd';
 import {
   closestCenter,
@@ -19,18 +17,19 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
+import { TbChecklist, TbCheckupList } from 'react-icons/tb';
 
 export const ChecklistOptions = [
   {
     id: 1,
-    name: 'Properties',
-    source: propertiesIcon,
+    name: 'Checklist',
+    icon: <TbCheckupList />,
     isVisible: false,
   },
   {
     id: 2,
-    label: 'attachments',
-    icon: <MdAddToPhotos />,
+    name: 'Add Checklist',
+    icon: <TbChecklist />,
     isVisible: false,
   },
 ];
@@ -71,16 +70,14 @@ export default function ChecklistSubtab() {
             | {
                 id: number;
                 name: string;
-                source: string;
-                label?: undefined;
-                icon?: undefined;
-                isVisible: boolean
+                icon: JSX.Element;
+                isVisible: boolean;
               }
             | {
                 id: number;
                 label: string;
                 icon: JSX.Element;
-                name?: undefined;
+                name: string;
                 source?: undefined;
                 isVisible: boolean;
               }
@@ -125,7 +122,7 @@ export default function ChecklistSubtab() {
                   id={item.id}
                   activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
-                  source={item.source}
+                  source={item.icon}
                   name={'Checklist'}
                 />
               )

@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../../../../app/hooks";
 // import ChecklistSubtab from "./subtabs/ChecklistSubtab";
 import ChecklistSubtab from "../subtabs/ChecklistSubtab";
 
-const DetailOptions = [
+export const cheklistOptions = [
   {
     id: 1,
     element: <AddChecklist />,
@@ -24,7 +24,8 @@ export default function Checklists() {
     (state) => state.workspace
   );
   const selectedSubSection = useMemo(
-    () => DetailOptions.find((option) => option.id === activeSubChecklistTabId),
+    () =>
+      cheklistOptions.find((option) => option.id === activeSubChecklistTabId),
     [activeSubChecklistTabId]
   );
   return (

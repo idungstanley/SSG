@@ -1,7 +1,7 @@
 import React from 'react';
 import { classNames } from '../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
-import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import { setActiveHotKeyId, setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../app/hooks';
 import { GrDrag } from 'react-icons/gr';
@@ -45,7 +45,9 @@ export default function TabDrag({
   };
 
   const handleClick = (tabId: number) => {
+    dispatch(setActiveHotKeyId(0));
     dispatch(setActiveTabId(tabId));
+
   };
 
   return (
