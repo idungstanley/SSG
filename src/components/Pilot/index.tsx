@@ -95,10 +95,13 @@ export default function Pilot() {
 
   return pilotSideOver.id ? (
     <div
-      className={cl('p-2 border-l h-full', showFullPilot && 'w-134 min-w-134')}
+      className={cl(
+        'p-2 border-l grid grid-rows-autoAutoFr',
+        showFullPilot && 'w-134 min-w-134'
+      )}
     >
-      {/* show / hide pilot toggle */}
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center pb-2">
+        {/* show / hide pilot toggle */}
         <button type="button" onClick={togglePilot} className="text-gray-500">
           {showFullPilot ? (
             <ChevronDoubleRightIcon className="w-5 h-5" />
@@ -124,7 +127,7 @@ export default function Pilot() {
       </div>
 
       {showFullPilot ? (
-        <div className="flex flex-col mt-2 h-full">
+        <>
           {/* tab items */}
           <Tabs
             showTabLabel={showTabLabel}
@@ -134,7 +137,7 @@ export default function Pilot() {
 
           {/* main section depends of active tab */}
           {activeSection ? activeSection.element : null}
-        </div>
+        </>
       ) : null}
     </div>
   ) : null;

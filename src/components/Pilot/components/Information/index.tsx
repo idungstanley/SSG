@@ -57,7 +57,7 @@ export default function Information() {
   return (
     <>
       {data ? (
-        <div className="flex border-b flex-col justify-center text-sm font-medium divide-y divide-gray-200">
+        <div className="flex border-b flex-col text-sm font-medium divide-y divide-gray-200">
           {info.map((item) => (
             <div key={item.id} className="flex py-3 justify-between">
               <p className="text-gray-500">{item.key}</p>

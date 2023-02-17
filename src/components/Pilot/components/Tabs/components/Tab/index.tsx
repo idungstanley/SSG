@@ -67,10 +67,10 @@ export default function Tab({
       </span>
 
       {/* main content */}
-      <div className="flex items-center gap-2 truncate">
+      <div title={label} className="flex items-center gap-2 truncate">
         {icon}
         {showTabLabel ? (
-          <p className="truncate" title={label}>
+          <p className="truncate">
             {label}
           </p>
         ) : null}

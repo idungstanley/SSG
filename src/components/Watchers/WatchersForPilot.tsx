@@ -12,7 +12,7 @@ export default function WatchersForPilot() {
       : null;
 
   return (
-    <div className="mt-4 h-full">
+    <div className="flex flex-col pt-2">
       {item ? (
         <>
           <AddNew item={item} />

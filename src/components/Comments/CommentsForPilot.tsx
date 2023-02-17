@@ -84,7 +84,7 @@ export default function CommentsForPilot() {
   };
 
   return (
-    <>
+    <div className="flex flex-col">
       <Form
         messageRef={messageRef}
         handleSubmit={handleSubmit}
@@ -102,6 +102,6 @@ export default function CommentsForPilot() {
         onEdit={onEdit}
         onDelete={onDelete}
       />
-    </>
+    </div>
   );
 }
