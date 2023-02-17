@@ -200,7 +200,9 @@ export default function TaskData({ task }: TaskDataProps) {
             </div>
           </div>
           <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+            {toggleAssignCurrentTaskId == task.id ? (
+              <AssignTask option={"assign-task"} />
+            ) : null}
           </span>
         </>
       );

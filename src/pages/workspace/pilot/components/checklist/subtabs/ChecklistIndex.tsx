@@ -16,6 +16,7 @@ import { setTriggerChecklistUpdate } from "../../../../../../features/task/check
 import { BiCaretRight } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
 import { Disclosure } from "@headlessui/react";
+import { GrDrag } from "react-icons/gr";
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
@@ -111,6 +112,9 @@ export default function ChecklistIndex() {
                     {({ open }) => (
                       <div>
                         <div className="group flex items-center border-2 border-t-0 p-1 hover:text-gray-700 hover:bg-gray-200 cursor-pointer">
+                          <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
+                            <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
+                          </span>
                           <span className="px-5 flex items-center">
                             <Disclosure.Button>
                               <div className="mx-1">

@@ -27,8 +27,8 @@ export default function ChecklistModal({
   checklistItemId,
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
+
   const handleDelChecklist = () => {
-    console.log(checklistId);
     dispatch(setClickChecklistId(checklistId));
     dispatch(setTriggerDelChecklist(true));
   };
@@ -43,8 +43,10 @@ export default function ChecklistModal({
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
-    } else if (option.name == "Assign to") {
+    } else if (option.name == "Assign to" || option.name == "Unassign") {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
+      dispatch(setClickChecklistId(checklistId));
+      dispatch(setClickChecklistItemId(checklistItemId));
     }
   };
   return (
