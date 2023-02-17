@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import { useGetHubChildren } from '../../../../../features/hubs/hubService';
 import TaskListSections from './items/ItemsHubData/TaskListSections';
+// ? uncomment this to show previous pilot
 // import Pilot from "../../../pilot";
 import WalletSection from './items/itemsWalletData/WalletSection';
 import ListSection from './items/itemsListData/ListSection';

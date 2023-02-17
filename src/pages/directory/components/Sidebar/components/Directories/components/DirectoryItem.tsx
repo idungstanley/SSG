@@ -58,24 +58,3 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
     </div>
   );
 }
-
-//       {/* templates */}
-//       {/* <div
-//                 className={cl(
-//                   'ml-6',
-//                   directory.templates.length > 0 ? 'mt-2' : ''
-//                 )}
-//               > */}
-//       {/* {directory.templates.map((template) => (
-//                   <div key={template.id} className="flex gap-2">
-//                     <Squares2X2Icon className="h-5 w-5 cursor-pointer" />
-//                     <p>{template.name}</p>
-//                   </div>
-//                 ))} */}
-//       {/* </div>
-//             </div>
-//           ))
-//         : null} */}
-//     </div>
-//   );
-// }

@@ -53,7 +53,7 @@ export default function Directories() {
   useEffect(() => {
     if (data) {
       // add children key to each directory
-      const stringifiedData = data.map(i => ({
+      const stringifiedData = data.map((i) => ({
         id: i.id,
         name: i.name,
         parent_id: i.parent_id,

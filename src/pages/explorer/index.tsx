@@ -11,7 +11,7 @@ export default function ExplorerPage() {
   return (
     <>
       <DragContext>
-        <main className="w-full h-full">
+        <main className="flex flex-col w-full h-full">
           <Header />
 
           <div className="flex w-full h-full">
