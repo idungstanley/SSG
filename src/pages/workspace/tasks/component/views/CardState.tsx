@@ -2,7 +2,7 @@ import React from "react";
 import { IoPeopleOutline } from "react-icons/io5";
 import { MdOutlineRadioButtonUnchecked } from "react-icons/md";
 import { RiFootballFill } from "react-icons/ri";
-import { TbCheck, TbFlag3 } from "react-icons/tb";
+import { TbCheck } from "react-icons/tb";
 import { TfiCalendar } from "react-icons/tfi";
 import { VscEllipsis } from "react-icons/vsc";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import {
   ImyTaskData,
   setCurrentTaskPriorityId,
 } from "../../../../../features/task/taskSlice";
+import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -29,9 +30,9 @@ export default function CardState({ task }: TaskDataProps) {
         </span>
         <span
           className=" text-xl cursor-pointer"
-          onClick={() => handleTaskPriority(task.id as string)} >
-          <TbFlag3 />
-          {/* <div> {groupTags(taskColField as tagItem[])} </div> */}
+          onClick={() => handleTaskPriority(task.id as string)}
+        >
+          <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
         <span className="  text-xl">
           <IoPeopleOutline />
