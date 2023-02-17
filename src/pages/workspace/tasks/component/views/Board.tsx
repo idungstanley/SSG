@@ -132,11 +132,11 @@ function Board() {
                 </span>
               </div>
               <div>
-                <div className="  text-xs opacity-0 group-hover:opacity-100">
+                <div className=" text-gray-300  text-xl opacity-0 group-hover:opacity-100">
                   <TbSubtask />
                 </div>
               </div>
-              {icons == task.id && <CardState />}
+              {icons == task.id && <CardState task={task} />}
               <span>
                 <p className="uppercase mt-3 color-gray text-xs font-bold">
                   + add subtask

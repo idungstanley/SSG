@@ -239,8 +239,7 @@ export default function TaskData({ task }: TaskDataProps) {
         return (
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: '-4px', marginLeft: '-30px' }}
-          >
+            style={{ marginTop: '-4px', marginLeft: '-30px' }}>
             {taskColField}
           </div>
         );
