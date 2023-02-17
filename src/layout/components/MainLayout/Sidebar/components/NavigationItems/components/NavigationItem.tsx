@@ -34,7 +34,7 @@ export default function NavigationItem({
           ? 'bg-green-100 hover:bg-green-200'
           : 'hover:bg-gray-100',
         !showSidebar ? 'justify-center' : 'gap-2 items-center',
-        'relative flex cursor-pointer p-2 w-full hover:text-gray-500 '
+        'relative flex cursor-pointer p-2 w-full'
       )}
     >
       {item.href === pathname ? (

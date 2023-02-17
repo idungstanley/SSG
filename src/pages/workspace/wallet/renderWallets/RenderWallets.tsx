@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 // import { getListsListService } from '../../../../features/list/listService';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
+// ? uncomment this to show previous pilot
 // import Pilot from '../../pilot';
 import { getWalletServices } from '../../../../features/wallet/walletService';
 import WalletSection from '../../hubs/components/renderHubs/items/itemsWalletData/WalletSection';

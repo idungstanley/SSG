@@ -20,7 +20,7 @@ function MainLayout() {
         <div className="flex flex-row w-full h-full overflow-hidden">
           <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
 
-          <div className="flex flex-col flex-grow border-2">
+          <div className="flex flex-col flex-grow">
             <Header />
 
             <div className="flex flex-row w-full h-full">

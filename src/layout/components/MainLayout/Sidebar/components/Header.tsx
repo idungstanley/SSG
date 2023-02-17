@@ -82,19 +82,15 @@ export default function Header() {
   const { pathname } = useLocation();
   const headerData = config.find((i) => `${i.path}` === pathname);
 
-  return (
-    <div className="top-0 flex bg-white shadow">
-      {headerData ? (
-        <div className="flex-1" style={{ height: '60px' }}>
-          <Nav
-            navName={headerData.title}
-            newd={headerData.newd}
-            Cleared={headerData.Cleared}
-            buttonLabel={headerData.buttonLabel}
-            Assigned={headerData.Assigned}
-          />
-        </div>
-      ) : null}
+  return headerData ? (
+    <div className="flex-1 border-b" style={{ height: '60px' }}>
+      <Nav
+        navName={headerData.title}
+        newd={headerData.newd}
+        Cleared={headerData.Cleared}
+        buttonLabel={headerData.buttonLabel}
+        Assigned={headerData.Assigned}
+      />
     </div>
-  );
+  ) : null;
 }
