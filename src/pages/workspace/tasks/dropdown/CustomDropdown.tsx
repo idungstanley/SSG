@@ -50,7 +50,9 @@ export default function CustomDropdown({
   }, []);
   return (
     <div className="h-auto" ref={ref}>
-      <div className="overflow-y-auto h-auto border-gray-200 border absolute top-24 z-50 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white">
+      <div className="overflow-y-auto h-auto border-gray-200 border absolute top-24 bottom-36 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white"
+      style={{zIndex: '999'}}
+      >
         <button type="button" className="p-2 font-semibold">
           {title}
         </button>

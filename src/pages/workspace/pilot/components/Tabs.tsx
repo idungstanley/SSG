@@ -31,7 +31,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   rectSortingStrategy,
@@ -44,47 +44,47 @@ import Dropdown from '../../../../components/Dropdown';
 export const pilotOptions = [
   {
     id: 1,
-    name: "Connect",
+    name: 'Connect',
     source: communicationIcon,
     subTab: <CommunicationSubTab />,
     isVisible: false,
   },
   {
     id: 2,
-    name: "Logs",
+    name: 'Logs',
     source: logsIcon,
     isVisible: true,
   },
   {
     id: 3,
-    name: "Permissions",
+    name: 'Permissions',
     source: permissionIcon,
     isVisible: false,
   },
 
   {
     id: 4,
-    name: "Details",
+    name: 'Details',
     source: detailIcon,
     subTab: <DetailsSubTab />,
     isVisible: false,
   },
   {
     id: 5,
-    name: "Automation",
+    name: 'Automation',
     source: automationIcon,
     isVisible: false,
   },
   {
     id: 6,
-    name: "TimeClock",
+    name: 'TimeClock',
     source: timeclockIcon,
     subTab: <TimeSubTab />,
     isVisible: true,
   },
   {
     id: 7,
-    name: "Checklist",
+    name: 'Checklist',
     source: checklistIcon,
     subTab: <ChecklistSubtab />,
     isVisible: true,
@@ -194,11 +194,11 @@ function Tab() {
       <div
         className={`gap-4 pb-1`}
         aria-label="Tabs"
-        style={showPilot ? { width: "400px" } : { width: "48px" }}
+        style={showPilot ? { width: '400px' } : { width: '48px' }}
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
-            showPilot && "pr-2"
+            showPilot && 'pr-2'
           }`}
         >
           <div className="flex items-center">
@@ -219,7 +219,7 @@ function Tab() {
           </div>
           <div
             className={`flex items-center h-fit  ${
-              showPilot ? "flex-row py-2 space-x-1" : "flex-col pr-4"
+              showPilot ? 'flex-row py-2 space-x-1' : 'flex-col pr-4'
             }`}
           >
             <img
@@ -228,8 +228,8 @@ function Tab() {
               onClick={() => handleShowPilot()}
               className={`cursor-pointer w-3 h-3 ${
                 showPilot
-                  ? "translate-x-4 skew-y-3"
-                  : "transform -rotate-180 mb-1"
+                  ? 'translate-x-4 skew-y-3'
+                  : 'transform -rotate-180 mb-1'
               }`}
             />
             <Dropdown items={dropdownOptions} />
@@ -238,7 +238,7 @@ function Tab() {
         <HotKeys />
         <div
           className={`flex flex-wrap relative divide-y divide-x ${
-            showPilotIconView ? "flex-row" : "flex-col"
+            showPilotIconView ? 'flex-row' : 'flex-col'
           }`}
         >
           <SortableContext strategy={rectSortingStrategy} items={items}>
@@ -257,7 +257,7 @@ function Tab() {
           {showPilot && (
             <span
               className={`z-10 text-xs flex w-8 justify-center items-center ${
-                !showPilotIconView && "absolute top-2 right-0"
+                !showPilotIconView && 'absolute top-2 right-0'
               }`}
             >
               <img
@@ -266,8 +266,8 @@ function Tab() {
                 onClick={() => handleShowPilotIconView()}
                 className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
                   showPilotIconView
-                    ? "text-green-500 transform -rotate-180"
-                    : ""
+                    ? 'text-green-500 transform -rotate-180'
+                    : ''
                 }`}
               />
             </span>
