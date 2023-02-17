@@ -28,6 +28,7 @@ export default function Checklists() {
       cheklistOptions.find((option) => option.id === activeSubChecklistTabId),
     [activeSubChecklistTabId]
   );
+  console.log(activeSubChecklistTabId);
   return (
     <section className={`flex flex-col h-full`}>
       {showPilot && <ChecklistSubtab />}

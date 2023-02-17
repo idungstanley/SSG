@@ -22,13 +22,13 @@ import {
 export const DetailOptions = [
   {
     id: 1,
-    name: 'Properties',
+    name: "Properties",
     source: propertiesIcon,
     isVisible: false,
   },
   {
     id: 2,
-    name: 'attachments',
+    name: "attachments",
     icon: <MdAddToPhotos />,
     isVisible: false,
   },
@@ -70,7 +70,7 @@ export default function DetailsSubTab() {
 
           localStorage.setItem(
             "subTab",
-            JSON.stringify([...sortArray.map((i: {id: string}) => i.id)])
+            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
           );
 
           return sortArray;

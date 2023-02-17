@@ -53,6 +53,7 @@ export default function SubtabDrag({
     } else if (name === "details") {
       dispatch(setActiveSubDetailsTabId(id));
     } else if (name === "Checklist") {
+      console.log(id);
       dispatch(setActiveSubChecklistTabId(id));
     }
   };

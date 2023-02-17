@@ -22,6 +22,7 @@ export default function Details() {
     () => DetailOptions.find((option) => option.id === activeSubDetailsTabId),
     [activeSubDetailsTabId]
   );
+  console.log(activeSubDetailsTabId);
   return (
     <section className={`flex flex-col h-full`}>
       {showPilot && <DetailsSubTab />}
