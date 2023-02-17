@@ -91,7 +91,7 @@ function Board() {
                 task {">"} lists {">"} stanlists
               </p>
               <div className="flex items-center justify-between mt-2">
-                <h3 className="text-sm  font-bold">{task.name}</h3>
+                <h3 className="text-sm capitalize  font-bold">{task.name}</h3>
                 <span>
                   {task.assignees &&
                   (
@@ -102,25 +102,31 @@ function Board() {
                     }>
                   ).length == 0 ? (
                     <>
-                      <UserAddOutlined
-                        className=" text-gray-400  cursor-pointer "
-                        aria-hidden="true"
-                        onClick={() => handleAssigneeModal(task.id)}
-                      />
-                      <span className="absolute shadow-2xl  z-30  ">
-                        {toggleAssignCurrentTaskId == task?.id ? (
-                          <AssignTask />
-                        ) : null}
-                      </span>
+                      <div onClick={() => handleAssigneeModal(task.id)}>
+                        <UserAddOutlined
+                          className=" text-gray-400  cursor-pointer "
+                          aria-hidden="true"
+                        />
+                        <span className="absolute shadow-2xl  z-30  ">
+                          {toggleAssignCurrentTaskId == task?.id ? (
+                            <AssignTask />
+                          ) : null}
+                        </span>
+                      </div>
                     </>
                   ) : (
                     <>
-                      {groupAssignee(task.assignees)}
-                      <span className="absolute shadow-2xl  z-30  ">
-                        {toggleAssignCurrentTaskId == task?.id ? (
-                          <AssignTask />
-                        ) : null}
-                      </span>
+                      <div
+                        onClick={() => handleAssigneeModal(task.id)}
+                        className="cursor-pointer flex "
+                      >
+                        {groupAssignee(task.assignees)}
+                        <span className="absolute shadow-2xl  z-30  ">
+                          {toggleAssignCurrentTaskId == task?.id ? (
+                            <AssignTask />
+                          ) : null}
+                        </span>
+                      </div>
                     </>
                   )}
                 </span>
