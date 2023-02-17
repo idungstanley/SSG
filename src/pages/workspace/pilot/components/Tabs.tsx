@@ -99,7 +99,7 @@ function Tab() {
     showRemoveHotKeyDropdown,
     showAddHotKeyDropdown,
     activeItemType,
-  } = useAppSelector((state) => state.workspace);
+  } = useAppSelector(state => state.workspace);
 
   const handleShowPilot = () => {
     if (showPilot) {

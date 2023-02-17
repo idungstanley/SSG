@@ -8,7 +8,8 @@ import {
 
 export interface IColumn {
   name: string;
-  id: number;
+  id?: number;
+  index?: number
   label?: string;
   source?: string;
   subTab?: JSX.Element;
