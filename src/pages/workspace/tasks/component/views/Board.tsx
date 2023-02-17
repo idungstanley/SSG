@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../../../../app/hooks";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { VscEllipsis } from "react-icons/vsc";
@@ -9,11 +9,12 @@ import {
   ImyTaskData,
   setToggleAssignCurrentTaskId,
 } from "../../../../../features/task/taskSlice";
+import { TbSubtask } from "react-icons/tb";
+import CardState from "./CardState";
 
 interface TaskDataProps {
   task: ImyTaskData;
 }
-
 function Board({ task }: TaskDataProps) {
   const dispatch = useDispatch();
   const { myTaskData } = useAppSelector((state) => state.task);
@@ -30,9 +31,28 @@ function Board({ task }: TaskDataProps) {
     // }
   };
 
+  // const groupAssignee = (
+  //   data: [{ id: string; initials: string; colour: string }] | undefined
+  // ) => {
+  //   return data?.map((newData) => (
+  //     <div key={newData.id} className="">
+  //       <span key={newData.id}>
+  //         <AvatarWithInitials
+  //           initials={newData.initials}
+  //           backgroundColour={newData.colour}
+  //           height="h-5"
+  //           width="w-5"
+  //         />
+  //       </span>
+  //     </div>
+  //   ));
+  // };
+
+  const [icons, setIcons] = useState<boolean>(false);
+
   return (
     <div className=" m-auto fgoverflow ">
-      <div className="flex  gap-5  ">
+      <div className="flex  gap-7  ">
         {myTaskData.map((column) => (
           <div
             key={column.id}
@@ -63,7 +83,11 @@ function Board({ task }: TaskDataProps) {
                 </div>
               </div>
             </div>
-            <div className=" p-3  bg-white h-36 w-64 shadow-md mt-10  rounded ">
+            <div
+              className=" group p-3  bg-white w-64 shadow-md mt-10  rounded "
+              onMouseEnter={() => setIcons(true)}
+              onMouseLeave={() => setIcons(false)}
+            >
               <p className="text-xs">
                 task {">"} lists {">"} stanlists
               </p>
@@ -71,12 +95,19 @@ function Board({ task }: TaskDataProps) {
                 <h3 className="text-sm  font-bold">{column.name}</h3>
                 <span>
                   <UserAddOutlined
-                    className=" text-gray-400 text-xl cursor-pointer "
+                    className=" text-gray-400  cursor-pointer "
                     aria-hidden="true"
                     onClick={() => handleAssigneeModal(task.id)}
+                    // {groupAssignee(task.assignees)}
                   />
                 </span>
               </div>
+              <div>
+                <div className="  text-xs opacity-0 group-hover:opacity-100">
+                  <TbSubtask />
+                </div>
+              </div>
+              {icons && <CardState />}
               <span>
                 <p className="uppercase mt-3 color-gray text-xs font-bold">
                   + add subtask
