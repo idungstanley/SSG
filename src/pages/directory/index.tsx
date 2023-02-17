@@ -60,26 +60,30 @@ function Directory() {
           </nav>
         </div>
 
-        <div className="flex flex-col items-start py-2 mr-96">
+        <div className="flex flex-col items-start py-2 w-full h-full">
           {/* status checking */}
           {templatesStatus === 'loading' ? (
             <div className="mx-auto w-6 mt-5 justify-center">
               <Spinner size={8} color="#0F70B7" />
             </div>
           ) : templatesStatus === 'error' ? (
-            <FullScreenMessage
-              title="Oops, an error occurred :("
-              description="Please try again later."
-            />
+            <div className="w-full h-full">
+              <FullScreenMessage
+                title="Oops, an error occurred :("
+                description="Please try again later."
+              />
+            </div>
           ) : null}
 
           {/* templates list */}
           {templates ? (
             !templates.length ? (
-              <FullScreenMessage
-                title="No records yet :("
-                description="Create one."
-              />
+              <div className="w-full h-full">
+                <FullScreenMessage
+                  title="No records yet :("
+                  description="Create one."
+                />
+              </div>
             ) : (
               <div className="flex gap-3 flex-col">
                 {templates.map((template) => (

@@ -33,7 +33,6 @@ import TeamMemberAcceptInvite from './pages/settings/teamMemberGroupSettings/Tea
 import SharedPage from './pages/shared';
 
 // At workspace
-import Index from './pages/workspace/Index';
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Community from './pages/workspace/community';

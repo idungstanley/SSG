@@ -25,13 +25,15 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
   return (
     <div
       className={cl(
-        'group hover:bg-gray-100 flex w-full p-1 justify-between items-center',
-        directoryId === id ? 'bg-green-200' : ''
+        'group flex w-full p-1 justify-between items-center',
+        directoryId === id
+          ? 'hover:bg-green-200 bg-green-100'
+          : 'hover:bg-gray-100'
       )}
     >
       <div
         onClick={() => onClickDirectory(id)}
-        className="flex items-center gap-2 cursor-pointer"
+        className="flex truncate items-center gap-2 cursor-pointer"
       >
         {directoryId === id ? (
           <VscTriangleDown
@@ -45,7 +47,9 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
           />
         )}
         <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
-        <p title={name}>{name}</p>
+        <p className="truncate" title={name}>
+          {name}
+        </p>
       </div>
 
       <span className="opacity-0 group-hover:opacity-100">
