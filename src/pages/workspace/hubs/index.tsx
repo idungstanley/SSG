@@ -26,8 +26,8 @@ function Hubs() {
 
   const configForDropdown = [
     {
-      label: 'Folder',
-      icon: <CubeTransparentIcon className="h-5 w-5" aria-hidden="true" />,
+      label: 'Hub',
+      icon: <img src={hubIcon} alt="Hub Icon" className="h-4 w-4" />,
       onClick: () => dispatch(setCreateHubSlideOverVisibility(true)),
     },
   ];
@@ -43,28 +43,28 @@ function Hubs() {
           </div>
         }
       />
-      <div
-        className={`${
-          showSidebar ? 'pl-4' : 'pl-3'
-        } hover:bg-gray-100 flex justify-between items-center`}
-      >
-        <div className="flex items-center content-center self-center py-2">
-          <img
-            src={everythingIcon}
-            alt="Hub Icon"
-            className={`${showSidebar ? 'h-4 mr-4' : 'h-6 w-6'} `}
+      {showSidebar ? (
+        <>
+          <div className="pl-4 hover:bg-gray-100 flex justify-between items-center">
+            <div className="flex items-center content-center self-center py-2">
+              <img
+                src={everythingIcon}
+                alt="Hub Icon"
+                className="h-4 mr-4"
+              />
+              <p className="block tracking-wider capitalize truncate text-xs">
+                Everything
+              </p>
+            </div>
+          </div>
+
+          <ItemsListInSidebar
+            items={data?.data.hubs}
+            status={status}
+            type="hub"
           />
-          <p
-            className={`${
-              showSidebar ? 'block' : 'hidden'
-            } tracking-wider capitalize truncate`}
-            style={{ fontSize: '12px' }}
-          >
-            Everything
-          </p>
-        </div>
-      </div>
-      <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
+        </>
+      ) : null}
 
       <Modal />
       <SubHubModal />

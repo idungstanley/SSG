@@ -109,25 +109,18 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   );
 
   return (
-    <div ref={sidebarRef} className="flex gap-5 text-center relative">
+    <aside ref={sidebarRef} className="flex gap-5 text-center relative">
       {/* show / hide sidebar icon */}
       <Toggle />
 
       {/* sidebar */}
-      {showSidebar ? (
-        <div
-          className="h-full relative flex flex-col border-r border-gray-500 px-1 gap-2"
-          style={style}
-        >
-          <FullSidebar />
-          <ResizeBorder onMouseDown={onMouseDown} />
-        </div>
-      ) : (
-        <div className="h-full relative flex flex-col border-r border-gray-500 px-1 gap-2">
-          <MinSidebar />
-          <ResizeBorder onMouseDown={onMouseDown} />
-        </div>
-      )}
-    </div>
+      <section
+        className="h-full relative flex flex-col border-r border-gray-500 gap-2"
+        style={showSidebar ? style : undefined}
+      >
+        {showSidebar ? <FullSidebar /> : <MinSidebar />}
+        <ResizeBorder onMouseDown={onMouseDown} />
+      </section>
+    </aside>
   );
 }

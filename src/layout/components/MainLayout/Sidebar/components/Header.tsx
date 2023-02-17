@@ -13,7 +13,7 @@ interface configData {
 
 const config: configData[] = [
   {
-    path: '',
+    path: '/',
     title: 'Home',
     newd: null,
     Cleared: null,

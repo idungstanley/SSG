@@ -19,7 +19,7 @@ export default function Header() {
     <div
       className={cl(
         'flex py-2 border-b items-center gap-1',
-        !showSidebar ? 'flex-col pb-9' : 'pr-6'
+        !showSidebar ? 'flex-col pb-9' : 'pr-7'
       )}
     >
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
