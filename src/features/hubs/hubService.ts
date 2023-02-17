@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
+import { itemType } from '../../types';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
 import { closeMenu, getHub } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
@@ -178,8 +179,8 @@ export const ArchiveHubService = (hub: {
 
 //get hub details
 export const UseGetHubDetails = (query: {
-  activeItemId: string | null;
-  activeItemType: string | null;
+  activeItemId?: string | null;
+  activeItemType?: string | itemType;
 }) => {
   return useQuery(
     ['hubs', query],

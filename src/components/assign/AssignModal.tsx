@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import { AiOutlineUserAdd } from 'react-icons/ai';
@@ -63,7 +63,7 @@ export default function AssignModal() {
                 {({ active }) => (
                   <button
                     type="button"
-                    className={classNames(
+                    className={cl(
                       active ? 'bg-gray-200' : '',
                       'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                     )}

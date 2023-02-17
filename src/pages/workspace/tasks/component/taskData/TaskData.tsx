@@ -15,7 +15,6 @@ import {
 } from '../../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { MdDragIndicator } from 'react-icons/md';
-import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useAppSelector } from '../../../../../app/hooks';
 // import { useNavigate } from 'react-router-dom';
 import AssignTask from '../../assignTask/AssignTask';
@@ -33,6 +32,7 @@ import TagModal from '../../../../../components/tags/TagModal';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -216,7 +216,7 @@ export default function TaskData({ task }: TaskDataProps) {
     ) {
       return (
         <>
-          <UserAddOutlined
+          <UserPlusIcon
             className=" ml-2 text-gray-400 text-xl cursor-pointer "
             aria-hidden="true"
             onClick={() => handleAssigneeModal(task.id)}
@@ -343,7 +343,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusOutlined
+                <PlusIcon
                   className="  w-3  text-gray-500   "
                   aria-hidden="true"
                   onClick={() => handleCreateSubTask(task.id as string)}
