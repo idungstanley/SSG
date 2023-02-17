@@ -23,7 +23,10 @@ function MainLayout() {
           <div className="flex flex-col flex-grow border-2">
             <Header />
 
-            <Outlet />
+            <div className="flex flex-row w-full h-full">
+              <Outlet />
+            </div>
+            {/* <Outlet /> */}
           </div>
         </div>
       </div>

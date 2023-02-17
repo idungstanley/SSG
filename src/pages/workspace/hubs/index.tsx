@@ -8,7 +8,6 @@ import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import hubIcon from '../../../assets/branding/hub.png';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { CubeTransparentIcon } from '@heroicons/react/24/outline';
 import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';

@@ -7,7 +7,7 @@ interface ToolTipProps {
 
 export default function ToolTip({ children, tooltip }: ToolTipProps) {
   return (
-    <div data-tooltip={tooltip} className="tooltip" style={{ zIndex: 100 }}>
+    <div data-tooltip={tooltip} className="tooltip" style={{ zIndex: 999 }}>
       {children}
     </div>
   );
