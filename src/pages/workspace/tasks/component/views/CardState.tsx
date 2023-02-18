@@ -32,7 +32,6 @@ export default function CardState({ task }: TaskDataProps) {
   //   );
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
-    console.log("great");
 
     //     const groupTags = (arr: tagItem[]) => {
     //       return arr.map((item: tagItem) => {

@@ -10,13 +10,15 @@ import { TbSubtask } from "react-icons/tb";
 import CardState from "./CardState";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
+// import Breadcrumb from "../../../../settings/components/Breadcrumb";
+// import { HomeIcon } from "@heroicons/react/24/outline";
+import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
 
 function Board() {
   const dispatch = useDispatch();
   const { myTaskData, toggleAssignCurrentTaskId } = useAppSelector(
     (state) => state.task
   );
-  console.log(myTaskData);
 
   const handleAssigneeModal = (id: string) => {
     console.log(id);
@@ -56,7 +58,7 @@ function Board() {
   // };
 
   return (
-    <div className=" fgoverflow  ">
+    <div className=" m-auto fgoverflow  ">
       <div className="flex  gap-7  ">
         {myTaskData.map((task) => (
           <div key={task.id} className=" rounded   " style={{ width: "auto" }}>
@@ -88,7 +90,8 @@ function Board() {
               onMouseLeave={() => setIcons(task.id)}
             >
               <p className="text-xs">
-                task {">"} lists {">"} stanlists
+                {/* task {">"} lists {">"} stanlists */}
+                {task.name}{}
               </p>
               <div className="flex items-center justify-between mt-2">
                 <h3 className="text-sm capitalize  font-bold">{task.name}</h3>
@@ -142,6 +145,8 @@ function Board() {
                   + add subtask
                 </p>
               </span>
+              {/* <Breadcrumb pages={} rootIcon={<HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />} rootIconHref="/explorer" /> */}
+              <BreadcrumbSection />
             </div>
           </div>
         ))}
