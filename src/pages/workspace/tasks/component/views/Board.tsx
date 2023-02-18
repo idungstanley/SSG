@@ -56,7 +56,7 @@ function Board() {
   // };
 
   return (
-    <div className=" m-auto fgoverflow ">
+    <div className=" fgoverflow  ">
       <div className="flex  gap-7  ">
         {myTaskData.map((task) => (
           <div key={task.id} className=" rounded   " style={{ width: "auto" }}>

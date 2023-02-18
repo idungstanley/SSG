@@ -56,7 +56,7 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            {boardView && <Board />}
+            <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}
 
             {listView &&
