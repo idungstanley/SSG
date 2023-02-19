@@ -28,7 +28,7 @@ export default function HotKeys() {
   ];
   console.log(hotKeysTabs);
 
-  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot } =
+  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot, activeHotKeyTabId } =
     useAppSelector((state) => state.workspace);
 
   const allHotKeysInfo = hotKeysTabs.map((key, index) => {
@@ -91,9 +91,15 @@ export default function HotKeys() {
     localStorage.setItem('HotKeys', JSON.stringify(filteredKeys));
   };
 
-  const handleClick = (id: number | undefined) => {
+  const handleClick = (id: number | undefined, name: string) => {
+    const findParentTabs = pilotOptions.find(keys=> keys.name === name);
+    if(findParentTabs){
+    dispatch(setActiveTabId(findParentTabs.id));
+    dispatch(setActiveHotKeyId(id));
+    }else{
     dispatch(setActiveTabId(0));
     dispatch(setActiveHotKeyId(id));
+    }
   };
 
   return (
@@ -107,17 +113,19 @@ export default function HotKeys() {
           {removeHotkeys?.map((item: IColumn) => (
             <div key={item.index}>
               <div
-                className="flex w-4 h-4 text-sm cursor-pointer"
-                onClick={() => handleClick(item.index)}
+                className={`${showPilot && 'p-2'} ${item.index === activeHotKeyTabId && 'bg-green-500 rounded'}`}
+                onClick={() => handleClick(item.index, item.name)}
               >
+              <span className="flex w-4 h-4 text-sm cursor-pointer">
                 {item.icon ? (
                   item.icon
-                ) : (
-                  <img
+                  ) : (
+                    <img
                     src={(item as IColumn).source}
                     alt={item.name + ' icon'}
-                  />
-                )}
+                    />
+                    )}
+                </span>
               </div>
             </div>
           ))}

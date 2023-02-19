@@ -113,18 +113,16 @@ export default function Pilot() {
             : 'flex-col'
         }`}
         ref={hoverRef}
-        style={{ minHeight: '0', maxHeight: '100vh' }}
+        style={{ minHeight: '0', maxHeight: '100%' }}
       >
         {/* navigation */}
         <Tab />
         {/* main section depends of active tab */}
-        <div>
           {selectedSection
             ? selectedSection.element
             : selectedHotKeySection
             ? selectedHotKeySection.element
             : null}
-        </div>
       </div>
     </div>
   );

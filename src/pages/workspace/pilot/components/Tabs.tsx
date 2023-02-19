@@ -193,7 +193,7 @@ function Tab() {
       <div
         className={`gap-4 pb-1 w-full`}
         aria-label="Tabs"
-        style={showPilot ? { width: '500px' } : { width: '48px' }}
+        style={showPilot ? { width: '650px' } : { width: '48px' }}
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
