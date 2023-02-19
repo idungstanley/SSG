@@ -10,7 +10,7 @@ import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
 import { useDispatch } from 'react-redux';
-import TimeClock from './components/timeClock/subtabs/TimeClock';
+import TimeClock, { TimeClockOptions } from './components/timeClock/subtabs/TimeClock';
 import { communicationOptions } from './components/communication/Communication';
 import { DetailOptions } from './components/details/Details';
 import {
@@ -65,6 +65,7 @@ export default function Pilot() {
     ...DetailOptions,
     ...communicationOptions,
     ...cheklistOptions,
+    ...TimeClockOptions,
   ];
 
   const allHotKeysInfo = hotKeysSections.map((key, index) => {

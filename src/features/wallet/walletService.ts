@@ -154,8 +154,8 @@ export const UseArchiveWalletService = (wallet: {
 
 //get wallet details
 export const UseGetWalletDetails = (query: {
-  activeItemId: string | null;
-  activeItemType: string | null;
+  activeItemId?: string | null;
+  activeItemType?: string | null;
 }) => {
   return useQuery(
     ['hubs', query],

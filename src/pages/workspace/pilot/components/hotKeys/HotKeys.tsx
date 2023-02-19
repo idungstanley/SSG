@@ -11,25 +11,31 @@ import CustomDropdown, {
 import { communicationOptions } from '../communication/CommunicationSubTab';
 import { DetailOptions } from '../details/DetailsSubTab';
 import { ChecklistOptions } from '../checklist/subtabs/ChecklistSubtab';
+import { TimeClockOptions } from '../timeClock/subtabs/TimeSubTab';
 
 export default function HotKeys() {
   const dispatch = useDispatch();
   const [items, setItems] = useState<IColumn[] | null | undefined>(null);
   const [hotKeys, setHotKeys] = useState<IColumn[] | null | undefined>(null);
+
   const hotKeysTabs = [
     ...DetailOptions,
     ...communicationOptions,
     ...ChecklistOptions,
+    ...TimeClockOptions,
   ];
+  console.log(hotKeysTabs);
+
   const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot } =
     useAppSelector((state) => state.workspace);
+
   const allHotKeysInfo = hotKeysTabs.map((key, index) => {
     return {
       ...key,
       index: index + 1,
     };
   });
-  console.log(allHotKeysInfo);
+
   const newHotKey = hotKeysTabs.map(({ name, isVisible }, index) => {
     return {
       name,

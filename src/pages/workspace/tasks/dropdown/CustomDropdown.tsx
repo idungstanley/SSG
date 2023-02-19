@@ -9,7 +9,7 @@ import {
 export interface IColumn {
   name: string;
   id?: number;
-  index?: number
+  index?: number;
   label?: string;
   source?: string;
   subTab?: JSX.Element;
@@ -50,19 +50,22 @@ export default function CustomDropdown({
     };
   }, []);
   return (
-    <div className="h-auto" ref={ref}>
-      <div className="overflow-y-auto h-auto border-gray-200 border absolute top-24 bottom-36 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white"
-      style={{zIndex: '999'}}
+    <div className="h-auto p-0.5" ref={ref}>
+      <div
+        className="overflow-y-auto h-fit border-gray-200 border absolute top-24 bottom-36 right-12 mt-3 w-56 rounded shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white px-1"
+        style={{ zIndex: '999' }}
       >
         <button type="button" className="p-2 font-semibold">
           {title}
         </button>
-        {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
+        {title && (
+          <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700 pb-0.5 mb-1" />
+        )}
         {listItems?.map((listItem) => (
           <div
             key={listItem.name}
-            className="hover:bg-gray-300 w-full"
-            onClick={() => handleClick(listItem.id)}
+            className="hover:bg-gray-300 w-full rounded"
+            onClick={() => handleClick(listItem.index)}
           >
             <button
               type="button"
@@ -87,7 +90,9 @@ export default function CustomDropdown({
           </div>
         ))}
         {listItems?.length === 0 && (
-          <div className="text-sm p-2 font-medium">There is no Item on this list. . .</div>
+          <div className="text-sm p-2 font-medium">
+            There is no Item on this list. . .
+          </div>
         )}
       </div>
     </div>

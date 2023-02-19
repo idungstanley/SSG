@@ -1,27 +1,29 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { MdDragIndicator } from 'react-icons/md';
+import { MdDragIndicator, MdOutlineMoreTime } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import inandoutIcon from '../../../../../../assets/branding/clock-in-and-out.png';
-import clockLogsIcon from '../../../../../../assets/branding/clock-logs.png';
-import clockPreferenceIcon from '../../../../../../assets/branding/clock-preferences.png';
 import { setActiveSubTimeClockTabId } from '../../../../../../features/workspace/workspaceSlice';
+import { RiTimerFlashLine } from 'react-icons/ri';
+import { FaBusinessTime } from 'react-icons/fa';
 
-const TimeClockOptions = [
+export const TimeClockOptions = [
   {
     id: 0,
     name: 'In & Out',
-    source: inandoutIcon,
+    icon: <RiTimerFlashLine />,
+    isVisible: false,
   },
   {
     id: 1,
-    label: 'Clock Logs',
-    source: clockLogsIcon,
+    name: 'Clock Logs',
+    icon: <FaBusinessTime />,
+    isVisible: false,
   },
   {
     id: 2,
-    label: 'Clock Preference',
-    source: clockPreferenceIcon,
+    name: 'Clock Preference',
+    icon: <MdOutlineMoreTime />,
+    isVisible: false,
   },
 ];
 export default function TimeSubTab() {
@@ -69,10 +71,10 @@ export default function TimeSubTab() {
                 className={`${!showPilot && 'text-xs'} ${
                   item.id === activeSubTimeClockTabId &&
                   !showPilot &&
-                  'bg-green-500 p-2 rounded'
+                  'bg-green-500 p-2 rounded w-3 h-3'
                 }`}
               >
-                {<img src={item.source} alt="Hub Icon" className="w-3 h-3" />}
+                {item.icon}
               </span>
             </div>
           </section>

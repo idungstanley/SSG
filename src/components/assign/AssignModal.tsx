@@ -24,8 +24,6 @@ export default function AssignModal() {
     (state) => state.task
   );
 
-  console.log(toggleAssignCurrentTaskId);
-
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
