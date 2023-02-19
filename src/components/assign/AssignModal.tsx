@@ -1,34 +1,42 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
-import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
-import AvatarWithInitials from '../avatar/AvatarWithInitials';
-import { AiOutlineUserAdd } from 'react-icons/ai';
+import React, { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { classNames } from "../../utils";
+import { useGetTeamMembers } from "../../features/settings/teamMembers/teamMemberService";
+import AvatarWithInitials from "../avatar/AvatarWithInitials";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import {
   UseAssignTaskService,
   getOneTaskServices,
-} from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import { setCurrTeamMemId } from '../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
+} from "../../features/task/taskService";
+import { useAppSelector } from "../../app/hooks";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import {
+  setCurrTeamMemId,
+  setTriggerAsssignTask,
+} from "../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
 
-export default function AssignModal() {
+interface assignModalProps {
+  option: string;
+  item: { id: string };
+}
+
+export default function AssignModal({ item, option }: assignModalProps) {
   const dispatch = useDispatch();
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: "",
   });
 
-  const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
-    (state) => state.task
-  );
+  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
+    useAppSelector((state) => state.task);
 
   console.log(toggleAssignCurrentTaskId);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
+    triggerAsssignTask: triggerAsssignTask,
   });
 
   const { data: getTaskAssignees } = getOneTaskServices({
@@ -65,13 +73,16 @@ export default function AssignModal() {
                   <button
                     type="button"
                     className={classNames(
-                      active ? 'bg-gray-200' : '',
-                      'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
+                      active ? "bg-gray-200" : "",
+                      "flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full"
                     )}
                   >
                     <div
                       className="relative flex items-center cursor-pointer  space-x-2"
-                      onClick={() => dispatch(setCurrTeamMemId(i.id))}
+                      onClick={() => {
+                        dispatch(setCurrTeamMemId(i.id));
+                        dispatch(setTriggerAsssignTask(true));
+                      }}
                     >
                       <AvatarWithInitials
                         initials={i.initials}

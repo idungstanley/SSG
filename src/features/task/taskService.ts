@@ -501,8 +501,7 @@ export const UseAssignTaskService = ({
   triggerAsssignTask: boolean;
 }) => {
   const dispatch = useDispatch();
-  // const queryClient = useQueryClient();
-  // console.log(task_id);
+
   return useQuery(
     ["assign", { team_member_id: team_member_id, task_id: task_id }],
     async () => {

@@ -66,22 +66,12 @@ export default function ChecklistSubtab() {
           const oldIndex = items.indexOf(findActive);
           const newIndex = items.indexOf(findOver);
 
-          const sortArray: (
-            | {
-                id: number;
-                name: string;
-                icon: JSX.Element;
-                isVisible: boolean;
-              }
-            | {
-                id: number;
-                label: string;
-                icon: JSX.Element;
-                name: string;
-                source?: undefined;
-                isVisible: boolean;
-              }
-          )[] = arrayMove(items, oldIndex, newIndex);
+          const sortArray: ({
+            id: number;
+            name: string;
+            icon: JSX.Element;
+            isVisible: boolean;
+          })[] = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
             "checklistdrag",
@@ -106,7 +96,7 @@ export default function ChecklistSubtab() {
               showPilot ? "flex-row" : "flex-col"
             }`}
           >
-            {ChecklistOptions.map((item) => {
+            {items.map((item) => {
               console.log(item);
               return (
                 <SubtabDrag

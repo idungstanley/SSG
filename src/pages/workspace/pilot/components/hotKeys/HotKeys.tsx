@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../app/hooks';
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../app/hooks";
 import {
   setActiveHotKeyId,
   setActiveTabId,
-} from '../../../../../features/workspace/workspaceSlice';
+} from "../../../../../features/workspace/workspaceSlice";
 import CustomDropdown, {
   IColumn,
-} from '../../../tasks/dropdown/CustomDropdown';
-import { communicationOptions } from '../communication/CommunicationSubTab';
-import { DetailOptions } from '../details/DetailsSubTab';
-import { ChecklistOptions } from '../checklist/subtabs/ChecklistSubtab';
+} from "../../../tasks/dropdown/CustomDropdown";
+import { communicationOptions } from "../communication/CommunicationSubTab";
+import { DetailOptions } from "../details/DetailsSubTab";
+import { ChecklistOptions } from "../checklist/subtabs/ChecklistSubtab";
 
 export default function HotKeys() {
   const dispatch = useDispatch();
@@ -21,9 +21,8 @@ export default function HotKeys() {
     ...communicationOptions,
     ...ChecklistOptions,
   ];
-  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot } =
+    useAppSelector((state) => state.workspace);
   const allHotKeysInfo = hotKeysTabs.map((key, index) => {
     return {
       ...key,
@@ -52,7 +51,7 @@ export default function HotKeys() {
   }, [items]);
 
   useEffect(() => {
-    const lsData = localStorage.getItem('HotKeys');
+    const lsData = localStorage.getItem("HotKeys");
     if (lsData) {
       const getKeysStorage = JSON.parse(lsData);
       setItems(getKeysStorage);
@@ -80,7 +79,7 @@ export default function HotKeys() {
       return key;
     });
     setItems(filteredKeys);
-    localStorage.setItem('HotKeys', JSON.stringify(filteredKeys));
+    localStorage.setItem("HotKeys", JSON.stringify(filteredKeys));
   };
 
   const handleClick = (id: number) => {
@@ -93,7 +92,7 @@ export default function HotKeys() {
       {removeHotkeys?.length != 0 ? (
         <div
           className={`border-b border-gray-200 py-2 px-4 flex gap-3 ${
-            showPilot ? 'flex-row' : 'flex-col'
+            showPilot ? "flex-row" : "flex-col"
           }`}
         >
           {removeHotkeys?.map((item: IColumn) => (
@@ -107,7 +106,7 @@ export default function HotKeys() {
                 ) : (
                   <img
                     src={(item as IColumn).source}
-                    alt={item.name + ' icon'}
+                    alt={item.name + " icon"}
                   />
                 )}
               </div>

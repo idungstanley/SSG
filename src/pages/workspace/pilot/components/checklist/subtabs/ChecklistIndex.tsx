@@ -1,36 +1,39 @@
-import React, { useState, FormEvent } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { useAppSelector } from "../../../../../../app/hooks";
 import {
   UseCreateClistService,
   UseDeleteChecklistService,
   UseGetAllClistService,
-  UseUpdateChecklistService,
 } from "../../../../../../features/task/checklist/checklistService";
-import ChecklistItem, { itemProps } from "../components/ChecklistItem";
 import { Spinner } from "../../../../../../common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ChecklistModal from "../components/ChecklistModal";
-import { completeOptions } from "../ModalOptions";
-import { setTriggerChecklistUpdate } from "../../../../../../features/task/checklist/checklistSlice";
-import { BiCaretRight } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
-import { Disclosure } from "@headlessui/react";
+import SingleChecklist from "../SingleChecklist";
+import { itemProps } from "../components/ChecklistItem";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
 
 export default function ChecklistIndex() {
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
-
-  // Local states
-  const [checklistName, setChecklistName] = useState<string>("");
-  const [editing, setEditing] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<string>("");
-  const [checklistId, setChecklistId] = useState<string>("");
-
   // RTK states
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { triggerChecklistUpdate, triggerDelChecklist, clickedChecklistId } =
-    useAppSelector((state) => state.checklist);
+  const { triggerDelChecklist, clickedChecklistId } = useAppSelector(
+    (state) => state.checklist
+  );
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -46,42 +49,72 @@ export default function ChecklistIndex() {
   };
 
   // Get Checklists
-  const { data, status, refetch } = UseGetAllClistService({
+  const { data, status } = UseGetAllClistService({
     task_id: currentTaskIdForPilot,
   });
   const task_checklist = data?.data.task.checklists;
-
-  // Update Checklist
-  const { status: updateStatus } = UseUpdateChecklistService({
-    checklist_id: checklistId,
-    name: checklistName,
-    triggerUpdate: triggerChecklistUpdate,
-  });
-
-  if (updateStatus === "success") {
-    refetch();
-  }
-
-  const editChecklist = (name: string) => {
-    setChecklistName(name);
-    setEditing(true);
-  };
-
-  const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
-    e.preventDefault();
-    dispatch(setTriggerChecklistUpdate(true));
-    setEditing(false);
-    setChecklistId(id);
-  };
 
   UseDeleteChecklistService({
     query: clickedChecklistId,
     delChecklist: triggerDelChecklist,
   });
 
+  const idsFromLS = JSON.parse(localStorage.getItem("checklist") || "[]");
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // const [items, setItems] = useState(
+  //   task_checklist?.sort(
+  //     (a: { id: string }, b: { id: string }) =>
+  //       idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
+  //   )
+  // );
+
+  const [items, setItems] = useState(
+    task_checklist?.sort(
+      (a: { id: string }, b: { id: string }) =>
+        idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
+    ) || []
+  );
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    console.log("Drag ke");
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const findActive = items.find(
+        (i: { id: UniqueIdentifier }) => i.id === active.id
+      );
+      const findOver = items.find(
+        (i: { id: UniqueIdentifier | undefined }) => i.id === over?.id
+      );
+
+      if (findActive && findOver) {
+        setItems((items: [{ id: string }]) => {
+          const oldIndex = items?.indexOf(findActive);
+          const newIndex = items?.indexOf(findOver);
+
+          const sortArray = arrayMove(items, oldIndex, newIndex);
+
+          localStorage.setItem(
+            "checklist",
+            JSON.stringify([...sortArray?.map((i: { id: string }) => i.id)])
+          );
+
+          return sortArray;
+        });
+      }
+    }
+  };
+
   if (status == "loading") {
     <Spinner size={20} color={"blue"} />;
   }
+
   return status == "success" ? (
     <div className="p-1">
       <div className="border-2 flex justify-between items-center text-center py-2">
@@ -94,77 +127,28 @@ export default function ChecklistIndex() {
         </div>
       </div>
       <div>
-        {task_checklist.length > 0
-          ? task_checklist.map(
-              (item: {
-                id: string;
-                name: string;
-                is_done: number;
-                items: itemProps[];
-              }) => {
-                const done = item.items.filter(
-                  (e: { is_done: number }) => e.is_done
-                );
-                return (
-                  <Disclosure key={item.id}>
-                    {({ open }) => (
-                      <div>
-                        <div className="group flex items-center border-2 border-t-0 p-1 hover:text-gray-700 hover:bg-gray-200 cursor-pointer">
-                          <span className="px-5 flex items-center">
-                            <Disclosure.Button>
-                              <div className="mx-1">
-                                <BiCaretRight
-                                  className={
-                                    open ? "rotate-90 transform w-4 h-4" : ""
-                                  }
-                                />
-                              </div>
-                            </Disclosure.Button>
-                            <div>
-                              <form onSubmit={(e) => handleEdit(e, item.id)}>
-                                <input
-                                  type="text"
-                                  value={
-                                    editing && item.id == itemId
-                                      ? checklistName
-                                      : item.name
-                                  }
-                                  onChange={(e) =>
-                                    setChecklistName(e.target.value)
-                                  }
-                                  onFocus={() => {
-                                    editChecklist(item.name);
-                                    setItemId(item.id);
-                                  }}
-                                  className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-9 w-40 rounded"
-                                />
-                              </form>
-                            </div>
-                            <label>
-                              ({done.length}/{item.items.length})
-                            </label>
-                          </span>
-                          <div className="opacity-0 group-hover:opacity-100">
-                            <ChecklistModal
-                              options={completeOptions}
-                              checklistId={item.id}
-                            />
-                          </div>
-                        </div>
-                        <Disclosure.Panel className="ml-6">
-                          <ChecklistItem
-                            Item={item.items}
-                            checklistId={item.id}
-                            refetch={refetch}
-                          />
-                        </Disclosure.Panel>
-                      </div>
-                    )}
-                  </Disclosure>
-                );
-              }
-            )
-          : "This task has no Checklist, click on the plus sign to create one"}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={(e) => handleDragEnd(e)}
+        >
+          <SortableContext strategy={rectSortingStrategy} items={items}>
+            {task_checklist?.length > 0
+              ? task_checklist?.map(
+                  (item: {
+                    id: string;
+                    name: string;
+                    is_done: number;
+                    items: itemProps[];
+                  }) => {
+                    return (
+                      <SingleChecklist key={item.id} item={item} id={item.id} />
+                    );
+                  }
+                )
+              : "This task has no Checklist, click on the plus sign to create one"}
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   ) : null;

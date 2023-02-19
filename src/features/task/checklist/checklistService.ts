@@ -91,6 +91,7 @@ export const UseUpdateChecklistService = ({
   triggerUpdate: boolean;
 }) => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   return useQuery(
     ["checklist", { checklist_id }],
     async () => {
@@ -110,6 +111,7 @@ export const UseUpdateChecklistService = ({
       enabled: checklist_id != null && triggerUpdate !== false,
       onSuccess: () => {
         dispatch(setTriggerChecklistUpdate(false));
+        queryClient.invalidateQueries();
       },
     }
   );
@@ -129,6 +131,7 @@ export const UseUpdateChecklistItemService = ({
   name: string;
 }) => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   return useQuery(
     ["checklist", { itemId, done, name }],
     async () => {
@@ -148,6 +151,7 @@ export const UseUpdateChecklistItemService = ({
     {
       enabled: checklist_id != null && triggerItemUpdate !== false,
       onSuccess: () => {
+        queryClient.invalidateQueries();
         dispatch(setTriggerItemtUpdate(false));
       },
     }

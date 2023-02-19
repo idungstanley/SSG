@@ -29,10 +29,9 @@ export interface itemProps {
 export interface checkListItemProps {
   Item: itemProps[];
   checklistId: string;
-  refetch: () => void;
 }
 
-function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
+function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
@@ -64,7 +63,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     setNewItem("");
   };
 
-  const { status: updateStatus } = UseUpdateChecklistItemService({
+  UseUpdateChecklistItemService({
     checklist_id: checklistId,
     name: editName,
     triggerItemUpdate: triggerItemUpdate,
@@ -72,9 +71,9 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
     done,
   });
 
-  if (updateStatus === "success") {
-    refetch();
-  }
+  // if (updateStatus === "success") {
+  //   refetch();
+  // }
 
   const isDone = (id: string, done: number, name: string) => {
     setItemId(id);
