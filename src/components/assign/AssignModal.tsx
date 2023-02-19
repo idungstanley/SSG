@@ -31,8 +31,6 @@ export default function AssignModal({ item, option }: assignModalProps) {
   const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
     useAppSelector((state) => state.task);
 
-  console.log(toggleAssignCurrentTaskId);
-
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,

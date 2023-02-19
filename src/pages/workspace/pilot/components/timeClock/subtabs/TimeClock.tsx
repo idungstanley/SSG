@@ -5,7 +5,7 @@ import ClockLogIndex from './index/ClockLogIndex';
 import ClockInOutIndex from './index/ClockInOutIndex';
 import ClockPreference from './index/ClockPreference';
 
-const TimeClockOptions = [
+export const TimeClockOptions = [
   {
     id: 0,
     element: <ClockInOutIndex />,

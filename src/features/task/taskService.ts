@@ -47,7 +47,7 @@ export const getOneTaskService = (data: {
 };
 
 //getOneTask
-export const getOneTaskServices = ({ task_id }: { task_id: string | null }) => {
+export const getOneTaskServices = ({ task_id }: { task_id?: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ["task", { task_id: task_id }],
@@ -246,7 +246,7 @@ export const createTimeEntriesService = (data: {
 };
 
 export const StartTimeEntryService = (query: {
-  taskId: string | null;
+  taskId?: string | null;
   trigger: boolean;
 }) => {
   // const queryClient = useQueryClient();
@@ -498,7 +498,7 @@ export const UseAssignTaskService = ({
 }: {
   task_id: string | null;
   team_member_id: string | null;
-  triggerAsssignTask: boolean;
+  triggerAsssignTask?: boolean;
 }) => {
   const dispatch = useDispatch();
 

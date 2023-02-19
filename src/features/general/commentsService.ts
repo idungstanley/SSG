@@ -4,7 +4,7 @@ import { itemType } from '../../types';
 
 export const useGetItemComments = (data: {
   type?: itemType | string;
-  id?: string | null | undefined;
+  id?: string | null;
 }) =>
   useQuery(
     ['comments', data.id],
@@ -46,7 +46,7 @@ const createItemComment = (data: {
   return request;
 };
 
-export const useCreateItemComment = (id?: string | null | undefined) => {
+export const useCreateItemComment = (id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(createItemComment, {
@@ -67,7 +67,7 @@ const deleteItemComment = (data: { id: string }) => {
   return request;
 };
 
-export const useDeleteItemComment = (id?: string | null | undefined) => {
+export const useDeleteItemComment = (id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteItemComment, {
@@ -91,7 +91,7 @@ const editItemComment = (data: { id: string; message: string }) => {
   return request;
 };
 
-export const useEditItemComment = (id?: string | null | undefined) => {
+export const useEditItemComment = (id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(editItemComment, {

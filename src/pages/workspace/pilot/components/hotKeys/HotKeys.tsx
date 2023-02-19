@@ -7,33 +7,40 @@ import {
 } from "../../../../../features/workspace/workspaceSlice";
 import CustomDropdown, {
   IColumn,
-} from "../../../tasks/dropdown/CustomDropdown";
-import { communicationOptions } from "../communication/CommunicationSubTab";
-import { DetailOptions } from "../details/DetailsSubTab";
-import { ChecklistOptions } from "../checklist/subtabs/ChecklistSubtab";
+} from '../../../tasks/dropdown/CustomDropdown';
+import { communicationOptions } from '../communication/CommunicationSubTab';
+import { DetailOptions } from '../details/DetailsSubTab';
+import { ChecklistOptions } from '../checklist/subtabs/ChecklistSubtab';
+import { TimeClockOptions } from '../timeClock/subtabs/TimeSubTab';
 
 export default function HotKeys() {
   const dispatch = useDispatch();
   const [items, setItems] = useState<IColumn[] | null | undefined>(null);
   const [hotKeys, setHotKeys] = useState<IColumn[] | null | undefined>(null);
+
   const hotKeysTabs = [
     ...DetailOptions,
     ...communicationOptions,
     ...ChecklistOptions,
+    ...TimeClockOptions,
   ];
+  console.log(hotKeysTabs);
+
   const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot } =
     useAppSelector((state) => state.workspace);
+
   const allHotKeysInfo = hotKeysTabs.map((key, index) => {
     return {
       ...key,
-      id: (key.id = index + 1),
+      index: index + 1,
     };
   });
+
   const newHotKey = hotKeysTabs.map(({ name, isVisible }, index) => {
     return {
       name,
       isVisible,
-      id: index + 1,
+      index: index + 1,
     };
   });
 
@@ -68,9 +75,9 @@ export default function HotKeys() {
     (keys: IColumn) => keys.isVisible === true
   );
 
-  const handleHotKey = (id: number | undefined) => {
+  const handleHotKey = (index: number | undefined) => {
     const filteredKeys = items?.map((key: IColumn) => {
-      if (key.id === id) {
+      if (key.index === index) {
         return {
           ...key,
           isVisible: !key.isVisible,
@@ -82,7 +89,7 @@ export default function HotKeys() {
     localStorage.setItem("HotKeys", JSON.stringify(filteredKeys));
   };
 
-  const handleClick = (id: number) => {
+  const handleClick = (id: number | undefined) => {
     dispatch(setActiveTabId(0));
     dispatch(setActiveHotKeyId(id));
   };
@@ -96,10 +103,10 @@ export default function HotKeys() {
           }`}
         >
           {removeHotkeys?.map((item: IColumn) => (
-            <div key={item.id}>
+            <div key={item.index}>
               <div
                 className="flex text-sm w-4 h-4 cursor-pointer"
-                onClick={() => handleClick(item.id)}
+                onClick={() => handleClick(item.index)}
               >
                 {item.icon ? (
                   item.icon

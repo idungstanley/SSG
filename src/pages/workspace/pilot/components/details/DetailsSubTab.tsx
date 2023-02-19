@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { MdAddToPhotos } from "react-icons/md";
-import { useAppSelector } from "../../../../../app/hooks";
-import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import SubtabDrag from "../SubtabDnd";
+import React, { useState } from 'react';
+import { MdAddToPhotos } from 'react-icons/md';
+import { useAppSelector } from '../../../../../app/hooks';
+import SubtabDrag from '../SubtabDnd';
 import {
   closestCenter,
   DndContext,
@@ -11,19 +10,20 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+} from '@dnd-kit/sortable';
+import { BsClipboardData } from 'react-icons/bs';
 
 export const DetailOptions = [
   {
     id: 1,
-    name: "Properties",
-    source: propertiesIcon,
+    name: 'Properties',
+    icon: <BsClipboardData />,
     isVisible: false,
   },
   {
@@ -39,7 +39,7 @@ export default function DetailsSubTab() {
     (state) => state.workspace
   );
 
-  const idsFromLS = JSON.parse(localStorage.getItem("subTab") || "[]");
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -69,7 +69,7 @@ export default function DetailsSubTab() {
           const sortArray = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            "subTab",
+            'subTab',
             JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
           );
 
@@ -88,30 +88,19 @@ export default function DetailsSubTab() {
         <section>
           <div
             className={`flex bg-gray-400 pt-0.5 ${
-              showPilot ? "flex-row" : "flex-col"
+              showPilot ? 'flex-row' : 'flex-col'
             }`}
           >
-            {DetailOptions.map((item) =>
-              item.icon ? (
-                <SubtabDrag
-                  key={item.id}
-                  id={item.id}
-                  icon={item.icon}
-                  activeSub={activeSubDetailsTabId}
-                  showPilot={showPilot}
-                  name={"details"}
-                />
-              ) : (
-                <SubtabDrag
-                  key={item.id}
-                  id={item.id}
-                  activeSub={activeSubDetailsTabId}
-                  showPilot={showPilot}
-                  source={item.source}
-                  name={"details"}
-                />
-              )
-            )}
+            {DetailOptions.map((item) => (
+              <SubtabDrag
+                key={item.id}
+                id={item.id}
+                icon={item.icon}
+                activeSub={activeSubDetailsTabId}
+                showPilot={showPilot}
+                name={'details'}
+              />
+            ))}
           </div>
         </section>
       </SortableContext>

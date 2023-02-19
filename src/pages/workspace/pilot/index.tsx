@@ -1,14 +1,16 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import Tab from './components/Tabs';
-import Checklists, { cheklistOptions } from './components/checklist/components/Checklist';
+import Checklists, {
+  cheklistOptions,
+} from './components/checklist/components/Checklist';
 import History from '../../explorer/components/Pilot/components/History';
 import Permissions from '../../explorer/components/Pilot/components/Permissions';
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
 import { useDispatch } from 'react-redux';
-import TimeClock from './components/timeClock/subtabs/TimeClock';
+import TimeClock, { TimeClockOptions } from './components/timeClock/subtabs/TimeClock';
 import { communicationOptions } from './components/communication/Communication';
 import { DetailOptions } from './components/details/Details';
 import {
@@ -63,7 +65,15 @@ export default function Pilot() {
     ...DetailOptions,
     ...communicationOptions,
     ...cheklistOptions,
+    ...TimeClockOptions,
   ];
+
+  const allHotKeysInfo = hotKeysSections.map((key, index) => {
+    return {
+      ...key,
+      index: index + 1,
+    };
+  });
   useEffect(() => {
     const checkHoverOutside = () => {
       if (showPilot === false && hoverRef.current) {
@@ -88,9 +98,11 @@ export default function Pilot() {
     [activeTabId]
   );
   const selectedHotKeySection = useMemo(
-    () => hotKeysSections.find((section) => section.id === activeHotKeyTabId),
+    () => allHotKeysInfo.find((section) => section.index === activeHotKeyTabId),
     [activeHotKeyTabId]
   );
+  console.log(activeHotKeyTabId);
+  console.log(allHotKeysInfo);
   return (
     <div className="pr-0.5">
       <div

@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import communicationIcon from "../../../../assets/branding/communication.png";
-import logsIcon from "../../../../assets/branding/logs.png";
-import detailIcon from "../../../../assets/branding/detail.png";
-import automationIcon from "../../../../assets/branding/automation.png";
-import timeclockIcon from "../../../../assets/branding/timeclock.png";
-import compactArrowIcon from "../../../../assets/branding/compact-arrow.png";
-import permissionIcon from "../../../../assets/branding/permission.png";
-import checklistIcon from "../../../../assets/branding/checklist-icon.svg";
-import listIcon from "../../../../assets/branding/icon-and-list-arrow.png";
-import { useAppSelector } from "../../../../app/hooks";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import communicationIcon from '../../../../assets/branding/communication.png';
+import automationIcon from '../../../../assets/branding/automation.png';
+import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
+import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
+import { useAppSelector } from '../../../../app/hooks';
+import { useDispatch } from 'react-redux';
 import {
   setShowAddHotKeyDropdown,
   setShowPilot,
@@ -37,9 +32,13 @@ import {
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
-import HotKeys from "./hotKeys/HotKeys";
-import Dropdown from "../../../../components/Dropdown";
+} from '@dnd-kit/sortable';
+import HotKeys from './hotKeys/HotKeys';
+import Dropdown from '../../../../components/Dropdown';
+import { AiOutlineFieldTime } from 'react-icons/ai';
+import { MdAppRegistration, MdSecurity } from 'react-icons/md';
+import { GiChecklist } from 'react-icons/gi';
+import { BiDetail } from 'react-icons/bi';
 
 export const pilotOptions = [
   {
@@ -51,21 +50,21 @@ export const pilotOptions = [
   },
   {
     id: 2,
-    name: "Logs",
-    source: logsIcon,
-    isVisible: true,
+    name: 'Logs',
+    icon: <MdAppRegistration />,
+    isVisible: false,
   },
   {
     id: 3,
-    name: "Permissions",
-    source: permissionIcon,
+    name: 'Permissions',
+    icon: <MdSecurity />,
     isVisible: false,
   },
 
   {
     id: 4,
-    name: "Details",
-    source: detailIcon,
+    name: 'Details',
+    icon: <BiDetail />,
     subTab: <DetailsSubTab />,
     isVisible: false,
   },
@@ -77,17 +76,17 @@ export const pilotOptions = [
   },
   {
     id: 6,
-    name: "TimeClock",
-    source: timeclockIcon,
+    name: 'TimeClock',
+    icon: <AiOutlineFieldTime />,
     subTab: <TimeSubTab />,
-    isVisible: true,
+    isVisible: false,
   },
   {
     id: 7,
-    name: "Checklist",
-    source: checklistIcon,
+    name: 'Checklist',
+    icon: <GiChecklist />,
     subTab: <ChecklistSubtab />,
-    isVisible: true,
+    isVisible: false,
   },
 ];
 function Tab() {
@@ -248,6 +247,7 @@ function Tab() {
                 id={item.id}
                 name={item.name}
                 source={item.source}
+                icon={item.icon}
                 showPilot={showPilot}
                 showPilotIconView={showPilotIconView}
                 subTab={item.subTab}
