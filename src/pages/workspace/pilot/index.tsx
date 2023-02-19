@@ -62,6 +62,7 @@ export default function Pilot() {
   } = useAppSelector((state) => state.workspace);
   const hoverRef = useRef<HTMLInputElement>(null);
   const hotKeysSections = [
+    ...sections,
     ...DetailOptions,
     ...communicationOptions,
     ...cheklistOptions,

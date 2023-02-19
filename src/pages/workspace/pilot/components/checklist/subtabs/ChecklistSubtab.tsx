@@ -22,7 +22,7 @@ import { TbChecklist, TbCheckupList } from 'react-icons/tb';
 export const ChecklistOptions = [
   {
     id: 1,
-    name: 'Checklist',
+    name: 'Checklist item',
     icon: <TbCheckupList />,
     isVisible: false,
   },

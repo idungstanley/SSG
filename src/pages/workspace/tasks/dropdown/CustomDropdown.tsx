@@ -50,9 +50,9 @@ export default function CustomDropdown({
     };
   }, []);
   return (
-    <div className="h-auto p-0.5" ref={ref}>
+    <div className="h- p-0.5" ref={ref}>
       <div
-        className="overflow-y-auto h-fit border-gray-200 border absolute top-24 bottom-36 right-12 mt-3 w-56 rounded shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white px-1"
+        className="absolute w-56 px-1 py-1 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl h-fit top-24 right-12 drop-shadow-2xl drop-shadow-md"
         style={{ zIndex: '999' }}
       >
         <button type="button" className="p-2 font-semibold">
@@ -64,12 +64,12 @@ export default function CustomDropdown({
         {listItems?.map((listItem) => (
           <div
             key={listItem.name}
-            className="hover:bg-gray-300 w-full rounded"
+            className="w-full rounded hover:bg-gray-300"
             onClick={() => handleClick(listItem.index)}
           >
             <button
               type="button"
-              className="capitalize flex cursor-pointer p-2 items-center gap-2"
+              className="flex items-center gap-2 p-2 capitalize cursor-pointer"
               onClick={() => listItem.onclick}
               key={listItem.name}
             >
@@ -90,7 +90,7 @@ export default function CustomDropdown({
           </div>
         ))}
         {listItems?.length === 0 && (
-          <div className="text-sm p-2 font-medium">
+          <div className="p-2 text-sm font-medium">
             There is no Item on this list. . .
           </div>
         )}

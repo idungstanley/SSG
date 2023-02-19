@@ -12,6 +12,7 @@ import { communicationOptions } from '../communication/CommunicationSubTab';
 import { DetailOptions } from '../details/DetailsSubTab';
 import { ChecklistOptions } from '../checklist/subtabs/ChecklistSubtab';
 import { TimeClockOptions } from '../timeClock/subtabs/TimeSubTab';
+import { pilotOptions } from '../Tabs';
 
 export default function HotKeys() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export default function HotKeys() {
   const [hotKeys, setHotKeys] = useState<IColumn[] | null | undefined>(null);
 
   const hotKeysTabs = [
+    ...pilotOptions,
     ...DetailOptions,
     ...communicationOptions,
     ...ChecklistOptions,
@@ -105,7 +107,7 @@ export default function HotKeys() {
           {removeHotkeys?.map((item: IColumn) => (
             <div key={item.index}>
               <div
-                className="flex text-sm w-4 h-4 cursor-pointer"
+                className="flex w-4 h-4 text-sm cursor-pointer"
                 onClick={() => handleClick(item.index)}
               >
                 {item.icon ? (

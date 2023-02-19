@@ -191,9 +191,9 @@ function Tab() {
       onDragEnd={(e) => handleDragEnd(e)}
     >
       <div
-        className={`gap-4 pb-1`}
+        className={`gap-4 pb-1 w-full`}
         aria-label="Tabs"
-        style={showPilot ? { width: '400px' } : { width: '48px' }}
+        style={showPilot ? { width: '500px' } : { width: '48px' }}
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
@@ -204,7 +204,7 @@ function Tab() {
             {activeItemName && showPilot && (
               <div
                 id="entity"
-                className="flex py-2 font-bold items-center pl-1 text-xs capitalize"
+                className="flex items-center py-2 pl-1 text-xs font-bold capitalize"
               >
                 <p className="text-gray-600">
                   {activeItemType && activeItemType}
