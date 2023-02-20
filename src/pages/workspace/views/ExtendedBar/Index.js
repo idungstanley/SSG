@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import requestNew from '../../app/requestNew';
+import requestNew from '../../../../app/requestNew';
 
 export const useGetHubList = () => {
   const queryClient = useQueryClient();

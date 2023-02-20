@@ -30,7 +30,7 @@ function RenderList() {
     getSubTaskId,
   } = useAppSelector((state) => state.task);
 
-  const { data: listDetailsData } = getTaskListService({ listId } );
+  const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
     <div className=" overflow-x-auto  relative">
@@ -56,7 +56,7 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            {boardView && <Board />}
+            <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}
 
             {listView &&

@@ -3,3 +3,47 @@
   grid-auto-columns: 100px;
   grid-auto-flow: column;
 }
+
+.fixed_headers {
+  border-collapse: collapse;
+  width: 100%;
+}
+.fixed_headers td,
+.fixed_headers thead th {
+  padding: 5px;
+  text-align: left;
+}
+
+.fixed_headers thead,
+textarea {
+  color: #fdfdfd;
+}
+.fixed_headers thead tr {
+  position: relative;
+}
+
+.fixed_headers thead th {
+  position: sticky;
+  top: 0;
+  resize: both;
+  overflow: auto;
+  min-width: 70px;
+}
+
+.fixed_headers tbody .td-resize {
+  position: sticky;
+  top: 0;
+  resize: both;
+  overflow: auto;
+  min-width: 70px;
+}
+
+.fgoverflow {
+  max-width: 1000px;
+  height: 100vh;
+  overflow-x: auto;
+}
+
+.boardGrab {
+  cursor: grab;
+}

@@ -57,8 +57,7 @@ export default function BreadcrumbSection() {
             onClick={button.onClick}
             key={button.id}
             type="button"
-            className="text-gray-400 focus:outline-none ring-0 focus:ring-0"
-          >
+            className="text-gray-400 focus:outline-none ring-0 focus:ring-0">
             {button.icon}
           </button>
         ))}
@@ -68,8 +67,7 @@ export default function BreadcrumbSection() {
         rootIcon={
           <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
         }
-        rootIconHref="/explorer"
-      />
+        rootIconHref="/explorer"/>
     </div>
   );
 }

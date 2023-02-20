@@ -8,11 +8,14 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string }];
+  priority:
+    | string
+    | null
+    | [{ id: string; initials: string; colour: string; name: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
-  assignees?: [{ id: string; initials: string; colour: string }];
+  assignees?: [{ id: string; initials: string; colour: string; name: string }];
   updated_at?: string;
   created_at?: string;
   archived_at?: string | null;
@@ -22,7 +25,7 @@ export interface ImyTaskData {
     | number
     | undefined
     | null
-    | [{ id: string; initials: string; colour: string }]
+    | [{ id: string; initials: string; colour: string; name: string }]
     | tagItem[];
 }
 

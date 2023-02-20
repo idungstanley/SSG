@@ -6,7 +6,7 @@ import {
   Button,
   EmptyStateSimple,
 } from '../../../../components';
-import Breadcrumb from '../../components/Breadcrumb';
+// import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import InviteTeamMemberSlideOver from './components/InviteTeamMemberSlideOver';
 import { setInviteTeamMemberSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
@@ -30,7 +30,7 @@ export default function TeamMemberInvitesPage() {
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
-      <Breadcrumb
+      {/* <Breadcrumb
         pages={[
           {
             name: 'Team members',
@@ -43,7 +43,7 @@ export default function TeamMemberInvitesPage() {
             current: true,
           },
         ]}
-      />
+      /> */}
       <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
         <div className="my-10">
           <SimpleSectionHeading

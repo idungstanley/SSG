@@ -83,7 +83,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   };
 
   const handleEditItemName = (id: string, done: number) => {
-    console.log(editName);
     setItemId(id);
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));
@@ -116,11 +115,11 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   return (
     <div>
       <span className="flex items-center">
-        <label className="text-xl px-5">+</label>
+        <label className="px-5 text-xl">+</label>
         <input
           autoFocus={true}
           type="text"
-          className="border-none hover:border-none hover:outline-none focus:outline-none h-8 my-1"
+          className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none"
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
