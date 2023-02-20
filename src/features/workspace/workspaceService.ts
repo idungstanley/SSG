@@ -37,7 +37,7 @@ export const getWorkspaceService = () => {
 };
 
 export const getAllWorkSpaceService = () => {
-  return useQuery(['workspace'], async () => {
+  return useQuery(['workspaces'], async () => {
     const data = await requestNew(
       {
         url: 'auth/account/workspaces',

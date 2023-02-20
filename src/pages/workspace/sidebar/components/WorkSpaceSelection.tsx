@@ -1,9 +1,9 @@
 import React from 'react';
-import { VscTriangleDown } from 'react-icons/vsc';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { getWorkspaceService } from '../../../../features/workspace/workspaceService';
 import Spinner from '../../../../common/Spinner';
+import WorkspaceSettingsModal from './WorkspaceSettingsModal';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.workspace);
@@ -42,7 +42,8 @@ function WorkSpaceSelection() {
                 {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
               </p>
             </div>
-            <VscTriangleDown className="text-xs text-gray-400" />
+            {/* <VscTriangleDown className="text-xs text-gray-400" /> */}
+            <WorkspaceSettingsModal />
           </div>
         </div>
       ) : (
