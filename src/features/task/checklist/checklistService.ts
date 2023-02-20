@@ -41,6 +41,7 @@ export const UseGetAllClistService = ({
 }: {
   task_id: string | null;
 }) => {
+  // const dispatch = useAppDispatch();
   return useQuery(
     ["clist", { task_id }],
     async () => {
@@ -56,7 +57,7 @@ export const UseGetAllClistService = ({
     {
       enabled: task_id != null,
       // onSuccess: () => {
-      //   dispatch(setTriggerChecklistUpdate(false));
+      //   dispatch(setTaskIdForPilot(null));
       // },
     }
   );

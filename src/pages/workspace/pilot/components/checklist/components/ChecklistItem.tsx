@@ -117,9 +117,9 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
       <span className="flex items-center">
         <label className="px-5 text-xl">+</label>
         <input
-          autoFocus={true}
+          autoFocus
           type="text"
-          className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none"
+          className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none rounded"
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
