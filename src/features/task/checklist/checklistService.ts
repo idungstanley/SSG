@@ -15,8 +15,10 @@ import { setCurrTeamMemId } from "../taskSlice";
 
 export const UseCreateClistService = ({
   task_id,
+  name,
 }: {
   task_id: string | null;
+  name: string;
 }) => {
   const url = `/checklists`;
   const response = requestNew(
@@ -24,7 +26,7 @@ export const UseCreateClistService = ({
       url,
       method: "POST",
       data: {
-        name: "Checklist",
+        name: name,
         id: task_id,
         type: "task",
       },
