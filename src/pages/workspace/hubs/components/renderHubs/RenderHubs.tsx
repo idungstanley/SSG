@@ -9,11 +9,13 @@ import WalletSection from "./items/itemsWalletData/WalletSection";
 import ListSection from "./items/itemsListData/ListSection";
 import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
 import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
+import Board from "../../../tasks/component/views/Board";
 
 function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
+  const { boardView } = useAppSelector((state) => state.task);
   return (
     <div className="h-screen">
       <section id="nav" className="capitalize">
@@ -30,11 +32,12 @@ function RenderHubs() {
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
             className="w-full  scrollbarDynCol"
-            style={{ minHeight: '0', maxHeight: '100vh' }}
+            style={{ minHeight: "0", maxHeight: "100vh" }}
           >
             <div className="w-full">
               <ListFilter />
             </div>
+            {boardView && <Board />}
             <div>
               {HubDetail?.data.hubs.map((data: dataProps) => (
                 <TaskListSections data={data} key={data.id} />
