@@ -24,4 +24,14 @@
   resize: both;
   overflow: auto;
   min-width: 70px;
-} */
+}
+
+.fgoverflow {
+  max-width: 1000px;
+  height: 100vh;
+  overflow-x: auto;
+}
+
+.boardGrab {
+  cursor: grab;
+}
