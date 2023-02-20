@@ -76,7 +76,6 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
   };
 
   const handleEditItemName = (id: string, done: number) => {
-    console.log(editName);
     setItemId(id);
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));
@@ -92,11 +91,11 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
   return (
     <div>
       <span className="flex items-center">
-        <label className="text-xl px-5">+</label>
+        <label className="px-5 text-xl">+</label>
         <input
           autoFocus={true}
           type="text"
-          className="border-none hover:border-none hover:outline-none focus:outline-none h-8 my-1"
+          className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none"
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
@@ -107,20 +106,20 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
         return (
           <div key={item.id}>
             <div className="group flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
-              <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
-                <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
+              <span className="justify-center text-gray-200 opacity-0 cursor-move group-hover:opacity-100">
+                <GrDrag className="w-4 h-4 text-base text-gray-200 opacity-30" />
               </span>
               <input
                 type="checkbox"
                 checked={item.is_done == 0 ? false : true}
-                className="rounded-lg mx-3"
+                className="mx-3 rounded-lg"
                 onChange={() => {
                   setItemId(item.id);
                   isDone(item.id, item.is_done, item.name);
                 }}
               />
               <input
-                className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36 rounded"
+                className="border-none rounded outline-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36"
                 type="text"
                 value={
                   editItemName && item.id === editId ? editName : item.name
@@ -148,7 +147,7 @@ function ChecklistItem({ Item, checklistId, refetch }: checkListItemProps) {
                 />
               </div>
               {toggleAssignChecklistItemId == item.id ? (
-                <span className="absolute shadow-2xl z-30 ml-20 mt-10">
+                <span className="absolute z-30 mt-10 ml-20 shadow-2xl">
                   <AssignTask />
                 </span>
               ) : null}

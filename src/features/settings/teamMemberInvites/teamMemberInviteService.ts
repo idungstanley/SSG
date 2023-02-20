@@ -66,7 +66,7 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
 };
 
 //Accept team member invite
-export const useAcceptTeamMemberInvite = () => {
+export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
   return useQuery(
     ['team_member_invite', inviteCode],
     async () => {
@@ -82,13 +82,12 @@ export const useAcceptTeamMemberInvite = () => {
     {
       onSuccess: (data) => {
         localStorage.setItem('user', JSON.stringify(data?.data.user));
-             localStorage.setItem(
-               'currentWorkspaceId',
-               JSON.stringify(data?.data.user.default_workspace_id)
-             );
+        localStorage.setItem(
+          'currentWorkspaceId',
+          JSON.stringify(data?.data.user.default_workspace_id)
+        );
       },
-      // initialData: queryClient.getQueryData(['team_member_invite', inviteCode]),
-      enabled: inviteCode != null,
+      enabled: acceptInviteTrigger == true && inviteCode != null,
     }
   );
 };

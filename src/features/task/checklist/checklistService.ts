@@ -1,14 +1,14 @@
-import requestNew from "../../../app/requestNew";
-import { useDispatch } from "react-redux";
+import requestNew from '../../../app/requestNew';
+import { useDispatch } from 'react-redux';
 import {
   setToggleAssignChecklistItemId,
   setTriggerChecklistUpdate,
   setTriggerDelChecklist,
   setTriggererChecklistItemDel,
   setTriggerItemtUpdate,
-} from "./checklistSlice";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAppDispatch } from "../../../app/hooks";
+} from './checklistSlice';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../../../app/hooks';
 
 export const UseCreateClistService = ({
   task_id,
@@ -19,11 +19,11 @@ export const UseCreateClistService = ({
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
-        name: "Checklist",
+        name: 'Checklist',
         id: task_id,
-        type: "task",
+        type: 'task',
       },
     },
     true
@@ -37,12 +37,12 @@ export const UseGetAllClistService = ({
   task_id: string | null;
 }) => {
   return useQuery(
-    ["clist", { task_id }],
+    ['clist', { task_id }],
     async () => {
       const data = await requestNew(
         {
           url: `at/tasks/${task_id}`,
-          method: "GET",
+          method: 'GET',
         },
         true
       );
@@ -68,7 +68,7 @@ export const UseCreatelistItemService = ({
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
         name: name,
       },
@@ -89,12 +89,12 @@ export const UseUpdateChecklistService = ({
 }) => {
   const dispatch = useDispatch();
   return useQuery(
-    ["checklist", { checklist_id }],
+    ['checklist', { checklist_id }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
             name: name,
           },
@@ -127,12 +127,12 @@ export const UseUpdateChecklistItemService = ({
 }) => {
   const dispatch = useDispatch();
   return useQuery(
-    ["checklist", { itemId, done, name }],
+    ['checklist', { itemId, done, name }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
             name: name,
             is_done: done,
@@ -160,12 +160,12 @@ export const UseDeleteChecklistService = (data: {
   const checklist_id = data.query;
   const queryClient = useQueryClient();
   return useQuery(
-    ["checklist"],
+    ['checklist'],
     async () => {
       const data = await requestNew(
         {
           url: `checklists/${checklist_id}`,
-          method: "DELETE",
+          method: 'DELETE',
         },
         true
       );
@@ -192,12 +192,12 @@ export const UseDeleteChecklistItemService = (data: {
   const itemId = data.itemId;
   const queryClient = useQueryClient();
   return useQuery(
-    ["checklist"],
+    ['checklist'],
     async () => {
       const data = await requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: "DELETE",
+          method: 'DELETE',
         },
         true
       );
@@ -225,12 +225,12 @@ export const UseAssignChecklistItemService = ({
 }) => {
   const queryClient = useQueryClient();
   return useQuery(
-    ["assign", { team_member_id: team_member_id }],
+    ['assign', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
-          method: "POST",
+          method: 'POST',
         },
         true
       );
@@ -240,7 +240,7 @@ export const UseAssignChecklistItemService = ({
       onSuccess: () => {
         // dispatch(setToggleAssignCurrentTaskId(null));
       },
-      initialData: queryClient.getQueryData(["assign", team_member_id]),
+      initialData: queryClient.getQueryData(['assign', team_member_id]),
       enabled: team_member_id != null,
     }
   );
@@ -259,12 +259,12 @@ export const UseUnAssignChecklistItemService = ({
 }) => {
   const dispatch = useAppDispatch();
   return useQuery(
-    ["unassign", { team_member_id: team_member_id }],
+    ['unassign', { team_member_id: team_member_id }],
     async () => {
       const data = await requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
-          method: "POST",
+          method: 'POST',
         },
         true
       );

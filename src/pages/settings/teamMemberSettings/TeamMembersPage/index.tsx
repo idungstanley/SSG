@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
 import { SimpleSectionHeading, SearchInput } from '../../../../components';
-import Breadcrumb from '../../components/Breadcrumb';
+// import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import { setTeamMembersSearchQuery } from '../../../../features/settings/teamMembers/teamMemberSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -25,8 +25,8 @@ export default function TeamMembersPage() {
   };
 
   return (
-    <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
-      <Breadcrumb
+    <div className="h-full flex-1 flex flex-col  bg-gray-50">
+      {/* <Breadcrumb
         pages={[
           {
             name: 'Team members',
@@ -34,7 +34,7 @@ export default function TeamMembersPage() {
             current: true,
           },
         ]}
-      />
+      /> */}
       <main className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
         <div className="my-10">
           <SimpleSectionHeading

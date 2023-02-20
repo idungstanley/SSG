@@ -4,7 +4,7 @@ import DetailsIndex from "./properties/DetailsIndex";
 import { useAppSelector } from "../../../../../app/hooks";
 import DetailsSubTab from "./DetailsSubTab";
 
-const DetailOptions = [
+export const DetailOptions = [
   {
     id: 1,
     element: <DetailsIndex />,

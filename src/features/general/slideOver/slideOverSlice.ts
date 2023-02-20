@@ -34,10 +34,10 @@ type Share = {
   type?: explorerItemType;
 };
 
-type Pilot = {
+export type Pilot = {
   show: boolean;
-  id?: string;
-  type?: explorerItemType;
+  id?: string | null ;
+  type?: explorerItemType ;
 };
 type PilotHub = {
   show: boolean;
