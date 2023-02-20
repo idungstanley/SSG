@@ -36,6 +36,19 @@ export const getWorkspaceService = () => {
   });
 };
 
+export const getAllWorkSpaceService = () => {
+  return useQuery(['workspace'], async () => {
+    const data = await requestNew(
+      {
+        url: 'auth/account/workspaces',
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
+};
+
 export const checkIfWorkspaceService = async () => {
   const response = requestNew(
     {
