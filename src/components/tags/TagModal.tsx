@@ -1,12 +1,12 @@
-import React, { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
-import { UseGetAllTagsService } from "../../features/workspace/workspaceService";
-import { Spinner } from "../../common";
-import CreateTag from "./CreateTag";
-import { UseAssignTagToTask } from "../../features/task/taskService";
-import { dataProps } from "../Index/walletIndex/WalletIndex";
-import { useAppSelector } from "../../app/hooks";
+import React, { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
+import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
+import { Spinner } from '../../common';
+import CreateTag from './CreateTag';
+import { UseAssignTagToTask } from '../../features/task/taskService';
+import { dataProps } from '../Index/walletIndex/WalletIndex';
+import { useAppSelector } from '../../app/hooks';
 
 export default function TagModal() {
   const [tagId, setTagId] = useState<string | null>(null);
@@ -16,17 +16,17 @@ export default function TagModal() {
 
   const tagList = data?.data.tags;
 
-  if (status == "loading") {
-    <Spinner size={10} color={"blue"} />;
+  if (status == 'loading') {
+    <Spinner size={10} color={'blue'} />;
   }
 
-  const { data: assignTag } = UseAssignTagToTask({
+  UseAssignTagToTask({
     tagId,
     currentTaskIdForTag,
   });
-  console.log(assignTag);
+  // console.log(assignTag);
 
-  return status == "success" ? (
+  return status == 'success' ? (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">

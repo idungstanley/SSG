@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaFolderOpen } from "react-icons/fa";
-import { VscTriangleRight } from "react-icons/vsc";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleRight } from 'react-icons/vsc';
 
 interface IBreadcrumbItem {
   name: string;
@@ -16,8 +16,6 @@ interface BreadcrumbProps {
 }
 
 function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
-  console.log(rootIcon);
-
   return (
     <nav className="flex py-2 bg-white h-7" aria-label="Breadcrumb">
       <ol className="flex w-full pl-2">
@@ -47,7 +45,7 @@ function Breadcrumb({ pages, rootIcon, rootIconHref }: BreadcrumbProps) {
                   aria-hidden="true"
                 />
                 <Link
-                  to={page.href || ""}
+                  to={page.href || ''}
                   className="flex items-center gap-1 text-xs font-semibold text-gray-500 select-none hover:text-gray-600 cursor-none"
                   aria-current="page"
                 >
