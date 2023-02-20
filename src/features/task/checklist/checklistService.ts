@@ -250,6 +250,7 @@ export const UseUnAssignChecklistItemService = ({
   checklist_id,
   itemId,
   team_member_id,
+  triggerUnassign,
 }: {
   checklist_id: string | null;
   itemId: string | null;
