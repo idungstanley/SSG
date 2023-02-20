@@ -541,7 +541,7 @@ export const UseUnAssignTaskService = ({
   unAssignTrigger: boolean;
 }) => {
   const queryClient = useQueryClient();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   return useQuery(
     ["task", { team_member_id: team_member_id }],
     async () => {
@@ -558,6 +558,7 @@ export const UseUnAssignTaskService = ({
       enabled: unAssignTrigger,
       onSuccess: () => {
         queryClient.invalidateQueries(["task"]);
+        dispatch(setToggleAssignCurrentTaskId(null));
       },
       // enabled: !!team_member_id,
     }

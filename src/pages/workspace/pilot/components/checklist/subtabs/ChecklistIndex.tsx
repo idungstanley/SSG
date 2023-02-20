@@ -36,7 +36,8 @@ export default function ChecklistIndex() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   // RTK states
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  // const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const { triggerDelChecklist, clickedChecklistId, showChecklistInput } =
     useAppSelector((state) => state.checklist);
 
@@ -50,14 +51,14 @@ export default function ChecklistIndex() {
 
   const handleSubmit = async (name: string) => {
     await createChecklist.mutateAsync({
-      task_id: currentTaskIdForPilot,
+      task_id: activeItemId,
       name,
     });
   };
 
   // Get Checklists
   const { data, status } = UseGetAllClistService({
-    task_id: currentTaskIdForPilot,
+    task_id: activeItemId,
   });
   const task_checklist = data?.data.task.checklists;
 

@@ -17,7 +17,7 @@ export const UseCreateClistService = ({
   task_id,
   name,
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
   name: string;
 }) => {
   const url = `/checklists`;
@@ -39,7 +39,7 @@ export const UseCreateClistService = ({
 export const UseGetAllClistService = ({
   task_id,
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
 }) => {
   // const dispatch = useAppDispatch();
   return useQuery(
