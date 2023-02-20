@@ -1,31 +1,31 @@
 import React, { memo, useRef, useState } from "react";
 import { FaWpforms } from "react-icons/fa";
-import Dashboard from "../pages/workspace/dashboard";
-import Favourites from "../pages/workspace/favorites";
-import Files from "../pages/workspace/files";
-import Inbox from "../pages/workspace/inbox";
+import Dashboard from "../dashboard";
+import Favourites from "../favorites";
+import Files from "../files";
+import Inbox from "../inbox";
 import {
   setActivePlaceId,
   setExtendedSidebarWidth,
   setIsExtSearchActive,
   setShowExtendedBar,
   setShowModal,
-} from "../features/workspace/workspaceSlice";
-import emailIcon from "../assets/branding/email-icon.png";
-import hubIcon from "../assets/branding/hub.png";
-import InboxIcon from "../assets/branding/inbox.png";
-import timeClockIcon from "../assets/branding/timeclock.png";
-import trackerIcon from "../assets/branding/tracker-icon.png";
+} from "../../../features/workspace/workspaceSlice";
+import emailIcon from "../../../assets/branding/email-icon.png";
+import hubIcon from "../../../assets/branding/hub.png";
+import InboxIcon from "../../../assets/branding/inbox.png";
+import timeClockIcon from "../../../assets/branding/timeclock.png";
+import trackerIcon from "../../../assets/branding/tracker-icon.png";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../app/hooks";
+import { useAppSelector } from "../../../app/hooks";
 import { BsPlusLg } from "react-icons/bs";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import ActiveHub from "./ActiveParents/ActiveHub";
 import { IoMdCloseCircle } from "react-icons/io";
-import Extendedbar from "../pages/explorer/components/Sidebar";
+import Extendedbar from "../../explorer/components/Sidebar";
 import { BiCabinet } from "react-icons/bi";
 import { IoSearchCircleOutline } from "react-icons/io5";
-import ResizeBorder from "../components/ResizeBorder";
+import ResizeBorder from "../../../components/ResizeBorder";
 
 const secondaryNavigation = [
   {

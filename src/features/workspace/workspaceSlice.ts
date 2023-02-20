@@ -16,8 +16,8 @@ interface workspaceState {
   showModal: boolean;
   searchIsActive: boolean;
   isExtSearchActive: boolean;
-  activeItemId: string | null;
-  activeItemType: string | null;
+  activeItemId?: string | null;
+  activeItemType?: string | null;
   activeItemName: string | null;
   currentWalletId: string | null;
   currentSubWalletId: string | null;
@@ -28,6 +28,7 @@ interface workspaceState {
   showRemoveHotKeyDropdown: boolean;
   showPilotListView: boolean;
   activeTabId: number | null;
+  activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
@@ -60,6 +61,7 @@ const initialState: workspaceState = {
   showPilotIconView: false,
   showPilotListView: false,
   activeTabId: 0,
+  activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
@@ -167,6 +169,9 @@ export const wsSlice = createSlice({
     setActiveTabId(state, action) {
       state.activeTabId = action.payload;
     },
+    setActiveHotKeyId(state, action) {
+      state.activeHotKeyTabId = action.payload;
+    },
     setActiveSubTimeClockTabId(state, action) {
       state.activeSubTimeClockTabId = action.payload;
     },
@@ -217,7 +222,8 @@ export const {
   setActiveTabId,
   setActiveSubChecklistTabId,
   setShowAddHotKeyDropdown,
-  setShowRemoveHotKeyDropdown
+  setShowRemoveHotKeyDropdown,
+  setActiveHotKeyId,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

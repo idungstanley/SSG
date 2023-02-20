@@ -178,8 +178,8 @@ export const ArchiveHubService = (hub: {
 
 //get hub details
 export const UseGetHubDetails = (query: {
-  activeItemId: string | null;
-  activeItemType: string | null;
+  activeItemId?: string | null;
+  activeItemType?: string | null;
 }) => {
   return useQuery(
     ['hubs', query],

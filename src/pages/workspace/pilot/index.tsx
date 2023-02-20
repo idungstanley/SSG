@@ -1,14 +1,20 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import Tab from './components/Tabs';
-import Checklists from './components/checklist/components/Checklist';
+import Checklists, {
+  cheklistOptions,
+} from './components/checklist/components/Checklist';
 import History from '../../explorer/components/Pilot/components/History';
 import Permissions from '../../explorer/components/Pilot/components/Permissions';
 import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
 import { useDispatch } from 'react-redux';
-import TimeClock from './components/timeClock/subtabs/TimeClock';
+import TimeClock, {
+  TimeClockOptions,
+} from './components/timeClock/subtabs/TimeClock';
+import { communicationOptions } from './components/communication/Communication';
+import { DetailOptions } from './components/details/Details';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
@@ -54,8 +60,23 @@ export default function Pilot() {
     activeItemId,
     activeSubDetailsTabId,
     activeTabId,
+    activeHotKeyTabId,
   } = useAppSelector((state) => state.workspace);
   const hoverRef = useRef<HTMLInputElement>(null);
+  const hotKeysSections = [
+    ...sections,
+    ...DetailOptions,
+    ...communicationOptions,
+    ...cheklistOptions,
+    ...TimeClockOptions,
+  ];
+
+  const allHotKeysInfo = hotKeysSections.map((key, index) => {
+    return {
+      ...key,
+      index: index + 1,
+    };
+  });
   useEffect(() => {
     const checkHoverOutside = () => {
       if (showPilot === false && hoverRef.current) {
@@ -77,8 +98,13 @@ export default function Pilot() {
   ]);
   const selectedSection = useMemo(
     () => sections.find((section) => section.id === activeTabId),
-    [activeTabId]
+    [activeTabId],
   );
+  const selectedHotKeySection = useMemo(
+    () => allHotKeysInfo.find((section) => section.index === activeHotKeyTabId),
+    [activeHotKeyTabId],
+  );
+
   return (
     <div className="pr-0.5">
       <div
@@ -88,12 +114,16 @@ export default function Pilot() {
             : 'flex-col'
         }`}
         ref={hoverRef}
-        style={{ minHeight: '0', maxHeight: '100vh' }}
+        style={{ minHeight: '0', maxHeight: '100%' }}
       >
         {/* navigation */}
         <Tab />
         {/* main section depends of active tab */}
-        <div>{selectedSection ? selectedSection.element : null}</div>
+        {selectedSection
+          ? selectedSection.element
+          : selectedHotKeySection
+          ? selectedHotKeySection.element
+          : null}
       </div>
     </div>
   );

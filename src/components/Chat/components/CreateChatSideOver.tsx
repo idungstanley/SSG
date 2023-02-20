@@ -4,13 +4,33 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useCreateChat } from '../../../features/chat/chatService';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 import SideOver from '../../SideOver';
+import { Pilot } from '../../../features/general/slideOver/slideOverSlice';
 
 export default function CreateChatSideOver() {
   const dispatch = useAppDispatch();
   const { showCreateChatSideOver } = useAppSelector((state) => state.chat);
+  const { activeItemType, activeItemId } = useAppSelector(
+    (state) => state.workspace
+  );
   const [name, setName] = useState('');
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { id, type } = pilotSideOver;
+  const featureId:
+    | {
+        id?: string | null;
+        type: string | null;
+        name?: string
+      }
+    | Pilot
+    | {
+        id?: string | null;
+        type?: string | null;
+        name?: string;
+      } =
+    (id || type) === null || undefined
+      ? { id: activeItemType, type: activeItemId }
+      : { id: id, type: type };
+  featureId.name = name;
 
   const { mutate: onCreate } = useCreateChat(id);
 
@@ -23,11 +43,7 @@ export default function CreateChatSideOver() {
     e.preventDefault();
 
     if (id && type) {
-      onCreate({
-        id,
-        type,
-        name,
-      });
+      onCreate(featureId);
     }
     onClose();
   };

@@ -3,7 +3,7 @@ import { itemType } from '../../../types/index';
 import requestNew from '../../../app/requestNew';
 import { IActivityLog, IHistoryRes } from './history.interfaces';
 
-export const useGetItemHistory = (data: { type?: itemType; id?: string }) =>
+export const useGetItemHistory = (data: { type?: itemType; id?: string | null }) =>
   useQuery<IHistoryRes, unknown, IActivityLog[]>(
     ['history', data.id],
     () =>

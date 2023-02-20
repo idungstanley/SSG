@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../app/hooks';
+import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../../../app/hooks';
 import {
   resetCurrentItem,
   setCurrentItem,
   setShowHub,
-} from '../../features/workspace/workspaceSlice';
-import { AvatarWithInitials } from '../../components';
-import { Spinner } from '../../common';
+} from '../../../../features/workspace/workspaceSlice';
+import { AvatarWithInitials } from '../../../../components';
+import { Spinner } from '../../../../common';
 import {
   useGetHubList,
   useGetHubWallet,
   useGetSubHub,
-} from '../../features/hubs/hubService';
-import { getHub } from '../../features/hubs/hubSlice';
-import SubWalletIndex from '../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
-import { getWalletService } from '../../features/wallet/walletService';
-import Sub2WalletIndex from '../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
+} from '../../../../features/hubs/hubService';
+import { getHub } from '../../../../features/hubs/hubSlice';
+import SubWalletIndex from '../../wallet/components/subwallet1/ SubWalletIndex';
+import { getWalletService } from '../../../../features/wallet/walletService';
+import Sub2WalletIndex from '../../wallet/components/subwallet2/Sub2WalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
-import MenuDropdown from '../../components/Dropdown/MenuDropdown';
-import SHubDropdownList from '../../components/ItemsListInSidebar/components/SHubDropdownList';
+import MenuDropdown from '../../../../components/Dropdown/MenuDropdown';
+import SHubDropdownList from '../../../../components/ItemsListInSidebar/components/SHubDropdownList';
 import ActiveSubHub from './ActiveSubHub';
-import DropdownList from '../../components/ItemsListInSidebar/components/DropdownList';
-import { dataProps } from '../../components/Index/walletIndex/WalletIndex';
+import DropdownList from '../../../../components/ItemsListInSidebar/components/DropdownList';
+import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();

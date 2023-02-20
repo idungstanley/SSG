@@ -3,7 +3,7 @@ import { useAppSelector } from "../../../../../app/hooks";
 import ChatForPilot from "../../../../../components/Chat/ChatForPilot";
 import CommunicationSubTab from "./CommunicationSubTab";
 
-const communicationOptions = [
+export const communicationOptions = [
   {
     id: 1,
     element: <ChatForPilot />,
@@ -26,7 +26,7 @@ export default function Commnunication() {
     [activeSubCommunicationTabId]
   );
   return (
-    <section className="flex flex-col h-full">
+    <section className="flex flex-col">
       {showPilot && <CommunicationSubTab />}
       <div>{selectedSubSection ? selectedSubSection.element : null}</div>
     </section>

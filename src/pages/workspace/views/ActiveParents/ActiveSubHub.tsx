@@ -1,10 +1,10 @@
 import React from 'react';
-import { useGetSubHub } from '../../features/hubs/hubService';
-import { useAppSelector } from '../../app/hooks';
+import { useGetSubHub } from '../../../../features/hubs/hubService';
+import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
   setHubParentId,
-} from '../../features/hubs/hubSlice';
+} from '../../../../features/hubs/hubSlice';
 
 export default function ActiveSubHub() {
   const dispatch = useDispatch();

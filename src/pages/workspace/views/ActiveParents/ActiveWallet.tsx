@@ -1,20 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetHubWallet } from '../../features/hubs/hubService';
+import { useGetHubWallet } from '../../../../features/hubs/hubService';
 
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../../../app/hooks';
 import {
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName,
-} from '../../features/workspace/workspaceSlice';
-import MenuDropdown from '../../components/Dropdown/MenuDropdown';
-import SubDropdown from '../../components/Dropdown/SubDropdown';
+} from '../../../../features/workspace/workspaceSlice';
+import MenuDropdown from '../../../../components/Dropdown/MenuDropdown';
+import SubDropdown from '../../../../components/Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
-} from '../../features/general/slideOver/slideOverSlice';
+} from '../../../../features/general/slideOver/slideOverSlice';
 
 interface WalletIndexProps {
   showHubList: boolean;
