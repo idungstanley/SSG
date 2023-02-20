@@ -45,18 +45,15 @@ function arrayToTree(array: IDirWithChildren[]) {
 
 export default function Directories() {
   const { directoryId } = useParams();
-
   const [directories, setDirectories] = useState<IDirWithChildren[]>([]);
-
   // if it's first mount and directory id saved in URL
   const isSavedIdFromURL = !directories.length && !!directoryId;
-
   const { data } = useGetDirectories(directoryId, isSavedIdFromURL);
 
   useEffect(() => {
     if (data) {
       // add children key to each directory
-      const stringifiedData = data.map((i) => ({
+      const stringifiedData = data.map(i => ({
         id: i.id,
         name: i.name,
         parent_id: i.parent_id,

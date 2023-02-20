@@ -16,13 +16,13 @@ import {
   setShowPilotIconView,
   setShowRemoveHotKeyDropdown,
 } from '../../../../features/workspace/workspaceSlice';
+import { SiHotjar } from 'react-icons/si';
+import { IoMdRemoveCircle } from 'react-icons/io';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
 import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 import TabDrag from './TabDrags';
 import ChecklistSubtab from './checklist/subtabs/ChecklistSubtab';
-import { SiHotjar } from 'react-icons/si';
-import { IoMdRemoveCircle } from 'react-icons/io';
 import {
   closestCenter,
   DndContext,
@@ -31,77 +31,90 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import Dropdown from '../../../../components/Dropdown';
 import HotKeys from './hotKeys/HotKeys';
-import { IColumn } from '../../tasks/dropdown/CustomDropdown';
+import Dropdown from '../../../../components/Dropdown';
 
-export const pilotOptions: IColumn[] = [
+export const pilotOptions = [
   {
     id: 1,
-    name: 'Connect',
+    name: "Connect",
     source: communicationIcon,
     subTab: <CommunicationSubTab />,
-    isVisible: true,
-  },
-  {
-    id: 2,
-    name: 'Logs',
-    source: logsIcon,
     isVisible: false,
   },
   {
+    id: 2,
+    name: "Logs",
+    source: logsIcon,
+    isVisible: true,
+  },
+  {
     id: 3,
-    name: 'Permissions',
+    name: "Permissions",
     source: permissionIcon,
     isVisible: false,
   },
 
   {
     id: 4,
-    name: 'Details',
+    name: "Details",
     source: detailIcon,
     subTab: <DetailsSubTab />,
     isVisible: false,
   },
   {
     id: 5,
-    name: 'Automation',
+    name: "Automation",
     source: automationIcon,
     isVisible: false,
   },
   {
     id: 6,
-    name: 'TimeClock',
+    name: "TimeClock",
     source: timeclockIcon,
     subTab: <TimeSubTab />,
     isVisible: true,
   },
   {
     id: 7,
-    name: 'Checklist',
+    name: "Checklist",
     source: checklistIcon,
     subTab: <ChecklistSubtab />,
     isVisible: true,
   },
 ];
-
 function Tab() {
   const dispatch = useDispatch();
   const {
     showPilot,
     showPilotIconView,
-    showAddHotKeyDropdown,
-    showRemoveHotKeyDropdown,
     activeItemName,
+    showRemoveHotKeyDropdown,
+    showAddHotKeyDropdown,
     activeItemType,
   } = useAppSelector((state) => state.workspace);
+
+  const handleShowPilot = () => {
+    if (showPilot) {
+      dispatch(setShowPilot(false));
+    } else {
+      dispatch(setShowPilot(true));
+    }
+  };
+  const handleShowPilotIconView = () => {
+    if (showPilotIconView) {
+      dispatch(setShowPilotIconView(false));
+    } else {
+      dispatch(setShowPilotIconView(true));
+    }
+  };
   const handleRemoveHotKeys = () => {
     dispatch(setShowAddHotKeyDropdown(false));
     dispatch(
@@ -126,21 +139,8 @@ function Tab() {
       onClick: handleRemoveHotKeys,
     },
   ];
-  const handleShowPilot = () => {
-    if (showPilot) {
-      dispatch(setShowPilot(false));
-    } else {
-      dispatch(setShowPilot(true));
-    }
-  };
-  const handleShowPilotIconView = () => {
-    if (showPilotIconView) {
-      dispatch(setShowPilotIconView(false));
-    } else {
-      dispatch(setShowPilotIconView(true));
-    }
-  };
   const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
+
   const [items, setItems] = useState(
     pilotOptions.sort(
       (a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
@@ -152,19 +152,33 @@ function Tab() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
+
     if (active.id !== over?.id) {
       const findActive = items.find((i) => i.id === active.id);
       const findOver = items.find((i) => i.id === over?.id);
+
       if (findActive && findOver) {
         setItems((items) => {
           const oldIndex = items.indexOf(findActive);
           const newIndex = items.indexOf(findOver);
+
           const sortArray = arrayMove(items, oldIndex, newIndex);
+
           localStorage.setItem(
             'pilotSections',
-            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
+            JSON.stringify([
+              ...sortArray.map(
+                (i: {
+                  id: number;
+                  name: string;
+                  source: string;
+                  subTab: JSX.Element;
+                }) => i.id
+              ),
+            ])
           );
           return sortArray;
         });
@@ -181,11 +195,11 @@ function Tab() {
       <div
         className={`gap-4 pb-1`}
         aria-label="Tabs"
-        style={showPilot ? { width: '400px' } : { width: '48px' }}
+        style={showPilot ? { width: "400px" } : { width: "48px" }}
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
-            showPilot && 'pr-2'
+            showPilot && "pr-2"
           }`}
         >
           <div className="flex items-center">
@@ -206,7 +220,7 @@ function Tab() {
           </div>
           <div
             className={`flex items-center h-fit  ${
-              showPilot ? 'flex-row py-2 space-x-1' : 'flex-col pr-4'
+              showPilot ? "flex-row py-2 space-x-1" : "flex-col pr-4"
             }`}
           >
             <img
@@ -215,8 +229,8 @@ function Tab() {
               onClick={() => handleShowPilot()}
               className={`cursor-pointer w-3 h-3 ${
                 showPilot
-                  ? 'translate-x-4 skew-y-3'
-                  : 'transform -rotate-180 mb-1'
+                  ? "translate-x-4 skew-y-3"
+                  : "transform -rotate-180 mb-1"
               }`}
             />
             <Dropdown items={dropdownOptions} />
@@ -225,7 +239,7 @@ function Tab() {
         <HotKeys />
         <div
           className={`flex flex-wrap relative divide-y divide-x ${
-            showPilotIconView ? 'flex-row' : 'flex-col'
+            showPilotIconView ? "flex-row" : "flex-col"
           }`}
         >
           <SortableContext strategy={rectSortingStrategy} items={items}>
@@ -244,7 +258,7 @@ function Tab() {
           {showPilot && (
             <span
               className={`z-10 text-xs flex w-8 justify-center items-center ${
-                !showPilotIconView && 'absolute top-2 right-0'
+                !showPilotIconView && "absolute top-2 right-0"
               }`}
             >
               <img
@@ -253,8 +267,8 @@ function Tab() {
                 onClick={() => handleShowPilotIconView()}
                 className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
                   showPilotIconView
-                    ? 'text-green-500 transform -rotate-180'
-                    : ''
+                    ? "text-green-500 transform -rotate-180"
+                    : ""
                 }`}
               />
             </span>
