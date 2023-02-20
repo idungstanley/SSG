@@ -12,7 +12,7 @@ import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
 // import Breadcrumb from "../../../../settings/components/Breadcrumb";
 // import { HomeIcon } from "@heroicons/react/24/outline";
-import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
+// import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
 
 function Board() {
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ function Board() {
               <div className="flex items-center gap-2  ">
                 <h3 className="text-xs uppercase font-bold ">{task.status}</h3>
                 <span className="border-2 rounded-full w-5 text-center">
-                  <p className="text-xs font-bold ">{myTaskData.length}</p>
+                  <p className="text-xs font-bold "> 1</p>
                 </span>
               </div>
               <div>
@@ -89,9 +89,9 @@ function Board() {
               onMouseEnter={() => setIcons(task.id)}
               onMouseLeave={() => setIcons(task.id)}
             >
-              <p className="text-xs">
+              <p className="text-xs font-bold">
                 {/* task {">"} lists {">"} stanlists */}
-                {task.name}{}
+                lists / tasks
               </p>
               <div className="flex items-center justify-between mt-2">
                 <h3 className="text-sm capitalize  font-bold">{task.name}</h3>
@@ -146,7 +146,7 @@ function Board() {
                 </p>
               </span>
               {/* <Breadcrumb pages={} rootIcon={<HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />} rootIconHref="/explorer" /> */}
-              <BreadcrumbSection />
+              {/* <BreadcrumbSection /> */}
             </div>
           </div>
         ))}
