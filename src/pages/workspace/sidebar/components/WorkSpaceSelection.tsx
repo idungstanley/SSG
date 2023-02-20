@@ -2,19 +2,26 @@ import React from 'react';
 import { VscTriangleDown } from 'react-icons/vsc';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
+import { getWorkspaceService } from '../../../../features/workspace/workspaceService';
+import Spinner from '../../../../common/Spinner';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.workspace);
-const getLocalWSName = JSON.parse(
-  localStorage.getItem('currentWorkspacename') as string
-);
-const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
 
-  return (
+  const { data, status } = getWorkspaceService();
+
+  const workspaceName = data?.data.workspace.name;
+
+  if (status == 'loading') {
+    return <Spinner size={10} color={'#6B7280'} />;
+  }
+
+  return status == 'success' ? (
     <>
       {showSidebar ? (
-        <div className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
-        style={{width: 'calc(100% - 120px)'}}
+        <div
+          className="rounded border border-gray-400 p-0.5 mt-1 cursor-pointer"
+          style={{ width: 'calc(100% - 120px)' }}
         >
           <div className="flex justify-between items-center">
             <div className="flex justify-between items-center space-x-1">
@@ -47,7 +54,7 @@ const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
         </p>
       )}
     </>
-  );
+  ) : null;
 }
 
 export default WorkSpaceSelection;
