@@ -10,18 +10,10 @@ import {
 } from "../../features/task/taskService";
 import { useAppSelector } from "../../app/hooks";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import {
-  setCurrTeamMemId,
-  setTriggerAsssignTask,
-} from "../../features/task/taskSlice";
+import { setCurrTeamMemId } from "../../features/task/taskSlice";
 import { useDispatch } from "react-redux";
 
-interface assignModalProps {
-  option: string;
-  item: { id: string };
-}
-
-export default function AssignModal({ item, option }: assignModalProps) {
+export default function AssignModal() {
   const dispatch = useDispatch();
   const { data } = useGetTeamMembers({
     page: 0,
@@ -30,6 +22,8 @@ export default function AssignModal({ item, option }: assignModalProps) {
 
   const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
     useAppSelector((state) => state.task);
+
+  console.log(toggleAssignCurrentTaskId);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
@@ -77,10 +71,7 @@ export default function AssignModal({ item, option }: assignModalProps) {
                   >
                     <div
                       className="relative flex items-center cursor-pointer  space-x-2"
-                      onClick={() => {
-                        dispatch(setCurrTeamMemId(i.id));
-                        dispatch(setTriggerAsssignTask(true));
-                      }}
+                      onClick={() => dispatch(setCurrTeamMemId(i.id))}
                     >
                       <AvatarWithInitials
                         initials={i.initials}
