@@ -14,11 +14,23 @@
   text-align: left;
 }
 
+.fixed_headers thead,
+textarea {
+  color: #fdfdfd;
+}
 .fixed_headers thead tr {
   position: relative;
 }
 
-/* .fixed_headers tbody .td-resize {
+.fixed_headers thead th {
+  position: sticky;
+  top: 0;
+  resize: both;
+  overflow: auto;
+  min-width: 70px;
+}
+
+.fixed_headers tbody .td-resize {
   position: sticky;
   top: 0;
   resize: both;
