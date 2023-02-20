@@ -10,7 +10,9 @@ import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
 import Commnunication from './components/communication/Communication';
 import Details from './components/details/Details';
 import { useDispatch } from 'react-redux';
-import TimeClock, { TimeClockOptions } from './components/timeClock/subtabs/TimeClock';
+import TimeClock, {
+  TimeClockOptions,
+} from './components/timeClock/subtabs/TimeClock';
 import { communicationOptions } from './components/communication/Communication';
 import { DetailOptions } from './components/details/Details';
 import {
@@ -96,14 +98,13 @@ export default function Pilot() {
   ]);
   const selectedSection = useMemo(
     () => sections.find((section) => section.id === activeTabId),
-    [activeTabId]
+    [activeTabId],
   );
   const selectedHotKeySection = useMemo(
     () => allHotKeysInfo.find((section) => section.index === activeHotKeyTabId),
-    [activeHotKeyTabId]
+    [activeHotKeyTabId],
   );
-  console.log(activeHotKeyTabId);
-  console.log(allHotKeysInfo);
+
   return (
     <div className="pr-0.5">
       <div
@@ -118,11 +119,11 @@ export default function Pilot() {
         {/* navigation */}
         <Tab />
         {/* main section depends of active tab */}
-          {selectedSection
-            ? selectedSection.element
-            : selectedHotKeySection
-            ? selectedHotKeySection.element
-            : null}
+        {selectedSection
+          ? selectedSection.element
+          : selectedHotKeySection
+          ? selectedHotKeySection.element
+          : null}
       </div>
     </div>
   );

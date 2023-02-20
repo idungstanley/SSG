@@ -26,7 +26,6 @@ export default function HotKeys() {
     ...ChecklistOptions,
     ...TimeClockOptions,
   ];
-  console.log(hotKeysTabs);
 
   const { showAddHotKeyDropdown, showRemoveHotKeyDropdown, showPilot, activeHotKeyTabId } =
     useAppSelector((state) => state.workspace);
