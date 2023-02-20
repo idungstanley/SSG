@@ -237,8 +237,8 @@ export default function TaskData({ task }: TaskDataProps) {
       if (taskColField == "completed") {
         return (
           <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
+            style={{ marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -246,8 +246,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "in progress") {
         return (
           <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white mb-5 px-1 w-20 absolute text-center h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-xs font-medium bg-purple-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
+            style={{ marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -255,8 +255,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "archived") {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-yellow-500 text-white py-2.5 px-1  w-20 absolute h-full"
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-xs font-medium bg-yellow-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
+            style={{ marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -264,8 +264,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else if (taskColField == "todo") {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            style={{ marginLeft: "-30px" }}
           >
             {taskColField}
           </div>
@@ -273,8 +273,8 @@ export default function TaskData({ task }: TaskDataProps) {
       } else {
         return (
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute "
-            style={{ marginTop: "-4px", marginLeft: "-30px" }}
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            style={{ marginLeft: "-30px" }}
           >
             Todo
           </div>

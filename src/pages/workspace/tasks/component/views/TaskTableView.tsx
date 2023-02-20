@@ -5,12 +5,14 @@ import PriorityDropdown from "../../../../../components/priority/PriorityDropdow
 import {
   ImyTaskData,
   setCurrentTaskPriorityId,
+  setCurrentTaskStatusId,
   setToggleAssignCurrentTaskId,
 } from "../../../../../features/task/taskSlice";
 import moment, { MomentInput } from "moment";
 import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import AssignTask from "../../assignTask/AssignTask";
+import { MdOutlineDragIndicator } from "react-icons/md";
 // import AssignTask from "../../assignTask/AssignTask";
 
 function TaskTableView() {
@@ -61,6 +63,10 @@ function TaskTableView() {
         </>
       );
     });
+  };
+
+  const handleTaskStatus = (id: string) => {
+    dispatch(setCurrentTaskStatusId(id));
   };
 
   const renderData = (
@@ -134,16 +140,49 @@ function TaskTableView() {
     } else if (colfield == "status") {
       if (taskColField == "completed") {
         return (
-          <p className="bg-green-500 rounded pl-2 min-w-fit">{taskColField}</p>
+          <p
+            className="bg-green-500 rounded pl-2 min-w-fit"
+            onClick={() => handleTaskStatus(task?.id as string)}
+          >
+            {taskColField}
+          </p>
         );
       } else if (taskColField == "in progress") {
-        return <div className="bg-purple-500 rounded pl-2">{taskColField}</div>;
+        return (
+          <div
+            className="bg-purple-500 rounded pl-2"
+            onClick={() => handleTaskStatus(task?.id as string)}
+          >
+            {taskColField}
+          </div>
+        );
       } else if (taskColField == "archived") {
-        return <div className="bg-yellow-500 rounded pl-2">{taskColField}</div>;
+        return (
+          <div
+            className="bg-yellow-500 rounded pl-2"
+            onClick={() => handleTaskStatus(task?.id as string)}
+          >
+            {taskColField}
+          </div>
+        );
       } else if (taskColField == "todo") {
-        return <div className="bg-gray-400  rounded pl-2">{taskColField}</div>;
+        return (
+          <div
+            className="bg-gray-400  rounded pl-2"
+            onClick={() => handleTaskStatus(task?.id as string)}
+          >
+            {taskColField}
+          </div>
+        );
       } else {
-        return <div className="bg-gray-400 rounded pl-2">Todo</div>;
+        return (
+          <div
+            className="bg-gray-400 rounded pl-2"
+            onClick={() => handleTaskStatus(task?.id as string)}
+          >
+            Todo
+          </div>
+        );
       }
     } else if (colfield === "name") {
       return (
@@ -174,9 +213,6 @@ function TaskTableView() {
         <table className="fixed_headers w-full divide-y divide-gray-500">
           <thead className="bg-gray-50">
             <tr>
-              <th>
-                <input type="checkbox" className="opacity-0" />
-              </th>
               <th>#</th>
               {hideTask.length
                 ? hideTask.map(
@@ -212,14 +248,17 @@ function TaskTableView() {
                   key={task.id}
                   className=" bg-gray-50 hover:bg-purple-100 group"
                 >
-                  <td className=" td-resize px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
-                    <input
-                      type="checkbox"
-                      className="opacity-0 group-hover:opacity-100"
-                    />
-                  </td>
                   <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
-                    {index + 1}
+                    <div className="flex">
+                      <span className="opacity-0 group-hover:opacity-100">
+                        <MdOutlineDragIndicator />
+                      </span>
+                      <span className="group-hover:opacity-0">{index + 1}</span>
+                      <input
+                        type="checkbox"
+                        className="opacity-0 group-hover:opacity-100"
+                      />
+                    </div>
                   </td>
                   {taskColumns.map(
                     (col) =>
