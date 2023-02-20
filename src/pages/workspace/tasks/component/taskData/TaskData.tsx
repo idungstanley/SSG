@@ -1,376 +1,15 @@
-import React, { ReactNode } from 'react';
-import { useDispatch } from 'react-redux';
-import {
-  ImyTaskData,
-  setCurrentParentTaskId,
-  setCurrentTaskId,
-  setCurrentTaskIdForTag,
-  setCurrentTaskPriorityId,
-  setCurrentTaskStatusId,
-  setGetSubTaskId,
-  setShowTaskNavigation,
-  setTaskIdForPilot,
-  setToggleAssignCurrentTaskId,
-  triggerUnassignTag,
-} from '../../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { MdDragIndicator } from 'react-icons/md';
-import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
-import { useAppSelector } from '../../../../../app/hooks';
-// import { useNavigate } from 'react-router-dom';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-import { FiEdit2 } from 'react-icons/fi';
-import './task.css';
-import { IoCloseSharp } from 'react-icons/io5';
-import ToolTip from '../../../../../components/Tooltip';
-import EditTagModal from '../../../../../components/tags/EditTagModal';
-import ColorsModal from '../../../../../components/tags/ColorsModal';
-import moment, { MomentInput } from 'moment';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import TagModal from '../../../../../components/tags/TagModal';
-import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
-import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import React from "react";
+import { ImyTaskData } from "../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../app/hooks";
+import "./task.css";
+import DataRenderFunc from "./DataRenderFunc";
 
 interface TaskDataProps {
   task: ImyTaskData;
 }
 
 export default function TaskData({ task }: TaskDataProps) {
-  const dispatch = useDispatch();
-  const {
-    showTaskNavigation,
-    toggleAssignCurrentTaskId,
-    currentParentTaskId,
-    getSubTaskId,
-    taskColumns,
-    hideTask,
-    showTagColorDialogueBox,
-    renameTagId,
-  } = useAppSelector((state) => state.task);
-
-  const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!showTaskNavigation));
-    dispatch(setCurrentTaskId(id));
-  };
-
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name,
-      })
-    );
-  };
-
-  const handleTaskStatus = (id: string) => {
-    dispatch(setCurrentTaskStatusId(id));
-  };
-
-  const handleTaskPriority = (id: string) => {
-    dispatch(setCurrentTaskPriorityId(id));
-  };
-
-  const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
-
-  const handleGetSubTask = (id: string) => {
-    if (id == getSubTaskId) {
-      dispatch(setGetSubTaskId(null));
-    } else {
-      dispatch(setGetSubTaskId(id));
-    }
-  };
-
-  const handleCreateSubTask = (id: string) => {
-    if (id == currentParentTaskId) {
-      dispatch(setCurrentParentTaskId(null));
-    } else {
-      dispatch(setCurrentParentTaskId(id));
-    }
-  };
-
-  const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }] | undefined
-  ) => {
-    return data?.map((newData) => (
-      <div key={newData.id} className="">
-        <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
-        </span>
-      </div>
-    ));
-  };
-
-  const groupTags = (arr: tagItem[]) => {
-    return arr.map((item: tagItem) => {
-      return Array.isArray(item) ? (
-        <div>{groupTags(item)}</div>
-      ) : (
-        <>
-          <div
-            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? 'object-contain' : 'w-20'
-            }`}
-            style={{ backgroundColor: `${item.color}` }}
-          >
-            <div className="flex items-center">
-              <p> {item.name}</p>
-              {renameTagId == item.id && (
-                <form>
-                  <input
-                    type="text"
-                    placeholder="tagedit name"
-                    className="text-gray-400 h-7 object-contain"
-                  />
-                </form>
-              )}
-            </div>
-            <ToolTip tooltip="edit tag">
-              <button>
-                <EditTagModal tagId={item.id} />
-              </button>
-            </ToolTip>
-
-            <ToolTip tooltip="unassign tag">
-              <button
-                onClick={() =>
-                  dispatch(
-                    triggerUnassignTag({
-                      unAssignTadId: item.id,
-                      currentTaskIdForTag: task.id,
-                    })
-                  )
-                }
-              >
-                <IoCloseSharp />
-              </button>
-            </ToolTip>
-            {showTagColorDialogueBox && <ColorsModal />}
-          </div>
-          {/* <span>{arr.length}</span> */}
-        </>
-      );
-    });
-  };
-
-  const renderData = (
-    taskColField:
-      | string
-      | number
-      | undefined
-      | tagItem[]
-      | null
-      | Array<{ id: string; initials: string; colour: string }>,
-    colfield: string
-  ) => {
-    if (
-      colfield === 'assignees' &&
-      (
-        taskColField as Array<{
-          id: string;
-          initials: string;
-          colour: string;
-        }>
-      ).length !== 0
-    ) {
-      return (
-        <>
-          <div className="">
-            <div
-              onClick={() => handleAssigneeModal(task.id)}
-              className="cursor-pointer flex "
-            >
-              {groupAssignee(task.assignees)}
-            </div>
-          </div>
-          <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == task.id ? (
-              <AssignTask option={"assign-task"} />
-            ) : null}
-          </span>
-        </>
-      );
-    } else if (
-      colfield === 'assignees' &&
-      (
-        taskColField as Array<{
-          id: string;
-          initials: string;
-          colour: string;
-        }>
-      ).length === 0
-    ) {
-      return (
-        <>
-          <UserAddOutlined
-            className=" ml-2 text-gray-400 text-xl cursor-pointer "
-            aria-hidden="true"
-            onClick={() => handleAssigneeModal(task.id)}
-          />
-          <span className="absolute shadow-2xl  z-30  ">
-            {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-          </span>
-        </>
-      );
-    } else if (colfield === 'tags') {
-      return <div> {groupTags(taskColField as tagItem[])}</div>;
-    } else if (colfield == 'created_at' || colfield == 'updated_at') {
-      return (
-        <span className="text-gray-400 text-sm font-medium">
-          {moment(taskColField as MomentInput).format('MM/DD')}
-        </span>
-      );
-    } else if (colfield == 'status') {
-      if (taskColField == 'completed') {
-        return (
-          <div
-            className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: '-30px' }}
-          >
-            {taskColField}
-          </div>
-        );
-      } else if (taskColField == 'in progress') {
-        return (
-          <div
-            className="capitalize text-xs font-medium bg-purple-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: '-30px' }}
-          >
-            {taskColField}
-          </div>
-        );
-      } else if (taskColField == 'archived') {
-        return (
-          <div
-            className="capitalize text-xs font-medium bg-yellow-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: '-30px' }}
-          >
-            {taskColField}
-          </div>
-        );
-      } else if (taskColField == 'todo') {
-        return (
-          <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
-            style={{ marginLeft: '-30px' }}
-          >
-            {taskColField}
-          </div>
-        );
-      } else {
-        return (
-          <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
-            style={{ marginLeft: '-30px' }}
-          >
-            Todo
-          </div>
-        );
-      }
-    } else if (colfield === 'name') {
-      return (
-        <div className="flex items-center relative ">
-          <div className=" flex items-center">
-            <input
-              type="checkbox"
-              id="checked-checkbox"
-              className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
-              onClick={() => {
-                displayNav(task.id as string);
-              }}
-            />
-            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
-          </div>
-          <div
-            onClick={() => handleGetSubTask(task.id)}
-            className="items-center"
-          >
-            {task.id == getSubTaskId ? (
-              <span>
-                <img
-                  src={ArrowDown}
-                  style={{ width: '6px', marginRight: '2px' }}
-                  className="flex-shrink-0 h-2"
-                  aria-hidden="true"
-                  color="rgba(72, 67, 67, 0.64)"
-                />
-              </span>
-            ) : (
-              <span>
-                <img
-                  src={ArrowRigt}
-                  style={{ width: '5px', marginRight: '2px' }}
-                  className="flex-shrink-0 h-2"
-                  color="rgba(72, 67, 67, 0.64)"
-                />
-              </span>
-            )}
-          </div>
-          <div className="flex items-center">
-            <p
-              onClick={() => handleTaskStatus(task.id as string)}
-              className="relative pt-1 pr-1"
-            >
-              <StatusDropdown TaskCurrentStatus={task?.status} />
-            </p>
-            <p
-              onClick={() =>
-                handleTaskPilot(task.id as string, task.name as string)
-              }
-              className="cursor-pointer "
-            >
-              {taskColField as ReactNode}
-            </p>
-            <div
-              id="iconWrapper"
-              className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
-            >
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
-              </span>
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusOutlined
-                  className="  w-3  text-gray-500   "
-                  aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task.id as string)}
-                />
-              </span>
-              {/* tag here */}
-              <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
-                <TagModal />
-              </button>
-            </div>
-            {/* tags goes here */}
-            {/* <div> {groupTags(task.tags)}</div>; */}
-          </div>
-        </div>
-      );
-    } else if (colfield === 'priority') {
-      return (
-        <span
-          className="relative  border-dotted border-gray-300 "
-          onClick={() => handleTaskPriority(task.id as string)}
-        >
-          <PriorityDropdown TaskCurrentPriority={task?.priority} />
-        </span>
-      );
-    } else return taskColField;
-  };
+  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   return (
     <div className="relative ">
@@ -380,25 +19,33 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == 'Task' &&
+                    col.value == "Task" &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field) as ReactNode}
+                        <DataRenderFunc
+                          taskColField={task[col.field]}
+                          colfield={col.field}
+                          task={task}
+                        />
                       </div>
                     )
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == 'Task' &&
+                    col.value == "Task" &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field) as ReactNode}
+                        <DataRenderFunc
+                          taskColField={task[col.field]}
+                          colfield={col.field}
+                          task={task}
+                        />
                       </div>
                     )
                 )}
@@ -407,25 +54,33 @@ export default function TaskData({ task }: TaskDataProps) {
             {hideTask.length
               ? hideTask.map(
                   (col) =>
-                    col.value == 'Tags' &&
+                    col.value == "Tags" &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field) as ReactNode}
+                        <DataRenderFunc
+                          taskColField={task[col.field]}
+                          colfield={col.field}
+                          task={task}
+                        />
                       </div>
                     )
                 )
               : taskColumns.map(
                   (col) =>
-                    col.value == 'Tags' &&
+                    col.value == "Tags" &&
                     !col.hidden && (
                       <div
                         key={col.field}
                         className="flex items-center capitalize ml-2 text-xs font-medium  group"
                       >
-                        {renderData(task[col.field], col.field) as ReactNode}
+                        <DataRenderFunc
+                          taskColField={task[col.field]}
+                          colfield={col.field}
+                          task={task}
+                        />
                       </div>
                     )
                 )}
@@ -435,29 +90,37 @@ export default function TaskData({ task }: TaskDataProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field) as ReactNode}
+                      <DataRenderFunc
+                        taskColField={task[col.field]}
+                        colfield={col.field}
+                        task={task}
+                      />
                     </div>
                   )
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value !== "Task" &&
+                  col.value !== "Tags" &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: '50px' }}
+                      style={{ width: "50px" }}
                     >
-                      {renderData(task[col.field], col.field) as ReactNode}
+                      <DataRenderFunc
+                        taskColField={task[col.field]}
+                        colfield={col.field}
+                        task={task}
+                      />
                     </div>
                   )
               )}
