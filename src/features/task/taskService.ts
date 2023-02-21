@@ -47,7 +47,11 @@ export const getOneTaskService = (data: {
 };
 
 //getOneTask
-export const getOneTaskServices = ({ task_id }: { task_id?: string | null }) => {
+export const getOneTaskServices = ({
+  task_id,
+}: {
+  task_id?: string | null;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],

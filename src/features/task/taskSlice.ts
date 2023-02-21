@@ -122,7 +122,6 @@ export const taskSlice = createSlice({
         state.myTaskData = taskDataArray;
       }
     },
-
     getTaskColumns(state, action) {
       state.taskColumns = action.payload;
     },
