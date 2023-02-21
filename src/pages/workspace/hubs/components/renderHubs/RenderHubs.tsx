@@ -38,9 +38,18 @@ function RenderHubs() {
               <ListFilter />
             </div>
             {/* Board */}
-            {HubDetail?.data.hubs.map((data: dataProps) => (
+            {/* {HubDetail?.data.hubs.map((data: dataProps) => (
               <>{boardView && <TaskBoardSection data={data} key={data.id} />}</>
-            ))}
+            ))} */}
+            {boardView && (
+              <div>
+                {HubDetail?.data?.hubs.map((data: dataProps) => (
+                  <div key={data.id}>
+                    <TaskBoardSection data={data} />
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div>
               {HubDetail?.data.hubs.map((data: dataProps) => (
