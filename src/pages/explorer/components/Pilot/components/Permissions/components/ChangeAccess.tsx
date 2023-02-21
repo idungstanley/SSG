@@ -14,9 +14,10 @@ export default function ChangeAccess({
   itemType,
   accessToId,
 }: ChangeAccessProps) {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { activeEntity } = useAppSelector(
+    (state) => state.workspace
+  );
+  const {id, type} = activeEntity;
 
   const { mutate: onChange } = useChangeAccessForData(type, id);
 

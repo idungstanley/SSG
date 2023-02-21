@@ -8,6 +8,7 @@ import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
 import ChatForPilot from '../../../../components/Chat/ChatForPilot';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { setActiveEntity } from '../../../../features/workspace/workspaceSlice';
 
 const sections = [
   {
@@ -50,6 +51,7 @@ export default function Pilot() {
 
     if (id) {
       dispatch(setShowPilotSideOver({ type, id, show: true }));
+      dispatch(setActiveEntity({ id: id, type: type}));
     }
 
     return () => setActiveTabId(0);

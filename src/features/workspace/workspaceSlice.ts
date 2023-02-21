@@ -26,6 +26,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
+  activeEntity: {id: string | null, type: string | null}
   showPilotListView: boolean;
   activeTabId: number | null;
   activeHotKeyTabId: number | null;
@@ -68,6 +69,7 @@ const initialState: workspaceState = {
   activeSubChecklistTabId: 2,
   showAddHotKeyDropdown: false,
   showRemoveHotKeyDropdown: false,
+  activeEntity: {id: null, type: null}
 };
 
 export const wsSlice = createSlice({
@@ -135,6 +137,9 @@ export const wsSlice = createSlice({
     },
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
+    },
+    setActiveEntity(state, action) {
+      state.activeEntity = action.payload;
     },
     setShowExtendedBar(state, action) {
       state.showExtendedBar = action.payload;
@@ -224,6 +229,7 @@ export const {
   setShowAddHotKeyDropdown,
   setShowRemoveHotKeyDropdown,
   setActiveHotKeyId,
+  setActiveEntity
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

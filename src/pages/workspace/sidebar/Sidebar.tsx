@@ -19,7 +19,6 @@ import Modal from '../hubs/components/Modal';
 // import ArchiveMenu from '../hubs/components/archive/ArchiveMenu';
 import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
-import FooterTabs from './components/FooterTabs';
 import ResizeBorder from '../../../components/ResizeBorder';
 import TeamSettings from '../workspaceSettings/components/TeamSettings';
 
@@ -117,9 +116,10 @@ export default function Sidebar() {
         <div className="relative flex flex-col bg-white">
           <div className="sticky top-0 left-0 z-10 flex items-center justify-between flex-shrink-0 border-separate">
             <div
-              className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit h-30 ${
+              className={`flex items-center justify-left border-b border-gray-300 mb-1.5 w-full py-2 bg-white w-inherit ${
                 showSidebar ? 'flex-row' : 'flex-col space-y-1'
               }`}
+              style={{height: '7vh'}}
             >
               <img className="w-10 ml-1 h-11" src={MainLogo} alt="Workflow" />
               <WorkSpaceSelection />
@@ -181,7 +181,7 @@ export default function Sidebar() {
           <div onScroll={(e) => handleScroll(e)} className="pr-0.5">
             <section
               className="w-full h-full pr-1 overflow-x-hidden overflow-y-auto"
-              style={{ minHeight: '0', maxHeight: '80vh' }}
+              style={{ maxHeight: '93vh' }}
             >
               <Search />
               <NavigationItems />
@@ -189,7 +189,6 @@ export default function Sidebar() {
             </section>
           </div>
         </div>
-        <FooterTabs />
         <ResizeBorder
           width={sidebarWidth}
           minWidth={MIN_SIDEBAR_WIDTH}

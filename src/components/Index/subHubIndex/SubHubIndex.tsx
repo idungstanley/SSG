@@ -18,6 +18,7 @@ import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../features/workspace/workspaceSlice';
@@ -52,6 +53,7 @@ export default function SubHubIndex() {
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
@@ -97,6 +99,7 @@ export default function SubHubIndex() {
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     navigate(`/workspace/hub/${id}`);
   };
 
