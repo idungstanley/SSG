@@ -134,12 +134,6 @@ export default function UserSettingsModal() {
       >
         <Menu.Items className="origin-top-right absolute z-30 mt-2 w-48 rounded-md shadow-lg -right-2 bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
           <div className="pt-3">
-            {/* <h4
-                className=" font-bold capitalize px-4 truncate"
-                style={{ fontSize: '11px' }}
-              >
-                {currentWorkspaceName?.data.workspace.name}
-              </h4> */}
             {userSettings?.map((i) => (
               <Menu.Item key={i.id}>
                 <button

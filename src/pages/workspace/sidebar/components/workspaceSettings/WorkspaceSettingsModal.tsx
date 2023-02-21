@@ -4,11 +4,20 @@ import { classNames } from '../../../../../utils';
 import { VscTriangleDown } from 'react-icons/vsc';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineGroupAdd } from 'react-icons/md';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAllWorkSpaceService,
   getWorkspaceService,
 } from '../../../../../features/workspace/workspaceService';
 import { AvatarWithInitials } from '../../../../../components';
+import { switchWorkspaceService } from '../../../../../features/account/accountService';
+import { useDispatch } from 'react-redux';
+import {
+  setCurrentWorkspace,
+  switchWorkspace,
+} from '../../../../../features/auth/authSlice';
+import { setMyWorkspacesSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface workspaceSettingsListType {
   id: number;
@@ -24,6 +33,9 @@ interface WorkspaceProps {
 }
 
 export default function WorkspaceSettingsModal() {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data } = getAllWorkSpaceService();
   const { data: currentWorkspaceName } = getWorkspaceService();
 
@@ -72,6 +84,36 @@ export default function WorkspaceSettingsModal() {
       handleClick: () => ({}),
     },
   ];
+
+  const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
+    onSuccess: (data) => {
+      // Clear react-query and redux cache
+
+      localStorage.setItem(
+        'currentWorkspaceId',
+        JSON.stringify(data.data.workspace.id)
+      );
+
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: data.data.workspace.id,
+        })
+      );
+
+      dispatch(setMyWorkspacesSlideOverVisibility(false));
+      navigate('/workspace');
+
+      queryClient.invalidateQueries();
+      dispatch(switchWorkspace());
+    },
+  });
+  const onSwitchWorkspace = (id: string) => {
+    switchWorkspaceMutation.mutate({
+      workspaceId: id,
+    });
+    queryClient.invalidateQueries();
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -137,7 +179,7 @@ export default function WorkspaceSettingsModal() {
                           active ? `bg-gray-200` : '',
                           'flex items-center space-x-1 py-2 text-sm text-gray-600 px-4 text-left w-full'
                         )}
-                        // onClick={i.handleClick}
+                        onClick={() => onSwitchWorkspace(i.id)}
                       >
                         <p>
                           <AvatarWithInitials
