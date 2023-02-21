@@ -5,6 +5,7 @@ import { useGetHubWallet } from '../../../../features/hubs/hubService';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../app/hooks';
 import {
+  setActiveEntity,
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName,
@@ -32,6 +33,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const handleLocation = (id: string, name: string, type = 'wallet') => {
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    dispatch(setActiveEntity({ id: id, type: type }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
@@ -44,13 +46,13 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
             Create a
             <span
               onClick={() => dispatch(setCreateWalletSlideOverVisibility(true))}
-              className="underline mx-1 text-black"
+              className="mx-1 text-black underline"
             >
               Wallet,
             </span>
             <span
               onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-              className="underline text-black"
+              className="text-black underline"
             >
               List
             </span>
@@ -69,7 +71,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                   >
                     <div
                       onClick={() => handleLocation(wallet.id, wallet.name)}
-                      className="ml-2 flex cursor-pointer hover:underline hover:decoration-dashed"
+                      className="flex ml-2 cursor-pointer hover:underline hover:decoration-dashed"
                     >
                       <p
                         className="tracking-wider capitalize truncate"

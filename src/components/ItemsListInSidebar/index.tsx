@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
+  setActiveEntity,
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
@@ -81,6 +82,7 @@ export default function ItemsListInSidebar({
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`/hub/${id}`);

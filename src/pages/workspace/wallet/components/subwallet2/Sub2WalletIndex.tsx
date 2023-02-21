@@ -6,6 +6,7 @@ import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { BsListUl } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../../../features/workspace/workspaceSlice';
@@ -59,6 +60,7 @@ function Sub2WalletIndex({
     dispatch(setShowHub(true));
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   const handleWalletSettings = (

@@ -10,10 +10,10 @@ import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../features/list/listService';
 
 export default function Information() {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { activeEntity } = useAppSelector(
+    (state) => state.workspace
+  );
+  const {id, type} = activeEntity;
 
   const { data: folder } = useGetExplorerFolder(id, type === 'folder');
 
@@ -57,9 +57,9 @@ export default function Information() {
   return (
     <>
       {data ? (
-        <div className="flex border-b flex-col text-sm font-medium divide-y divide-gray-200">
+        <div className="flex flex-col justify-center text-sm font-medium border-b divide-y divide-gray-200">
           {info.map((item) => (
-            <div key={item.id} className="flex py-3 justify-between">
+            <div key={item.key} className="flex justify-between py-3">
               <p className="text-gray-500">{item.key}</p>
               <span className="text-gray-700">{item.value}</span>
             </div>

@@ -1,27 +1,26 @@
 import React, { memo, useEffect } from 'react';
-import hubIcon from '../../../../../assets/branding/hub.png';
-import { FaWpforms } from 'react-icons/fa';
-import emailIcon from '../../../../../assets/branding/email-icon.png';
-import InboxIcon from '../../../../../assets/branding/inbox.png';
-import timeClockIcon from '../../../../../assets/branding/timeclock.png';
-// import trackerIcon from '../../../../assets/branding/tracker-icon.png';
-import routePlanner from '../../../../../assets/branding/gis_route.png';
-import alsoHRIcon from '../../../../../assets/branding/alsohr-icon.png';
-// import formsIcon from '../../../../assets/branding/forms-icon.png';
-import commerceIcon from '../../../../../assets/branding/commerce.png';
-import libraryIcon from '../../../../../assets/icons/library.svg';
-import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
+import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
+import Dashboard from '../../../../../pages/workspace/dashboard';
 import Favorites from '../../../../../pages/workspace/favorites';
+import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
-import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
-import Files from '../../../../../pages/workspace/files';
-import Dashboard from '../../../../../pages/workspace/dashboard';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import hubIcon from '../../../../../assets/branding/hub.png';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
+import emailIcon from '../../../../../assets/branding/email-icon.png';
+import InboxIcon from '../../../../../assets/branding/inbox.png';
+import libraryIcon from '../../../../../assets/icons/library.svg';
+import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
+import AlsoHr from '../../../../../pages/workspace/alsoHr';
+import Commerce from '../../../../../pages/workspace/commerce';
+import RoutePlanner from '../../../../../pages/workspace/routePlanner';
+import { IoBusinessOutline } from 'react-icons/io5';
+import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { FaHandsHelping, FaRoute } from 'react-icons/fa';
 import Sidebar from '../../../../../pages/directory/components/Sidebar';
 
 const places = [
@@ -61,31 +60,31 @@ const places = [
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <FaWpforms className="h-4" />,
+    icon: <DocumentTextIcon className="w-fit h-fit" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    source: timeClockIcon,
+    icon: <ClockIcon className="w-fit h-fit"/>,
   },
   {
     name: 'Route Planner',
     id: 8,
-    place: <> </>,
-    source: routePlanner,
+    place: <RoutePlanner />,
+    icon: <FaRoute className="text-md"/>,
   },
   {
     name: 'Also HR',
     id: 9,
-    place: <> </>,
-    source: alsoHRIcon,
+    place: <AlsoHr/>,
+    icon: <FaHandsHelping className="w-fit h-fit"/>,
   },
   {
     name: 'Commerce',
     id: 10,
-    place: <> </>,
-    source: commerceIcon,
+    place: <Commerce/>,
+    icon: <IoBusinessOutline className="w-fit h-fit"/>,
   },
 ];
 
@@ -118,7 +117,7 @@ function Places() {
   return (
     <ul
       aria-labelledby="projects-headline relative"
-      className="divide-y divide-gray-200 border-t border-b border-gray-200"
+      className="border-t border-b border-gray-200 divide-y divide-gray-200"
     >
       {places.map((place) => (
         <div key={place.id}>
@@ -133,7 +132,7 @@ function Places() {
                   <img
                     src={place.source}
                     alt={place.name + 'Icon'}
-                    className="h-4 w-4"
+                    className="w-fit h-fit"
                   />
                 )
               }

@@ -13,14 +13,15 @@ import MenuDropdown from '../../Dropdown/MenuDropdown';
 import { setCurrentListId } from '../../../features/list/listSlice';
 import { useAppSelector } from '../../../app/hooks';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../features/workspace/workspaceSlice';
 
 interface ListIndexProps {
-  showHubList: boolean;
-  getCurrentHubId: string | null;
-  paddingLeft?: string;
+  showHubList: boolean
+  getCurrentHubId: string | null
+  paddingLeft?: string
 }
 
 function ListIndex({
@@ -42,20 +43,21 @@ function ListIndex({
         activeItemType: 'list',
         activeItemId: id,
         activeItemName: name,
-      })
+      }),
     );
+    dispatch(setActiveEntity({ id: id, type: 'list' }));
   };
   const handleListSettings = (
     id: string,
     name: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>,
   ) => {
     dispatch(setCurrentListId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
         showMenuDropdownType: 'list',
-      })
+      }),
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {

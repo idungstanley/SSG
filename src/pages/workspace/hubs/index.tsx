@@ -26,7 +26,7 @@ function Hubs() {
   const configForDropdown = [
     {
       label: 'Hub',
-      icon: <img src={hubIcon} alt="Hub Icon" className="h-4 w-4" />,
+      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
       onClick: () => dispatch(setCreateHubSlideOverVisibility(true)),
     },
   ];
@@ -35,23 +35,25 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASK"
-        icon={<img src={hubIcon} alt="Hub Icon" className="h-4 w-4" />}
+        icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />}
         rightContent={
-          <div className="flex gap-2">
+          <div className="flex gap-2"
+          onClick={(e) => e.stopPropagation()}
+          >
             <Dropdown config={configForDropdown} iconType="plus" />
           </div>
         }
       />
       {showSidebar ? (
         <>
-          <div className="pl-4 hover:bg-gray-100 flex justify-between items-center">
+          <div className="flex items-center justify-between pl-4 hover:bg-gray-100">
             <div className="flex items-center content-center self-center py-2">
               <img
                 src={everythingIcon}
                 alt="Hub Icon"
                 className="h-4 mr-4"
               />
-              <p className="block tracking-wider capitalize truncate text-xs">
+              <p className="block text-xs tracking-wider capitalize truncate">
                 Everything
               </p>
             </div>
