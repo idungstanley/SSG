@@ -21,3 +21,11 @@
 .scrollbarDynCol:hover {
   overflow-y: auto;
 }
+
+.singleLineView {
+  height: 20px;
+}
+
+.CompactView {
+  min-height: 60px;
+}

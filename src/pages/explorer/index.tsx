@@ -16,7 +16,7 @@ export default function ExplorerPage() {
 
           <div className="flex w-full h-full">
             {/* files list, breadcrumb, file preview */}
-            <div className="flex h-full w-full flex-col">
+            <div className="flex flex-col w-full h-full">
               {/* Breadcrumb */}
               <BreadcrumbSection />
               {/* files list & file preview */}

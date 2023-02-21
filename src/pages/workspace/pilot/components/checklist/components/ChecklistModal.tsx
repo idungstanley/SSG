@@ -27,8 +27,8 @@ export default function ChecklistModal({
   checklistItemId,
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
+
   const handleDelChecklist = () => {
-    console.log(checklistId);
     dispatch(setClickChecklistId(checklistId));
     dispatch(setTriggerDelChecklist(true));
   };
@@ -43,8 +43,10 @@ export default function ChecklistModal({
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
-    } else if (option.name == "Assign to") {
+    } else if (option.name == "Assign to" || option.name == "Unassign") {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
+      dispatch(setClickChecklistId(checklistId));
+      dispatch(setClickChecklistItemId(checklistItemId));
     }
   };
   return (
@@ -63,16 +65,16 @@ export default function ChecklistModal({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute z-20 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-20">
+        <Menu.Items className="absolute z-20 w-40 mt-2 -ml-20 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {options.map((option) =>
             option.name === "New Item" ? (
               <Disclosure.Button key={option.id} className="w-full">
-                <Menu.Button className="flex text-sm text-gray-400 w-full">
+                <Menu.Button className="flex w-full text-sm text-gray-400">
                   {() => (
-                    <div className="flex items-center hover:bg-gray-300 text-gray-600 w-full">
+                    <div className="flex items-center w-full text-gray-600 hover:bg-gray-300">
                       <button
                         type="button"
-                        className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
+                        className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
                         onClick={() => {
                           handleOptions(option);
                         }}
@@ -86,10 +88,10 @@ export default function ChecklistModal({
             ) : (
               <Menu.Item key={option.id}>
                 {() => (
-                  <div className="flex items-center hover:bg-gray-300 text-gray-600">
+                  <div className="flex items-center text-gray-600 hover:bg-gray-300">
                     <button
                       type="button"
-                      className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
+                      className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
                       onClick={() => {
                         handleOptions(option);
                       }}

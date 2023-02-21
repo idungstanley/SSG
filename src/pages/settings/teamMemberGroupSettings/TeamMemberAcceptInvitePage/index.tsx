@@ -25,7 +25,6 @@ export default function TeamMemberAcceptInvite() {
     if (data?.data) {
       localStorage.setItem('user', JSON.stringify(data?.data.user));
     }
-
     window.location.href = '/workspace';
   };
 

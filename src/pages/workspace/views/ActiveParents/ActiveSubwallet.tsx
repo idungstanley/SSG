@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getWalletServices } from '../../features/wallet/walletService';
+import { getWalletServices } from '../../../../features/wallet/walletService';
 import { useDispatch } from 'react-redux';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
-import MenuDropdown from '../../components/Dropdown/MenuDropdown';
-import { useAppSelector } from '../../app/hooks';
-import { dataProps } from '../../components/Index/walletIndex/WalletIndex';
+import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
+import MenuDropdown from '../../../../components/Dropdown/MenuDropdown';
+import { useAppSelector } from '../../../../app/hooks';
+import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
 
 interface SubWalletIndexProps {
   walletParentId: string | null;

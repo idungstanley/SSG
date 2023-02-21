@@ -121,7 +121,7 @@ function TimeEntriesDropdown({
                     <p>{moment.utc(duration * 1000).format("HH:mm:ss")}</p>
                     <p>{moment(start_date).format("MMM D")}</p>
                   </div>
-                  <div
+[1:03 PM, 2/16/2023] Nich Uk Line: <div
                     id="right"
                     className="flex items-center space-x-2 relative"
                   >

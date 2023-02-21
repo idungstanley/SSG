@@ -23,6 +23,6 @@ export interface ISuccessRequest {
 
 export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';
 
-export type explorerItemType = 'folder' | 'file';
+export type explorerItemType = 'folder' | 'file' | null | string;
 
-export type itemType = 'inbox_file' | 'inbox' | explorerItemType | 'hub';
+export type itemType = 'inbox_file' | 'inbox' | explorerItemType | null | string;

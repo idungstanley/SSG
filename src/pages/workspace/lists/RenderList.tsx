@@ -1,22 +1,21 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { getTaskListService } from '../../../features/task/taskService';
-import ListNav from './components/renderlist/ListNav';
-import { useAppSelector } from '../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setAddNewTaskItem } from '../../../features/task/taskSlice';
-import TaskListViews from '../tasks/component/views/TaskListViews';
-import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
-import TaskData from '../tasks/component/taskData/TaskData';
-import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
-import SubTask from '../tasks/subtasks/create/SubTask';
-import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
-// ? uncomment this to show previous pilot
-// import Pilot from "../pilot";
-import ListFilter from './components/renderlist/listDetails/ListFilter';
-import Board from '../tasks/component/views/Board';
-import TaskTableView from '../tasks/component/views/TaskTableView';
-import Pilot from '../../../components/Pilot';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { getTaskListService } from "../../../features/task/taskService";
+import ListNav from "./components/renderlist/ListNav";
+import { useAppSelector } from "../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { setAddNewTaskItem } from "../../../features/task/taskSlice";
+import TaskListViews from "../tasks/component/views/TaskListViews";
+import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
+import TaskData from "../tasks/component/taskData/TaskData";
+import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction";
+import SubTask from "../tasks/subtasks/create/SubTask";
+import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
+import Pilot from "../pilot";
+import ListFilter from "./components/renderlist/listDetails/ListFilter";
+import Board from "../tasks/component/views/Board";
+import TaskTableView from "../tasks/component/views/TaskTableView";
+// import ListViewSettingsModal from "../tasks/viewSettingsModal/ListViewSettingsModal";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -35,7 +34,7 @@ function RenderList() {
   const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       <section id="nav" className="capitalize ">
         <ListNav
           navName={listDetailsData?.data?.list?.name}
@@ -46,10 +45,10 @@ function RenderList() {
         />
         <ListFilter />
       </section>
-      <section className="flex h-full w-full">
-        <div className="  w-full overflow-y-scroll">
+      <section className="flex w-full h-full">
+        <div className="w-full overflow-y-scroll ">
           <div
-            className=" block p-2 border-2 border-gray-200"
+            className="block p-2 border-2 border-gray-200 "
             style={{ backgroundColor: '#e1e4e5' }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
@@ -58,7 +57,7 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            {boardView && <Board />}
+            <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}
 
             {listView &&
@@ -82,7 +81,7 @@ function RenderList() {
               id="newItem"
               onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
             >
-              <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
+              <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
                 + New Task
               </p>
             </div>

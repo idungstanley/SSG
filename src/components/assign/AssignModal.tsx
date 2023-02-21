@@ -7,27 +7,28 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import {
   UseAssignTaskService,
   getOneTaskServices,
-} from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import { setCurrTeamMemId } from '../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
+} from "../../features/task/taskService";
+import { useAppSelector } from "../../app/hooks";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { setCurrTeamMemId } from "../../features/task/taskSlice";
+import { useDispatch } from "react-redux";
 
 export default function AssignModal() {
   const dispatch = useDispatch();
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: "",
   });
 
-  const { toggleAssignCurrentTaskId, currTeamMemberId } = useAppSelector(
-    (state) => state.task
-  );
+  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
+    useAppSelector((state) => state.task);
+
+  console.log(toggleAssignCurrentTaskId);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
-    triggerAsssignTask: false,
+    triggerAsssignTask: triggerAsssignTask,
   });
 
   const { data: getTaskAssignees } = getOneTaskServices({
@@ -56,8 +57,8 @@ export default function AssignModal() {
         leaveTo="transform opacity-0 scale-95"
         // show={sidebarSettings}
       >
-        <Menu.Items className="origin-top-right absolute z-20 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
-          <div className="h-52 overflow-auto">
+        <Menu.Items className="absolute z-20 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
+          <div className="overflow-auto h-52">
             {data?.data.team_members.map((i) => (
               <Menu.Item key={i.id}>
                 {({ active }) => (
@@ -69,7 +70,7 @@ export default function AssignModal() {
                     )}
                   >
                     <div
-                      className="relative flex items-center cursor-pointer  space-x-2"
+                      className="relative flex items-center space-x-2 cursor-pointer"
                       onClick={() => dispatch(setCurrTeamMemId(i.id))}
                     >
                       <AvatarWithInitials
@@ -86,7 +87,7 @@ export default function AssignModal() {
                           type="button"
                           // onClick={() => handleUnAssign(i.id)}
                         >
-                          <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                          <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                         </button>
                       ) : null}
                     </div>
