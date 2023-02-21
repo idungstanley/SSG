@@ -1,6 +1,7 @@
 import React from "react";
 import { useGetHubChildren } from "../../../../../../../features/hubs/hubService";
-import ListTemplate, { dataProps } from "./ListTemplate";
+import { dataProps } from "./ListTemplate";
+import BoardTemplate from "./BoardTemplate";
 
 interface ItemsHubDataProps {
   hubId: string | null;
@@ -19,7 +20,7 @@ export default function BoardHubData({ hubId, hubName }: ItemsHubDataProps) {
             <>
               <div key={item.id}>{item.name}</div>
               <div>
-                <ListTemplate listId={item.id} />
+                <BoardTemplate listId={item.id} />
               </div>
             </>
           );
