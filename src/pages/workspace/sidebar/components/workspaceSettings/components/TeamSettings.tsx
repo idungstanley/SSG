@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
+import MenuWithTransition from '../../../../../../components/MenuLists/MenuWithTransition';
 import { CiSettings } from 'react-icons/ci';
 
 const leftMenuItems = [

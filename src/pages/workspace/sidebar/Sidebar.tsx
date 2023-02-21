@@ -11,7 +11,6 @@ import MainLogo from '../../../assets/branding/main-logo.png';
 import notificationIcon from '../../../assets/branding/notification-logo.png';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { AvatarWithInitials } from '../../../components';
 import { useAppSelector } from '../../../app/hooks';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import WorkSpaceSelection from './components/WorkSpaceSelection';
@@ -21,7 +20,8 @@ import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
 import FooterTabs from './components/FooterTabs';
 import ResizeBorder from '../../../components/ResizeBorder';
-import TeamSettings from '../workspaceSettings/components/TeamSettings';
+import TeamSettings from './components/workspaceSettings/components/TeamSettings';
+import UserSettingsModal from './components/workspaceSettings/components/UserSettingsModal';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -72,11 +72,6 @@ export default function Sidebar() {
     dispatch(setSidebarWidth(300));
     dispatch(setShowSidebar(true));
   };
-
-  const getLocalWSName = JSON.parse(
-    localStorage.getItem('currentWorkspacename') as string
-  );
-  const workspaceName = getLocalWSName ? getLocalWSName : 'Also Workspace';
 
   return (
     <>
@@ -150,18 +145,7 @@ export default function Sidebar() {
                   {/* <ArchiveMenu /> */}
                   <TeamSettings />
                 </div>
-
-                <AvatarWithInitials
-                  initials={workspaceName
-                    .split(' ')
-                    .slice(0, 2)
-                    .map((word: string) => word[0])
-                    .join('')
-                    .toUpperCase()}
-                  height="h-5"
-                  width="w-5"
-                  backgroundColour="blue"
-                />
+                <UserSettingsModal />
               </div>
               {showSidebar ? (
                 <HiChevronDoubleLeft

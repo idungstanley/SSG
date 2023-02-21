@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../../../utils';
+import { classNames } from '../../../../../utils';
 import { VscTriangleDown } from 'react-icons/vsc';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import {
   getAllWorkSpaceService,
   getWorkspaceService,
-} from '../../../../features/workspace/workspaceService';
-import { AvatarWithInitials } from '../../../../components';
+} from '../../../../../features/workspace/workspaceService';
+import { AvatarWithInitials } from '../../../../../components';
 
 interface workspaceSettingsListType {
   id: number;
@@ -27,14 +27,8 @@ export default function WorkspaceSettingsModal() {
   const { data } = getAllWorkSpaceService();
   const { data: currentWorkspaceName } = getWorkspaceService();
 
-  // colour: '#7C3BED';
-  // id: '1c754631-1443-4305-96c7-292142c7ed51';
-  // initials: 'NW';
-  // last_activity_at: '2023-02-20 16:34:43';
-  // name: 'newUserNicholas workspace';
-
   const AllMyWorkspace = data?.data.workspaces;
-  // console.log(data, AllMyWorkspace);
+
   const workspaceSettingsList: workspaceSettingsListType[] = [
     {
       id: 1,
