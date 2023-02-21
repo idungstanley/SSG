@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { getWorkspaceService } from '../../../../features/workspace/workspaceService';
 import Spinner from '../../../../common/Spinner';
-import WorkspaceSettingsModal from './workspaceSettings/WorkspaceSettingsModal';
+import WorkspaceSettingsModal from '../../workspaceSettings/WorkspaceSettingsModal';
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.workspace);

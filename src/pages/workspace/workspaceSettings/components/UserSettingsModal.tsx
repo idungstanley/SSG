@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsToggleOff } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
-import { AvatarWithInitials } from '../../../../../../components';
-import { logoutService } from '../../../../../../features/auth/authService';
+import { AvatarWithInitials } from '../../../../components';
+import { logoutService } from '../../../../features/auth/authService';
 import { useDispatch } from 'react-redux';
 import {
   setVisibility,
   displayPrompt,
-} from '../../../../../../features/general/prompt/promptSlice';
-import { logout, setAuthData } from '../../../../../../features/auth/authSlice';
+} from '../../../../features/general/prompt/promptSlice';
+import { logout, setAuthData } from '../../../../features/auth/authSlice';
 
 interface UserSettingsType {
   id: number;

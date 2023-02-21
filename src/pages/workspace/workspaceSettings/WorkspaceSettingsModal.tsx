@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../../../../utils';
+import { classNames } from '../../../utils';
 import { VscTriangleDown } from 'react-icons/vsc';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineGroupAdd } from 'react-icons/md';
@@ -8,15 +8,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAllWorkSpaceService,
   getWorkspaceService,
-} from '../../../../../features/workspace/workspaceService';
-import { AvatarWithInitials } from '../../../../../components';
-import { switchWorkspaceService } from '../../../../../features/account/accountService';
+} from '../../../features/workspace/workspaceService';
+import { AvatarWithInitials } from '../../../components';
+import { switchWorkspaceService } from '../../../features/account/accountService';
 import { useDispatch } from 'react-redux';
 import {
   setCurrentWorkspace,
   switchWorkspace,
-} from '../../../../../features/auth/authSlice';
-import { setMyWorkspacesSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+} from '../../../features/auth/authSlice';
+import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useNavigate } from 'react-router-dom';
 
 interface workspaceSettingsListType {

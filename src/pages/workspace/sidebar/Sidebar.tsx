@@ -20,8 +20,8 @@ import Search from '../search';
 import SubHubModal from '../hubs/components/SubHubModal';
 import FooterTabs from './components/FooterTabs';
 import ResizeBorder from '../../../components/ResizeBorder';
-import TeamSettings from './components/workspaceSettings/components/TeamSettings';
-import UserSettingsModal from './components/workspaceSettings/components/UserSettingsModal';
+import TeamSettings from '../workspaceSettings/components/TeamSettings';
+import UserSettingsModal from '../workspaceSettings/components/UserSettingsModal';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
