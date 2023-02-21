@@ -53,9 +53,10 @@ export default function DataRenderFunc({
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
-
     showTagColorDialogueBox,
     renameTagId,
+    SingleLineViewSettings,
+    CompactViewSettings,
   } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
@@ -70,18 +71,36 @@ export default function DataRenderFunc({
   const groupAssignee = (
     data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
-    return data?.map((newData) => (
-      <div key={newData.id} className="">
-        <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
-        </span>
-      </div>
-    ));
+    return (data as [{ id: string; initials: string; colour: string }])
+      ?.length >= 4
+      ? data?.slice(0, 3).map((newData) => (
+          <div key={newData.id} className="">
+            <span
+              key={newData.id}
+              className="flex gap-1 items-center justify center"
+            >
+              <AvatarWithInitials
+                initials={newData.initials}
+                backgroundColour={newData.colour}
+                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
+                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+              />
+              <span>+{data.length - 3}</span>
+            </span>
+          </div>
+        ))
+      : data?.map((newData) => (
+          <div key={newData.id} className="">
+            <span key={newData.id}>
+              <AvatarWithInitials
+                initials={newData.initials}
+                backgroundColour={newData.colour}
+                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
+                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+              />
+            </span>
+          </div>
+        ));
   };
 
   const groupTags = (arr: tagItem[]) => {
@@ -275,7 +294,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: "-30px" }}
           >
             {taskColField}
@@ -286,7 +305,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: "-30px" }}
           >
             Todo
@@ -345,9 +364,14 @@ export default function DataRenderFunc({
               onClick={() =>
                 handleTaskPilot(task.id as string, task.name as string)
               }
-              className="cursor-pointer "
+              className={`${CompactViewSettings ? "text-xl" : null}`}
             >
-              {taskColField as ReactNode}
+              {(taskColField as string)?.length > 50 &&
+              SingleLineViewSettings ? (
+                <span>{(taskColField as string)?.substring(0, 50)}...</span>
+              ) : (
+                (taskColField as ReactNode)
+              )}
             </p>
             <div
               id="iconWrapper"
