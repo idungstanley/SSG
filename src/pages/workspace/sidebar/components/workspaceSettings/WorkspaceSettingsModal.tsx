@@ -88,7 +88,6 @@ export default function WorkspaceSettingsModal() {
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
       // Clear react-query and redux cache
-      // console.log(data);
       localStorage.setItem(
         'currentWorkspaceId',
         JSON.stringify(data.data.workspace.id)
