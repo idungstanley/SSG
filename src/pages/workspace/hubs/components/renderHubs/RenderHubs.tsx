@@ -9,7 +9,7 @@ import WalletSection from "./items/itemsWalletData/WalletSection";
 import ListSection from "./items/itemsListData/ListSection";
 import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
 import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
-import Board from "../../../tasks/component/views/Board";
+import TaskBoardSection from "./items/ItemsHubData/TaskBoardSection";
 
 function RenderHubs() {
   const { hubId } = useParams();
@@ -22,7 +22,7 @@ function RenderHubs() {
         <ListNav
           navName={activeItemName}
           viewsList="List"
-          // viewsList1="Table"
+          viewsList1="Table"
           viewsList2="Board"
           changeViews="View"
         />
@@ -37,7 +37,11 @@ function RenderHubs() {
             <div className="w-full">
               <ListFilter />
             </div>
-            {boardView && <Board />}
+            {/* Board */}
+            {HubDetail?.data.hubs.map((data: dataProps) => (
+              <>{boardView && <TaskBoardSection data={data} key={data.id} />}</>
+            ))}
+
             <div>
               {HubDetail?.data.hubs.map((data: dataProps) => (
                 <TaskListSections data={data} key={data.id} />
