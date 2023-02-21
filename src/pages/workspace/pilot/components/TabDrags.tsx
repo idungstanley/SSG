@@ -1,7 +1,7 @@
 import React from 'react';
 import { classNames } from '../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
-import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import { setActiveHotKeyId, setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../app/hooks';
 import { GrDrag } from 'react-icons/gr';
@@ -9,7 +9,8 @@ import { GrDrag } from 'react-icons/gr';
 interface TabProps {
   id: number;
   name: string;
-  source: string | undefined;
+  source?: string;
+  icon?: JSX.Element
   showPilot?: boolean;
   showPilotIconView?: boolean;
   subTab?: JSX.Element;
@@ -20,6 +21,7 @@ export default function TabDrag({
   name,
   source,
   showPilot,
+  icon,
   showPilotIconView,
   subTab,
 }: TabProps) {
@@ -45,7 +47,9 @@ export default function TabDrag({
   };
 
   const handleClick = (tabId: number) => {
+    dispatch(setActiveHotKeyId(0));
     dispatch(setActiveTabId(tabId));
+
   };
 
   return (
@@ -87,7 +91,7 @@ export default function TabDrag({
           >
             <GrDrag className="text-base text-gray-200 opacity-30 w-3 h-3" />
           </span>
-          <img src={source} alt="" className="w-4 h-4" />
+          {icon ? icon : <img src={source} alt="" className="w-4 h-4" />}
         </div>
         <p
           className={`text-xs ${showPilot ? 'block' : 'hidden'} ${

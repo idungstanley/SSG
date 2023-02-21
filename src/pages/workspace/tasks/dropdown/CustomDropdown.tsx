@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../app/hooks';
+import {
+  setShowAddHotKeyDropdown,
+  setShowRemoveHotKeyDropdown,
+} from '../../../../features/workspace/workspaceSlice';
 
 export interface IColumn {
   name: string;
-  id: number;
+  id?: number;
+  index?: number;
   label?: string;
   source?: string;
   subTab?: JSX.Element;
@@ -13,7 +20,7 @@ export interface IColumn {
 
 interface CustomDropdownProps {
   title: string;
-  listItems: IColumn[];
+  listItems: IColumn[] | undefined;
   handleClick: (id: number | undefined) => void;
 }
 
@@ -22,20 +29,47 @@ export default function CustomDropdown({
   listItems,
   handleClick,
 }: CustomDropdownProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
+  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown } = useAppSelector(
+    (state) => state.workspace
+  );
+  useEffect(() => {
+    const checkClickedOutSide = (e: MouseEvent) => {
+      if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
+        if (showAddHotKeyDropdown === true) {
+          dispatch(setShowAddHotKeyDropdown(false));
+        } else if (showRemoveHotKeyDropdown === true) {
+          dispatch(setShowRemoveHotKeyDropdown(false));
+        }
+      }
+    };
+    document.addEventListener('click', checkClickedOutSide);
+    return () => {
+      document.removeEventListener('click', checkClickedOutSide);
+    };
+  }, []);
   return (
-    <div className="">
-      <div className="overflow-y-auto border-gray-200 border absolute bottom-20 top-16 z-50 right-12 mt-3 w-56 rounded-lg shadow-2xl drop-shadow-2xl drop-shadow-md py-1 bg-white">
-        <button type="button">{title}</button>
-        {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />}
-        {listItems.map((listItem) => (
+    <div className="h- p-0.5" ref={ref}>
+      <div
+        className="absolute w-56 px-1 py-1 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl h-fit top-24 right-12 drop-shadow-2xl drop-shadow-md"
+        style={{ zIndex: '999' }}
+      >
+        <button type="button" className="p-2 font-semibold">
+          {title}
+        </button>
+        {title && (
+          <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700 pb-0.5 mb-1" />
+        )}
+        {listItems?.map((listItem) => (
           <div
             key={listItem.name}
-            className="hover:bg-gray-300 w-full"
-            onClick={() => handleClick(listItem.id)}
+            className="w-full rounded hover:bg-gray-300"
+            onClick={() => handleClick(listItem.index)}
           >
             <button
               type="button"
-              className="capitalize flex cursor-pointer p-2 items-center gap-2"
+              className="flex items-center gap-2 p-2 capitalize cursor-pointer"
               onClick={() => listItem.onclick}
               key={listItem.name}
             >
@@ -55,6 +89,11 @@ export default function CustomDropdown({
             {/* <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" /> */}
           </div>
         ))}
+        {listItems?.length === 0 && (
+          <div className="p-2 text-sm font-medium">
+            There is no Item on this list. . .
+          </div>
+        )}
       </div>
     </div>
   );

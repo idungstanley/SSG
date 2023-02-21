@@ -23,15 +23,30 @@ export const createWorkspaceService = (data: IData) => {
   return response;
 };
 
-export const getWorkspaceService = async () => {
-  const response = requestNew(
-    {
-      url: 'workspace',
-      method: 'GET',
-    },
-    true
-  );
-  return response;
+export const getWorkspaceService = () => {
+  return useQuery(['workspace'], async () => {
+    const data = await requestNew(
+      {
+        url: 'workspace',
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
+};
+
+export const getAllWorkSpaceService = () => {
+  return useQuery(['workspaces'], async () => {
+    const data = await requestNew(
+      {
+        url: 'auth/account/workspaces',
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
 };
 
 export const checkIfWorkspaceService = async () => {
@@ -46,7 +61,7 @@ export const checkIfWorkspaceService = async () => {
 };
 
 //tags
-export const UseCreateTagService = ({ name }: {name: string}) => {
+export const UseCreateTagService = ({ name }: { name: string }) => {
   const url = 'tags';
   const response = requestNew(
     {
@@ -62,17 +77,14 @@ export const UseCreateTagService = ({ name }: {name: string}) => {
 };
 
 export const UseGetAllTagsService = () => {
-  return useQuery(
-    ['tags'],
-    async () => {
-      const data = await requestNew(
-        {
-          url: 'tags',
-          method: 'GET',
-        },
-        true
-      );
-      return data;
-    },
-  );
+  return useQuery(['tags'], async () => {
+    const data = await requestNew(
+      {
+        url: 'tags',
+        method: 'GET',
+      },
+      true
+    );
+    return data;
+  });
 };

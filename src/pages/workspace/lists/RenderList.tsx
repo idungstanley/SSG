@@ -15,6 +15,7 @@ import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
 import TaskTableView from "../tasks/component/views/TaskTableView";
+// import ListViewSettingsModal from "../tasks/viewSettingsModal/ListViewSettingsModal";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function RenderList() {
     getSubTaskId,
   } = useAppSelector((state) => state.task);
 
-  const { data: listDetailsData } = getTaskListService({ listId } );
+  const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
     <div className=" overflow-x-auto  relative">
@@ -48,7 +49,7 @@ function RenderList() {
         <div className="  w-full overflow-y-scroll">
           <div
             className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: "#e1e4e5" }}
+            style={{ backgroundColor: '#e1e4e5' }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
@@ -56,7 +57,7 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            {boardView && <Board />}
+            <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}
 
             {listView &&

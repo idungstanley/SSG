@@ -1,18 +1,20 @@
-import React from 'react';
-import { Button } from '../../../../../components';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import React from "react";
+import { Button } from "../../../../../components";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import {
   getBoardView,
   getListView,
-} from '../../../../../features/task/taskSlice';
-import { getTableView } from '../../../../../features/task/taskSlice';
-import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
+} from "../../../../../features/task/taskSlice";
+import { getTableView } from "../../../../../features/task/taskSlice";
+import TaskMenu from "../../../tasks/component/taskMenu/TaskMenu";
 import {
   Bars3Icon,
   EllipsisHorizontalCircleIcon,
-} from '@heroicons/react/24/outline';
-import { BsListStars } from 'react-icons/bs';
-import { CiViewTable } from 'react-icons/ci';
+} from "@heroicons/react/24/outline";
+import { BsListStars } from "react-icons/bs";
+import { CiViewTable } from "react-icons/ci";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import ListViewSettingsModal from "../../../tasks/viewSettingsModal/ListViewSettingsModal";
 
 interface ListNavProps {
   navName?: string | null;
@@ -63,9 +65,9 @@ function ListNav({
       </div>
       <nav
         className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
-        style={{ padding: '15px' }}
+        style={{ padding: "15px" }}
       >
-        <section className="flex items-center justify-start space-x-2 text-gray-500">
+        <section className="flex items-center justify-start text-gray-500">
           <span className="space-x-2">
             <span className="font-bold">{navName}</span>
           </span>
@@ -77,10 +79,13 @@ function ListNav({
               />
             </span>
             <span
-              className="flex items-center text-sm hover:bg-gray-100"
+              className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer"
               onClick={handleListView}
             >
               {viewsList}
+              <span className="opacity-0 group-hover:opacity-100 z-100">
+                <ListViewSettingsModal />
+              </span>
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
@@ -91,14 +96,17 @@ function ListNav({
               />
             </span>
             <span
-              className="flex items-center text-sm hover:bg-gray-100"
+              className="group gap-2  flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
               onClick={handleTableView}
             >
               {viewsList1}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
             </span>
           </span>
           <span
-            className="flex items-center justify-start space-x-1"
+            className="flex items-center justify-start space-x-1 cursor-pointer"
             onClick={handleBoardView}
           >
             <span>
@@ -107,16 +115,22 @@ function ListNav({
                 aria-hidden="true"
               />
             </span>
-            <span className="flex items-center text-sm hover:bg-gray-100">
+            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {viewsList2}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
             <span>
               <Bars3Icon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
             </span>
-            <span className="flex items-center text-sm hover:bg-gray-100">
+            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {changeViews}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
             </span>
           </span>
         </section>

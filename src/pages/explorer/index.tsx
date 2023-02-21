@@ -8,7 +8,7 @@ import Watchers from '../../components/Watchers';
 import Comments from '../../components/Comments';
 import Sidebar from '../workspace/sidebar/Sidebar';
 import { useAppSelector } from '../../app/hooks';
-import ExpandedNav from '../../views/ExpandedNav';
+import ExpandedNav from '../workspace/views/ExpandedNav';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
 

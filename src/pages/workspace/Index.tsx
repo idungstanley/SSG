@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './sidebar/Header';
 import UploadModal from '../../components/UploadModal';
-import ExpandedNav from '../../views/ExpandedNav';
+import ExpandedNav from './views/ExpandedNav';
 
 function Index() {
   const { showSidebar, showExtendedBar, sidebarWidth } = useAppSelector(

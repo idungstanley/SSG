@@ -14,7 +14,11 @@ interface priorityType {
 }
 
 interface TaskCurrentPriorityProps {
-  TaskCurrentPriority: string | null | [{ id: string; initials: string; colour: string; }];
+  TaskCurrentPriority:
+    | string
+    | [{ id: string; initials: string; colour: string }]
+    | null
+    | undefined;
 }
 export default function PriorityDropdown({
   TaskCurrentPriority,
@@ -67,14 +71,24 @@ export default function PriorityDropdown({
   if (status == "success") {
     setPriority("");
   }
-  const setPriorityColor = (priority: string | null | [{ id: string; initials: string; colour: string; }]) => {
+  const setPriorityColor = (
+    priority:
+      | string
+      | null
+      | undefined
+      | [{ id: string; initials: string; colour: string }]
+  ) => {
     if (priority == null || priority == "low") {
       return (
         <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />
       );
     } else if (priority == "normal") {
       return (
-        <AiFillFlag className="h-5 w-7  text-blue-500 " aria-hidden="true" />
+        <AiFillFlag
+          className="h-5 w-7"
+          style={{ color: "#6fddff" }}
+          aria-hidden="true"
+        />
       );
     } else if (priority == "high") {
       return (
@@ -88,7 +102,7 @@ export default function PriorityDropdown({
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left z-50">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           {setPriorityColor(TaskCurrentPriority)}
