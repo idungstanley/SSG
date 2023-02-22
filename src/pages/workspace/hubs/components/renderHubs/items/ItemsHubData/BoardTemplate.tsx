@@ -48,7 +48,9 @@ export default function BoardTemplate({ listId }: listIdprops) {
                       style={{ marginLeft: "-80px" }}
                     >
                       <div className="flex justify-between">
-                        <p className="">{items.name}</p>
+                        <p className="">
+                          {items.name.slice(0, 30)}
+                        </p>
                         <p>nath</p>
                       </div>
                     </div>
