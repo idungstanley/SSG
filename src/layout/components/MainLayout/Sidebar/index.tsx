@@ -30,8 +30,6 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
     sidebarWidthFromLS || MIN_SIDEBAR_WIDTH
   );
 
-  console.log(sidebarWidth, showSidebar);
-
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onMouseDown = useCallback(

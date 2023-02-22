@@ -60,13 +60,13 @@ const places = [
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-5 h-5" />,
+    icon: <DocumentTextIcon className="w-7 h-7" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-5 h-5"/>,
+    icon: <ClockIcon className="w-7 h-7"/>,
   },
   {
     name: 'Route Planner',
@@ -132,7 +132,7 @@ function Places() {
                   <img
                     src={place.source}
                     alt={place.name + 'Icon'}
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
                 )
               }

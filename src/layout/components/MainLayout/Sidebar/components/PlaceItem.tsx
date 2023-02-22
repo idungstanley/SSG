@@ -35,7 +35,7 @@ function PlaceItem({
     <li
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
-        'focus:flex flex-col w-full pl-4 py-5 items-center relative',
+        'focus:flex flex-col w-full pl-3 py-5 items-center relative',
         bottomContent ? 'gap-2' : ''
       )}
     >
