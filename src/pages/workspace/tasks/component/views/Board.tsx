@@ -10,9 +10,6 @@ import { TbSubtask } from "react-icons/tb";
 import CardState from "./CardState";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
-// import Breadcrumb from "../../../../settings/components/Breadcrumb";
-// import { HomeIcon } from "@heroicons/react/24/outline";
-// import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
 
 function Board() {
   const dispatch = useDispatch();
@@ -21,12 +18,10 @@ function Board() {
   );
 
   const handleAssigneeModal = (id: string) => {
-    console.log(id);
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
     } else {
       dispatch(setToggleAssignCurrentTaskId(id));
-      console.log(id);
     }
   };
 
@@ -47,15 +42,11 @@ function Board() {
     ));
   };
 
+  myTaskData.map((thistask) => {
+    console.log(thistask);
+  });
+
   const [icons, setIcons] = useState<string | null>(null);
-
-  // const addIcons = (id: string) => {
-  //   setIcons(true);
-  // };
-
-  // const removeIcons = () => {
-  //   setIcons(false);
-  // };
 
   return (
     <div className=" m-auto fgoverflow  ">
@@ -145,8 +136,6 @@ function Board() {
                   + add subtask
                 </p>
               </span>
-              {/* <Breadcrumb pages={} rootIcon={<HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />} rootIconHref="/explorer" /> */}
-              {/* <BreadcrumbSection /> */}
             </div>
           </div>
         ))}
