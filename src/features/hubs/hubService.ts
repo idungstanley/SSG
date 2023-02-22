@@ -251,8 +251,22 @@ export const useAddToFavourites = (data: {
       enabled: !!trigger,
       onSuccess: () => {
         dispatch(setTriggerAddToFav(false));
-        console.log("Done");
       },
     }
   );
+};
+
+export const useGetFavourites = () => {
+  // const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
+  return useQuery(["favourites"], async () => {
+    const data = await requestNew(
+      {
+        url: `/favorites`,
+        method: "GET",
+      },
+      true
+    );
+    return data;
+  });
 };
