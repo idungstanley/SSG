@@ -36,9 +36,9 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
         {data?.data.lists.map((item: dataProps) => {
           return (
             <div key={item.id} className="border p-5 rounded-xl relative">
-              <p className="text-xs font-semibold text-gray-400 capitalize">
+              {/* <p className="text-xs font-semibold text-gray-400 capitalize">
                 {item.name}
-              </p>
+              </p> */}
               <div
                 className=" absolute  left-0 top-0 h-full w-1 rounded-l-md"
                 style={{ backgroundColor: "#78828d" }}
