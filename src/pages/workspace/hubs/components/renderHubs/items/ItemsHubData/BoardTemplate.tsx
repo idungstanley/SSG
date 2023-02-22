@@ -54,7 +54,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
 
   return (
     <>
-      <div className=" dynamic gap-10  ">
+      <div className=" dynamic gap-5  ">
         {Object.keys(newData).map((key) => {
           return (
             <>
@@ -63,7 +63,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                 className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white p-3  "
               >
                 <div className=" absolute top-0 rounded bg-gray-400 w-full h-1"></div>
-                <h3 className=" ">{key}</h3>
+                <h3 className="absolute left-0 pl-3 ">{key}</h3>
               </div>
               <div className="-ml-10 mt-5  ">
                 {newData[key].map((items) => {
@@ -71,7 +71,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                     <div
                       key={items.id}
                       className=" bg-white h-32 mt-3  shadow-md   w-56 p-2"
-                      style={{ marginLeft: "-100px" }}
+                      style={{ marginLeft: "-80px" }}
                     >
                       <p className="">{items.name}</p>
                     </div>
