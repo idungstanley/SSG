@@ -10,6 +10,10 @@ import "./styles/index.css";
 function App() {
   const user = useSelector(selectCurrentUser);
 
+  // const customToastStyle = {
+  //   width: '500px', // set the desired width here
+  // };
+
   return (
     <div className="h-full flex flex-col">
       <RouterProvider router={routes(user)} />
@@ -17,7 +21,7 @@ function App() {
         position="bottom-left"
         toastOptions={{
           style: {
-            width: "100px",
+            width: "200px",
           },
         }}
       />

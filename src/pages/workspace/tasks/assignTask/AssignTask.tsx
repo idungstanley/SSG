@@ -105,7 +105,7 @@ export default function AssignTask({ option, item }: option) {
   return (
     <div className="relative">
       <section
-        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100"
+        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100 overflow-scroll h-36"
         ref={assigneeRef}
         id="assignModal"
         // onClick={(e) => handleAssignModal(e)}

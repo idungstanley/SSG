@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
-import { Spinner } from '../../common';
-import AvatarWithInitials from '../avatar/AvatarWithInitials';
+import React, { useState } from "react";
+import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
+import { useDispatch } from "react-redux";
+import { Spinner } from "../../common";
+import AvatarWithInitials from "../avatar/AvatarWithInitials";
 import {
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
   setShowHub,
   setShowPilot,
-} from '../../features/workspace/workspaceSlice';
-import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/MenuDropdown';
-import FullScreenMessage from '../CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../app/hooks';
-import { IInbox } from '../../features/inbox/inbox.interfaces';
-import { IHub } from '../../features/hubs/hubs.interfaces';
+} from "../../features/workspace/workspaceSlice";
+import DropdownList from "./components/DropdownList";
+import MenuDropdown from "../Dropdown/MenuDropdown";
+import FullScreenMessage from "../CenterMessage/FullScreenMessage";
+import { useAppSelector } from "../../app/hooks";
+import { IInbox } from "../../features/inbox/inbox.interfaces";
+import { IHub } from "../../features/hubs/hubs.interfaces";
 import {
   closeMenu,
   getCurrHubId,
   getPrevName,
   getSubMenu,
   setshowMenuDropdown,
-} from '../../features/hubs/hubSlice';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import SubDropdown from '../Dropdown/SubDropdown';
-import { useNavigate } from 'react-router-dom';
+} from "../../features/hubs/hubSlice";
+import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
+import SubDropdown from "../Dropdown/SubDropdown";
+import { useNavigate } from "react-router-dom";
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -54,7 +54,7 @@ export default function ItemsListInSidebar({
     setIsHovering(-1);
   };
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <FullScreenMessage
         title="Oops, an error occurred :("
@@ -64,7 +64,7 @@ export default function ItemsListInSidebar({
     );
   }
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex justify-center mx-auto mt-10">
         <Spinner size={8} color="#0F70B7" />
@@ -76,7 +76,7 @@ export default function ItemsListInSidebar({
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'hub',
+        activeItemType: "hub",
         activeItemName: name,
       })
     );
@@ -119,12 +119,12 @@ export default function ItemsListInSidebar({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'hubs',
+        showMenuDropdownType: "hubs",
       })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id == "menusettings") {
         dispatch(closeMenu());
       }
     }
@@ -134,12 +134,12 @@ export default function ItemsListInSidebar({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'hubs',
+        SubMenuType: "hubs",
       })
     );
   };
 
-  return status === 'success' ? (
+  return status === "success" ? (
     <ul className="z-20 w-full">
       {items?.map((i: { id: string; name: string }, index) => (
         <li
@@ -150,14 +150,14 @@ export default function ItemsListInSidebar({
         >
           <div
             className={`flex justify-between items-center hover:bg-gray-100 ${
-              i.id === activeItemId && 'bg-green-100 text-green-500'
+              i.id === activeItemId && "bg-green-100 text-green-500"
             }`}
             tabIndex={0}
             onClick={() => handleClick(i.id)}
           >
             <div
               className={`flex relative justify-between items-center hover:bg-gray-100 ${
-                i.id === activeItemId && 'text-green-500'
+                i.id === activeItemId && "text-green-500"
               }`}
             >
               {i.id === activeItemId && (
@@ -168,9 +168,7 @@ export default function ItemsListInSidebar({
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 {showSidebar && (
-                  <div
-                    className="mr-0.5"
-                  >
+                  <div className="mr-0.5">
                     {i.id === showChildren ? (
                       <span className="flex flex-col">
                         <VscTriangleDown
@@ -190,25 +188,27 @@ export default function ItemsListInSidebar({
                 )}
 
                 <div
-                  className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}
+                  className={`flex items-center flex-1 min-w-0 ${
+                    !showSidebar && "ml-3"
+                  }`}
                   onClick={() => handleLocation(i.id, i.name)}
                 >
                   <AvatarWithInitials
                     initials={i.name
-                      .split(' ')
+                      .split(" ")
                       .slice(0, 2)
                       .map((word) => word[0])
-                      .join('')
+                      .join("")
                       .toUpperCase()}
-                    height={showSidebar ? 'h-4' : 'h-6'}
-                    width={showSidebar ? 'w-4' : 'w-6'}
+                    height={showSidebar ? "h-4" : "h-6"}
+                    width={showSidebar ? "w-4" : "w-6"}
                     backgroundColour="blue"
                     roundedStyle="rounded"
                   />
                   <span className="ml-4 overflow-hidden">
                     <a
                       className="tracking-wider capitalize truncate cursor-pointer"
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                       onClick={() => handleLocation(i.id, i.name)}
                     >
                       {i.name}
@@ -219,8 +219,11 @@ export default function ItemsListInSidebar({
             </div>
             {isHovering === index && showSidebar && (
               <div className="flex items-center pr-1 space-x-1">
+                {/* Get Id of clicked hub */}
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={(e) => {
+                    handleHubSettings(i.id, i.name, e);
+                  }}
                   className="cursor-pointer"
                   id="menusettings"
                 />

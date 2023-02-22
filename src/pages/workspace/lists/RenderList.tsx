@@ -22,7 +22,7 @@ function RenderList() {
   const { listId } = useParams();
   const {
     myTaskData,
-    tableView,
+    // tableView,
     listView,
     boardView,
     addNewTaskItem,
@@ -55,7 +55,7 @@ function RenderList() {
             {/* card */}
 
             {/* task list logic */}
-            {tableView && closeTaskListView && <TaskTableView />}
+            {/* {tableView && closeTaskListView && <TaskTableView />} */}
 
             <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}
