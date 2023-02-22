@@ -6,10 +6,10 @@ import { useGetItemHistory } from "../../../../../features/general/history/histo
 import { OutputDateTime } from "../../../../../app/helpers";
 
 export default function History() {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
+  const { pilotSideOver } = useAppSelector(
+    (state) => state.slideOver
   );
-  const {id, type} = activeEntity;
+  const {id, type} = pilotSideOver;
 
   // ! implement pagination
   const { data: logs, status } = useGetItemHistory({ type, id });

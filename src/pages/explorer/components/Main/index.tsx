@@ -6,7 +6,7 @@ import FilePreview from './components/FilePreview';
 import FilesListWithToolbar from './components/FilesListWithToolbar';
 
 export default function Main() {
-  const dispatch = useAppDispatch();
+const dispatch = useAppDispatch();
   const { settings } = useAppSelector((state) => state.account);
   const { showPreview } = settings;
 
