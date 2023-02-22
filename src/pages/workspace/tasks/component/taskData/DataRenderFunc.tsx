@@ -53,7 +53,6 @@ export default function DataRenderFunc({
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
-
     showTagColorDialogueBox,
     renameTagId,
   } = useAppSelector((state) => state.task);
@@ -71,7 +70,7 @@ export default function DataRenderFunc({
     data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
     return data?.map((newData) => (
-      <div key={newData.id} className="">
+      <div key={newData.id}>
         <span key={newData.id}>
           <AvatarWithInitials
             initials={newData.initials}
