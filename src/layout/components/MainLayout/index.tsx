@@ -5,9 +5,9 @@ import { Outlet } from 'react-router-dom';
 // import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
 import UploadModal from '../../../components/UploadModal';
-import Header from './Sidebar/components/Header';
 import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
+import Header from './Header';
 
 function MainLayout() {
   const [allowSelect, setAllowSelect] = useState(true);

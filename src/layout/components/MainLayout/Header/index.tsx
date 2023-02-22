@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Nav from '../../../../../pages/workspace/nav/Nav';
+import Nav from '../../../../pages/workspace/nav/Nav';
 
 interface configData {
   path: string;
@@ -83,7 +83,7 @@ export default function Header() {
   const headerData = config.find((i) => `${i.path}` === pathname);
 
   return headerData ? (
-    <div className="flex-1 border-b" style={{ height: '60px' }}>
+    <div className="border-b" style={{ height: '60px' }}>
       <Nav
         navName={headerData.title}
         newd={headerData.newd}
