@@ -55,8 +55,10 @@ export default function DataRenderFunc({
     getSubTaskId,
     showTagColorDialogueBox,
     renameTagId,
-    SingleLineViewSettings,
-    CompactViewSettings,
+    comfortableView,
+    comfortableViewWrap,
+    CompactView,
+    CompactViewWrap,
   } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
@@ -83,16 +85,23 @@ export default function DataRenderFunc({
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+                height={`${CompactView ? "h-4" : "h-5"}`}
+                width={`${CompactView ? "w-4" : "w-5"}`}
               />
             </span>
           </div>
         ))}
         <span>
-          +
           {(data as [{ id: string; initials: string; colour: string }])
-            ?.length - 3}
+            ?.length -
+            2 !==
+          0 ? (
+            <span>
+              +
+              {(data as [{ id: string; initials: string; colour: string }])
+                ?.length - 2}
+            </span>
+          ) : null}
         </span>
       </div>
     ) : (
@@ -102,8 +111,8 @@ export default function DataRenderFunc({
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-              width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+              height={`${CompactView ? "h-4" : "h-5"}`}
+              width={`${CompactView ? "w-4" : "w-5"}`}
             />
           </span>
         </div>
@@ -372,11 +381,22 @@ export default function DataRenderFunc({
               onClick={() =>
                 handleTaskPilot(task.id as string, task.name as string)
               }
-              className={`${CompactViewSettings ? "text-xl" : null}`}
+              className={`${
+                comfortableView
+                  ? "text-lg whitespace-nowrap"
+                  : comfortableViewWrap
+                  ? "text-lg"
+                  : CompactView
+                  ? "text-xs whitespace-nowrap"
+                  : CompactViewWrap
+                  ? "text-xs"
+                  : null
+              }`}
             >
-              {(taskColField as string)?.length > 50 &&
-              SingleLineViewSettings ? (
-                <span>{(taskColField as string)?.substring(0, 50)}...</span>
+              {(taskColField as string)?.length > 50 && comfortableView ? (
+                <span>{(taskColField as string)?.substring(0, 40)}...</span>
+              ) : (taskColField as string)?.length > 61 && CompactView ? (
+                <span>{(taskColField as string)?.substring(0, 60)}...</span>
               ) : (
                 (taskColField as ReactNode)
               )}

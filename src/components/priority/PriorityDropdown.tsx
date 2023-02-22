@@ -112,7 +112,6 @@ export default function PriorityDropdown({
           /> */}
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

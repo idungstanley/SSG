@@ -40,9 +40,10 @@ interface TaskState {
   hideTask: listColumnProps[];
   current_task_id: null;
   listView: boolean;
-  comfortableViewSettings: boolean;
-  CompactViewSettings: boolean;
-  SingleLineViewSettings: boolean;
+  comfortableView: boolean;
+  comfortableViewWrap: boolean;
+  CompactView: boolean;
+  CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
   showTaskNavigation: boolean;
@@ -81,9 +82,10 @@ const initialState: TaskState = {
   hideTask: [],
   current_task_id: null,
   listView: true,
-  comfortableViewSettings: true,
-  CompactViewSettings: false,
-  SingleLineViewSettings: false,
+  comfortableView: true,
+  comfortableViewWrap: false,
+  CompactView: false,
+  CompactViewWrap: false,
   tableView: false,
   boardView: false,
   showTaskNavigation: false,
@@ -162,14 +164,17 @@ export const taskSlice = createSlice({
     getListView(state, action) {
       state.listView = action.payload;
     },
-    getComfortableViewSettings(state, action) {
-      state.comfortableViewSettings = action.payload;
+    getComfortableView(state, action) {
+      state.comfortableView = action.payload;
     },
-    getCompactViewSettings(state, action) {
-      state.CompactViewSettings = action.payload;
+    getComfortableViewWrap(state, action) {
+      state.comfortableViewWrap = action.payload;
     },
-    getSingleLineViewSettings(state, action) {
-      state.SingleLineViewSettings = action.payload;
+    getCompactView(state, action) {
+      state.CompactView = action.payload;
+    },
+    getCompactViewWrap(state, action) {
+      state.CompactViewWrap = action.payload;
     },
     setAddNewTaskItem(state, action) {
       state.addNewTaskItem = action.payload;
@@ -267,9 +272,10 @@ export const {
   getTaskData,
   getTaskColumns,
   getListView,
-  getComfortableViewSettings,
-  getCompactViewSettings,
-  getSingleLineViewSettings,
+  getComfortableView,
+  getComfortableViewWrap,
+  getCompactView,
+  getCompactViewWrap,
   getTableView,
   getBoardView,
   setShowTaskNavigation,
