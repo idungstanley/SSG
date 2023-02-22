@@ -71,7 +71,21 @@ export default function BoardTemplate({ listId }: listIdprops) {
                 key={key}
                 className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white p-3  "
               >
-                <div className=" absolute top-0 rounded bg-gray-400 w-full h-1"></div>
+                {key === "new" ? (
+                  <div className=" absolute top-0 rounded-t-lg	 bg-gray-400 w-full h-1"></div>
+                ) : key === "in progress" ? (
+                  <div
+                    className=" absolute top-0 rounded-t-lg w-full h-1"
+                    style={{ backgroundColor: "#7c3bed" }}
+                  ></div>
+                ) : key === "completed" ? (
+                  <div className=" absolute top-0 rounded-t-lg bg-green-400 w-full h-1"></div>
+                ) : key === "archived" ? (
+                  <div className=" absolute top-0 rounded-t-lg bg-yellow-400 w-full h-1"></div>
+                ) : (
+                  <div className=" absolute top-0 rounded-t-lg bg-gray-400 w-full h-1"></div>
+                )}
+
                 <h3 className="absolute left-0 pl-3 ">{key}</h3>
               </div>
               <div className="-ml-10 mt-5  ">
