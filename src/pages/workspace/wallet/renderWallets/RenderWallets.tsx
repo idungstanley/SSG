@@ -13,6 +13,7 @@ import pilotConfig from '../components/PilotSection';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 
 function RenderWallets() {
+  const dispatch = useAppDispatch();
   const { walletId } = useParams();
   const { currentWalletName } = useAppSelector((state) => state.workspace);
 
@@ -25,7 +26,6 @@ function RenderWallets() {
 
   // set data for pilot
   useEffect(() => {
-    const dispatch = useAppDispatch();
     const selectedItemId = walletId;
     const selectedItemType = 'wallet';
 
