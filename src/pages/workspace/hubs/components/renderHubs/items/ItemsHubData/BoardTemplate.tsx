@@ -46,20 +46,42 @@ export default function BoardTemplate({ listId }: listIdprops) {
     console.log(item);
   });
 
+  //   Object.keys(newData).map((item) => {
+  //     newData[item].map((each) => {
+  //       console.log(each.name);
+  //     });
+  //   });
+
   return (
     <>
-      <div className="hei flex gap-5 ">
-        {Object.keys(newData).map((key) => (
-          <div key={key} className="">
-            <h3 className="">{key}</h3>
-          </div>
-        ))}
+      <div className=" dynamic gap-10  ">
+        {Object.keys(newData).map((key) => {
+          return (
+            <>
+              <div
+                key={key}
+                className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white p-3  "
+              >
+                <div className=" absolute top-0 rounded bg-gray-400 w-full h-1"></div>
+                <h3 className=" ">{key}</h3>
+              </div>
+              <div className="-ml-10 mt-5  ">
+                {newData[key].map((items) => {
+                  return (
+                    <div
+                      key={items.id}
+                      className=" bg-white h-32 mt-3  shadow-md   w-56 p-2"
+                      style={{ marginLeft: "-100px" }}
+                    >
+                      <p className="">{items.name}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          );
+        })}
       </div>
-      {/* <div className="hei">
-        {myTaskData.map((task) => (
-          <div key={task.id}>{task.name}</div>
-        ))}
-      </div> */}
     </>
   );
 }
