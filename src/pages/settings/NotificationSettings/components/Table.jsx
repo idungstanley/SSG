@@ -1,49 +1,34 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
-import { useGetPermissionsList } from '../../../../features/settings/permissions/permissionsService';
-import PermissionsCheckbox from './PermissionsCheckbox';
+import { NotificationData } from './DummyData';
 import { classNames } from '../../../../utils';
 
-export default function Table() {
-  const [permissionsByCategory, setPermissionsByCategory] = useState([]);
+export default function NotificaitonTablle() {
 
-  const { data: permissionsList, status: permissionsListStatus } =
-    useGetPermissionsList();
+  const [notificationsByCategory, setNotificationsByCategory] = useState([]);
 
-  console.log(permissionsList);
   useEffect(() => {
-    if (permissionsListStatus !== 'success') {
-      return setPermissionsByCategory([]);
+    if (!NotificationData) {
+      return setNotificationsByCategory([]);
     }
-
-    const permissionsByCategoryTemp = permissionsList.reduce(
-      (permissionsByCategorySoFar, currentPermission) => {
-        if (
-          !permissionsByCategorySoFar[
-            currentPermission.workspace_permission_category.key
-          ]
-        ) {
-          permissionsByCategorySoFar[
-            currentPermission.workspace_permission_category.key
-          ] = {
-            name: currentPermission.workspace_permission_category.name,
-            key: currentPermission.workspace_permission_category.key,
-            permissions: [],
+    const notificationsByCategoryTemp = NotificationData.reduce(
+      (notificationSoFar, currentNotification) => {
+        if (!notificationSoFar[currentNotification.notificationCategory.key]) {
+          notificationSoFar[currentNotification.notificationCategory.key] = {
+            name: currentNotification.notificationCategory.name,
+            key: currentNotification.notificationCategory.key,
+            notifications: [],
           };
         }
-        permissionsByCategorySoFar[
-          currentPermission.workspace_permission_category.key
-        ].permissions.push(currentPermission);
-        return permissionsByCategorySoFar;
+        notificationSoFar[
+          currentNotification.notificationCategory.key
+        ].notifications.push(currentNotification);
+        return notificationSoFar;
       },
       {}
     );
-    setPermissionsByCategory(permissionsByCategoryTemp);
 
-    return true;
-  }, [permissionsList, permissionsListStatus]);
-
-  console.log(permissionsByCategory);
+    setNotificationsByCategory(notificationsByCategoryTemp);
+  }, [NotificationData]);
 
   return (
     <div className="flex flex-col -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-6">
@@ -56,56 +41,50 @@ export default function Table() {
                   scope="col"
                   className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
-                  Capability
+                  Actions
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Guest
+                  Email
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Low
+                  Mobile
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  High
+                  In-App
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Admin
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Owner
+                  Browser
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              {Object.keys(permissionsByCategory).map((key) => (
-                <Fragment key={permissionsByCategory[key].key}>
+              {Object.keys(notificationsByCategory).map((key) => (
+                <Fragment key={notificationsByCategory[key].key}>
                   <tr className="border-t border-gray-200">
                     <th
                       colSpan={5}
                       scope="colgroup"
-                      className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
+                      className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6 capitalize w-full"
                     >
-                      {permissionsByCategory[key].name}
+                      {notificationsByCategory[key].name}
                     </th>
                   </tr>
-                  {permissionsByCategory[key].permissions.map(
-                    (permission, index) => (
+                  {notificationsByCategory[key].notifications.map(
+                    (notification, index) => (
                       <tr
-                        key={permission.key}
+                        key={notification.key}
                         className={classNames(
                           index === 0 ? 'border-gray-300' : 'border-gray-200',
                           'border-t'
@@ -113,46 +92,38 @@ export default function Table() {
                       >
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                           <div className="flex flex-row z-50">
-                            {permission.name}
-                            {permission.description !== null && (
-                              <span title={permission.description}>
-                                <QuestionMarkCircleIcon
-                                  className="ml-2 h-5 w-5 text-gray-400 hover:text-black"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            )}
+                            {notification.name}
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
+                          {/* <PermissionsCheckbox
                             teamMemberRoleKey="guest"
                             workspacePermissionKey={permission.key}
-                          />
+                          /> */}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
+                          {/* <PermissionsCheckbox
                             teamMemberRoleKey="low"
                             workspacePermissionKey={permission.key}
-                          />
+                          /> */}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
+                          {/* <PermissionsCheckbox
                             teamMemberRoleKey="high"
                             workspacePermissionKey={permission.key}
-                          />
+                          /> */}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
+                          {/* <PermissionsCheckbox
                             teamMemberRoleKey="admin"
                             workspacePermissionKey={permission.key}
-                          />
+                          /> */}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
+                          {/* <PermissionsCheckbox
                             teamMemberRoleKey="owner"
                             workspacePermissionKey={permission.key}
-                          />
+                          /> */}
                         </td>
                       </tr>
                     )
