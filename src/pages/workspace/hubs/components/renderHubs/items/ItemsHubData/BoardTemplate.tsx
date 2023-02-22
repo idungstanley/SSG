@@ -124,6 +124,7 @@ export default function BoardTemplate({ listId, hubName }: { listId: string; hub
                       style={{ marginLeft: '-80px' }}
                       onMouseEnter={() => setIcons(items.id)}
                     >
+<<<<<<< HEAD
                       <div className="flex justify-between gap-5 ">
                         <p className="pb-2 text-sm font-bold">
                           {items.name.length > 70 ? items.name.slice(0, 70) + '...' : items.name}
@@ -151,6 +152,13 @@ export default function BoardTemplate({ listId, hubName }: { listId: string; hub
                             )}
                           </span>
                         </div>
+=======
+                      <div className="flex justify-between">
+                        <p className="">
+                          {items.name.slice(0, 30)}
+                        </p>
+                        <p>nath</p>
+>>>>>>> 830d4203 (truncate long text on board)
                       </div>
                       <div className="py-2">{icons == items.id && <CardState task={items} />}</div>
                       <span className="pt-10">
