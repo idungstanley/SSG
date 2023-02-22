@@ -10,11 +10,9 @@ interface AddAccessProps {
 }
 
 export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const selectedId = activeEntity.id;
-  const selectedType = activeEntity.type;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const selectedId = pilotSideOver.id;
+  const selectedType = pilotSideOver.type as 'file' | 'folder';
 
   const { data: dt } = useGetTeamMembersOrGroups({
     query: '',

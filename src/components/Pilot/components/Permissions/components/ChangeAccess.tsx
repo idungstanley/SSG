@@ -14,12 +14,13 @@ export default function ChangeAccess({
   itemType,
   accessToId,
 }: ChangeAccessProps) {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const {id, type} = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { id, type } = pilotSideOver;
 
-  const { mutate: onChange } = useChangeAccessForData(type, id);
+  const { mutate: onChange } = useChangeAccessForData(
+    type as 'file' | 'folder',
+    id
+  );
 
   const onChangeAccess = (key: string) => {
     if (id && type) {
@@ -27,7 +28,7 @@ export default function ChangeAccess({
         dataId: id,
         key,
         accessToId,
-        type,
+        type: type as 'file' | 'folder',
         itemType,
       });
     }

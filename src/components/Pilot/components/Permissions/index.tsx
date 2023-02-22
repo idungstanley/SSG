@@ -10,7 +10,10 @@ export default function Permissions() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { id, type } = pilotSideOver;
 
-  const { data, status } = useGetItemAccess({ id, type });
+  const { data, status } = useGetItemAccess({
+    id,
+    type: type as 'file' | 'folder',
+  });
 
   const fileMembers = data?.file_members;
   const folderMembers = data?.folder_team_members;

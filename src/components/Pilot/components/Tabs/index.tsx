@@ -11,61 +11,16 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import {
-  ChatBubbleLeftEllipsisIcon,
-  ClockIcon,
-  DocumentTextIcon,
-  EyeIcon,
-  InformationCircleIcon,
-  SignalIcon,
-} from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import { TbShield } from 'react-icons/tb';
+import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import Tab from './components/Tab';
-
-const tabs = [
-  {
-    id: 1,
-    label: 'Details',
-    icon: <InformationCircleIcon className="w-5 h-5" />,
-  },
-  {
-    id: 2,
-    label: 'Logs',
-    icon: <DocumentTextIcon className="w-5 h-5" />,
-  },
-  {
-    id: 3,
-    label: 'Permissions',
-    icon: <TbShield className="w-5 h-5" />,
-  },
-  {
-    id: 4,
-    label: 'Comments',
-    icon: <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />,
-  },
-  {
-    id: 5,
-    label: 'Watchers',
-    icon: <EyeIcon className="w-5 h-5" />,
-  },
-  {
-    id: 6,
-    label: 'Connect',
-    icon: <SignalIcon className="w-5 h-5" />,
-  },
-  {
-    id: 7,
-    label: 'Time clock',
-    icon: <ClockIcon className="w-5 h-5" />,
-  },
-];
 
 interface TabsProps {
   activeTabId: number;
   setActiveTabId: (i: number) => void;
   showTabLabel: boolean;
+  tabs: IPilotTab[];
 }
 
 const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
@@ -78,6 +33,7 @@ export default function Tabs({
   activeTabId,
   setActiveTabId,
   showTabLabel,
+  tabs,
 }: TabsProps) {
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage

@@ -13,17 +13,18 @@ export default function RemoveAccess({
   itemType,
   isActiveUser,
 }: RemoveAccessProps) {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const {id, type} = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { id, type } = pilotSideOver;
 
-  const { mutate: onRemoveAccess } = useRemoveAccessForData(type, id);
+  const { mutate: onRemoveAccess } = useRemoveAccessForData(
+    type as 'file' | 'folder',
+    id
+  );
 
   const removeAccess = () => {
     if (type && id) {
       onRemoveAccess({
-        type,
+        type: type as 'file' | 'folder',
         itemType,
         dataId: id,
         accessToId,
