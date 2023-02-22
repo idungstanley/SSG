@@ -1,9 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowSidebar } from '../../../../features/account/accountSlice';
-import FullSidebar from './components/FullSidebar';
-import MinSidebar from './components/MinSidebar';
+import FooterTabs from './components/FooterTabs';
+import Header from './components/Header';
+import NavigationItems from './components/NavigationItems';
+import Places from './components/Places';
 import ResizeBorder from './components/ResizeBorder';
+import Search from './components/Search';
 import Toggle from './components/Toggle';
 
 export const MIN_SIDEBAR_WIDTH = 230;
@@ -26,6 +29,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const [sidebarWidth, setSidebarWidth] = useState(
     sidebarWidthFromLS || MIN_SIDEBAR_WIDTH
   );
+
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onMouseDown = useCallback(
@@ -118,7 +122,18 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         className="h-full relative flex flex-col border-r border-gray-500 gap-2"
         style={showSidebar ? style : undefined}
       >
-        {showSidebar ? <FullSidebar /> : <MinSidebar />}
+        <Header />
+
+        <section className="relative flex flex-col overflow-y-scroll overflow-x-hidden">
+          {showSidebar ? <Search /> : null}
+
+          <NavigationItems />
+
+          <Places />
+        </section>
+
+        <FooterTabs />
+
         <ResizeBorder onMouseDown={onMouseDown} />
       </section>
     </aside>

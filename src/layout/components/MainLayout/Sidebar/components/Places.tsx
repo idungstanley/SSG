@@ -60,31 +60,31 @@ const places = [
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-fit h-fit" />,
+    icon: <DocumentTextIcon className="w-5 h-5" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-fit h-fit"/>,
+    icon: <ClockIcon className="w-5 h-5"/>,
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="text-md"/>,
+    icon: <FaRoute className="w-5 h-5"/>,
   },
   {
     name: 'Also HR',
     id: 9,
     place: <AlsoHr/>,
-    icon: <FaHandsHelping className="w-fit h-fit"/>,
+    icon: <FaHandsHelping className="w-5 h-5"/>,
   },
   {
     name: 'Commerce',
     id: 10,
     place: <Commerce/>,
-    icon: <IoBusinessOutline className="w-fit h-fit"/>,
+    icon: <IoBusinessOutline className="w-5 h-5"/>,
   },
 ];
 
@@ -104,7 +104,7 @@ function Places() {
   };
 
   useEffect(() => {
-    // ? go to active place from URL on mount
+    // go to active place from URL on mount
     const placeFromUrl = pathname.split('/')[1];
 
     const activePlace = places.find((i) => i.link === placeFromUrl);
@@ -132,7 +132,7 @@ function Places() {
                   <img
                     src={place.source}
                     alt={place.name + 'Icon'}
-                    className="w-fit h-fit"
+                    className="w-5 h-5"
                   />
                 )
               }

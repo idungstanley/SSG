@@ -42,6 +42,7 @@ function PlaceItem({
       {isActivePlace && (
         <span className="absolute top-0 left-0 right-0 bg-green-500 h-1"></span>
       )}
+
       <div className="flex justify-between w-full">
         <div
           onClick={isActivePlace ? resetSelectedPlace : onClick}
@@ -63,6 +64,7 @@ function PlaceItem({
             </span>
           ) : null}
         </div>
+
         {showSidebar ? (
           <div className="flex gap-2 items-center">
             {rightContent}

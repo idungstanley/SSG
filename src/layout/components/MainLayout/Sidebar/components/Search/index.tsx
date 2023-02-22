@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CommandSearchModal from '../../../layout/components/MainLayout/Sidebar/components/CommandSearchModal';
+import CommandSearchModal from '../CommandSearchModal';
 
 export default function Search() {
   const [commandSearchModal, setCommandSearchModal] = useState(false);

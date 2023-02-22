@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../../../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../../../../../components';
-import { setShowSidebarSettings } from '../../../../../../../../features/hubs/hubSlice';
-import ArchiveMenu from '../../../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
-import WorkSpaceSelection from '../../../WorkSpaceSelection';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../../components';
+import { setShowSidebarSettings } from '../../../../../../features/hubs/hubSlice';
+import ArchiveMenu from '../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
+import WorkSpaceSelection from '../WorkSpaceSelection';
 import MainLogo from '../../../../../../../../assets/branding/main-logo.png';
-import { cl } from '../../../../../../../../utils';
+import { cl } from '../../../../../../utils';
 
 export default function Header() {
   const dispatch = useAppDispatch();
