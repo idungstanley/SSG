@@ -10,6 +10,7 @@ import ListFilter from '../../../lists/components/renderlist/listDetails/ListFil
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import PageWrapper from '../../../../../components/PageWrapper';
+import pilotConfig from '../PilotSection';
 
 function RenderHubs() {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ function RenderHubs() {
 
   return (
     <PageWrapper
+      pilotConfig={pilotConfig}
       header={
         <ListNav
           navName={activeItemName}
