@@ -22,7 +22,7 @@ function RenderList() {
   const { listId } = useParams();
   const {
     myTaskData,
-    // tableView,
+    tableView,
     listView,
     boardView,
     addNewTaskItem,
@@ -49,13 +49,13 @@ function RenderList() {
         <div className="  w-full overflow-y-scroll">
           <div
             className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: '#e1e4e5' }}
+            style={{ backgroundColor: "#e1e4e5" }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
 
             {/* task list logic */}
-            {/* {tableView && closeTaskListView && <TaskTableView />} */}
+            {tableView && closeTaskListView && <TaskTableView />}
 
             <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}

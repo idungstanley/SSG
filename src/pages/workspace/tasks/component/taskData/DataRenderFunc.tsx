@@ -385,11 +385,11 @@ export default function DataRenderFunc({
                 comfortableView
                   ? "text-lg whitespace-nowrap"
                   : comfortableViewWrap
-                  ? "text-lg"
+                  ? "text-lg 	"
                   : CompactView
                   ? "text-xs whitespace-nowrap"
                   : CompactViewWrap
-                  ? "text-xs"
+                  ? "text-xs text-justify	"
                   : null
               }`}
             >
