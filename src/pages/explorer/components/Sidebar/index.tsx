@@ -24,6 +24,7 @@ import {
 } from '@heroicons/react/24/outline';
 import PlaceItem from '../../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import cabinetIcon from '../../../../assets/icons/cabinet.svg';
+import { cl } from '../../../../utils';
 
 const stringifyFolders = (
   query: string,
@@ -97,9 +98,7 @@ export default function ExtendedBar() {
           <img src={cabinetIcon} alt={'cabinet' + 'Icon'} className="w-4 h-4" />
         }
         rightContent={
-          <div className="flex gap-2"
-          onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" />
 
             {showSearch ? (
@@ -122,36 +121,34 @@ export default function ExtendedBar() {
         }
       />
 
-      {showSidebar ? (
-        <aside className="mb-2">
-          {/* header */}
-          {status === 'loading' ? (
-            <div className="justify-center w-6 mx-auto mt-8">
-              <Spinner size={8} color="#0F70B7" />
-            </div>
-          ) : status === 'error' ? (
-            <FullScreenMessage
-              title="Oops, an error occurred :("
-              description="Please try again later."
-            />
-          ) : null}
+      <aside className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
+        {/* header */}
+        {status === 'loading' ? (
+          <div className="justify-center w-6 mx-auto mt-8">
+            <Spinner size={8} color="#0F70B7" />
+          </div>
+        ) : status === 'error' ? (
+          <FullScreenMessage
+            title="Oops, an error occurred :("
+            description="Please try again later."
+          />
+        ) : null}
 
-          {/* folder list */}
-          {folders ? (
-            folders.length ? (
-              <FoldersList
-                folders={folders}
-                isSearchedResults={!!filteredSearchedFolders?.length}
-              />
-            ) : (
-              <FullScreenMessage
-                title="No folders yet."
-                description="Create one."
-              />
-            )
-          ) : null}
-        </aside>
-      ) : null}
+        {/* folder list */}
+        {folders ? (
+          folders.length ? (
+            <FoldersList
+              folders={folders}
+              isSearchedResults={!!filteredSearchedFolders?.length}
+            />
+          ) : (
+            <FullScreenMessage
+              title="No folders yet."
+              description="Create one."
+            />
+          )
+        ) : null}
+      </aside>
     </>
   );
 }

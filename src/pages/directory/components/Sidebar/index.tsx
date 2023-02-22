@@ -97,21 +97,19 @@ function Sidebar() {
         }
       />
 
-      {showSidebar ? (
-        <>
-          <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
-          <LibraryNavigation
-            label="Shelf"
-            path="shelf"
-            icon={<BookShelfIcon />}
-          />
-          {isBookShelf ? (
-            <div className="ml-5">
-              <DirectoryList />
-            </div>
-          ) : null}
-        </>
-      ) : null}
+      <div className={cl(!showSidebar && 'overflow-x-hidden w-12')}>
+        <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
+        <LibraryNavigation
+          label="Shelf"
+          path="shelf"
+          icon={<BookShelfIcon />}
+        />
+        {isBookShelf ? (
+          <div className="ml-5">
+            <DirectoryList />
+          </div>
+        ) : null}
+      </div>
     </>
   );
 }

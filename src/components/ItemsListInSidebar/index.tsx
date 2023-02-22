@@ -27,6 +27,7 @@ import {
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useNavigate } from 'react-router-dom';
+import { cl } from '../../utils';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -143,7 +144,7 @@ export default function ItemsListInSidebar({
   };
 
   return status === 'success' ? (
-    <ul className="z-20 w-full">
+    <ul className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}>
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}

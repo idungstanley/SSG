@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowSidebar } from '../../../../features/account/accountSlice';
+import { cl } from '../../../../utils';
 import FooterTabs from './components/FooterTabs';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
@@ -113,7 +114,13 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   );
 
   return (
-    <aside ref={sidebarRef} className="flex gap-5 text-center relative">
+    <aside
+      ref={sidebarRef}
+      className={cl(
+        'flex gap-5 text-center relative overflow-x-hidden',
+        !showSidebar && 'overflow-hidden w-16'
+      )}
+    >
       {/* show / hide sidebar icon */}
       <Toggle />
 

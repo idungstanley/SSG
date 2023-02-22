@@ -11,11 +11,12 @@ import { setCreateHubSlideOverVisibility } from '../../../features/general/slide
 import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
+import { cl } from '../../../utils';
 
 function Hubs() {
   const dispatch = useDispatch();
-  const { toggleArchive } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { toggleArchive } = useAppSelector((state) => state.hub);
   const { data, status } = useGetHubList({
     query: toggleArchive,
   });
@@ -37,35 +38,27 @@ function Hubs() {
         label="TASK"
         icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />}
         rightContent={
-          <div className="flex gap-2"
-          onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" />
           </div>
         }
       />
-      {showSidebar ? (
-        <>
-          <div className="flex items-center justify-between pl-4 hover:bg-gray-100">
-            <div className="flex items-center content-center self-center py-2">
-              <img
-                src={everythingIcon}
-                alt="Hub Icon"
-                className="h-4 mr-4"
-              />
-              <p className="block text-xs tracking-wider capitalize truncate">
-                Everything
-              </p>
-            </div>
-          </div>
 
-          <ItemsListInSidebar
-            items={data?.data.hubs}
-            status={status}
-            type="hub"
-          />
-        </>
-      ) : null}
+      <div
+        className={cl(
+          !showSidebar && 'overflow-x-hidden w-12',
+          'flex items-center justify-between pl-4 hover:bg-gray-100'
+        )}
+      >
+        <div className="flex items-center content-center self-center py-2">
+          <img src={everythingIcon} alt="Hub Icon" className="h-4 mr-4" />
+          <p className="block text-xs tracking-wider capitalize truncate">
+            Everything
+          </p>
+        </div>
+      </div>
+
+      <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
 
       <Modal />
       <SubHubModal />
