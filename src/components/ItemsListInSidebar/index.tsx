@@ -220,7 +220,9 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {isHovering === index && showSidebar && (
-              <div className="flex items-center pr-1 space-x-1">
+              <div className="flex items-center pr-1 space-x-1"
+              onClick={(e) => e.stopPropagation()}
+              >
                 <AiOutlineEllipsis
                   onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="cursor-pointer"

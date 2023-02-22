@@ -8,7 +8,7 @@ import notificationIcon from '../../../../assets/branding/notification-logo.png'
 import homeIcon from '../../../../assets/branding/Home-icon.svg';
 import { classNames } from '../../../../utils';
 import { MdOutlineDashboard } from 'react-icons/md';
-import { HiUserGroup } from 'react-icons/hi';
+import { HiUserGroup, HiOutlineLibrary, HiTemplate } from 'react-icons/hi';
 
 const navigation = [
   {
@@ -33,6 +33,18 @@ const navigation = [
     name: "Community",
     href: "/workspace/community",
     icon: <HiUserGroup className="text-gray-700 text-l" />,
+    alwaysShow: false,
+  },
+  {
+    name: "Library",
+    href: "/workspace/directory",
+    icon: <HiOutlineLibrary className="text-gray-700 text-l" />,
+    alwaysShow: false,
+  },
+  {
+    name: "Template",
+    href: "/template",
+    icon: <HiTemplate className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
@@ -86,7 +98,7 @@ export default function NavigationItems() {
               )}
             >
               {item.href === pathname && (
-                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg " />
               )}
               <div className="flex items-center">
                 <div
@@ -131,7 +143,7 @@ export default function NavigationItems() {
               )}
             >
               {item.href === pathname && (
-                <span className="absolute rounded-r-lg top-0 bottom-0 left-0 w-1 bg-green-500 " />
+                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg " />
               )}
               <div className="flex items-center">
                 <div
@@ -168,7 +180,7 @@ export default function NavigationItems() {
         )}
         <div
           onClick={() => setShowMore((prev) => !prev)}
-          className="flex items-center w-full pl-4 cursor-pointer py-1 text-base font-medium hover:bg-gray-100 hover:text-gray-900"
+          className="flex items-center w-full py-1 pl-4 text-base font-medium cursor-pointer hover:bg-gray-100 hover:text-gray-900"
         >
           <div
             className="flex-shrink-0 w-4 h-4 mr-4 hover:text-gray-900 hover:bg-gray-100"

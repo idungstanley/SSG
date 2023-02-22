@@ -5,7 +5,7 @@ import Favorites from '../../favorites';
 import Files from '../../files';
 import Hubs from '../../hubs';
 import Inbox from '../../inbox';
-import hubIcon from '../../../../assets/branding/hub.png';
+import hubIcon from '../../../../assets/branding/hub.svg';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';

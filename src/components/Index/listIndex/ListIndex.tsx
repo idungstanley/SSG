@@ -103,6 +103,7 @@ function ListIndex({
                 type="button"
                 id="listright"
                 className="flex items-center justify-end mr-6 space-x-1"
+                onClick={(e) => e.stopPropagation()}
               >
                 {/* <TaskDropdown getListId={getListId} /> */}
                 <AiOutlineEllipsis

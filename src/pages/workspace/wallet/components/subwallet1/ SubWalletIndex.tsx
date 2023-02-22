@@ -220,6 +220,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
               type="button"
               id="listright"
               className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               {/* <TaskDropdown /> */}
               <AiOutlineEllipsis
