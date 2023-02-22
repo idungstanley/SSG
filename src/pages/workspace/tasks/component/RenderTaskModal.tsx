@@ -20,7 +20,6 @@ import {
   getOneTaskService,
   createTimeEntriesService,
 } from '../../../../features/task/taskService';
-import TimeEntriesDropdown from './timeEntriesDropdown/TimeEntriesDropdown';
 import Watcher from '../watchers/index';
 
 function RenderTaskModal() {
@@ -28,8 +27,6 @@ function RenderTaskModal() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [showTimeEntries, setShowTimeEntries] = useState(false);
-  const [showEntries, setShowEntries] = useState(false);
-  const [isBillable, setIsBillable] = useState(false);
 
   const { data: taskData } = useQuery({
     queryKey: ['taskData', taskId],

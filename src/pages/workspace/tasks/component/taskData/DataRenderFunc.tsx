@@ -1,4 +1,3 @@
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
 import moment, { MomentInput } from "moment";
 import React, { ReactNode } from "react";
 import { IoCloseSharp } from "react-icons/io5";
@@ -30,6 +29,7 @@ import { setActiveItem } from "../../../../../features/workspace/workspaceSlice"
 import { FiEdit2 } from "react-icons/fi";
 import TagModal from "../../../../../components/tags/TagModal";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 interface renderDataProps {
   taskColField:
@@ -232,7 +232,7 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <UserAddOutlined
+        <UserPlusIcon
           className=" ml-2 text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
@@ -381,7 +381,7 @@ export default function DataRenderFunc({
                 <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusOutlined
+                <PlusIcon
                   className="  w-3  text-gray-500   "
                   aria-hidden="true"
                   onClick={() => handleCreateSubTask(task.id as string)}

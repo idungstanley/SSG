@@ -3,13 +3,13 @@ import { useAppSelector } from "../../../../../app/hooks";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { VscEllipsis } from "react-icons/vsc";
 import { BsPlus } from "react-icons/bs";
-import { UserAddOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setToggleAssignCurrentTaskId } from "../../../../../features/task/taskSlice";
 import { TbSubtask } from "react-icons/tb";
 import CardState from "./CardState";
 import AssignTask from "../../assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../components";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 // import Breadcrumb from "../../../../settings/components/Breadcrumb";
 // import { HomeIcon } from "@heroicons/react/24/outline";
 // import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
@@ -21,12 +21,12 @@ function Board() {
   );
 
   const handleAssigneeModal = (id: string) => {
-    console.log(id);
+    // console.log(id);
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
     } else {
       dispatch(setToggleAssignCurrentTaskId(id));
-      console.log(id);
+      // console.log(id);
     }
   };
 
@@ -106,7 +106,7 @@ function Board() {
                   ).length == 0 ? (
                     <>
                       <div onClick={() => handleAssigneeModal(task.id)}>
-                        <UserAddOutlined
+                        <UserPlusIcon
                           className=" text-gray-400  cursor-pointer "
                           aria-hidden="true"
                         />

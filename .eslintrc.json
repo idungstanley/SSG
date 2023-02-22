@@ -21,8 +21,8 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    // "@typescript-eslint/no-explicit-any": "error",
-    // "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
     "no-empty": "error",
     "linebreak-style": 0,
@@ -65,5 +65,10 @@
       }
     ],
     "jsx-quotes": [2, "prefer-double"]
-  }
+  },
+  "settings": {
+    "react": {
+        "version": "detect"
+    }
+}
 }

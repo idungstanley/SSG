@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
-import { itemType } from '../../types';
 import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
 import { closeMenu, getHub } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
