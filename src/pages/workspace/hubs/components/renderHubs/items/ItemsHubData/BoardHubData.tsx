@@ -18,7 +18,7 @@ export default function BoardHubData({ hubId, hubName }: ItemsHubDataProps) {
         {data?.data.lists.map((item: dataProps) => {
           return (
             <>
-              <div key={item.id}>{item.name}</div>
+              {/* <div key={item.id}>{item.name}</div> */}
               <div className="pt-10 pl-10">
                 <BoardTemplate listId={item.id} />
               </div>
