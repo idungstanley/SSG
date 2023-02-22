@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+// import Pilot from '../../pages/workspace/pilot';
 import Pilot from '../Pilot';
 
 interface PageWrapperProps {

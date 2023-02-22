@@ -7,10 +7,8 @@ import AddAccess from './components/AddAccess';
 import MembersList from './components/MembersList';
 
 export default function Permissions() {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-const {id, type} = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { id, type } = pilotSideOver;
 
   const { data, status } = useGetItemAccess({ id, type });
 

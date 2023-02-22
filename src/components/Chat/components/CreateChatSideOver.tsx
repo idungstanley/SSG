@@ -9,10 +9,8 @@ export default function CreateChatSideOver() {
   const dispatch = useAppDispatch();
   const { showCreateChatSideOver } = useAppSelector((state) => state.chat);
   const [name, setName] = useState('');
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const { id, type } = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { type, id } = pilotSideOver;
 
   const { mutate: onCreate } = useCreateChat(id);
 
@@ -25,7 +23,7 @@ export default function CreateChatSideOver() {
     e.preventDefault();
 
     if (id && type) {
-      onCreate({id, type, name});
+      onCreate({ id, type, name });
     }
     onClose();
   };

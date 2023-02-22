@@ -13,10 +13,8 @@ import { mentionTeamMemberInMessageReg } from '../../regex';
 import { useAppSelector } from '../../app/hooks';
 
 export default function CommentsForPilot() {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const { type, id } = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { type, id } = pilotSideOver;
 
   const messageRef = useRef<HTMLInputElement>(null);
 

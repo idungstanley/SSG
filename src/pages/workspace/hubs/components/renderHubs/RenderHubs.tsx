@@ -4,14 +4,12 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import { useGetHubChildren } from '../../../../../features/hubs/hubService';
 import TaskListSections from './items/ItemsHubData/TaskListSections';
-// ? uncomment this to show previous pilot
-// import Pilot from "../../../pilot";
 import WalletSection from './items/itemsWalletData/WalletSection';
 import ListSection from './items/itemsListData/ListSection';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
-import Pilot from '../../../../../components/Pilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import PageWrapper from '../../../../../components/PageWrapper';
 
 function RenderHubs() {
   const dispatch = useAppDispatch();
@@ -36,43 +34,33 @@ function RenderHubs() {
   }, [hubId]);
 
   return (
-    <div className="h-full w-full">
-      <section id="nav" className="capitalize">
+    <PageWrapper
+      header={
         <ListNav
           navName={activeItemName}
           viewsList="List"
           viewsList2="Board"
           changeViews="View"
         />
-      </section>
-      <section className="flex w-full h-full bg-white">
-        {/* ListList */}
-        <div className="pr-1 pt-0.5 w-full h-full">
-          <div
-            className="w-full  scrollbarDynCol"
-            style={{ minHeight: '0', maxHeight: '100vh' }}
-          >
-            <div className="w-full">
-              <ListFilter />
-            </div>
-            <div>
-              {HubDetail?.data.hubs.map((data: dataProps) => (
-                <TaskListSections data={data} key={data.id} />
-              ))}
-              {HubDetail?.data.wallets.map((data: dataProps) => (
-                <WalletSection data={data} key={data.id} />
-              ))}
-              {HubDetail?.data.lists.map((data: dataProps) => {
-                return <ListSection data={data} key={data.id} />;
-              })}
-            </div>
-          </div>
+      }
+    >
+      <div className="w-full h-full">
+        <div className="w-full">
+          <ListFilter />
         </div>
         <div>
-          <Pilot />
+          {HubDetail?.data.hubs.map((data: dataProps) => (
+            <TaskListSections data={data} key={data.id} />
+          ))}
+          {HubDetail?.data.wallets.map((data: dataProps) => (
+            <WalletSection data={data} key={data.id} />
+          ))}
+          {HubDetail?.data.lists.map((data: dataProps) => {
+            return <ListSection data={data} key={data.id} />;
+          })}
         </div>
-      </section>
-    </div>
+      </div>
+    </PageWrapper>
   );
 }
 

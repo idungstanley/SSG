@@ -10,12 +10,11 @@ interface ChatsListProps {
 }
 
 export default function ChatsList({ selectChat }: ChatsListProps) {
-  const { activeEntity } = useAppSelector(
-    (state) => state.workspace
-  );
-  const { id, type} = activeEntity;
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { type, id } = pilotSideOver;
+
   const { mutate: onDelete } = useDeleteChat();
-  const { data, status } = useGetChats({id, type});
+  const { data, status } = useGetChats({ id, type });
 
   const handleDelete = (id: string) => {
     onDelete(id);
