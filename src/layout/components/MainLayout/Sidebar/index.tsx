@@ -10,7 +10,7 @@ import Search from './components/Search';
 import Toggle from './components/Toggle';
 
 export const MIN_SIDEBAR_WIDTH = 230;
-const MAX_SIDEBAR_WIDTH = 400;
+export const MAX_SIDEBAR_WIDTH = 320;
 const RELATIVE_WIDTH = 10;
 
 interface SidebarProps {
@@ -119,7 +119,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
 
       {/* sidebar */}
       <section
-        className="h-full relative flex flex-col border-r border-gray-500 gap-2"
+        className="h-full relative flex flex-col border-r border-gray-500 gap-2 pr-1"
         style={showSidebar ? style : undefined}
       >
         <Header />
@@ -134,7 +134,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
 
         <FooterTabs />
 
-        <ResizeBorder onMouseDown={onMouseDown} />
+        <ResizeBorder sidebarWidth={sidebarWidth} onMouseDown={onMouseDown} />
       </section>
     </aside>
   );
