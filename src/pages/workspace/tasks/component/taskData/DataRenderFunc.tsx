@@ -71,36 +71,48 @@ export default function DataRenderFunc({
   const groupAssignee = (
     data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
-    return (data as [{ id: string; initials: string; colour: string }])
-      ?.length >= 4
-      ? data?.slice(0, 3).map((newData) => (
-          <div key={newData.id} className="">
-            <span
-              key={newData.id}
-              className="flex gap-1 items-center justify center"
-            >
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
-              />
-              <span>+{data.length - 3}</span>
+    return (
+      <div>
+        {(data as [{ id: string; initials: string; colour: string }])?.length >=
+        2 ? (
+          <div className="flex items-center justify-center">
+            {data?.slice(0, 2).map((newData) => (
+              <div key={newData.id} className="">
+                <span
+                  key={newData.id}
+                  className="flex gap-1 items-center justify center"
+                >
+                  <AvatarWithInitials
+                    initials={newData.initials}
+                    backgroundColour={newData.colour}
+                    height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
+                    width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+                  />
+                </span>
+              </div>
+            ))}
+            <span>
+              +
+              {(data as [{ id: string; initials: string; colour: string }])
+                ?.length - 3}
             </span>
           </div>
-        ))
-      : data?.map((newData) => (
-          <div key={newData.id} className="">
-            <span key={newData.id}>
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
-              />
-            </span>
-          </div>
-        ));
+        ) : (
+          data?.map((newData) => (
+            <div key={newData.id} className="">
+              <span key={newData.id}>
+                <AvatarWithInitials
+                  initials={newData.initials}
+                  backgroundColour={newData.colour}
+                  height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
+                  width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+                />
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+    );
   };
 
   const groupTags = (arr: tagItem[]) => {
