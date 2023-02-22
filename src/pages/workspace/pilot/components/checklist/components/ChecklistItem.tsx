@@ -71,10 +71,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     done,
   });
 
-  // if (updateStatus === "success") {
-  //   refetch();
-  // }
-
   const isDone = (id: string, done: number, name: string) => {
     setItemId(id);
     setEditName(name);

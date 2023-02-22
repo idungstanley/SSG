@@ -14,14 +14,14 @@ import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
 import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
-import TaskTableView from "../tasks/component/views/TaskTableView";
+// import TaskTableView from "../tasks/component/views/TaskTableView";
 
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
   const {
     myTaskData,
-    tableView,
+    // tableView,
     listView,
     boardView,
     addNewTaskItem,
@@ -54,7 +54,7 @@ function RenderList() {
             {/* card */}
 
             {/* task list logic */}
-            {tableView && closeTaskListView && <TaskTableView />}
+            {/* {tableView && closeTaskListView && <TaskTableView />} */}
 
             <div className="-z-50">{boardView && <Board />}</div>
             {listView && <TaskListViews />}

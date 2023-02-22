@@ -50,7 +50,7 @@ export default function ChecklistModal({
     }
   };
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left absolute">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           <BsThreeDots className="cursor-pointer" />

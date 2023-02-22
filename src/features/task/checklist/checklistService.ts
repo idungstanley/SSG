@@ -131,7 +131,7 @@ export const UseUpdateChecklistItemService = ({
   itemId: string;
   done: number;
   checklist_id: string;
-  name: string;
+  name: string | null;
 }) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
