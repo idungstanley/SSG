@@ -7,46 +7,9 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
-import History from './components/History';
-import Information from './components/Information';
-import Permissions from './components/Permissions';
 import { cl } from '../../utils';
-import ChatForPilot from '../Chat/ChatForPilot';
-import CommentsForPilot from '../Comments/CommentsForPilot';
-import WatchersForPilot from '../Watchers/WatchersForPilot';
 import Tabs from './components/Tabs';
-import TimeClock from '../../pages/workspace/pilot/components/timeClock/TimeClock';
-
-const sections = [
-  {
-    id: 1,
-    element: <Information />,
-  },
-  {
-    id: 2,
-    element: <History />,
-  },
-  {
-    id: 3,
-    element: <Permissions />,
-  },
-  {
-    id: 4,
-    element: <CommentsForPilot />,
-  },
-  {
-    id: 5,
-    element: <WatchersForPilot />,
-  },
-  {
-    id: 6,
-    element: <ChatForPilot />,
-  },
-  {
-    id: 7,
-    element: <TimeClock />,
-  },
-];
+import { IPilotSection, IPilotTab } from '../../types';
 
 const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
   localStorage.getItem('pilot') || '""'
@@ -54,7 +17,13 @@ const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
 
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
-export default function Pilot() {
+interface PilotProps {
+  pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
+}
+
+export default function Pilot({ pilotConfig }: PilotProps) {
+  const { sections, tabs } = pilotConfig;
+
   const dispatch = useAppDispatch();
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const [activeTabId, setActiveTabId] = useState(1);
@@ -130,6 +99,7 @@ export default function Pilot() {
         <>
           {/* tab items */}
           <Tabs
+            tabs={tabs}
             showTabLabel={showTabLabel}
             activeTabId={activeTabId}
             setActiveTabId={setActiveTabId}

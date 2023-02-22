@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { IPilotSection, IPilotTab } from '../../types';
 // import Pilot from '../../pages/workspace/pilot';
 import Pilot from '../Pilot';
 
@@ -6,12 +7,14 @@ interface PageWrapperProps {
   header: JSX.Element;
   children: ReactNode;
   additional?: JSX.Element;
+  pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
 }
 
 export default function PageWrapper({
   header,
   children,
   additional,
+  pilotConfig,
 }: PageWrapperProps) {
   return (
     <>
@@ -21,7 +24,7 @@ export default function PageWrapper({
         <div className="flex w-full h-full">
           {children}
 
-          <Pilot />
+          <Pilot pilotConfig={pilotConfig} />
         </div>
       </main>
 

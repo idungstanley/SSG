@@ -33,7 +33,7 @@ export default function History() {
             {logs ? (
               !logs.length ? (
                 <FullScreenMessage
-                  title="NO logs yet"
+                  title="No logs yet"
                   description="Do any action."
                 />
               ) : (
