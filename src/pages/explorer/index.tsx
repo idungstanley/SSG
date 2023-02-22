@@ -5,31 +5,29 @@ import Main from './components/Main';
 import CreateOrRenameItemSlideOver from './components/sideOvers/CreateOrRenameItemSlideOver';
 import ShareItemModal from '../../components/ShareItemModal';
 import DragContext from './components/DragContext';
-import Pilot from '../../components/Pilot';
+import PageWrapper from '../../components/PageWrapper';
 
 export default function ExplorerPage() {
   return (
-    <>
-      <DragContext>
-        <main className="flex flex-col w-full h-full">
-          <Header />
+    <PageWrapper
+      header={<Header />}
+      additional={
+        <>
+          <CreateOrRenameItemSlideOver />
+          <ShareItemModal />
+        </>
+      }
+    >
+      {/* files list, breadcrumb, file preview */}
+      <div className="flex flex-col w-full h-full">
+        {/* Breadcrumb */}
+        <BreadcrumbSection />
+        {/* files list & file preview */}
 
-          <div className="flex w-full h-full">
-            {/* files list, breadcrumb, file preview */}
-            <div className="flex flex-col w-full h-full">
-              {/* Breadcrumb */}
-              <BreadcrumbSection />
-              {/* files list & file preview */}
-              <Main />
-            </div>
-
-            <Pilot />
-          </div>
-        </main>
-      </DragContext>
-
-      <CreateOrRenameItemSlideOver />
-      <ShareItemModal />
-    </>
+        <DragContext>
+          <Main />
+        </DragContext>
+      </div>
+    </PageWrapper>
   );
 }

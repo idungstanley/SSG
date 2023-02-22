@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
+import PageWrapper from '../../components/PageWrapper';
 import {
   useGetDirectoryTemplate,
   useGetDirectoryTemplates,
@@ -37,9 +38,8 @@ function Directory() {
     useGetDirectoryTemplate(selectedTemplateId);
 
   return (
-    <>
-      <div className="w-full h-full">
-        {/* nav */}
+    <PageWrapper
+      header={
         <div className="border-b border-gray-200 w-full">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
@@ -59,85 +59,88 @@ function Directory() {
             ))}
           </nav>
         </div>
+      }
+      additional={
+        <>
+          <CreateDirectorySideOver />
+        </>
+      }
+    >
+      <div className="flex flex-col items-start py-2 w-full h-full">
+        {/* status checking */}
+        {templatesStatus === 'loading' ? (
+          <div className="mx-auto w-6 mt-5 justify-center">
+            <Spinner size={8} color="#0F70B7" />
+          </div>
+        ) : templatesStatus === 'error' ? (
+          <div className="w-full h-full">
+            <FullScreenMessage
+              title="Oops, an error occurred :("
+              description="Please try again later."
+            />
+          </div>
+        ) : null}
 
-        <div className="flex flex-col items-start py-2 w-full h-full">
-          {/* status checking */}
-          {templatesStatus === 'loading' ? (
-            <div className="mx-auto w-6 mt-5 justify-center">
-              <Spinner size={8} color="#0F70B7" />
-            </div>
-          ) : templatesStatus === 'error' ? (
+        {/* templates list */}
+        {templates ? (
+          !templates.length ? (
             <div className="w-full h-full">
               <FullScreenMessage
-                title="Oops, an error occurred :("
-                description="Please try again later."
+                title="No records yet :("
+                description="Create one."
               />
             </div>
-          ) : null}
+          ) : (
+            <div className="flex gap-3 flex-col">
+              {templates.map((template) => (
+                <p
+                  onClick={() =>
+                    setSelectedTemplateId((prev) =>
+                      prev === template.id ? null : template.id
+                    )
+                  }
+                  key={template.id}
+                  className={cl(
+                    'border p-2 rounded-xl cursor-pointer text-black border-gray-700 hover:border-black',
+                    selectedTemplateId === template.id ? 'bg-indigo-200' : ''
+                  )}
+                >
+                  {template.name}
+                </p>
+              ))}
+            </div>
+          )
+        ) : null}
 
-          {/* templates list */}
-          {templates ? (
-            !templates.length ? (
-              <div className="w-full h-full">
-                <FullScreenMessage
-                  title="No records yet :("
-                  description="Create one."
+        {/* template fields list */}
+        {selectedTemplateId && templateStatus === 'loading' ? (
+          <div className="mx-auto w-6 mt-5 justify-center">
+            <Spinner size={8} color="#0F70B7" />
+          </div>
+        ) : template && selectedTemplateId ? (
+          <div className="mt-10 flex flex-col">
+            <h3 className="text-lg font-medium uppercase leading-6 text-gray-900 border-b border-gray-200 pb-2">
+              {template.name}
+            </h3>
+
+            <div className="flex flex-col space-y-4 divide-y divide-gray-200">
+              {template.fields.map((field) => (
+                <FieldItem
+                  key={field.id}
+                  selectedTemplateId={selectedTemplateId}
+                  fieldData={field}
                 />
-              </div>
-            ) : (
-              <div className="flex gap-3 flex-col">
-                {templates.map((template) => (
-                  <p
-                    onClick={() =>
-                      setSelectedTemplateId((prev) =>
-                        prev === template.id ? null : template.id
-                      )
-                    }
-                    key={template.id}
-                    className={cl(
-                      'border p-2 rounded-xl cursor-pointer text-black border-gray-700 hover:border-black',
-                      selectedTemplateId === template.id ? 'bg-indigo-200' : ''
-                    )}
-                  >
-                    {template.name}
-                  </p>
-                ))}
-              </div>
-            )
-          ) : null}
-
-          {/* template fields list */}
-          {selectedTemplateId && templateStatus === 'loading' ? (
-            <div className="mx-auto w-6 mt-5 justify-center">
-              <Spinner size={8} color="#0F70B7" />
+              ))}
+              <FieldItem selectedTemplateId={selectedTemplateId} />
             </div>
-          ) : template && selectedTemplateId ? (
-            <div className="mt-10 flex flex-col">
-              <h3 className="text-lg font-medium uppercase leading-6 text-gray-900 border-b border-gray-200 pb-2">
-                {template.name}
-              </h3>
-
-              <div className="flex flex-col space-y-4 divide-y divide-gray-200">
-                {template.fields.map((field) => (
-                  <FieldItem
-                    key={field.id}
-                    selectedTemplateId={selectedTemplateId}
-                    fieldData={field}
-                  />
-                ))}
-                <FieldItem selectedTemplateId={selectedTemplateId} />
-              </div>
-            </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         {selectedTemplateId ? (
           <TemplateItems selectedTemplateId={selectedTemplateId} />
         ) : null}
       </div>
-
-      <CreateDirectorySideOver />
-    </>
+    </PageWrapper>
   );
 }
 
