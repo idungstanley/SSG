@@ -3,6 +3,7 @@ import requestNew from '../../app/requestNew';
 import {
   IDirectoriesRes,
   IDirectory,
+  IDirectoryRes,
   IDirectoryTemplate,
   IDirectoryTemplateItem,
   IDirectoryTemplateItemsRes,
@@ -14,7 +15,7 @@ import {
 // request includes both fetch with and within tree
 export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
   useQuery<IDirectoriesRes, unknown, IDirectory[]>(
-    ['directory', includeTree ? 'tree-' + parentId : parentId || 'root'],
+    ['directory-p', includeTree ? 'tree-' + parentId : parentId || 'root'],
     () =>
       requestNew(
         {
@@ -30,6 +31,23 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
     {
       select: (res) =>
         res.data.directories || res.data.tree_elements?.directories || [],
+    }
+  );
+
+export const useGetDirectory = (directoryId?: string, isDirectory?: boolean) =>
+  useQuery<IDirectoryRes, unknown, IDirectory>(
+    ['directory', directoryId || 'root'],
+    () =>
+      requestNew(
+        {
+          url: `directories/${directoryId}`,
+          method: 'GET',
+        },
+        true
+      ),
+    {
+      enabled: isDirectory ? !!directoryId : !!directoryId && isDirectory,
+      select: (res) => res.data.directory,
     }
   );
 
@@ -54,7 +72,7 @@ export const useGetDirectoryTemplates = (directoryId?: string) =>
     }
   );
 
-export const useGetDirectoryTemplate = (templateId?: string | null) =>
+export const useGetDirectoryTemplate = (templateId?: string | null, isTemplate?: boolean) =>
   useQuery<IDirectoryTemplateRes, unknown, IDirectoryTemplateWithFields>(
     ['directory-template', templateId],
     () =>
@@ -66,7 +84,7 @@ export const useGetDirectoryTemplate = (templateId?: string | null) =>
         true
       ),
     {
-      enabled: !!templateId,
+      enabled: isTemplate ? !!templateId : !!templateId && isTemplate,
       select: (res) => res.data.template,
     }
   );

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../app/hooks';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
 import PageWrapper from '../../components/PageWrapper';
@@ -7,8 +8,10 @@ import {
   useGetDirectoryTemplate,
   useGetDirectoryTemplates,
 } from '../../features/directory/directoryService';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../utils';
 import FieldItem from './components/FieldItem';
+import pilotConfig from './components/PilotSection';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 import TemplateItems from './components/TemplateItems';
 
@@ -24,6 +27,7 @@ const tabs = [
 ];
 
 function Directory() {
+  const dispatch = useAppDispatch();
   const { directoryId } = useParams();
   const [activeTabId, setActiveTabId] = useState(1);
 
@@ -37,8 +41,25 @@ function Directory() {
   const { data: template, status: templateStatus } =
     useGetDirectoryTemplate(selectedTemplateId);
 
+  // set data for pilot
+  useEffect(() => {
+    const selectedItemId = selectedTemplateId || directoryId;
+    const selectedItemType = selectedTemplateId ? 'template' : 'directory';
+
+    if (selectedItemId) {
+      dispatch(
+        setShowPilotSideOver({
+          id: selectedItemId,
+          type: selectedItemType,
+          show: true,
+        })
+      );
+    }
+  }, [selectedTemplateId, directoryId]);
+
   return (
     <PageWrapper
+      pilotConfig={pilotConfig}
       header={
         <div className="border-b border-gray-200 w-full">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
