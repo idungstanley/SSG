@@ -20,6 +20,7 @@ function RenderHubs() {
         <ListNav
           navName={activeItemName}
           viewsList="List"
+          viewsList1="Table"
           viewsList2="Board"
           changeViews="View"
         />
