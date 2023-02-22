@@ -12,23 +12,22 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
 import Directory from '../../../directory/components/Sidebar';
-import emailIcon from '../../../../assets/branding/email-icon.png';
-import InboxIcon from '../../../../assets/branding/inbox.png';
 import libraryIcon from '../../../../assets/icons/library.svg';
 import cabinetIcon from '../../../../assets/icons/cabinet.svg';
 import AlsoHr from '../../alsoHr';
 import Commerce from '../../commerce';
 import RoutePlanner from '../../routePlanner';
 import { IoBusinessOutline } from 'react-icons/io5';
-import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, DocumentTextIcon, InboxStackIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping, FaRoute } from 'react-icons/fa';
+import { MdAlternateEmail } from 'react-icons/md';
 
 const places = [
   {
     name: 'Email',
     id: 1,
     place: <Favorites />,
-    source: emailIcon,
+    icon: <MdAlternateEmail />,
   },
   {
     name: 'TASK',
@@ -40,7 +39,7 @@ const places = [
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    source: InboxIcon,
+    icon: <InboxStackIcon/>,
   },
   {
     name: 'Cabinet',
