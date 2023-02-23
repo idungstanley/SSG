@@ -3,8 +3,6 @@ import {
   ArrowUpIcon,
   BellIcon,
   Squares2X2Icon,
-  CalendarIcon,
-  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
@@ -13,7 +11,8 @@ import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
 import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
-import { HiOutlineLibrary, HiTemplate } from 'react-icons/hi';
+import { HiOutlineLibrary, HiTemplate, HiUserGroup } from 'react-icons/hi';
+import { BsCalendar2Minus } from 'react-icons/bs';
 
 const navigation = [
   {
@@ -25,31 +24,31 @@ const navigation = [
   {
     name: 'Notifications',
     href: '/notification',
-    icon: <BellIcon className="w-5 h-5" aria-hidden="true" />,
+    icon: <BellIcon className="w-4 h4" aria-hidden="true" />,
     alwaysShow: true,
   },
   {
     name: 'Calendar',
     href: '/calendar',
-    icon: <CalendarIcon className="w-5 h-5" aria-hidden="true" />,
+    icon: <BsCalendar2Minus className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
     name: 'Community',
     href: '/community',
-    icon: <UserGroupIcon className="w-5 h-5" aria-hidden="true" />,
+    icon: <HiUserGroup className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
     name: "Library",
     href: "/directory",
-    icon: <HiOutlineLibrary className="text-gray-700 text-l" />,
+    icon: <HiOutlineLibrary className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
     name: "Template",
     href: "/template",
-    icon: <HiTemplate className="text-gray-700 text-l" />,
+    icon: <HiTemplate className="w-4 h4"aria-hidden="true" />,
     alwaysShow: false,
   },
   {
@@ -61,7 +60,7 @@ const navigation = [
   {
     name: 'Dashboards',
     href: '/dashboard',
-    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
+    icon: <Squares2X2Icon className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
@@ -75,11 +74,11 @@ const navigation = [
 const showLessOrMore = [
   {
     name: 'Show Less',
-    icon: <ArrowUpIcon className="w-5 h-5" aria-hidden="true" />,
+    icon: <ArrowUpIcon className="w-4 h4" aria-hidden="true" />,
   },
   {
     name: 'Show More',
-    icon: <ArrowDownIcon className="w-5 h-5" aria-hidden="true" />,
+    icon: <ArrowDownIcon className="w-4 h4" aria-hidden="true" />,
   },
 ];
 
@@ -102,12 +101,12 @@ export default function NavigationItems() {
         onClick={() => setShowMore((prev) => !prev)}
         className={cl(
           !showSidebar ? 'justify-center' : 'gap-2 items-center',
-          'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+          'flex cursor-pointer gap-2 items-center pl-4 p-2 w-full hover:text-gray-500 hover:bg-gray-100'
         )}
       >
         {showLessOrMore[showMore ? 0 : 1].icon}
         {showSidebar ? (
-          <p className="text-xs truncate">
+          <p className="ml-3 text-xs truncate">
             {showLessOrMore[showMore ? 0 : 1].name}
           </p>
         ) : null}

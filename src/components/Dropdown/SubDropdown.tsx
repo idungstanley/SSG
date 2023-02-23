@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
-import hubIcon from '../../assets/branding/hub.png';
+import hubIcon from '../../assets/branding/hub.svg';
 import {
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
@@ -178,14 +178,14 @@ export default function SubDropdown() {
   return (
     <div className="" ref={ref}>
       <div
-        className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md  top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
         style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px' }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center cursor-pointer p-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-200 rounded-md"
+                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
                 onClick={item.handleClick}
               >
                 {item.icon}

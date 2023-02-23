@@ -1,8 +1,8 @@
-import emailIcon from '../../../assets/branding/email-icon.png';
 import React from 'react';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import { useAppSelector } from '../../../app/hooks';
 import { cl } from '../../../utils';
+import { MdAlternateEmail } from 'react-icons/md';
 
 function Favorites() {
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -11,7 +11,7 @@ function Favorites() {
     <>
       <PlaceItem
         label="Email"
-        icon={<img src={emailIcon} alt="icon" className="h-4 w-4" />}
+        icon={<MdAlternateEmail className="w-4 h-4" />}
       />
       <div className={cl(!showSidebar && 'overflow-x-hidden w-12')}>
         favorites

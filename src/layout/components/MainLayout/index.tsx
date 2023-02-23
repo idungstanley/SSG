@@ -27,6 +27,7 @@ function MainLayout() {
           <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
           </div>
           <div className="flex">
+            {/* show the extended side navigation component*/}
             {showExtendedBar && <ExpandedNav />}
           <div className="flex flex-col flex-1 shrink-0"
           >

@@ -6,7 +6,7 @@ import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
-import hubIcon from '../../../assets/branding/hub.png';
+import hubIcon from '../../../assets/branding/hub.svg';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
