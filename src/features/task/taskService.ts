@@ -1,8 +1,8 @@
 import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../../app/hooks';
+// import { useAppDispatch } from '../../app/hooks';
 import {
-  getTaskData,
+  // getTaskData,
   setToggleAssignCurrentTaskId,
   setTriggerAsssignTask,
 } from './taskSlice';
@@ -168,7 +168,7 @@ export const getTaskListService = ({
 }: {
   listId: string | null | undefined;
 }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
   return useQuery(
@@ -188,15 +188,31 @@ export const getTaskListService = ({
     },
     {
       onSuccess: (data) => {
-        const taskData = data.data.tasks.map((task: { id: string }) => {
-          queryClient.setQueryData(['task', task.id], task);
-          return { ...task };
-        });
-        dispatch(getTaskData(taskData));
+        return data.data.tasks.map((task: { id: string }) =>
+          queryClient.setQueryData(['single-task', task.id], task)
+        );
+
+        // return data.data.tasks.map((task: { id: string }) => {
+        //   queryClient.setQueryData(['task', task.id], task);
+        // });
+        // dispatch(getTaskData(taskData));
       },
     }
   );
 };
+
+// export const useGetTask = (taskId?: string) => {
+//   const queryClient = useQueryClient();
+
+//   return useQuery(
+//     ['single-task', taskId],
+//     () => queryClient.getQueryData(['single-task', taskId]),
+//     {
+//       initialData: () => queryClient.getQueryData(['single-task', taskId]),
+//       enabled: !!taskId,
+//     }
+//   );
+// };
 // getTaskListService();
 
 export const getTaskListService2 = (query: { parentId: string | null }) => {

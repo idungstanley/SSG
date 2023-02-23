@@ -11,7 +11,12 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import {
+  ChevronDoubleDownIcon,
+  ChevronDoubleUpIcon,
+} from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
+import { useAppSelector } from '../../../../app/hooks';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import Tab from './components/Tab';
@@ -19,7 +24,6 @@ import Tab from './components/Tab';
 interface TabsProps {
   activeTabId: number;
   setActiveTabId: (i: number) => void;
-  showTabLabel: boolean;
   tabs: IPilotTab[];
 }
 
@@ -28,16 +32,30 @@ const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
 );
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
+const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
-export default function Tabs({
-  activeTabId,
-  setActiveTabId,
-  showTabLabel,
-  tabs,
-}: TabsProps) {
+export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const showFullPilot = pilotSideOver.show;
+
+  const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
+
+  const toggleShowTabLabel = () => {
+    setShowTabLabel((prev) => {
+      localStorage.setItem(
+        'pilot',
+        JSON.stringify({
+          ...pilotFromLS,
+          showTabLabel: !prev,
+        })
+      );
+
+      return !prev;
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -82,7 +100,7 @@ export default function Tabs({
     >
       <nav
         className={cl(
-          'grid overflow-x-scroll w-full pb-2 border-b',
+          'relative grid overflow-x-scroll w-full pb-2 border-b',
           showTabLabel ? 'grid-cols-1' : 'grid-rows-1 grid-flow-col'
         )}
         aria-label="Tabs"
@@ -100,6 +118,22 @@ export default function Tabs({
             />
           ))}
         </SortableContext>
+        {showFullPilot ? (
+          <button
+            type="button"
+            onClick={toggleShowTabLabel}
+            className={cl(
+              'border flex items-center justify-center text-gray-600',
+              showTabLabel ? 'absolute right-0 top-1 w-7 h-7' : 'w-9 h-9'
+            )}
+          >
+            {showTabLabel ? (
+              <ChevronDoubleUpIcon className="w-4 h-4" />
+            ) : (
+              <ChevronDoubleDownIcon className="w-4 h-4" />
+            )}
+          </button>
+        ) : null}
       </nav>
     </DndContext>
   );

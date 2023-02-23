@@ -14,7 +14,6 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import { getTaskListService } from '../../../../../features/task/taskService';
 import Details from '../../../pilot/components/details/Details';
 import TimeClock from '../../../pilot/components/timeClock/TimeClock';
 
@@ -85,7 +84,10 @@ export default function PilotSection() {
 
   const { listId } = useParams();
 
-  const { data: listDetailsData } = getTaskListService({ listId });
+  // const { data } = useGetTask(listId);
+
+  // const task = data as { id: string; name: string };
+  // console.log(data);
 
   // set data for pilot
   useEffect(() => {
@@ -98,11 +100,11 @@ export default function PilotSection() {
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: listDetailsData?.data?.list?.name,
+          title: '[TASK_NAME]',
         })
       );
     }
-  }, [listDetailsData]);
+  }, [listId]);
 
   return null;
 }
