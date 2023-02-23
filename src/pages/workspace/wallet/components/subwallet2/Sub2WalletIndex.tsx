@@ -188,6 +188,7 @@ function Sub2WalletIndex({
               type="button"
               id="listright"
               className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"

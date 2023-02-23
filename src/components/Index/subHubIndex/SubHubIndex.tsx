@@ -170,6 +170,7 @@ export default function SubHubIndex() {
               <div
                 id="subhubRight"
                 className="flex items-center space-x-1 text-black opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"
