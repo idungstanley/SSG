@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
+import React, { useState } from "react";
+import { useAppSelector } from "../../../../../../app/hooks";
 // import propertiesIcon from "../../../../../assets/branding/properties-icon.png";
-import SubtabDrag from '../../SubtabDnd';
+import SubtabDrag from "../../SubtabDnd";
 import {
   closestCenter,
   DndContext,
@@ -10,14 +10,14 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
-import { TbChecklist, TbCheckupList } from 'react-icons/tb';
+} from "@dnd-kit/sortable";
+import { TbChecklist, TbCheckupList } from "react-icons/tb";
 
 export const ChecklistOptions = [
   {
@@ -28,7 +28,7 @@ export const ChecklistOptions = [
   },
   {
     id: 2,
-    name: 'Add Checklist',
+    name: "Add Checklist",
     icon: <TbChecklist />,
     isVisible: false,
   },
@@ -39,7 +39,7 @@ export default function ChecklistSubtab() {
     (state) => state.workspace
   );
 
-  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
+  const idsFromLS = JSON.parse(localStorage.getItem("checklistdrag") || "[]");
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -66,25 +66,15 @@ export default function ChecklistSubtab() {
           const oldIndex = items.indexOf(findActive);
           const newIndex = items.indexOf(findOver);
 
-          const sortArray: (
-            | {
-                id: number;
-                name: string;
-                icon: JSX.Element;
-                isVisible: boolean;
-              }
-            | {
-                id: number;
-                label: string;
-                icon: JSX.Element;
-                name: string;
-                source?: undefined;
-                isVisible: boolean;
-              }
-          )[] = arrayMove(items, oldIndex, newIndex);
+          const sortArray: ({
+            id: number;
+            name: string;
+            icon: JSX.Element;
+            isVisible: boolean;
+          })[] = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            'subTab',
+            "checklistdrag",
             JSON.stringify([...sortArray.map((i) => i.id)])
           );
 
@@ -103,30 +93,21 @@ export default function ChecklistSubtab() {
         <section>
           <div
             className={`flex bg-gray-400 pt-0.5 ${
-              showPilot ? 'flex-row' : 'flex-col'
+              showPilot ? "flex-row" : "flex-col"
             }`}
           >
-            {ChecklistOptions.map((item) =>
-              item.icon ? (
+            {items.map((item) => {
+              return (
                 <SubtabDrag
                   key={item.id}
                   id={item.id}
                   icon={item.icon}
                   activeSub={activeSubChecklistTabId}
                   showPilot={showPilot}
-                  name={'Checklist'}
+                  name={"Checklist"}
                 />
-              ) : (
-                <SubtabDrag
-                  key={item.id}
-                  id={item.id}
-                  activeSub={activeSubChecklistTabId}
-                  showPilot={showPilot}
-                  source={item.icon}
-                  name={'Checklist'}
-                />
-              )
-            )}
+              );
+            })}
           </div>
         </section>
       </SortableContext>

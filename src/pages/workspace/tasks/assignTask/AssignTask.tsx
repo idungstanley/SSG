@@ -15,8 +15,25 @@ import {
   UseUnAssignTaskService,
   getOneTaskServices,
 } from "../../../../features/task/taskService";
+import {
+  UseAssignChecklistItemService,
+  UseUnAssignChecklistItemService,
+} from "../../../../features/task/checklist/checklistService";
+import {
+  setTriggerAssignChecklistItem,
+  setTriggerUnassignChecklistItem,
+} from "../../../../features/task/checklist/checklistSlice";
 
-export default function AssignTask() {
+interface checklistItem {
+  assignees: [{ id: string; initials: string; colour: string }];
+}
+
+interface option {
+  option?: string;
+  item?: checklistItem;
+}
+
+export default function AssignTask({ option, item }: option) {
   const dispatch = useDispatch();
   const [unAssignTrigger, setUnAssignTrigger] = React.useState(false);
   const assigneeRef = useRef<HTMLInputElement>(null);
@@ -26,6 +43,27 @@ export default function AssignTask() {
   });
   const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
     useAppSelector((state) => state.task);
+
+  const {
+    clickedChecklistId,
+    clickedChecklistItemId,
+    triggerAssignChecklistItem,
+    triggerUnassignChecklistItem,
+  } = useAppSelector((state) => state.checklist);
+
+  UseAssignChecklistItemService({
+    checklist_id: clickedChecklistId,
+    itemId: clickedChecklistItemId,
+    team_member_id: currTeamMemberId,
+    triggerAssignChecklistItem: triggerAssignChecklistItem,
+  });
+
+  UseUnAssignChecklistItemService({
+    checklist_id: clickedChecklistId,
+    itemId: clickedChecklistItemId,
+    team_member_id: currTeamMemberId,
+    triggerUnassignChecklistItem: triggerUnassignChecklistItem,
+  });
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
@@ -47,9 +85,16 @@ export default function AssignTask() {
     ({ id }: { id: string }) => id
   );
 
+  const assignees = item?.assignees.map(({ id }: { id: string }) => id);
+
   const handleUnAssign = (id: string) => {
     dispatch(setCurrTeamMemId(id));
     setUnAssignTrigger(true);
+  };
+
+  const handleUnAssignChecklistItem = (id: string) => {
+    dispatch(setCurrTeamMemId(id));
+    dispatch(setTriggerUnassignChecklistItem(true));
   };
 
   // const handleAssignModal = (e) => {
@@ -60,7 +105,7 @@ export default function AssignTask() {
   return (
     <div className="relative">
       <section
-        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100"
+        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100 overflow-scroll h-36"
         ref={assigneeRef}
         id="assignModal"
         // onClick={(e) => handleAssignModal(e)}
@@ -85,7 +130,9 @@ export default function AssignTask() {
                   className="relative flex items-center cursor-pointer  space-x-2"
                   onClick={() => {
                     dispatch(setCurrTeamMemId(item.id));
-                    dispatch(setTriggerAsssignTask(true));
+                    option === "checklstItem"
+                      ? dispatch(setTriggerAssignChecklistItem(true))
+                      : dispatch(setTriggerAsssignTask(true));
                   }}
                 >
                   <AvatarWithInitials
@@ -98,7 +145,16 @@ export default function AssignTask() {
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>
-                {assignedUser?.includes(item.id) ? (
+                {assignees?.includes(item.id) && option === "checklstItem" ? (
+                  <button
+                    type="button"
+                    onClick={() => handleUnAssignChecklistItem(item.id)}
+                  >
+                    <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                  </button>
+                ) : null}
+                {assignedUser?.includes(item.id) &&
+                option !== "checklstItem" ? (
                   <button type="button" onClick={() => handleUnAssign(item.id)}>
                     <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
                   </button>

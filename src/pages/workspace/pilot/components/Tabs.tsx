@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import communicationIcon from '../../../../assets/branding/communication.png';
-import automationIcon from '../../../../assets/branding/automation.png';
-import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
-import listIcon from '../../../../assets/branding/icon-and-list-arrow.png';
-import { useAppSelector } from '../../../../app/hooks';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import communicationIcon from "../../../../assets/branding/communication.png";
+import automationIcon from "../../../../assets/branding/automation.png";
+import compactArrowIcon from "../../../../assets/branding/compact-arrow.png";
+import listIcon from "../../../../assets/branding/icon-and-list-arrow.png";
+import { useAppSelector } from "../../../../app/hooks";
+import { useDispatch } from "react-redux";
 import {
   setShowAddHotKeyDropdown,
   setShowPilot,
   setShowPilotIconView,
   setShowRemoveHotKeyDropdown,
-} from '../../../../features/workspace/workspaceSlice';
-import { SiHotjar } from 'react-icons/si';
-import { IoMdRemoveCircle } from 'react-icons/io';
-import DetailsSubTab from './details/DetailsSubTab';
-import CommunicationSubTab from './communication/CommunicationSubTab';
-import TimeSubTab from './timeClock/subtabs/TimeSubTab';
-import TabDrag from './TabDrags';
-import ChecklistSubtab from './checklist/subtabs/ChecklistSubtab';
+} from "../../../../features/workspace/workspaceSlice";
+import { SiHotjar } from "react-icons/si";
+import { IoMdRemoveCircle } from "react-icons/io";
+import DetailsSubTab from "./details/DetailsSubTab";
+import CommunicationSubTab from "./communication/CommunicationSubTab";
+import TimeSubTab from "./timeClock/subtabs/TimeSubTab";
+import TabDrag from "./TabDrags";
+import ChecklistSubtab from "./checklist/subtabs/ChecklistSubtab";
 import {
   closestCenter,
   DndContext,
@@ -26,64 +26,64 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
-import HotKeys from './hotKeys/HotKeys';
-import Dropdown from '../../../../components/Dropdown';
-import { AiOutlineFieldTime } from 'react-icons/ai';
-import { MdAppRegistration, MdSecurity } from 'react-icons/md';
-import { GiChecklist } from 'react-icons/gi';
-import { BiDetail } from 'react-icons/bi';
+} from "@dnd-kit/sortable";
+import HotKeys from "./hotKeys/HotKeys";
+import Dropdown from "../../../../components/Dropdown";
+import { AiOutlineFieldTime } from "react-icons/ai";
+import { MdAppRegistration, MdSecurity } from "react-icons/md";
+import { GiChecklist } from "react-icons/gi";
+import { BiDetail } from "react-icons/bi";
 
 export const pilotOptions = [
   {
     id: 1,
-    name: 'Connect',
+    name: "Connect",
     source: communicationIcon,
     subTab: <CommunicationSubTab />,
     isVisible: false,
   },
   {
     id: 2,
-    name: 'Logs',
+    name: "Logs",
     icon: <MdAppRegistration />,
     isVisible: false,
   },
   {
     id: 3,
-    name: 'Permissions',
+    name: "Permissions",
     icon: <MdSecurity />,
     isVisible: false,
   },
 
   {
     id: 4,
-    name: 'Details',
+    name: "Details",
     icon: <BiDetail />,
     subTab: <DetailsSubTab />,
     isVisible: false,
   },
   {
     id: 5,
-    name: 'Automation',
+    name: "Automation",
     source: automationIcon,
     isVisible: false,
   },
   {
     id: 6,
-    name: 'TimeClock',
+    name: "TimeClock",
     icon: <AiOutlineFieldTime />,
     subTab: <TimeSubTab />,
     isVisible: false,
   },
   {
     id: 7,
-    name: 'Checklist',
+    name: "Checklist",
     icon: <GiChecklist />,
     subTab: <ChecklistSubtab />,
     isVisible: false,
@@ -127,18 +127,18 @@ function Tab() {
   const dropdownOptions = [
     {
       id: 1,
-      label: 'Add HotKeys',
+      label: "Add HotKeys",
       icon: <SiHotjar />,
       onClick: handleAddHotKeys,
     },
     {
       id: 2,
-      label: 'Remove HotKeys',
+      label: "Remove HotKeys",
       icon: <IoMdRemoveCircle />,
       onClick: handleRemoveHotKeys,
     },
   ];
-  const idsFromLS = JSON.parse(localStorage.getItem('pilotSections') || '[]');
+  const idsFromLS = JSON.parse(localStorage.getItem("pilotSections") || "[]");
 
   const [items, setItems] = useState(
     pilotOptions.sort(
@@ -166,7 +166,7 @@ function Tab() {
           const sortArray = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
-            'pilotSections',
+            "pilotSections",
             JSON.stringify([
               ...sortArray.map(
                 (i: {
@@ -197,7 +197,7 @@ function Tab() {
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
-            showPilot && 'pr-2'
+            showPilot && "pr-2"
           }`}
         >
           <div className="flex items-center">
@@ -218,7 +218,7 @@ function Tab() {
           </div>
           <div
             className={`flex items-center h-fit  ${
-              showPilot ? 'flex-row py-2 space-x-1' : 'flex-col pr-4'
+              showPilot ? "flex-row py-2 space-x-1" : "flex-col pr-4"
             }`}
           >
             <img
@@ -227,8 +227,8 @@ function Tab() {
               onClick={() => handleShowPilot()}
               className={`cursor-pointer w-3 h-3 ${
                 showPilot
-                  ? 'translate-x-4 skew-y-3'
-                  : 'transform -rotate-180 mb-1'
+                  ? "translate-x-4 skew-y-3"
+                  : "transform -rotate-180 mb-1"
               }`}
             />
             <Dropdown items={dropdownOptions} />
@@ -237,7 +237,7 @@ function Tab() {
         <HotKeys />
         <div
           className={`flex flex-wrap relative divide-y divide-x ${
-            showPilotIconView ? 'flex-row' : 'flex-col'
+            showPilotIconView ? "flex-row" : "flex-col"
           }`}
         >
           <SortableContext strategy={rectSortingStrategy} items={items}>
@@ -257,7 +257,7 @@ function Tab() {
           {showPilot && (
             <span
               className={`z-10 text-xs flex w-8 justify-center items-center ${
-                !showPilotIconView && 'absolute top-2 right-0'
+                !showPilotIconView && "absolute top-2 right-0"
               }`}
             >
               <img
@@ -266,8 +266,8 @@ function Tab() {
                 onClick={() => handleShowPilotIconView()}
                 className={`w-4 h-4 flex flex-col justify-between cursor-pointer items-center hover:text-green-500 ${
                   showPilotIconView
-                    ? 'text-green-500 transform -rotate-180'
-                    : ''
+                    ? "text-green-500 transform -rotate-180"
+                    : ""
                 }`}
               />
             </span>

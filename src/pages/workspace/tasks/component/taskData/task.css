@@ -21,3 +21,26 @@
 .scrollbarDynCol:hover {
   overflow-y: auto;
 }
+
+.comfortableView {
+  /* width: 400px; */
+  white-space: nowrap;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+.comfortableViewWrap {
+  min-height: 60px;
+}
+
+.compactView {
+  min-height: 20px;
+  /* overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; */
+}
+
+.compactViewWrap {
+  min-height: 20px;
+  white-space: normal;
+}

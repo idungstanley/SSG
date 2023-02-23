@@ -12,7 +12,10 @@ import {
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 import { BsListStars } from "react-icons/bs";
+import { RxDividerVertical } from "react-icons/rx";
 import { CiViewTable } from "react-icons/ci";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import ListViewSettingsModal from "../../../tasks/viewSettingsModal/ListViewSettingsModal";
 
 interface ListNavProps {
   navName?: string | null;
@@ -65,7 +68,7 @@ function ListNav({
         className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
         style={{ padding: "15px" }}
       >
-        <section className="flex items-center justify-start space-x-2 text-gray-500">
+        <section className="flex items-center justify-start text-gray-500">
           <span className="space-x-2">
             <span className="font-bold">{navName}</span>
           </span>
@@ -77,10 +80,14 @@ function ListNav({
               />
             </span>
             <span
-              className="flex items-center text-sm hover:bg-gray-100 cursor-pointer"
+              className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer"
               onClick={handleListView}
             >
               {viewsList}
+              <span className="opacity-0 group-hover:opacity-100 z-100">
+                <ListViewSettingsModal />
+              </span>
+              <RxDividerVertical />
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
@@ -91,11 +98,15 @@ function ListNav({
               />
             </span>
             <span
-              className="flex items-center text-sm hover:bg-gray-100 cursor-pointer"
+              className="group gap-2  flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
               onClick={handleTableView}
             >
               {viewsList1}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
             </span>
+            <RxDividerVertical />
           </span>
           <span
             className="flex items-center justify-start space-x-1 cursor-pointer"
@@ -107,16 +118,23 @@ function ListNav({
                 aria-hidden="true"
               />
             </span>
-            <span className="flex items-center text-sm hover:bg-gray-100 cursor-pointer">
+            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {viewsList2}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
+              <RxDividerVertical />
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
             <span>
               <Bars3Icon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
             </span>
-            <span className="flex items-center text-sm hover:bg-gray-100 cursor-pointer">
+            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {changeViews}
+              <span className="opacity-0 group-hover:opacity-100">
+                <BiDotsHorizontalRounded />
+              </span>
             </span>
           </span>
         </section>

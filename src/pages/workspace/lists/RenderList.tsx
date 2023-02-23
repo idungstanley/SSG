@@ -17,6 +17,7 @@ import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
 import TaskTableView from "../tasks/component/views/TaskTableView";
+// import ListViewSettingsModal from "../tasks/viewSettingsModal/ListViewSettingsModal";
 
 function RenderList() {
   const dispatch = useDispatch();

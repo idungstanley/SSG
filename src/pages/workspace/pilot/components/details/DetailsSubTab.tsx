@@ -28,7 +28,7 @@ export const DetailOptions = [
   },
   {
     id: 2,
-    name: 'attachments',
+    name: "attachments",
     icon: <MdAddToPhotos />,
     isVisible: false,
   },
