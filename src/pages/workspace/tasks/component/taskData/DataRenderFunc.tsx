@@ -15,7 +15,6 @@ import {
   setCurrentTaskIdForTag,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
-  setGetSubTaskId,
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
@@ -41,18 +40,23 @@ interface renderDataProps {
     | Array<{ id: string; initials: string; colour: string }>;
   colfield: string;
   task: ImyTaskData;
+  getSubTaskId: string | null;
+  handleGetSubTask?: (id: string) => void;
+  ShowPlusIcon?: null | boolean;
 }
 
 export default function DataRenderFunc({
   taskColField,
   colfield,
   task,
+  getSubTaskId,
+  handleGetSubTask,
+  ShowPlusIcon,
 }: renderDataProps) {
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
     currentParentTaskId,
-    getSubTaskId,
     showTagColorDialogueBox,
     renameTagId,
     comfortableView,
@@ -175,14 +179,6 @@ export default function DataRenderFunc({
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
-  };
-
-  const handleGetSubTask = (id: string) => {
-    if (id == getSubTaskId) {
-      dispatch(setGetSubTaskId(null));
-    } else {
-      dispatch(setGetSubTaskId(id));
-    }
   };
 
   const handleTaskStatus = (id: string) => {
@@ -346,7 +342,9 @@ export default function DataRenderFunc({
             <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
           </div>
           <div
-            onClick={() => handleGetSubTask(task.id)}
+            onClick={() =>
+              handleGetSubTask ? handleGetSubTask(task.id) : null
+            }
             className="items-center"
           >
             {task.id == getSubTaskId ? (
@@ -385,7 +383,7 @@ export default function DataRenderFunc({
                 comfortableView
                   ? "text-lg whitespace-nowrap"
                   : comfortableViewWrap
-                  ? "text-lg 	"
+                  ? "text-lg"
                   : CompactView
                   ? "text-xs whitespace-nowrap"
                   : CompactViewWrap
@@ -409,11 +407,13 @@ export default function DataRenderFunc({
                 <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusOutlined
-                  className="  w-3 text-gray-500   "
-                  aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task.id as string)}
-                />
+                {!ShowPlusIcon && (
+                  <PlusOutlined
+                    className="  w-3 text-gray-500   "
+                    aria-hidden="true"
+                    onClick={() => handleCreateSubTask(task.id as string)}
+                  />
+                )}
               </span>
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>

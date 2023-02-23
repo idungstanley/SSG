@@ -1,6 +1,9 @@
 import React from "react";
-import { ImyTaskData } from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
+import {
+  ImyTaskData,
+  setGetSubTaskId,
+} from "../../../../../features/task/taskSlice";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import "./task.css";
 import DataRenderFunc from "./DataRenderFunc";
 
@@ -12,11 +15,22 @@ export default function TaskData({ task }: TaskDataProps) {
   const {
     taskColumns,
     hideTask,
+    getSubTaskId,
     CompactView,
     CompactViewWrap,
     comfortableView,
     comfortableViewWrap,
   } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+
+  const handleGetSubTask = (id: string) => {
+    if (id == getSubTaskId) {
+      dispatch(setGetSubTaskId(null));
+    } else {
+      dispatch(setGetSubTaskId(id));
+    }
+  };
 
   return (
     <div className="relative">
@@ -48,6 +62,8 @@ export default function TaskData({ task }: TaskDataProps) {
                           taskColField={task[col.field]}
                           colfield={col.field}
                           task={task}
+                          getSubTaskId={getSubTaskId}
+                          handleGetSubTask={() => handleGetSubTask(task.id)}
                         />
                       </div>
                     )
@@ -65,6 +81,8 @@ export default function TaskData({ task }: TaskDataProps) {
                           taskColField={task[col.field]}
                           colfield={col.field}
                           task={task}
+                          getSubTaskId={getSubTaskId}
+                          handleGetSubTask={() => handleGetSubTask(task.id)}
                         />
                       </div>
                     )
@@ -84,6 +102,8 @@ export default function TaskData({ task }: TaskDataProps) {
                           taskColField={task[col.field]}
                           colfield={col.field}
                           task={task}
+                          getSubTaskId={getSubTaskId}
+                          handleGetSubTask={() => handleGetSubTask(task.id)}
                         />
                       </div>
                     )
@@ -100,6 +120,8 @@ export default function TaskData({ task }: TaskDataProps) {
                           taskColField={task[col.field]}
                           colfield={col.field}
                           task={task}
+                          getSubTaskId={getSubTaskId}
+                          handleGetSubTask={() => handleGetSubTask(task.id)}
                         />
                       </div>
                     )
@@ -122,6 +144,8 @@ export default function TaskData({ task }: TaskDataProps) {
                         taskColField={task[col.field]}
                         colfield={col.field}
                         task={task}
+                        getSubTaskId={getSubTaskId}
+                        handleGetSubTask={() => handleGetSubTask(task.id)}
                       />
                     </div>
                   )
@@ -140,6 +164,8 @@ export default function TaskData({ task }: TaskDataProps) {
                         taskColField={task[col.field]}
                         colfield={col.field}
                         task={task}
+                        getSubTaskId={getSubTaskId}
+                        handleGetSubTask={() => handleGetSubTask(task.id)}
                       />
                     </div>
                   )
