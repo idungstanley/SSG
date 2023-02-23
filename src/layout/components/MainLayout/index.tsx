@@ -26,13 +26,13 @@ function MainLayout() {
           <ExtendBtn />
           <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
           </div>
-          <div className="flex">
+          <div className="flex flex-1 grow">
             {/* show the extended side navigation component*/}
             {showExtendedBar && <ExpandedNav />}
-          <div className="flex flex-col flex-1 shrink-0"
+          <div className="flex flex-col flex-1 w-full"
           >
             <Header />
-            <div className="w-full h-ful">
+            <div className="w-full h-full">
               <Outlet />
             </div>
           </div>
