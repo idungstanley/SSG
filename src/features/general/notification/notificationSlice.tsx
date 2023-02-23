@@ -9,7 +9,6 @@ interface NotificationStore {
   center: boolean;
   top: boolean;
   show_close: boolean;
-  notificationsByCategory: string[];
 }
 
 const initialState: NotificationStore = {
@@ -21,7 +20,6 @@ const initialState: NotificationStore = {
   center: false,
   top: true,
   show_close: true,
-  notificationsByCategory: [],
 };
 
 export const notificationSlice = createSlice({
@@ -39,14 +37,11 @@ export const notificationSlice = createSlice({
       state.center = action.payload.center;
       state.top = action.payload.top;
       state.show_close = action.payload.show_close;
-    },
-    setNotificationCategory: (state, action) => {
-      state.notificationsByCategory = action.payload;
-    },
+    }
   },
 });
 
-export const { setVisibility, setContent, setNotificationCategory } =
+export const { setVisibility, setContent } =
   notificationSlice.actions;
 
 export default notificationSlice.reducer;

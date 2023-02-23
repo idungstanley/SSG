@@ -3,7 +3,6 @@ import { NotificationData } from './DummyData';
 import { classNames } from '../../../../utils';
 
 export default function NotificaitonTablle() {
-
   const [notificationsByCategory, setNotificationsByCategory] = useState([]);
 
   useEffect(() => {

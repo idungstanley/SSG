@@ -10,7 +10,6 @@ export default function Table() {
   const { data: permissionsList, status: permissionsListStatus } =
     useGetPermissionsList();
 
-  console.log(permissionsList);
   useEffect(() => {
     if (permissionsListStatus !== 'success') {
       return setPermissionsByCategory([]);
@@ -42,8 +41,6 @@ export default function Table() {
 
     return true;
   }, [permissionsList, permissionsListStatus]);
-
-  console.log(permissionsByCategory);
 
   return (
     <div className="flex flex-col -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-6">
