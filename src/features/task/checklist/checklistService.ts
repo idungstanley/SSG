@@ -41,7 +41,6 @@ export const UseGetAllClistService = ({
 }: {
   task_id: string | null | undefined;
 }) => {
-  // const dispatch = useAppDispatch();
   return useQuery(
     ["clist", { task_id }],
     async () => {

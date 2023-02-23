@@ -3,7 +3,15 @@ import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
 import requestNew from "../../app/requestNew";
 import { IResponseGetHubs, IHubReq } from "./hubs.interfaces";
-import { closeMenu, getHub, setTriggerAddToFav } from "./hubSlice";
+import {
+  closeMenu,
+  getHub,
+  setDelFavId,
+  setShowFavEditInput,
+  // setshowMenuDropdown,
+  setTriggerAddToFav,
+  setTriggerFavUpdate,
+} from "./hubSlice";
 import { setArchiveHub, setDelHub } from "./hubSlice";
 
 export const createHubService = (data: {
@@ -224,6 +232,7 @@ export const useAddToFavourites = (data: {
   trigger: boolean;
 }) => {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   let newType: string | null = null;
   const { query, type, trigger } = data;
   if (type === "hubs" || type === "subhub") {
@@ -232,7 +241,7 @@ export const useAddToFavourites = (data: {
     newType = type;
   }
   return useQuery(
-    ["favourite", { query }],
+    ["favorites", { query }],
     async () => {
       const data = requestNew(
         {
@@ -251,6 +260,8 @@ export const useAddToFavourites = (data: {
       enabled: !!trigger,
       onSuccess: () => {
         dispatch(setTriggerAddToFav(false));
+        dispatch(closeMenu());
+        queryClient.invalidateQueries();
       },
     }
   );
@@ -259,7 +270,7 @@ export const useAddToFavourites = (data: {
 export const useGetFavourites = () => {
   // const queryClient = useQueryClient();
   // const dispatch = useDispatch();
-  return useQuery(["favourites"], async () => {
+  return useQuery(["favorites"], async () => {
     const data = await requestNew(
       {
         url: `/favorites`,
@@ -269,4 +280,70 @@ export const useGetFavourites = () => {
     );
     return data;
   });
+};
+
+export const UseDeleteFav = (req: { delFav: string | null }) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const id = req.delFav;
+  return useQuery(
+    ["favorites", { id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `/favorites/${id}`,
+          method: "DELETE",
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: id != null,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        dispatch(setDelFavId(null));
+      },
+      onError: () => {
+        dispatch(setDelFavId(null));
+      },
+    }
+  );
+};
+
+export const UseUpdateFavService = ({
+  favId,
+  name,
+  trigger,
+}: {
+  favId: string | null;
+  name: string;
+  trigger: boolean;
+}) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["checklist", { favId, name }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `/favorites/${favId}`,
+          method: "PUT",
+          params: {
+            name: name,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: favId != null && trigger !== false,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        dispatch(setShowFavEditInput(null));
+        dispatch(setTriggerFavUpdate(false));
+      },
+    }
+  );
 };
