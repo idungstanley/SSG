@@ -68,7 +68,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
 
   return (
     <>
-      <div className=" dynamic gap-5  ">
+      <div className=" dynamic gap-5 ">
         {Object.keys(newData).map((key) => {
           return (
             <>
@@ -77,7 +77,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                 className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white p-3  "
               >
                 {key === "new" ? (
-                  <div className=" absolute top-0 rounded-t-lg	 bg-gray-400 w-full h-1"></div>
+                  <div className=" absolute top-0 rounded-t-lg	 bg-blue-400 w-full h-1"></div>
                 ) : key === "in progress" ? (
                   <div
                     className=" absolute top-0 rounded-t-lg w-full h-1"
@@ -91,9 +91,9 @@ export default function BoardTemplate({ listId }: listIdprops) {
                   <div className=" absolute top-0 rounded-t-lg bg-gray-400 w-full h-1"></div>
                 )}
 
-                <h3 className="absolute left-0 pl-3 ">{key}</h3>
+                <h3 className="absolute left-0 pl-3  ">{key}</h3>
               </div>
-              <div className="-ml-10 mt-5  ">
+              <div className="-ml-10 mt-5 oveflow-y-auto">
                 {newData[key].map((items: ImyTaskData) => {
                   return (
                     <div

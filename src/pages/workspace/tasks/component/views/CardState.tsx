@@ -26,7 +26,7 @@ export default function CardState({ task }: TaskDataProps) {
   };
   return (
     <div className="flex h-full items-center justify-between">
-      <div className="flex items-center gap-3 text-gray-300 ">
+      <div className="flex items-center gap-1 text-gray-300 ">
         <span className=" text-x font-bold ">
           <TfiCalendar />
         </span>
