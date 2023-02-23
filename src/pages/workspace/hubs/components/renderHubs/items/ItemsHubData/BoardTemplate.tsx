@@ -64,8 +64,6 @@ export default function BoardTemplate({ listId }: listIdprops) {
 
   const [icons, setIcons] = useState<string | null>(null);
 
-  console.log(setIcons);
-
   return (
     <>
       <div className=" dynamic gap-5 ">
@@ -74,7 +72,8 @@ export default function BoardTemplate({ listId }: listIdprops) {
             <>
               <div
                 key={key}
-                className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white p-3  "
+                className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white uppercase p-3 font-bold  "
+                style={{ fontSize: "12px" }}
               >
                 {key === "new" ? (
                   <div className=" absolute top-0 rounded-t-lg	 bg-blue-400 w-full h-1"></div>
@@ -90,7 +89,6 @@ export default function BoardTemplate({ listId }: listIdprops) {
                 ) : (
                   <div className=" absolute top-0 rounded-t-lg bg-gray-400 w-full h-1"></div>
                 )}
-
                 <h3 className="absolute left-0 pl-3  ">{key}</h3>
               </div>
               <div className="-ml-10 mt-5 oveflow-y-auto">
