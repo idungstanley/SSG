@@ -52,37 +52,37 @@ const tabs = [
   {
     id: 1,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-5 h-5" />,
+    icon: <InformationCircleIcon className="w-4 h-4" />,
   },
   {
     id: 2,
     label: 'Logs',
-    icon: <DocumentTextIcon className="w-5 h-5" />,
+    icon: <DocumentTextIcon className="w-4 h-4" />,
   },
   {
     id: 3,
     label: 'Permissions',
-    icon: <TbShield className="w-5 h-5" />,
+    icon: <TbShield className="w-4 h-4" />,
   },
   {
     id: 4,
     label: 'Comments',
-    icon: <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />,
+    icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />,
   },
   {
     id: 5,
     label: 'Watchers',
-    icon: <EyeIcon className="w-5 h-5" />,
+    icon: <EyeIcon className="w-4 h-4" />,
   },
   {
     id: 6,
     label: 'Connect',
-    icon: <SignalIcon className="w-5 h-5" />,
+    icon: <SignalIcon className="w-4 h-4" />,
   },
   // {
   //   id: 7,
   //   label: 'Time clock',
-  //   icon: <ClockIcon className="w-5 h-5" />,
+  //   icon: <ClockIcon className="w-4 h-4" />,
   // },
 ];
 

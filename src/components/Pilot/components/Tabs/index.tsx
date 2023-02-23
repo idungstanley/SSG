@@ -82,8 +82,8 @@ export default function Tabs({
     >
       <nav
         className={cl(
-          'gap-2 grid overflow-x-scroll w-full pb-2 border-b',
-          showTabLabel ? 'grid-cols-2' : 'grid-rows-1 grid-flow-col'
+          'grid overflow-x-scroll w-full pb-2 border-b',
+          showTabLabel ? 'grid-cols-1' : 'grid-rows-1 grid-flow-col'
         )}
         aria-label="Tabs"
       >

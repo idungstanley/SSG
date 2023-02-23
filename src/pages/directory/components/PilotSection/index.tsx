@@ -13,7 +13,7 @@ export const tabs = [
   {
     id: 1,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-5 h-5" />,
+    icon: <InformationCircleIcon className="w-4 h-4" />,
   },
 ];
 
