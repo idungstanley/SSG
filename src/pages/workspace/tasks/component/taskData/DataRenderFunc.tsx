@@ -115,8 +115,8 @@ export default function DataRenderFunc({
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${CompactView ? "h-4" : "h-5"}`}
-              width={`${CompactView ? "w-4" : "w-5"}`}
+              height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
+              width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
             />
           </span>
         </div>
