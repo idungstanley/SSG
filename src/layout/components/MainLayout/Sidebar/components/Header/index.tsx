@@ -22,8 +22,8 @@ export default function Header() {
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
       <div
       className={cl(
-        'flex py-2 grow flex-1',
-        !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7'
+        'flex pt-2 flex-1',
+        !showSidebar ? 'flex-col items-center' : ''
       )}>
       <WorkSpaceSelection />
 
