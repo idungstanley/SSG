@@ -36,3 +36,11 @@ export interface NotificationType {
     descendants: [];
   };
 }
+
+export interface CardNotificationType {
+  assigned: {
+    name: string;
+    key: string;
+    notifications: NotificationType[];
+  };
+}
