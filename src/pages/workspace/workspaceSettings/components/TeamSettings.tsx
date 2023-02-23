@@ -34,7 +34,7 @@ export default function TeamSettings() {
     <MenuWithTransition
       icon={
         <CiSettings
-          className="w-auto h-6 mb-1 cursor-pointer"
+          className="w-6 h-6 cursor-pointer"
           aria-hidden="true"
         />
       }

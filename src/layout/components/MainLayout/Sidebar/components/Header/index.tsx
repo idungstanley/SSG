@@ -1,11 +1,11 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../../../components';
 import { setShowSidebarSettings } from '../../../../../../features/hubs/hubSlice';
-import ArchiveMenu from '../../../../../../pages/workspace/hubs/components/archive/ArchiveMenu';
 import WorkSpaceSelection from '../WorkSpaceSelection';
-import MainLogo from '../../../../../../assets/branding/main-logo.png';
+import MainLogo from '../../../../../../assets/icons/mainIcon.svg';
 import { cl } from '../../../../../../utils';
+import TeamSettings from '../../../../../../pages/workspace/workspaceSettings/components/TeamSettings';
+import UserSettingsModal from '../../../../../../pages/workspace/workspaceSettings/components/UserSettingsModal';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -15,29 +15,26 @@ export default function Header() {
   return (
     <div
       className={cl(
-        'flex py-2 border-b items-center gap-1',
-        !showSidebar ? 'flex-col pb-9' : 'pr-7'
+        'flex py-2 border-b gap-1',
+        !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7'
       )}
     >
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
+      <div
+      className={cl(
+        'flex py-2 grow flex-1',
+        !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7'
+      )}>
       <WorkSpaceSelection />
 
       {/* cog */}
       <div
-        className="mt-3"
         onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}
       >
-        <ArchiveMenu />
+        <TeamSettings />
       </div>
-
-      <span>
-        <AvatarWithInitials
-          initials="AW"
-          height="h-5"
-          width="w-5"
-          backgroundColour="blue"
-        />
-      </span>
+      <UserSettingsModal />
+      </div>
     </div>
   );
 }
