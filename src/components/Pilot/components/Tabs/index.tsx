@@ -124,7 +124,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
             onClick={toggleShowTabLabel}
             className={cl(
               'border flex items-center justify-center text-gray-600',
-              showTabLabel ? 'absolute right-0 top-1 w-7 h-7' : 'w-9 h-9'
+              showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'w-9 h-9'
             )}
           >
             {showTabLabel ? (

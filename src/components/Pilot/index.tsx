@@ -2,12 +2,14 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from '@heroicons/react/24/outline';
+import { FireIcon } from '@heroicons/react/24/solid';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../utils';
 import Tabs from './components/Tabs';
 import { IPilotSection, IPilotTab } from '../../types';
+import Dropdown from '../Dropdown/index';
 
 interface PilotProps {
   pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
@@ -40,6 +42,15 @@ export default function Pilot({ pilotConfig }: PilotProps) {
     dispatch(setShowPilotSideOver({ ...pilotSideOver, show: !showFullPilot }));
   };
 
+  const dropdownConfig = [
+    {
+      id: 1,
+      icon: <FireIcon className="w-4 h-4" />,
+      label: 'Add / remove hotkeys',
+      onClick: () => ({}),
+    },
+  ];
+
   return pilotSideOver.id ? (
     <div
       className={cl(
@@ -48,20 +59,26 @@ export default function Pilot({ pilotConfig }: PilotProps) {
       )}
     >
       <div className="w-full flex justify-between items-center pb-2">
-        {/* show / hide pilot toggle */}
-        <p className="capitalize text-xs font-semibold">
-          {type}: <span className=" font-normal">{title}</span>
-        </p>
+        {/* item type and title */}
+        {showFullPilot ? (
+          <p className="truncate capitalize text-xs font-semibold">
+            {type}: <span className=" font-normal">{title}</span>
+          </p>
+        ) : null}
 
-        <button type="button" onClick={togglePilot} className="text-gray-600">
+        <div className="flex gap-2 items-center">
+          <button type="button" onClick={togglePilot} className="text-gray-600">
+            {showFullPilot ? (
+              <ChevronDoubleRightIcon className="w-4 h-4" />
+            ) : (
+              <ChevronDoubleLeftIcon className="w-4 h-4" />
+            )}
+          </button>
+
           {showFullPilot ? (
-            <ChevronDoubleRightIcon className="w-4 h-4" />
-          ) : (
-            <ChevronDoubleLeftIcon className="w-4 h-4" />
-          )}
-        </button>
-
-        {/* icon + label / icon views toggle */}
+            <Dropdown config={dropdownConfig} iconType="dots" />
+          ) : null}
+        </div>
       </div>
 
       {showFullPilot ? (

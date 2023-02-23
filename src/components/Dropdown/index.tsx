@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { useNavigate } from 'react-router-dom';
-import { AiOutlineEllipsis } from 'react-icons/ai';
-import { BsPlusLg } from 'react-icons/bs';
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 interface IDropdownItem {
   label: string;
@@ -23,16 +22,16 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-500 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-700 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <AiOutlineEllipsis
-              className="w-4 h-4 text-black"
+            <EllipsisVerticalIcon
+              className="w-4 h-4"
               aria-hidden="true"
             />
           ) : (
-            <BsPlusLg className="w-2.5 h-2.5" aria-hidden="true" />
+            <PlusIcon className="w-4 h-4" aria-hidden="true" />
           )}
         </Menu.Button>
       </div>
