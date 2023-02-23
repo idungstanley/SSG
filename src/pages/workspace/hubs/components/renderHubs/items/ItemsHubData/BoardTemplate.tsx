@@ -98,14 +98,14 @@ export default function BoardTemplate({ listId }: listIdprops) {
                   return (
                     <div
                       key={items.id}
-                      className=" bg-white h-28 mt-3  shadow-md   w-56 p-2 relative"
+                      className=" bg-white  mt-3  shadow-md   w-56 p-2 relative"
                       style={{ marginLeft: "-80px" }}
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
-                        <p className="text-justify text-sm font-bold truncate">
-                          {items.name.length > 70
-                            ? items.name.slice(0, 80) + "..."
+                        <p className="text-justify text-sm font-bold truncate pb-10">
+                          {items.name.length > 50
+                            ? items.name.slice(0, 50) + "..."
                             : items.name}
                         </p>
                         <div>
@@ -151,10 +151,12 @@ export default function BoardTemplate({ listId }: listIdprops) {
                           </span>
                         </div>
                       </div>
-                      {icons == items.id && <CardState task={items} />}
+                      <div className="py-2">
+                        {icons == items.id && <CardState task={items} />}
+                      </div>
                       <span className="pt-10">
                         <p
-                          className="absolute bottom-0  uppercase text-gray-400 "
+                          className="absolute bottom-0  uppercase text-gray-400 mt-1 pb-1 "
                           style={{ fontSize: "11px" }}
                         >
                           + add new task
