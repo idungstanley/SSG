@@ -126,7 +126,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
       <section
         className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-500"
         style={showSidebar ? style : undefined}
-      >
+        >
         <Header />
         <section className="relative flex flex-col overflow-x-hidden overflow-y-scroll">
           {showSidebar ? <Search /> : null}
