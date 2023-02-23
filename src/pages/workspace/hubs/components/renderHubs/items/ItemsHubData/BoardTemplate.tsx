@@ -135,7 +135,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
-                        <p className="text-justify text-sm font-bold  pb-2">
+                        <p className=" text-sm font-bold  pb-2">
                           {items.name.length > 70
                             ? items.name.slice(0, 70) + "..."
                             : items.name}
