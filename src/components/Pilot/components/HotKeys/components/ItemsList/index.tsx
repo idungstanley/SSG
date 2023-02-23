@@ -34,7 +34,7 @@ export default function HotkeysList({
             activeTabId === hotkey.id
               ? 'bg-green-500 border-green-500'
               : 'bg-white border-gray-200',
-            'flex items-center justify-center p-2 rounded-lg border border-opacity-0 hover:border-opacity-100 duration-200'
+            'flex items-center justify-center p-2 rounded-lg border border-opacity-0 hover:border-opacity-100'
           )}
           key={hotkey.id}
         >

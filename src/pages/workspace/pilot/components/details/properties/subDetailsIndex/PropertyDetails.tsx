@@ -58,7 +58,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <Priority Details={Details} />
           </ToolTip>
         </section>
-        <section className="flex items-center justify-center space-x-3">
+        <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
             <Share />

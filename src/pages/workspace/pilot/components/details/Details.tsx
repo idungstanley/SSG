@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import AddTo from "../attachments/AddTo";
-import DetailsIndex from "./properties/DetailsIndex";
-import { useAppSelector } from "../../../../../app/hooks";
-import DetailsSubTab from "./DetailsSubTab";
+import React, { useMemo } from 'react';
+import AddTo from '../attachments/AddTo';
+import DetailsIndex from './properties/DetailsIndex';
+import { useAppSelector } from '../../../../../app/hooks';
+import DetailsSubTab from './DetailsSubTab';
 
 export const DetailOptions = [
   {
@@ -24,7 +24,7 @@ export default function Details() {
   );
 
   return (
-    <section className={`flex flex-col h-full`}>
+    <section className="flex flex-col h-fit overflow-y-scroll">
       {showPilot && <DetailsSubTab />}
       <div>{selectedSubSection ? selectedSubSection.element : null}</div>
     </section>
