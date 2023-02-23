@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { getTaskListService } from "../../../../../../../features/task/taskService";
 import {
   ImyTaskData,
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { UserAddOutlined } from "@ant-design/icons";
 import AssignTask from "../../../../../tasks/assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../../../components";
+import CardState from "../../../../../tasks/component/views/CardState";
 
 interface listIdprops {
   listId: string;
@@ -61,6 +62,10 @@ export default function BoardTemplate({ listId }: listIdprops) {
     ));
   };
 
+  const [icons, setIcons] = useState<string | null>(null);
+
+  console.log(setIcons);
+
   return (
     <>
       <div className=" dynamic gap-5  ">
@@ -93,8 +98,9 @@ export default function BoardTemplate({ listId }: listIdprops) {
                   return (
                     <div
                       key={items.id}
-                      className=" bg-white h-28 mt-3  shadow-md   w-56 p-2"
+                      className=" bg-white h-28 mt-3  shadow-md   w-56 p-2 relative"
                       style={{ marginLeft: "-80px" }}
+                      onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
                         <p className="text-justify text-sm font-bold truncate">
@@ -145,6 +151,15 @@ export default function BoardTemplate({ listId }: listIdprops) {
                           </span>
                         </div>
                       </div>
+                      {icons == items.id && <CardState task={items} />}
+                      <span className="pt-10">
+                        <p
+                          className="absolute bottom-0  uppercase text-gray-400 "
+                          style={{ fontSize: "11px" }}
+                        >
+                          + add new task
+                        </p>
+                      </span>
                     </div>
                   );
                 })}
