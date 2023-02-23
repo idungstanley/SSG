@@ -85,8 +85,8 @@ export default function DataRenderFunc({
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView ? "h-4" : "h-5"}`}
-                width={`${CompactView ? "w-4" : "w-5"}`}
+                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
+                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
               />
             </span>
           </div>
@@ -410,7 +410,7 @@ export default function DataRenderFunc({
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <PlusOutlined
-                  className="  w-3  text-gray-500   "
+                  className="  w-3 text-gray-500   "
                   aria-hidden="true"
                   onClick={() => handleCreateSubTask(task.id as string)}
                 />
