@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
 import History from '../../../../../components/Pilot/components/History';
@@ -83,11 +83,7 @@ export default function PilotSection() {
   const dispatch = useAppDispatch();
 
   const { listId } = useParams();
-
-  // const { data } = useGetTask(listId);
-
-  // const task = data as { id: string; name: string };
-  // console.log(data);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   // set data for pilot
   useEffect(() => {
@@ -100,7 +96,7 @@ export default function PilotSection() {
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: '[TASK_NAME]',
+          title: activeItemName ?? '',
         })
       );
     }

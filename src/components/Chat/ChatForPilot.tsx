@@ -19,7 +19,7 @@ export default function ChatForPilot() {
 
   return (
     <>
-      <div className="flex w-full h-fit border-r border-l border-b">
+      <div className="flex w-full h-full border-r border-l border-b">
         <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
 
         {/* main section */}
