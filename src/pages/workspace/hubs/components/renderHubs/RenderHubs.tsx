@@ -13,11 +13,11 @@ import TaskBoardSection from "./items/ItemsHubData/TaskBoardSection";
 
 function RenderHubs() {
   const { hubId } = useParams();
-  console.log(hubId);
 
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
-  const { boardView } = useAppSelector((state) => state.task);
+  const { boardView, listView } = useAppSelector((state) => state.task);
+
   return (
     <div className="h-screen">
       <section id="nav" className="capitalize">
@@ -49,17 +49,19 @@ function RenderHubs() {
                 ))}
               </div>
             )}
-            <div>
-              {HubDetail?.data.hubs.map((data: dataProps) => (
-                <TaskListSections data={data} key={data.id} />
-              ))}
-              {HubDetail?.data.wallets.map((data: dataProps) => (
-                <WalletSection data={data} key={data.id} />
-              ))}
-              {HubDetail?.data.lists.map((data: dataProps) => {
-                return <ListSection data={data} key={data.id} />;
-              })}
-            </div>
+            {listView && (
+              <div>
+                {HubDetail?.data.hubs.map((data: dataProps) => (
+                  <TaskListSections data={data} key={data.id} />
+                ))}
+                {HubDetail?.data.wallets.map((data: dataProps) => (
+                  <WalletSection data={data} key={data.id} />
+                ))}
+                {HubDetail?.data.lists.map((data: dataProps) => {
+                  return <ListSection data={data} key={data.id} />;
+                })}
+              </div>
+            )}
           </div>
         </div>
         <div>

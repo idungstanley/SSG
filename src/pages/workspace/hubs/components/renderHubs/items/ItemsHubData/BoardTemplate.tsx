@@ -15,7 +15,8 @@ interface listIdprops {
   listId: string;
 }
 export default function BoardTemplate({ listId }: listIdprops) {
-  const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId, CompactView, CompactViewWrap } =
+    useAppSelector((state) => state.task);
 
   const dispatch = useDispatch();
 
@@ -48,25 +49,58 @@ export default function BoardTemplate({ listId }: listIdprops) {
   const groupAssignee = (
     data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
-    return data?.map((newData) => (
-      <div key={newData.id} className="">
-        <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
+    return (data as [{ id: string; initials: string; colour: string }])
+      ?.length >= 3 ? (
+      <div className="flex items-center justify-center">
+        {data?.slice(0, 2).map((newData) => (
+          <div key={newData.id} className="">
+            <span
+              key={newData.id}
+              className="flex gap-1 items-center justify center"
+            >
+              <AvatarWithInitials
+                initials={newData.initials}
+                backgroundColour={newData.colour}
+                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
+                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
+              />
+            </span>
+          </div>
+        ))}
+        <span>
+          {(data as [{ id: string; initials: string; colour: string }])
+            ?.length -
+            2 !==
+          0 ? (
+            <span>
+              +
+              {(data as [{ id: string; initials: string; colour: string }])
+                ?.length - 2}
+            </span>
+          ) : null}
         </span>
       </div>
-    ));
+    ) : (
+      data?.map((newData) => (
+        <div key={newData.id} className="flex">
+          <span key={newData.id}>
+            <AvatarWithInitials
+              initials={newData.initials}
+              backgroundColour={newData.colour}
+              height={`${CompactView ? "h-4" : "h-5"}`}
+              width={`${CompactView ? "w-4" : "w-5"}`}
+            />
+          </span>
+        </div>
+      ))
+    );
   };
 
   const [icons, setIcons] = useState<string | null>(null);
 
   return (
     <>
-      <div className=" dynamic gap-5 ">
+      <div className=" dynamic gap-5  ">
         {Object.keys(newData).map((key) => {
           return (
             <>
@@ -101,9 +135,9 @@ export default function BoardTemplate({ listId }: listIdprops) {
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
-                        <p className="text-justify text-sm font-bold truncate pb-10">
-                          {items.name.length > 50
-                            ? items.name.slice(0, 50) + "..."
+                        <p className="text-justify text-sm font-bold  pb-2">
+                          {items.name.length > 70
+                            ? items.name.slice(0, 70) + "..."
                             : items.name}
                         </p>
                         <div>
