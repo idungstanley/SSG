@@ -10,7 +10,7 @@ import WalletSection from './items/itemsWalletData/WalletSection';
 import ListSection from './items/itemsListData/ListSection';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
-import Pilot from '../../../../../components/Pilot';
+import Pilot from '../../../pilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 function RenderHubs() {
@@ -36,7 +36,7 @@ function RenderHubs() {
   }, [hubId]);
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full h-full">
       <section id="nav" className="capitalize">
         <ListNav
           navName={activeItemName}
@@ -49,7 +49,7 @@ function RenderHubs() {
         {/* ListList */}
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
-            className="w-full  scrollbarDynCol"
+            className="w-full scrollbarDynCol"
             style={{ minHeight: '0', maxHeight: '100vh' }}
           >
             <div className="w-full">

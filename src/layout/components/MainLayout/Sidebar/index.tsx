@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowSidebar } from '../../../../features/account/accountSlice';
 import { cl } from '../../../../utils';
-import FooterTabs from './components/FooterTabs';
+import { setShowSidebar } from '../../../../features/account/accountSlice';
+import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
@@ -10,7 +10,7 @@ import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 
-export const MIN_SIDEBAR_WIDTH = 230;
+export const MIN_SIDEBAR_WIDTH = 260;
 export const MAX_SIDEBAR_WIDTH = 320;
 const RELATIVE_WIDTH = 10;
 
@@ -26,7 +26,7 @@ const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const dispatch = useAppDispatch();
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector(state => state.account);
   const [sidebarWidth, setSidebarWidth] = useState(
     sidebarWidthFromLS || MIN_SIDEBAR_WIDTH
   );
@@ -41,15 +41,12 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         if (allowSelect) {
           setAllowSelect(false);
         }
-
         // current width
         const width = sidebarWidth + e.clientX - startX;
-
         // actual size is bigger than bax
         if (width > MAX_SIDEBAR_WIDTH) {
           return;
         }
-
         // actual size is smaller than min
         if (width < MIN_SIDEBAR_WIDTH - RELATIVE_WIDTH) {
           return dispatch(setShowSidebar(false));
@@ -112,6 +109,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
     }),
     [sidebarWidth]
   );
+  useMemo(()=>(dispatch(setSidebarWidthRD(sidebarWidth))), [sidebarWidth]);
 
   return (
     <aside
@@ -126,21 +124,15 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
 
       {/* sidebar */}
       <section
-        className="h-full relative flex flex-col border-r border-gray-500 gap-2 pr-1"
+        className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-500"
         style={showSidebar ? style : undefined}
       >
         <Header />
-
-        <section className="relative flex flex-col overflow-y-scroll overflow-x-hidden">
+        <section className="relative flex flex-col overflow-x-hidden overflow-y-scroll">
           {showSidebar ? <Search /> : null}
-
           <NavigationItems />
-
           <Places />
         </section>
-
-        <FooterTabs />
-
         <ResizeBorder sidebarWidth={sidebarWidth} onMouseDown={onMouseDown} />
       </section>
     </aside>

@@ -19,6 +19,7 @@ interface workspaceState {
   currentSubWalletId: string | null;
   currentWalletName: string | null;
   showPilot: boolean;
+  sidebarWidthRD: number;
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
@@ -54,6 +55,7 @@ const initialState: workspaceState = {
   showPilotIconView: false,
   showPilotListView: false,
   activeTabId: 0,
+  sidebarWidthRD: 260,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
@@ -116,6 +118,9 @@ export const wsSlice = createSlice({
     },
     setShowHub(state, action) {
       state.showHub = action.payload;
+    },
+    setSidebarWidthRD(state, action) {
+      state.sidebarWidthRD = action.payload;
     },
     setShowWallet(state, action) {
       state.showWallet = action.payload;
@@ -195,7 +200,8 @@ export const {
   setShowAddHotKeyDropdown,
   setShowRemoveHotKeyDropdown,
   setActiveHotKeyId,
-  setActiveEntity
+  setActiveEntity,
+  setSidebarWidthRD
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

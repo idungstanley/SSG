@@ -13,6 +13,7 @@ import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
 import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
+import { HiOutlineLibrary, HiTemplate } from 'react-icons/hi';
 
 const navigation = [
   {
@@ -37,6 +38,18 @@ const navigation = [
     name: 'Community',
     href: '/community',
     icon: <UserGroupIcon className="w-5 h-5" aria-hidden="true" />,
+    alwaysShow: false,
+  },
+  {
+    name: "Library",
+    href: "/directory",
+    icon: <HiOutlineLibrary className="text-gray-700 text-l" />,
+    alwaysShow: false,
+  },
+  {
+    name: "Template",
+    href: "/template",
+    icon: <HiTemplate className="text-gray-700 text-l" />,
     alwaysShow: false,
   },
   {
