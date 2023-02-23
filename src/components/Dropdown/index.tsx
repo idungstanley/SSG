@@ -26,10 +26,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisVerticalIcon
-              className="w-4 h-4"
-              aria-hidden="true"
-            />
+            <EllipsisVerticalIcon className="w-4 h-4" aria-hidden="true" />
           ) : (
             <PlusIcon className="w-4 h-4" aria-hidden="true" />
           )}
