@@ -40,6 +40,10 @@ interface TaskState {
   hideTask: listColumnProps[];
   current_task_id: null;
   listView: boolean;
+  comfortableView: boolean;
+  comfortableViewWrap: boolean;
+  CompactView: boolean;
+  CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
   showTaskNavigation: boolean;
@@ -78,6 +82,10 @@ const initialState: TaskState = {
   hideTask: [],
   current_task_id: null,
   listView: true,
+  comfortableView: true,
+  comfortableViewWrap: false,
+  CompactView: false,
+  CompactViewWrap: false,
   tableView: false,
   boardView: false,
   showTaskNavigation: false,
@@ -122,7 +130,6 @@ export const taskSlice = createSlice({
         state.myTaskData = taskDataArray;
       }
     },
-
     getTaskColumns(state, action) {
       state.taskColumns = action.payload;
     },
@@ -156,6 +163,18 @@ export const taskSlice = createSlice({
 
     getListView(state, action) {
       state.listView = action.payload;
+    },
+    getComfortableView(state, action) {
+      state.comfortableView = action.payload;
+    },
+    getComfortableViewWrap(state, action) {
+      state.comfortableViewWrap = action.payload;
+    },
+    getCompactView(state, action) {
+      state.CompactView = action.payload;
+    },
+    getCompactViewWrap(state, action) {
+      state.CompactViewWrap = action.payload;
     },
     setAddNewTaskItem(state, action) {
       state.addNewTaskItem = action.payload;
@@ -253,6 +272,10 @@ export const {
   getTaskData,
   getTaskColumns,
   getListView,
+  getComfortableView,
+  getComfortableViewWrap,
+  getCompactView,
+  getCompactViewWrap,
   getTableView,
   getBoardView,
   setShowTaskNavigation,

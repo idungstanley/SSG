@@ -4,7 +4,9 @@ import { getTaskListService } from "../../../features/task/taskService";
 import ListNav from "./components/renderlist/ListNav";
 import { useAppSelector } from "../../../app/hooks";
 import { useDispatch } from "react-redux";
-import { setAddNewTaskItem } from "../../../features/task/taskSlice";
+import {
+  setAddNewTaskItem,
+} from "../../../features/task/taskSlice";
 import TaskListViews from "../tasks/component/views/TaskListViews";
 import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
 import TaskData from "../tasks/component/taskData/TaskData";
@@ -15,6 +17,7 @@ import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
 import TaskTableView from "../tasks/component/views/TaskTableView";
+// import ListViewSettingsModal from "../tasks/viewSettingsModal/ListViewSettingsModal";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -56,9 +59,8 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            <div className="-z-50">{boardView && <Board />}</div>
-            {listView && <TaskListViews />}
-
+            {boardView && <Board />}
+            {listView && <TaskListViews/>}
             {listView &&
               myTaskData?.map((task) => (
                 <div key={task.id}>

@@ -9,11 +9,30 @@ interface TaskDataProps {
 }
 
 export default function TaskData({ task }: TaskDataProps) {
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const {
+    taskColumns,
+    hideTask,
+    CompactView,
+    CompactViewWrap,
+    comfortableView,
+    comfortableViewWrap,
+  } = useAppSelector((state) => state.task);
 
   return (
-    <div className="relative ">
-      <div className="flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative">
+    <div className="relative">
+      <div
+        className={`${
+          comfortableView
+            ? "  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5"
+            : comfortableViewWrap
+            ? "flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5"
+            : CompactView
+            ? " compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5"
+            : CompactViewWrap
+            ? "compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5"
+            : null
+        }`}
+      >
         <div className=" flex justify-between w-6/12 pr-24 items-center ">
           <div className="w-5/6">
             {hideTask.length
@@ -23,7 +42,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                        className="flex items-center capitalize ml-2 text-xs font-medium group w-12/12"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -39,7 +58,8 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                        className="flex items-center capitalize ml-2 text-xs font-medium group
+                        cursor-pointer w-12/12"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -58,7 +78,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                        className="flex items-center capitalize ml-2 text-xs font-medium group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -74,7 +94,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium  group"
+                        className="flex items-center capitalize ml-2 text-xs font-medium group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}

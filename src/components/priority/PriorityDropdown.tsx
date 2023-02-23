@@ -84,7 +84,11 @@ export default function PriorityDropdown({
       );
     } else if (priority == "normal") {
       return (
-        <AiFillFlag className="h-5 w-7  text-blue-500 " aria-hidden="true" />
+        <AiFillFlag
+          className="h-5 w-7"
+          style={{ color: "#6fddff" }}
+          aria-hidden="true"
+        />
       );
     } else if (priority == "high") {
       return (
@@ -98,7 +102,7 @@ export default function PriorityDropdown({
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left ">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           {setPriorityColor(TaskCurrentPriority)}
@@ -108,7 +112,6 @@ export default function PriorityDropdown({
           /> */}
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

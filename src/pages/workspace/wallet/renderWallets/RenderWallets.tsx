@@ -26,6 +26,7 @@ function RenderWallets() {
         <ListNav
           navName={currentWalletName}
           viewsList="List"
+          viewsList1="Table"
           viewsList2="Board"
           changeViews="View"
         />

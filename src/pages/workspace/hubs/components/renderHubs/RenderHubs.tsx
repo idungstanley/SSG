@@ -9,17 +9,22 @@ import WalletSection from "./items/itemsWalletData/WalletSection";
 import ListSection from "./items/itemsListData/ListSection";
 import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
 import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
+import TaskBoardSection from "./items/ItemsHubData/TaskBoardSection";
 
 function RenderHubs() {
   const { hubId } = useParams();
+  console.log(hubId);
+
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
+  const { boardView } = useAppSelector((state) => state.task);
   return (
     <div className="h-screen">
       <section id="nav" className="capitalize">
         <ListNav
           navName={activeItemName}
           viewsList="List"
+          viewsList1="Table"
           viewsList2="Board"
           changeViews="View"
         />
@@ -29,11 +34,21 @@ function RenderHubs() {
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
             className="w-full  scrollbarDynCol"
-            style={{ minHeight: '0', maxHeight: '100vh' }}
+            style={{ minHeight: "0", maxHeight: "100vh" }}
           >
             <div className="w-full">
               <ListFilter />
             </div>
+            {/* Board */}
+            {boardView && (
+              <div>
+                {HubDetail?.data?.hubs.map((data: dataProps) => (
+                  <div key={data.id}>
+                    <TaskBoardSection data={data} />
+                  </div>
+                ))}
+              </div>
+            )}
             <div>
               {HubDetail?.data.hubs.map((data: dataProps) => (
                 <TaskListSections data={data} key={data.id} />

@@ -53,9 +53,12 @@ export default function DataRenderFunc({
     toggleAssignCurrentTaskId,
     currentParentTaskId,
     getSubTaskId,
-
     showTagColorDialogueBox,
     renameTagId,
+    comfortableView,
+    comfortableViewWrap,
+    CompactView,
+    CompactViewWrap,
   } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
@@ -70,18 +73,51 @@ export default function DataRenderFunc({
   const groupAssignee = (
     data: [{ id: string; initials: string; colour: string }] | undefined
   ) => {
-    return data?.map((newData) => (
-      <div key={newData.id} className="">
-        <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
+    return (data as [{ id: string; initials: string; colour: string }])
+      ?.length >= 3 ? (
+      <div className="flex items-center justify-center">
+        {data?.slice(0, 2).map((newData) => (
+          <div key={newData.id} className="">
+            <span
+              key={newData.id}
+              className="flex gap-1 items-center justify center"
+            >
+              <AvatarWithInitials
+                initials={newData.initials}
+                backgroundColour={newData.colour}
+                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
+                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
+              />
+            </span>
+          </div>
+        ))}
+        <span>
+          {(data as [{ id: string; initials: string; colour: string }])
+            ?.length -
+            2 !==
+          0 ? (
+            <span>
+              +
+              {(data as [{ id: string; initials: string; colour: string }])
+                ?.length - 2}
+            </span>
+          ) : null}
         </span>
       </div>
-    ));
+    ) : (
+      data?.map((newData) => (
+        <div key={newData.id} className="flex">
+          <span key={newData.id}>
+            <AvatarWithInitials
+              initials={newData.initials}
+              backgroundColour={newData.colour}
+              height={`${CompactView ? "h-4" : "h-5"}`}
+              width={`${CompactView ? "w-4" : "w-5"}`}
+            />
+          </span>
+        </div>
+      ))
+    );
   };
 
   const groupTags = (arr: tagItem[]) => {
@@ -275,7 +311,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: "-30px" }}
           >
             {taskColField}
@@ -286,7 +322,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute top-0 flex flex-col justify-center"
+            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: "-30px" }}
           >
             Todo
@@ -345,9 +381,25 @@ export default function DataRenderFunc({
               onClick={() =>
                 handleTaskPilot(task.id as string, task.name as string)
               }
-              className="cursor-pointer "
+              className={`${
+                comfortableView
+                  ? "text-lg whitespace-nowrap"
+                  : comfortableViewWrap
+                  ? "text-lg 	"
+                  : CompactView
+                  ? "text-xs whitespace-nowrap"
+                  : CompactViewWrap
+                  ? "text-xs text-justify	"
+                  : null
+              }`}
             >
-              {taskColField as ReactNode}
+              {(taskColField as string)?.length > 50 && comfortableView ? (
+                <span>{(taskColField as string)?.substring(0, 40)}...</span>
+              ) : (taskColField as string)?.length > 61 && CompactView ? (
+                <span>{(taskColField as string)?.substring(0, 60)}...</span>
+              ) : (
+                (taskColField as ReactNode)
+              )}
             </p>
             <div
               id="iconWrapper"
@@ -358,7 +410,7 @@ export default function DataRenderFunc({
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <PlusOutlined
-                  className="  w-3  text-gray-500   "
+                  className="  w-3 text-gray-500   "
                   aria-hidden="true"
                   onClick={() => handleCreateSubTask(task.id as string)}
                 />
