@@ -66,7 +66,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
 
   return (
     <>
-      <div className=" dynamic gap-5 ">
+      <div className=" dynamic gap-5  ">
         {Object.keys(newData).map((key) => {
           return (
             <>
