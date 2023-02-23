@@ -27,6 +27,16 @@ function RenderHubs() {
           changeViews="View"
         />
       </section>
+      {/* Board */}
+      {boardView && (
+        <div>
+          {HubDetail?.data?.hubs.map((data: dataProps) => (
+            <div key={data.id}>
+              <TaskBoardSection data={data} />
+            </div>
+          ))}
+        </div>
+      )}
       <section className="flex w-full h-full bg-white">
         {/* ListList */}
         <div className="pr-1 pt-0.5 w-full h-full">
@@ -37,16 +47,6 @@ function RenderHubs() {
             <div className="w-full">
               <ListFilter />
             </div>
-            {/* Board */}
-            {boardView && (
-              <div>
-                {HubDetail?.data?.hubs.map((data: dataProps) => (
-                  <div key={data.id}>
-                    <TaskBoardSection data={data} />
-                  </div>
-                ))}
-              </div>
-            )}
 
             <div>
               {HubDetail?.data.hubs.map((data: dataProps) => (

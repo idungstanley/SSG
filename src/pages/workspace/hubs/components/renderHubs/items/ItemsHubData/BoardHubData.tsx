@@ -19,7 +19,7 @@ export default function BoardHubData({ hubId, hubName }: ItemsHubDataProps) {
           return (
             <>
               {/* <div key={item.id}>{item.name}</div> */}
-              <div className="pt-10 pl-10">
+              <div className="pt-10 ">
                 <BoardTemplate listId={item.id} />
               </div>
             </>
