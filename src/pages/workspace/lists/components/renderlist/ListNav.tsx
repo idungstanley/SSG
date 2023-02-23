@@ -96,7 +96,7 @@ function ListNav({
               />
             </span>
             <span
-              className="group gap-2  flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
+              className="group flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
               onClick={handleTableView}
             >
               {viewsList1}

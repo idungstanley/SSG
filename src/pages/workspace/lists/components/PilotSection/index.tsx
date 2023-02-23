@@ -6,11 +6,15 @@ import {
   InformationCircleIcon,
   SignalIcon,
 } from '@heroicons/react/24/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { getTaskListService } from '../../../../../features/task/taskService';
 import Details from '../../../pilot/components/details/Details';
 import TimeClock from '../../../pilot/components/timeClock/TimeClock';
 
@@ -74,6 +78,31 @@ const tabs = [
   },
 ];
 
-const pilotConfig = { sections, tabs };
+export const pilotConfig = { sections, tabs };
 
-export default pilotConfig;
+export default function PilotSection() {
+  const dispatch = useAppDispatch();
+
+  const { listId } = useParams();
+
+  const { data: listDetailsData } = getTaskListService({ listId });
+
+  // set data for pilot
+  useEffect(() => {
+    const selectedItemId = listId;
+    const selectedItemType = 'list';
+
+    if (selectedItemId) {
+      dispatch(
+        setShowPilotSideOver({
+          id: selectedItemId,
+          type: selectedItemType,
+          show: true,
+          title: listDetailsData?.data?.list?.name,
+        })
+      );
+    }
+  }, [listDetailsData]);
+
+  return null;
+}
