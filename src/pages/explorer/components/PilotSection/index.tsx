@@ -1,19 +1,22 @@
 import {
   ChatBubbleLeftEllipsisIcon,
-  // ClockIcon,
   DocumentTextIcon,
   EyeIcon,
   InformationCircleIcon,
   SignalIcon,
 } from '@heroicons/react/24/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TbShield } from 'react-icons/tb';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ChatForPilot from '../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../components/Comments/CommentsForPilot';
-// import Information from '../../../../components/Pilot/components/Information';
 import Permissions from '../../../../components/Pilot/components/Permissions';
 import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
-// import TimeClock from '../../../workspace/pilot/components/timeClock/TimeClock';
+import {
+  useGetExplorerFile,
+  useGetExplorerFolder,
+} from '../../../../features/explorer/explorerService';
+import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import History from '../Pilot/components/History';
 import Details from './components/Details';
 
@@ -42,10 +45,6 @@ const sections = [
     id: 6,
     element: <ChatForPilot />,
   },
-  // {
-  //   id: 7,
-  //   element: <TimeClock />,
-  // },
 ];
 
 const tabs = [
@@ -79,13 +78,36 @@ const tabs = [
     label: 'Connect',
     icon: <SignalIcon className="w-4 h-4" />,
   },
-  // {
-  //   id: 7,
-  //   label: 'Time clock',
-  //   icon: <ClockIcon className="w-4 h-4" />,
-  // },
 ];
 
-const pilotConfig = { sections, tabs };
+export const pilotConfig = { sections, tabs };
 
-export default pilotConfig;
+export default function PilotSection() {
+  const dispatch = useAppDispatch();
+
+  const { selectedFileId, selectedFolderId } = useAppSelector(
+    (state) => state.explorer
+  );
+
+  const { data: file } = useGetExplorerFile(selectedFileId);
+  const { data: folder } = useGetExplorerFolder(selectedFolderId);
+
+  // set data for pilot
+  useEffect(() => {
+    const selectedItemId = selectedFileId || selectedFolderId;
+    const selectedItemType = selectedFileId ? 'file' : 'folder';
+
+    if (selectedItemId) {
+      dispatch(
+        setShowPilotSideOver({
+          id: selectedItemId,
+          type: selectedItemType,
+          show: true,
+          title: file?.display_name || folder?.data.current_folder.name,
+        })
+      );
+    }
+  }, [file, folder]);
+
+  return null;
+}

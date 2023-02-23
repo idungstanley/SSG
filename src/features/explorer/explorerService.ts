@@ -32,7 +32,10 @@ export const useGetExplorerFolders = () => {
   );
 };
 
-export const useGetExplorerFolder = (folderId?: string | null, isFolder?: boolean) => {
+export const useGetExplorerFolder = (
+  folderId?: string | null,
+  isFolder?: boolean
+) => {
   // isFolder - needed only for Pilot/Information
 
   const enabled = isFolder ? !!folderId : !!folderId && isFolder;

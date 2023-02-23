@@ -30,6 +30,7 @@ export default function Pilot({ pilotConfig }: PilotProps) {
   const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
 
   const showFullPilot = pilotSideOver.show;
+  const { type, title } = pilotSideOver;
 
   useEffect(() => {
     // reset active tab and current item id on unmount
@@ -71,6 +72,10 @@ export default function Pilot({ pilotConfig }: PilotProps) {
     >
       <div className="w-full flex justify-between items-center pb-2">
         {/* show / hide pilot toggle */}
+        <p className="capitalize text-xs font-semibold">
+          {type}: {title}
+        </p>
+
         <button type="button" onClick={togglePilot} className="text-gray-500">
           {showFullPilot ? (
             <ChevronDoubleRightIcon className="w-5 h-5" />
