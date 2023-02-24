@@ -22,9 +22,8 @@ export default function Details() {
     () => DetailOptions.find((option) => option.id === activeSubDetailsTabId),
     [activeSubDetailsTabId]
   );
-
   return (
-    <section className="flex flex-col h-fit overflow-y-scroll">
+    <section className="flex flex-col overflow-y-scroll h-fit">
       {showPilot && <DetailsSubTab />}
       <div>{selectedSubSection ? selectedSubSection.element : null}</div>
     </section>

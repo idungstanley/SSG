@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { useAppSelector } from '../../../app/hooks';
-import Tab from './components/Tabs';
+import React, { useEffect, useMemo, useRef } from "react";
+import { useAppSelector } from "../../../app/hooks";
+import Tab from "./components/Tabs";
 import Checklists, {
   cheklistOptions,
 } from './components/checklist/components/Checklist';
@@ -12,14 +12,14 @@ import Details from './components/details/Details';
 import { useDispatch } from 'react-redux';
 import TimeClock, {
   TimeClockOptions,
-} from './components/timeClock/subtabs/TimeClock';
-import { communicationOptions } from './components/communication/Communication';
-import { DetailOptions } from './components/details/Details';
+} from "./components/timeClock/subtabs/TimeClock";
+import { communicationOptions } from "./components/communication/Communication";
+import { DetailOptions } from "./components/details/Details";
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveTabId,
-} from '../../../features/workspace/workspaceSlice';
+} from "../../../features/workspace/workspaceSlice";
 
 const sections = [
   {
@@ -85,9 +85,9 @@ export default function Pilot() {
         dispatch(setActiveTabId(0));
       }
     };
-    hoverRef.current?.addEventListener('mouseleave', checkHoverOutside);
+    hoverRef.current?.addEventListener("mouseleave", checkHoverOutside);
     return () => {
-      hoverRef.current?.removeEventListener('mouseleave', checkHoverOutside);
+      hoverRef.current?.removeEventListener("mouseleave", checkHoverOutside);
     };
   }, [
     activeSubCommunicationTabId,
@@ -98,11 +98,11 @@ export default function Pilot() {
   ]);
   const selectedSection = useMemo(
     () => sections.find((section) => section.id === activeTabId),
-    [activeTabId],
+    [activeTabId]
   );
   const selectedHotKeySection = useMemo(
     () => allHotKeysInfo.find((section) => section.index === activeHotKeyTabId),
-    [activeHotKeyTabId],
+    [activeHotKeyTabId]
   );
 
   return (
@@ -110,11 +110,11 @@ export default function Pilot() {
       <div
         className={`flex ease-in-out overflow-y-auto pr-1  duration-300 transition-all transform bg-white border-l border-r h-screen ${
           !showPilot && selectedSection
-            ? 'flex-row fixed z-40 top-16 right-0'
-            : 'flex-col'
+            ? "flex-row fixed z-40 top-16 right-0"
+            : "flex-col"
         }`}
         ref={hoverRef}
-        style={{ minHeight: '0', maxHeight: '100%' }}
+        style={{ minHeight: "0", maxHeight: "100%" }}
       >
         {/* navigation */}
         <Tab />

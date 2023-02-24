@@ -97,7 +97,6 @@ export default function ChecklistSubtab() {
             }`}
           >
             {items.map((item) => {
-              console.log(item);
               return (
                 <SubtabDrag
                   key={item.id}

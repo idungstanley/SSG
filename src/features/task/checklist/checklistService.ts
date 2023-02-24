@@ -15,8 +15,10 @@ import { setCurrTeamMemId } from "../taskSlice";
 
 export const UseCreateClistService = ({
   task_id,
+  name,
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
+  name: string;
 }) => {
   const url = `/checklists`;
   const response = requestNew(
@@ -24,7 +26,7 @@ export const UseCreateClistService = ({
       url,
       method: "POST",
       data: {
-        name: "Checklist",
+        name: name,
         id: task_id,
         type: "task",
       },
@@ -36,8 +38,10 @@ export const UseCreateClistService = ({
 
 export const UseGetAllClistService = ({
   task_id,
+  activeItemType,
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
+  activeItemType: string | null | undefined;
 }) => {
   return useQuery(
     ["clist", { task_id }],
@@ -52,9 +56,9 @@ export const UseGetAllClistService = ({
       return data;
     },
     {
-      enabled: task_id != null,
+      enabled: task_id != null && activeItemType == "task",
       // onSuccess: () => {
-      //   dispatch(setTriggerChecklistUpdate(false));
+      //   dispatch(setTaskIdForPilot(null));
       // },
     }
   );
@@ -128,7 +132,7 @@ export const UseUpdateChecklistItemService = ({
   itemId: string;
   done: number;
   checklist_id: string;
-  name: string;
+  name: string | null;
 }) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();

@@ -1,9 +1,18 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDispatch } from 'react-redux';
-import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
-import { closeMenu, getHub } from './hubSlice';
-import { setArchiveHub, setDelHub } from './hubSlice';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../app/hooks";
+import requestNew from "../../app/requestNew";
+import { IResponseGetHubs, IHubReq } from "./hubs.interfaces";
+import {
+  closeMenu,
+  getHub,
+  setDelFavId,
+  setShowFavEditInput,
+  // setshowMenuDropdown,
+  setTriggerAddToFav,
+  setTriggerFavUpdate,
+} from "./hubSlice";
+import { setArchiveHub, setDelHub } from "./hubSlice";
 
 export const createHubService = (data: {
   name: string;
@@ -12,8 +21,8 @@ export const createHubService = (data: {
 }) => {
   const response = requestNew(
     {
-      url: 'hubs',
-      method: 'POST',
+      url: "hubs",
+      method: "POST",
       data: {
         name: data.name,
         current_workspace_id: data.currentWorkspaceId,
@@ -32,12 +41,12 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
   const dispatch = useDispatch();
 
   return useQuery<IResponseGetHubs>(
-    ['hubs', { isArchived: query ? 1 : 0 }],
+    ["hubs", { isArchived: query ? 1 : 0 }],
     () =>
       requestNew(
         {
-          url: 'hubs',
-          method: 'GET',
+          url: "hubs",
+          method: "GET",
           params: {
             is_archived: query ? 1 : 0,
           },
@@ -48,7 +57,7 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
     {
       onSuccess: (data) => {
         const hubData = data.data.hubs.map((hub) => {
-          queryClient.setQueryData(['hub', hub.id], hub);
+          queryClient.setQueryData(["hub", hub.id], hub);
           return { ...hub, isOpen: false };
         });
         dispatch(getHub(hubData));
@@ -57,14 +66,18 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
   );
 };
 
-export const useGetHubChildren = ({ query }: { query: string | null | undefined }) => {
+export const useGetHubChildren = ({
+  query,
+}: {
+  query: string | null | undefined;
+}) => {
   const hubId = query;
 
-  return useQuery(['hubs', hubId], async () => {
+  return useQuery(["hubs", hubId], async () => {
     const data = await requestNew(
       {
         url: `at/hubs/${hubId}`,
-        method: 'GET',
+        method: "GET",
       },
       true
     );
@@ -75,12 +88,12 @@ export const useGetHubChildren = ({ query }: { query: string | null | undefined 
 //get subhub
 export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
   return useQuery<IResponseGetHubs>(
-    ['hubs', { parentId: parentId }],
+    ["hubs", { parentId: parentId }],
     () =>
       requestNew(
         {
           url: `hubs/${parentId}`,
-          method: 'GET',
+          method: "GET",
         },
         false,
         true
@@ -100,7 +113,7 @@ export const useEditHubService = (data: {
   const response = requestNew(
     {
       url: `hubs/${data.currHubId}`,
-      method: 'PUT',
+      method: "PUT",
       params: {
         name: data.name,
         current_workspace_id: data.currentWorkspaceId,
@@ -121,12 +134,12 @@ export const UseDeleteHubService = (data: {
   const hubid = data.query;
   const queryClient = useQueryClient();
   return useQuery(
-    ['hubs'],
+    ["hubs"],
     async () => {
       const data = await requestNew(
         {
           url: `at/hubs/${hubid}`,
-          method: 'DELETE',
+          method: "DELETE",
         },
         true
       );
@@ -153,19 +166,19 @@ export const ArchiveHubService = (hub: {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   return useQuery(
-    ['hubs', hubid],
+    ["hubs", hubid],
     async () => {
       const data = await requestNew(
         {
           url: `at/hubs/${hubid}/archive`,
-          method: 'POST',
+          method: "POST",
         },
         true
       );
       return data;
     },
     {
-      initialData: queryClient.getQueryData(['hubs', hubid]),
+      initialData: queryClient.getQueryData(["hubs", hubid]),
       enabled: hub.archiveHub,
       onSuccess: () => {
         dispatch(setArchiveHub(false));
@@ -182,12 +195,12 @@ export const UseGetHubDetails = (query: {
   activeItemType?: string | null;
 }) => {
   return useQuery(
-    ['hubs', query],
+    ["hubs", query],
     async () => {
       const data = await requestNew(
         {
           url: `at/hubs/${query.activeItemId}/details`,
-          method: 'GET',
+          method: "GET",
         },
         true
       );
@@ -195,7 +208,7 @@ export const UseGetHubDetails = (query: {
     },
     {
       enabled:
-        (query.activeItemType === 'hub' || query.activeItemType === 'subhub') &&
+        (query.activeItemType === "hub" || query.activeItemType === "subhub") &&
         !!query.activeItemId,
     }
   );
@@ -206,9 +219,131 @@ export const useGetHubWallet = (hubId: string | null) =>
     requestNew(
       {
         url: `hubs/${hubId}`,
-        method: 'GET',
+        method: "GET",
       },
       false,
       true
     )
   );
+
+export const useAddToFavourites = (data: {
+  query: string | null;
+  type: string | null;
+  trigger: boolean;
+}) => {
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  let newType: string | null = null;
+  const { query, type, trigger } = data;
+  if (type === "hubs" || type === "subhub") {
+    newType = "hub";
+  } else {
+    newType = type;
+  }
+  return useQuery(
+    ["favorites", { query }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `/favorites`,
+          method: "POST",
+          params: {
+            type: newType,
+            id: query,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: !!trigger,
+      onSuccess: () => {
+        dispatch(setTriggerAddToFav(false));
+        dispatch(closeMenu());
+        queryClient.invalidateQueries();
+      },
+    }
+  );
+};
+
+export const useGetFavourites = () => {
+  // const queryClient = useQueryClient();
+  // const dispatch = useDispatch();
+  return useQuery(["favorites"], async () => {
+    const data = await requestNew(
+      {
+        url: `/favorites`,
+        method: "GET",
+      },
+      true
+    );
+    return data;
+  });
+};
+
+export const UseDeleteFav = (req: { delFav: string | null }) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const id = req.delFav;
+  return useQuery(
+    ["favorites", { id }],
+    async () => {
+      const data = await requestNew(
+        {
+          url: `/favorites/${id}`,
+          method: "DELETE",
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: id != null,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        dispatch(setDelFavId(null));
+      },
+      onError: () => {
+        dispatch(setDelFavId(null));
+      },
+    }
+  );
+};
+
+export const UseUpdateFavService = ({
+  favId,
+  name,
+  trigger,
+}: {
+  favId: string | null;
+  name: string;
+  trigger: boolean;
+}) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["favorite", { favId, name }],
+    async () => {
+      const data = requestNew(
+        {
+          url: `/favorites/${favId}`,
+          method: "PUT",
+          params: {
+            name: name,
+          },
+        },
+        true
+      );
+      return data;
+    },
+    {
+      enabled: favId != null && trigger !== false,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        dispatch(setShowFavEditInput(null));
+        dispatch(setTriggerFavUpdate(false));
+      },
+    }
+  );
+};

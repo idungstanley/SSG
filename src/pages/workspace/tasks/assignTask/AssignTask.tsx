@@ -122,7 +122,7 @@ export default function AssignTask({ option, item }: option) {
           <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           {data?.data.team_members.map((item) => (
             <section
-              className="space-x-2 hover:bg-gray-300 p-3 "
+              className="space-x-2 hover:bg-gray-300 p-3"
               key={item?.id}
             >
               <div className="flex items-center justify-between cursor-pointer">

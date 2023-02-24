@@ -51,43 +51,44 @@ function RenderList() {
           </section>
         }
       >
-        <div
-          className="w-full overflow-y-scroll block p-2 border-2 border-gray-200 "
-          style={{ backgroundColor: '#e1e4e5' }}
-        >
-          <TaskQuickAction listDetailsData={listDetailsData} />
-          {/* card */}
-
-          {/* task list logic */}
-          {tableView && closeTaskListView && <TaskTableView />}
-
-          <div className="-z-50">{boardView && <Board />}</div>
-          {listView && <TaskListViews />}
-
-          {listView &&
-            myTaskData?.map((task) => (
-              <div key={task.id}>
-                {closeTaskListView && <TaskData task={task} />}
-
-                {currentParentTaskId === task.id ? (
-                  <div>
-                    <SubTask parentTaskId={currentParentTaskId} />
-                  </div>
-                ) : null}
-                {getSubTaskId === task.id ? <RenderSubTasks /> : null}
-              </div>
-            ))}
-
-          {/* toggle */}
-          {addNewTaskItem && <AddNewItem listId={listId} />}
+        <div className="w-full overflow-y-scroll ">
           <div
-            className=""
-            id="newItem"
-            onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+            className="block p-2 border-2 border-gray-200 "
+            style={{ backgroundColor: "#e1e4e5" }}
           >
-            <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
-              + New Task
-            </p>
+            <TaskQuickAction listDetailsData={listDetailsData} />
+            {/* card */}
+
+            {/* task list logic */}
+            {tableView && closeTaskListView && <TaskTableView />}
+
+            {boardView && <Board />}
+            {listView && <TaskListViews/>}
+            {listView &&
+              myTaskData?.map((task) => (
+                <div key={task.id}>
+                  {closeTaskListView && <TaskData task={task} />}
+
+                  {currentParentTaskId === task.id ? (
+                    <div>
+                      <SubTask parentTaskId={currentParentTaskId} />
+                    </div>
+                  ) : null}
+                  {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                </div>
+              ))}
+
+            {/* toggle */}
+            {addNewTaskItem && <AddNewItem listId={listId} />}
+            <div
+              className=""
+              id="newItem"
+              onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+            >
+              <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
+                + New Task
+              </p>
+            </div>
           </div>
         </div>
       </PageWrapper>

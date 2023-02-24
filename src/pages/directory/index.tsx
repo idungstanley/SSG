@@ -44,8 +44,8 @@ function Directory() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <div className="border-b border-gray-200 w-full">
-            <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <div className="w-full border-b border-gray-200">
+            <nav className="flex -mb-px space-x-8" aria-label="Tabs">
               {tabs.map((tab) => (
                 <span
                   key={tab.id}
@@ -70,10 +70,10 @@ function Directory() {
           </>
         }
       >
-        <div className="flex flex-col items-start py-2 w-full h-full">
+        <div className="flex flex-col items-start w-full h-full py-2">
           {/* status checking */}
           {templatesStatus === 'loading' ? (
-            <div className="mx-auto w-6 mt-5 justify-center">
+            <div className="justify-center w-6 mx-auto mt-5">
               <Spinner size={8} color="#0F70B7" />
             </div>
           ) : templatesStatus === 'error' ? (
@@ -95,7 +95,7 @@ function Directory() {
                 />
               </div>
             ) : (
-              <div className="flex gap-3 flex-col">
+              <div className="flex flex-col gap-3">
                 {templates.map((template) => (
                   <p
                     onClick={() =>
@@ -118,12 +118,12 @@ function Directory() {
 
           {/* template fields list */}
           {selectedTemplateId && templateStatus === 'loading' ? (
-            <div className="mx-auto w-6 mt-5 justify-center">
+            <div className="justify-center w-6 mx-auto mt-5">
               <Spinner size={8} color="#0F70B7" />
             </div>
           ) : template && selectedTemplateId ? (
-            <div className="mt-10 flex flex-col">
-              <h3 className="text-lg font-medium uppercase leading-6 text-gray-900 border-b border-gray-200 pb-2">
+            <div className="flex flex-col mt-10">
+              <h3 className="pb-2 text-lg font-medium leading-6 text-gray-900 uppercase border-b border-gray-200">
                 {template.name}
               </h3>
 

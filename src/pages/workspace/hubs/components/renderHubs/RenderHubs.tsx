@@ -10,10 +10,12 @@ import ListFilter from '../../../lists/components/renderlist/listDetails/ListFil
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 import PageWrapper from '../../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../PilotSection';
+import TaskBoardSection from './items/ItemsHubData/TaskBoardSection';
 
 function RenderHubs() {
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { boardView, listView } = useAppSelector((state) => state.task);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
 
   return (
@@ -30,20 +32,42 @@ function RenderHubs() {
           />
         }
       >
-        <div className="w-full h-full">
-          <div className="w-full">
-            <ListFilter />
-          </div>
-          <div>
-            {HubDetail?.data.hubs.map((data: dataProps) => (
-              <TaskListSections data={data} key={data.id} />
-            ))}
-            {HubDetail?.data.wallets.map((data: dataProps) => (
-              <WalletSection data={data} key={data.id} />
-            ))}
-            {HubDetail?.data.lists.map((data: dataProps) => {
-              return <ListSection data={data} key={data.id} />;
-            })}
+       <div className="pr-1 pt-0.5 w-full h-full">
+          <div
+            className="w-full scrollbarDynCol"
+            style={{ minHeight: '0', maxHeight: '100vh' }}
+          >
+            <div className="w-full">
+              <ListFilter />
+            </div>
+            {/* Board */}
+            {boardView && (
+              <div>
+                {HubDetail?.data?.hubs.map((data: dataProps) => (
+                  <div key={data.id} className="mb-10">
+                    <TaskBoardSection data={data} />
+                  </div>
+                ))}
+                {/* {HubDetail?.data.wallets.map((data: dataProps) => (
+                  <div key={data.id} className="">
+                    <BoardWalletSection data={data} key={data.id} />
+                  </div>
+                ))} */}
+              </div>
+            )}
+            {listView && (
+              <div>
+                {HubDetail?.data.hubs.map((data: dataProps) => (
+                  <TaskListSections data={data} key={data.id} />
+                ))}
+                {HubDetail?.data.wallets.map((data: dataProps) => (
+                  <WalletSection data={data} key={data.id} />
+                ))}
+                {HubDetail?.data.lists.map((data: dataProps) => {
+                  return <ListSection data={data} key={data.id} />;
+                })}
+              </div>
+            )}
           </div>
         </div>
       </PageWrapper>

@@ -226,7 +226,9 @@ export default function ItemsListInSidebar({
                 onClick={(e) => e.stopPropagation()}
               >
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={(e) => {
+                    handleHubSettings(i.id, i.name, e);
+                  }}
                   className="cursor-pointer"
                   id="menusettings"
                 />

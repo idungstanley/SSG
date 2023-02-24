@@ -23,8 +23,6 @@ export default function AssignModal() {
   const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
     useAppSelector((state) => state.task);
 
-  console.log(toggleAssignCurrentTaskId);
-
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
@@ -46,7 +44,6 @@ export default function AssignModal() {
           <AiOutlineUserAdd className="text-sm" />
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

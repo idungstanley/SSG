@@ -10,6 +10,7 @@ import {
   displayPrompt,
 } from '../../../../features/general/prompt/promptSlice';
 import { logout, setAuthData } from '../../../../features/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface UserSettingsType {
   id: number;
@@ -19,6 +20,7 @@ interface UserSettingsType {
 
 export default function UserSettingsModal() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logoutMutation = useMutation(logoutService, {
     onSuccess: () => {
@@ -50,7 +52,9 @@ export default function UserSettingsModal() {
     {
       id: 2,
       title: 'Notificaitons',
-      handleClick: () => ({}),
+      handleClick: () => {
+        navigate('settings/notifications');
+      },
     },
     {
       id: 3,

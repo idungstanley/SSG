@@ -10,6 +10,10 @@ import './styles/index.css';
 function App() {
   const user = useSelector(selectCurrentUser);
 
+  // const customToastStyle = {
+  //   width: '500px', // set the desired width here
+  // };
+
   return (
     <>
       <RouterProvider router={routes(user)} />
