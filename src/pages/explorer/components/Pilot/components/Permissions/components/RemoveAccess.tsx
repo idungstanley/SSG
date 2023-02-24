@@ -13,9 +13,10 @@ export default function RemoveAccess({
   itemType,
   isActiveUser,
 }: RemoveAccessProps) {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { activeEntity } = useAppSelector(
+    (state) => state.workspace
+  );
+  const {id, type} = activeEntity;
 
   const { mutate: onRemoveAccess } = useRemoveAccessForData(type, id);
 
@@ -34,7 +35,7 @@ export default function RemoveAccess({
   return (
     <button
       onClick={removeAccess}
-      className="border p-2 rounded-md text-gray-600 hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300"
+      className="p-2 text-gray-600 transition-all duration-300 border rounded-md hover:border-indigo-600 hover:text-indigo-600"
       type="button"
     >
       {isActiveUser ? `Leave ${type}` : 'Remove access'}

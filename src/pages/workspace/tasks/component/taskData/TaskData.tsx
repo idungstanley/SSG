@@ -23,7 +23,7 @@ export default function TaskData({ task }: TaskDataProps) {
             : ' flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
         }`}
       >
-        <div className=" flex justify-between w-6/12 pr-24 items-center ">
+        <div className="flex items-center justify-between w-6/12 pr-24 ">
           <div className="w-5/6">
             {hideTask.length
               ? hideTask.map(
@@ -32,7 +32,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium group"
+                        className="flex items-center ml-2 text-xs font-medium capitalize group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -48,8 +48,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium group
-                        cursor-pointer"
+                        className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -68,7 +67,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium group"
+                        className="flex items-center ml-2 text-xs font-medium capitalize group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -84,7 +83,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.field}
-                        className="flex items-center capitalize ml-2 text-xs font-medium group"
+                        className="flex items-center ml-2 text-xs font-medium capitalize group"
                       >
                         <DataRenderFunc
                           taskColField={task[col.field]}
@@ -96,7 +95,7 @@ export default function TaskData({ task }: TaskDataProps) {
                 )}
           </div>
         </div>
-        <div className=" dynamic ">
+        <div className=" dynamic">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
@@ -105,7 +104,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
@@ -123,7 +122,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.field}
-                      className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
+                      className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc

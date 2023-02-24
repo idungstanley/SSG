@@ -141,6 +141,7 @@ export const routes = (user: IUser | null) =>
         { path: '', element: <Home /> },
         { path: 'notification', element: <Notification /> },
         { path: 'community', element: <Community /> },
+        { path: 'directory', element: <Directory /> },
         { path: 'settings/permissions', element: <PermissionsPage /> },
         {
           path: 'settings/notifications',

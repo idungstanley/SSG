@@ -6,7 +6,7 @@ import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../sidebar/components/PlaceItem';
-import hubIcon from '../../../assets/branding/hub.png';
+import hubIcon from '../../../assets/branding/hub.svg';
 import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { CubeTransparentIcon } from '@heroicons/react/24/outline';
 import Dropdown from '../../../components/Dropdown/index';
@@ -25,7 +25,7 @@ function Hubs() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <CubeTransparentIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <CubeTransparentIcon className="w-5 h-5" aria-hidden="true" />,
       onClick: () => dispatch(setCreateHubSlideOverVisibility(true)),
     },
   ];
@@ -34,9 +34,11 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASK"
-        icon={<img src={hubIcon} alt="Hub Icon" className="h-4 w-4" />}
+        icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />}
         rightContent={
-          <div className="flex gap-2">
+          <div className="flex gap-2"
+          onClick={(e) => e.stopPropagation()}
+          >
             <Dropdown config={configForDropdown} iconType="plus" />
           </div>
         }

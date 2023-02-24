@@ -7,10 +7,10 @@ import AddAccess from './components/AddAccess';
 import MembersList from './components/MembersList';
 
 export default function Permissions() {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { activeEntity } = useAppSelector(
+    (state) => state.workspace
+  );
+const {id, type} = activeEntity;
 
   const { data, status } = useGetItemAccess({ id, type });
 
@@ -24,11 +24,11 @@ export default function Permissions() {
       description="Please try again later."
     />
   ) : status === 'loading' ? (
-    <div className="mx-auto w-6 justify-center mt-12">
+    <div className="justify-center w-6 mx-auto mt-12">
       <Spinner size={8} color="#0F70B7" />
     </div>
   ) : (
-    <div className="mt-3 w-full space-y-3">
+    <div className="w-full mt-3 space-y-3">
       {/* in all lists no members */}
       <div className="space-y-3">
         {!fileMembers?.length &&

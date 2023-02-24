@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
+  setActiveEntity,
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
@@ -80,6 +81,7 @@ export default function ItemsListInSidebar({
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`/workspace/hub/${id}`);
@@ -218,7 +220,9 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {isHovering === index && showSidebar && (
-              <div className="flex items-center pr-1 space-x-1">
+              <div className="flex items-center pr-1 space-x-1"
+              onClick={(e) => e.stopPropagation()}
+              >
                 <AiOutlineEllipsis
                   onClick={(e) => handleHubSettings(i.id, i.name, e)}
                   className="cursor-pointer"

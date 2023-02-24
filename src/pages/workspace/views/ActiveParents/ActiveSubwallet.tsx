@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getWalletServices } from '../../../../features/wallet/walletService';
 import { useDispatch } from 'react-redux';
-import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../app/hooks';
 import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
@@ -31,6 +31,7 @@ function ActiveSubWallet({
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`/workspace/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   return (

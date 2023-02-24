@@ -224,30 +224,6 @@ function ExpandedNav() {
               )
           )}
         </div>
-        <span className="group">
-          <div
-            className={`absolute top-0 bottom-0 z-40 h-full justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth >= 230 && "group-hover:bg-green-100"
-            }`}
-            onMouseDown={startResizing}
-            style={{
-              cursor: "col-resize",
-              width: `${extendedSidebarWidth > 320 ? "4px" : "2px"}`,
-              right: "0.5px",
-            }}
-          ></div>
-          <div
-            className={`absolute top-0 bottom-0 h-full z-40 justify-self-end shrink-0 grow-0 cursor-all-scroll ${
-              extendedSidebarWidth <= 320 && "group-hover:bg-green-100"
-            }`}
-            style={{
-              cursor: "col-resize",
-              width: `${extendedSidebarWidth < 230 ? "4px" : "2px"}`,
-              right: `${extendedSidebarWidth < 230 ? "-4px" : "-2px"}`,
-            }}
-            onMouseDown={startResizing}
-          ></div>
-        </span>
         <ResizeBorder
           width={extendedSidebarWidth}
           minWidth={MIN_SIDEBAR_WIDTH}

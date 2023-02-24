@@ -13,6 +13,7 @@ import {
 } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../../../features/workspace/workspaceSlice';
@@ -71,6 +72,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   const handleWalletSettings = (
@@ -218,6 +220,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
               type="button"
               id="listright"
               className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               {/* <TaskDropdown /> */}
               <AiOutlineEllipsis
