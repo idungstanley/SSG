@@ -10,10 +10,11 @@ import ListSection from "./items/itemsListData/ListSection";
 import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
 import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
 import TaskBoardSection from "./items/ItemsHubData/TaskBoardSection";
+// import BoardWalletSection from "./items/itemsWalletData/BoardWalletSection";
 
 function RenderHubs() {
   const { hubId } = useParams();
-  const { activeItemName} = useAppSelector((state) => state.workspace);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });
   const { boardView, listView } = useAppSelector((state) => state.task);
 
@@ -42,10 +43,15 @@ function RenderHubs() {
             {boardView && (
               <div>
                 {HubDetail?.data?.hubs.map((data: dataProps) => (
-                  <div key={data.id}>
+                  <div key={data.id} className="mb-10">
                     <TaskBoardSection data={data} />
                   </div>
                 ))}
+                {/* {HubDetail?.data.wallets.map((data: dataProps) => (
+                  <div key={data.id} className="">
+                    <BoardWalletSection data={data} key={data.id} />
+                  </div>
+                ))} */}
               </div>
             )}
             {listView && (

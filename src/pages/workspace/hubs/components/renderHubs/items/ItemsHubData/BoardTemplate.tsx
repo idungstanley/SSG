@@ -10,6 +10,9 @@ import { UserAddOutlined } from "@ant-design/icons";
 import AssignTask from "../../../../../tasks/assignTask/AssignTask";
 import { AvatarWithInitials } from "../../../../../../../components";
 import CardState from "../../../../../tasks/component/views/CardState";
+import { IoChevronBackOutline } from "react-icons/io5";
+import { VscEllipsis } from "react-icons/vsc";
+import { BsPlus } from "react-icons/bs";
 
 interface listIdprops {
   listId: string;
@@ -106,7 +109,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
             <>
               <div
                 key={key}
-                className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white uppercase p-3 font-bold  "
+                className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white uppercase p-3 font-bold group "
                 style={{ fontSize: "12px" }}
               >
                 {key === "new" ? (
@@ -124,6 +127,17 @@ export default function BoardTemplate({ listId }: listIdprops) {
                   <div className=" absolute top-0 rounded-t-lg bg-gray-400 w-full h-1"></div>
                 )}
                 <h3 className="absolute left-0 pl-3  ">{key}</h3>
+                <div className="flex absolute right-0 pr-3 items-center gap-2 text-sm font-bold">
+                  <span className="opacity-0 group-hover:opacity-100 bg-gray-200 rounded cursor-pointer">
+                    <IoChevronBackOutline />
+                  </span>
+                  <span className="opacity-0 group-hover:opacity-100 cursor-pointer">
+                    <VscEllipsis />
+                  </span>
+                  <span className="opacity-0 group-hover:opacity-100 cursor-pointer">
+                    <BsPlus />
+                  </span>
+                </div>
               </div>
               <div className="-ml-10 mt-5 oveflow-y-auto">
                 {newData[key].map((items: ImyTaskData) => {
@@ -135,7 +149,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
-                        <p className=" text-sm font-bold  pb-2">
+                        <p className="text-sm font-bold  pb-2">
                           {items.name.length > 70
                             ? items.name.slice(0, 70) + "..."
                             : items.name}

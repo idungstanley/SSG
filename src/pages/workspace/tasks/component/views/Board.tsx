@@ -42,10 +42,6 @@ function Board() {
     ));
   };
 
-  myTaskData.map((thistask) => {
-    console.log(thistask);
-  });
-
   const [icons, setIcons] = useState<string | null>(null);
 
   return (
