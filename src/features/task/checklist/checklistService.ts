@@ -38,8 +38,10 @@ export const UseCreateClistService = ({
 
 export const UseGetAllClistService = ({
   task_id,
+  activeItemType,
 }: {
   task_id: string | null | undefined;
+  activeItemType: string | null | undefined;
 }) => {
   return useQuery(
     ["clist", { task_id }],
@@ -54,7 +56,7 @@ export const UseGetAllClistService = ({
       return data;
     },
     {
-      enabled: task_id != null,
+      enabled: task_id != null && activeItemType == "task",
       // onSuccess: () => {
       //   dispatch(setTaskIdForPilot(null));
       // },

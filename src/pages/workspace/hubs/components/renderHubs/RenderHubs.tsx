@@ -13,7 +13,6 @@ import TaskBoardSection from "./items/ItemsHubData/TaskBoardSection";
 
 function RenderHubs() {
   const { hubId } = useParams();
-  console.log(hubId);
 
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { data: HubDetail } = useGetHubChildren({ query: hubId });

@@ -323,7 +323,7 @@ export const UseUpdateFavService = ({
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   return useQuery(
-    ["checklist", { favId, name }],
+    ["favorite", { favId, name }],
     async () => {
       const data = requestNew(
         {

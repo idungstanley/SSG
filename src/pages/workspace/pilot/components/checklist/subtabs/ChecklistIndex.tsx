@@ -37,7 +37,9 @@ export default function ChecklistIndex() {
   const dispatch = useAppDispatch();
   // RTK states
   // const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector(
+    (state) => state.workspace
+  );
   const { triggerDelChecklist, clickedChecklistId, showChecklistInput } =
     useAppSelector((state) => state.checklist);
 
@@ -59,6 +61,7 @@ export default function ChecklistIndex() {
   // Get Checklists
   const { data, status } = UseGetAllClistService({
     task_id: activeItemId,
+    activeItemType: activeItemType,
   });
   const task_checklist = data?.data.task.checklists;
 
