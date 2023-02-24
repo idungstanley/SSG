@@ -1,4 +1,4 @@
-import React, { memo, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -6,14 +6,14 @@ import { setActivePlaceId } from '../../../../../features/workspace/workspaceSli
 import { cl } from '../../../../../utils';
 
 interface PlaceItemProps {
-  label: string;
-  onClick?: () => void; // not required if already clicked in place
-  icon: JSX.Element;
-  rightContent?: ReactNode;
-  bottomContent?: ReactNode;
+  label: string
+  onClick?: () => void // not required if already clicked in place
+  icon: JSX.Element
+  rightContent?: ReactNode
+  bottomContent?: ReactNode
 }
 
-function PlaceItem({
+export default function PlaceItem({
   label,
   onClick,
   icon,
@@ -23,7 +23,6 @@ function PlaceItem({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
-
   const isActivePlace = !onClick;
 
   const resetSelectedPlace = () => {
@@ -35,53 +34,49 @@ function PlaceItem({
     <li
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
-        'focus:flex flex-col w-full pl-3 py-5 items-center relative',
-        bottomContent ? 'gap-2' : ''
+        'focus:flex flex-col w-full pl-4 py-5 items-center relative',
+        bottomContent ? 'gap-2' : '',
       )}
+      onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {isActivePlace && (
-        <span className="absolute top-0 left-0 right-0 bg-green-500 h-1"></span>
+      {!showSidebar && isActivePlace && (
+        <span className="absolute top-0 left-0 right-0 h-1 bg-green-500"></span>
       )}
-
       <div className="flex justify-between w-full">
         <div
-          onClick={isActivePlace ? resetSelectedPlace : onClick}
           className={cl(
-            'flex cursor-pointer gap-4 items-center content-center self-center',
-            isActivePlace && 'justify-center text-black font-bold',
-            isActivePlace && showSidebar && 'ml-16'
+            'flex gap-4 items-center content-center self-center',
+            isActivePlace ? 'justify-center text-black font-bold' : '',
+            showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
-          {icon}
-          {showSidebar ? (
-            <span
-              className={cl(
-                'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
-                isActivePlace && 'text-black font-bold'
-              )}
-            >
-              {label}
-            </span>
-          ) : null}
+          <span className="flex items-center w-6 h-6">{icon}</span>
+          <span
+            className={cl(
+              showSidebar ? 'block' : 'hidden',
+              'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
+              isActivePlace ? 'text-black font-bold' : '',
+            )}
+          >
+            {label}
+          </span>
         </div>
+        <div className="flex items-center gap-2">
+          {showSidebar && rightContent}
 
-        {showSidebar ? (
-          <div className="flex gap-2 items-center">
-            {rightContent}
-
-            <span onClick={isActivePlace ? resetSelectedPlace : onClick}>
-              {isActivePlace ? (
-                <FiChevronDown className="h-5 w-5 cursor-pointer text-gray-500" />
-              ) : (
-                <FiChevronRight className="h-5 w-5 cursor-pointer text-gray-500" />
-              )}
-            </span>
-          </div>
-        ) : null}
+          <span
+            onClick={isActivePlace ? resetSelectedPlace : onClick}
+            className={cl(showSidebar ? 'block' : 'hidden')}
+          >
+            {isActivePlace ? (
+              <FiChevronDown className="w-5 h-5 text-gray-500 cursor-pointer" />
+            ) : (
+              <FiChevronRight className="w-5 h-5 text-gray-500 cursor-pointer" />
+            )}
+          </span>
+        </div>
       </div>
-      {showSidebar ? bottomContent : null}
+      {bottomContent}
     </li>
   );
 }
-
-export default memo(PlaceItem);

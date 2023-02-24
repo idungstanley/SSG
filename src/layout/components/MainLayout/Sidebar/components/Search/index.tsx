@@ -13,7 +13,7 @@ export default function Search() {
       >
         <input
           placeholder="Enter search value"
-          className="w-full text-xs pl-8 border-gray-400 h-7 rounded-2xl group-hover:border-green-500 group-hover:text-primary-400"
+          className="w-full pl-3 text-xs border-gray-400 h-7 rounded-2xl group-hover:border-green-500 group-hover:text-primary-400"
           disabled
           type="text"
         />

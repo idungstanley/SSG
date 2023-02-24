@@ -210,6 +210,7 @@ function WalletIndex({
               <div
                 id="walletRight"
                 className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"

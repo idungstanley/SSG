@@ -5,14 +5,12 @@ import Favorites from '../../../../../pages/workspace/favorites';
 import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
-import hubIcon from '../../../../../assets/branding/hub.png';
+import hubIcon from '../../../../../assets/branding/hub.svg';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
-import emailIcon from '../../../../../assets/branding/email-icon.png';
-import InboxIcon from '../../../../../assets/branding/inbox.png';
 import libraryIcon from '../../../../../assets/icons/library.svg';
 import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
 import AlsoHr from '../../../../../pages/workspace/alsoHr';
@@ -22,13 +20,15 @@ import { IoBusinessOutline } from 'react-icons/io5';
 import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping, FaRoute } from 'react-icons/fa';
 import Sidebar from '../../../../../pages/directory/components/Sidebar';
+import { MdAlternateEmail } from 'react-icons/md';
+import { InboxStackIcon } from '@heroicons/react/24/solid';
 
 const places = [
   {
     name: 'Email',
     id: 1,
     place: <Favorites />,
-    source: emailIcon,
+    icon: <MdAlternateEmail />,
   },
   {
     name: 'TASK',
@@ -40,7 +40,7 @@ const places = [
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    source: InboxIcon,
+    icon: <InboxStackIcon/>,
   },
   {
     name: 'Cabinet',
@@ -60,31 +60,31 @@ const places = [
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-7 h-7" />,
+    icon: <DocumentTextIcon className="w-fit h-fit" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-7 h-7"/>,
+    icon: <ClockIcon className="w-fit h-fit"/>,
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-5 h-5"/>,
+    icon: <FaRoute className="text-md"/>,
   },
   {
     name: 'Also HR',
     id: 9,
     place: <AlsoHr/>,
-    icon: <FaHandsHelping className="w-5 h-5"/>,
+    icon: <FaHandsHelping className="w-fit h-fit"/>,
   },
   {
     name: 'Commerce',
     id: 10,
     place: <Commerce/>,
-    icon: <IoBusinessOutline className="w-5 h-5"/>,
+    icon: <IoBusinessOutline className="w-fit h-fit"/>,
   },
 ];
 
