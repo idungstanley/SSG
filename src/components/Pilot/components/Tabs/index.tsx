@@ -30,32 +30,54 @@ interface TabsProps {
 const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
   localStorage.getItem('pilot') || '""'
 );
+interface ShowTabsLabelToggleProps {
+  showTabLabel: boolean;
+  setShowTabLabel: (i: boolean) => void;
+}
+
+function ShowTabsLabelToggle({
+  showTabLabel,
+  setShowTabLabel,
+}: ShowTabsLabelToggleProps) {
+  const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
+
+  const toggleShowTabLabel = () => {
+    localStorage.setItem(
+      'pilot',
+      JSON.stringify({
+        ...pilotFromLS,
+        showTabLabel: !showTabLabel,
+      })
+    );
+    setShowTabLabel(!showTabLabel);
+  };
+
+  return show ? (
+    <button
+      type="button"
+      onClick={toggleShowTabLabel}
+      className={cl(
+        'border flex items-center justify-center text-gray-600',
+        showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'p-2 mb-1'
+      )}
+    >
+      {showTabLabel ? (
+        <ChevronDoubleUpIcon className="w-4 h-4" />
+      ) : (
+        <ChevronDoubleDownIcon className="w-4 h-4" />
+      )}
+    </button>
+  ) : null;
+}
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
 export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const showFullPilot = pilotSideOver.show;
-
   const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
-
-  const toggleShowTabLabel = () => {
-    setShowTabLabel((prev) => {
-      localStorage.setItem(
-        'pilot',
-        JSON.stringify({
-          ...pilotFromLS,
-          showTabLabel: !prev,
-        })
-      );
-
-      return !prev;
-    });
-  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -93,48 +115,39 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={(e) => handleDragEnd(e)}
-    >
-      <nav
-        className={cl(
-          'relative grid overflow-x-scroll w-full pb-2 border-b',
-          showTabLabel ? 'grid-cols-1' : 'grid-rows-1 grid-flow-col'
-        )}
-        aria-label="Tabs"
+    <div className="relative flex items-center">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={(e) => handleDragEnd(e)}
       >
-        <SortableContext strategy={rectSortingStrategy} items={tabItems}>
-          {tabs.map((tab) => (
-            <Tab
-              key={tab.id}
-              id={tab.id}
-              icon={tab.icon}
-              label={tab.label}
-              activeTabId={activeTabId}
-              setActiveTabId={setActiveTabId}
-              showTabLabel={showTabLabel}
-            />
-          ))}
-        </SortableContext>
-        {showFullPilot ? (
-          <button
-            type="button"
-            onClick={toggleShowTabLabel}
-            className={cl(
-              'border flex items-center justify-center text-gray-600',
-              showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'w-9 h-9'
-            )}
-          >
-            {showTabLabel ? (
-              <ChevronDoubleUpIcon className="w-4 h-4" />
-            ) : (
-              <ChevronDoubleDownIcon className="w-4 h-4" />
-            )}
-          </button>
-        ) : null}
-      </nav>
-    </DndContext>
+        <nav
+          className={cl(
+            'relative grid overflow-x-scroll w-full',
+            showTabLabel ? 'grid-cols-1' : 'grid-rows-1 grid-flow-col'
+          )}
+          aria-label="Tabs"
+        >
+          <SortableContext strategy={rectSortingStrategy} items={tabItems}>
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.id}
+                id={tab.id}
+                icon={tab.icon}
+                label={tab.label}
+                activeTabId={activeTabId}
+                setActiveTabId={setActiveTabId}
+                showTabLabel={showTabLabel}
+              />
+            ))}
+          </SortableContext>
+        </nav>
+      </DndContext>
+
+      <ShowTabsLabelToggle
+        setShowTabLabel={setShowTabLabel}
+        showTabLabel={showTabLabel}
+      />
+    </div>
   );
 }
