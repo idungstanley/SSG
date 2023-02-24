@@ -3,7 +3,7 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Combobox } from '@headlessui/react';
 import { Spinner } from '../../common';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 interface optionsDataType {
   id: string;
@@ -69,7 +69,7 @@ export default function ComboBoxWithAvatar({
                   key={option.id}
                   value={option.id}
                   className={({ active }) =>
-                    classNames(
+                    cl(
                       'relative cursor-default select-none py-2 pl-3 pr-9',
                       active ? 'bg-indigo-600 text-white' : 'text-gray-900'
                     )
@@ -80,7 +80,7 @@ export default function ComboBoxWithAvatar({
                       <div className="flex items-center">
                         {option.avatar}
                         <span
-                          className={classNames(
+                          className={cl(
                             'ml-3 truncate',
                             selectedKey === option.id
                               ? 'font-semibold'
@@ -93,7 +93,7 @@ export default function ComboBoxWithAvatar({
 
                       {selectedKey === option.id && (
                         <span
-                          className={classNames(
+                          className={cl(
                             'absolute inset-y-0 right-0 flex items-center pr-4',
                             active ? 'text-white' : 'text-indigo-600'
                           )}

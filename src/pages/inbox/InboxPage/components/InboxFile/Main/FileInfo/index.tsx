@@ -9,8 +9,8 @@ import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
 import Activity from './Activity';
-import Comments from '../../../../../../../components/Comments';
-import { classNames } from '../../../../../../../utils';
+import Comments from '../../../../../../../components/Comments/CommentsForPilot';
+import { cl } from '../../../../../../../utils';
 import { useAppSelector } from '../../../../../../../app/hooks';
 
 const tabs = [
@@ -74,7 +74,7 @@ function FileInfo() {
                     <Tab key={tab.name}>
                       {({ selected }) => (
                         <div
-                          className={classNames(
+                          className={cl(
                             selected
                               ? 'border-indigo-500 text-indigo-600'
                               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
@@ -82,7 +82,7 @@ function FileInfo() {
                           )}
                         >
                           <tab.icon
-                            className={classNames(
+                            className={cl(
                               selected
                                 ? 'text-indigo-500'
                                 : 'text-gray-400 group-hover:text-gray-500',

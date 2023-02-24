@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { classNames } from '../../../utils';
+import { cl } from '../../../utils';
 import { VscTriangleDown } from 'react-icons/vsc';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineGroupAdd } from 'react-icons/md';
@@ -20,16 +20,16 @@ import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/sl
 import { useNavigate } from 'react-router-dom';
 
 interface workspaceSettingsListType {
-  id: number;
-  title: string;
-  handleClick: () => void;
+  id: number
+  title: string
+  handleClick: () => void
 }
 interface WorkspaceProps {
-  colour: string;
-  id: string;
-  initials: string;
-  last_activity_at: string;
-  name: string;
+  colour: string
+  id: string
+  initials: string
+  last_activity_at: string
+  name: string
 }
 
 export default function WorkspaceSettingsModal() {
@@ -90,13 +90,13 @@ export default function WorkspaceSettingsModal() {
       // Clear react-query and redux cache
       localStorage.setItem(
         'currentWorkspaceId',
-        JSON.stringify(data.data.workspace.id)
+        JSON.stringify(data.data.workspace.id),
       );
 
       dispatch(
         setCurrentWorkspace({
           workspaceId: data.data.workspace.id,
-        })
+        }),
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
@@ -130,11 +130,11 @@ export default function WorkspaceSettingsModal() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute z-30 mt-2 w-48 rounded-md shadow-lg -right-2 bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+        <Menu.Items className="absolute z-30 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg -right-2 ring-1 ring-black ring-opacity-5 focus:outline-none ">
           <section className="flex flex-col">
             <div className="pt-3">
               <h4
-                className=" font-bold capitalize px-4 truncate"
+                className="px-4 font-bold capitalize truncate "
                 style={{ fontSize: '11px' }}
               >
                 {currentWorkspaceName?.data.workspace.name}
@@ -143,14 +143,14 @@ export default function WorkspaceSettingsModal() {
                 <button
                   key={i.id}
                   type="button"
-                  className="flex items-center cursor-pointer px-4  py-2 text-xs text-gray-600 w-full hover:bg-gray-100"
+                  className="flex items-center w-full px-4 py-2 text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
                   onClick={i.handleClick}
                 >
                   <p className="flex ">
                     {i.title}{' '}
                     {i.id == 3 ? (
                       <button className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
-                        <MdOutlineGroupAdd className="h-4 w-4 test-sm" />{' '}
+                        <MdOutlineGroupAdd className="w-4 h-4 test-sm" />{' '}
                         <p>Invite</p>
                       </button>
                     ) : null}
@@ -174,9 +174,9 @@ export default function WorkspaceSettingsModal() {
                     {({ active }) => (
                       <button
                         type="button"
-                        className={classNames(
+                        className={cl(
                           active ? `bg-gray-200` : '',
-                          'flex items-center space-x-1 py-2 text-sm text-gray-600 px-4 text-left w-full'
+                          'flex items-center space-x-1 py-2 text-sm text-gray-600 px-4 text-left w-full',
                         )}
                         onClick={() => onSwitchWorkspace(i.id)}
                       >

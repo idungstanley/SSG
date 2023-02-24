@@ -8,7 +8,7 @@ import WalletModal from '../../../pages/workspace/wallet/components/modals/Walle
 import ListModal from '../../../pages/workspace/lists/components/modals/ListModal';
 
 export default function DropdownList() {
-  const { currentItemId, currentItemType, showExtendedBar } = useAppSelector(
+  const { currentItemId, currentItemType } = useAppSelector(
     (state) => state.workspace
   );
 
@@ -16,9 +16,9 @@ export default function DropdownList() {
     <>
       <SubHubIndex />
       <WalletIndex showHubList={!false} getCurrentHubId={currentItemId} />
-      {!showExtendedBar && (
-        <ListIndex showHubList={!false} getCurrentHubId={currentItemId} />
-      )}
+
+      <ListIndex showHubList={!false} getCurrentHubId={currentItemId} />
+
       <WalletModal />
       <ListModal />
     </>

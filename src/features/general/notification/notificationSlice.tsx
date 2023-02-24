@@ -37,10 +37,11 @@ export const notificationSlice = createSlice({
       state.center = action.payload.center;
       state.top = action.payload.top;
       state.show_close = action.payload.show_close;
-    },
+    }
   },
 });
 
-export const { setVisibility, setContent } = notificationSlice.actions;
+export const { setVisibility, setContent } =
+  notificationSlice.actions;
 
 export default notificationSlice.reducer;

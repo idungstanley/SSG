@@ -25,7 +25,7 @@ import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
-import { classNames } from '../../../../utils';
+import { cl } from '../../../../utils';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
@@ -238,7 +238,7 @@ function TopMenu() {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={classNames(
+                  className={cl(
                     item.current
                       ? 'bg-gray-900 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',

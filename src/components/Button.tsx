@@ -1,10 +1,10 @@
 import React from 'react';
 import Spinner from '../common/Spinner';
-import { classNames } from '../utils';
+import { cl } from '../utils';
 
 interface ButtonProps {
   buttonStyle?: string;
-  onClick?: () => | void;
+  onClick?: () => void;
   loading?: boolean;
   label?: string | null;
   icon?: string | JSX.Element;
@@ -87,7 +87,7 @@ function Button({
       onClick={onClick}
       type="button"
       disabled={disabled || loading}
-      className={classNames(
+      className={cl(
         disabled || loading
           ? ('opacity-50' as string)
           : (hoverBackgroundColor as string),

@@ -7,9 +7,13 @@ import { getOneTaskServices } from '../../../../../../features/task/taskService'
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
 
 export default function DetailsIndex() {
-  const { activeItemId, activeItemType } = useAppSelector(
-    (state) => state.workspace
-  );
+  // const { activeItemId, activeItemType } = useAppSelector(
+  //   (state) => state.workspace
+  // );
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+
+  const { id: activeItemId, type: activeItemType } = pilotSideOver;
+
   const { data: hub } = UseGetHubDetails({
     activeItemId,
     activeItemType,
@@ -41,6 +45,7 @@ export default function DetailsIndex() {
       return <PropertyDetails Details={listDetails} key={listDetails?.id} />;
     }
   };
+
   return (
     <>
       <section className="mt-3">{showDetailsType()}</section>

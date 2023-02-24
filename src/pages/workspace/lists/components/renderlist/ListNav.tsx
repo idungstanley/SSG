@@ -12,6 +12,7 @@ import {
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 import { BsListStars } from "react-icons/bs";
+import { RxDividerVertical } from "react-icons/rx";
 import { CiViewTable } from "react-icons/ci";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import ListViewSettingsModal from "../../../tasks/viewSettingsModal/ListViewSettingsModal";
@@ -86,6 +87,7 @@ function ListNav({
               <span className="opacity-0 group-hover:opacity-100 z-100">
                 <ListViewSettingsModal />
               </span>
+              <RxDividerVertical />
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
@@ -96,7 +98,7 @@ function ListNav({
               />
             </span>
             <span
-              className="group gap-2  flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
+              className="group flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
               onClick={handleTableView}
             >
               {viewsList1}
@@ -104,6 +106,7 @@ function ListNav({
                 <BiDotsHorizontalRounded />
               </span>
             </span>
+            <RxDividerVertical />
           </span>
           <span
             className="flex items-center justify-start space-x-1 cursor-pointer"
@@ -120,6 +123,7 @@ function ListNav({
               <span className="opacity-0 group-hover:opacity-100">
                 <BiDotsHorizontalRounded />
               </span>
+              <RxDividerVertical />
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">

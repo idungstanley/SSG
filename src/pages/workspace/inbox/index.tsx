@@ -1,9 +1,9 @@
-import { InboxStackIcon } from '@heroicons/react/24/outline';
+import { InboxStackIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useGetActiveInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
-import PlaceItem from '../sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 
 function Inbox() {
   const { data: dt, status } = useGetActiveInboxes();
@@ -14,7 +14,7 @@ function Inbox() {
     <>
       <PlaceItem
         label="In-tray"
-        icon={<InboxStackIcon className="h-5 w-5" />}
+        icon={<InboxStackIcon className="w-5 h-5" />}
       />
       <div className="space-y-4">
         <CreateInboxSlideOver />

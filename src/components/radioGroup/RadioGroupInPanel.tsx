@@ -1,6 +1,6 @@
 import React from 'react';
 import { RadioGroup } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 interface RadioGroupInPanelProps {
   selectedKey: string;
@@ -21,7 +21,7 @@ function RadioGroupInPanel({
             key={option.key}
             value={option.key}
             className={({ checked }) =>
-              classNames(
+              cl(
                 optionIndex === 0 ? 'rounded-tl-md rounded-tr-md' : '',
                 optionIndex === options.length - 1
                   ? 'rounded-bl-md rounded-br-md'
@@ -36,7 +36,7 @@ function RadioGroupInPanel({
             {({ active, checked }) => (
               <>
                 <span
-                  className={classNames(
+                  className={cl(
                     checked
                       ? 'bg-primary-600 border-transparent'
                       : 'bg-white border-gray-300',
@@ -50,7 +50,7 @@ function RadioGroupInPanel({
                 <span className="ml-3 flex flex-col">
                   <RadioGroup.Label
                     as="span"
-                    className={classNames(
+                    className={cl(
                       checked ? 'text-primary-900' : 'text-gray-900',
                       'block text-sm font-medium'
                     )}
@@ -59,7 +59,7 @@ function RadioGroupInPanel({
                   </RadioGroup.Label>
                   <RadioGroup.Description
                     as="span"
-                    className={classNames(
+                    className={cl(
                       checked ? 'text-primary-700' : 'text-gray-500',
                       'block text-sm'
                     )}

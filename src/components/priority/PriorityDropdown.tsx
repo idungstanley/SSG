@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { classNames } from "../../utils";
-import { AiFillFlag } from "react-icons/ai";
-import { UseUpdateTaskStatusServices } from "../../features/task/taskService";
-import { useAppSelector } from "../../app/hooks";
+import React, { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { cl } from '../../utils';
+import { AiFillFlag } from 'react-icons/ai';
+import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
+import { useAppSelector } from '../../app/hooks';
 
 interface priorityType {
   id: number;
@@ -102,7 +102,7 @@ export default function PriorityDropdown({
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left z-50">
+    <Menu as="div" className="relative inline-block text-left ">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           {setPriorityColor(TaskCurrentPriority)}
@@ -112,7 +112,6 @@ export default function PriorityDropdown({
           /> */}
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -129,9 +128,9 @@ export default function PriorityDropdown({
               {({ active }) => (
                 <button
                   type="button"
-                  className={classNames(
-                    active ? `bg-${i.bg}-200` : "",
-                    "flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full"
+                  className={cl(
+                    active ? `bg-${i.bg}-200` : '',
+                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}
                 >

@@ -6,16 +6,16 @@ import { useGetItemHistory } from "../../../../../features/general/history/histo
 import { OutputDateTime } from "../../../../../app/helpers";
 
 export default function History() {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { pilotSideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
+  const {id, type} = pilotSideOver;
 
   // ! implement pagination
   const { data: logs, status } = useGetItemHistory({ type, id });
 
   return (
-    <div className="h-full flex-1">
+    <div className="flex-1 h-full">
       <div className="relative h-full">
         {status === "error" ? (
           <FullScreenMessage
@@ -23,16 +23,16 @@ export default function History() {
             description="Please try again later."
           />
         ) : status === "loading" ? (
-          <div className="mx-auto w-6 justify-center mt-12">
+          <div className="justify-center w-6 mx-auto mt-12">
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
-          <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col">
-            <ul className="divide-y divide-gray-200 h-full flex-1">
+          <div className="absolute inset-0 flex flex-col h-full overflow-y-scroll">
+            <ul className="flex-1 h-full divide-y divide-gray-200">
               {logs?.map((activityLog) => (
                 <li
                   key={activityLog.id}
-                  className="py-2 flex justify-between items-center"
+                  className="flex items-center justify-between py-2"
                 >
                   <div className="flex items-center">
                     <InitialsAvatar
@@ -49,7 +49,7 @@ export default function History() {
                     </div>
                   </div>
 
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-sm text-gray-400">
                     {OutputDateTime(activityLog.created_at)}
                   </p>
                 </li>

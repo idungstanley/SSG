@@ -22,8 +22,9 @@ import {
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
 } from '@heroicons/react/24/outline';
-import PlaceItem from '../../../workspace/sidebar/components/PlaceItem';
+import PlaceItem from '../../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import cabinetIcon from '../../../../assets/icons/cabinet.svg';
+import { cl } from '../../../../utils';
 
 const stringifyFolders = (
   query: string,
@@ -47,7 +48,7 @@ const stringifyFolders = (
 export default function ExtendedBar() {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
-
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { selectedFileId } = useAppSelector((state) => state.explorer);
 
   const [showSearch, setShowSearch] = useState(false);
@@ -78,7 +79,7 @@ export default function ExtendedBar() {
   const configForDropdown = [
     {
       label: 'Folder',
-      icon: <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />,
+      icon: <FolderPlusIcon className="w-5 h-5" aria-hidden="true" />,
       onClick: () =>
         dispatch(
           setItemActionForSideOver({
@@ -94,21 +95,21 @@ export default function ExtendedBar() {
       <PlaceItem
         label="Cabinet"
         icon={
-          <img src={cabinetIcon} alt={'cabinet' + 'Icon'} className="h-4 w-4" />
+          <img src={cabinetIcon} alt={'cabinet' + 'Icon'} className="w-4 h-4" />
         }
         rightContent={
-          <div className="flex gap-2">
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" />
 
             {showSearch ? (
               <MagnifyingGlassMinusIcon
                 onClick={() => setShowSearch(false)}
-                className="h-5 w-5 text-gray-500 cursor-pointer"
+                className="w-5 h-5 text-gray-500 cursor-pointer"
               />
             ) : (
               <MagnifyingGlassIcon
                 onClick={() => setShowSearch(true)}
-                className="h-5 w-5 text-gray-500 cursor-pointer"
+                className="w-5 h-5 text-gray-500 cursor-pointer"
               />
             )}
           </div>
@@ -120,10 +121,10 @@ export default function ExtendedBar() {
         }
       />
 
-      <aside className="mb-2">
+      <aside className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
         {/* header */}
         {status === 'loading' ? (
-          <div className="mx-auto w-6 mt-8 justify-center">
+          <div className="justify-center w-6 mx-auto mt-8">
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : status === 'error' ? (

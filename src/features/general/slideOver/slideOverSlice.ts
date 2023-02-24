@@ -36,8 +36,9 @@ type Share = {
 
 export type Pilot = {
   show: boolean;
-  id?: string | null ;
-  type?: explorerItemType ;
+  id?: string;
+  type?: itemType;
+  title?: string;
 };
 type PilotHub = {
   show: boolean;

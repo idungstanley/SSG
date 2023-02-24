@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import CommentsT from '../../../../../components/Comments';
+import CommentsT from '../../../../../components/Comments/CommentsForPilot';
 
 interface CommentsProps {
   setShowModal: (i: boolean) => void;

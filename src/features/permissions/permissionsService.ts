@@ -38,7 +38,7 @@ export const useGetFilteredTeamMembers = (
 
 export const useGetItemAccess = (data: {
   id?: string | null;
-  type?: explorerItemType | null;
+  type?: explorerItemType;
 }) => {
   const { id, type } = data;
 
@@ -49,7 +49,10 @@ export const useGetItemAccess = (data: {
         url: `${type}s/${id}/access`,
         method: 'GET',
       }),
-    { enabled: !!id && !!type, select: (res) => res.data }
+    {
+      enabled: (!!id && type === 'file') || type === 'folder',
+      select: (res) => res.data,
+    }
   );
 };
 

@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 interface MenuWithTransitionProps {
   icon: JSX.Element;
@@ -20,7 +20,7 @@ export default function MenuWithTransition({
   return (
     <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="flex p-1 text-sm text-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+        <Menu.Button className="flex items-center p-1 text-sm text-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           {icon}
         </Menu.Button>
       </div>
@@ -41,7 +41,7 @@ export default function MenuWithTransition({
                   <button
                     type="button"
                     onClick={i.onClick}
-                    className={classNames(
+                    className={cl(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-left text-gray-700 w-full'
                     )}
@@ -51,7 +51,7 @@ export default function MenuWithTransition({
                 ) : typeof i.onClick === 'string' ? (
                   <Link
                     to={i.onClick}
-                    className={classNames(
+                    className={cl(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700 text-left'
                     )}

@@ -18,6 +18,7 @@ import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../features/workspace/workspaceSlice';
@@ -52,6 +53,7 @@ export default function SubHubIndex() {
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
@@ -97,7 +99,8 @@ export default function SubHubIndex() {
         activeItemName: name,
       })
     );
-    navigate(`/workspace/hub/${id}`);
+    navigate(`/hub/${id}`);
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
   };
 
   return currentItemId === hubParentId ? (
@@ -167,6 +170,7 @@ export default function SubHubIndex() {
               <div
                 id="subhubRight"
                 className="flex items-center space-x-1 text-black opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
               >
                 <AiOutlineEllipsis
                   className="cursor-pointer"

@@ -6,7 +6,7 @@ import AvatarWithInitials from '../../../../avatar/AvatarWithInitials';
 import DropdownMenuForMessage from './DropdownMenuForMessage';
 import { mentionTeamMemberInMessageReg } from '../../../../../regex';
 import { useAppSelector } from '../../../../../app/hooks';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -33,7 +33,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
       >
         {sortedByTimeMessages.map((message) => (
           <div
-            className={classNames(
+            className={cl(
               'flex gap-3 px-2 py-1',
               isCurrentUser(message.team_member.user.id)
                 ? 'justify-end'

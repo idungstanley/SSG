@@ -6,6 +6,12 @@ export interface IDirectory {
   parent_id: null | string;
 }
 
+export interface IDirectoryRes {
+  data: {
+    directory: IDirectory
+  }
+}
+
 export interface IDirWithChildren {
   name: string;
   id: string;

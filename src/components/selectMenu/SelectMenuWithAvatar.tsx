@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import Badge from '../Badge';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 export interface IOption {
@@ -89,7 +89,7 @@ export default function SelectMenuWithAvatar({
                   <Listbox.Option
                     key={option.id}
                     className={({ active }) =>
-                      classNames(
+                      cl(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
                         'cursor-default select-none relative py-2 pl-3 pr-6 w-full flex-1'
                       )
@@ -101,7 +101,7 @@ export default function SelectMenuWithAvatar({
                         <div className="flex">
                           {option.avatar}
                           <span
-                            className={classNames(
+                            className={cl(
                               selectedId === option.id
                                 ? 'font-semibold'
                                 : 'font-normal',

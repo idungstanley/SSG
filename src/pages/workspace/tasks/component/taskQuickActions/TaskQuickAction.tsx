@@ -2,8 +2,8 @@ import {
   CheckIcon,
   ChevronDownIcon,
   InformationCircleIcon,
-} from '@heroicons/react/24/outline';
-import React from 'react';
+} from "@heroicons/react/24/outline";
+import React from "react";
 
 interface TaskQuickActionProps {
   listDetailsData: {
@@ -34,7 +34,7 @@ export default function TaskQuickAction({
             aria-hidden="true"
           />
           <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
-            {' '}
+            {" "}
             + New Task
             {/* <span onClick={() => handleNewTask()}></span> */}
           </p>
@@ -58,9 +58,9 @@ export default function TaskQuickAction({
           <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
           <span
             className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
-            style={{ backgroundColor: '#eee' }}
+            style={{ backgroundColor: "#eee" }}
           >
-            Add New Status
+            Add New Status dot com
           </span>
         </div>
       </section>

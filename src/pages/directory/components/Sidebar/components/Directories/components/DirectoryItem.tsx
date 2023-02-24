@@ -3,7 +3,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { AiOutlineBranches } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useNavigate, useParams } from 'react-router-dom';
-import { classNames } from '../../../../../../../utils';
+import { cl } from '../../../../../../../utils';
 
 interface DirectoryItemProps {
   id: string;
@@ -24,14 +24,16 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
 
   return (
     <div
-      className={classNames(
-        'group hover:bg-gray-100 flex w-full p-1 justify-between items-center',
-        directoryId === id ? 'bg-green-200' : ''
+      className={cl(
+        'group flex w-full p-1 justify-between items-center',
+        directoryId === id
+          ? 'hover:bg-green-200 bg-green-100'
+          : 'hover:bg-gray-100'
       )}
     >
       <div
         onClick={() => onClickDirectory(id)}
-        className="flex items-center gap-2 cursor-pointer"
+        className="flex truncate items-center gap-2 cursor-pointer"
       >
         {directoryId === id ? (
           <VscTriangleDown
@@ -45,7 +47,9 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
           />
         )}
         <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
-        <p title={name}>{name}</p>
+        <p className="truncate" title={name}>
+          {name}
+        </p>
       </div>
 
       <span className="opacity-0 group-hover:opacity-100">
@@ -54,24 +58,3 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
     </div>
   );
 }
-
-//       {/* templates */}
-//       {/* <div
-//                 className={classNames(
-//                   'ml-6',
-//                   directory.templates.length > 0 ? 'mt-2' : ''
-//                 )}
-//               > */}
-//       {/* {directory.templates.map((template) => (
-//                   <div key={template.id} className="flex gap-2">
-//                     <Squares2X2Icon className="h-5 w-5 cursor-pointer" />
-//                     <p>{template.name}</p>
-//                   </div>
-//                 ))} */}
-//       {/* </div>
-//             </div>
-//           ))
-//         : null} */}
-//     </div>
-//   );
-// }

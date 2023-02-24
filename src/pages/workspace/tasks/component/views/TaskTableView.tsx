@@ -33,9 +33,6 @@ function TaskTableView() {
     }
   };
 
-  // console.log("taskIdState", taskId);
-  // console.log("currentAssig", toggleAssignCurrentTaskId);
-
   const handleTaskPriority = (id: string | undefined | null) => {
     dispatch(setCurrentTaskPriorityId(id));
   };

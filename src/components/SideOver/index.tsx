@@ -1,7 +1,7 @@
 import React, { Fragment, ReactNode } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 interface SideOverProps {
   show: boolean;
@@ -20,7 +20,12 @@ export default function SideOver({
 }: SideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="relative" style={{ zIndex: 101 }} onClose={onClose}>
+      <Dialog
+        as="div"
+        className="relative"
+        style={{ zIndex: 101 }}
+        onClose={onClose}
+      >
         <div className="absolute inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -55,7 +60,7 @@ export default function SideOver({
                       </div>
                     </div>
                     <div
-                      className={classNames(
+                      className={cl(
                         'relative my-6 flex flex-col px-3 sm:px-3 h-full',
                         disableGapForChildren ? '' : 'gap-6'
                       )}

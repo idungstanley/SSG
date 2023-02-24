@@ -4,7 +4,6 @@ import { useDeleteChat, useGetChats } from '../../../features/chat/chatService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '../../../common';
-import { Pilot } from '../../../features/general/slideOver/slideOverSlice';
 
 interface ChatsListProps {
   selectChat: (i: string) => void;
@@ -12,27 +11,16 @@ interface ChatsListProps {
 
 export default function ChatsList({ selectChat }: ChatsListProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { activeItemType, activeItemId } = useAppSelector(
-    (state) => state.workspace
-  );
-  const { id: pilotId, type: pilotType } = pilotSideOver;
-  const featureId:
-    | {
-        id?: string | null;
-        type?: string | null;
-      }
-    | Pilot =
-    pilotId || pilotType === undefined
-      ? { id: activeItemId, type: activeItemType }
-      : { id: pilotId, type: pilotType };
+  const { type, id } = pilotSideOver;
+
   const { mutate: onDelete } = useDeleteChat();
-  const { data, status } = useGetChats(featureId);
+  const { data, status } = useGetChats({ id, type });
 
   const handleDelete = (id: string) => {
     onDelete(id);
   };
 
-  return status === 'loading' && activeItemId === null ? (
+  return status === 'loading' ? (
     <div className="justify-center w-6 mx-auto mt-5">
       <Spinner size={8} color="#0F70B7" />
     </div>

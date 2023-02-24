@@ -13,6 +13,7 @@ import {
 } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../../../features/workspace/workspaceSlice';
@@ -56,14 +57,14 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     setShowSubWallet2(id);
     setCurrWalId(id);
   };
 
   const handleListLocation = (id: string, name: string) => {
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
     dispatch(
       setActiveItem({
         activeItemType: 'list',
@@ -71,6 +72,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   const handleWalletSettings = (
@@ -171,6 +173,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
             <div
               id="walletRight"
               className="flex items-center space-x-2 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"
@@ -218,6 +221,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
               type="button"
               id="listright"
               className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               {/* <TaskDropdown /> */}
               <AiOutlineEllipsis

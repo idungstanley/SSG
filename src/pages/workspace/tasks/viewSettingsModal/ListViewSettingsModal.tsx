@@ -3,9 +3,10 @@ import { Menu, Transition } from "@headlessui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { useAppDispatch } from "../../../../app/hooks";
 import {
-  getComfortableViewSettings,
-  getCompactViewSettings,
-  getSingleLineViewSettings,
+  getCompactView,
+  getCompactViewWrap,
+  getComfortableView,
+  getComfortableViewWrap,
 } from "../../../../features/task/taskSlice";
 
 export default function ListViewSettingsModal() {
@@ -14,45 +15,54 @@ export default function ListViewSettingsModal() {
   const ViewSettings = [
     {
       id: 1,
-      href: "#",
       label: "View Settings",
-      handleClick: () => dispatch(getComfortableViewSettings(true)),
+      handleClick: () => dispatch(getComfortableView(true)),
     },
     {
       id: 2,
-      href: "#",
       label: "Comfortable View",
       handleClick: () => {
-        dispatch(getComfortableViewSettings(true));
-        dispatch(getCompactViewSettings(false));
-        dispatch(getSingleLineViewSettings(false));
+        dispatch(getComfortableView(true));
+        dispatch(getComfortableViewWrap(false));
+        dispatch(getCompactView(false));
+        dispatch(getCompactViewWrap(false));
       },
     },
     {
       id: 3,
-      href: "#",
-      label: "Compact View",
+      label: "Comfortable Wrap",
       handleClick: () => {
-        dispatch(getComfortableViewSettings(false));
-        dispatch(getCompactViewSettings(true));
-        dispatch(getSingleLineViewSettings(false));
+        dispatch(getComfortableView(false));
+        dispatch(getComfortableViewWrap(true));
+        dispatch(getCompactView(false));
+        dispatch(getCompactViewWrap(false));
       },
     },
     {
       id: 4,
-      href: "#",
-      label: "Single Line View",
+      label: "Compact View",
       handleClick: () => {
-        dispatch(getComfortableViewSettings(false));
-        dispatch(getCompactViewSettings(false));
-        dispatch(getSingleLineViewSettings(true));
+        dispatch(getComfortableView(false));
+        dispatch(getComfortableViewWrap(false));
+        dispatch(getCompactView(true));
+        dispatch(getCompactViewWrap(false));
+      },
+    },
+    {
+      id: 4,
+      label: "Compact Wrap",
+      handleClick: () => {
+        dispatch(getComfortableView(false));
+        dispatch(getComfortableViewWrap(false));
+        dispatch(getCompactView(false));
+        dispatch(getCompactViewWrap(true));
       },
     },
   ];
 
   return (
     <Menu>
-      <div>
+      <div className="flex justify-center items-center">
         <Menu.Button>
           <BsThreeDots className="cursor-pointer" />
         </Menu.Button>
@@ -71,7 +81,6 @@ export default function ListViewSettingsModal() {
             <Menu.Item
               as="a"
               key={View.id}
-              href={View.href}
               className="flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full"
             >
               {View.label == "View Settings" ? (

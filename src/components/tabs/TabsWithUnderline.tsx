@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 interface TabsWithUnderlineProps {
   tabs: { name: string; key: string; badge?: number; onClick: () => void }[];
@@ -18,7 +18,7 @@ export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
           key={tab.name}
           type="button"
           onClick={tab.onClick}
-          className={classNames(
+          className={cl(
             tab.key === selectedInboxTabKey
               ? 'border-primary-500 text-primary-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
@@ -30,7 +30,7 @@ export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
             {tab.name}
             {tab.badge !== null && (
               <span
-                className={classNames(
+                className={cl(
                   tab.key === selectedInboxTabKey
                     ? 'bg-primary-100 text-primary-600'
                     : 'bg-gray-100 text-gray-900',

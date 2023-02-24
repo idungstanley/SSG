@@ -9,7 +9,7 @@ import {
   setSelectedItem,
 } from '../../../../../features/explorer/explorerSlice';
 import { useDroppable } from '@dnd-kit/core';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 
 interface FoldersListProps {
   folders: {
@@ -169,7 +169,7 @@ function DragOverRoot() {
 
   return (
     <div
-      className={classNames(
+      className={cl(
         'mt-2 w-full border text-center py-1 px-1 hover:bg-gray-100',
         isOver ? 'bg-primary-100' : ''
       )}

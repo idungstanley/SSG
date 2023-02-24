@@ -1,6 +1,6 @@
 import { ClockIcon } from '@heroicons/react/24/outline';
 import React from 'react';
-import PlaceItem from '../sidebar/components/PlaceItem';
+import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 
 function Dashboard() {
   return (

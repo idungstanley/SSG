@@ -65,5 +65,10 @@
       }
     ],
     "jsx-quotes": [2, "prefer-double"]
-  }
+  },
+  "settings": {
+    "react": {
+        "version": "detect"
+    }
+}
 }

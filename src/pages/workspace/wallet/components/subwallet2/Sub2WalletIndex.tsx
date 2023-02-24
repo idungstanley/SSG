@@ -6,6 +6,7 @@ import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { BsListUl } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
+  setActiveEntity,
   setActiveItem,
   setShowHub,
 } from '../../../../../features/workspace/workspaceSlice';
@@ -52,13 +53,14 @@ function Sub2WalletIndex({
   const navigate = useNavigate();
   const handleListLocation = (id: string) => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/list/${id}`);
+    navigate(`/list/${id}`);
   };
 
   const handleLocation = (id: string, type = 'sub2wallet') => {
     dispatch(setShowHub(true));
-    navigate(`/workspace/wallet/${id}`);
+    navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   const handleWalletSettings = (
@@ -186,6 +188,7 @@ function Sub2WalletIndex({
               type="button"
               id="listright"
               className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+              onClick={(e) => e.stopPropagation()}
             >
               <AiOutlineEllipsis
                 className="cursor-pointer"

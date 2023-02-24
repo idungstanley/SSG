@@ -23,6 +23,28 @@ export interface ISuccessRequest {
 
 export type inboxType = 'active' | 'hidden' | 'archived' | 'trashed';
 
-export type explorerItemType = 'folder' | 'file' | null | string;
+export type explorerItemType = 'folder' | 'file';
 
-export type itemType = 'inbox_file' | 'inbox' | explorerItemType | null | string;
+export type itemType =
+  | 'inbox_file'
+  | 'inbox'
+  | explorerItemType
+  | 'template'
+  | 'directory'
+  | 'hub'
+  | 'subhub'
+  | 'task'
+  | 'wallet'
+  | 'list'
+  | 'subWallet';
+
+export interface IPilotTab {
+  id: number;
+  label: string;
+  icon: JSX.Element;
+}
+
+export interface IPilotSection {
+  id: number;
+  element: JSX.Element;
+}

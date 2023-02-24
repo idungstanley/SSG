@@ -2,16 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface workspaceState {
   workspace: string[];
-  showSidebar: boolean;
   currentItemId: string | null;
   currentItemType?: string | null;
   activePlaceId: number | null | boolean;
-  showExtendedBar: boolean;
-  sidebarWidth: number;
   pilotWidth: number;
-  extendedSidebarWidth: number;
   showHub: boolean;
   showWallet: boolean;
+  extendedSidebarWidth: number;
   showMenuDropDown: boolean;
   showModal: boolean;
   searchIsActive: boolean;
@@ -23,9 +20,11 @@ interface workspaceState {
   currentSubWalletId: string | null;
   currentWalletName: string | null;
   showPilot: boolean;
+  sidebarWidthRD: number;
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
+  activeEntity: {id: string | null, type: string | null}
   showPilotListView: boolean;
   activeTabId: number | null;
   activeHotKeyTabId: number | null;
@@ -33,23 +32,20 @@ interface workspaceState {
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
+  showExtendedBar: false;
 }
 
 const initialState: workspaceState = {
   workspace: [],
-  showSidebar: true,
   currentItemId: null,
   currentItemType: null,
   activePlaceId: null,
-  showExtendedBar: false,
-  sidebarWidth: 300,
   pilotWidth: 400,
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
   showModal: false,
   searchIsActive: false,
-  extendedSidebarWidth: 240,
   isExtSearchActive: false,
   activeItemId: null,
   activeItemType: null,
@@ -60,14 +56,18 @@ const initialState: workspaceState = {
   showPilot: false,
   showPilotIconView: false,
   showPilotListView: false,
+  extendedSidebarWidth: 240,
   activeTabId: 0,
+  sidebarWidthRD: 260,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
   showAddHotKeyDropdown: false,
+  showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
+  activeEntity: {id: null, type: null}
 };
 
 export const wsSlice = createSlice({
@@ -77,36 +77,20 @@ export const wsSlice = createSlice({
     createWorkspace(state, action) {
       state.workspace.push(action.payload);
     },
-    setShowSidebar(state, action) {
-      if (action.payload === 'CHANGE') {
-        return {
-          ...state,
-          showSidebar: !state.showSidebar,
-        };
-      } else if (action.payload === true) {
-        state.showSidebar = action.payload;
-      } else if (action.payload === false) {
-        state.showSidebar = action.payload;
-      }
-      state.showSidebar;
-    },
-    setSidebarWidth(state, action) {
-      state.sidebarWidth = action.payload;
-    },
     setPilotWidth(state, action) {
       state.pilotWidth = action.payload;
     },
     setShowPilot(state, action) {
       state.showPilot = action.payload;
     },
+    setShowExtendedBar(state, action) {
+      state.showExtendedBar = action.payload;
+    },
     setShowPilotIconView(state, action) {
       state.showPilotIconView = action.payload;
     },
     setShowPilotListView(state, action) {
       state.showPilotListView = action.payload;
-    },
-    setExtendedSidebarWidth(state, action) {
-      state.extendedSidebarWidth = action.payload;
     },
     setSearchIsActive(state, action) {
       if (action.payload === 'TOGGLE') {
@@ -136,11 +120,14 @@ export const wsSlice = createSlice({
     setShowMenuDropDown(state, action) {
       state.showMenuDropDown = action.payload;
     },
-    setShowExtendedBar(state, action) {
-      state.showExtendedBar = action.payload;
+    setActiveEntity(state, action) {
+      state.activeEntity = action.payload;
     },
     setShowHub(state, action) {
       state.showHub = action.payload;
+    },
+    setSidebarWidthRD(state, action) {
+      state.sidebarWidthRD = action.payload;
     },
     setShowWallet(state, action) {
       state.showWallet = action.payload;
@@ -184,6 +171,9 @@ export const wsSlice = createSlice({
     setCurrenSubtWalletId(state, action) {
       state.currentSubWalletId = action.payload;
     },
+    setExtendedSidebarWidth(state, action) {
+      state.extendedSidebarWidth = action.payload;
+    },
     resetCurrentItem(state) {
       state.currentItemId = null;
       state.currentItemType = null;
@@ -195,18 +185,14 @@ export const wsSlice = createSlice({
 export const {
   createWorkspace,
   checkIfWs,
-  setShowSidebar,
   setCurrentItem,
   resetCurrentItem,
   setActivePlaceId,
-  setShowExtendedBar,
   setShowHub,
   setShowWallet,
-  setSidebarWidth,
   setShowMenuDropDown,
   setShowModal,
   setSearchIsActive,
-  setExtendedSidebarWidth,
   setIsExtSearchActive,
   setActiveItem,
   setCurrentWalletId,
@@ -224,6 +210,10 @@ export const {
   setShowAddHotKeyDropdown,
   setShowRemoveHotKeyDropdown,
   setActiveHotKeyId,
+  setActiveEntity,
+  setSidebarWidthRD,
+  setShowExtendedBar,
+  setExtendedSidebarWidth
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

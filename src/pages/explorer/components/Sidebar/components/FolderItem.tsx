@@ -8,7 +8,7 @@ import {
   ClipboardIcon,
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
-import { classNames } from '../../../../../utils';
+import { cl } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
@@ -129,7 +129,7 @@ export default function FolderItem({
 
   return (
     <div
-      className={classNames(
+      className={cl(
         'group flex relative bg-white justify-between w-full items-center py-1.5 hover:bg-gray-100',
         isActiveFolder && parentId === null ? 'bg-green-200 text-black' : '',
         !transform && isOver ? 'bg-primary-100' : ''

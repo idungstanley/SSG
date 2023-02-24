@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import {
+  setActiveEntity,
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
@@ -26,6 +27,7 @@ import {
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useNavigate } from 'react-router-dom';
+import { cl } from '../../utils';
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -42,9 +44,10 @@ export default function ItemsListInSidebar({
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, activeItemId, showSidebar } = useAppSelector(
+  const { currentItemId, activeItemId } = useAppSelector(
     (state) => state.workspace
   );
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const handleMouseOver = (i: number) => {
@@ -80,9 +83,10 @@ export default function ItemsListInSidebar({
         activeItemName: name,
       })
     );
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/workspace/hub/${id}`);
+    navigate(`/hub/${id}`);
   };
 
   const handleClick = (id: string) => {
@@ -140,7 +144,7 @@ export default function ItemsListInSidebar({
   };
 
   return status === 'success' ? (
-    <ul className="z-20 w-full">
+    <ul className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}>
       {items?.map((i: { id: string; name: string }, index) => (
         <li
           key={i.id}
@@ -168,9 +172,7 @@ export default function ItemsListInSidebar({
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 {showSidebar && (
-                  <div
-                    className="mr-0.5"
-                  >
+                  <div className="mr-0.5">
                     {i.id === showChildren ? (
                       <span className="flex flex-col">
                         <VscTriangleDown
@@ -190,7 +192,9 @@ export default function ItemsListInSidebar({
                 )}
 
                 <div
-                  className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}
+                  className={`flex items-center flex-1 min-w-0 ${
+                    !showSidebar && 'ml-3'
+                  }`}
                   onClick={() => handleLocation(i.id, i.name)}
                 >
                   <AvatarWithInitials
@@ -218,9 +222,13 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {isHovering === index && showSidebar && (
-              <div className="flex items-center pr-1 space-x-1">
+              <div className="flex items-center pr-1 space-x-1"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={(e) => {
+                    handleHubSettings(i.id, i.name, e);
+                  }}
                   className="cursor-pointer"
                   id="menusettings"
                 />

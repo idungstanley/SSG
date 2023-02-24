@@ -20,7 +20,6 @@ import {
   getOneTaskService,
   createTimeEntriesService,
 } from '../../../../features/task/taskService';
-import TimeEntriesDropdown from './timeEntriesDropdown/TimeEntriesDropdown';
 import Watcher from '../watchers/index';
 
 function RenderTaskModal() {
@@ -28,8 +27,6 @@ function RenderTaskModal() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [showTimeEntries, setShowTimeEntries] = useState(false);
-  const [showEntries, setShowEntries] = useState(false);
-  const [isBillable, setIsBillable] = useState(false);
 
   const { data: taskData } = useQuery({
     queryKey: ['taskData', taskId],
@@ -70,7 +67,7 @@ function RenderTaskModal() {
 
   const navigate = useNavigate();
   const closeTaskModal = () => {
-    navigate('/workspace');
+    navigate('/');
   };
 
   const handleTimeTracker = () => {
@@ -192,13 +189,14 @@ function RenderTaskModal() {
                           <Timecode />
                         </Timer>
                       </div>
+
                       <div className="relative">
                         <ChevronDownIcon
                           className="h-5 w-7 text-gray-300"
                           aria-hidden="true"
                           onClick={() => setShowTimeEntries(!showTimeEntries)}
                         />
-                        {showTimeEntries && (
+                        {/* {showTimeEntries && (
                           <TimeEntriesDropdown
                             taskId={taskId}
                             startTimeClicked={startTimeClicked}
@@ -211,7 +209,7 @@ function RenderTaskModal() {
                             // onSubmit={onSubmit}
                             handleTimeTracker={handleTimeTracker}
                           />
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>

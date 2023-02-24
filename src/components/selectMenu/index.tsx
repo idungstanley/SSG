@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { classNames } from '../../utils';
+import { cl } from '../../utils';
 
 export interface ISelectedData {
   id: string;
@@ -70,7 +70,7 @@ export default function SelectMenuTeamMembers({
                   <Listbox.Option
                     key={person.id}
                     className={({ active }) =>
-                      classNames(
+                      cl(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
                         'relative group cursor-default select-none py-2 pl-3 pr-9'
                       )

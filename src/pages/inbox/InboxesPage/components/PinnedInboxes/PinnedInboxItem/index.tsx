@@ -6,7 +6,7 @@ import {
   useGetPinnedInbox,
   usePinOrUnpinInbox,
 } from '../../../../../../features/inbox/inboxesService';
-import { classNames } from '../../../../../../utils';
+import { cl } from '../../../../../../utils';
 
 interface PinnedInboxItemProps {
   pinnedInboxId: string;
@@ -84,7 +84,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
                     <button
                       onClick={onViewInbox}
                       type="button"
-                      className={classNames(
+                      className={cl(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block w-full px-4 py-2 text-sm text-left'
                       )}
@@ -100,7 +100,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
                     <button
                       onClick={onUnpinInbox}
                       type="button"
-                      className={classNames(
+                      className={cl(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block w-full px-4 py-2 text-sm text-left'
                       )}
