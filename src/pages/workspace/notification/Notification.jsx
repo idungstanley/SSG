@@ -12,7 +12,7 @@ function Notification() {
       return setNotificationDataType([]);
     }
 
-    const permissionsByCategoryTemp = NotificationResponse.reduce(
+    const notificationByCategory = NotificationResponse.reduce(
       (AccumulatedNotifications, currentNotification) => {
         if (!AccumulatedNotifications[currentNotification.type]) {
           AccumulatedNotifications[currentNotification.type] = {
@@ -28,7 +28,7 @@ function Notification() {
       },
       {}
     );
-    setNotificationDataType(permissionsByCategoryTemp);
+    setNotificationDataType(notificationByCategory);
 
     return true;
   }, [NotificationResponse, status]);

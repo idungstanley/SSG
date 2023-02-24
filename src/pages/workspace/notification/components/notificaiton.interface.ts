@@ -1,5 +1,11 @@
+export interface AccumulatedNotificationType {
+  name: string;
+  key: string;
+  notifications: NotificationType[];
+}
+
 export interface NotificationType {
-  id: string;
+  id?: string;
   type: string;
   model_id: string;
   model_type: string;
@@ -37,10 +43,11 @@ export interface NotificationType {
   };
 }
 
+export interface CardItemTypes {
+  assigned: AccumulatedNotificationType;
+  unassigned: AccumulatedNotificationType;
+}
+
 export interface CardNotificationType {
-  assigned: {
-    name: string;
-    key: string;
-    notifications: NotificationType[];
-  };
+  cardItems: CardItemTypes;
 }
