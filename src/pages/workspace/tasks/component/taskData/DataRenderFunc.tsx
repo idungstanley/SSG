@@ -1,6 +1,7 @@
+import { PlusOutlined, UserAddOutlined } from '@ant-design/icons';
 import moment, { MomentInput } from 'moment';
 import React, { ReactNode } from 'react';
-import { IoCloseSharp, IoPersonAddOutline } from 'react-icons/io5';
+import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../components';
@@ -14,7 +15,6 @@ import {
   setCurrentTaskIdForTag,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
-  setGetSubTaskId,
   setShowTaskNavigation,
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
@@ -26,7 +26,7 @@ import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { FiEdit2, FiPlus } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
@@ -40,22 +40,29 @@ interface renderDataProps {
     | Array<{ id: string; initials: string; colour: string }>;
   colfield: string;
   task: ImyTaskData;
+  getSubTaskId: string | null;
+  handleGetSubTask?: (id: string) => void;
+  ShowPlusIcon?: null | boolean;
 }
 
 export default function DataRenderFunc({
   taskColField,
   colfield,
   task,
+  getSubTaskId,
+  handleGetSubTask,
+  ShowPlusIcon,
 }: renderDataProps) {
   const {
     showTaskNavigation,
     toggleAssignCurrentTaskId,
     currentParentTaskId,
-    getSubTaskId,
     showTagColorDialogueBox,
     renameTagId,
-    SingleLineViewSettings,
-    CompactViewSettings,
+    comfortableView,
+    comfortableViewWrap,
+    CompactView,
+    CompactViewWrap,
   } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
@@ -77,21 +84,28 @@ export default function DataRenderFunc({
           <div key={newData.id} className="">
             <span
               key={newData.id}
-              className="flex items-center gap-1 justify center"
+              className="flex gap-1 items-center justify center"
             >
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${SingleLineViewSettings ? 'h-4' : 'h-5'}`}
-                width={`${SingleLineViewSettings ? 'w-4' : 'w-5'}`}
+                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
               />
             </span>
           </div>
         ))}
         <span>
-          +
           {(data as [{ id: string; initials: string; colour: string }])
-            ?.length - 3}
+            ?.length -
+            2 !==
+          0 ? (
+            <span>
+              +
+              {(data as [{ id: string; initials: string; colour: string }])
+                ?.length - 2}
+            </span>
+          ) : null}
         </span>
       </div>
     ) : (
@@ -101,8 +115,8 @@ export default function DataRenderFunc({
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${SingleLineViewSettings ? 'h-4' : 'h-5'}`}
-              width={`${SingleLineViewSettings ? 'w-4' : 'w-5'}`}
+              height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+              width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
             />
           </span>
         </div>
@@ -129,7 +143,7 @@ export default function DataRenderFunc({
                   <input
                     type="text"
                     placeholder="tagedit name"
-                    className="object-contain text-gray-400 h-7"
+                    className="text-gray-400 h-7 object-contain"
                   />
                 </form>
               )}
@@ -165,14 +179,6 @@ export default function DataRenderFunc({
   const displayNav = (id: string) => {
     dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
-  };
-
-  const handleGetSubTask = (id: string) => {
-    if (id == getSubTaskId) {
-      dispatch(setGetSubTaskId(null));
-    } else {
-      dispatch(setGetSubTaskId(id));
-    }
   };
 
   const handleTaskStatus = (id: string) => {
@@ -217,12 +223,12 @@ export default function DataRenderFunc({
         <div className="">
           <div
             onClick={() => handleAssigneeModal(task.id)}
-            className="flex cursor-pointer "
+            className="cursor-pointer flex "
           >
             {groupAssignee(task.assignees)}
           </div>
         </div>
-        <span className="absolute z-30 shadow-2xl ">
+        <span className="absolute shadow-2xl  z-30  ">
           {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
         </span>
       </>
@@ -239,12 +245,12 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <IoPersonAddOutline
-          className="ml-2 text-xl text-gray-400 cursor-pointer "
+        <UserAddOutlined
+          className=" ml-2 text-gray-400 text-xl cursor-pointer "
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
-        <span className="absolute z-30 shadow-2xl ">
+        <span className="absolute shadow-2xl  z-30  ">
           {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
         </span>
       </>
@@ -258,7 +264,7 @@ export default function DataRenderFunc({
   } else if (colfield == 'created_at' || colfield == 'updated_at') {
     return (
       <>
-        <span className="text-sm font-medium text-gray-400">
+        <span className="text-gray-400 text-sm font-medium">
           {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       </>
@@ -279,7 +285,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
+            className="capitalize text-xs font-medium bg-purple-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
             {taskColField}
@@ -290,7 +296,7 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
+            className="capitalize text-xs font-medium bg-yellow-500 text-white  px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
             {taskColField}
@@ -323,20 +329,22 @@ export default function DataRenderFunc({
   } else if (colfield === 'name') {
     return (
       <>
-        <div className="relative flex items-center ">
-          <div className="flex items-center ">
+        <div className="flex items-center relative ">
+          <div className=" flex items-center">
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-8"
+              className="cursor-pointer absolute rounded-full focus:outline-1 focus:ring-transparent group-hover:opacity-100 opacity-0 focus:border-2 focus:opacity-100 -left-8 h-3 w-3"
               onClick={() => {
                 displayNav(task.id as string);
               }}
             />
-            <MdDragIndicator className="absolute text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
+            <MdDragIndicator className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move  text-sm	 absolute -left-5 " />
           </div>
           <div
-            onClick={() => handleGetSubTask(task.id)}
+            onClick={() =>
+              handleGetSubTask ? handleGetSubTask(task.id) : null
+            }
             className="items-center"
           >
             {task.id == getSubTaskId ? (
@@ -371,28 +379,41 @@ export default function DataRenderFunc({
               onClick={() =>
                 handleTaskPilot(task.id as string, task.name as string)
               }
-              className={`${CompactViewSettings ? 'text-xl' : null}`}
+              className={`${
+                comfortableView
+                  ? 'text-lg whitespace-nowrap'
+                  : comfortableViewWrap
+                  ? 'text-lg'
+                  : CompactView
+                  ? 'text-xs whitespace-nowrap'
+                  : CompactViewWrap
+                  ? 'text-xs text-justify	'
+                  : null
+              }`}
             >
-              {(taskColField as string)?.length > 50 &&
-              SingleLineViewSettings ? (
-                <span>{(taskColField as string)?.substring(0, 50)}...</span>
+              {(taskColField as string)?.length > 50 && comfortableView ? (
+                <span>{(taskColField as string)?.substring(0, 40)}...</span>
+              ) : (taskColField as string)?.length > 61 && CompactView ? (
+                <span>{(taskColField as string)?.substring(0, 60)}...</span>
               ) : (
                 (taskColField as ReactNode)
               )}
             </p>
             <div
               id="iconWrapper"
-              className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100"
+              className="flex items-center space-x-1 ml-1 opacity-0  group-hover:opacity-100"
             >
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
+                <FiEdit2 className="w-3  text-gray-500 " aria-hidden="true" />
               </span>
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiPlus
-                  className="w-3 text-gray-500 "
-                  aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task.id as string)}
-                />
+                {!ShowPlusIcon && (
+                  <PlusOutlined
+                    className="  w-3 text-gray-500   "
+                    aria-hidden="true"
+                    onClick={() => handleCreateSubTask(task.id as string)}
+                  />
+                )}
               </span>
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
@@ -409,7 +430,7 @@ export default function DataRenderFunc({
     return (
       <>
         <span
-          className="relative border-gray-300 border-dotted "
+          className="relative  border-dotted border-gray-300 "
           onClick={() => handleTaskPriority(task.id as string)}
         >
           <PriorityDropdown TaskCurrentPriority={task?.priority} />

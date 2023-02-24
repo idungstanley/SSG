@@ -225,7 +225,7 @@ function Tab() {
               src={compactArrowIcon}
               alt=""
               onClick={() => handleShowPilot()}
-              className={`cursor-pointer w-3 h-3 ${
+              className={`cursor-pointer w-3 h-3  ${
                 showPilot
                   ? "translate-x-4 skew-y-3"
                   : "transform -rotate-180 mb-1"

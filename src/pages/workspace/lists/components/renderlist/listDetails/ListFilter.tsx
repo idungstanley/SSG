@@ -4,37 +4,54 @@ import { BsLayers } from "react-icons/bs";
 import { GrFormSearch } from "react-icons/gr";
 import { IoPeopleOutline } from "react-icons/io5";
 import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
+import { RxDividerVertical } from "react-icons/rx";
 import { TbSubtask } from "react-icons/tb";
 import { VscEllipsis } from "react-icons/vsc";
+import { useAppSelector } from "../../../../../../app/hooks";
 
 export default function ListFilter() {
+  const { showPilot } = useAppSelector((state) => state.workspace);
   return (
-    <nav className="flex items-center justify-between bg-white h-7 pr-5   ">
-      <div className="flex items-center justify-between pl-5 ">
+    <nav className="flex items-center justify-between bg-white h-8 pr-5  ">
+      <div className="flex items-center justify-between p-2">
         <GrFormSearch className="w-5 h-5 " />
         <input
           type="text"
           placeholder="Search tasks..."
           className="border-transparent focus:border-transparent h-5 w-full focus:ring-0 font-bold"
           style={{ fontSize: "11px" }}
-        />{" "}
-        <span className=" p-1 border-gray-400	hover:bg-gray-200  rounded ">
-          <VscEllipsis className=" border-r" />
-        </span>
+        />
+        <div className=" p-1 border-gray-400	hover:bg-gray-200  rounded ">
+          <VscEllipsis className=" " />
+        </div>
+        <div className=" border-gray-100	 ">
+          <RxDividerVertical className=" " />
+        </div>
       </div>
-      <div className="flex items-center gap-5 text-xs font-bold">
+      <div className="flex gap-3 items-center  text-xs font-bold">
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
           <span>
             <MdFilterList />
           </span>
           filter
         </p>
-        <p className="flex items-center gap-1 bg-blue-100	p-1 rounded text-blue-600 cursor-pointer hover:text-blue-800">
-          <span>
-            <BsLayers />
-          </span>
-          Group by: Status
-        </p>
+        <span>
+          {showPilot === false ? (
+            <p className="flex items-center gap-1 bg-blue-100	p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800">
+              <span>
+                <BsLayers />
+              </span>
+              Group by: Status
+            </p>
+          ) : (
+            <p className="flex items-center gap-1 bg-blue-100	p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800 w-32">
+              <span>
+                <BsLayers />
+              </span>
+              Group by: Status
+            </p>
+          )}
+        </span>
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
           <span>
             <TbSubtask />
