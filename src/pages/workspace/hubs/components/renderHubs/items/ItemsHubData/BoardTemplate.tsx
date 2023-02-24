@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { getTaskListService } from "../../../../../../../features/task/taskService";
+import React, { useState } from 'react';
+import { getTaskListService } from '../../../../../../../features/task/taskService';
 import {
   ImyTaskData,
   setToggleAssignCurrentTaskId,
-} from "../../../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../../../app/hooks";
-import { useDispatch } from "react-redux";
-import { UserAddOutlined } from "@ant-design/icons";
-import AssignTask from "../../../../../tasks/assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../../../components";
-import CardState from "../../../../../tasks/component/views/CardState";
-import { IoChevronBackOutline } from "react-icons/io5";
-import { VscEllipsis } from "react-icons/vsc";
-import { BsPlus } from "react-icons/bs";
+} from '../../../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { UserAddOutlined } from '@ant-design/icons';
+import AssignTask from '../../../../../tasks/assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../../../components';
+import CardState from '../../../../../tasks/component/views/CardState';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { VscEllipsis } from 'react-icons/vsc';
+import { BsPlus } from 'react-icons/bs';
 
 interface listIdprops {
   listId: string;
@@ -25,9 +25,9 @@ export default function BoardTemplate({ listId }: listIdprops) {
 
   const { data } = getTaskListService({ listId });
 
-  const products = data?.data.tasks;
+  const products: ImyTaskData[] = data?.data.tasks;
 
-  const groupBy = (key: string, arr) =>
+  const groupBy = (key: string, arr: ImyTaskData[]) =>
     arr.reduce(
       (cache, product) => ({
         ...cache,
@@ -39,7 +39,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
       {}
     );
 
-  const newData = groupBy("status", products);
+  const newData = groupBy('status', products);
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -64,8 +64,8 @@ export default function BoardTemplate({ listId }: listIdprops) {
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
-                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
+                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
               />
             </span>
           </div>
@@ -90,8 +90,8 @@ export default function BoardTemplate({ listId }: listIdprops) {
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${CompactView ? "h-4" : "h-5"}`}
-              width={`${CompactView ? "w-4" : "w-5"}`}
+              height={`${CompactView ? 'h-4' : 'h-5'}`}
+              width={`${CompactView ? 'w-4' : 'w-5'}`}
             />
           </span>
         </div>
@@ -110,18 +110,18 @@ export default function BoardTemplate({ listId }: listIdprops) {
               <div
                 key={key}
                 className="relative -mt-10 h-10 flex justify-center items-center shadow-md rounded w-56 bg-white uppercase p-3 font-bold group "
-                style={{ fontSize: "12px" }}
+                style={{ fontSize: '12px' }}
               >
-                {key === "new" ? (
+                {key === 'new' ? (
                   <div className=" absolute top-0 rounded-t-lg	 bg-blue-400 w-full h-1"></div>
-                ) : key === "in progress" ? (
+                ) : key === 'in progress' ? (
                   <div
                     className=" absolute top-0 rounded-t-lg w-full h-1"
-                    style={{ backgroundColor: "#7c3bed" }}
+                    style={{ backgroundColor: '#7c3bed' }}
                   ></div>
-                ) : key === "completed" ? (
+                ) : key === 'completed' ? (
                   <div className=" absolute top-0 rounded-t-lg bg-green-400 w-full h-1"></div>
-                ) : key === "archived" ? (
+                ) : key === 'archived' ? (
                   <div className=" absolute top-0 rounded-t-lg bg-yellow-400 w-full h-1"></div>
                 ) : (
                   <div className=" absolute top-0 rounded-t-lg bg-gray-400 w-full h-1"></div>
@@ -145,13 +145,13 @@ export default function BoardTemplate({ listId }: listIdprops) {
                     <div
                       key={items.id}
                       className=" bg-white  mt-3  shadow-md   w-56 p-2 relative"
-                      style={{ marginLeft: "-80px" }}
+                      style={{ marginLeft: '-80px' }}
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex gap-5 justify-between ">
                         <p className="text-sm font-bold  pb-2">
                           {items.name.length > 70
-                            ? items.name.slice(0, 70) + "..."
+                            ? items.name.slice(0, 70) + '...'
                             : items.name}
                         </p>
                         <div>
@@ -203,7 +203,7 @@ export default function BoardTemplate({ listId }: listIdprops) {
                       <span className="pt-10">
                         <p
                           className="absolute bottom-0  uppercase text-gray-400 mt-1 pb-1 "
-                          style={{ fontSize: "11px" }}
+                          style={{ fontSize: '11px' }}
                         >
                           + add new task
                         </p>
