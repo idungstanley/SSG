@@ -170,9 +170,7 @@ export default function ItemsListInSidebar({
                 className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
               >
                 {showSidebar && (
-                  <div
-                    className="mr-0.5"
-                  >
+                  <div className="mr-0.5">
                     {i.id === showChildren ? (
                       <span className="flex flex-col">
                         <VscTriangleDown
@@ -192,7 +190,9 @@ export default function ItemsListInSidebar({
                 )}
 
                 <div
-                  className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}
+                  className={`flex items-center flex-1 min-w-0 ${
+                    !showSidebar && 'ml-3'
+                  }`}
                   onClick={() => handleLocation(i.id, i.name)}
                 >
                   <AvatarWithInitials
@@ -220,11 +220,14 @@ export default function ItemsListInSidebar({
               </div>
             </div>
             {isHovering === index && showSidebar && (
-              <div className="flex items-center pr-1 space-x-1"
-              onClick={(e) => e.stopPropagation()}
+              <div
+                className="flex items-center pr-1 space-x-1"
+                onClick={(e) => e.stopPropagation()}
               >
                 <AiOutlineEllipsis
-                  onClick={(e) => handleHubSettings(i.id, i.name, e)}
+                  onClick={(e) => {
+                    handleHubSettings(i.id, i.name, e);
+                  }}
                   className="cursor-pointer"
                   id="menusettings"
                 />

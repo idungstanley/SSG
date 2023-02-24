@@ -13,12 +13,6 @@ import {
   //   triggerUnassignTag,
 } from "../../../../../features/task/taskSlice";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-// import { AiOutlineTags } from "react-icons/ai";
-// import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-// import { useAppSelector } from "../../../../../app/hooks";
-// import ToolTip from "../../../../../components/Tooltip";
-// import EditTagModal from "../../../../../components/tags/EditTagModal";
-// import ColorsModal from "../../../../../components/tags/ColorsModal";
 import TagModal from "../../../../../components/tags/TagModal";
 
 interface TaskDataProps {
@@ -27,67 +21,12 @@ interface TaskDataProps {
 
 export default function CardState({ task }: TaskDataProps) {
   const dispatch = useDispatch();
-  //   const { renameTagId, showTagColorDialogueBox } = useAppSelector(
-  //     (state) => state.task
-  //   );
   const handleTaskPriority = (id: string) => {
     dispatch(setCurrentTaskPriorityId(id));
-
-    //     const groupTags = (arr: tagItem[]) => {
-    //       return arr.map((item: tagItem) => {
-    //         return Array.isArray(item) ? (
-    //           <div>{groupTags(item)}</div>
-    //         ) : (
-    //           <>
-    //             <div
-    //               className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-    //                 item.name.length > 10 ? "object-contain" : "w-20"
-    //               }`}
-    //               style={{ backgroundColor: `${item.color}` }}
-    //             >
-    //               <div className="flex items-center">
-    //                 <p> {item.name}</p>
-    //                 {renameTagId == item.id && (
-    //                   <form>
-    //                     <input
-    //                       type="text"
-    //                       placeholder="tagedit name"
-    //                       className="text-gray-400 h-7 object-contain"
-    //                     />
-    //                   </form>
-    //                 )}
-    //               </div>
-    //               <ToolTip tooltip="edit tag">
-    //                 <button>
-    //                   <EditTagModal tagId={item.id} />
-    //                 </button>
-    //               </ToolTip>
-
-    //               <ToolTip tooltip="unassign tag">
-    //                 <button
-    //                   onClick={() =>
-    //                     dispatch(
-    //                       triggerUnassignTag({
-    //                         unAssignTadId: item.id,
-    //                         currentTaskIdForTag: task.id,
-    //                       })
-    //                     )
-    //                   }
-    //                 >
-    //                   <IoCloseSharp />
-    //                 </button>
-    //               </ToolTip>
-    //               {showTagColorDialogueBox && <ColorsModal />}
-    //             </div>
-    //             {/* <span>{arr.length}</span> */}
-    //           </>
-    //         );
-    //       });
-    //     };
   };
   return (
-    <div className="flex h-full border-t pt-2 items-center justify-between">
-      <div className="flex items-center gap-3 text-gray-300 ">
+    <div className="flex h-full items-center justify-between">
+      <div className="flex items-center gap-1 text-gray-300 ">
         <span className=" text-x font-bold ">
           <TfiCalendar />
         </span>

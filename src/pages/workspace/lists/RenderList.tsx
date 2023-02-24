@@ -4,7 +4,9 @@ import { getTaskListService } from "../../../features/task/taskService";
 import ListNav from "./components/renderlist/ListNav";
 import { useAppSelector } from "../../../app/hooks";
 import { useDispatch } from "react-redux";
-import { setAddNewTaskItem } from "../../../features/task/taskSlice";
+import {
+  setAddNewTaskItem,
+} from "../../../features/task/taskSlice";
 import TaskListViews from "../tasks/component/views/TaskListViews";
 import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
 import TaskData from "../tasks/component/taskData/TaskData";
@@ -49,7 +51,7 @@ function RenderList() {
         <div className="  w-full overflow-y-scroll">
           <div
             className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: '#e1e4e5' }}
+            style={{ backgroundColor: "#e1e4e5" }}
           >
             <TaskQuickAction listDetailsData={listDetailsData} />
             {/* card */}
@@ -57,9 +59,8 @@ function RenderList() {
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            <div className="-z-50">{boardView && <Board />}</div>
-            {listView && <TaskListViews />}
-
+            {boardView && <Board />}
+            {listView && <TaskListViews/>}
             {listView &&
               myTaskData?.map((task) => (
                 <div key={task.id}>

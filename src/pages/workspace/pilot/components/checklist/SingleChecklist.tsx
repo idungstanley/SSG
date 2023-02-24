@@ -105,7 +105,7 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
                         editChecklist(item.name);
                         setItemId(item.id);
                       }}
-                      className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-9 w-40 rounded"
+                      className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-auto w-auto rounded"
                     />
                   </form>
                 </div>

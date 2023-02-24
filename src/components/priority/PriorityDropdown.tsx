@@ -102,7 +102,7 @@ export default function PriorityDropdown({
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left z-50">
+    <Menu as="div" className="relative inline-block text-left ">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           {setPriorityColor(TaskCurrentPriority)}
@@ -112,7 +112,6 @@ export default function PriorityDropdown({
           /> */}
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

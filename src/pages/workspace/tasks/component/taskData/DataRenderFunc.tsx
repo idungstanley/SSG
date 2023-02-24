@@ -1,12 +1,12 @@
-import moment, { MomentInput } from "moment";
-import React, { ReactNode } from "react";
-import { IoCloseSharp, IoPersonAddOutline } from "react-icons/io5";
-import { MdDragIndicator } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { AvatarWithInitials } from "../../../../../components";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ToolTip from "../../../../../components/Tooltip";
+import moment, { MomentInput } from 'moment';
+import React, { ReactNode } from 'react';
+import { IoCloseSharp, IoPersonAddOutline } from 'react-icons/io5';
+import { MdDragIndicator } from 'react-icons/md';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../components';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ToolTip from '../../../../../components/Tooltip';
 import {
   ImyTaskData,
   setCurrentParentTaskId,
@@ -19,16 +19,16 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId,
   triggerUnassignTag,
-} from "../../../../../features/task/taskSlice";
-import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-import AssignTask from "../../assignTask/AssignTask";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { FiEdit2, FiPlus } from "react-icons/fi";
-import TagModal from "../../../../../components/tags/TagModal";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
+} from '../../../../../features/task/taskSlice';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import AssignTask from '../../assignTask/AssignTask';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { FiEdit2, FiPlus } from 'react-icons/fi';
+import TagModal from '../../../../../components/tags/TagModal';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
 interface renderDataProps {
   taskColField:
@@ -56,7 +56,7 @@ export default function DataRenderFunc({
     renameTagId,
     SingleLineViewSettings,
     CompactViewSettings,
-  } = useAppSelector(state => state.task);
+  } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
   const handleAssigneeModal = (id: string) => {
@@ -82,8 +82,8 @@ export default function DataRenderFunc({
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-                width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+                height={`${SingleLineViewSettings ? 'h-4' : 'h-5'}`}
+                width={`${SingleLineViewSettings ? 'w-4' : 'w-5'}`}
               />
             </span>
           </div>
@@ -101,8 +101,8 @@ export default function DataRenderFunc({
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${SingleLineViewSettings ? "h-4" : "h-5"}`}
-              width={`${SingleLineViewSettings ? "w-4" : "w-5"}`}
+              height={`${SingleLineViewSettings ? 'h-4' : 'h-5'}`}
+              width={`${SingleLineViewSettings ? 'w-4' : 'w-5'}`}
             />
           </span>
         </div>
@@ -118,7 +118,7 @@ export default function DataRenderFunc({
         <>
           <div
             className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? "object-contain" : "w-20"
+              item.name.length > 10 ? 'object-contain' : 'w-20'
             }`}
             style={{ backgroundColor: `${item.color}` }}
           >
@@ -184,7 +184,7 @@ export default function DataRenderFunc({
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "task",
+        activeItemType: 'task',
         activeItemName: name,
       })
     );
@@ -203,7 +203,7 @@ export default function DataRenderFunc({
   };
 
   if (
-    colfield === "assignees" &&
+    colfield === 'assignees' &&
     (
       taskColField as Array<{
         id: string;
@@ -228,7 +228,7 @@ export default function DataRenderFunc({
       </>
     );
   } else if (
-    colfield === "assignees" &&
+    colfield === 'assignees' &&
     (
       taskColField as Array<{
         id: string;
@@ -249,60 +249,60 @@ export default function DataRenderFunc({
         </span>
       </>
     );
-  } else if (colfield === "tags") {
+  } else if (colfield === 'tags') {
     return (
       <>
         <div> {groupTags(taskColField as tagItem[])}</div>
       </>
     );
-  } else if (colfield == "created_at" || colfield == "updated_at") {
+  } else if (colfield == 'created_at' || colfield == 'updated_at') {
     return (
       <>
         <span className="text-sm font-medium text-gray-400">
-          {moment(taskColField as MomentInput).format("MM/DD")}
+          {moment(taskColField as MomentInput).format('MM/DD')}
         </span>
       </>
     );
-  } else if (colfield == "status") {
-    if (taskColField == "completed") {
+  } else if (colfield == 'status') {
+    if (taskColField == 'completed') {
       return (
         <>
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "in progress") {
+    } else if (taskColField == 'in progress') {
       return (
         <>
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "archived") {
+    } else if (taskColField == 'archived') {
       return (
         <>
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "todo") {
+    } else if (taskColField == 'todo') {
       return (
         <>
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -313,14 +313,14 @@ export default function DataRenderFunc({
         <>
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             Todo
           </div>
         </>
       );
     }
-  } else if (colfield === "name") {
+  } else if (colfield === 'name') {
     return (
       <>
         <div className="relative flex items-center ">
@@ -343,7 +343,7 @@ export default function DataRenderFunc({
               <span>
                 <img
                   src={ArrowDown}
-                  style={{ width: "6px", marginRight: "2px" }}
+                  style={{ width: '6px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   aria-hidden="true"
                   color="rgba(72, 67, 67, 0.64)"
@@ -353,7 +353,7 @@ export default function DataRenderFunc({
               <span>
                 <img
                   src={ArrowRigt}
-                  style={{ width: "5px", marginRight: "2px" }}
+                  style={{ width: '5px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   color="rgba(72, 67, 67, 0.64)"
                 />
@@ -371,7 +371,7 @@ export default function DataRenderFunc({
               onClick={() =>
                 handleTaskPilot(task.id as string, task.name as string)
               }
-              className={`${CompactViewSettings ? "text-xl" : null}`}
+              className={`${CompactViewSettings ? 'text-xl' : null}`}
             >
               {(taskColField as string)?.length > 50 &&
               SingleLineViewSettings ? (
@@ -405,7 +405,7 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield === "priority") {
+  } else if (colfield === 'priority') {
     return (
       <>
         <span

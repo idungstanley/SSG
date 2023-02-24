@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import { IoChevronBackOutline } from "react-icons/io5";
-import { VscEllipsis } from "react-icons/vsc";
-import { BsPlus } from "react-icons/bs";
-import { UserAddOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { setToggleAssignCurrentTaskId } from "../../../../../features/task/taskSlice";
-import { TbSubtask } from "react-icons/tb";
-import CardState from "./CardState";
-import AssignTask from "../../assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../components";
-// import Breadcrumb from "../../../../settings/components/Breadcrumb";
-// import { HomeIcon } from "@heroicons/react/24/outline";
-// import BreadcrumbSection from "../../../../explorer/components/Breadcrumb";
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { VscEllipsis } from 'react-icons/vsc';
+import { BsPlus } from 'react-icons/bs';
+import { UserAddOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { setToggleAssignCurrentTaskId } from '../../../../../features/task/taskSlice';
+import { TbSubtask } from 'react-icons/tb';
+import CardState from './CardState';
+import AssignTask from '../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../components';
 
 function Board() {
   const dispatch = useDispatch();
   const { myTaskData, toggleAssignCurrentTaskId } = useAppSelector(
-    state => state.task
+    (state) => state.task
   );
 
   const handleAssigneeModal = (id: string) => {
@@ -47,19 +44,11 @@ function Board() {
 
   const [icons, setIcons] = useState<string | null>(null);
 
-  // const addIcons = (id: string) => {
-  //   setIcons(true);
-  // };
-
-  // const removeIcons = () => {
-  //   setIcons(false);
-  // };
-
   return (
     <div className="m-auto fgoverflow">
       <div className="flex gap-7 ">
         {myTaskData.map((task) => (
-          <div key={task.id} className="rounded " style={{ width: "auto" }}>
+          <div key={task.id} className="rounded " style={{ width: 'auto' }}>
             <div className="w-64 h-1 bg-gray-400 rounded-t-sm "></div>
             <div className="flex items-center justify-between w-64 h-10 p-2 bg-white rounded shadow-md group boardGrab">
               <div className="flex items-center gap-2 ">
@@ -143,8 +132,6 @@ function Board() {
                   + add subtask
                 </p>
               </span>
-              {/* <Breadcrumb pages={} rootIcon={<HomeIcon className="flex-shrink-0 w-5 h-5" aria-hidden="true" />} rootIconHref="/explorer" /> */}
-              {/* <BreadcrumbSection /> */}
             </div>
           </div>
         ))}
