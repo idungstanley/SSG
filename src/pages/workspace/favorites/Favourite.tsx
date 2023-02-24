@@ -44,7 +44,7 @@ function Favourite({ item }: nameType) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/workspace/hub/${item.model_id}`);
+    navigate(`/hub/${item.model_id}`);
   };
 
   return (
