@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { IoChevronBackOutline } from 'react-icons/io5';
-import { VscEllipsis } from 'react-icons/vsc';
-import { BsPlus } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { setToggleAssignCurrentTaskId } from '../../../../../features/task/taskSlice';
-import { TbSubtask } from 'react-icons/tb';
-import CardState from './CardState';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
+import React, { useState } from "react";
+import { useAppSelector } from "../../../../../app/hooks";
+import { IoChevronBackOutline } from "react-icons/io5";
+import { VscEllipsis } from "react-icons/vsc";
+import { BsPlus } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { setToggleAssignCurrentTaskId } from "../../../../../features/task/taskSlice";
+import { TbSubtask } from "react-icons/tb";
+import CardState from "./CardState";
+import AssignTask from "../../assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../components";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 
 function Board() {
   const dispatch = useDispatch();
   const { myTaskData, toggleAssignCurrentTaskId } = useAppSelector(
     (state) => state.task
   );
+  console.log(myTaskData);
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -45,10 +46,10 @@ function Board() {
   const [icons, setIcons] = useState<string | null>(null);
 
   return (
-    <div className="m-auto fgoverflow">
+    <div className=" fgoverflow">
       <div className="flex gap-7 ">
         {myTaskData.map((task) => (
-          <div key={task.id} className="rounded " style={{ width: 'auto' }}>
+          <div key={task.id} className="rounded " style={{ width: "auto" }}>
             <div className="w-64 h-1 bg-gray-400 rounded-t-sm "></div>
             <div className="flex items-center justify-between w-64 h-10 p-2 bg-white rounded shadow-md group boardGrab">
               <div className="flex items-center gap-2 ">

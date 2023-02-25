@@ -10,7 +10,7 @@ import CardState from "../../../../../tasks/component/views/CardState";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { VscEllipsis } from "react-icons/vsc";
 import { BsPlus } from "react-icons/bs";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
+import { RiUserAddLine } from "react-icons/ri";
 
 // interface listIdprops {
 //   listId: string;
@@ -26,7 +26,7 @@ export default function BoardTemplate({ listId }) {
   const products = data?.data.tasks;
 
   const groupBy = (key, arr) =>
-    arr.reduce(
+    arr?.reduce(
       (cache, product) => ({
         ...cache,
         [product[key]]:
@@ -148,11 +148,11 @@ export default function BoardTemplate({ listId }) {
                                 <div
                                   onClick={() => handleAssigneeModal(items.id)}
                                 >
-                                  <UserPlusIcon
-                                    className="text-gray-400 cursor-pointer "
+                                  <RiUserAddLine
+                                    className=" text-gray-400  cursor-pointer "
                                     aria-hidden="true"
                                   />
-                                  <span className="absolute z-30 mt-5 shadow-2xl">
+                                  <span className="absolute shadow-2xl  z-30 mt-5">
                                     {toggleAssignCurrentTaskId == items?.id ? (
                                       <AssignTask />
                                     ) : null}
@@ -163,10 +163,10 @@ export default function BoardTemplate({ listId }) {
                               <>
                                 <div
                                   onClick={() => handleAssigneeModal(items.id)}
-                                  className="flex cursor-pointer "
+                                  className="cursor-pointer flex "
                                 >
                                   {groupAssignee(items.assignees)}
-                                  <span className="absolute z-30 mt-10 shadow-2xl ">
+                                  <span className="absolute shadow-2xl mt-10 z-30  ">
                                     {toggleAssignCurrentTaskId == items?.id ? (
                                       <AssignTask />
                                     ) : null}
