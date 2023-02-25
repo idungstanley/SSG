@@ -31,6 +31,10 @@ function RenderList() {
     getSubTaskId,
   } = useAppSelector((state) => state.task);
 
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+
+  const { show } = pilotSideOver;
+
   const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
@@ -47,21 +51,28 @@ function RenderList() {
               viewsList2="Board"
               changeViews="View"
             />
-            <ListFilter />
           </section>
         }
       >
         <div className="w-full overflow-y-scroll ">
-          <div
-            className="block p-2 border-2 border-gray-200 "
-            style={{ backgroundColor: "#e1e4e5" }}
-          >
+          <div className="block " style={{ backgroundColor: "#e1e4e5" }}>
+            {listView && <ListFilter />}
             {listView && <TaskQuickAction listDetailsData={listDetailsData} />}
 
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            {boardView && <Board />}
+            {/* BoardView */}
+            {boardView && <ListFilter />}
+            {boardView && (
+              <div
+                className={`" ml-10" ${
+                  show === false ? "fgoverflow2" : "fgoverflow"
+                }`}
+              >
+                <Board />
+              </div>
+            )}
 
             {/* card */}
             {listView && <TaskListViews />}
@@ -81,15 +92,17 @@ function RenderList() {
 
             {/* toggle */}
             {addNewTaskItem && <AddNewItem listId={listId} />}
-            <div
-              className=""
-              id="newItem"
-              onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
-            >
-              <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
-                + New Task
-              </p>
-            </div>
+            {listView && (
+              <div
+                className=""
+                id="newItem"
+                onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+              >
+                <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
+                  + New Task
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </PageWrapper>
