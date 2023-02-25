@@ -18,7 +18,6 @@ function Board() {
     CompactView,
     CompactViewWrap,
   } = useAppSelector((state) => state.task);
-  console.log(myTaskData);
 
   const groupBy = (key, arr) =>
     arr?.reduce(
@@ -33,7 +32,6 @@ function Board() {
     );
 
   const newData = groupBy("status", myTaskData);
-  console.log(newData);
 
   const handleAssigneeModal = (id) => {
     if (toggleAssignCurrentTaskId == id) {
