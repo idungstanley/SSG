@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
-import { PropTypes } from 'prop-types';
-import { getTaskListService } from '../../../../../../../features/task/taskService';
-import { setToggleAssignCurrentTaskId } from '../../../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import AssignTask from '../../../../../tasks/assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../../../components';
-import CardState from '../../../../../tasks/component/views/CardState';
-import { IoChevronBackOutline } from 'react-icons/io5';
-import { VscEllipsis } from 'react-icons/vsc';
-import { BsPlus } from 'react-icons/bs';
-import { UserPlusIcon } from '@heroicons/react/24/solid';
+import React, { useState } from "react";
+import { PropTypes } from "prop-types";
+import { getTaskListService } from "../../../../../../../features/task/taskService";
+import { setToggleAssignCurrentTaskId } from "../../../../../../../features/task/taskSlice";
+import { useAppSelector } from "../../../../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import AssignTask from "../../../../../tasks/assignTask/AssignTask";
+import { AvatarWithInitials } from "../../../../../../../components";
+import CardState from "../../../../../tasks/component/views/CardState";
+import { IoChevronBackOutline } from "react-icons/io5";
+import { VscEllipsis } from "react-icons/vsc";
+import { BsPlus } from "react-icons/bs";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 
 // interface listIdprops {
 //   listId: string;
 // }
 export default function BoardTemplate({ listId }) {
-  const {
-    toggleAssignCurrentTaskId,
-    CompactView,
-    CompactViewWrap,
-  } = useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId, CompactView, CompactViewWrap } =
+    useAppSelector((state) => state.task);
 
   const dispatch = useDispatch();
 
@@ -37,10 +34,10 @@ export default function BoardTemplate({ listId }) {
             ? cache[product[key]].concat(product)
             : [product],
       }),
-      {},
+      {}
     );
 
-  const newData = groupBy('status', products);
+  const newData = groupBy("status", products);
 
   const handleAssigneeModal = (id) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -52,7 +49,7 @@ export default function BoardTemplate({ listId }) {
 
   const groupAssignee = (data) => {
     return data?.length >= 3 ? (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center ">
         {data?.slice(0, 2).map((newData) => (
           <div key={newData.id} className="">
             <span
@@ -62,8 +59,8 @@ export default function BoardTemplate({ listId }) {
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
+                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
               />
             </span>
           </div>
@@ -79,8 +76,8 @@ export default function BoardTemplate({ listId }) {
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${CompactView ? 'h-4' : 'h-5'}`}
-              width={`${CompactView ? 'w-4' : 'w-5'}`}
+              height={`${CompactView ? "h-4" : "h-5"}`}
+              width={`${CompactView ? "w-4" : "w-5"}`}
             />
           </span>
         </div>
@@ -92,25 +89,25 @@ export default function BoardTemplate({ listId }) {
 
   return (
     <>
-      <div className="gap-5 dynamic">
+      <div className="gap-5 dynamic ">
         {Object.keys(newData).map((key) => {
           return (
             <>
               <div
                 key={key}
                 className="relative flex items-center justify-center w-56 h-10 p-3 -mt-10 font-bold uppercase bg-white rounded shadow-md group "
-                style={{ fontSize: '12px' }}
+                style={{ fontSize: "12px" }}
               >
-                {key === 'new' ? (
+                {key === "new" ? (
                   <div className="absolute top-0 w-full h-1 bg-blue-400 rounded-t-lg "></div>
-                ) : key === 'in progress' ? (
+                ) : key === "in progress" ? (
                   <div
                     className="absolute top-0 w-full h-1 rounded-t-lg "
-                    style={{ backgroundColor: '#7c3bed' }}
+                    style={{ backgroundColor: "#7c3bed" }}
                   ></div>
-                ) : key === 'completed' ? (
+                ) : key === "completed" ? (
                   <div className="absolute top-0 w-full h-1 bg-green-400 rounded-t-lg "></div>
-                ) : key === 'archived' ? (
+                ) : key === "archived" ? (
                   <div className="absolute top-0 w-full h-1 bg-yellow-400 rounded-t-lg "></div>
                 ) : (
                   <div className="absolute top-0 w-full h-1 bg-gray-400 rounded-t-lg "></div>
@@ -134,13 +131,13 @@ export default function BoardTemplate({ listId }) {
                     <div
                       key={items.id}
                       className="relative w-56 p-2 mt-3 bg-white shadow-md "
-                      style={{ marginLeft: '-80px' }}
+                      style={{ marginLeft: "-80px" }}
                       onMouseEnter={() => setIcons(items.id)}
                     >
                       <div className="flex justify-between gap-5 ">
                         <p className="pb-2 text-sm font-bold">
                           {items.name.length > 70
-                            ? items.name.slice(0, 70) + '...'
+                            ? items.name.slice(0, 70) + "..."
                             : items.name}
                         </p>
                         <div>
@@ -186,7 +183,7 @@ export default function BoardTemplate({ listId }) {
                       <span className="pt-10">
                         <p
                           className="absolute bottom-0 pb-1 mt-1 text-gray-400 uppercase "
-                          style={{ fontSize: '11px' }}
+                          style={{ fontSize: "11px" }}
                         >
                           + add new task
                         </p>
