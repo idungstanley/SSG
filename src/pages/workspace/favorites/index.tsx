@@ -1,24 +1,24 @@
-import React from 'react';
-import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
-import Favourite from './Favourite';
+import React from "react";
+import PlaceItem from "../../../layout/components/MainLayout/Sidebar/components/PlaceItem";
+import Favourite from "./Favourite";
 import {
   UseDeleteFav,
   useGetFavourites,
-} from '../../../features/hubs/hubService';
-import { Spinner } from '../../../common';
-import { useAppSelector } from '../../../app/hooks';
-import { MdAlternateEmail } from 'react-icons/md';
+  // UseUpdateFavService,
+} from "../../../features/hubs/hubService";
+import { Spinner } from "../../../common";
+import { useAppSelector } from "../../../app/hooks";
+import { MdAlternateEmail } from "react-icons/md";
 
 function Favorites() {
   const { delFavId } = useAppSelector((state) => state.hub);
   UseDeleteFav({
     delFav: delFavId,
   });
-  // console.log(delStatus);
 
   const { data, status } = useGetFavourites();
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <Spinner />;
   }
 

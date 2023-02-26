@@ -317,7 +317,7 @@ export const UseUpdateFavService = ({
   trigger,
 }: {
   favId: string | null;
-  name: string;
+  name: string | null;
   trigger: boolean;
 }) => {
   const dispatch = useDispatch();
