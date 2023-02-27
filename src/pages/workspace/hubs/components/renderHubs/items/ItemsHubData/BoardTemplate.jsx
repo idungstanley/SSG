@@ -15,7 +15,7 @@ import { RiUserAddLine } from "react-icons/ri";
 // interface listIdprops {
 //   listId: string;
 // }
-export default function BoardTemplate({ listId }) {
+export default function BoardTemplate({ listId, hubName }) {
   const { toggleAssignCurrentTaskId, CompactView, CompactViewWrap } =
     useAppSelector((state) => state.task);
 
@@ -88,7 +88,13 @@ export default function BoardTemplate({ listId }) {
   const [icons, setIcons] = useState(null);
 
   return (
-    <>
+    <div className="-mt-10  ">
+      <p
+        className="pb-10 my-2 font-bold uppercase "
+        style={{ fontSize: "12px" }}
+      >
+        {hubName}
+      </p>
       <div className="gap-5 dynamic ">
         {Object.keys(newData).map((key) => {
           return (
@@ -196,10 +202,11 @@ export default function BoardTemplate({ listId }) {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 
 BoardTemplate.propTypes = {
   listId: PropTypes.string,
+  hubName: PropTypes.string,
 };
