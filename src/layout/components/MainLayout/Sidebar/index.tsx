@@ -128,7 +128,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         style={showSidebar ? style : undefined}
         >
         <Header />
-        <section className="relative flex flex-col overflow-x-hidden overflow-y-scroll">
+        <section className="relative flex flex-col pr-1.5 overflow-x-hidden overflow-y-scroll">
           {showSidebar ? <Search /> : null}
           <NavigationItems />
           <Places />
