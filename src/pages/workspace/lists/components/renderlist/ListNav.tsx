@@ -57,15 +57,15 @@ function ListNav({
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full p-2">
         {showTaskNavigation && (
-          <span className="w-12/12 transition duration-300 ease-in-out">
+          <span className="w-12/12 transition duration-300 ease-in-out ">
             <TaskMenu />
           </span>
         )}
       </div>
       <nav
-        className="flex items-center justify-between border-b overflow-hidden bg-white h-30"
+        className="flex items-center justify-between  overflow-hidden bg-white border-b border-gray-200 h-30"
         style={{ padding: "15px" }}
       >
         <section className="flex items-center justify-start text-gray-500">

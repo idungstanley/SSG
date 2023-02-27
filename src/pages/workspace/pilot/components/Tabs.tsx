@@ -193,7 +193,7 @@ function Tab() {
       <div
         className={`gap-4 pb-1 w-full`}
         aria-label="Tabs"
-        style={showPilot ? { width: '500px' } : { width: '48px' }}
+        style={showPilot ? { width: "500px" } : { width: "48px" }}
       >
         <section
           className={`flex justify-between border-b items-center h-12 ${
@@ -227,7 +227,7 @@ function Tab() {
               onClick={() => handleShowPilot()}
               className={`cursor-pointer w-3 h-3  ${
                 showPilot
-                  ? "translate-x-4 skew-y-3"
+                  ? "translate-x-4 skew-y-3 "
                   : "transform -rotate-180 mb-1"
               }`}
             />

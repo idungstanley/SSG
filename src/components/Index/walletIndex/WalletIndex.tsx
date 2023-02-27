@@ -158,6 +158,7 @@ function WalletIndex({
                 wallet.id === activeItemId &&
                 "bg-green-100 text-black font-medium"
               }`}
+              onClick={() => handleShowSubWallet(wallet.id)}
             >
               {wallet.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
@@ -169,7 +170,6 @@ function WalletIndex({
               >
                 {/* showsub1 */}
                 <div
-                  onClick={() => handleShowSubWallet(wallet.id)}
                   className="flex items-center"
                 >
                   {showSubWallet === wallet.id ? (

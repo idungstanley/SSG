@@ -3,13 +3,13 @@ import { useAppSelector } from "../../../app/hooks";
 import Tab from "./components/Tabs";
 import Checklists, {
   cheklistOptions,
-} from './components/checklist/components/Checklist';
-import History from '../../explorer/components/Pilot/components/History';
-import Permissions from '../../../components/Pilot/components/Permissions';
-import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
-import Commnunication from './components/communication/Communication';
-import Details from './components/details/Details';
-import { useDispatch } from 'react-redux';
+} from "./components/checklist/components/Checklist";
+import History from "../../explorer/components/Pilot/components/History";
+import Permissions from "../../../components/Pilot/components/Permissions";
+import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
+import Commnunication from "./components/communication/Communication";
+import Details from "./components/details/Details";
+import { useDispatch } from "react-redux";
 import TimeClock, {
   TimeClockOptions,
 } from "./components/timeClock/subtabs/TimeClock";
@@ -108,7 +108,7 @@ export default function Pilot() {
   return (
     <div className="pr-0.5">
       <div
-        className={`flex ease-in-out overflow-y-auto pr-1  duration-300 transition-all transform bg-white border-l border-r h-screen ${
+        className={`flex ease-in-out overflow-y-auto pr-1  duration-300 transition-all transform bg-white border-l border-r h-screen  ${
           !showPilot && selectedSection
             ? "flex-row fixed z-40 top-16 right-0"
             : "flex-col"

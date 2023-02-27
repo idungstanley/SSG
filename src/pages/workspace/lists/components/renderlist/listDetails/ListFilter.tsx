@@ -10,7 +10,9 @@ import { VscEllipsis } from "react-icons/vsc";
 import { useAppSelector } from "../../../../../../app/hooks";
 
 export default function ListFilter() {
-  const { showPilot } = useAppSelector((state) => state.workspace);
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+
+  const { show } = pilotSideOver;
   return (
     <nav className="flex items-center justify-between bg-white h-8 pr-5  ">
       <div className="flex items-center justify-between p-2">
@@ -36,7 +38,7 @@ export default function ListFilter() {
           filter
         </p>
         <span>
-          {showPilot === false ? (
+          {show === false ? (
             <p className="flex items-center gap-1 bg-blue-100	p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800">
               <span>
                 <BsLayers />
