@@ -13,18 +13,12 @@ import { tagItem } from "../../../pilot/components/details/properties/subDetails
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import AssignTask from "../../assignTask/AssignTask";
 import { MdOutlineDragIndicator } from "react-icons/md";
-// import AssignTask from "../../assignTask/AssignTask";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns, toggleAssignCurrentTaskId } =
     useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
-  // const displayNav = (id: string) => {
-  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
-  //   dispatch(setCurrentTaskId(id));
-  // };
-  // const [taskId, setTaskId] = useState("");
   const handleAssigneeModal = (id: string | undefined) => {
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
@@ -184,7 +178,7 @@ function TaskTableView() {
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
-          <div className="flex w-11/12 justify-between items-center group">
+          <div className="flex whitespace-normal w-11/12 justify-between items-center group">
             <p>{taskColField as ReactNode}</p>
             <p className="opacity-0 bg-gray-300 hover:bg-gray-400 group-hover:opacity-100 p-2 cursor-pointer">
               <BsArrowsAngleExpand />
