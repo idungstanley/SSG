@@ -12,6 +12,10 @@ import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
 import { cl } from '../../../utils';
+import WalletModal from '../wallet/components/modals/WalletModal';
+import SubWalletModal from '../wallet/components/modals/SubWalletModal';
+import ListModal from '../lists/components/modals/ListModal';
+import TaskModal from '../tasks/component/TaskModal';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -62,6 +66,10 @@ function Hubs() {
 
       <Modal />
       <SubHubModal />
+      <WalletModal />
+      <SubWalletModal />
+      <ListModal />
+      <TaskModal />
     </>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import WalletModal from '../../pages/workspace/wallet/components/modals/WalletModal';
 import {
   DocumentDuplicateIcon,
   StarIcon,
@@ -11,7 +10,6 @@ import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import ListModal from '../../pages/workspace/lists/components/modals/ListModal';
 import hubIcon from '../../assets/branding/hub.svg';
 import {
   setCreateListSlideOverVisibility,
@@ -20,9 +18,7 @@ import {
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility,
 } from '../../features/general/slideOver/slideOverSlice';
-import TaskModal from '../../pages/workspace/tasks/component/TaskModal';
 import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
-import SubWalletModal from '../../pages/workspace/wallet/components/modals/SubWalletModal';
 
 interface itemsType {
   id: number;
@@ -195,10 +191,6 @@ export default function SubDropdown() {
           ) : null
         )}
       </div>
-      <WalletModal />
-      <SubWalletModal />
-      <ListModal />
-      <TaskModal />
     </div>
   );
 }

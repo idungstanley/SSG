@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
-import { FireIcon } from '@heroicons/react/24/solid';
-import { useAppSelector } from '../../../../app/hooks';
-import Dropdown from '../../../Dropdown/index';
+import React, { Fragment } from "react";
+import { FireIcon } from "@heroicons/react/24/solid";
+import { useAppSelector } from "../../../../app/hooks";
+import Dropdown from "../../../Dropdown/index";
 
 interface HotKeysProps {
   setShowModal: (i: boolean) => void;
@@ -13,8 +13,8 @@ export default function Menu({ setShowModal }: HotKeysProps) {
   const dropdownConfig = [
     {
       id: 1,
-      icon: <FireIcon className="w-4 h-4" />,
-      label: 'Add / remove hotkeys',
+      icon: <FireIcon className="w-4 h-4 " />,
+      label: "Add / remove hotkeys",
       onClick: () => setShowModal(true),
     },
   ];

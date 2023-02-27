@@ -13,18 +13,12 @@ import { tagItem } from "../../../pilot/components/details/properties/subDetails
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import AssignTask from "../../assignTask/AssignTask";
 import { MdOutlineDragIndicator } from "react-icons/md";
-// import AssignTask from "../../assignTask/AssignTask";
 
 function TaskTableView() {
   const { myTaskData, hideTask, taskColumns, toggleAssignCurrentTaskId } =
     useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
-  // const displayNav = (id: string) => {
-  //   dispatch(setShowTaskNavigation(!showTaskNavigation));
-  //   dispatch(setCurrentTaskId(id));
-  // };
-  // const [taskId, setTaskId] = useState("");
   const handleAssigneeModal = (id: string | undefined) => {
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
@@ -52,11 +46,13 @@ function TaskTableView() {
     return data?.map((newData, index) => {
       return (
         <>
-          {data.length !== index + 1 ? (
-            <p key={index}>{newData.name},</p>
-          ) : (
-            <p key={index}>{newData.name}</p>
-          )}
+          <div>
+            {data.length !== index + 1 ? (
+              <p key={index}>{newData.name},</p>
+            ) : (
+              <p key={index}>{newData.name}</p>
+            )}
+          </div>
         </>
       );
     });
@@ -98,7 +94,7 @@ function TaskTableView() {
             className="cursor-pointer flex "
             onClick={() => handleAssigneeModal(task?.id)}
           >
-            <div className="flex gap-3">
+            <div className="flex flex-wrap break-normal  gap-3">
               {groupAssignee(taskColFieldSetType)}
             </div>
             <span className="absolute shadow-2xl  z-30 mt-6 ">
@@ -184,7 +180,7 @@ function TaskTableView() {
     } else if (colfield === "name") {
       return (
         <div className="flex items-center relative ">
-          <div className="flex w-11/12 justify-between items-center group">
+          <div className="flex whitespace-normal w-11/12 justify-between items-center group">
             <p>{taskColField as ReactNode}</p>
             <p className="opacity-0 bg-gray-300 hover:bg-gray-400 group-hover:opacity-100 p-2 cursor-pointer">
               <BsArrowsAngleExpand />

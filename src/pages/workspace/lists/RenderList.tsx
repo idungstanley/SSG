@@ -11,11 +11,11 @@ import TaskData from "../tasks/component/taskData/TaskData";
 import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction";
 import SubTask from "../tasks/subtasks/create/SubTask";
 import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
-import Pilot from "../pilot";
 import ListFilter from "./components/renderlist/listDetails/ListFilter";
 import Board from "../tasks/component/views/Board";
 import TaskTableView from "../tasks/component/views/TaskTableView";
-// import ListViewSettingsModal from "../tasks/viewSettingsModal/ListViewSettingsModal";
+import PageWrapper from "../../../components/PageWrapper";
+import PilotSection, { pilotConfig } from "./components/PilotSection";
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -31,35 +31,51 @@ function RenderList() {
     getSubTaskId,
   } = useAppSelector((state) => state.task);
 
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+
+  const { show } = pilotSideOver;
+
   const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
-    <div className=" overflow-x-auto  relative">
-      <section id="nav" className="capitalize ">
-        <ListNav
-          navName={listDetailsData?.data?.list?.name}
-          viewsList="List"
-          viewsList1="Table"
-          viewsList2="Board"
-          changeViews="View"
-        />
-        <ListFilter />
-      </section>
-      <section className="flex h-full w-full">
-        <div className="  w-full overflow-y-scroll">
-          <div
-            className=" block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: '#e1e4e5' }}
-          >
-            <TaskQuickAction listDetailsData={listDetailsData} />
-            {/* card */}
+    <>
+      <PilotSection />
+      <PageWrapper
+        pilotConfig={pilotConfig}
+        header={
+          <section id="nav" className="capitalize ">
+            <ListNav
+              navName={listDetailsData?.data?.list?.name}
+              viewsList="List"
+              viewsList1="Table"
+              viewsList2="Board"
+              changeViews="View"
+            />
+          </section>
+        }
+      >
+        <div className="w-full overflow-y-scroll ">
+          <div className="block " style={{ backgroundColor: "#e1e4e5" }}>
+            {listView && <ListFilter />}
+            {listView && <TaskQuickAction listDetailsData={listDetailsData} />}
 
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
 
-            <div className="-z-50">{boardView && <Board />}</div>
-            {listView && <TaskListViews />}
+            {/* BoardView */}
+            {boardView && <ListFilter />}
+            {boardView && (
+              <div
+                className={`" ml-10" ${
+                  show === false ? "fgoverflow2" : "fgoverflow"
+                }`}
+              >
+                <Board />
+              </div>
+            )}
 
+            {/* card */}
+            {listView && <TaskListViews />}
             {listView &&
               myTaskData?.map((task) => (
                 <div key={task.id}>
@@ -76,22 +92,21 @@ function RenderList() {
 
             {/* toggle */}
             {addNewTaskItem && <AddNewItem listId={listId} />}
-            <div
-              className=""
-              id="newItem"
-              onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
-            >
-              <p className="pl-2 text-xs  w-20 mt-1 cursor-pointer ml-10 font-semibold text-gray-400">
-                + New Task
-              </p>
-            </div>
+            {listView && (
+              <div
+                className=""
+                id="newItem"
+                onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
+              >
+                <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
+                  + New Task
+                </p>
+              </div>
+            )}
           </div>
         </div>
-        <div>
-          <Pilot />
-        </div>
-      </section>
-    </div>
+      </PageWrapper>
+    </>
   );
 }
 
