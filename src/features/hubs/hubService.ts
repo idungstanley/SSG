@@ -259,9 +259,9 @@ export const useAddToFavourites = (data: {
     {
       enabled: !!trigger,
       onSuccess: () => {
+        queryClient.invalidateQueries();
         dispatch(setTriggerAddToFav(false));
         dispatch(closeMenu());
-        queryClient.invalidateQueries();
       },
     }
   );
