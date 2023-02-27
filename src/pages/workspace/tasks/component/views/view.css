@@ -39,12 +39,12 @@ textarea {
 }
 
 .fgoverflow {
-  max-width: 600px;
+  max-width: 700px;
   height: 100vh;
   overflow-x: auto;
 }
 .fgoverflow2 {
-  max-width: 1000px;
+  max-width: 1100px;
   height: 100vh;
   overflow-x: auto;
 }
