@@ -46,11 +46,13 @@ function TaskTableView() {
     return data?.map((newData, index) => {
       return (
         <>
-          {data.length !== index + 1 ? (
-            <p key={index}>{newData.name},</p>
-          ) : (
-            <p key={index}>{newData.name}</p>
-          )}
+          <div>
+            {data.length !== index + 1 ? (
+              <p key={index}>{newData.name},</p>
+            ) : (
+              <p key={index}>{newData.name}</p>
+            )}
+          </div>
         </>
       );
     });
@@ -92,7 +94,7 @@ function TaskTableView() {
             className="cursor-pointer flex "
             onClick={() => handleAssigneeModal(task?.id)}
           >
-            <div className="flex gap-3">
+            <div className="flex flex-wrap break-normal  gap-3">
               {groupAssignee(taskColFieldSetType)}
             </div>
             <span className="absolute shadow-2xl  z-30 mt-6 ">
