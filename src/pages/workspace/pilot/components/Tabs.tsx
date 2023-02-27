@@ -17,7 +17,7 @@ import DetailsSubTab from "./details/DetailsSubTab";
 import CommunicationSubTab from "./communication/CommunicationSubTab";
 import TimeSubTab from "./timeClock/subtabs/TimeSubTab";
 import TabDrag from "./TabDrags";
-import ChecklistSubtab from "./checklist/subtabs/ChecklistSubtab";
+
 import {
   closestCenter,
   DndContext,
@@ -85,7 +85,6 @@ export const pilotOptions = [
     id: 7,
     name: "Checklist",
     icon: <GiChecklist />,
-    subTab: <ChecklistSubtab />,
     isVisible: false,
   },
 ];

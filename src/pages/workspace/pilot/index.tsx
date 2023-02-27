@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { useAppSelector } from "../../../app/hooks";
 import Tab from "./components/Tabs";
-import Checklists, {
-  cheklistOptions,
-} from './components/checklist/components/Checklist';
-import History from '../../explorer/components/Pilot/components/History';
-import Permissions from '../../../components/Pilot/components/Permissions';
-import CommentsForPilot from '../../../components/Comments/CommentsForPilot';
-import Commnunication from './components/communication/Communication';
-import Details from './components/details/Details';
-import { useDispatch } from 'react-redux';
+import Checklists from "./components/checklist/components/Checklist";
+import History from "../../explorer/components/Pilot/components/History";
+import Permissions from "../../../components/Pilot/components/Permissions";
+import CommentsForPilot from "../../../components/Comments/CommentsForPilot";
+import Commnunication from "./components/communication/Communication";
+import Details from "./components/details/Details";
+import { useDispatch } from "react-redux";
 import TimeClock, {
   TimeClockOptions,
 } from "./components/timeClock/subtabs/TimeClock";
@@ -67,7 +65,6 @@ export default function Pilot() {
     ...sections,
     ...DetailOptions,
     ...communicationOptions,
-    ...cheklistOptions,
     ...TimeClockOptions,
   ];
 

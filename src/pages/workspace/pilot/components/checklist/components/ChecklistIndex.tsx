@@ -9,7 +9,7 @@ import { Spinner } from "../../../../../../common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GoPlus } from "react-icons/go";
 import SingleChecklist from "../SingleChecklist";
-import { itemProps } from "../components/ChecklistItem";
+import { itemProps } from "./ChecklistItem";
 import {
   closestCenter,
   DndContext,
