@@ -32,7 +32,7 @@ const places = [
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
-    name: 'TASK',
+    name: 'TASKS',
     id: 2,
     place: <Hubs />,
     source: hubIcon,

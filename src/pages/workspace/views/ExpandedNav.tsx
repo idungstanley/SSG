@@ -37,7 +37,7 @@ export const secondaryNavigation = [
     source: emailIcon,
   },
   {
-    name: "TASK",
+    name: "TASKS",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,
