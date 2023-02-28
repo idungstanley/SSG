@@ -28,7 +28,7 @@ const places = [
     name: 'Email',
     id: 1,
     place: <Favorites />,
-    icon: <MdAlternateEmail />,
+    icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
     name: 'TASK',
@@ -40,7 +40,7 @@ const places = [
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    icon: <InboxStackIcon/>,
+    icon: <InboxStackIcon className="w-4 h-4"/>,
   },
   {
     name: 'Cabinet',
@@ -60,31 +60,31 @@ const places = [
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-fit h-fit" />,
+    icon: <DocumentTextIcon className="w-4 h-4" />,
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-fit h-fit"/>,
+    icon: <ClockIcon className="w-4 h-4"/>,
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="text-md"/>,
+    icon: <FaRoute className="w-4 h-4"/>,
   },
   {
     name: 'Also HR',
     id: 9,
     place: <AlsoHr/>,
-    icon: <FaHandsHelping className="w-fit h-fit"/>,
+    icon: <FaHandsHelping className="w-4 h-4"/>,
   },
   {
     name: 'Commerce',
     id: 10,
     place: <Commerce/>,
-    icon: <IoBusinessOutline className="w-fit h-fit"/>,
+    icon: <IoBusinessOutline className="w-4 h-4"/>,
   },
 ];
 

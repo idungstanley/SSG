@@ -8,9 +8,11 @@ import {
 import { Spinner } from '../../../common';
 import { useAppSelector } from '../../../app/hooks';
 import { MdAlternateEmail } from 'react-icons/md';
+import { cl } from '../../../utils';
 
 function Favorites() {
   const { delFavId } = useAppSelector((state) => state.hub);
+  const { showSidebar } = useAppSelector((state) => state.account);
   UseDeleteFav({
     delFav: delFavId,
   });
@@ -28,7 +30,7 @@ function Favorites() {
         label="Email"
         icon={<MdAlternateEmail className="w-4 h-4" />}
       />
-      <div>
+      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
         {data?.data.favorites.map(
           (fav: {
             name: string;

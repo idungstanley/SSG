@@ -34,7 +34,7 @@ export default function PlaceItem({
     <li
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
-        'focus:flex flex-col w-full pl-4 py-5 items-center relative',
+        'focus:flex flex-col w-full pl-5 py-5 items-center relative',
         bottomContent ? 'gap-2' : '',
       )}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
@@ -47,7 +47,7 @@ export default function PlaceItem({
           className={cl(
             'flex gap-4 items-center content-center self-center',
             isActivePlace ? 'justify-center text-black font-bold' : '',
-            showSidebar && isActivePlace ? 'ml-16' : '',
+            // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
           <span className="flex items-center w-6 h-6">{icon}</span>
@@ -55,7 +55,7 @@ export default function PlaceItem({
             className={cl(
               showSidebar ? 'block' : 'hidden',
               'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
-              isActivePlace ? 'text-black font-bold' : '',
+              isActivePlace ? 'text-black font-black' : '',
             )}
           >
             {label}

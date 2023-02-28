@@ -14,7 +14,7 @@ function Inbox() {
     <>
       <PlaceItem
         label="In-tray"
-        icon={<InboxStackIcon className="w-5 h-5" />}
+        icon={<InboxStackIcon className="w-4 h-4" />}
       />
       <div className="space-y-4">
         <CreateInboxSlideOver />
