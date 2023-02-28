@@ -32,8 +32,6 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
-  console.log(task);
-
   return (
     <div className="relative">
       <div

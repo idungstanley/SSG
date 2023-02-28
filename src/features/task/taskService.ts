@@ -64,7 +64,6 @@ export const UseGetFullTaskList = ({
     {
       // enabled: itemId == null,
       onSuccess: (data) => {
-        console.log(data);
         data.pages.map((page) =>
           page.data.tasks.map((task: ITaskFullList) =>
             queryClient.setQueryData(['task', task.id], task)
@@ -82,25 +81,25 @@ export const UseGetFullTaskList = ({
   );
 };
 
-export const getOneTaskService = (data: {
-  queryKey: (string | undefined)[];
-}) => {
-  const taskId = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: `at/tasks/${taskId}`,
-      method: 'GET',
-    },
-    true
-  );
-  return response;
-};
+// export const getOneTaskService = (data: {
+//   queryKey: (string | undefined)[];
+// }) => {
+//   const taskId = data.queryKey[1];
+//   const response = requestNew(
+//     {
+//       url: `at/tasks/${taskId}`,
+//       method: 'GET',
+//     },
+//     true
+//   );
+//   return response;
+// };
 
 //getOneTask
 export const getOneTaskServices = ({
   task_id,
 }: {
-  task_id?: string | null;
+  task_id: string | undefined;
 }) => {
   // const queryClient = useQueryClient();
   return useQuery(
@@ -116,7 +115,8 @@ export const getOneTaskServices = ({
       return data;
     },
     {
-      enabled: task_id != null,
+      enabled: false,
+      // enabled: task_id != null,
     }
   );
 };
