@@ -11,6 +11,7 @@ import {
   setShowExtendedBar,
   setShowModal,
 } from "../../../features/workspace/workspaceSlice";
+import libraryIcon from '../../../assets/icons/library.svg';
 import emailIcon from "../../../assets/branding/email-icon.png";
 import hubIcon from "../../../assets/branding/hub.png";
 import InboxIcon from "../../../assets/branding/inbox.png";
@@ -26,16 +27,17 @@ import Extendedbar from "../../explorer/components/Sidebar";
 import { BiCabinet } from "react-icons/bi";
 import { IoSearchCircleOutline } from "react-icons/io5";
 import ResizeBorder from "../../../components/ResizeBorder";
+import Sidebar from "../../directory/components/Sidebar";
 
-const secondaryNavigation = [
+export const secondaryNavigation = [
   {
-    name: "email",
+    name: "Email",
     id: 1,
     place: <Favourites />,
     source: emailIcon,
   },
   {
-    name: "task",
+    name: "TASKS",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,
@@ -70,12 +72,19 @@ const secondaryNavigation = [
     place: <Favourites />,
     source: trackerIcon,
   },
+  {
+    name: 'Library',
+    id: 8,
+    place: <Sidebar />,
+    source: libraryIcon,
+    link: 'directory',
+  },
 ];
 
 function ExpandedNav() {
   const dispatch = useDispatch();
   const {
-    activePlaceId,
+    activePlaceName,
     showExtendedBar,
     extendedSidebarWidth,
     isExtSearchActive,
@@ -114,10 +123,12 @@ function ExpandedNav() {
       window.removeEventListener("mouseup", stopResizing);
     };
   }, [resize, stopResizing]);
-  if (activePlaceId === (0 || true)) {
+
+  if (activePlaceName === null) {
     dispatch(setShowExtendedBar(false));
     dispatch(setExtendedSidebarWidth(240));
   }
+
   return (
     <div
       className="relative flex-none"
@@ -148,7 +159,7 @@ function ExpandedNav() {
         <div aria-labelledby="projects-headline">
           {secondaryNavigation.map(
             (item) =>
-              activePlaceId === item.id && (
+              activePlaceName?.toLowerCase() === item.name.toLowerCase() && (
                 <div key={item.id} className="">
                   <div className="relative top-0 flex items-center h-8 p-2 text-gray-600 border-b cursor-pointer border-gray">
                     <button
@@ -170,7 +181,7 @@ function ExpandedNav() {
                         )}
                         <span
                           className={` font-semibold leading-3 uppercase truncate tracking-wider ${
-                            activePlaceId === item.id && "text-black font-bold"
+                            activePlaceName === item.name && "text-black font-bold"
                           }`}
                           style={{ fontSize: "11px" }}
                         >
@@ -193,7 +204,7 @@ function ExpandedNav() {
                         />
                       </span>
                     </button>
-                    {activePlaceId === item.id && (
+                    {activePlaceName === item.name && (
                       <div
                         className={`w-full ${
                           isExtSearchActive ? "flex" : "hidden"
