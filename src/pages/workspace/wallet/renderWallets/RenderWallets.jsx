@@ -8,7 +8,7 @@ import { useAppSelector } from '../../../../app/hooks';
 // import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
 import PageWrapper from '../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
-import { UseGetFullTaskList } from '../../../../features/task/taskService';
+import { UseGetFullTaskListWallet } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
 import TaskTemplateData from '../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
@@ -22,7 +22,7 @@ function RenderWallets() {
 
   // const { data } = getWalletServices({ parentId: walletId });
 
-  const { data: TaskFullList, status } = UseGetFullTaskList({
+  const { data: TaskFullList, status } = UseGetFullTaskListWallet({
     itemId: activeItemId,
     itemType: activeItemType,
   });
