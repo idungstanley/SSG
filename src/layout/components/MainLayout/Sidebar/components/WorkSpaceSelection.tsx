@@ -47,7 +47,7 @@ function WorkSpaceSelection() {
         </div>
       ) : (
         <p
-          className="p-1 ml-1 truncate rounded"
+          className="flex items-center justify-center flex-1 w-full p-1 truncate rounded grow"
           style={{ fontSize: '5px', backgroundColor: '#D2AAF0' }}
         >
           {workspaceName}

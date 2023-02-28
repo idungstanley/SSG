@@ -3,13 +3,16 @@ import { useAppSelector } from "../../../app/hooks";
 import { UseUpdateFavService } from "../../../features/hubs/hubService";
 import FavModal from "./FavModal";
 import { useAppDispatch } from "../../../app/hooks";
-import { setTriggerFavUpdate } from "../../../features/hubs/hubSlice";
 import {
   setActiveItem,
   setActiveTabId,
   setShowPilot,
 } from "../../../features/workspace/workspaceSlice";
 import { useNavigate } from "react-router";
+import {
+  setFavUpdateName,
+  setTriggerFavUpdate,
+} from "../../../features/hubs/hubSlice";
 
 interface nameType {
   item: {
@@ -24,13 +27,13 @@ function Favourite({ item }: nameType) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [favName, setFavName] = useState<string>(item.name);
-  const { showFavEditInput, triggerFavUpdate } = useAppSelector(
+  const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector(
     (state) => state.hub
   );
 
   UseUpdateFavService({
     favId: showFavEditInput,
-    name: favName,
+    name: favUpdateName,
     trigger: triggerFavUpdate,
   });
 
@@ -39,12 +42,18 @@ function Favourite({ item }: nameType) {
       setActiveItem({
         activeItemId: item.model_id,
         activeItemType: item.model_type,
-        activeItemName: item.name,
+        activeItemName: favName,
       })
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/workspace/hub/${item.model_id}`);
+    navigate(`/hub/${item.model_id}`);
+  };
+
+  const handleUpdate = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    dispatch(setFavUpdateName(favName));
+    dispatch(setTriggerFavUpdate(true));
   };
 
   return (
@@ -53,8 +62,7 @@ function Favourite({ item }: nameType) {
         {showFavEditInput === item.id ? (
           <form
             onSubmit={(e) => {
-              e.preventDefault();
-              dispatch(setTriggerFavUpdate(true));
+              handleUpdate(e);
             }}
           >
             <input

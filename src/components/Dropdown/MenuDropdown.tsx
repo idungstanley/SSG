@@ -51,7 +51,6 @@ import {
   UseDeleteListService,
 } from "../../features/list/listService";
 import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
-// import Favorites from '../../pages/workspace/favorites';
 
 interface itemsType {
   id: number;
