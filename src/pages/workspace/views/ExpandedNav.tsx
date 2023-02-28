@@ -11,7 +11,8 @@ import {
   setShowExtendedBar,
   setShowModal,
 } from "../../../features/workspace/workspaceSlice";
-import libraryIcon from '../../../assets/icons/library.svg';
+import libraryIcon from "../../../assets/icons/library.svg";
+import favoriteIcon from "../../../assets/branding/Favourite-icon.svg";
 import emailIcon from "../../../assets/branding/email-icon.png";
 import hubIcon from "../../../assets/branding/hub.png";
 import InboxIcon from "../../../assets/branding/inbox.png";
@@ -37,7 +38,7 @@ export const secondaryNavigation = [
     source: emailIcon,
   },
   {
-    name: "TASKS",
+    name: "TASKSAS",
     id: 2,
     place: <ActiveHub />,
     source: hubIcon,
@@ -73,11 +74,18 @@ export const secondaryNavigation = [
     source: trackerIcon,
   },
   {
-    name: 'Library',
+    name: "Library",
     id: 8,
     place: <Sidebar />,
     source: libraryIcon,
-    link: 'directory',
+    link: "directory",
+  },
+  {
+    name: "Favorites",
+    id: 9,
+    place: <Favourites />,
+    source: favoriteIcon,
+    link: "favorite",
   },
 ];
 
@@ -181,7 +189,8 @@ function ExpandedNav() {
                         )}
                         <span
                           className={` font-semibold leading-3 uppercase truncate tracking-wider ${
-                            activePlaceName === item.name && "text-black font-bold"
+                            activePlaceName === item.name &&
+                            "text-black font-bold"
                           }`}
                           style={{ fontSize: "11px" }}
                         >

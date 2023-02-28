@@ -1,14 +1,14 @@
-import React from 'react';
-import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
-import Favourite from './Favourite';
+import React from "react";
+import PlaceItem from "../../../layout/components/MainLayout/Sidebar/components/PlaceItem";
+import Favourite from "./Favourite";
 import {
   UseDeleteFav,
   useGetFavourites,
-} from '../../../features/hubs/hubService';
-import { Spinner } from '../../../common';
-import { useAppSelector } from '../../../app/hooks';
-import { MdAlternateEmail } from 'react-icons/md';
-import { cl } from '../../../utils';
+} from "../../../features/hubs/hubService";
+import { Spinner } from "../../../common";
+import { useAppSelector } from "../../../app/hooks";
+import { cl } from "../../../utils";
+import { AiFillStar } from "react-icons/ai";
 
 function Favorites() {
   const { delFavId } = useAppSelector((state) => state.hub);
@@ -16,21 +16,19 @@ function Favorites() {
   UseDeleteFav({
     delFav: delFavId,
   });
+
   // console.log(delStatus);
 
   const { data, status } = useGetFavourites();
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <Spinner />;
   }
 
   return (
     <>
-      <PlaceItem
-        label="Email"
-        icon={<MdAlternateEmail className="w-4 h-4" />}
-      />
-      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
+      <PlaceItem label="FAVORITES" icon={<AiFillStar className="w-4 h-4" />} />
+      <div className={cl("mb-2", !showSidebar && "overflow-x-hidden w-12")}>
         {data?.data.favorites.map(
           (fav: {
             name: string;
