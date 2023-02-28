@@ -30,7 +30,7 @@ function Favorites() {
         label="Email"
         icon={<MdAlternateEmail className="w-4 h-4" />}
       />
-      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
+      <div className={cl('mb-2',!showSidebar && 'overflow-x-hidden w-12')}>
         {data?.data.favorites.map(
           (fav: {
             name: string;
