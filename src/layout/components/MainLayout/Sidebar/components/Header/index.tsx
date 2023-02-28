@@ -23,7 +23,7 @@ export default function Header() {
       <div
       className={cl(
         'flex pt-2 flex-1',
-        !showSidebar ? 'flex-col items-center' : ''
+        !showSidebar ? 'flex-col items-center justify-center' : ''
       )}>
       <WorkSpaceSelection />
 
