@@ -17,7 +17,7 @@ import Timer from 'react-timer-wrapper';
 import moment from 'moment';
 import Timecode from 'react-timecode';
 import {
-  getOneTaskService,
+  getOneTaskServices,
   createTimeEntriesService,
 } from '../../../../features/task/taskService';
 import Watcher from '../watchers/index';
@@ -28,10 +28,12 @@ function RenderTaskModal() {
   const [stopTimer, setStopTimer] = useState(false);
   const [showTimeEntries, setShowTimeEntries] = useState(false);
 
-  const { data: taskData } = useQuery({
-    queryKey: ['taskData', taskId],
-    queryFn: getOneTaskService,
-  });
+  const { data: taskData } = getOneTaskServices({ task_id: taskId });
+
+  // const { data: taskData } = useQuery({
+  //   queryKey: ['taskData', taskId],
+  //   queryFn: getOneTaskService,
+  // });
 
   useQuery({
     queryKey: ['startTimeClock', taskId],
