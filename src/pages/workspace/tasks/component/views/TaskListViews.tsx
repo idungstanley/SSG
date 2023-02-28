@@ -14,7 +14,7 @@ import { columnsHead } from './ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 
-export default function TaskListViews({ taskLength }: { taskLength: number }) {
+export default function TaskListViews({ taskLength }: { taskLength?: number }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);

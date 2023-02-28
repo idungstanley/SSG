@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -13,15 +14,13 @@ import { useAppSelector } from '../../../../../app/hooks';
 // import AddNewItem from '../taskColumn/AddNewItem';
 import TaskListViews from '../views/TaskListViews';
 // import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
-import {
-  ITaskFullListObj,
-  KeyItemTypes,
-} from '../../../../../features/task/interface.tasks';
+// import {
+//   ITaskFullListObj,
+//   KeyItemTypes,
+// } from '../../../../../features/task/interface.tasks';
 import TaskData from './TaskData';
 
-export default function TaskTemplateData({
-  filteredTaskData,
-}: ITaskFullListObj) {
+export default function TaskTemplateData({ filteredTaskData }) {
   const dispatch = useDispatch();
   const { createTaskFromTop } = useAppSelector((state) => state.list);
   // const { addNewTaskItem } = useAppSelector((state) => state.task);
@@ -33,7 +32,7 @@ export default function TaskTemplateData({
         <div className="">
           {Object.keys(filteredTaskData).map((value) => (
             <div
-              key={filteredTaskData[value as keyof KeyItemTypes].key}
+              key={filteredTaskData[value].key}
               className="border p-5 rounded-xl relative"
             >
               {/* Breadcrumb goes here */}
@@ -59,10 +58,7 @@ export default function TaskTemplateData({
                     className="text-base font-semibold text-black	"
                     style={{ backgroundColor: '#e1e4e5' }}
                   >
-                    {
-                      filteredTaskData[value as keyof KeyItemTypes]
-                        .groupListName
-                    }
+                    {filteredTaskData[value].groupListName}
                   </p>
 
                   <InformationCircleIcon
@@ -74,11 +70,7 @@ export default function TaskTemplateData({
                     className=""
                     id="newItem"
                     onClick={() => {
-                      dispatch(
-                        setCurrentListId(
-                          filteredTaskData[value as keyof KeyItemTypes].key
-                        )
-                      );
+                      dispatch(setCurrentListId(filteredTaskData[value].key));
                       dispatch(setCreateTaskFromTop(!createTaskFromTop));
                     }}
                   >
@@ -123,17 +115,13 @@ export default function TaskTemplateData({
               <div>
                 <div>
                   <TaskListViews
-                    taskLength={
-                      filteredTaskData[value as keyof KeyItemTypes].tasks.length
-                    }
+                    taskLength={filteredTaskData[value].tasks.length}
                   />
-                  {filteredTaskData[value as keyof KeyItemTypes].tasks?.map(
-                    (task) => (
-                      <Fragment key={task.id}>
-                        <TaskData task={task} />
-                      </Fragment>
-                    )
-                  )}
+                  {filteredTaskData[value].tasks?.map((task) => (
+                    <Fragment key={task.id}>
+                      <TaskData task={task} />
+                    </Fragment>
+                  ))}
                 </div>
               </div>
               {/* {addNewTaskItem && currentListId === item.id && (
@@ -161,3 +149,41 @@ export default function TaskTemplateData({
     </main>
   );
 }
+
+TaskTemplateData.propTypes = {
+  filteredTaskData: {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    list_id: PropTypes.string,
+    parent_id: null,
+    priority: null,
+    status: PropTypes.string,
+    start_date: null,
+    end_date: null,
+    assignees: PropTypes.array,
+    group_assignees: PropTypes.array,
+    custom_fields: PropTypes.array,
+    tags: PropTypes.array,
+    updated_at: PropTypes.string,
+    created_at: PropTypes.string,
+    archived_at: null,
+    deleted_at: null,
+    directory_items: PropTypes.array,
+    list: {
+      id: PropTypes.string,
+      name: PropTypes.string,
+      parents: {
+        hubs: [
+          {
+            id: PropTypes.string,
+            name: PropTypes.string,
+            parent_id: null,
+          },
+        ],
+        wallets: PropTypes.array,
+        lists: PropTypes.array,
+      },
+    },
+  },
+};

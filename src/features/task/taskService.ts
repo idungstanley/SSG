@@ -40,13 +40,15 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
+  itemType,
 }: {
-  itemId: string | undefined;
+  itemId: string | undefined | null;
+  itemType: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-
+  const enabled = itemType == 'hub' || itemType == 'subhub';
   return useInfiniteQuery(
-    ['task', itemId],
+    ['task', itemId, itemType],
     async ({ pageParam = 0 }) => {
       return requestNew(
         {
@@ -62,7 +64,52 @@ export const UseGetFullTaskList = ({
       );
     },
     {
-      // enabled: itemId == null,
+      enabled,
+      onSuccess: (data) => {
+        data.pages.map((page) =>
+          page.data.tasks.map((task: ITaskFullList) =>
+            queryClient.setQueryData(['task', task.id], task)
+          )
+        );
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+    }
+  );
+};
+
+export const UseGetFullTaskListWallet = ({
+  itemId,
+  itemType,
+}: {
+  itemId: string | undefined | null;
+  itemType: string | null | undefined;
+}) => {
+  const queryClient = useQueryClient();
+  const enabled = itemType == 'wallet' || itemType == 'subwallet';
+
+  return useInfiniteQuery(
+    ['task', itemId, itemType],
+    async ({ pageParam = 0 }) => {
+      return requestNew(
+        {
+          url: 'at/tasks/full-list',
+          method: 'POST',
+          params: {
+            page: pageParam,
+            wallet_id: itemId,
+          },
+        },
+        true
+      );
+    },
+    {
+      enabled,
       onSuccess: (data) => {
         data.pages.map((page) =>
           page.data.tasks.map((task: ITaskFullList) =>
@@ -99,7 +146,7 @@ export const UseGetFullTaskList = ({
 export const getOneTaskServices = ({
   task_id,
 }: {
-  task_id: string | undefined;
+  task_id: string | undefined | null;
 }) => {
   // const queryClient = useQueryClient();
   return useQuery(
