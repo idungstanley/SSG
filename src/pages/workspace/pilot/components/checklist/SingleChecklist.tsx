@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, useRef } from "react";
 import { Disclosure } from "@headlessui/react";
 import { GrDrag } from "react-icons/gr";
 import { BiCaretRight } from "react-icons/bi";
@@ -20,10 +20,8 @@ interface checklistArr {
 
 function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
   const dispatch = useAppDispatch();
-  const [editing, setEditing] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<string>("");
-  // Local states
   const [checklistName, setChecklistName] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [checklistId, setChecklistId] = useState<string>("");
 
@@ -40,20 +38,13 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
     id,
   });
 
-  const editChecklist = (name: string) => {
-    setChecklistName(name);
-    setEditing(true);
-  };
-
-  const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
-    e.preventDefault();
+  const handleEdit = (id: string) => {
+    setChecklistName(inputRef.current!.innerText);
     dispatch(setTriggerChecklistUpdate(true));
-    setEditing(false);
     setChecklistId(id);
+    inputRef.current!.blur();
   };
 
-  // Update Checklist
-  // const { status: updateStatus } =
   UseUpdateChecklistService({
     checklist_id: checklistId,
     name: checklistName,
@@ -70,6 +61,10 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
   };
 
   const done = item.items.filter((e: { is_done: number }) => e.is_done);
+
+  const focusItem = () => {
+    inputRef.current?.focus();
+  };
 
   return (
     <div style={style}>
@@ -93,21 +88,16 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
                     />
                   </div>
                 </Disclosure.Button>
-                <div>
-                  <form onSubmit={(e) => handleEdit(e, item.id)}>
-                    <input
-                      type="text"
-                      value={
-                        editing && item.id == itemId ? checklistName : item.name
-                      }
-                      onChange={(e) => setChecklistName(e.target.value)}
-                      onFocus={() => {
-                        editChecklist(item.name);
-                        setItemId(item.id);
-                      }}
-                      className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-auto w-auto rounded"
-                    />
-                  </form>
+                <div
+                  suppressContentEditableWarning={true}
+                  ref={inputRef}
+                  contentEditable={true}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" ? handleEdit(item.id) : null
+                  }
+                  className="cursor-text"
+                >
+                  {item.name}
                 </div>
                 <label>
                   ({done.length}/{item.items.length})
@@ -117,6 +107,7 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
                 <ChecklistModal
                   options={completeOptions}
                   checklistId={item.id}
+                  focus={focusItem}
                 />
               </div>
             </div>

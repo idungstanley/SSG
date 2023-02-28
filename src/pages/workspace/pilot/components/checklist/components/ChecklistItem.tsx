@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
@@ -32,13 +32,12 @@ export interface checkListItemProps {
 }
 
 function ChecklistItem({ Item, checklistId }: checkListItemProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>("");
   const [itemId, setItemId] = useState<string>("");
   const [done, setDone] = useState<number>(0);
-  const [editItemName, setEditItemName] = useState<boolean>(false);
-  const [editId, setEditId] = useState<string>("");
   const [editName, setEditName] = useState<string>("");
 
   const {
@@ -79,10 +78,10 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   };
 
   const handleEditItemName = (id: string, done: number) => {
+    setEditName(inputRef.current!.innerText);
     setItemId(id);
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));
-    setEditItemName(false);
   };
 
   UseDeleteChecklistItemService({
@@ -90,6 +89,10 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     itemId: clickedChecklistItemId,
     delItem: triggerDelChecklistItem,
   });
+
+  const focusItem = () => {
+    inputRef.current?.focus();
+  };
 
   const groupAssignee = (
     data: [{ id: string; initials: string; colour: string }] | undefined
@@ -144,24 +147,19 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                     isDone(item.id, item.is_done, item.name);
                   }}
                 />
-                <input
-                  className="outline-none border-none hover:outline-none hover:border-none hover:bg-gray-200 focus:bg-white h-7 w-36 rounded"
-                  type="text"
-                  value={
-                    editItemName && item.id === editId ? editName : item.name
+                <div
+                  ref={inputRef}
+                  suppressContentEditableWarning={true}
+                  contentEditable={true}
+                  onKeyDown={(e) =>
+                    e.key === "Enter"
+                      ? handleEditItemName(item.id, item.is_done)
+                      : null
                   }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleEditItemName(item.id, item.is_done);
-                    }
-                  }}
-                  onChange={(e) => setEditName(e.target.value)}
-                  onFocus={() => {
-                    setEditItemName(true);
-                    setEditId(item.id);
-                    setEditName(item.name);
-                  }}
-                />
+                  className="cursor-text"
+                >
+                  {item.name}
+                </div>
                 {item.assignees.length ? (
                   <span
                     className="flex mx-4 cursor-pointer"
@@ -192,6 +190,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                     options={lessOptions}
                     checklistId={checklistId}
                     checklistItemId={item.id}
+                    focus={focusItem}
                   />
                 </div>
                 {toggleAssignChecklistItemId == item.id ? (
