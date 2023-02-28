@@ -13,6 +13,7 @@ import { itemProps } from "./ChecklistItem";
 import { useAppDispatch } from "../../../../../../app/hooks";
 import { setShowChecklistInput } from "../../../../../../features/task/checklist/checklistSlice";
 import { MdCancel } from "react-icons/md";
+import ToolTip from "../../../../../../components/Tooltip";
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>("Checklist");
@@ -64,7 +65,9 @@ export default function ChecklistIndex() {
           className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
           onClick={() => dispatch(setShowChecklistInput(true))}
         >
-          <GoPlus className="w-3 h-3" />
+          <ToolTip tooltip="Add Checklist">
+            <GoPlus className="w-3 h-3" />
+          </ToolTip>
         </div>
       </div>
       {showChecklistInput && (
