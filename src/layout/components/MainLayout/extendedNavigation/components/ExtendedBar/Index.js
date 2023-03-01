@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import requestNew from '../../../../app/requestNew';
+import requestNew from '../../../../../../app/requestNew';
 
 export const useGetHubList = () => {
   const queryClient = useQueryClient();
@@ -13,14 +13,14 @@ export const useGetHubList = () => {
           method: 'GET',
         },
         false,
-        true
+        true,
       ),
     {
       onSuccess: (data) => {
         data.data.hubs.map((hub) =>
-          queryClient.setQueryData(['hub', hub.id], hub)
+          queryClient.setQueryData(['hub', hub.id], hub),
         );
       },
-    }
+    },
   );
 };
