@@ -1,13 +1,13 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from "react";
 // import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../../app/hooks';
-import ListNav from '../../../lists/components/renderlist/ListNav';
-import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
-import PageWrapper from '../../../../../components/PageWrapper';
-import PilotSection, { pilotConfig } from '../PilotSection';
-import { UseGetFullTaskList } from '../../../../../features/task/taskService';
-import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData';
-import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
+import { useAppSelector } from "../../../../../app/hooks";
+import ListNav from "../../../lists/components/renderlist/ListNav";
+import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
+import PageWrapper from "../../../../../components/PageWrapper";
+import PilotSection, { pilotConfig } from "../PilotSection";
+import { UseGetFullTaskList } from "../../../../../features/task/taskService";
+import TaskTemplateData from "../../../tasks/component/taskData/TaskTemplateData";
+import NoTaskFound from "../../../tasks/component/taskData/NoTaskFound";
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState([]);
@@ -25,7 +25,7 @@ function RenderHubs() {
   );
 
   useEffect(() => {
-    if (status !== 'success') {
+    if (status !== "success") {
       return setTaskDataGroupings([]);
     }
 
@@ -33,7 +33,7 @@ function RenderHubs() {
       (GroupedTaskByListID, currentTask) => {
         if (!GroupedTaskByListID[currentTask.list_id]) {
           GroupedTaskByListID[currentTask.list_id] = {
-            groupListName: currentTask.list.name,
+            groupListName: currentTask.list?.name,
             key: currentTask.list_id,
 
             tasks: [],
@@ -66,7 +66,7 @@ function RenderHubs() {
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
             className="w-full scrollbarDynCol"
-            style={{ minHeight: '0', maxHeight: '100vh' }}
+            style={{ minHeight: "0", maxHeight: "100vh" }}
           >
             <div className="w-full">
               <ListFilter />

@@ -131,13 +131,13 @@ export default function DataRenderFunc({
       ) : (
         <>
           <div
-            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? "object-contain" : "w-20"
+            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 shapify ${
+              item.name.length > 10 ? "object-contain p-10" : "w-20"
             }`}
             style={{ backgroundColor: `${item.color}` }}
           >
             <div className="flex items-center">
-              <p> {item.name}</p>
+              <p className="pl-3"> {item.name}</p>
               {renameTagId == item.id && (
                 <form>
                   <input
@@ -170,6 +170,7 @@ export default function DataRenderFunc({
             </ToolTip>
             {showTagColorDialogueBox && <ColorsModal />}
           </div>
+
           {/* <span>{arr.length}</span> */}
         </>
       );
