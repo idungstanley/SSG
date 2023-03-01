@@ -140,7 +140,11 @@ export default function DataRenderFunc({
                 <>
                   <div
                     className={`flex items-center  text-white p-0.5 text-center  shapify `}
-                    style={{ backgroundColor: `${item.color}` }}
+                    style={{
+                      backgroundColor: `${item.color}`,
+                      clipPath:
+                        "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)",
+                    }}
                   >
                     <div className="flex items-center ">
                       <p className="pl-4">
