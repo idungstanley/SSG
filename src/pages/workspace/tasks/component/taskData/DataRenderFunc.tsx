@@ -125,56 +125,71 @@ export default function DataRenderFunc({
   };
 
   const groupTags = (arr: tagItem[]) => {
-    return arr.map((item: tagItem) => {
-      return Array.isArray(item) ? (
-        <div>{groupTags(item)}</div>
-      ) : (
-        <>
-          <div
-            className={`flex items-center space-x-1 text-white p-0.5 text-center m-0.5 shapify ${
-              item.name.length > 10 ? "object-contain p-10" : "w-20"
-            }`}
-            style={{ backgroundColor: `${item.color}` }}
-          >
-            <div className="flex items-center">
-              <p className="pl-3"> {item.name}</p>
-              {renameTagId == item.id && (
-                <form>
-                  <input
-                    type="text"
-                    placeholder="tagedit name"
-                    className="object-contain text-gray-400 h-7"
-                  />
-                </form>
+    console.log(arr);
+    return (
+      <div
+        key={arr.length}
+        className="flex items-center -mr-5 drop-shadow-xl	 	 "
+      >
+        {arr.map((item: tagItem) => {
+          return (
+            <div key={item.id} className="">
+              {Array.isArray(item) ? (
+                <div className="">{groupTags(item)}</div>
+              ) : (
+                <>
+                  <div
+                    className={`flex items-center  text-white p-0.5 text-center  shapify `}
+                    style={{ backgroundColor: `${item.color}` }}
+                  >
+                    <div className="flex items-center ">
+                      <p className="pl-4">
+                        {item.name.length > 6
+                          ? item.name.slice(0, 5)
+                          : item.name}
+                      </p>
+                      {renameTagId == item.id && (
+                        <form>
+                          <input
+                            type="text"
+                            placeholder="tagedit name"
+                            className="object-contain text-gray-400 h-7"
+                          />
+                        </form>
+                      )}
+                    </div>
+                    <ToolTip tooltip="edit tag">
+                      <button className="mt-1">
+                        <EditTagModal tagId={item.id} />
+                      </button>
+                    </ToolTip>
+
+                    <ToolTip tooltip="unassign tag">
+                      <button
+                        className="pr-2 mt-1"
+                        onClick={() =>
+                          dispatch(
+                            triggerUnassignTag({
+                              unAssignTadId: item.id,
+                              currentTaskIdForTag: task.id,
+                            })
+                          )
+                        }
+                      >
+                        <IoCloseSharp />
+                      </button>
+                    </ToolTip>
+                    {showTagColorDialogueBox && <ColorsModal />}
+                  </div>
+
+                  {/* <span>{arr.length}</span> */}
+                </>
               )}
             </div>
-            <ToolTip tooltip="edit tag">
-              <button>
-                <EditTagModal tagId={item.id} />
-              </button>
-            </ToolTip>
-
-            <ToolTip tooltip="unassign tag">
-              <button
-                onClick={() =>
-                  dispatch(
-                    triggerUnassignTag({
-                      unAssignTadId: item.id,
-                      currentTaskIdForTag: task.id,
-                    })
-                  )
-                }
-              >
-                <IoCloseSharp />
-              </button>
-            </ToolTip>
-            {showTagColorDialogueBox && <ColorsModal />}
-          </div>
-
-          {/* <span>{arr.length}</span> */}
-        </>
-      );
-    });
+          );
+        })}
+      </div>
+    );
   };
 
   const displayNav = (id: string) => {
