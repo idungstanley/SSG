@@ -27,7 +27,7 @@ function FavoritedExtension({ name }: { name: string }) {
     );
   });
   return (
-    <div className="w-11/12">
+    <div className="w-full">
       {activePlaceNameForNavigation !== null ? (
         <div className="flex justify-between w-full">
           <span className="flex items-center content-center self-center">
