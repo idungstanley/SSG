@@ -4,7 +4,7 @@ import { useAppSelector } from "../../../app/hooks";
 import PlaceItem from "../../../layout/components/MainLayout/Sidebar/components/PlaceItem";
 import { cl } from "../../../utils";
 
-export default function RoutePlanner() {
+export default function Email() {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
