@@ -16,6 +16,11 @@ export const completeOptions = [
   },
   {
     id: 5,
+    name: "Rename",
+    handleClick: () => ({}),
+  },
+  {
+    id: 6,
     name: "Delete Checklist",
     handleClick: () => {
       // const dispatch = useAppDispatch();

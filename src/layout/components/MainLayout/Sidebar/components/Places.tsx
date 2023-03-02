@@ -1,5 +1,8 @@
 import React, { memo, useEffect } from 'react';
-import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
+import {
+  setActivePlaceId,
+  setActivePlaceName,
+} from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
 import Favorites from '../../../../../pages/workspace/favorites';
 import Files from '../../../../../pages/workspace/files';
@@ -11,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
-import libraryIcon from '../../../../../assets/icons/library.svg';
 import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
 import AlsoHr from '../../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../../pages/workspace/commerce';
@@ -19,7 +21,6 @@ import RoutePlanner from '../../../../../pages/workspace/routePlanner';
 import { IoBusinessOutline } from 'react-icons/io5';
 import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping, FaRoute } from 'react-icons/fa';
-import Sidebar from '../../../../../pages/directory/components/Sidebar';
 import { MdAlternateEmail } from 'react-icons/md';
 import { InboxStackIcon } from '@heroicons/react/24/solid';
 
@@ -31,7 +32,7 @@ const places = [
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
-    name: 'TASK',
+    name: 'TASKS',
     id: 2,
     place: <Hubs />,
     source: hubIcon,
@@ -40,7 +41,7 @@ const places = [
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    icon: <InboxStackIcon className="w-4 h-4"/>,
+    icon: <InboxStackIcon className="w-4 h-4" />,
   },
   {
     name: 'Cabinet',
@@ -48,13 +49,6 @@ const places = [
     place: <ExtendedBar />,
     source: cabinetIcon,
     link: 'explorer',
-  },
-  {
-    name: 'Library',
-    id: 5,
-    place: <Sidebar />,
-    source: libraryIcon,
-    link: 'directory',
   },
   {
     name: 'Forms',
@@ -66,25 +60,25 @@ const places = [
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-4 h-4"/>,
+    icon: <ClockIcon className="w-4 h-4" />,
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-4 h-4"/>,
+    icon: <FaRoute className="w-4 h-4" />,
   },
   {
     name: 'Also HR',
     id: 9,
-    place: <AlsoHr/>,
-    icon: <FaHandsHelping className="w-4 h-4"/>,
+    place: <AlsoHr />,
+    icon: <FaHandsHelping className="w-4 h-4" />,
   },
   {
     name: 'Commerce',
     id: 10,
-    place: <Commerce/>,
-    icon: <IoBusinessOutline className="w-4 h-4"/>,
+    place: <Commerce />,
+    icon: <IoBusinessOutline className="w-4 h-4" />,
   },
 ];
 
@@ -95,8 +89,9 @@ function Places() {
 
   const { activePlaceId } = useAppSelector((state) => state.workspace);
 
-  const handleClick = (id: number, link?: string) => {
+  const handleClick = (id: number, name: string | null, link?: string) => {
     dispatch(setActivePlaceId(id));
+    dispatch(setActivePlaceName(name));
 
     if (link) {
       navigate('/' + link);
@@ -137,7 +132,7 @@ function Places() {
                 )
               }
               label={place.name}
-              onClick={() => handleClick(place.id, place.link)}
+              onClick={() => handleClick(place.id, place.name, place.link)}
             />
           )}
         </div>

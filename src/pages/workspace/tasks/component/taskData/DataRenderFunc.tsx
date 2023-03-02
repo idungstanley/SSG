@@ -264,6 +264,7 @@ export default function DataRenderFunc({
       <>
         <UserPlusIcon
           className="ml-2 text-xl text-gray-400 cursor-pointer "
+          style={{ width: "30px" }}
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -423,15 +424,15 @@ export default function DataRenderFunc({
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
               </span>
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                {!ShowPlusIcon && (
+              {!ShowPlusIcon && (
+                <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                   <PlusIcon
                     className="w-3 text-gray-500 "
                     aria-hidden="true"
                     onClick={() => handleCreateSubTask(task.id as string)}
                   />
-                )}
-              </span>
+                </span>
+              )}
               {/* tag here */}
               <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
                 <TagModal />
