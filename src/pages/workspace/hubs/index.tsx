@@ -39,7 +39,7 @@ function Hubs() {
   return (
     <>
       <PlaceItem
-        label="TASK"
+        label="TASKS"
         icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
@@ -61,9 +61,7 @@ function Hubs() {
           </p>
         </div>
       </div>
-
       <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
-
       <Modal />
       <SubHubModal />
       <WalletModal />

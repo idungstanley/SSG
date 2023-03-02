@@ -1,36 +1,40 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../../../app/hooks';
+import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
+import { useAppSelector } from '../../../../../app/hooks';
 import {
   resetCurrentItem,
   setCurrentItem,
   setShowHub,
-} from '../../../../features/workspace/workspaceSlice';
-import { AvatarWithInitials } from '../../../../components';
-import { Spinner } from '../../../../common';
+} from '../../../../../features/workspace/workspaceSlice';
+import { AvatarWithInitials } from '../../../../../components';
+import { Spinner } from '../../../../../common';
 import {
   useGetHubList,
   useGetHubWallet,
   useGetSubHub,
-} from '../../../../features/hubs/hubService';
-import { getHub } from '../../../../features/hubs/hubSlice';
-import SubWalletIndex from '../../wallet/components/subwallet1/ SubWalletIndex';
-import { getWalletService } from '../../../../features/wallet/walletService';
-import Sub2WalletIndex from '../../wallet/components/subwallet2/Sub2WalletIndex';
+} from '../../../../../features/hubs/hubService';
+import { getHub } from '../../../../../features/hubs/hubSlice';
+import SubWalletIndex from '../../../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
+import { getWalletService } from '../../../../../features/wallet/walletService';
+import Sub2WalletIndex from '../../../../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
-import MenuDropdown from '../../../../components/Dropdown/MenuDropdown';
-import SHubDropdownList from '../../../../components/ItemsListInSidebar/components/SHubDropdownList';
+import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
+import SHubDropdownList from '../../../../../components/ItemsListInSidebar/components/SHubDropdownList';
 import ActiveSubHub from './ActiveSubHub';
-import DropdownList from '../../../../components/ItemsListInSidebar/components/DropdownList';
-import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
+import DropdownList from '../../../../../components/ItemsListInSidebar/components/DropdownList';
+import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, activeItemId, activeItemType, currentWalletId } =
-    useAppSelector((state) => state.workspace);
+  const {
+    currentItemId,
+    activeItemId,
+    activeItemType,
+    currentWalletId,
+  } = useAppSelector((state) => state.workspace);
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
   // const { data: subwallet } = useQuery({
@@ -158,7 +162,7 @@ export default function ActiveHub() {
           setCurrentItem({
             currentItemId: id,
             currentItemType: 'hub',
-          })
+          }),
         );
       } else {
         dispatch(resetCurrentItem());
@@ -169,7 +173,7 @@ export default function ActiveHub() {
         setCurrentItem({
           currentItemId: id,
           currentItemType: 'hub',
-        })
+        }),
       );
     }
   };
@@ -238,13 +242,13 @@ export default function ActiveHub() {
                   <MenuDropdown />
                 </div>
               </div>
-              <div className="w-full border bg-green-50 flex items-center">
+              <div className="flex items-center w-full border bg-green-50">
                 {displayClickedParent()}
               </div>
               <hr />
               <div>{displayActiveItem()}</div>
             </li>
-          )
+          ),
       )}
     </ul>
   ) : null;
