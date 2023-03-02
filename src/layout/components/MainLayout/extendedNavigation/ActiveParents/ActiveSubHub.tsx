@@ -1,10 +1,8 @@
 import React from 'react';
-import { useGetSubHub } from '../../../../features/hubs/hubService';
-import { useAppSelector } from '../../../../app/hooks';
+import { useGetSubHub } from '../../../../../features/hubs/hubService';
+import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  setHubParentId,
-} from '../../../../features/hubs/hubSlice';
+import { setHubParentId } from '../../../../../features/hubs/hubSlice';
 
 export default function ActiveSubHub() {
   const dispatch = useDispatch();
@@ -13,12 +11,9 @@ export default function ActiveSubHub() {
     parentId: currentItemId,
   });
   if (status === 'success') {
-    data?.data?.hubs.map(({ parent_id }) =>
-      dispatch(setHubParentId(parent_id))
-    );
+    data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, currSubHubId } =
-    useAppSelector((state) => state.hub);
+  const { hubParentId, currSubHubId } = useAppSelector((state) => state.hub);
 
   return currentItemId === hubParentId ? (
     <div id="subhub">
@@ -32,12 +27,12 @@ export default function ActiveSubHub() {
                   className="flex items-center justify-center"
                 >
                   <div className="flex items-center flex-1 min-w-0">
-                      <h4
-                        className="tracking-wider capitalize truncate"
-                        style={{ fontSize: '10px' }}
-                      >
-                        {subhub.name}
-                      </h4>
+                    <h4
+                      className="tracking-wider capitalize truncate"
+                      style={{ fontSize: '10px' }}
+                    >
+                      {subhub.name}
+                    </h4>
                   </div>
                 </div>
               </section>
