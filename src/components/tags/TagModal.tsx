@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
-import { UseGetAllTagsService } from '../../features/workspace/workspaceService';
+import { UseGetAllTagsService } from '../../features/workspace/tags/tagService';
 import { Spinner } from '../../common';
 import CreateTag from './CreateTag';
-import { UseAssignTagToTask } from '../../features/task/taskService';
+import { UseAssignTagToTask } from '../../features/workspace/tags/tagService';
 import { dataProps } from '../Index/walletIndex/WalletIndex';
 import { useAppSelector } from '../../app/hooks';
 
