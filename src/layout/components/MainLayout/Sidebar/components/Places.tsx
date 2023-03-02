@@ -29,7 +29,7 @@ export const places = [
   {
     name: "Email",
     id: 1,
-    place: <Favorites />,
+    place: <Email />,
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
