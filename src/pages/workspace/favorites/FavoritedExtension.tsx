@@ -10,11 +10,6 @@ import { secondaryNavigation } from "../../../layout/components/MainLayout/exten
 
 function FavoritedExtension({ name }: { name: string }) {
   const dispatch = useAppDispatch();
-  const activePlaceInfo = secondaryNavigation.filter((elem) => {
-    return (
-      elem.name?.toLowerCase() === activePlaceNameForNavigation?.toLowerCase()
-    );
-  });
   const {
     activePlaceName,
     activePlaceIdForNavigation,
@@ -26,6 +21,11 @@ function FavoritedExtension({ name }: { name: string }) {
     dispatch(setActivePlaceId(activePlaceIdForNavigation));
     dispatch(setActivePlaceName(activePlaceNameForNavigation));
   };
+  const activePlaceInfo = secondaryNavigation.filter((elem) => {
+    return (
+      elem.name?.toLowerCase() === activePlaceNameForNavigation?.toLowerCase()
+    );
+  });
   return (
     <div className="w-11/12">
       {activePlaceNameForNavigation !== null ? (
