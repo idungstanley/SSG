@@ -31,7 +31,7 @@ export default function OpenExtBtn() {
     >
       {!showExtendedBar && (
         <RiArrowRightSLine
-          className="text-xs "
+          className="text-xs"
           onClick={() => dispatch(setShowExtendedBar(true))}
         />
       )}

@@ -3,27 +3,27 @@ import {
   setActivePlaceForNav,
   setActivePlaceId,
   setActivePlaceName,
-} from '../../../../../features/workspace/workspaceSlice';
-import Dashboard from '../../../../../pages/workspace/dashboard';
-import Files from '../../../../../pages/workspace/files';
-import Hubs from '../../../../../pages/workspace/hubs';
-import Inbox from '../../../../../pages/workspace/inbox';
-import hubIcon from '../../../../../assets/branding/hub.svg';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
-import PlaceItem from './PlaceItem';
-import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
-import AlsoHr from '../../../../../pages/workspace/alsoHr';
-import Commerce from '../../../../../pages/workspace/commerce';
-import RoutePlanner from '../../../../../pages/workspace/routePlanner';
-import { IoBusinessOutline } from 'react-icons/io5';
-import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
-import { FaHandsHelping, FaRoute } from 'react-icons/fa';
-import { MdAlternateEmail } from 'react-icons/md';
-import { InboxStackIcon } from '@heroicons/react/24/solid';
-import Email from '../../../../../pages/workspace/email';
+} from "../../../../../features/workspace/workspaceSlice";
+import Dashboard from "../../../../../pages/workspace/dashboard";
+import Files from "../../../../../pages/workspace/files";
+import Hubs from "../../../../../pages/workspace/hubs";
+import Inbox from "../../../../../pages/workspace/inbox";
+import hubIcon from "../../../../../assets/branding/hub.svg";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import ExtendedBar from "../../../../../pages/explorer/components/Sidebar";
+import PlaceItem from "./PlaceItem";
+import cabinetIcon from "../../../../../assets/icons/cabinet.svg";
+import AlsoHr from "../../../../../pages/workspace/alsoHr";
+import Commerce from "../../../../../pages/workspace/commerce";
+import RoutePlanner from "../../../../../pages/workspace/routePlanner";
+import { IoBusinessOutline } from "react-icons/io5";
+import { ClockIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import { FaHandsHelping, FaRoute } from "react-icons/fa";
+import { MdAlternateEmail } from "react-icons/md";
+import { InboxStackIcon } from "@heroicons/react/24/solid";
+import Email from "../../../../../pages/workspace/email";
 
 export const places = [
   {
