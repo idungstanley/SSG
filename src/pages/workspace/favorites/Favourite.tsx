@@ -13,6 +13,9 @@ import {
   setFavUpdateName,
   setTriggerFavUpdate,
 } from "../../../features/hubs/hubSlice";
+import { AvatarWithInitials } from "../../../components";
+import { MdFolder } from "react-icons/md";
+import { FiList } from "react-icons/fi";
 
 interface nameType {
   item: {
@@ -24,6 +27,8 @@ interface nameType {
 }
 
 function Favourite({ item }: nameType) {
+  //   console.log(item.model_type);
+  // const type = item.model_type;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [favName, setFavName] = useState<string>(item.name);
@@ -57,33 +62,53 @@ function Favourite({ item }: nameType) {
   };
 
   return (
-    <div className="hover:bg-gray-100 py-0.5 h-6 flex">
-      <div className="items-center w-full mx-2 flex justify-between  items-center  relative">
-        {showFavEditInput === item.id ? (
-          <form
-            onSubmit={(e) => {
-              handleUpdate(e);
-            }}
-          >
-            <input
-              autoFocus
-              style={{ fontSize: "10px" }}
-              className="h-6 outline-none border-none focus:border-none focus:outline-none rounded"
-              type="text"
-              onChange={(e) => setFavName(e.target.value)}
-              value={favName}
+    <div className="hover:bg-gray-100 py-0.5 h-6 px-2 group">
+      <div className="w-full flex justify-between  items-center  relative">
+        <div className="flex">
+          {item.model_type === "hub" && (
+            <AvatarWithInitials
+              initials={item.name
+                .split(" ")
+                .slice(0, 2)
+                .map((word) => word[0])
+                .join("")
+                .toUpperCase()}
+              height="h-4"
+              width="w-4"
+              backgroundColour="blue"
+              roundedStyle="rounded"
             />
-          </form>
-        ) : (
-          <h4
-            className="tracking-wider capitalize truncate cursor-pointer"
-            style={{ fontSize: "10px" }}
-            onClick={() => handleLocation()}
-          >
-            {item.name}
-          </h4>
-        )}
-        <FavModal id={item.id} />
+          )}
+          {item.model_type === "wallet" && <MdFolder className="w-4 h-4" />}
+          {item.model_type === "list" && <FiList className="w-4 h-4" />}
+          {showFavEditInput === item.id ? (
+            <form
+              onSubmit={(e) => {
+                handleUpdate(e);
+              }}
+            >
+              <input
+                autoFocus
+                style={{ fontSize: "10px" }}
+                className="h-6 outline-none border-none focus:border-none focus:outline-none rounded"
+                type="text"
+                onChange={(e) => setFavName(e.target.value)}
+                value={favName}
+              />
+            </form>
+          ) : (
+            <h4
+              className="tracking-wider capitalize truncate cursor-pointer mx-1"
+              style={{ fontSize: "10px" }}
+              onClick={() => handleLocation()}
+            >
+              {item.name}
+            </h4>
+          )}
+        </div>
+        <div className="opacity-0 group-hover:opacity-100">
+          <FavModal id={item.id} />
+        </div>
       </div>
     </div>
   );

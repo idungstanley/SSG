@@ -1,81 +1,82 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect } from "react";
 import {
+  setActivePlaceForNav,
   setActivePlaceId,
   setActivePlaceName,
-} from '../../../../../features/workspace/workspaceSlice';
-import Dashboard from '../../../../../pages/workspace/dashboard';
-import Favorites from '../../../../../pages/workspace/favorites';
-import Files from '../../../../../pages/workspace/files';
-import Hubs from '../../../../../pages/workspace/hubs';
-import Inbox from '../../../../../pages/workspace/inbox';
-import hubIcon from '../../../../../assets/branding/hub.svg';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
-import PlaceItem from './PlaceItem';
-import cabinetIcon from '../../../../../assets/icons/cabinet.svg';
-import AlsoHr from '../../../../../pages/workspace/alsoHr';
-import Commerce from '../../../../../pages/workspace/commerce';
-import RoutePlanner from '../../../../../pages/workspace/routePlanner';
-import { IoBusinessOutline } from 'react-icons/io5';
-import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
-import { FaHandsHelping, FaRoute } from 'react-icons/fa';
-import { MdAlternateEmail } from 'react-icons/md';
-import { InboxStackIcon } from '@heroicons/react/24/solid';
+} from "../../../../../features/workspace/workspaceSlice";
+import Dashboard from "../../../../../pages/workspace/dashboard";
+import Favorites from "../../../../../pages/workspace/favorites";
+import Files from "../../../../../pages/workspace/files";
+import Hubs from "../../../../../pages/workspace/hubs";
+import Inbox from "../../../../../pages/workspace/inbox";
+import hubIcon from "../../../../../assets/branding/hub.svg";
+import { useAppSelector } from "../../../../../app/hooks";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import ExtendedBar from "../../../../../pages/explorer/components/Sidebar";
+import PlaceItem from "./PlaceItem";
+import cabinetIcon from "../../../../../assets/icons/cabinet.svg";
+import AlsoHr from "../../../../../pages/workspace/alsoHr";
+import Commerce from "../../../../../pages/workspace/commerce";
+import RoutePlanner from "../../../../../pages/workspace/routePlanner";
+import { IoBusinessOutline } from "react-icons/io5";
+import { ClockIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import { FaHandsHelping, FaRoute } from "react-icons/fa";
+import { MdAlternateEmail } from "react-icons/md";
+import { InboxStackIcon } from "@heroicons/react/24/solid";
 
-const places = [
+export const places = [
   {
-    name: 'Email',
+    name: "Email",
     id: 1,
     place: <Favorites />,
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
-    name: 'TASKS',
+    name: "TASKS",
     id: 2,
     place: <Hubs />,
     source: hubIcon,
   },
   {
-    name: 'In-tray',
+    name: "In-tray",
     id: 3,
     place: <Inbox />,
     icon: <InboxStackIcon className="w-4 h-4" />,
   },
   {
-    name: 'Cabinet',
+    name: "Cabinet",
     id: 4,
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'explorer',
+    link: "explorer",
   },
   {
-    name: 'Forms',
+    name: "Forms",
     id: 6,
     place: <Files />,
     icon: <DocumentTextIcon className="w-4 h-4" />,
   },
   {
-    name: 'Time clock',
+    name: "Time clock",
     id: 7,
     place: <Dashboard />,
     icon: <ClockIcon className="w-4 h-4" />,
   },
   {
-    name: 'Route Planner',
+    name: "Route Planner",
     id: 8,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />,
   },
   {
-    name: 'Also HR',
+    name: "Also HR",
     id: 9,
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />,
   },
   {
-    name: 'Commerce',
+    name: "Commerce",
     id: 10,
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />,
@@ -92,15 +93,21 @@ function Places() {
   const handleClick = (id: number, name: string | null, link?: string) => {
     dispatch(setActivePlaceId(id));
     dispatch(setActivePlaceName(name));
+    dispatch(
+      setActivePlaceForNav({
+        activePlaceNameForNavigation: name,
+        activePlaceIdForNavigation: id,
+      })
+    );
 
     if (link) {
-      navigate('/' + link);
+      navigate("/" + link);
     }
   };
 
   useEffect(() => {
     // go to active place from URL on mount
-    const placeFromUrl = pathname.split('/')[1];
+    const placeFromUrl = pathname.split("/")[1];
 
     const activePlace = places.find((i) => i.link === placeFromUrl);
 
@@ -126,7 +133,7 @@ function Places() {
                 ) : (
                   <img
                     src={place.source}
-                    alt={place.name + 'Icon'}
+                    alt={place.name + "Icon"}
                     className="w-4 h-4"
                   />
                 )

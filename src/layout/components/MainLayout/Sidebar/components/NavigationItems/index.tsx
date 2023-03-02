@@ -90,7 +90,7 @@ export default function NavigationItems() {
     <nav className="flex flex-col mt-1">
       {navigation.map((item) => (
         <NavigationItem
-          key={item.href}
+          key={item.name}
           item={item}
           isVisible={item.alwaysShow || showMore}
         />
