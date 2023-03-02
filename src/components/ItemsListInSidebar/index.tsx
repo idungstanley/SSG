@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { VscTriangleDown, VscTriangleRight } from "react-icons/vsc";
 import { useDispatch } from "react-redux";
 import { Spinner } from "../../common";
-import AvatarWithInitials from "../avatar/AvatarWithInitials";
 import {
   setActiveEntity,
   setActiveItem,
@@ -21,13 +19,12 @@ import {
   closeMenu,
   getCurrHubId,
   getPrevName,
-  getSubMenu,
   setshowMenuDropdown,
 } from "../../features/hubs/hubSlice";
-import { AiOutlineEllipsis, AiOutlinePlus } from "react-icons/ai";
 import SubDropdown from "../Dropdown/SubDropdown";
 import { useNavigate } from "react-router-dom";
 import { cl } from "../../utils";
+import HubItem from "../tasks/HubItem";
 
 interface ItemsListInSidebarProps {
   status: string;
@@ -43,19 +40,12 @@ export default function ItemsListInSidebar({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null>(null);
-  const [isHovering, setIsHovering] = useState<number>(-1);
-  const { currentItemId, activeItemId } = useAppSelector(
+  const { currentItemId } = useAppSelector(
     (state) => state.workspace
   );
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
 
   if (status === "error") {
     return (
@@ -143,112 +133,20 @@ export default function ItemsListInSidebar({
     }
   };
 
-  const handleItemAction = (id: string) => {
-    dispatch(
-      getSubMenu({
-        SubMenuId: id,
-        SubMenuType: "hubs",
-      })
-    );
-  };
-
   return status === "success" ? (
     <ul className={cl("z-20", !showSidebar && "overflow-x-hidden w-12")}>
-      {items?.map((i: { id: string; name: string }, index) => (
+      {items?.map((i: { id: string; name: string }) => (
         <li
           key={i.id}
-          className={`flex relative flex-col ${i.id === showChildren}`}
-          onMouseEnter={() => handleMouseOver(index)}
-          onMouseLeave={handleMouseOut}
+          className="relative flex flex-col group"
         >
-          <div
-            className={`flex justify-between items-center hover:bg-gray-100 ${
-              i.id === activeItemId && "bg-green-100 text-green-500"
-            }`}
-            tabIndex={0}
-            onClick={() => handleClick(i.id)}
-          >
-            <div
-              className={`flex relative justify-between items-center hover:bg-gray-100 ${
-                i.id === activeItemId && "text-green-500"
-              }`}
-            >
-              {i.id === activeItemId && (
-                <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
-              )}
-              <div
-                role="button"
-                className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-              >
-                {showSidebar && (
-                  <div className="mr-0.5">
-                    {i.id === showChildren ? (
-                      <span className="flex flex-col">
-                        <VscTriangleDown
-                          className="flex-shrink-0 h-2"
-                          aria-hidden="true"
-                          color="rgba(72, 67, 67, 0.64)"
-                        />
-                      </span>
-                    ) : (
-                      <VscTriangleRight
-                        className="flex-shrink-0 h-2"
-                        aria-hidden="true"
-                        color="#BBBDC0"
-                      />
-                    )}
-                  </div>
-                )}
-
-                <div
-                  className={`flex items-center flex-1 min-w-0 ${
-                    !showSidebar && "ml-3"
-                  }`}
-                  onClick={() => handleLocation(i.id, i.name)}
-                >
-                  <AvatarWithInitials
-                    initials={i.name
-                      .split(" ")
-                      .slice(0, 2)
-                      .map((word) => word[0])
-                      .join("")
-                      .toUpperCase()}
-                    height={showSidebar ? "h-4" : "h-6"}
-                    width={showSidebar ? "w-4" : "w-6"}
-                    backgroundColour="blue"
-                    roundedStyle="rounded"
-                  />
-                  <span className="ml-4 overflow-hidden">
-                    <a
-                      className="tracking-wider capitalize truncate cursor-pointer"
-                      style={{ fontSize: "12px" }}
-                      onClick={() => handleLocation(i.id, i.name)}
-                    >
-                      {i.name}
-                    </a>
-                  </span>
-                </div>
-              </div>
-            </div>
-            {isHovering === index && showSidebar && (
-              <div
-                className="flex items-center pr-1 space-x-1"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <AiOutlineEllipsis
-                  onClick={(e) => {
-                    handleHubSettings(i.id, i.name, e);
-                  }}
-                  className="cursor-pointer"
-                  id="menusettings"
-                />
-                <AiOutlinePlus
-                  onClick={() => handleItemAction(i.id)}
-                  className="cursor-pointer"
-                />
-              </div>
-            )}
-          </div>
+          <HubItem
+            item={i}
+            handleClick={handleClick}
+            handleHubSettings={handleHubSettings}
+            handleLocation={handleLocation}
+            showChildren={showChildren}
+          />
           {showChildren === i.id && showSidebar ? <DropdownList /> : null}
           {showMenuDropdown === i.id && showSidebar ? <MenuDropdown /> : null}
           {SubMenuId === i.id && showSidebar ? <SubDropdown /> : null}
