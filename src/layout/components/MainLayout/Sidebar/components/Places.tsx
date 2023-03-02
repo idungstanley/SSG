@@ -4,7 +4,6 @@ import {
   setActivePlaceName,
 } from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
-import Favorites from '../../../../../pages/workspace/favorites';
 import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
@@ -23,12 +22,13 @@ import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping, FaRoute } from 'react-icons/fa';
 import { MdAlternateEmail } from 'react-icons/md';
 import { InboxStackIcon } from '@heroicons/react/24/solid';
+import Email from '../../../../../pages/workspace/email';
 
 const places = [
   {
     name: 'Email',
     id: 1,
-    place: <Favorites />,
+    place: <Email />,
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {

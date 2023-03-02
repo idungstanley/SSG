@@ -23,6 +23,7 @@ import CloseExtBtn from './components/extendBtn/CloseExtBtn';
 import ExtendedItem from './components/extendedItem';
 import InboxData from '../../../../pages/workspace/inbox/InboxData';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryData';
+import Email from '../../../../pages/workspace/email';
 
 interface ItemData {
     id?: number;
@@ -37,7 +38,7 @@ export const secondaryNavigation: ItemData[] = [
   {
     name: 'Email',
     id: 1,
-    place: <Favourites />,
+    place: <Email />,
     source: emailIcon,
   },
   {
