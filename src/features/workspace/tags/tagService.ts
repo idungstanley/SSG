@@ -34,9 +34,9 @@ export const UseUpdateTagService = ({
   tag_id,
   name,
 }: {
-  color: string;
+  color?: string;
   tag_id: string | null;
-  name?: string | null;
+  name?: string;
 }) => {
   const url = `tags/${tag_id}`;
   const response = requestNew(

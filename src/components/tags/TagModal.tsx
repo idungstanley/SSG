@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
+import { AiOutlineTags } from "react-icons/ai";
 import {
   UseAssignTagService,
   UseGetAllTagsService,
@@ -9,7 +9,7 @@ import { Spinner } from "../../common";
 import CreateTag from "./CreateTag";
 import { dataProps } from "../Index/walletIndex/WalletIndex";
 import { useAppSelector } from "../../app/hooks";
-import EditTagModal from "./EditTagModal";
+// import EditTagModal from "./EditTagModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function TagModal() {
@@ -74,9 +74,9 @@ export default function TagModal() {
                     >
                       <p>{tags.name}</p>
                     </button>
-                    <button onClick={() => <EditTagModal tagId={tags.id} />}>
+                    {/* <button onClick={() => <EditTagModal tagId={tags.id} />}>
                       <AiOutlineEllipsis className="text-sm" />
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </Menu.Item>

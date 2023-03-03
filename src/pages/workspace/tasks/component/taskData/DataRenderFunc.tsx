@@ -1,5 +1,5 @@
 import moment, { MomentInput } from "moment";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { MdDragIndicator } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
@@ -29,7 +29,10 @@ import PriorityDropdown from "../../../../../components/priority/PriorityDropdow
 import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setCurrentTaskIdForTag } from "../../../../../features/workspace/tags/tagSlice";
-import { UseUnAssignTagService } from "../../../../../features/workspace/tags/tagService";
+import {
+  UseUnAssignTagService,
+  UseUpdateTagService,
+} from "../../../../../features/workspace/tags/tagService";
 
 interface renderDataProps {
   taskColField:
@@ -63,13 +66,19 @@ export default function DataRenderFunc({
     CompactView,
     CompactViewWrap,
   } = useAppSelector((state) => state.task);
-  const { showTagColorDialogueBox, renameTagId } = useAppSelector(
-    (state) => state.tag
-  );
+  const [tagState, setTagState] = useState<string>("");
+  const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } =
+    useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
+  const editTagNameMutation = useMutation(UseUpdateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },
@@ -81,6 +90,21 @@ export default function DataRenderFunc({
     } else {
       dispatch(setToggleAssignCurrentTaskId(id));
     }
+  };
+
+  const handleEditTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagState(e.target.value);
+  };
+
+  const handleEditTagSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    currentTagId: string
+  ) => {
+    e.preventDefault();
+    await editTagNameMutation.mutateAsync({
+      name: tagState,
+      tag_id: currentTagId,
+    });
   };
 
   const groupAssignee = (
@@ -143,52 +167,55 @@ export default function DataRenderFunc({
                 <div className="">{groupTags(item)}</div>
               ) : (
                 <>
-                  <div
-                    className="flex items-center text-white p-0.5 h-4 text-center space-x-1 mr-1.5"
-                    style={{
-                      backgroundColor: `${item.color}`,
-                      clipPath:
-                        "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)",
-                    }}
-                  >
-                    <div className="flex items-center font-bold truncate">
-                      <p className="pl-4" style={{ fontSize: "7px" }}>
-                        {item.name.length > 10
-                          ? item.name.slice(0, 5)
-                          : item.name}
-                      </p>
-                      {renameTagId == item.id && (
-                        <form>
-                          <input
-                            type="text"
-                            placeholder="tagedit name"
-                            className="object-contain text-gray-400 h-7"
-                          />
-                        </form>
-                      )}
-                    </div>
-                    <ToolTip tooltip="edit tag">
-                      <button className="mt-1">
-                        <EditTagModal tagId={item.id} />
-                      </button>
-                    </ToolTip>
+                  {renameTagId == item.id && currentTaskIdForTag == task.id ? (
+                    <form onSubmit={(e) => handleEditTagSubmit(e, item.id)}>
+                      <input
+                        type="text"
+                        value={tagState}
+                        onChange={(e) => handleEditTagChange(e)}
+                        name="tag"
+                        className="text-gray-400 w-full h-10"
+                      />
+                    </form>
+                  ) : (
+                    <div
+                      className="flex items-center text-white p-0.5 h-4 text-center space-x-1 mr-1.5"
+                      style={{
+                        backgroundColor: `${item.color}`,
+                        clipPath:
+                          "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)",
+                      }}
+                    >
+                      <div className="flex items-center font-bold truncate">
+                        <p className="pl-4" style={{ fontSize: "7px" }}>
+                          {item.name.length > 10
+                            ? item.name.slice(0, 5)
+                            : item.name}
+                        </p>
+                      </div>
+                      <ToolTip tooltip="edit tag">
+                        <button className="mt-1">
+                          <EditTagModal taskId={task.id} tagId={item.id} />
+                        </button>
+                      </ToolTip>
 
-                    <ToolTip tooltip="unassign tag">
-                      <button
-                        className="pr-2 text-gray-300 font-bold"
-                        style={{ fontSize: "9px" }}
-                        onClick={() =>
-                          unAssignTagMutation.mutateAsync({
-                            tagId: item.id,
-                            currentTaskIdForTag: task.id,
-                          })
-                        }
-                      >
-                        <IoCloseSharp />
-                      </button>
-                    </ToolTip>
-                    {showTagColorDialogueBox && <ColorsModal />}
-                  </div>
+                      <ToolTip tooltip="unassign tag">
+                        <button
+                          className="pr-2 text-gray-300 font-bold"
+                          style={{ fontSize: "9px" }}
+                          onClick={() =>
+                            unAssignTagMutation.mutateAsync({
+                              tagId: item.id,
+                              currentTaskIdForTag: task.id,
+                            })
+                          }
+                        >
+                          <IoCloseSharp />
+                        </button>
+                      </ToolTip>
+                      {showTagColorDialogueBox && <ColorsModal />}
+                    </div>
+                  )}
 
                   {/* <span>{arr.length}</span> */}
                 </>

@@ -14,6 +14,7 @@ import {
 import { UseDeleteTagsService } from "../../features/workspace/tags/tagService";
 import {
   setCurrentTagId,
+  setCurrentTaskIdForTag,
   setRenameTagId,
   setShowTagColorDialogBox,
 } from "../../features/workspace/tags/tagSlice";
@@ -28,9 +29,10 @@ interface itemsType {
 
 interface EditTagModalProps {
   tagId: string | null;
+  taskId: string | null;
 }
 
-export default function EditTagModal({ tagId }: EditTagModalProps) {
+export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { showTagColorDialogueBox } = useAppSelector((state) => state.tag);
@@ -80,6 +82,7 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
       title: "Rename",
       handleClick: () => {
         dispatch(setRenameTagId(tagId));
+        dispatch(setCurrentTaskIdForTag(taskId));
       },
       icon: <HiOutlinePencil />,
       bg: "blue",
