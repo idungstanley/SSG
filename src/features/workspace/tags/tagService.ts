@@ -75,34 +75,26 @@ export const UseDeleteTagsService = ({
 };
 
 //assign tags
-export const UseAssignTagToTask = ({
+export const UseAssignTagService = ({
   tagId,
   currentTaskIdForTag,
 }: {
   tagId: string | null;
   currentTaskIdForTag: string | null;
 }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(
-    ["task", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `tags/${tagId}/assign`,
-          method: "POST",
-          params: {
-            type: "task",
-            id: currentTaskIdForTag,
-          },
-        },
-        true
-      );
-      return data;
-    },
+  const url = `tags/${tagId}/assign`;
+  const response = requestNew(
     {
-      enabled: !!tagId,
-    }
+      url,
+      method: "POST",
+      params: {
+        type: "task",
+        id: currentTaskIdForTag,
+      },
+    },
+    true
   );
+  return response;
 };
 
 //unassign tags

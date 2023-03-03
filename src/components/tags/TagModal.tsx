@@ -1,16 +1,20 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
-import { UseGetAllTagsService } from "../../features/workspace/tags/tagService";
+import {
+  UseAssignTagService,
+  UseGetAllTagsService,
+} from "../../features/workspace/tags/tagService";
 import { Spinner } from "../../common";
 import CreateTag from "./CreateTag";
-import { UseAssignTagToTask } from "../../features/workspace/tags/tagService";
 import { dataProps } from "../Index/walletIndex/WalletIndex";
 import { useAppSelector } from "../../app/hooks";
 import EditTagModal from "./EditTagModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function TagModal() {
-  const [tagId, setTagId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+
   const { currentTaskIdForTag } = useAppSelector((state) => state.tag);
   //get all tags
   const { data, status } = UseGetAllTagsService();
@@ -21,11 +25,18 @@ export default function TagModal() {
     <Spinner size={10} color={"blue"} />;
   }
 
-  UseAssignTagToTask({
-    tagId,
-    currentTaskIdForTag,
+  const assignTagMutation = useMutation(UseAssignTagService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
-  // console.log(assignTag);
+
+  const handleAssignTag = async (tagId: string) => {
+    await assignTagMutation.mutateAsync({
+      tagId,
+      currentTaskIdForTag,
+    });
+  };
 
   return status == "success" ? (
     <Menu as="div" className="relative inline-block text-left">
@@ -59,7 +70,7 @@ export default function TagModal() {
                     <button
                       type="button"
                       className="flex items-center px-4 py-2 text-sm  text-left space-x-2 w-11/12"
-                      onClick={() => setTagId(tags.id)}
+                      onClick={() => handleAssignTag(tags.id)}
                     >
                       <p>{tags.name}</p>
                     </button>
