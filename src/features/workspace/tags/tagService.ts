@@ -97,6 +97,29 @@ export const UseAssignTagService = ({
   return response;
 };
 
+//un-assign tags
+export const UseUnAssignTagService = ({
+  tagId,
+  currentTaskIdForTag,
+}: {
+  tagId: string | null;
+  currentTaskIdForTag: string | null;
+}) => {
+  const url = `tags/${tagId}/unassign`;
+  const response = requestNew(
+    {
+      url,
+      method: "POST",
+      params: {
+        type: "task",
+        id: currentTaskIdForTag,
+      },
+    },
+    true
+  );
+  return response;
+};
+
 //unassign tags
 export const UseUnAssignTagFromTask = ({
   tagId,

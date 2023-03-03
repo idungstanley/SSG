@@ -27,10 +27,9 @@ import { FiEdit2 } from "react-icons/fi";
 import TagModal from "../../../../../components/tags/TagModal";
 import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
 import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import {
-  setCurrentTaskIdForTag,
-  triggerUnassignTag,
-} from "../../../../../features/workspace/tags/tagSlice";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { setCurrentTaskIdForTag } from "../../../../../features/workspace/tags/tagSlice";
+import { UseUnAssignTagService } from "../../../../../features/workspace/tags/tagService";
 
 interface renderDataProps {
   taskColField:
@@ -68,6 +67,13 @@ export default function DataRenderFunc({
     (state) => state.tag
   );
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  const unAssignTagMutation = useMutation(UseUnAssignTagService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -172,12 +178,10 @@ export default function DataRenderFunc({
                         className="pr-2 text-gray-300 font-bold"
                         style={{ fontSize: "9px" }}
                         onClick={() =>
-                          dispatch(
-                            triggerUnassignTag({
-                              unAssignTadId: item.id,
-                              currentTaskIdForTag: task.id,
-                            })
-                          )
+                          unAssignTagMutation.mutateAsync({
+                            tagId: item.id,
+                            currentTaskIdForTag: task.id,
+                          })
                         }
                       >
                         <IoCloseSharp />
