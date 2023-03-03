@@ -7,6 +7,7 @@ import walletSlice from "../features/wallet/walletSlice";
 import listSlice from "../features/list/listSlice";
 import taskSlice from "../features/task/taskSlice";
 import explorerSlice from "../features/explorer/explorerSlice";
+import tagSlice from "../features/workspace/tags/tagSlice";
 import inboxSlice from "../features/inbox/inboxSlice";
 import searchSlice from "../features/search/searchSlice";
 import notificationSlice from "../features/general/notification/notificationSlice";
@@ -42,6 +43,7 @@ export const store = configureStore({
     chat: chatSlice,
     account: accountSlice,
     checklist: checklistSlice,
+    tag: tagSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

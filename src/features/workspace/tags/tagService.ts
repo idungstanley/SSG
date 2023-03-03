@@ -1,12 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import requestNew from '../../../app/requestNew';
+import { useQuery } from "@tanstack/react-query";
+import requestNew from "../../../app/requestNew";
 
 export const UseCreateTagService = ({ name }: { name: string }) => {
-  const url = 'tags';
+  const url = "tags";
   const response = requestNew(
     {
       url,
-      method: 'POST',
+      method: "POST",
       data: {
         name: name,
       },
@@ -17,16 +17,40 @@ export const UseCreateTagService = ({ name }: { name: string }) => {
 };
 
 export const UseGetAllTagsService = () => {
-  return useQuery(['tags'], async () => {
+  return useQuery(["tags"], async () => {
     const data = await requestNew(
       {
-        url: 'tags',
-        method: 'GET',
+        url: "tags",
+        method: "GET",
       },
       true
     );
     return data;
   });
+};
+
+export const UseUpdateTagService = ({
+  color,
+  tag_id,
+  name,
+}: {
+  color: string;
+  tag_id: string | null;
+  name?: string | null;
+}) => {
+  const url = `tags/${tag_id}`;
+  const response = requestNew(
+    {
+      url,
+      method: "PUT",
+      data: {
+        name: name,
+        color: color,
+      },
+    },
+    true
+  );
+  return response;
 };
 
 export const UseDeleteTagsService = ({
@@ -40,7 +64,7 @@ export const UseDeleteTagsService = ({
   const response = requestNew(
     {
       url,
-      method: 'DELETE',
+      method: "DELETE",
       params: {
         confirm: trigger,
       },
@@ -60,14 +84,14 @@ export const UseAssignTagToTask = ({
 }) => {
   // const queryClient = useQueryClient();
   return useQuery(
-    ['task', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    ["task", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {
       const data = await requestNew(
         {
           url: `tags/${tagId}/assign`,
-          method: 'POST',
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: currentTaskIdForTag,
           },
         },
@@ -91,14 +115,14 @@ export const UseUnAssignTagFromTask = ({
 }) => {
   // const queryClient = useQueryClient();
   return useQuery(
-    ['task', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
+    ["task", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {
       const data = await requestNew(
         {
           url: `tags/${tagId}/unassign`,
-          method: 'POST',
+          method: "POST",
           params: {
-            type: 'task',
+            type: "task",
             id: currentTaskIdForTag,
           },
         },

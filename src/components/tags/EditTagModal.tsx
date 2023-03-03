@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BiTrash } from 'react-icons/bi';
-import { AiOutlineEllipsis } from 'react-icons/ai';
-import { HiOutlinePencil } from 'react-icons/hi';
-import { BsDroplet } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import {
-  setRenameTagId,
-  setShowTagColorDialogBox,
-} from '../../features/task/taskSlice';
-import { useAppSelector } from '../../app/hooks';
+import React, { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { BiTrash } from "react-icons/bi";
+import { AiOutlineEllipsis } from "react-icons/ai";
+import { HiOutlinePencil } from "react-icons/hi";
+import { BsDroplet } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../app/hooks";
 import {
   displayPrompt,
   setVisibility,
-} from '../../features/general/prompt/promptSlice';
-import { UseDeleteTagsService } from '../../features/workspace/tags/tagService';
+} from "../../features/general/prompt/promptSlice";
+import { UseDeleteTagsService } from "../../features/workspace/tags/tagService";
+import {
+  setCurrentTagId,
+  setRenameTagId,
+  setShowTagColorDialogBox,
+} from "../../features/workspace/tags/tagSlice";
 
 interface itemsType {
   id: number;
@@ -32,27 +33,27 @@ interface EditTagModalProps {
 export default function EditTagModal({ tagId }: EditTagModalProps) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const { showTagColorDialogueBox } = useAppSelector((state) => state.task);
+  const { showTagColorDialogueBox } = useAppSelector((state) => state.tag);
 
   const deleteTagMutation = useMutation(UseDeleteTagsService, {
     onSuccess: () => {
       dispatch(setVisibility(false));
-      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(["task"]);
     },
   });
   const EditTagOptions: itemsType[] = [
     {
       id: 1,
-      title: 'Delete',
+      title: "Delete",
       handleClick: () => {
         dispatch(
           displayPrompt(
-            'Delete Tag',
-            'Would you like delete this tag from the workspace?',
+            "Delete Tag",
+            "Would you like delete this tag from the workspace?",
             [
               {
-                label: 'Delete tag',
-                style: 'danger',
+                label: "Delete tag",
+                style: "danger",
                 callback: () => {
                   deleteTagMutation.mutateAsync({
                     trigger: 1,
@@ -61,8 +62,8 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
                 },
               },
               {
-                label: 'Cancel',
-                style: 'plain',
+                label: "Cancel",
+                style: "plain",
                 callback: () => {
                   dispatch(setVisibility(false));
                 },
@@ -72,25 +73,26 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
         );
       },
       icon: <BiTrash />,
-      bg: 'red',
+      bg: "red",
     },
     {
       id: 2,
-      title: 'Rename',
+      title: "Rename",
       handleClick: () => {
         dispatch(setRenameTagId(tagId));
       },
       icon: <HiOutlinePencil />,
-      bg: 'blue',
+      bg: "blue",
     },
     {
       id: 3,
-      title: 'Change Color',
+      title: "Change Color",
       handleClick: () => {
         dispatch(setShowTagColorDialogBox(!showTagColorDialogueBox));
+        dispatch(setCurrentTagId(tagId));
       },
       icon: <BsDroplet />,
-      bg: 'purple',
+      bg: "purple",
     },
   ];
 

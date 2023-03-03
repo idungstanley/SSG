@@ -1,23 +1,24 @@
-import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { AiOutlineTags, AiOutlineEllipsis } from 'react-icons/ai';
-import { UseGetAllTagsService } from '../../features/workspace/tags/tagService';
-import { Spinner } from '../../common';
-import CreateTag from './CreateTag';
-import { UseAssignTagToTask } from '../../features/workspace/tags/tagService';
-import { dataProps } from '../Index/walletIndex/WalletIndex';
-import { useAppSelector } from '../../app/hooks';
+import React, { Fragment, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { AiOutlineTags, AiOutlineEllipsis } from "react-icons/ai";
+import { UseGetAllTagsService } from "../../features/workspace/tags/tagService";
+import { Spinner } from "../../common";
+import CreateTag from "./CreateTag";
+import { UseAssignTagToTask } from "../../features/workspace/tags/tagService";
+import { dataProps } from "../Index/walletIndex/WalletIndex";
+import { useAppSelector } from "../../app/hooks";
+import EditTagModal from "./EditTagModal";
 
 export default function TagModal() {
   const [tagId, setTagId] = useState<string | null>(null);
-  const { currentTaskIdForTag } = useAppSelector((state) => state.task);
+  const { currentTaskIdForTag } = useAppSelector((state) => state.tag);
   //get all tags
   const { data, status } = UseGetAllTagsService();
 
   const tagList = data?.data.tags;
 
-  if (status == 'loading') {
-    <Spinner size={10} color={'blue'} />;
+  if (status == "loading") {
+    <Spinner size={10} color={"blue"} />;
   }
 
   UseAssignTagToTask({
@@ -26,7 +27,7 @@ export default function TagModal() {
   });
   // console.log(assignTag);
 
-  return status == 'success' ? (
+  return status == "success" ? (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
@@ -62,7 +63,7 @@ export default function TagModal() {
                     >
                       <p>{tags.name}</p>
                     </button>
-                    <button>
+                    <button onClick={() => <EditTagModal tagId={tags.id} />}>
                       <AiOutlineEllipsis className="text-sm" />
                     </button>
                   </div>
