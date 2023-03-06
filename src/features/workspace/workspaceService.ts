@@ -59,32 +59,3 @@ export const checkIfWorkspaceService = async () => {
   );
   return response;
 };
-
-//tags
-export const UseCreateTagService = ({ name }: { name: string }) => {
-  const url = 'tags';
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      data: {
-        name: name
-      }
-    },
-    true
-  );
-  return response;
-};
-
-export const UseGetAllTagsService = () => {
-  return useQuery(['tags'], async () => {
-    const data = await requestNew(
-      {
-        url: 'tags',
-        method: 'GET'
-      },
-      true
-    );
-    return data;
-  });
-};

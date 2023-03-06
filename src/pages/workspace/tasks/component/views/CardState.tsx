@@ -6,14 +6,10 @@ import { TbCheck } from 'react-icons/tb';
 import { TfiCalendar } from 'react-icons/tfi';
 import { VscEllipsis } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
-import {
-  ImyTaskData,
-  setCurrentTaskIdForTag,
-  setCurrentTaskPriorityId
-  //   triggerUnassignTag,
-} from '../../../../../features/task/taskSlice';
+import { ImyTaskData, setCurrentTaskPriorityId } from '../../../../../features/task/taskSlice';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import TagModal from '../../../../../components/tags/TagModal';
+import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 
 interface TaskDataProps {
   task: ImyTaskData;

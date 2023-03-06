@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { UseCreateTagService } from '../../features/workspace/workspaceService';
+
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { UseCreateTagService } from '../../features/workspace/tags/tagService';
 
 export default function CreateTag() {
   const queryClient = useQueryClient();
@@ -9,7 +10,7 @@ export default function CreateTag() {
     name: ''
   };
 
-  const createTag = useMutation(UseCreateTagService, {
+  const createTagMutation = useMutation(UseCreateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
     }
@@ -26,7 +27,7 @@ export default function CreateTag() {
   const { name } = formState;
 
   const onSubmit = async () => {
-    await createTag.mutateAsync({
+    await createTagMutation.mutateAsync({
       name
     });
   };
