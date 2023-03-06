@@ -1,30 +1,43 @@
+import { MdPersonOutline } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import { BsPencil } from "react-icons/bs";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineNoAccounts } from "react-icons/md";
+import { FiPlus } from "react-icons/fi";
+import React from "react";
+
 export const completeOptions = [
   {
     id: 1,
     name: "New Item",
     handleClick: () => ({}),
+    icon: <FiPlus />,
+  },
+  {
+    id: 2,
+    name: "Assign all",
+    handleClick: () => ({}),
+    icon: <MdPersonOutline />,
   },
   {
     id: 3,
-    name: "Assign all",
+    name: "Unassign all",
     handleClick: () => ({}),
+    icon: <MdOutlineNoAccounts />,
   },
   {
     id: 4,
-    name: "Unassign all",
+    name: "Rename",
     handleClick: () => ({}),
+    icon: <BsPencil />,
   },
   {
     id: 5,
-    name: "Rename",
-    handleClick: () => ({}),
-  },
-  {
-    id: 6,
     name: "Delete Checklist",
     handleClick: () => {
       // const dispatch = useAppDispatch();
     },
+    icon: <RiDeleteBin6Line />,
   },
 ];
 
@@ -33,20 +46,24 @@ export const lessOptions = [
     id: 1,
     name: "Rename",
     handleClick: () => ({}),
+    icon: <BsPencil />,
   },
   {
     id: 2,
     name: "Assign to",
     handleClick: () => ({}),
+    icon: <CgProfile />,
   },
   {
     id: 3,
     name: "Unassign",
     handleClick: () => ({}),
+    icon: <MdOutlineNoAccounts />,
   },
   {
     id: 4,
     name: "Delete Item",
     handleClick: () => ({}),
+    icon: <RiDeleteBin6Line />,
   },
 ];

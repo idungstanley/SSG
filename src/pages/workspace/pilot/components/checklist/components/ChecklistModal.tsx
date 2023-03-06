@@ -21,6 +21,7 @@ interface ChecklistModalProps {
     id: number;
     handleClick: () => void;
     name: string;
+    icon: JSX.Element;
   }[];
 }
 
@@ -47,6 +48,7 @@ export default function ChecklistModal({
       itemId: checklistItemId,
     });
   };
+
   const handleOptions = (option: { name: string }) => {
     if (option.name === "Delete Checklist") {
       handleDelChecklist();
@@ -90,6 +92,7 @@ export default function ChecklistModal({
                           handleOptions(option);
                         }}
                       >
+                        <span className="w-4 h-4">{option.icon}</span>
                         <p>{option.name}</p>
                       </button>
                     </div>
@@ -107,6 +110,7 @@ export default function ChecklistModal({
                         handleOptions(option);
                       }}
                     >
+                      <span className="w-4 h-4">{option.icon}</span>
                       <p>{option.name}</p>
                     </button>
                   </div>

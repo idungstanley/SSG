@@ -1,6 +1,4 @@
 import React from "react";
-// import { Link } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../../../../app/hooks";
 import {
   setActivePlaceName,
@@ -25,7 +23,6 @@ export default function NavigationItem({
   isVisible,
 }: NavigationItemProps) {
   const navigate = useNavigate();
-  // const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
   const { activePlaceName } = useAppSelector((state) => state.workspace);
