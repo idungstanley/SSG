@@ -9,14 +9,17 @@ import { UseGetFullTaskList } from "../../../../../features/task/taskService";
 import TaskTemplateData from "../../../tasks/component/taskData/TaskTemplateData";
 import NoTaskFound from "../../../tasks/component/taskData/NoTaskFound";
 import TaskTableTemplateData from "../../../tasks/component/taskData/TaskTableTemplateData";
+import { ImyTaskData } from "../../../../../features/task/taskSlice";
 
 function RenderHubs() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState([]);
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<{
+    [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
+  }>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem("hubDetailsStorage");
-  const hubdetail = JSON.parse(retrievedObject);
+  const hubdetail = JSON.parse(retrievedObject as string);
 
   // const { hubId } = useParams();
   const { data: TaskFullList, status } = UseGetFullTaskList({
@@ -30,10 +33,10 @@ function RenderHubs() {
 
   useEffect(() => {
     if (status !== "success") {
-      return setTaskDataGroupings([]);
+      return setTaskDataGroupings({});
     }
 
-    const taskDataGroupedByListID = unFilteredTaskData.reduce(
+    const taskDataGroupedByListID = unFilteredTaskData?.reduce(
       (GroupedTaskByListID, currentTask) => {
         if (!GroupedTaskByListID[currentTask.list_id]) {
           GroupedTaskByListID[currentTask.list_id] = {
@@ -50,7 +53,9 @@ function RenderHubs() {
     );
     setTaskDataGroupings(taskDataGroupedByListID);
 
-    return true;
+    return () => {
+      true;
+    };
   }, [unFilteredTaskData, status]);
 
   return (

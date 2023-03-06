@@ -12,17 +12,21 @@ import { UseGetFullTaskListWallet } from "../../../../features/task/taskService"
 import ListFilter from "../../lists/components/renderlist/listDetails/ListFilter";
 import TaskTemplateData from "../../tasks/component/taskData/TaskTemplateData";
 import NoTaskFound from "../../tasks/component/taskData/NoTaskFound";
+// import { ITaskTemplateData } from "../../tasks/component/taskData/TaskTableTemplateData";
 import { ImyTaskData } from "../../../../features/task/taskSlice";
-import { ITaskTemplateData } from "../../tasks/component/taskData/TaskTableTemplateData";
+// import { ImyTaskData } from "../../../../features/task/taskSlice";
+// import { ITaskTemplateData } from "../../tasks/component/taskData/TaskTableTemplateData";
 
 function RenderWallets() {
   // const { walletId } = useParams();
-  const [TaskDataGroupings, setTaskDataGroupings] = useState([]);
+
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<{
+    [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
+  }>({});
+
   const { currentWalletName, activeItemId, activeItemType } = useAppSelector(
     (state) => state.workspace
   );
-
-  // const { data } = getWalletServices({ parentId: walletId });
 
   const { data: TaskFullList, status } = UseGetFullTaskListWallet({
     itemId: activeItemId,
@@ -36,7 +40,8 @@ function RenderWallets() {
 
   useEffect(() => {
     if (status !== "success") {
-      return setTaskDataGroupings([]);
+      setTaskDataGroupings({});
+      return;
     }
 
     const taskDataGroupedByListID = unFilteredTaskData?.reduce(
@@ -56,7 +61,9 @@ function RenderWallets() {
     );
     setTaskDataGroupings(taskDataGroupedByListID);
 
-    return true;
+    return () => {
+      true;
+    };
   }, [unFilteredTaskData, status]);
 
   return (
