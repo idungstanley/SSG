@@ -4,7 +4,7 @@ import {
   useDeleteItemComment,
   useEditItemComment,
   useGetItemComments
-} from '../../features/general/commentsService';
+} from '../../features/general/comments/commentsService';
 import Form from './components/Form';
 import List from './components/List';
 import Dropdown from './components/Dropdown';

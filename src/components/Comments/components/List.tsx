@@ -4,16 +4,11 @@ import { Spinner } from '../../../common';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { IMentionUser } from '../../../features/chat/chat.interfaces';
 import { mentionTeamMemberInMessageReg } from '../../../regex';
+import { IComment } from '../../../features/general/comments/comments.interfaces';
 
-interface itemType {
-  id: string;
-  message: string;
-  can_modify: boolean;
-  mention_users: IMentionUser[];
-}
 interface ListType {
   status: string;
-  comments: itemType[];
+  comments?: IComment[];
   onEdit: (id: string, message: string, users: IMentionUser[]) => void;
   onDelete: (value: string) => void;
 }
