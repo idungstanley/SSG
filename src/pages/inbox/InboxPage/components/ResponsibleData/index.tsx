@@ -6,7 +6,7 @@ import { Spinner } from '../../../../../common';
 import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import {
   useCreateResponsibleMemberOrGroup,
-  useGetResponsibleMembersOrGroups,
+  useGetResponsibleMembersOrGroups
 } from '../../../../../features/inbox/inboxService';
 import ListItems from './ListItems';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
@@ -16,19 +16,11 @@ interface ResponsibleDataProps {
   isGroups: boolean;
 }
 
-export default function ResponsibleData({
-  setShowModal,
-  isGroups,
-}: ResponsibleDataProps) {
+export default function ResponsibleData({ setShowModal, isGroups }: ResponsibleDataProps) {
   const { inboxId } = useParams();
   const [selectedData, setSelectedData] = useState<ISelectedData | null>(null);
-  const { data, status } = isGroups
-    ? useGetTeamMemberGroups(0)
-    : useGetTeamMembers({ page: 0, query: '' });
-  const { mutate: onCreate } = useCreateResponsibleMemberOrGroup(
-    isGroups,
-    inboxId
-  );
+  const { data, status } = isGroups ? useGetTeamMemberGroups(0) : useGetTeamMembers({ page: 0, query: '' });
+  const { mutate: onCreate } = useCreateResponsibleMemberOrGroup(isGroups, inboxId);
 
   const { data: dt } = useGetResponsibleMembersOrGroups(isGroups, inboxId);
 
@@ -36,16 +28,10 @@ export default function ResponsibleData({
     ? dt?.data.inbox_responsible_team_member_groups
     : dt?.data.inbox_responsible_team_members;
 
-  const selectItems = isGroups
-    ? data?.data.team_member_groups
-    : data?.data.team_members;
+  const selectItems = isGroups ? data?.data.team_member_groups : data?.data.team_members;
 
-  const responsibleDataIds = responsibleData?.map((i) =>
-    isGroups ? i.team_member_group_id : i.team_member_id
-  );
-  const filteredData = selectItems?.filter(
-    (i) => !responsibleDataIds?.includes(i.id)
-  );
+  const responsibleDataIds = responsibleData?.map((i) => (isGroups ? i.team_member_group_id : i.team_member_id));
+  const filteredData = selectItems?.filter((i) => !responsibleDataIds?.includes(i.id));
 
   if (status === 'loading') {
     return (
@@ -60,11 +46,7 @@ export default function ResponsibleData({
   if (status === 'error') {
     return (
       <div className="absolute top-14 p-6 rounded-xl border bg-white z-50 w-80">
-        <FullScreenMessage
-          title="Oops, an error occurred :("
-          description="Please try again later."
-          showHalFScreen
-        />
+        <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showHalFScreen />
       </div>
     );
   }
@@ -75,7 +57,7 @@ export default function ResponsibleData({
       onCreate({
         dataId: item.id,
         isGroups,
-        inboxId,
+        inboxId
       });
     }
   };
@@ -98,13 +80,11 @@ export default function ResponsibleData({
               name: i.name || i.user.name,
               email: i.user?.email,
               accessLevel: i.id,
-              type: isGroups ? 'member-group' : 'member',
+              type: isGroups ? 'member-group' : 'member'
             }))}
             selectedData={selectedData}
             setSelectedData={handleChange}
-            title={`Add new responsible team ${
-              isGroups ? 'member groups' : 'members'
-            }`}
+            title={`Add new responsible team ${isGroups ? 'member groups' : 'members'}`}
           />
         ) : null}
         <ListItems isGroups={isGroups} />

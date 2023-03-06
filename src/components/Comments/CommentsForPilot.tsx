@@ -3,7 +3,7 @@ import {
   useCreateItemComment,
   useDeleteItemComment,
   useEditItemComment,
-  useGetItemComments,
+  useGetItemComments
 } from '../../features/general/commentsService';
 import Form from './components/Form';
 import List from './components/List';
@@ -29,14 +29,10 @@ export default function CommentsForPilot() {
 
   const { status, data } = useGetItemComments({
     type,
-    id,
+    id
   });
 
-  const handleSubmit = (
-    e:
-      | React.FormEvent<HTMLFormElement>
-      | React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();
 
     if (messageRef.current && messageRef.current.value.length > 2) {
@@ -45,18 +41,16 @@ export default function CommentsForPilot() {
       if (editId) {
         editComment({
           id: editId,
-          message,
+          message
         });
         setEditId(null);
       } else {
-        const messageWithUserIds = `${message} ${selectedUsers.map(
-          (user) => `@[${user.id}] `
-        )}`;
+        const messageWithUserIds = `${message} ${selectedUsers.map((user) => `@[${user.id}] `)}`;
 
         sendComment({
           message: messageWithUserIds,
           type: type || 'file',
-          id: id || '',
+          id: id || ''
         });
 
         messageRef.current.value = '';
@@ -68,16 +62,13 @@ export default function CommentsForPilot() {
 
   const onDelete = (id: string) => {
     deleteComment({
-      id,
+      id
     });
   };
 
   const onEdit = (id: string, value: string, user: selectedUserType[]) => {
     if (messageRef.current) {
-      messageRef.current.value = value.replaceAll(
-        mentionTeamMemberInMessageReg,
-        ''
-      );
+      messageRef.current.value = value.replaceAll(mentionTeamMemberInMessageReg, '');
     }
     setEditId(id);
     setSelectedUsers([...user]);
@@ -85,23 +76,14 @@ export default function CommentsForPilot() {
 
   return (
     <div className="flex flex-col">
-      <Form
-        messageRef={messageRef}
-        handleSubmit={handleSubmit}
-        setShowDropdown={setShowDropdown}
-      />
+      <Form messageRef={messageRef} handleSubmit={handleSubmit} setShowDropdown={setShowDropdown} />
       <Dropdown
         show={showDropdown}
         setShowDropdown={setShowDropdown}
         setSelectedUsers={setSelectedUsers}
         selectedUsers={selectedUsers}
       />
-      <List
-        status={status}
-        comments={data}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
+      <List status={status} comments={data} onEdit={onEdit} onDelete={onDelete} />
     </div>
   );
 }

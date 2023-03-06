@@ -64,23 +64,23 @@ const inbox = [
       { path: '', element: <Active /> },
       { path: 'hidden', element: <Hidden /> },
       { path: 'archived', element: <Archived /> },
-      { path: 'restore', element: <Restore /> },
-    ],
+      { path: 'restore', element: <Restore /> }
+    ]
   },
   { path: 'inbox/:inboxId', element: <InboxPage /> },
   { path: 'inbox/:inboxId/settings', element: <GeneralSettingsPage /> },
   {
     path: 'inbox/:inboxId/settings/permissions',
-    element: <PermissionsSettingsPage />,
+    element: <PermissionsSettingsPage />
   },
   {
     path: 'inbox/:inboxId/settings/members',
-    element: <TeamMembersSettingsPage />,
+    element: <TeamMembersSettingsPage />
   },
   {
     path: 'inbox/:inboxId/settings/groups',
-    element: <TeamMemberGroupsSettingsPage />,
-  },
+    element: <TeamMemberGroupsSettingsPage />
+  }
 ];
 
 export const routes = (user: IUser | null) =>
@@ -95,11 +95,11 @@ export const routes = (user: IUser | null) =>
         )
       ) : (
         <Navigate to="/auth/login" />
-      ),
+      )
     },
     {
       path: 'accept-invite/:inviteCode',
-      element: <TeamMemberAcceptInvite />,
+      element: <TeamMemberAcceptInvite />
     },
     {
       path: '/',
@@ -138,26 +138,26 @@ export const routes = (user: IUser | null) =>
         { path: 'settings/permissions', element: <PermissionsPage /> },
         {
           path: 'settings/notifications',
-          element: <NotificationSettingsPage />,
+          element: <NotificationSettingsPage />
         },
         { path: 'settings/team-members', element: <TeamMembersPage /> },
         {
           path: 'settings/team-members/invites',
-          element: <TeamMemberInvitesPage />,
+          element: <TeamMemberInvitesPage />
         },
         {
           path: 'settings/team-members/groups',
-          element: <TeamMemberGroupsPage />,
+          element: <TeamMemberGroupsPage />
         },
         {
           path: 'settings/team-members/groups/:teamMemberGroupId',
-          element: <TeamMemberGroupGeneralSettingsPage />,
+          element: <TeamMemberGroupGeneralSettingsPage />
         },
         {
           path: 'settings/team-members/groups/:teamMemberGroupId/members',
-          element: <TeamMemberGroupMembersPage />,
-        },
-      ],
+          element: <TeamMemberGroupMembersPage />
+        }
+      ]
     },
 
     {
@@ -166,10 +166,10 @@ export const routes = (user: IUser | null) =>
       children: [
         { path: 'login', element: <LoginPage /> },
         { path: 'register', element: <RegisterPage /> },
-        { path: 'register/:inviteCode', element: <RegisterPage /> },
-      ],
+        { path: 'register/:inviteCode', element: <RegisterPage /> }
+      ]
     },
-    { path: '*', element: <NotFoundPage /> },
+    { path: '*', element: <NotFoundPage /> }
   ]);
 
 export default routes;

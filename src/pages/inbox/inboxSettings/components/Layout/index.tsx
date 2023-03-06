@@ -27,13 +27,7 @@ export default function Layout({ isGroups }: LayoutProps) {
           <TabbedHeading
             selectedTabKey={`${keyWord}s`}
             actions={
-              <Button
-                buttonStyle="primary"
-                onClick={addItem}
-                loading={false}
-                label={`Add ${keyWord}`}
-                width="w-36"
-              />
+              <Button buttonStyle="primary" onClick={addItem} loading={false} label={`Add ${keyWord}`} width="w-36" />
             }
           />
         </div>

@@ -3,10 +3,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { BsListUl } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import {
-  closeMenu,
-  setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
+import { closeMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { getListServices } from '../../../../../features/list/listService';
@@ -24,20 +21,17 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
 
   const { data: dataList } = getListServices({
     walletId: finalParentId,
-    Archived: toggleArchiveList,
+    Archived: toggleArchiveList
   });
   const navigate = useNavigate();
   const handleListLocation = (id: string) => {
     navigate(`/list/${id}`);
   };
-  const handleListSettings = (
-    id: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>
-  ) => {
+  const handleListSettings = (id: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'list',
+        showMenuDropdownType: 'list'
       })
     );
     if (showMenuDropdown != null) {
@@ -57,11 +51,7 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
               <div onClick={() => handleListLocation(list.id)}>{list.name}</div>
             </div>
             {/* ends here */}
-            <button
-              type="button"
-              id="listright"
-              className="flex items-center justify-end space-x-1 "
-            >
+            <button type="button" id="listright" className="flex items-center justify-end space-x-1 ">
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 id="menusettings"

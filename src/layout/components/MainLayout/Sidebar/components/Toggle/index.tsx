@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-} from '@heroicons/react/24/solid';
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
@@ -20,7 +17,7 @@ export default function Toggle() {
       'sidebar',
       JSON.stringify({
         sidebarWidth: MIN_SIDEBAR_WIDTH,
-        showSidebar: !showSidebar,
+        showSidebar: !showSidebar
       })
     );
   };

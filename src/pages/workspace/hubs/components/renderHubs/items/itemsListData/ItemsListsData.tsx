@@ -12,9 +12,7 @@ interface ItemsListsDataProps {
 export default function ItemsListsData({ listId }: ItemsListsDataProps) {
   const { data } = getTaskListService({ listId });
 
-  const { currentParentTaskId, getSubTaskId } = useAppSelector(
-    (state) => state.task
-  );
+  const { currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
 
   // console.log(data);
 

@@ -7,36 +7,26 @@ import { cl } from '../../../../utils';
 export default function Table() {
   const [permissionsByCategory, setPermissionsByCategory] = useState([]);
 
-  const { data: permissionsList, status: permissionsListStatus } =
-    useGetPermissionsList();
+  const { data: permissionsList, status: permissionsListStatus } = useGetPermissionsList();
 
   useEffect(() => {
     if (permissionsListStatus !== 'success') {
       return setPermissionsByCategory([]);
     }
 
-    const permissionsByCategoryTemp = permissionsList.reduce(
-      (permissionsByCategorySoFar, currentPermission) => {
-        if (
-          !permissionsByCategorySoFar[
-            currentPermission.workspace_permission_category.key
-          ]
-        ) {
-          permissionsByCategorySoFar[
-            currentPermission.workspace_permission_category.key
-          ] = {
-            name: currentPermission.workspace_permission_category.name,
-            key: currentPermission.workspace_permission_category.key,
-            permissions: [],
-          };
-        }
-        permissionsByCategorySoFar[
-          currentPermission.workspace_permission_category.key
-        ].permissions.push(currentPermission);
-        return permissionsByCategorySoFar;
-      },
-      {}
-    );
+    const permissionsByCategoryTemp = permissionsList.reduce((permissionsByCategorySoFar, currentPermission) => {
+      if (!permissionsByCategorySoFar[currentPermission.workspace_permission_category.key]) {
+        permissionsByCategorySoFar[currentPermission.workspace_permission_category.key] = {
+          name: currentPermission.workspace_permission_category.name,
+          key: currentPermission.workspace_permission_category.key,
+          permissions: []
+        };
+      }
+      permissionsByCategorySoFar[currentPermission.workspace_permission_category.key].permissions.push(
+        currentPermission
+      );
+      return permissionsByCategorySoFar;
+    }, {});
     setPermissionsByCategory(permissionsByCategoryTemp);
 
     return true;
@@ -49,40 +39,22 @@ export default function Table() {
           <table className="min-w-full">
             <thead className="bg-white">
               <tr>
-                <th
-                  scope="col"
-                  className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                >
+                <th scope="col" className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                   Capability
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Guest
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Low
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   High
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Admin
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Owner
                 </th>
               </tr>
@@ -99,61 +71,41 @@ export default function Table() {
                       {permissionsByCategory[key].name}
                     </th>
                   </tr>
-                  {permissionsByCategory[key].permissions.map(
-                    (permission, index) => (
-                      <tr
-                        key={permission.key}
-                        className={cl(
-                          index === 0 ? 'border-gray-300' : 'border-gray-200',
-                          'border-t'
-                        )}
-                      >
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                          <div className="flex flex-row z-50">
-                            {permission.name}
-                            {permission.description !== null && (
-                              <span title={permission.description}>
-                                <QuestionMarkCircleIcon
-                                  className="ml-2 h-5 w-5 text-gray-400 hover:text-black"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
-                            teamMemberRoleKey="guest"
-                            workspacePermissionKey={permission.key}
-                          />
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
-                            teamMemberRoleKey="low"
-                            workspacePermissionKey={permission.key}
-                          />
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
-                            teamMemberRoleKey="high"
-                            workspacePermissionKey={permission.key}
-                          />
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
-                            teamMemberRoleKey="admin"
-                            workspacePermissionKey={permission.key}
-                          />
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <PermissionsCheckbox
-                            teamMemberRoleKey="owner"
-                            workspacePermissionKey={permission.key}
-                          />
-                        </td>
-                      </tr>
-                    )
-                  )}
+                  {permissionsByCategory[key].permissions.map((permission, index) => (
+                    <tr
+                      key={permission.key}
+                      className={cl(index === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
+                    >
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <div className="flex flex-row z-50">
+                          {permission.name}
+                          {permission.description !== null && (
+                            <span title={permission.description}>
+                              <QuestionMarkCircleIcon
+                                className="ml-2 h-5 w-5 text-gray-400 hover:text-black"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PermissionsCheckbox teamMemberRoleKey="guest" workspacePermissionKey={permission.key} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PermissionsCheckbox teamMemberRoleKey="low" workspacePermissionKey={permission.key} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PermissionsCheckbox teamMemberRoleKey="high" workspacePermissionKey={permission.key} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PermissionsCheckbox teamMemberRoleKey="admin" workspacePermissionKey={permission.key} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PermissionsCheckbox teamMemberRoleKey="owner" workspacePermissionKey={permission.key} />
+                      </td>
+                    </tr>
+                  ))}
                 </Fragment>
               ))}
             </tbody>

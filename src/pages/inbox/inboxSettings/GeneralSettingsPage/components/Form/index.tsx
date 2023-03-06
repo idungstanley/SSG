@@ -15,7 +15,7 @@ export default function Form() {
   // Form state
   const defaultFormState = {
     name: '',
-    emailUsername: '',
+    emailUsername: ''
   };
 
   const [formState, setFormState] = useState(defaultFormState);
@@ -26,7 +26,7 @@ export default function Form() {
     if (loadingInboxData === 'success' && inbox != null) {
       setFormState({
         name: inbox.name,
-        emailUsername: inbox.email_key,
+        emailUsername: inbox.email_key
       });
     }
   }, [inbox]);
@@ -34,7 +34,7 @@ export default function Form() {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
@@ -42,7 +42,7 @@ export default function Form() {
     updateInboxSettingsMutation.mutate({
       name,
       emailUsername,
-      inboxId,
+      inboxId
     });
   };
 
@@ -52,9 +52,7 @@ export default function Form() {
         <div>
           <div>
             <h3 className="text-lg leading-6 font-medium text-gray-900">General settings</h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Manage inbox general settings
-            </p>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">Manage inbox general settings</p>
           </div>
 
           <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -64,13 +62,7 @@ export default function Form() {
               </label>
               <div className="mt-1 sm:mt-0 sm:col-span-2">
                 <div className="w-full max-w-xl">
-                  <Input
-                    placeholder="Inbox name"
-                    name="name"
-                    value={name}
-                    type="text"
-                    onChange={onChange}
-                  />
+                  <Input placeholder="Inbox name" name="name" value={name} type="text" onChange={onChange} />
                 </div>
               </div>
             </div>

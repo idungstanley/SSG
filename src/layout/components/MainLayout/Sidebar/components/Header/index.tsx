@@ -13,27 +13,16 @@ export default function Header() {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
-    <div
-      className={cl(
-        'flex py-2 border-b gap-1',
-        !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7'
-      )}
-    >
+    <div className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7')}>
       <img className="w-10 h-11" src={MainLogo} alt="Workflow" />
-      <div
-      className={cl(
-        'flex pt-2 flex-1',
-        !showSidebar ? 'flex-col items-center justify-center' : ''
-      )}>
-      <WorkSpaceSelection />
+      <div className={cl('flex pt-2 flex-1', !showSidebar ? 'flex-col items-center justify-center' : '')}>
+        <WorkSpaceSelection />
 
-      {/* cog */}
-      <div
-        onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}
-      >
-        <TeamSettings />
-      </div>
-      <UserSettingsModal />
+        {/* cog */}
+        <div onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}>
+          <TeamSettings />
+        </div>
+        <UserSettingsModal />
       </div>
     </div>
   );

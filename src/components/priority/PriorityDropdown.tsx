@@ -14,90 +14,68 @@ interface priorityType {
 }
 
 interface TaskCurrentPriorityProps {
-  TaskCurrentPriority:
-    | string
-    | [{ id: string; initials: string; colour: string }]
-    | null
-    | undefined;
+  TaskCurrentPriority: string | [{ id: string; initials: string; colour: string }] | null | undefined;
 }
-export default function PriorityDropdown({
-  TaskCurrentPriority,
-}: TaskCurrentPriorityProps) {
-  const [priorityValue, setPriority] = useState("");
+export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
+  const [priorityValue, setPriority] = useState('');
   const { currentTaskPriorityId } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
-      title: "Low",
+      title: 'Low',
       handleClick: () => {
-        setPriority("low");
+        setPriority('low');
       },
-      color: "#d3d3d3",
-      bg: "gray",
+      color: '#d3d3d3',
+      bg: 'gray'
     },
     {
       id: 2,
-      title: "Normal",
+      title: 'Normal',
       handleClick: () => {
-        setPriority("normal");
+        setPriority('normal');
       },
-      color: "#6fddff",
-      bg: "blue",
+      color: '#6fddff',
+      bg: 'blue'
     },
     {
       id: 3,
-      title: "High",
+      title: 'High',
       handleClick: () => {
-        setPriority("high");
+        setPriority('high');
       },
-      color: "#f7cb04",
-      bg: "yellow",
+      color: '#f7cb04',
+      bg: 'yellow'
     },
     {
       id: 4,
-      title: "Urgent",
+      title: 'Urgent',
       handleClick: () => {
-        setPriority("urgent");
+        setPriority('urgent');
       },
-      color: "#f32100",
-      bg: "red",
-    },
+      color: '#f32100',
+      bg: 'red'
+    }
   ];
   const { status } = UseUpdateTaskStatusServices({
     task_id: currentTaskPriorityId,
-    priorityDataUpdate: priorityValue,
+    priorityDataUpdate: priorityValue
   });
 
-  if (status == "success") {
-    setPriority("");
+  if (status == 'success') {
+    setPriority('');
   }
   const setPriorityColor = (
-    priority:
-      | string
-      | null
-      | undefined
-      | [{ id: string; initials: string; colour: string }]
+    priority: string | null | undefined | [{ id: string; initials: string; colour: string }]
   ) => {
-    if (priority == null || priority == "low") {
-      return (
-        <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />
-      );
-    } else if (priority == "normal") {
-      return (
-        <AiFillFlag
-          className="h-5 w-7"
-          style={{ color: "#6fddff" }}
-          aria-hidden="true"
-        />
-      );
-    } else if (priority == "high") {
-      return (
-        <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />
-      );
-    } else if (priority == "urgent") {
-      return (
-        <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />
-      );
+    if (priority == null || priority == 'low') {
+      return <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />;
+    } else if (priority == 'normal') {
+      return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
+    } else if (priority == 'high') {
+      return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
+    } else if (priority == 'urgent') {
+      return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
     }
   };
 
@@ -135,11 +113,7 @@ export default function PriorityDropdown({
                   onClick={i.handleClick}
                 >
                   <p>
-                    <AiFillFlag
-                      className="h-5 w-7  "
-                      aria-hidden="true"
-                      style={{ color: `${i.color}` }}
-                    />
+                    <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${i.color}` }} />
                   </p>
                   <p>{i.title}</p>
                 </button>

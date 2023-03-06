@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ImyTaskData,
-  setGetSubTaskId,
-} from '../../../../../features/task/taskSlice';
+import { ImyTaskData, setGetSubTaskId } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
@@ -12,15 +9,8 @@ interface TaskDataProps {
 }
 
 export default function TaskData({ task }: TaskDataProps) {
-  const {
-    taskColumns,
-    hideTask,
-    getSubTaskId,
-    CompactView,
-    CompactViewWrap,
-    comfortableView,
-    comfortableViewWrap,
-  } = useAppSelector((state) => state.task);
+  const { taskColumns, hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } =
+    useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
@@ -93,10 +83,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center ml-2 text-xs font-medium capitalize group"
-                      >
+                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
                           colfield={col.field}
@@ -111,10 +98,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center ml-2 text-xs font-medium capitalize group"
-                      >
+                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
                           colfield={col.field}

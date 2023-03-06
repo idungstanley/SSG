@@ -22,7 +22,7 @@ export default function TagModal() {
 
   UseAssignTagToTask({
     tagId,
-    currentTaskIdForTag,
+    currentTaskIdForTag
   });
   // console.log(assignTag);
 

@@ -10,20 +10,13 @@ interface DropDownPropTypes {
   selectedUsers: selectedUserType[];
 }
 
-export default function Dropdown({
-  show,
-  setShowDropdown,
-  setSelectedUsers,
-  selectedUsers,
-}: DropDownPropTypes) {
+export default function Dropdown({ show, setShowDropdown, setSelectedUsers, selectedUsers }: DropDownPropTypes) {
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: ''
   });
   const selectedUserIds = selectedUsers.map((i) => i.id);
-  const usersWithoutSelected = data?.data.team_members.filter(
-    (i) => !selectedUserIds.includes(i.user.id)
-  );
+  const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
 
   return show ? (
     <>
@@ -50,11 +43,7 @@ export default function Dropdown({
                   className="relative px-3 py-2 text-sm bg-indigo-100 border border-primary-400 rounded-xl"
                 >
                   <XMarkIcon
-                    onClick={() =>
-                      setSelectedUsers((prev) => [
-                        ...prev.filter((i) => i.id !== user.id),
-                      ])
-                    }
+                    onClick={() => setSelectedUsers((prev) => [...prev.filter((i) => i.id !== user.id)])}
                     className="absolute w-6 h-6 p-1 text-black transition-all duration-300 bg-white border rounded-full cursor-pointer -top-2 -right-3"
                   />
                   <p>{user.name}</p>
@@ -68,9 +57,7 @@ export default function Dropdown({
                 <button
                   key={user.id}
                   type="button"
-                  onClick={() =>
-                    setSelectedUsers((prev) => [...prev, user.user])
-                  }
+                  onClick={() => setSelectedUsers((prev) => [...prev, user.user])}
                   className="w-full px-4 py-2 text-sm text-left text-gray-900 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <p>{user.user.name}</p>

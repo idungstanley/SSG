@@ -11,7 +11,7 @@ const initialState: teamMemberGroupState = {
   teamMemberGroupsPaginationPage: 1,
 
   // General
-  selectedTeamMemberGroupId: null,
+  selectedTeamMemberGroupId: null
 };
 
 export const teamMemberGroupSlice = createSlice({
@@ -29,13 +29,11 @@ export const teamMemberGroupSlice = createSlice({
     },
     setSelectedTeamMemberGroup: (state, action) => {
       state.selectedTeamMemberGroupId = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
 // Action creators are generated for each case reducer function
@@ -43,7 +41,7 @@ export const {
   goToPreviousTeamMemberGroupsPage,
   goToNextTeamMemberGroupsPage,
   setTeamMemberGroupsPage,
-  setSelectedTeamMemberGroup,
+  setSelectedTeamMemberGroup
 } = teamMemberGroupSlice.actions;
 
 export default teamMemberGroupSlice.reducer;

@@ -3,24 +3,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWalletService } from '../../../../../features/wallet/walletService';
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  setCreateSubWalletSlideOverVisibility,
-} from '../../../../../features/general/slideOver/slideOverSlice';
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
+import { setCreateSubWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 
 function SubWalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown} = useAppSelector(
-    (state) => state.hub
-  );
-  const { showCreateSubWalletSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showMenuDropdownType, showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showCreateSubWalletSlideOver } = useAppSelector((state) => state.slideOver);
 
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
@@ -29,14 +20,14 @@ function SubWalletModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
 
   const defaultWalletFormState = {
-    name: '',
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultWalletFormState);
@@ -54,7 +45,7 @@ function SubWalletModal() {
         (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null),
+        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null)
     });
   };
 
@@ -63,7 +54,7 @@ function SubWalletModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };

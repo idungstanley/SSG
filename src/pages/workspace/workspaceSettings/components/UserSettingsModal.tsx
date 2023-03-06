@@ -5,10 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AvatarWithInitials } from '../../../../components';
 import { logoutService } from '../../../../features/auth/authService';
 import { useDispatch } from 'react-redux';
-import {
-  setVisibility,
-  displayPrompt,
-} from '../../../../features/general/prompt/promptSlice';
+import { setVisibility, displayPrompt } from '../../../../features/general/prompt/promptSlice';
 import { logout, setAuthData } from '../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,81 +32,77 @@ export default function UserSettingsModal() {
           user: null,
           accessToken: null,
           currentWorkspaceId: null,
-          currentUserId: null,
+          currentUserId: null
         })
       );
 
       dispatch(logout());
-    },
+    }
   });
 
   const userSettings: UserSettingsType[] = [
     {
       id: 1,
       title: 'My Settings',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
     {
       id: 2,
       title: 'Notificaitons',
       handleClick: () => {
         navigate('settings/notifications');
-      },
+      }
     },
     {
       id: 3,
       title: 'Apps',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
 
     {
       id: 4,
       title: 'Rewards',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
     {
       id: 5,
       title: 'HotKeys',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
     {
       id: 6,
       title: 'Help',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
     {
       id: 7,
       title: 'Dark Mode',
-      handleClick: () => ({}),
+      handleClick: () => ({})
     },
     {
       id: 8,
       title: 'Log out',
       handleClick: () => {
         dispatch(
-          displayPrompt(
-            'Sign out',
-            'Would you like to sign out of your account?',
-            [
-              {
-                label: 'Sign out',
-                style: 'danger',
-                callback: () => {
-                  logoutMutation.mutate();
-                },
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => {
-                  dispatch(setVisibility(false));
-                },
-              },
-            ]
-          )
+          displayPrompt('Sign out', 'Would you like to sign out of your account?', [
+            {
+              label: 'Sign out',
+              style: 'danger',
+              callback: () => {
+                logoutMutation.mutate();
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
         );
-      },
-    },
+      }
+    }
   ];
 
   const getLocalWS = JSON.parse(localStorage.getItem('user') as string);

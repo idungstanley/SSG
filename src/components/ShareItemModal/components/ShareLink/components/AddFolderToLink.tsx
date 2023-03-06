@@ -3,10 +3,7 @@ import { Combobox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { IExplorerFolder } from '../../../../../features/explorer/explorer.interfaces';
 import { useGetSearchFolders } from '../../../../../features/explorer/explorerService';
-import {
-  useAddOrRemoveItemToOrFromLink,
-  useGetShareLink,
-} from '../../../../../features/shared/sharedService';
+import { useAddOrRemoveItemToOrFromLink, useGetShareLink } from '../../../../../features/shared/sharedService';
 import { useDebounce } from '../../../../../hooks';
 import { cl } from '../../../../../utils';
 
@@ -26,17 +23,13 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
   const debouncedQuery = useDebounce(query, 500);
   const { data: searchedFolders } = useGetSearchFolders(debouncedQuery);
 
-  const foldersWithoutSelected = searchedFolders?.filter(
-    (i) => !selectedFolderIds?.includes(i.id)
-  );
+  const foldersWithoutSelected = searchedFolders?.filter((i) => !selectedFolderIds?.includes(i.id));
 
   const filteredFolders =
     debouncedQuery === ''
       ? foldersWithoutSelected
       : foldersWithoutSelected?.filter((folder) => {
-          return folder.name
-            .toLowerCase()
-            .includes(debouncedQuery.toLowerCase());
+          return folder.name.toLowerCase().includes(debouncedQuery.toLowerCase());
         });
 
   const onSelect = (selectedFolder: IExplorerFolder | string) => {
@@ -46,15 +39,13 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
       linkId: shareLinkId,
       itemId: folder.id,
       type: 'folder',
-      action: 'add',
+      action: 'add'
     });
   };
 
   return (
     <Combobox as="div" value={''} onChange={onSelect}>
-      <Combobox.Label className="block text-sm font-medium text-gray-700">
-        Add folder to link
-      </Combobox.Label>
+      <Combobox.Label className="block text-sm font-medium text-gray-700">Add folder to link</Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input
           placeholder="enter folder name"
@@ -71,11 +62,7 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
           </svg>
         </Combobox.Button>
 
@@ -94,14 +81,7 @@ export default function AddFolderToLink({ shareLinkId }: AddFolderToLinkProps) {
               >
                 {({ active, selected }) => (
                   <>
-                    <span
-                      className={cl(
-                        'block truncate',
-                        selected ? 'font-semibold' : ''
-                      )}
-                    >
-                      {folder.name}
-                    </span>
+                    <span className={cl('block truncate', selected ? 'font-semibold' : '')}>{folder.name}</span>
 
                     {selected && (
                       <span

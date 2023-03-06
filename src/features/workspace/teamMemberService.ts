@@ -3,10 +3,10 @@ import requestNew from '../../app/requestNew';
 
 // Get team members in the workspace
 interface Iprops {
-  query: string | number
+  query: string | number;
 }
 interface teamMemberType {
-  id: string
+  id: string;
 }
 export const useGetTeamMembers = ({ query }: Iprops) => {
   const queryClient = useQueryClient();
@@ -16,18 +16,25 @@ export const useGetTeamMembers = ({ query }: Iprops) => {
     async ({ pageParam = 0 }) => {
       const url = 'settings/team-members';
 
-      return requestNew({
-        url,
-        method: 'GET',
-        params: {
-          page: pageParam,
-          search: query,
+      return requestNew(
+        {
+          url,
+          method: 'GET',
+          params: {
+            page: pageParam,
+            search: query
+          }
         },
-      }, true);
+        true
+      );
     },
     {
       onSuccess: (data) => {
-        data.pages.map((page) => page.data.team_members.map((teamMember: teamMemberType) => queryClient.setQueryData(['team_member', teamMember.id], teamMember)));
+        data.pages.map((page) =>
+          page.data.team_members.map((teamMember: teamMemberType) =>
+            queryClient.setQueryData(['team_member', teamMember.id], teamMember)
+          )
+        );
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.pagination.has_more_pages) {
@@ -35,7 +42,7 @@ export const useGetTeamMembers = ({ query }: Iprops) => {
         }
 
         return false;
-      },
-    },
+      }
+    }
   );
 };

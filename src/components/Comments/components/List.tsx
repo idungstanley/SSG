@@ -32,10 +32,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
             <div className="flex items-center gap-3">
               <div className="flex gap-2">
                 {item.mention_users?.map((user) => (
-                  <div
-                    key={user.id}
-                    className="px-3 py-1 text-sm bg-indigo-100 border border-primary-400 rounded-2xl"
-                  >
+                  <div key={user.id} className="px-3 py-1 text-sm bg-indigo-100 border border-primary-400 rounded-2xl">
                     {user.name}
                   </div>
                 ))}
@@ -43,9 +40,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
               {item.can_modify ? (
                 <>
                   <PencilIcon
-                    onClick={() =>
-                      onEdit(item.id, item.message, item.mention_users)
-                    }
+                    onClick={() => onEdit(item.id, item.message, item.mention_users)}
                     className="w-6 h-6 text-gray-300 transition-all duration-300 cursor-pointer hover:text-indigo-500"
                   />
                   <TrashIcon
@@ -62,9 +57,6 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
       <FullScreenMessage title="No comments yet." description="Create one." />
     )
   ) : (
-    <FullScreenMessage
-      title="Oops, an error occurred :("
-      description="Please try again later."
-    />
+    <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
   );
 }

@@ -5,10 +5,7 @@ import { Input } from '../../../../components';
 import { useAppSelector } from '../../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import {
-  useCreateFolder,
-  useRenameItem,
-} from '../../../../features/explorer/explorerActionsService';
+import { useCreateFolder, useRenameItem } from '../../../../features/explorer/explorerActionsService';
 
 export default function CreateOrRenameItemSlideOver() {
   const dispatch = useDispatch();
@@ -32,14 +29,14 @@ export default function CreateOrRenameItemSlideOver() {
     if (isCreateAction) {
       onCreate({
         folderName: itemName,
-        parentId: itemActionForSideOver.id,
+        parentId: itemActionForSideOver.id
       });
     } else {
       if (itemActionForSideOver) {
         onRename({
           type: 'folder',
           id: itemActionForSideOver.id,
-          name: itemName,
+          name: itemName
         });
       }
     }
@@ -70,9 +67,7 @@ export default function CreateOrRenameItemSlideOver() {
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {isCreateAction
-                            ? 'Create new folder'
-                            : `Rename folder`}
+                          {isCreateAction ? 'Create new folder' : 'Rename folder'}
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -92,8 +87,8 @@ export default function CreateOrRenameItemSlideOver() {
                         className="py-6 w-full space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200 space-y-1 h-full flex flex-col justify-between sm:space-y-0"
                       >
                         <Input
-                          label={`Folder name`}
-                          placeholder={`Folder name`}
+                          label={'Folder name'}
+                          placeholder={'Folder name'}
                           name="name"
                           value={itemName}
                           type="text"

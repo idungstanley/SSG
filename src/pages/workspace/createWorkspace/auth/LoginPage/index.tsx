@@ -23,16 +23,13 @@ function LoginPage() {
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(default_workspace_id)
-      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(default_workspace_id));
       dispatch(
         setAuthData({
           user,
           accessToken,
           currentWorkspaceId: default_workspace_id,
-          currentUserId: user_id,
+          currentUserId: user_id
         })
       );
     }
@@ -41,22 +38,20 @@ function LoginPage() {
   const onSubmit = (values: { email: string; password: string }) => {
     onLogin({
       email: values.email,
-      password: values.password,
+      password: values.password
     });
   };
 
   const formikConfig: formikConfig = {
     initValues: {
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string()
-        .min(8, 'Password must be 8 characters or longer!')
-        .required('Required'),
+      password: Yup.string().min(8, 'Password must be 8 characters or longer!').required('Required')
     }),
-    buttonTitle: 'Sign In',
+    buttonTitle: 'Sign In'
   };
 
   return (
@@ -64,10 +59,7 @@ function LoginPage() {
       <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex flex-col px-4 py-8 bg-white shadow-lg sm:rounded-lg sm:px-10 gap-7">
           <h2 className="text-2xl font-bold text-center">Welcome back!</h2>
-          <Form
-            onSubmit={(values) => onSubmit(values)}
-            formikConfig={formikConfig}
-          />
+          <Form onSubmit={(values) => onSubmit(values)} formikConfig={formikConfig} />
 
           <GoogleLogin title="Or sign in with Google" />
         </div>

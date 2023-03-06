@@ -6,7 +6,7 @@ import {
   BarsArrowDownIcon,
   ClockIcon,
   PaperClipIcon,
-  EllipsisVerticalIcon,
+  EllipsisVerticalIcon
 } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { IStringifiedFile } from '../index';
@@ -41,83 +41,43 @@ const sortingItems = [
   {
     id: 1,
     title: 'Created at (latest)',
-    icon: (
-      <ClockIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <ClockIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 2,
     title: 'Created at (oldest)',
-    icon: (
-      <ClockIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <ClockIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 3,
     title: 'Modified at (latest)',
-    icon: (
-      <PencilIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <PencilIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 4,
     title: 'Modified at (oldest)',
-    icon: (
-      <PencilIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <PencilIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 5,
     title: 'Name (A-Z)',
-    icon: (
-      <BarsArrowUpIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <BarsArrowUpIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 6,
     title: 'Name (Z-A)',
-    icon: (
-      <BarsArrowDownIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <BarsArrowDownIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 7,
     title: 'Size (largest)',
-    icon: (
-      <PaperClipIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
+    icon: <PaperClipIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
     id: 8,
     title: 'Size (smallest)',
-    icon: (
-      <PaperClipIcon
-        className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-        aria-hidden="true"
-      />
-    ),
-  },
+    icon: <PaperClipIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+  }
 ];
 
 export default function Sorting() {
@@ -130,10 +90,7 @@ export default function Sorting() {
   };
 
   return (
-    <Menu
-      as="div"
-      className="relative inline-block text-left whitespace-nowrap"
-    >
+    <Menu as="div" className="relative inline-block text-left whitespace-nowrap">
       <Menu.Button className="flex pt-1.5 text-gray-700 focus:outline-none ring-0 focus:ring-0">
         <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
       </Menu.Button>
@@ -156,9 +113,7 @@ export default function Sorting() {
                   className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full',
-                    selectedSortingId === i.id
-                      ? 'bg-gray-100 text-gray-900'
-                      : ''
+                    selectedSortingId === i.id ? 'bg-gray-100 text-gray-900' : ''
                   )}
                   onClick={() => handleClick(i.id)}
                 >

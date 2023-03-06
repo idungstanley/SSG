@@ -24,9 +24,9 @@ interface AccountState {
 
 const initialState: AccountState = {
   settings: {
-    showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false,
+    showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false
   },
-  showSidebar,
+  showSidebar
 };
 
 export const accountSlice = createSlice({
@@ -38,8 +38,8 @@ export const accountSlice = createSlice({
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setAccountSettings, setShowSidebar } = accountSlice.actions;

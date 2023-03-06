@@ -6,13 +6,13 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 export default function CreateTag() {
   const queryClient = useQueryClient();
   const defaultHubFormState = {
-    name: '',
+    name: ''
   };
 
   const createTag = useMutation(UseCreateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const [formState, setFormState] = useState(defaultHubFormState);
@@ -20,14 +20,14 @@ export default function CreateTag() {
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
   const { name } = formState;
 
   const onSubmit = async () => {
     await createTag.mutateAsync({
-      name,
+      name
     });
   };
   return (

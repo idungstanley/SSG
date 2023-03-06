@@ -7,9 +7,7 @@ export default function NoEntriesFound() {
   return (
     <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">
       {/* <p className="text-base font-semibold text-indigo-600">404</p> */}
-      <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-        Sorry, No Entries
-      </h1>
+      <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">Sorry, No Entries</h1>
 
       <div className="mt-6">
         <div

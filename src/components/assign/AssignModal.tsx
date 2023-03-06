@@ -4,38 +4,32 @@ import { cl } from '../../utils';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import { AiOutlineUserAdd } from 'react-icons/ai';
-import {
-  UseAssignTaskService,
-  getOneTaskServices,
-} from "../../features/task/taskService";
-import { useAppSelector } from "../../app/hooks";
-import { TrashIcon } from "@heroicons/react/24/outline";
-import { setCurrTeamMemId } from "../../features/task/taskSlice";
-import { useDispatch } from "react-redux";
+import { UseAssignTaskService, getOneTaskServices } from '../../features/task/taskService';
+import { useAppSelector } from '../../app/hooks';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { setCurrTeamMemId } from '../../features/task/taskSlice';
+import { useDispatch } from 'react-redux';
 
 export default function AssignModal() {
   const dispatch = useDispatch();
   const { data } = useGetTeamMembers({
     page: 0,
-    query: "",
+    query: ''
   });
 
-  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } =
-    useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } = useAppSelector((state) => state.task);
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
-    triggerAsssignTask: triggerAsssignTask,
+    triggerAsssignTask: triggerAsssignTask
   });
 
   const { data: getTaskAssignees } = getOneTaskServices({
-    task_id: toggleAssignCurrentTaskId,
+    task_id: toggleAssignCurrentTaskId
   });
 
-  const assignedUser = getTaskAssignees?.data.task.assignees.map(
-    ({ id }: { id: string }) => id
-  );
+  const assignedUser = getTaskAssignees?.data.task.assignees.map(({ id }: { id: string }) => id);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -70,15 +64,8 @@ export default function AssignModal() {
                       className="relative flex items-center space-x-2 cursor-pointer"
                       onClick={() => dispatch(setCurrTeamMemId(i.id))}
                     >
-                      <AvatarWithInitials
-                        initials={i.initials}
-                        backgroundColour={i.colour}
-                        height="h-5"
-                        width="w-5"
-                      />
-                      <p className="text-xs">
-                        {i.user.name.toLocaleUpperCase()}
-                      </p>
+                      <AvatarWithInitials initials={i.initials} backgroundColour={i.colour} height="h-5" width="w-5" />
+                      <p className="text-xs">{i.user.name.toLocaleUpperCase()}</p>
                       {assignedUser?.includes(i.id) ? (
                         <button
                           type="button"

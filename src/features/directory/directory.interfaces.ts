@@ -8,8 +8,8 @@ export interface IDirectory {
 
 export interface IDirectoryRes {
   data: {
-    directory: IDirectory
-  }
+    directory: IDirectory;
+  };
 }
 
 export interface IDirWithChildren {

@@ -1,15 +1,15 @@
-import React, { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { BsThreeDots } from "react-icons/bs";
+import React, { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { BsThreeDots } from 'react-icons/bs';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
   setToggleAssignChecklistItemId,
   setTriggerDelChecklist,
-  setTriggererChecklistItemDel,
-} from "../../../../../../features/task/checklist/checklistSlice";
-import { useAppDispatch } from "../../../../../../app/hooks";
-import { Disclosure } from "@headlessui/react";
+  setTriggererChecklistItemDel
+} from '../../../../../../features/task/checklist/checklistSlice';
+import { useAppDispatch } from '../../../../../../app/hooks';
+import { Disclosure } from '@headlessui/react';
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -22,12 +22,7 @@ interface ChecklistModalProps {
   }[];
 }
 
-export default function ChecklistModal({
-  options,
-  checklistId,
-  checklistItemId,
-  focus,
-}: ChecklistModalProps) {
+export default function ChecklistModal({ options, checklistId, checklistItemId, focus }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
   const handleDelChecklist = () => {
@@ -41,15 +36,15 @@ export default function ChecklistModal({
     dispatch(setTriggererChecklistItemDel(true));
   };
   const handleOptions = (option: { name: string }) => {
-    if (option.name === "Delete Checklist") {
+    if (option.name === 'Delete Checklist') {
       handleDelChecklist();
-    } else if (option.name === "Delete Item") {
+    } else if (option.name === 'Delete Item') {
       handleChecklistItemDel();
-    } else if (option.name == "Assign to" || option.name == "Unassign") {
+    } else if (option.name == 'Assign to' || option.name == 'Unassign') {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
-    } else if (option.name == "Rename") {
+    } else if (option.name == 'Rename') {
       focus();
     }
   };
@@ -71,7 +66,7 @@ export default function ChecklistModal({
       >
         <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {options.map((option) =>
-            option.name === "New Item" ? (
+            option.name === 'New Item' ? (
               <Disclosure.Button key={option.id} className="w-full">
                 <Menu.Button className="flex w-full text-sm text-gray-400">
                   {() => (

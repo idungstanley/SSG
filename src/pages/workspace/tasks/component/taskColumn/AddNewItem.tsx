@@ -20,10 +20,10 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
     onSuccess: () => {
       queryClient.invalidateQueries();
       dispatch(setAddNewTaskItem(!addNewTaskItem));
-    },
+    }
   });
   const defaultTaskFormState = {
-    name: "",
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultTaskFormState);
@@ -33,14 +33,14 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
   const onSubmit = async () => {
     await createTask.mutateAsync({
       name,
-      getListId: listId,
+      getListId: listId
     });
   };
   return (
@@ -60,34 +60,19 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
       {/* icons */}
       <div className="flex items-center space-x-1">
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserPlusIcon
-            className="text-xs h-6 w-6 text-gray-400"
-            aria-hidden="true"
-          />
+          <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserPlusIcon
-            className="text-xs h-6 w-6 text-gray-400"
-            aria-hidden="true"
-          />
+          <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-          <UserPlusIcon
-            className="text-xs h-6 w-6 text-gray-400"
-            aria-hidden="true"
-          />
+          <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-          <CalendarIcon
-            className="text-xs h-6 w-6 text-gray-400"
-            aria-hidden="true"
-          />
+          <CalendarIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
         </span>
         <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-          <FaGlobeAfrica
-            className="text-xs h-6 w-6 text-gray-400"
-            aria-hidden="true"
-          />
+          <FaGlobeAfrica className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
         </span>
         <Button
           buttonStyle="primary"

@@ -28,12 +28,7 @@ export default function Table({ isGroups }: LayoutProps) {
   }
 
   if (status === 'error') {
-    return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-      />
-    );
+    return <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />;
   }
 
   const keyWord = isGroups ? 'group' : 'member';

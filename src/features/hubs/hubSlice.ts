@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface HubState {
   hub: string[];
@@ -44,16 +44,16 @@ const initialState: HubState = {
   SubMenuType: null,
   hubParentId: null,
   refType: null,
-  prevName: "",
+  prevName: '',
   triggerAddToFav: false,
   delFavId: null,
   showFavEditInput: null,
   triggerFavUpdate: false,
-  favUpdateName: null,
+  favUpdateName: null
 };
 
 export const hubSlice = createSlice({
-  name: "hub",
+  name: 'hub',
   initialState,
   reducers: {
     createHub(state, action) {
@@ -126,8 +126,8 @@ export const hubSlice = createSlice({
     setFavUpdateName(state, { payload }) {
       state.favUpdateName = payload;
     },
-    chechIfHub: (state) => state,
-  },
+    chechIfHub: (state) => state
+  }
 });
 
 export const {

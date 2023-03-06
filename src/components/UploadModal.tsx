@@ -11,13 +11,11 @@ import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSli
 import { useAppSelector } from '../app/hooks';
 
 const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
-const currentWorkspaceId = JSON.parse(
-  localStorage.getItem('currentWorkspaceId') || 'null'
-);
+const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || 'null');
 
 const headers = {
   Authorization: `Bearer ${accessToken}`,
-  current_workspace_id: currentWorkspaceId,
+  current_workspace_id: currentWorkspaceId
 };
 
 export default function UploadModal() {
@@ -35,11 +33,11 @@ export default function UploadModal() {
     new Uppy({
       debug: true,
       autoProceed: true,
-      meta: {},
+      meta: {}
     }).use(XHRUpload, {
       endpoint: '',
       bundle: false,
-      headers,
+      headers
     })
   );
 
@@ -60,11 +58,7 @@ export default function UploadModal() {
           //     : httpBody.data.uploaded_to_folder_id,
           // ]);
         } else {
-          queryClient.invalidateQueries([
-            'inbox_files',
-            inboxId,
-            { isArchived: 0 },
-          ]);
+          queryClient.invalidateQueries(['inbox_files', inboxId, { isArchived: 0 }]);
           queryClient.invalidateQueries(['inboxes']);
           queryClient.invalidateQueries(['inbox_files', inboxId]);
         }
@@ -73,9 +67,7 @@ export default function UploadModal() {
   });
 
   useEffect(() => {
-    const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${
-      isExplorerPath ? 'files' : 'inboxes'
-    }`;
+    const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${isExplorerPath ? 'files' : 'inboxes'}`;
     const endpoint = isExplorerPath
       ? folderId == null
         ? uploadUrl
@@ -85,8 +77,8 @@ export default function UploadModal() {
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint,
-      },
+        endpoint
+      }
     });
   }, [dataId]);
 

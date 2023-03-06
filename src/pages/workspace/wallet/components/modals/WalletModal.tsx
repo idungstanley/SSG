@@ -4,21 +4,15 @@ import { createWalletService } from '../../../../../features/wallet/walletServic
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 import { setCreateWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 
 function WalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdownType, showMenuDropdown, currSubHubId } =
-    useAppSelector((state) => state.hub);
-  const { showCreateWalletSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showMenuDropdownType, showMenuDropdown, currSubHubId } = useAppSelector((state) => state.hub);
+  const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -26,14 +20,14 @@ function WalletModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
 
   const defaultWalletFormState = {
-    name: '',
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultWalletFormState);
@@ -52,7 +46,7 @@ function WalletModal() {
         (currSubHubId !== null ? currSubHubId : currentItemId),
       walletId:
         (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null),
+        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null)
     });
   };
 
@@ -61,7 +55,7 @@ function WalletModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };

@@ -6,9 +6,7 @@ import InboxIndex from '../../../../../../components/Index/InboxIndex';
 import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function HubData() {
-  const { currentItemId, currentItemType } = useAppSelector(
-    (state) => state.workspace,
-  );
+  const { currentItemId, currentItemType } = useAppSelector((state) => state.workspace);
 
   return currentItemType === 'hub' ? (
     <>

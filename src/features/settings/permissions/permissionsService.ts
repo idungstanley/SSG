@@ -10,7 +10,7 @@ export const useGetPermissionsList = () =>
     const data = await requestNew(
       {
         url,
-        method: 'GET',
+        method: 'GET'
       },
       true
     );
@@ -30,7 +30,7 @@ export const useGetPermissionsValues = () => {
       const data = await requestNew(
         {
           url,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
@@ -45,22 +45,19 @@ export const useGetPermissionsValues = () => {
               'workspace_permission_value',
               {
                 teamMemberRoleKey: permissionValue.team_member_role_key,
-                workspacePermissionKey: permissionValue.permission_key,
-              },
+                workspacePermissionKey: permissionValue.permission_key
+              }
             ],
             permissionValue
           )
         );
-      },
+      }
     }
   );
 };
 
 // Get individual permission value
-export const useGetPermissionValue = (
-  teamMemberRoleKey: string,
-  workspacePermissionKey: string
-) => {
+export const useGetPermissionValue = (teamMemberRoleKey: string, workspacePermissionKey: string) => {
   const queryClient = useQueryClient();
 
   return useQuery<IPermission | undefined>(
@@ -68,16 +65,16 @@ export const useGetPermissionValue = (
       'workspace_permission_value',
       {
         teamMemberRoleKey,
-        workspacePermissionKey,
-      },
+        workspacePermissionKey
+      }
     ],
     () =>
       queryClient.getQueryData([
         'workspace_permission_value',
         {
           teamMemberRoleKey,
-          workspacePermissionKey,
-        },
+          workspacePermissionKey
+        }
       ]),
     {
       initialData: () =>
@@ -85,9 +82,9 @@ export const useGetPermissionValue = (
           'workspace_permission_value',
           {
             teamMemberRoleKey,
-            workspacePermissionKey,
-          },
-        ]),
+            workspacePermissionKey
+          }
+        ])
     }
   );
 };
@@ -105,8 +102,8 @@ export const changeRolePermissionService = (data: {
       params: {
         team_member_role_key: data.teamMemberRoleKey,
         workspace_permission_key: data.workspacePermissionKey,
-        permission_allowed: data.isPermissionAllowed,
-      },
+        permission_allowed: data.isPermissionAllowed
+      }
     },
     true
   );

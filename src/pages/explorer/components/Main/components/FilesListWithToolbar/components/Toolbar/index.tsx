@@ -4,12 +4,9 @@ import {
   ShareIcon,
   MagnifyingGlassIcon,
   MagnifyingGlassMinusIcon,
-  ArrowDownIcon,
+  ArrowDownIcon
 } from '@heroicons/react/24/outline';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { IStringifiedFile } from '../FilesList';
 import Tooltip from '../../../../../../../../components/Tooltip';
 import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
@@ -35,15 +32,11 @@ const stringifyNumber = (number: number) => {
 export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
   const { folderId } = useParams();
   const dispatch = useAppDispatch();
-  const { selectedFileId, selectedFileIds } = useAppSelector(
-    (state) => state.explorer
-  );
+  const { selectedFileId, selectedFileIds } = useAppSelector((state) => state.explorer);
 
   const [showSearch, setShowSearch] = useState(false);
 
-  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
-    (i) => i
-  );
+  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter((i) => i);
 
   const currentFileIndex = data.findIndex((i) => i.id === selectedFileId) + 1;
 
@@ -63,7 +56,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
   const handleCopy = () => {
     onCopy({
       copyToFolderId: folderId,
-      fileIds: selectedIds,
+      fileIds: selectedIds
     });
 
     dispatch(resetSelectedFiles());
@@ -71,12 +64,10 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
 
   const leftItems = [
     {
-      icon: (
-        <ArrowDownIcon className="w-4 h-4 stroke-current" aria-hidden="true" />
-      ),
+      icon: <ArrowDownIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
       onClick: handleDownload,
       label: 'Download',
-      disabled: selectedIds.length === 0,
+      disabled: selectedIds.length === 0
     },
     {
       icon: <ShareIcon className="w-4 h-4 stroke-current" aria-hidden="true" />,
@@ -85,23 +76,18 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           setShowShareSideOver({
             show: true,
             id: selectedFileId || '',
-            type: 'file',
+            type: 'file'
           })
         ),
       label: 'Share',
-      disabled: !selectedFileId,
+      disabled: !selectedFileId
     },
     {
-      icon: (
-        <BsClipboardCheck
-          className="w-4 h-4 stroke-current"
-          aria-hidden="true"
-        />
-      ),
+      icon: <BsClipboardCheck className="w-4 h-4 stroke-current" aria-hidden="true" />,
       onClick: handleCopy,
       label: 'Copy',
-      disabled: selectedIds.length === 0,
-    },
+      disabled: selectedIds.length === 0
+    }
   ];
 
   return (
@@ -128,15 +114,9 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           {/* search */}
           <Tooltip tooltip={showSearch ? 'Hide search' : 'Show search'}>
             {showSearch ? (
-              <MagnifyingGlassMinusIcon
-                onClick={() => setShowSearch(false)}
-                className="w-5 h-5 text-gray-500"
-              />
+              <MagnifyingGlassMinusIcon onClick={() => setShowSearch(false)} className="w-5 h-5 text-gray-500" />
             ) : (
-              <MagnifyingGlassIcon
-                onClick={() => setShowSearch(true)}
-                className="w-5 h-5 text-gray-500"
-              />
+              <MagnifyingGlassIcon onClick={() => setShowSearch(true)} className="w-5 h-5 text-gray-500" />
             )}
           </Tooltip>
 
@@ -148,9 +128,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           <div className="flex gap-1.5 items-center text-sm rounded bg-green-100 px-2.5 font-semibold text-gray-800">
             {currentFileIndex ? (
               <>
-                <span className="text-primary-500">
-                  {stringifyNumber(currentFileIndex)}
-                </span>
+                <span className="text-primary-500">{stringifyNumber(currentFileIndex)}</span>
                 <span>of</span>
               </>
             ) : null}
@@ -161,27 +139,18 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           <Tooltip tooltip="Delete">
             <button
               disabled={selectedIds.length === 0}
-              className={
-                selectedIds.length === 0
-                  ? 'text-gray-300 pt-1'
-                  : 'text-gray-500 pt-1'
-              }
+              className={selectedIds.length === 0 ? 'text-gray-300 pt-1' : 'text-gray-500 pt-1'}
               onClick={handleDelete}
               type="button"
             >
-              <TrashIcon
-                className="w-5 h-5 stroke-current"
-                aria-hidden="true"
-              />
+              <TrashIcon className="w-5 h-5 stroke-current" aria-hidden="true" />
             </button>
           </Tooltip>
         </div>
       </div>
 
       {/* search input */}
-      {showSearch ? (
-        <Search query={query} setQuery={setQuery} type="file" />
-      ) : null}
+      {showSearch ? <Search query={query} setQuery={setQuery} type="file" /> : null}
     </>
   );
 }

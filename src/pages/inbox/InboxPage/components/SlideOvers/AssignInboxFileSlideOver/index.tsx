@@ -5,13 +5,9 @@ import { setAssignInboxFileSlideOverVisibility } from '../../../../../../feature
 import { useGetInboxes } from '../../../../../../features/inbox/inboxesService';
 import {
   useAssignOrUnassignInboxFile,
-  useGetInboxFileFullDetails,
+  useGetInboxFileFullDetails
 } from '../../../../../../features/inbox/inboxService';
-import {
-  SearchInput,
-  StackListWithHeader,
-  SlideOver,
-} from '../../../../../../components';
+import { SearchInput, StackListWithHeader, SlideOver } from '../../../../../../components';
 import InboxResultItem from './InboxResultItem';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -19,31 +15,24 @@ import { useAppSelector } from '../../../../../../app/hooks';
 function AssignInboxFileSlideOver() {
   const dispatch = useDispatch();
 
-  const { showAssignInboxFileSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
-  const { selectedInboxFileId, currentInboxId } = useAppSelector(
-    (state) => state.inbox
-  );
+  const { showAssignInboxFileSlideOver } = useAppSelector((state) => state.slideOver);
+  const { selectedInboxFileId, currentInboxId } = useAppSelector((state) => state.inbox);
 
   const [searchQuery, setSearchQuery] = useState('');
 
   const { status, data } = useGetInboxes();
   const inboxes = data?.data.inboxes;
 
-  const { status: detailsStatus, data: inboxFileFullDetails } =
-    useGetInboxFileFullDetails(selectedInboxFileId || null);
+  const { status: detailsStatus, data: inboxFileFullDetails } = useGetInboxFileFullDetails(selectedInboxFileId || null);
 
-  const { mutate: AssignFile } =
-    useAssignOrUnassignInboxFile(selectedInboxFileId);
+  const { mutate: AssignFile } = useAssignOrUnassignInboxFile(selectedInboxFileId);
 
   const filteredItems = useMemo(
     () =>
       searchQuery.length > 1
         ? inboxes?.filter(
             (inbox) =>
-              inbox.name.match(new RegExp(searchQuery, 'i')) ||
-              inbox.email_key.match(new RegExp(searchQuery, 'i'))
+              inbox.name.match(new RegExp(searchQuery, 'i')) || inbox.email_key.match(new RegExp(searchQuery, 'i'))
           )
         : inboxes,
     [searchQuery, inboxes]
@@ -53,7 +42,7 @@ function AssignInboxFileSlideOver() {
     AssignFile({
       isAssigned,
       inboxId,
-      inboxFileId: selectedInboxFileId,
+      inboxFileId: selectedInboxFileId
     });
   };
 
@@ -69,10 +58,7 @@ function AssignInboxFileSlideOver() {
           </div>
         ) : status === 'error' || detailsStatus === 'error' ? (
           <div className=" mt-72">
-            <FullScreenMessage
-              title="Oops, an error occurred :("
-              description="Please try again later."
-            />
+            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
           </div>
         ) : inboxFileFullDetails ? (
           <div className="px-4 sm:px-6 space-y-8 sm:py-0">
@@ -91,14 +77,10 @@ function AssignInboxFileSlideOver() {
                     <InboxResultItem
                       key={inbox.id}
                       inboxId={inbox.id}
-                      isAssigned={inboxFileFullDetails.inbox_file_source.in_inbox_ids.includes(
-                        inbox.id
-                      )}
+                      isAssigned={inboxFileFullDetails.inbox_file_source.in_inbox_ids.includes(inbox.id)}
                       isDisabled={inbox.id === currentInboxId}
                       handleAssignToInbox={() => assignToInbox(inbox.id, false)}
-                      handleUnassignFromInbox={() =>
-                        assignToInbox(inbox.id, true)
-                      }
+                      handleUnassignFromInbox={() => assignToInbox(inbox.id, true)}
                     />
                   ))}
                 />

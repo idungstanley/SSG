@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  showUploadModal: false,
+  showUploadModal: false
 };
 
 export const uploadFileSlice = createSlice({
@@ -10,8 +10,8 @@ export const uploadFileSlice = createSlice({
   reducers: {
     setShowUploadModal: (state, action: PayloadAction<boolean>) => {
       state.showUploadModal = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setShowUploadModal } = uploadFileSlice.actions;

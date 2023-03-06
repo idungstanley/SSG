@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../components';
 import {
   goToPreviousTeamMembersPage,
-  goToNextTeamMembersPage,
+  goToNextTeamMembersPage
 } from '../../../../../../features/settings/teamMembers/teamMemberSlice';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -11,13 +11,11 @@ import { useAppSelector } from '../../../../../../app/hooks';
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
-    (state) => state.teamMember
-  );
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
 
   const { data: response } = useGetTeamMembers({
     page: teamMembersPaginationPage,
-    query: teamMembersSearchQuery,
+    query: teamMembersSearchQuery
   });
   const goToPreviousPage = () => {
     dispatch(goToPreviousTeamMembersPage());
@@ -37,18 +35,11 @@ export default function Pagination() {
           Showing{' '}
           {response?.data.pagination.total !== 0 && (
             <>
-              <span className="font-medium">
-                {response?.data.pagination.first_item}
-              </span>{' '}
-              to{' '}
-              <span className="font-medium">
-                {response?.data.pagination.last_item}
-              </span>{' '}
-              of{' '}
+              <span className="font-medium">{response?.data.pagination.first_item}</span> to{' '}
+              <span className="font-medium">{response?.data.pagination.last_item}</span> of{' '}
             </>
           )}
-          <span className="font-medium">{response?.data.pagination.total}</span>{' '}
-          results
+          <span className="font-medium">{response?.data.pagination.total}</span> results
         </p>
       </div>
       <div className="flex-1 flex justify-between sm:justify-end space-x-3">

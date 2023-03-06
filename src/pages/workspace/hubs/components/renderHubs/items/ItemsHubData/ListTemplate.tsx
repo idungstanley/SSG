@@ -17,9 +17,7 @@ export interface dataProps {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  const { currentParentTaskId, getSubTaskId } = useAppSelector(
-    (state) => state.task
-  );
+  const { currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
 
   return (
     <div className="">

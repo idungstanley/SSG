@@ -8,18 +8,13 @@ interface DropdownForMentionProps {
   setSelectedUsers: (i: { id: string; name: string }[]) => void;
 }
 
-export default function DropdownForMention({
-  setSelectedUsers,
-  selectedUsers,
-}: DropdownForMentionProps) {
+export default function DropdownForMention({ setSelectedUsers, selectedUsers }: DropdownForMentionProps) {
   const { data } = useGetTeamMembers({
     page: 0,
-    query: '',
+    query: ''
   });
   const selectedUserIds = selectedUsers.map((i) => i.id);
-  const usersWithoutSelected = data?.data.team_members.filter(
-    (i) => !selectedUserIds.includes(i.user.id)
-  );
+  const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -48,11 +43,7 @@ export default function DropdownForMention({
                   className="relative px-3 py-2 text-sm bg-indigo-100 border border-primary-400 rounded-xl"
                 >
                   <XMarkIcon
-                    onClick={() =>
-                      setSelectedUsers([
-                        ...selectedUsers.filter((i) => i.id !== user.id),
-                      ])
-                    }
+                    onClick={() => setSelectedUsers([...selectedUsers.filter((i) => i.id !== user.id)])}
                     className="absolute w-6 h-6 p-1 text-black transition-all duration-300 bg-white border rounded-full cursor-pointer -top-2 -right-3"
                   />
                   <p>{user.name}</p>
@@ -66,9 +57,7 @@ export default function DropdownForMention({
                 <button
                   type="button"
                   key={user.id}
-                  onClick={() =>
-                    setSelectedUsers([...selectedUsers, user.user])
-                  }
+                  onClick={() => setSelectedUsers([...selectedUsers, user.user])}
                   className="w-full px-4 py-2 text-sm text-left text-gray-900 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <p>{user.user.name}</p>

@@ -5,7 +5,7 @@ import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/
 import { cl } from '../../../utils';
 
 export default function RoutePlanner() {
-  const {showSidebar} = useAppSelector(state=> state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
     <div>

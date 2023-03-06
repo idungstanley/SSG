@@ -24,7 +24,7 @@ export default function Status({ Details }: StatusDetailsProps) {
 
   const { status } = UseUpdateTaskStatusService({
     task_id: Details?.id,
-    statusDataUpdate: complete,
+    statusDataUpdate: complete
   });
 
   if (status == 'success') {
@@ -70,9 +70,7 @@ export default function Status({ Details }: StatusDetailsProps) {
           </button>
         </ToolTip>
         <ToolTip tooltip="Next status">
-          <button
-            className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}
-          >
+          <button className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
             <MdArrowRight />
           </button>
         </ToolTip>

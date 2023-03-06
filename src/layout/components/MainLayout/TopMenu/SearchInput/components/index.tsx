@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BookmarkIcon, TrashIcon } from '@heroicons/react/24/outline';
-import {
-  useGetSavedSearches,
-  useSaveSearchValue,
-} from '../../../../../../features/search/searchService';
+import { useGetSavedSearches, useSaveSearchValue } from '../../../../../../features/search/searchService';
 import { Spinner } from '../../../../../../common';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setSearchQuery } from '../../../../../../features/search/searchSlice';
@@ -70,9 +67,7 @@ export default function SavedSearches() {
             </div>
           ) : data ? (
             <>
-              <p className="text-sm text-indigo-600 px-4 py-3 border-t">
-                Saved search values:
-              </p>
+              <p className="text-sm text-indigo-600 px-4 py-3 border-t">Saved search values:</p>
 
               {data[0].value.map((saved) => (
                 <Menu.Item key={saved}>

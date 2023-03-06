@@ -6,12 +6,7 @@ interface ResizeBorderProps {
   maxWidth: number;
   startResizing: () => void;
 }
-export default function ResizeBorder({
-  width,
-  minWidth,
-  maxWidth,
-  startResizing,
-}: ResizeBorderProps) {
+export default function ResizeBorder({ width, minWidth, maxWidth, startResizing }: ResizeBorderProps) {
   return (
     <span className="group">
       <div
@@ -21,7 +16,7 @@ export default function ResizeBorder({
         onMouseDown={startResizing}
         style={{
           cursor: 'col-resize',
-          width: `${width > maxWidth ? '4px' : '2px'}`,
+          width: `${width > maxWidth ? '4px' : '2px'}`
         }}
       ></div>
       <div
@@ -31,7 +26,7 @@ export default function ResizeBorder({
         style={{
           cursor: 'col-resize',
           width: `${width < minWidth ? '4px' : '2px'}`,
-          right: `${width < minWidth ? '-4.5px' : '-2.8px'}`,
+          right: `${width < minWidth ? '-4.5px' : '-2.8px'}`
         }}
         onMouseDown={startResizing}
       ></div>

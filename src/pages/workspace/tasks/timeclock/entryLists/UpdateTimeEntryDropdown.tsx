@@ -12,25 +12,22 @@ interface UpdateTimeEntryDropdownProps {
   time_entry_id: string | undefined;
 }
 
-function UpdateTimeEntryDropdown({
-  time_entry_id,
-}: UpdateTimeEntryDropdownProps) {
+function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [isBillable, setIsBillable] = useState(false);
-  const { initial_description, initial_start_date, initial_end_date } =
-    useAppSelector((state) => state.task);
+  const { initial_description, initial_start_date, initial_end_date } = useAppSelector((state) => state.task);
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['timeclock']);
       dispatch(setUpdateEntries({ openUpdateEntryId: null }));
-    },
+    }
   });
 
   const defaultUpdateTimeFormState = {
     description: initial_description,
     start_date: initial_start_date,
-    end_date: initial_end_date,
+    end_date: initial_end_date
   };
 
   const [formState, setFormState] = useState(defaultUpdateTimeFormState);
@@ -38,7 +35,7 @@ function UpdateTimeEntryDropdown({
   const handleUpdateTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
@@ -50,7 +47,7 @@ function UpdateTimeEntryDropdown({
       isBillable: isBillable === false ? 0 : 1,
       start_date,
       end_date,
-      time_entry_id,
+      time_entry_id
     });
   };
 
@@ -59,12 +56,7 @@ function UpdateTimeEntryDropdown({
       <section className="absolute -left-44 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
         <div className="flex justify-between items-center px-3 py-3 text-xs">
           <p>Edit Session</p>
-          <button
-            type="button"
-            onClick={() =>
-              dispatch(setUpdateEntries({ openUpdateEntryId: null }))
-            }
-          >
+          <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>
             X
           </button>
         </div>
@@ -78,10 +70,7 @@ function UpdateTimeEntryDropdown({
             className="border-0 shadow-sm rounded text-gray-600"
           />
         </div>
-        <div
-          id="billable"
-          className="flex items-center justify-start space-x-1 text-sm px-3"
-        >
+        <div id="billable" className="flex items-center justify-start space-x-1 text-sm px-3">
           <CurrencyDollarIcon
             className={`${
               isBillable
@@ -93,10 +82,7 @@ function UpdateTimeEntryDropdown({
           />
           <p className="text-gray-400">Billable</p>
         </div>
-        <div
-          id="startDate"
-          className="flex items-center justify-start space-x-1 px-4 py-2"
-        >
+        <div id="startDate" className="flex items-center justify-start space-x-1 px-4 py-2">
           <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
@@ -106,10 +92,7 @@ function UpdateTimeEntryDropdown({
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>
-        <div
-          id="endDate"
-          className="flex items-center justify-start space-x-1 px-4 py-2"
-        >
+        <div id="endDate" className="flex items-center justify-start space-x-1 px-4 py-2">
           <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
           <input
             type="text"

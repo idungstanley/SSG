@@ -10,39 +10,29 @@ import {
   getPrevName,
   getSubMenu,
   setHubParentId,
-  setshowMenuDropdown,
+  setshowMenuDropdown
 } from '../../../features/hubs/hubSlice';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
-import {
-  setActiveEntity,
-  setActiveItem,
-  setShowHub,
-} from '../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showSubChildren, setShowSubChidren] = useState<string | null>(null);
-  const { currentItemId, activeItemId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { currentItemId, activeItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
-    parentId: currentItemId,
+    parentId: currentItemId
   });
 
   if (status === 'success') {
-    data?.data?.hubs.map(({ parent_id }) =>
-      dispatch(setHubParentId(parent_id))
-    );
+    data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector(
-    (state) => state.hub
-  );
+  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   const handleClick = (id: string, name: string) => {
     setShowSubChidren(id);
@@ -50,14 +40,14 @@ export default function SubHubIndex() {
       setActiveItem({
         activeItemType: 'subhub',
         activeItemId: id,
-        activeItemName: name,
+        activeItemName: name
       })
     );
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
-        currSubHubIdType: 'subhub',
+        currSubHubIdType: 'subhub'
       })
     );
     if (showSubChildren === id) {
@@ -70,7 +60,7 @@ export default function SubHubIndex() {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'subhub',
+        showMenuDropdownType: 'subhub'
       })
     );
     dispatch(getPrevName(name));
@@ -85,7 +75,7 @@ export default function SubHubIndex() {
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'subhub',
+        SubMenuType: 'subhub'
       })
     );
   };
@@ -96,7 +86,7 @@ export default function SubHubIndex() {
       setActiveItem({
         activeItemId: id,
         activeItemType: 'subhub',
-        activeItemName: name,
+        activeItemName: name
       })
     );
     navigate(`/hub/${id}`);
@@ -110,19 +100,14 @@ export default function SubHubIndex() {
           <div key={subhub.id}>
             <section
               className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-                subhub.id === activeItemId &&
-                'bg-green-100 text-black font-medium'
+                subhub.id === activeItemId && 'bg-green-100 text-black font-medium'
               }`}
               onClick={() => handleClick(subhub.id, subhub.name)}
             >
               {subhub.id === activeItemId && (
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
-              <div
-                id="subhubleft"
-                className="flex items-center justify-center"
-                style={{paddingLeft: "26px"}}
-              >
+              <div id="subhubleft" className="flex items-center justify-center" style={{ paddingLeft: '26px' }}>
                 {/* showsub1 */}
                 <div
                   role="button"
@@ -130,17 +115,9 @@ export default function SubHubIndex() {
                   className="flex items-center py-1.5 justify-start overflow-y-hidden text-sm"
                 >
                   {showSubChildren === subhub.id ? (
-                    <VscTriangleDown
-                      className="flex-shrink-0 h-2"
-                      aria-hidden="true"
-                      color="rgba(72, 67, 67, 0.64)"
-                    />
+                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                   ) : (
-                    <VscTriangleRight
-                      className="flex-shrink-0 h-2"
-                      aria-hidden="true"
-                      color="#BBBDC0"
-                    />
+                    <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                   )}
                 </div>
                 <div className="flex items-center flex-1 min-w-0">
@@ -177,10 +154,7 @@ export default function SubHubIndex() {
                   onClick={(e) => handleShowMenu(subhub.id, subhub.name, e)}
                   id="menusettings"
                 />
-                <AiOutlinePlus
-                  onClick={() => handleItemAction(subhub.id)}
-                  className="cursor-pointer"
-                />
+                <AiOutlinePlus onClick={() => handleItemAction(subhub.id)} className="cursor-pointer" />
               </div>
             </section>
             {showSubChildren === subhub.id ? <SHubDropdownList /> : null}

@@ -10,8 +10,8 @@ const loginService = (data: { email: string; password: string }) => {
       method: 'POST',
       data: {
         email: data.email,
-        password: data.password,
-      },
+        password: data.password
+      }
     },
     true
   );
@@ -25,7 +25,7 @@ export const useLoginService = () =>
         token: { accessToken: string; token: { user_id: string } };
         user: IUser;
       };
-    }) => res.data,
+    }) => res.data
   });
 
 // Login by Google
@@ -36,8 +36,8 @@ const loginGoogleService = (data: { code: string; inviteCode?: string }) => {
       method: 'POST',
       data: {
         code: data.code,
-        invite_code: data.inviteCode,
-      },
+        invite_code: data.inviteCode
+      }
     },
     true
   );
@@ -51,16 +51,11 @@ export const useLoginGoogleService = () =>
         token: { accessToken: string; token: { user_id: string } };
         user: IUser;
       };
-    }) => res.data,
+    }) => res.data
   });
 
 // Register
-const registerService = (data: {
-  name: string;
-  email: string;
-  password: string;
-  inviteCode?: string;
-}) => {
+const registerService = (data: { name: string; email: string; password: string; inviteCode?: string }) => {
   const response = requestNew(
     {
       url: 'auth/register',
@@ -70,8 +65,8 @@ const registerService = (data: {
         email: data.email,
         password: data.password,
         password_confirmation: data.password,
-        invite_code: data.inviteCode,
-      },
+        invite_code: data.inviteCode
+      }
     },
     true
   );
@@ -85,7 +80,7 @@ export const useRegisterService = () =>
         token: { accessToken: string; token: { user_id: string } };
         user: IUser;
       };
-    }) => res.data,
+    }) => res.data
   });
 
 // Logout
@@ -93,7 +88,7 @@ export const logoutService = () => {
   const response = requestNew(
     {
       url: 'auth/logout',
-      method: 'GET',
+      method: 'GET'
     },
     true
   );
@@ -107,9 +102,9 @@ export const useGetInviteByCode = (inviteCode?: string) =>
     async () =>
       requestNew({
         url: `auth/invite-details/${inviteCode}`,
-        method: 'GET',
+        method: 'GET'
       }),
     {
-      enabled: !!inviteCode,
+      enabled: !!inviteCode
     }
   );

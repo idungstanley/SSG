@@ -1,10 +1,6 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import {
-  FolderPlusIcon,
-  MagnifyingGlassIcon,
-  MagnifyingGlassMinusIcon,
-} from '@heroicons/react/24/outline';
+import { FolderPlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon } from '@heroicons/react/24/outline';
 import PlaceItem from '../../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import Dropdown from '../../../../components/Dropdown/index';
 import Search from '../../../explorer/components/Search';
@@ -22,8 +18,8 @@ function Sidebar() {
     {
       label: 'Directory',
       icon: <FolderPlusIcon className="w-5 h-5" aria-hidden="true" />,
-      onClick: () => dispatch(setShowCreateDirectorySlideOver(true)),
-    },
+      onClick: () => dispatch(setShowCreateDirectorySlideOver(true))
+    }
   ];
 
   return (
@@ -32,9 +28,7 @@ function Sidebar() {
         label="Library"
         icon={<img src={libraryIcon} alt="library Icon" className="w-4 h-4" />}
         rightContent={
-          <div className="flex gap-2"
-          onClick={(e)=> e.stopPropagation()}
-          >
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" />
 
             {showSearch ? (
@@ -50,11 +44,7 @@ function Sidebar() {
             )}
           </div>
         }
-        bottomContent={
-          showSearch ? (
-            <Search query={query} setQuery={setQuery} type="folder" />
-          ) : null
-        }
+        bottomContent={showSearch ? <Search query={query} setQuery={setQuery} type="folder" /> : null}
       />
       <LibraryData />
     </>

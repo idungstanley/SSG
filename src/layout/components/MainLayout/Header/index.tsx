@@ -18,7 +18,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
+    buttonLabel: 'Calendar'
   },
   {
     path: '/notification',
@@ -26,7 +26,7 @@ const config: configData[] = [
     newd: 'New',
     Cleared: 'Clear',
     Assigned: 'Assigned to me',
-    buttonLabel: 'All',
+    buttonLabel: 'All'
   },
   {
     path: '/community',
@@ -34,7 +34,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
+    buttonLabel: 'Calendar'
   },
   {
     path: '/goals',
@@ -42,7 +42,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: null,
-    buttonLabel: null,
+    buttonLabel: null
   },
   {
     path: '/inbox',
@@ -50,7 +50,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
+    buttonLabel: 'Calendar'
   },
   {
     path: '/dashboard',
@@ -58,7 +58,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
+    buttonLabel: 'Calendar'
   },
   {
     path: '/calendar',
@@ -66,7 +66,7 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
+    buttonLabel: 'Calendar'
   },
   {
     path: '/favorites',
@@ -74,8 +74,8 @@ const config: configData[] = [
     newd: null,
     Cleared: null,
     Assigned: 'Agenda',
-    buttonLabel: 'Calendar',
-  },
+    buttonLabel: 'Calendar'
+  }
 ];
 
 export default function Header() {

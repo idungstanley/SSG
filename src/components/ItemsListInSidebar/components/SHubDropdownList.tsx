@@ -7,9 +7,7 @@ import WalletModal from '../../../pages/workspace/wallet/components/modals/Walle
 import ListModal from '../../../pages/workspace/lists/components/modals/ListModal';
 
 export default function SHubDropdownList() {
-  const { currSubHubId, currSubHubIdType } = useAppSelector(
-    (state) => state.hub
-  );
+  const { currSubHubId, currSubHubIdType } = useAppSelector((state) => state.hub);
 
   return currSubHubIdType === 'subhub' ? (
     <>

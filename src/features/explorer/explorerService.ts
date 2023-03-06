@@ -1,9 +1,4 @@
-import {
-  IExplorerFile,
-  IExplorerFilesRes,
-  IExplorerFolder,
-  IExplorerFoldersRes,
-} from './explorer.interfaces';
+import { IExplorerFile, IExplorerFilesRes, IExplorerFolder, IExplorerFoldersRes } from './explorer.interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import requestForBuffer from '../../app/requestForBuffer';
@@ -18,24 +13,20 @@ export const useGetExplorerFolders = () => {
     () =>
       requestNew({
         url: 'explorer-folders',
-        method: 'GET',
+        method: 'GET'
       }),
     {
       select: (res) => res.data.folders,
       onSuccess: (res) =>
         res.map(
-          (folder) =>
-            queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
+          (folder) => queryClient.setQueryData(['explorer-folder-1', folder.id], folder)
           // ? query name 'explorer-folder-1' using because 'explorer-folder' is already use
-        ),
+        )
     }
   );
 };
 
-export const useGetExplorerFolder = (
-  folderId?: string | null,
-  isFolder?: boolean
-) => {
+export const useGetExplorerFolder = (folderId?: string | null, isFolder?: boolean) => {
   // isFolder - needed only for Pilot/Information
 
   const enabled = isFolder ? !!folderId : !!folderId && isFolder;
@@ -45,7 +36,7 @@ export const useGetExplorerFolder = (
     () =>
       requestNew({
         url: `explorer-folders/${folderId}`,
-        method: 'GET',
+        method: 'GET'
       }),
     { enabled }
   );
@@ -59,12 +50,12 @@ export const useGetSearchFolders = (query: string) =>
         url: 'search/folders',
         method: 'GET',
         params: {
-          query,
-        },
+          query
+        }
       }),
     {
       enabled: query.length > 2,
-      select: (res) => res.data.folders,
+      select: (res) => res.data.folders
     }
   );
 
@@ -76,12 +67,12 @@ export const useGetSearchFiles = (query: string) =>
         url: 'search/files',
         method: 'GET',
         params: {
-          query,
-        },
+          query
+        }
       }),
     {
       enabled: query.length > 2,
-      select: (res) => res.data.files,
+      select: (res) => res.data.files
     }
   );
 
@@ -94,22 +85,16 @@ export const useGetExplorerFiles = (folderId?: string) => {
     () =>
       requestNew({
         url: `explorer-files${folderId ? `/${folderId}` : ''}`,
-        method: 'GET',
+        method: 'GET'
       }),
     {
       select: (res) => res.data.files,
-      onSuccess: (res) =>
-        res.map((file) =>
-          queryClient.setQueryData(['explorer-file', file.id], file)
-        ),
+      onSuccess: (res) => res.map((file) => queryClient.setQueryData(['explorer-file', file.id], file))
     }
   );
 };
 
-export const useGetExplorerFile = (
-  fileId?: string | null,
-  isFile?: boolean
-) => {
+export const useGetExplorerFile = (fileId?: string | null, isFile?: boolean) => {
   // isFile - needed only for Pilot/Information
 
   const queryClient = useQueryClient();
@@ -120,7 +105,7 @@ export const useGetExplorerFile = (
     () => queryClient.getQueryData(['explorer-file', fileId]),
     {
       initialData: () => queryClient.getQueryData(['explorer-file', fileId]),
-      enabled,
+      enabled
     }
   );
 };
@@ -130,8 +115,8 @@ const multipleDeleteFiles = (fileIds: string[]) => {
     url: 'explorer/multiple-delete',
     method: 'POST',
     params: {
-      file_ids: fileIds,
-    },
+      file_ids: fileIds
+    }
   });
   return response;
 };
@@ -142,7 +127,7 @@ export const useMultipleDeleteFiles = (folderId?: string) => {
   return useMutation(multipleDeleteFiles, {
     onSuccess: () => {
       queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
-    },
+    }
   });
 };
 
@@ -152,17 +137,14 @@ export const useGetFileBuffers = (id: string | null, contentType: string) => {
     () =>
       requestForBuffer({
         url: `files/${id}/contents`,
-        method: 'GET',
+        method: 'GET'
       }),
     { enabled: !!id }
   );
 
   return {
-    data: `data:${contentType};base64,${Buffer.from(
-      response.data || '',
-      'binary'
-    ).toString('base64')}`,
-    status: response.status,
+    data: `data:${contentType};base64,${Buffer.from(response.data || '', 'binary').toString('base64')}`,
+    status: response.status
   };
 };
 
@@ -173,10 +155,10 @@ export const useGetTrashedExplorerFolders = () =>
     () =>
       requestNew({
         url: 'folders/trashed',
-        method: 'GET',
+        method: 'GET'
       }),
     {
-      select: (res) => res.data.folders,
+      select: (res) => res.data.folders
     }
   );
 
@@ -186,22 +168,19 @@ export const useGetTrashedExplorerFiles = () =>
     () =>
       requestNew({
         url: 'files/trashed',
-        method: 'GET',
+        method: 'GET'
       }),
     {
-      select: (res) => res.data.files,
+      select: (res) => res.data.files
     }
   );
 
-const restoreExplorerItem = (data: {
-  type: explorerItemType;
-  itemId: string;
-}) => {
+const restoreExplorerItem = (data: { type: explorerItemType; itemId: string }) => {
   const { type, itemId } = data;
 
   const response = requestNew({
     url: `${type}s/${itemId}/restore`,
-    method: 'POST',
+    method: 'POST'
   });
   return response;
 };

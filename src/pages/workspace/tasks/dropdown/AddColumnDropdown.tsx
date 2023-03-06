@@ -1,41 +1,38 @@
-import React from "react";
-import { BiSearch } from "react-icons/bi";
-import { BsCheck2 } from "react-icons/bs";
-import { BiCaretDownSquare } from "react-icons/bi";
-import { BiText } from "react-icons/bi";
-import { BsTextareaT } from "react-icons/bs";
-import { MdDateRange } from "react-icons/md";
-import { TbBatteryEco } from "react-icons/tb";
-import { AiOutlineNumber } from "react-icons/ai";
-import { IoMdCheckboxOutline } from "react-icons/io";
-import { HiOutlineMail } from "react-icons/hi";
-import { MdOutlineAttachFile } from "react-icons/md";
-import { ImClearFormatting } from "react-icons/im";
-import { BsTag } from "react-icons/bs";
-import { TfiLocationPin } from "react-icons/tfi";
-import { TfiMoney } from "react-icons/tfi";
-import { MdPersonOutline } from "react-icons/md";
-import { AiOutlinePhone } from "react-icons/ai";
-import { BsBatteryHalf } from "react-icons/bs";
-import { AiOutlineStar } from "react-icons/ai";
-import { TbArrowsDoubleSwNe } from "react-icons/tb";
-import { BsArrowUpRight } from "react-icons/bs";
-import { DiDropbox } from "react-icons/di";
-import { TbWorld } from "react-icons/tb";
-import { useState } from "react";
-import { useAppDispatch } from "../../../../app/hooks";
-import { hideTaskColumns } from "../../../../features/task/taskSlice";
-import { listColumnProps } from "../component/views/ListColumns";
+import React from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { BsCheck2 } from 'react-icons/bs';
+import { BiCaretDownSquare } from 'react-icons/bi';
+import { BiText } from 'react-icons/bi';
+import { BsTextareaT } from 'react-icons/bs';
+import { MdDateRange } from 'react-icons/md';
+import { TbBatteryEco } from 'react-icons/tb';
+import { AiOutlineNumber } from 'react-icons/ai';
+import { IoMdCheckboxOutline } from 'react-icons/io';
+import { HiOutlineMail } from 'react-icons/hi';
+import { MdOutlineAttachFile } from 'react-icons/md';
+import { ImClearFormatting } from 'react-icons/im';
+import { BsTag } from 'react-icons/bs';
+import { TfiLocationPin } from 'react-icons/tfi';
+import { TfiMoney } from 'react-icons/tfi';
+import { MdPersonOutline } from 'react-icons/md';
+import { AiOutlinePhone } from 'react-icons/ai';
+import { BsBatteryHalf } from 'react-icons/bs';
+import { AiOutlineStar } from 'react-icons/ai';
+import { TbArrowsDoubleSwNe } from 'react-icons/tb';
+import { BsArrowUpRight } from 'react-icons/bs';
+import { DiDropbox } from 'react-icons/di';
+import { TbWorld } from 'react-icons/tb';
+import { useState } from 'react';
+import { useAppDispatch } from '../../../../app/hooks';
+import { hideTaskColumns } from '../../../../features/task/taskSlice';
+import { listColumnProps } from '../component/views/ListColumns';
 
 interface CustomDropdownProps {
   title: string;
   listItems: listColumnProps[];
 }
 
-export default function AddColumnDropdown({
-  title,
-  listItems,
-}: CustomDropdownProps) {
+export default function AddColumnDropdown({ title, listItems }: CustomDropdownProps) {
   const [column, setColumn] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -43,19 +40,13 @@ export default function AddColumnDropdown({
     <div className="relative">
       <div
         className=" scrollbarDynCol absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1   "
-        style={{ height: "50vh" }}
+        style={{ height: '50vh' }}
       >
         <div className="flex  py-2 px-2 justify-around">
-          <p
-            onClick={() => setColumn(!column)}
-            className={`${!column && "text-purple-600"}`}
-          >
+          <p onClick={() => setColumn(!column)} className={`${!column && 'text-purple-600'}`}>
             Show/Hide
           </p>
-          <p
-            onClick={() => setColumn(!column)}
-            className={`${column && "text-purple-600"}`}
-          >
+          <p onClick={() => setColumn(!column)} className={`${column && 'text-purple-600'}`}>
             New Column
           </p>
         </div>

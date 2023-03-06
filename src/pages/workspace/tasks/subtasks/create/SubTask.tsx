@@ -5,14 +5,10 @@ import { createTaskService } from '../../../../../features/task/taskService';
 import { FaTimes } from 'react-icons/fa';
 import { setCurrentParentTaskId } from '../../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
-import {
-  CalendarIcon,
-  FlagIcon,
-  UserPlusIcon,
-} from '@heroicons/react/24/outline';
+import { CalendarIcon, FlagIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface SubTaskProps {
-  parentTaskId?: string | null ;
+  parentTaskId?: string | null;
 }
 
 function SubTask({ parentTaskId }: SubTaskProps) {
@@ -22,11 +18,11 @@ function SubTask({ parentTaskId }: SubTaskProps) {
     onSuccess: () => {
       queryClient.invalidateQueries();
       dispatch(setCurrentParentTaskId(null));
-    },
+    }
   });
 
   const defaultTaskFormState = {
-    name: '',
+    name: ''
   };
 
   const [taskFormState, setTaskFormState] = useState(defaultTaskFormState);
@@ -34,7 +30,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskFormState({
       ...taskFormState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -43,7 +39,7 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   const onSubmit = async () => {
     await createSubTask.mutateAsync({
       name,
-      parentTaskId,
+      parentTaskId
     });
   };
 
@@ -67,34 +63,19 @@ function SubTask({ parentTaskId }: SubTaskProps) {
 
         <div className="flex items-center space-x-1">
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserPlusIcon
-              className="text-xs h-6 w-6 text-gray-400"
-              aria-hidden="true"
-            />
+            <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserPlusIcon
-              className="text-xs h-6 w-6 text-gray-400"
-              aria-hidden="true"
-            />
+            <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs font-semibold">
-            <UserPlusIcon
-              className="text-xs h-6 w-6 text-gray-400"
-              aria-hidden="true"
-            />
+            <UserPlusIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-            <CalendarIcon
-              className="text-xs h-6 w-6 text-gray-400"
-              aria-hidden="true"
-            />
+            <CalendarIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
           </span>
           <span className="border-dotted border-gray-300 border-2 rounded-full text-xs">
-            <FlagIcon
-              className="text-xs h-6 w-6 text-gray-400"
-              aria-hidden="true"
-            />
+            <FlagIcon className="text-xs h-6 w-6 text-gray-400" aria-hidden="true" />
           </span>
           <Button
             buttonStyle="primary"

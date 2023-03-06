@@ -18,11 +18,7 @@ function Archived() {
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-        showHalFScreen
-      />
+      <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showHalFScreen />
     );
   }
 

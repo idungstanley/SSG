@@ -7,11 +7,7 @@ import CreateChatSideOver from './components/CreateChatSideOver';
 import Pusher from 'pusher-js';
 import { IMessage } from '../../features/chat/chat.interfaces';
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  setShowChat,
-  setShowCreateChatSideOver,
-  setShowMembersInChatSideOver,
-} from '../../features/chat/chatSlice';
+import { setShowChat, setShowCreateChatSideOver, setShowMembersInChatSideOver } from '../../features/chat/chatSlice';
 import CreateMessage from './components/ChatSection/components/CreateMessage';
 import MessagesList from './components/ChatSection/components/MessagesList';
 import ChatsList from './components/ChatList';
@@ -56,10 +52,10 @@ export default function Chat() {
         auth: {
           headers: {
             'X-CSRF-Token': 'iTcXX4EKprDuuxIWtloqmr7yBqRlEjM8C7JydcdB',
-            'X-App-ID': 'alsoworkspace',
-          },
+            'X-App-ID': 'alsoworkspace'
+          }
         },
-        enabledTransports: ['ws', 'wss'],
+        enabledTransports: ['ws', 'wss']
       });
 
       socket.current.connection.bind('connected', () => {
@@ -74,12 +70,10 @@ export default function Chat() {
 
       const channelName = 'SendMessageEvent-' + id;
 
-      socket.current
-        .subscribe(channelName)
-        .bind('send-chat-message', (data: { data: { message: IMessage } }) => {
-          const message = data.data.message;
-          setIncomingData((prev) => [...prev, message]);
-        });
+      socket.current.subscribe(channelName).bind('send-chat-message', (data: { data: { message: IMessage } }) => {
+        const message = data.data.message;
+        setIncomingData((prev) => [...prev, message]);
+      });
     }
   };
 
@@ -95,9 +89,7 @@ export default function Chat() {
   };
 
   // old messages with new from websocket
-  const allMessages = messages
-    ? [...messages, ...incomingData]
-    : [...incomingData];
+  const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
 
   return (
     <>
@@ -123,9 +115,7 @@ export default function Chat() {
                       <div className="flex justify-between items-center mb-3">
                         {selectedItem?.id ? (
                           <button
-                            onClick={() =>
-                              dispatch(setShowCreateChatSideOver(true))
-                            }
+                            onClick={() => dispatch(setShowCreateChatSideOver(true))}
                             type="button"
                             className="px-3.5 py-2 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"
                           >
@@ -135,11 +125,7 @@ export default function Chat() {
                           <div></div>
                         )}
 
-                        <XMarkIcon
-                          onClick={handleHideChat}
-                          className="h-6 w-6 cursor-pointer"
-                          aria-hidden="true"
-                        />
+                        <XMarkIcon onClick={handleHideChat} className="h-6 w-6 cursor-pointer" aria-hidden="true" />
                       </div>
                       <ChatsList selectChat={handleClickChat} />
 
@@ -147,16 +133,11 @@ export default function Chat() {
                         <div className="flex flex-col justify-between mt-3">
                           <div className="flex items-center justify-between">
                             <p className="text-center">
-                              Chat{' '}
-                              <span className="font-semibold text-indigo-600">
-                                {chat.name}
-                              </span>
+                              Chat <span className="font-semibold text-indigo-600">{chat.name}</span>
                             </p>
                             <button
                               type="button"
-                              onClick={() =>
-                                dispatch(setShowMembersInChatSideOver(true))
-                              }
+                              onClick={() => dispatch(setShowMembersInChatSideOver(true))}
                               className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
                               Members
@@ -165,13 +146,9 @@ export default function Chat() {
                         </div>
                       ) : null}
 
-                      {selectedChatId ? (
-                        <MessagesList messages={allMessages} />
-                      ) : null}
+                      {selectedChatId ? <MessagesList messages={allMessages} /> : null}
 
-                      {selectedChatId ? (
-                        <CreateMessage chatId={selectedChatId} />
-                      ) : null}
+                      {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
                     </div>
 
                     {/* </div> */}

@@ -19,7 +19,7 @@ const initialState: NotificationStore = {
   body: '-',
   center: false,
   top: true,
-  show_close: true,
+  show_close: true
 };
 
 export const notificationSlice = createSlice({
@@ -38,10 +38,9 @@ export const notificationSlice = createSlice({
       state.top = action.payload.top;
       state.show_close = action.payload.show_close;
     }
-  },
+  }
 });
 
-export const { setVisibility, setContent } =
-  notificationSlice.actions;
+export const { setVisibility, setContent } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

@@ -1,9 +1,5 @@
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/outline";
-import React from "react";
+import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
 interface TaskQuickActionProps {
   listDetailsData: {
@@ -15,26 +11,16 @@ interface TaskQuickActionProps {
   };
 }
 
-export default function TaskQuickAction({
-  listDetailsData,
-}: TaskQuickActionProps) {
+export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProps) {
   return (
     <>
       <div id="listTitle" className="flex justify-between items-center">
         <div className="flex items-center justify-center space-x-2 text-gray-400 group">
-          <ChevronDownIcon
-            className="flex-shrink-0 h-4 w-5"
-            aria-hidden="true"
-          />
-          <p className="font-bold text-gray-700 dark:text-gray-400">
-            {listDetailsData?.data?.list?.name}
-          </p>
-          <InformationCircleIcon
-            className="flex-shrink-0 h-4 w-5 text-gray-400"
-            aria-hidden="true"
-          />
+          <ChevronDownIcon className="flex-shrink-0 h-4 w-5" aria-hidden="true" />
+          <p className="font-bold text-gray-700 dark:text-gray-400">{listDetailsData?.data?.list?.name}</p>
+          <InformationCircleIcon className="flex-shrink-0 h-4 w-5 text-gray-400" aria-hidden="true" />
           <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
-            {" "}
+            {' '}
             + New Task
             {/* <span onClick={() => handleNewTask()}></span> */}
           </p>
@@ -46,10 +32,7 @@ export default function TaskQuickAction({
           </p>
         </div>
         <div className="flex items-center justify-center space-x-1 text-gray-400">
-          <CheckIcon
-            className="flex-shrink-0 h-4 w-5 text-gray-400"
-            aria-hidden="true"
-          />
+          <CheckIcon className="flex-shrink-0 h-4 w-5 text-gray-400" aria-hidden="true" />
           <p>Show Closed</p>
         </div>
       </div>
@@ -58,7 +41,7 @@ export default function TaskQuickAction({
           <hr className="my-8 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
           <span
             className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
-            style={{ backgroundColor: "#eee" }}
+            style={{ backgroundColor: '#eee' }}
           >
             Add New Status dot com
           </span>

@@ -7,13 +7,9 @@ import { secondaryNavigation } from '../../ExpandedNav';
 
 export default function OpenExtBtn() {
   const dispatch = useDispatch();
-  const { activePlaceName, showExtendedBar } = useAppSelector(
-    (state) => state.workspace,
-  );
+  const { activePlaceName, showExtendedBar } = useAppSelector((state) => state.workspace);
   // to find the clicked item in the extendedBar list
-  const extendedAppName = secondaryNavigation.find(
-    (item) => item.name === activePlaceName,
-  );
+  const extendedAppName = secondaryNavigation.find((item) => item.name === activePlaceName);
   //if the clicked item is library, the extended bar should be prompted
   if (activePlaceName === 'Library') {
     dispatch(setShowExtendedBar(true));
@@ -30,10 +26,7 @@ export default function OpenExtBtn() {
       }`}
     >
       {!showExtendedBar && (
-        <RiArrowRightSLine
-          className="text-xs "
-          onClick={() => dispatch(setShowExtendedBar(true))}
-        />
+        <RiArrowRightSLine className="text-xs " onClick={() => dispatch(setShowExtendedBar(true))} />
       )}
     </span>
   );

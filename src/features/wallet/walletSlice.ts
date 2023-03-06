@@ -19,7 +19,7 @@ const initialState: WalletState = {
   currentWalletParentType: null,
   delWallet: false,
   archiveWallet: false,
-  toggleArchiveWallet: false,
+  toggleArchiveWallet: false
 };
 
 export const walletSlice = createSlice({
@@ -46,7 +46,7 @@ export const walletSlice = createSlice({
         if (wallet.id === action.payload) {
           return {
             ...wallet,
-            isOpen: !wallet.isOpen,
+            isOpen: !wallet.isOpen
           };
         }
         return wallet;
@@ -56,8 +56,8 @@ export const walletSlice = createSlice({
       state.currentWalletParentId = action.payload.currentWalletParentId;
       state.currentWalletParentType = action.payload.currentWalletParentType;
     },
-    checkIfWallet: (state) => state,
-  },
+    checkIfWallet: (state) => state
+  }
 });
 
 export const {
@@ -68,6 +68,6 @@ export const {
   setWalletItem,
   setDeleteWallet,
   setArchiveWallet,
-  setToggleArchiveWallet,
+  setToggleArchiveWallet
 } = walletSlice.actions;
 export default walletSlice.reducer;

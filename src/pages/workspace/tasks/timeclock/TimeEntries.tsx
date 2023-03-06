@@ -3,10 +3,7 @@ import { AvatarWithInitials } from '../../../../components';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
-import {
-  GetTimeEntriesService,
-  StartTimeEntryService,
-} from '../../../../features/task/taskService';
+import { GetTimeEntriesService, StartTimeEntryService } from '../../../../features/task/taskService';
 import { useAppSelector } from '../../../../app/hooks';
 import moment from 'moment';
 import Timer from 'react-timer-wrapper';
@@ -16,20 +13,18 @@ import EntryList from './entryLists/EntryList';
 export default function TimeEntries() {
   const [showEntries, setShowEntries] = useState(false);
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { activeItemName, activeItemType } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
 
   const { data: getEntries, refetch } = GetTimeEntriesService({
     taskId: currentTaskIdForPilot,
-    trigger: activeItemType,
+    trigger: activeItemType
   });
 
   StartTimeEntryService({
     taskId: currentTaskIdForPilot,
-    trigger: startTimeClicked,
+    trigger: startTimeClicked
   });
 
   // EndTimeEntriesService({
@@ -82,10 +77,7 @@ export default function TimeEntries() {
               }) => <EntryList entries={entries} key={entries.id} />
             )}
         </section>
-        <section
-          id="body"
-          className="bg-indigo-500 text-white rounded-b-md px-3 py-1"
-        >
+        <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
           <div id="descNote" className="text-white w-full my-3">
             <input
               type="text"
@@ -95,25 +87,12 @@ export default function TimeEntries() {
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
           </div>
-          <div
-            id="entries"
-            className="px-3 py-1 flex items-center justify-between"
-          >
-            <div
-              id="left"
-              className="flex items-center space-x-1 cursor-pointer"
-              onClick={() => handleTimeTrigger()}
-            >
+          <div id="entries" className="px-3 py-1 flex items-center justify-between">
+            <div id="left" className="flex items-center space-x-1 cursor-pointer" onClick={() => handleTimeTrigger()}>
               {startTimeClicked ? (
-                <BsStopCircle
-                  className="text-red-400 cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
+                <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
               ) : (
-                <AiOutlinePlayCircle
-                  className="text-green-500 cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
+                <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
               )}
               <Timer
                 active={startTimeClicked}

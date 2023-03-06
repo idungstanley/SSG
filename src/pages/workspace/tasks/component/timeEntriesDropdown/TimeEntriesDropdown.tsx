@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  CurrencyDollarIcon,
-  NoSymbolIcon,
-  PencilIcon,
-  TagIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import moment from "moment";
-import Timer from "react-timer-wrapper";
-import Timecode from "react-timecode";
-import {
-  GetTimeEntriesService,
-} from '../../../../../features/task/taskService';
+import { CurrencyDollarIcon, NoSymbolIcon, PencilIcon, TagIcon, TrashIcon } from '@heroicons/react/24/outline';
+import moment from 'moment';
+import Timer from 'react-timer-wrapper';
+import Timecode from 'react-timecode';
+import { GetTimeEntriesService } from '../../../../../features/task/taskService';
 import { AvatarWithInitials } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
@@ -37,21 +29,19 @@ function TimeEntriesDropdown({
   isBillable,
   setIsBillable,
   // setFormState,
-  handleTimeTracker,
+  handleTimeTracker
 }: TimeEntriesDropdownProps) {
   const queryClient = useQueryClient();
-  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(
-    false
-  );
+  const [openUpdateEntry, setOpenUpdateEntry] = useState<string | boolean>(false);
   const { activeItemType } = useAppSelector((state) => state.workspace);
   // const [getTEId, setTEId] = useState('');
   // const [triggerDel, setTriggerDel] = useState(false);
 
-  queryClient.invalidateQueries({ queryKey: ["getTimeEntries"] });
+  queryClient.invalidateQueries({ queryKey: ['getTimeEntries'] });
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId,
-    trigger: activeItemType,
+    trigger: activeItemType
   });
 
   // useQuery({
@@ -95,41 +85,21 @@ function TimeEntriesDropdown({
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
               <p>Me</p>
             </div>
-            <p>{moment.utc(totalDuration * 1000).format("HH:mm:ss")}</p>
+            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
             getEntries?.data?.time_entries?.map(
-              ({
-                id,
-                duration,
-                start_date,
-              }: {
-                id: string;
-                duration: number;
-                start_date: string;
-              }) => (
-                <section
-                  key={id}
-                  id="getTimeEntries"
-                  className="flex items-center justify-between px-3 h-10"
-                >
-                  <div
-                    id="left"
-                    className="flex items-center space-x-3 text-xs"
-                  >
-                    <p>{moment.utc(duration * 1000).format("HH:mm:ss")}</p>
-                    <p>{moment(start_date).format("MMM D")}</p>
+              ({ id, duration, start_date }: { id: string; duration: number; start_date: string }) => (
+                <section key={id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
+                  <div id="left" className="flex items-center space-x-3 text-xs">
+                    <p>{moment.utc(duration * 1000).format('HH:mm:ss')}</p>
+                    <p>{moment(start_date).format('MMM D')}</p>
                   </div>
-[1:03 PM, 2/16/2023] Nich Uk Line: <div
-                    id="right"
-                    className="flex items-center space-x-2 relative"
-                  >
+                  [1:03 PM, 2/16/2023] Nich Uk Line:{' '}
+                  <div id="right" className="flex items-center space-x-2 relative">
                     <button type="button" onClick={() => handleUpdateEntry(id)}>
-                      <PencilIcon
-                        className="flex-shrink-0 h-3 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
+                      <PencilIcon className="flex-shrink-0 h-3 w-5 text-gray-400" aria-hidden="true" />
                     </button>
                     {/* {openUpdateEntry === id ? (
                       <UpdateTimeEntryDropdown
@@ -139,28 +109,16 @@ function TimeEntriesDropdown({
                       />
                     ) : null} */}
                     <button type="button">
-                      <TrashIcon
-                        className="flex-shrink-0 h-3 w-5 text-red-400"
-                        aria-hidden="true"
-                      />
+                      <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
                     </button>
                   </div>
                 </section>
               )
             )}
         </section>
-        <section
-          id="body"
-          className="bg-indigo-500 text-white rounded-b-md px-3 py-1"
-        >
-          <div
-            id="timeTrackType"
-            className="flex justify-center items-center text-sm h-5"
-          >
-            <PlayCircleIcon
-              className="flex-shrink-0 h-3 w-5"
-              aria-hidden="true"
-            />
+        <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
+          <div id="timeTrackType" className="flex justify-center items-center text-sm h-5">
+            <PlayCircleIcon className="flex-shrink-0 h-3 w-5" aria-hidden="true" />
             <p>Timer</p>
           </div>
           <div id="descNote" className="text-white w-full my-3">
@@ -172,25 +130,12 @@ function TimeEntriesDropdown({
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
           </div>
-          <div
-            id="entries"
-            className="px-3 py-1 flex items-center justify-between"
-          >
-            <div
-              id="left"
-              className="flex items-center space-x-1"
-              onClick={handleTimeTracker}
-            >
+          <div id="entries" className="px-3 py-1 flex items-center justify-between">
+            <div id="left" className="flex items-center space-x-1" onClick={handleTimeTracker}>
               {startTimeClicked ? (
-                <NoSymbolIcon
-                  className="text-red-400 cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
+                <NoSymbolIcon className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
               ) : (
-                <PlayCircleIcon
-                  className="cursor-pointer text-2xl"
-                  aria-hidden="true"
-                />
+                <PlayCircleIcon className="cursor-pointer text-2xl" aria-hidden="true" />
               )}
               <Timer active={startTimeClicked} duration={null}>
                 <Timecode />
@@ -203,8 +148,8 @@ function TimeEntriesDropdown({
               <CurrencyDollarIcon
                 className={`${
                   isBillable
-                    ? "bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl"
-                    : "text-white cursor-pointer text-xl rounded-full h-7"
+                    ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
+                    : 'text-white cursor-pointer text-xl rounded-full h-7'
                 }`}
                 aria-hidden="true"
                 onClick={() => setIsBillable(!isBillable)}

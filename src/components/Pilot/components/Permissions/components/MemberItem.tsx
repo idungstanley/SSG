@@ -14,9 +14,7 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
 
   const access = member.access_level.name;
 
-  const isCurrentUser = !isGroup
-    ? currentUserId === member.team_member.user.id
-    : false;
+  const isCurrentUser = !isGroup ? currentUserId === member.team_member.user.id : false;
 
   return (
     <div className="flex flex-col gap-3 border rounded-md p-2 w-full text-sm">
@@ -31,9 +29,7 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
           ) : (
             // is another user
             <>
-              <p className="text-base text-gray-600">
-                {member.team_member.user.name}
-              </p>
+              <p className="text-base text-gray-600">{member.team_member.user.name}</p>
               <p>{member.team_member.user.email}</p>
             </>
           )}
@@ -46,9 +42,7 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
           <ChangeAccess
             itemType={isGroup ? 'member-group' : 'member'}
             actualAccess={member.access_level.key}
-            accessToId={
-              !isGroup ? member.team_member.id : member.team_member_group.id
-            }
+            accessToId={!isGroup ? member.team_member.id : member.team_member_group.id}
           />
         )}
       </div>
@@ -56,12 +50,8 @@ export default function MemberItem({ member, isGroup }: MemberProps) {
       <div className="flex items-center justify-end">
         <RemoveAccess
           itemType={isGroup ? 'member-group' : 'member'}
-          accessToId={
-            !isGroup ? member.team_member.id : member.team_member_group.id
-          }
-          isActiveUser={
-            !isGroup ? member.team_member.user.id === currentUserId : false
-          }
+          accessToId={!isGroup ? member.team_member.id : member.team_member_group.id}
+          isActiveUser={!isGroup ? member.team_member.user.id === currentUserId : false}
         />
       </div>
     </div>

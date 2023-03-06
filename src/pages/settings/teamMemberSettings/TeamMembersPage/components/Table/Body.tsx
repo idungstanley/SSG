@@ -4,21 +4,17 @@ import { useGetTeamMembers } from '../../../../../../features/settings/teamMembe
 import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Body() {
-  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
-    (state) => state.teamMember
-  );
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
 
   const { status, data } = useGetTeamMembers({
     page: teamMembersPaginationPage,
-    query: teamMembersSearchQuery,
+    query: teamMembersSearchQuery
   });
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {status === 'success' &&
-        data.data.team_members?.map((teamMember) => (
-          <Row key={teamMember.id} teamMemberId={teamMember.id} />
-        ))}
+        data.data.team_members?.map((teamMember) => <Row key={teamMember.id} teamMemberId={teamMember.id} />)}
     </tbody>
   );
 }

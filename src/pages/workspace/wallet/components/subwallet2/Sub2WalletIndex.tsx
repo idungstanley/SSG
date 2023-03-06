@@ -5,18 +5,10 @@ import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { BsListUl } from 'react-icons/bs';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  setActiveEntity,
-  setActiveItem,
-  setShowHub,
-} from '../../../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import { useDispatch } from 'react-redux';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
-import {
-  closeMenu,
-  getSubMenu,
-  setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
+import { closeMenu, getSubMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import LastListIndex from './LastListIndex';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
@@ -27,10 +19,7 @@ interface Sub2WalletIndexProps {
   currWalId?: string;
 }
 
-function Sub2WalletIndex({
-  paddingLeft = '56',
-  currWalId,
-}: Sub2WalletIndexProps) {
+function Sub2WalletIndex({ paddingLeft = '56', currWalId }: Sub2WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [finalParentId, setFinalWalletParentId] = useState('');
@@ -39,7 +28,7 @@ function Sub2WalletIndex({
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currWalId,
+    parentId: currWalId
   });
 
   const handleShowSubWallet = (id: string) => {
@@ -63,14 +52,11 @@ function Sub2WalletIndex({
     dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
-  const handleWalletSettings = (
-    id: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>
-  ) => {
+  const handleWalletSettings = (id: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'subwallet3',
+        showMenuDropdownType: 'subwallet3'
       })
     );
     if (showMenuDropdown != null) {
@@ -84,19 +70,16 @@ function Sub2WalletIndex({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: 'subwallet3',
+        SubMenuType: 'subwallet3'
       })
     );
   };
 
-  const handleListSettings = (
-    id: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>
-  ) => {
+  const handleListSettings = (id: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'list',
+        showMenuDropdownType: 'list'
       })
     );
     if (showMenuDropdown != null) {
@@ -112,8 +95,7 @@ function Sub2WalletIndex({
         <div key={wallet.id}>
           <section
             className={`flex relative items-center justify-between space-x-1 text-sm h-8 group py-1.5 hover:bg-gray-100 ${
-              wallet.id === activeItemId &&
-              'bg-green-100 text-black font-medium'
+              wallet.id === activeItemId && 'bg-green-100 text-black font-medium'
             }`}
             style={{ paddingLeft: `${paddingLeft}px` }}
           >
@@ -124,56 +106,35 @@ function Sub2WalletIndex({
               <div onClick={() => handleShowSubWallet(wallet.id)}>
                 {showSubWallet3 === wallet.id ? (
                   <div className="flex items-center">
-                    <VscTriangleDown
-                      className="flex-shrink-0 h-2"
-                      aria-hidden="true"
-                      color="#BBBDC0"
-                    />
+                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                     <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
                   </div>
                 ) : (
                   <div className="flex items-center">
-                    <VscTriangleRight
-                      className="flex-shrink-0 h-2"
-                      aria-hidden="true"
-                      color="#BBBDC0"
-                    />
+                    <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                     <FaFolder color="rgba(72, 67, 67, 0.64)" />
                   </div>
                 )}
               </div>
               <div onClick={() => handleLocation(wallet.id)}>
-                <p
-                  className="ml-2 tracking-wider capitalize truncate cursor-pointer"
-                  style={{ fontSize: '12px' }}
-                >
-                  {wallet.name.length > 10
-                    ? wallet.name.substr(0, 10) + '...'
-                    : wallet.name}
+                <p className="ml-2 tracking-wider capitalize truncate cursor-pointer" style={{ fontSize: '12px' }}>
+                  {wallet.name.length > 10 ? wallet.name.substr(0, 10) + '...' : wallet.name}
                 </p>
               </div>
             </div>
             {/* ends here */}
-            <div
-              id="walletRight"
-              className="flex items-center space-x-2 opacity-0 group-hover:opacity-100"
-            >
+            <div id="walletRight" className="flex items-center space-x-2 opacity-0 group-hover:opacity-100">
               <AiOutlineEllipsis
                 className="cursor-pointer"
                 onClick={(e) => handleWalletSettings(wallet.id, e)}
                 id="menusettings"
               />
-              <AiOutlinePlus
-                onClick={() => handleItemAction(wallet.id)}
-                className="cursor-pointer"
-              />
+              <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
             </div>
           </section>
           {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
           {SubMenuId === wallet.id ? <SubDropdown /> : null}
-          {showSubWallet3 === wallet.id ? (
-            <LastListIndex finalParentId={finalParentId} />
-          ) : null}
+          {showSubWallet3 === wallet.id ? <LastListIndex finalParentId={finalParentId} /> : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (

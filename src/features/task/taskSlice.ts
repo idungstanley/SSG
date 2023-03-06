@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { tagItem } from "../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-import { listColumnProps } from "../../pages/workspace/tasks/component/views/ListColumns";
+import { createSlice } from '@reduxjs/toolkit';
+import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 
 export interface ImyTaskData {
   id: string;
@@ -8,10 +8,7 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority:
-    | string
-    | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
@@ -98,7 +95,7 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: "",
+  initial_description: '',
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
@@ -110,11 +107,11 @@ const initialState: TaskState = {
   unAssignTadId: null,
   renameTagId: null,
   showTagColorDialogueBox: false,
-  triggerAsssignTask: false,
+  triggerAsssignTask: false
 };
 
 export const taskSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState,
   reducers: {
     createTaskSlice(state, action) {
@@ -142,7 +139,7 @@ export const taskSlice = createSlice({
                 if (prev.field === action.payload) {
                   return {
                     ...prev,
-                    hidden: !prev.hidden,
+                    hidden: !prev.hidden
                   };
                 } else {
                   return prev;
@@ -152,12 +149,12 @@ export const taskSlice = createSlice({
                 if (prev.field === action.payload) {
                   return {
                     ...prev,
-                    hidden: !prev.hidden,
+                    hidden: !prev.hidden
                   };
                 } else {
                   return prev;
                 }
-              }),
+              })
       };
     },
 
@@ -259,8 +256,8 @@ export const taskSlice = createSlice({
     checkIfTask: (state) => state,
     setTriggerAsssignTask(state, { payload }) {
       state.triggerAsssignTask = payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -299,6 +296,6 @@ export const {
   setCurrentTaskIdForTag,
   setRenameTagId,
   setShowTagColorDialogBox,
-  setTriggerAsssignTask,
+  setTriggerAsssignTask
 } = taskSlice.actions;
 export default taskSlice.reducer;

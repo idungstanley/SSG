@@ -3,32 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
 import { BsListUl } from 'react-icons/bs';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import {
-  closeMenu,
-  getPrevName,
-  setshowMenuDropdown,
-} from '../../../features/hubs/hubSlice';
+import { closeMenu, getPrevName, setshowMenuDropdown } from '../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import { setCurrentListId } from '../../../features/list/listSlice';
 import { useAppSelector } from '../../../app/hooks';
-import {
-  setActiveEntity,
-  setActiveItem,
-  setShowHub,
-} from '../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
 
 interface ListIndexProps {
-  showHubList: boolean
-  getCurrentHubId: string | null
-  paddingLeft?: string
+  showHubList: boolean;
+  getCurrentHubId: string | null;
+  paddingLeft?: string;
 }
 
-function ListIndex({
-  showHubList,
-  getCurrentHubId,
-  paddingLeft = '26',
-}: ListIndexProps) {
+function ListIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: ListIndexProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data } = useGetHubWallet(getCurrentHubId);
@@ -42,22 +30,18 @@ function ListIndex({
       setActiveItem({
         activeItemType: 'list',
         activeItemId: id,
-        activeItemName: name,
-      }),
+        activeItemName: name
+      })
     );
     dispatch(setActiveEntity({ id: id, type: 'list' }));
   };
-  const handleListSettings = (
-    id: string,
-    name: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>,
-  ) => {
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(setCurrentListId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'list',
-      }),
+        showMenuDropdownType: 'list'
+      })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
@@ -74,8 +58,7 @@ function ListIndex({
           <div key={list.id}>
             <section
               className={`flex relative justify-between items-center text-sm h-8 hover:bg-gray-100 ${
-                list.id === activeItemId &&
-                'bg-green-100 text-black font-medium'
+                list.id === activeItemId && 'bg-green-100 text-black font-medium'
               }`}
               style={{ paddingLeft: `${paddingLeft}px` }}
             >
@@ -83,19 +66,14 @@ function ListIndex({
                 <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
               )}
               <div className="flex items-center justify-center space-x-1">
-                <BsListUl
-                  className="flex-shrink-0 w-5 h-3"
-                  aria-hidden="true"
-                />
+                <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
                 <button
                   type="button"
                   onClick={() => handleListLocation(list.id, list.name)}
                   className="ml-2 tracking-wider capitalize truncate cursor-pointer"
                   style={{ fontSize: '12px' }}
                 >
-                  {list.name.length > 10
-                    ? list.name.substr(0, 10) + '...'
-                    : list.name}
+                  {list.name.length > 10 ? list.name.substr(0, 10) + '...' : list.name}
                 </button>
               </div>
               {/* ends here */}

@@ -13,54 +13,48 @@ interface statusType {
 }
 
 interface StatusDropdownProps {
-  TaskCurrentStatus:
-    | string
-    | null
-    | undefined
-    | [{ id: string; initials: string; colour: string }];
+  TaskCurrentStatus: string | null | undefined | [{ id: string; initials: string; colour: string }];
 }
 
-export default function StatusDropdown({
-  TaskCurrentStatus,
-}: StatusDropdownProps) {
-  const [statusValue, setStatus] = useState("");
+export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
+  const [statusValue, setStatus] = useState('');
   const statusList: statusType[] = [
     {
       id: 1,
-      title: "Todo",
+      title: 'Todo',
       handleClick: () => {
-        setStatus("todo");
+        setStatus('todo');
       },
-      color: "#d3d3d3",
-      bg: "gray",
+      color: '#d3d3d3',
+      bg: 'gray'
     },
     {
       id: 2,
-      title: "In Progress",
+      title: 'In Progress',
       handleClick: () => {
-        setStatus("in progress");
+        setStatus('in progress');
       },
-      color: "#a875ff",
-      bg: "purple",
+      color: '#a875ff',
+      bg: 'purple'
     },
     {
       id: 3,
-      title: "Archived",
+      title: 'Archived',
       handleClick: () => {
-        setStatus("archived");
+        setStatus('archived');
       },
-      color: "#f7cb04",
-      bg: "yellow",
+      color: '#f7cb04',
+      bg: 'yellow'
     },
     {
       id: 4,
-      title: "Completed",
+      title: 'Completed',
       handleClick: () => {
-        setStatus("completed");
+        setStatus('completed');
       },
-      color: "#6bc951",
-      bg: "green",
-    },
+      color: '#6bc951',
+      bg: 'green'
+    }
   ];
 
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
@@ -69,59 +63,31 @@ export default function StatusDropdown({
 
   const { status } = UseUpdateTaskStatusService({
     task_id: currentTaskStatusId,
-    statusDataUpdate: statusValue,
+    statusDataUpdate: statusValue
   });
 
-  if (status == "success") {
-    setStatus("");
+  if (status == 'success') {
+    setStatus('');
   }
 
   // console.log(updateTaskStatus);
   // console.log(statusValue);
 
-  const setStatusColor = (
-    status:
-      | string
-      | null
-      | undefined
-      | [{ id: string; initials: string; colour: string }]
-  ) => {
-    if (status == "new" || status == "todo") {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-gray-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == "in progress") {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-purple-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == "completed") {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-green-400 text-xs"
-          aria-hidden="true"
-        />
-      );
-    } else if (status == "archived") {
-      return (
-        <RiCheckboxBlankFill
-          className="pl-px text-yellow-400 text-xs"
-          aria-hidden="true"
-        />
-      );
+  const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
+    if (status == 'new' || status == 'todo') {
+      return <RiCheckboxBlankFill className="pl-px text-gray-400 text-xs" aria-hidden="true" />;
+    } else if (status == 'in progress') {
+      return <RiCheckboxBlankFill className="pl-px text-purple-400 text-xs" aria-hidden="true" />;
+    } else if (status == 'completed') {
+      return <RiCheckboxBlankFill className="pl-px text-green-400 text-xs" aria-hidden="true" />;
+    } else if (status == 'archived') {
+      return <RiCheckboxBlankFill className="pl-px text-yellow-400 text-xs" aria-hidden="true" />;
     }
   };
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">
-          {setStatusColor(TaskCurrentStatus)}
-        </Menu.Button>
+        <Menu.Button className="flex text-sm text-gray-400">{setStatusColor(TaskCurrentStatus)}</Menu.Button>
       </div>
 
       <Transition

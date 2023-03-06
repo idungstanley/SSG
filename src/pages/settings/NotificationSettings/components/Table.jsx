@@ -9,22 +9,17 @@ export default function NotificaitonTablle() {
     if (!NotificationData) {
       return setNotificationsByCategory([]);
     }
-    const notificationsByCategoryTemp = NotificationData.reduce(
-      (notificationSoFar, currentNotification) => {
-        if (!notificationSoFar[currentNotification.notificationCategory.key]) {
-          notificationSoFar[currentNotification.notificationCategory.key] = {
-            name: currentNotification.notificationCategory.name,
-            key: currentNotification.notificationCategory.key,
-            notifications: [],
-          };
-        }
-        notificationSoFar[
-          currentNotification.notificationCategory.key
-        ].notifications.push(currentNotification);
-        return notificationSoFar;
-      },
-      {}
-    );
+    const notificationsByCategoryTemp = NotificationData.reduce((notificationSoFar, currentNotification) => {
+      if (!notificationSoFar[currentNotification.notificationCategory.key]) {
+        notificationSoFar[currentNotification.notificationCategory.key] = {
+          name: currentNotification.notificationCategory.name,
+          key: currentNotification.notificationCategory.key,
+          notifications: []
+        };
+      }
+      notificationSoFar[currentNotification.notificationCategory.key].notifications.push(currentNotification);
+      return notificationSoFar;
+    }, {});
 
     setNotificationsByCategory(notificationsByCategoryTemp);
   }, [NotificationData]);
@@ -36,34 +31,19 @@ export default function NotificaitonTablle() {
           <table className="min-w-full">
             <thead className="bg-white">
               <tr>
-                <th
-                  scope="col"
-                  className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                >
+                <th scope="col" className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                   Actions
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Email
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Mobile
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   In-App
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                   Browser
                 </th>
               </tr>
@@ -80,53 +60,46 @@ export default function NotificaitonTablle() {
                       {notificationsByCategory[key].name}
                     </th>
                   </tr>
-                  {notificationsByCategory[key].notifications.map(
-                    (notification, index) => (
-                      <tr
-                        key={notification.key}
-                        className={classNames(
-                          index === 0 ? 'border-gray-300' : 'border-gray-200',
-                          'border-t'
-                        )}
-                      >
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                          <div className="flex flex-row z-50">
-                            {notification.name}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <PermissionsCheckbox
+                  {notificationsByCategory[key].notifications.map((notification, index) => (
+                    <tr
+                      key={notification.key}
+                      className={classNames(index === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
+                    >
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <div className="flex flex-row z-50">{notification.name}</div>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {/* <PermissionsCheckbox
                             teamMemberRoleKey="guest"
                             workspacePermissionKey={permission.key}
                           /> */}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <PermissionsCheckbox
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {/* <PermissionsCheckbox
                             teamMemberRoleKey="low"
                             workspacePermissionKey={permission.key}
                           /> */}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <PermissionsCheckbox
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {/* <PermissionsCheckbox
                             teamMemberRoleKey="high"
                             workspacePermissionKey={permission.key}
                           /> */}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <PermissionsCheckbox
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {/* <PermissionsCheckbox
                             teamMemberRoleKey="admin"
                             workspacePermissionKey={permission.key}
                           /> */}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {/* <PermissionsCheckbox
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {/* <PermissionsCheckbox
                             teamMemberRoleKey="owner"
                             workspacePermissionKey={permission.key}
                           /> */}
-                        </td>
-                      </tr>
-                    )
-                  )}
+                      </td>
+                    </tr>
+                  ))}
                 </Fragment>
               ))}
             </tbody>

@@ -8,7 +8,7 @@ export const useGetNotificationService = () => {
       const data = await requestNew(
         {
           url: 'notifications',
-          method: 'GET',
+          method: 'GET'
         },
         true
       );

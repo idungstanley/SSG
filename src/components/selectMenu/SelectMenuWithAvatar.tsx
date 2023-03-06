@@ -24,7 +24,7 @@ export default function SelectMenuWithAvatar({
   selectedId,
   label,
   onChange,
-  showSelectPlaceholder = false,
+  showSelectPlaceholder = false
 }: SelectMenuWithAvatarProps) {
   const [processedOptions, setProcessedOptions] = useState<IOption[]>([]);
 
@@ -47,11 +47,7 @@ export default function SelectMenuWithAvatar({
     <Listbox value={selectedId} onChange={handleChange}>
       {({ open }) => (
         <>
-          {label && (
-            <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">
-              {label}
-            </Listbox.Label>
-          )}
+          {label && <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">{label}</Listbox.Label>}
           <div className="relative">
             {item && (
               <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -69,10 +65,7 @@ export default function SelectMenuWithAvatar({
                   )}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 ml-3 pointer-events-none">
-                  <ChevronDownIcon
-                    className="w-5 h-5 text-gray-400"
-                    aria-hidden="true"
-                  />
+                  <ChevronDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
                 </span>
               </Listbox.Button>
             )}
@@ -102,9 +95,7 @@ export default function SelectMenuWithAvatar({
                           {option.avatar}
                           <span
                             className={cl(
-                              selectedId === option.id
-                                ? 'font-semibold'
-                                : 'font-normal',
+                              selectedId === option.id ? 'font-semibold' : 'font-normal',
                               'ml-3 block truncate'
                             )}
                           >

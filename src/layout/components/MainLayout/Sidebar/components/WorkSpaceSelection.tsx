@@ -6,7 +6,7 @@ import { Spinner } from '../../../../../common';
 import WorkspaceSettingsModal from '../../../../../pages/workspace/workspaceSettings/WorkspaceSettingsModal';
 
 function WorkSpaceSelection() {
-  const { showSidebar } = useAppSelector(state => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const { data, status } = getWorkspaceService();
 

@@ -7,11 +7,10 @@ import RendersubTask2 from '../subtask2/RendersubTask2';
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
 
 export default function RenderSubTasks() {
-  const { getSubTaskId, currentParentTaskId, currentParentSubTaskId } =
-    useAppSelector((state) => state.task);
+  const { getSubTaskId, currentParentTaskId, currentParentSubTaskId } = useAppSelector((state) => state.task);
 
   const { data } = getTaskListService2({
-    parentId: getSubTaskId,
+    parentId: getSubTaskId
   });
 
   return (

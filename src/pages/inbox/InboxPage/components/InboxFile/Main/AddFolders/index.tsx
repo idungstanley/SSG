@@ -3,36 +3,27 @@ import { useDispatch } from 'react-redux';
 import { LightBulbIcon } from '@heroicons/react/24/outline';
 import FolderSearchResultItem from './FolderSearchResultItem';
 import SelectedFolderItem from './SelectedFolderItem';
-import {
-  useGetInboxFile,
-  useSearchFoldersForFiling,
-} from '../../../../../../../features/inbox/inboxService';
+import { useGetInboxFile, useSearchFoldersForFiling } from '../../../../../../../features/inbox/inboxService';
 import {
   setSearchFoldersQuery,
   addFolderForFiling,
-  removeFolderForFiling,
+  removeFolderForFiling
 } from '../../../../../../../features/inbox/inboxSlice';
-import {
-  SearchInput,
-  StackListWithHeader,
-  Badge,
-} from '../../../../../../../components';
+import { SearchInput, StackListWithHeader, Badge } from '../../../../../../../components';
 import { useAppSelector } from '../../../../../../../app/hooks';
 
 function AddFolders() {
   const dispatch = useDispatch();
 
-  const { searchFoldersQuery, selectedInboxFileId, folderIdsForFiling } =
-    useAppSelector((state) => state.inbox);
+  const { searchFoldersQuery, selectedInboxFileId, folderIdsForFiling } = useAppSelector((state) => state.inbox);
 
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
-  const { data: folderSearchData, status: folderSearchStatus } =
-    useSearchFoldersForFiling(searchFoldersQuery);
+  const { data: folderSearchData, status: folderSearchStatus } = useSearchFoldersForFiling(searchFoldersQuery);
 
   const updateFolderSearchQuery = (query: string) => {
     dispatch(
       setSearchFoldersQuery({
-        query,
+        query
       })
     );
   };
@@ -53,12 +44,8 @@ function AddFolders() {
           <div className="mb-5">
             <div className="flex justify-between">
               <div className="text-left">
-                <h2 className="text-lg font-medium text-gray-900">
-                  Where would you like to save this file?
-                </h2>
-                <p className="mt-1 text-sm text-gray-500">
-                  Search your folders, or use our smart suggestions.
-                </p>
+                <h2 className="text-lg font-medium text-gray-900">Where would you like to save this file?</h2>
+                <p className="mt-1 text-sm text-gray-500">Search your folders, or use our smart suggestions.</p>
               </div>
 
               <div>
@@ -101,11 +88,7 @@ function AddFolders() {
               <div className="mb-3">
                 <div className="mt-3">
                   {folderIdsForFiling.map((folderId) => (
-                    <SelectedFolderItem
-                      key={folderId}
-                      folderId={folderId}
-                      handleRemoveFolder={handleRemoveFolder}
-                    />
+                    <SelectedFolderItem key={folderId} folderId={folderId} handleRemoveFolder={handleRemoveFolder} />
                   ))}
                 </div>
               </div>
@@ -140,10 +123,7 @@ function AddFolders() {
                 title={
                   <div className="flex">
                     SMART FOLDER SUGGESTIONS
-                    <LightBulbIcon
-                      className="h-5 w-5 ml-1 -mt-0.5 text-yellow-400"
-                      aria-hidden="true"
-                    />
+                    <LightBulbIcon className="h-5 w-5 ml-1 -mt-0.5 text-yellow-400" aria-hidden="true" />
                   </div>
                 }
                 items={<span>Test</span>}

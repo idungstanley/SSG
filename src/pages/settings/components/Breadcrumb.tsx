@@ -12,11 +12,6 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ pages }: BreadcrumbProps) {
   return (
-    <BreadcrumbComponent
-      pages={pages}
-      rootIcon={
-        <CogIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
-      }
-    />
+    <BreadcrumbComponent pages={pages} rootIcon={<CogIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />} />
   );
 }

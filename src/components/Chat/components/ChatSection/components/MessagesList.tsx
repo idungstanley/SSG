@@ -17,9 +17,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
   const { currentUserId } = useAppSelector((state) => state.auth);
 
   const sortedByTimeMessages = useMemo(
-    () => [
-      ...messages.sort((a, b) => a.created_at.localeCompare(b.created_at)),
-    ],
+    () => [...messages.sort((a, b) => a.created_at.localeCompare(b.created_at))],
     [messages]
   );
 
@@ -27,17 +25,12 @@ export default function MessagesList({ messages }: MessagesListProps) {
 
   return (
     <div className="p-2">
-      <div
-        ref={ref}
-        className="flex flex-col h-full w-full border rounded-xl overflow-y-scroll"
-      >
+      <div ref={ref} className="flex flex-col h-full w-full border rounded-xl overflow-y-scroll">
         {sortedByTimeMessages.map((message) => (
           <div
             className={cl(
               'flex gap-3 px-2 py-1',
-              isCurrentUser(message.team_member.user.id)
-                ? 'justify-end'
-                : 'justify-start'
+              isCurrentUser(message.team_member.user.id) ? 'justify-end' : 'justify-start'
             )}
             key={message.id}
           >
@@ -58,12 +51,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                 </div>
 
                 {/* message */}
-                <p className="text-black">
-                  {message.message.replaceAll(
-                    mentionTeamMemberInMessageReg,
-                    ''
-                  )}
-                </p>
+                <p className="text-black">{message.message.replaceAll(mentionTeamMemberInMessageReg, '')}</p>
 
                 {/* bottom */}
                 <div className="flex items-center justify-between">
@@ -77,9 +65,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
                     ))}
                   </div>
-                  <p className="text-sm text-gray-500">
-                    {moment(message.created_at).format('HH:mm')}
-                  </p>
+                  <p className="text-sm text-gray-500">{moment(message.created_at).format('HH:mm')}</p>
                 </div>
               </div>
             </div>

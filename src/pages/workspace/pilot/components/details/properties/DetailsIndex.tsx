@@ -16,15 +16,15 @@ export default function DetailsIndex() {
 
   const { data: hub } = UseGetHubDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: wallet } = UseGetWalletDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: list } = UseGetListDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
@@ -38,9 +38,7 @@ export default function DetailsIndex() {
     } else if (activeItemType == 'task') {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
     } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
-      return (
-        <PropertyDetails Details={walletDetails} key={walletDetails?.id} />
-      );
+      return <PropertyDetails Details={walletDetails} key={walletDetails?.id} />;
     } else if (activeItemType == 'list') {
       return <PropertyDetails Details={listDetails} key={listDetails?.id} />;
     }

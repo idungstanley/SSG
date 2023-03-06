@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getOneTaskServices } from "../taskService";
+import { createSlice } from '@reduxjs/toolkit';
+import { getOneTaskServices } from '../taskService';
 
 interface checklistState {
   checklist: string[];
@@ -20,17 +20,17 @@ const initialState: checklistState = {
   triggerChecklistUpdate: false,
   triggerItemUpdate: false,
   triggerDelChecklist: false,
-  clickedChecklistId: "",
-  clickedChecklistItemId: "",
+  clickedChecklistId: '',
+  clickedChecklistItemId: '',
   triggerDelChecklistItem: false,
   toggleAssignChecklistItemId: null,
   triggerAssignChecklistItem: false,
   triggerUnassignChecklistItem: false,
-  showChecklistInput: false,
+  showChecklistInput: false
 };
 
 export const checklistSlice = createSlice({
-  name: "Checklists",
+  name: 'Checklists',
   initialState,
   reducers: {
     getchecklist(state, { payload }) {
@@ -68,8 +68,8 @@ export const checklistSlice = createSlice({
     },
     setShowChecklistInput(state, { payload }) {
       state.showChecklistInput = payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -83,7 +83,7 @@ export const {
   setToggleAssignChecklistItemId,
   setTriggerAssignChecklistItem,
   setTriggerUnassignChecklistItem,
-  setShowChecklistInput,
+  setShowChecklistInput
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

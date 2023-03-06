@@ -18,7 +18,7 @@ const initialState: PromptState = {
   show: false,
   title: '',
   body: '',
-  options: [],
+  options: []
 };
 
 export const promptSlice = createSlice({
@@ -40,24 +40,21 @@ export const promptSlice = createSlice({
       state.title = '';
       state.body = '';
       state.options = [];
-    },
-  },
+    }
+  }
 });
 
-export const { setVisibility, setData, setOptions, reset } =
-  promptSlice.actions;
+export const { setVisibility, setData, setOptions, reset } = promptSlice.actions;
 
-export const displayPrompt =
-  (title: string, body: string, options: IOption[]) =>
-  (dispatch: AppDispatch) => {
-    dispatch(
-      setData({
-        title,
-        body,
-      })
-    );
-    dispatch(setOptions(options));
-    dispatch(setVisibility(true));
-  };
+export const displayPrompt = (title: string, body: string, options: IOption[]) => (dispatch: AppDispatch) => {
+  dispatch(
+    setData({
+      title,
+      body
+    })
+  );
+  dispatch(setOptions(options));
+  dispatch(setVisibility(true));
+};
 
 export default promptSlice.reducer;

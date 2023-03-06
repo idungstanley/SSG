@@ -2,9 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { ITeamMemberInvitesReq } from './teamMemberInvites.interface';
 
-const inviteCode: string = JSON.parse(
-  localStorage.getItem('teamMemberInviteCode') as string
-);
+const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') as string);
 
 // Get team member invites
 export const useGetTeamMemberInvites = (page: number) => {
@@ -20,8 +18,8 @@ export const useGetTeamMemberInvites = (page: number) => {
           url,
           method: 'GET',
           params: {
-            page,
-          },
+            page
+          }
         },
         true
       );
@@ -29,12 +27,9 @@ export const useGetTeamMemberInvites = (page: number) => {
     {
       onSuccess: (data) => {
         data.data.team_member_invites.map((teamMemberInvite) =>
-          queryClient.setQueryData(
-            ['team_member_invite', teamMemberInvite.id],
-            teamMemberInvite
-          )
+          queryClient.setQueryData(['team_member_invite', teamMemberInvite.id], teamMemberInvite)
         );
-      },
+      }
     }
   );
 };
@@ -49,18 +44,15 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
       const data = await requestNew(
         {
           url: `settings/team-member-invites/${teamMemberInviteId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
       return data.data.team_member_invite;
     },
     {
-      initialData: queryClient.getQueryData([
-        'team_member_invite',
-        teamMemberInviteId,
-      ]),
-      enabled: teamMemberInviteId != null,
+      initialData: queryClient.getQueryData(['team_member_invite', teamMemberInviteId]),
+      enabled: teamMemberInviteId != null
     }
   );
 };
@@ -73,7 +65,7 @@ export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
       const data = await requestNew(
         {
           url: `workspace/accept-invite/${inviteCode}`,
-          method: 'POST',
+          method: 'POST'
         },
         true
       );
@@ -82,24 +74,19 @@ export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
     {
       onSuccess: (data) => {
         localStorage.setItem('user', JSON.stringify(data?.data.user));
-        localStorage.setItem(
-          'currentWorkspaceId',
-          JSON.stringify(data?.data.user.default_workspace_id)
-        );
+        localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
       },
-      enabled: acceptInviteTrigger == true && inviteCode != null,
+      enabled: acceptInviteTrigger == true && inviteCode != null
     }
   );
 };
 
 // Delete team member invite
-export const deleteTeamMemberInviteService = async (data: {
-  teamMemberId: string;
-}) => {
+export const deleteTeamMemberInviteService = async (data: { teamMemberId: string }) => {
   const response = requestNew(
     {
       url: `/settings/team-member-invites/${data.teamMemberId}`,
-      method: 'DELETE',
+      method: 'DELETE'
     },
     true
   );
@@ -113,18 +100,16 @@ export function useDeleteTeamMemberInvite(teamMemberId: string) {
     onSuccess: () => {
       // Invalida all pages of team member invites
       queryClient.invalidateQueries(['team_member_invites']);
-    },
+    }
   });
 }
 
 // Resend team member invite
-export const resendTeamMemberInviteService = async (data: {
-  teamMemberId: string;
-}) => {
+export const resendTeamMemberInviteService = async (data: { teamMemberId: string }) => {
   const response = requestNew(
     {
       url: `/settings/team-member-invites/${data.teamMemberId}/resend`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -148,8 +133,8 @@ export const createTeamMemberInviteService = async (data: {
       params: {
         email: data.email,
         name: data.name,
-        team_member_role_key: data.teamMemberRoleKey,
-      },
+        team_member_role_key: data.teamMemberRoleKey
+      }
     },
     true
   );

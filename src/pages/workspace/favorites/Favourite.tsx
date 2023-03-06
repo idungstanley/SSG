@@ -1,18 +1,11 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../app/hooks";
-import { UseUpdateFavService } from "../../../features/hubs/hubService";
-import FavModal from "./FavModal";
-import { useAppDispatch } from "../../../app/hooks";
-import {
-  setActiveItem,
-  setActiveTabId,
-  setShowPilot,
-} from "../../../features/workspace/workspaceSlice";
-import { useNavigate } from "react-router";
-import {
-  setFavUpdateName,
-  setTriggerFavUpdate,
-} from "../../../features/hubs/hubSlice";
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../app/hooks';
+import { UseUpdateFavService } from '../../../features/hubs/hubService';
+import FavModal from './FavModal';
+import { useAppDispatch } from '../../../app/hooks';
+import { setActiveItem, setActiveTabId, setShowPilot } from '../../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router';
+import { setFavUpdateName, setTriggerFavUpdate } from '../../../features/hubs/hubSlice';
 
 interface nameType {
   item: {
@@ -27,14 +20,12 @@ function Favourite({ item }: nameType) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [favName, setFavName] = useState<string>(item.name);
-  const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector(
-    (state) => state.hub
-  );
+  const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
 
   UseUpdateFavService({
     favId: showFavEditInput,
     name: favUpdateName,
-    trigger: triggerFavUpdate,
+    trigger: triggerFavUpdate
   });
 
   const handleLocation = () => {
@@ -42,7 +33,7 @@ function Favourite({ item }: nameType) {
       setActiveItem({
         activeItemId: item.model_id,
         activeItemType: item.model_type,
-        activeItemName: favName,
+        activeItemName: favName
       })
     );
     dispatch(setShowPilot(true));
@@ -67,7 +58,7 @@ function Favourite({ item }: nameType) {
           >
             <input
               autoFocus
-              style={{ fontSize: "10px" }}
+              style={{ fontSize: '10px' }}
               className="h-6 outline-none border-none focus:border-none focus:outline-none rounded"
               type="text"
               onChange={(e) => setFavName(e.target.value)}
@@ -77,7 +68,7 @@ function Favourite({ item }: nameType) {
         ) : (
           <h4
             className="tracking-wider capitalize truncate cursor-pointer"
-            style={{ fontSize: "10px" }}
+            style={{ fontSize: '10px' }}
             onClick={() => handleLocation()}
           >
             {item.name}

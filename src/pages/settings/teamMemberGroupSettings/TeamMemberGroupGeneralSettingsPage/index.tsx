@@ -16,20 +16,18 @@ function TeamMemberGroupGeneralSettingsPage() {
           {
             name: 'Team members',
             href: '/settings/team-members',
-            current: false,
+            current: false
           },
           {
             name: 'Groups',
             href: '/settings/team-members/groups',
-            current: false,
+            current: false
           },
           {
             name: teamMemberGroup ? teamMemberGroup.name : 'Loading...',
-            href: `/settings/team-members/groups/${
-              teamMemberGroup ? teamMemberGroup.id : null
-            }`,
-            current: true,
-          },
+            href: `/settings/team-members/groups/${teamMemberGroup ? teamMemberGroup.id : null}`,
+            current: true
+          }
         ]}
       />
       <div className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">

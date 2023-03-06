@@ -13,13 +13,13 @@ export const useGetItemHistory = (data: { type?: itemType; id?: string | null })
           method: 'GET',
           params: {
             type: data.type,
-            id: data.id,
-          },
+            id: data.id
+          }
         },
         true
       ),
     {
       enabled: !!data.type && !!data.id,
-      select: (res) => res.data.activity_logs,
+      select: (res) => res.data.activity_logs
     }
   );

@@ -6,5 +6,5 @@ export const colors = [
   { id: 5, value: 'yellow' },
   { id: 6, value: 'green' },
   { id: 7, value: 'gold' },
-  { id: 8, value: 'pink' },
+  { id: 8, value: 'pink' }
 ];

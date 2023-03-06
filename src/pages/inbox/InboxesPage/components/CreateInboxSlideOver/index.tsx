@@ -4,12 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createInboxService } from '../../../../../features/inbox/inboxesService';
 import { setCreateInboxSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import {
-  SlideOver,
-  Button,
-  Input,
-  InputWithTrailingAddon,
-} from '../../../../../components';
+import { SlideOver, Button, Input, InputWithTrailingAddon } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 
 function CreateInboxSlideOver() {
@@ -23,16 +18,14 @@ function CreateInboxSlideOver() {
       queryClient.invalidateQueries(['active-inboxes']);
       dispatch(setCreateInboxSlideOverVisibility(false));
       navigate(`/inbox/${data.data.inbox.id}`);
-    },
+    }
   });
 
-  const { showCreateInboxSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showCreateInboxSlideOver } = useAppSelector((state) => state.slideOver);
 
   const defaultFormState = {
     name: '',
-    emailUsername: '',
+    emailUsername: ''
   };
 
   const [formState, setFormState] = useState(defaultFormState);
@@ -42,14 +35,14 @@ function CreateInboxSlideOver() {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
   const onSubmit = async () => {
     createInboxMutation.mutate({
       name,
-      emailUsername,
+      emailUsername
     });
   };
 

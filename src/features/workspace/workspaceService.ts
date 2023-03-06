@@ -15,8 +15,8 @@ export const createWorkspaceService = (data: IData) => {
       data: {
         name: data.name,
         company_size: data.companySize,
-        emails: data.emails,
-      },
+        emails: data.emails
+      }
     },
     true
   );
@@ -28,7 +28,7 @@ export const getWorkspaceService = () => {
     const data = await requestNew(
       {
         url: 'workspace',
-        method: 'GET',
+        method: 'GET'
       },
       true
     );
@@ -41,7 +41,7 @@ export const getAllWorkSpaceService = () => {
     const data = await requestNew(
       {
         url: 'auth/account/workspaces',
-        method: 'GET',
+        method: 'GET'
       },
       true
     );
@@ -53,7 +53,7 @@ export const checkIfWorkspaceService = async () => {
   const response = requestNew(
     {
       url: 'user/self',
-      method: 'GET',
+      method: 'GET'
     },
     true
   );
@@ -68,8 +68,8 @@ export const UseCreateTagService = ({ name }: { name: string }) => {
       url,
       method: 'POST',
       data: {
-        name: name,
-      },
+        name: name
+      }
     },
     true
   );
@@ -81,7 +81,7 @@ export const UseGetAllTagsService = () => {
     const data = await requestNew(
       {
         url: 'tags',
-        method: 'GET',
+        method: 'GET'
       },
       true
     );

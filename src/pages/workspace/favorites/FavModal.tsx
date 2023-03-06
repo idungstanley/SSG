@@ -1,11 +1,8 @@
-import React, { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { BsThreeDots } from "react-icons/bs";
-import { useAppDispatch } from "../../../app/hooks";
-import {
-  setDelFavId,
-  setShowFavEditInput,
-} from "../../../features/hubs/hubSlice";
+import React, { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { BsThreeDots } from 'react-icons/bs';
+import { useAppDispatch } from '../../../app/hooks';
+import { setDelFavId, setShowFavEditInput } from '../../../features/hubs/hubSlice';
 // import { UseDeleteFav } from "../../../features/hubs/hubService";
 
 export default function FavModal({ id }: { id: string }) {
@@ -13,16 +10,16 @@ export default function FavModal({ id }: { id: string }) {
   const options = [
     {
       id: 1,
-      name: "Unfavorite",
+      name: 'Unfavorite'
     },
     {
       id: 2,
-      name: "Rename",
-    },
+      name: 'Rename'
+    }
   ];
 
   const handleClick = (name: string) => {
-    if (name === "Unfavorite") {
+    if (name === 'Unfavorite') {
       dispatch(setDelFavId(id));
     } else {
       dispatch(setShowFavEditInput(id));
@@ -53,10 +50,7 @@ export default function FavModal({ id }: { id: string }) {
                   className="flex items-center text-gray-600 hover:bg-gray-300"
                   onClick={() => handleClick(option.name)}
                 >
-                  <button
-                    type="button"
-                    className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
-                  >
+                  <button type="button" className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left">
                     <p>{option.name}</p>
                   </button>
                 </div>

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface workspaceState {
   workspace: string[];
@@ -25,7 +25,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
-  activeEntity: {id: string | null, type: string | null}
+  activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | null;
   activeHotKeyTabId: number | null;
@@ -69,7 +69,7 @@ const initialState: workspaceState = {
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
-  activeEntity: {id: null, type: null}
+  activeEntity: { id: null, type: null }
 };
 
 export const wsSlice = createSlice({
@@ -98,7 +98,7 @@ export const wsSlice = createSlice({
       if (action.payload === 'TOGGLE') {
         return {
           ...state,
-          searchIsActive: !state.searchIsActive,
+          searchIsActive: !state.searchIsActive
         };
       }
     },
@@ -106,7 +106,7 @@ export const wsSlice = createSlice({
       if (action.payload === 'TOGGLE') {
         return {
           ...state,
-          isExtSearchActive: !state.isExtSearchActive,
+          isExtSearchActive: !state.isExtSearchActive
         };
       }
     },
@@ -183,8 +183,8 @@ export const wsSlice = createSlice({
       state.currentItemId = null;
       state.currentItemType = null;
     },
-    checkIfWs: (state) => state,
-  },
+    checkIfWs: (state) => state
+  }
 });
 
 export const {

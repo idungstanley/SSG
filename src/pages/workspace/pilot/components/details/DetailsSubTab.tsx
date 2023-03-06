@@ -9,14 +9,9 @@ import {
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from '@dnd-kit/core';
-import {
-  arrayMove,
-  rectSortingStrategy,
-  SortableContext,
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { BsClipboardData } from 'react-icons/bs';
 
 export const DetailOptions = [
@@ -24,35 +19,29 @@ export const DetailOptions = [
     id: 1,
     name: 'Properties',
     icon: <BsClipboardData />,
-    isVisible: false,
+    isVisible: false
   },
   {
     id: 2,
-    name: "attachments",
+    name: 'attachments',
     icon: <MdAddToPhotos />,
-    isVisible: false,
-  },
+    isVisible: false
+  }
 ];
 
 export default function DetailsSubTab() {
-  const { showPilot, activeSubDetailsTabId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showPilot, activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
 
   const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates
     })
   );
 
-  const [items, setItems] = useState(
-    DetailOptions.sort(
-      (a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
-    )
-  );
+  const [items, setItems] = useState(DetailOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -68,10 +57,7 @@ export default function DetailsSubTab() {
 
           const sortArray = arrayMove(items, oldIndex, newIndex);
 
-          localStorage.setItem(
-            'subTab',
-            JSON.stringify([...sortArray.map((i: { id: string }) => i.id)])
-          );
+          localStorage.setItem('subTab', JSON.stringify([...sortArray.map((i: { id: string }) => i.id)]));
 
           return sortArray;
         });
@@ -79,18 +65,10 @@ export default function DetailsSubTab() {
     }
   };
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={(e) => handleDragEnd(e)}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div
-            className={`flex bg-gray-400 pt-0.5 ${
-              showPilot ? 'flex-row' : 'flex-col'
-            }`}
-          >
+          <div className={`flex bg-gray-400 pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
             {DetailOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

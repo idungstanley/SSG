@@ -15,7 +15,7 @@ const initialState: ListState = {
   createTaskFromTop: false,
   delList: false,
   archiveList: false,
-  toggleArchiveList: false,
+  toggleArchiveList: false
 };
 
 export const listSlice = createSlice({
@@ -43,8 +43,8 @@ export const listSlice = createSlice({
     setCreateTaskFromTop(state, action) {
       state.createTaskFromTop = action.payload;
     },
-    checkIfList: (state) => state,
-  },
+    checkIfList: (state) => state
+  }
 });
 
 export const {
@@ -55,6 +55,6 @@ export const {
   setCreateTaskFromTop,
   setDeleteList,
   setArchiveList,
-  setToggleArchiveList,
+  setToggleArchiveList
 } = listSlice.actions;
 export default listSlice.reducer;

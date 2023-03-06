@@ -1,13 +1,13 @@
-import React from "react";
-import { BiShow } from "react-icons/bi";
-import { BsLayers } from "react-icons/bs";
-import { GrFormSearch } from "react-icons/gr";
-import { IoPeopleOutline } from "react-icons/io5";
-import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
-import { RxDividerVertical } from "react-icons/rx";
-import { TbSubtask } from "react-icons/tb";
-import { VscEllipsis } from "react-icons/vsc";
-import { useAppSelector } from "../../../../../../app/hooks";
+import React from 'react';
+import { BiShow } from 'react-icons/bi';
+import { BsLayers } from 'react-icons/bs';
+import { GrFormSearch } from 'react-icons/gr';
+import { IoPeopleOutline } from 'react-icons/io5';
+import { MdFilterList, MdOutlinePersonOutline } from 'react-icons/md';
+import { RxDividerVertical } from 'react-icons/rx';
+import { TbSubtask } from 'react-icons/tb';
+import { VscEllipsis } from 'react-icons/vsc';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function ListFilter() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -21,7 +21,7 @@ export default function ListFilter() {
           type="text"
           placeholder="Search tasks..."
           className="border-transparent focus:border-transparent h-5 w-full focus:ring-0 font-bold"
-          style={{ fontSize: "11px" }}
+          style={{ fontSize: '11px' }}
         />
         <div className=" p-1 border-gray-400	hover:bg-gray-200  rounded ">
           <VscEllipsis className=" " />

@@ -5,10 +5,7 @@ import { AiOutlineEllipsis } from 'react-icons/ai';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { BsDroplet } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
-import {
-  setRenameTagId,
-  setShowTagColorDialogBox,
-} from '../../features/task/taskSlice';
+import { setRenameTagId, setShowTagColorDialogBox } from '../../features/task/taskSlice';
 import { useAppSelector } from '../../app/hooks';
 
 interface itemsType {
@@ -32,7 +29,7 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
       title: 'Delete',
       handleClick: () => ({}),
       icon: <BiTrash />,
-      bg: 'red',
+      bg: 'red'
     },
     {
       id: 2,
@@ -41,7 +38,7 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
         dispatch(setRenameTagId(tagId));
       },
       icon: <HiOutlinePencil />,
-      bg: 'blue',
+      bg: 'blue'
     },
     {
       id: 3,
@@ -50,8 +47,8 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
         dispatch(setShowTagColorDialogBox(!showTagColorDialogueBox));
       },
       icon: <BsDroplet />,
-      bg: 'purple',
-    },
+      bg: 'purple'
+    }
   ];
   // return (
   //   <Menu as="div" className="relative inline-block text-left">
@@ -102,11 +99,7 @@ export default function EditTagModal({ tagId }: EditTagModalProps) {
   return (
     <>
       <div className="relative inline-block text-left">
-        <button
-          type="button"
-          onClick={openModal}
-          className="flex text-sm text-gray-400"
-        >
+        <button type="button" onClick={openModal} className="flex text-sm text-gray-400">
           <AiOutlineEllipsis className="cursor-pointer" />
         </button>
       </div>

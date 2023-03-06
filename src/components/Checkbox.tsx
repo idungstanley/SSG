@@ -24,7 +24,7 @@ function Checkbox({
   spinnerSize = 20,
   name,
   label,
-  description,
+  description
 }: CheckboxProps) {
   return (
     <div className="relative flex items-start">
@@ -49,10 +49,7 @@ function Checkbox({
       </div>
 
       {label && description === null && (
-        <label
-          htmlFor="remember-me"
-          className="ml-2 -mt-0.5 block text-sm text-gray-900"
-        >
+        <label htmlFor="remember-me" className="ml-2 -mt-0.5 block text-sm text-gray-900">
           {label}
         </label>
       )}

@@ -3,10 +3,7 @@ import { FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../../../pages/workspace/dashboard';
 import Favourites from '../../../../pages/workspace/favorites';
 import Files from '../../../../pages/workspace/files';
-import {
-  setExtendedSidebarWidth,
-  setShowExtendedBar,
-} from '../../../../features/workspace/workspaceSlice';
+import { setExtendedSidebarWidth, setShowExtendedBar } from '../../../../features/workspace/workspaceSlice';
 import libraryIcon from '../../../../assets/icons/library.svg';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
@@ -25,12 +22,12 @@ import InboxData from '../../../../pages/workspace/inbox/InboxData';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryData';
 
 interface ItemData {
-    id?: number;
-    icon?: JSX.Element;
-    source?: string;
-    name?: string;
-    place?: JSX.Element;
-    link?: string;
+  id?: number;
+  icon?: JSX.Element;
+  source?: string;
+  name?: string;
+  place?: JSX.Element;
+  link?: string;
 }
 
 export const secondaryNavigation: ItemData[] = [
@@ -38,60 +35,56 @@ export const secondaryNavigation: ItemData[] = [
     name: 'Email',
     id: 1,
     place: <Favourites />,
-    source: emailIcon,
+    source: emailIcon
   },
   {
     name: 'TASKS',
     id: 2,
     place: <ActiveHub />,
-    source: hubIcon,
+    source: hubIcon
   },
   {
     name: 'In-tray',
     id: 3,
     place: <InboxData />,
-    source: InboxIcon,
+    source: InboxIcon
   },
   {
     name: 'Cabinet',
     id: 4,
     place: <Extendedbar />,
-    icon: <BiCabinet className="h-4 mr-4" />,
+    icon: <BiCabinet className="h-4 mr-4" />
   },
   {
     name: 'forms',
     id: 5,
     place: <Files />,
-    icon: <FaWpforms className="h-4 mr-4" />,
+    icon: <FaWpforms className="h-4 mr-4" />
   },
   {
     name: 'time clock',
     id: 6,
     place: <Dashboard />,
-    source: timeClockIcon,
+    source: timeClockIcon
   },
   {
     name: 'tracker',
     id: 7,
     place: <Favourites />,
-    source: trackerIcon,
+    source: trackerIcon
   },
   {
     name: 'Library',
     id: 8,
     place: <LibraryData />,
     source: libraryIcon,
-    link: 'directory',
-  },
+    link: 'directory'
+  }
 ];
 
 function ExpandedNav() {
   const dispatch = useDispatch();
-  const {
-    activePlaceName,
-    showExtendedBar,
-    extendedSidebarWidth,
-  } = useAppSelector((state) => state.workspace);
+  const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const MIN_SIDEBAR_WIDTH = 230;
@@ -108,15 +101,12 @@ function ExpandedNav() {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
             dispatch(
-              setExtendedSidebarWidth(
-                mouseMoveEvent.clientX -
-                  sidebarRef?.current?.getBoundingClientRect().left,
-              ),
+              setExtendedSidebarWidth(mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left)
             );
           }
       }
     },
-    [isResizing],
+    [isResizing]
   );
   React.useEffect(() => {
     window.addEventListener('mousemove', resize);
@@ -132,8 +122,10 @@ function ExpandedNav() {
     dispatch(setExtendedSidebarWidth(240));
   }
 
-  const sectionToExtend = useMemo(()=>
-  secondaryNavigation.find(section=> section.name?.toLowerCase() === activePlaceName?.toLowerCase()), [activePlaceName]);
+  const sectionToExtend = useMemo(
+    () => secondaryNavigation.find((section) => section.name?.toLowerCase() === activePlaceName?.toLowerCase()),
+    [activePlaceName]
+  );
   return (
     <div
       className="relative flex-none"
@@ -143,7 +135,7 @@ function ExpandedNav() {
           ? {
               maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
               width: extendedSidebarWidth,
-              minWidth: `${MIN_SIDEBAR_WIDTH}px`,
+              minWidth: `${MIN_SIDEBAR_WIDTH}px`
             }
           : { width: '1px', minWidth: '1px' }
       }

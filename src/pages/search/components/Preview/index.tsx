@@ -3,10 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FileIcon } from '../../../../common';
 import { useGetSearchedItemDetails } from '../../../../features/search/searchService';
-import {
-  resetSelectedItem,
-  setSearchQuery,
-} from '../../../../features/search/searchSlice';
+import { resetSelectedItem, setSearchQuery } from '../../../../features/search/searchSlice';
 import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { Button } from '../../../../components';
 import { useAppSelector } from '../../../../app/hooks';
@@ -15,31 +12,19 @@ function Preview() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { selectedItemId, selectedItemType, selectedItemPath } = useAppSelector(
-    (state) => state.search
-  );
+  const { selectedItemId, selectedItemType, selectedItemPath } = useAppSelector((state) => state.search);
 
-  const isExplorerFile =
-    selectedItemPath === 'Explorer' && selectedItemType === 'file';
+  const isExplorerFile = selectedItemPath === 'Explorer' && selectedItemType === 'file';
   const isInboxFile = selectedItemPath === 'Inbox';
 
   const { data } = useGetSearchedItemDetails({
-    type:
-      selectedItemPath === 'Explorer' ? `${selectedItemType}s` : 'inbox-files',
-    id: selectedItemId,
+    type: selectedItemPath === 'Explorer' ? `${selectedItemType}s` : 'inbox-files',
+    id: selectedItemId
   });
 
-  const item = isExplorerFile
-    ? data?.data.file
-    : isInboxFile
-    ? data?.data.inbox_file
-    : data?.data.folder;
+  const item = isExplorerFile ? data?.data.file : isInboxFile ? data?.data.inbox_file : data?.data.folder;
 
-  const name = isExplorerFile
-    ? item?.display_name
-    : isInboxFile
-    ? item?.inbox_file_source.display_name
-    : item?.name;
+  const name = isExplorerFile ? item?.display_name : isInboxFile ? item?.inbox_file_source.display_name : item?.name;
   const icon = isExplorerFile
     ? item?.file_format.extension
     : isInboxFile
@@ -48,11 +33,7 @@ function Preview() {
 
   const createdAt = item?.created_at;
   const updatedAt = item?.updated_at;
-  const size = isInboxFile
-    ? item?.inbox_file_source.size
-    : isExplorerFile
-    ? item?.size
-    : null;
+  const size = isInboxFile ? item?.inbox_file_source.size : isExplorerFile ? item?.size : null;
 
   const onShowInFolder = () => {
     const path = isInboxFile
@@ -77,11 +58,7 @@ function Preview() {
           stroke="currentColor"
           className="w-6 h-6 text-gray-400 transition duration-300 cursor-pointer p hover:text-red-400"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
         <div>
           <div className="block w-full h-10 overflow-hidden rounded-md">
@@ -93,23 +70,13 @@ function Preview() {
                 <span className="sr-only">Details for </span>
                 {name}
               </h2>
-              {size ? (
-                <p className="text-sm font-medium text-gray-500">
-                  {OutputFileSize(size)}
-                </p>
-              ) : null}
+              {size ? <p className="text-sm font-medium text-gray-500">{OutputFileSize(size)}</p> : null}
             </div>
           </div>
         </div>
 
         <div className="flex">
-          <Button
-            buttonStyle="white"
-            onClick={onShowInFolder}
-            label="Show in folder"
-            width="w-full"
-            ringOnFocus
-          />
+          <Button buttonStyle="white" onClick={onShowInFolder} label="Show in folder" width="w-full" ringOnFocus />
         </div>
 
         <div>

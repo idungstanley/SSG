@@ -19,7 +19,7 @@ function Badge({
   paddingVertical = 'py-0.5',
   textSize = 'text-xs',
   fontWeight = 'font-semibold',
-  otherStyles = null,
+  otherStyles = null
 }: BadgeProps) {
   return (
     <span

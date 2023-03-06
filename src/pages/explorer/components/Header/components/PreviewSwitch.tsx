@@ -2,10 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { Switch } from '@headlessui/react';
 import { cl } from '../../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import {
-  useGetUserSettingsKeys,
-  useSetUserSettingsKeys,
-} from '../../../../../features/account/accountService';
+import { useGetUserSettingsKeys, useSetUserSettingsKeys } from '../../../../../features/account/accountService';
 import { setAccountSettings } from '../../../../../features/account/accountSlice';
 
 const showPreviewFromLS = localStorage.getItem('showPreview');

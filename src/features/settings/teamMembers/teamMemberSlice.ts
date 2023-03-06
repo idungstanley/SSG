@@ -6,7 +6,7 @@ const initialState = {
   teamMembersSearchQuery: '',
 
   // Pagination
-  teamMembersPaginationPage: 1,
+  teamMembersPaginationPage: 1
 };
 
 export const teamMemberSlice = createSlice({
@@ -22,20 +22,15 @@ export const teamMemberSlice = createSlice({
     },
     goToNextTeamMembersPage: (state) => {
       state.teamMembersPaginationPage += 1;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  setTeamMembersSearchQuery,
-  goToPreviousTeamMembersPage,
-  goToNextTeamMembersPage,
-} = teamMemberSlice.actions;
+export const { setTeamMembersSearchQuery, goToPreviousTeamMembersPage, goToNextTeamMembersPage } =
+  teamMemberSlice.actions;
 
 export default teamMemberSlice.reducer;

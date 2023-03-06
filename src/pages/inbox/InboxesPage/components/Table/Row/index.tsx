@@ -31,19 +31,13 @@ function Row({ inboxId, type, inbox }: RowProps) {
             style={{ backgroundColor: inbox.colour }}
             aria-hidden="true"
           />
-          <Link
-            to={`/inbox/${inbox.id}`}
-            className="truncate hover:text-gray-600"
-            onClick={handleClickInbox}
-          >
+          <Link to={`/inbox/${inbox.id}`} className="truncate hover:text-gray-600" onClick={handleClickInbox}>
             <span className="space-x-2">
               <span>{inbox.name}</span>
 
               {inbox.unfiled_count > 0 && (
                 <Badge
-                  value={
-                    inbox.unfiled_count >= 99 ? '99+' : inbox.unfiled_count
-                  }
+                  value={inbox.unfiled_count >= 99 ? '99+' : inbox.unfiled_count}
                   textColour="text-red-800"
                   backgroundColour="bg-red-100"
                 />
@@ -53,9 +47,7 @@ function Row({ inboxId, type, inbox }: RowProps) {
         </div>
       </td>
       <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-left">
-        <span className="text-gray-500 font-normal">
-          {`${inbox.email_key}@inbox.alsofile.com`}
-        </span>
+        <span className="text-gray-500 font-normal">{`${inbox.email_key}@inbox.alsofile.com`}</span>
       </td>
       <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
         {OutputDateTime(inbox.updated_at)}

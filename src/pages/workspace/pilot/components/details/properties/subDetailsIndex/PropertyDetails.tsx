@@ -13,9 +13,9 @@ import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 
 export interface tagItem {
-  id: string,
-  name: string,
-  color: string
+  id: string;
+  name: string;
+  color: string;
 }
 interface PropertyDetailsProps {
   Details: {
@@ -25,12 +25,12 @@ interface PropertyDetailsProps {
     created_at: string;
     status: string;
     priority: string;
-    tags: [tagItem[]]
+    tags: [tagItem[]];
   };
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const groupTags = (arr: tagItem[]| [tagItem[]]) => {
+  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
     return arr?.map((item) => {
       return Array.isArray(item) ? (
         <span className="flex">{groupTags(item)}</span>
@@ -75,13 +75,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           <Subscribers />
         </ToolTip>
         <span className="text-gray-300">|</span>
-        <AvatarWithInitials
-          initials="DN"
-          backgroundColour="blue"
-          roundedStyle="rounded"
-          height="h-5"
-          width="w-5"
-        />
+        <AvatarWithInitials initials="DN" backgroundColour="blue" roundedStyle="rounded" height="h-5" width="w-5" />
       </section>
       <section className="p-2" key={Details?.id}>
         {/* tags */}

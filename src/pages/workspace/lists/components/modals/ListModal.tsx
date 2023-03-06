@@ -3,10 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createListService } from '../../../../../features/list/listService';
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 
@@ -15,11 +12,8 @@ function ListModal() {
   const dispatch = useDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
 
-  const { showMenuDropdown, showMenuDropdownType, currSubHubId } =
-    useAppSelector((state) => state.hub);
-  const { showCreateListSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showMenuDropdown, showMenuDropdownType, currSubHubId } = useAppSelector((state) => state.hub);
+  const { showCreateListSlideOver } = useAppSelector((state) => state.slideOver);
   const createList = useMutation(createListService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -27,14 +21,14 @@ function ListModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
 
   const defaultListFormState = {
-    name: '',
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
@@ -42,7 +36,7 @@ function ListModal() {
   const handleListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -65,7 +59,7 @@ function ListModal() {
           ? showMenuDropdown
           : null || showMenuDropdownType == 'subwallet3'
           ? showMenuDropdown
-          : null,
+          : null
     });
   };
   const handleCloseSlider = () => {
@@ -73,7 +67,7 @@ function ListModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };

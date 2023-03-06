@@ -5,19 +5,16 @@ import {
   PencilIcon,
   ShareIcon,
   ArrowUpTrayIcon,
-  ClipboardIcon,
+  ClipboardIcon
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { cl } from '../../../../../utils';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
-  setShowShareSideOver,
+  setShowShareSideOver
 } from '../../../../../features/general/slideOver/slideOverSlice';
-import {
-  useCopyItems,
-  useDeleteExplorerItem,
-} from '../../../../../features/explorer/explorerActionsService';
+import { useCopyItems, useDeleteExplorerItem } from '../../../../../features/explorer/explorerActionsService';
 import { resetSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useNavigate } from 'react-router-dom';
 import { DownloadFile } from '../../../../../app/helpers';
@@ -41,7 +38,7 @@ export default function FolderItem({
   parentId,
   handleClickFolder,
   haveActiveChild,
-  isActiveFolder,
+  isActiveFolder
 }: FolderItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -51,19 +48,17 @@ export default function FolderItem({
     listeners,
     setNodeRef: draggableRef,
     transform,
-    isDragging,
+    isDragging
   } = useDraggable({ id, data: { parentId, isFolder: true } });
 
   const { isOver, setNodeRef: droppableRef } = useDroppable({
     id,
-    data: { parentId, isFolder: true },
+    data: { parentId, isFolder: true }
   });
 
   const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
-    zIndex: isDragging ? 1 : undefined,
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    zIndex: isDragging ? 1 : undefined
   };
 
   const { mutate: onDelete } = useDeleteExplorerItem(parentId || '', 'folder');
@@ -73,7 +68,7 @@ export default function FolderItem({
   const handleDelete = () => {
     onDelete({
       type: 'folder',
-      id,
+      id
     });
     if (isActiveFolder) {
       dispatch(resetSelectedItem());
@@ -86,13 +81,12 @@ export default function FolderItem({
     DownloadFile('folder', id, itemName);
   };
 
-  const handleShowShare = () =>
-    dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
+  const handleShowShare = () => dispatch(setShowShareSideOver({ show: true, id, type: 'folder' }));
 
   const handleCopy = () => {
     onCopy({
       copyToFolderId: parentId,
-      folderIds: [id],
+      folderIds: [id]
     });
   };
 
@@ -100,31 +94,28 @@ export default function FolderItem({
     {
       label: 'Download',
       onClick: handleDownload,
-      icon: <ArrowUpTrayIcon className="w-5 h-5" aria-hidden="true" />,
+      icon: <ArrowUpTrayIcon className="w-5 h-5" aria-hidden="true" />
     },
     {
       label: 'Rename',
-      onClick: () =>
-        dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
-      icon: <PencilIcon className="w-5 h-5" aria-hidden="true" />,
+      onClick: () => dispatch(setItemActionForSideOver({ action: 'rename', id, name })),
+      icon: <PencilIcon className="w-5 h-5" aria-hidden="true" />
     },
     {
       label: 'Copy',
-      icon: (
-        <ClipboardIcon className="w-5 h-5 stroke-current" aria-hidden="true" />
-      ),
-      onClick: handleCopy,
+      icon: <ClipboardIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
+      onClick: handleCopy
     },
     {
       label: 'Share',
       icon: <ShareIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
-      onClick: handleShowShare,
+      onClick: handleShowShare
     },
     {
       label: 'Delete',
       onClick: handleDelete,
-      icon: <TrashIcon className="w-5 h-5" aria-hidden="true" />,
-    },
+      icon: <TrashIcon className="w-5 h-5" aria-hidden="true" />
+    }
   ];
 
   return (
@@ -138,25 +129,16 @@ export default function FolderItem({
       style={style}
       title={name}
     >
-      <div
-        onClick={() => handleClickFolder(id, parentId)}
-        className="flex items-center cursor-pointer ml-0.5"
-      >
+      <div onClick={() => handleClickFolder(id, parentId)} className="flex items-center cursor-pointer ml-0.5">
         <div className="flex items-center gap-2">
           {isActiveFolder || haveActiveChild ? (
             <>
-              <VscTriangleDown
-                className="h-4 w-4 text-gray-600"
-                aria-hidden="true"
-              />
+              <VscTriangleDown className="h-4 w-4 text-gray-600" aria-hidden="true" />
               <FaFolderOpen className="text-green-500" />
             </>
           ) : (
             <>
-              <VscTriangleRight
-                className="h-4 w-4 text-gray-600"
-                aria-hidden="true"
-              />
+              <VscTriangleRight className="h-4 w-4 text-gray-600" aria-hidden="true" />
               <FaFolder color="rgb(95,99,104)" />
             </>
           )}
@@ -169,9 +151,7 @@ export default function FolderItem({
       <div className="flex items-center gap-2">
         <Dropdown config={configForDropdown} iconType="dots" />
         <PlusIcon
-          onClick={() =>
-            dispatch(setItemActionForSideOver({ action: 'create', id }))
-          }
+          onClick={() => dispatch(setItemActionForSideOver({ action: 'create', id }))}
           className="w-4 h-4 text-black cursor-pointer stroke-current"
           aria-hidden="true"
         />

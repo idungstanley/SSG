@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../components';
 import {
   goToPreviousTeamMemberInvitesPage,
-  goToNextTeamMemberInvitesPage,
+  goToNextTeamMemberInvitesPage
 } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import { useGetTeamMemberInvites } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -11,13 +11,9 @@ import { useAppSelector } from '../../../../../../app/hooks';
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const { teamMemberInvitesPaginationPage } = useAppSelector(
-    (state) => state.teamMemberInvite
-  );
+  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
 
-  const { data: response } = useGetTeamMemberInvites(
-    teamMemberInvitesPaginationPage
-  );
+  const { data: response } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
   const goToPreviousPage = () => {
     dispatch(goToPreviousTeamMemberInvitesPage());
   };
@@ -36,18 +32,11 @@ export default function Pagination() {
           Showing{' '}
           {response?.data.pagination.total !== 0 && (
             <>
-              <span className="font-medium">
-                {response?.data.pagination.first_item}
-              </span>{' '}
-              to{' '}
-              <span className="font-medium">
-                {response?.data.pagination.last_item}
-              </span>{' '}
-              of{' '}
+              <span className="font-medium">{response?.data.pagination.first_item}</span> to{' '}
+              <span className="font-medium">{response?.data.pagination.last_item}</span> of{' '}
             </>
           )}
-          <span className="font-medium">{response?.data.pagination.total}</span>{' '}
-          results
+          <span className="font-medium">{response?.data.pagination.total}</span> results
         </p>
       </div>
       <div className="flex-1 flex justify-between sm:justify-end space-x-3">

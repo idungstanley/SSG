@@ -1,24 +1,24 @@
-import React, { useState, useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState, useRef } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   UseCreatelistItemService,
   UseDeleteChecklistItemService,
-  UseUpdateChecklistItemService,
-} from "../../../../../../features/task/checklist/checklistService";
-import { GrDrag } from "react-icons/gr";
-import { CgProfile } from "react-icons/cg";
-import ChecklistModal from "./ChecklistModal";
-import { lessOptions } from "../ModalOptions";
-import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
+  UseUpdateChecklistItemService
+} from '../../../../../../features/task/checklist/checklistService';
+import { GrDrag } from 'react-icons/gr';
+import { CgProfile } from 'react-icons/cg';
+import ChecklistModal from './ChecklistModal';
+import { lessOptions } from '../ModalOptions';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
   setToggleAssignChecklistItemId,
-  setTriggerItemtUpdate,
-} from "../../../../../../features/task/checklist/checklistSlice";
-import AssignTask from "../../../../tasks/assignTask/AssignTask";
-import { AvatarWithInitials } from "../../../../../../components";
-import ToolTip from "../../../../../../components/Tooltip";
+  setTriggerItemtUpdate
+} from '../../../../../../features/task/checklist/checklistSlice';
+import AssignTask from '../../../../tasks/assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../../components';
+import ToolTip from '../../../../../../components/Tooltip';
 
 export interface itemProps {
   id: string;
@@ -35,31 +35,31 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const [newItem, setNewItem] = useState<string>("");
-  const [itemId, setItemId] = useState<string>("");
+  const [newItem, setNewItem] = useState<string>('');
+  const [itemId, setItemId] = useState<string>('');
   const [done, setDone] = useState<number>(0);
-  const [editName, setEditName] = useState<string>("");
+  const [editName, setEditName] = useState<string>('');
 
   const {
     triggerDelChecklistItem,
     clickedChecklistId,
     clickedChecklistItemId,
     triggerItemUpdate,
-    toggleAssignChecklistItemId,
+    toggleAssignChecklistItemId
   } = useAppSelector((state) => state.checklist);
 
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const handleSubmit = async () => {
     await createChecklist.mutateAsync({
       checklist_id: checklistId,
-      name: newItem,
+      name: newItem
     });
-    setNewItem("");
+    setNewItem('');
   };
 
   UseUpdateChecklistItemService({
@@ -67,7 +67,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     name: editName,
     triggerItemUpdate: triggerItemUpdate,
     itemId: itemId,
-    done,
+    done
   });
 
   const isDone = (id: string, done: number, name: string) => {
@@ -87,25 +87,18 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   UseDeleteChecklistItemService({
     query: clickedChecklistId,
     itemId: clickedChecklistItemId,
-    delItem: triggerDelChecklistItem,
+    delItem: triggerDelChecklistItem
   });
 
   const focusItem = () => {
     inputRef.current?.focus();
   };
 
-  const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }] | undefined
-  ) => {
+  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
     return data?.map((newData) => (
       <div key={newData.id} className="">
         <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height="h-5"
-            width="w-5"
-          />
+          <AvatarWithInitials initials={newData.initials} backgroundColour={newData.colour} height="h-5" width="w-5" />
         </span>
       </div>
     ));
@@ -122,7 +115,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
           placeholder="New Checklist Item"
           onChange={(e) => setNewItem(e.target.value)}
           value={newItem}
-          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : null)}
+          onKeyDown={(e) => (e.key == 'Enter' ? handleSubmit() : null)}
         />
       </span>
       {Item.map(
@@ -151,11 +144,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   ref={inputRef}
                   suppressContentEditableWarning={true}
                   contentEditable={true}
-                  onKeyDown={(e) =>
-                    e.key === "Enter"
-                      ? handleEditItemName(item.id, item.is_done)
-                      : null
-                  }
+                  onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
                   className="cursor-text"
                 >
                   {item.name}
@@ -195,7 +184,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                 </div>
                 {toggleAssignChecklistItemId == item.id ? (
                   <span className="absolute shadow-2xl z-30 ml-20 mt-10">
-                    <AssignTask option={"checklstItem"} item={item} />
+                    <AssignTask option={'checklstItem'} item={item} />
                   </span>
                 ) : null}
               </div>

@@ -1,19 +1,19 @@
-import React from "react";
-import { IoPeopleOutline } from "react-icons/io5";
-import { MdOutlineRadioButtonUnchecked } from "react-icons/md";
-import { RiFootballFill } from "react-icons/ri";
-import { TbCheck } from "react-icons/tb";
-import { TfiCalendar } from "react-icons/tfi";
-import { VscEllipsis } from "react-icons/vsc";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { IoPeopleOutline } from 'react-icons/io5';
+import { MdOutlineRadioButtonUnchecked } from 'react-icons/md';
+import { RiFootballFill } from 'react-icons/ri';
+import { TbCheck } from 'react-icons/tb';
+import { TfiCalendar } from 'react-icons/tfi';
+import { VscEllipsis } from 'react-icons/vsc';
+import { useDispatch } from 'react-redux';
 import {
   ImyTaskData,
   setCurrentTaskIdForTag,
-  setCurrentTaskPriorityId,
+  setCurrentTaskPriorityId
   //   triggerUnassignTag,
-} from "../../../../../features/task/taskSlice";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import TagModal from "../../../../../components/tags/TagModal";
+} from '../../../../../features/task/taskSlice';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import TagModal from '../../../../../components/tags/TagModal';
 
 interface TaskDataProps {
   task: ImyTaskData;
@@ -30,16 +30,10 @@ export default function CardState({ task }: TaskDataProps) {
         <span className=" text-x font-bold ">
           <TfiCalendar />
         </span>
-        <span
-          className=" text-xl cursor-pointer pt-1"
-          onClick={() => handleTaskPriority(task.id as string)}
-        >
+        <span className=" text-xl cursor-pointer pt-1" onClick={() => handleTaskPriority(task.id as string)}>
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
-        <span
-          className="  text-xl"
-          onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}
-        >
+        <span className="  text-xl" onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
           <TagModal />
         </span>
         <span className="  text-xl">

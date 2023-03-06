@@ -8,10 +8,7 @@ interface ResizeBorderProps {
   sidebarWidth: number;
 }
 
-export default function ResizeBorder({
-  onMouseDown,
-  sidebarWidth,
-}: ResizeBorderProps) {
+export default function ResizeBorder({ onMouseDown, sidebarWidth }: ResizeBorderProps) {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
@@ -23,9 +20,7 @@ export default function ResizeBorder({
       <div
         className={cl(
           'group-hover:opacity-100 opacity-0 h-full w-0.5 shadow bg-green-300 transition duration-500',
-          sidebarWidth === MAX_SIDEBAR_WIDTH
-            ? 'mr-1.5'
-            : showSidebar && 'ml-1.5',
+          sidebarWidth === MAX_SIDEBAR_WIDTH ? 'mr-1.5' : showSidebar && 'ml-1.5',
           !showSidebar && 'ml-1.5'
         )}
       />

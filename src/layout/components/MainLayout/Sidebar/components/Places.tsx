@@ -1,8 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import {
-  setActivePlaceId,
-  setActivePlaceName,
-} from '../../../../../features/workspace/workspaceSlice';
+import { setActivePlaceId, setActivePlaceName } from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
 import Favorites from '../../../../../pages/workspace/favorites';
 import Files from '../../../../../pages/workspace/files';
@@ -29,57 +26,57 @@ const places = [
     name: 'Email',
     id: 1,
     place: <Favorites />,
-    icon: <MdAlternateEmail className="w-4 h-4" />,
+    icon: <MdAlternateEmail className="w-4 h-4" />
   },
   {
     name: 'TASKS',
     id: 2,
     place: <Hubs />,
-    source: hubIcon,
+    source: hubIcon
   },
   {
     name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    icon: <InboxStackIcon className="w-4 h-4" />,
+    icon: <InboxStackIcon className="w-4 h-4" />
   },
   {
     name: 'Cabinet',
     id: 4,
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'explorer',
+    link: 'explorer'
   },
   {
     name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-4 h-4" />,
+    icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
     name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-4 h-4" />,
+    icon: <ClockIcon className="w-4 h-4" />
   },
   {
     name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-4 h-4" />,
+    icon: <FaRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
     id: 9,
     place: <AlsoHr />,
-    icon: <FaHandsHelping className="w-4 h-4" />,
+    icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
     name: 'Commerce',
     id: 10,
     place: <Commerce />,
-    icon: <IoBusinessOutline className="w-4 h-4" />,
-  },
+    icon: <IoBusinessOutline className="w-4 h-4" />
+  }
 ];
 
 function Places() {
@@ -120,17 +117,7 @@ function Places() {
             place.place
           ) : (
             <PlaceItem
-              icon={
-                place.icon ? (
-                  place.icon
-                ) : (
-                  <img
-                    src={place.source}
-                    alt={place.name + 'Icon'}
-                    className="w-4 h-4"
-                  />
-                )
-              }
+              icon={place.icon ? place.icon : <img src={place.source} alt={place.name + 'Icon'} className="w-4 h-4" />}
               label={place.name}
               onClick={() => handleClick(place.id, place.name, place.link)}
             />

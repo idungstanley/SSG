@@ -1,16 +1,10 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { Spinner } from '../../../../../../../../common';
 import FullScreenMessage from '../../../../../../../../components/CenterMessage/FullScreenMessage';
 import { useGetExplorerFiles } from '../../../../../../../../features/explorer/explorerService';
-import {
-  setSelectedFileId,
-  setSelectedFiles,
-} from '../../../../../../../../features/explorer/explorerSlice';
+import { setSelectedFileId, setSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';
 import { setShowUploadModal } from '../../../../../../../../features/general/uploadFile/uploadFileSlice';
 import Table from './components/Table';
 
@@ -36,22 +30,14 @@ export default function FilesList({ data }: FilesListProps) {
   const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const { selectedFileIds, selectedFileId } = useAppSelector(
-    (state) => state.explorer
-  );
+  const { selectedFileIds, selectedFileId } = useAppSelector((state) => state.explorer);
 
-  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter(
-    (i) => i
-  );
+  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter((i) => i);
 
   useLayoutEffect(() => {
-    const isIndeterminate =
-      selectedIds.length > 0 && selectedIds.length < data?.length;
+    const isIndeterminate = selectedIds.length > 0 && selectedIds.length < data?.length;
 
-    if (
-      selectedIds.length === data.length &&
-      +selectedIds.length + +data.length > 0
-    ) {
+    if (selectedIds.length === data.length && +selectedIds.length + +data.length > 0) {
       setChecked(selectedIds.length === data.length);
     }
     setIndeterminate(isIndeterminate);
@@ -93,10 +79,7 @@ export default function FilesList({ data }: FilesListProps) {
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'error' ? (
-        <FullScreenMessage
-          title="Oops, an error occurred :("
-          description="Please try again later."
-        />
+        <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
       ) : null}
 
       {/* table */}
@@ -111,12 +94,7 @@ export default function FilesList({ data }: FilesListProps) {
           />
         ) : (
           <div className="flex flex-col h-full w-full overflow-x-scroll">
-            <Table
-              checkbox={checkbox}
-              checked={checked}
-              toggleAll={toggleAll}
-              items={data}
-            />
+            <Table checkbox={checkbox} checked={checked} toggleAll={toggleAll} items={data} />
           </div>
         )
       ) : null}

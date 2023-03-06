@@ -13,17 +13,11 @@ export default function Watcher({ taskId }: WatcherProps) {
   const dispatch = useDispatch();
 
   const { data: getWatchers, status } = UseGetWatcherService({
-    query: taskId,
+    query: taskId
   });
 
   if (status == 'success') {
-    dispatch(
-      setWatchersData(
-        getWatchers?.data.watchers.map(
-          (id: { team_member_id: string }) => id.team_member_id
-        )
-      )
-    );
+    dispatch(setWatchersData(getWatchers?.data.watchers.map((id: { team_member_id: string }) => id.team_member_id)));
   }
 
   return (
@@ -35,9 +29,7 @@ export default function Watcher({ taskId }: WatcherProps) {
       />
 
       <p className="absolute bottom-1 left-4 bg-indigo-500 rounded text-xs text-white px-0.5 h-4 w-3 text-center ">
-        {getWatchers?.data.watchers.length == null
-          ? '0'
-          : getWatchers?.data.watchers.length}
+        {getWatchers?.data.watchers.length == null ? '0' : getWatchers?.data.watchers.length}
       </p>
       {showWatchers && <Dropdown taskId={taskId} />}
     </div>

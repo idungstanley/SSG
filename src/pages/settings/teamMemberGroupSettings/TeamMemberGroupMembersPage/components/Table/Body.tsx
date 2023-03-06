@@ -5,8 +5,7 @@ import { useGetTeamMemberGroup } from '../../../../../../features/settings/teamM
 
 export default function Body() {
   const { teamMemberGroupId } = useParams();
-  const { data: teamMemberGroup, status } =
-    useGetTeamMemberGroup(teamMemberGroupId);
+  const { data: teamMemberGroup, status } = useGetTeamMemberGroup(teamMemberGroupId);
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">

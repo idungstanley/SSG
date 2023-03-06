@@ -13,12 +13,7 @@ export default function CloseExtBtn() {
 
   return (
     <span className="absolute z-50 bg-green-400 border-2 border-green-400 rounded-full cursor-pointer -right-2 top-2">
-      {showExtendedBar && (
-        <RiArrowLeftSLine
-          className="text-sm text-white"
-          onClick={() => handleCloseExt()}
-        />
-      )}
+      {showExtendedBar && <RiArrowLeftSLine className="text-sm text-white" onClick={() => handleCloseExt()} />}
     </span>
   );
 }

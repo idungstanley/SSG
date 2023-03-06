@@ -1,7 +1,7 @@
-import React from "react";
-import { ImyTaskData } from "../../../../../features/task/taskSlice";
-import { useAppSelector } from "../../../../../app/hooks";
-import DataRenderFunc from "../../component/taskData/DataRenderFunc";
+import React from 'react';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../app/hooks';
+import DataRenderFunc from '../../component/taskData/DataRenderFunc';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -19,12 +19,9 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value == "Task" &&
+                  col.value == 'Task' &&
                   !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
+                    <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                       <DataRenderFunc
                         taskColField={task[col.field]}
                         colfield={col.field}
@@ -37,12 +34,9 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value == "Task" &&
+                  col.value == 'Task' &&
                   !col.hidden && (
-                    <div
-                      key={col.field}
-                      className="flex items-center capitalize ml-2 text-xs font-medium  group"
-                    >
+                    <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                       <DataRenderFunc
                         taskColField={task[col.field]}
                         colfield={col.field}
@@ -58,12 +52,12 @@ export default function Template({ task }: TemplateProps) {
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== "Task" &&
+                  col.value !== 'Task' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}
@@ -77,12 +71,12 @@ export default function Template({ task }: TemplateProps) {
               )
             : taskColumns.map(
                 (col) =>
-                  col.value !== "Task" &&
+                  col.value !== 'Task' &&
                   !col.hidden && (
                     <div
                       key={col.field}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
-                      style={{ width: "50px" }}
+                      style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}

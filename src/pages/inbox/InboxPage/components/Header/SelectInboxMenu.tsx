@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetInboxes } from '../../../../../features/inbox/inboxesService';
-import {
-  AvatarWithInitials,
-  SelectMenuWithAvatar,
-} from '../../../../../components';
+import { AvatarWithInitials, SelectMenuWithAvatar } from '../../../../../components';
 
 interface ITempInboxes {
   id: string;
@@ -46,7 +43,7 @@ function SelectInboxMenu() {
           id: inbox.id,
           name: inbox.name,
           badge: inbox.unfiled_count !== 0 ? inbox.unfiled_count : null,
-          avatar,
+          avatar
         });
       });
     }
@@ -59,11 +56,7 @@ function SelectInboxMenu() {
   }, [inboxId]);
 
   return status === 'success' && data ? (
-    <SelectMenuWithAvatar
-      options={processedInboxes}
-      selectedId={selectedInboxId}
-      onChange={onChangeInbox}
-    />
+    <SelectMenuWithAvatar options={processedInboxes} selectedId={selectedInboxId} onChange={onChangeInbox} />
   ) : null;
 }
 

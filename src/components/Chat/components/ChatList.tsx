@@ -44,10 +44,7 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
             </span>
 
             {/* chat name and last message */}
-            <div
-              onClick={() => selectChat(chat.id)}
-              className="ml-3 cursor-pointer"
-            >
+            <div onClick={() => selectChat(chat.id)} className="ml-3 cursor-pointer">
               <p className="font-medium text-gray-900">{chat.name}</p>
               <p className="text-sm text-gray-500">message</p>
             </div>

@@ -2,17 +2,14 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
-  DragStartEvent,
+  DragStartEvent
   // MouseSensor,
   // TouchSensor,
   // useSensor,
   // useSensors,
 } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import {
-  resetSelectedItem,
-  setDraggableItem,
-} from '../../../features/explorer/explorerSlice';
+import { resetSelectedItem, setDraggableItem } from '../../../features/explorer/explorerSlice';
 import { useMoveExplorerItems } from '../../../features/explorer/explorerActionsService';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -26,9 +23,7 @@ export default function DragContext({ children }: DragContextProps) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { draggableItem, selectedFolderId } = useAppSelector(
-    (state) => state.explorer
-  );
+  const { draggableItem, selectedFolderId } = useAppSelector((state) => state.explorer);
 
   // const mouseSensor = useSensor(MouseSensor);
   // const touchSensor = useSensor(TouchSensor);
@@ -45,8 +40,7 @@ export default function DragContext({ children }: DragContextProps) {
 
   useEffect(() => {
     if (isSuccess && dataForInvalidation) {
-      const invalidate = (query: string, value?: string) =>
-        queryClient.invalidateQueries([query, value]);
+      const invalidate = (query: string, value?: string) => queryClient.invalidateQueries([query, value]);
 
       const { dropId, dragId, isTargetFile } = dataForInvalidation;
 
@@ -87,17 +81,13 @@ export default function DragContext({ children }: DragContextProps) {
 
     if (overId && activeId && draggableItem) {
       const isTargetFile = draggableItem.isFile;
-      const dragId =
-        active.data.current?.fileFolderId ||
-        active.data.current?.parentId ||
-        'root'; // if draggable is file - get folderId, else - parentId of folder
-      const dropId =
-        (overId as string) || over.data.current?.parentId || 'root'; // always folderId
+      const dragId = active.data.current?.fileFolderId || active.data.current?.parentId || 'root'; // if draggable is file - get folderId, else - parentId of folder
+      const dropId = (overId as string) || over.data.current?.parentId || 'root'; // always folderId
 
       setDataForInvalidation({
         isTargetFile,
         dragId,
-        dropId,
+        dropId
       });
 
       // reset selected folder if it moved to root
@@ -107,13 +97,11 @@ export default function DragContext({ children }: DragContextProps) {
       }
 
       // moving file / folder request data
-      const moveData = draggableItem?.isFile
-        ? { fileIds: [activeId as string] }
-        : { folderIds: [activeId as string] };
+      const moveData = draggableItem?.isFile ? { fileIds: [activeId as string] } : { folderIds: [activeId as string] };
 
       onMove({
         targetFolderId: overId === 'root' ? '' : (overId as string),
-        ...moveData,
+        ...moveData
       });
     }
   };

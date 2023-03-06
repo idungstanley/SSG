@@ -9,7 +9,7 @@ import {
   IDirectoryTemplateItemsRes,
   IDirectoryTemplateRes,
   IDirectoryTemplatesRes,
-  IDirectoryTemplateWithFields,
+  IDirectoryTemplateWithFields
 } from './directory.interfaces';
 
 // request includes both fetch with and within tree
@@ -23,14 +23,13 @@ export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
           method: 'GET',
           params: {
             parent_id: !includeTree ? parentId : undefined,
-            include_tree: includeTree ? 1 : undefined,
-          },
+            include_tree: includeTree ? 1 : undefined
+          }
         },
         true
       ),
     {
-      select: (res) =>
-        res.data.directories || res.data.tree_elements?.directories || [],
+      select: (res) => res.data.directories || res.data.tree_elements?.directories || []
     }
   );
 
@@ -41,13 +40,13 @@ export const useGetDirectory = (directoryId?: string, isDirectory?: boolean) =>
       requestNew(
         {
           url: `directories/${directoryId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       ),
     {
       enabled: isDirectory ? !!directoryId : !!directoryId && isDirectory,
-      select: (res) => res.data.directory,
+      select: (res) => res.data.directory
     }
   );
 
@@ -62,13 +61,13 @@ export const useGetDirectoryTemplates = (directoryId?: string) =>
           params: !directoryId
             ? undefined
             : {
-                directory_id: directoryId,
-              },
+                directory_id: directoryId
+              }
         },
         true
       ),
     {
-      select: (res) => res.data.templates,
+      select: (res) => res.data.templates
     }
   );
 
@@ -79,13 +78,13 @@ export const useGetDirectoryTemplate = (templateId?: string | null, isTemplate?:
       requestNew(
         {
           url: `directory-templates/${templateId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       ),
     {
       enabled: isTemplate ? !!templateId : !!templateId && isTemplate,
-      select: (res) => res.data.template,
+      select: (res) => res.data.template
     }
   );
 
@@ -96,12 +95,12 @@ export const useGetDirectoryTemplateItems = (templateId: string | null) =>
       requestNew(
         {
           url: `directory-templates/${templateId}/items`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       ),
     {
       enabled: !!templateId,
-      select: (res) => res.data.items,
+      select: (res) => res.data.items
     }
   );

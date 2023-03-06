@@ -1,15 +1,15 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from 'react';
 // import { useParams } from "react-router-dom";
-import { useAppSelector } from "../../../../../app/hooks";
-import ListNav from "../../../lists/components/renderlist/ListNav";
-import ListFilter from "../../../lists/components/renderlist/listDetails/ListFilter";
-import PageWrapper from "../../../../../components/PageWrapper";
-import PilotSection, { pilotConfig } from "../PilotSection";
-import { UseGetFullTaskList } from "../../../../../features/task/taskService";
-import TaskTemplateData from "../../../tasks/component/taskData/TaskTemplateData";
-import NoTaskFound from "../../../tasks/component/taskData/NoTaskFound";
-import TaskTableTemplateData from "../../../tasks/component/taskData/TaskTableTemplateData";
-import { ImyTaskData } from "../../../../../features/task/taskSlice";
+import { useAppSelector } from '../../../../../app/hooks';
+import ListNav from '../../../lists/components/renderlist/ListNav';
+import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
+import PageWrapper from '../../../../../components/PageWrapper';
+import PilotSection, { pilotConfig } from '../PilotSection';
+import { UseGetFullTaskList } from '../../../../../features/task/taskService';
+import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData';
+import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
+import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<{
@@ -18,39 +18,33 @@ function RenderHubs() {
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView } = useAppSelector((state) => state.task);
 
-  const retrievedObject = localStorage.getItem("hubDetailsStorage");
+  const retrievedObject = localStorage.getItem('hubDetailsStorage');
   const hubdetail = JSON.parse(retrievedObject as string);
 
   // const { hubId } = useParams();
   const { data: TaskFullList, status } = UseGetFullTaskList({
     itemId: hubdetail.activeItemId,
-    itemType: hubdetail.activeItemType,
+    itemType: hubdetail.activeItemType
   });
-  const unFilteredTaskData = useMemo(
-    () => TaskFullList?.pages.flatMap((page) => page.data.tasks),
-    [TaskFullList]
-  );
+  const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
   useEffect(() => {
-    if (status !== "success") {
+    if (status !== 'success') {
       return setTaskDataGroupings({});
     }
 
-    const taskDataGroupedByListID = unFilteredTaskData?.reduce(
-      (GroupedTaskByListID, currentTask) => {
-        if (!GroupedTaskByListID[currentTask.list_id]) {
-          GroupedTaskByListID[currentTask.list_id] = {
-            groupListName: currentTask.list?.name,
-            key: currentTask.list_id,
+    const taskDataGroupedByListID = unFilteredTaskData?.reduce((GroupedTaskByListID, currentTask) => {
+      if (!GroupedTaskByListID[currentTask.list_id]) {
+        GroupedTaskByListID[currentTask.list_id] = {
+          groupListName: currentTask.list?.name,
+          key: currentTask.list_id,
 
-            tasks: [],
-          };
-        }
-        GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
-        return GroupedTaskByListID;
-      },
-      {}
-    );
+          tasks: []
+        };
+      }
+      GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
+      return GroupedTaskByListID;
+    }, {});
     setTaskDataGroupings(taskDataGroupedByListID);
 
     return () => {
@@ -64,21 +58,12 @@ function RenderHubs() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <ListNav
-            navName={activeItemName}
-            viewsList="List"
-            viewsList1="Table"
-            viewsList2="Board"
-            changeViews="View"
-          />
+          <ListNav navName={activeItemName} viewsList="List" viewsList1="Table" viewsList2="Board" changeViews="View" />
         }
       >
         {listView && (
           <div className="pr-1 pt-0.5 w-full h-full">
-            <div
-              className="w-full overflow-auto"
-              style={{ minHeight: "0", maxHeight: "90vh" }}
-            >
+            <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }}>
               <div className="w-full">
                 <ListFilter />
               </div>
@@ -88,24 +73,17 @@ function RenderHubs() {
               ) : (
                 <TaskTemplateData filteredTaskData={TaskDataGroupings} />
               )}
-              {tableView && (
-                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
-              )}
+              {tableView && <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />}
             </div>
           </div>
         )}
         {tableView && (
           <div className="pr-1 pt-0.5 w-full h-full">
-            <div
-              className="w-full"
-              style={{ minHeight: "0", maxHeight: "90vh" }}
-            >
+            <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
               {/* <div className="w-full">
                 <ListFilter />
               </div> */}
-              {tableView && (
-                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
-              )}
+              {tableView && <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />}
             </div>
           </div>
         )}

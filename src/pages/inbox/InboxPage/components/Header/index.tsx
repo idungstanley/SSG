@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  CogIcon,
-  TrashIcon,
-  EnvelopeOpenIcon,
-  ChatBubbleBottomCenterIcon,
-  EyeIcon,
-} from '@heroicons/react/24/solid';
+import { CogIcon, TrashIcon, EnvelopeOpenIcon, ChatBubbleBottomCenterIcon, EyeIcon } from '@heroicons/react/24/solid';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import SelectInboxMenu from './SelectInboxMenu';
 import { Button } from '../../../../../components';
@@ -39,7 +33,7 @@ function Header() {
   const handleDelete = () => {
     deleteInbox({
       isDeleted: false,
-      inboxId,
+      inboxId
     });
     navigate('/inbox');
   };
@@ -49,72 +43,44 @@ function Header() {
       buttonStyle: 'white',
       label: 'Blacklist',
       onClick: () => setShowEmailsModal((prev) => !prev),
-      icon: (
-        <EnvelopeOpenIcon
-          className="mr-2.5 h-5 w-5 text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      icon: <EnvelopeOpenIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'white',
       label: 'Comments',
       onClick: () => setShowCommentsModal((prev) => !prev),
-      icon: (
-        <ChatBubbleBottomCenterIcon
-          className="mr-2.5 h-5 w-5 text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      icon: <ChatBubbleBottomCenterIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'white',
       label: 'Upload',
       onClick: upload,
-      icon: (
-        <ArrowUpTrayIcon
-          className="mr-2.5 h-5 w-5 text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      icon: <ArrowUpTrayIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'white',
       label: 'Watchers',
-      onClick: () =>
-        dispatch(setShowWatchersSideOver({ show: true, type: 'inbox' })),
-      icon: (
-        <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
-      ),
+      onClick: () => dispatch(setShowWatchersSideOver({ show: true, type: 'inbox' })),
+      icon: <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'white',
       label: 'Chat',
-      onClick: () =>
-        dispatch(setSelectedItem({ id: inboxId || '', type: 'inbox' })),
-      icon: (
-        <ChatBubbleBottomCenterIcon
-          className="mr-2.5 h-5 w-5 text-gray-500"
-          aria-hidden="true"
-        />
-      ),
+      onClick: () => dispatch(setSelectedItem({ id: inboxId || '', type: 'inbox' })),
+      icon: <ChatBubbleBottomCenterIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'white',
       label: 'Settings',
       onClick: goToSettings,
-      icon: (
-        <CogIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
-      ),
+      icon: <CogIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       buttonStyle: 'danger',
       label: 'Delete',
       onClick: handleDelete,
-      icon: (
-        <TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />
-      ),
-    },
+      icon: <TrashIcon className="mr-2.5 h-5 w-5 text-white" aria-hidden="true" />
+    }
   ];
 
   return (
@@ -142,13 +108,9 @@ function Header() {
           />
         ))}
 
-        {showCommentsModal ? (
-          <Comments setShowModal={setShowCommentsModal} />
-        ) : null}
+        {showCommentsModal ? <Comments setShowModal={setShowCommentsModal} /> : null}
 
-        {showEmailsModal ? (
-          <BlackListEmails setShowModal={setShowEmailsModal} />
-        ) : null}
+        {showEmailsModal ? <BlackListEmails setShowModal={setShowEmailsModal} /> : null}
       </div>
     </div>
   );

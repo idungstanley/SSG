@@ -24,8 +24,8 @@ export const useGetTeamMemberGroups = ({ query }: Iprops) => {
           method: 'GET',
           params: {
             page: pageParam,
-            search: query,
-          },
+            search: query
+          }
         },
         true
       );
@@ -34,10 +34,7 @@ export const useGetTeamMemberGroups = ({ query }: Iprops) => {
       onSuccess: (data) => {
         data.pages.map((page) =>
           page.data.team_member_groups.map((teamMemberGroup: teamgroupType) =>
-            queryClient.setQueryData(
-              ['team_member_group', teamMemberGroup.id],
-              teamMemberGroup
-            )
+            queryClient.setQueryData(['team_member_group', teamMemberGroup.id], teamMemberGroup)
           )
         );
       },
@@ -47,7 +44,7 @@ export const useGetTeamMemberGroups = ({ query }: Iprops) => {
         }
 
         return false;
-      },
+      }
     }
   );
 };
