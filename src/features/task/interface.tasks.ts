@@ -53,3 +53,9 @@ export interface GroupedTaskType {
 export interface KeyItemTypes {
   ['list_id']: GroupedTaskType;
 }
+
+export interface ITaskRes {
+  data: {
+    task: ITaskFullList;
+  };
+}

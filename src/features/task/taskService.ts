@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { ITaskFullList } from './interface.tasks';
+import { ITaskFullList, ITaskRes } from './interface.tasks';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
@@ -140,7 +140,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITaskRes>(
         {
           url: `at/tasks/${task_id}`,
           method: 'GET'
