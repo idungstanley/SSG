@@ -8,37 +8,37 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
       },
       colors: {
         primary: colors.indigo,
-        sky: colors.sky,
+        sky: colors.sky
       },
       gridTemplateColumns: {
-        sidebarItem: 'auto 1fr auto',
+        sidebarItem: 'auto 1fr auto'
       },
       gridTemplateRows: {
-        autoFrAuto: 'auto 1fr auto',
+        autoFrAuto: 'auto 1fr auto'
       },
       height: {
-        204: '51rem',
+        204: '51rem'
       },
       maxHeight: {
-        204: '51rem',
+        204: '51rem'
       },
       maxWidth: {
-        34: '9rem',
+        34: '9rem'
       },
       width: {
-        134: '26.8rem',
+        134: '26.8rem'
       },
       minWidth: {
-        134: '26.8rem',
-      },
-    },
+        134: '26.8rem'
+      }
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms')]
 };
