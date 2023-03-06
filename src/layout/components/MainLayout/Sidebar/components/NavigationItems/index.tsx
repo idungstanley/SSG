@@ -65,7 +65,7 @@ const navigation = [
   },
   {
     name: "Favorites",
-    href: "/",
+    href: "/favorites",
     source: favoriteIcon,
     alwaysShow: false,
   },
