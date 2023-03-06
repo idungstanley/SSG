@@ -8,13 +8,18 @@ import PilotSection, { pilotConfig } from "../PilotSection";
 import { UseGetFullTaskList } from "../../../../../features/task/taskService";
 import TaskTemplateData from "../../../tasks/component/taskData/TaskTemplateData";
 import NoTaskFound from "../../../tasks/component/taskData/NoTaskFound";
+import TaskTableTemplateData from "../../../tasks/component/taskData/TaskTableTemplateData";
+import { ImyTaskData } from "../../../../../features/task/taskSlice";
 
 function RenderHubs() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState([]);
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<{
+    [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
+  }>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { listView, tableView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem("hubDetailsStorage");
-  const hubdetail = JSON.parse(retrievedObject);
+  const hubdetail = JSON.parse(retrievedObject as string);
 
   // const { hubId } = useParams();
   const { data: TaskFullList, status } = UseGetFullTaskList({
@@ -28,10 +33,10 @@ function RenderHubs() {
 
   useEffect(() => {
     if (status !== "success") {
-      return setTaskDataGroupings([]);
+      return setTaskDataGroupings({});
     }
 
-    const taskDataGroupedByListID = unFilteredTaskData.reduce(
+    const taskDataGroupedByListID = unFilteredTaskData?.reduce(
       (GroupedTaskByListID, currentTask) => {
         if (!GroupedTaskByListID[currentTask.list_id]) {
           GroupedTaskByListID[currentTask.list_id] = {
@@ -48,7 +53,9 @@ function RenderHubs() {
     );
     setTaskDataGroupings(taskDataGroupedByListID);
 
-    return true;
+    return () => {
+      true;
+    };
   }, [unFilteredTaskData, status]);
 
   return (
@@ -60,27 +67,48 @@ function RenderHubs() {
           <ListNav
             navName={activeItemName}
             viewsList="List"
+            viewsList1="Table"
             viewsList2="Board"
             changeViews="View"
           />
         }
       >
-        <div className="pr-1 pt-0.5 w-full h-full">
-          <div
-            className="w-full overflow-auto"
-            style={{ minHeight: "0", maxHeight: "90vh" }}
-          >
-            <div className="w-full">
-              <ListFilter />
-            </div>
+        {listView && (
+          <div className="pr-1 pt-0.5 w-full h-full">
+            <div
+              className="w-full overflow-auto"
+              style={{ minHeight: "0", maxHeight: "90vh" }}
+            >
+              <div className="w-full">
+                <ListFilter />
+              </div>
 
-            {Object.keys(TaskDataGroupings).length === 0 ? (
-              <NoTaskFound />
-            ) : (
-              <TaskTemplateData filteredTaskData={TaskDataGroupings} />
-            )}
+              {Object.keys(TaskDataGroupings).length === 0 ? (
+                <NoTaskFound />
+              ) : (
+                <TaskTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+              {tableView && (
+                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+            </div>
           </div>
-        </div>
+        )}
+        {tableView && (
+          <div className="pr-1 pt-0.5 w-full h-full">
+            <div
+              className="w-full"
+              style={{ minHeight: "0", maxHeight: "90vh" }}
+            >
+              {/* <div className="w-full">
+                <ListFilter />
+              </div> */}
+              {tableView && (
+                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+            </div>
+          </div>
+        )}
       </PageWrapper>
     </>
   );

@@ -14,9 +14,60 @@ import { BsArrowsAngleExpand } from "react-icons/bs";
 import AssignTask from "../../assignTask/AssignTask";
 import { MdOutlineDragIndicator } from "react-icons/md";
 
-function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns, toggleAssignCurrentTaskId } =
-    useAppSelector((state) => state.task);
+// interface TaskTemplateData {
+//   filteredTaskData: {
+//     id: string;
+//     name: string;
+//     description: string;
+//     list_id: string;
+//     parent_id: null;
+//     priority: null;
+//     status: string;
+//     start_date: null;
+//     end_date: null;
+//     assignees: string[];
+//     group_assignees: string[];
+//     custom_fields: string[];
+//     tags: string[];
+//     updated_at: string;
+//     created_at: string;
+//     archived_at: null;
+//     deleted_at: null;
+//     directory_items: string[];
+//     list: {
+//       id: string;
+//       name: string;
+//       parents: {
+//         hubs: [
+//           {
+//             id: string;
+//             name: string;
+//             parent_id: null;
+//           }
+//         ];
+//         wallets: string[];
+//         lists: string[];
+//       };
+//     };
+//   };
+// }
+
+export interface ITaskTemplateData {
+  filteredTaskData: {
+    [key: string]: {
+      tasks: ImyTaskData[];
+      key: string;
+      groupListName: string;
+      [key: string]: ImyTaskData[] | string;
+    };
+  };
+}
+[];
+
+function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
+  const { hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector(
+    (state) => state.task
+  );
   const dispatch = useAppDispatch();
 
   const handleAssigneeModal = (id: string | undefined) => {
@@ -216,7 +267,7 @@ function TaskTableView() {
                       !columns.hidden && (
                         <th
                           scope="col"
-                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-x-2 border-gray-300"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase border-x-2 border-gray-300 whitespace-nowrap"
                           key={columns.field}
                         >
                           {columns.value}
@@ -228,7 +279,7 @@ function TaskTableView() {
                       !columns.hidden && (
                         <th
                           scope="col"
-                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2 border-gray-300"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase  border-2 border-x-2 border-gray-300 whitespace-nowrap"
                           key={columns.field}
                         >
                           {columns.value}
@@ -237,50 +288,59 @@ function TaskTableView() {
                   )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {myTaskData.map((task, index) => {
-              return (
-                <tr
-                  key={task.id}
-                  className=" bg-gray-50 hover:bg-purple-100 group"
-                >
-                  <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
-                    <div className="flex">
-                      <span className="opacity-0 group-hover:opacity-100">
-                        <MdOutlineDragIndicator />
-                      </span>
-                      <span className="group-hover:opacity-0">{index + 1}</span>
-                      <input
-                        type="checkbox"
-                        className="opacity-0 group-hover:opacity-100"
-                      />
-                    </div>
-                  </td>
-                  {taskColumns.map(
-                    (col) =>
-                      !col.hidden && (
-                        <td
-                          className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
-                          key={col.field}
-                        >
-                          {
-                            renderData(
-                              task[col.field],
-                              col.field,
-                              task
-                            ) as ReactNode
-                          }
-                        </td>
-                      )
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
+          {Object.keys(filteredTaskData).map((value) => (
+            <tbody
+              className="divide-y divide-gray-50"
+              key={filteredTaskData[value]?.key}
+            >
+              {filteredTaskData[value]?.tasks?.map(
+                (task: ImyTaskData, index: number) => {
+                  return (
+                    <tr
+                      key={task.id}
+                      className=" bg-gray-50 hover:bg-purple-100 group"
+                    >
+                      <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
+                        <div className="flex">
+                          <span className="opacity-0 group-hover:opacity-100">
+                            <MdOutlineDragIndicator />
+                          </span>
+                          <span className="group-hover:opacity-0">
+                            {index + 1}
+                          </span>
+                          <input
+                            type="checkbox"
+                            className="opacity-0 group-hover:opacity-100"
+                          />
+                        </div>
+                      </td>
+                      {taskColumns.map(
+                        (col) =>
+                          !col.hidden && (
+                            <td
+                              className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
+                              key={col.field}
+                            >
+                              {
+                                renderData(
+                                  task[col.field],
+                                  col.field,
+                                  task
+                                ) as ReactNode
+                              }
+                            </td>
+                          )
+                      )}
+                    </tr>
+                  );
+                }
+              )}
+            </tbody>
+          ))}
         </table>
       </div>
     </>
   );
 }
 
-export default TaskTableView;
+export default TaskTableTemplateData;

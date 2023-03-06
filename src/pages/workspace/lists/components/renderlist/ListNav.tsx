@@ -80,14 +80,13 @@ function ListNav({
               />
             </span>
             <span
-              className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer"
+              className="viewSettingsParent gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer"
               onClick={handleListView}
             >
               {viewsList}
-              <span className="opacity-0 group-hover:opacity-100 z-100">
+              <span>
                 <ListViewSettingsModal />
               </span>
-              <RxDividerVertical />
             </span>
           </span>
           <span className="flex items-center justify-start space-x-1">
@@ -102,7 +101,7 @@ function ListNav({
               onClick={handleTableView}
             >
               {viewsList1}
-              <span className="opacity-0 group-hover:opacity-100">
+              <span className="">
                 <BiDotsHorizontalRounded />
               </span>
             </span>
@@ -120,7 +119,7 @@ function ListNav({
             </span>
             <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {viewsList2}
-              <span className="opacity-0 group-hover:opacity-100">
+              <span className="">
                 <BiDotsHorizontalRounded />
               </span>
               <RxDividerVertical />
@@ -132,7 +131,7 @@ function ListNav({
             </span>
             <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
               {changeViews}
-              <span className="opacity-0 group-hover:opacity-100">
+              <span className="">
                 <BiDotsHorizontalRounded />
               </span>
             </span>
