@@ -110,7 +110,7 @@ export const UseUpdateChecklistService = ({
       enabled: checklist_id != null && triggerUpdate !== false,
       onSuccess: () => {
         dispatch(setTriggerChecklistUpdate(false));
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries(["checklist"]);
       },
     }
   );
