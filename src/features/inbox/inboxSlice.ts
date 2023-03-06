@@ -49,16 +49,16 @@ export const inboxSlice = createSlice({
       state.assignedInboxIds = [];
       state.processingAssignInboxIds = [];
     },
-    setSelectedInboxTabKey: (state, action) => {
+    setSelectedInboxTabKey: (state, action: PayloadAction<string>) => {
       state.selectedInboxTabKey = action.payload;
     },
-    addFolderForFiling: (state, action) => {
+    addFolderForFiling: (state, action: PayloadAction<string>) => {
       state.folderIdsForFiling.push(action.payload);
     },
-    removeFolderForFiling: (state, action) => {
+    removeFolderForFiling: (state, action: PayloadAction<string>) => {
       state.folderIdsForFiling = state.folderIdsForFiling.filter((folderId) => folderId !== action.payload);
     },
-    setSearchFoldersQuery: (state, action) => {
+    setSearchFoldersQuery: (state, action: PayloadAction<{ query: string }>) => {
       state.searchFoldersQuery = action.payload.query;
     }
   },

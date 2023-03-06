@@ -26,7 +26,7 @@ export default function PermissionsCheckbox({ teamMemberRoleKey, workspacePermis
   // Mutations
   const changeRolePermissionMutation = useMutation(changeRolePermissionService, {
     onSuccess: (successData) => {
-      const updatedPermissions: IPermission[] = successData.data.updated_permissions;
+      const updatedPermissions = successData.data.updated_permissions as IPermission[];
 
       updatedPermissions.map((updatedPermissionValue) =>
         queryClient.setQueryData(

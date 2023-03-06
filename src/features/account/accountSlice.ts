@@ -24,7 +24,7 @@ interface AccountState {
 
 const initialState: AccountState = {
   settings: {
-    showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false
+    showPreview: JSON.parse(showPreviewFromLS ?? 'false') as boolean
   },
   showSidebar
 };

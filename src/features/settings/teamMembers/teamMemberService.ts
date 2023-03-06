@@ -43,7 +43,7 @@ export const useGetTeamMember = (teamMemberId: string) => {
   return useQuery<ITeamMember>(
     ['team_member', teamMemberId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<{ data: { team_member: ITeamMember } }>(
         {
           url: `settings/team-members/${teamMemberId}`,
           method: 'GET'
@@ -61,7 +61,7 @@ export const useGetTeamMember = (teamMemberId: string) => {
 
 // Deactivate team member service
 export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { team_member: ITeamMember } }>(
     {
       url: `/settings/team-members/${data.teamMemberId}/deactivate`,
       method: 'POST'
@@ -83,7 +83,7 @@ export function useDeactivateTeamMember(teamMemberId: string) {
 
 // Reactivate team member service
 export const reactivateTeamMemberService = async (data: { teamMemberId: string }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { team_member: ITeamMember } }>(
     {
       url: `/settings/team-members/${data.teamMemberId}/reactivate`,
       method: 'POST'

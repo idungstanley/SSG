@@ -26,7 +26,7 @@ export const useGetMyWorkspaces = () => {
 
 // Switch workspace service
 export const switchWorkspaceService = async (data: { workspaceId: string }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { workspace: { id: string } } }>(
     {
       url: `auth/account/workspaces/${data.workspaceId}/switch`,
       method: 'POST'

@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
 // Get user credentials from localStorage
-const UserFromLS = JSON.parse(localStorage.getItem('user') || 'null');
-const AccessTokenFromLS = JSON.parse(localStorage.getItem('accessToken') || 'null');
-const CurrentWorkspaceIdFromLS = JSON.parse(localStorage.getItem('currentWorkspaceId') || 'null');
-const CurrentUserIdFromLS = JSON.parse(localStorage.getItem('currentUserId') || 'null');
+const UserFromLS = JSON.parse(localStorage.getItem('user') || 'null') as IUser;
+const AccessTokenFromLS = JSON.parse(localStorage.getItem('accessToken') || 'null') as string;
+const CurrentWorkspaceIdFromLS = JSON.parse(localStorage.getItem('currentWorkspaceId') || 'null') as string;
+const CurrentUserIdFromLS = JSON.parse(localStorage.getItem('currentUserId') || 'null') as string;
 
 export interface IUser {
   avatar_path: null | string;

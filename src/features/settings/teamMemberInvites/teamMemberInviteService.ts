@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { ITeamMemberInvitesReq } from './teamMemberInvites.interface';
+import { IUser } from '../../auth/authSlice';
+import { ITeamMemberInviteRes, ITeamMemberInvitesReq } from './teamMemberInvites.interface';
 
-const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') as string);
+const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
 
 // Get team member invites
 export const useGetTeamMemberInvites = (page: number) => {
@@ -41,7 +42,7 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
   return useQuery(
     ['team_member_invite', teamMemberInviteId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITeamMemberInviteRes>(
         {
           url: `settings/team-member-invites/${teamMemberInviteId}`,
           method: 'GET'
@@ -62,7 +63,7 @@ export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
   return useQuery(
     ['team_member_invite', inviteCode],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<{ data: { user: IUser } }>(
         {
           url: `workspace/accept-invite/${inviteCode}`,
           method: 'POST'

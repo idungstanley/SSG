@@ -189,10 +189,10 @@ export const useAddOrRemoveItemToOrFromLink = (linkId?: string) => {
   });
 };
 
-const getPublishLink = (data: { linkId: string; expiresIn: expiresIn }): Promise<IPublishRes> => {
+const getPublishLink = (data: { linkId: string; expiresIn: expiresIn }) => {
   const { linkId, expiresIn } = data;
 
-  const response = requestNew({
+  const response = requestNew<IPublishRes>({
     url: `share-documents-links/${linkId}/publish`,
     method: 'POST',
     data: {

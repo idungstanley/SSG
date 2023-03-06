@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Uppy from '@uppy/core';
+import Uppy, { SuccessResponse } from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
@@ -10,8 +10,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSlice';
 import { useAppSelector } from '../app/hooks';
 
-const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
-const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || 'null');
+const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null') as string | null;
+const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
 const headers = {
   Authorization: `Bearer ${accessToken}`,
@@ -43,9 +43,9 @@ export default function UploadModal() {
 
   const { xhrUpload } = uppy.getState();
 
-  uppy.on('upload-success', (file, response) => {
+  uppy.on('upload-success', (file, response: SuccessResponse) => {
     const httpStatus = response.status;
-    const httpBody = response.body;
+    const httpBody = response.body as { success: boolean };
 
     if (httpStatus === 200) {
       if (httpBody.success === true) {

@@ -4,13 +4,10 @@ import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
 import { explorerItemType } from '../types';
 
-const accessTokenLS = localStorage.getItem('accessToken') || 'null';
-const currentWorkspaceIdLS = localStorage.getItem('currentWorkspaceId') || 'null';
-
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
-  const accessToken = JSON.parse(accessTokenLS);
-  const currentWorkspaceId = JSON.parse(currentWorkspaceIdLS);
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || '""') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
   const endpoint = type === 'inboxFile' ? `${baseUrl}/inbox-files/${id}/contents` : `${baseUrl}/files/${id}/contents`;
 
   const response = await axios.get(endpoint, {
@@ -21,9 +18,10 @@ export async function GetFileWithHeaders(type: string, id: string) {
     responseType: 'arraybuffer'
   });
 
-  const data = `data:${response.headers['content-type']};base64,${Buffer.from(response.data, 'binary').toString(
-    'base64'
-  )}`;
+  const data = `data:${response.headers['content-type']};base64,${Buffer.from(
+    response.data as string,
+    'binary'
+  ).toString('base64')}`;
   return data;
 }
 
@@ -31,8 +29,8 @@ export async function DownloadFile(type: explorerItemType | 'inbox' | string, id
   let endpoint = '';
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
-  const accessToken = JSON.parse(accessTokenLS);
-  const currentWorkspaceId = JSON.parse(currentWorkspaceIdLS);
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || '""') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
   if (type === 'inboxFile') {
     endpoint = `${baseUrl}/inbox-files/${id}/download`;
@@ -50,7 +48,7 @@ export async function DownloadFile(type: explorerItemType | 'inbox' | string, id
     responseType: 'blob' // Important
   });
 
-  fileDownload(response.data, name);
+  fileDownload(response.data as string, name);
 }
 
 export function OutputDateTime(timestamp: string, format = null, timezone = null) {

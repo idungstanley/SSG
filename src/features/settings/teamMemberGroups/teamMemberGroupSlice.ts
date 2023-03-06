@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../../auth/authSlice';
 
 interface teamMemberGroupState {
@@ -24,10 +24,10 @@ export const teamMemberGroupSlice = createSlice({
     goToNextTeamMemberGroupsPage: (state) => {
       state.teamMemberGroupsPaginationPage += 1;
     },
-    setTeamMemberGroupsPage: (state, action) => {
+    setTeamMemberGroupsPage: (state, action: PayloadAction<number>) => {
       state.teamMemberGroupsPaginationPage = action.payload;
     },
-    setSelectedTeamMemberGroup: (state, action) => {
+    setSelectedTeamMemberGroup: (state, action: PayloadAction<string>) => {
       state.selectedTeamMemberGroupId = action.payload;
     }
   },

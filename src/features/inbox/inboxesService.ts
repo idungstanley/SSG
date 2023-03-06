@@ -150,7 +150,7 @@ export const useGetPinnedInbox = (inboxId: string) => {
 
 // Create inbox
 export const createInboxService = async (data: { name: string; emailUsername: string }) => {
-  const response = requestNew({
+  const response = requestNew<{ data: { inbox: { id: string } } }>({
     url: 'inboxes',
     method: 'POST',
     data: {
@@ -182,7 +182,7 @@ export function usePinOrUnpinInbox() {
 // Get total inbox unfiled account
 export const useGetInboxUnfiledCount = () =>
   useQuery(['inboxes_unfiled_count'], async () => {
-    const data = await requestNew({
+    const data = await requestNew<{ data: { unfiled_count: number } }>({
       url: 'inboxes/unfiled-count',
       method: 'GET'
     });
@@ -280,14 +280,14 @@ export const useGetResponsibleInboxes = () => {
 
 // blacklist
 export const getBlacklistFiles = () => {
-  const request = requestNew({
+  const request = requestNew<IBlackListInboxFilesReq>({
     url: 'blacklist-inbox-files',
     method: 'GET'
   });
   return request;
 };
 
-export const useGetBlacklistFiles = () => useQuery<IBlackListInboxFilesReq>(['blacklist-files'], getBlacklistFiles);
+export const useGetBlacklistFiles = () => useQuery(['blacklist-files'], getBlacklistFiles);
 
 const blacklistFile = (data: { type: 'add' | string; fileId: string | null }) => {
   const url = data.type === 'add' ? `inbox-files/${data.fileId}/blacklist` : `blacklist-inbox-files/${data.fileId}`;

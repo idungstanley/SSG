@@ -14,12 +14,12 @@ import {
 export const useGetInboxFiles = ({ inboxId, isArchived }: { inboxId?: string | null; isArchived: boolean }) => {
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery<IInboxFilesReq>(
+  return useInfiniteQuery(
     ['inbox_files', inboxId, { isArchived: isArchived ? 1 : 0 }],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
       const url = `inboxes/${inboxId}/inbox-files`;
 
-      return requestNew({
+      return requestNew<IInboxFilesReq>({
         url,
         method: 'GET',
         params: {
@@ -69,12 +69,12 @@ export const useGetInboxFileFullDetails = (inboxFileId: string | null) => {
   return useQuery(
     ['inbox_file_full_details', inboxFileId],
     () =>
-      requestNew({
+      requestNew<{ data: { inbox_file: IInboxFile; inbox_file_source: { in_inbox_ids: string[] } } }>({
         url,
         method: 'GET'
       }),
     {
-      select: (data) => data.data.inbox_file,
+      select: (data) => data.data,
       enabled: !!inboxFileId,
       staleTime: 0 // So it refetches which inboxes the file is assigned to
     }
@@ -121,7 +121,7 @@ export const useGetSearchFoldersForFilingResult = (folderId: string) => {
 
 // File inbox file
 export const fileInboxFileService = async (data: { folderIds: string[]; inboxFileId?: string }) => {
-  const response = requestNew({
+  const response = requestNew<{ data: { inbox_file: { id: string; inbox_id: string } } }>({
     url: `inbox-files/${data.inboxFileId}/file`,
     method: 'POST',
     params: {
@@ -142,7 +142,7 @@ const assignOrUnassignInboxFile = (data: { isAssigned: boolean; inboxId: string;
         assign_to_inbox_id: data.inboxId
       };
 
-  const response = requestNew({
+  const response = requestNew<{ data: { copied_to_inbox_id: string } }>({
     url,
     method: 'POST',
     params
@@ -162,7 +162,7 @@ export const useAssignOrUnassignInboxFile = (fileId: string | null) => {
 };
 
 const archiveOrUnarchiveInboxFile = (data: { inboxFileId: string; type: 'archive' | 'unarchive' }) => {
-  const response = requestNew({
+  const response = requestNew<{ data: { inbox_file: { id: string; inbox_id: string } } }>({
     url: `inbox-files/${data.inboxFileId}/${data.type}`,
     method: 'POST'
   });
@@ -190,7 +190,7 @@ export const multipleArchiveOrUnarchiveInboxFiles = (data: {
 }) => {
   // type: archive / unarchive
 
-  const request = requestNew({
+  const request = requestNew<{ data: { inbox_file: { id: string; inbox_id: string } } }>({
     url: `inboxes/${data.inboxId}/${data.type}-multiple-files`,
     method: 'POST',
     data: {

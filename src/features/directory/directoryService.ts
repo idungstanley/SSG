@@ -14,10 +14,10 @@ import {
 
 // request includes both fetch with and within tree
 export const useGetDirectories = (parentId?: string, includeTree?: boolean) =>
-  useQuery<IDirectoriesRes, unknown, IDirectory[]>(
+  useQuery(
     ['directory-p', includeTree ? 'tree-' + parentId : parentId || 'root'],
     () =>
-      requestNew(
+      requestNew<IDirectoriesRes>(
         {
           url: `directories${includeTree ? '/' + parentId : ''}`,
           method: 'GET',

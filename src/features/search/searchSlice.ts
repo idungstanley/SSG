@@ -32,7 +32,14 @@ export const searchSlice = createSlice({
       state.selectedItemType = null;
       state.selectedItemPath = null;
     },
-    setSelectedItem: (state, action) => {
+    setSelectedItem: (
+      state,
+      action: PayloadAction<{
+        selectedItemId: null | string;
+        selectedItemType: null | string;
+        selectedItemPath: null | string;
+      }>
+    ) => {
       state.selectedItemId = action.payload.selectedItemId;
       state.selectedItemType = action.payload.selectedItemType;
       state.selectedItemPath = action.payload.selectedItemPath;

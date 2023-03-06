@@ -24,7 +24,7 @@ interface TabsProps {
   tabs: IPilotTab[];
 }
 
-const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(localStorage.getItem('pilot') || '""');
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
 interface ShowTabsLabelToggleProps {
   showTabLabel: boolean;
   setShowTabLabel: (i: boolean) => void;
@@ -92,7 +92,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
             'pilot',
             JSON.stringify({
               ...pilotFromLS,
-              tabOrder: [...sortArray.map((i: { id: string }) => i.id)]
+              tabOrder: [...sortArray.map((i) => i.id)]
             })
           );
 

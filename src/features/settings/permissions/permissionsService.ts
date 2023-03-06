@@ -1,22 +1,26 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { IPermission, IPermissionFromList } from './permissions.interfaces';
+import { IPermission, IPermissionFromList, IPermissionsReq } from './permissions.interfaces';
 
 // Get permissions list
 export const useGetPermissionsList = () =>
-  useQuery<IPermissionFromList[]>(['workspace_permissions_list'], async () => {
-    const url = 'settings/permissions';
+  useQuery(
+    ['workspace_permissions_list'],
+    async () => {
+      const url = 'settings/permissions';
 
-    const data = await requestNew(
-      {
-        url,
-        method: 'GET'
-      },
-      true
-    );
+      const data = await requestNew<{ data: { permissions: IPermissionFromList[] } }>(
+        {
+          url,
+          method: 'GET'
+        },
+        true
+      );
 
-    return data.data.permissions;
-  });
+      return data;
+    },
+    { select: (res) => res }
+  );
 
 // Get permissions values
 export const useGetPermissionsValues = () => {
@@ -27,7 +31,7 @@ export const useGetPermissionsValues = () => {
     async () => {
       const url = 'settings/permissions/roles';
 
-      const data = await requestNew(
+      const data = await requestNew<IPermissionsReq>(
         {
           url,
           method: 'GET'
@@ -95,7 +99,7 @@ export const changeRolePermissionService = (data: {
   workspacePermissionKey: string;
   isPermissionAllowed: number;
 }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { updated_permissions: IPermission[] } }>(
     {
       url: 'settings/permissions/change-role-permission',
       method: 'POST',

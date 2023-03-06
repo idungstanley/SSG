@@ -4,7 +4,12 @@ import { IUser } from './authSlice';
 
 // Login
 const loginService = (data: { email: string; password: string }) => {
-  const response = requestNew(
+  const response = requestNew<{
+    data: {
+      token: { accessToken: string; token: { user_id: string } };
+      user: IUser;
+    };
+  }>(
     {
       url: 'auth/login',
       method: 'POST',
@@ -20,17 +25,17 @@ const loginService = (data: { email: string; password: string }) => {
 
 export const useLoginService = () =>
   useMutation(loginService, {
-    onSuccess: (res: {
-      data: {
-        token: { accessToken: string; token: { user_id: string } };
-        user: IUser;
-      };
-    }) => res.data
+    onSuccess: (res) => res.data
   });
 
 // Login by Google
 const loginGoogleService = (data: { code: string; inviteCode?: string }) => {
-  const response = requestNew(
+  const response = requestNew<{
+    data: {
+      token: { accessToken: string; token: { user_id: string } };
+      user: IUser;
+    };
+  }>(
     {
       url: 'auth/social/google',
       method: 'POST',
@@ -46,17 +51,17 @@ const loginGoogleService = (data: { code: string; inviteCode?: string }) => {
 
 export const useLoginGoogleService = () =>
   useMutation(loginGoogleService, {
-    onSuccess: (res: {
-      data: {
-        token: { accessToken: string; token: { user_id: string } };
-        user: IUser;
-      };
-    }) => res.data
+    onSuccess: (res) => res.data
   });
 
 // Register
 const registerService = (data: { name: string; email: string; password: string; inviteCode?: string }) => {
-  const response = requestNew(
+  const response = requestNew<{
+    data: {
+      token: { accessToken: string; token: { user_id: string } };
+      user: IUser;
+    };
+  }>(
     {
       url: 'auth/register',
       method: 'POST',
@@ -75,12 +80,7 @@ const registerService = (data: { name: string; email: string; password: string; 
 
 export const useRegisterService = () =>
   useMutation(registerService, {
-    onSuccess: (res: {
-      data: {
-        token: { accessToken: string; token: { user_id: string } };
-        user: IUser;
-      };
-    }) => res.data
+    onSuccess: (res) => res.data
   });
 
 // Logout

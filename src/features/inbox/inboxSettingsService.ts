@@ -175,7 +175,7 @@ export const useGetTeamMembersOrGroups = ({ query, isGroups }: { query: string; 
           url,
           method: 'GET',
           params: {
-            page: pageParam,
+            page: pageParam as number,
             search: query
           }
         },

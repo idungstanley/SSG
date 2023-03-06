@@ -1,49 +1,51 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { FileIcon } from '../../../../common';
 import { useGetSearchedItemDetails } from '../../../../features/search/searchService';
-import { resetSelectedItem, setSearchQuery } from '../../../../features/search/searchSlice';
+import {
+  resetSelectedItem
+  // setSearchQuery
+} from '../../../../features/search/searchSlice';
 import { OutputDateTime, OutputFileSize } from '../../../../app/helpers';
 import { Button } from '../../../../components';
 import { useAppSelector } from '../../../../app/hooks';
 
 function Preview() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { selectedItemId, selectedItemType, selectedItemPath } = useAppSelector((state) => state.search);
 
-  const isExplorerFile = selectedItemPath === 'Explorer' && selectedItemType === 'file';
-  const isInboxFile = selectedItemPath === 'Inbox';
+  // const isExplorerFile = selectedItemPath === 'Explorer' && selectedItemType === 'file';
+  // const isInboxFile = selectedItemPath === 'Inbox';
 
   const { data } = useGetSearchedItemDetails({
     type: selectedItemPath === 'Explorer' ? `${selectedItemType}s` : 'inbox-files',
     id: selectedItemId
   });
 
-  const item = isExplorerFile ? data?.data.file : isInboxFile ? data?.data.inbox_file : data?.data.folder;
+  // const item = isExplorerFile ? data?.data.file : isInboxFile ? data?.data.inbox_file : data?.data.folder;
 
-  const name = isExplorerFile ? item?.display_name : isInboxFile ? item?.inbox_file_source.display_name : item?.name;
-  const icon = isExplorerFile
-    ? item?.file_format.extension
-    : isInboxFile
-    ? item?.inbox_file_source.file_format.extension
-    : 'folder';
+  const name = 'folder 1'; // isExplorerFile ? item?.display_name : isInboxFile ? item?.inbox_file_source.display_name : item?.name;
+  const icon = 'folder'; // isExplorerFile
+  // ? item?.file_format.extension
+  // : isInboxFile
+  // ? item?.inbox_file_source.file_format.extension
+  // : 'folder';
 
-  const createdAt = item?.created_at;
-  const updatedAt = item?.updated_at;
-  const size = isInboxFile ? item?.inbox_file_source.size : isExplorerFile ? item?.size : null;
+  const createdAt = '01/02/2003'; // item?.created_at;
+  const updatedAt = '01/02/2003'; // item?.updated_at;
+  const size = null; // isInboxFile ? item?.inbox_file_source.size : isExplorerFile ? item?.size : null;
 
   const onShowInFolder = () => {
-    const path = isInboxFile
-      ? `/inbox/${item?.inbox_id}`
-      : isExplorerFile
-      ? `/explorer/${item?.folder_id || ''}`
-      : `/explorer/${item?.parent_id || ''}`;
-
-    navigate(path);
-    dispatch(setSearchQuery(''));
+    //   const path = isInboxFile
+    //     ? `/inbox/${item?.inbox_id}`
+    //     : isExplorerFile
+    //     ? `/explorer/${item?.folder_id || ''}`
+    //     : `/explorer/${item?.parent_id || ''}`;
+    //   navigate(path);
+    //   dispatch(setSearchQuery(''));
   };
 
   return data ? (

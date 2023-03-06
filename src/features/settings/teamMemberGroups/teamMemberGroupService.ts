@@ -39,10 +39,10 @@ export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
 export const useGetTeamMemberGroup = (teamMemberGroupId?: string) => {
   const queryClient = useQueryClient();
 
-  return useQuery<ITeamMemberGroupsReq>(
+  return useQuery(
     ['team_member_group', teamMemberGroupId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITeamMemberGroupsReq>(
         {
           url: `settings/team-member-groups/${teamMemberGroupId}`,
           method: 'GET'
