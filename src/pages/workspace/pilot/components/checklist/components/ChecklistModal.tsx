@@ -5,11 +5,13 @@ import {
   setClickChecklistId,
   setClickChecklistItemId,
   setToggleAssignChecklistItemId,
-  setTriggerDelChecklist,
-  setTriggererChecklistItemDel,
 } from "../../../../../../features/task/checklist/checklistSlice";
 import { useAppDispatch } from "../../../../../../app/hooks";
 import { Disclosure } from "@headlessui/react";
+import {
+  useDeleteChecklist,
+  useDeleteChecklistItem,
+} from "../../../../../../features/task/checklist/checklistService";
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -30,15 +32,20 @@ export default function ChecklistModal({
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
+  const { mutate: onChecklistDelete } = useDeleteChecklist();
+  const { mutate: onChecklistItemDelete } = useDeleteChecklistItem();
+
   const handleDelChecklist = () => {
-    dispatch(setClickChecklistId(checklistId));
-    dispatch(setTriggerDelChecklist(true));
+    onChecklistDelete({
+      query: checklistId,
+    });
   };
 
   const handleChecklistItemDel = () => {
-    dispatch(setClickChecklistId(checklistId));
-    dispatch(setClickChecklistItemId(checklistItemId));
-    dispatch(setTriggererChecklistItemDel(true));
+    onChecklistItemDelete({
+      query: checklistId,
+      itemId: checklistItemId,
+    });
   };
   const handleOptions = (option: { name: string }) => {
     if (option.name === "Delete Checklist") {
