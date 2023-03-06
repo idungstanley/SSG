@@ -1,10 +1,10 @@
+import React from "react";
 import { MdPersonOutline } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { BsPencil } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineNoAccounts } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
-import React from "react";
 
 export const completeOptions = [
   {
@@ -34,9 +34,7 @@ export const completeOptions = [
   {
     id: 5,
     name: "Delete Checklist",
-    handleClick: () => {
-      // const dispatch = useAppDispatch();
-    },
+    handleClick: () => ({}),
     icon: <RiDeleteBin6Line />,
   },
 ];
