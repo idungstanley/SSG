@@ -54,11 +54,11 @@ export default function ChecklistModal({
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
-    } else if (option.name == "Assign to" || option.name == "Unassign") {
+    } else if (option.name === "Assign to" || option.name == "Unassign") {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
-    } else if (option.name == "Rename") {
+    } else if (option.name === "Rename") {
       focus();
     }
   };
