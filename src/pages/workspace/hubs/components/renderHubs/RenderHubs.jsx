@@ -8,10 +8,12 @@ import PilotSection, { pilotConfig } from "../PilotSection";
 import { UseGetFullTaskList } from "../../../../../features/task/taskService";
 import TaskTemplateData from "../../../tasks/component/taskData/TaskTemplateData";
 import NoTaskFound from "../../../tasks/component/taskData/NoTaskFound";
+import TaskTableTemplateData from "../../../tasks/component/taskData/TaskTableTemplateData";
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState([]);
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { listView, tableView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem("hubDetailsStorage");
   const hubdetail = JSON.parse(retrievedObject);
@@ -60,27 +62,48 @@ function RenderHubs() {
           <ListNav
             navName={activeItemName}
             viewsList="List"
+            viewsList1="Table"
             viewsList2="Board"
             changeViews="View"
           />
         }
       >
-        <div className="pr-1 pt-0.5 w-full h-full">
-          <div
-            className="w-full overflow-auto"
-            style={{ minHeight: "0", maxHeight: "90vh" }}
-          >
-            <div className="w-full">
-              <ListFilter />
-            </div>
+        {listView && (
+          <div className="pr-1 pt-0.5 w-full h-full">
+            <div
+              className="w-full overflow-auto"
+              style={{ minHeight: "0", maxHeight: "90vh" }}
+            >
+              <div className="w-full">
+                <ListFilter />
+              </div>
 
-            {Object.keys(TaskDataGroupings).length === 0 ? (
-              <NoTaskFound />
-            ) : (
-              <TaskTemplateData filteredTaskData={TaskDataGroupings} />
-            )}
+              {Object.keys(TaskDataGroupings).length === 0 ? (
+                <NoTaskFound />
+              ) : (
+                <TaskTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+              {tableView && (
+                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+            </div>
           </div>
-        </div>
+        )}
+        {tableView && (
+          <div className="pr-1 pt-0.5 w-full h-full">
+            <div
+              className="w-full"
+              style={{ minHeight: "0", maxHeight: "90vh" }}
+            >
+              {/* <div className="w-full">
+                <ListFilter />
+              </div> */}
+              {tableView && (
+                <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />
+              )}
+            </div>
+          </div>
+        )}
       </PageWrapper>
     </>
   );

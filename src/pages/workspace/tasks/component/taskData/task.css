@@ -18,8 +18,12 @@
   background: #fff;
   overflow-y: hidden;
 }
-.scrollbarDynCol:hover {
+/* .scrollbarDynCol:hover {
   overflow-y: auto;
+} */
+
+.viewSettings {
+  display: none;
 }
 
 .comfortableView {
@@ -43,4 +47,8 @@
 .compactViewWrap {
   min-height: 20px;
   white-space: normal;
+}
+
+.viewSettingsParent:hover .viewSettings {
+  display: block;
 }

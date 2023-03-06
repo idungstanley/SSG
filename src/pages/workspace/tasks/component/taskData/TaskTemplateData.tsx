@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -21,12 +20,16 @@ import { setAddNewTaskItem } from "../../../../../features/task/taskSlice";
 import AddNewItem from "../taskColumn/AddNewItem";
 import SubTask from "../../subtasks/create/SubTask";
 import RenderSubTasks from "../../subtasks/subtask1/RenderSubTasks";
+import { ITaskTemplateData } from "./TaskTableTemplateData";
 
-export default function TaskTemplateData({ filteredTaskData }) {
+export default function TaskTemplateData({
+  filteredTaskData,
+}: ITaskTemplateData) {
   const dispatch = useDispatch();
   const { createTaskFromTop, currentListId } = useAppSelector(
     (state) => state.list
   );
+  // console.log(filteredTaskData);
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector(
     (state) => state.task
   );
@@ -164,41 +167,3 @@ export default function TaskTemplateData({ filteredTaskData }) {
     </main>
   );
 }
-
-TaskTemplateData.propTypes = {
-  filteredTaskData: {
-    id: PropTypes.string,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    list_id: PropTypes.string,
-    parent_id: null,
-    priority: null,
-    status: PropTypes.string,
-    start_date: null,
-    end_date: null,
-    assignees: PropTypes.array,
-    group_assignees: PropTypes.array,
-    custom_fields: PropTypes.array,
-    tags: PropTypes.array,
-    updated_at: PropTypes.string,
-    created_at: PropTypes.string,
-    archived_at: null,
-    deleted_at: null,
-    directory_items: PropTypes.array,
-    list: {
-      id: PropTypes.string,
-      name: PropTypes.string,
-      parents: {
-        hubs: [
-          {
-            id: PropTypes.string,
-            name: PropTypes.string,
-            parent_id: null,
-          },
-        ],
-        wallets: PropTypes.array,
-        lists: PropTypes.array,
-      },
-    },
-  },
-};
