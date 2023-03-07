@@ -36,14 +36,14 @@ export default function HubItem({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: "hubs",
+        SubMenuType: type == "hub" ? "hubs" : "subhub",
       })
     );
   };
 
   return (
     <div
-      className={`flex justify-between items-center hover:bg-gray-100 ${
+      className={`flex justify-between items-center hover:bg-gray-100 group ${
         item.id === activeItemId && "bg-green-100 text-green-500"
       }`}
       tabIndex={0}

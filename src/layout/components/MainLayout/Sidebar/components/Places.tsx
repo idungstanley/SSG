@@ -7,7 +7,6 @@ import Dashboard from '../../../../../pages/workspace/dashboard';
 import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,59 +22,60 @@ import { FaHandsHelping, FaRoute } from 'react-icons/fa';
 import { MdAlternateEmail } from 'react-icons/md';
 import { InboxStackIcon } from '@heroicons/react/24/solid';
 import Email from '../../../../../pages/workspace/email';
+import { BsListCheck } from 'react-icons/bs';
 
 const places = [
   {
-    name: 'Email',
+    name: "Email",
     id: 1,
     place: <Email />,
     icon: <MdAlternateEmail className="w-4 h-4" />,
   },
   {
-    name: 'TASKS',
+    name: "TASKS",
     id: 2,
     place: <Hubs />,
-    source: hubIcon,
+    icon: <BsListCheck className="w-4 h-4" />,
   },
   {
-    name: 'In-tray',
+    name: "In-tray",
     id: 3,
     place: <Inbox />,
     icon: <InboxStackIcon className="w-4 h-4" />,
   },
   {
-    name: 'Cabinet',
+    name: "Cabinet",
     id: 4,
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'explorer',
+    link: "explorer",
   },
   {
-    name: 'Forms',
+    name: "Forms",
     id: 6,
     place: <Files />,
     icon: <DocumentTextIcon className="w-4 h-4" />,
   },
   {
-    name: 'Time clock',
+    name: "Time clock",
     id: 7,
     place: <Dashboard />,
     icon: <ClockIcon className="w-4 h-4" />,
   },
   {
-    name: 'Route Planner',
+    name: "Route Planner",
     id: 8,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />,
   },
   {
-    name: 'Also HR',
+    name: "Also HR",
     id: 9,
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />,
   },
   {
-    name: 'Commerce',
+    name: "Commerce",
     id: 10,
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />,
