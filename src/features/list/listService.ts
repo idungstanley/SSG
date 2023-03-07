@@ -3,6 +3,7 @@ import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
+import { IWalletRes } from '../wallet/wallet.interfaces';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew(
@@ -54,7 +55,7 @@ export const getListsListService = (data: { queryKey: (string | undefined)[] }) 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(['wallet', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
-    requestNew(
+    requestNew<IWalletRes | undefined>(
       {
         url: 'lists',
         method: 'GET',

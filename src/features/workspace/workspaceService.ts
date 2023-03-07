@@ -1,6 +1,6 @@
 import requestNew from '../../app/requestNew';
 import { useQuery } from '@tanstack/react-query';
-import { IWorkspaceRes } from './workspace.interfaces';
+import { IAllWorkspacesRes, IWorkspaceRes } from './workspace.interfaces';
 
 interface IData {
   name: string | number;
@@ -39,7 +39,7 @@ export const getWorkspaceService = () => {
 
 export const getAllWorkSpaceService = () => {
   return useQuery(['workspaces'], async () => {
-    const data = await requestNew(
+    const data = await requestNew<IAllWorkspacesRes | undefined>(
       {
         url: 'auth/account/workspaces',
         method: 'GET'

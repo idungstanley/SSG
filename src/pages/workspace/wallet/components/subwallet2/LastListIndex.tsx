@@ -43,7 +43,7 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
 
   return dataList?.data.lists != null ? (
     <section>
-      {dataList?.data?.lists.map((list: dataProps) => (
+      {dataList?.data.lists.map((list: dataProps) => (
         <div key={list.id}>
           <section className="flex items-center justify-between pl-20 space-x-1 text-sm h-8 mr-6 hover:bg-gray-100">
             <div className="flex items-center space-x-1">

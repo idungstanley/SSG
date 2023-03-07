@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes } from './interface.tasks';
+import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
@@ -10,6 +10,7 @@ import {
 } from './taskSlice';
 import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
+import { IWatchersRes } from '../general/watchers/watchers.interface';
 
 export const createTaskService = (data: {
   name: string;
@@ -375,12 +376,10 @@ export const GetTimeEntriesService = ({
   taskId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
-  // const queryClient = useQueryClient();
-  // const dispatch = useDispatch();
   return useQuery(
     ['timeclock', { taskId: taskId }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITimeEntriesRes | undefined>(
         {
           url: 'time-entries',
           method: 'GET',
@@ -464,7 +463,7 @@ export const UseGetWatcherService = (taskId: { query: string | null | undefined 
   return useQuery(
     ['watcher', taskId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<IWatchersRes | undefined>(
         {
           url: 'watch',
           method: 'GET',

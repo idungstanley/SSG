@@ -30,10 +30,8 @@ export default function WorkspaceSettingsModal() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data } = getAllWorkSpaceService();
+  const { data: AllMyWorkSpace } = getAllWorkSpaceService();
   const { data: currentWorkspaceName } = getWorkspaceService();
-
-  const AllMyWorkspace = data?.data.workspaces;
 
   const workspaceSettingsList: workspaceSettingsListType[] = [
     {
@@ -154,7 +152,7 @@ export default function WorkspaceSettingsModal() {
                 </span>
               </div>
               <div>
-                {AllMyWorkspace?.map((i: WorkspaceProps) => (
+                {AllMyWorkSpace?.data.workspaces.map((i: WorkspaceProps) => (
                   <Menu.Item key={i.id}>
                     {({ active }) => (
                       <button

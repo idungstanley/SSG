@@ -43,7 +43,6 @@ export default function TimeEntries() {
     setShowEntries(!showEntries);
     refetch();
   };
-  const totalDuration = getEntries?.data.total_duration;
   return (
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
@@ -63,11 +62,11 @@ export default function TimeEntries() {
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
             </div>
             {/* total time here */}
-            <p>{moment.utc(totalDuration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc(getEntries.data.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
-            getEntries?.data?.time_entries?.map(
+            getEntries?.data.time_entries.map(
               (entries: {
                 id: string;
                 duration: number;

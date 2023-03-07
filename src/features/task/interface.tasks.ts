@@ -1,4 +1,4 @@
-import { ImyTaskData } from "./taskSlice";
+import { ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
   task_id: string | null;
@@ -78,5 +78,25 @@ export interface KeyItemTypes {
 export interface ITaskRes {
   data: {
     task: ITaskFullList;
+  };
+}
+
+export interface IEntries {
+  id: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  description: string;
+}
+
+export interface ITimeEntriesRes {
+  data: {
+    time_entries: IEntries[];
+    total_duration: number;
+    pagination: {
+      page: number;
+      per_page: number;
+      has_more_pages: boolean;
+    };
   };
 }
