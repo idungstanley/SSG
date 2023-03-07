@@ -27,8 +27,6 @@ interface nameType {
 }
 
 function Favourite({ item }: nameType) {
-  //   console.log(item.model_type);
-  // const type = item.model_type;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [favName, setFavName] = useState<string>(item.name);
@@ -53,6 +51,14 @@ function Favourite({ item }: nameType) {
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`/hub/${item.model_id}`);
+    localStorage.setItem(
+      "hubDetailsStorage",
+      JSON.stringify({
+        activeItemId: item.model_id,
+        activeItemType: item.model_type,
+        activeItemName: favName,
+      })
+    );
   };
 
   const handleUpdate = (e: { preventDefault: () => void }) => {
