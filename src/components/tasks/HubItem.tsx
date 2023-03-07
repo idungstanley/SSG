@@ -60,10 +60,10 @@ export default function HubItem({
         <div
           role="button"
           className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-          style={{ paddingLeft: type === "subhub" ? "26px" : "" }}
+          style={{ paddingLeft: type === "subhub" ? "10px" : "" }}
         >
           {showSidebar && (
-            <div className="mr-0.5">
+            <div>
               {item.id === showChildren ? (
                 <span className="flex flex-col">
                   <VscTriangleDown

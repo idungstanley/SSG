@@ -13,7 +13,7 @@ export default function DropdownList() {
   return currentItemType === "hub" ? (
     <>
       <SubHubIndex />
-      <WalletIndex showHubList={!false} getCurrentHubId={currentItemId} />
+      <WalletIndex showHubList={!false} getCurrentHubId={currentItemId} paddingLeft="10" />
       <ListIndex showHubList={!false} getCurrentHubId={currentItemId} />
     </>
   ) : (

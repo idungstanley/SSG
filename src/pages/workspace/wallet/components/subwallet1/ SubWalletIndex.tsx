@@ -14,7 +14,7 @@ import WalletItem from "../../../../../components/tasks/WalletItem";
 import ListItem from "../../../../../components/tasks/ListItem";
 
 interface SubWalletIndexProps {
-  paddingLeft?: string;
+  paddingLeft?: string | number;
 }
 
 interface dataProps {
@@ -22,7 +22,7 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = "32" }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = "30" }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector(
     (state) => state.wallet
@@ -62,7 +62,7 @@ function SubWalletIndex({ paddingLeft = "32" }: SubWalletIndexProps) {
             walletType="subwallet2"
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
-            paddingLeft="64"
+            paddingLeft={paddingLeft}
             showSubWallet={showSubWallet2}
           />
           <div>
@@ -76,7 +76,7 @@ function SubWalletIndex({ paddingLeft = "32" }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-          <ListItem list={list} paddingLeft={paddingLeft} />
+          <ListItem list={list} paddingLeft="65" />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}

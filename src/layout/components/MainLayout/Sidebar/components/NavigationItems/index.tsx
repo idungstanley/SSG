@@ -1,18 +1,19 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  BellIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import favoriteIcon from "../../../../../../assets/branding/Favourite-icon.svg";
 import groupIcon from "../../../../../../assets/branding/Group.png";
-import homeIcon from "../../../../../../assets/branding/Home-icon.svg";
+import homeIcon from "../../../../../../assets/icons/Home.svg";
 import { cl } from "../../../../../../utils";
 import { useAppSelector } from "../../../../../../app/hooks";
 import NavigationItem from "./components/NavigationItem";
-import { HiOutlineLibrary, HiTemplate, HiUserGroup } from "react-icons/hi";
-import { BsCalendar2Minus } from "react-icons/bs";
+import { HiOutlineLibrary, HiOutlineUserGroup } from "react-icons/hi";
+import { CgTemplate } from "react-icons/cg";
+import { IoNotificationsOutline } from "react-icons/io5";
+import { VscCalendar } from "react-icons/vsc";
 
 const navigation = [
   {
@@ -24,19 +25,19 @@ const navigation = [
   {
     name: "Notifications",
     href: "/notification",
-    icon: <BellIcon className="w-4 h4" aria-hidden="true" />,
+    icon: <IoNotificationsOutline className="w-4 h4" aria-hidden="true" />,
     alwaysShow: true,
   },
   {
     name: "Calendar",
     href: "/calendar",
-    icon: <BsCalendar2Minus className="w-4 h4" aria-hidden="true" />,
+    icon: <VscCalendar className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
     name: "Community",
     href: "/community",
-    icon: <HiUserGroup className="w-4 h4" aria-hidden="true" />,
+    icon: <HiOutlineUserGroup className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
@@ -48,7 +49,7 @@ const navigation = [
   {
     name: "Template",
     href: "/template",
-    icon: <HiTemplate className="w-4 h4" aria-hidden="true" />,
+    icon: <CgTemplate className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
