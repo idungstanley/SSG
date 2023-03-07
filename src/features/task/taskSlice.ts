@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+// import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 
 export interface ImyTaskData {
@@ -17,13 +17,7 @@ export interface ImyTaskData {
   created_at?: string;
   archived_at?: string | null;
   deleted_at?: string | null;
-  [key: string]:
-    | string
-    | number
-    | undefined
-    | null
-    | [{ id: string; initials: string; colour: string; name: string }]
-    | tagItem[];
+  [key: string]: string | number | undefined | null | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 interface TaskState {

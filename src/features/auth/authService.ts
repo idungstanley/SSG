@@ -100,7 +100,12 @@ export const useGetInviteByCode = (inviteCode?: string) =>
   useQuery(
     ['team_member_invite_details', inviteCode],
     async () =>
-      requestNew({
+      requestNew<{
+        data: {
+          team_member_invite: [];
+          user: IUser;
+        };
+      }>({
         url: `auth/invite-details/${inviteCode}`,
         method: 'GET'
       }),
