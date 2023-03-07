@@ -13,7 +13,7 @@ import { setCreateSubHubSlideOverVisibility } from '../../../../features/general
 function SubHubModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { currHubId } = useAppSelector((state) => state.hub);
+  const { currHubId, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -60,7 +60,7 @@ function SubHubModal() {
     await createHub.mutateAsync({
       name,
       currentWorkspaceId,
-      currHubId,
+      currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
     });
   };
 

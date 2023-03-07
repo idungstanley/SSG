@@ -14,13 +14,11 @@ import { columnsHead } from "./ListColumns";
 import { MdDragIndicator } from "react-icons/md";
 import { FaSort } from "react-icons/fa";
 
-export default function TaskListViews() {
+export default function TaskListViews({ taskLength }: { taskLength?: number }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
-  const { myTaskData, taskColumns, hideTask } = useAppSelector(
-    (state) => state.task
-  );
+  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   dispatch(getTaskColumns(columnsHead));
 
@@ -54,7 +52,7 @@ export default function TaskListViews() {
                 </span>
               </div>
               <span className="text-xs text-gray-400 	ml-3 mr-px font-bold">
-                {myTaskData?.length}
+                {taskLength}
               </span>
             </div>
           </div>
@@ -150,7 +148,7 @@ export default function TaskListViews() {
             className=" font-black hover:bg-white 	"
             onClick={() => handleDropDown()}
           />
-          <span className="text-sm z-30">
+          <span className="text-sm z-50">
             {dropDown && (
               <AddColumnDropdown
                 title=""

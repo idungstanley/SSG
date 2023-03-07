@@ -105,10 +105,10 @@ export default function AssignTask({ option, item }: option) {
   return (
     <div className="relative">
       <section
-        className="absolute z-20  w-60 rounded-md shadow-lg bg-gray-100"
+        className="w-60 absolute ml-10 bottom-0 left-0 rounded-md shadow-lg bg-gray-50 overflow-auto"
+        style={{ maxHeight: "40vh" }}
         ref={assigneeRef}
         id="assignModal"
-        // onClick={(e) => handleAssignModal(e)}
       >
         <div className="text-xs">
           <section className="flex relative">
@@ -121,10 +121,7 @@ export default function AssignTask({ option, item }: option) {
           </section>
           <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           {data?.data.team_members.map((item) => (
-            <section
-              className="space-x-2 hover:bg-gray-300 p-3"
-              key={item?.id}
-            >
+            <section className="space-x-2 hover:bg-gray-300 p-3" key={item?.id}>
               <div className="flex items-center justify-between cursor-pointer">
                 <div
                   className="relative flex items-center cursor-pointer  space-x-2"
@@ -141,7 +138,7 @@ export default function AssignTask({ option, item }: option) {
                     height="h-5"
                     width="w-5"
                   />
-                  <p className="text-xs">
+                  <p className="text-xs text-black">
                     {item.user.name.toLocaleUpperCase()}
                   </p>
                 </div>

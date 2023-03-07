@@ -259,9 +259,9 @@ export const useAddToFavourites = (data: {
     {
       enabled: !!trigger,
       onSuccess: () => {
+        queryClient.invalidateQueries();
         dispatch(setTriggerAddToFav(false));
         dispatch(closeMenu());
-        queryClient.invalidateQueries();
       },
     }
   );
@@ -317,7 +317,7 @@ export const UseUpdateFavService = ({
   trigger,
 }: {
   favId: string | null;
-  name: string;
+  name: string | null;
   trigger: boolean;
 }) => {
   const dispatch = useDispatch();

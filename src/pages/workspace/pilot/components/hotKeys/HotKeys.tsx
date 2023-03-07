@@ -10,7 +10,6 @@ import CustomDropdown, {
 } from '../../../tasks/dropdown/CustomDropdown';
 import { communicationOptions } from '../communication/CommunicationSubTab';
 import { DetailOptions } from '../details/DetailsSubTab';
-import { ChecklistOptions } from '../checklist/subtabs/ChecklistSubtab';
 import { TimeClockOptions } from '../timeClock/subtabs/TimeSubTab';
 import { pilotOptions } from '../Tabs';
 
@@ -23,7 +22,6 @@ export default function HotKeys() {
     ...pilotOptions,
     ...DetailOptions,
     ...communicationOptions,
-    ...ChecklistOptions,
     ...TimeClockOptions,
   ];
 

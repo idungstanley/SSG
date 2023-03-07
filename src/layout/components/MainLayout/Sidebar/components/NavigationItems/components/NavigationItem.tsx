@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../../../utils';
 
 interface NavigationItemProps {
@@ -20,7 +21,11 @@ export default function NavigationItem({
   isVisible,
 }: NavigationItemProps) {
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const handleClick = (name: string | null)=> {
+    dispatch(setActivePlaceName(name));
+  };
 
   if (!isVisible) {
     return null;
@@ -36,6 +41,7 @@ export default function NavigationItem({
         !showSidebar ? 'justify-center' : 'gap-2 items-center',
         'relative flex cursor-pointer pl-4 p-2 w-full'
       )}
+      onClick={()=> handleClick(item.name)}
     >
       {item.href === pathname ? (
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg " />

@@ -202,7 +202,10 @@ function TaskTableView() {
 
   return (
     <>
-      <div className="overflow-y-auto border rounded-lg h-min">
+      <div
+        className="overflow-y-auto border rounded-lg h-min"
+        style={{ maxHeight: "87vh" }}
+      >
         <table className="fixed_headers w-full divide-y divide-gray-500">
           <thead className="bg-gray-50">
             <tr>

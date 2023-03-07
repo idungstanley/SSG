@@ -9,34 +9,17 @@ import { Spinner } from "../../../../../../common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GoPlus } from "react-icons/go";
 import SingleChecklist from "../SingleChecklist";
-import { itemProps } from "../components/ChecklistItem";
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  UniqueIdentifier,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  rectSortingStrategy,
-  SortableContext,
-  sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+import { itemProps } from "./ChecklistItem";
 import { useAppDispatch } from "../../../../../../app/hooks";
 import { setShowChecklistInput } from "../../../../../../features/task/checklist/checklistSlice";
 import { MdCancel } from "react-icons/md";
+import ToolTip from "../../../../../../components/Tooltip";
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>("Checklist");
 
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  // RTK states
-  // const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector(
     (state) => state.workspace
   );
@@ -70,47 +53,6 @@ export default function ChecklistIndex() {
     delChecklist: triggerDelChecklist,
   });
 
-  const idsFromLS = JSON.parse(localStorage.getItem("checklist") || "[]");
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const [items, setItems] = useState(
-    task_checklist?.sort(
-      (a: { id: string }, b: { id: string }) =>
-        idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)
-    ) || []
-  );
-
-  const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e;
-
-    if (active.id !== over?.id) {
-      const findActive = items.find(
-        (i: { id: UniqueIdentifier }) => i.id === active.id
-      );
-      const findOver = items.find(
-        (i: { id: UniqueIdentifier | undefined }) => i.id === over?.id
-      );
-
-      if (findActive && findOver) {
-        setItems((items: [{ id: string }]) => {
-          const oldIndex = items?.indexOf(findActive);
-          const newIndex = items?.indexOf(findOver);
-          const sortArray = arrayMove(items, oldIndex, newIndex);
-          localStorage.setItem(
-            "checklist",
-            JSON.stringify([...sortArray?.map((i: { id: string }) => i.id)])
-          );
-          return sortArray;
-        });
-      }
-    }
-  };
-
   if (status == "loading") {
     <Spinner size={20} color={"blue"} />;
   }
@@ -123,7 +65,9 @@ export default function ChecklistIndex() {
           className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
           onClick={() => dispatch(setShowChecklistInput(true))}
         >
-          <GoPlus className="w-3 h-3" />
+          <ToolTip tooltip="Add Checklist">
+            <GoPlus className="w-3 h-3" />
+          </ToolTip>
         </div>
       </div>
       {showChecklistInput && (
@@ -147,30 +91,21 @@ export default function ChecklistIndex() {
           />
         </form>
       )}
-
       <div>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={(e) => handleDragEnd(e)}
-        >
-          <SortableContext strategy={rectSortingStrategy} items={items}>
-            {task_checklist?.length > 0
-              ? task_checklist?.map(
-                  (item: {
-                    id: string;
-                    name: string;
-                    is_done: number;
-                    items: itemProps[];
-                  }) => {
-                    return (
-                      <SingleChecklist key={item.id} item={item} id={item.id} />
-                    );
-                  }
-                )
-              : "This task has no Checklist, click on the plus sign to create one"}
-          </SortableContext>
-        </DndContext>
+        {task_checklist?.length > 0
+          ? task_checklist?.map(
+              (item: {
+                id: string;
+                name: string;
+                is_done: number;
+                items: itemProps[];
+              }) => {
+                return (
+                  <SingleChecklist key={item.id} item={item} id={item.id} />
+                );
+              }
+            )
+          : "This task has no Checklist, click on the plus sign to create one"}
       </div>
     </div>
   ) : null;

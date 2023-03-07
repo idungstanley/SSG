@@ -1,5 +1,10 @@
 import requestNew from "../../app/requestNew";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ITaskFullList } from "./interface.tasks";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useAppDispatch } from "../../app/hooks";
 import {
   getTaskData,
@@ -33,25 +38,115 @@ export const createTaskService = (data: {
   return response;
 };
 
-export const getOneTaskService = (data: {
-  queryKey: (string | undefined)[];
+export const UseGetFullTaskList = ({
+  itemId,
+  itemType,
+}: {
+  itemId: string | undefined | null;
+  itemType: string | null | undefined;
 }) => {
-  const taskId = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: `at/tasks/${taskId}`,
-      method: "GET",
+  const queryClient = useQueryClient();
+  const enabled = itemType == "hub" || itemType == "subhub";
+  return useInfiniteQuery(
+    ["task", itemId, itemType],
+    async ({ pageParam = 0 }) => {
+      return requestNew(
+        {
+          url: "at/tasks/full-list",
+          method: "POST",
+          params: {
+            page: pageParam,
+            hub_id: itemId,
+            wallet_id: itemId,
+          },
+        },
+        true
+      );
     },
-    true
+    {
+      enabled,
+      onSuccess: (data) => {
+        data.pages.map((page) =>
+          page.data.tasks.map((task: ITaskFullList) =>
+            queryClient.setQueryData(["task", task.id], task)
+          )
+        );
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+    }
   );
-  return response;
 };
+
+export const UseGetFullTaskListWallet = ({
+  itemId,
+  itemType,
+}: {
+  itemId: string | undefined | null;
+  itemType: string | null | undefined;
+}) => {
+  const queryClient = useQueryClient();
+  const enabled = itemType == "wallet" || itemType == "subwallet";
+
+  return useInfiniteQuery(
+    ["task", itemId, itemType],
+    async ({ pageParam = 0 }) => {
+      return requestNew(
+        {
+          url: "at/tasks/full-list",
+          method: "POST",
+          params: {
+            page: pageParam,
+            wallet_id: itemId,
+          },
+        },
+        true
+      );
+    },
+    {
+      enabled,
+      onSuccess: (data) => {
+        data.pages.map((page) =>
+          page.data.tasks.map((task: ITaskFullList) =>
+            queryClient.setQueryData(["task", task.id], task)
+          )
+        );
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+    }
+  );
+};
+
+// export const getOneTaskService = (data: {
+//   queryKey: (string | undefined)[];
+// }) => {
+//   const taskId = data.queryKey[1];
+//   const response = requestNew(
+//     {
+//       url: `at/tasks/${taskId}`,
+//       method: 'GET',
+//     },
+//     true
+//   );
+//   return response;
+// };
 
 //getOneTask
 export const getOneTaskServices = ({
   task_id,
 }: {
-  task_id?: string | null;
+  task_id: string | undefined | null;
 }) => {
   // const queryClient = useQueryClient();
   return useQuery(
@@ -67,7 +162,8 @@ export const getOneTaskServices = ({
       return data;
     },
     {
-      enabled: task_id != null,
+      enabled: false,
+      // enabled: task_id != null,
     }
   );
 };
@@ -575,74 +671,6 @@ export const UseUnAssignTaskService = ({
         dispatch(setToggleAssignCurrentTaskId(null));
       },
       // enabled: !!team_member_id,
-    }
-  );
-};
-
-//assign tags
-export const UseAssignTagToTask = ({
-  tagId,
-  currentTaskIdForTag,
-}: {
-  tagId: string | null;
-  currentTaskIdForTag: string | null;
-}) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ["tags", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `tags/${tagId}/assign`,
-          method: "POST",
-          params: {
-            type: "task",
-            id: currentTaskIdForTag,
-          },
-        },
-        true
-      );
-      return data;
-    },
-    {
-      enabled: !!tagId,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["task"]);
-      },
-    }
-  );
-};
-
-//unassign tags
-export const UseUnAssignTagFromTask = ({
-  tagId,
-  currentTaskIdForTag,
-}: {
-  tagId: string;
-  currentTaskIdForTag: string;
-}) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ["tags", { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `tags/${tagId}/unassign`,
-          method: "POST",
-          params: {
-            type: "task",
-            id: currentTaskIdForTag,
-          },
-        },
-        true
-      );
-      return data;
-    },
-    {
-      enabled: !!tagId,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["task"]);
-      },
     }
   );
 };

@@ -51,7 +51,6 @@ import {
   UseDeleteListService,
 } from "../../features/list/listService";
 import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
-// import Favorites from '../../pages/workspace/favorites';
 
 interface itemsType {
   id: number;
@@ -80,6 +79,7 @@ export default function MenuDropdown() {
     showEditHubSlideOver,
     showEditListSlideOver,
     showEditWalletSlideOver,
+    showCreateListSlideOver,
   } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
   const { delList, archiveList } = useAppSelector((state) => state.list);
@@ -100,7 +100,8 @@ export default function MenuDropdown() {
           showCreateTaskSlideOver === false &&
           showEditHubSlideOver === false &&
           showEditListSlideOver === false &&
-          showEditWalletSlideOver === false
+          showEditWalletSlideOver === false &&
+          showCreateListSlideOver === false
         ) {
           if (SubDropdownMenu === true) {
             dispatch(setSubDropdownMenu(false));
@@ -128,6 +129,7 @@ export default function MenuDropdown() {
     showEditHubSlideOver,
     showEditListSlideOver,
     showEditWalletSlideOver,
+    showCreateListSlideOver
   ]);
 
   //delete-entity
@@ -370,7 +372,7 @@ export default function MenuDropdown() {
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center cursor-pointer p-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-200 rounded-md"
+                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
                 onClick={item.handleClick}
               >
                 {item.icon}

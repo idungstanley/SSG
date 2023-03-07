@@ -5,17 +5,19 @@ import {
   EyeIcon,
   InformationCircleIcon,
   SignalIcon,
-} from '@heroicons/react/24/outline';
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
-import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
-import History from '../../../../../components/Pilot/components/History';
-import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
-import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import Details from '../../../pilot/components/details/Details';
-import TimeClock from '../../../pilot/components/timeClock/TimeClock';
+} from "@heroicons/react/24/outline";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import ChatForPilot from "../../../../../components/Chat/ChatForPilot";
+import CommentsForPilot from "../../../../../components/Comments/CommentsForPilot";
+import History from "../../../../../components/Pilot/components/History";
+import WatchersForPilot from "../../../../../components/Watchers/WatchersForPilot";
+import { setShowPilotSideOver } from "../../../../../features/general/slideOver/slideOverSlice";
+import Checklists from "../../../pilot/components/checklist/components/Checklist";
+import Details from "../../../pilot/components/details/Details";
+import TimeClock from "../../../pilot/components/timeClock/TimeClock";
+import { VscChecklist } from "react-icons/vsc";
 
 const sections = [
   {
@@ -42,38 +44,47 @@ const sections = [
     id: 6,
     element: <TimeClock />,
   },
+  {
+    id: 7,
+    element: <Checklists />,
+  },
 ];
 
 const tabs = [
   {
     id: 1,
-    label: 'Details',
+    label: "Details",
     icon: <InformationCircleIcon className="w-4 h-4" />,
   },
   {
     id: 2,
-    label: 'Logs',
+    label: "Logs",
     icon: <DocumentTextIcon className="w-4 h-4" />,
   },
   {
     id: 3,
-    label: 'Comments',
+    label: "Comments",
     icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />,
   },
   {
     id: 4,
-    label: 'Watchers',
+    label: "Watchers",
     icon: <EyeIcon className="w-4 h-4" />,
   },
   {
     id: 5,
-    label: 'Connect',
+    label: "Connect",
     icon: <SignalIcon className="w-4 h-4" />,
   },
   {
     id: 6,
-    label: 'Time clock',
+    label: "Time clock",
     icon: <ClockIcon className="w-4 h-4" />,
+  },
+  {
+    id: 7,
+    label: "Checklists",
+    icon: <VscChecklist className="w-4 h-4" />,
   },
 ];
 
@@ -88,7 +99,7 @@ export default function PilotSection() {
   // set data for pilot
   useEffect(() => {
     const selectedItemId = hubId;
-    const selectedItemType = 'hub';
+    const selectedItemType = "hub";
 
     if (selectedItemId) {
       dispatch(
@@ -96,7 +107,7 @@ export default function PilotSection() {
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: activeItemName ?? '',
+          title: activeItemName ?? "",
         })
       );
     }

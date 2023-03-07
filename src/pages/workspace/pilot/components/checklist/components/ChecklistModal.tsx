@@ -14,6 +14,7 @@ import { Disclosure } from "@headlessui/react";
 interface ChecklistModalProps {
   checklistId: string;
   checklistItemId?: string;
+  focus: () => void;
   options: {
     id: number;
     handleClick: () => void;
@@ -25,6 +26,7 @@ export default function ChecklistModal({
   options,
   checklistId,
   checklistItemId,
+  focus,
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
@@ -47,6 +49,8 @@ export default function ChecklistModal({
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
+    } else if (option.name == "Rename") {
+      focus();
     }
   };
   return (
@@ -65,7 +69,7 @@ export default function ChecklistModal({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-20 w-40 mt-2 -ml-20 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {options.map((option) =>
             option.name === "New Item" ? (
               <Disclosure.Button key={option.id} className="w-full">
