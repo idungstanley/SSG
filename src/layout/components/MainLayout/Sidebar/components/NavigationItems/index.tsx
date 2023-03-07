@@ -7,35 +7,36 @@ import {
 import React, { useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../assets/branding/Group.png';
-import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
+// import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
 import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
 import { HiOutlineLibrary, HiTemplate, HiUserGroup } from 'react-icons/hi';
 import { BsCalendar2Minus } from 'react-icons/bs';
+import { VscHome } from 'react-icons/vsc';
 
 const navigation = [
   {
-    name: 'Home',
-    href: '/',
-    source: homeIcon,
+    name: "Home",
+    href: "/",
+    icon: <VscHome className="w-4 h4" aria-hidden="true" />,
     alwaysShow: true,
   },
   {
-    name: 'Notifications',
-    href: '/notification',
+    name: "Notifications",
+    href: "/notification",
     icon: <BellIcon className="w-4 h4" aria-hidden="true" />,
     alwaysShow: true,
   },
   {
-    name: 'Calendar',
-    href: '/calendar',
+    name: "Calendar",
+    href: "/calendar",
     icon: <BsCalendar2Minus className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
-    name: 'Community',
-    href: '/community',
+    name: "Community",
+    href: "/community",
     icon: <HiUserGroup className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
@@ -48,24 +49,24 @@ const navigation = [
   {
     name: "Template",
     href: "/template",
-    icon: <HiTemplate className="w-4 h4"aria-hidden="true" />,
+    icon: <HiTemplate className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
-    name: 'Goals',
-    href: '/goals',
+    name: "Goals",
+    href: "/goals",
     source: groupIcon,
     alwaysShow: false,
   },
   {
-    name: 'Dashboards',
-    href: '/dashboard',
+    name: "Dashboards",
+    href: "/dashboard",
     icon: <Squares2X2Icon className="w-4 h4" aria-hidden="true" />,
     alwaysShow: false,
   },
   {
-    name: 'Favorites',
-    href: '/favorites',
+    name: "Favorites",
+    href: "/favorites",
     source: favoriteIcon,
     alwaysShow: false,
   },
