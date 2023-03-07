@@ -1,5 +1,6 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect } from "react";
 import {
+  setActivePlaceForNav,
   setActivePlaceId,
   setActivePlaceName,
 } from '../../../../../features/workspace/workspaceSlice';
@@ -24,7 +25,7 @@ import { InboxStackIcon } from '@heroicons/react/24/solid';
 import Email from '../../../../../pages/workspace/email';
 import { BsListCheck } from 'react-icons/bs';
 
-const places = [
+export const places = [
   {
     name: "Email",
     id: 1,
@@ -92,15 +93,21 @@ function Places() {
   const handleClick = (id: number, name: string | null, link?: string) => {
     dispatch(setActivePlaceId(id));
     dispatch(setActivePlaceName(name));
+    dispatch(
+      setActivePlaceForNav({
+        activePlaceNameForNavigation: name,
+        activePlaceIdForNavigation: id,
+      })
+    );
 
     if (link) {
-      navigate('/' + link);
+      navigate("/" + link);
     }
   };
 
   useEffect(() => {
     // go to active place from URL on mount
-    const placeFromUrl = pathname.split('/')[1];
+    const placeFromUrl = pathname.split("/")[1];
 
     const activePlace = places.find((i) => i.link === placeFromUrl);
 
@@ -126,7 +133,7 @@ function Places() {
                 ) : (
                   <img
                     src={place.source}
-                    alt={place.name + 'Icon'}
+                    alt={place.name + "Icon"}
                     className="w-4 h-4"
                   />
                 )

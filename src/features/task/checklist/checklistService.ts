@@ -4,12 +4,10 @@ import {
   setToggleAssignChecklistItemId,
   setTriggerAssignChecklistItem,
   setTriggerChecklistUpdate,
-  setTriggerDelChecklist,
-  setTriggererChecklistItemDel,
   setTriggerItemtUpdate,
   setTriggerUnassignChecklistItem,
 } from "./checklistSlice";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAppDispatch } from "../../../app/hooks";
 import { setCurrTeamMemId } from "../taskSlice";
 
@@ -44,7 +42,7 @@ export const UseGetAllClistService = ({
   activeItemType: string | null | undefined;
 }) => {
   return useQuery(
-    ["clist", { task_id }],
+    ["checklist", { task_id }],
     async () => {
       const data = await requestNew(
         {
@@ -57,9 +55,6 @@ export const UseGetAllClistService = ({
     },
     {
       enabled: task_id != null && activeItemType == "task",
-      // onSuccess: () => {
-      //   dispatch(setTaskIdForPilot(null));
-      // },
     }
   );
 };
@@ -115,7 +110,7 @@ export const UseUpdateChecklistService = ({
       enabled: checklist_id != null && triggerUpdate !== false,
       onSuccess: () => {
         dispatch(setTriggerChecklistUpdate(false));
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries(["checklist"]);
       },
     }
   );
@@ -162,66 +157,54 @@ export const UseUpdateChecklistItemService = ({
   );
 };
 
-//Delete a Checklist
-export const UseDeleteChecklistService = (data: {
-  query: string | null;
-  delChecklist: boolean;
-}) => {
-  const dispatch = useDispatch();
+// Delete Checklist
+const deleteChecklist = (data: { query: string | null }) => {
   const checklist_id = data.query;
-  const queryClient = useQueryClient();
-  return useQuery(
-    ["checklist"],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `checklists/${checklist_id}`,
-          method: "DELETE",
-        },
-        true
-      );
-      return data;
-    },
+  const request = requestNew(
     {
-      enabled: data.delChecklist,
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-        dispatch(setTriggerDelChecklist(false));
-      },
-    }
+      url: `checklists/${checklist_id}`,
+      method: "DELETE",
+    },
+    true
   );
+  return request;
+};
+
+export const useDeleteChecklist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteChecklist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["checklist"]);
+    },
+  });
 };
 
 //Delete a Checklist Item
-export const UseDeleteChecklistItemService = (data: {
+const deleteChecklistItem = (data: {
   query: string | null;
-  itemId: string | null;
-  delItem: boolean;
+  itemId: string | undefined;
 }) => {
-  const dispatch = useDispatch();
   const checklist_id = data.query;
   const itemId = data.itemId;
-  const queryClient = useQueryClient();
-  return useQuery(
-    ["checklist"],
-    async () => {
-      const data = await requestNew(
-        {
-          url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: "DELETE",
-        },
-        true
-      );
-      return data;
-    },
+  const request = requestNew(
     {
-      enabled: data.delItem,
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-        dispatch(setTriggererChecklistItemDel(false));
-      },
-    }
+      url: `/checklists/${checklist_id}/item/${itemId}`,
+      method: "DELETE",
+    },
+    true
   );
+  return request;
+};
+
+export const useDeleteChecklistItem = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteChecklistItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["checklist"]);
+    },
+  });
 };
 
 // Assign Checklist Item

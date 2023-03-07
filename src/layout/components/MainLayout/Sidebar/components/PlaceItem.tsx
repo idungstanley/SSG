@@ -1,16 +1,16 @@
-import React, { ReactNode } from 'react';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
-import { cl } from '../../../../../utils';
+import React, { ReactNode } from "react";
+import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { setActivePlaceId } from "../../../../../features/workspace/workspaceSlice";
+import { cl } from "../../../../../utils";
 
 interface PlaceItemProps {
-  label: string
-  onClick?: () => void // not required if already clicked in place
-  icon: JSX.Element
-  rightContent?: ReactNode
-  bottomContent?: ReactNode
+  label: string;
+  onClick?: () => void; // not required if already clicked in place
+  icon: JSX.Element;
+  rightContent?: ReactNode;
+  bottomContent?: ReactNode;
 }
 
 export default function PlaceItem({
@@ -27,11 +27,12 @@ export default function PlaceItem({
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <li
+      id={`${label}`}
       className={cl(
         !isActivePlace ? "hover:bg-gray-100" : "hover:bg-gray-100",
         "focus:flex flex-col w-full pl-5 py-5 items-center relative",

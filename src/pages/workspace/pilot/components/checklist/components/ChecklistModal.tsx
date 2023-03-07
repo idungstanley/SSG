@@ -5,11 +5,13 @@ import {
   setClickChecklistId,
   setClickChecklistItemId,
   setToggleAssignChecklistItemId,
-  setTriggerDelChecklist,
-  setTriggererChecklistItemDel,
 } from "../../../../../../features/task/checklist/checklistSlice";
 import { useAppDispatch } from "../../../../../../app/hooks";
 import { Disclosure } from "@headlessui/react";
+import {
+  useDeleteChecklist,
+  useDeleteChecklistItem,
+} from "../../../../../../features/task/checklist/checklistService";
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -19,6 +21,7 @@ interface ChecklistModalProps {
     id: number;
     handleClick: () => void;
     name: string;
+    icon: JSX.Element;
   }[];
 }
 
@@ -30,26 +33,32 @@ export default function ChecklistModal({
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
+  const { mutate: onChecklistDelete } = useDeleteChecklist();
+  const { mutate: onChecklistItemDelete } = useDeleteChecklistItem();
+
   const handleDelChecklist = () => {
-    dispatch(setClickChecklistId(checklistId));
-    dispatch(setTriggerDelChecklist(true));
+    onChecklistDelete({
+      query: checklistId,
+    });
   };
 
   const handleChecklistItemDel = () => {
-    dispatch(setClickChecklistId(checklistId));
-    dispatch(setClickChecklistItemId(checklistItemId));
-    dispatch(setTriggererChecklistItemDel(true));
+    onChecklistItemDelete({
+      query: checklistId,
+      itemId: checklistItemId,
+    });
   };
+
   const handleOptions = (option: { name: string }) => {
     if (option.name === "Delete Checklist") {
       handleDelChecklist();
     } else if (option.name === "Delete Item") {
       handleChecklistItemDel();
-    } else if (option.name == "Assign to" || option.name == "Unassign") {
+    } else if (option.name === "Assign to" || option.name == "Unassign") {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
-    } else if (option.name == "Rename") {
+    } else if (option.name === "Rename") {
       focus();
     }
   };
@@ -83,6 +92,7 @@ export default function ChecklistModal({
                           handleOptions(option);
                         }}
                       >
+                        <span className="w-4 h-4">{option.icon}</span>
                         <p>{option.name}</p>
                       </button>
                     </div>
@@ -100,6 +110,7 @@ export default function ChecklistModal({
                         handleOptions(option);
                       }}
                     >
+                      <span className="w-4 h-4">{option.icon}</span>
                       <p>{option.name}</p>
                     </button>
                   </div>

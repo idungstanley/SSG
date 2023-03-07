@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   UseCreatelistItemService,
-  UseDeleteChecklistItemService,
   UseUpdateChecklistItemService,
 } from "../../../../../../features/task/checklist/checklistService";
 import { GrDrag } from "react-icons/gr";
@@ -40,13 +39,9 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const [done, setDone] = useState<number>(0);
   const [editName, setEditName] = useState<string>("");
 
-  const {
-    triggerDelChecklistItem,
-    clickedChecklistId,
-    clickedChecklistItemId,
-    triggerItemUpdate,
-    toggleAssignChecklistItemId,
-  } = useAppSelector((state) => state.checklist);
+  const { triggerItemUpdate, toggleAssignChecklistItemId } = useAppSelector(
+    (state) => state.checklist
+  );
 
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: () => {
@@ -83,12 +78,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));
   };
-
-  UseDeleteChecklistItemService({
-    query: clickedChecklistId,
-    itemId: clickedChecklistItemId,
-    delItem: triggerDelChecklistItem,
-  });
 
   const focusItem = () => {
     inputRef.current?.focus();
