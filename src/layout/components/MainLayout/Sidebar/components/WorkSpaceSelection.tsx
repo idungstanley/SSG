@@ -26,12 +26,14 @@ function WorkSpaceSelection() {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center justify-between space-x-1">
               <AvatarWithInitials
-                initials={workspaceName
-                  .split(' ')
-                  .slice(0, 2)
-                  .map((word: string[]) => word[0])
-                  .join('')
-                  .toUpperCase()}
+                initials={
+                  workspaceName
+                    ?.split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase() as string
+                }
                 height="h-5"
                 width="w-5"
                 backgroundColour="#34C6BE"
@@ -39,7 +41,7 @@ function WorkSpaceSelection() {
                 textColor="black"
               />
               <p className="truncate" style={{ fontSize: '8px' }}>
-                {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
+                {workspaceName?.split(' ').slice(0, 2).join('').toUpperCase()}
               </p>
             </div>
             <WorkspaceSettingsModal />

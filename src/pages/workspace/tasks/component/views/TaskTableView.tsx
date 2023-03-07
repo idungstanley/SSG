@@ -9,7 +9,6 @@ import {
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
 import moment, { MomentInput } from 'moment';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { BsArrowsAngleExpand } from 'react-icons/bs';
 import AssignTask from '../../assignTask/AssignTask';
 import { MdOutlineDragIndicator } from 'react-icons/md';
@@ -63,7 +62,6 @@ function TaskTableView() {
       | string
       | number
       | undefined
-      | tagItem[]
       | null
       | Array<{ id: string; initials: string; colour: string; name: string }>,
     colfield: string,

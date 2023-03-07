@@ -17,7 +17,6 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
@@ -32,13 +31,7 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 
 interface renderDataProps {
-  taskColField:
-    | string
-    | number
-    | undefined
-    | tagItem[]
-    | null
-    | Array<{ id: string; initials: string; colour: string }>;
+  taskColField: string | number | undefined | null | Array<{ id: string; initials: string; colour: string }>;
   colfield: string;
   task: ImyTaskData;
   getSubTaskId: string | null;
@@ -137,10 +130,10 @@ export default function DataRenderFunc({
     );
   };
 
-  const groupTags = (arr: tagItem[]) => {
+  const groupTags = (arr) => {
     return (
       <div key={arr.length} className="flex items-center -mr-5 drop-shadow-xl">
-        {arr.map((item: tagItem) => {
+        {arr.map((item) => {
           return (
             <div key={item.id} className="">
               {Array.isArray(item) ? (
@@ -284,7 +277,7 @@ export default function DataRenderFunc({
   } else if (colfield === 'tags') {
     return (
       <>
-        <div> {groupTags(taskColField as tagItem[])}</div>
+        <div> {groupTags(taskColField)}</div>
       </>
     );
   } else if (colfield == 'created_at' || colfield == 'updated_at') {

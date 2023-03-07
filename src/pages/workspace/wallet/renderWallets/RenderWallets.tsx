@@ -1,25 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
-// import { useParams } from 'react-router-dom';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
-// import { getWalletServices } from '../../../../features/wallet/walletService';
-// import WalletSection from '../../hubs/components/renderHubs/items/itemsWalletData/WalletSection';
-// import ListSection from '../../hubs/components/renderHubs/items/itemsListData/ListSection';
-// import { dataProps } from '../../../../components/Index/walletIndex/WalletIndex';
 import PageWrapper from '../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
 import { UseGetFullTaskListWallet } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
 import TaskTemplateData from '../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
-// import { ITaskTemplateData } from "../../tasks/component/taskData/TaskTableTemplateData";
 import { ImyTaskData } from '../../../../features/task/taskSlice';
-// import { ImyTaskData } from "../../../../features/task/taskSlice";
-// import { ITaskTemplateData } from "../../tasks/component/taskData/TaskTableTemplateData";
 
 function RenderWallets() {
-  // const { walletId } = useParams();
-
   const [TaskDataGroupings, setTaskDataGroupings] = useState<{
     [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
   }>({});

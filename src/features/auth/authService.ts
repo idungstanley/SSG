@@ -102,7 +102,14 @@ export const useGetInviteByCode = (inviteCode?: string) =>
     async () =>
       requestNew<{
         data: {
-          team_member_invite: [];
+          team_member_invite_id: string;
+          workspace: {
+            id: string;
+            name: string;
+            colour: string;
+            initials: string;
+            last_activty_at: string;
+          };
           user: IUser;
         };
       }>({

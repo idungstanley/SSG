@@ -9,48 +9,9 @@ import {
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
 import moment, { MomentInput } from 'moment';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { BsArrowsAngleExpand } from 'react-icons/bs';
 import AssignTask from '../../assignTask/AssignTask';
 import { MdOutlineDragIndicator } from 'react-icons/md';
-
-// interface TaskTemplateData {
-//   filteredTaskData: {
-//     id: string;
-//     name: string;
-//     description: string;
-//     list_id: string;
-//     parent_id: null;
-//     priority: null;
-//     status: string;
-//     start_date: null;
-//     end_date: null;
-//     assignees: string[];
-//     group_assignees: string[];
-//     custom_fields: string[];
-//     tags: string[];
-//     updated_at: string;
-//     created_at: string;
-//     archived_at: null;
-//     deleted_at: null;
-//     directory_items: string[];
-//     list: {
-//       id: string;
-//       name: string;
-//       parents: {
-//         hubs: [
-//           {
-//             id: string;
-//             name: string;
-//             parent_id: null;
-//           }
-//         ];
-//         wallets: string[];
-//         lists: string[];
-//       };
-//     };
-//   };
-// }
 
 export interface ITaskTemplateData {
   filteredTaskData: {
@@ -113,7 +74,6 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
       | string
       | number
       | undefined
-      | tagItem[]
       | null
       | Array<{ id: string; initials: string; colour: string; name: string }>,
     colfield: string,

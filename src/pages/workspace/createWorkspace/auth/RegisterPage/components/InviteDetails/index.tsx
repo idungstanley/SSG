@@ -23,13 +23,13 @@ export default function InviteDetails() {
         <div className="ml-3">
           <h3 className="text-sm font-medium text-blue-800">
             You have been invited to &quot;
-            {inviteData?.data.team_member_invite.workspace.name}
+            {inviteData?.data.workspace.name}
             &quot;
           </h3>
           <div className="mt-2 text-sm text-blue-700">
             <p>
               By registering, you are accepting the invite to join their workspace. You must register with the same
-              email as the invite: {inviteData?.data.team_member_invite.email}.
+              email as the invite: {inviteData?.data.user.email}.
             </p>
           </div>
         </div>

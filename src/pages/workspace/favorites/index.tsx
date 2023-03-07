@@ -8,7 +8,7 @@ import { AiFillStar } from 'react-icons/ai';
 
 function Favorites() {
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { data, status } = useGetFavourites();
+  const { data: FavData, status } = useGetFavourites();
 
   if (status === 'loading') {
     return (
@@ -33,7 +33,7 @@ function Favorites() {
         </div>
       </div>
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
-        {data?.data.favorites.map((fav: { name: string; id: string; model_type: string; model_id: string }) => {
+        {FavData?.data.favorites.map((fav: { name: string; id: string; model_type: string; model_id: string }) => {
           return <Favourite key={fav.id} item={fav} />;
         })}
       </div>

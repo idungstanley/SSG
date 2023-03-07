@@ -9,7 +9,7 @@ interface IData {
 }
 
 export const createWorkspaceService = (data: IData) => {
-  const response = requestNew(
+  const response = requestNew<IWorkspaceRes>(
     {
       url: 'workspace',
       method: 'POST',

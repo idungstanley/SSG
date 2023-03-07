@@ -14,14 +14,12 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import Details from '../../../pilot/components/details/Details';
-import TimeClock from '../../../pilot/components/timeClock/TimeClock';
 
 const sections = [
-  {
-    id: 1,
-    element: <Details />
-  },
+  // {
+  //   id: 1,
+  //   element: <Details />
+  // },
   {
     id: 2,
     element: <History />
@@ -38,10 +36,10 @@ const sections = [
     id: 5,
     element: <ChatForPilot />
   },
-  {
-    id: 6,
-    element: <TimeClock />
-  }
+  // {
+  //   id: 6,
+  //   element: <TimeClock />
+  // }
 ];
 
 const tabs = [
