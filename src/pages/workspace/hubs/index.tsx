@@ -12,10 +12,11 @@ import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
 import { cl } from '../../../utils';
-import WalletModal from '../wallet/components/modals/WalletModal';
 import SubWalletModal from '../wallet/components/modals/SubWalletModal';
 import ListModal from '../lists/components/modals/ListModal';
 import TaskModal from '../tasks/component/TaskModal';
+import { BsListCheck } from 'react-icons/bs';
+import WalletModal from '../wallet/components/modals/WalletModal';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -40,18 +41,17 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASKS"
-        icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />}
+        icon={<BsListCheck className="w-4 h-4" />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" />
           </div>
         }
       />
-
       <div
         className={cl(
-          !showSidebar && 'overflow-x-hidden w-12',
-          'flex items-center justify-between pl-4 hover:bg-gray-100'
+          !showSidebar && "overflow-x-hidden w-12",
+          "flex items-center justify-between pl-4 hover:bg-gray-100"
         )}
       >
         <div className="flex items-center content-center self-center py-2">
@@ -64,10 +64,10 @@ function Hubs() {
       <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
       <Modal />
       <SubHubModal />
-      <WalletModal />
       <SubWalletModal />
       <ListModal />
       <TaskModal />
+      <WalletModal />
     </>
   );
 }

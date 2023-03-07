@@ -62,9 +62,9 @@ export default function ListViewSettingsModal() {
 
   return (
     <Menu>
-      <div className="flex justify-center items-center">
+      <div className="viewSettingsParent flex justify-center items-center">
         <Menu.Button>
-          <BsThreeDots className="cursor-pointer" />
+          <BsThreeDots className={` viewSettings `} />
         </Menu.Button>
       </div>
       <Transition

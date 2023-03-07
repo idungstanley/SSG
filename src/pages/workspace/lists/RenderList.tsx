@@ -55,7 +55,10 @@ function RenderList() {
         }
       >
         <div className="w-full overflow-y-scroll ">
-          <div className="block " style={{ backgroundColor: "#e1e4e5" }}>
+          <div
+            className="block p-2 border-2 border-gray-200"
+            style={{ backgroundColor: "#e1e4e5" }}
+          >
             {listView && <ListFilter />}
             {listView && <TaskQuickAction listDetailsData={listDetailsData} />}
 

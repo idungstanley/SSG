@@ -138,7 +138,7 @@ export default function ItemsListInSidebar({
       {items?.map((i: { id: string; name: string }) => (
         <li
           key={i.id}
-          className="relative flex flex-col group"
+          className="relative flex flex-col"
         >
           <HubItem
             item={i}
@@ -146,6 +146,7 @@ export default function ItemsListInSidebar({
             handleHubSettings={handleHubSettings}
             handleLocation={handleLocation}
             showChildren={showChildren}
+            type= "hub"
           />
           {showChildren === i.id && showSidebar ? <DropdownList /> : null}
           {showMenuDropdown === i.id && showSidebar ? <MenuDropdown /> : null}
