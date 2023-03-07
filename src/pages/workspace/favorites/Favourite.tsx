@@ -50,7 +50,7 @@ function Favourite({ item }: nameType) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/hub/${item.model_id}`);
+    navigate(`/${item.model_type}/${item.model_id}`);
     localStorage.setItem(
       "hubDetailsStorage",
       JSON.stringify({
