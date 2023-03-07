@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useRef, useState } from 'react';
-import { FaWpforms } from 'react-icons/fa';
+import { FaHandsHelping, FaRoute, FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../../../pages/workspace/dashboard';
 import Favourites from '../../../../pages/workspace/favorites';
 import Files from '../../../../pages/workspace/files';
@@ -8,6 +8,7 @@ import libraryIcon from '../../../../assets/icons/library.svg';
 import emailIcon from '../../../../assets/branding/email-icon.png';
 import hubIcon from '../../../../assets/branding/hub.png';
 import InboxIcon from '../../../../assets/branding/inbox.png';
+import favoriteIcon from '../../../../assets/branding/favorite-icon.png';
 import timeClockIcon from '../../../../assets/branding/timeclock.png';
 import trackerIcon from '../../../../assets/branding/tracker-icon.png';
 import { useDispatch } from 'react-redux';
@@ -20,6 +21,11 @@ import CloseExtBtn from './components/extendBtn/CloseExtBtn';
 import ExtendedItem from './components/extendedItem';
 import InboxData from '../../../../pages/workspace/inbox/InboxData';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryData';
+import Email from '../../../../pages/workspace/email';
+import RoutePlanner from '../../../../pages/workspace/routePlanner';
+import AlsoHr from '../../../../pages/workspace/alsoHr';
+import Commerce from '../../../../pages/workspace/commerce';
+import { IoBusinessOutline } from 'react-icons/io5';
 
 interface ItemData {
   id?: number;
@@ -34,7 +40,7 @@ export const secondaryNavigation: ItemData[] = [
   {
     name: 'Email',
     id: 1,
-    place: <Favourites />,
+    place: <Email />,
     source: emailIcon
   },
   {
@@ -74,17 +80,43 @@ export const secondaryNavigation: ItemData[] = [
     source: trackerIcon
   },
   {
-    name: 'Library',
+    name: 'Route Planner',
     id: 8,
+    place: <RoutePlanner />,
+    icon: <FaRoute className="w-4 h-4" />
+  },
+  {
+    name: 'Also HR',
+    id: 9,
+    place: <AlsoHr />,
+    icon: <FaHandsHelping className="w-4 h-4" />
+  },
+  {
+    name: 'Commerce',
+    id: 10,
+    place: <Commerce />,
+    icon: <IoBusinessOutline className="w-4 h-4" />
+  },
+  {
+    name: 'Library',
+    id: 11,
     place: <LibraryData />,
     source: libraryIcon,
     link: 'directory'
+  },
+  {
+    name: 'Favorites',
+    id: 12,
+    place: <Favourites />,
+    source: favoriteIcon,
+    link: 'favorite'
   }
 ];
 
 function ExpandedNav() {
   const dispatch = useDispatch();
   const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
+
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const MIN_SIDEBAR_WIDTH = 230;
@@ -126,6 +158,7 @@ function ExpandedNav() {
     () => secondaryNavigation.find((section) => section.name?.toLowerCase() === activePlaceName?.toLowerCase()),
     [activePlaceName]
   );
+
   return (
     <div
       className="relative flex-none"

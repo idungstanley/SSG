@@ -26,8 +26,8 @@ export const checklistSlice = createSlice({
   name: 'Checklists',
   initialState,
   reducers: {
-    setTriggerChecklistUpdate(state, action) {
-      state.triggerChecklistUpdate = action.payload;
+    setTriggerChecklistUpdate(state, { payload }) {
+      state.triggerChecklistUpdate = payload;
     },
     setTriggerItemtUpdate(state, { payload }) {
       state.triggerItemUpdate = payload;

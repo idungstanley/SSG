@@ -69,7 +69,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/favorites',
+    path: '/',
     title: 'Favorites',
     newd: null,
     Cleared: null,

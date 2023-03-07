@@ -12,7 +12,7 @@ import {
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getSubMenu } from '../../features/hubs/hubSlice';
 
 interface itemsType {
   id: number;
@@ -33,7 +33,8 @@ export default function SubDropdown() {
     showCreateHubSlideOver,
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
-    showCreateTaskSlideOver
+    showCreateTaskSlideOver,
+    showCreateListSlideOver
   } = useAppSelector((state) => state.slideOver);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -47,9 +48,10 @@ export default function SubDropdown() {
           showCreateTaskSlideOver === false &&
           showEditHubSlideOver === false &&
           showEditListSlideOver === false &&
-          showEditWalletSlideOver === false
+          showEditWalletSlideOver === false &&
+          showCreateListSlideOver === false
         ) {
-          dispatch(setSubDropdownMenu(false));
+          // dispatch(setSubDropdownMenu(false));
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -72,7 +74,8 @@ export default function SubDropdown() {
     showCreateTaskSlideOver,
     showEditHubSlideOver,
     showEditListSlideOver,
-    showEditWalletSlideOver
+    showEditWalletSlideOver,
+    showCreateListSlideOver
   ]);
   const itemsList: itemsType[] = [
     {
@@ -87,18 +90,30 @@ export default function SubDropdown() {
     {
       id: 2,
       title:
-        (showMenuDropdownType === 'wallet' ? 'Sub Wallet' : 'Wallet') ||
-        (SubMenuType === 'wallet' ? 'Sub Wallet' : '') ||
+        (SubMenuType === 'wallet' ? 'Sub Wallet' : SubMenuType === 'subwallet2' ? 'Sub Wallet' : 'Wallet') ||
+        (showMenuDropdownType === 'wallet'
+          ? 'Sub Wallet'
+          : showMenuDropdownType === 'subwallet2'
+          ? 'Sub Wallet'
+          : 'Wallet') ||
         (showMenuDropdownType === 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
-        if (SubMenuType !== 'wallet' && showMenuDropdownType !== 'wallet') {
+        if (
+          SubMenuType !== 'wallet' &&
+          SubMenuType !== 'subwallet2' &&
+          showMenuDropdownType !== 'wallet' &&
+          showMenuDropdownType !== 'subwallet2'
+        ) {
           dispatch(setCreateWalletSlideOverVisibility(true));
         } else {
           dispatch(setCreateSubWalletSlideOverVisibility(true));
         }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' ? false : true
+      isVisible:
+        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
+          ? false
+          : true
     },
     {
       id: 3,

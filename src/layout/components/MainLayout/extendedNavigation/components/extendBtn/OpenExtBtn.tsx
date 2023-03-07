@@ -11,7 +11,7 @@ export default function OpenExtBtn() {
   // to find the clicked item in the extendedBar list
   const extendedAppName = secondaryNavigation.find((item) => item.name === activePlaceName);
   //if the clicked item is library, the extended bar should be prompted
-  if (activePlaceName === 'Library') {
+  if (activePlaceName === 'Library' || activePlaceName === 'Favorites') {
     dispatch(setShowExtendedBar(true));
   }
   //so if clicked item is not in extended list, the extended bar should close
@@ -25,9 +25,7 @@ export default function OpenExtBtn() {
         extendedAppName ? 'block' : 'hidden'
       }`}
     >
-      {!showExtendedBar && (
-        <RiArrowRightSLine className="text-xs " onClick={() => dispatch(setShowExtendedBar(true))} />
-      )}
+      {!showExtendedBar && <RiArrowRightSLine className="text-xs" onClick={() => dispatch(setShowExtendedBar(true))} />}
     </span>
   );
 }

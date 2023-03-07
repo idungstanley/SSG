@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createListService } from '../../../../../features/list/listService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setCreateListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createListService } from "../../../../../features/list/listService";
+import { Button, Input, SlideOver } from "../../../../../components";
+import { useAppSelector } from "../../../../../app/hooks";
+import {
+  setSubDropdownMenu,
+  setshowMenuDropdown,
+} from "../../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
+import { setCreateListSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
 
 function ListModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  // const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, showMenuDropdownType, SubMenuId, SubMenuType } =
+    useAppSelector((state) => state.hub);
+  const { showCreateListSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
 
-  const { showMenuDropdown, showMenuDropdownType, currSubHubId } = useAppSelector((state) => state.hub);
-  const { showCreateListSlideOver } = useAppSelector((state) => state.slideOver);
   const createList = useMutation(createListService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -28,14 +34,10 @@ function ListModal() {
   });
 
   const defaultListFormState = {
-    name: ''
+    name: "",
   };
 
-  const [formState, setFormState] = useState(defaultListFormState);
-
-  const handleListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
-      ...formState,
       [e.target.name]: e.target.value
     });
   };
@@ -45,21 +47,17 @@ function ListModal() {
     await createList.mutateAsync({
       listName: name,
       hubId:
-        showMenuDropdownType == 'hubs'
-          ? showMenuDropdown
-          : null || showMenuDropdownType == 'subhub'
-          ? showMenuDropdown
-          : null || currSubHubId !== null
-          ? currSubHubId
-          : currentItemId,
+        (showMenuDropdownType == "hubs" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subhub" ? showMenuDropdown : null) ||
+        (SubMenuType == "hubs" ? SubMenuId : null) ||
+        (SubMenuType == "subhub" ? SubMenuId : null),
       walletId:
-        showMenuDropdownType == 'wallet'
-          ? showMenuDropdown
-          : null || showMenuDropdownType == 'subwallet'
-          ? showMenuDropdown
-          : null || showMenuDropdownType == 'subwallet3'
-          ? showMenuDropdown
-          : null
+        (showMenuDropdownType == "wallet" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subwallet" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subwallet3" ? showMenuDropdown : null) ||
+        (SubMenuType == "wallet" ? SubMenuId : null) ||
+        (SubMenuType == "subwallet2" ? SubMenuId : null) ||
+        (SubMenuType == "subwallet3" ? SubMenuId : null),
     });
   };
   const handleCloseSlider = () => {
@@ -78,7 +76,7 @@ function ListModal() {
       headerTitle="Create List"
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label="List Name"
               placeholder="Enter list name"

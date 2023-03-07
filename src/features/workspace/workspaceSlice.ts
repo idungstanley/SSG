@@ -34,6 +34,8 @@ interface workspaceState {
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
   showExtendedBar: false;
+  activePlaceNameForNavigation: string | null;
+  activePlaceIdForNavigation: string | null;
 }
 
 const initialState: workspaceState = {
@@ -69,7 +71,9 @@ const initialState: workspaceState = {
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
-  activeEntity: { id: null, type: null }
+  activeEntity: { id: null, type: null },
+  activePlaceNameForNavigation: null,
+  activePlaceIdForNavigation: null
 };
 
 export const wsSlice = createSlice({
@@ -183,6 +187,10 @@ export const wsSlice = createSlice({
       state.currentItemId = null;
       state.currentItemType = null;
     },
+    setActivePlaceForNav(state, { payload }) {
+      state.activePlaceNameForNavigation = payload.activePlaceNameForNavigation;
+      state.activePlaceIdForNavigation = payload.activePlaceIdForNavigation;
+    },
     checkIfWs: (state) => state
   }
 });
@@ -219,7 +227,8 @@ export const {
   setSidebarWidthRD,
   setShowExtendedBar,
   setExtendedSidebarWidth,
-  setActivePlaceName
+  setActivePlaceName,
+  setActivePlaceForNav
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

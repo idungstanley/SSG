@@ -1,29 +1,37 @@
 import React from 'react';
-import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import Favourite from './Favourite';
-import { UseDeleteFav, useGetFavourites } from '../../../features/hubs/hubService';
+import { useGetFavourites } from '../../../features/hubs/hubService';
 import { Spinner } from '../../../common';
 import { useAppSelector } from '../../../app/hooks';
-import { MdAlternateEmail } from 'react-icons/md';
 import { cl } from '../../../utils';
+import { AiFillStar } from 'react-icons/ai';
 
 function Favorites() {
-  const { delFavId } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
-  UseDeleteFav({
-    delFav: delFavId
-  });
-  // console.log(delStatus);
-
   const { data, status } = useGetFavourites();
 
   if (status === 'loading') {
-    return <Spinner />;
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
     <>
-      <PlaceItem label="Email" icon={<MdAlternateEmail className="w-4 h-4" />} />
+      <div className="bg-gray-200 focus:flex flex w-full py-5 items-center relative list-none gap-2">
+        <div className="flex justify-center w-full">
+          <div className="flex items-center">
+            <span className="flex justify-between items-center w-full h-6 mx-1">
+              <AiFillStar />
+            </span>
+            <span className="block font-semibold text-xs w-full cursor-pointer uppercase leading-3 tracking-wider text-black mx-1">
+              FAVORITES
+            </span>
+          </div>
+        </div>
+      </div>
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
         {data?.data.favorites.map((fav: { name: string; id: string; model_type: string; model_id: string }) => {
           return <Favourite key={fav.id} item={fav} />;

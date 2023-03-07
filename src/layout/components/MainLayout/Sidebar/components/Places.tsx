@@ -1,11 +1,13 @@
 import React, { memo, useEffect } from 'react';
-import { setActivePlaceId, setActivePlaceName } from '../../../../../features/workspace/workspaceSlice';
+import {
+  setActivePlaceForNav,
+  setActivePlaceId,
+  setActivePlaceName
+} from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
-import Favorites from '../../../../../pages/workspace/favorites';
 import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,19 +22,21 @@ import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping, FaRoute } from 'react-icons/fa';
 import { MdAlternateEmail } from 'react-icons/md';
 import { InboxStackIcon } from '@heroicons/react/24/solid';
+import Email from '../../../../../pages/workspace/email';
+import { BsListCheck } from 'react-icons/bs';
 
-const places = [
+export const places = [
   {
     name: 'Email',
     id: 1,
-    place: <Favorites />,
+    place: <Email />,
     icon: <MdAlternateEmail className="w-4 h-4" />
   },
   {
     name: 'TASKS',
     id: 2,
     place: <Hubs />,
-    source: hubIcon
+    icon: <BsListCheck className="w-4 h-4" />
   },
   {
     name: 'In-tray',
@@ -89,6 +93,12 @@ function Places() {
   const handleClick = (id: number, name: string | null, link?: string) => {
     dispatch(setActivePlaceId(id));
     dispatch(setActivePlaceName(name));
+    dispatch(
+      setActivePlaceForNav({
+        activePlaceNameForNavigation: name,
+        activePlaceIdForNavigation: id
+      })
+    );
 
     if (link) {
       navigate('/' + link);

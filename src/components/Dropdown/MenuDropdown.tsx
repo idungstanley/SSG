@@ -20,7 +20,12 @@ import {
 import { setArchiveHub, setDelHub, setshowMenuDropdown, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
-import { ArchiveHubService, useAddToFavourites, UseDeleteHubService } from '../../features/hubs/hubService';
+import {
+  ArchiveHubService,
+  // useAddToFavourites,
+  useCreateFavorite,
+  UseDeleteHubService
+} from '../../features/hubs/hubService';
 import {
   setEditHubSlideOverVisibility,
   setEditListSlideOverVisibility,
@@ -32,7 +37,7 @@ import { setArchiveWallet, setDeleteWallet } from '../../features/wallet/walletS
 import { UseArchiveWalletService, UseDeleteWalletService } from '../../features/wallet/walletService';
 import { setArchiveList, setDeleteList } from '../../features/list/listSlice';
 import { UseArchiveListService, UseDeleteListService } from '../../features/list/listService';
-import { setTriggerAddToFav } from '../../features/hubs/hubSlice';
+// import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
   id: number;
@@ -44,8 +49,14 @@ interface itemsType {
 
 export default function MenuDropdown() {
   const dispatch = useDispatch();
-  const { SubDropdownMenu, delHub, archiveHub, showMenuDropdown, showMenuDropdownType, triggerAddToFav } =
-    useAppSelector((state) => state.hub);
+  const {
+    SubDropdownMenu,
+    delHub,
+    archiveHub,
+    showMenuDropdown,
+    showMenuDropdownType
+    // triggerAddToFav,
+  } = useAppSelector((state) => state.hub);
   const {
     showCreateSubWalletSlideOver,
     showCreateHubSlideOver,
@@ -54,7 +65,8 @@ export default function MenuDropdown() {
     showCreateWalletSlideOver,
     showEditHubSlideOver,
     showEditListSlideOver,
-    showEditWalletSlideOver
+    showEditWalletSlideOver,
+    showCreateListSlideOver
   } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
   const { delList, archiveList } = useAppSelector((state) => state.list);
@@ -70,7 +82,8 @@ export default function MenuDropdown() {
           showCreateTaskSlideOver === false &&
           showEditHubSlideOver === false &&
           showEditListSlideOver === false &&
-          showEditWalletSlideOver === false
+          showEditWalletSlideOver === false &&
+          showCreateListSlideOver === false
         ) {
           if (SubDropdownMenu === true) {
             dispatch(setSubDropdownMenu(false));
@@ -97,7 +110,8 @@ export default function MenuDropdown() {
     showCreateTaskSlideOver,
     showEditHubSlideOver,
     showEditListSlideOver,
-    showEditWalletSlideOver
+    showEditWalletSlideOver,
+    showCreateListSlideOver
   ]);
 
   //delete-entity
@@ -139,11 +153,12 @@ export default function MenuDropdown() {
   });
 
   // Add Entity to Favorites
-  useAddToFavourites({
-    query: showMenuDropdown,
-    type: showMenuDropdownType,
-    trigger: triggerAddToFav
-  });
+  // useAddToFavourites({
+  //   query: showMenuDropdown,
+  //   type: showMenuDropdownType,
+  //   trigger: triggerAddToFav,
+  // });
+  const { mutate: onCreate } = useCreateFavorite();
 
   const itemsList: itemsType[] = [
     {
@@ -195,7 +210,11 @@ export default function MenuDropdown() {
       id: 6,
       title: 'Add to favorites',
       handleClick: () => {
-        dispatch(setTriggerAddToFav(true));
+        onCreate({
+          query: showMenuDropdown,
+          type: showMenuDropdownType
+        });
+        // dispatch(setTriggerAddToFav(true));
       },
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true
@@ -313,7 +332,7 @@ export default function MenuDropdown() {
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center cursor-pointer p-2 space-x-2 text-sm text-left text-gray-600 hover:bg-gray-200 rounded-md"
+                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
                 onClick={item.handleClick}
               >
                 {item.icon}

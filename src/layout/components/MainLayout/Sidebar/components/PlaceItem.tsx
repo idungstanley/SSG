@@ -26,14 +26,16 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
 
   return (
     <li
+      id={`${label}`}
       className={cl(
-        !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100 bg-gray-200',
+        !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100',
         'focus:flex flex-col w-full pl-5 py-5 items-center relative',
         bottomContent ? 'gap-2' : ''
       )}
+      style={{ backgroundColor: `${isActivePlace ? 'rgba(0, 0, 0, 0.35)' : ''}` }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {!showSidebar && isActivePlace && <span className="absolute top-0 left-0 right-0 h-1 bg-green-500"></span>}
+      {isActivePlace && <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>}
       <div className="flex justify-between w-full">
         <div
           className={cl(

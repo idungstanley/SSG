@@ -10,8 +10,7 @@ import { useDispatch } from 'react-redux';
 function WalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdownType, showMenuDropdown, currSubHubId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
   const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
@@ -43,10 +42,13 @@ function WalletModal() {
       hubID:
         (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
-        (currSubHubId !== null ? currSubHubId : currentItemId),
+        (SubMenuType == 'hubs' ? SubMenuId : null) ||
+        (SubMenuType == 'subhub' ? SubMenuId : null),
       walletId:
         (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null)
+        (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
+        (SubMenuType == 'wallet' ? SubMenuId : null) ||
+        (SubMenuType == 'subWallet2' ? SubMenuId : null)
     });
   };
 

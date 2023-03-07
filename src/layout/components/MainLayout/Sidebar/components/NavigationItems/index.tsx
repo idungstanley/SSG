@@ -84,7 +84,7 @@ export default function NavigationItems() {
   return (
     <nav className="flex flex-col mt-1">
       {navigation.map((item) => (
-        <NavigationItem key={item.href} item={item} isVisible={item.alwaysShow || showMore} />
+        <NavigationItem key={item.name} item={item} isVisible={item.alwaysShow || showMore} />
       ))}
 
       {/* show less or more button */}
