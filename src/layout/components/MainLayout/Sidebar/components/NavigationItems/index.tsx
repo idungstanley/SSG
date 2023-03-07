@@ -7,19 +7,20 @@ import {
 import React, { useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../assets/branding/Group.png';
-// import homeIcon from '../../../../../../assets/branding/Home-icon.svg';
+import homeIcon from "../../../../../../assets/icons/Home.svg";
 import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
 import { HiOutlineLibrary, HiTemplate, HiUserGroup } from 'react-icons/hi';
 import { BsCalendar2Minus } from 'react-icons/bs';
-import { VscHome } from 'react-icons/vsc';
+// import { VscHome } from 'react-icons/vsc';
 
 const navigation = [
   {
     name: "Home",
     href: "/",
-    icon: <VscHome className="w-4 h4" aria-hidden="true" />,
+    // icon: <VscHome className="w-4 h4" aria-hidden="true" />,
+    source: homeIcon,
     alwaysShow: true,
   },
   {

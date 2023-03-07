@@ -1,16 +1,16 @@
-import React, { ReactNode } from 'react';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
-import { cl } from '../../../../../utils';
+import React, { ReactNode } from "react";
+import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { setActivePlaceId } from "../../../../../features/workspace/workspaceSlice";
+import { cl } from "../../../../../utils";
 
 interface PlaceItemProps {
-  label: string
-  onClick?: () => void // not required if already clicked in place
-  icon: JSX.Element
-  rightContent?: ReactNode
-  bottomContent?: ReactNode
+  label: string;
+  onClick?: () => void; // not required if already clicked in place
+  icon: JSX.Element;
+  rightContent?: ReactNode;
+  bottomContent?: ReactNode;
 }
 
 export default function PlaceItem({
@@ -27,7 +27,7 @@ export default function PlaceItem({
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -37,7 +37,9 @@ export default function PlaceItem({
         "focus:flex flex-col w-full pl-5 py-5 items-center relative",
         bottomContent ? "gap-2" : ""
       )}
-      style={{ backgroundColor: `${ isActivePlace ? "rgba(0, 0, 0, 0.35)" : ''}`}}
+      style={{
+        backgroundColor: `${isActivePlace ? "rgba(0, 0, 0, 0.35)" : ""}`,
+      }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
       {isActivePlace && (
@@ -51,7 +53,9 @@ export default function PlaceItem({
             // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
-          <span className="flex items-center w-6 h-6">{icon}</span>
+          <span className="flex items-center w-6 h-6 hover:text-green-400">
+            {icon}
+          </span>
           <span
             className={cl(
               showSidebar ? "block" : "hidden",

@@ -47,10 +47,7 @@ export default function NavigationItem({
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg " />
       ) : null}
       <span
-        className={`w-4 h-4 flex items-center ${
-          item.name === "Home" && "bg-green-400 rounded text-white"
-        }`}
-        style={{ backgroundColor: item.name === "Home" ? "#00CC25" : "" }}
+        className="flex items-center w-4 h-4"
       >
         {item.icon || (
           <img className="w-4 h-4" src={item.source} alt={item.name} />
