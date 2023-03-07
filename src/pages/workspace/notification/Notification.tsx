@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import NoNotificationFound from './components/NoNotificationFound';
 import { useGetNotificationService } from '../../../features/general/notification/notificationService';
 import NotificationCard from './components/NotificationCard';
-import { CardNotificationType } from './components/notificaiton.interface';
 
 function Notification() {
   const [notificationDataType, setNotificationDataType] = useState({});

@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useEffect } from 'react';
-// import { useParams } from "react-router-dom";
 import { useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';

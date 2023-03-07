@@ -17,7 +17,6 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
-import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';

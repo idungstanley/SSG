@@ -9,6 +9,7 @@ import moment from 'moment';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
 import EntryList from './entryLists/EntryList';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 
 export default function TimeEntries() {
   const [showEntries, setShowEntries] = useState(false);
@@ -62,7 +63,7 @@ export default function TimeEntries() {
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
             </div>
             {/* total time here */}
-            <p>{moment.utc(getEntries.data.total_duration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc((getEntries as ITimeEntriesRes).data.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
