@@ -24,7 +24,7 @@ export const createWalletService = (data: { name: string; hubID?: string | null;
 // // get wallets
 export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
-    const response = await requestNew(
+    const response = await requestNew<IWalletRes | undefined>(
       {
         url: 'at/wallets',
         method: 'GET',

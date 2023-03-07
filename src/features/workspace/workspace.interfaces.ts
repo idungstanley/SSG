@@ -2,7 +2,7 @@ export interface IWorkspaceRes {
   data: {
     workspace: {
       id: string;
-      name: string;
+      name: string | undefined;
       company_size: {
         key: string;
         name: string;

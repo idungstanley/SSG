@@ -24,16 +24,12 @@ export default function ActiveHub() {
   const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
-  // const { data: subwallet } = useQuery({
-  //   queryKey: ['subwalletlist', [currentWalletId]],
-  //   queryFn: getWalletService,
-  // });
   const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
     parentId: currentItemId
   });
   const subHubData = subHub?.data.hubs;
-  const subWalletData = subwallet?.data?.wallets;
+  const subWalletData = subwallet?.data.wallets;
   const { data, status } = useGetHubList({ query: null });
 
   const items = data?.data.hubs;

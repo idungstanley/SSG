@@ -8,9 +8,9 @@ import WorkspaceSettingsModal from '../../../../../pages/workspace/workspaceSett
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const { data, status } = getWorkspaceService();
+  const { data: workSpaceData, status } = getWorkspaceService();
 
-  const workspaceName = data?.data.workspace.name;
+  const workspaceName = workSpaceData?.data.workspace.name;
 
   if (status == 'loading') {
     return <Spinner size={10} color={'#6B7280'} />;

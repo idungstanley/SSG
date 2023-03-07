@@ -1,5 +1,6 @@
 import requestNew from '../../app/requestNew';
 import { useQuery } from '@tanstack/react-query';
+import { IWorkspaceRes } from './workspace.interfaces';
 
 interface IData {
   name: string | number;
@@ -25,7 +26,7 @@ export const createWorkspaceService = (data: IData) => {
 
 export const getWorkspaceService = () => {
   return useQuery(['workspace'], async () => {
-    const data = await requestNew(
+    const data = await requestNew<IWorkspaceRes | undefined>(
       {
         url: 'workspace',
         method: 'GET'
