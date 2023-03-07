@@ -27,7 +27,8 @@ import EditHubModal from "../../pages/workspace/hubs/components/EditHubModal";
 import SubDropdown from "./SubDropdown";
 import {
   ArchiveHubService,
-  useAddToFavourites,
+  // useAddToFavourites,
+  useCreateFavorite,
   UseDeleteHubService,
 } from "../../features/hubs/hubService";
 import {
@@ -50,7 +51,7 @@ import {
   UseArchiveListService,
   UseDeleteListService,
 } from "../../features/list/listService";
-import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
+// import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
   id: number;
@@ -68,7 +69,7 @@ export default function MenuDropdown() {
     archiveHub,
     showMenuDropdown,
     showMenuDropdownType,
-    triggerAddToFav,
+    // triggerAddToFav,
   } = useAppSelector((state) => state.hub);
   const {
     showCreateSubWalletSlideOver,
@@ -171,11 +172,12 @@ export default function MenuDropdown() {
   });
 
   // Add Entity to Favorites
-  useAddToFavourites({
-    query: showMenuDropdown,
-    type: showMenuDropdownType,
-    trigger: triggerAddToFav,
-  });
+  // useAddToFavourites({
+  //   query: showMenuDropdown,
+  //   type: showMenuDropdownType,
+  //   trigger: triggerAddToFav,
+  // });
+  const { mutate: onCreate } = useCreateFavorite();
 
   const itemsList: itemsType[] = [
     {
@@ -235,7 +237,11 @@ export default function MenuDropdown() {
       id: 6,
       title: "Add to favorites",
       handleClick: () => {
-        dispatch(setTriggerAddToFav(true));
+        onCreate({
+          query: showMenuDropdown,
+          type: showMenuDropdownType,
+        });
+        // dispatch(setTriggerAddToFav(true));
       },
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true,
