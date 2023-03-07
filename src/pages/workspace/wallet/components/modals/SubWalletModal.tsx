@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createWalletService } from '../../../../../features/wallet/walletService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import {
-  setCreateSubWalletSlideOverVisibility,
-} from '../../../../../features/general/slideOver/slideOverSlice';
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createWalletService } from "../../../../../features/wallet/walletService";
+import { Button, Input, SlideOver } from "../../../../../components";
+import { useAppSelector } from "../../../../../app/hooks";
+import { setCreateSubWalletSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
 import {
   setSubDropdownMenu,
   setshowMenuDropdown,
-} from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
+} from "../../../../../features/hubs/hubSlice";
+import { useDispatch } from "react-redux";
 
 function SubWalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown} = useAppSelector(
-    (state) => state.hub
-  );
+  const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType } =
+    useAppSelector((state) => state.hub);
   const { showCreateSubWalletSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
@@ -36,7 +33,7 @@ function SubWalletModal() {
   });
 
   const defaultWalletFormState = {
-    name: '',
+    name: "",
   };
 
   const [formState, setFormState] = useState(defaultWalletFormState);
@@ -50,11 +47,15 @@ function SubWalletModal() {
     await createWallet.mutateAsync({
       name,
       hubID:
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
+        (showMenuDropdownType == "hubs" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subhub" ? showMenuDropdown : null) ||
+        (SubMenuType == "hubs" ? SubMenuId : null) ||
+        (SubMenuType == "subhub" ? SubMenuId : null),
       walletId:
-        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null),
+        (showMenuDropdownType == "wallet" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subwallet2" ? showMenuDropdown : null) ||
+        (SubMenuType == "wallet" ? SubMenuId : null) ||
+        (SubMenuType == "subWallet2" ? SubMenuId : null),
     });
   };
 
