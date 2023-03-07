@@ -40,6 +40,19 @@ export interface ITaskFullList {
   };
 }
 
+export interface IPaginator {
+  page: number;
+  per_page: number;
+  has_more_pages: boolean;
+}
+
+export interface IFullTaskRes {
+  data: {
+    tasks: ITaskFullList[];
+    paginator: IPaginator;
+  };
+}
+
 export interface ITaskFullListObj {
   filteredTaskData: ITaskFullList;
 }

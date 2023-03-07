@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { ITaskFullList, ITaskRes } from './interface.tasks';
+import { IFullTaskRes, ITaskFullList, ITaskRes } from './interface.tasks';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
@@ -46,7 +46,7 @@ export const UseGetFullTaskList = ({
   return useInfiniteQuery(
     ['task', itemId, itemType],
     async ({ pageParam = 0 }) => {
-      return requestNew(
+      return requestNew<IFullTaskRes>(
         {
           url: 'at/tasks/full-list',
           method: 'POST',
@@ -90,7 +90,7 @@ export const UseGetFullTaskListWallet = ({
   return useInfiniteQuery(
     ['task', itemId, itemType],
     async ({ pageParam = 0 }) => {
-      return requestNew(
+      return requestNew<IFullTaskRes>(
         {
           url: 'at/tasks/full-list',
           method: 'POST',
@@ -241,7 +241,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   return useQuery(
     ['task', { listId: listId }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<IFullTaskRes>(
         {
           url: 'at/tasks/list',
           method: 'POST',
@@ -265,20 +265,6 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
     }
   );
 };
-
-// export const useGetTask = (taskId?: string) => {
-//   const queryClient = useQueryClient();
-
-//   return useQuery(
-//     ['single-task', taskId],
-//     () => queryClient.getQueryData(['single-task', taskId]),
-//     {
-//       initialData: () => queryClient.getQueryData(['single-task', taskId]),
-//       enabled: !!taskId,
-//     }
-//   );
-// };
-// getTaskListService();
 
 export const getTaskListService2 = (query: { parentId: string | null }) => {
   // const dispatch = useAppDispatch();

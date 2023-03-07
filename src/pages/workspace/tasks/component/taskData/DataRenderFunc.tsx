@@ -1,12 +1,12 @@
-import moment, { MomentInput } from "moment";
-import React, { ReactNode, useState } from "react";
-import { IoCloseSharp } from "react-icons/io5";
-import { MdDragIndicator } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { AvatarWithInitials } from "../../../../../components";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ToolTip from "../../../../../components/Tooltip";
+import moment, { MomentInput } from 'moment';
+import React, { ReactNode, useState } from 'react';
+import { IoCloseSharp } from 'react-icons/io5';
+import { MdDragIndicator } from 'react-icons/md';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../components';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ToolTip from '../../../../../components/Tooltip';
 import {
   ImyTaskData,
   setCurrentParentTaskId,
@@ -15,24 +15,21 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-import AssignTask from "../../assignTask/AssignTask";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { FiEdit2 } from "react-icons/fi";
-import TagModal from "../../../../../components/tags/TagModal";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { setCurrentTaskIdForTag } from "../../../../../features/workspace/tags/tagSlice";
-import {
-  UseUnAssignTagService,
-  UseUpdateTagService,
-} from "../../../../../features/workspace/tags/tagService";
+  setToggleAssignCurrentTaskId
+} from '../../../../../features/task/taskSlice';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import AssignTask from '../../assignTask/AssignTask';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { FiEdit2 } from 'react-icons/fi';
+import TagModal from '../../../../../components/tags/TagModal';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
+import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 
 interface renderDataProps {
   taskColField:
@@ -66,22 +63,21 @@ export default function DataRenderFunc({
     CompactView,
     CompactViewWrap
   } = useAppSelector((state) => state.task);
-  const [tagState, setTagState] = useState<string>("");
-  const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } =
-    useAppSelector((state) => state.tag);
+  const [tagState, setTagState] = useState<string>('');
+  const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const editTagNameMutation = useMutation(UseUpdateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const handleAssigneeModal = (id: string) => {
@@ -96,22 +92,16 @@ export default function DataRenderFunc({
     setTagState(e.target.value);
   };
 
-  const handleEditTagSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    currentTagId: string
-  ) => {
+  const handleEditTagSubmit = async (e: React.FormEvent<HTMLFormElement>, currentTagId: string) => {
     e.preventDefault();
     await editTagNameMutation.mutateAsync({
       name: tagState,
-      tag_id: currentTagId,
+      tag_id: currentTagId
     });
   };
 
-  const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }] | undefined
-  ) => {
-    return (data as [{ id: string; initials: string; colour: string }])
-      ?.length >= 3 ? (
+  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+    return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
       <div className="flex items-center justify-center">
         {data?.slice(0, 2).map((newData) => (
           <div key={newData.id} className="">
@@ -172,15 +162,12 @@ export default function DataRenderFunc({
                       className="flex items-center text-white p-0.5 h-4 text-center space-x-1 mr-1.5"
                       style={{
                         backgroundColor: `${item.color}`,
-                        clipPath:
-                          "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)",
+                        clipPath: 'polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)'
                       }}
                     >
                       <div className="flex items-center font-bold truncate">
-                        <p className="pl-4" style={{ fontSize: "7px" }}>
-                          {item.name.length > 10
-                            ? item.name.slice(0, 5)
-                            : item.name}
+                        <p className="pl-4" style={{ fontSize: '7px' }}>
+                          {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
                       <ToolTip tooltip="edit tag">
@@ -192,11 +179,11 @@ export default function DataRenderFunc({
                       <ToolTip tooltip="unassign tag">
                         <button
                           className="pr-2 text-gray-300 font-bold"
-                          style={{ fontSize: "9px" }}
+                          style={{ fontSize: '9px' }}
                           onClick={() =>
                             unAssignTagMutation.mutateAsync({
                               tagId: item.id,
-                              currentTaskIdForTag: task.id,
+                              currentTaskIdForTag: task.id
                             })
                           }
                         >

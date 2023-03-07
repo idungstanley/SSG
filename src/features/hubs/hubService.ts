@@ -192,8 +192,8 @@ export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?
 };
 
 export const useGetHubWallet = (hubId: string | null) =>
-  useQuery<IHubReq>([`hub-${hubId}`], () =>
-    requestNew(
+  useQuery([`hub-${hubId}`], () =>
+    requestNew<IHubReq | undefined>(
       {
         url: `hubs/${hubId}`,
         method: 'GET'

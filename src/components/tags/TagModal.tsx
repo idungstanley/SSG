@@ -14,9 +14,7 @@ export default function TagModal() {
 
   const { currentTaskIdForTag } = useAppSelector((state) => state.tag);
   //get all tags
-  const { data, status } = UseGetAllTagsService();
-
-  const tagList = data?.data.tags;
+  const { data: tagsData, status } = UseGetAllTagsService();
 
   if (status == 'loading') {
     <Spinner size={10} color={'blue'} />;
@@ -60,7 +58,7 @@ export default function TagModal() {
             <CreateTag />
           </div>
           <div className="h-52 overflow-auto ">
-            {tagList.map((tags: dataProps) => (
+            {tagsData?.data.tags.map((tags: dataProps) => (
               <Menu.Item key={tags.id}>
                 {() => (
                   <div className="flex items-center hover:bg-gray-300 text-gray-600">

@@ -53,8 +53,8 @@ function ListIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: ListInd
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data?.lists &&
-        data?.data?.lists.map((list) => (
+      {data?.data.lists &&
+        data?.data.lists.map((list) => (
           <div key={list.id}>
             <section
               className={`flex relative justify-between items-center text-sm h-8 hover:bg-gray-100 ${

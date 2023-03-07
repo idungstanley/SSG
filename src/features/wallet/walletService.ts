@@ -3,9 +3,10 @@ import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
+import { ICreateWallet, IWalletRes } from './wallet.interfaces';
 
 export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
-  const response = requestNew(
+  const response = requestNew<ICreateWallet>(
     {
       url: 'at/wallets',
       method: 'POST',
@@ -42,7 +43,7 @@ export const getWalletService = (currentWalletId: string | null) => {
 export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(['wallet', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
-    requestNew(
+    requestNew<IWalletRes | undefined>(
       {
         url: 'wallets',
         method: 'GET',
