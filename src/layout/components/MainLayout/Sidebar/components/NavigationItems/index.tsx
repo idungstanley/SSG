@@ -3,23 +3,21 @@ import {
   ArrowUpIcon,
   BellIcon,
   Squares2X2Icon,
-} from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
-import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
-import groupIcon from '../../../../../../assets/branding/Group.png';
+} from "@heroicons/react/24/outline";
+import React, { useState } from "react";
+import favoriteIcon from "../../../../../../assets/branding/Favourite-icon.svg";
+import groupIcon from "../../../../../../assets/branding/Group.png";
 import homeIcon from "../../../../../../assets/icons/Home.svg";
-import { cl } from '../../../../../../utils';
-import { useAppSelector } from '../../../../../../app/hooks';
-import NavigationItem from './components/NavigationItem';
-import { HiOutlineLibrary, HiTemplate, HiUserGroup } from 'react-icons/hi';
-import { BsCalendar2Minus } from 'react-icons/bs';
-// import { VscHome } from 'react-icons/vsc';
+import { cl } from "../../../../../../utils";
+import { useAppSelector } from "../../../../../../app/hooks";
+import NavigationItem from "./components/NavigationItem";
+import { HiOutlineLibrary, HiTemplate, HiUserGroup } from "react-icons/hi";
+import { BsCalendar2Minus } from "react-icons/bs";
 
 const navigation = [
   {
     name: "Home",
     href: "/",
-    // icon: <VscHome className="w-4 h4" aria-hidden="true" />,
     source: homeIcon,
     alwaysShow: true,
   },
@@ -75,11 +73,11 @@ const navigation = [
 
 const showLessOrMore = [
   {
-    name: 'Show Less',
+    name: "Show Less",
     icon: <ArrowUpIcon className="w-4 h4" aria-hidden="true" />,
   },
   {
-    name: 'Show More',
+    name: "Show More",
     icon: <ArrowDownIcon className="w-4 h4" aria-hidden="true" />,
   },
 ];
@@ -92,7 +90,7 @@ export default function NavigationItems() {
     <nav className="flex flex-col mt-1">
       {navigation.map((item) => (
         <NavigationItem
-          key={item.href}
+          key={item.name}
           item={item}
           isVisible={item.alwaysShow || showMore}
         />
@@ -102,8 +100,8 @@ export default function NavigationItems() {
       <div
         onClick={() => setShowMore((prev) => !prev)}
         className={cl(
-          !showSidebar ? 'justify-center' : 'gap-2 items-center',
-          'flex cursor-pointer gap-2 items-center pl-4 p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+          !showSidebar ? "justify-center" : "gap-2 items-center",
+          "flex cursor-pointer gap-2 items-center pl-4 p-2 w-full hover:text-gray-500 hover:bg-gray-100"
         )}
       >
         {showLessOrMore[showMore ? 0 : 1].icon}

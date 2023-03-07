@@ -25,7 +25,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
-  activeEntity: {id: string | null, type: string | null}
+  activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | null;
   activeHotKeyTabId: number | null;
@@ -34,6 +34,8 @@ interface workspaceState {
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
   showExtendedBar: false;
+  activePlaceNameForNavigation: string | null;
+  activePlaceIdForNavigation: string | null;
 }
 
 const initialState: workspaceState = {
@@ -69,11 +71,13 @@ const initialState: workspaceState = {
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
-  activeEntity: {id: null, type: null}
+  activeEntity: { id: null, type: null },
+  activePlaceNameForNavigation: null,
+  activePlaceIdForNavigation: null,
 };
 
 export const wsSlice = createSlice({
-  name: 'workspace',
+  name: "workspace",
   initialState,
   reducers: {
     createWorkspace(state, action) {
@@ -95,7 +99,7 @@ export const wsSlice = createSlice({
       state.showPilotListView = action.payload;
     },
     setSearchIsActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           searchIsActive: !state.searchIsActive,
@@ -103,7 +107,7 @@ export const wsSlice = createSlice({
       }
     },
     setIsExtSearchActive(state, action) {
-      if (action.payload === 'TOGGLE') {
+      if (action.payload === "TOGGLE") {
         return {
           ...state,
           isExtSearchActive: !state.isExtSearchActive,
@@ -183,6 +187,10 @@ export const wsSlice = createSlice({
       state.currentItemId = null;
       state.currentItemType = null;
     },
+    setActivePlaceForNav(state, { payload }) {
+      state.activePlaceNameForNavigation = payload.activePlaceNameForNavigation;
+      state.activePlaceIdForNavigation = payload.activePlaceIdForNavigation;
+    },
     checkIfWs: (state) => state,
   },
 });
@@ -219,7 +227,8 @@ export const {
   setSidebarWidthRD,
   setShowExtendedBar,
   setExtendedSidebarWidth,
-  setActivePlaceName
+  setActivePlaceName,
+  setActivePlaceForNav,
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

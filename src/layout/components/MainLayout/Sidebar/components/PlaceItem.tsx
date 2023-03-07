@@ -32,6 +32,7 @@ export default function PlaceItem({
 
   return (
     <li
+      id={`${label}`}
       className={cl(
         !isActivePlace ? "hover:bg-gray-100" : "hover:bg-gray-100",
         "focus:flex flex-col w-full pl-5 py-5 items-center relative",

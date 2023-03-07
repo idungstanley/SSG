@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAppSelector } from "../../../../../../app/hooks";
 import {
   UseCreateClistService,
-  UseDeleteChecklistService,
+  // UseDeleteChecklistService,
   UseGetAllClistService,
 } from "../../../../../../features/task/checklist/checklistService";
 import { Spinner } from "../../../../../../common";
@@ -23,8 +23,7 @@ export default function ChecklistIndex() {
   const { activeItemId, activeItemType } = useAppSelector(
     (state) => state.workspace
   );
-  const { triggerDelChecklist, clickedChecklistId, showChecklistInput } =
-    useAppSelector((state) => state.checklist);
+  const { showChecklistInput } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateClistService, {
@@ -48,10 +47,10 @@ export default function ChecklistIndex() {
   });
   const task_checklist = data?.data.task.checklists;
 
-  UseDeleteChecklistService({
-    query: clickedChecklistId,
-    delChecklist: triggerDelChecklist,
-  });
+  // UseDeleteChecklistService({
+  //   query: clickedChecklistId,
+  //   delChecklist: triggerDelChecklist,
+  // });
 
   if (status == "loading") {
     <Spinner size={20} color={"blue"} />;

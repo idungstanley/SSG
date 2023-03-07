@@ -3,9 +3,10 @@ import { Menu, Transition } from "@headlessui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { useAppDispatch } from "../../../app/hooks";
 import {
-  setDelFavId,
+  // setDelFavId,
   setShowFavEditInput,
 } from "../../../features/hubs/hubSlice";
+import { useUnfavoriteEntity } from "../../../features/hubs/hubService";
 // import { UseDeleteFav } from "../../../features/hubs/hubService";
 
 export default function FavModal({ id }: { id: string }) {
@@ -21,19 +22,24 @@ export default function FavModal({ id }: { id: string }) {
     },
   ];
 
+  const { mutate: onUnfavorite } = useUnfavoriteEntity();
+
   const handleClick = (name: string) => {
     if (name === "Unfavorite") {
-      dispatch(setDelFavId(id));
+      // dispatch(setDelFavId(id));
+      onUnfavorite({
+        delFav: id,
+      });
     } else {
       dispatch(setShowFavEditInput(id));
     }
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left absolute">
+    <Menu as="div" className="relative inline-block text-left absolute group">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          <BsThreeDots className="cursor-pointer" />
+          <BsThreeDots className="cursor-pointer opacity-0 group-hover:opacity-100" />
         </Menu.Button>
       </div>
       <Transition
