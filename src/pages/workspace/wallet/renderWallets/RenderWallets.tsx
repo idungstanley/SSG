@@ -51,7 +51,9 @@ function RenderWallets() {
       GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
       return GroupedTaskByListID;
     }, {});
-    setTaskDataGroupings(taskDataGroupedByListID);
+    setTaskDataGroupings(
+      taskDataGroupedByListID as { [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] } }
+    );
 
     return () => {
       true;
