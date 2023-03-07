@@ -66,7 +66,7 @@ export const useGetHubChildren = ({ query }: { query: string | null | undefined 
   const hubId = query;
 
   return useQuery(['hubs', hubId], async () => {
-    const data = await requestNew(
+    const data = await requestNew<IHubReq>(
       {
         url: `at/hubs/${hubId}`,
         method: 'GET'

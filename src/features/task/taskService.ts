@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskFullList, ITaskRes } from './interface.tasks';
+import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes } from './interface.tasks';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
@@ -241,7 +241,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   return useQuery(
     ['task', { listId: listId }],
     async () => {
-      const data = await requestNew<IFullTaskRes>(
+      const data = await requestNew<ITaskListRes>(
         {
           url: 'at/tasks/list',
           method: 'POST',
@@ -273,7 +273,7 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITaskListRes | undefined>(
         {
           url: 'at/tasks/list',
           method: 'POST',

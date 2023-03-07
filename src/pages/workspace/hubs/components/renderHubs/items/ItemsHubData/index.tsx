@@ -86,7 +86,7 @@ export default function ItemsHubData({ hubId, hubName }: ItemsHubDataProps) {
                   </p>
                 </div>
               </div>
-              {createTaskFromTop && currentListId === item.id && <AddNewItem listId={data.id} />}
+              {createTaskFromTop && currentListId === item.id && <AddNewItem listId={item.id} />}
               <div>
                 <div>
                   <TaskListViews />

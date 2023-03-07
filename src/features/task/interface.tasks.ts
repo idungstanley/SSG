@@ -1,3 +1,5 @@
+import { ImyTaskData } from "./taskSlice";
+
 export interface UpdateTaskProps {
   task_id: string | null;
   priorityDataUpdate?: string;
@@ -49,6 +51,12 @@ export interface IPaginator {
 export interface IFullTaskRes {
   data: {
     tasks: ITaskFullList[];
+    paginator: IPaginator;
+  };
+}
+export interface ITaskListRes {
+  data: {
+    tasks: ImyTaskData[];
     paginator: IPaginator;
   };
 }
