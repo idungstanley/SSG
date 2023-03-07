@@ -241,7 +241,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   return useQuery(
     ['task', { listId: listId }],
     async () => {
-      const data = await requestNew<ITaskListRes>(
+      const data = await requestNew<ITaskListRes | undefined>(
         {
           url: 'at/tasks/list',
           method: 'POST',
@@ -255,7 +255,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
     },
     {
       onSuccess: (data) => {
-        const taskData = data.data.tasks.map((task: { id: string }) => {
+        const taskData = data?.data.tasks.map((task: { id: string }) => {
           queryClient.setQueryData(['task', task.id], task);
           return { ...task };
         });

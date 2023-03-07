@@ -2,13 +2,7 @@ import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/re
 import React from 'react';
 
 interface TaskQuickActionProps {
-  listDetailsData: {
-    data: {
-      list: {
-        name: string;
-      };
-    };
-  };
+  listDetailsData: string | null;
 }
 
 export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProps) {
@@ -17,17 +11,17 @@ export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProp
       <div id="listTitle" className="flex justify-between items-center">
         <div className="flex items-center justify-center space-x-2 text-gray-400 group">
           <ChevronDownIcon className="flex-shrink-0 h-4 w-5" aria-hidden="true" />
-          <p className="font-bold text-gray-700 dark:text-gray-400">{listDetailsData?.data?.list?.name}</p>
+          <p className="font-bold text-gray-700 dark:text-gray-400">{listDetailsData}</p>
           <InformationCircleIcon className="flex-shrink-0 h-4 w-5 text-gray-400" aria-hidden="true" />
-          <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out		">
+          <p className="text-xs hover:bg-gray-200 hover:text-gray-500 cursor-pointer transition-all ease-in-out">
             {' '}
             + New Task
             {/* <span onClick={() => handleNewTask()}></span> */}
           </p>
-          <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
+          <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out">
             Add Description
           </p>
-          <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out	">
+          <p className="opacity-0 group-hover:opacity-100 hover:bg-gray-300 hover:text-gray-500 border-gray-700 p-1 cursor-pointer text-xs transition-all	ease-in-out">
             Add Comment
           </p>
         </div>

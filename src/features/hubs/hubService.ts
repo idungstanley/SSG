@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq } from './hubs.interfaces';
+import { IResponseGetHubs, IHubReq, IFavoritesRes } from './hubs.interfaces';
 import {
   closeMenu,
   getHub,
@@ -241,10 +241,8 @@ export const useAddToFavourites = (data: { query: string | null; type: string | 
 };
 
 export const useGetFavourites = () => {
-  // const queryClient = useQueryClient();
-  // const dispatch = useDispatch();
   return useQuery(['favorites'], async () => {
-    const data = await requestNew(
+    const data = await requestNew<IFavoritesRes | undefined>(
       {
         url: '/favorites',
         method: 'GET'

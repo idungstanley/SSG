@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { getTaskListService } from '../../../features/task/taskService';
+// import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -30,12 +30,13 @@ function RenderList() {
     currentParentTaskId,
     getSubTaskId
   } = useAppSelector((state) => state.task);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
   const { show } = pilotSideOver;
 
-  const { data: listDetailsData } = getTaskListService({ listId });
+  // const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
     <>
@@ -45,7 +46,7 @@ function RenderList() {
         header={
           <section id="nav" className="capitalize ">
             <ListNav
-              navName={listDetailsData?.data?.list?.name}
+              navName={activeItemName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
@@ -57,7 +58,7 @@ function RenderList() {
         <div className="w-full overflow-y-scroll ">
           <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
             {listView && <ListFilter />}
-            {listView && <TaskQuickAction listDetailsData={listDetailsData} />}
+            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
