@@ -17,6 +17,7 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
+import { tagItem } from '../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
@@ -30,8 +31,20 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 
+export interface tagItem {
+  id: string;
+  name: string;
+  color: string;
+}
+
 interface renderDataProps {
-  taskColField: string | number | undefined | null | Array<{ id: string; initials: string; colour: string }>;
+  taskColField:
+    | string
+    | number
+    | undefined
+    | tagItem[]
+    | null
+    | Array<{ id: string; initials: string; colour: string }>;
   colfield: string;
   task: ImyTaskData;
   getSubTaskId: string | null;
@@ -130,10 +143,10 @@ export default function DataRenderFunc({
     );
   };
 
-  const groupTags = (arr) => {
+  const groupTags = (arr: tagItem[]) => {
     return (
       <div key={arr.length} className="flex items-center -mr-5 drop-shadow-xl">
-        {arr.map((item) => {
+        {arr.map((item: tagItem) => {
           return (
             <div key={item.id} className="">
               {Array.isArray(item) ? (
@@ -277,7 +290,7 @@ export default function DataRenderFunc({
   } else if (colfield === 'tags') {
     return (
       <>
-        <div> {groupTags(taskColField)}</div>
+        <div> {groupTags(taskColField as tagItem[])}</div>
       </>
     );
   } else if (colfield == 'created_at' || colfield == 'updated_at') {
