@@ -106,7 +106,7 @@ function Favourite({ item }: nameType) {
             </h4>
           )}
         </div>
-        <div className="opacity-0 group-hover:opacity-100">
+        <div className="">
           <FavModal id={item.id} />
         </div>
       </div>

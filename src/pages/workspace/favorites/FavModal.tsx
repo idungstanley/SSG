@@ -36,10 +36,10 @@ export default function FavModal({ id }: { id: string }) {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left absolute">
+    <Menu as="div" className="relative inline-block text-left absolute group">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          <BsThreeDots className="cursor-pointer" />
+          <BsThreeDots className="cursor-pointer opacity-0 group-hover:opacity-100" />
         </Menu.Button>
       </div>
       <Transition
