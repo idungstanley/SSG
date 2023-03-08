@@ -51,17 +51,23 @@ function Notification() {
       return setNotificationDataType([]);
     }
 
-    const notificationByCategory = NotificationResponse.reduce((AccumulatedNotifications, currentNotification) => {
-      if (!AccumulatedNotifications[currentNotification.type]) {
-        AccumulatedNotifications[currentNotification.type] = {
-          name: currentNotification.model.name,
-          key: currentNotification.type,
-          notifications: []
-        };
-      }
-      AccumulatedNotifications[currentNotification.type].notifications.push(currentNotification);
-      return AccumulatedNotifications;
-    }, {});
+    const notificationByCategory = NotificationResponse.reduce(
+      (
+        AccumulatedNotifications: { [key: string]: { name?: string; key?: string; notifications: INotification[] } },
+        currentNotification
+      ) => {
+        if (!AccumulatedNotifications[currentNotification.type]) {
+          AccumulatedNotifications[currentNotification.type] = {
+            name: currentNotification.model.name,
+            key: currentNotification.type,
+            notifications: []
+          };
+        }
+        AccumulatedNotifications[currentNotification.type].notifications.push(currentNotification);
+        return AccumulatedNotifications;
+      },
+      {}
+    );
     setNotificationDataType(
       notificationByCategory as { [key: string]: { name: string; key: string; notifications: INotification[] } }
     );

@@ -4,7 +4,7 @@ import { IoChevronBackOutline } from 'react-icons/io5';
 import { VscEllipsis } from 'react-icons/vsc';
 import { BsPlus } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
-import { setToggleAssignCurrentTaskId } from '../../../../../features/task/taskSlice';
+import { setToggleAssignCurrentTaskId, ImyTaskData } from '../../../../../features/task/taskSlice';
 import CardState from './CardState';
 import AssignTask from '../../assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../components';
@@ -25,7 +25,7 @@ function Board() {
 
   const newData = groupBy('status', myTaskData);
 
-  const handleAssigneeModal = (id) => {
+  const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
     } else {
