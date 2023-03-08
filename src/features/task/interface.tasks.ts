@@ -6,6 +6,12 @@ export interface UpdateTaskProps {
   statusDataUpdate?: string;
 }
 
+export interface IParent {
+  hubs: Array<{ id: string; name: string; parent_id: string | null }> | [];
+  lists: Array<{ id: string; name: string; parent_id: string | null }> | [];
+  wallets: Array<{ id: string; name: string; parent_id: string | null }> | [];
+}
+
 export interface ITaskFullList {
   id: string;
   name: string;
@@ -28,17 +34,7 @@ export interface ITaskFullList {
   list: {
     id: string;
     name: string;
-    parents: {
-      hubs: [
-        {
-          id: string;
-          name: string;
-          parent_id: null;
-        }
-      ];
-      wallets: [];
-      lists: [];
-    };
+    parents: IParent;
   };
 }
 
@@ -54,6 +50,14 @@ export interface IFullTaskRes {
     paginator: IPaginator;
   };
 }
+
+export interface IFullTaskRes2 {
+  data: {
+    tasks: ImyTaskData[];
+    paginator: IPaginator;
+  };
+}
+
 export interface ITaskListRes {
   data: {
     tasks: ImyTaskData[];

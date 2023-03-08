@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { IParent } from './interface.tasks';
 
 export interface ImyTaskData {
   id: string;
@@ -18,6 +19,36 @@ export interface ImyTaskData {
   archived_at?: string | null;
   deleted_at?: string | null;
   [key: string]: string | number | undefined | null | [{ id: string; initials: string; colour: string; name: string }];
+}
+
+export interface ImyTaskData2 {
+  id?: string;
+  name?: string;
+  description?: string | null;
+  list_id?: string;
+  list?: { id: string; name: string; parent: IParent };
+  parent_id?: string | null;
+  priority?: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  start_date?: string | null;
+  end_date?: string | null;
+  status?: string | null;
+  tags?: [];
+  directory_items?: [];
+  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  updated_at?: string;
+  created_at?: string;
+  group_assignees?: [];
+  custom_fields?: [];
+  archived_at?: string | null;
+  deleted_at?: string | null;
+  [key: string]:
+    | string
+    | number
+    | undefined
+    | { id: string; name: string; parent: IParent }
+    | []
+    | null
+    | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 interface TaskState {

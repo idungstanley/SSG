@@ -7,11 +7,12 @@ import { UseGetFullTaskListWallet } from '../../../../features/task/taskService'
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
 import TaskTemplateData from '../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
-import { ImyTaskData } from '../../../../features/task/taskSlice';
+import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
+import { ITaskFullList } from '../../../../features/task/interface.tasks';
 
 function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<{
-    [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
+    [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData[] };
   }>({});
 
   const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -29,20 +30,24 @@ function RenderWallets() {
       return;
     }
 
-    const taskDataGroupedByListID = unFilteredTaskData?.reduce((GroupedTaskByListID, currentTask) => {
-      if (!GroupedTaskByListID[currentTask.list_id]) {
-        GroupedTaskByListID[currentTask.list_id] = {
-          groupListName: currentTask.list.name,
-          key: currentTask.list_id,
-          tasks: []
-        };
-      }
-      GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
-      return GroupedTaskByListID;
-    }, {});
-    setTaskDataGroupings(
-      taskDataGroupedByListID as { [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] } }
+    const taskDataGroupedByListID = unFilteredTaskData?.reduce(
+      (
+        GroupedTaskByListID: { [key: string]: { groupListName?: string; key?: string; tasks: ITaskFullList[] } },
+        currentTask
+      ) => {
+        if (!GroupedTaskByListID[currentTask.list_id as keyof ImyTaskData2]) {
+          GroupedTaskByListID[currentTask.list_id as keyof ImyTaskData2] = {
+            groupListName: currentTask.list?.name,
+            key: currentTask.list_id,
+            tasks: []
+          };
+        }
+        (GroupedTaskByListID[currentTask.list_id].tasks as ITaskFullList[]).push(currentTask);
+        return GroupedTaskByListID;
+      },
+      {}
     );
+    setTaskDataGroupings(taskDataGroupedByListID);
 
     return () => {
       true;
@@ -62,10 +67,25 @@ function RenderWallets() {
               <ListFilter />
             </div>
 
-            {Object.keys(TaskDataGroupings).length === 0 ? (
+            {Object.keys(
+              TaskDataGroupings as {
+                [key: string]: { groupListName: string; key: string; tasks: ImyTaskData2[] };
+              }
+            ).length === 0 ? (
               <NoTaskFound />
             ) : (
-              <TaskTemplateData filteredTaskData={TaskDataGroupings} />
+              <TaskTemplateData
+                filteredTaskData={
+                  TaskDataGroupings as {
+                    [key: string]: {
+                      [key: string]: string | ImyTaskData[];
+                      tasks: ImyTaskData[];
+                      key: string;
+                      groupListName: string;
+                    };
+                  }
+                }
+              />
             )}
           </div>
         </div>

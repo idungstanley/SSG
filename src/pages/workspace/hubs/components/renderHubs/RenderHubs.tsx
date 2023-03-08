@@ -9,6 +9,7 @@ import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData
 import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
 import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
+import { ITaskFullList } from '../../../../../features/task/interface.tasks';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<{
@@ -32,21 +33,25 @@ function RenderHubs() {
       return setTaskDataGroupings({});
     }
 
-    const taskDataGroupedByListID = unFilteredTaskData?.reduce((GroupedTaskByListID, currentTask) => {
-      if (!GroupedTaskByListID[currentTask.list_id]) {
-        GroupedTaskByListID[currentTask.list_id] = {
-          groupListName: currentTask.list?.name,
-          key: currentTask.list_id,
+    const taskDataGroupedByListID = unFilteredTaskData?.reduce(
+      (
+        GroupedTaskByListID: { [key: string]: { groupListName?: string; key?: string; tasks: ITaskFullList[] } },
+        currentTask
+      ) => {
+        if (!GroupedTaskByListID[currentTask.list_id]) {
+          GroupedTaskByListID[currentTask.list_id] = {
+            groupListName: currentTask.list?.name,
+            key: currentTask.list_id,
 
-          tasks: []
-        };
-      }
-      GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
-      return GroupedTaskByListID;
-    }, {});
-    setTaskDataGroupings(
-      taskDataGroupedByListID as { [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] } }
+            tasks: []
+          };
+        }
+        GroupedTaskByListID[currentTask.list_id].tasks.push(currentTask);
+        return GroupedTaskByListID;
+      },
+      {}
     );
+    setTaskDataGroupings(taskDataGroupedByListID);
 
     return () => {
       true;
