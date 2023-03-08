@@ -3,13 +3,13 @@ import { useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
 import PageWrapper from '../../../../../components/PageWrapper';
-import PilotSection, { pilotConfig } from '../PilotSection';
 import { UseGetFullTaskList } from '../../../../../features/task/taskService';
 import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
 import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
 import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/task/interface.tasks';
+import PilotSection, { pilotConfig } from '../../../../explorer/components/PilotSection';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});

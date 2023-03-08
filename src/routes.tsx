@@ -20,7 +20,7 @@ import TeamMembersSettingsPage from './pages/inbox/inboxSettings/TeamMembersSett
 import TeamMemberGroupsSettingsPage from './pages/inbox/inboxSettings/TeamMemberGroupsSettingsPage';
 
 // Settings
-import PermissionsPage from './pages/settings/PermissionsPage';
+import PermissionsPage from './pages/settings/permissionsPage';
 import TeamMembersPage from './pages/settings/teamMemberSettings/TeamMembersPage';
 import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/TeamMemberInvitesPage';
 
