@@ -1,80 +1,86 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { IoChevronBackOutline } from 'react-icons/io5';
-import { VscEllipsis } from 'react-icons/vsc';
-import { BsPlus } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { setToggleAssignCurrentTaskId, ImyTaskData } from '../../../../../features/task/taskSlice';
-import CardState from './CardState';
-import AssignTask from '../../assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../components';
-import { RiUserAddLine } from 'react-icons/ri';
+import React from 'react';
+// import { useAppSelector } from '../../../../../app/hooks';
+// import { IoChevronBackOutline } from 'react-icons/io5';
+// import { VscEllipsis } from 'react-icons/vsc';
+// import { BsPlus } from 'react-icons/bs';
+// import { useDispatch } from 'react-redux';
+// import { ImyTaskData, setToggleAssignCurrentTaskId } from '../../../../../features/task/taskSlice';
+// import CardState from './CardState';
+// import AssignTask from '../../assignTask/AssignTask';
+// import { AvatarWithInitials } from '../../../../../components';
+// import { RiUserAddLine } from 'react-icons/ri';
 
 function Board() {
-  const dispatch = useDispatch();
-  const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  // const dispatch = useDispatch();
+  // const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  // type GroupedData = {
+  //   [key: string]: ImyTaskData[];
+  // };
+  // const groupBy = (key: string, arr: ImyTaskData[]): GroupedData =>
+  //   arr?.reduce(
+  //     (cache: GroupedData, product) => {
+  //       const group = product[key];
+  //       return {
+  //         ...cache,
+  //         [group]: group in cache ? cache[group].concat(product) : [product]
+  //       };
+  //     },
+  //     {} as GroupedData // explicitly type the initial value of cache as GroupedData
+  //   );
 
-  const groupBy = (key, arr) =>
-    arr?.reduce(
-      (cache, product) => ({
-        ...cache,
-        [product[key]]: product[key] in cache ? cache[product[key]].concat(product) : [product]
-      }),
-      {}
-    );
+  // const newData = groupBy('status', myTaskData);
 
-  const newData = groupBy('status', myTaskData);
+  // const handleAssigneeModal = (id: string) => {
+  //   if (toggleAssignCurrentTaskId == id) {
+  //     dispatch(setToggleAssignCurrentTaskId(null));
+  //   } else {
+  //     dispatch(setToggleAssignCurrentTaskId(id));
+  //   }
+  // };
 
-  const handleAssigneeModal = (id: string) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
+  // const groupAssignee = (data) => {
+  //   return data?.length >= 3 ? (
+  //     <div className="flex items-center justify-center ">
+  //       {data?.slice(0, 2).map((newData) => (
+  //         <div key={newData.id} className="">
+  //           <span key={newData.id} className="flex items-center gap-1 justify center">
+  //             <AvatarWithInitials
+  //               initials={newData.initials}
+  //               backgroundColour={newData.colour}
+  //               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+  //               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+  //             />
+  //           </span>
+  //         </div>
+  //       ))}
+  //       <span>{data?.length - 2 !== 0 ? <span>+{data?.length - 2}</span> : null}</span>
+  //     </div>
+  //   ) : (
+  //     data?.map((newData) => (
+  //       <div key={newData.id} className="flex">
+  //         <span key={newData.id}>
+  //           <AvatarWithInitials
+  //             initials={newData.initials}
+  //             backgroundColour={newData.colour}
+  //             height={`${CompactView ? 'h-4' : 'h-5'}`}
+  //             width={`${CompactView ? 'w-4' : 'w-5'}`}
+  //           />
+  //         </span>
+  //       </div>
+  //     ))
+  //   );
+  // };
 
-  const groupAssignee = (data) => {
-    return data?.length >= 3 ? (
-      <div className="flex items-center justify-center ">
-        {data?.slice(0, 2).map((newData) => (
-          <div key={newData.id} className="">
-            <span key={newData.id} className="flex items-center gap-1 justify center">
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-              />
-            </span>
-          </div>
-        ))}
-        <span>{data?.length - 2 !== 0 ? <span>+{data?.length - 2}</span> : null}</span>
-      </div>
-    ) : (
-      data?.map((newData) => (
-        <div key={newData.id} className="flex">
-          <span key={newData.id}>
-            <AvatarWithInitials
-              initials={newData.initials}
-              backgroundColour={newData.colour}
-              height={`${CompactView ? 'h-4' : 'h-5'}`}
-              width={`${CompactView ? 'w-4' : 'w-5'}`}
-            />
-          </span>
-        </div>
-      ))
-    );
-  };
-
-  const [icons, setIcons] = useState(null);
+  // const [icons, setIcons] = useState(null);
   return (
-    <div className="gap-5 dynamic pt-14 pl-5">
-      {Object.keys(newData).map((key) => {
+    <div className="gap-5 pl-5 dynamic pt-14">
+      <p>to be fixed soon</p>
+      {/* {Object.keys(newData).map((key) => {
         return (
           <>
             <div
               key={key}
-              className="relative flex items-center justify-center w-56 h-10 p-3 -mt-10  font-bold uppercase bg-white rounded shadow-md group "
+              className="relative flex items-center justify-center w-56 h-10 p-3 -mt-10 font-bold uppercase bg-white rounded shadow-md group "
               style={{ fontSize: '12px' }}
             >
               {key === 'new' ? (
@@ -119,17 +125,17 @@ function Board() {
                           {items.assignees && (items?.assignees).length == 0 ? (
                             <>
                               <div onClick={() => handleAssigneeModal(items.id)}>
-                                <RiUserAddLine className=" text-gray-400  cursor-pointer " aria-hidden="true" />
-                                <span className="absolute shadow-2xl  z-30 mt-5">
+                                <RiUserAddLine className="text-gray-400 cursor-pointer " aria-hidden="true" />
+                                <span className="absolute z-30 mt-5 shadow-2xl">
                                   {toggleAssignCurrentTaskId == items?.id ? <AssignTask /> : null}
                                 </span>
                               </div>
                             </>
                           ) : (
                             <>
-                              <div onClick={() => handleAssigneeModal(items.id)} className="cursor-pointer flex ">
+                              <div onClick={() => handleAssigneeModal(items.id)} className="flex cursor-pointer ">
                                 {groupAssignee(items.assignees)}
-                                <span className="absolute shadow-2xl mt-10 z-30  ">
+                                <span className="absolute z-30 mt-10 shadow-2xl ">
                                   {toggleAssignCurrentTaskId == items?.id ? <AssignTask /> : null}
                                 </span>
                               </div>
@@ -150,7 +156,7 @@ function Board() {
             </div>
           </>
         );
-      })}
+      })} */}
     </div>
   );
 }
