@@ -45,7 +45,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint:check": "clear && eslint src/**/*.{ts,tsx,js,jsx} --config .eslintrc.json",
+    "lint:check": "clear && eslint src/**/*.{ts,tsx,js} --config .eslintrc.json",
     "ts:check": "clear && tsc --allowJS false --pretty --strict true",
     "format:check": "clear && prettier --check src/**/*.{ts,tsx,js,jsx} --config .prettierrc.json",
     "format:fix": "clear && prettier --write src/**/*.{ts,tsx,js,jsx} --config .prettierrc.json",

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { explorerItemType } from '../../types';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-const selectedSortingId: number = JSON.parse(localStorage.getItem('selectedSortingId') || '1');
+const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId') || '1') as number;
 
 interface IFastPreview {
   show: boolean;

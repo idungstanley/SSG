@@ -38,13 +38,8 @@ export default function SelectMenuWithAvatar({
 
   const item = processedOptions.find((item) => item.id === selectedId);
 
-  interface IAvatar {
-    id: string;
-  }
-
   const handleChange = (e: string) => {
-    const value: IAvatar = JSON.parse(JSON.stringify(e)) as IAvatar;
-    onChange(value.id);
+    onChange({ id: e });
   };
 
   return (

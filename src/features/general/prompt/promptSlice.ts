@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../../app/store';
 
 interface IOption {
@@ -25,14 +25,14 @@ export const promptSlice = createSlice({
   name: 'prompt',
   initialState,
   reducers: {
-    setVisibility: (state, action) => {
+    setVisibility: (state, action: PayloadAction<boolean>) => {
       state.show = action.payload;
     },
-    setData: (state, action) => {
+    setData: (state, action: PayloadAction<{ title: string; body: string }>) => {
       state.title = action.payload.title;
       state.body = action.payload.body;
     },
-    setOptions: (state, action) => {
+    setOptions: (state, action: PayloadAction<IOption[]>) => {
       state.options = action.payload;
     },
     reset: (state) => {
