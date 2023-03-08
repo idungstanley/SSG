@@ -34,7 +34,6 @@ function RenderWallets() {
         GroupedTaskByListID[currentTask.list_id] = {
           groupListName: currentTask.list.name,
           key: currentTask.list_id,
-
           tasks: []
         };
       }
