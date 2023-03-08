@@ -8,13 +8,11 @@ import { UseGetFullTaskList } from '../../../../../features/task/taskService';
 import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
 import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
-import { ImyTaskData } from '../../../../../features/task/taskSlice';
-import { ITaskFullList } from '../../../../../features/task/interface.tasks';
+import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlice';
+import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/task/interface.tasks';
 
 function RenderHubs() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState<{
-    [key: string]: { groupListName: string; key: string; tasks: ImyTaskData[] };
-  }>({});
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView } = useAppSelector((state) => state.task);
 
@@ -51,7 +49,7 @@ function RenderHubs() {
       },
       {}
     );
-    setTaskDataGroupings(taskDataGroupedByListID);
+    setTaskDataGroupings(taskDataGroupedByListID as TaskDataGroupingsProps | unknown);
 
     return () => {
       true;
@@ -74,12 +72,40 @@ function RenderHubs() {
                 <ListFilter />
               </div>
 
-              {Object.keys(TaskDataGroupings).length === 0 ? (
+              {Object.keys(
+                TaskDataGroupings as {
+                  [key: string]: { groupListName: string; key: string; tasks: ImyTaskData2[] };
+                }
+              ).length === 0 ? (
                 <NoTaskFound />
               ) : (
-                <TaskTemplateData filteredTaskData={TaskDataGroupings} />
+                <TaskTemplateData
+                  filteredTaskData={
+                    TaskDataGroupings as {
+                      [key: string]: {
+                        [key: string]: string | ImyTaskData[];
+                        tasks: ImyTaskData[];
+                        key: string;
+                        groupListName: string;
+                      };
+                    }
+                  }
+                />
               )}
-              {tableView && <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />}
+              {tableView && (
+                <TaskTableTemplateData
+                  filteredTaskData={
+                    TaskDataGroupings as {
+                      [key: string]: {
+                        [key: string]: string | ImyTaskData[];
+                        tasks: ImyTaskData[];
+                        key: string;
+                        groupListName: string;
+                      };
+                    }
+                  }
+                />
+              )}
             </div>
           </div>
         )}
@@ -89,7 +115,20 @@ function RenderHubs() {
               {/* <div className="w-full">
                 <ListFilter />
               </div> */}
-              {tableView && <TaskTableTemplateData filteredTaskData={TaskDataGroupings} />}
+              {tableView && (
+                <TaskTableTemplateData
+                  filteredTaskData={
+                    TaskDataGroupings as {
+                      [key: string]: {
+                        [key: string]: string | ImyTaskData[];
+                        tasks: ImyTaskData[];
+                        key: string;
+                        groupListName: string;
+                      };
+                    }
+                  }
+                />
+              )}
             </div>
           </div>
         )}

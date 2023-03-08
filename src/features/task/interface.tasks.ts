@@ -1,4 +1,4 @@
-import { ImyTaskData } from './taskSlice';
+import { ImyTaskData, ImyTaskData2 } from './taskSlice';
 
 export interface UpdateTaskProps {
   task_id: string | null;
@@ -10,6 +10,10 @@ export interface IParent {
   hubs: Array<{ id: string; name: string; parent_id: string | null }> | [];
   lists: Array<{ id: string; name: string; parent_id: string | null }> | [];
   wallets: Array<{ id: string; name: string; parent_id: string | null }> | [];
+}
+
+export interface TaskDataGroupingsProps {
+  [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData2[] } | undefined;
 }
 
 export interface ITaskFullList {

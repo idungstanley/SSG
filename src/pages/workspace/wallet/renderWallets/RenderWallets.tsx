@@ -8,12 +8,10 @@ import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter
 import TaskTemplateData from '../../tasks/component/taskData/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
 import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
-import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, TaskDataGroupingsProps } from '../../../../features/task/interface.tasks';
 
 function RenderWallets() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState<{
-    [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData[] };
-  }>({});
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
 
   const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
@@ -47,7 +45,7 @@ function RenderWallets() {
       },
       {}
     );
-    setTaskDataGroupings(taskDataGroupedByListID);
+    setTaskDataGroupings(taskDataGroupedByListID as TaskDataGroupingsProps | unknown);
 
     return () => {
       true;
