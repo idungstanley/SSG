@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface TagState {
   currentTaskIdForTag: null;
@@ -13,11 +13,11 @@ const initialState: TagState = {
   unAssignTadId: null,
   renameTagId: null,
   showTagColorDialogueBox: false,
-  currentTagId: null,
+  currentTagId: null
 };
 
 export const tagSlice = createSlice({
-  name: "tag",
+  name: 'tag',
   initialState,
   reducers: {
     setCurrentTaskIdForTag(state, action) {
@@ -35,16 +35,11 @@ export const tagSlice = createSlice({
     },
     setCurrentTagId(state, action) {
       state.currentTagId = action.payload;
-    },
-  },
+    }
+  }
 });
 
-export const {
-  triggerUnassignTag,
-  setCurrentTaskIdForTag,
-  setRenameTagId,
-  setShowTagColorDialogBox,
-  setCurrentTagId,
-} = tagSlice.actions;
+export const { triggerUnassignTag, setCurrentTaskIdForTag, setRenameTagId, setShowTagColorDialogBox, setCurrentTagId } =
+  tagSlice.actions;
 
 export default tagSlice.reducer;

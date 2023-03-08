@@ -41,7 +41,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                 <div className="group flex items-center justify-center " style={{ color: '#78828d', fontSize: '11px' }}>
                   <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
 
-                  <p className="text-base font-semibold text-black	" style={{ backgroundColor: '#e1e4e5' }}>
+                  <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
                     {filteredTaskData[value].groupListName}
                   </p>
 

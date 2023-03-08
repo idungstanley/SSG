@@ -46,7 +46,7 @@ export const UseGetFullTaskList = ({
   const enabled = itemType == 'hub' || itemType == 'subhub';
   return useInfiniteQuery(
     ['task', itemId, itemType],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>(
         {
           url: 'at/tasks/full-list',
@@ -90,7 +90,7 @@ export const UseGetFullTaskListWallet = ({
 
   return useInfiniteQuery(
     ['task', itemId, itemType],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>(
         {
           url: 'at/tasks/full-list',

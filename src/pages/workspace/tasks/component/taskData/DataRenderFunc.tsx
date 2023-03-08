@@ -406,7 +406,7 @@ export default function DataRenderFunc({
                   : CompactView
                   ? 'text-xs whitespace-nowrap'
                   : CompactViewWrap
-                  ? 'text-xs text-justify	'
+                  ? 'text-xs text-justify'
                   : null
               }`}
             >

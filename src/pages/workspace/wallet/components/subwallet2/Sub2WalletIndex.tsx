@@ -12,7 +12,7 @@ import ListItem from '../../../../../components/tasks/ListItem';
 
 interface SubWalletIndexProps {
   paddingLeft?: string;
-  currWalId: string
+  currWalId: string;
 }
 
 interface dataProps {
@@ -61,7 +61,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
             paddingLeft="64"
             showSubWallet={showSubWallet2}
           />
-          <div>{showSubWallet2 === wallet.id ? <Sub2WalletIndex currWalId={currWalId } paddingLeft="72" /> : null}</div>
+          <div>{showSubWallet2 === wallet.id ? <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" /> : null}</div>
           {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
           {SubMenuId === wallet.id ? <SubDropdown /> : null}
         </div>

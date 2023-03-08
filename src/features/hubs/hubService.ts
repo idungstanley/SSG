@@ -209,7 +209,7 @@ const addToFavorite = (data: {
   }
   const response = requestNew(
     {
-      url: `/favorites`,
+      url: '/favorites',
       method: 'POST',
       params: {
         type: newType,

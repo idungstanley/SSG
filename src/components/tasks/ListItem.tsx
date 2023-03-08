@@ -1,17 +1,10 @@
-import React from "react";
-import { AiOutlineEllipsis } from "react-icons/ai";
-import { BsListUl } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  closeMenu,
-  getPrevName,
-  setshowMenuDropdown,
-} from "../../features/hubs/hubSlice";
-import {
-  setActiveEntity,
-  setActiveItem,
-} from "../../features/workspace/workspaceSlice";
+import React from 'react';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import { BsListUl } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
 
 interface ListItemProps {
   list: {
@@ -31,28 +24,24 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     navigate(`/list/${id}`);
     dispatch(
       setActiveItem({
-        activeItemType: "list",
+        activeItemType: 'list',
         activeItemId: id,
-        activeItemName: name,
+        activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: "wallet" }));
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
-  const handleListSettings = (
-    id: string,
-    name: string,
-    e: React.MouseEvent<HTMLButtonElement | SVGElement>
-  ) => {
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: "list",
+        showMenuDropdownType: 'list'
       })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == "menusettings") {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -61,18 +50,16 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   return (
     <section
       className={`relative flex items-center justify-between h-8 space-x-1 hover:bg-gray-100 group ${
-        list.id === activeItemId && "bg-green-100 text-black font-medium"
+        list.id === activeItemId && 'bg-green-100 text-black font-medium'
       }`}
       style={{ paddingLeft: `${paddingLeft}px` }}
     >
-      {list.id === activeItemId && (
-        <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
-      )}
+      {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
       <div className="flex items-center space-x-1 tracking-wider capitalize truncate cursor-pointer">
         <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
         <div
           onClick={() => handleListLocation(list.id, list.name)}
-          style={{ fontSize: "12px" }}
+          style={{ fontSize: '12px' }}
           className="tracking-wider capitalize truncate cursor-pointer"
         >
           {list.name}

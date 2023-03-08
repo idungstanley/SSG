@@ -50,8 +50,8 @@ function Hubs() {
       />
       <div
         className={cl(
-          !showSidebar && "overflow-x-hidden w-12",
-          "flex items-center justify-between pl-4 hover:bg-gray-100"
+          !showSidebar && 'overflow-x-hidden w-12',
+          'flex items-center justify-between pl-4 hover:bg-gray-100'
         )}
       >
         <div className="flex items-center content-center self-center py-2">

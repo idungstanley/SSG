@@ -36,7 +36,9 @@ export default function EditHubModal() {
     }));
   };
 
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '"');
+  const currentWorkspaceId: string | undefined = JSON.parse(
+    localStorage.getItem('currentWorkspaceId') || '"'
+  ) as string;
 
   const { name } = formState;
 

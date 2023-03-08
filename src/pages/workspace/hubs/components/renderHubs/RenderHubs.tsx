@@ -11,15 +11,19 @@ import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlic
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/task/interface.tasks';
 import PilotSection, { pilotConfig } from '../../../../explorer/components/PilotSection';
 
+interface HubDetailTypes {
+  activeItemId: string;
+  activeItemType: string;
+}
+
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem('hubDetailsStorage');
-  const hubdetail = JSON.parse(retrievedObject as string);
+  const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
 
-  // const { hubId } = useParams();
   const { data: TaskFullList, status } = UseGetFullTaskList({
     itemId: hubdetail.activeItemId,
     itemType: hubdetail.activeItemType

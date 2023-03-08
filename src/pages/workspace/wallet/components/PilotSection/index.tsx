@@ -37,7 +37,7 @@ const sections = [
   {
     id: 5,
     element: <ChatForPilot />
-  },
+  }
   // {
   //   id: 6,
   //   element: <TimeClock />

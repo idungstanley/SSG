@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { cl } from "../../utils";
-import { RiCheckboxBlankFill } from "react-icons/ri";
-import { useAppSelector } from "../../app/hooks";
-import { UseUpdateTaskStatusService } from "../../features/task/taskService";
+import React, { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { cl } from '../../utils';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { useAppSelector } from '../../app/hooks';
+import { UseUpdateTaskStatusService } from '../../features/task/taskService';
 interface statusType {
   id: number;
   title: string;
@@ -107,8 +107,8 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
                 <button
                   type="button"
                   className={cl(
-                    active ? `bg-${i.bg}-200` : "",
-                    "flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full"
+                    active ? `bg-${i.bg}-200` : '',
+                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}
                 >

@@ -8,7 +8,7 @@ import { Button } from '../../../../components';
 export default function TeamMemberAcceptInvite() {
   const { inviteCode } = useParams();
   const [acceptInviteTrigger, setAcceptInviteTrigger] = useState<boolean>(false);
-  const token = JSON.parse(localStorage.getItem('accessToken') as string);
+  const token: string = JSON.parse(localStorage.getItem('accessToken') as string) as string;
 
   useEffect(() => {
     if (inviteCode) {

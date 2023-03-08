@@ -15,6 +15,11 @@ interface UserSettingsType {
   handleClick: () => void;
 }
 
+interface User {
+  initials: string;
+  colour: string;
+}
+
 export default function UserSettingsModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -105,8 +110,9 @@ export default function UserSettingsModal() {
     }
   ];
 
-  const getLocalWS = JSON.parse(localStorage.getItem('user') as string);
-  const workspaceInitials = getLocalWS ? getLocalWS.initials : 'A';
+  const getLocalWS: User = JSON.parse(localStorage.getItem('user') as string) as User;
+
+  const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
