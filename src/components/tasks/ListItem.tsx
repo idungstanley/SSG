@@ -1,8 +1,8 @@
 import React from "react";
 import { AiOutlineEllipsis } from "react-icons/ai";
-import { BsListUl } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import ListIcon from "../../assets/icons/ListIcon";
 import {
   closeMenu,
   getPrevName,
@@ -69,11 +69,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
       )}
       <div className="flex items-center space-x-1 tracking-wider capitalize truncate cursor-pointer">
-        <BsListUl className="flex-shrink-0 w-5 h-3" aria-hidden="true" />
+        <ListIcon />
         <div
           onClick={() => handleListLocation(list.id, list.name)}
           style={{ fontSize: "12px" }}
-          className="tracking-wider capitalize truncate cursor-pointer"
+          className="pl-4 tracking-wider capitalize truncate cursor-pointer"
         >
           {list.name}
         </div>

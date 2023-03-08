@@ -55,7 +55,7 @@ function SubWalletModal() {
         (showMenuDropdownType == "wallet" ? showMenuDropdown : null) ||
         (showMenuDropdownType == "subwallet2" ? showMenuDropdown : null) ||
         (SubMenuType == "wallet" ? SubMenuId : null) ||
-        (SubMenuType == "subWallet2" ? SubMenuId : null),
+        (SubMenuType == "subwallet2" ? SubMenuId : null),
     });
   };
 
