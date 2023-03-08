@@ -9,6 +9,7 @@ import {
   getSubMenu,
   setshowMenuDropdown,
 } from "../../features/hubs/hubSlice";
+import { setPaletteDropDown } from "../../features/wallet/walletSlice";
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
@@ -20,6 +21,7 @@ interface WalletItemProps {
   showSubWallet: string | null;
   paddingLeft: string | number;
   walletType: string;
+  paletteColor?: string;
 }
 export default function WalletItem({
   handleShowSubWallet,
@@ -27,6 +29,7 @@ export default function WalletItem({
   showSubWallet,
   handleLocation,
   paddingLeft,
+  paletteColor = "rgba(72, 67, 67, 0.64)",
   walletType,
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -40,6 +43,10 @@ export default function WalletItem({
         SubMenuType: walletType,
       })
     );
+  };
+  const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    dispatch(setPaletteDropDown(id));
   };
 
   const handleWalletSettings = (
@@ -84,7 +91,10 @@ export default function WalletItem({
                 aria-hidden="true"
                 color="rgba(72, 67, 67, 0.64)"
               />
-              <FaFolderOpen color="rgba(72, 67, 67, 0.64)" />
+              <FaFolderOpen
+                color={paletteColor}
+                onClick={(e) => handleWalletColour(wallet.id,e)}
+              />
             </>
           ) : (
             <>
@@ -93,7 +103,10 @@ export default function WalletItem({
                 aria-hidden="true"
                 color="#BBBDC0"
               />
-              <FaFolder color="rgba(72, 67, 67, 0.64)" />
+              <FaFolder
+                color={paletteColor}
+                onClick={(e) => handleWalletColour(wallet.id,e)}
+              />
             </>
           )}
         </div>
