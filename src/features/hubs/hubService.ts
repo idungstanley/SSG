@@ -196,11 +196,11 @@ export const useGetHubWallet = (hubId: string | null) =>
   );
 
 const addToFavorite = (data: {
-  query: string | null;
-  type: string | null;
+  query: string | null | undefined;
+  type: string | null | undefined;
   // trigger: boolean;
 }) => {
-  let newType: string | null = null;
+  let newType: string | null | undefined = null;
   const { query, type } = data;
   if (type === 'hubs' || type === 'subhub') {
     newType = 'hub';
