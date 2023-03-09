@@ -549,7 +549,7 @@ export const UseAssignTaskService = ({
   team_member_id,
   triggerAsssignTask
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
   team_member_id: string | null;
   triggerAsssignTask?: boolean;
 }) => {

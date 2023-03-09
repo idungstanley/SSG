@@ -1,7 +1,7 @@
 import { ImyTaskData, ImyTaskData2 } from './taskSlice';
 
 export interface UpdateTaskProps {
-  task_id: string | null;
+  task_id: string | null | undefined;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
 }
