@@ -24,7 +24,7 @@ export default function ListSection({ data }: { data: dataProps }) {
         <div id="listTitle" className="flex items-center justify-between">
           <div className="group flex items-center justify-center text-gray-400">
             <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
-            <p className="text-base font-semibold text-black	" style={{ backgroundColor: '#e1e4e5' }}>
+            <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
               {data.name}
             </p>
 

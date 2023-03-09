@@ -2,7 +2,7 @@ import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/re
 import React from 'react';
 
 interface TaskQuickActionProps {
-  listDetailsData: string | null;
+  listDetailsData: string | null | undefined;
 }
 
 export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProps) {

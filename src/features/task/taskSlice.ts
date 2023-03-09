@@ -60,7 +60,7 @@ interface TaskState {
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
-  current_task_id: null;
+  current_task_id: string | null;
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -68,11 +68,11 @@ interface TaskState {
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
-  showTaskNavigation: boolean;
+  showTaskNavigation: boolean | unknown;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
-  toggleAssignCurrentTaskId: null | undefined | string;
-  currentParentTaskId: null;
+  toggleAssignCurrentTaskId: string | null;
+  currentParentTaskId: string | null;
   getSubTaskId: null;
   currentParentSubTaskId: null;
   currentParentSubTaskId2: null | string;
@@ -84,8 +84,8 @@ interface TaskState {
   openUpdateEntryId: null | undefined;
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
-  currentTaskStatusId: null | string | undefined;
-  currentTaskPriorityId: null | string | undefined;
+  currentTaskStatusId: string | null;
+  currentTaskPriorityId: string | null;
   triggerAsssignTask: boolean;
 }
 
@@ -200,7 +200,7 @@ export const taskSlice = createSlice({
       state.boardView = action.payload;
     },
 
-    setShowTaskNavigation(state, action: PayloadAction<boolean>) {
+    setShowTaskNavigation(state, action: PayloadAction<boolean | unknown>) {
       state.showTaskNavigation = action.payload;
     },
 
@@ -215,16 +215,16 @@ export const taskSlice = createSlice({
       state.currTeamMemberId = action.payload;
     },
 
-    setCurrentTaskId(state, action: PayloadAction<null>) {
+    setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.current_task_id = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
     },
-    setToggleAssignCurrentTaskId(state, action: PayloadAction<null | string | undefined>) {
+    setToggleAssignCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.toggleAssignCurrentTaskId = action.payload;
     },
-    setCurrentParentTaskId(state, action: PayloadAction<null>) {
+    setCurrentParentTaskId(state, action: PayloadAction<string | null>) {
       state.currentParentTaskId = action.payload;
     },
     setGetSubTaskId(state, action: PayloadAction<null>) {
@@ -242,10 +242,10 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId4(state, action: PayloadAction<null | string | undefined>) {
       state.currentParentSubTaskId4 = action.payload;
     },
-    setCurrentTaskStatusId(state, action: PayloadAction<null | string | undefined>) {
+    setCurrentTaskStatusId(state, action: PayloadAction<string | null>) {
       state.currentTaskStatusId = action.payload;
     },
-    setCurrentTaskPriorityId(state, action: PayloadAction<null | string | undefined>) {
+    setCurrentTaskPriorityId(state, action: PayloadAction<string | null>) {
       state.currentTaskPriorityId = action.payload;
     },
     setUpdateEntries(
