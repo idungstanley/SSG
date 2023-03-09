@@ -68,7 +68,7 @@ interface TaskState {
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
-  showTaskNavigation: boolean | unknown;
+  showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
@@ -200,7 +200,7 @@ export const taskSlice = createSlice({
       state.boardView = action.payload;
     },
 
-    setShowTaskNavigation(state, action: PayloadAction<boolean | unknown>) {
+    setShowTaskNavigation(state, action: PayloadAction<boolean>) {
       state.showTaskNavigation = action.payload;
     },
 
