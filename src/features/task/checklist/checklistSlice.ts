@@ -26,29 +26,29 @@ export const checklistSlice = createSlice({
   name: 'Checklists',
   initialState,
   reducers: {
-    setTriggerChecklistUpdate(state, { payload }) {
-      state.triggerChecklistUpdate = payload;
+    setTriggerChecklistUpdate(state, action: PayloadAction<boolean>) {
+      state.triggerChecklistUpdate = action.payload;
     },
-    setTriggerItemtUpdate(state, { payload }) {
-      state.triggerItemUpdate = payload;
+    setTriggerItemtUpdate(state, action: PayloadAction<boolean>) {
+      state.triggerItemUpdate = action.payload;
     },
-    setClickChecklistId(state, { payload }) {
-      state.clickedChecklistId = payload;
+    setClickChecklistId(state, action: PayloadAction<string>) {
+      state.clickedChecklistId = action.payload;
     },
-    setClickChecklistItemId(state, { payload }) {
-      state.clickedChecklistItemId = payload;
+    setClickChecklistItemId(state, action: PayloadAction<string>) {
+      state.clickedChecklistItemId = action.payload;
     },
-    setToggleAssignChecklistItemId(state, { payload }) {
-      state.toggleAssignChecklistItemId = payload;
+    setToggleAssignChecklistItemId(state, action: PayloadAction<string | null>) {
+      state.toggleAssignChecklistItemId = action.payload;
     },
-    setTriggerAssignChecklistItem(state, { payload }) {
-      state.triggerAssignChecklistItem = payload;
+    setTriggerAssignChecklistItem(state, action: PayloadAction<boolean>) {
+      state.triggerAssignChecklistItem = action.payload;
     },
-    setTriggerUnassignChecklistItem(state, { payload }) {
-      state.triggerUnassignChecklistItem = payload;
+    setTriggerUnassignChecklistItem(state, action: PayloadAction<boolean>) {
+      state.triggerUnassignChecklistItem = action.payload;
     },
-    setShowChecklistInput(state, { payload }) {
-      state.showChecklistInput = payload;
+    setShowChecklistInput(state, action: PayloadAction<boolean>) {
+      state.showChecklistInput = action.payload;
     }
   }
 });
