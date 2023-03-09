@@ -106,7 +106,7 @@ export const useEditHubService = (data: { name: string; currentWorkspaceId?: str
 };
 
 //Delete a Hub
-export const UseDeleteHubService = (data: { query: string | null; delHub: boolean }) => {
+export const UseDeleteHubService = (data: { query: string | null | undefined; delHub: boolean }) => {
   const dispatch = useDispatch();
   const hubid = data.query;
   const queryClient = useQueryClient();

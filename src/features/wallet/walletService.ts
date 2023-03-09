@@ -76,7 +76,7 @@ export const UseEditWalletService = (data: { walletName?: string; WalletId?: str
 };
 
 //del wallet
-export const UseDeleteWalletService = (data: { query: string | null; delWallet: boolean }) => {
+export const UseDeleteWalletService = (data: { query: string | null | undefined; delWallet: boolean }) => {
   const dispatch = useDispatch();
   const walletId = data.query;
   const queryClient = useQueryClient();

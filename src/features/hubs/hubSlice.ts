@@ -12,8 +12,8 @@ interface HubState {
   archiveHub: boolean;
   sidebarSettings: boolean;
   toggleArchive: number;
-  showMenuDropdown: string | null;
-  showMenuDropdownType: string | null;
+  showMenuDropdown: string | null | undefined;
+  showMenuDropdownType: string | null | undefined;
   SubDropdownMenu: boolean;
   SubMenuId: string | null;
   SubMenuType: string | null;
@@ -90,7 +90,10 @@ export const hubSlice = createSlice({
     },
     setshowMenuDropdown(
       state,
-      action: PayloadAction<{ showMenuDropdown: string | null; showMenuDropdownType: string | null }>
+      action: PayloadAction<{
+        showMenuDropdown?: string | null | undefined;
+        showMenuDropdownType?: string | null | undefined;
+      }>
     ) {
       state.showMenuDropdown = action.payload.showMenuDropdown;
       state.showMenuDropdownType = action.payload.showMenuDropdownType;

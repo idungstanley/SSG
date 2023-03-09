@@ -4,7 +4,7 @@ interface workspaceState {
   workspace: string[];
   currentItemId: string | null;
   currentItemType?: string | null;
-  activePlaceId: number | null | boolean;
+  activePlaceId: number | null | boolean | undefined;
   activePlaceName: string | null;
   pilotWidth: number;
   showHub: boolean;
@@ -35,7 +35,7 @@ interface workspaceState {
   activeSubChecklistTabId: number | null;
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
-  activePlaceIdForNavigation: string | null;
+  activePlaceIdForNavigation: number | null;
 }
 
 const initialState: workspaceState = {
@@ -138,7 +138,7 @@ export const wsSlice = createSlice({
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
-    setActivePlaceId: (state, action: PayloadAction<number | boolean | null>) => {
+    setActivePlaceId: (state, action: PayloadAction<number | boolean | null | undefined>) => {
       state.activePlaceId = action.payload;
     },
     setActivePlaceName: (state, action: PayloadAction<string | null>) => {
@@ -196,7 +196,7 @@ export const wsSlice = createSlice({
     },
     setActivePlaceForNav(
       state,
-      action: PayloadAction<{ activePlaceNameForNavigation: string | null; activePlaceIdForNavigation: string | null }>
+      action: PayloadAction<{ activePlaceNameForNavigation: string | null; activePlaceIdForNavigation: number | null }>
     ) {
       state.activePlaceNameForNavigation = action.payload.activePlaceNameForNavigation;
       state.activePlaceIdForNavigation = action.payload.activePlaceIdForNavigation;
