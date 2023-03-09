@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ListState {
   list: string[];
-  currentListId: null;
+  currentListId: string | null;
   createTaskFromTop: boolean;
   delList: boolean;
   archiveList: boolean;
@@ -37,7 +37,7 @@ export const listSlice = createSlice({
     setDeleteList(state, action: PayloadAction<boolean>) {
       state.delList = action.payload;
     },
-    setCurrentListId(state, action: PayloadAction<null>) {
+    setCurrentListId(state, action: PayloadAction<string | null>) {
       state.currentListId = action.payload;
     },
     setCreateTaskFromTop(state, action: PayloadAction<boolean>) {
