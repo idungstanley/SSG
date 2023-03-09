@@ -17,7 +17,6 @@ export const createHubService = (data: { name: string; currHubId?: string | null
         parent_id: data.currHubId
       }
     },
-    false,
     true
   );
   return response;
@@ -39,7 +38,6 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
             is_archived: query ? 1 : 0
           }
         },
-        false,
         true
       ),
     {
@@ -79,7 +77,6 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
           url: `hubs/${parentId}`,
           method: 'GET'
         },
-        false,
         true
       ),
     {
@@ -99,7 +96,6 @@ export const useEditHubService = (data: { name: string; currentWorkspaceId?: str
         current_workspace_id: data.currentWorkspaceId
       }
     },
-    false,
     true
   );
   return response;
@@ -190,7 +186,6 @@ export const useGetHubWallet = (hubId: string | null) =>
         url: `hubs/${hubId}`,
         method: 'GET'
       },
-      false,
       true
     )
   );
