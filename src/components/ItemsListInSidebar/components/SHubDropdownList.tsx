@@ -10,8 +10,8 @@ export default function SHubDropdownList() {
   return currSubHubIdType === 'subhub' ? (
     <>
       <div>
-        <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="52" />
-        <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="52" />
+        <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="25" />
+        <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="40" />
       </div>
     </>
   ) : (

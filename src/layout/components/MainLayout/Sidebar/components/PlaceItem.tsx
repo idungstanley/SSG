@@ -32,7 +32,9 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
         'focus:flex flex-col w-full pl-5 py-5 items-center relative',
         bottomContent ? 'gap-2' : ''
       )}
-      style={{ backgroundColor: `${isActivePlace ? 'rgba(0, 0, 0, 0.35)' : ''}` }}
+      style={{
+        backgroundColor: `${isActivePlace ? "rgba(0, 0, 0, 0.35)" : ""}`,
+      }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
       {isActivePlace && <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>}
@@ -44,7 +46,9 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
             // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
-          <span className="flex items-center w-6 h-6">{icon}</span>
+          <span className="flex items-center w-6 h-6 hover:text-green-400">
+            {icon}
+          </span>
           <span
             className={cl(
               showSidebar ? 'block' : 'hidden',

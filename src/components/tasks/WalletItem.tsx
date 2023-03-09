@@ -13,7 +13,7 @@ interface WalletItemProps {
     name: string;
   };
   showSubWallet: string | null;
-  paddingLeft: string;
+  paddingLeft: string | number;
   walletType: string;
 }
 export default function WalletItem({

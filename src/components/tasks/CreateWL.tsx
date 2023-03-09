@@ -5,7 +5,7 @@ import {
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
 
-export default function CreateWL({ paddingLeft }: { paddingLeft: string }) {
+export default function CreateWL({ paddingLeft }: { paddingLeft: string | number }) {
   const dispatch = useAppDispatch();
   return (
     <div

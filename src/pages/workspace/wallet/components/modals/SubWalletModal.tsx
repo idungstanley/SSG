@@ -46,10 +46,10 @@ function SubWalletModal() {
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
         (SubMenuType == 'subhub' ? SubMenuId : null),
       walletId:
-        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
-        (SubMenuType == 'wallet' ? SubMenuId : null) ||
-        (SubMenuType == 'subWallet2' ? SubMenuId : null)
+        (showMenuDropdownType == "wallet" ? showMenuDropdown : null) ||
+        (showMenuDropdownType == "subwallet2" ? showMenuDropdown : null) ||
+        (SubMenuType == "wallet" ? SubMenuId : null) ||
+        (SubMenuType == "subwallet2" ? SubMenuId : null),
     });
   };
 

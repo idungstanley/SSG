@@ -68,7 +68,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-          <ListItem list={list} paddingLeft={paddingLeft} />
+        <ListItem list={list} paddingLeft="87" />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}

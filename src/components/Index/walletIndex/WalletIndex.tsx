@@ -21,7 +21,7 @@ import CreateWL from '../../tasks/CreateWL';
 interface WalletIndexProps {
   showHubList: boolean;
   getCurrentHubId: string | null;
-  paddingLeft?: string;
+  paddingLeft: string | number;
 }
 
 export interface dataProps {
@@ -29,7 +29,7 @@ export interface dataProps {
   name: string;
 }
 
-function WalletIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: WalletIndexProps) {
+function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
@@ -96,7 +96,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: Walle
               showSubWallet={showSubWallet}
               paddingLeft={paddingLeft}
             />
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft="50" /> : null}</div>
+            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 25} /> : null}</div>
             {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
             {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>
