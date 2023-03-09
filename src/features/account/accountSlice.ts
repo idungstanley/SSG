@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserState } from './account.interfaces';
 
-const showPreviewFromLS = localStorage.getItem('showPreview');
+const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
 // const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
 //   JSON.parse(localStorage.getItem('sidebar') || '""');

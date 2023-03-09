@@ -81,8 +81,8 @@ export default function DragContext({ children }: DragContextProps) {
 
     if (overId && activeId && draggableItem) {
       const isTargetFile = draggableItem.isFile;
-      const dragId = active.data.current?.fileFolderId || active.data.current?.parentId || 'root'; // if draggable is file - get folderId, else - parentId of folder
-      const dropId = (overId as string) || over.data.current?.parentId || 'root'; // always folderId
+      const dragId: string = active.data.current?.fileFolderId || active.data.current?.parentId || 'root'; // if draggable is file - get folderId, else - parentId of folder
+      const dropId: string = (overId as string) || over.data.current?.parentId || 'root'; // always folderId
 
       setDataForInvalidation({
         isTargetFile,

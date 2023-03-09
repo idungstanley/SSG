@@ -18,7 +18,7 @@ function PreviewSwitch() {
   useEffect(() => {
     // if request sended, add values from it to localStorage and store
     if (data) {
-      const value = JSON.parse(data?.value.showPreview || 'false');
+      const value = JSON.parse(data?.value.showPreview || 'false') as boolean;
       dispatch(setAccountSettings({ ...settings, showPreview: value }));
 
       localStorage.setItem('showPreview', JSON.stringify(value));
