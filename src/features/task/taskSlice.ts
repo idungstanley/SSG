@@ -79,8 +79,8 @@ interface TaskState {
   currentParentSubTaskId3: null | string;
   currentParentSubTaskId4: string | null | undefined;
   initial_description: string | undefined;
-  initial_start_date: null | undefined;
-  initial_end_date: null | undefined;
+  initial_start_date: null | undefined | string;
+  initial_end_date: null | undefined | string;
   openUpdateEntryId: null | undefined | string;
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
@@ -252,8 +252,8 @@ export const taskSlice = createSlice({
       state,
       action: PayloadAction<{
         initial_description?: string | undefined;
-        initial_start_date?: null | undefined;
-        initial_end_date?: null | undefined;
+        initial_start_date?: null | undefined | string;
+        initial_end_date?: null | undefined | string;
         openUpdateEntryId?: null | undefined | string;
       }>
     ) {

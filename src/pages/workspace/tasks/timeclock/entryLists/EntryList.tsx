@@ -28,7 +28,7 @@ export default function EntryList({ entries }: EntryListProps) {
   });
 
   const handleUpdateEntry = (id: string) => {
-    if ((openUpdateEntryId) == id) {
+    if (openUpdateEntryId == id) {
       dispatch(
         setUpdateEntries({
           openUpdateEntryId: id
