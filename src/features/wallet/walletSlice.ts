@@ -6,8 +6,8 @@ interface walletProps {
 }
 interface WalletState {
   wallet: walletProps[];
-  currentWalletParentId: null;
-  currentWalletParentType: null;
+  currentWalletParentId: string | null;
+  currentWalletParentType: string | null;
   delWallet: boolean;
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
@@ -52,7 +52,10 @@ export const walletSlice = createSlice({
         return wallet;
       });
     },
-    setWalletItem(state, action: PayloadAction<{ currentWalletParentId: null; currentWalletParentType: null }>) {
+    setWalletItem(
+      state,
+      action: PayloadAction<{ currentWalletParentId: string | null; currentWalletParentType: string | null }>
+    ) {
       state.currentWalletParentId = action.payload.currentWalletParentId;
       state.currentWalletParentType = action.payload.currentWalletParentType;
     },

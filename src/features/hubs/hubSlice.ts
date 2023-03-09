@@ -4,20 +4,20 @@ import { IHub } from './hubs.interfaces';
 interface HubState {
   hub: IHub[];
   currHubId: string | null;
-  currSubHubId: null;
-  currSubHubIdType: null;
+  currSubHubId: string | null;
+  currSubHubIdType: string | null;
   delHub: boolean;
   showSubItems: boolean;
   showEditHubModal: boolean;
   archiveHub: boolean;
   sidebarSettings: boolean;
   toggleArchive: number;
-  showMenuDropdown: null | string;
-  showMenuDropdownType: null;
+  showMenuDropdown: string | null;
+  showMenuDropdownType: string | null;
   SubDropdownMenu: boolean;
   SubMenuId: null;
   SubMenuType: null;
-  hubParentId: null;
+  hubParentId: string | null;
   refType: null;
   prevName: string;
   showFavEditInput: null | string;
@@ -68,7 +68,7 @@ export const hubSlice = createSlice({
     getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
     },
-    getCurrSubHubId(state, action: PayloadAction<{ currSubHubId: null; currSubHubIdType: null }>) {
+    getCurrSubHubId(state, action: PayloadAction<{ currSubHubId: string | null; currSubHubIdType: string | null }>) {
       state.currSubHubId = action.payload.currSubHubId;
       state.currSubHubIdType = action.payload.currSubHubIdType;
     },
@@ -88,7 +88,10 @@ export const hubSlice = createSlice({
     setToggleArchive(state, action: PayloadAction<number>) {
       state.toggleArchive = action.payload;
     },
-    setshowMenuDropdown(state, action: PayloadAction<{ showMenuDropdown: null; showMenuDropdownType: null }>) {
+    setshowMenuDropdown(
+      state,
+      action: PayloadAction<{ showMenuDropdown: string | null; showMenuDropdownType: string | null }>
+    ) {
       state.showMenuDropdown = action.payload.showMenuDropdown;
       state.showMenuDropdownType = action.payload.showMenuDropdownType;
     },
@@ -99,7 +102,7 @@ export const hubSlice = createSlice({
     setSubDropdownMenu(state, action: PayloadAction<boolean>) {
       state.SubDropdownMenu = action.payload;
     },
-    setHubParentId(state, action: PayloadAction<null>) {
+    setHubParentId(state, action: PayloadAction<string | null>) {
       state.hubParentId = action.payload;
     },
     getMenuRef(state, action: PayloadAction<null>) {
