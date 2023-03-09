@@ -19,7 +19,7 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = "30" }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 

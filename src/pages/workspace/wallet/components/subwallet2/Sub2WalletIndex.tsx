@@ -21,6 +21,8 @@ interface dataProps {
 }
 
 function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
+  // eslint-disable-next-line no-console
+  console.log(paddingLeft);
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
@@ -68,7 +70,7 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-        <ListItem list={list} paddingLeft="87" />
+          <ListItem list={list} paddingLeft="87" />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}

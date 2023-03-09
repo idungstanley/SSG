@@ -53,7 +53,10 @@ export default function HubItem({
         {item.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
         <div
           role="button"
-          className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm" style={{ paddingLeft: type === "subhub" ? "10px" : "" }}>{showSidebar && (
+          className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
+          style={{ paddingLeft: type === 'subhub' ? '10px' : '' }}
+        >
+          {showSidebar && (
             <div>
               {item.id === showChildren ? (
                 <span className="flex flex-col">

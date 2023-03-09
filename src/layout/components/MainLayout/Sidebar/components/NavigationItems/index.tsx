@@ -1,19 +1,15 @@
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/24/outline";
-import React, { useState } from "react";
-import favoriteIcon from "../../../../../../assets/branding/Favourite-icon.svg";
-import groupIcon from "../../../../../../assets/branding/Group.png";
-import homeIcon from "../../../../../../assets/icons/Home.svg";
-import { cl } from "../../../../../../utils";
-import { useAppSelector } from "../../../../../../app/hooks";
-import NavigationItem from "./components/NavigationItem";
-import { HiOutlineLibrary, HiOutlineUserGroup } from "react-icons/hi";
-import { CgTemplate } from "react-icons/cg";
-import { IoNotificationsOutline } from "react-icons/io5";
-import { VscCalendar } from "react-icons/vsc";
+import { ArrowDownIcon, ArrowUpIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
+import groupIcon from '../../../../../../assets/branding/Group.png';
+import homeIcon from '../../../../../../assets/icons/Home.svg';
+import { cl } from '../../../../../../utils';
+import { useAppSelector } from '../../../../../../app/hooks';
+import NavigationItem from './components/NavigationItem';
+import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
+import { CgTemplate } from 'react-icons/cg';
+import { IoNotificationsOutline } from 'react-icons/io5';
+import { VscCalendar } from 'react-icons/vsc';
 
 const navigation = [
   {
@@ -23,22 +19,22 @@ const navigation = [
     alwaysShow: true
   },
   {
-    name: "Notifications",
-    href: "/notification",
+    name: 'Notifications',
+    href: '/notification',
     icon: <IoNotificationsOutline className="w-4 h4" aria-hidden="true" />,
-    alwaysShow: true,
+    alwaysShow: true
   },
   {
-    name: "Calendar",
-    href: "/calendar",
+    name: 'Calendar',
+    href: '/calendar',
     icon: <VscCalendar className="w-4 h4" aria-hidden="true" />,
-    alwaysShow: false,
+    alwaysShow: false
   },
   {
-    name: "Community",
-    href: "/community",
+    name: 'Community',
+    href: '/community',
     icon: <HiOutlineUserGroup className="w-4 h4" aria-hidden="true" />,
-    alwaysShow: false,
+    alwaysShow: false
   },
   {
     name: 'Library',
@@ -47,10 +43,10 @@ const navigation = [
     alwaysShow: false
   },
   {
-    name: "Template",
-    href: "/template",
+    name: 'Template',
+    href: '/template',
     icon: <CgTemplate className="w-4 h4" aria-hidden="true" />,
-    alwaysShow: false,
+    alwaysShow: false
   },
   {
     name: 'Goals',

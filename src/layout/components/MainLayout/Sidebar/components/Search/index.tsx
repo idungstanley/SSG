@@ -14,10 +14,10 @@ export default function Search() {
       >
         <div
           className="absolute flex items-center justify-between w-auto w-full tracking-wider text-gray-400 grow left-4 hover:text-green-500"
-          style={{ fontSize: "10px" }}
+          style={{ fontSize: '10px' }}
         >
           <div className="flex items-center justify-between">
-            <CiSearch/>
+            <CiSearch />
             <p>Search</p>
           </div>
           <p className="mr-8">Ctrl+k</p>

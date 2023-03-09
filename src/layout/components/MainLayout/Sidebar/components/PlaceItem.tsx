@@ -33,7 +33,7 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
         bottomContent ? 'gap-2' : ''
       )}
       style={{
-        backgroundColor: `${isActivePlace ? "rgba(0, 0, 0, 0.35)" : ""}`,
+        backgroundColor: `${isActivePlace ? 'rgba(0, 0, 0, 0.35)' : ''}`
       }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
@@ -46,9 +46,7 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
             // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
-          <span className="flex items-center w-6 h-6 hover:text-green-400">
-            {icon}
-          </span>
+          <span className="flex items-center w-6 h-6 hover:text-green-400">{icon}</span>
           <span
             className={cl(
               showSidebar ? 'block' : 'hidden',

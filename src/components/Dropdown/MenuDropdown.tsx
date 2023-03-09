@@ -322,7 +322,7 @@ export default function MenuDropdown() {
     <div className="" ref={ref}>
       <div
         className="absolute top-auto z-50 w-56 p-2 origin-top-right bg-white rounded-md left-5 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{ boxShadow: "0 1px 10px #00000040", minWidth: "200px" }}
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px' }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (

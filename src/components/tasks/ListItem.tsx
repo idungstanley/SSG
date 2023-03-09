@@ -1,17 +1,10 @@
-import React from "react";
-import { AiOutlineEllipsis } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import ListIcon from "../../assets/icons/ListIcon";
-import {
-  closeMenu,
-  getPrevName,
-  setshowMenuDropdown,
-} from "../../features/hubs/hubSlice";
-import {
-  setActiveEntity,
-  setActiveItem,
-} from "../../features/workspace/workspaceSlice";
+import React from 'react';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import ListIcon from '../../assets/icons/ListIcon';
+import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
 
 interface ListItemProps {
   list: {
@@ -66,7 +59,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         <ListIcon />
         <div
           onClick={() => handleListLocation(list.id, list.name)}
-          style={{ fontSize: "12px" }}
+          style={{ fontSize: '12px' }}
           className="pl-4 tracking-wider capitalize truncate cursor-pointer"
         >
           {list.name}
