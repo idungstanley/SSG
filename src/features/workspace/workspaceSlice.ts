@@ -33,7 +33,7 @@ interface workspaceState {
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
-  showExtendedBar: false;
+  showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
   activePlaceIdForNavigation: string | null;
 }
@@ -89,7 +89,7 @@ export const wsSlice = createSlice({
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
     },
-    setShowExtendedBar(state, action: PayloadAction<false>) {
+    setShowExtendedBar(state, action: PayloadAction<boolean>) {
       state.showExtendedBar = action.payload;
     },
     setShowPilotIconView(state, action: PayloadAction<boolean>) {
@@ -151,9 +151,9 @@ export const wsSlice = createSlice({
     setActiveItem(
       state,
       action: PayloadAction<{
-        activeItemId: string | null;
-        activeItemType: string | null;
-        activeItemName: string | undefined | null;
+        activeItemId?: string | null;
+        activeItemType?: string | null;
+        activeItemName?: string | undefined | null;
       }>
     ) {
       state.activeItemId = action.payload.activeItemId;
