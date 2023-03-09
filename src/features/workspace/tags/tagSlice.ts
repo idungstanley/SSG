@@ -26,7 +26,7 @@ export const tagSlice = createSlice({
     setRenameTagId(state, action: PayloadAction<null>) {
       state.renameTagId = action.payload;
     },
-    setShowTagColorDialogBox(state, action) {
+    setShowTagColorDialogBox(state, action: PayloadAction<boolean>) {
       state.showTagColorDialogueBox = action.payload;
     },
     triggerUnassignTag(state, action) {
