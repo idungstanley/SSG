@@ -15,8 +15,8 @@ interface HubState {
   showMenuDropdown: string | null;
   showMenuDropdownType: string | null;
   SubDropdownMenu: boolean;
-  SubMenuId: null;
-  SubMenuType: null;
+  SubMenuId: string | null;
+  SubMenuType: string | null;
   hubParentId: string | null;
   refType: null;
   prevName: string;
@@ -72,7 +72,7 @@ export const hubSlice = createSlice({
       state.currSubHubId = action.payload.currSubHubId;
       state.currSubHubIdType = action.payload.currSubHubIdType;
     },
-    getSubMenu(state, action: PayloadAction<{ SubMenuId: null; SubMenuType: null }>) {
+    getSubMenu(state, action: PayloadAction<{ SubMenuId: string | null; SubMenuType: string | null }>) {
       state.SubMenuId = action.payload.SubMenuId;
       state.SubMenuType = action.payload.SubMenuType;
     },
