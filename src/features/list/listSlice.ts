@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ListState {
   list: string[];
@@ -22,25 +22,25 @@ export const listSlice = createSlice({
   name: 'list',
   initialState,
   reducers: {
-    createList(state, action) {
+    createList(state, action: PayloadAction<string>) {
       state.list.push(action.payload);
     },
-    getList(state, action) {
+    getList(state, action: PayloadAction<string[]>) {
       state.list = action.payload;
     },
-    setArchiveList(state, action) {
+    setArchiveList(state, action: PayloadAction<boolean>) {
       state.archiveList = action.payload;
     },
-    setToggleArchiveList(state, action) {
+    setToggleArchiveList(state, action: PayloadAction<boolean>) {
       state.toggleArchiveList = action.payload;
     },
-    setDeleteList(state, action) {
+    setDeleteList(state, action: PayloadAction<boolean>) {
       state.delList = action.payload;
     },
-    setCurrentListId(state, action) {
+    setCurrentListId(state, action: PayloadAction<null>) {
       state.currentListId = action.payload;
     },
-    setCreateTaskFromTop(state, action) {
+    setCreateTaskFromTop(state, action: PayloadAction<boolean>) {
       state.createTaskFromTop = action.payload;
     },
     checkIfList: (state) => state
