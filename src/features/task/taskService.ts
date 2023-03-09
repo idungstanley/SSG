@@ -400,10 +400,10 @@ export const GetTimeEntriesService = ({
 
 export const UpdateTimeEntriesService = (data: {
   time_entry_id: string | undefined;
-  description: string;
+  description: string | undefined;
   isBillable: number;
-  start_date: string | null;
-  end_date: string | null;
+  start_date: string | null | undefined;
+  end_date: string | null | undefined;
 }) => {
   const response = requestNew(
     {
