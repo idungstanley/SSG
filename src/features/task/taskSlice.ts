@@ -137,11 +137,11 @@ export const taskSlice = createSlice({
     setTaskIdForPilot(state, action: PayloadAction<string | null>) {
       state.currentTaskIdForPilot = action.payload;
     },
-    getTaskData(state, action: PayloadAction<ImyTaskData[]>) {
+    getTaskData(state, action: PayloadAction<{ id: string }[] | undefined>) {
       const taskDataArray = action.payload;
       // taskDataArray.unshift(myObj);
       if (taskDataArray) {
-        state.myTaskData = taskDataArray;
+        state.myTaskData = taskDataArray as ImyTaskData[];
       }
     },
     getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
