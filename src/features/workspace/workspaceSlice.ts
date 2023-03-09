@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface workspaceState {
   workspace: string[];
@@ -80,22 +80,22 @@ export const wsSlice = createSlice({
   name: 'workspace',
   initialState,
   reducers: {
-    createWorkspace(state, action) {
+    createWorkspace(state, action: PayloadAction<string>) {
       state.workspace.push(action.payload);
     },
-    setPilotWidth(state, action) {
+    setPilotWidth(state, action: PayloadAction<number>) {
       state.pilotWidth = action.payload;
     },
-    setShowPilot(state, action) {
+    setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
     },
-    setShowExtendedBar(state, action) {
+    setShowExtendedBar(state, action: PayloadAction<false>) {
       state.showExtendedBar = action.payload;
     },
-    setShowPilotIconView(state, action) {
+    setShowPilotIconView(state, action: PayloadAction<boolean>) {
       state.showPilotIconView = action.payload;
     },
-    setShowPilotListView(state, action) {
+    setShowPilotListView(state, action: PayloadAction<boolean>) {
       state.showPilotListView = action.payload;
     },
     setSearchIsActive(state, action) {
@@ -114,82 +114,92 @@ export const wsSlice = createSlice({
         };
       }
     },
-    setShowModal(state, action) {
+    setShowModal(state, action: PayloadAction<boolean>) {
       state.showModal = action.payload;
     },
-    setShowAddHotKeyDropdown(state, action) {
+    setShowAddHotKeyDropdown(state, action: PayloadAction<boolean>) {
       state.showAddHotKeyDropdown = action.payload;
     },
-    setShowRemoveHotKeyDropdown(state, action) {
+    setShowRemoveHotKeyDropdown(state, action: PayloadAction<boolean>) {
       state.showRemoveHotKeyDropdown = action.payload;
     },
-    setShowMenuDropDown(state, action) {
+    setShowMenuDropDown(state, action: PayloadAction<boolean>) {
       state.showMenuDropDown = action.payload;
     },
-    setActiveEntity(state, action) {
+    setActiveEntity(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
       state.activeEntity = action.payload;
     },
-    setShowHub(state, action) {
+    setShowHub(state, action: PayloadAction<boolean>) {
       state.showHub = action.payload;
     },
-    setSidebarWidthRD(state, action) {
+    setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
     },
-    setShowWallet(state, action) {
+    setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
-    setActivePlaceId: (state, action) => {
+    setActivePlaceId: (state, action: PayloadAction<number | boolean | null>) => {
       state.activePlaceId = action.payload;
     },
-    setActivePlaceName: (state, action) => {
+    setActivePlaceName: (state, action: PayloadAction<string | null>) => {
       state.activePlaceName = action.payload;
     },
-    setCurrentItem(state, action) {
+    setCurrentItem(state, action: PayloadAction<{ currentItemId: string | null; currentItemType: string | null }>) {
       state.currentItemId = action.payload.currentItemId;
       state.currentItemType = action.payload.currentItemType;
     },
-    setActiveItem(state, action) {
+    setActiveItem(
+      state,
+      action: PayloadAction<{
+        activeItemId: string | null;
+        activeItemType: string | null;
+        activeItemName: string | null;
+      }>
+    ) {
       state.activeItemId = action.payload.activeItemId;
       state.activeItemType = action.payload.activeItemType;
       state.activeItemName = action.payload.activeItemName;
     },
-    setCurrentWalletId(state, action) {
+    setCurrentWalletId(state, action: PayloadAction<string | null>) {
       state.currentWalletId = action.payload;
     },
-    setActiveSubCommunicationTabId(state, action) {
+    setActiveSubCommunicationTabId(state, action: PayloadAction<number | null>) {
       state.activeSubCommunicationTabId = action.payload;
     },
-    setActiveSubDetailsTabId(state, action) {
+    setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
-    setActiveTabId(state, action) {
+    setActiveTabId(state, action: PayloadAction<number | null>) {
       state.activeTabId = action.payload;
     },
-    setActiveHotKeyId(state, action) {
+    setActiveHotKeyId(state, action: PayloadAction<number | null>) {
       state.activeHotKeyTabId = action.payload;
     },
-    setActiveSubTimeClockTabId(state, action) {
+    setActiveSubTimeClockTabId(state, action: PayloadAction<number | null>) {
       state.activeSubTimeClockTabId = action.payload;
     },
-    setActiveSubChecklistTabId(state, action) {
+    setActiveSubChecklistTabId(state, action: PayloadAction<number | null>) {
       state.activeSubChecklistTabId = action.payload;
     },
-    setCurrentWalletName(state, action) {
+    setCurrentWalletName(state, action: PayloadAction<string | null>) {
       state.currentWalletName = action.payload;
     },
-    setCurrenSubtWalletId(state, action) {
+    setCurrenSubtWalletId(state, action: PayloadAction<string | null>) {
       state.currentSubWalletId = action.payload;
     },
-    setExtendedSidebarWidth(state, action) {
+    setExtendedSidebarWidth(state, action: PayloadAction<number>) {
       state.extendedSidebarWidth = action.payload;
     },
     resetCurrentItem(state) {
       state.currentItemId = null;
       state.currentItemType = null;
     },
-    setActivePlaceForNav(state, { payload }) {
-      state.activePlaceNameForNavigation = payload.activePlaceNameForNavigation;
-      state.activePlaceIdForNavigation = payload.activePlaceIdForNavigation;
+    setActivePlaceForNav(
+      state,
+      action: PayloadAction<{ activePlaceNameForNavigation: string | null; activePlaceIdForNavigation: string | null }>
+    ) {
+      state.activePlaceNameForNavigation = action.payload.activePlaceNameForNavigation;
+      state.activePlaceIdForNavigation = action.payload.activePlaceIdForNavigation;
     },
     checkIfWs: (state) => state
   }
