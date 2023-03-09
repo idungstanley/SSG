@@ -1,34 +1,31 @@
-import React, { memo, useMemo, useRef, useState } from "react";
-import { FaHandsHelping, FaRoute, FaWpforms } from "react-icons/fa";
-import Dashboard from "../../../../pages/workspace/dashboard";
-import Favourites from "../../../../pages/workspace/favorites";
-import Files from "../../../../pages/workspace/files";
-import {
-  setExtendedSidebarWidth,
-  setShowExtendedBar,
-} from "../../../../features/workspace/workspaceSlice";
-import libraryIcon from "../../../../assets/icons/library.svg";
-import emailIcon from "../../../../assets/branding/email-icon.png";
-import hubIcon from "../../../../assets/branding/hub.png";
-import InboxIcon from "../../../../assets/branding/inbox.png";
-import favoriteIcon from "../../../../assets/branding/favorite-icon.png";
-import timeClockIcon from "../../../../assets/branding/timeclock.png";
-import trackerIcon from "../../../../assets/branding/tracker-icon.png";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../app/hooks";
-import ActiveHub from "./ActiveParents/ActiveHub";
-import Extendedbar from "../../../../pages/explorer/components/Sidebar";
-import { BiCabinet } from "react-icons/bi";
-import ResizeBorder from "../../../../components/ResizeBorder";
-import CloseExtBtn from "./components/extendBtn/CloseExtBtn";
-import ExtendedItem from "./components/extendedItem";
-import InboxData from "../../../../pages/workspace/inbox/InboxData";
-import LibraryData from "../../../../pages/directory/components/Sidebar/LibraryData";
-import Email from "../../../../pages/workspace/email";
-import RoutePlanner from "../../../../pages/workspace/routePlanner";
-import AlsoHr from "../../../../pages/workspace/alsoHr";
-import Commerce from "../../../../pages/workspace/commerce";
-import { IoBusinessOutline } from "react-icons/io5";
+import React, { memo, useMemo, useRef, useState } from 'react';
+import { FaHandsHelping, FaRoute, FaWpforms } from 'react-icons/fa';
+import Dashboard from '../../../../pages/workspace/dashboard';
+import Favourites from '../../../../pages/workspace/favorites';
+import Files from '../../../../pages/workspace/files';
+import { setExtendedSidebarWidth, setShowExtendedBar } from '../../../../features/workspace/workspaceSlice';
+import libraryIcon from '../../../../assets/icons/library.svg';
+import emailIcon from '../../../../assets/branding/email-icon.png';
+import hubIcon from '../../../../assets/branding/hub.png';
+import InboxIcon from '../../../../assets/branding/inbox.png';
+import favoriteIcon from '../../../../assets/branding/favorite-icon.png';
+import timeClockIcon from '../../../../assets/branding/timeclock.png';
+import trackerIcon from '../../../../assets/branding/tracker-icon.png';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../app/hooks';
+import ActiveHub from './ActiveParents/ActiveHub';
+import Extendedbar from '../../../../pages/explorer/components/Sidebar';
+import { BiCabinet } from 'react-icons/bi';
+import ResizeBorder from '../../../../components/ResizeBorder';
+import CloseExtBtn from './components/extendBtn/CloseExtBtn';
+import ExtendedItem from './components/extendedItem';
+import InboxData from '../../../../pages/workspace/inbox/InboxData';
+import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryData';
+import Email from '../../../../pages/workspace/email';
+import RoutePlanner from '../../../../pages/workspace/routePlanner';
+import AlsoHr from '../../../../pages/workspace/alsoHr';
+import Commerce from '../../../../pages/workspace/commerce';
+import { IoBusinessOutline } from 'react-icons/io5';
 
 interface ItemData {
   id?: number;
@@ -41,88 +38,84 @@ interface ItemData {
 
 export const secondaryNavigation: ItemData[] = [
   {
-    name: "Email",
+    name: 'Email',
     id: 1,
     place: <Email />,
-    source: emailIcon,
+    source: emailIcon
   },
   {
-    name: "TASKS",
+    name: 'TASKS',
     id: 2,
     place: <ActiveHub />,
-    source: hubIcon,
+    source: hubIcon
   },
   {
-    name: "In-tray",
+    name: 'In-tray',
     id: 3,
     place: <InboxData />,
-    source: InboxIcon,
+    source: InboxIcon
   },
   {
-    name: "Cabinet",
+    name: 'Cabinet',
     id: 4,
     place: <Extendedbar />,
-    icon: <BiCabinet className="h-4 mr-4" />,
+    icon: <BiCabinet className="h-4 mr-4" />
   },
   {
-    name: "forms",
+    name: 'forms',
     id: 5,
     place: <Files />,
-    icon: <FaWpforms className="h-4 mr-4" />,
+    icon: <FaWpforms className="h-4 mr-4" />
   },
   {
-    name: "time clock",
+    name: 'time clock',
     id: 6,
     place: <Dashboard />,
-    source: timeClockIcon,
+    source: timeClockIcon
   },
   {
-    name: "tracker",
+    name: 'tracker',
     id: 7,
     place: <Favourites />,
-    source: trackerIcon,
+    source: trackerIcon
   },
   {
-    name: "Route Planner",
+    name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-4 h-4" />,
+    icon: <FaRoute className="w-4 h-4" />
   },
   {
-    name: "Also HR",
+    name: 'Also HR',
     id: 9,
     place: <AlsoHr />,
-    icon: <FaHandsHelping className="w-4 h-4" />,
+    icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
-    name: "Commerce",
+    name: 'Commerce',
     id: 10,
     place: <Commerce />,
-    icon: <IoBusinessOutline className="w-4 h-4" />,
+    icon: <IoBusinessOutline className="w-4 h-4" />
   },
   {
-    name: "Library",
+    name: 'Library',
     id: 11,
     place: <LibraryData />,
     source: libraryIcon,
-    link: "directory",
+    link: 'directory'
   },
   {
-    name: "Favorites",
+    name: 'Favorites',
     id: 12,
     place: <Favourites />,
     source: favoriteIcon,
-    link: "favorite",
-  },
+    link: 'favorite'
+  }
 ];
 
 function ExpandedNav() {
   const dispatch = useDispatch();
-  const {
-    activePlaceName,
-    showExtendedBar,
-    extendedSidebarWidth,
-  } = useAppSelector((state) => state.workspace);
+  const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
 
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
@@ -140,10 +133,7 @@ function ExpandedNav() {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
             dispatch(
-              setExtendedSidebarWidth(
-                mouseMoveEvent.clientX -
-                  sidebarRef?.current?.getBoundingClientRect().left
-              )
+              setExtendedSidebarWidth(mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left)
             );
           }
       }
@@ -151,11 +141,11 @@ function ExpandedNav() {
     [isResizing]
   );
   React.useEffect(() => {
-    window.addEventListener("mousemove", resize);
-    window.addEventListener("mouseup", stopResizing);
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
     return () => {
-      window.removeEventListener("mousemove", resize);
-      window.removeEventListener("mouseup", stopResizing);
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
 
@@ -165,11 +155,7 @@ function ExpandedNav() {
   }
 
   const sectionToExtend = useMemo(
-    () =>
-      secondaryNavigation.find(
-        (section) =>
-          section.name?.toLowerCase() === activePlaceName?.toLowerCase()
-      ),
+    () => secondaryNavigation.find((section) => section.name?.toLowerCase() === activePlaceName?.toLowerCase()),
     [activePlaceName]
   );
 
@@ -182,15 +168,15 @@ function ExpandedNav() {
           ? {
               maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
               width: extendedSidebarWidth,
-              minWidth: `${MIN_SIDEBAR_WIDTH}px`,
+              minWidth: `${MIN_SIDEBAR_WIDTH}px`
             }
-          : { width: "1px", minWidth: "1px" }
+          : { width: '1px', minWidth: '1px' }
       }
     >
       <CloseExtBtn />
       <section
         className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${
-          isResizing ? "border-gray-500" : "border-gray-300"
+          isResizing ? 'border-gray-500' : 'border-gray-300'
         }`}
       >
         <div aria-labelledby="projects-headline">

@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface TagState {
-  currentTaskIdForTag: null;
+  currentTaskIdForTag: string | null;
   unAssignTadId: null;
-  renameTagId: null;
+  renameTagId: string | null;
   showTagColorDialogueBox: boolean;
-  currentTagId: null;
+  currentTagId: string | null;
 }
 
 const initialState: TagState = {
@@ -13,38 +13,38 @@ const initialState: TagState = {
   unAssignTadId: null,
   renameTagId: null,
   showTagColorDialogueBox: false,
-  currentTagId: null,
+  currentTagId: null
 };
 
 export const tagSlice = createSlice({
-  name: "tag",
+  name: 'tag',
   initialState,
   reducers: {
-    setCurrentTaskIdForTag(state, action) {
+    setCurrentTaskIdForTag(state, action: PayloadAction<null | string>) {
       state.currentTaskIdForTag = action.payload;
     },
-    setRenameTagId(state, action) {
+    setRenameTagId(state, action: PayloadAction<string | null>) {
       state.renameTagId = action.payload;
     },
-    setShowTagColorDialogBox(state, action) {
+    setShowTagColorDialogBox(state, action: PayloadAction<boolean>) {
       state.showTagColorDialogueBox = action.payload;
     },
-    triggerUnassignTag(state, action) {
-      state.unAssignTadId = action.payload.unAssignTadId;
-      state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+    triggerUnassignTag(state, action: PayloadAction<{ unAssignTadId: null; currentTaskIdForTag: null } | null>) {
+      if (action.payload == null) {
+        state.unAssignTadId = null;
+        state.currentTaskIdForTag = null;
+      } else {
+        state.unAssignTadId = action.payload.unAssignTadId;
+        state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+      }
     },
-    setCurrentTagId(state, action) {
+    setCurrentTagId(state, action: PayloadAction<string | null>) {
       state.currentTagId = action.payload;
-    },
-  },
+    }
+  }
 });
 
-export const {
-  triggerUnassignTag,
-  setCurrentTaskIdForTag,
-  setRenameTagId,
-  setShowTagColorDialogBox,
-  setCurrentTagId,
-} = tagSlice.actions;
+export const { triggerUnassignTag, setCurrentTaskIdForTag, setRenameTagId, setShowTagColorDialogBox, setCurrentTagId } =
+  tagSlice.actions;
 
 export default tagSlice.reducer;

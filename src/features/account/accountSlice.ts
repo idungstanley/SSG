@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserState } from './account.interfaces';
 
-const showPreviewFromLS = localStorage.getItem('showPreview');
+const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
 // const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
 //   JSON.parse(localStorage.getItem('sidebar') || '""');
@@ -24,9 +24,9 @@ interface AccountState {
 
 const initialState: AccountState = {
   settings: {
-    showPreview: showPreviewFromLS ? JSON.parse(showPreviewFromLS) : false,
+    showPreview: JSON.parse(showPreviewFromLS ?? 'false') as boolean
   },
-  showSidebar,
+  showSidebar
 };
 
 export const accountSlice = createSlice({
@@ -38,8 +38,8 @@ export const accountSlice = createSlice({
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setAccountSettings, setShowSidebar } = accountSlice.actions;

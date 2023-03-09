@@ -29,12 +29,7 @@ function Header() {
           buttonStyle="white"
           label="Upload"
           onClick={() => ({})}
-          icon={
-            <ArrowUpTrayIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          }
+          icon={<ArrowUpTrayIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
           iconPosition="center"
           disabled
           ringOnFocus
@@ -44,12 +39,7 @@ function Header() {
           buttonStyle="white"
           label="Back to inbox"
           onClick={goBackToInbox}
-          icon={
-            <InboxIcon
-              className="mr-2.5 h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
-          }
+          icon={<InboxIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />}
           iconPosition="center"
           disabled={false}
           ringOnFocus

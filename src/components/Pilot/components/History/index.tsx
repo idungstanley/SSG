@@ -19,10 +19,7 @@ export default function History() {
       <div className="relative h-full">
         {/* status checking */}
         {status === 'error' ? (
-          <FullScreenMessage
-            title="Oops, an error occurred :("
-            description="Please try again later."
-          />
+          <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
         ) : status === 'loading' ? (
           <div className="mx-auto w-6 justify-center mt-12">
             <Spinner size={8} color="#0F70B7" />
@@ -32,18 +29,12 @@ export default function History() {
             {/* message if logs are empty */}
             {logs ? (
               !logs.length ? (
-                <FullScreenMessage
-                  title="No logs yet"
-                  description="Do any action."
-                />
+                <FullScreenMessage title="No logs yet" description="Do any action." />
               ) : (
                 <ul className="divide-y divide-gray-200 h-full flex-1">
                   {/* logs list */}
                   {logs.map((activityLog) => (
-                    <li
-                      key={activityLog.id}
-                      className="py-2 flex justify-between items-center"
-                    >
+                    <li key={activityLog.id} className="py-2 flex justify-between items-center">
                       <div className="flex items-center">
                         <InitialsAvatar
                           size={10}
@@ -52,18 +43,12 @@ export default function History() {
                         />
 
                         <div className="ml-3">
-                          <p className="text-indigo-600">
-                            {activityLog.team_member.name}
-                          </p>
-                          <p className="text-gray-400">
-                            {activityLog.category}
-                          </p>
+                          <p className="text-indigo-600">{activityLog.team_member.name}</p>
+                          <p className="text-gray-400">{activityLog.category}</p>
                         </div>
                       </div>
 
-                      <p className="text-gray-400 text-sm">
-                        {OutputDateTime(activityLog.created_at)}
-                      </p>
+                      <p className="text-gray-400 text-sm">{OutputDateTime(activityLog.created_at)}</p>
                     </li>
                   ))}
                 </ul>

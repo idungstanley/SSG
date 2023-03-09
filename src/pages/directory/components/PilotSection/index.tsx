@@ -4,34 +4,27 @@ import Details from './components/Details';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useParams } from 'react-router-dom';
-import {
-  useGetDirectory,
-  useGetDirectoryTemplate,
-} from '../../../../features/directory/directoryService';
+import { useGetDirectory, useGetDirectoryTemplate } from '../../../../features/directory/directoryService';
 
 export const sections = [
   {
     id: 1,
-    element: <Details />,
-  },
+    element: <Details />
+  }
 ];
 
 export const tabs = [
   {
     id: 1,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />,
-  },
+    icon: <InformationCircleIcon className="w-4 h-4" />
+  }
 ];
 
 export const pilotConfig = { sections, tabs };
 
 // ! move template and directory ids to global store
-export default function PilotSection({
-  templateId,
-}: {
-  templateId: string | null;
-}) {
+export default function PilotSection({ templateId }: { templateId: string | null }) {
   const dispatch = useAppDispatch();
 
   const { directoryId } = useParams();
@@ -51,7 +44,7 @@ export default function PilotSection({
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: template?.name || directory?.name,
+          title: template?.name || directory?.name
         })
       );
     }

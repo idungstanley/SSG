@@ -1,10 +1,5 @@
 import React, { Fragment } from 'react';
-import {
-  EyeIcon,
-  InformationCircleIcon,
-  ClockIcon,
-  ChatBubbleBottomCenterIcon,
-} from '@heroicons/react/24/outline';
+import { EyeIcon, InformationCircleIcon, ClockIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { Tab } from '@headlessui/react';
 import Preview from './Preview';
 import Details from './Details';
@@ -18,26 +13,26 @@ const tabs = [
     key: 'preview',
     name: 'Preview',
     icon: EyeIcon,
-    current: true,
+    current: true
   },
   {
     key: 'file-details',
     name: 'File details',
     icon: InformationCircleIcon,
-    current: false,
+    current: false
   },
   {
     key: 'activity',
     name: 'Activity',
     icon: ClockIcon,
-    current: false,
+    current: false
   },
   {
     key: 'comments',
     name: 'Comments',
     icon: ChatBubbleBottomCenterIcon,
-    current: false,
-  },
+    current: false
+  }
 ];
 
 function FileInfo() {
@@ -66,10 +61,7 @@ function FileInfo() {
             </div>
             <div className="hidden sm:block h-full w-full">
               <Tab.Group as="div" className="h-full w-full flex flex-col">
-                <Tab.List
-                  as="nav"
-                  className="flex space-x-8 px-6 border-b border-gray-200 w-full"
-                >
+                <Tab.List as="nav" className="flex space-x-8 px-6 border-b border-gray-200 w-full">
                   {tabs.map((tab) => (
                     <Tab key={tab.name}>
                       {({ selected }) => (
@@ -83,9 +75,7 @@ function FileInfo() {
                         >
                           <tab.icon
                             className={cl(
-                              selected
-                                ? 'text-indigo-500'
-                                : 'text-gray-400 group-hover:text-gray-500',
+                              selected ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500',
                               '-ml-0.5 mr-2 h-5 w-5'
                             )}
                             aria-hidden="true"
@@ -111,9 +101,7 @@ function FileInfo() {
                       <Activity />
                     </Tab.Panel>
 
-                    <Tab.Panel className="h-full p-4">
-                      {selectedInboxFileId ? <Comments /> : null}
-                    </Tab.Panel>
+                    <Tab.Panel className="h-full p-4">{selectedInboxFileId ? <Comments /> : null}</Tab.Panel>
                   </Tab.Panels>
                 </div>
               </Tab.Group>

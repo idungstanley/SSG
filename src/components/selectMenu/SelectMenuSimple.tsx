@@ -16,12 +16,7 @@ interface SelectMenuSimpleProps {
   onChange: (value: string) => void;
 }
 
-export default function SelectMenuSimple({
-  options,
-  selectedId,
-  label,
-  onChange,
-}: SelectMenuSimpleProps) {
+export default function SelectMenuSimple({ options, selectedId, label, onChange }: SelectMenuSimpleProps) {
   const [processedOptions, setProcessedOptions] = useState<IOption[]>([]);
 
   useEffect(() => {
@@ -41,21 +36,12 @@ export default function SelectMenuSimple({
     <Listbox value={selectedId} onChange={onSelect}>
       {({ open }) => (
         <>
-          {label && (
-            <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">
-              {label}
-            </Listbox.Label>
-          )}
+          {label && <Listbox.Label className="block mb-1 text-sm font-medium text-gray-700">{label}</Listbox.Label>}
           <div className="relative">
             <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-              <span className="block truncate">
-                {processedOptions.find((item) => item.id === selectedId)?.name}
-              </span>
+              <span className="block truncate">{processedOptions.find((item) => item.id === selectedId)?.name}</span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <ChevronUpDownIcon
-                  className="w-5 h-5 text-gray-400"
-                  aria-hidden="true"
-                />
+                <ChevronUpDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
               </span>
             </Listbox.Button>
 
@@ -81,12 +67,7 @@ export default function SelectMenuSimple({
                     {({ active }) => (
                       <>
                         <span
-                          className={cl(
-                            selectedId === option.id
-                              ? 'font-semibold'
-                              : 'font-normal',
-                            'block truncate'
-                          )}
+                          className={cl(selectedId === option.id ? 'font-semibold' : 'font-normal', 'block truncate')}
                         >
                           {option.name}
                         </span>

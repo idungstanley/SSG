@@ -15,11 +15,11 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
 
   const { data: dataList } = getListServices({
     walletId: finalParentId,
-    Archived: toggleArchiveList,
+    Archived: toggleArchiveList
   });
   return dataList?.data.lists != null ? (
     <section>
-      {dataList?.data?.lists.map((list: dataProps) => (
+      {dataList?.data.lists.map((list: dataProps) => (
         <div key={list.id}>
           <ListItem paddingLeft="100" list={list} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}

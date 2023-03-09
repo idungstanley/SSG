@@ -11,17 +11,10 @@ export default function Contacts() {
 
   const members = data?.data.team_members;
 
-  const membersWithoutCurrent = members?.filter(
-    (member) => member.user.id !== currentUserId
-  );
+  const membersWithoutCurrent = members?.filter((member) => member.user.id !== currentUserId);
 
   if (status === 'error') {
-    return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-      />
-    );
+    return <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />;
   }
 
   if (status === 'loading') {
@@ -38,20 +31,12 @@ export default function Contacts() {
         <h2 className="text-lg font-medium text-gray-900 border-b p-2">Contacts</h2>
         <ul role="list" className="divide-y divide-gray-200 p-2">
           {membersWithoutCurrent.map((member) => (
-            <li
-              key={member.id}
-              className="flex py-2 w-full items-center justify-between cursor-pointer"
-            >
+            <li key={member.id} className="flex py-2 w-full items-center justify-between cursor-pointer">
               <div className="flex">
-                <AvatarWithInitials
-                  initials={member.initials}
-                  backgroundColour={member.colour}
-                />
+                <AvatarWithInitials initials={member.initials} backgroundColour={member.colour} />
 
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">
-                    {member.user.name}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900">{member.user.name}</p>
                   <p className="text-sm text-gray-500">{member.user.email}</p>
                 </div>
               </div>
@@ -60,10 +45,7 @@ export default function Contacts() {
         </ul>
       </>
     ) : (
-      <FullScreenMessage
-        title="You have no members yet"
-        description="Invite one."
-      />
+      <FullScreenMessage title="You have no members yet" description="Invite one." />
     )
   ) : null;
 }

@@ -1,44 +1,39 @@
-import React, { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineTags } from "react-icons/ai";
-import {
-  UseAssignTagService,
-  UseGetAllTagsService,
-} from "../../features/workspace/tags/tagService";
-import { Spinner } from "../../common";
-import CreateTag from "./CreateTag";
-import { dataProps } from "../Index/walletIndex/WalletIndex";
-import { useAppSelector } from "../../app/hooks";
+import React, { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { AiOutlineTags } from 'react-icons/ai';
+import { UseAssignTagService, UseGetAllTagsService } from '../../features/workspace/tags/tagService';
+import { Spinner } from '../../common';
+import CreateTag from './CreateTag';
+import { dataProps } from '../Index/walletIndex/WalletIndex';
+import { useAppSelector } from '../../app/hooks';
 // import EditTagModal from "./EditTagModal";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function TagModal() {
   const queryClient = useQueryClient();
 
   const { currentTaskIdForTag } = useAppSelector((state) => state.tag);
   //get all tags
-  const { data, status } = UseGetAllTagsService();
+  const { data: tagsData, status } = UseGetAllTagsService();
 
-  const tagList = data?.data.tags;
-
-  if (status == "loading") {
-    <Spinner size={10} color={"blue"} />;
+  if (status == 'loading') {
+    <Spinner size={10} color={'blue'} />;
   }
 
   const assignTagMutation = useMutation(UseAssignTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const handleAssignTag = async (tagId: string) => {
     await assignTagMutation.mutateAsync({
       tagId,
-      currentTaskIdForTag,
+      currentTaskIdForTag
     });
   };
 
-  return status == "success" ? (
+  return status == 'success' ? (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
@@ -63,7 +58,7 @@ export default function TagModal() {
             <CreateTag />
           </div>
           <div className="h-52 overflow-auto ">
-            {tagList.map((tags: dataProps) => (
+            {tagsData?.data.tags.map((tags: dataProps) => (
               <Menu.Item key={tags.id}>
                 {() => (
                   <div className="flex items-center hover:bg-gray-300 text-gray-600">

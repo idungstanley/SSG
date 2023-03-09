@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ListState {
   list: string[];
-  currentListId: null;
+  currentListId: string | null;
   createTaskFromTop: boolean;
   delList: boolean;
   archiveList: boolean;
@@ -15,36 +15,36 @@ const initialState: ListState = {
   createTaskFromTop: false,
   delList: false,
   archiveList: false,
-  toggleArchiveList: false,
+  toggleArchiveList: false
 };
 
 export const listSlice = createSlice({
   name: 'list',
   initialState,
   reducers: {
-    createList(state, action) {
+    createList(state, action: PayloadAction<string>) {
       state.list.push(action.payload);
     },
-    getList(state, action) {
+    getList(state, action: PayloadAction<string[]>) {
       state.list = action.payload;
     },
-    setArchiveList(state, action) {
+    setArchiveList(state, action: PayloadAction<boolean>) {
       state.archiveList = action.payload;
     },
-    setToggleArchiveList(state, action) {
+    setToggleArchiveList(state, action: PayloadAction<boolean>) {
       state.toggleArchiveList = action.payload;
     },
-    setDeleteList(state, action) {
+    setDeleteList(state, action: PayloadAction<boolean>) {
       state.delList = action.payload;
     },
-    setCurrentListId(state, action) {
+    setCurrentListId(state, action: PayloadAction<string | null>) {
       state.currentListId = action.payload;
     },
-    setCreateTaskFromTop(state, action) {
+    setCreateTaskFromTop(state, action: PayloadAction<boolean>) {
       state.createTaskFromTop = action.payload;
     },
-    checkIfList: (state) => state,
-  },
+    checkIfList: (state) => state
+  }
 });
 
 export const {
@@ -55,6 +55,6 @@ export const {
   setCreateTaskFromTop,
   setDeleteList,
   setArchiveList,
-  setToggleArchiveList,
+  setToggleArchiveList
 } = listSlice.actions;
 export default listSlice.reducer;

@@ -6,10 +6,7 @@ import InboxData from './InboxData';
 function Inbox() {
   return (
     <>
-      <PlaceItem
-        label="In-tray"
-        icon={<InboxStackIcon className="w-4 h-4" />}
-      />
+      <PlaceItem label="In-tray" icon={<InboxStackIcon className="w-4 h-4" />} />
       <InboxData />
     </>
   );

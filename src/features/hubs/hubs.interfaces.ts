@@ -38,6 +38,24 @@ export interface IResponseGetHubs {
   };
 }
 
+export interface IFavorites {
+  name: string;
+  id: string;
+  model_type: string;
+  model_id: string;
+}
+
+export interface IFavoritesRes {
+  data: {
+    favorites: IFavorites[];
+    pagination: {
+      page: number;
+      per_page: number;
+      has_more_pages: boolean;
+    };
+  };
+}
+
 export interface IHubReq {
   data: {
     hubs: IHub[];

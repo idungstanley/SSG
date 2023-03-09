@@ -1,12 +1,12 @@
-import moment, { MomentInput } from "moment";
-import React, { ReactNode, useState } from "react";
-import { IoCloseSharp } from "react-icons/io5";
-import { MdDragIndicator } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { AvatarWithInitials } from "../../../../../components";
-import ColorsModal from "../../../../../components/tags/ColorsModal";
-import EditTagModal from "../../../../../components/tags/EditTagModal";
-import ToolTip from "../../../../../components/Tooltip";
+import moment, { MomentInput } from 'moment';
+import React, { ReactNode, useState } from 'react';
+import { IoCloseSharp } from 'react-icons/io5';
+import { MdDragIndicator } from 'react-icons/md';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { AvatarWithInitials } from '../../../../../components';
+import ColorsModal from '../../../../../components/tags/ColorsModal';
+import EditTagModal from '../../../../../components/tags/EditTagModal';
+import ToolTip from '../../../../../components/Tooltip';
 import {
   ImyTaskData,
   setCurrentParentTaskId,
@@ -15,24 +15,26 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setToggleAssignCurrentTaskId,
-} from "../../../../../features/task/taskSlice";
-import { tagItem } from "../../../pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-import AssignTask from "../../assignTask/AssignTask";
-import ArrowRigt from "../../../../../../src/assets/branding/ArrowRigt.svg";
-import ArrowDown from "../../../../../../src/assets/branding/ArrowDown.svg";
-import StatusDropdown from "../../../../../components/status/StatusDropdown";
-import { setActiveItem } from "../../../../../features/workspace/workspaceSlice";
-import { FiEdit2 } from "react-icons/fi";
-import TagModal from "../../../../../components/tags/TagModal";
-import PriorityDropdown from "../../../../../components/priority/PriorityDropdown";
-import { PlusIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { setCurrentTaskIdForTag } from "../../../../../features/workspace/tags/tagSlice";
-import {
-  UseUnAssignTagService,
-  UseUpdateTagService,
-} from "../../../../../features/workspace/tags/tagService";
+  setToggleAssignCurrentTaskId
+} from '../../../../../features/task/taskSlice';
+import AssignTask from '../../assignTask/AssignTask';
+import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
+import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
+import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { FiEdit2 } from 'react-icons/fi';
+import TagModal from '../../../../../components/tags/TagModal';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
+import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
+
+export interface tagItem {
+  id: string;
+  name: string;
+  color: string;
+}
 
 interface renderDataProps {
   taskColField:
@@ -55,7 +57,7 @@ export default function DataRenderFunc({
   task,
   getSubTaskId,
   handleGetSubTask,
-  ShowPlusIcon,
+  ShowPlusIcon
 }: renderDataProps) {
   const {
     showTaskNavigation,
@@ -64,24 +66,23 @@ export default function DataRenderFunc({
     comfortableView,
     comfortableViewWrap,
     CompactView,
-    CompactViewWrap,
+    CompactViewWrap
   } = useAppSelector((state) => state.task);
-  const [tagState, setTagState] = useState<string>("");
-  const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } =
-    useAppSelector((state) => state.tag);
+  const [tagState, setTagState] = useState<string>('');
+  const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const editTagNameMutation = useMutation(UseUpdateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const handleAssigneeModal = (id: string) => {
@@ -96,48 +97,32 @@ export default function DataRenderFunc({
     setTagState(e.target.value);
   };
 
-  const handleEditTagSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    currentTagId: string
-  ) => {
+  const handleEditTagSubmit = async (e: React.FormEvent<HTMLFormElement>, currentTagId: string) => {
     e.preventDefault();
     await editTagNameMutation.mutateAsync({
       name: tagState,
-      tag_id: currentTagId,
+      tag_id: currentTagId
     });
   };
 
-  const groupAssignee = (
-    data: [{ id: string; initials: string; colour: string }] | undefined
-  ) => {
-    return (data as [{ id: string; initials: string; colour: string }])
-      ?.length >= 3 ? (
+  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+    return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
       <div className="flex items-center justify-center">
         {data?.slice(0, 2).map((newData) => (
           <div key={newData.id} className="">
-            <span
-              key={newData.id}
-              className="flex items-center gap-1 justify center"
-            >
+            <span key={newData.id} className="flex items-center gap-1 justify center">
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
-                width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
+                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
               />
             </span>
           </div>
         ))}
         <span>
-          {(data as [{ id: string; initials: string; colour: string }])
-            ?.length -
-            2 !==
-          0 ? (
-            <span>
-              +
-              {(data as [{ id: string; initials: string; colour: string }])
-                ?.length - 2}
-            </span>
+          {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
+            <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
           ) : null}
         </span>
       </div>
@@ -148,8 +133,8 @@ export default function DataRenderFunc({
             <AvatarWithInitials
               initials={newData.initials}
               backgroundColour={newData.colour}
-              height={`${CompactView || CompactViewWrap ? "h-4" : "h-5"}`}
-              width={`${CompactView || CompactViewWrap ? "w-4" : "w-5"}`}
+              height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+              width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
             />
           </span>
         </div>
@@ -182,15 +167,12 @@ export default function DataRenderFunc({
                       className="flex items-center text-white p-0.5 h-4 text-center space-x-1 mr-1.5"
                       style={{
                         backgroundColor: `${item.color}`,
-                        clipPath:
-                          "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)",
+                        clipPath: 'polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)'
                       }}
                     >
                       <div className="flex items-center font-bold truncate">
-                        <p className="pl-4" style={{ fontSize: "7px" }}>
-                          {item.name.length > 10
-                            ? item.name.slice(0, 5)
-                            : item.name}
+                        <p className="pl-4" style={{ fontSize: '7px' }}>
+                          {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
                       <ToolTip tooltip="edit tag">
@@ -202,11 +184,11 @@ export default function DataRenderFunc({
                       <ToolTip tooltip="unassign tag">
                         <button
                           className="pr-2 text-gray-300 font-bold"
-                          style={{ fontSize: "9px" }}
+                          style={{ fontSize: '9px' }}
                           onClick={() =>
                             unAssignTagMutation.mutateAsync({
                               tagId: item.id,
-                              currentTaskIdForTag: task.id,
+                              currentTaskIdForTag: task.id
                             })
                           }
                         >
@@ -241,8 +223,8 @@ export default function DataRenderFunc({
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "task",
-        activeItemName: name,
+        activeItemType: 'task',
+        activeItemName: name
       })
     );
   };
@@ -260,7 +242,7 @@ export default function DataRenderFunc({
   };
 
   if (
-    colfield === "assignees" &&
+    colfield === 'assignees' &&
     (
       taskColField as Array<{
         id: string;
@@ -272,10 +254,7 @@ export default function DataRenderFunc({
     return (
       <>
         <div className="">
-          <div
-            onClick={() => handleAssigneeModal(task.id)}
-            className="flex cursor-pointer "
-          >
+          <div onClick={() => handleAssigneeModal(task.id)} className="flex cursor-pointer ">
             {groupAssignee(task.assignees)}
           </div>
         </div>
@@ -285,7 +264,7 @@ export default function DataRenderFunc({
       </>
     );
   } else if (
-    colfield === "assignees" &&
+    colfield === 'assignees' &&
     (
       taskColField as Array<{
         id: string;
@@ -298,7 +277,7 @@ export default function DataRenderFunc({
       <>
         <UserPlusIcon
           className="ml-2 text-xl text-gray-400 cursor-pointer "
-          style={{ width: "30px" }}
+          style={{ width: '30px' }}
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
@@ -307,60 +286,58 @@ export default function DataRenderFunc({
         </span>
       </>
     );
-  } else if (colfield === "tags") {
+  } else if (colfield === 'tags') {
     return (
       <>
         <div> {groupTags(taskColField as tagItem[])}</div>
       </>
     );
-  } else if (colfield == "created_at" || colfield == "updated_at") {
+  } else if (colfield == 'created_at' || colfield == 'updated_at') {
     return (
       <>
-        <span className="text-sm font-medium text-gray-400">
-          {moment(taskColField as MomentInput).format("MM/DD")}
-        </span>
+        <span className="text-sm font-medium text-gray-400">{moment(taskColField as MomentInput).format('MM/DD')}</span>
       </>
     );
-  } else if (colfield == "status") {
-    if (taskColField == "completed") {
+  } else if (colfield == 'status') {
+    if (taskColField == 'completed') {
       return (
         <>
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "in progress") {
+    } else if (taskColField == 'in progress') {
       return (
         <>
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "archived") {
+    } else if (taskColField == 'archived') {
       return (
         <>
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
         </>
       );
-    } else if (taskColField == "todo") {
+    } else if (taskColField == 'todo') {
       return (
         <>
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             {taskColField}
           </div>
@@ -371,14 +348,14 @@ export default function DataRenderFunc({
         <>
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
-            style={{ marginLeft: "-30px" }}
+            style={{ marginLeft: '-30px' }}
           >
             Todo
           </div>
         </>
       );
     }
-  } else if (colfield === "name") {
+  } else if (colfield === 'name') {
     return (
       <>
         <div className="relative flex items-center ">
@@ -393,17 +370,12 @@ export default function DataRenderFunc({
             />
             <MdDragIndicator className="absolute text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
           </div>
-          <div
-            onClick={() =>
-              handleGetSubTask ? handleGetSubTask(task.id) : null
-            }
-            className="items-center"
-          >
+          <div onClick={() => (handleGetSubTask ? handleGetSubTask(task.id) : null)} className="items-center">
             {task.id == getSubTaskId ? (
               <span>
                 <img
                   src={ArrowDown}
-                  style={{ width: "6px", marginRight: "2px" }}
+                  style={{ width: '6px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   aria-hidden="true"
                   color="rgba(72, 67, 67, 0.64)"
@@ -413,7 +385,7 @@ export default function DataRenderFunc({
               <span>
                 <img
                   src={ArrowRigt}
-                  style={{ width: "5px", marginRight: "2px" }}
+                  style={{ width: '5px', marginRight: '2px' }}
                   className="flex-shrink-0 h-2"
                   color="rgba(72, 67, 67, 0.64)"
                 />
@@ -421,25 +393,20 @@ export default function DataRenderFunc({
             )}
           </div>
           <div className="flex items-center">
-            <p
-              onClick={() => handleTaskStatus(task.id as string)}
-              className="relative pt-1 pr-1"
-            >
+            <p onClick={() => handleTaskStatus(task.id as string)} className="relative pt-1 pr-1">
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <div
-              onClick={() =>
-                handleTaskPilot(task.id as string, task.name as string)
-              }
+              onClick={() => handleTaskPilot(task.id as string, task.name as string)}
               className={`${
                 comfortableView
-                  ? "text-lg whitespace-nowrap"
+                  ? 'text-lg whitespace-nowrap'
                   : comfortableViewWrap
-                  ? "text-lg"
+                  ? 'text-lg'
                   : CompactView
-                  ? "text-xs whitespace-nowrap"
+                  ? 'text-xs whitespace-nowrap'
                   : CompactViewWrap
-                  ? "text-xs text-justify	"
+                  ? 'text-xs text-justify'
                   : null
               }`}
             >
@@ -475,13 +442,10 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield === "priority") {
+  } else if (colfield === 'priority') {
     return (
       <>
-        <span
-          className="relative border-gray-300 border-dotted "
-          onClick={() => handleTaskPriority(task.id as string)}
-        >
+        <span className="relative border-gray-300 border-dotted " onClick={() => handleTaskPriority(task.id as string)}>
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
       </>

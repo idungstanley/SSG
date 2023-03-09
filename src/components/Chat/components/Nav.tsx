@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  ChatBubbleBottomCenterTextIcon,
-  PlusIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline';
+import { ChatBubbleBottomCenterTextIcon, PlusIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../../app/hooks';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 import ToolTip from '../../Tooltip';
@@ -13,18 +9,13 @@ const navItems = [
   {
     id: 0,
     label: 'Chats',
-    icon: (
-      <ChatBubbleBottomCenterTextIcon
-        className="h-7 w-7 stroke-current"
-        aria-hidden="true"
-      />
-    ),
+    icon: <ChatBubbleBottomCenterTextIcon className="h-7 w-7 stroke-current" aria-hidden="true" />
   },
   {
     id: 1,
     label: 'Contacts',
-    icon: <UsersIcon className="h-7 w-7 stroke-current" aria-hidden="true" />,
-  },
+    icon: <UsersIcon className="h-7 w-7 stroke-current" aria-hidden="true" />
+  }
 ];
 
 interface NavProps {
@@ -55,9 +46,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
               type="button"
               className={cl(
                 'inline-flex items-center p-1 focus:outline-none ring-0 focus:ring-0',
-                activeTabId === tab.id
-                  ? 'text-indigo-500 hover:text-indigo-700'
-                  : 'text-gray-500 hover:text-gray-700'
+                activeTabId === tab.id ? 'text-indigo-500 hover:text-indigo-700' : 'text-gray-500 hover:text-gray-700'
               )}
             >
               {tab.icon}

@@ -1,22 +1,26 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { IPermission, IPermissionFromList } from './permissions.interfaces';
+import { IPermission, IPermissionFromList, IPermissionsReq } from './permissions.interfaces';
 
 // Get permissions list
 export const useGetPermissionsList = () =>
-  useQuery<IPermissionFromList[]>(['workspace_permissions_list'], async () => {
-    const url = 'settings/permissions';
+  useQuery(
+    ['workspace_permissions_list'],
+    async () => {
+      const url = 'settings/permissions';
 
-    const data = await requestNew(
-      {
-        url,
-        method: 'GET',
-      },
-      true
-    );
+      const data = await requestNew<{ data: { permissions: IPermissionFromList[] } }>(
+        {
+          url,
+          method: 'GET'
+        },
+        true
+      );
 
-    return data.data.permissions;
-  });
+      return data;
+    },
+    { select: (res) => res }
+  );
 
 // Get permissions values
 export const useGetPermissionsValues = () => {
@@ -27,10 +31,10 @@ export const useGetPermissionsValues = () => {
     async () => {
       const url = 'settings/permissions/roles';
 
-      const data = await requestNew(
+      const data = await requestNew<IPermissionsReq>(
         {
           url,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
@@ -45,22 +49,19 @@ export const useGetPermissionsValues = () => {
               'workspace_permission_value',
               {
                 teamMemberRoleKey: permissionValue.team_member_role_key,
-                workspacePermissionKey: permissionValue.permission_key,
-              },
+                workspacePermissionKey: permissionValue.permission_key
+              }
             ],
             permissionValue
           )
         );
-      },
+      }
     }
   );
 };
 
 // Get individual permission value
-export const useGetPermissionValue = (
-  teamMemberRoleKey: string,
-  workspacePermissionKey: string
-) => {
+export const useGetPermissionValue = (teamMemberRoleKey: string, workspacePermissionKey: string) => {
   const queryClient = useQueryClient();
 
   return useQuery<IPermission | undefined>(
@@ -68,16 +69,16 @@ export const useGetPermissionValue = (
       'workspace_permission_value',
       {
         teamMemberRoleKey,
-        workspacePermissionKey,
-      },
+        workspacePermissionKey
+      }
     ],
     () =>
       queryClient.getQueryData([
         'workspace_permission_value',
         {
           teamMemberRoleKey,
-          workspacePermissionKey,
-        },
+          workspacePermissionKey
+        }
       ]),
     {
       initialData: () =>
@@ -85,9 +86,9 @@ export const useGetPermissionValue = (
           'workspace_permission_value',
           {
             teamMemberRoleKey,
-            workspacePermissionKey,
-          },
-        ]),
+            workspacePermissionKey
+          }
+        ])
     }
   );
 };
@@ -98,15 +99,15 @@ export const changeRolePermissionService = (data: {
   workspacePermissionKey: string;
   isPermissionAllowed: number;
 }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { updated_permissions: IPermission[] } }>(
     {
       url: 'settings/permissions/change-role-permission',
       method: 'POST',
       params: {
         team_member_role_key: data.teamMemberRoleKey,
         workspace_permission_key: data.workspacePermissionKey,
-        permission_allowed: data.isPermissionAllowed,
-      },
+        permission_allowed: data.isPermissionAllowed
+      }
     },
     true
   );

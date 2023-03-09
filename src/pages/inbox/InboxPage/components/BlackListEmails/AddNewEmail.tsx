@@ -12,7 +12,7 @@ export default function AddNewEmail() {
 
     addEmail({
       inboxId,
-      email: value,
+      email: value
     });
 
     setValue('');
@@ -20,10 +20,7 @@ export default function AddNewEmail() {
 
   return (
     <form className="relative" onSubmit={(e) => handleSubmit(e)}>
-      <label
-        htmlFor="blacklist"
-        className="block text-sm font-medium text-gray-600 mb-1 ml-1"
-      >
+      <label htmlFor="blacklist" className="block text-sm font-medium text-gray-600 mb-1 ml-1">
         Add new email to blacklist
       </label>
       <div className="relative">

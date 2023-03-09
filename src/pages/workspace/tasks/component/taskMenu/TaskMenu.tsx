@@ -29,11 +29,7 @@ export default function TaskMenu() {
         </div>
         <div className="flex items-center pr-5 gap-2 ">
           <MdFileCopy className="text-white text-lg" />
-          <input
-            type="text"
-            placeholder="type '/' for commands"
-            className="h-8 rounded bg-transparent text-xs  "
-          />
+          <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
         </div>
       </div>
     </div>

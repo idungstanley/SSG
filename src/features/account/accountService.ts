@@ -1,11 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import {
-  IAccountReq,
-  IUserParams,
-  IUserSettings,
-  IUserSettingsRes,
-} from './account.interfaces';
+import { IAccountReq, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -17,26 +12,24 @@ export const useGetMyWorkspaces = () => {
       requestNew(
         {
           url: 'auth/account/workspaces',
-          method: 'GET',
+          method: 'GET'
         },
         true
       ),
     {
       onSuccess: (data) => {
-        data.data.workspaces.map((workspace) =>
-          queryClient.setQueryData(['my_workspace', workspace.id], workspace)
-        );
-      },
+        data.data.workspaces.map((workspace) => queryClient.setQueryData(['my_workspace', workspace.id], workspace));
+      }
     }
   );
 };
 
 // Switch workspace service
 export const switchWorkspaceService = async (data: { workspaceId: string }) => {
-  const response = requestNew(
+  const response = requestNew<{ data: { workspace: { id: string } } }>(
     {
       url: `auth/account/workspaces/${data.workspaceId}/switch`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -52,14 +45,14 @@ export const useGetUserSettingsKeys = (enabled: boolean) =>
           url: 'user/settings',
           method: 'GET',
           params: {
-            keys: 'sidebar',
-          },
+            keys: 'sidebar'
+          }
         },
         true
       ),
     {
       enabled,
-      select: (res) => res.data.settings[0],
+      select: (res) => res.data.settings[0]
     }
   );
 
@@ -69,8 +62,8 @@ export const setUserSettingsKeys = (value: IUserParams) => {
       url: 'user/settings',
       method: 'PUT',
       data: {
-        keys: [{ key: 'sidebar', value }],
-      },
+        keys: [{ key: 'sidebar', value }]
+      }
     },
     true
   );
@@ -83,6 +76,6 @@ export const useSetUserSettingsKeys = () => {
   return useMutation(setUserSettingsKeys, {
     onSuccess: () => {
       queryClient.invalidateQueries(['user-settings']);
-    },
+    }
   });
 };

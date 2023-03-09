@@ -18,19 +18,14 @@ interface FieldItemProps {
 
 const typeOptions = ['Text', 'Bool', 'Number', 'Date'];
 
-const firstLetterUppercase = (value: string) =>
-  value.at(0)?.toUpperCase() + value.slice(1);
+const firstLetterUppercase = (value: string) => value.at(0)?.toUpperCase() + value.slice(1);
 
-export default function FieldItem({
-  selectedTemplateId,
-  fieldData,
-}: FieldItemProps) {
+export default function FieldItem({ selectedTemplateId, fieldData }: FieldItemProps) {
   const [name, setName] = useState(fieldData?.name || '');
   const [isRequired, setIsRequired] = useState(!!fieldData?.is_required);
   const [isTitle, setIsTitle] = useState(!!fieldData?.is_title);
   const [type, setType] = useState<FieldType>(
-    ((fieldData ? firstLetterUppercase(fieldData.type) : null) ||
-      'Text') as FieldType
+    ((fieldData ? firstLetterUppercase(fieldData.type) : null) || 'Text') as FieldType
   );
 
   const [allowEdit, setAllowEdit] = useState(!fieldData);
@@ -39,8 +34,7 @@ export default function FieldItem({
 
   const { data: template } = useGetDirectoryTemplate(selectedTemplateId);
 
-  const { mutate: onCreateOrUpdate } =
-    useUpdateOrAddTemplateField(selectedTemplateId);
+  const { mutate: onCreateOrUpdate } = useUpdateOrAddTemplateField(selectedTemplateId);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +49,7 @@ export default function FieldItem({
       name: i.name,
       type: i.type,
       isRequired: i.is_required,
-      isTitle: i.is_title,
+      isTitle: i.is_title
     }));
 
     if (savedFields) {
@@ -69,12 +63,12 @@ export default function FieldItem({
         name: _name,
         type: _type,
         isRequired: _isRequired,
-        isTitle: _isTitle,
+        isTitle: _isTitle
       };
 
       onCreateOrUpdate({
         templateId: selectedTemplateId,
-        fields: [...savedFields, newField],
+        fields: [...savedFields, newField]
       });
 
       // clear input values if it's new filed
@@ -93,10 +87,7 @@ export default function FieldItem({
   };
 
   return (
-    <form
-      onSubmit={(e) => handleSubmit(e)}
-      className="flex gap-3 items-center pt-4"
-    >
+    <form onSubmit={(e) => handleSubmit(e)} className="flex gap-3 items-center pt-4">
       <input
         disabled={!allowEdit}
         value={name}
@@ -122,19 +113,9 @@ export default function FieldItem({
         </select>
       </div>
 
-      <Checkbox
-        disabled={!allowEdit}
-        label="Title"
-        checked={isTitle}
-        setChecked={setIsTitle}
-      />
+      <Checkbox disabled={!allowEdit} label="Title" checked={isTitle} setChecked={setIsTitle} />
 
-      <Checkbox
-        disabled={!allowEdit}
-        label="Required"
-        checked={isRequired}
-        setChecked={setIsRequired}
-      />
+      <Checkbox disabled={!allowEdit} label="Required" checked={isRequired} setChecked={setIsRequired} />
 
       <button
         type="submit"

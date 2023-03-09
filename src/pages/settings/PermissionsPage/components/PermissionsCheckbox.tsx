@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   changeRolePermissionService,
   useGetPermissionValue,
-  useGetPermissionsList,
+  useGetPermissionsList
 } from '../../../../features/settings/permissions/permissionsService';
 import { Checkbox } from '../../../../components';
 import { IPermission } from '../../../../features/settings/permissions/permissions.interfaces';
@@ -13,39 +13,35 @@ interface PermissionsCheckboxProps {
   workspacePermissionKey: string;
 }
 
-export default function PermissionsCheckbox({
-  teamMemberRoleKey,
-  workspacePermissionKey,
-}: PermissionsCheckboxProps) {
+export default function PermissionsCheckbox({ teamMemberRoleKey, workspacePermissionKey }: PermissionsCheckboxProps) {
   const queryClient = useQueryClient();
 
-  const { data: currentPermissionValue, status: currentPermissionStatus } =
-    useGetPermissionValue(teamMemberRoleKey, workspacePermissionKey);
+  const { data: currentPermissionValue, status: currentPermissionStatus } = useGetPermissionValue(
+    teamMemberRoleKey,
+    workspacePermissionKey
+  );
 
   const { status: permissionsListStatus } = useGetPermissionsList();
 
   // Mutations
-  const changeRolePermissionMutation = useMutation(
-    changeRolePermissionService,
-    {
-      onSuccess: (successData) => {
-        const updatedPermissions: IPermission[] = successData.data.updated_permissions;
+  const changeRolePermissionMutation = useMutation(changeRolePermissionService, {
+    onSuccess: (successData) => {
+      const updatedPermissions = successData.data.updated_permissions as IPermission[];
 
-        updatedPermissions.map((updatedPermissionValue) =>
-          queryClient.setQueryData(
-            [
-              'workspace_permission_value',
-              {
-                teamMemberRoleKey: updatedPermissionValue.team_member_role_key,
-                workspacePermissionKey: updatedPermissionValue.permission_key,
-              },
-            ],
-            updatedPermissionValue
-          )
-        );
-      },
+      updatedPermissions.map((updatedPermissionValue) =>
+        queryClient.setQueryData(
+          [
+            'workspace_permission_value',
+            {
+              teamMemberRoleKey: updatedPermissionValue.team_member_role_key,
+              workspacePermissionKey: updatedPermissionValue.permission_key
+            }
+          ],
+          updatedPermissionValue
+        )
+      );
     }
-  );
+  });
 
   const changeRole = () => {
     if (!currentPermissionValue || currentPermissionStatus !== 'success') {
@@ -55,7 +51,7 @@ export default function PermissionsCheckbox({
     changeRolePermissionMutation.mutate({
       teamMemberRoleKey,
       workspacePermissionKey,
-      isPermissionAllowed: currentPermissionValue.value === true ? 0 : 1,
+      isPermissionAllowed: currentPermissionValue.value === true ? 0 : 1
     });
 
     return true;
@@ -63,10 +59,7 @@ export default function PermissionsCheckbox({
 
   return (
     <Checkbox
-      checked={
-        currentPermissionStatus === 'success' &&
-        currentPermissionValue?.value === true
-      }
+      checked={currentPermissionStatus === 'success' && currentPermissionValue?.value === true}
       onChange={changeRole}
       height="h-6"
       width="w-6"

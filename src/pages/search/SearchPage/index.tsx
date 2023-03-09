@@ -23,9 +23,7 @@ interface IResultItem {
 
 export default function SearchPage() {
   const dispatch = useDispatch();
-  const { selectedItemId, searchQuery, searchFileContents } = useAppSelector(
-    (state) => state.search
-  );
+  const { selectedItemId, searchQuery, searchFileContents } = useAppSelector((state) => state.search);
 
   const debouncedValue = useDebounce(searchQuery, 300);
 
@@ -53,7 +51,7 @@ export default function SearchPage() {
       name: i.display_name,
       path: i.ancestor_path,
       from: 'Explorer',
-      updatedAt: i.updated_at,
+      updatedAt: i.updated_at
     })
   ),
     folders?.map((i) =>
@@ -65,7 +63,7 @@ export default function SearchPage() {
         name: i.name,
         path: i.ancestor_path,
         from: 'Explorer',
-        updatedAt: i.updated_at,
+        updatedAt: i.updated_at
       })
     );
 
@@ -78,7 +76,7 @@ export default function SearchPage() {
       name: i.inbox_file_source.display_name,
       path: null,
       from: 'Inbox',
-      updatedAt: i.updated_at,
+      updatedAt: i.updated_at
     })
   );
 
@@ -95,10 +93,7 @@ export default function SearchPage() {
             />
           ) : // checking error and loading
           explorerStatus === 'error' || inboxStatus === 'error' ? (
-            <FullScreenMessage
-              title="Oops, an error occurred :("
-              description="Please try again later."
-            />
+            <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
           ) : explorerStatus === 'loading' || inboxStatus === 'loading' ? (
             <div className="flex justify-center mx-auto mt-10">
               <Spinner size={22} color="#0F70B7" />
@@ -110,10 +105,7 @@ export default function SearchPage() {
                 description="Enter at least 2 characters to start searching"
               />
             ) : !allResults.length ? (
-              <FullScreenMessage
-                title="Тo matches found :("
-                description="Please, try again"
-              />
+              <FullScreenMessage title="Тo matches found :(" description="Please, try again" />
             ) : (
               <div>
                 <Results data={allResults} />

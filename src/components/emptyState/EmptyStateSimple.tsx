@@ -11,14 +11,7 @@ interface Iprops {
   showIcon: boolean;
 }
 
-export default function EmptyStateSimple({
-  title,
-  description,
-  ctaText,
-  ctaOnClick,
-  showCta,
-  showIcon,
-}: Iprops) {
+export default function EmptyStateSimple({ title, description, ctaText, ctaOnClick, showCta, showIcon }: Iprops) {
   return (
     <div className="text-center">
       {showIcon ? (
@@ -47,9 +40,7 @@ export default function EmptyStateSimple({
             onClick={ctaOnClick}
             label={ctaText}
             width="w-40"
-            icon={
-              <PlusIcon className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" />
-            }
+            icon={<PlusIcon className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" />}
           />
         </div>
       )}
@@ -61,5 +52,5 @@ EmptyStateSimple.defaultProps = {
   ctaText: null,
   ctaOnClick: null,
   showCta: false,
-  showIcon: true,
+  showIcon: true
 };

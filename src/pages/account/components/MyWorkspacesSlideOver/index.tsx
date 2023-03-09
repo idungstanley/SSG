@@ -9,9 +9,7 @@ import { useAppSelector } from '../../../../app/hooks';
 function MyWorkspacesSlideOver() {
   const dispatch = useDispatch();
 
-  const { showMyWorkspacesSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showMyWorkspacesSlideOver } = useAppSelector((state) => state.slideOver);
 
   const { data, status } = useGetMyWorkspaces();
 
@@ -27,10 +25,7 @@ function MyWorkspacesSlideOver() {
               <StackListWithHeader
                 title={<span>All Workspaces</span>}
                 items={data.data.workspaces.map((userWorkspace) => (
-                  <ListItem
-                    key={userWorkspace.id}
-                    userWorkspace={userWorkspace}
-                  />
+                  <ListItem key={userWorkspace.id} userWorkspace={userWorkspace} />
                 ))}
               />
             </div>

@@ -8,18 +8,11 @@ interface RemoveAccessProps {
   isActiveUser: boolean;
 }
 
-export default function RemoveAccess({
-  accessToId,
-  itemType,
-  isActiveUser,
-}: RemoveAccessProps) {
+export default function RemoveAccess({ accessToId, itemType, isActiveUser }: RemoveAccessProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { id, type } = pilotSideOver;
 
-  const { mutate: onRemoveAccess } = useRemoveAccessForData(
-    type as 'file' | 'folder',
-    id
-  );
+  const { mutate: onRemoveAccess } = useRemoveAccessForData(type as 'file' | 'folder', id);
 
   const removeAccess = () => {
     if (type && id) {
@@ -28,7 +21,7 @@ export default function RemoveAccess({
         itemType,
         dataId: id,
         accessToId,
-        isActiveUser,
+        isActiveUser
       });
     }
   };

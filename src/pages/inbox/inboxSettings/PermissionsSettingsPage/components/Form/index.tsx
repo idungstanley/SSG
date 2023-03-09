@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, RadioGroupInPanel } from '../../../../../../components';
-import { useGetInboxAccess, updateInboxWorkspaceAccessLevelService } from '../../../../../../features/inbox/inboxSettingsService';
+import {
+  useGetInboxAccess,
+  updateInboxWorkspaceAccessLevelService
+} from '../../../../../../features/inbox/inboxSettingsService';
 
 export default function Form() {
   const queryClient = useQueryClient();
@@ -24,13 +27,13 @@ export default function Form() {
   const updateInboxWorkspaceAccessLevelMutation = useMutation(updateInboxWorkspaceAccessLevelService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['inbox_access', inboxId]);
-    },
+    }
   });
 
   const onSubmit = async () => {
     updateInboxWorkspaceAccessLevelMutation.mutate({
       accessLevelKey: workspaceAccessLevel,
-      inboxId,
+      inboxId
     });
   };
 
@@ -40,9 +43,7 @@ export default function Form() {
         <div>
           <div>
             <h3 className="text-lg leading-6 font-medium text-gray-900">Permissions</h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Manage inbox permissions
-            </p>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">Manage inbox permissions</p>
           </div>
 
           <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -57,28 +58,28 @@ export default function Form() {
                       {
                         name: 'No access',
                         description: 'Only members and groups which are added directly will have access.',
-                        key: null,
+                        key: null
                       },
                       {
                         name: 'Read-only',
                         description: 'All workspace members can view the inbox and its files.',
-                        key: 'read',
+                        key: 'read'
                       },
                       {
                         name: 'Manage',
                         description: 'All workspace members can manage the inbox and its files.',
-                        key: 'modify',
+                        key: 'modify'
                       },
                       {
                         name: 'Full control',
                         description: 'All workspace members have full control over the inbox.',
-                        key: 'full-control',
+                        key: 'full-control'
                       },
                       {
                         name: 'Owner',
                         description: 'All workspace members are owners of the inbox.',
-                        key: 'owner',
-                      },
+                        key: 'owner'
+                      }
                     ]}
                     selectedKey={workspaceAccessLevel || ''}
                     setSelected={setSelected}

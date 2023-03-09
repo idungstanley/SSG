@@ -1,9 +1,6 @@
 import React from 'react';
 import { Spinner } from '../../../../../common';
-import {
-  useAddTeamMemberToChat,
-  useGetChat,
-} from '../../../../../features/chat/chatService';
+import { useAddTeamMemberToChat, useGetChat } from '../../../../../features/chat/chatService';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import SelectMenuTeamMembers, { ISelectedData } from '../../../../selectMenu';
 
@@ -19,9 +16,7 @@ export default function AddNew({ chatId }: AddNewProps) {
   const memberIds = dt?.chat.team_members.map((member) => member.id);
 
   // get unique members that are not in watchers list
-  const membersWithoutActive = teamMembers?.filter(
-    (member) => !memberIds?.includes(member.id)
-  );
+  const membersWithoutActive = teamMembers?.filter((member) => !memberIds?.includes(member.id));
 
   const { mutate: onCreate } = useAddTeamMemberToChat(chatId);
 
@@ -29,7 +24,7 @@ export default function AddNew({ chatId }: AddNewProps) {
     if (member) {
       onCreate({
         chatId,
-        teamMemberId: member.id,
+        teamMemberId: member.id
       });
     }
   };
@@ -50,7 +45,7 @@ export default function AddNew({ chatId }: AddNewProps) {
           name: i.name || i.user.name,
           email: i.user?.email,
           accessLevel: i.id,
-          type: 'member',
+          type: 'member'
         }))}
         selectedData={null}
         setSelectedData={handleChange}

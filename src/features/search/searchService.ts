@@ -1,17 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import {
-  IExplorerSearchRes,
-  IInboxSearchRes,
-  ISavedSearch,
-  ISavedSearchesRes,
-} from './search.interfaces';
+import { IExplorerSearchRes, IInboxSearchRes, ISavedSearch, ISavedSearchesRes } from './search.interfaces';
 
-export const useSearch = (
-  query: string,
-  searchFileContents: boolean,
-  enabled: boolean
-) => {
+export const useSearch = (query: string, searchFileContents: boolean, enabled: boolean) => {
   const explorer = useQuery<IExplorerSearchRes>(
     ['search_explorer', { query, searchFileContents }],
     async () =>
@@ -20,11 +11,11 @@ export const useSearch = (
         method: 'GET',
         params: {
           content_search: searchFileContents,
-          query,
-        },
+          query
+        }
       }),
     {
-      enabled: !!enabled && query.length > 2,
+      enabled: !!enabled && query.length > 2
     }
   );
 
@@ -35,11 +26,11 @@ export const useSearch = (
         url: '/search/inbox-files',
         method: 'GET',
         params: {
-          query,
-        },
+          query
+        }
       }),
     {
-      enabled: !!enabled && query.length > 2,
+      enabled: !!enabled && query.length > 2
     }
   );
 
@@ -48,14 +39,11 @@ export const useSearch = (
     folders: explorer?.data?.data.folders,
     inbox: inbox?.data?.data.inbox_files,
     explorerStatus: explorer?.status,
-    inboxStatus: inbox?.status,
+    inboxStatus: inbox?.status
   };
 };
 
-export const useGetSearchedItemDetails = (data: {
-  type: string;
-  id: string | null;
-}) => {
+export const useGetSearchedItemDetails = (data: { type: string; id: string | null }) => {
   const { type, id } = data;
 
   const url = `/${type}/${id}/details`;
@@ -63,7 +51,7 @@ export const useGetSearchedItemDetails = (data: {
   return useQuery(['search-details', id], () =>
     requestNew({
       url,
-      method: 'GET',
+      method: 'GET'
     })
   );
 };
@@ -77,8 +65,8 @@ export const useGetSavedSearches = () => {
           url: 'settings',
           method: 'GET',
           params: {
-            keys: 'task_search',
-          },
+            keys: 'task_search'
+          }
         },
         true
       ),
@@ -92,8 +80,8 @@ const saveSearchValue = (valuesArr: string[]) => {
       url: 'settings',
       method: 'PUT',
       data: {
-        keys: [{ key: 'task_search', value: valuesArr }],
-      },
+        keys: [{ key: 'task_search', value: valuesArr }]
+      }
     },
     true
   );
@@ -106,6 +94,6 @@ export const useSaveSearchValue = () => {
   return useMutation(saveSearchValue, {
     onSuccess: () => {
       queryClient.invalidateQueries(['savedSearches']);
-    },
+    }
   });
 };

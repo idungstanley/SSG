@@ -7,7 +7,7 @@ interface CustomStatusDropdownProps {
 }
 
 export default function CustomStatusDropdown({
-  title,
+  title
 }: // listItems,
 // clickAction,
 CustomStatusDropdownProps) {
@@ -17,11 +17,7 @@ CustomStatusDropdownProps) {
   return (
     <div className="">
       <div className="origin-top-right absolute bottom-20 left-10 right-50 z-10 -mt-3 w-fit min:w-48 rounded-md shadow-lg py-1 px-2 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-        <input
-          type="text"
-          placeholder="Search statuses"
-          className="p-2 w-full border-0  focus:outline-none"
-        />
+        <input type="text" placeholder="Search statuses" className="p-2 w-full border-0  focus:outline-none" />
         <div>{title}</div>
         <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
         {/* {listItems.map((listItem, i) => (

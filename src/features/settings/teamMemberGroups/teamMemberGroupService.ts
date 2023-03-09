@@ -18,8 +18,8 @@ export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
           url,
           method: 'GET',
           params: {
-            page,
-          },
+            page
+          }
         },
         true
       );
@@ -28,12 +28,9 @@ export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
       enabled,
       onSuccess: (data) => {
         data.data.team_member_groups?.map((teamMemberGroup) =>
-          queryClient.setQueryData(
-            ['team_member_group', teamMemberGroup.id],
-            teamMemberGroup
-          )
+          queryClient.setQueryData(['team_member_group', teamMemberGroup.id], teamMemberGroup)
         );
-      },
+      }
     }
   );
 };
@@ -42,24 +39,21 @@ export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
 export const useGetTeamMemberGroup = (teamMemberGroupId?: string) => {
   const queryClient = useQueryClient();
 
-  return useQuery<ITeamMemberGroupsReq>(
+  return useQuery(
     ['team_member_group', teamMemberGroupId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITeamMemberGroupsReq>(
         {
           url: `settings/team-member-groups/${teamMemberGroupId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
       return data.data.team_member_group;
     },
     {
-      initialData: queryClient.getQueryData([
-        'team_member_group',
-        teamMemberGroupId,
-      ]),
-      enabled: !!teamMemberGroupId,
+      initialData: queryClient.getQueryData(['team_member_group', teamMemberGroupId]),
+      enabled: !!teamMemberGroupId
     }
   );
 };
@@ -71,8 +65,8 @@ export const createTeamMemberGroupService = async (data: { name: string }) => {
       url: 'settings/team-member-groups',
       method: 'POST',
       params: {
-        name: data.name,
-      },
+        name: data.name
+      }
     },
     true
   );
@@ -80,17 +74,14 @@ export const createTeamMemberGroupService = async (data: { name: string }) => {
 };
 
 // Update team member group service
-export const updateTeamMemberGroupService = async (data: {
-  name: string;
-  teamMemberGroupId?: string;
-}) => {
+export const updateTeamMemberGroupService = async (data: { name: string; teamMemberGroupId?: string }) => {
   const response = requestNew(
     {
       url: `settings/team-member-groups/${data.teamMemberGroupId}`,
       method: 'PUT',
       params: {
-        name: data.name,
-      },
+        name: data.name
+      }
     },
     true
   );
@@ -98,25 +89,20 @@ export const updateTeamMemberGroupService = async (data: {
 };
 
 // Delete team member group service
-export const deleteTeamMemberGroupService = async (data: {
-  teamMemberGroupId?: string;
-}) => {
+export const deleteTeamMemberGroupService = async (data: { teamMemberGroupId?: string }) => {
   const response = requestNew({
     url: `settings/team-member-groups/${data.teamMemberGroupId}`,
-    method: 'DELETE',
+    method: 'DELETE'
   });
   return response;
 };
 
 // Remove team member from group service
-export const removeTeamMemberFromGroupService = async (data: {
-  teamMemberGroupId: string;
-  teamMemberId: string;
-}) => {
+export const removeTeamMemberFromGroupService = async (data: { teamMemberGroupId: string; teamMemberId: string }) => {
   const response = requestNew(
     {
       url: `settings/team-member-groups/${data.teamMemberGroupId}/remove-team-member/${data.teamMemberId}`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -124,14 +110,11 @@ export const removeTeamMemberFromGroupService = async (data: {
 };
 
 // Add team member to group service
-export const addTeamMemberToGroupService = async (data: {
-  teamMemberGroupId?: string;
-  teamMemberId: string;
-}) => {
+export const addTeamMemberToGroupService = async (data: { teamMemberGroupId?: string; teamMemberId: string }) => {
   const response = requestNew(
     {
       url: `settings/team-member-groups/${data.teamMemberGroupId}/add-team-member/${data.teamMemberId}`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );

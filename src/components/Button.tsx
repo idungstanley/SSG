@@ -37,7 +37,7 @@ function Button({
   roundedRight = true,
   borderLeft = true,
   borderRight = true,
-  value,
+  value
 }: ButtonProps) {
   let buttonClassName;
   let hoverBackgroundColor;
@@ -56,8 +56,7 @@ function Button({
       'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
   } else if (buttonStyle === 'white') {
     hoverBackgroundColor = 'hover:bg-gray-50';
-    buttonClassName =
-      'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
+    buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
   }
 
   if (ringOnFocus === true) {
@@ -88,31 +87,20 @@ function Button({
       type="button"
       disabled={disabled || loading}
       className={cl(
-        disabled || loading
-          ? ('opacity-50' as string)
-          : (hoverBackgroundColor as string),
+        disabled || loading ? ('opacity-50' as string) : (hoverBackgroundColor as string),
         `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`
       )}
     >
       {loading ? (
         <div className="items-center justify-center w-full -mt-1">
-          <Spinner
-            size={10}
-            color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'}
-          />
+          <Spinner size={10} color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'} />
         </div>
       ) : (
         <>
-          {icon && iconPosition === 'center' && (
-            <span className="">{icon}</span>
-          )}
-          {icon && (iconPosition === 'left' || iconPosition === null) && (
-            <span className="mr-1">{icon}</span>
-          )}
+          {icon && iconPosition === 'center' && <span className="">{icon}</span>}
+          {icon && (iconPosition === 'left' || iconPosition === null) && <span className="mr-1">{icon}</span>}
           {label && <span>{label}</span>}
-          {icon && iconPosition === 'right' && (
-            <span className="ml-1">{icon}</span>
-          )}
+          {icon && iconPosition === 'right' && <span className="ml-1">{icon}</span>}
         </>
       )}
     </button>

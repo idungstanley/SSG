@@ -6,11 +6,11 @@ import { Spinner } from '../../../../../common';
 import WorkspaceSettingsModal from '../../../../../pages/workspace/workspaceSettings/WorkspaceSettingsModal';
 
 function WorkSpaceSelection() {
-  const { showSidebar } = useAppSelector(state => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
-  const { data, status } = getWorkspaceService();
+  const { data: workSpaceData, status } = getWorkspaceService();
 
-  const workspaceName = data?.data.workspace.name;
+  const workspaceName = workSpaceData?.data.workspace.name;
 
   if (status == 'loading') {
     return <Spinner size={10} color={'#6B7280'} />;
@@ -26,12 +26,14 @@ function WorkSpaceSelection() {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center justify-between space-x-1">
               <AvatarWithInitials
-                initials={workspaceName
-                  .split(' ')
-                  .slice(0, 2)
-                  .map((word: string[]) => word[0])
-                  .join('')
-                  .toUpperCase()}
+                initials={
+                  workspaceName
+                    ?.split(' ')
+                    .slice(0, 2)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase() as string
+                }
                 height="h-5"
                 width="w-5"
                 backgroundColour="#34C6BE"
@@ -39,7 +41,7 @@ function WorkSpaceSelection() {
                 textColor="black"
               />
               <p className="truncate" style={{ fontSize: '8px' }}>
-                {workspaceName.split(' ').slice(0, 2).join('').toUpperCase()}
+                {workspaceName?.split(' ').slice(0, 2).join('').toUpperCase()}
               </p>
             </div>
             <WorkspaceSettingsModal />

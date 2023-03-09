@@ -10,12 +10,7 @@ interface PageWrapperProps {
   pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
 }
 
-export default function PageWrapper({
-  header,
-  children,
-  additional,
-  pilotConfig,
-}: PageWrapperProps) {
+export default function PageWrapper({ header, children, additional, pilotConfig }: PageWrapperProps) {
   return (
     <>
       <main className="flex flex-col w-full h-full">

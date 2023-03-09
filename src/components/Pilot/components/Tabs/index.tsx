@@ -5,16 +5,13 @@ import {
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import {
-  ChevronDoubleDownIcon,
-  ChevronDoubleUpIcon,
-} from '@heroicons/react/24/outline';
+import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { IPilotTab } from '../../../../types';
@@ -27,18 +24,13 @@ interface TabsProps {
   tabs: IPilotTab[];
 }
 
-const pilotFromLS: { tabOrder: number[]; showTabLabel: boolean } = JSON.parse(
-  localStorage.getItem('pilot') || '""'
-);
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
 interface ShowTabsLabelToggleProps {
   showTabLabel: boolean;
   setShowTabLabel: (i: boolean) => void;
 }
 
-function ShowTabsLabelToggle({
-  showTabLabel,
-  setShowTabLabel,
-}: ShowTabsLabelToggleProps) {
+function ShowTabsLabelToggle({ showTabLabel, setShowTabLabel }: ShowTabsLabelToggleProps) {
   const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const toggleShowTabLabel = () => {
@@ -46,7 +38,7 @@ function ShowTabsLabelToggle({
       'pilot',
       JSON.stringify({
         ...pilotFromLS,
-        showTabLabel: !showTabLabel,
+        showTabLabel: !showTabLabel
       })
     );
     setShowTabLabel(!showTabLabel);
@@ -61,11 +53,7 @@ function ShowTabsLabelToggle({
         showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'p-2 mb-1'
       )}
     >
-      {showTabLabel ? (
-        <ChevronDoubleUpIcon className="w-4 h-4" />
-      ) : (
-        <ChevronDoubleDownIcon className="w-4 h-4" />
-      )}
+      {showTabLabel ? <ChevronDoubleUpIcon className="w-4 h-4" /> : <ChevronDoubleDownIcon className="w-4 h-4" />}
     </button>
   ) : null;
 }
@@ -82,7 +70,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates
     })
   );
 
@@ -104,7 +92,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
             'pilot',
             JSON.stringify({
               ...pilotFromLS,
-              tabOrder: [...sortArray.map((i: { id: string }) => i.id)],
+              tabOrder: [...sortArray.map((i) => i.id)]
             })
           );
 
@@ -116,11 +104,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
 
   return (
     <div className="relative flex items-center">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={(e) => handleDragEnd(e)}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
         <nav
           className={cl(
             'relative grid overflow-x-scroll w-full',
@@ -144,10 +128,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
         </nav>
       </DndContext>
 
-      <ShowTabsLabelToggle
-        setShowTabLabel={setShowTabLabel}
-        showTabLabel={showTabLabel}
-      />
+      <ShowTabsLabelToggle setShowTabLabel={setShowTabLabel} showTabLabel={showTabLabel} />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
     const isActiveDirectory = directoryId === id;
 
     navigate(`/directory/shelf/${isActiveDirectory ? '' : id}`, {
-      replace: true,
+      replace: true
     });
   };
 
@@ -26,25 +26,14 @@ export default function DirectoryItem({ id, name }: DirectoryItemProps) {
     <div
       className={cl(
         'group flex w-full p-1 justify-between items-center',
-        directoryId === id
-          ? 'hover:bg-green-200 bg-green-100'
-          : 'hover:bg-gray-100'
+        directoryId === id ? 'hover:bg-green-200 bg-green-100' : 'hover:bg-gray-100'
       )}
     >
-      <div
-        onClick={() => onClickDirectory(id)}
-        className="flex truncate items-center gap-2 cursor-pointer"
-      >
+      <div onClick={() => onClickDirectory(id)} className="flex truncate items-center gap-2 cursor-pointer">
         {directoryId === id ? (
-          <VscTriangleDown
-            className="h-4 w-4 text-gray-500"
-            aria-hidden="true"
-          />
+          <VscTriangleDown className="h-4 w-4 text-gray-500" aria-hidden="true" />
         ) : (
-          <VscTriangleRight
-            className="h-4 w-4 text-gray-500"
-            aria-hidden="true"
-          />
+          <VscTriangleRight className="h-4 w-4 text-gray-500" aria-hidden="true" />
         )}
         <AiOutlineBranches className="h-5 w-5 cursor-pointer" />
         <p className="truncate" title={name}>

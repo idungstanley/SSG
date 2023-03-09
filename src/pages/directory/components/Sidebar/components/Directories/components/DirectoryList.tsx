@@ -7,19 +7,14 @@ interface DirectoryListProps {
   leftMargin: boolean;
 }
 
-export default function DirectoryList({
-  directories,
-  leftMargin,
-}: DirectoryListProps) {
+export default function DirectoryList({ directories, leftMargin }: DirectoryListProps) {
   return (
     <>
       {directories.map((directory) => (
         <div key={directory.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <DirectoryItem id={directory.id} name={directory.name} />
 
-          {directory.children.length ? (
-            <DirectoryList directories={directory.children} leftMargin />
-          ) : null}
+          {directory.children.length ? <DirectoryList directories={directory.children} leftMargin /> : null}
         </div>
       ))}
     </>

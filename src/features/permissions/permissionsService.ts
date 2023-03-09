@@ -4,17 +4,14 @@ import { explorerItemType } from '../../types';
 import { ITeamMembersAndGroupsReq } from '../workspace/teamMembers.intrfaces';
 import { IDataAccessRes, IPermissions } from './permissions.interfaces';
 
-export const useGetFilteredTeamMembers = (
-  currentUserId?: string | null,
-  activeMembers?: string[]
-) => {
+export const useGetFilteredTeamMembers = (currentUserId?: string | null, activeMembers?: string[]) => {
   const { data, status } = useQuery<ITeamMembersAndGroupsReq>(
     ['team-members'],
     () =>
       requestNew(
         {
           url: 'settings/team-members',
-          method: 'GET',
+          method: 'GET'
         },
         true
       ),
@@ -27,19 +24,12 @@ export const useGetFilteredTeamMembers = (
     activeMembersWithCurrent.filter((v, i, a) => a.indexOf(v) === i);
   }
 
-  const teamMembers =
-    data &&
-    data.data.team_members.filter(
-      (i) => !activeMembersWithCurrent.includes(i.user.id)
-    );
+  const teamMembers = data && data.data.team_members.filter((i) => !activeMembersWithCurrent.includes(i.user.id));
 
   return { users: teamMembers, status };
 };
 
-export const useGetItemAccess = (data: {
-  id?: string | null;
-  type?: explorerItemType;
-}) => {
+export const useGetItemAccess = (data: { id?: string | null; type?: explorerItemType }) => {
   const { id, type } = data;
 
   return useQuery<IDataAccessRes, unknown, IPermissions>(
@@ -47,11 +37,11 @@ export const useGetItemAccess = (data: {
     async () =>
       requestNew({
         url: `${type}s/${id}/access`,
-        method: 'GET',
+        method: 'GET'
       }),
     {
       enabled: (!!id && type === 'file') || type === 'folder',
-      select: (res) => res.data,
+      select: (res) => res.data
     }
   );
 };
@@ -65,32 +55,25 @@ const removeAccessForData = (dat: {
 }) => {
   const { type, dataId, itemType, isActiveUser, accessToId } = dat;
 
-  const url = `${type}s/${dataId}/access/${
-    isActiveUser ? 'leave' : 'remove-access'
-  }`;
+  const url = `${type}s/${dataId}/access/${isActiveUser ? 'leave' : 'remove-access'}`;
 
-  const data = isActiveUser
-    ? null
-    : { access_type: itemType, access_to_id: accessToId };
+  const data = isActiveUser ? null : { access_type: itemType, access_to_id: accessToId };
 
   const response = requestNew({
     method: 'POST',
     url,
-    data,
+    data
   });
   return response;
 };
 
-export const useRemoveAccessForData = (
-  type?: explorerItemType | null,
-  id?: string | null
-) => {
+export const useRemoveAccessForData = (type?: explorerItemType | null, id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(removeAccessForData, {
     onSuccess: () => {
       queryClient.invalidateQueries([`${type}-permissions`, id]);
-    },
+    }
   });
 };
 
@@ -110,22 +93,19 @@ const changeAccessForData = (data: {
     data: {
       access_type: itemType,
       access_to_id: accessToId,
-      access_level_key: key,
-    },
+      access_level_key: key
+    }
   });
   return response;
 };
 
-export const useChangeAccessForData = (
-  type?: explorerItemType | null,
-  id?: string | null
-) => {
+export const useChangeAccessForData = (type?: explorerItemType | null, id?: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(changeAccessForData, {
     onSuccess: () => {
       queryClient.invalidateQueries([`${type}-permissions`, id]);
-    },
+    }
   });
 };
 
@@ -145,21 +125,18 @@ const addAccessForData = (data: {
     data: {
       access_type: itemType,
       access_to_id: accessToId,
-      access_level_key: 'read',
-    },
+      access_level_key: 'read'
+    }
   });
   return response;
 };
 
-export const useAddAccessForData = (
-  id?: string | null,
-  type?: explorerItemType | null
-) => {
+export const useAddAccessForData = (id?: string | null, type?: explorerItemType | null) => {
   const queryClient = useQueryClient();
 
   return useMutation(addAccessForData, {
     onSuccess: () => {
       queryClient.invalidateQueries([`${type}-permissions`, id]);
-    },
+    }
   });
 };

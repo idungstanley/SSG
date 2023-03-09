@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UseEditListService } from "../../../../../features/list/listService";
-import { Button, Input, SlideOver } from "../../../../../components";
-import { useAppSelector } from "../../../../../app/hooks";
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from "../../../../../features/hubs/hubSlice";
-import { useDispatch } from "react-redux";
-import { setEditListSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UseEditListService } from '../../../../../features/list/listService';
+import { Button, Input, SlideOver } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
+import { setEditListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 
 function EditListModal() {
   const queryClient = useQueryClient();
@@ -23,14 +20,14 @@ function EditListModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
 
   const defaultListFormState = {
-    name: prevName,
+    name: prevName
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
@@ -38,7 +35,7 @@ function EditListModal() {
   const handleListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -46,7 +43,7 @@ function EditListModal() {
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
-      listId: showMenuDropdown,
+      listId: showMenuDropdown
     });
   };
   const handleCloseSlider = () => {
@@ -54,7 +51,7 @@ function EditListModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };

@@ -19,7 +19,7 @@ export default function Tabs() {
 
   const { data } = useGetInboxFiles({
     inboxId,
-    isArchived: false,
+    isArchived: false
   });
 
   const activeCount = data?.pages[0].data.not_archived_files_count;
@@ -30,14 +30,14 @@ export default function Tabs() {
       key: 'inbox',
       name: 'Inbox',
       onClick: goToInboxTab,
-      badge: activeCount,
+      badge: activeCount
     },
     {
       key: 'archived',
       name: 'Archived',
       onClick: goToArchivedTab,
-      badge: archiveCount,
-    },
+      badge: archiveCount
+    }
   ];
 
   return <TabsWithUnderline tabs={tabs} />;

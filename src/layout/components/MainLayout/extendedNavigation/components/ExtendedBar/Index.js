@@ -10,17 +10,15 @@ export const useGetHubList = () => {
       requestNew(
         {
           url: 'hubs',
-          method: 'GET',
+          method: 'GET'
         },
         false,
-        true,
+        true
       ),
     {
       onSuccess: (data) => {
-        data.data.hubs.map((hub) =>
-          queryClient.setQueryData(['hub', hub.id], hub),
-        );
-      },
-    },
+        data.data.hubs.map((hub) => queryClient.setQueryData(['hub', hub.id], hub));
+      }
+    }
   );
 };

@@ -7,9 +7,7 @@ import { cl } from '../../../../../utils';
 
 export default function Toggle() {
   const dispatch = useDispatch();
-  const searchFileContents = useAppSelector(
-    (state) => state.search.searchFileContents
-  );
+  const searchFileContents = useAppSelector((state) => state.search.searchFileContents);
 
   const setState = (state: boolean) => {
     dispatch(setSearchFileContents(state));
@@ -34,9 +32,7 @@ export default function Toggle() {
         />
       </Switch>
       <Switch.Label as="span" className="ml-3">
-        <span className="text-sm font-medium text-gray-900">
-          Search file contents
-        </span>
+        <span className="text-sm font-medium text-gray-900">Search file contents</span>
       </Switch.Label>
     </Switch.Group>
   );

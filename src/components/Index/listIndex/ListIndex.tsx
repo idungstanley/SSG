@@ -1,8 +1,8 @@
-import React from "react";
-import { useGetHubWallet } from "../../../features/hubs/hubService";
-import MenuDropdown from "../../Dropdown/MenuDropdown";
-import { useAppSelector } from "../../../app/hooks";
-import ListItem from "../../tasks/ListItem";
+import React from 'react';
+import { useGetHubWallet } from '../../../features/hubs/hubService';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { useAppSelector } from '../../../app/hooks';
+import ListItem from '../../tasks/ListItem';
 
 interface ListIndexProps {
   showHubList: boolean;
@@ -10,16 +10,12 @@ interface ListIndexProps {
   paddingLeft?: string;
 }
 
-function ListIndex({
-  showHubList,
-  getCurrentHubId,
-  paddingLeft = "26",
-}: ListIndexProps) {
+function ListIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: ListIndexProps) {
   const { data } = useGetHubWallet(getCurrentHubId);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   return (
-    <div id="createWallet" className={`${showHubList ? "block" : "hidden"}`}>
+    <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {data?.data?.lists &&
         data?.data?.lists.map((list) => (
           <div key={list.id}>

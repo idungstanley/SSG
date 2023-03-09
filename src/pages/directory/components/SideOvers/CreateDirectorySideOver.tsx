@@ -7,9 +7,7 @@ import { setShowCreateDirectorySlideOver } from '../../../../features/general/sl
 
 export default function Watchers() {
   const dispatch = useAppDispatch();
-  const { showCreateDirectorySlideOver: show } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showCreateDirectorySlideOver: show } = useAppSelector((state) => state.slideOver);
 
   const { mutate: onCreate } = useCreateDirectory();
 
@@ -23,7 +21,7 @@ export default function Watchers() {
 
     if (name && name.length > 2) {
       onCreate({
-        name: name.trim(),
+        name: name.trim()
       });
 
       directoryNameRef.current.value = '';
@@ -33,10 +31,7 @@ export default function Watchers() {
   };
   return (
     <SideOver show={show} onClose={onClose} title="Directory">
-      <form
-        className="relative flex gap-3 items-center p-2"
-        onSubmit={(e) => handleSubmit(e)}
-      >
+      <form className="relative flex gap-3 items-center p-2" onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
           placeholder="Directory name"
@@ -44,14 +39,8 @@ export default function Watchers() {
           className="block w-full rounded-md border-gray-300 shadow-sm ring-0 focus:ring-0 sm:text-sm"
         />
 
-        <button
-          type="submit"
-          className="inline-flex items-center cursor-pointer"
-        >
-          <PaperAirplaneIcon
-            className="h-6 w-6 stroke-current text-indigo-600 inline-block"
-            aria-hidden="true"
-          />
+        <button type="submit" className="inline-flex items-center cursor-pointer">
+          <PaperAirplaneIcon className="h-6 w-6 stroke-current text-indigo-600 inline-block" aria-hidden="true" />
         </button>
       </form>
     </SideOver>

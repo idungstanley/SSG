@@ -9,24 +9,18 @@ interface RowProps {
 }
 
 export default function Row({ teamMemberGroupId }: RowProps) {
-  const { data: teamMemberGroup, status } =
-    useGetTeamMemberGroup(teamMemberGroupId);
+  const { data: teamMemberGroup, status } = useGetTeamMemberGroup(teamMemberGroupId);
 
   return status === 'success' && teamMemberGroup != null ? (
     <tr key={teamMemberGroup.id}>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
         <div className="flex items-center">
           <div className="flex-shrink-0">
-            <AvatarWithInitials
-              initials={teamMemberGroup.initials}
-              backgroundColour={teamMemberGroup.colour}
-            />
+            <AvatarWithInitials initials={teamMemberGroup.initials} backgroundColour={teamMemberGroup.colour} />
           </div>
           <div className="ml-4">
             <div className="font-medium text-gray-900">
-              <Link to={`/settings/team-members/groups/${teamMemberGroup.id}`}>
-                {teamMemberGroup.name}
-              </Link>
+              <Link to={`/settings/team-members/groups/${teamMemberGroup.id}`}>{teamMemberGroup.name}</Link>
             </div>
             <div className="text-gray-500">{`${teamMemberGroup.group_team_members.length} members`}</div>
           </div>

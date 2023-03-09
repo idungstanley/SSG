@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { UseCreateTagService } from "../../features/workspace/tags/tagService";
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { UseCreateTagService } from '../../features/workspace/tags/tagService';
 
 export default function CreateTag() {
   const queryClient = useQueryClient();
   const defaultHubFormState = {
-    name: "",
+    name: ''
   };
 
   const createTagMutation = useMutation(UseCreateTagService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-    },
+    }
   });
 
   const [formState, setFormState] = useState(defaultHubFormState);
@@ -21,14 +21,14 @@ export default function CreateTag() {
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
   const { name } = formState;
 
   const onSubmit = async () => {
     await createTagMutation.mutateAsync({
-      name,
+      name
     });
   };
   return (

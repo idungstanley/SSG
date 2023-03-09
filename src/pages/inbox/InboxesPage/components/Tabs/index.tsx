@@ -5,7 +5,7 @@ import { cl } from '../../../../../utils';
 const tabs = [
   { name: 'Active', href: '/inbox' },
   { name: 'Archive', href: '/inbox/archived' },
-  { name: 'Hidden', href: '/inbox/hidden' },
+  { name: 'Hidden', href: '/inbox/hidden' }
 ];
 
 const rightTabs = [{ name: 'Deleted', href: '/inbox/restore' }];
@@ -48,9 +48,7 @@ export default function Tabs() {
                 key={tab.name}
                 to={tab.href}
                 className={cl(
-                  tab.href === pathname
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'text-gray-500 hover:text-gray-700',
+                  tab.href === pathname ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:text-gray-700',
                   'px-3 py-2 font-medium text-sm rounded-md'
                 )}
                 aria-current={tab.href ? 'page' : undefined}
@@ -67,9 +65,7 @@ export default function Tabs() {
                 key={tab.name}
                 to={tab.href}
                 className={cl(
-                  tab.href === pathname
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'text-gray-500 hover:text-gray-700',
+                  tab.href === pathname ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:text-gray-700',
                   'px-3 py-2 font-medium text-sm rounded-md'
                 )}
                 aria-current={tab.href ? 'page' : undefined}

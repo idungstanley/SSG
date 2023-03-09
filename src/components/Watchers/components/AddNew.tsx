@@ -1,9 +1,6 @@
 import React from 'react';
 import { Spinner } from '../../../common';
-import {
-  useCreateWatcher,
-  useGetItemWatchers,
-} from '../../../features/general/watchers/watchersService';
+import { useCreateWatcher, useGetItemWatchers } from '../../../features/general/watchers/watchersService';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { itemType } from '../../../types';
 import SelectMenuTeamMembers, { ISelectedData } from '../../selectMenu';
@@ -20,9 +17,7 @@ export default function AddNew({ item }: AddNewProps) {
   const watcherIds = dt?.data.watchers.map((watcher) => watcher.team_member_id);
 
   // get unique members that are not in watchers list
-  const membersWithoutWatchers = teamMembers?.filter(
-    (member) => !watcherIds?.includes(member.id)
-  );
+  const membersWithoutWatchers = teamMembers?.filter((member) => !watcherIds?.includes(member.id));
 
   const { mutate: onCreate } = useCreateWatcher(item.id);
 
@@ -30,7 +25,7 @@ export default function AddNew({ item }: AddNewProps) {
     if (member) {
       onCreate({
         ...item,
-        team_member_ids: [member.id],
+        team_member_ids: [member.id]
       });
     }
   };
@@ -51,7 +46,7 @@ export default function AddNew({ item }: AddNewProps) {
           name: i.name || i.user.name,
           email: i.user?.email,
           accessLevel: i.id,
-          type: 'member',
+          type: 'member'
         }))}
         selectedData={null}
         setSelectedData={handleChange}

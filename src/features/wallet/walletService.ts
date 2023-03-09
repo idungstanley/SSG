@@ -3,21 +3,18 @@ import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
+import { ICreateWallet, IWalletRes } from './wallet.interfaces';
 
-export const createWalletService = (data: {
-  name: string;
-  hubID?: string | null;
-  walletId?: string | null;
-}) => {
-  const response = requestNew(
+export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
+  const response = requestNew<ICreateWallet>(
     {
       url: 'at/wallets',
       method: 'POST',
       data: {
         name: data.name,
         hub_id: data.hubID,
-        parent_id: data.walletId,
-      },
+        parent_id: data.walletId
+      }
     },
     true
   );
@@ -27,15 +24,15 @@ export const createWalletService = (data: {
 // // get wallets
 export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
-    const response = await requestNew(
+    const response = await requestNew<IWalletRes | undefined>(
       {
         url: 'at/wallets',
         method: 'GET',
         params: {
-          parent_id: currentWalletId, //this returns for subwallet
+          parent_id: currentWalletId //this returns for subwallet
           // hub_id: //this is the hub id
           // is_archived: //toggle archive
-        },
+        }
       },
       true
     );
@@ -43,46 +40,34 @@ export const getWalletService = (currentWalletId: string | null) => {
   });
 };
 
-export const getWalletServices = (data: {
-  hubId?: string | null;
-  Archived?: boolean;
-  parentId?: string | null;
-}) => {
+export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
   // const queryClient = useQueryClient();
-  return useQuery(
-    [
-      'wallet',
-      { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 },
-    ],
-    () =>
-      requestNew(
-        {
-          url: 'wallets',
-          method: 'GET',
-          params: {
-            hub_id: data.hubId,
-            is_archived: data.Archived ? 1 : 0, // send is_archived query
-            parent_id: data.parentId, //send wallet id for subwallet
-          },
-        },
-        false,
-        true
-      )
+  return useQuery(['wallet', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
+    requestNew<IWalletRes | undefined>(
+      {
+        url: 'wallets',
+        method: 'GET',
+        params: {
+          hub_id: data.hubId,
+          is_archived: data.Archived ? 1 : 0, // send is_archived query
+          parent_id: data.parentId //send wallet id for subwallet
+        }
+      },
+      false,
+      true
+    )
   );
 };
 
 //edit wallet
-export const UseEditWalletService = (data: {
-  walletName?: string;
-  WalletId?: string | null;
-}) => {
+export const UseEditWalletService = (data: { walletName?: string; WalletId?: string | null }) => {
   const response = requestNew(
     {
       url: `wallets/${data.WalletId}`,
       method: 'PUT',
       params: {
-        name: data.walletName,
-      },
+        name: data.walletName
+      }
     },
     false,
     true
@@ -91,10 +76,7 @@ export const UseEditWalletService = (data: {
 };
 
 //del wallet
-export const UseDeleteWalletService = (data: {
-  query: string | null;
-  delWallet: boolean;
-}) => {
+export const UseDeleteWalletService = (data: { query: string | null | undefined; delWallet: boolean }) => {
   const dispatch = useDispatch();
   const walletId = data.query;
   const queryClient = useQueryClient();
@@ -104,7 +86,7 @@ export const UseDeleteWalletService = (data: {
       const data = await requestNew(
         {
           url: `at/wallets/${walletId}`,
-          method: 'DELETE',
+          method: 'DELETE'
         },
         true
       );
@@ -115,16 +97,13 @@ export const UseDeleteWalletService = (data: {
       onSuccess: () => {
         queryClient.invalidateQueries();
         dispatch(setDeleteWallet(false));
-      },
+      }
     }
   );
 };
 
 //archive wallet
-export const UseArchiveWalletService = (wallet: {
-  query: string | null;
-  archiveWallet: boolean;
-}) => {
+export const UseArchiveWalletService = (wallet: { query: string | null | undefined; archiveWallet: boolean }) => {
   const walletId = wallet.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -134,7 +113,7 @@ export const UseArchiveWalletService = (wallet: {
       const data = await requestNew(
         {
           url: `at/wallets/${walletId}/archive`,
-          method: 'POST',
+          method: 'POST'
         },
         true
       );
@@ -147,30 +126,27 @@ export const UseArchiveWalletService = (wallet: {
         dispatch(setArchiveWallet(false));
         dispatch(closeMenu());
         queryClient.invalidateQueries();
-      },
+      }
     }
   );
 };
 
 //get wallet details
-export const UseGetWalletDetails = (query: {
-  activeItemId?: string | null;
-  activeItemType?: string | null;
-}) => {
+export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
   return useQuery(
     ['hubs', query],
     async () => {
       const data = await requestNew(
         {
           url: `at/wallets/${query.activeItemId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
       return data;
     },
     {
-      enabled: query.activeItemType === 'wallet' && !!query.activeItemId,
+      enabled: query.activeItemType === 'wallet' && !!query.activeItemId
     }
   );
 };

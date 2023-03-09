@@ -1,7 +1,4 @@
-import {
-  IExplorerFile,
-  IExplorerFolder,
-} from './../explorer/explorer.interfaces';
+import { IExplorerFile, IExplorerFolder } from './../explorer/explorer.interfaces';
 
 export interface IExplorerAndSharedData {
   id: string;

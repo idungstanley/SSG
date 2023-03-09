@@ -1,24 +1,17 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UseEditWalletService } from "../../../../../features/wallet/walletService";
-import { Button, Input, SlideOver } from "../../../../../components";
-import { useAppSelector } from "../../../../../app/hooks";
-import { setEditWalletSlideOverVisibility } from "../../../../../features/general/slideOver/slideOverSlice";
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from "../../../../../features/hubs/hubSlice";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UseEditWalletService } from '../../../../../features/wallet/walletService';
+import { Button, Input, SlideOver } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
+import { setEditWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
+import { useDispatch } from 'react-redux';
 
 function EditWalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown } = useAppSelector(
-    (state) => state.hub
-  );
-  const { showEditWalletSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showMenuDropdownType, showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showEditWalletSlideOver } = useAppSelector((state) => state.slideOver);
   const { prevName } = useAppSelector((state) => state.hub);
   const editWallet = useMutation(UseEditWalletService, {
     onSuccess: () => {
@@ -27,14 +20,14 @@ function EditWalletModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
 
   const defaultWalletFormState = {
-    name: prevName,
+    name: prevName
   };
 
   const [formState, setFormState] = useState(defaultWalletFormState);
@@ -48,7 +41,7 @@ function EditWalletModal() {
   const onSubmit = async () => {
     await editWallet.mutateAsync({
       walletName: name,
-      WalletId: showMenuDropdown,
+      WalletId: showMenuDropdown
     });
   };
 
@@ -57,7 +50,7 @@ function EditWalletModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };
@@ -65,23 +58,13 @@ function EditWalletModal() {
     <SlideOver
       show={showEditWalletSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={
-        showMenuDropdownType === "wallet" ? " Edit wallet" : "Edit subwallet"
-      }
+      headerTitle={showMenuDropdownType === 'wallet' ? ' Edit wallet' : 'Edit subwallet'}
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={
-                showMenuDropdownType === "wallet"
-                  ? "Wallet Name:"
-                  : "Subwallet Name:"
-              }
-              placeholder={
-                showMenuDropdownType === "wallet"
-                  ? "Enter wallet Name"
-                  : "Enter Subwallet Name"
-              }
+              label={showMenuDropdownType === 'wallet' ? 'Wallet Name:' : 'Subwallet Name:'}
+              placeholder={showMenuDropdownType === 'wallet' ? 'Enter wallet Name' : 'Enter Subwallet Name'}
               name="name"
               value={name}
               type="text"
@@ -94,9 +77,7 @@ function EditWalletModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={
-            showMenuDropdownType === "wallet" ? "Edit Wallet" : "Edit Subwallet"
-          }
+          label={showMenuDropdownType === 'wallet' ? 'Edit Wallet' : 'Edit Subwallet'}
           padding="py-2 px-4"
           height="h-10"
           width="w-40"

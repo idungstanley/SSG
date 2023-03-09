@@ -2,9 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { explorerItemType } from '../../types';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-const selectedSortingId: number = JSON.parse(
-  localStorage.getItem('selectedSortingId') || '1'
-);
+const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId') || '1') as number;
 
 interface IFastPreview {
   show: boolean;
@@ -36,7 +34,7 @@ const initialState: ExplorerState = {
   selectedFileId: null,
   selectedSortingId,
 
-  draggableItem: null,
+  draggableItem: null
 };
 
 export const explorerSlice = createSlice({
@@ -50,10 +48,7 @@ export const explorerSlice = createSlice({
         state.fastPreview = action.payload;
       }
     },
-    setDraggableItem: (
-      state,
-      action: PayloadAction<{ id: string; isFile: boolean } | null>
-    ) => {
+    setDraggableItem: (state, action: PayloadAction<{ id: string; isFile: boolean } | null>) => {
       state.draggableItem = action.payload;
     },
     setSelectedFolderId: (state, action: PayloadAction<string | null>) => {
@@ -94,13 +89,11 @@ export const explorerSlice = createSlice({
     },
     setSelectedSorting: (state, action: PayloadAction<number>) => {
       state.selectedSortingId = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
 export const {
@@ -114,7 +107,7 @@ export const {
   setSelectedFiles,
   setSelectedFolders,
   resetSelectedFilesAndFolders,
-  setSelectedSorting,
+  setSelectedSorting
 } = explorerSlice.actions;
 
 export default explorerSlice.reducer;

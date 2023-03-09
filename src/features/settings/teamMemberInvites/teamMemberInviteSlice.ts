@@ -3,7 +3,7 @@ import { logout, switchWorkspace } from '../../auth/authSlice';
 
 const initialState = {
   // Pagination
-  teamMemberInvitesPaginationPage: 1,
+  teamMemberInvitesPaginationPage: 1
 };
 
 export const teamMemberInviteSlice = createSlice({
@@ -15,19 +15,14 @@ export const teamMemberInviteSlice = createSlice({
     },
     goToNextTeamMemberInvitesPage: (state) => {
       state.teamMemberInvitesPaginationPage += 1;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  goToPreviousTeamMemberInvitesPage,
-  goToNextTeamMemberInvitesPage,
-} = teamMemberInviteSlice.actions;
+export const { goToPreviousTeamMemberInvitesPage, goToNextTeamMemberInvitesPage } = teamMemberInviteSlice.actions;
 
 export default teamMemberInviteSlice.reducer;

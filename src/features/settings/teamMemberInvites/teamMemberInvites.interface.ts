@@ -5,6 +5,7 @@ interface IInvite {
     key: string;
     name: string;
   };
+  name: string;
   expires_at: string;
   accepted_at: string;
   created_at: string;
@@ -24,5 +25,11 @@ export interface ITeamMemberInvitesReq {
       on_last_page: boolean;
       total: number;
     };
+  };
+}
+
+export interface ITeamMemberInviteRes {
+  data: {
+    team_member_invite: IInvite;
   };
 }

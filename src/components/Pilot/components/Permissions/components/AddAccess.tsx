@@ -16,19 +16,15 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
 
   const { data: dt } = useGetTeamMembersOrGroups({
     query: '',
-    isGroups: type === 'member-group',
+    isGroups: type === 'member-group'
   });
 
   // members or member groups list
-  const data = dt?.pages.flatMap(
-    (page) => page.data.team_members || page.data.team_member_groups
-  );
+  const data = dt?.pages.flatMap((page) => page.data.team_members || page.data.team_member_groups);
 
   const { mutate: onAddAccess } = useAddAccessForData(selectedId, selectedType);
 
-  const membersWithoutActive = data?.filter(
-    (member) => !actualMemberIds?.includes(member.id)
-  );
+  const membersWithoutActive = data?.filter((member) => !actualMemberIds?.includes(member.id));
 
   const handleAddAccess = (value: ISelectedData | null) => {
     if (value && selectedType && selectedId) {
@@ -36,7 +32,7 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
         dataId: selectedId,
         accessToId: value.id,
         type: selectedType,
-        itemType: type,
+        itemType: type
       });
     }
   };
@@ -49,7 +45,7 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
           name: i.name || i.user.name,
           email: i.user?.email,
           accessLevel: i.id,
-          type,
+          type
         }))}
         selectedData={null}
         setSelectedData={handleAddAccess}

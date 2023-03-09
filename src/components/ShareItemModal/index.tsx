@@ -9,7 +9,7 @@ import ShareLink from './components/ShareLink';
 
 const tabs = [
   { name: 'Share selected item', id: 1 },
-  { name: 'Create sharing link', id: 2 },
+  { name: 'Create sharing link', id: 2 }
 ];
 
 export default function ShareItemModal() {
@@ -61,10 +61,7 @@ export default function ShareItemModal() {
                   </button>
                 </div>
 
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900 mb-3"
-                >
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 mb-3">
                   Share {type}
                 </Dialog.Title>
 
@@ -72,11 +69,7 @@ export default function ShareItemModal() {
                   <nav className="flex space-x-4 w-full" aria-label="Tabs">
                     {tabs.map((tab) => (
                       <span
-                        onClick={() =>
-                          setSelectedTabId((prev) =>
-                            prev !== tab.id ? tab.id : prev
-                          )
-                        }
+                        onClick={() => setSelectedTabId((prev) => (prev !== tab.id ? tab.id : prev))}
                         key={tab.name}
                         className={cl(
                           tab.id === selectedTabId
@@ -84,9 +77,7 @@ export default function ShareItemModal() {
                             : 'text-gray-500 hover:text-gray-700 border',
                           'px-3 py-1.5 font-medium cursor-pointer text-sm rounded-md flex flex-grow justify-center'
                         )}
-                        aria-current={
-                          tab.id === selectedTabId ? 'page' : undefined
-                        }
+                        aria-current={tab.id === selectedTabId ? 'page' : undefined}
                       >
                         {tab.name}
                       </span>

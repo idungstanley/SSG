@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  ArrowUpTrayIcon,
-  PlusIcon,
-  Square2StackIcon,
-} from '@heroicons/react/24/outline';
+import { ArrowUpTrayIcon, PlusIcon, Square2StackIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowUploadModal } from '../../../../features/general/uploadFile/uploadFileSlice';
 import PreviewSwitch from './components/PreviewSwitch';
@@ -15,23 +11,23 @@ export default function Header() {
     {
       label: 'New',
       icon: <PlusIcon className="h-6 w-6" aria-hidden="true" />,
-      onClick: () => ({}),
+      onClick: () => ({})
     },
     {
       label: 'Upload',
       icon: <ArrowUpTrayIcon className="h-6 w-6" aria-hidden="true" />,
-      onClick: () => dispatch(setShowUploadModal(true)),
+      onClick: () => dispatch(setShowUploadModal(true))
     },
     {
       label: 'Layout',
       icon: <Square2StackIcon className="h-6 w-6" aria-hidden="true" />,
-      onClick: () => ({}),
+      onClick: () => ({})
     },
     {
       label: 'Preview',
       icon: <PreviewSwitch />,
-      onClick: () => ({}),
-    },
+      onClick: () => ({})
+    }
   ];
 
   return (

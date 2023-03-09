@@ -22,30 +22,21 @@ export default function InputWithTrailingAddon({
   value,
   onChange,
   hint,
-  cornerHint,
+  cornerHint
 }: inputWithTrailingAddonTypes) {
   return (
     <div>
       {label && (
         <div className="flex justify-between mb-1">
-          <label
-            htmlFor={name}
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor={name} className="block text-sm font-medium text-gray-700">
             {label}
           </label>
-          {cornerHint && (
-            <span className="text-sm text-gray-500">{cornerHint}</span>
-          )}
+          {cornerHint && <span className="text-sm text-gray-500">{cornerHint}</span>}
         </div>
       )}
       <div className="flex rounded-md shadow-sm">
         <div className="relative flex items-stretch flex-grow focus-within:z-10">
-          {icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              {icon}
-            </div>
-          )}
+          {icon && <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">{icon}</div>}
           <input
             type={type}
             name={name}
@@ -73,5 +64,5 @@ InputWithTrailingAddon.defaultProps = {
   placeholder: null,
   type: 'text',
   hint: null,
-  cornerHint: null,
+  cornerHint: null
 };

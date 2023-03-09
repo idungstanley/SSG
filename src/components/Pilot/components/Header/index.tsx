@@ -1,10 +1,7 @@
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-} from "@heroicons/react/24/outline";
-import React, { ReactNode } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { setShowPilotSideOver } from "../../../../features/general/slideOver/slideOverSlice";
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
+import React, { ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 
 interface HeaderProps {
   children: ReactNode;
@@ -32,11 +29,7 @@ export default function Header({ children }: HeaderProps) {
       {/* show / hide pilot toggle */}
       <div className="relative flex gap-2 items-center">
         <button type="button" onClick={togglePilot} className="text-gray-600">
-          {show ? (
-            <ChevronDoubleRightIcon className="w-4 h-4 " />
-          ) : (
-            <ChevronDoubleLeftIcon className="w-4 h-4" />
-          )}
+          {show ? <ChevronDoubleRightIcon className="w-4 h-4 " /> : <ChevronDoubleLeftIcon className="w-4 h-4" />}
         </button>
 
         {/* other components */}

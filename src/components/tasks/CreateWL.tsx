@@ -1,9 +1,9 @@
-import React from "react";
-import { useAppDispatch } from "../../app/hooks";
+import React from 'react';
+import { useAppDispatch } from '../../app/hooks';
 import {
   setCreateListSlideOverVisibility,
-  setCreateWalletSlideOverVisibility,
-} from "../../features/general/slideOver/slideOverSlice";
+  setCreateWalletSlideOverVisibility
+} from '../../features/general/slideOver/slideOverSlice';
 
 export default function CreateWL({ paddingLeft }: { paddingLeft: string | number }) {
   const dispatch = useAppDispatch();
@@ -20,10 +20,7 @@ export default function CreateWL({ paddingLeft }: { paddingLeft: string | number
         >
           Wallet,
         </span>
-        <span
-          onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-          className="underline cursor-pointer"
-        >
+        <span onClick={() => dispatch(setCreateListSlideOverVisibility(true))} className="underline cursor-pointer">
           List
         </span>
       </span>

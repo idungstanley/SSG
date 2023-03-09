@@ -9,14 +9,10 @@ import {
   InputAvatar,
   AvatarWithInitials,
   AvatarBg,
-  Button,
+  Button
 } from '../../../components';
 import { createWorkspaceService } from '../../../features/workspace/workspaceService';
-import {
-  selectCurrentUser,
-  setCurrentUser,
-  setCurrentWorkspace,
-} from '../../../features/auth/authSlice';
+import { selectCurrentUser, setCurrentUser, setCurrentWorkspace } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
 
@@ -30,33 +26,30 @@ function CreateWorkspace() {
         'user',
         JSON.stringify({
           ...user,
-          default_workspace_id: successData.data.workspace.id,
+          default_workspace_id: successData.data.workspace.id
         })
       );
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(successData.data.workspace.id)
-      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.workspace.id));
 
       dispatch(
         setCurrentWorkspace({
-          workspaceId: successData.data.workspace.id,
+          workspaceId: successData.data.workspace.id
         })
       );
       if (user) {
         dispatch(
           setCurrentUser({
             ...user,
-            default_workspace_id: successData.data.workspace.id,
+            default_workspace_id: successData.data.workspace.id
           })
         );
       }
-    },
+    }
   });
 
   const defaultFormState = {
     name: '',
-    email: '',
+    email: ''
   };
 
   const [formState, setFormState] = useState(defaultFormState);
@@ -79,7 +72,7 @@ function CreateWorkspace() {
     createWSMutation.mutate({
       name,
       emails,
-      companySize,
+      companySize
     });
   };
 
@@ -94,22 +87,16 @@ function CreateWorkspace() {
           {
             name: 'Workspace',
             href: '/onboarding',
-            current: true,
-          },
+            current: true
+          }
         ]}
-        rootIcon={
-          <PlusIcon className="flex-shrink-0 w-5 h-5" aria-hidden="true" />
-        }
+        rootIcon={<PlusIcon className="flex-shrink-0 w-5 h-5" aria-hidden="true" />}
         rootIconHref="/onboarding"
       />
 
       <section className="flex-1 h-full px-4 pb-10 overflow-y-scroll sm:px-6 lg:px-6 ">
         <div className="my-5">
-          <SimpleSectionHeading
-            title="Create your workspace"
-            description={null}
-            actions={null}
-          />
+          <SimpleSectionHeading title="Create your workspace" description={null} actions={null} />
         </div>
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">

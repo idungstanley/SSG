@@ -2,20 +2,12 @@ import React from 'react';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
 
 interface FormType {
-  handleSubmit: (
-    e:
-      | React.FormEvent<HTMLFormElement>
-      | React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
   messageRef: React.RefObject<HTMLInputElement>;
 }
 
-export default function Form({
-  handleSubmit,
-  setShowDropdown,
-  messageRef,
-}: FormType) {
+export default function Form({ handleSubmit, setShowDropdown, messageRef }: FormType) {
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="relative">
       <input
@@ -39,9 +31,7 @@ export default function Form({
           strokeWidth={1.5}
           stroke="currentColor"
           className={`w-6 h-6 cursor-pointer transition-all duration-300 ${
-            (messageRef.current?.value.length || 0) > 2
-              ? 'stroke-current text-indigo-600'
-              : null
+            (messageRef.current?.value.length || 0) > 2 ? 'stroke-current text-indigo-600' : null
           } stroke-current hover:text-indigo-600 `}
         >
           <path

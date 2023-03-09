@@ -4,44 +4,33 @@ import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
 import { explorerItemType } from '../types';
 
-const accessTokenLS = localStorage.getItem('accessToken') || 'null';
-const currentWorkspaceIdLS =
-  localStorage.getItem('currentWorkspaceId') || 'null';
-
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
-  const accessToken = JSON.parse(accessTokenLS);
-  const currentWorkspaceId = JSON.parse(currentWorkspaceIdLS);
-  const endpoint =
-    type === 'inboxFile'
-      ? `${baseUrl}/inbox-files/${id}/contents`
-      : `${baseUrl}/files/${id}/contents`;
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || '""') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
+  const endpoint = type === 'inboxFile' ? `${baseUrl}/inbox-files/${id}/contents` : `${baseUrl}/files/${id}/contents`;
 
   const response = await axios.get(endpoint, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      current_workspace_id: currentWorkspaceId,
+      current_workspace_id: currentWorkspaceId
     },
-    responseType: 'arraybuffer',
+    responseType: 'arraybuffer'
   });
 
   const data = `data:${response.headers['content-type']};base64,${Buffer.from(
-    response.data,
+    response.data as string,
     'binary'
   ).toString('base64')}`;
   return data;
 }
 
-export async function DownloadFile(
-  type: explorerItemType | 'inbox' | string,
-  id: string,
-  name: string
-) {
+export async function DownloadFile(type: explorerItemType | 'inbox' | string, id: string, name: string) {
   let endpoint = '';
 
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
-  const accessToken = JSON.parse(accessTokenLS);
-  const currentWorkspaceId = JSON.parse(currentWorkspaceIdLS);
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || '""') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
   if (type === 'inboxFile') {
     endpoint = `${baseUrl}/inbox-files/${id}/download`;
@@ -54,19 +43,15 @@ export async function DownloadFile(
   const response = await axios.get(endpoint, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      current_workspace_id: currentWorkspaceId,
+      current_workspace_id: currentWorkspaceId
     },
-    responseType: 'blob', // Important
+    responseType: 'blob' // Important
   });
 
-  fileDownload(response.data, name);
+  fileDownload(response.data as string, name);
 }
 
-export function OutputDateTime(
-  timestamp: string,
-  format = null,
-  timezone = null
-) {
+export function OutputDateTime(timestamp: string, format = null, timezone = null) {
   return moment
     .utc(timestamp)
     .tz(timezone || moment.tz.guess())
@@ -89,10 +74,7 @@ export function OutputFileSize(bytes: number) {
   do {
     tmpBytes /= thresh;
     ++u;
-  } while (
-    Math.round(Math.abs(tmpBytes) * r) / r >= thresh &&
-    u < units.length - 1
-  );
+  } while (Math.round(Math.abs(tmpBytes) * r) / r >= thresh && u < units.length - 1);
 
   let decimal_points = 0;
   if (units[u] == 'GB' || units[u] == 'MB') {

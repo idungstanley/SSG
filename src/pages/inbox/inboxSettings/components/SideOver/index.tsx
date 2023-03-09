@@ -5,7 +5,7 @@ import { AvatarWithInitials, Button, ComboBoxWithAvatar, SelectMenuSimple, Slide
 import { setShowAddTeamMembersOrGroupsSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import {
   useAddTeamMemberOrGroupAccess,
-  useGetTeamMembersOrGroups,
+  useGetTeamMembersOrGroups
 } from '../../../../../features/inbox/inboxSettingsService';
 
 interface SideOverProps {
@@ -23,19 +23,12 @@ export default function SideOver({ isGroups }: SideOverProps) {
   const { inboxId } = useParams();
   const [query, setQuery] = useState<string>('');
   const [itemId, setItemId] = useState<string | null>(null);
-  const [selectedAccessLevelKey, setSelectedAccessLevelKey] = useState<
-    string | null
-  >(null);
-  const [unpaginatedItemOptions, setUnpaginatedItemOptions] = useState<
-    ComboboxOption[]
-  >([]);
+  const [selectedAccessLevelKey, setSelectedAccessLevelKey] = useState<string | null>(null);
+  const [unpaginatedItemOptions, setUnpaginatedItemOptions] = useState<ComboboxOption[]>([]);
 
-  const { showAddTeamMembersOrGroupsSideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showAddTeamMembersOrGroupsSideOver } = useAppSelector((state) => state.slideOver);
 
-  const { mutate: onAddAccess, isSuccess, isLoading } =
-    useAddTeamMemberOrGroupAccess(inboxId);
+  const { mutate: onAddAccess, isSuccess, isLoading } = useAddTeamMemberOrGroupAccess(inboxId);
 
   useEffect(() => {
     if (isSuccess) {
@@ -64,39 +57,40 @@ export default function SideOver({ isGroups }: SideOverProps) {
       accessToId: itemId,
       accessLevelKey: selectedAccessLevelKey,
       inboxId,
-      isGroups,
+      isGroups
     });
   };
 
-  const { status, data, fetchNextPage, hasNextPage } =
-    useGetTeamMembersOrGroups({
-      query,
-      isGroups,
-    });
+  const { status, data, fetchNextPage, hasNextPage } = useGetTeamMembersOrGroups({
+    query,
+    isGroups
+  });
 
   useEffect(() => {
     const temp: ComboboxOption[] = [];
 
     if (status === 'success' && data) {
-      const flat = data.pages.flatMap((page) => isGroups ? page.data.team_member_groups : page.data.team_members);
+      const flat = data.pages.flatMap((page) => (isGroups ? page.data.team_member_groups : page.data.team_members));
 
-      flat.filter(i => i).map((item) => {
-        const avatar = (
-          <AvatarWithInitials
-            height="h-6"
-            width="w-6"
-            initials={item.initials}
-            backgroundColour={item.colour}
-            textSize="text-xs"
-          />
-        );
+      flat
+        .filter((i) => i)
+        .map((item) => {
+          const avatar = (
+            <AvatarWithInitials
+              height="h-6"
+              width="w-6"
+              initials={item.initials}
+              backgroundColour={item.colour}
+              textSize="text-xs"
+            />
+          );
 
-        return temp.push({
-          id: item.id,
-          name: isGroups ? item.name : item.user.name,
-          avatar,
+          return temp.push({
+            id: item.id,
+            name: isGroups ? item.name : item.user.name,
+            avatar
+          });
         });
-      });
     }
 
     return setUnpaginatedItemOptions(temp);
@@ -107,9 +101,7 @@ export default function SideOver({ isGroups }: SideOverProps) {
   return (
     <SlideOver
       show={showAddTeamMembersOrGroupsSideOver}
-      onClose={() =>
-        dispatch(setShowAddTeamMembersOrGroupsSideOver(false))
-      }
+      onClose={() => dispatch(setShowAddTeamMembersOrGroupsSideOver(false))}
       headerTitle={`Add ${keyWord} to inbox`}
       headerDescription={`Set a role and select a team member${isGroups ? ' group' : ''}`}
       body={
@@ -121,7 +113,7 @@ export default function SideOver({ isGroups }: SideOverProps) {
                 { id: 'read', name: 'Read-only' },
                 { id: 'modify', name: 'Manage' },
                 { id: 'full-control', name: 'Full control' },
-                { id: 'owner', name: 'Owner' },
+                { id: 'owner', name: 'Owner' }
               ]}
               onChange={onChangeAccessLevel}
               selectedId={selectedAccessLevelKey || ''}
@@ -142,13 +134,7 @@ export default function SideOver({ isGroups }: SideOverProps) {
         </div>
       }
       footerButtons={
-        <Button
-          buttonStyle="primary"
-          onClick={onSubmit}
-          loading={isLoading}
-          label={`Add ${keyWord}`}
-          width="w-40"
-        />
+        <Button buttonStyle="primary" onClick={onSubmit} loading={isLoading} label={`Add ${keyWord}`} width="w-40" />
       }
     />
   );

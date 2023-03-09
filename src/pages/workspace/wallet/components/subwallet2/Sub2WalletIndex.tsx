@@ -1,54 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getWalletServices } from "../../../../../features/wallet/walletService";
-import { useAppSelector } from "../../../../../app/hooks";
-import {
-  setActiveEntity,
-  setActiveItem,
-  setShowHub,
-} from "../../../../../features/workspace/workspaceSlice";
-import { useDispatch } from "react-redux";
-import SubDropdown from "../../../../../components/Dropdown/SubDropdown";
-import LastListIndex from "./LastListIndex";
-import MenuDropdown from "../../../../../components/Dropdown/MenuDropdown";
-import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
-import WalletItem from "../../../../../components/tasks/WalletItem";
-import ListItem from "../../../../../components/tasks/ListItem";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getWalletServices } from '../../../../../features/wallet/walletService';
+import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
+import { useDispatch } from 'react-redux';
+import { setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
+import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
+import { useAppSelector } from '../../../../../app/hooks';
+import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
+import WalletItem from '../../../../../components/tasks/WalletItem';
+import ListItem from '../../../../../components/tasks/ListItem';
 
-interface Sub2WalletIndexProps {
+interface SubWalletIndexProps {
   paddingLeft?: string;
-  currWalId?: string;
+  currWalId: string;
 }
 
-function Sub2WalletIndex({
-  paddingLeft = "56",
-  currWalId,
-}: Sub2WalletIndexProps) {
+interface dataProps {
+  id: string;
+  name: string;
+}
+
+function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
+  // eslint-disable-next-line no-console
+  console.log(paddingLeft);
   const dispatch = useDispatch();
-  const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
-  const [finalParentId, setFinalWalletParentId] = useState("");
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+
+  const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
+  const [currWalId, setCurrWalId] = useState('');
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currWalId,
+    parentId: currentWalletParentId
   });
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet3 === id) {
-      return setShowSubWallet3(null);
+    setShowSubWallet2(id);
+    setCurrWalId(id);
+    if (showSubWallet2 === id) {
+      return setShowSubWallet2(null);
     }
-    setFinalWalletParentId(id);
-    setShowSubWallet3(id);
   };
 
   const navigate = useNavigate();
-
-  const handleLocation = (id: string, type = "sub2wallet") => {
+  const handleLocation = (id: string, type = 'subWallet') => {
     dispatch(setShowHub(true));
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id: id, type: "wallet" }));
+    setShowSubWallet2(id);
+    setCurrWalId(id);
   };
 
   return (
@@ -56,27 +56,26 @@ function Sub2WalletIndex({
       {subwallet?.data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <WalletItem
-            showSubWallet={showSubWallet3}
-            walletType="subwallet3"
             wallet={wallet}
+            walletType="subwallet2"
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
-            paddingLeft={paddingLeft}
+            paddingLeft="64"
+            showSubWallet={showSubWallet2}
           />
+          <div>{showSubWallet2 === wallet.id ? <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" /> : null}</div>
           {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
           {SubMenuId === wallet.id ? <SubDropdown /> : null}
-          {showSubWallet3 === wallet.id ? (
-            <LastListIndex finalParentId={finalParentId} />
-          ) : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-        <ListItem list={list} paddingLeft="87" />
+          <ListItem list={list} paddingLeft="87" />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}
     </div>
   );
 }
-export default Sub2WalletIndex;
+
+export default SubWalletIndex;

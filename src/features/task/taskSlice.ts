@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { tagItem } from "../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails";
-import { listColumnProps } from "../../pages/workspace/tasks/component/views/ListColumns";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+// import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
+import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { IParent } from './interface.tasks';
 
 export interface ImyTaskData {
   id: string;
@@ -8,10 +9,7 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority:
-    | string
-    | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
@@ -20,25 +18,49 @@ export interface ImyTaskData {
   created_at?: string;
   archived_at?: string | null;
   deleted_at?: string | null;
+  [key: string]: string | number | undefined | null | [{ id: string; initials: string; colour: string; name: string }];
+}
+
+export interface ImyTaskData2 {
+  id?: string;
+  name?: string;
+  description?: string | null;
+  list_id?: string;
+  list?: { id: string; name: string; parent: IParent };
+  parent_id?: string | null;
+  priority?: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  start_date?: string | null;
+  end_date?: string | null;
+  status?: string | null;
+  tags?: [];
+  directory_items?: [];
+  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  updated_at?: string;
+  created_at?: string;
+  group_assignees?: [];
+  custom_fields?: [];
+  archived_at?: string | null;
+  deleted_at?: string | null;
   [key: string]:
     | string
     | number
     | undefined
+    | { id: string; name: string; parent: IParent }
+    | []
     | null
-    | [{ id: string; initials: string; colour: string; name: string }]
-    | tagItem[];
+    | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 interface TaskState {
   task: string[];
   currentTaskIdForPilot: string | null;
   watchersData: string[];
-  removeWatcherId: null;
+  removeWatcherId: null | string;
   currTeamMemberId: null | string;
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
-  current_task_id: null;
+  current_task_id: string | null;
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -49,21 +71,21 @@ interface TaskState {
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
-  toggleAssignCurrentTaskId: null;
-  currentParentTaskId: null;
-  getSubTaskId: null;
-  currentParentSubTaskId: null;
-  currentParentSubTaskId2: null;
-  currentParentSubTaskId3: null;
-  currentParentSubTaskId4: null;
-  initial_description: string;
-  initial_start_date: null;
-  initial_end_date: null;
-  openUpdateEntryId: null;
+  toggleAssignCurrentTaskId: string | null | undefined;
+  currentParentTaskId: string | null;
+  getSubTaskId: null | string;
+  currentParentSubTaskId: null | string;
+  currentParentSubTaskId2: null | string;
+  currentParentSubTaskId3: null | string;
+  currentParentSubTaskId4: string | null | undefined;
+  initial_description: string | undefined;
+  initial_start_date: null | undefined | string;
+  initial_end_date: null | undefined | string;
+  openUpdateEntryId: null | undefined | string;
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
-  currentTaskStatusId: null;
-  currentTaskPriorityId: null;
+  currentTaskStatusId: string | null;
+  currentTaskPriorityId: string | null | undefined;
   triggerAsssignTask: boolean;
 }
 
@@ -94,7 +116,7 @@ const initialState: TaskState = {
   currentParentSubTaskId2: null,
   currentParentSubTaskId3: null,
   currentParentSubTaskId4: null,
-  initial_description: "",
+  initial_description: '',
   initial_start_date: null,
   initial_end_date: null,
   openUpdateEntryId: null,
@@ -102,27 +124,27 @@ const initialState: TaskState = {
   updateStatusModalIdForPilot: null,
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
-  triggerAsssignTask: false,
+  triggerAsssignTask: false
 };
 
 export const taskSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState,
   reducers: {
-    createTaskSlice(state, action) {
+    createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
-    setTaskIdForPilot(state, action) {
+    setTaskIdForPilot(state, action: PayloadAction<string | null>) {
       state.currentTaskIdForPilot = action.payload;
     },
-    getTaskData(state, action) {
+    getTaskData(state, action: PayloadAction<{ id: string }[] | undefined>) {
       const taskDataArray = action.payload;
       // taskDataArray.unshift(myObj);
       if (taskDataArray) {
-        state.myTaskData = taskDataArray;
+        state.myTaskData = taskDataArray as ImyTaskData[];
       }
     },
-    getTaskColumns(state, action) {
+    getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
       state.taskColumns = action.payload;
     },
     hideTaskColumns(state, action) {
@@ -134,7 +156,7 @@ export const taskSlice = createSlice({
                 if (prev.field === action.payload) {
                   return {
                     ...prev,
-                    hidden: !prev.hidden,
+                    hidden: !prev.hidden
                   };
                 } else {
                   return prev;
@@ -144,102 +166,110 @@ export const taskSlice = createSlice({
                 if (prev.field === action.payload) {
                   return {
                     ...prev,
-                    hidden: !prev.hidden,
+                    hidden: !prev.hidden
                   };
                 } else {
                   return prev;
                 }
-              }),
+              })
       };
     },
 
-    getListView(state, action) {
+    getListView(state, action: PayloadAction<boolean>) {
       state.listView = action.payload;
     },
-    getComfortableView(state, action) {
+    getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
     },
-    getComfortableViewWrap(state, action) {
+    getComfortableViewWrap(state, action: PayloadAction<boolean>) {
       state.comfortableViewWrap = action.payload;
     },
-    getCompactView(state, action) {
+    getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
     },
-    getCompactViewWrap(state, action) {
+    getCompactViewWrap(state, action: PayloadAction<boolean>) {
       state.CompactViewWrap = action.payload;
     },
-    setAddNewTaskItem(state, action) {
+    setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
     },
-    getTableView(state, action) {
+    getTableView(state, action: PayloadAction<boolean>) {
       state.tableView = action.payload;
     },
-    getBoardView(state, action) {
+    getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
     },
 
-    setShowTaskNavigation(state, action) {
+    setShowTaskNavigation(state, action: PayloadAction<boolean>) {
       state.showTaskNavigation = action.payload;
     },
 
-    setWatchersData(state, action) {
+    setWatchersData(state, action: PayloadAction<string>) {
       state.watchersData.push(action.payload);
     },
-    setRmWatcher(state, action) {
+    setRmWatcher(state, action: PayloadAction<null | string>) {
       state.removeWatcherId = action.payload;
     },
 
-    setCurrTeamMemId(state, action) {
+    setCurrTeamMemId(state, action: PayloadAction<null | string>) {
       state.currTeamMemberId = action.payload;
     },
 
-    setCurrentTaskId(state, action) {
+    setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.current_task_id = action.payload;
     },
-    setCloseTaskListView(state, action) {
+    setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
     },
-    setToggleAssignCurrentTaskId(state, action) {
+    setToggleAssignCurrentTaskId(state, action: PayloadAction<string | null | undefined>) {
       state.toggleAssignCurrentTaskId = action.payload;
     },
-    setCurrentParentTaskId(state, action) {
+    setCurrentParentTaskId(state, action: PayloadAction<string | null>) {
       state.currentParentTaskId = action.payload;
     },
-    setGetSubTaskId(state, action) {
+    setGetSubTaskId(state, action: PayloadAction<null | string>) {
       state.getSubTaskId = action.payload;
     },
-    setCurrentParentSubTaskId(state, action) {
+    setCurrentParentSubTaskId(state, action: PayloadAction<null | string>) {
       state.currentParentSubTaskId = action.payload;
     },
-    setCurrentParentSubTaskId2(state, action) {
+    setCurrentParentSubTaskId2(state, action: PayloadAction<null | string>) {
       state.currentParentSubTaskId2 = action.payload;
     },
-    setCurrentParentSubTaskId3(state, action) {
+    setCurrentParentSubTaskId3(state, action: PayloadAction<null | string>) {
       state.currentParentSubTaskId3 = action.payload;
     },
-    setCurrentParentSubTaskId4(state, action) {
+    setCurrentParentSubTaskId4(state, action: PayloadAction<null | string | undefined>) {
       state.currentParentSubTaskId4 = action.payload;
     },
-    setCurrentTaskStatusId(state, action) {
+    setCurrentTaskStatusId(state, action: PayloadAction<string | null>) {
       state.currentTaskStatusId = action.payload;
     },
-    setCurrentTaskPriorityId(state, action) {
+    setCurrentTaskPriorityId(state, action: PayloadAction<string | null | undefined>) {
       state.currentTaskPriorityId = action.payload;
     },
-    setUpdateEntries(state, action) {
+    setUpdateEntries(
+      state,
+      action: PayloadAction<{
+        initial_description?: string | undefined;
+        initial_start_date?: null | undefined | string;
+        initial_end_date?: null | undefined | string;
+        openUpdateEntryId?: null | undefined | string;
+      }>
+    ) {
       state.initial_description = action.payload.initial_description;
       state.initial_start_date = action.payload.initial_start_date;
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-    setUpdateStatusModalId(state, action) {
+    setUpdateStatusModalId(state, action: PayloadAction<null>) {
       state.updateStatusModalId = action.payload;
     },
     checkIfTask: (state) => state,
-    setTriggerAsssignTask(state, { payload }) {
-      state.triggerAsssignTask = payload;
-    },
-  },
+    setTriggerAsssignTask(state, action: PayloadAction<boolean>) {
+      state.triggerAsssignTask = action.payload;
+    }
+  }
 });
 
 export const {
@@ -274,6 +304,6 @@ export const {
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
-  setTriggerAsssignTask,
+  setTriggerAsssignTask
 } = taskSlice.actions;
 export default taskSlice.reducer;

@@ -12,23 +12,13 @@ interface ModalProps {
   setActiveHotkeyIds: (i: number[]) => void;
 }
 
-export function Modal({
-  showModal,
-  setShowModal,
-  tabs,
-  activeHotkeyIds,
-  setActiveHotkeyIds,
-}: ModalProps) {
+export function Modal({ showModal, setShowModal, tabs, activeHotkeyIds, setActiveHotkeyIds }: ModalProps) {
   const onClose = () => setShowModal(false);
 
   const handleClick = (tabId: number) => {
     const isIncludes = activeHotkeyIds.includes(tabId);
 
-    setActiveHotkeyIds(
-      isIncludes
-        ? [...activeHotkeyIds.filter((i) => i !== tabId)]
-        : [...activeHotkeyIds, tabId]
-    );
+    setActiveHotkeyIds(isIncludes ? [...activeHotkeyIds.filter((i) => i !== tabId)] : [...activeHotkeyIds, tabId]);
   };
 
   return (
@@ -70,19 +60,11 @@ export function Modal({
                       )}
                     >
                       <div className="flex items-center gap-2">
-                        <span
-                          className={cl(
-                            activeHotkeyIds.includes(tab.id) && 'text-black'
-                          )}
-                        >
-                          {tab.icon}
-                        </span>
+                        <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>{tab.icon}</span>
                         <span className="block truncate">{tab.label}</span>
                       </div>
 
-                      {activeHotkeyIds.includes(tab.id) && (
-                        <CheckIcon className="h-4 w-4" aria-hidden="true" />
-                      )}
+                      {activeHotkeyIds.includes(tab.id) && <CheckIcon className="h-4 w-4" aria-hidden="true" />}
                     </div>
                   ))}
                 </div>

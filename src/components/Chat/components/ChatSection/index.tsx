@@ -53,10 +53,10 @@ export default function ChatSection() {
         auth: {
           headers: {
             'X-CSRF-Token': 'iTcXX4EKprDuuxIWtloqmr7yBqRlEjM8C7JydcdB',
-            'X-App-ID': 'alsoworkspace',
-          },
+            'X-App-ID': 'alsoworkspace'
+          }
         },
-        enabledTransports: ['ws', 'wss'],
+        enabledTransports: ['ws', 'wss']
       });
 
       socket.current.connection.bind('connected', () => {
@@ -71,12 +71,10 @@ export default function ChatSection() {
 
       const channelName = 'SendMessageEvent-' + id;
 
-      socket.current
-        .subscribe(channelName)
-        .bind('send-chat-message', (data: { data: { message: IMessage } }) => {
-          const message = data.data.message;
-          setIncomingData((prev) => [...prev, message]);
-        });
+      socket.current.subscribe(channelName).bind('send-chat-message', (data: { data: { message: IMessage } }) => {
+        const message = data.data.message;
+        setIncomingData((prev) => [...prev, message]);
+      });
     }
   };
 
@@ -85,9 +83,7 @@ export default function ChatSection() {
     connect(id);
   };
 
-  const allMessages = messages
-    ? [...messages, ...incomingData]
-    : [...incomingData];
+  const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
 
   return (
     <>
@@ -98,10 +94,7 @@ export default function ChatSection() {
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'error' ? (
-        <FullScreenMessage
-          title="Oops, an error occurred :("
-          description="Please try again later."
-        />
+        <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
       ) : messages && chat ? (
         <div className="grid grid-rows-autoFrAuto h-full gap-1">
           {/* header */}

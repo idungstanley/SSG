@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../../auth/authSlice';
 
 const initialState = {
@@ -6,14 +6,14 @@ const initialState = {
   teamMembersSearchQuery: '',
 
   // Pagination
-  teamMembersPaginationPage: 1,
+  teamMembersPaginationPage: 1
 };
 
 export const teamMemberSlice = createSlice({
   name: 'teamMember',
   initialState,
   reducers: {
-    setTeamMembersSearchQuery: (state, action) => {
+    setTeamMembersSearchQuery: (state, action: PayloadAction<string>) => {
       state.teamMembersPaginationPage = 1;
       state.teamMembersSearchQuery = action.payload;
     },
@@ -22,20 +22,15 @@ export const teamMemberSlice = createSlice({
     },
     goToNextTeamMembersPage: (state) => {
       state.teamMembersPaginationPage += 1;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  setTeamMembersSearchQuery,
-  goToPreviousTeamMembersPage,
-  goToNextTeamMembersPage,
-} = teamMemberSlice.actions;
+export const { setTeamMembersSearchQuery, goToPreviousTeamMembersPage, goToNextTeamMembersPage } =
+  teamMemberSlice.actions;
 
 export default teamMemberSlice.reducer;

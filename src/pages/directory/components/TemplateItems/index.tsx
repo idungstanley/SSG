@@ -2,10 +2,7 @@ import { PlusIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { ITemplateField } from '../../../../features/directory/directory.interfaces';
 import { useCreateTemplateItem } from '../../../../features/directory/directoryActionService';
-import {
-  useGetDirectoryTemplate,
-  useGetDirectoryTemplateItems,
-} from '../../../../features/directory/directoryService';
+import { useGetDirectoryTemplate, useGetDirectoryTemplateItems } from '../../../../features/directory/directoryService';
 
 interface TemplateItemsProps {
   selectedTemplateId: string;
@@ -17,13 +14,11 @@ const makeClearFieldsArr = (item: ITemplateField[]) => [
     type: i.type,
     value: '',
     name: i.name,
-    isRequired: !!i.is_required,
-  })),
+    isRequired: !!i.is_required
+  }))
 ];
 
-export default function TemplateItems({
-  selectedTemplateId,
-}: TemplateItemsProps) {
+export default function TemplateItems({ selectedTemplateId }: TemplateItemsProps) {
   const { data: items } = useGetDirectoryTemplateItems(selectedTemplateId);
 
   const { data: template } = useGetDirectoryTemplate(selectedTemplateId);
@@ -60,7 +55,7 @@ export default function TemplateItems({
 
       onCreate({
         templateId: selectedTemplateId,
-        fields: fieldsArr,
+        fields: fieldsArr
       });
 
       // clear inputs
@@ -70,10 +65,7 @@ export default function TemplateItems({
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     if (inputFields) {
       const data = [...inputFields];
       data[index].value = e.target.value;
@@ -103,10 +95,7 @@ export default function TemplateItems({
 
         {/* create new item form */}
         {inputFields ? (
-          <form
-            onSubmit={(e) => handleSubmit(e)}
-            className="flex flex-col gap-3 items-start"
-          >
+          <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-3 items-start">
             {inputFields.map((field, index) => (
               <div key={field.id} className="flex gap-2 items-center">
                 <input
@@ -118,10 +107,7 @@ export default function TemplateItems({
                   className="block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
                 {!field.isRequired ? (
-                  <QuestionMarkCircleIcon
-                    className="h-5 w-5 text-gray-500"
-                    aria-hidden="true"
-                  />
+                  <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
                 ) : null}
               </div>
             ))}

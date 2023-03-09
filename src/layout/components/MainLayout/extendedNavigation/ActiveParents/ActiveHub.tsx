@@ -2,18 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  resetCurrentItem,
-  setCurrentItem,
-  setShowHub,
-} from '../../../../../features/workspace/workspaceSlice';
+import { resetCurrentItem, setCurrentItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../../../../../components';
 import { Spinner } from '../../../../../common';
-import {
-  useGetHubList,
-  useGetHubWallet,
-  useGetSubHub,
-} from '../../../../../features/hubs/hubService';
+import { useGetHubList, useGetHubWallet, useGetSubHub } from '../../../../../features/hubs/hubService';
 import { getHub } from '../../../../../features/hubs/hubSlice';
 import SubWalletIndex from '../../../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { getWalletService } from '../../../../../features/wallet/walletService';
@@ -29,24 +21,15 @@ import { dataProps } from '../../../../../components/Index/walletIndex/WalletInd
 export default function ActiveHub() {
   const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState<number>(-1);
-  const {
-    currentItemId,
-    activeItemId,
-    activeItemType,
-    currentWalletId,
-  } = useAppSelector((state) => state.workspace);
+  const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
-  // const { data: subwallet } = useQuery({
-  //   queryKey: ['subwalletlist', [currentWalletId]],
-  //   queryFn: getWalletService,
-  // });
   const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
-    parentId: currentItemId,
+    parentId: currentItemId
   });
   const subHubData = subHub?.data.hubs;
-  const subWalletData = subwallet?.data?.wallets;
+  const subWalletData = subwallet?.data.wallets;
   const { data, status } = useGetHubList({ query: null });
 
   const items = data?.data.hubs;
@@ -62,11 +45,7 @@ export default function ActiveHub() {
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-        showOneThirdMessage
-      />
+      <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showOneThirdMessage />
     );
   }
 
@@ -103,13 +82,7 @@ export default function ActiveHub() {
     } else if (activeItemType === 'subWallet') {
       return subWalletData?.map((subWallet: dataProps) => {
         if (subWallet.id === activeItemId) {
-          return (
-            <Sub2WalletIndex
-              key={subWallet.id}
-              currWalId={subWallet.id}
-              paddingLeft="0"
-            />
-          );
+          return <Sub2WalletIndex key={subWallet.id} currWalId={subWallet.id} paddingLeft="0" />;
         }
         return null;
       });
@@ -128,25 +101,13 @@ export default function ActiveHub() {
     } else if (activeItemType === 'wallet') {
       return walletData?.map((wallet: dataProps) => {
         if (wallet.id === activeItemId) {
-          return (
-            <ActiveWallet
-              key={wallet.id}
-              showHubList={!false}
-              getCurrentHubId={currentItemId}
-            />
-          );
+          return <ActiveWallet key={wallet.id} showHubList={!false} getCurrentHubId={currentItemId} />;
         }
       });
     } else if (activeItemType === 'subWallet') {
       return subWalletData?.map((subWallet: dataProps) => {
         if (subWallet.id === activeItemId) {
-          return (
-            <ActiveSubWallet
-              key={subWallet.id}
-              walletParentId={currentWalletId}
-              padding="pl-0"
-            />
-          );
+          return <ActiveSubWallet key={subWallet.id} walletParentId={currentWalletId} padding="pl-0" />;
         }
         return null;
       });
@@ -161,8 +122,8 @@ export default function ActiveHub() {
         dispatch(
           setCurrentItem({
             currentItemId: id,
-            currentItemType: 'hub',
-          }),
+            currentItemType: 'hub'
+          })
         );
       } else {
         dispatch(resetCurrentItem());
@@ -172,8 +133,8 @@ export default function ActiveHub() {
       dispatch(
         setCurrentItem({
           currentItemId: id,
-          currentItemType: 'hub',
-        }),
+          currentItemType: 'hub'
+        })
       );
     }
   };
@@ -192,9 +153,7 @@ export default function ActiveHub() {
                 onMouseEnter={() => handleMouseOver(index)}
                 onMouseLeave={handleMouseOut}
               >
-                {i.id === currentItemId && (
-                  <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />
-                )}
+                {i.id === currentItemId && <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />}
                 <div
                   className="relative flex items-center justify-between gap-2 hover:bg-gray-100"
                   style={{ height: '28px' }}
@@ -224,10 +183,7 @@ export default function ActiveHub() {
                         roundedStyle="rounded"
                       />
                       <span className="ml-4 overflow-hidden">
-                        <h4
-                          className="tracking-wider capitalize truncate"
-                          style={{ fontSize: '10px' }}
-                        >
+                        <h4 className="tracking-wider capitalize truncate" style={{ fontSize: '10px' }}>
                           {i.name}
                         </h4>
                       </span>
@@ -242,13 +198,11 @@ export default function ActiveHub() {
                   <MenuDropdown />
                 </div>
               </div>
-              <div className="flex items-center w-full border bg-green-50">
-                {displayClickedParent()}
-              </div>
+              <div className="flex items-center w-full border bg-green-50">{displayClickedParent()}</div>
               <hr />
               <div>{displayActiveItem()}</div>
             </li>
-          ),
+          )
       )}
     </ul>
   ) : null;

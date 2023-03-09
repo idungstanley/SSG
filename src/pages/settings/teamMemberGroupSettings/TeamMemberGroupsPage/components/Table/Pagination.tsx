@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '../../../../../../components';
 import {
   goToPreviousTeamMemberGroupsPage,
-  goToNextTeamMemberGroupsPage,
+  goToNextTeamMemberGroupsPage
 } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupSlice';
 import { useGetTeamMemberGroups } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../../../app/hooks';
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const {teamMemberGroupsPaginationPage} = useAppSelector((state) => state.teamMemberGroup);
+  const { teamMemberGroupsPaginationPage } = useAppSelector((state) => state.teamMemberGroup);
 
   const { data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 
@@ -30,23 +30,14 @@ export default function Pagination() {
     >
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
-          Showing
-          {' '}
+          Showing{' '}
           {data?.data.pagination.total !== 0 && (
             <>
-              <span className="font-medium">{data?.data.pagination.first_item}</span>
-              {' '}
-              to
-              {' '}
-              <span className="font-medium">{data?.data.pagination.last_item}</span>
-              {' '}
-              of
-              {' '}
+              <span className="font-medium">{data?.data.pagination.first_item}</span> to{' '}
+              <span className="font-medium">{data?.data.pagination.last_item}</span> of{' '}
             </>
           )}
-          <span className="font-medium">{data?.data.pagination.total}</span>
-          {' '}
-          results
+          <span className="font-medium">{data?.data.pagination.total}</span> results
         </p>
       </div>
       <div className="flex-1 flex justify-between sm:justify-end space-x-3">

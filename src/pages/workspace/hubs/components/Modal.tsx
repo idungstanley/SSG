@@ -3,10 +3,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button, Input, SlideOver } from '../../../../components';
 import { createHubService } from '../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../app/hooks';
-import {
-  setshowMenuDropdown,
-  setSubDropdownMenu,
-} from '../../../../features/hubs/hubSlice';
+import { setshowMenuDropdown, setSubDropdownMenu } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 
@@ -21,11 +18,11 @@ function Modal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
       setFormState(defaultHubFormState);
-    },
+    }
   });
 
   const handleCloseSlider = () => {
@@ -33,13 +30,13 @@ function Modal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };
 
   const defaultHubFormState = {
-    name: '',
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultHubFormState);
@@ -47,13 +44,13 @@ function Modal() {
   const handleHubChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const currentWorkspaceId = JSON.parse(
+  const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
-  );
+  ) as string;
 
   const { name } = formState;
 
@@ -61,7 +58,7 @@ function Modal() {
     await createHub.mutateAsync({
       name,
       currentWorkspaceId,
-      currHubId,
+      currHubId
     });
   };
 

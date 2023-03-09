@@ -21,19 +21,17 @@ export interface EntryListProps {
 export default function EntryList({ entries }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
-  const [timeEntryDeleteTriggerId, setTimeEntryDeleteTriggerId] = useState<
-    string | null
-  >(null);
+  const [timeEntryDeleteTriggerId, setTimeEntryDeleteTriggerId] = useState<string | null>(null);
 
   DeleteTimeEntriesService({
-    timeEntryDeleteTriggerId,
+    timeEntryDeleteTriggerId
   });
 
   const handleUpdateEntry = (id: string) => {
     if (openUpdateEntryId == id) {
       dispatch(
         setUpdateEntries({
-          openUpdateEntryId: id,
+          openUpdateEntryId: id
         })
       );
     } else {
@@ -42,7 +40,7 @@ export default function EntryList({ entries }: EntryListProps) {
           openUpdateEntryId: id,
           initial_description: entries.description,
           initial_start_date: entries.start_date,
-          initial_end_date: entries.end_date,
+          initial_end_date: entries.end_date
         })
       );
     }
@@ -56,30 +54,18 @@ export default function EntryList({ entries }: EntryListProps) {
     // }
   };
   return (
-    <section
-      key={entries.id}
-      id="getTimeEntries"
-      className="flex items-center justify-between px-3 h-10"
-    >
+    <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
       <div id="left" className="flex items-center space-x-3 text-xs">
         <p>{moment.utc(entries.duration * 1000).format('HH:mm:ss')}</p>
         <p>{moment(entries.start_date).format('MMM D')}</p>
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
-          <PencilIcon
-            className="flex-shrink-0 h-3 w-5 text-gray-400"
-            aria-hidden="true"
-          />
+          <PencilIcon className="flex-shrink-0 h-3 w-5 text-gray-400" aria-hidden="true" />
         </button>
-        {openUpdateEntryId == entries.id ? (
-          <UpdateTimeEntryDropdown time_entry_id={entries.id} />
-        ) : null}
+        {openUpdateEntryId == entries.id ? <UpdateTimeEntryDropdown time_entry_id={entries.id} /> : null}
         <button type="button" onClick={() => handleDeleteEntry(entries.id)}>
-          <TrashIcon
-            className="flex-shrink-0 h-3 w-5 text-red-400"
-            aria-hidden="true"
-          />
+          <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
         </button>
       </div>
     </section>

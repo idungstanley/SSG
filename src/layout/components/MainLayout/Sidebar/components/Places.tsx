@@ -1,8 +1,8 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect } from 'react';
 import {
   setActivePlaceForNav,
   setActivePlaceId,
-  setActivePlaceName,
+  setActivePlaceName
 } from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
 import Files from '../../../../../pages/workspace/files';
@@ -27,60 +27,60 @@ import { BsListCheck } from 'react-icons/bs';
 
 export const places = [
   {
-    name: "Email",
+    name: 'Email',
     id: 1,
     place: <Email />,
-    icon: <MdAlternateEmail className="w-4 h-4" />,
+    icon: <MdAlternateEmail className="w-4 h-4" />
   },
   {
-    name: "TASKS",
+    name: 'TASKS',
     id: 2,
     place: <Hubs />,
-    icon: <BsListCheck className="w-4 h-4" />,
+    icon: <BsListCheck className="w-4 h-4" />
   },
   {
-    name: "In-tray",
+    name: 'In-tray',
     id: 3,
     place: <Inbox />,
-    icon: <InboxStackIcon className="w-4 h-4" />,
+    icon: <InboxStackIcon className="w-4 h-4" />
   },
   {
-    name: "Cabinet",
+    name: 'Cabinet',
     id: 4,
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: "explorer",
+    link: 'explorer'
   },
   {
-    name: "Forms",
+    name: 'Forms',
     id: 6,
     place: <Files />,
-    icon: <DocumentTextIcon className="w-4 h-4" />,
+    icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
-    name: "Time clock",
+    name: 'Time clock',
     id: 7,
     place: <Dashboard />,
-    icon: <ClockIcon className="w-4 h-4" />,
+    icon: <ClockIcon className="w-4 h-4" />
   },
   {
-    name: "Route Planner",
+    name: 'Route Planner',
     id: 8,
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-4 h-4" />,
+    icon: <FaRoute className="w-4 h-4" />
   },
   {
-    name: "Also HR",
+    name: 'Also HR',
     id: 9,
     place: <AlsoHr />,
-    icon: <FaHandsHelping className="w-4 h-4" />,
+    icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
-    name: "Commerce",
+    name: 'Commerce',
     id: 10,
     place: <Commerce />,
-    icon: <IoBusinessOutline className="w-4 h-4" />,
-  },
+    icon: <IoBusinessOutline className="w-4 h-4" />
+  }
 ];
 
 function Places() {
@@ -96,18 +96,18 @@ function Places() {
     dispatch(
       setActivePlaceForNav({
         activePlaceNameForNavigation: name,
-        activePlaceIdForNavigation: id,
+        activePlaceIdForNavigation: id
       })
     );
 
     if (link) {
-      navigate("/" + link);
+      navigate('/' + link);
     }
   };
 
   useEffect(() => {
     // go to active place from URL on mount
-    const placeFromUrl = pathname.split("/")[1];
+    const placeFromUrl = pathname.split('/')[1];
 
     const activePlace = places.find((i) => i.link === placeFromUrl);
 
@@ -127,17 +127,7 @@ function Places() {
             place.place
           ) : (
             <PlaceItem
-              icon={
-                place.icon ? (
-                  place.icon
-                ) : (
-                  <img
-                    src={place.source}
-                    alt={place.name + "Icon"}
-                    className="w-4 h-4"
-                  />
-                )
-              }
+              icon={place.icon ? place.icon : <img src={place.source} alt={place.name + 'Icon'} className="w-4 h-4" />}
               label={place.name}
               onClick={() => handleClick(place.id, place.name, place.link)}
             />

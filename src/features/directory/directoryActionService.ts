@@ -11,8 +11,8 @@ const createDirectory = (data: { name: string; parentId?: string }) => {
       method: 'POST',
       params: {
         name,
-        parent_id: parentId,
-      },
+        parent_id: parentId
+      }
     },
     true
   );
@@ -25,14 +25,11 @@ export const useCreateDirectory = (parentId?: string) => {
   return useMutation(createDirectory, {
     onSuccess: () => {
       queryClient.invalidateQueries(['directory', parentId || 'root']);
-    },
+    }
   });
 };
 
-const createDirectoryTemplate = (data: {
-  name: string;
-  directoryId: string;
-}) => {
+const createDirectoryTemplate = (data: { name: string; directoryId: string }) => {
   const { name, directoryId } = data;
 
   const response = requestNew(
@@ -41,8 +38,8 @@ const createDirectoryTemplate = (data: {
       method: 'POST',
       data: {
         name,
-        directory_id: directoryId,
-      },
+        directory_id: directoryId
+      }
     },
     true
   );
@@ -55,7 +52,7 @@ export const useCreateDirectoryTemplate = (directoryId?: string) => {
   return useMutation(createDirectoryTemplate, {
     onSuccess: () => {
       queryClient.invalidateQueries(['directory', directoryId || 'root']);
-    },
+    }
   });
 };
 
@@ -81,9 +78,9 @@ const updateOrAddTemplateField = (data: {
           name: field.name,
           type: field.type,
           is_title: field.isTitle,
-          is_required: field.isRequired,
-        })),
-      },
+          is_required: field.isRequired
+        }))
+      }
     },
     true
   );
@@ -96,14 +93,11 @@ export const useUpdateOrAddTemplateField = (templateId: string) => {
   return useMutation(updateOrAddTemplateField, {
     onSuccess: () => {
       queryClient.invalidateQueries(['directory-template', templateId]);
-    },
+    }
   });
 };
 
-const createTemplateItem = (data: {
-  templateId: string;
-  fields: Record<string, string>;
-}) => {
+const createTemplateItem = (data: { templateId: string; fields: Record<string, string> }) => {
   const { templateId, fields } = data;
 
   const response = requestNew(
@@ -111,8 +105,8 @@ const createTemplateItem = (data: {
       url: `/directory-templates/${templateId}/item`,
       method: 'POST',
       data: {
-        fields,
-      },
+        fields
+      }
     },
     true
   );
@@ -125,6 +119,6 @@ export const useCreateTemplateItem = (templateId: string) => {
   return useMutation(createTemplateItem, {
     onSuccess: () => {
       queryClient.invalidateQueries(['directory-template-items', templateId]);
-    },
+    }
   });
 };

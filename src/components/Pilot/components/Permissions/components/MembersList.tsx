@@ -8,11 +8,7 @@ interface MembersListProps {
   title: string;
 }
 
-export default function MembersList({
-  membersList,
-  isGroup,
-  title,
-}: MembersListProps) {
+export default function MembersList({ membersList, isGroup, title }: MembersListProps) {
   return (
     <div>
       <h1 className="uppercase text-gray-600 text-sm mb-2">{title}</h1>

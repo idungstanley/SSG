@@ -3,10 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { itemType } from '../../../types';
 
-export const useGetItemWatchers = (data: {
-  type: itemType | null;
-  id: string | null;
-}) =>
+export const useGetItemWatchers = (data: { type: itemType | null; id: string | null }) =>
   useQuery<IWatchersRes>(
     ['watchers', data.id],
     () =>
@@ -16,29 +13,25 @@ export const useGetItemWatchers = (data: {
           method: 'GET',
           params: {
             type: data.type,
-            id: data.id,
-          },
+            id: data.id
+          }
         },
         true
       ),
     {
-      enabled: !!data.id && !!data.type,
+      enabled: !!data.id && !!data.type
       // select: (watchers) => watchers.data.watchers,
     }
   );
 
-const createWatcher = (data: {
-  id: string;
-  team_member_ids: string[];
-  type: itemType;
-}) => {
+const createWatcher = (data: { id: string; team_member_ids: string[]; type: itemType }) => {
   const request = requestNew(
     {
       url: 'watch',
       method: 'POST',
       data: {
-        ...data,
-      },
+        ...data
+      }
     },
     true
   );
@@ -51,22 +44,18 @@ export const useCreateWatcher = (id: string) => {
   return useMutation(createWatcher, {
     onSuccess: () => {
       queryClient.invalidateQueries(['watchers', id]);
-    },
+    }
   });
 };
 
-const removeWatcher = (data: {
-  id: string;
-  team_member_ids: string[];
-  type: itemType;
-}) => {
+const removeWatcher = (data: { id: string; team_member_ids: string[]; type: itemType }) => {
   const request = requestNew(
     {
       url: 'watch/remove',
       method: 'POST',
       data: {
-        ...data,
-      },
+        ...data
+      }
     },
     true
   );
@@ -79,6 +68,6 @@ export const useRemoveWatcher = (id: string) => {
   return useMutation(removeWatcher, {
     onSuccess: () => {
       queryClient.invalidateQueries(['watchers', id]);
-    },
+    }
   });
 };

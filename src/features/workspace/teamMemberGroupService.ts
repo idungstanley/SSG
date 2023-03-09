@@ -1,5 +1,6 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
+import { ITeamMembersAndGroupsReq } from './teamMembers.intrfaces';
 
 // Get team member groups in the workspace
 
@@ -15,39 +16,37 @@ export const useGetTeamMemberGroups = ({ query }: Iprops) => {
 
   return useInfiniteQuery(
     ['team_member_groups', { query }],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
       const url = 'settings/team-member-groups';
 
-      return requestNew(
+      return requestNew<ITeamMembersAndGroupsReq>(
         {
           url,
           method: 'GET',
           params: {
             page: pageParam,
-            search: query,
-          },
+            search: query
+          }
         },
         true
       );
     },
     {
-      onSuccess: (data) => {
+      onSuccess: (data: InfiniteData<ITeamMembersAndGroupsReq>) => {
         data.pages.map((page) =>
           page.data.team_member_groups.map((teamMemberGroup: teamgroupType) =>
-            queryClient.setQueryData(
-              ['team_member_group', teamMemberGroup.id],
-              teamMemberGroup
-            )
+            queryClient.setQueryData(['team_member_group', teamMemberGroup.id], teamMemberGroup)
           )
         );
       },
       getNextPageParam: (lastPage) => {
-        if (lastPage?.data?.pagination.has_more_pages) {
+        const hasMorePages = lastPage.data?.pagination.has_more_pages;
+        if (hasMorePages) {
           return Number(lastPage.data.pagination.page) + 1;
         }
 
         return false;
-      },
+      }
     }
   );
 };

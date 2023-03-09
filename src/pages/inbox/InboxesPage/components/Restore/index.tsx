@@ -19,11 +19,7 @@ export default function Restore() {
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-        showHalFScreen
-      />
+      <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showHalFScreen />
     );
   }
 
@@ -33,12 +29,7 @@ export default function Restore() {
         <Header />
         <tbody className="bg-white divide-y divide-gray-100">
           {trashed.map((inbox) => (
-            <Row
-              key={inbox.id}
-              inboxId={inbox.id}
-              type="trashed"
-              inbox={inbox}
-            />
+            <Row key={inbox.id} inboxId={inbox.id} type="trashed" inbox={inbox} />
           ))}
         </tbody>
       </table>

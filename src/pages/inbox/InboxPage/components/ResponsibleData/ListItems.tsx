@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import {
   useDeleteResponsibleMemberOrGroup,
-  useGetResponsibleMembersOrGroups,
+  useGetResponsibleMembersOrGroups
 } from '../../../../../features/inbox/inboxService';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 
@@ -13,31 +13,22 @@ interface ListItemsProps {
 
 export default function ListItems({ isGroups }: ListItemsProps) {
   const { inboxId } = useParams();
-  const { mutate: onDelete } = useDeleteResponsibleMemberOrGroup(
-    isGroups,
-    inboxId
-  );
+  const { mutate: onDelete } = useDeleteResponsibleMemberOrGroup(isGroups, inboxId);
   const { data: dt } = useGetResponsibleMembersOrGroups(isGroups, inboxId);
 
-  const data = isGroups
-    ? dt?.data.inbox_responsible_team_member_groups
-    : dt?.data.inbox_responsible_team_members;
+  const data = isGroups ? dt?.data.inbox_responsible_team_member_groups : dt?.data.inbox_responsible_team_members;
 
   const handleDelete = (id: string) => {
     onDelete({
       dataId: id,
       isGroups,
-      inboxId,
+      inboxId
     });
   };
   return data ? (
     !data.length ? (
       <div className="mt-4">
-        <FullScreenMessage
-          title="No data yet."
-          description="Create one."
-          showHalFScreen
-        />
+        <FullScreenMessage title="No data yet." description="Create one." showHalFScreen />
       </div>
     ) : (
       <>
@@ -49,13 +40,9 @@ export default function ListItems({ isGroups }: ListItemsProps) {
             <li key={i.id} className="py-4 flex justify-between items-center">
               <div className="flex flex-col pl-1">
                 <p className="text-indigo-700 font-bold">
-                  {isGroups
-                    ? i.team_member_group?.name
-                    : i.team_member?.user.name}
+                  {isGroups ? i.team_member_group?.name : i.team_member?.user.name}
                 </p>
-                <p className="text-gray-500">
-                  {isGroups ? null : i.team_member?.user.email}
-                </p>
+                <p className="text-gray-500">{isGroups ? null : i.team_member?.user.email}</p>
               </div>
 
               <TrashIcon

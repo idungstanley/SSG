@@ -1,9 +1,6 @@
 import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import {
-  useAddOrRemoveItemToOrFromLink,
-  useGetShareLink,
-} from '../../../../../features/shared/sharedService';
+import { useAddOrRemoveItemToOrFromLink, useGetShareLink } from '../../../../../features/shared/sharedService';
 
 interface FilesFromLinkProps {
   shareLinkId: string;
@@ -20,7 +17,7 @@ export default function FilesFromLink({ shareLinkId }: FilesFromLinkProps) {
       type: 'file',
       linkId: shareLinkId,
       itemId: fileId,
-      action: 'remove',
+      action: 'remove'
     });
   };
 

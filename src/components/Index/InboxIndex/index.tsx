@@ -13,21 +13,14 @@ export default function InboxIndex() {
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { status, data: dt } = useGetInboxFiles({
     inboxId: currentItemId,
-    isArchived: false,
+    isArchived: false
   });
 
-  const data = useMemo(
-    () => dt?.pages.flatMap((page) => page.data.inbox_files),
-    [dt]
-  );
+  const data = useMemo(() => dt?.pages.flatMap((page) => page.data.inbox_files), [dt]);
 
   if (status === 'error') {
     return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-        showOneThirdMessage
-      />
+      <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showOneThirdMessage />
     );
   }
 
@@ -55,17 +48,10 @@ export default function InboxIndex() {
       <ul className="divide-y divide-gray-200">
         {data.map((item) => (
           <li key={item.id} className="flex py-4">
-            <FileIcon
-              extensionKey={item.inbox_file_source.file_format.extension}
-              size={8}
-            />
+            <FileIcon extensionKey={item.inbox_file_source.file_format.extension} size={8} />
             <div className="ml-3">
-              <p className="text-sm w-40 truncate font-medium text-gray-900">
-                {item.inbox_file_source.display_name}
-              </p>
-              <p className="text-sm text-gray-500">
-                {OutputFileSize(item.inbox_file_source.size)}
-              </p>
+              <p className="text-sm w-40 truncate font-medium text-gray-900">{item.inbox_file_source.display_name}</p>
+              <p className="text-sm text-gray-500">{OutputFileSize(item.inbox_file_source.size)}</p>
             </div>
             <MenuDropdown />
           </li>

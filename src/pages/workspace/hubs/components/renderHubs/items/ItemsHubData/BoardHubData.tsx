@@ -1,7 +1,7 @@
-import React from "react";
-import { useGetHubChildren } from "../../../../../../../features/hubs/hubService";
-import { dataProps } from "./ListTemplate";
-import BoardTemplate from "./BoardTemplate";
+import React from 'react';
+import { useGetHubChildren } from '../../../../../../../features/hubs/hubService';
+import { dataProps } from './ListTemplate';
+import BoardTemplate from './BoardTemplate';
 
 interface ItemsHubDataProps {
   hubId: string | null;

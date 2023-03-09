@@ -12,22 +12,11 @@ interface SlideOverProps {
   footerButtons?: ReactNode;
 }
 
-function SlideOver({
-  show,
-  onClose,
-  headerTitle,
-  headerDescription,
-  body,
-  footerButtons,
-}: SlideOverProps) {
+function SlideOver({ show, onClose, headerTitle, headerDescription, body, footerButtons }: SlideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
       {onClose ? (
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-40 overflow-hidden"
-          onClose={onClose}
-        >
+        <Dialog as="div" className="fixed inset-0 z-40 overflow-hidden" onClose={onClose}>
           <div className="absolute inset-0 overflow-hidden">
             <Transition.Child
               as={Fragment}
@@ -58,26 +47,13 @@ function SlideOver({
                       <div className="px-4 py-6 bg-gray-50 sm:px-6">
                         <div className="flex items-start justify-between space-x-3">
                           <div className="space-y-1">
-                            <Dialog.Title className="text-lg font-medium text-gray-900">
-                              {headerTitle}
-                            </Dialog.Title>
-                            {headerDescription && (
-                              <p className="text-sm text-gray-500">
-                                {headerDescription}
-                              </p>
-                            )}
+                            <Dialog.Title className="text-lg font-medium text-gray-900">{headerTitle}</Dialog.Title>
+                            {headerDescription && <p className="text-sm text-gray-500">{headerDescription}</p>}
                           </div>
                           <div className="flex items-center h-7">
-                            <button
-                              type="button"
-                              className="text-gray-400 hover:text-gray-500"
-                              onClick={onClose}
-                            >
+                            <button type="button" className="text-gray-400 hover:text-gray-500" onClick={onClose}>
                               <span className="sr-only">Close</span>
-                              <XMarkIcon
-                                className="w-6 h-6"
-                                aria-hidden="true"
-                              />
+                              <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                             </button>
                           </div>
                         </div>
@@ -90,13 +66,7 @@ function SlideOver({
                     {/* Footer / Action buttons */}
                     <div className="flex-shrink-0 px-4 py-5 border-t border-gray-200 sm:px-6">
                       <div className="flex justify-end space-x-3">
-                        <Button
-                          buttonStyle="white"
-                          onClick={onClose}
-                          loading={false}
-                          label="Close"
-                          width={20}
-                        />
+                        <Button buttonStyle="white" onClick={onClose} loading={false} label="Close" width={20} />
                         {footerButtons}
                       </div>
                     </div>

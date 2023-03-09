@@ -8,18 +8,18 @@ import {
   setActiveEntity,
   setActiveItem,
   setCurrentWalletId,
-  setCurrentWalletName,
+  setCurrentWalletName
 } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
-  setCreateWalletSlideOverVisibility,
+  setCreateWalletSlideOverVisibility
 } from '../../../../../features/general/slideOver/slideOverSlice';
 
 interface WalletIndexProps {
-  showHubList: boolean
-  getCurrentHubId: string | null
+  showHubList: boolean;
+  getCurrentHubId: string | null;
 }
 
 function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
@@ -50,10 +50,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
             >
               Wallet,
             </span>
-            <span
-              onClick={() => dispatch(setCreateListSlideOverVisibility(true))}
-              className="text-black underline"
-            >
+            <span onClick={() => dispatch(setCreateListSlideOverVisibility(true))} className="text-black underline">
               List
             </span>
           </span>
@@ -65,18 +62,12 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
             wallet.id === activeItemId && (
               <div key={wallet.id}>
                 <section className="flex items-center relative justify-between py-1.5 mt-0.5 text-sm hover:bg-gray-100 h-8">
-                  <div
-                    id="walletLeft"
-                    className="flex items-center justify-center"
-                  >
+                  <div id="walletLeft" className="flex items-center justify-center">
                     <div
                       onClick={() => handleLocation(wallet.id, wallet.name)}
                       className="flex ml-2 cursor-pointer hover:underline hover:decoration-dashed"
                     >
-                      <p
-                        className="tracking-wider capitalize truncate"
-                        style={{ fontSize: '10px' }}
-                      >
+                      <p className="tracking-wider capitalize truncate" style={{ fontSize: '10px' }}>
                         {wallet.name}
                       </p>
                     </div>
@@ -85,7 +76,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
                 {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
                 {SubMenuId === wallet.id ? <SubDropdown /> : null}
               </div>
-            ),
+            )
         )}
     </div>
   ) : null;

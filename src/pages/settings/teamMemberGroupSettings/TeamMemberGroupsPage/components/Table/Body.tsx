@@ -4,9 +4,7 @@ import { useGetTeamMemberGroups } from '../../../../../../features/settings/team
 import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Body() {
-  const { teamMemberGroupsPaginationPage } = useAppSelector(
-    (state) => state.teamMemberGroup
-  );
+  const { teamMemberGroupsPaginationPage } = useAppSelector((state) => state.teamMemberGroup);
 
   const { data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 

@@ -14,11 +14,15 @@ export interface ITeamMemberGroup {
 }
 
 export interface ITeamMemberGroupsReq {
-  group_team_members: ITeamMemberGroup[];
-  name: string;
-  id: string;
-  initials: string;
-  colour: string;
-  created_at: string;
-  updated_at: string;
+  data: {
+    team_member_group: {
+      group_team_members: ITeamMemberGroup[];
+      name: string;
+      id: string;
+      initials: string;
+      colour: string;
+      created_at: string;
+      updated_at: string;
+    };
+  };
 }

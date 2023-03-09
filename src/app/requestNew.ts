@@ -1,29 +1,29 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-const requestNew = async (
+async function requestNew<T>(
   options: Record<string, unknown>,
   isMainEndpoint?: boolean,
   isTaskEndpoint?: boolean
-) => {
-  const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
-  const currentWorkspaceId = JSON.parse(
-    localStorage.getItem('currentWorkspaceId') || 'null'
-  );
+): Promise<T> {
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') ?? '""') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '') as string;
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
 
-  const headers = accessToken && {
-    Authorization: `Bearer ${accessToken}`,
-    current_workspace_id: currentWorkspaceId,
-  };
+  const headers = accessToken
+    ? {
+        Authorization: `Bearer ${accessToken}`,
+        current_workspace_id: currentWorkspaceId
+      }
+    : undefined;
 
   const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,
-    headers,
+    headers
   });
 
   // request handler
-  const onSuccess = (response: AxiosResponse) => {
+  const onSuccess = (response: AxiosResponse<T>) => {
     const { data } = response;
     return data;
   };
@@ -33,8 +33,9 @@ const requestNew = async (
     return Promise.reject(error.response);
   }
 
+  const response = client(options).then(onSuccess).catch(onError);
   // adding success and error handlers to client
-  return client(options).then(onSuccess).catch(onError);
-};
+  return response;
+}
 
 export default requestNew;

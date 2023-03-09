@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface walletProps {
   id: string;
@@ -6,8 +6,8 @@ interface walletProps {
 }
 interface WalletState {
   wallet: walletProps[];
-  currentWalletParentId: null;
-  currentWalletParentType: null;
+  currentWalletParentId: string | null;
+  currentWalletParentType: string | null;
   delWallet: boolean;
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
@@ -19,26 +19,26 @@ const initialState: WalletState = {
   currentWalletParentType: null,
   delWallet: false,
   archiveWallet: false,
-  toggleArchiveWallet: false,
+  toggleArchiveWallet: false
 };
 
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    createWallet(state, action) {
+    createWallet(state, action: PayloadAction<walletProps>) {
       state.wallet.push(action.payload);
     },
-    getWallet(state, action) {
+    getWallet(state, action: PayloadAction<walletProps[]>) {
       state.wallet = action.payload;
     },
-    setArchiveWallet(state, action) {
+    setArchiveWallet(state, action: PayloadAction<boolean>) {
       state.archiveWallet = action.payload;
     },
-    setToggleArchiveWallet(state, action) {
+    setToggleArchiveWallet(state, action: PayloadAction<boolean>) {
       state.toggleArchiveWallet = action.payload;
     },
-    setDeleteWallet(state, action) {
+    setDeleteWallet(state, action: PayloadAction<boolean>) {
       state.delWallet = action.payload;
     },
     showWallet(state, action) {
@@ -46,18 +46,21 @@ export const walletSlice = createSlice({
         if (wallet.id === action.payload) {
           return {
             ...wallet,
-            isOpen: !wallet.isOpen,
+            isOpen: !wallet.isOpen
           };
         }
         return wallet;
       });
     },
-    setWalletItem(state, action) {
+    setWalletItem(
+      state,
+      action: PayloadAction<{ currentWalletParentId: string | null; currentWalletParentType: string | null }>
+    ) {
       state.currentWalletParentId = action.payload.currentWalletParentId;
       state.currentWalletParentType = action.payload.currentWalletParentType;
     },
-    checkIfWallet: (state) => state,
-  },
+    checkIfWallet: (state) => state
+  }
 });
 
 export const {
@@ -68,6 +71,6 @@ export const {
   setWalletItem,
   setDeleteWallet,
   setArchiveWallet,
-  setToggleArchiveWallet,
+  setToggleArchiveWallet
 } = walletSlice.actions;
 export default walletSlice.reducer;

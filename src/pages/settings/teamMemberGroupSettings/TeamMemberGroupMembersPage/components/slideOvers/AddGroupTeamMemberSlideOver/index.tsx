@@ -5,18 +5,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setAddGroupTeamMemberSlideOverVisibility } from '../../../../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../../../../features/workspace/teamMemberService';
 import { addTeamMemberToGroupService } from '../../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
-import {
-  SlideOver,
-  Button,
-  ComboBoxWithAvatar,
-  AvatarWithInitials,
-} from '../../../../../../../components';
+import { SlideOver, Button, ComboBoxWithAvatar, AvatarWithInitials } from '../../../../../../../components';
 import { useAppSelector } from '../../../../../../../app/hooks';
 
 interface IItem {
-  name: string
-  id: string
-  avatar: JSX.Element
+  name: string;
+  id: string;
+  avatar: JSX.Element;
 }
 
 function AddGroupTeamMemberSlideOver() {
@@ -25,26 +20,20 @@ function AddGroupTeamMemberSlideOver() {
 
   const { teamMemberGroupId } = useParams();
 
-  const { showAddGroupTeamMemberSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showAddGroupTeamMemberSlideOver } = useAppSelector((state) => state.slideOver);
 
-  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] =
-    useState<IItem[]>([]);
+  const [unpaginatedTeamMemberOptions, setUnpaginatedTeamMemberOptions] = useState<IItem[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string | null>(null);
   const [query, setQuery] = useState<string>('');
 
-  const addTeamMemberToGroupMutation = useMutation(
-    addTeamMemberToGroupService,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['team_member_group', teamMemberGroupId]);
-        dispatch(setAddGroupTeamMemberSlideOverVisibility(false));
-        setQuery('');
-        setTeamMemberId(null);
-      },
+  const addTeamMemberToGroupMutation = useMutation(addTeamMemberToGroupService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['team_member_group', teamMemberGroupId]);
+      dispatch(setAddGroupTeamMemberSlideOverVisibility(false));
+      setQuery('');
+      setTeamMemberId(null);
     }
-  );
+  });
 
   const onQueryChange = (query: string) => {
     setQuery(query);
@@ -62,12 +51,12 @@ function AddGroupTeamMemberSlideOver() {
 
     return addTeamMemberToGroupMutation.mutate({
       teamMemberId,
-      teamMemberGroupId,
+      teamMemberGroupId
     });
   };
 
   const { status, data, fetchNextPage, hasNextPage } = useGetTeamMembers({
-    query,
+    query
   });
 
   useEffect(() => {
@@ -90,7 +79,7 @@ function AddGroupTeamMemberSlideOver() {
         return temp.push({
           id: teamMember.id,
           name: teamMember.user.name,
-          avatar,
+          avatar
         });
       });
     }

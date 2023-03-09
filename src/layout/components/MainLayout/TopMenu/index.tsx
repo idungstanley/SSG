@@ -1,26 +1,14 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
-import {
-  Bars3Icon,
-  XMarkIcon,
-  CogIcon,
-  BellIcon,
-} from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, CogIcon, BellIcon } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import SearchInput from './SearchInput';
 import { Badge, AvatarWithInitials, StatusDot } from '../../../../components';
-import {
-  selectCurrentUser,
-  setAuthData,
-  logout,
-} from '../../../../features/auth/authSlice';
+import { selectCurrentUser, setAuthData, logout } from '../../../../features/auth/authSlice';
 import { logoutService } from '../../../../features/auth/authService';
-import {
-  displayPrompt,
-  setVisibility,
-} from '../../../../features/general/prompt/promptSlice';
+import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesService';
 import MainLogo from '../../../../assets/branding/main-logo.png';
@@ -30,7 +18,7 @@ import { cl } from '../../../../utils';
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
   { name: 'Shared', href: '/shared', current: false },
-  { name: 'Inbox', href: '/inbox', current: false },
+  { name: 'Inbox', href: '/inbox', current: false }
 ];
 
 const leftMenuItems = [
@@ -38,26 +26,26 @@ const leftMenuItems = [
     id: 1,
     type: 'link',
     onClick: '/settings/team-members',
-    title: 'Team members',
+    title: 'Team members'
   },
   {
     id: 2,
     type: 'link',
     onClick: '/settings/team-members/invites',
-    title: 'Team member invites',
+    title: 'Team member invites'
   },
   {
     id: 3,
     type: 'link',
     onClick: '/settings/team-members/groups',
-    title: 'Team member groups',
+    title: 'Team member groups'
   },
   {
     id: 4,
     type: 'link',
     onClick: '/settings/permissions',
-    title: 'Permissions',
-  },
+    title: 'Permissions'
+  }
 ];
 
 function TopMenu() {
@@ -80,12 +68,12 @@ function TopMenu() {
           user: null,
           accessToken: null,
           currentWorkspaceId: null,
-          currentUserId: null,
+          currentUserId: null
         })
       );
 
       dispatch(logout());
-    },
+    }
   });
 
   const onLogout = () => {
@@ -96,15 +84,15 @@ function TopMenu() {
           style: 'danger',
           callback: () => {
             logoutMutation.mutate();
-          },
+          }
         },
         {
           label: 'Cancel',
           style: 'plain',
           callback: () => {
             dispatch(setVisibility(false));
-          },
-        },
+          }
+        }
       ])
     );
   };
@@ -114,20 +102,20 @@ function TopMenu() {
       id: 1,
       type: 'button',
       onClick: () => dispatch(setMyWorkspacesSlideOverVisibility(true)),
-      title: 'My workspaces',
+      title: 'My workspaces'
     },
     {
       id: 2,
       type: 'link',
       onClick: 'tempurl',
-      title: 'Account',
+      title: 'Account'
     },
     {
       id: 3,
       type: 'button',
       onClick: onLogout,
-      title: 'Sign out',
-    },
+      title: 'Sign out'
+    }
   ];
 
   return (
@@ -154,11 +142,7 @@ function TopMenu() {
                     src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
                     alt="Workflow"
                   />
-                  <img
-                    className="hidden lg:block h-8 w-auto"
-                    src={MainLogo}
-                    alt="Workflow"
-                  />
+                  <img className="hidden lg:block h-8 w-auto" src={MainLogo} alt="Workflow" />
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
@@ -177,11 +161,7 @@ function TopMenu() {
 
                         {item.name === 'Inbox' && status === 'success' && (
                           <span className="ml-1.5">
-                            <Badge
-                              value={unfiledInboxesCount}
-                              textColour="text-white"
-                              backgroundColour="bg-red-500"
-                            />
+                            <Badge value={unfiledInboxesCount} textColour="text-white" backgroundColour="bg-red-500" />
                           </span>
                         )}
                       </NavLink>
@@ -239,9 +219,7 @@ function TopMenu() {
                   as="a"
                   href={item.href}
                   className={cl(
-                    item.current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                     'block px-3 py-2 rounded-md text-base font-medium'
                   )}
                   aria-current={item.current ? 'page' : undefined}

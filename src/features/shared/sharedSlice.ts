@@ -11,7 +11,7 @@ const initialState: SharedState = {
   selectedItemType: null,
   selectedItemId: null,
   selectedFileIds: [],
-  selectedFolderIds: [],
+  selectedFolderIds: []
 };
 
 export const sharedSlice = createSlice({
@@ -45,8 +45,8 @@ export const sharedSlice = createSlice({
     },
     setSelectedFolders: (state, action: PayloadAction<string[]>) => {
       state.selectedFolderIds = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -55,7 +55,7 @@ export const {
   setSelectedFolder,
   resetSelectedItem,
   setSelectedFiles,
-  setSelectedFolders,
+  setSelectedFolders
 } = sharedSlice.actions;
 
 export default sharedSlice.reducer;

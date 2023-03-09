@@ -37,7 +37,7 @@ export default function ArchiveMenu() {
         // }
       },
       icon: <BsArchive />,
-      isVisible: true,
+      isVisible: true
     },
     {
       id: 2,
@@ -46,7 +46,7 @@ export default function ArchiveMenu() {
         // dispatch(setToggleArchiveWallet(!toggleArchiveWallet));
       },
       icon: <BiWallet />,
-      isVisible: true,
+      isVisible: true
     },
     {
       id: 3,
@@ -55,8 +55,8 @@ export default function ArchiveMenu() {
         // dispatch(setToggleArchiveList(!toggleArchiveList));
       },
       icon: <RiListSettingsFill />,
-      isVisible: true,
-    },
+      isVisible: true
+    }
   ];
 
   return (
