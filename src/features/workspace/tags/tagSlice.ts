@@ -29,11 +29,16 @@ export const tagSlice = createSlice({
     setShowTagColorDialogBox(state, action: PayloadAction<boolean>) {
       state.showTagColorDialogueBox = action.payload;
     },
-    triggerUnassignTag(state, action) {
-      state.unAssignTadId = action.payload.unAssignTadId;
-      state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+    triggerUnassignTag(state, action: PayloadAction<{ unAssignTadId: null; currentTaskIdForTag: null } | null>) {
+      if (action.payload == null) {
+        state.unAssignTadId = null;
+        state.currentTaskIdForTag = null;
+      } else {
+        state.unAssignTadId = action.payload.unAssignTadId;
+        state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
+      }
     },
-    setCurrentTagId(state, action) {
+    setCurrentTagId(state, action: PayloadAction<null>) {
       state.currentTagId = action.payload;
     }
   }
