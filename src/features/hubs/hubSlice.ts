@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface HubState {
   hub: string[];
-  currHubId: null;
+  currHubId: string | null;
   currSubHubId: null;
   currSubHubIdType: null;
   delHub: boolean;
@@ -52,42 +52,42 @@ export const hubSlice = createSlice({
   name: 'hub',
   initialState,
   reducers: {
-    createHub(state, action) {
+    createHub(state, action: PayloadAction<string>) {
       state.hub.push(action.payload);
     },
-    getHub(state, action) {
+    getHub(state, action: PayloadAction<string[]>) {
       state.hub = action.payload;
     },
-    setDelHub(state, action) {
+    setDelHub(state, action: PayloadAction<boolean>) {
       state.delHub = action.payload;
     },
-    setShowEditHubModal(state, action) {
+    setShowEditHubModal(state, action: PayloadAction<boolean>) {
       state.showEditHubModal = action.payload;
     },
-    getCurrHubId(state, action) {
+    getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
     },
-    getCurrSubHubId(state, action) {
+    getCurrSubHubId(state, action: PayloadAction<{ currSubHubId: null; currSubHubIdType: null }>) {
       state.currSubHubId = action.payload.currSubHubId;
       state.currSubHubIdType = action.payload.currSubHubIdType;
     },
-    getSubMenu(state, action) {
+    getSubMenu(state, action: PayloadAction<{ SubMenuId: null; SubMenuType: null }>) {
       state.SubMenuId = action.payload.SubMenuId;
       state.SubMenuType = action.payload.SubMenuType;
     },
-    setShowSubItems(state, action) {
+    setShowSubItems(state, action: PayloadAction<boolean>) {
       state.showSubItems = action.payload;
     },
-    setArchiveHub(state, action) {
+    setArchiveHub(state, action: PayloadAction<boolean>) {
       state.archiveHub = action.payload;
     },
-    setShowSidebarSettings(state, action) {
+    setShowSidebarSettings(state, action: PayloadAction<boolean>) {
       state.sidebarSettings = action.payload;
     },
-    setToggleArchive(state, action) {
+    setToggleArchive(state, action: PayloadAction<number>) {
       state.toggleArchive = action.payload;
     },
-    setshowMenuDropdown(state, action) {
+    setshowMenuDropdown(state, action: PayloadAction<{ showMenuDropdown: null | string; showMenuDropdownType: null }>) {
       state.showMenuDropdown = action.payload.showMenuDropdown;
       state.showMenuDropdownType = action.payload.showMenuDropdownType;
     },
@@ -95,26 +95,26 @@ export const hubSlice = createSlice({
       state.showMenuDropdown = null;
       state.showMenuDropdownType = null;
     },
-    setSubDropdownMenu(state, action) {
+    setSubDropdownMenu(state, action: PayloadAction<boolean>) {
       state.SubDropdownMenu = action.payload;
     },
-    setHubParentId(state, action) {
+    setHubParentId(state, action: PayloadAction<null>) {
       state.hubParentId = action.payload;
     },
-    getMenuRef(state, action) {
+    getMenuRef(state, action: PayloadAction<null>) {
       state.refType = action.payload;
     },
-    getPrevName(state, action) {
+    getPrevName(state, action: PayloadAction<string>) {
       state.prevName = action.payload;
     },
-    setShowFavEditInput(state, { payload }) {
-      state.showFavEditInput = payload;
+    setShowFavEditInput(state, action: PayloadAction<string | null>) {
+      state.showFavEditInput = action.payload;
     },
-    setTriggerFavUpdate(state, { payload }) {
-      state.triggerFavUpdate = payload;
+    setTriggerFavUpdate(state, action: PayloadAction<boolean>) {
+      state.triggerFavUpdate = action.payload;
     },
-    setFavUpdateName(state, { payload }) {
-      state.favUpdateName = payload;
+    setFavUpdateName(state, action: PayloadAction<string | null>) {
+      state.favUpdateName = action.payload;
     },
     chechIfHub: (state) => state
   }
