@@ -79,7 +79,7 @@ const queryClient = new QueryClient({
   })
 });
 
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
 
 ReactDOM.render(
   <React.StrictMode>

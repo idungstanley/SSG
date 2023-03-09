@@ -6,7 +6,7 @@ async function requestNew<T>(
   isTaskEndpoint?: boolean
 ): Promise<T> {
   const accessToken = JSON.parse(localStorage.getItem('accessToken') ?? '""') as string;
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
   const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
 
