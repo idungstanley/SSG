@@ -17,11 +17,7 @@ function WalletModal() {
       queryClient.invalidateQueries();
       dispatch(setCreateWalletSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
-      dispatch(
-        setshowMenuDropdown({
-          showMenuDropdown: null
-        })
-      );
+      dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
     }
   });
 
@@ -55,11 +51,7 @@ function WalletModal() {
   const handleCloseSlider = () => {
     dispatch(setCreateWalletSlideOverVisibility(false));
     dispatch(setSubDropdownMenu(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: null
-      })
-    );
+    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
   };
   return (
     <SlideOver

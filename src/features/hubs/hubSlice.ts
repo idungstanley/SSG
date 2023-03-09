@@ -87,7 +87,7 @@ export const hubSlice = createSlice({
     setToggleArchive(state, action: PayloadAction<number>) {
       state.toggleArchive = action.payload;
     },
-    setshowMenuDropdown(state, action: PayloadAction<{ showMenuDropdown: null | string; showMenuDropdownType: null }>) {
+    setshowMenuDropdown(state, action: PayloadAction<{ showMenuDropdown: null; showMenuDropdownType: null }>) {
       state.showMenuDropdown = action.payload.showMenuDropdown;
       state.showMenuDropdownType = action.payload.showMenuDropdownType;
     },

@@ -88,11 +88,7 @@ export default function MenuDropdown() {
           if (SubDropdownMenu === true) {
             dispatch(setSubDropdownMenu(false));
           } else {
-            dispatch(
-              setshowMenuDropdown({
-                showMenuDropdown: null
-              })
-            );
+            dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
           }
         }
       }
