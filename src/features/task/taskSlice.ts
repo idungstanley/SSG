@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IParent } from './interface.tasks';
@@ -131,20 +131,20 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    createTaskSlice(state, action) {
+    createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
-    setTaskIdForPilot(state, action) {
+    setTaskIdForPilot(state, action: PayloadAction<string | null>) {
       state.currentTaskIdForPilot = action.payload;
     },
-    getTaskData(state, action) {
+    getTaskData(state, action: PayloadAction<ImyTaskData[]>) {
       const taskDataArray = action.payload;
       // taskDataArray.unshift(myObj);
       if (taskDataArray) {
         state.myTaskData = taskDataArray;
       }
     },
-    getTaskColumns(state, action) {
+    getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
       state.taskColumns = action.payload;
     },
     hideTaskColumns(state, action) {
@@ -175,91 +175,99 @@ export const taskSlice = createSlice({
       };
     },
 
-    getListView(state, action) {
+    getListView(state, action: PayloadAction<boolean>) {
       state.listView = action.payload;
     },
-    getComfortableView(state, action) {
+    getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
     },
-    getComfortableViewWrap(state, action) {
+    getComfortableViewWrap(state, action: PayloadAction<boolean>) {
       state.comfortableViewWrap = action.payload;
     },
-    getCompactView(state, action) {
+    getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
     },
-    getCompactViewWrap(state, action) {
+    getCompactViewWrap(state, action: PayloadAction<boolean>) {
       state.CompactViewWrap = action.payload;
     },
-    setAddNewTaskItem(state, action) {
+    setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
     },
-    getTableView(state, action) {
+    getTableView(state, action: PayloadAction<boolean>) {
       state.tableView = action.payload;
     },
-    getBoardView(state, action) {
+    getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
     },
 
-    setShowTaskNavigation(state, action) {
+    setShowTaskNavigation(state, action: PayloadAction<boolean>) {
       state.showTaskNavigation = action.payload;
     },
 
-    setWatchersData(state, action) {
+    setWatchersData(state, action: PayloadAction<string>) {
       state.watchersData.push(action.payload);
     },
-    setRmWatcher(state, action) {
+    setRmWatcher(state, action: PayloadAction<null>) {
       state.removeWatcherId = action.payload;
     },
 
-    setCurrTeamMemId(state, action) {
+    setCurrTeamMemId(state, action: PayloadAction<null | string>) {
       state.currTeamMemberId = action.payload;
     },
 
-    setCurrentTaskId(state, action) {
+    setCurrentTaskId(state, action: PayloadAction<null>) {
       state.current_task_id = action.payload;
     },
-    setCloseTaskListView(state, action) {
+    setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
     },
-    setToggleAssignCurrentTaskId(state, action) {
+    setToggleAssignCurrentTaskId(state, action: PayloadAction<null>) {
       state.toggleAssignCurrentTaskId = action.payload;
     },
-    setCurrentParentTaskId(state, action) {
+    setCurrentParentTaskId(state, action: PayloadAction<null>) {
       state.currentParentTaskId = action.payload;
     },
-    setGetSubTaskId(state, action) {
+    setGetSubTaskId(state, action: PayloadAction<null>) {
       state.getSubTaskId = action.payload;
     },
-    setCurrentParentSubTaskId(state, action) {
+    setCurrentParentSubTaskId(state, action: PayloadAction<null>) {
       state.currentParentSubTaskId = action.payload;
     },
-    setCurrentParentSubTaskId2(state, action) {
+    setCurrentParentSubTaskId2(state, action: PayloadAction<null>) {
       state.currentParentSubTaskId2 = action.payload;
     },
-    setCurrentParentSubTaskId3(state, action) {
+    setCurrentParentSubTaskId3(state, action: PayloadAction<null>) {
       state.currentParentSubTaskId3 = action.payload;
     },
-    setCurrentParentSubTaskId4(state, action) {
+    setCurrentParentSubTaskId4(state, action: PayloadAction<null>) {
       state.currentParentSubTaskId4 = action.payload;
     },
-    setCurrentTaskStatusId(state, action) {
+    setCurrentTaskStatusId(state, action: PayloadAction<null>) {
       state.currentTaskStatusId = action.payload;
     },
-    setCurrentTaskPriorityId(state, action) {
+    setCurrentTaskPriorityId(state, action: PayloadAction<null>) {
       state.currentTaskPriorityId = action.payload;
     },
-    setUpdateEntries(state, action) {
+    setUpdateEntries(
+      state,
+      action: PayloadAction<{
+        initial_description: string;
+        initial_start_date: null;
+        initial_end_date: null;
+        openUpdateEntryId: null;
+      }>
+    ) {
       state.initial_description = action.payload.initial_description;
       state.initial_start_date = action.payload.initial_start_date;
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-    setUpdateStatusModalId(state, action) {
+    setUpdateStatusModalId(state, action: PayloadAction<null>) {
       state.updateStatusModalId = action.payload;
     },
     checkIfTask: (state) => state,
-    setTriggerAsssignTask(state, { payload }) {
-      state.triggerAsssignTask = payload;
+    setTriggerAsssignTask(state, action: PayloadAction<boolean>) {
+      state.triggerAsssignTask = action.payload;
     }
   }
 });

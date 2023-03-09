@@ -38,10 +38,7 @@
     "no-console": "warn",
     "semi-spacing": ["error", { "before": false, "after": true }],
     "space-infix-ops": "error",
-    "key-spacing": [
-      "error",
-      { "mode": "strict", "afterColon": true, "beforeColon": false }
-    ],
+    "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "semi": ["error", "always"],
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
@@ -49,10 +46,7 @@
     "@typescript-eslint/semi": "error",
     "@typescript-eslint/comma-dangle": 0,
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/space-before-function-paren": [
-      "error",
-      { "named": "ignore", "asyncArrow": "ignore" }
-    ],
+    "@typescript-eslint/space-before-function-paren": ["error", { "named": "ignore", "asyncArrow": "ignore" }],
     "@typescript-eslint/strict-boolean-expressions": 0,
     "no-var": 2,
     "no-loop-func": "off",
@@ -76,12 +70,12 @@
     "jsx-quotes": ["error", "prefer-double"],
     "prettier/prettier": [
       "error",
-      { "singleQuote": true, "jsxSingleQuote": false,  "tabWidth": 2, "indent": ["error"] }
+      { "singleQuote": true, "jsxSingleQuote": false, "tabWidth": 2, "indent": ["error"], "endOfLine": "auto" }
     ]
   },
   "settings": {
     "react": {
-        "version": "detect"
+      "version": "detect"
     }
-}
+  }
 }
