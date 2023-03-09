@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IHub } from './hubs.interfaces';
 
 interface HubState {
-  hub: string[];
+  hub: IHub[];
   currHubId: string | null;
   currSubHubId: null;
   currSubHubIdType: null;
@@ -52,10 +53,10 @@ export const hubSlice = createSlice({
   name: 'hub',
   initialState,
   reducers: {
-    createHub(state, action: PayloadAction<string>) {
+    createHub(state, action: PayloadAction<IHub>) {
       state.hub.push(action.payload);
     },
-    getHub(state, action: PayloadAction<string[]>) {
+    getHub(state, action: PayloadAction<IHub[]>) {
       state.hub = action.payload;
     },
     setDelHub(state, action: PayloadAction<boolean>) {
