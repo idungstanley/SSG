@@ -71,12 +71,12 @@ interface TaskState {
   showTaskNavigation: boolean | unknown;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
-  toggleAssignCurrentTaskId: string | null;
+  toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
   getSubTaskId: null;
   currentParentSubTaskId: null;
   currentParentSubTaskId2: null | string;
-  currentParentSubTaskId3: null;
+  currentParentSubTaskId3: null | string;
   currentParentSubTaskId4: string | null | undefined;
   initial_description: string | undefined;
   initial_start_date: null | undefined;
@@ -85,7 +85,7 @@ interface TaskState {
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
-  currentTaskPriorityId: string | null;
+  currentTaskPriorityId: string | null | undefined;
   triggerAsssignTask: boolean;
 }
 
@@ -221,7 +221,7 @@ export const taskSlice = createSlice({
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
     },
-    setToggleAssignCurrentTaskId(state, action: PayloadAction<string | null>) {
+    setToggleAssignCurrentTaskId(state, action: PayloadAction<string | null | undefined>) {
       state.toggleAssignCurrentTaskId = action.payload;
     },
     setCurrentParentTaskId(state, action: PayloadAction<string | null>) {
@@ -236,7 +236,7 @@ export const taskSlice = createSlice({
     setCurrentParentSubTaskId2(state, action: PayloadAction<null | string>) {
       state.currentParentSubTaskId2 = action.payload;
     },
-    setCurrentParentSubTaskId3(state, action: PayloadAction<null>) {
+    setCurrentParentSubTaskId3(state, action: PayloadAction<null | string>) {
       state.currentParentSubTaskId3 = action.payload;
     },
     setCurrentParentSubTaskId4(state, action: PayloadAction<null | string | undefined>) {
@@ -245,7 +245,7 @@ export const taskSlice = createSlice({
     setCurrentTaskStatusId(state, action: PayloadAction<string | null>) {
       state.currentTaskStatusId = action.payload;
     },
-    setCurrentTaskPriorityId(state, action: PayloadAction<string | null>) {
+    setCurrentTaskPriorityId(state, action: PayloadAction<string | null | undefined>) {
       state.currentTaskPriorityId = action.payload;
     },
     setUpdateEntries(
