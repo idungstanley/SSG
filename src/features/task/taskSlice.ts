@@ -81,7 +81,7 @@ interface TaskState {
   initial_description: string | undefined;
   initial_start_date: null | undefined;
   initial_end_date: null | undefined;
-  openUpdateEntryId: null | undefined;
+  openUpdateEntryId: null | undefined | string;
   updateStatusModalId: null;
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
@@ -254,7 +254,7 @@ export const taskSlice = createSlice({
         initial_description?: string | undefined;
         initial_start_date?: null | undefined;
         initial_end_date?: null | undefined;
-        openUpdateEntryId?: null | undefined;
+        openUpdateEntryId?: null | undefined | string;
       }>
     ) {
       state.initial_description = action.payload.initial_description;
