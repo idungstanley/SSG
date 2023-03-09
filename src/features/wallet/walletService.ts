@@ -103,7 +103,7 @@ export const UseDeleteWalletService = (data: { query: string | null | undefined;
 };
 
 //archive wallet
-export const UseArchiveWalletService = (wallet: { query: string | null; archiveWallet: boolean }) => {
+export const UseArchiveWalletService = (wallet: { query: string | null | undefined; archiveWallet: boolean }) => {
   const walletId = wallet.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();

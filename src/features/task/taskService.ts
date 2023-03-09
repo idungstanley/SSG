@@ -585,7 +585,7 @@ export const UseUnAssignTaskService = ({
   team_member_id,
   unAssignTrigger
 }: {
-  task_id: string | null;
+  task_id: string | null | undefined;
   team_member_id: string | null;
   unAssignTrigger: boolean;
 }) => {

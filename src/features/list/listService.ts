@@ -101,7 +101,7 @@ export const UseEditListService = (data: { listName?: string; listId?: string | 
 };
 
 //del lists
-export const UseDeleteListService = (data: { query: string | null; delList: boolean }) => {
+export const UseDeleteListService = (data: { query: string | null | undefined; delList: boolean }) => {
   const dispatch = useDispatch();
   const listId = data.query;
   const queryClient = useQueryClient();

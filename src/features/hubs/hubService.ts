@@ -135,7 +135,7 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
 };
 
 //archive hub
-export const ArchiveHubService = (hub: { query: string | null; archiveHub: boolean }) => {
+export const ArchiveHubService = (hub: { query: string | null | undefined; archiveHub: boolean }) => {
   const hubid = hub.query;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
