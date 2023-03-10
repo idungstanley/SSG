@@ -35,7 +35,7 @@ export default function DetailsIndex() {
     } else if (activeItemType == 'task') {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
     } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
-      return <PropertyDetails Details={wallet?.data.wallet} key={walletDetails.id} />;
+      return <PropertyDetails Details={wallet?.data.wallet} key={wallet?.data.wallet.id} />;
     } else if (activeItemType == 'list') {
       return <PropertyDetails Details={list?.data.list} key={list?.data.list.id} />;
     }

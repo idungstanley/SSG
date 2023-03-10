@@ -3,15 +3,16 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 import ToolTip from '../../../../../../../components/Tooltip';
-import Status from '../status/Status';
-import Priority from '../priority/Priority';
+// import Status from '../status/Status';
+// import Priority from '../priority/Priority';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
-import { IWalletDetails, IHubDetails, IListDetails } from '../../../../../../../features/hubs/hubs.interfaces';
+import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
+import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
 
 export interface tagItem {
   id: string;
@@ -19,7 +20,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | IWalletDetails | IListDetails;
+  Details: IHubDetails | undefined | ITaskFullList;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
@@ -45,12 +46,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   return (
     <>
       <div className="flex items-center justify-between p-2">
-        <section className="flex items-center space-x-3">
+        {/* <section className="flex items-center space-x-3">
           <Status Details={Details} />
           <ToolTip tooltip="Priority">
             <Priority Details={Details} />
           </ToolTip>
-        </section>
+        </section> */}
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">

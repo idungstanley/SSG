@@ -26,3 +26,25 @@ export interface IWalletRes {
     lists: [];
   };
 }
+
+export interface IWalletDetails {
+  id: string;
+  name: string;
+  color: null;
+  shape: null;
+  hub_id: string;
+  parent_id: null;
+  updated_at: string;
+  created_at: string;
+  archived_at: null;
+  deleted_at: null;
+  description: null;
+  directory_items: [];
+  checklists: [];
+}
+
+export interface IWalletDetailRes {
+  data: {
+    wallet: IWalletDetails;
+  };
+}
