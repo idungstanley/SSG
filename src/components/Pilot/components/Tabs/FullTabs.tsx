@@ -108,7 +108,7 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
         <nav
           className={cl(
             'relative grid overflow-x-scroll w-full',
-            showTabLabel ? 'grid-cols-1' : 'grid-rows-1 grid-flow-col'
+            showTabLabel ? 'grid-cols-1 h-40' : 'grid-rows-1 grid-flow-col'
           )}
           aria-label="Tabs"
         >
