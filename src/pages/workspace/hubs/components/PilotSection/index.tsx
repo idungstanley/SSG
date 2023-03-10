@@ -15,12 +15,15 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { VscChecklist } from 'react-icons/vsc';
+import Details from './components/details/Details';
+import TimeClock from './components/TimeClock';
+import Checklists from './components/checklist/components/Checklist';
 
 const sections = [
-  // {
-  //   id: 1,
-  //   element: <Details />
-  // },
+  {
+    id: 1,
+    element: <Details />
+  },
   {
     id: 2,
     element: <History />
@@ -36,15 +39,15 @@ const sections = [
   {
     id: 5,
     element: <ChatForPilot />
+  },
+  {
+    id: 6,
+    element: <TimeClock />
+  },
+  {
+    id: 7,
+    element: <Checklists />
   }
-  // {
-  //   id: 6,
-  //   element: <TimeClock />
-  // },
-  // {
-  //   id: 7,
-  //   element: <Checklists />
-  // }
 ];
 
 const tabs = [

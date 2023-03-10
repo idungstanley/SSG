@@ -14,12 +14,13 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import Details from '../../../hubs/components/PilotSection/components/details/Details';
 
 const sections = [
-  // {
-  //   id: 1,
-  //   element: <Details />
-  // },
+  {
+    id: 1,
+    element: <Details />
+  },
   {
     id: 2,
     element: <History />

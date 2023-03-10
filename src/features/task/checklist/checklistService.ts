@@ -255,3 +255,32 @@ export const UseUnAssignChecklistItemService = ({
     }
   );
 };
+
+//Delete a Checklist Item
+export const UseDeleteChecklistItemService = (data: {
+  query: string | null;
+  itemId: string | null;
+  delItem: boolean;
+}) => {
+  // const dispatch = useDispatch();
+  const checklist_id = data.query;
+  const itemId = data.itemId;
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['checklist'],
+    async () => {
+      const data = await requestNew({
+        url: `/checklists/${checklist_id}/item/${itemId}`,
+        method: 'DELETE'
+      });
+      return data;
+    },
+    {
+      enabled: data.delItem,
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        // dispatch(setTriggererChecklistItemDel(false));
+      }
+    }
+  );
+};

@@ -82,7 +82,7 @@ interface TaskState {
   initial_start_date: null | undefined | string;
   initial_end_date: null | undefined | string;
   openUpdateEntryId: null | undefined | string;
-  updateStatusModalId: null;
+  updateStatusModalId: null | string;
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
   currentTaskPriorityId: string | null | undefined;
@@ -262,7 +262,7 @@ export const taskSlice = createSlice({
       state.initial_end_date = action.payload.initial_end_date;
       state.openUpdateEntryId = action.payload.openUpdateEntryId;
     },
-    setUpdateStatusModalId(state, action: PayloadAction<null>) {
+    setUpdateStatusModalId(state, action: PayloadAction<string | null>) {
       state.updateStatusModalId = action.payload;
     },
     checkIfTask: (state) => state,
