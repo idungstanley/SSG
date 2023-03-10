@@ -48,7 +48,7 @@ export default function Palette({
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
         if (paletteDropDown !== null) {
-          dispatch(setPaletteDropDown(null));
+          dispatch(setPaletteDropDown({paletteDropDown: false}));
         }
       }
     };
@@ -62,17 +62,21 @@ export default function Palette({
     height: "15px",
     width: "15px",
   };
-  interface PaletteArrayProps{
-   paletteDropDown: string | null;
-   color: string;
+  interface PaletteArrayProps {
+    paletteDropDown: string | null;
+    color: string;
   }
+
   const paletteColorArray: PaletteArrayProps[] = [];
   const handleClick = (color: string) => {
     setPaletteColor(color);
-    dispatch(setPaletteDropDown(null));
     paletteColorArray.push({ paletteDropDown, color });
+    dispatch(setPaletteDropDown(null));
   };
-  console.log(paletteColorArray);
+  useEffect(() => {
+    console.log(paletteColorArray);
+  }, [paletteDropDown, ]);
+
   const colorBoxes = palette.map((c) => (
     <div
       style={{ backgroundColor: `${c}`, ...style }}

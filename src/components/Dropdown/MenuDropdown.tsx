@@ -130,7 +130,7 @@ export default function MenuDropdown() {
     showEditHubSlideOver,
     showEditListSlideOver,
     showEditWalletSlideOver,
-    showCreateListSlideOver
+    showCreateListSlideOver,
   ]);
 
   //delete-entity
@@ -371,8 +371,12 @@ export default function MenuDropdown() {
   return (
     <div className="" ref={ref}>
       <div
-        className="absolute top-auto z-50 w-56 p-2 origin-top-right bg-white rounded-md left-5 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{ boxShadow: "0 1px 10px #00000040", minWidth: "200px" }}
+        className="absolute top-auto w-auto p-2 origin-top-right bg-white rounded-md left-2 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        style={{
+          boxShadow: "0 1px 10px #00000040",
+          minWidth: "200px",
+          zIndex: "999",
+        }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (

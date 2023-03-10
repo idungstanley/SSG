@@ -11,7 +11,7 @@ export const createWalletService = (data: {
 }) => {
   const response = requestNew(
     {
-      url: 'at/wallets',
+      url: '/wallets',
       method: 'POST',
       data: {
         name: data.name,
@@ -29,7 +29,7 @@ export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
     const response = await requestNew(
       {
-        url: 'at/wallets',
+        url: '/wallets',
         method: 'GET',
         params: {
           parent_id: currentWalletId, //this returns for subwallet
@@ -65,7 +65,6 @@ export const getWalletServices = (data: {
             parent_id: data.parentId, //send wallet id for subwallet
           },
         },
-        false,
         true
       )
   );
@@ -84,7 +83,6 @@ export const UseEditWalletService = (data: {
         name: data.walletName,
       },
     },
-    false,
     true
   );
   return response;
@@ -103,7 +101,7 @@ export const UseDeleteWalletService = (data: {
     async () => {
       const data = await requestNew(
         {
-          url: `at/wallets/${walletId}`,
+          url: `/wallets/${walletId}`,
           method: 'DELETE',
         },
         true
@@ -133,7 +131,7 @@ export const UseArchiveWalletService = (wallet: {
     async () => {
       const data = await requestNew(
         {
-          url: `at/wallets/${walletId}/archive`,
+          url: `/wallets/${walletId}/archive`,
           method: 'POST',
         },
         true

@@ -1,36 +1,36 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { cl } from '../../../../utils';
-import { setShowSidebar } from '../../../../features/account/accountSlice';
-import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
-import Header from './components/Header';
-import NavigationItems from './components/NavigationItems';
-import Places from './components/Places';
-import ResizeBorder from './components/ResizeBorder';
-import Search from './components/Search';
-import Toggle from './components/Toggle';
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { cl } from "../../../../utils";
+import { setShowSidebar } from "../../../../features/account/accountSlice";
+import { setSidebarWidthRD } from "../../../../features/workspace/workspaceSlice";
+import Header from "./components/Header";
+import NavigationItems from "./components/NavigationItems";
+import Places from "./components/Places";
+import ResizeBorder from "./components/ResizeBorder";
+import Search from "./components/Search";
+import Toggle from "./components/Toggle";
 
-export const MIN_SIDEBAR_WIDTH = 260;
-export const MAX_SIDEBAR_WIDTH = 320;
+export const MIN_SIDEBAR_WIDTH = 240;
+export const MAX_SIDEBAR_WIDTH = 350;
 const RELATIVE_WIDTH = 10;
 
 interface SidebarProps {
-  allowSelect: boolean
-  setAllowSelect: (i: boolean) => void
+  allowSelect: boolean;
+  setAllowSelect: (i: boolean) => void;
 }
 
 // getting sidebar width from localStorage
 const sidebarFromLS: {
-  sidebarWidth: number
-  showSidebar: boolean
-} = JSON.parse(localStorage.getItem('sidebar') || '""');
+  sidebarWidth: number;
+  showSidebar: boolean;
+} = JSON.parse(localStorage.getItem("sidebar") || '""');
 const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
   const [sidebarWidth, setSidebarWidth] = useState(
-    sidebarWidthFromLS || MIN_SIDEBAR_WIDTH,
+    sidebarWidthFromLS || MIN_SIDEBAR_WIDTH
   );
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -73,8 +73,8 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
       const onMouseEnd = () => {
         setAllowSelect(true);
 
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseEnd);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseEnd);
 
         // saving current sidebar size to localStorage
         if (sidebarRef.current) {
@@ -87,53 +87,52 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
               : width;
 
           localStorage.setItem(
-            'sidebar',
+            "sidebar",
             JSON.stringify({
               adjustedWidth,
               showSidebar: width >= MIN_SIDEBAR_WIDTH,
-            }),
+            })
           );
         }
       };
 
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseEnd);
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseEnd);
     },
-    [allowSelect],
+    [allowSelect]
   );
 
   // dynamic width for sidebar
   const style = useMemo(
     () => ({
-      width: sidebarWidth + 'px',
-      minWidth: MIN_SIDEBAR_WIDTH + 'px',
-      maxWidth: MAX_SIDEBAR_WIDTH + 'px',
+      width: sidebarWidth + "px",
+      minWidth: MIN_SIDEBAR_WIDTH + "px",
+      maxWidth: MAX_SIDEBAR_WIDTH + "px",
     }),
-    [sidebarWidth],
+    [sidebarWidth]
   );
   useMemo(() => dispatch(setSidebarWidthRD(sidebarWidth)), [sidebarWidth]);
 
   return (
     <aside
       ref={sidebarRef}
-      className={cl(
-        'flex text-center relative overflow-x-hidden',
-      )}
+      className={cl("flex text-center relative overflow-x-hidden")}
     >
       {/* show / hide sidebar icon */}
       <Toggle />
-
       {/* sidebar */}
       <section
         className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-300"
         style={showSidebar ? style : undefined}
       >
         <Header />
-          <section className="relative flex flex-col pr-1.5 overflow-x-hidden overflow-y-scroll">
-            {showSidebar ? <Search /> : null}
-            <NavigationItems />
-            <Places />
-          </section>
+        <section
+          className="relative flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden"
+        >
+          {showSidebar ? <Search /> : null}
+          <NavigationItems />
+          <Places />
+        </section>
       </section>
       <ResizeBorder sidebarWidth={sidebarWidth} onMouseDown={onMouseDown} />
     </aside>

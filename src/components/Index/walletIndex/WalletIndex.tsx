@@ -10,14 +10,11 @@ import {
   setCurrentWalletName,
   setShowHub,
 } from "../../../features/workspace/workspaceSlice";
-import MenuDropdown from "../../Dropdown/MenuDropdown";
 import { setWalletItem } from "../../../features/wallet/walletSlice";
-import SubDropdown from "../../Dropdown/SubDropdown";
 import { getWalletServices } from "../../../features/wallet/walletService";
 import { useGetHubWallet } from "../../../features/hubs/hubService";
 import WalletItem from "../../tasks/WalletItem";
 import CreateWL from "../../tasks/CreateWL";
-import Palette from "../../ColorPalette";
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -37,13 +34,10 @@ function WalletIndex({
 }: WalletIndexProps) {
   const dispatch = useDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
-  const { toggleArchiveWallet, paletteDropDown } = useAppSelector(
+  const { toggleArchiveWallet } = useAppSelector(
     (state) => state.wallet
   );
   const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
-  const [paletteColor, setPaletteColor] = useState<string>('');
-
   const { data } = getWalletServices({
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet,
@@ -104,21 +98,12 @@ function WalletIndex({
               handleShowSubWallet={handleShowSubWallet}
               showSubWallet={showSubWallet}
               paddingLeft={paddingLeft}
-              paletteColor={paletteColor}
             />
             <div>
               {showSubWallet === wallet.id ? (
                 <SubWalletIndex paddingLeft={Number(paddingLeft) + 25} />
               ) : null}
             </div>
-            {paletteDropDown === wallet.id ? (
-              <Palette
-                title="Wallet Colour"
-                setPaletteColor={setPaletteColor}
-              />
-            ) : null}
-            {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-            {SubMenuId === wallet.id ? <SubDropdown /> : null}
           </div>
         ))}
     </div>

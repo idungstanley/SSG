@@ -9,7 +9,6 @@ import {
 } from "../../../../../features/workspace/workspaceSlice";
 import MenuDropdown from "../../../../../components/Dropdown/MenuDropdown";
 import { useAppSelector } from "../../../../../app/hooks";
-import SubDropdown from "../../../../../components/Dropdown/SubDropdown";
 import WalletItem from "../../../../../components/tasks/WalletItem";
 import ListItem from "../../../../../components/tasks/ListItem";
 
@@ -34,7 +33,7 @@ function SubWalletIndex({ paddingLeft = "30" }: SubWalletIndexProps) {
     Archived: toggleArchiveWallet,
     parentId: currentWalletParentId,
   });
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
     setShowSubWallet2(id);
@@ -70,8 +69,6 @@ function SubWalletIndex({ paddingLeft = "30" }: SubWalletIndexProps) {
               <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" />
             ) : null}
           </div>
-          {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-          {SubMenuId === wallet.id ? <SubDropdown /> : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (

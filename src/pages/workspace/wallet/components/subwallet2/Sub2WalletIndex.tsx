@@ -8,7 +8,6 @@ import {
   setShowHub,
 } from "../../../../../features/workspace/workspaceSlice";
 import { useDispatch } from "react-redux";
-import SubDropdown from "../../../../../components/Dropdown/SubDropdown";
 import LastListIndex from "./LastListIndex";
 import MenuDropdown from "../../../../../components/Dropdown/MenuDropdown";
 import { dataProps } from "../../../../../components/Index/walletIndex/WalletIndex";
@@ -27,7 +26,7 @@ function Sub2WalletIndex({
   const dispatch = useDispatch();
   const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
   const [finalParentId, setFinalWalletParentId] = useState("");
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
@@ -63,8 +62,6 @@ function Sub2WalletIndex({
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
           />
-          {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-          {SubMenuId === wallet.id ? <SubDropdown /> : null}
           {showSubWallet3 === wallet.id ? (
             <LastListIndex finalParentId={finalParentId} />
           ) : null}

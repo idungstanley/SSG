@@ -23,6 +23,7 @@ export default function PlaceItem({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const isActivePlace = !onClick;
 
   const resetSelectedPlace = () => {
@@ -39,11 +40,17 @@ export default function PlaceItem({
         bottomContent ? "gap-2" : ""
       )}
       style={{
-        backgroundColor: `${isActivePlace ? "rgba(0, 0, 0, 0.35)" : ""}`,
+        backgroundColor: `${
+          isActivePlace && activeItemId !== null
+          ? "rgba(0, 0, 0, 0.15)"
+          : isActivePlace
+          ? "rgba(0, 0, 0, 0.35)"
+            : ""
+        }`,
       }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {isActivePlace && (
+      {isActivePlace && activeItemId == null && (
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>
       )}
       <div className="flex justify-between w-full">
