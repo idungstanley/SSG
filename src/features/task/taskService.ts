@@ -19,19 +19,16 @@ export const createTaskService = (data: {
   getListId?: string;
   parentTaskId?: string | null;
 }) => {
-  const response = requestNew(
-    {
-      url: 'at/tasks',
-      method: 'POST',
-      data: {
-        name: data.name,
-        description: data.description,
-        list_id: data.showMenuDropdown || data.getListId,
-        parent_id: data.parentTaskId
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'at/tasks',
+    method: 'POST',
+    data: {
+      name: data.name,
+      description: data.description,
+      list_id: data.showMenuDropdown || data.getListId,
+      parent_id: data.parentTaskId
+    }
+  });
   return response;
 };
 
@@ -47,18 +44,15 @@ export const UseGetFullTaskList = ({
   return useInfiniteQuery(
     ['task', itemId, itemType],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<IFullTaskRes>(
-        {
-          url: 'at/tasks/full-list',
-          method: 'POST',
-          params: {
-            page: pageParam,
-            hub_id: itemId,
-            wallet_id: itemId
-          }
-        },
-        true
-      );
+      return requestNew<IFullTaskRes>({
+        url: 'at/tasks/full-list',
+        method: 'POST',
+        params: {
+          page: pageParam,
+          hub_id: itemId,
+          wallet_id: itemId
+        }
+      });
     },
     {
       enabled,
@@ -91,17 +85,14 @@ export const UseGetFullTaskListWallet = ({
   return useInfiniteQuery(
     ['task', itemId, itemType],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<IFullTaskRes>(
-        {
-          url: 'at/tasks/full-list',
-          method: 'POST',
-          params: {
-            page: pageParam,
-            wallet_id: itemId
-          }
-        },
-        true
-      );
+      return requestNew<IFullTaskRes>({
+        url: 'at/tasks/full-list',
+        method: 'POST',
+        params: {
+          page: pageParam,
+          wallet_id: itemId
+        }
+      });
     },
     {
       enabled,
@@ -130,7 +121,7 @@ export const UseGetFullTaskListWallet = ({
 //       url: `at/tasks/${taskId}`,
 //       method: 'GET',
 //     },
-//     true
+//
 //   );
 //   return response;
 // };
@@ -141,13 +132,10 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
-      const data = await requestNew<ITaskRes>(
-        {
-          url: `at/tasks/${task_id}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<ITaskRes>({
+        url: `at/tasks/${task_id}`,
+        method: 'GET'
+      });
       return data;
     },
     {
@@ -163,16 +151,13 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
   return useQuery(
     ['task'],
     async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}/checklist`,
-          method: 'POST',
-          params: {
-            name: 'Checklist'
-          }
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `at/tasks/${task_id}/checklist`,
+        method: 'POST',
+        params: {
+          name: 'Checklist'
+        }
+      });
       return data;
     },
     {
@@ -186,17 +171,14 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priority
   return useQuery(
     ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
     async () => {
-      const data = requestNew(
-        {
-          url: `at/tasks/${task_id}`,
-          method: 'PUT',
-          params: {
-            status: statusDataUpdate
-            // priority: priorityDataUpdate,
-          }
-        },
-        true
-      );
+      const data = requestNew({
+        url: `at/tasks/${task_id}`,
+        method: 'PUT',
+        params: {
+          status: statusDataUpdate
+          // priority: priorityDataUpdate,
+        }
+      });
       return data;
     },
     {
@@ -214,16 +196,13 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
   return useQuery(
     ['task', { task_id, priorityDataUpdate }],
     async () => {
-      const data = requestNew(
-        {
-          url: `at/tasks/${task_id}`,
-          method: 'PUT',
-          params: {
-            priority: priorityDataUpdate
-          }
-        },
-        true
-      );
+      const data = requestNew({
+        url: `at/tasks/${task_id}`,
+        method: 'PUT',
+        params: {
+          priority: priorityDataUpdate
+        }
+      });
       return data;
     },
     {
@@ -242,16 +221,13 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   return useQuery(
     ['task', { listId: listId }],
     async () => {
-      const data = await requestNew<ITaskListRes | undefined>(
-        {
-          url: 'at/tasks/list',
-          method: 'POST',
-          params: {
-            list_id: listId
-          }
-        },
-        true
-      );
+      const data = await requestNew<ITaskListRes | undefined>({
+        url: 'at/tasks/list',
+        method: 'POST',
+        params: {
+          list_id: listId
+        }
+      });
       return data;
     },
     {
@@ -274,16 +250,13 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {
-      const data = await requestNew<ITaskListRes | undefined>(
-        {
-          url: 'at/tasks/list',
-          method: 'POST',
-          params: {
-            parent_id: query.parentId
-          }
-        },
-        true
-      );
+      const data = await requestNew<ITaskListRes | undefined>({
+        url: 'at/tasks/list',
+        method: 'POST',
+        params: {
+          parent_id: query.parentId
+        }
+      });
       return data;
     },
     {
@@ -301,17 +274,14 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
 
 export const createTimeEntriesService = (data: { queryKey: (string | undefined)[] }) => {
   const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'time-entries/start',
-      method: 'POST',
-      params: {
-        type: 'task',
-        id: taskID
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'time-entries/start',
+    method: 'POST',
+    params: {
+      type: 'task',
+      id: taskID
+    }
+  });
   return response;
 };
 
@@ -320,17 +290,14 @@ export const StartTimeEntryService = (query: { taskId?: string | null; trigger: 
   return useQuery(
     ['timeclock', { query: query.taskId }],
     async () => {
-      const data = await requestNew(
-        {
-          url: 'time-entries/start',
-          method: 'POST',
-          params: {
-            type: 'task',
-            id: query.taskId
-          }
-        },
-        true
-      );
+      const data = await requestNew({
+        url: 'time-entries/start',
+        method: 'POST',
+        params: {
+          type: 'task',
+          id: query.taskId
+        }
+      });
       return data;
     },
     {
@@ -350,17 +317,14 @@ export const EndTimeEntriesService = (data: {
   return useQuery(
     ['timeclock'],
     async () => {
-      const response = requestNew(
-        {
-          url: 'time-entries/stop',
-          method: 'POST',
-          params: {
-            description: data.description,
-            is_billable: data.isBillable
-          }
-        },
-        true
-      );
+      const response = requestNew({
+        url: 'time-entries/stop',
+        method: 'POST',
+        params: {
+          description: data.description,
+          is_billable: data.isBillable
+        }
+      });
       return response;
     },
     {
@@ -379,17 +343,14 @@ export const GetTimeEntriesService = ({
   return useQuery(
     ['timeclock', { taskId: taskId }],
     async () => {
-      const data = await requestNew<ITimeEntriesRes | undefined>(
-        {
-          url: 'time-entries',
-          method: 'GET',
-          params: {
-            type: 'task',
-            id: taskId
-          }
-        },
-        true
-      );
+      const data = await requestNew<ITimeEntriesRes | undefined>({
+        url: 'time-entries',
+        method: 'GET',
+        params: {
+          type: 'task',
+          id: taskId
+        }
+      });
       return data;
     },
     {
@@ -405,19 +366,16 @@ export const UpdateTimeEntriesService = (data: {
   start_date: string | null | undefined;
   end_date: string | null | undefined;
 }) => {
-  const response = requestNew(
-    {
-      url: `time-entries/${data.time_entry_id}`,
-      method: 'PUT',
-      params: {
-        description: data.description,
-        is_billable: data.isBillable,
-        start_date: data.start_date,
-        end_date: data.end_date
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: `time-entries/${data.time_entry_id}`,
+    method: 'PUT',
+    params: {
+      description: data.description,
+      is_billable: data.isBillable,
+      start_date: data.start_date,
+      end_date: data.end_date
+    }
+  });
   return response;
 };
 
@@ -425,13 +383,10 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
   return useQuery(
     ['timeclock', { data: data.timeEntryDeleteTriggerId }],
     async () => {
-      const response = requestNew(
-        {
-          url: `time-entries/${data.timeEntryDeleteTriggerId}`,
-          method: 'DELETE'
-        },
-        true
-      );
+      const response = requestNew({
+        url: `time-entries/${data.timeEntryDeleteTriggerId}`,
+        method: 'DELETE'
+      });
       return response;
     },
     {
@@ -442,17 +397,14 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
 
 export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];
-  const response = requestNew(
-    {
-      url: 'watch',
-      method: 'POST',
-      params: {
-        type: 'task',
-        id: taskID
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'watch',
+    method: 'POST',
+    params: {
+      type: 'task',
+      id: taskID
+    }
+  });
   return response;
 };
 
@@ -463,17 +415,14 @@ export const UseGetWatcherService = (taskId: { query: string | null | undefined 
   return useQuery(
     ['watcher', taskId],
     async () => {
-      const data = await requestNew<IWatchersRes | undefined>(
-        {
-          url: 'watch',
-          method: 'GET',
-          params: {
-            type: 'task',
-            id: taskId.query
-          }
-        },
-        true
-      );
+      const data = await requestNew<IWatchersRes | undefined>({
+        url: 'watch',
+        method: 'GET',
+        params: {
+          type: 'task',
+          id: taskId.query
+        }
+      });
       return data;
     },
     {
@@ -489,18 +438,15 @@ export const AddWatcherService = ({ query }: { query: (string | undefined | null
   return useQuery(
     ['watcher', query],
     async () => {
-      const data = await requestNew(
-        {
-          url: 'watch',
-          method: 'POST',
-          params: {
-            type: 'task',
-            id: query[1],
-            team_member_ids: [query[0]]
-          }
-        },
-        true
-      );
+      const data = await requestNew({
+        url: 'watch',
+        method: 'POST',
+        params: {
+          type: 'task',
+          id: query[1],
+          team_member_ids: [query[0]]
+        }
+      });
       return data;
     },
     {
@@ -519,18 +465,15 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   return useQuery(
     ['watcher', query],
     async () => {
-      const data = await requestNew(
-        {
-          url: 'watch/remove',
-          method: 'POST',
-          params: {
-            type: 'task',
-            id: query[1],
-            team_member_ids: [query[0]]
-          }
-        },
-        true
-      );
+      const data = await requestNew({
+        url: 'watch/remove',
+        method: 'POST',
+        params: {
+          type: 'task',
+          id: query[1],
+          team_member_ids: [query[0]]
+        }
+      });
       return data;
     },
     {
@@ -558,13 +501,10 @@ export const UseAssignTaskService = ({
   return useQuery(
     ['task', { team_member_id: team_member_id, task_id: task_id }],
     async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
+        method: 'POST'
+      });
       return data;
     },
     {
@@ -594,13 +534,10 @@ export const UseUnAssignTaskService = ({
   return useQuery(
     ['task', { team_member_id: team_member_id }],
     async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
+        method: 'POST'
+      });
       return data;
     },
     {

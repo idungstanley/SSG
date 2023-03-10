@@ -7,17 +7,14 @@ export const useGetItemWatchers = (data: { type: itemType | null; id: string | n
   useQuery<IWatchersRes>(
     ['watchers', data.id],
     () =>
-      requestNew(
-        {
-          url: 'watch',
-          method: 'GET',
-          params: {
-            type: data.type,
-            id: data.id
-          }
-        },
-        true
-      ),
+      requestNew({
+        url: 'watch',
+        method: 'GET',
+        params: {
+          type: data.type,
+          id: data.id
+        }
+      }),
     {
       enabled: !!data.id && !!data.type
       // select: (watchers) => watchers.data.watchers,
@@ -25,16 +22,13 @@ export const useGetItemWatchers = (data: { type: itemType | null; id: string | n
   );
 
 const createWatcher = (data: { id: string; team_member_ids: string[]; type: itemType }) => {
-  const request = requestNew(
-    {
-      url: 'watch',
-      method: 'POST',
-      data: {
-        ...data
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: 'watch',
+    method: 'POST',
+    data: {
+      ...data
+    }
+  });
   return request;
 };
 
@@ -49,16 +43,13 @@ export const useCreateWatcher = (id: string) => {
 };
 
 const removeWatcher = (data: { id: string; team_member_ids: string[]; type: itemType }) => {
-  const request = requestNew(
-    {
-      url: 'watch/remove',
-      method: 'POST',
-      data: {
-        ...data
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: 'watch/remove',
+    method: 'POST',
+    data: {
+      ...data
+    }
+  });
   return request;
 };
 

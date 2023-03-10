@@ -13,18 +13,15 @@ import { setCurrTeamMemId } from '../taskSlice';
 
 export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
   const url = '/checklists';
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      data: {
-        name: name,
-        id: task_id,
-        type: 'task'
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'POST',
+    data: {
+      name: name,
+      id: task_id,
+      type: 'task'
+    }
+  });
   return response;
 };
 
@@ -38,13 +35,10 @@ export const UseGetAllClistService = ({
   return useQuery(
     ['checklist', { task_id }],
     async () => {
-      const data = await requestNew(
-        {
-          url: `at/tasks/${task_id}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `at/tasks/${task_id}`,
+        method: 'GET'
+      });
       return data;
     },
     {
@@ -55,16 +49,13 @@ export const UseGetAllClistService = ({
 
 export const UseCreatelistItemService = ({ checklist_id, name }: { checklist_id: string; name: string }) => {
   const url = `/checklists/${checklist_id}`;
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      data: {
-        name: name
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'POST',
+    data: {
+      name: name
+    }
+  });
   return response;
 };
 
@@ -82,16 +73,13 @@ export const UseUpdateChecklistService = ({
   return useQuery(
     ['checklist', { checklist_id }],
     async () => {
-      const data = requestNew(
-        {
-          url: `/checklists/${checklist_id}`,
-          method: 'PUT',
-          params: {
-            name: name
-          }
-        },
-        true
-      );
+      const data = requestNew({
+        url: `/checklists/${checklist_id}`,
+        method: 'PUT',
+        params: {
+          name: name
+        }
+      });
       return data;
     },
     {
@@ -122,17 +110,14 @@ export const UseUpdateChecklistItemService = ({
   return useQuery(
     ['checklist', { itemId, done, name }],
     async () => {
-      const data = requestNew(
-        {
-          url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: 'PUT',
-          params: {
-            name: name,
-            is_done: done
-          }
-        },
-        true
-      );
+      const data = requestNew({
+        url: `/checklists/${checklist_id}/item/${itemId}`,
+        method: 'PUT',
+        params: {
+          name: name,
+          is_done: done
+        }
+      });
       return data;
     },
     {
@@ -148,13 +133,10 @@ export const UseUpdateChecklistItemService = ({
 // Delete Checklist
 const deleteChecklist = (data: { query: string | null }) => {
   const checklist_id = data.query;
-  const request = requestNew(
-    {
-      url: `checklists/${checklist_id}`,
-      method: 'DELETE'
-    },
-    true
-  );
+  const request = requestNew({
+    url: `checklists/${checklist_id}`,
+    method: 'DELETE'
+  });
   return request;
 };
 
@@ -172,13 +154,10 @@ export const useDeleteChecklist = () => {
 const deleteChecklistItem = (data: { query: string | null; itemId: string | undefined }) => {
   const checklist_id = data.query;
   const itemId = data.itemId;
-  const request = requestNew(
-    {
-      url: `/checklists/${checklist_id}/item/${itemId}`,
-      method: 'DELETE'
-    },
-    true
-  );
+  const request = requestNew({
+    url: `/checklists/${checklist_id}/item/${itemId}`,
+    method: 'DELETE'
+  });
   return request;
 };
 
@@ -216,13 +195,10 @@ export const UseAssignChecklistItemService = ({
       }
     ],
     async () => {
-      const data = await requestNew(
-        {
-          url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
+        method: 'POST'
+      });
       return data;
     },
     {
@@ -261,13 +237,10 @@ export const UseUnAssignChecklistItemService = ({
       }
     ],
     async () => {
-      const data = await requestNew(
-        {
-          url: `/checklists/${checklist_id}/item/${itemId}/unassign/${team_member_id}`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `/checklists/${checklist_id}/item/${itemId}/unassign/${team_member_id}`,
+        method: 'POST'
+      });
       return data;
     },
     {

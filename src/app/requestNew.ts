@@ -1,14 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-async function requestNew<T>(
-  options: Record<string, unknown>,
-  isMainEndpoint?: boolean,
-  isTaskEndpoint?: boolean
-): Promise<T> {
-  const accessToken = JSON.parse(localStorage.getItem('accessToken') ?? '""') as string;
-  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
-
-  const additionalRoute = isMainEndpoint ? '' : isTaskEndpoint ? 'at' : 'af';
+async function requestNew<T>(options: Record<string, unknown>): Promise<T> {
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') ?? 'null') as string;
+  const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || 'null') as string;
 
   const headers = accessToken
     ? {
@@ -18,7 +12,7 @@ async function requestNew<T>(
     : undefined;
 
   const client = axios.create({
-    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/${additionalRoute}`,
+    baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/`,
     headers
   });
 

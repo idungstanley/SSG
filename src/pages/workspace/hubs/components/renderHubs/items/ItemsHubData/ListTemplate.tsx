@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { getTaskListService } from '../../../../../../../features/task/taskService';
-import { ImyTaskData } from '../../../../../../../features/task/taskSlice';
 import TaskData from '../../../../../tasks/component/taskData/TaskData';
 import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../../../../../tasks/subtasks/subtask1/RenderSubTasks';

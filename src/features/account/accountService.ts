@@ -9,13 +9,10 @@ export const useGetMyWorkspaces = () => {
   return useQuery<IAccountReq>(
     ['my_workspaces'],
     async () =>
-      requestNew(
-        {
-          url: 'auth/account/workspaces',
-          method: 'GET'
-        },
-        true
-      ),
+      requestNew({
+        url: 'auth/account/workspaces',
+        method: 'GET'
+      }),
     {
       onSuccess: (data) => {
         data.data.workspaces.map((workspace) => queryClient.setQueryData(['my_workspace', workspace.id], workspace));
@@ -26,13 +23,10 @@ export const useGetMyWorkspaces = () => {
 
 // Switch workspace service
 export const switchWorkspaceService = async (data: { workspaceId: string }) => {
-  const response = requestNew<{ data: { workspace: { id: string } } }>(
-    {
-      url: `auth/account/workspaces/${data.workspaceId}/switch`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew<{ data: { workspace: { id: string } } }>({
+    url: `auth/account/workspaces/${data.workspaceId}/switch`,
+    method: 'POST'
+  });
   return response;
 };
 
@@ -40,16 +34,13 @@ export const useGetUserSettingsKeys = (enabled: boolean) =>
   useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
-      requestNew(
-        {
-          url: 'user/settings',
-          method: 'GET',
-          params: {
-            keys: 'sidebar'
-          }
-        },
-        true
-      ),
+      requestNew({
+        url: 'user/settings',
+        method: 'GET',
+        params: {
+          keys: 'sidebar'
+        }
+      }),
     {
       enabled,
       select: (res) => res.data.settings[0]
@@ -57,16 +48,13 @@ export const useGetUserSettingsKeys = (enabled: boolean) =>
   );
 
 export const setUserSettingsKeys = (value: IUserParams) => {
-  const request = requestNew(
-    {
-      url: 'user/settings',
-      method: 'PUT',
-      data: {
-        keys: [{ key: 'sidebar', value }]
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: 'user/settings',
+    method: 'PUT',
+    data: {
+      keys: [{ key: 'sidebar', value }]
+    }
+  });
   return request;
 };
 

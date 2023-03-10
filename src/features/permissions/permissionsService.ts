@@ -8,13 +8,10 @@ export const useGetFilteredTeamMembers = (currentUserId?: string | null, activeM
   const { data, status } = useQuery<ITeamMembersAndGroupsReq>(
     ['team-members'],
     () =>
-      requestNew(
-        {
-          url: 'settings/team-members',
-          method: 'GET'
-        },
-        true
-      ),
+      requestNew({
+        url: 'settings/team-members',
+        method: 'GET'
+      }),
     { enabled: !!currentUserId }
   );
   const activeMembersWithCurrent = currentUserId ? [currentUserId] : [];
