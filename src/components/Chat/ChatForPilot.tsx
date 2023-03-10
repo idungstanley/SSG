@@ -3,6 +3,8 @@ import CreateChatSideOver from './components/CreateChatSideOver';
 import ChatSection from './components/ChatSection';
 import Contacts from './components/Contacts';
 import Nav from './components/Nav';
+import SectionArea from '../Pilot/components/SectionArea';
+import { SignalIcon } from '@heroicons/react/24/outline';
 
 export default function ChatForPilot() {
   const [activeTabId, setActiveTabId] = useState(0);
@@ -16,6 +18,8 @@ export default function ChatForPilot() {
 
   return (
     <>
+      <SectionArea label="Connect" icon={<SignalIcon className="w-4 h-4" />} />
+
       <div className="flex w-full h-full border-r border-l border-b">
         <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
 

@@ -1,9 +1,8 @@
-import { CheckIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
-import { IPilotTab } from '../../../../../../types';
-import { cl } from '../../../../../../utils';
-import { Modal } from '../Modal';
+import { IPilotTab } from '../../../../types';
+import { cl } from '../../../../utils';
+import { Modal } from './components/Modal';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
@@ -17,13 +16,18 @@ const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as n
 
 const HOTKEY_LIMIT = 3;
 
-export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showModal, setShowModal }: HotkeysListProps) {
-  const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
+export default function MinHotkeysList({
+  tabs,
+  setActiveTabId,
+  activeTabId,
+  showModal,
+  setShowModal
+}: HotkeysListProps) {
   const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
 
   const hotkeys = useMemo(
-    () => tabs.filter((i) => activeHotkeyIds.includes(i.id)).slice(0, !show ? HOTKEY_LIMIT : undefined),
-    [activeHotkeyIds, tabs, show]
+    () => tabs.filter((i) => activeHotkeyIds.includes(i.id)).slice(0, HOTKEY_LIMIT),
+    [activeHotkeyIds, tabs]
   );
 
   const handleClick = useCallback(
@@ -41,21 +45,14 @@ export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showMod
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className={cl('flex flex-wrap gap-y-2 p-2 col-span-1', show ? 'flex-row w-full' : 'flex-col gap-2')}>
+        <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-col gap-2">
           {hotkeys.map((hotkey) => (
             <button
               onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
               title={hotkey.label}
               className={cl(
-                show
-                  ? 'border-r border-l px-4 py-1'
-                  : 'px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg',
-                activeTabId === hotkey.id
-                  ? show
-                    ? 'text-green-500'
-                    : 'border-green-500 bg-green-500 text-gray-100'
-                  : 'text-gray-600',
-                'flex items-center justify-center'
+                activeTabId === hotkey.id ? 'text-green-500' : 'text-gray-600',
+                'flex items-center justify-center px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg'
               )}
               key={hotkey.id}
             >
@@ -74,7 +71,6 @@ export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showMod
               key={tab.id}
               className={cl(
                 activeHotkeyIds.includes(tab.id) && 'font-semibold',
-
                 'relative flex gap-10 text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
               )}
             >

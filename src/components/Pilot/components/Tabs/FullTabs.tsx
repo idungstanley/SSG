@@ -19,8 +19,8 @@ import { cl } from '../../../../utils';
 import Tab from './components/Tab';
 
 interface TabsProps {
-  activeTabId: number;
-  setActiveTabId: (i: number) => void;
+  activeTabId: number | null;
+  setActiveTabId: (i: number | null) => void;
   tabs: IPilotTab[];
 }
 
@@ -61,7 +61,7 @@ function ShowTabsLabelToggle({ showTabLabel, setShowTabLabel }: ShowTabsLabelTog
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
-export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
+export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
   const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
@@ -103,7 +103,7 @@ export default function Tabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className="col-span-1 relative flex items-center overflow-x-scroll">
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
         <nav
           className={cl(
