@@ -392,7 +392,7 @@ export default function DataRenderFunc({
               </span>
             )}
           </div>
-          <div className="flex items-center">
+          <div className="flex group items-center">
             <p onClick={() => handleTaskStatus(task.id as string)} className="relative pt-1 pr-1">
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
@@ -418,7 +418,7 @@ export default function DataRenderFunc({
                 (taskColField as ReactNode)
               )}
             </div>
-            <p id="iconWrapper" className="flex items-center ml-1 space-x-1 ">
+            <p id="iconWrapper" className="flex opacity-0 group-hover:opacity-100 items-center ml-1 space-x-1 ">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
               </span>
