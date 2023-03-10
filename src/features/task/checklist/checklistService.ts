@@ -10,6 +10,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
 import { setCurrTeamMemId } from '../taskSlice';
+import { ITaskRes } from '../interface.tasks';
 
 export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
   const url = '/checklists';
@@ -38,9 +39,9 @@ export const UseGetAllClistService = ({
   return useQuery(
     ['checklist', { task_id }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITaskRes>(
         {
-          url: `at/tasks/${task_id}`,
+          url: `tasks/${task_id}`,
           method: 'GET'
         },
         true
@@ -200,7 +201,7 @@ export const UseAssignChecklistItemService = ({
   triggerAssignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerAssignChecklistItem: boolean;
 }) => {
@@ -245,7 +246,7 @@ export const UseUnAssignChecklistItemService = ({
   triggerUnassignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerUnassignChecklistItem: boolean;
 }) => {
