@@ -11,7 +11,7 @@ export const createListService = (data: {
 }) => {
   const response = requestNew(
     {
-      url: 'at/lists',
+      url: '/lists',
       method: 'POST',
       data: {
         name: data.listName,
@@ -29,7 +29,7 @@ export const getListService = (data: {queryKey: (string | undefined)[]}) => {
   const hubID = data.queryKey[1];
   const response = requestNew(
     {
-      url: 'at/lists',
+      url: '/lists',
       method: 'GET',
       params: {
         hub_id: hubID,
