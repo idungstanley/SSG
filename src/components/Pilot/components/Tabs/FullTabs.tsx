@@ -12,7 +12,7 @@ import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
@@ -96,7 +96,7 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
             })
           );
 
-          return sortArray;
+          return [...sortArray];
         });
       }
     }
@@ -113,7 +113,7 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
           aria-label="Tabs"
         >
           <SortableContext strategy={rectSortingStrategy} items={tabItems}>
-            {tabs.map((tab) => (
+            {tabItems.map((tab) => (
               <Tab
                 key={tab.id}
                 id={tab.id}
