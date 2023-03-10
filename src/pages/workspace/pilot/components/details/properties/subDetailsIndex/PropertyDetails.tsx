@@ -11,7 +11,7 @@ import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
-import { IWalletDetails, IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
+import { IWalletDetails, IHubDetails, IListDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 
 export interface tagItem {
   id: string;
@@ -19,7 +19,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | IWalletDetails;
+  Details: IHubDetails | IWalletDetails | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);

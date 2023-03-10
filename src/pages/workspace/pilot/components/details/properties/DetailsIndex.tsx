@@ -28,8 +28,6 @@ export default function DetailsIndex() {
   });
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
-  const walletDetails = wallet?.data.wallet;
-  const listDetails = list?.data.list;
 
   const showDetailsType = () => {
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
@@ -37,9 +35,9 @@ export default function DetailsIndex() {
     } else if (activeItemType == 'task') {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
     } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
-      return <PropertyDetails Details={walletDetails} key={walletDetails.id} />;
+      return <PropertyDetails Details={wallet?.data.wallet} key={walletDetails.id} />;
     } else if (activeItemType == 'list') {
-      return <PropertyDetails Details={listDetails} key={listDetails.id} />;
+      return <PropertyDetails Details={list?.data.list} key={list?.data.list.id} />;
     }
   };
 

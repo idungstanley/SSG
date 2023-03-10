@@ -165,7 +165,7 @@ export const UseGetListDetails = (query: {
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew<IHubDetailRes>(
+      const data = await requestNew<IHubDetailRes | undefined>(
         {
           url: `lists/${query.activeItemId}`,
           method: 'GET'
