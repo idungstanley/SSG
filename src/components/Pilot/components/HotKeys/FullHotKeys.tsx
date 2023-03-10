@@ -55,7 +55,9 @@ export default function FullHotkeysList({
             </button>
           ))}
         </div>
-      ) : null}
+      ) : (
+        <div />
+      )}
 
       <Modal setShowModal={setShowModal} showModal={showModal}>
         {/* hotkeys list */}

@@ -14,7 +14,7 @@ export default function WatchersForPilot() {
     <>
       <SectionArea label="Watchers" icon={<EyeIcon className="w-4 h-4" />} />
 
-      <div className="flex flex-col pt-2">
+      <div className="flex h-full flex-col pt-2">
         {item ? (
           <>
             <AddNew item={item} />

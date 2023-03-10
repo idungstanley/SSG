@@ -4,7 +4,8 @@
 
 .tooltip::before,
 .tooltip::after {
-  width:auto;
+  z-index: 999;
+  width: auto;
   --scale: 0;
   --arrow-size: 0.2px;
   --tooltip-color: #333;

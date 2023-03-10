@@ -57,14 +57,14 @@ export function useResize({ dimensions, storageKey }: UseResizeProps) {
           className={cl(
             width === max ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 left-0 transition-all w-1 h-full opacity-0 bg-green-300'
+            'absolute top-0 left-0 transition-all w-0.5 h-full opacity-0 bg-green-300'
           )}
         />
         <div
           className={cl(
             width === min ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 right-0 transition-all w-1 h-full opacity-0 bg-green-300'
+            'absolute top-0 right-0 transition-all w-0.5 h-full opacity-0 bg-green-300'
           )}
         />
       </div>

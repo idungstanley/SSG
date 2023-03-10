@@ -24,14 +24,14 @@ export default function MinPilot({
   showModal
 }: MinPilotProps) {
   return (
-    <div onMouseLeave={() => (activeTabId ? setActiveTabId(null) : undefined)} className="border-l relative">
+    <div onMouseLeave={() => (activeTabId ? setActiveTabId(null) : undefined)} className="border-l relative divide-y">
       <div
         style={{
           transform: `translateX(${activeTabId ? -13 : 100}%)`
         }}
         className={cl(
           activeTabId ? 'opacity-100' : 'opacity-100',
-          'z-20 bg-white w-96 border fixed top-10 bottom-20 right-0 h-full transform transition-all duration-500 p-2'
+          'z-20 bg-white flex flex-col w-96 border-2 fixed top-10 bottom-0 right-0 transform transition-all duration-500 p-2'
         )}
       >
         {activeSection?.element}
