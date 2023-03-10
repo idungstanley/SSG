@@ -73,9 +73,6 @@ export default function Palette({
     paletteColorArray.push({ paletteDropDown, color });
     dispatch(setPaletteDropDown(null));
   };
-  useEffect(() => {
-    console.log(paletteColorArray);
-  }, [paletteDropDown, ]);
 
   const colorBoxes = palette.map((c) => (
     <div
