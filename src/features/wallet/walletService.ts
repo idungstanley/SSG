@@ -53,7 +53,6 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
           parent_id: data.parentId //send wallet id for subwallet
         }
       },
-      false,
       true
     )
   );
@@ -69,7 +68,6 @@ export const UseEditWalletService = (data: { walletName?: string; WalletId?: str
         name: data.walletName
       }
     },
-    false,
     true
   );
   return response;
