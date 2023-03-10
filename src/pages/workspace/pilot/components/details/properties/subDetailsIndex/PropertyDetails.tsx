@@ -11,6 +11,7 @@ import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
+import { IWalletDetails, IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 
 export interface tagItem {
   id: string;
@@ -18,36 +19,28 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: {
-    id: string;
-    name: string;
-    description: string;
-    created_at: string;
-    status: string;
-    priority: string;
-    tags: [tagItem[]];
-  };
+  Details: IHubDetails | IWalletDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const groupTags = (arr: tagItem[] | [tagItem[]]) => {
-    return arr?.map((item) => {
-      return Array.isArray(item) ? (
-        <span className="flex">{groupTags(item)}</span>
-      ) : (
-        <>
-          <span
-            className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? 'object-contain' : 'w-20'
-            }`}
-            style={{ backgroundColor: `${item.color}` }}
-          >
-            {item.name}
-          </span>
-        </>
-      );
-    });
-  };
+  // const groupTags = (arr: tagItem[] | [tagItem[]]) => {
+  //   return arr?.map((item) => {
+  //     return Array.isArray(item) ? (
+  //       <span className="flex">{groupTags(item)}</span>
+  //     ) : (
+  //       <>
+  //         <span
+  //           className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
+  //             item.name.length > 10 ? 'object-contain' : 'w-20'
+  //           }`}
+  //           style={{ backgroundColor: `${item.color}` }}
+  //         >
+  //           {item.name}
+  //         </span>
+  //       </>
+  //     );
+  //   });
+  // };
 
   return (
     <>
@@ -82,7 +75,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="tags" className="mt-2">
           <label className="text-xs text-gray-500">Tags</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p> {groupTags(Details?.tags)}</p>
+            {/* <p> {groupTags(Details?.tags)}</p> */}
           </div>
         </div>
         {/* name */}

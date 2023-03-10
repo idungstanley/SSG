@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
+import { IHubDetailRes } from '../hubs/hubs.interfaces';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew(
@@ -164,7 +165,7 @@ export const UseGetListDetails = (query: {
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<IHubDetailRes>(
         {
           url: `lists/${query.activeItemId}`,
           method: 'GET'

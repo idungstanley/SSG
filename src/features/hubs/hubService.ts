@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes } from './hubs.interfaces';
+import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes } from './hubs.interfaces';
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
@@ -164,7 +164,7 @@ export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<IHubDetailRes | undefined>(
         {
           url: `at/hubs/${query.activeItemId}/details`,
           method: 'GET'
