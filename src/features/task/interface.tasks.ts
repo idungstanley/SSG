@@ -16,6 +16,21 @@ export interface TaskDataGroupingsProps {
   [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData2[] } | undefined;
 }
 
+export interface ICheckListItems {
+  id: string;
+  name: string;
+  is_done: number;
+  assignees: [{ id: string; initials: string; colour: string }];
+  group_assignees: [];
+  tags: [];
+}
+
+export interface ICheckListRes {
+  id: string;
+  name: string;
+  items: ICheckListItems[];
+}
+
 export interface ITaskFullList {
   id: string;
   name: string;
@@ -35,6 +50,7 @@ export interface ITaskFullList {
   archived_at: null;
   deleted_at: null;
   directory_items: [];
+  checklists: ICheckListRes[];
   list: {
     id: string;
     name: string;

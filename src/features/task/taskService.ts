@@ -21,7 +21,7 @@ export const createTaskService = (data: {
 }) => {
   const response = requestNew(
     {
-      url: 'at/tasks',
+      url: 'tasks',
       method: 'POST',
       data: {
         name: data.name,
@@ -49,7 +49,7 @@ export const UseGetFullTaskList = ({
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>(
         {
-          url: 'at/tasks/full-list',
+          url: 'tasks/full-list',
           method: 'POST',
           params: {
             page: pageParam,
@@ -93,7 +93,7 @@ export const UseGetFullTaskListWallet = ({
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>(
         {
-          url: 'at/tasks/full-list',
+          url: 'tasks/full-list',
           method: 'POST',
           params: {
             page: pageParam,
@@ -121,21 +121,6 @@ export const UseGetFullTaskListWallet = ({
   );
 };
 
-// export const getOneTaskService = (data: {
-//   queryKey: (string | undefined)[];
-// }) => {
-//   const taskId = data.queryKey[1];
-//   const response = requestNew(
-//     {
-//       url: `at/tasks/${taskId}`,
-//       method: 'GET',
-//     },
-//     true
-//   );
-//   return response;
-// };
-
-//getOneTask
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(
@@ -143,7 +128,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     async () => {
       const data = await requestNew<ITaskRes>(
         {
-          url: `at/tasks/${task_id}`,
+          url: `tasks/${task_id}`,
           method: 'GET'
         },
         true
@@ -165,7 +150,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
     async () => {
       const data = await requestNew(
         {
-          url: `at/tasks/${task_id}/checklist`,
+          url: `tasks/${task_id}/checklist`,
           method: 'POST',
           params: {
             name: 'Checklist'
@@ -188,7 +173,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priority
     async () => {
       const data = requestNew(
         {
-          url: `at/tasks/${task_id}`,
+          url: `tasks/${task_id}`,
           method: 'PUT',
           params: {
             status: statusDataUpdate
@@ -216,7 +201,7 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
     async () => {
       const data = requestNew(
         {
-          url: `at/tasks/${task_id}`,
+          url: `tasks/${task_id}`,
           method: 'PUT',
           params: {
             priority: priorityDataUpdate
@@ -238,13 +223,13 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 
 export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { listId: listId }],
     async () => {
       const data = await requestNew<ITaskListRes | undefined>(
         {
-          url: 'at/tasks/list',
+          url: 'tasks/list',
           method: 'POST',
           params: {
             list_id: listId
@@ -257,7 +242,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
     {
       onSuccess: (data) => {
         const taskData = data?.data.tasks.map((task: { id: string }) => {
-          queryClient.setQueryData(['task', task.id], task);
+          // queryClient.setQueryData(['task', task.id], task);
           return { ...task };
         });
         dispatch(getTaskData(taskData));
@@ -276,7 +261,7 @@ export const getTaskListService2 = (query: { parentId: string | null }) => {
     async () => {
       const data = await requestNew<ITaskListRes | undefined>(
         {
-          url: 'at/tasks/list',
+          url: 'tasks/list',
           method: 'POST',
           params: {
             parent_id: query.parentId

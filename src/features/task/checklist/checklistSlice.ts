@@ -4,8 +4,8 @@ interface checklistState {
   triggerChecklistUpdate: boolean;
   triggerItemUpdate: boolean;
   clickedChecklistId: string;
-  clickedChecklistItemId: string;
-  toggleAssignChecklistItemId: string | null;
+  clickedChecklistItemId: string | undefined;
+  toggleAssignChecklistItemId: string | null | undefined;
   triggerAssignChecklistItem: boolean;
   triggerUnassignChecklistItem: boolean;
   showChecklistInput: boolean;
@@ -35,10 +35,10 @@ export const checklistSlice = createSlice({
     setClickChecklistId(state, action: PayloadAction<string>) {
       state.clickedChecklistId = action.payload;
     },
-    setClickChecklistItemId(state, action: PayloadAction<string>) {
+    setClickChecklistItemId(state, action: PayloadAction<string | undefined>) {
       state.clickedChecklistItemId = action.payload;
     },
-    setToggleAssignChecklistItemId(state, action: PayloadAction<string | null>) {
+    setToggleAssignChecklistItemId(state, action: PayloadAction<string | null | undefined>) {
       state.toggleAssignChecklistItemId = action.payload;
     },
     setTriggerAssignChecklistItem(state, action: PayloadAction<boolean>) {

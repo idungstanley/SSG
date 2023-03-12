@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes } from './hubs.interfaces';
+import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes } from './hubs.interfaces';
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
@@ -17,7 +17,6 @@ export const createHubService = (data: { name: string; currHubId?: string | null
         parent_id: data.currHubId
       }
     },
-    false,
     true
   );
   return response;
@@ -39,7 +38,6 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
             is_archived: query ? 1 : 0
           }
         },
-        false,
         true
       ),
     {
@@ -79,7 +77,6 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
           url: `hubs/${parentId}`,
           method: 'GET'
         },
-        false,
         true
       ),
     {
@@ -99,7 +96,6 @@ export const useEditHubService = (data: { name: string; currentWorkspaceId?: str
         current_workspace_id: data.currentWorkspaceId
       }
     },
-    false,
     true
   );
   return response;
@@ -168,7 +164,7 @@ export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<IHubDetailRes>(
         {
           url: `at/hubs/${query.activeItemId}/details`,
           method: 'GET'
@@ -190,7 +186,6 @@ export const useGetHubWallet = (hubId: string | null) =>
         url: `hubs/${hubId}`,
         method: 'GET'
       },
-      false,
       true
     )
   );
