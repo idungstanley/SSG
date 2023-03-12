@@ -223,7 +223,7 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 
 export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { listId: listId }],
     async () => {
@@ -242,7 +242,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
     {
       onSuccess: (data) => {
         const taskData = data?.data.tasks.map((task: { id: string }) => {
-          queryClient.setQueryData(['task', task.id], task);
+          // queryClient.setQueryData(['task', task.id], task);
           return { ...task };
         });
         dispatch(getTaskData(taskData));

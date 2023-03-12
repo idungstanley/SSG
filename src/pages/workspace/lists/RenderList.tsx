@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-// import { getTaskListService } from '../../../features/task/taskService';
+import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -36,7 +36,7 @@ function RenderList() {
 
   const { show } = pilotSideOver;
 
-  // const { data: listDetailsData } = getTaskListService({ listId });
+  getTaskListService({ listId });
 
   return (
     <>
