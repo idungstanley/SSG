@@ -21,7 +21,7 @@ function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
   const {
-    myTaskData,
+    // myTaskData,
     tableView,
     listView,
     boardView,
@@ -36,7 +36,7 @@ function RenderList() {
 
   const { show } = pilotSideOver;
 
-  getTaskListService({ listId });
+  const { data: listDetailsData } = getTaskListService({ listId });
 
   return (
     <>
@@ -74,7 +74,7 @@ function RenderList() {
             {/* card */}
             {listView && <TaskListViews />}
             {listView &&
-              myTaskData?.map((task) => (
+              listDetailsData?.data.tasks.map((task) => (
                 <div key={task.id}>
                   {closeTaskListView && <TaskData task={task} />}
 
