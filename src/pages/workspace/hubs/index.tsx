@@ -31,7 +31,7 @@ function Hubs() {
 
   const configForDropdown = [
     {
-      label: 'Hub',
+      label: 'hub',
       icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
       onClick: () => dispatch(setCreateHubSlideOverVisibility(true))
     }
