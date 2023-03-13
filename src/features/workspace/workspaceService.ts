@@ -9,54 +9,42 @@ interface IData {
 }
 
 export const createWorkspaceService = (data: IData) => {
-  const response = requestNew<IWorkspaceRes>(
-    {
-      url: 'workspace',
-      method: 'POST',
-      data: {
-        name: data.name,
-        company_size: data.companySize,
-        emails: data.emails
-      }
-    },
-    true
-  );
+  const response = requestNew<IWorkspaceRes>({
+    url: 'workspace',
+    method: 'POST',
+    data: {
+      name: data.name,
+      company_size: data.companySize,
+      emails: data.emails
+    }
+  });
   return response;
 };
 
 export const getWorkspaceService = () => {
   return useQuery(['workspace'], async () => {
-    const data = await requestNew<IWorkspaceRes | undefined>(
-      {
-        url: 'workspace',
-        method: 'GET'
-      },
-      true
-    );
+    const data = await requestNew<IWorkspaceRes | undefined>({
+      url: 'workspace',
+      method: 'GET'
+    });
     return data;
   });
 };
 
 export const getAllWorkSpaceService = () => {
   return useQuery(['workspaces'], async () => {
-    const data = await requestNew<IAllWorkspacesRes | undefined>(
-      {
-        url: 'auth/account/workspaces',
-        method: 'GET'
-      },
-      true
-    );
+    const data = await requestNew<IAllWorkspacesRes | undefined>({
+      url: 'auth/account/workspaces',
+      method: 'GET'
+    });
     return data;
   });
 };
 
 export const checkIfWorkspaceService = async () => {
-  const response = requestNew(
-    {
-      url: 'user/self',
-      method: 'GET'
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'user/self',
+    method: 'GET'
+  });
   return response;
 };

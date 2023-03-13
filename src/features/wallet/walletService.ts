@@ -6,36 +6,30 @@ import { closeMenu } from '../hubs/hubSlice';
 import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 
 export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
-  const response = requestNew<ICreateWallet>(
-    {
-      url: '/wallets',
-      method: 'POST',
-      data: {
-        name: data.name,
-        hub_id: data.hubID,
-        parent_id: data.walletId
-      }
-    },
-    true
-  );
+  const response = requestNew<ICreateWallet>({
+    url: 'wallets',
+    method: 'POST',
+    data: {
+      name: data.name,
+      hub_id: data.hubID,
+      parent_id: data.walletId
+    }
+  });
   return response;
 };
 
 // // get wallets
 export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
-    const response = await requestNew<IWalletRes | undefined>(
-      {
-        url: '/wallets',
-        method: 'GET',
-        params: {
-          parent_id: currentWalletId //this returns for subwallet
-          // hub_id: //this is the hub id
-          // is_archived: //toggle archive
-        }
-      },
-      true
-    );
+    const response = await requestNew<IWalletRes | undefined>({
+      url: 'wallets',
+      method: 'GET',
+      params: {
+        parent_id: currentWalletId //this returns for subwallet
+        // hub_id: //this is the hub id
+        // is_archived: //toggle archive
+      }
+    });
     return response;
   });
 };
@@ -43,18 +37,15 @@ export const getWalletService = (currentWalletId: string | null) => {
 export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
   // const queryClient = useQueryClient();
   return useQuery(['wallet', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
-    requestNew<IWalletRes | undefined>(
-      {
-        url: 'wallets',
-        method: 'GET',
-        params: {
-          hub_id: data.hubId,
-          is_archived: data.Archived ? 1 : 0, // send is_archived query
-          parent_id: data.parentId //send wallet id for subwallet
-        }
-      },
-      true
-    )
+    requestNew<IWalletRes | undefined>({
+      url: 'wallets',
+      method: 'GET',
+      params: {
+        hub_id: data.hubId,
+        is_archived: data.Archived ? 1 : 0, // send is_archived query
+        parent_id: data.parentId //send wallet id for subwallet
+      }
+    })
   );
 };
 
@@ -64,18 +55,14 @@ export const UseEditWalletService = (data: {
   WalletId?: string | null;
   walletColor?: string | null;
 }) => {
-  const response = requestNew(
-    {
-      url: `wallets/${data.WalletId}`,
-      method: 'PUT',
-      params: {
-        name: data.walletName,
-        color: data.walletColor
-      }
-    },
-    true
-  );
-  console.log(response);
+  const response = requestNew({
+    url: `wallets/${data.WalletId}`,
+    method: 'PUT',
+    params: {
+      name: data.walletName,
+      color: data.walletColor
+    }
+  });
   return response;
 };
 
@@ -87,13 +74,10 @@ export const UseDeleteWalletService = (data: { query: string | null | undefined;
   return useQuery(
     ['wallets'],
     async () => {
-      const data = await requestNew(
-        {
-          url: `/wallets/${walletId}`,
-          method: 'DELETE'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `wallets/${walletId}`,
+        method: 'DELETE'
+      });
       return data;
     },
     {
@@ -114,13 +98,10 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
   return useQuery(
     ['wallet', walletId],
     async () => {
-      const data = await requestNew(
-        {
-          url: `/wallets/${walletId}/archive`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `wallets/${walletId}/archive`,
+        method: 'POST'
+      });
       return data;
     },
     {
@@ -140,13 +121,10 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew<IWalletDetailRes>(
-        {
-          url: `wallets/${query.activeItemId}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<IWalletDetailRes>({
+        url: `wallets/${query.activeItemId}`,
+        method: 'GET'
+      });
       return data;
     },
     {

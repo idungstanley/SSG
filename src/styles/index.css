@@ -48,7 +48,7 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 4px;
   height: 4px;
   padding: 0 20px;
   background-color: #fff;

@@ -7,17 +7,14 @@ export const useGetItemComments = (data: { type?: itemType | string; id?: string
   useQuery(
     ['comments', data.id],
     () =>
-      requestNew<ICommentsRes>(
-        {
-          url: 'comments',
-          method: 'GET',
-          params: {
-            type: data.type,
-            id: data.id
-          }
-        },
-        true
-      ),
+      requestNew<ICommentsRes>({
+        url: 'comments',
+        method: 'GET',
+        params: {
+          type: data.type,
+          id: data.id
+        }
+      }),
     {
       enabled: !!data.type && !!data.id,
       select: (comments) => comments.data.comments
@@ -25,18 +22,15 @@ export const useGetItemComments = (data: { type?: itemType | string; id?: string
   );
 
 const createItemComment = (data: { id: string; message: string; type: itemType | string }) => {
-  const request = requestNew(
-    {
-      url: 'comments',
-      method: 'POST',
-      data: {
-        message: data.message,
-        type: data.type,
-        id: data.id
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: 'comments',
+    method: 'POST',
+    data: {
+      message: data.message,
+      type: data.type,
+      id: data.id
+    }
+  });
   return request;
 };
 
@@ -51,13 +45,10 @@ export const useCreateItemComment = (id?: string | null) => {
 };
 
 const deleteItemComment = (data: { id: string }) => {
-  const request = requestNew(
-    {
-      url: `comments/${data.id}`,
-      method: 'DELETE'
-    },
-    true
-  );
+  const request = requestNew({
+    url: `comments/${data.id}`,
+    method: 'DELETE'
+  });
   return request;
 };
 
@@ -72,16 +63,13 @@ export const useDeleteItemComment = (id?: string | null) => {
 };
 
 const editItemComment = (data: { id: string; message: string }) => {
-  const request = requestNew(
-    {
-      url: `comments/${data.id}`,
-      method: 'PUT',
-      data: {
-        message: data.message
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: `comments/${data.id}`,
+    method: 'PUT',
+    data: {
+      message: data.message
+    }
+  });
   return request;
 };
 
