@@ -9,5 +9,5 @@ pipelines:
           - apt-get install -y sshpass
           # - npm install --force
           # - npm run build
-          - ssh -v -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'cd -p /var/www/alsodev_frontend/'
+          - ssh -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'cd /var/www/alsodev_frontend/ && pwd'
           - sshpass -p $SSH_PASSWORD scp -o StrictHostKeyChecking=no -r build/* $SSH_USER@$SSH_HOST:/var/www/alsodev_frontend/
