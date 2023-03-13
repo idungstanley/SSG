@@ -41,15 +41,15 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco --openssl-legacy-provider start",
+    "start": "craco start --openssl-legacy-provider",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint:check": "clear && eslint src/*/.{ts,tsx,js} --config .eslintrc.json",
+    "lint:check": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json",
     "ts:check": "clear && tsc --allowJS false --pretty --strict true",
-    "format:check": "clear && prettier --check src/*/.{ts,tsx,js,jsx} --config .prettierrc.json",
-    "format:fix": "clear && prettier --write src/*/.{ts,tsx,js,jsx} --config .prettierrc.json",
-    "lint:fix": "clear && eslint . --fix"
+    "format:check": "clear && prettier --check 'src/**/*.{ts,tsx,js}' --config .prettierrc.json",
+    "format:fix": "clear && prettier --write 'src/**/*.{ts,tsx,js}' --config .prettierrc.json",
+    "lint:fix": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json --fix"
   },
   "browserslist": {
     "production": [

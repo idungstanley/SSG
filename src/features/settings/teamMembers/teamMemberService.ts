@@ -13,17 +13,14 @@ export const useGetTeamMembers = (data: { page: number; query: string; isEnabled
     async () => {
       const url = 'settings/team-members';
 
-      return requestNew(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page: data.page,
-            search: data.query
-          }
-        },
-        true
-      );
+      return requestNew({
+        url,
+        method: 'GET',
+        params: {
+          page: data.page,
+          search: data.query
+        }
+      });
     },
     {
       enabled,
@@ -43,13 +40,10 @@ export const useGetTeamMember = (teamMemberId: string) => {
   return useQuery<ITeamMember>(
     ['team_member', teamMemberId],
     async () => {
-      const data = await requestNew<{ data: { team_member: ITeamMember } }>(
-        {
-          url: `settings/team-members/${teamMemberId}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<{ data: { team_member: ITeamMember } }>({
+        url: `settings/team-members/${teamMemberId}`,
+        method: 'GET'
+      });
       return data.data.team_member;
     },
     {
@@ -61,13 +55,10 @@ export const useGetTeamMember = (teamMemberId: string) => {
 
 // Deactivate team member service
 export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
-  const response = requestNew<{ data: { team_member: ITeamMember } }>(
-    {
-      url: `/settings/team-members/${data.teamMemberId}/deactivate`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew<{ data: { team_member: ITeamMember } }>({
+    url: `/settings/team-members/${data.teamMemberId}/deactivate`,
+    method: 'POST'
+  });
   return response;
 };
 
@@ -83,13 +74,10 @@ export function useDeactivateTeamMember(teamMemberId: string) {
 
 // Reactivate team member service
 export const reactivateTeamMemberService = async (data: { teamMemberId: string }) => {
-  const response = requestNew<{ data: { team_member: ITeamMember } }>(
-    {
-      url: `/settings/team-members/${data.teamMemberId}/reactivate`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew<{ data: { team_member: ITeamMember } }>({
+    url: `/settings/team-members/${data.teamMemberId}/reactivate`,
+    method: 'POST'
+  });
   return response;
 };
 
@@ -105,13 +93,10 @@ export function useReactivateTeamMember(teamMemberId: string) {
 
 // Remove team member
 export const removeTeamMemberService = async (data: { teamMemberId: string }) => {
-  const response = requestNew(
-    {
-      url: `/settings/team-members/${data.teamMemberId}/remove`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew({
+    url: `/settings/team-members/${data.teamMemberId}/remove`,
+    method: 'POST'
+  });
   return response;
 };
 

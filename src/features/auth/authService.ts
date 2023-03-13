@@ -9,17 +9,14 @@ const loginService = (data: { email: string; password: string }) => {
       token: { accessToken: string; token: { user_id: string } };
       user: IUser;
     };
-  }>(
-    {
-      url: 'auth/login',
-      method: 'POST',
-      data: {
-        email: data.email,
-        password: data.password
-      }
-    },
-    true
-  );
+  }>({
+    url: 'auth/login',
+    method: 'POST',
+    data: {
+      email: data.email,
+      password: data.password
+    }
+  });
   return response;
 };
 
@@ -35,17 +32,14 @@ const loginGoogleService = (data: { code: string; inviteCode?: string }) => {
       token: { accessToken: string; token: { user_id: string } };
       user: IUser;
     };
-  }>(
-    {
-      url: 'auth/social/google',
-      method: 'POST',
-      data: {
-        code: data.code,
-        invite_code: data.inviteCode
-      }
-    },
-    true
-  );
+  }>({
+    url: 'auth/social/google',
+    method: 'POST',
+    data: {
+      code: data.code,
+      invite_code: data.inviteCode
+    }
+  });
   return response;
 };
 
@@ -61,20 +55,17 @@ const registerService = (data: { name: string; email: string; password: string; 
       token: { accessToken: string; token: { user_id: string } };
       user: IUser;
     };
-  }>(
-    {
-      url: 'auth/register',
-      method: 'POST',
-      data: {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password,
-        invite_code: data.inviteCode
-      }
-    },
-    true
-  );
+  }>({
+    url: 'auth/register',
+    method: 'POST',
+    data: {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      password_confirmation: data.password,
+      invite_code: data.inviteCode
+    }
+  });
   return response;
 };
 
@@ -85,13 +76,10 @@ export const useRegisterService = () =>
 
 // Logout
 export const logoutService = () => {
-  const response = requestNew(
-    {
-      url: 'auth/logout',
-      method: 'GET'
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'auth/logout',
+    method: 'GET'
+  });
   return response;
 };
 

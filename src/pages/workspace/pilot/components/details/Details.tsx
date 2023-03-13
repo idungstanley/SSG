@@ -7,17 +7,15 @@ import DetailsSubTab from './DetailsSubTab';
 export const DetailOptions = [
   {
     id: 1,
-    element: <DetailsIndex />,
+    element: <DetailsIndex />
   },
   {
     id: 2,
-    element: <AddTo />,
-  },
+    element: <AddTo />
+  }
 ];
 export default function Details() {
-  const { activeSubDetailsTabId, showPilot } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeSubDetailsTabId, showPilot } = useAppSelector((state) => state.workspace);
   const selectedSubSection = useMemo(
     () => DetailOptions.find((option) => option.id === activeSubDetailsTabId),
     [activeSubDetailsTabId]

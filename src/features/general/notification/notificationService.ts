@@ -6,13 +6,10 @@ export const useGetNotificationService = () => {
   return useQuery(
     ['notification'],
     async () => {
-      const data = await requestNew<INotificationRes>(
-        {
-          url: 'notifications',
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<INotificationRes>({
+        url: 'notifications',
+        method: 'GET'
+      });
       return data?.data.notifications;
     }
 

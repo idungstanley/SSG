@@ -15,17 +15,14 @@ export const useGetTeamMembers = ({ query }: { query: string | number }) => {
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       const url = 'settings/team-members';
 
-      return requestNew<ITeamMembersRes>(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page: pageParam,
-            search: query
-          }
-        },
-        true
-      );
+      return requestNew<ITeamMembersRes>({
+        url,
+        method: 'GET',
+        params: {
+          page: pageParam,
+          search: query
+        }
+      });
     },
     {
       onSuccess: (data: InfiniteData<ITeamMembersRes>) => {

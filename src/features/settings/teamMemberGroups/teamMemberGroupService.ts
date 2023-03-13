@@ -13,16 +13,13 @@ export const useGetTeamMemberGroups = (page: number, notFetch?: boolean) => {
     async () => {
       const url = 'settings/team-member-groups';
 
-      return requestNew(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page
-          }
-        },
-        true
-      );
+      return requestNew({
+        url,
+        method: 'GET',
+        params: {
+          page
+        }
+      });
     },
     {
       enabled,
@@ -42,13 +39,10 @@ export const useGetTeamMemberGroup = (teamMemberGroupId?: string) => {
   return useQuery(
     ['team_member_group', teamMemberGroupId],
     async () => {
-      const data = await requestNew<ITeamMemberGroupsReq>(
-        {
-          url: `settings/team-member-groups/${teamMemberGroupId}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<ITeamMemberGroupsReq>({
+        url: `settings/team-member-groups/${teamMemberGroupId}`,
+        method: 'GET'
+      });
       return data.data.team_member_group;
     },
     {
@@ -60,31 +54,25 @@ export const useGetTeamMemberGroup = (teamMemberGroupId?: string) => {
 
 // Create team member group
 export const createTeamMemberGroupService = async (data: { name: string }) => {
-  const response = requestNew(
-    {
-      url: 'settings/team-member-groups',
-      method: 'POST',
-      params: {
-        name: data.name
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'settings/team-member-groups',
+    method: 'POST',
+    params: {
+      name: data.name
+    }
+  });
   return response;
 };
 
 // Update team member group service
 export const updateTeamMemberGroupService = async (data: { name: string; teamMemberGroupId?: string }) => {
-  const response = requestNew(
-    {
-      url: `settings/team-member-groups/${data.teamMemberGroupId}`,
-      method: 'PUT',
-      params: {
-        name: data.name
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: `settings/team-member-groups/${data.teamMemberGroupId}`,
+    method: 'PUT',
+    params: {
+      name: data.name
+    }
+  });
   return response;
 };
 
@@ -99,24 +87,18 @@ export const deleteTeamMemberGroupService = async (data: { teamMemberGroupId?: s
 
 // Remove team member from group service
 export const removeTeamMemberFromGroupService = async (data: { teamMemberGroupId: string; teamMemberId: string }) => {
-  const response = requestNew(
-    {
-      url: `settings/team-member-groups/${data.teamMemberGroupId}/remove-team-member/${data.teamMemberId}`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew({
+    url: `settings/team-member-groups/${data.teamMemberGroupId}/remove-team-member/${data.teamMemberId}`,
+    method: 'POST'
+  });
   return response;
 };
 
 // Add team member to group service
 export const addTeamMemberToGroupService = async (data: { teamMemberGroupId?: string; teamMemberId: string }) => {
-  const response = requestNew(
-    {
-      url: `settings/team-member-groups/${data.teamMemberGroupId}/add-team-member/${data.teamMemberId}`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew({
+    url: `settings/team-member-groups/${data.teamMemberGroupId}/add-team-member/${data.teamMemberId}`,
+    method: 'POST'
+  });
   return response;
 };

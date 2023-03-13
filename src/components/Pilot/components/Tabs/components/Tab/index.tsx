@@ -7,8 +7,8 @@ interface TabProps {
   id: number;
   label: string;
   icon: JSX.Element;
-  activeTabId: number;
-  setActiveTabId: (i: number) => void;
+  activeTabId: number | null;
+  setActiveTabId: (i: number | null) => void;
   showTabLabel: boolean;
 }
 
@@ -25,7 +25,7 @@ export default function Tab({ id, label, icon, activeTabId, setActiveTabId, show
   };
 
   const handleClick = (tabId: number) => {
-    setActiveTabId(tabId);
+    setActiveTabId(activeTabId === tabId ? null : tabId);
   };
 
   const isActiveTab = id === activeTabId;

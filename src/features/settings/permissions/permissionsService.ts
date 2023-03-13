@@ -9,13 +9,10 @@ export const useGetPermissionsList = () =>
     async () => {
       const url = 'settings/permissions';
 
-      const data = await requestNew<{ data: { permissions: IPermissionFromList[] } }>(
-        {
-          url,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<{ data: { permissions: IPermissionFromList[] } }>({
+        url,
+        method: 'GET'
+      });
 
       return data;
     },
@@ -31,13 +28,10 @@ export const useGetPermissionsValues = () => {
     async () => {
       const url = 'settings/permissions/roles';
 
-      const data = await requestNew<IPermissionsReq>(
-        {
-          url,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<IPermissionsReq>({
+        url,
+        method: 'GET'
+      });
 
       return data.data.values;
     },
@@ -99,17 +93,14 @@ export const changeRolePermissionService = (data: {
   workspacePermissionKey: string;
   isPermissionAllowed: number;
 }) => {
-  const response = requestNew<{ data: { updated_permissions: IPermission[] } }>(
-    {
-      url: 'settings/permissions/change-role-permission',
-      method: 'POST',
-      params: {
-        team_member_role_key: data.teamMemberRoleKey,
-        workspace_permission_key: data.workspacePermissionKey,
-        permission_allowed: data.isPermissionAllowed
-      }
-    },
-    true
-  );
+  const response = requestNew<{ data: { updated_permissions: IPermission[] } }>({
+    url: 'settings/permissions/change-role-permission',
+    method: 'POST',
+    params: {
+      team_member_role_key: data.teamMemberRoleKey,
+      workspace_permission_key: data.workspacePermissionKey,
+      permission_allowed: data.isPermissionAllowed
+    }
+  });
   return response;
 };

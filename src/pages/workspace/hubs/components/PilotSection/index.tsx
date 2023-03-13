@@ -7,7 +7,6 @@ import {
   SignalIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
@@ -15,9 +14,10 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { VscChecklist } from 'react-icons/vsc';
-import Checklists from '../../../pilot/components/checklist/components/Checklist';
-import Details from '../../../pilot/components/details/Details';
-import TimeClock from '../../../pilot/components/timeClock/TimeClock';
+import Details from './components/details/Details';
+import TimeClock from './components/TimeClock';
+import Checklists from './components/checklist/components/Checklist';
+import { useParams } from 'react-router-dom';
 
 const sections = [
   {
@@ -95,7 +95,6 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  console.log(activeItemName);
 
   // set data for pilot
   useEffect(() => {

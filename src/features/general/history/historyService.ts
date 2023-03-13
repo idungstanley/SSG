@@ -7,17 +7,14 @@ export const useGetItemHistory = (data: { type?: itemType; id?: string | null })
   useQuery<IHistoryRes, unknown, IActivityLog[]>(
     ['history', data.id],
     () =>
-      requestNew(
-        {
-          url: 'history',
-          method: 'GET',
-          params: {
-            type: data.type,
-            id: data.id
-          }
-        },
-        true
-      ),
+      requestNew({
+        url: 'history',
+        method: 'GET',
+        params: {
+          type: data.type,
+          id: data.id
+        }
+      }),
     {
       enabled: !!data.type && !!data.id,
       select: (res) => res.data.activity_logs
