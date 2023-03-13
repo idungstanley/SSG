@@ -9,6 +9,9 @@ interface checklistState {
   triggerAssignChecklistItem: boolean;
   triggerUnassignChecklistItem: boolean;
   showChecklistInput: boolean;
+  showChecklistItemInput: boolean;
+  openChecklistModal: boolean;
+  openedDisclosureId: string[];
 }
 
 const initialState: checklistState = {
@@ -19,7 +22,10 @@ const initialState: checklistState = {
   toggleAssignChecklistItemId: null,
   triggerAssignChecklistItem: false,
   triggerUnassignChecklistItem: false,
-  showChecklistInput: false
+  showChecklistItemInput: false,
+  showChecklistInput: false,
+  openChecklistModal: false,
+  openedDisclosureId: []
 };
 
 export const checklistSlice = createSlice({
@@ -49,6 +55,21 @@ export const checklistSlice = createSlice({
     },
     setShowChecklistInput(state, action: PayloadAction<boolean>) {
       state.showChecklistInput = action.payload;
+    },
+    setShowChecklistItemInput(state, action: PayloadAction<boolean>) {
+      state.showChecklistItemInput = action.payload;
+    },
+    setOpenChecklistModal(state, action: PayloadAction<boolean>) {
+      state.openChecklistModal = action.payload;
+    },
+    setOpenedDisclosureId(state, action: PayloadAction<string>) {
+      let newArr = [];
+      if (state.openedDisclosureId.includes(action.payload)) {
+        newArr = state.openedDisclosureId.filter((i) => i !== action.payload);
+      } else {
+        newArr = [...state.openedDisclosureId, action.payload];
+      }
+      state.openedDisclosureId = newArr;
     }
   }
 });
@@ -61,7 +82,10 @@ export const {
   setToggleAssignChecklistItemId,
   setTriggerAssignChecklistItem,
   setTriggerUnassignChecklistItem,
-  setShowChecklistInput
+  setShowChecklistInput,
+  setShowChecklistItemInput,
+  setOpenChecklistModal,
+  setOpenedDisclosureId
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

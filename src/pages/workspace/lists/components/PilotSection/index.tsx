@@ -77,7 +77,7 @@ const tabs = [
   },
   {
     id: 7,
-    label: 'Checklists',
+    label: 'Checklist',
     icon: <ClockIcon className="w-4 h-4" />
   }
 ];

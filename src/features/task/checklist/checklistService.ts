@@ -180,7 +180,7 @@ export const UseAssignChecklistItemService = ({
   triggerAssignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null | undefined;
+  itemId: string | null;
   team_member_id: string | null;
   triggerAssignChecklistItem: boolean;
 }) => {
@@ -197,8 +197,13 @@ export const UseAssignChecklistItemService = ({
     ],
     async () => {
       const data = await requestNew({
-        url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
-        method: 'POST'
+        url: '/assignee/assign',
+        method: 'POST',
+        params: {
+          team_member_id: team_member_id,
+          id: itemId,
+          type: 'checklist_item'
+        }
       });
       return data;
     },
@@ -207,7 +212,7 @@ export const UseAssignChecklistItemService = ({
         dispatch(setToggleAssignChecklistItemId(null));
         dispatch(setTriggerAssignChecklistItem(false));
         dispatch(setCurrTeamMemId(null));
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries(['checklist']);
       },
       // initialData: queryClient.getQueryData(["assign", team_member_id]),
       enabled: !!team_member_id && triggerAssignChecklistItem
@@ -222,7 +227,7 @@ export const UseUnAssignChecklistItemService = ({
   triggerUnassignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null | undefined;
+  itemId: string | null;
   team_member_id: string | null;
   triggerUnassignChecklistItem: boolean;
 }) => {
@@ -230,7 +235,7 @@ export const UseUnAssignChecklistItemService = ({
   const dispatch = useAppDispatch();
   return useQuery(
     [
-      'unassign',
+      'checklist',
       {
         team_member_id: team_member_id,
         itemId: itemId,
@@ -239,8 +244,13 @@ export const UseUnAssignChecklistItemService = ({
     ],
     async () => {
       const data = await requestNew({
-        url: `/checklists/${checklist_id}/item/${itemId}/unassign/${team_member_id}`,
-        method: 'POST'
+        url: '/assignee/unassign',
+        method: 'POST',
+        params: {
+          team_member_id: team_member_id,
+          id: itemId,
+          type: 'checklist_item'
+        }
       });
       return data;
     },
@@ -249,9 +259,8 @@ export const UseUnAssignChecklistItemService = ({
         dispatch(setToggleAssignChecklistItemId(null));
         dispatch(setCurrTeamMemId(null));
         dispatch(setTriggerUnassignChecklistItem(false));
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries(['checklist']);
       },
-      // initialData: queryClient.getQueryData(["unassign", team_member_id]),
       enabled: !!team_member_id && triggerUnassignChecklistItem
     }
   );

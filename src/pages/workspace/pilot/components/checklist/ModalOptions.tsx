@@ -1,67 +1,67 @@
-import React from "react";
-import { MdPersonOutline } from "react-icons/md";
-import { CgProfile } from "react-icons/cg";
-import { BsPencil } from "react-icons/bs";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { MdOutlineNoAccounts } from "react-icons/md";
-import { FiPlus } from "react-icons/fi";
+import React from 'react';
+import { MdPersonOutline } from 'react-icons/md';
+import { CgProfile } from 'react-icons/cg';
+import { BsPencil } from 'react-icons/bs';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { MdOutlineNoAccounts } from 'react-icons/md';
+import { FiPlus } from 'react-icons/fi';
 
 export const completeOptions = [
   {
     id: 1,
-    name: "New Item",
+    name: 'New Item',
     handleClick: () => ({}),
-    icon: <FiPlus />,
+    icon: <FiPlus />
   },
   {
     id: 2,
-    name: "Assign all",
+    name: 'Assign all',
     handleClick: () => ({}),
-    icon: <MdPersonOutline />,
+    icon: <MdPersonOutline />
   },
   {
     id: 3,
-    name: "Unassign all",
+    name: 'Unassign all',
     handleClick: () => ({}),
-    icon: <MdOutlineNoAccounts />,
+    icon: <MdOutlineNoAccounts />
   },
   {
     id: 4,
-    name: "Rename",
+    name: 'Rename',
     handleClick: () => ({}),
-    icon: <BsPencil />,
+    icon: <BsPencil />
   },
   {
     id: 5,
-    name: "Delete Checklist",
+    name: 'Delete Checklist',
     handleClick: () => ({}),
-    icon: <RiDeleteBin6Line />,
-  },
+    icon: <RiDeleteBin6Line />
+  }
 ];
 
 export const lessOptions = [
   {
     id: 1,
-    name: "Rename",
+    name: 'Rename',
     handleClick: () => ({}),
-    icon: <BsPencil />,
+    icon: <BsPencil />
   },
   {
     id: 2,
-    name: "Assign to",
+    name: 'Assign to',
     handleClick: () => ({}),
-    icon: <CgProfile />,
+    icon: <CgProfile />
   },
   {
     id: 3,
-    name: "Unassign",
+    name: 'Unassign',
     handleClick: () => ({}),
-    icon: <MdOutlineNoAccounts />,
+    icon: <MdOutlineNoAccounts />
   },
   {
     id: 4,
-    name: "Delete Item",
+    name: 'Delete Item',
     handleClick: () => ({}),
-    icon: <RiDeleteBin6Line />,
-  },
+    icon: <RiDeleteBin6Line />
+  }
 ];

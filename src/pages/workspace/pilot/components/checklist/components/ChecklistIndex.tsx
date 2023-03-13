@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
 import {
   UseCreateClistService,
-  // UseDeleteChecklistService,
   UseGetAllClistService
 } from '../../../../../../features/task/checklist/checklistService';
 import { Spinner } from '../../../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GoPlus } from 'react-icons/go';
-import SingleChecklist from '../SingleChecklist';
-import { useAppDispatch } from '../../../../../../app/hooks';
+// import SingleChecklist from '../SingleChecklist';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setShowChecklistInput } from '../../../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
-import ToolTip from '../../../../../../components/Tooltip';
+import Disclosures from './Disclosure';
+import { VscChecklist } from 'react-icons/vsc';
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>('Checklist');
@@ -54,16 +52,15 @@ export default function ChecklistIndex() {
 
   return status == 'success' ? (
     <div className="p-1">
-      <div className="border-2 flex justify-between items-center text-center py-2">
-        <h1 className="text-xl ml-8">Checklists</h1>
-        <div
-          className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
+      <div className="border-2 flex items-center text-center py-2 bg-white">
+        <VscChecklist className="w-6 h-6 ml-2" />
+        <h1 className="text-xl mx-6">Checklists</h1>
+        <button
+          className="p-0.5 border-blue-400 border-solid border-2 rounded-lg"
           onClick={() => dispatch(setShowChecklistInput(true))}
         >
-          <ToolTip tooltip="Add Checklist">
-            <GoPlus className="w-3 h-3" />
-          </ToolTip>
-        </div>
+          ADD
+        </button>
       </div>
       {showChecklistInput && (
         <form
@@ -86,7 +83,12 @@ export default function ChecklistIndex() {
       <div>
         {checkListData?.data.task.checklists.length > 0
           ? checkListData?.data.task.checklists.map((item) => {
-              return <SingleChecklist key={item.id} item={item} id={item.id} />;
+              return (
+                <>
+                  {/* <SingleChecklist key={item.id} item={item} id={item.id} /> */}
+                  <Disclosures item={item} />
+                </>
+              );
             })
           : 'This task has no Checklist, click on the plus sign to create one'}
       </div>
