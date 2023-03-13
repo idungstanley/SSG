@@ -16,13 +16,5 @@ export default function ProgressBar() {
     }
   }, [isFetching, isMutating]);
 
-  return (
-    <LoadingBar
-      color="#EF4444"
-      height={2.5}
-      waitingTime={100}
-      loaderSpeed={250}
-      ref={progressBarRef}
-    />
-  );
+  return <LoadingBar color="#EF4444" height={2.5} waitingTime={100} loaderSpeed={250} ref={progressBarRef} />;
 }

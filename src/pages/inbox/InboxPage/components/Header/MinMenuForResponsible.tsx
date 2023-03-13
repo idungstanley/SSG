@@ -1,10 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import {
-  ChevronDownIcon,
-  UserIcon,
-  UsersIcon,
-} from '@heroicons/react/24/solid';
+import { ChevronDownIcon, UserIcon, UsersIcon } from '@heroicons/react/24/solid';
 import ResponsibleData from '../ResponsibleData';
 
 export default function MinMenuForResponsible() {
@@ -18,9 +14,7 @@ export default function MinMenuForResponsible() {
         setShowResponsibleModal(!showResponsibleModal);
         setIsGroups(false);
       },
-      icon: (
-        <UserIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-      ),
+      icon: <UserIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
     },
     {
       label: 'member groups',
@@ -28,22 +22,14 @@ export default function MinMenuForResponsible() {
         setShowResponsibleModal(!showResponsibleModal);
         setIsGroups(true);
       },
-      icon: (
-        <UsersIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
-      ),
-    },
+      icon: <UsersIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+    }
   ];
 
   return (
     <>
       {showResponsibleModal && isGroups !== null ? (
-        <ResponsibleData
-          setShowModal={setShowResponsibleModal}
-          isGroups={isGroups}
-        />
+        <ResponsibleData setShowModal={setShowResponsibleModal} isGroups={isGroups} />
       ) : null}
 
       <div className="inline-flex rounded-md shadow-sm bg-white">
@@ -75,9 +61,7 @@ export default function MinMenuForResponsible() {
                         className="flex whitespace-nowrap cursor-pointer items-center hover:bg-gray-100 px-3"
                       >
                         {item.icon}
-                        <p className="block py-2 text-sm text-gray-700">
-                          {item.label}
-                        </p>
+                        <p className="block py-2 text-sm text-gray-700">{item.label}</p>
                       </div>
                     )}
                   </Menu.Item>

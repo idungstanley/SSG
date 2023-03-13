@@ -173,7 +173,7 @@ export interface IInboxMember {
   id: string;
   access_level: {
     name: string;
-    key: string
+    key: string;
   };
   team_member_group_id: string;
   team_member_group: {

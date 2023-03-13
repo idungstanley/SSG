@@ -5,9 +5,7 @@ import InboxIndex from '../../Index/InboxIndex';
 import { useAppSelector } from '../../../app/hooks';
 
 export default function SHubDropdownList() {
-  const { currSubHubId, currSubHubIdType } = useAppSelector(
-    (state) => state.hub
-  );
+  const { currSubHubId, currSubHubIdType } = useAppSelector((state) => state.hub);
 
   return currSubHubIdType === 'subhub' ? (
     <>

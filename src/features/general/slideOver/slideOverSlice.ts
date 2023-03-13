@@ -7,14 +7,7 @@ type itemAction = {
   name?: string;
 };
 
-type HubItemType =
-  | 'hub'
-  | 'subHub'
-  | 'wallet'
-  | 'subwallet'
-  | 'sub2wallet'
-  | 'list'
-  | 'task';
+type HubItemType = 'hub' | 'subHub' | 'wallet' | 'subwallet' | 'sub2wallet' | 'list' | 'task';
 
 type Watchers = {
   show: boolean;
@@ -99,35 +92,23 @@ const initialState: SideOverState = {
   shareSideOver: { show: false },
   pilotSideOver: { show: false },
   pilotSideOverHub: { show: true },
-  itemActionForSideOver: null,
+  itemActionForSideOver: null
 };
 
 export const slideOverSlice = createSlice({
   name: 'slideOver',
   initialState,
   reducers: {
-    setShowCreateDirectorySlideOver: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setShowCreateDirectorySlideOver: (state, action: PayloadAction<boolean>) => {
       state.showCreateDirectorySlideOver = action.payload;
     },
-    setItemActionForSideOver: (
-      state,
-      action: PayloadAction<itemAction | null>
-    ) => {
+    setItemActionForSideOver: (state, action: PayloadAction<itemAction | null>) => {
       state.itemActionForSideOver = action.payload;
     },
-    setCreateInboxSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateInboxSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateInboxSlideOver = action.payload;
     },
-    setCreateHubSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateHubSlideOver = action.payload;
     },
     setEditListSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
@@ -136,88 +117,46 @@ export const slideOverSlice = createSlice({
     setEditHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showEditHubSlideOver = action.payload;
     },
-    setCreateWalletSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateWalletSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateWalletSlideOver = action.payload;
     },
-    setCreateSubWalletSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateSubWalletSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateSubWalletSlideOver = action.payload;
     },
-    setCreateSubHubSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateSubHubSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateSubHubSlideOver = action.payload;
     },
-    setEditWalletSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setEditWalletSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showEditWalletSlideOver = action.payload;
     },
-    setCreateListSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateListSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateListSlideOver = action.payload;
     },
-    setCreateTaskSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateTaskSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateTaskSlideOver = action.payload;
     },
-    setAssignInboxFileSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setAssignInboxFileSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showAssignInboxFileSlideOver = action.payload;
     },
-    setCreateFolderSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateFolderSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateFolderSlideOver = action.payload;
     },
-    setInviteTeamMemberSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setInviteTeamMemberSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showInviteTeamMemberSlideOver = action.payload;
     },
-    setMyWorkspacesSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setMyWorkspacesSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showMyWorkspacesSlideOver = action.payload;
     },
-    setCreateTeamMemberGroupSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setCreateTeamMemberGroupSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showCreateTeamMemberGroupSlideOver = action.payload;
     },
-    setAddGroupTeamMemberSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setAddGroupTeamMemberSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showAddGroupTeamMemberSlideOver = action.payload;
     },
-    setRenameFileSlideOverVisibility: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setRenameFileSlideOverVisibility: (state, action: PayloadAction<boolean>) => {
       state.showRenameFileSlideOver = action.payload;
     },
-    setShowAddTeamMembersOrGroupsSideOver: (
-      state,
-      action: PayloadAction<boolean>
-    ) => {
+    setShowAddTeamMembersOrGroupsSideOver: (state, action: PayloadAction<boolean>) => {
       state.showAddTeamMembersOrGroupsSideOver = action.payload;
     },
     setShowWatchersSideOver: (state, action: PayloadAction<Watchers>) => {
@@ -234,8 +173,8 @@ export const slideOverSlice = createSlice({
     },
     setShowPilotSideOverHub: (state, action: PayloadAction<PilotHub>) => {
       state.pilotSideOverHub = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -263,7 +202,7 @@ export const {
   setShowShareSideOver,
   setShowPilotSideOver,
   setShowPilotSideOverHub,
-  setCreateSubHubSlideOverVisibility,
+  setCreateSubHubSlideOverVisibility
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

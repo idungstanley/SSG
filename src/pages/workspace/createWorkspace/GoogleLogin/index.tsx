@@ -21,16 +21,13 @@ export default function GoogleLogin({ title }: GoogleLoginProps) {
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(default_workspace_id)
-      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(default_workspace_id));
       dispatch(
         setAuthData({
           user,
           accessToken,
           currentWorkspaceId: default_workspace_id,
-          currentUserId: user_id,
+          currentUserId: user_id
         })
       );
     }
@@ -40,11 +37,11 @@ export default function GoogleLogin({ title }: GoogleLoginProps) {
     flow: 'auth-code',
     onSuccess: (tokenResponse) => {
       onGoogleLogin({
-        code: tokenResponse.code,
+        code: tokenResponse.code
       });
     },
     // eslint-disable-next-line no-console
-    onError: (errorResponse) => console.error(errorResponse),
+    onError: (errorResponse) => console.error(errorResponse)
   });
 
   return (

@@ -17,7 +17,7 @@ export const avatarBg: avatarType[] = [
   { colour: 'brown' },
   { colour: 'gray' },
   { colour: 'gold' },
-  { colour: 'pink' },
+  { colour: 'pink' }
 ];
 
 export const companySizeBtn: companyArrayType[] = [
@@ -25,5 +25,5 @@ export const companySizeBtn: companyArrayType[] = [
   { label: '2-5', value: '2' },
   { label: '6-10', value: '6' },
   { label: '10-25', value: '10' },
-  { label: 'I dont know', value: 'null' },
+  { label: 'I dont know', value: 'null' }
 ];

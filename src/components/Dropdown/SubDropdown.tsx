@@ -1,24 +1,18 @@
-import React, { useEffect, useRef } from "react";
-import {
-  DocumentDuplicateIcon,
-  StarIcon,
-  PlusIcon,
-  LinkIcon,
-  SwatchIcon,
-} from "@heroicons/react/24/outline";
-import { useAppSelector } from "../../app/hooks";
-import { useDispatch } from "react-redux";
-import { FaFolder } from "react-icons/fa";
-import { AiOutlineUnorderedList } from "react-icons/ai";
-import hubIcon from "../../assets/branding/hub.svg";
+import React, { useEffect, useRef } from 'react';
+import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
+import { useAppSelector } from '../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { FaFolder } from 'react-icons/fa';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
+import hubIcon from '../../assets/branding/hub.svg';
 import {
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
-  setCreateWalletSlideOverVisibility,
-} from "../../features/general/slideOver/slideOverSlice";
-import { getSubMenu } from "../../features/hubs/hubSlice";
+  setCreateWalletSlideOverVisibility
+} from '../../features/general/slideOver/slideOverSlice';
+import { getSubMenu } from '../../features/hubs/hubSlice';
 
 interface itemsType {
   id: number;
@@ -30,9 +24,7 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType, SubMenuType, SubMenuId } = useAppSelector(
-    (state) => state.hub
-  );
+  const { showMenuDropdownType, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
   const {
     showCreateSubWalletSlideOver,
     showEditHubSlideOver,
@@ -42,16 +34,12 @@ export default function SubDropdown() {
     showCreateSubHubSlideOver,
     showCreateWalletSlideOver,
     showCreateTaskSlideOver,
-    showCreateListSlideOver,
+    showCreateListSlideOver
   } = useAppSelector((state) => state.slideOver);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
-      if (
-        SubMenuId != null &&
-        ref.current &&
-        !ref.current.contains(e.target as HTMLButtonElement)
-      ) {
+      if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
         if (
           showCreateSubWalletSlideOver === false &&
           showCreateHubSlideOver === false &&
@@ -67,15 +55,15 @@ export default function SubDropdown() {
           dispatch(
             getSubMenu({
               SubMenuId: null,
-              SubMenuType: null,
+              SubMenuType: null
             })
           );
         }
       }
     };
-    document.addEventListener("click", checkClickedOutSide);
+    document.addEventListener('click', checkClickedOutSide);
     return () => {
-      document.removeEventListener("click", checkClickedOutSide);
+      document.removeEventListener('click', checkClickedOutSide);
     };
   }, [
     SubMenuId,
@@ -87,43 +75,34 @@ export default function SubDropdown() {
     showEditHubSlideOver,
     showEditListSlideOver,
     showEditWalletSlideOver,
-    showCreateListSlideOver,
+    showCreateListSlideOver
   ]);
   const itemsList: itemsType[] = [
     {
       id: 1,
-      title: "Sub Hub",
+      title: 'Sub Hub',
       handleClick: () => {
         dispatch(setCreateSubHubSlideOverVisibility(true));
       },
       icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
-      isVisible:
-        showMenuDropdownType == "hubs"
-          ? true
-          : false || SubMenuType == "hubs"
-          ? true
-          : false,
+      isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
     },
     {
       id: 2,
       title:
-        (SubMenuType === "wallet"
-          ? "Sub Wallet"
-          : SubMenuType === "subwallet2"
-          ? "Sub Wallet"
-          : "Wallet") ||
-        (showMenuDropdownType === "wallet"
-          ? "Sub Wallet"
-          : showMenuDropdownType === "subwallet2"
-          ? "Sub Wallet"
-          : "Wallet") ||
-        (showMenuDropdownType === "subwallet" ? "Sub Wallet" : "Wallet"),
+        (SubMenuType === 'wallet' ? 'Sub Wallet' : SubMenuType === 'subwallet2' ? 'Sub Wallet' : 'Wallet') ||
+        (showMenuDropdownType === 'wallet'
+          ? 'Sub Wallet'
+          : showMenuDropdownType === 'subwallet2'
+          ? 'Sub Wallet'
+          : 'Wallet') ||
+        (showMenuDropdownType === 'subwallet' ? 'Sub Wallet' : 'Wallet'),
       handleClick: () => {
         if (
-          SubMenuType !== "wallet" &&
-          SubMenuType !== "subwallet2" &&
-          showMenuDropdownType !== "wallet" &&
-          showMenuDropdownType !== "subwallet2"
+          SubMenuType !== 'wallet' &&
+          SubMenuType !== 'subwallet2' &&
+          showMenuDropdownType !== 'wallet' &&
+          showMenuDropdownType !== 'subwallet2'
         ) {
           dispatch(setCreateWalletSlideOverVisibility(true));
         } else {
@@ -132,68 +111,62 @@ export default function SubDropdown() {
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
-        showMenuDropdownType == "list" ||
-        showMenuDropdownType == "subwallet3" ||
-        SubMenuType === "subwallet3"
+        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
           ? false
-          : true,
+          : true
     },
     {
       id: 3,
-      title: "Task",
+      title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
       },
-      icon: (
-        <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
-      ),
-      isVisible: showMenuDropdownType == "list" ? true : false,
+      icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      isVisible: showMenuDropdownType == 'list' ? true : false
     },
     {
       id: 4,
-      title: "List",
+      title: 'List',
       handleClick: () => {
         dispatch(setCreateListSlideOverVisibility(true));
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === "list" ? false : true,
+      isVisible: showMenuDropdownType === 'list' ? false : true
     },
     {
       id: 5,
-      title: "Sprint",
+      title: 'Sprint',
       handleClick: () => ({}),
-      icon: (
-        <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />
-      ),
-      isVisible: true,
+      icon: <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      isVisible: true
     },
     {
       id: 6,
-      title: "Folder",
+      title: 'Folder',
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: false,
+      isVisible: false
     },
     {
       id: 7,
-      title: "From Template",
+      title: 'From Template',
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true,
+      isVisible: true
     },
     {
       id: 8,
-      title: "Import",
+      title: 'Import',
       handleClick: () => ({}),
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true,
-    },
+      isVisible: true
+    }
   ];
   return (
     <div className="" ref={ref}>
       <div
         className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{ boxShadow: "0 1px 10px #00000040", minWidth: "200px" }}
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px' }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (

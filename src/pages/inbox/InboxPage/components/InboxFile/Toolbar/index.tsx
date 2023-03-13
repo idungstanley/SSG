@@ -2,10 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRightCircleIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
-import {
-  useGetInboxFile,
-  fileInboxFileService,
-} from '../../../../../../features/inbox/inboxService';
+import { useGetInboxFile, fileInboxFileService } from '../../../../../../features/inbox/inboxService';
 import { Button } from '../../../../../../components';
 import MinMenu from './components/minMenu';
 import NavigationBetweenFiles from './components/navigationBetweenFiles';
@@ -22,34 +19,25 @@ function Toolbar() {
 
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
 
-  const folderIdsForFiling = useAppSelector(
-    (state) => state.inbox.folderIdsForFiling
-  );
+  const folderIdsForFiling = useAppSelector((state) => state.inbox.folderIdsForFiling);
 
   const fileInboxFileMutation = useMutation(fileInboxFileService, {
     onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['inbox_file', data.data.inbox_file.id],
-        data.data.inbox_file
-      );
-      queryClient.invalidateQueries([
-        'inbox_files',
-        data.data.inbox_file.inbox_id,
-        { isArchived: 0 },
-      ]);
+      queryClient.setQueryData(['inbox_file', data.data.inbox_file.id], data.data.inbox_file);
+      queryClient.invalidateQueries(['inbox_files', data.data.inbox_file.inbox_id, { isArchived: 0 }]);
       queryClient.invalidateQueries(['inboxes_unfiled_count']);
-    },
+    }
   });
 
   const fileDocument = async () => {
     await fileInboxFileMutation.mutateAsync({
       folderIds: folderIdsForFiling,
-      inboxFileId: inboxFile?.id,
+      inboxFileId: inboxFile?.id
     });
     dispatch(
       setCurrentInboxFile({
         inboxFileId: null,
-        inboxFileIndex: 1,
+        inboxFileIndex: 1
       })
     );
   };
@@ -60,10 +48,7 @@ function Toolbar() {
       <div className="min-h-0 flex-1 flex">
         {/* Main area */}
         <main className="min-w-0 flex-1 border-gray-200 xl:flex">
-          <section
-            aria-labelledby="message-heading"
-            className="min-w-0 flex-1 h-full flex flex-col xl:order-last"
-          >
+          <section aria-labelledby="message-heading" className="min-w-0 flex-1 h-full flex flex-col xl:order-last">
             {/* Top section */}
             <div className="flex-shrink-0 bg-white border-b border-gray-200">
               {/* Toolbar */}
@@ -80,14 +65,12 @@ function Toolbar() {
                           dispatch(
                             setSelectedItem({
                               id: selectedInboxFileId || '',
-                              type: 'inbox_file',
+                              type: 'inbox_file'
                             })
                           )
                         }
                         label="Chat"
-                        icon={
-                          <ChatBubbleBottomCenterIcon className="h-5 w-5" aria-hidden="true" />
-                        }
+                        icon={<ChatBubbleBottomCenterIcon className="h-5 w-5" aria-hidden="true" />}
                         iconPosition="right"
                       />
                       <DeleteFile />
@@ -96,12 +79,7 @@ function Toolbar() {
                         onClick={fileDocument}
                         loading={fileInboxFileMutation.status === 'loading'}
                         label="File document"
-                        icon={
-                          <ArrowRightCircleIcon
-                            className="ml-2.5 mr-2 h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        }
+                        icon={<ArrowRightCircleIcon className="ml-2.5 mr-2 h-5 w-5" aria-hidden="true" />}
                         iconPosition="right"
                         width="w-48"
                         disabled={inboxFile.status === 'filed'}

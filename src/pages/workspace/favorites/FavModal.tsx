@@ -1,12 +1,12 @@
-import React, { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { BsThreeDots } from "react-icons/bs";
-import { useAppDispatch } from "../../../app/hooks";
+import React, { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { BsThreeDots } from 'react-icons/bs';
+import { useAppDispatch } from '../../../app/hooks';
 import {
   // setDelFavId,
-  setShowFavEditInput,
-} from "../../../features/hubs/hubSlice";
-import { useUnfavoriteEntity } from "../../../features/hubs/hubService";
+  setShowFavEditInput
+} from '../../../features/hubs/hubSlice';
+import { useUnfavoriteEntity } from '../../../features/hubs/hubService';
 // import { UseDeleteFav } from "../../../features/hubs/hubService";
 
 export default function FavModal({ id }: { id: string }) {
@@ -14,21 +14,21 @@ export default function FavModal({ id }: { id: string }) {
   const options = [
     {
       id: 1,
-      name: "Unfavorite",
+      name: 'Unfavorite'
     },
     {
       id: 2,
-      name: "Rename",
-    },
+      name: 'Rename'
+    }
   ];
 
   const { mutate: onUnfavorite } = useUnfavoriteEntity();
 
   const handleClick = (name: string) => {
-    if (name === "Unfavorite") {
+    if (name === 'Unfavorite') {
       // dispatch(setDelFavId(id));
       onUnfavorite({
-        delFav: id,
+        delFav: id
       });
     } else {
       dispatch(setShowFavEditInput(id));
@@ -36,7 +36,7 @@ export default function FavModal({ id }: { id: string }) {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left absolute group">
+    <Menu as="div" className="relative inline-block text-left group">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           <BsThreeDots className="cursor-pointer opacity-0 group-hover:opacity-100" />
@@ -59,10 +59,7 @@ export default function FavModal({ id }: { id: string }) {
                   className="flex items-center text-gray-600 hover:bg-gray-300"
                   onClick={() => handleClick(option.name)}
                 >
-                  <button
-                    type="button"
-                    className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
-                  >
+                  <button type="button" className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left">
                     <p>{option.name}</p>
                   </button>
                 </div>

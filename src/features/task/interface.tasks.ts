@@ -1,7 +1,34 @@
+import { ImyTaskData, ImyTaskData2 } from './taskSlice';
+
 export interface UpdateTaskProps {
-  task_id: string | null;
+  task_id: string | null | undefined;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
+}
+
+export interface IParent {
+  hubs: Array<{ id: string; name: string; parent_id: string | null }> | [];
+  lists: Array<{ id: string; name: string; parent_id: string | null }> | [];
+  wallets: Array<{ id: string; name: string; parent_id: string | null }> | [];
+}
+
+export interface TaskDataGroupingsProps {
+  [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData2[] } | undefined;
+}
+
+export interface ICheckListItems {
+  id: string;
+  name: string;
+  is_done: number;
+  assignees: [{ id: string; initials: string; colour: string }];
+  group_assignees: [];
+  tags: [];
+}
+
+export interface ICheckListRes {
+  id: string;
+  name: string;
+  items: ICheckListItems[];
 }
 
 export interface ITaskFullList {
@@ -23,20 +50,38 @@ export interface ITaskFullList {
   archived_at: null;
   deleted_at: null;
   directory_items: [];
+  checklists: ICheckListRes[];
   list: {
     id: string;
     name: string;
-    parents: {
-      hubs: [
-        {
-          id: string;
-          name: string;
-          parent_id: null;
-        }
-      ];
-      wallets: [];
-      lists: [];
-    };
+    parents: IParent;
+  };
+}
+
+export interface IPaginator {
+  page: number;
+  per_page: number;
+  has_more_pages: boolean;
+}
+
+export interface IFullTaskRes {
+  data: {
+    tasks: ITaskFullList[];
+    paginator: IPaginator;
+  };
+}
+
+export interface IFullTaskRes2 {
+  data: {
+    tasks: ImyTaskData[];
+    paginator: IPaginator;
+  };
+}
+
+export interface ITaskListRes {
+  data: {
+    tasks: ImyTaskData[];
+    paginator: IPaginator;
   };
 }
 
@@ -52,4 +97,30 @@ export interface GroupedTaskType {
 
 export interface KeyItemTypes {
   ['list_id']: GroupedTaskType;
+}
+
+export interface ITaskRes {
+  data: {
+    task: ITaskFullList;
+  };
+}
+
+export interface IEntries {
+  id: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  description: string;
+}
+
+export interface ITimeEntriesRes {
+  data: {
+    time_entries: IEntries[];
+    total_duration: number;
+    pagination: {
+      page: number;
+      per_page: number;
+      has_more_pages: boolean;
+    };
+  };
 }

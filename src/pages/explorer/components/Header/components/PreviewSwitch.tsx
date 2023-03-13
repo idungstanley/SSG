@@ -2,10 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { Switch } from '@headlessui/react';
 import { cl } from '../../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import {
-  useGetUserSettingsKeys,
-  useSetUserSettingsKeys,
-} from '../../../../../features/account/accountService';
+import { useGetUserSettingsKeys, useSetUserSettingsKeys } from '../../../../../features/account/accountService';
 import { setAccountSettings } from '../../../../../features/account/accountSlice';
 
 const showPreviewFromLS = localStorage.getItem('showPreview');
@@ -21,7 +18,7 @@ function PreviewSwitch() {
   useEffect(() => {
     // if request sended, add values from it to localStorage and store
     if (data) {
-      const value = JSON.parse(data?.value.showPreview || 'false');
+      const value = JSON.parse(data?.value.showPreview || 'false') as boolean;
       dispatch(setAccountSettings({ ...settings, showPreview: value }));
 
       localStorage.setItem('showPreview', JSON.stringify(value));

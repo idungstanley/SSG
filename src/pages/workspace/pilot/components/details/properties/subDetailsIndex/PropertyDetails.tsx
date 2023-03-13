@@ -3,61 +3,55 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 import ToolTip from '../../../../../../../components/Tooltip';
-import Status from '../status/Status';
-import Priority from '../priority/Priority';
+// import Status from '../status/Status';
+// import Priority from '../priority/Priority';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
+import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
+import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
 
 export interface tagItem {
-  id: string,
-  name: string,
-  color: string
+  id: string;
+  name: string;
+  color: string;
 }
 interface PropertyDetailsProps {
-  Details: {
-    id: string;
-    name: string;
-    description: string;
-    created_at: string;
-    status: string;
-    priority: string;
-    tags: [tagItem[]]
-  };
+  Details: IHubDetails | undefined | ITaskFullList;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const groupTags = (arr: tagItem[]| [tagItem[]]) => {
-    return arr?.map((item) => {
-      return Array.isArray(item) ? (
-        <span className="flex">{groupTags(item)}</span>
-      ) : (
-        <>
-          <span
-            className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
-              item.name.length > 10 ? 'object-contain' : 'w-20'
-            }`}
-            style={{ backgroundColor: `${item.color}` }}
-          >
-            {item.name}
-          </span>
-        </>
-      );
-    });
-  };
+  // const groupTags = (arr: tagItem[] | [tagItem[]]) => {
+  //   return arr?.map((item) => {
+  //     return Array.isArray(item) ? (
+  //       <span className="flex">{groupTags(item)}</span>
+  //     ) : (
+  //       <>
+  //         <span
+  //           className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
+  //             item.name.length > 10 ? 'object-contain' : 'w-20'
+  //           }`}
+  //           style={{ backgroundColor: `${item.color}` }}
+  //         >
+  //           {item.name}
+  //         </span>
+  //       </>
+  //     );
+  //   });
+  // };
 
   return (
     <>
       <div className="flex items-center justify-between p-2">
-        <section className="flex items-center space-x-3">
+        {/* <section className="flex items-center space-x-3">
           <Status Details={Details} />
           <ToolTip tooltip="Priority">
             <Priority Details={Details} />
           </ToolTip>
-        </section>
+        </section> */}
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
@@ -75,20 +69,14 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           <Subscribers />
         </ToolTip>
         <span className="text-gray-300">|</span>
-        <AvatarWithInitials
-          initials="DN"
-          backgroundColour="blue"
-          roundedStyle="rounded"
-          height="h-5"
-          width="w-5"
-        />
+        <AvatarWithInitials initials="DN" backgroundColour="blue" roundedStyle="rounded" height="h-5" width="w-5" />
       </section>
       <section className="p-2" key={Details?.id}>
         {/* tags */}
         <div id="tags" className="mt-2">
           <label className="text-xs text-gray-500">Tags</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p> {groupTags(Details?.tags)}</p>
+            {/* <p> {groupTags(Details?.tags)}</p> */}
           </div>
         </div>
         {/* name */}

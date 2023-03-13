@@ -11,13 +11,11 @@ import { useAppSelector } from '../../../../app/hooks';
 export default function TeamMembersPage() {
   const dispatch = useDispatch();
 
-  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector(
-    (state) => state.teamMember
-  );
+  const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
 
   const { status } = useGetTeamMembers({
     page: teamMembersPaginationPage,
-    query: teamMembersSearchQuery,
+    query: teamMembersSearchQuery
   });
 
   const onChange = (value: string) => {

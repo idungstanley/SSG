@@ -17,7 +17,7 @@ const initialState: ChatState = {
   showChat: false,
   showMembersInChatSideOver: false,
   showCreateChatSideOver: false,
-  selectedItem: null,
+  selectedItem: null
 };
 
 export const chatSlice = createSlice({
@@ -37,15 +37,11 @@ export const chatSlice = createSlice({
       state.selectedItem = action.payload;
 
       state.showChat = !!state.selectedItem;
-    },
-  },
+    }
+  }
 });
 
-export const {
-  setShowChat,
-  setShowMembersInChatSideOver,
-  setShowCreateChatSideOver,
-  setSelectedItem,
-} = chatSlice.actions;
+export const { setShowChat, setShowMembersInChatSideOver, setShowCreateChatSideOver, setSelectedItem } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

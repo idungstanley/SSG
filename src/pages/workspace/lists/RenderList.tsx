@@ -1,35 +1,36 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { getTaskListService } from "../../../features/task/taskService";
-import ListNav from "./components/renderlist/ListNav";
-import { useAppSelector } from "../../../app/hooks";
-import { useDispatch } from "react-redux";
-import { setAddNewTaskItem } from "../../../features/task/taskSlice";
-import TaskListViews from "../tasks/component/views/TaskListViews";
-import AddNewItem from "../tasks/component/taskColumn/AddNewItem";
-import TaskData from "../tasks/component/taskData/TaskData";
-import TaskQuickAction from "../tasks/component/taskQuickActions/TaskQuickAction";
-import SubTask from "../tasks/subtasks/create/SubTask";
-import RenderSubTasks from "../tasks/subtasks/subtask1/RenderSubTasks";
-import ListFilter from "./components/renderlist/listDetails/ListFilter";
-import Board from "../tasks/component/views/Board";
-import TaskTableView from "../tasks/component/views/TaskTableView";
-import PageWrapper from "../../../components/PageWrapper";
-import PilotSection, { pilotConfig } from "./components/PilotSection";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { getTaskListService } from '../../../features/task/taskService';
+import ListNav from './components/renderlist/ListNav';
+import { useAppSelector } from '../../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { setAddNewTaskItem } from '../../../features/task/taskSlice';
+import TaskListViews from '../tasks/component/views/TaskListViews';
+import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
+import TaskData from '../tasks/component/taskData/TaskData';
+import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
+import SubTask from '../tasks/subtasks/create/SubTask';
+import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
+import ListFilter from './components/renderlist/listDetails/ListFilter';
+import Board from '../tasks/component/views/Board';
+import TaskTableView from '../tasks/component/views/TaskTableView';
+import PageWrapper from '../../../components/PageWrapper';
+import PilotSection, { pilotConfig } from './components/PilotSection';
 
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
   const {
-    myTaskData,
+    // myTaskData,
     tableView,
     listView,
     boardView,
     addNewTaskItem,
     closeTaskListView,
     currentParentTaskId,
-    getSubTaskId,
+    getSubTaskId
   } = useAppSelector((state) => state.task);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
@@ -45,7 +46,7 @@ function RenderList() {
         header={
           <section id="nav" className="capitalize ">
             <ListNav
-              navName={listDetailsData?.data?.list?.name}
+              navName={activeItemName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
@@ -55,12 +56,9 @@ function RenderList() {
         }
       >
         <div className="w-full overflow-y-scroll ">
-          <div
-            className="block p-2 border-2 border-gray-200"
-            style={{ backgroundColor: "#e1e4e5" }}
-          >
+          <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
             {listView && <ListFilter />}
-            {listView && <TaskQuickAction listDetailsData={listDetailsData} />}
+            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}
@@ -68,11 +66,7 @@ function RenderList() {
             {/* BoardView */}
             {boardView && <ListFilter />}
             {boardView && (
-              <div
-                className={`" ml-10" ${
-                  show === false ? "fgoverflow2" : "fgoverflow"
-                }`}
-              >
+              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>
                 <Board />
               </div>
             )}
@@ -80,7 +74,7 @@ function RenderList() {
             {/* card */}
             {listView && <TaskListViews />}
             {listView &&
-              myTaskData?.map((task) => (
+              listDetailsData?.data.tasks.map((task) => (
                 <div key={task.id}>
                   {closeTaskListView && <TaskData task={task} />}
 
@@ -96,14 +90,8 @@ function RenderList() {
             {/* toggle */}
             {addNewTaskItem && <AddNewItem listId={listId} />}
             {listView && (
-              <div
-                className=""
-                id="newItem"
-                onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}
-              >
-                <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">
-                  + New Task
-                </p>
+              <div className="" id="newItem" onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}>
+                <p className="w-20 pl-2 mt-1 ml-10 text-xs font-semibold text-gray-400 cursor-pointer">+ New Task</p>
               </div>
             )}
           </div>

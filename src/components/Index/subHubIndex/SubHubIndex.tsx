@@ -1,25 +1,21 @@
-import React, { MouseEvent, useState } from "react";
-import { useGetSubHub } from "../../../features/hubs/hubService";
-import { useAppSelector } from "../../../app/hooks";
-import { useDispatch } from "react-redux";
+import React, { MouseEvent, useState } from 'react';
+import { useGetSubHub } from '../../../features/hubs/hubService';
+import { useAppSelector } from '../../../app/hooks';
+import { useDispatch } from 'react-redux';
 import {
   closeMenu,
   getCurrHubId,
   getCurrSubHubId,
   getPrevName,
   setHubParentId,
-  setshowMenuDropdown,
-} from "../../../features/hubs/hubSlice";
-import MenuDropdown from "../../Dropdown/MenuDropdown";
-import SHubDropdownList from "../../ItemsListInSidebar/components/SHubDropdownList";
-import SubDropdown from "../../Dropdown/SubDropdown";
-import {
-  setActiveEntity,
-  setActiveItem,
-  setShowHub,
-} from "../../../features/workspace/workspaceSlice";
-import { useNavigate } from "react-router-dom";
-import HubItem from "../../tasks/HubItem";
+  setshowMenuDropdown
+} from '../../../features/hubs/hubSlice';
+import MenuDropdown from '../../Dropdown/MenuDropdown';
+import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
+import SubDropdown from '../../Dropdown/SubDropdown';
+import { setActiveEntity, setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
+import HubItem from '../../tasks/HubItem';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -27,32 +23,28 @@ export default function SubHubIndex() {
   const [showSubChildren, setShowSubChidren] = useState<string | null>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
-    parentId: currentItemId,
+    parentId: currentItemId
   });
 
-  if (status === "success") {
-    data?.data?.hubs.map(({ parent_id }) =>
-      dispatch(setHubParentId(parent_id))
-    );
+  if (status === 'success') {
+    data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector(
-    (state) => state.hub
-  );
+  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   const handleClick = (id: string, name?: string) => {
     setShowSubChidren(id);
     dispatch(
       setActiveItem({
-        activeItemType: "subhub",
+        activeItemType: 'subhub',
         activeItemId: id,
-        activeItemName: name,
+        activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: "hub" }));
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
-        currSubHubIdType: "subhub",
+        currSubHubIdType: 'subhub'
       })
     );
     if (showSubChildren === id) {
@@ -65,12 +57,12 @@ export default function SubHubIndex() {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: "subhub",
+        showMenuDropdownType: 'subhub'
       })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == "menusettings") {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -81,12 +73,12 @@ export default function SubHubIndex() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: "subhub",
-        activeItemName: name,
+        activeItemType: 'subhub',
+        activeItemName: name
       })
     );
     navigate(`/hub/${id}`);
-    dispatch(setActiveEntity({ id: id, type: "hub" }));
+    dispatch(setActiveEntity({ id: id, type: 'hub' }));
   };
 
   return currentItemId === hubParentId ? (

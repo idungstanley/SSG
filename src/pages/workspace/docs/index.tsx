@@ -2,7 +2,9 @@ import React from 'react';
 
 function Docs() {
   return (
-    <div><p>this is docs</p></div>
+    <div>
+      <p>this is docs</p>
+    </div>
   );
 }
 

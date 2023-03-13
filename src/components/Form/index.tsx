@@ -11,30 +11,22 @@ interface checkboxType {
 }
 
 interface formType {
-  onSubmit: (values: {
-    email: string;
-    password: string;
-    name?: string;
-  }) => void;
+  onSubmit: (values: { email: string; password: string; name?: string }) => void;
   formikConfig: formikConfig;
   checkboxConfig?: checkboxType[];
 }
 
-export default function Form({
-  onSubmit,
-  formikConfig,
-  checkboxConfig,
-}: formType) {
+export default function Form({ onSubmit, formikConfig, checkboxConfig }: formType) {
   const formik = useFormik({
     initialValues: {
-      ...formikConfig.initValues,
+      ...formikConfig.initValues
     },
 
     validationSchema: formikConfig.validationSchema,
 
     onSubmit: (values) => {
       onSubmit(values);
-    },
+    }
   });
 
   return (
@@ -48,8 +40,7 @@ export default function Form({
           {...formik.getFieldProps(i)}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
           message={
-            formik.touched[i as keyof typeof formik.touched] &&
-            formik.errors[i as keyof typeof formik.errors]
+            formik.touched[i as keyof typeof formik.touched] && formik.errors[i as keyof typeof formik.errors]
               ? formik.errors[i as keyof typeof formik.errors]
               : undefined
           }

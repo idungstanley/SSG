@@ -24,10 +24,7 @@ function MainLayout() {
           <div className="relative flex grow">
             {/* show extended navigation button */}
             <OpenExtBtn />
-            <Sidebar
-              allowSelect={allowSelect}
-              setAllowSelect={setAllowSelect}
-            />
+            <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
           </div>
           <div className="flex flex-1 grow">
             {/* show the extended side navigation component*/}

@@ -25,16 +25,13 @@ export default function FilesListWithToolbar() {
           updated_at: i.created_at,
           size: i.size,
           fileType: i.file_format.extension,
-          id: i.id,
+          id: i.id
         })),
       [data]
     ) || [];
 
   const searchedItems = useMemo(
-    () =>
-      debouncedQuery.length
-        ? items.filter((i) => i.name.includes(debouncedQuery))
-        : items,
+    () => (debouncedQuery.length ? items.filter((i) => i.name.includes(debouncedQuery)) : items),
     [debouncedQuery, items]
   );
 

@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
+import { INotificationRes } from './notification.interfaces';
 
 export const useGetNotificationService = () => {
   return useQuery(
     ['notification'],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<INotificationRes>(
         {
           url: 'notifications',
-          method: 'GET',
+          method: 'GET'
         },
         true
       );

@@ -1,16 +1,16 @@
-import React from "react";
-import Favourite from "./Favourite";
-import { useGetFavourites } from "../../../features/hubs/hubService";
-import { Spinner } from "../../../common";
-import { useAppSelector } from "../../../app/hooks";
-import { cl } from "../../../utils";
-import { AiFillStar } from "react-icons/ai";
+import React from 'react';
+import Favourite from './Favourite';
+import { useGetFavourites } from '../../../features/hubs/hubService';
+import { Spinner } from '../../../common';
+import { useAppSelector } from '../../../app/hooks';
+import { cl } from '../../../utils';
+import { AiFillStar } from 'react-icons/ai';
 
 function Favorites() {
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { data, status } = useGetFavourites();
+  const { data: FavData, status } = useGetFavourites();
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <div className="flex justify-center">
         <Spinner />
@@ -26,23 +26,16 @@ function Favorites() {
             <span className="flex justify-between items-center w-full h-6 mx-1">
               <AiFillStar />
             </span>
-            <span className="block font-semibold text-xs w-full cursor-pointer uppercase leading-3 tracking-wider text-black font-black mx-1">
+            <span className="block font-semibold text-xs w-full cursor-pointer uppercase leading-3 tracking-wider text-black mx-1">
               FAVORITES
             </span>
           </div>
         </div>
       </div>
-      <div className={cl("mb-2", !showSidebar && "overflow-x-hidden w-12")}>
-        {data?.data.favorites.map(
-          (fav: {
-            name: string;
-            id: string;
-            model_type: string;
-            model_id: string;
-          }) => {
-            return <Favourite key={fav.id} item={fav} />;
-          }
-        )}
+      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>
+        {FavData?.data.favorites.map((fav: { name: string; id: string; model_type: string; model_id: string }) => {
+          return <Favourite key={fav.id} item={fav} />;
+        })}
       </div>
     </>
   );

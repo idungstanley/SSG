@@ -7,12 +7,7 @@ interface CheckboxProps {
   label: string;
 }
 
-export default function Checkbox({
-  disabled,
-  checked,
-  setChecked,
-  label,
-}: CheckboxProps) {
+export default function Checkbox({ disabled, checked, setChecked, label }: CheckboxProps) {
   return (
     <div className="relative flex items-start">
       <div className="flex h-5 items-center">

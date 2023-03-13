@@ -15,11 +15,7 @@ export default function TeamMembersInChat({ chatId }: TeamMembersInChatProps) {
   const onClose = () => dispatch(setShowMembersInChatSideOver(false));
 
   return (
-    <SideOver
-      show={showMembersInChatSideOver}
-      onClose={onClose}
-      title="Members"
-    >
+    <SideOver show={showMembersInChatSideOver} onClose={onClose} title="Members">
       <AddNew chatId={chatId} />
       <List chatId={chatId} />
     </SideOver>

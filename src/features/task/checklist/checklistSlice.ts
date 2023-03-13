@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface checklistState {
   triggerChecklistUpdate: boolean;
   triggerItemUpdate: boolean;
   clickedChecklistId: string;
-  clickedChecklistItemId: string;
-  toggleAssignChecklistItemId: string | null;
+  clickedChecklistItemId: string | undefined;
+  toggleAssignChecklistItemId: string | null | undefined;
   triggerAssignChecklistItem: boolean;
   triggerUnassignChecklistItem: boolean;
   showChecklistInput: boolean;
@@ -14,43 +14,43 @@ interface checklistState {
 const initialState: checklistState = {
   triggerChecklistUpdate: false,
   triggerItemUpdate: false,
-  clickedChecklistId: "",
-  clickedChecklistItemId: "",
+  clickedChecklistId: '',
+  clickedChecklistItemId: '',
   toggleAssignChecklistItemId: null,
   triggerAssignChecklistItem: false,
   triggerUnassignChecklistItem: false,
-  showChecklistInput: false,
+  showChecklistInput: false
 };
 
 export const checklistSlice = createSlice({
-  name: "Checklists",
+  name: 'Checklists',
   initialState,
   reducers: {
-    setTriggerChecklistUpdate(state, { payload }) {
-      state.triggerChecklistUpdate = payload;
+    setTriggerChecklistUpdate(state, action: PayloadAction<boolean>) {
+      state.triggerChecklistUpdate = action.payload;
     },
-    setTriggerItemtUpdate(state, { payload }) {
-      state.triggerItemUpdate = payload;
+    setTriggerItemtUpdate(state, action: PayloadAction<boolean>) {
+      state.triggerItemUpdate = action.payload;
     },
-    setClickChecklistId(state, { payload }) {
-      state.clickedChecklistId = payload;
+    setClickChecklistId(state, action: PayloadAction<string>) {
+      state.clickedChecklistId = action.payload;
     },
-    setClickChecklistItemId(state, { payload }) {
-      state.clickedChecklistItemId = payload;
+    setClickChecklistItemId(state, action: PayloadAction<string | undefined>) {
+      state.clickedChecklistItemId = action.payload;
     },
-    setToggleAssignChecklistItemId(state, { payload }) {
-      state.toggleAssignChecklistItemId = payload;
+    setToggleAssignChecklistItemId(state, action: PayloadAction<string | null | undefined>) {
+      state.toggleAssignChecklistItemId = action.payload;
     },
-    setTriggerAssignChecklistItem(state, { payload }) {
-      state.triggerAssignChecklistItem = payload;
+    setTriggerAssignChecklistItem(state, action: PayloadAction<boolean>) {
+      state.triggerAssignChecklistItem = action.payload;
     },
-    setTriggerUnassignChecklistItem(state, { payload }) {
-      state.triggerUnassignChecklistItem = payload;
+    setTriggerUnassignChecklistItem(state, action: PayloadAction<boolean>) {
+      state.triggerUnassignChecklistItem = action.payload;
     },
-    setShowChecklistInput(state, { payload }) {
-      state.showChecklistInput = payload;
-    },
-  },
+    setShowChecklistInput(state, action: PayloadAction<boolean>) {
+      state.showChecklistInput = action.payload;
+    }
+  }
 });
 
 export const {
@@ -61,7 +61,7 @@ export const {
   setToggleAssignChecklistItemId,
   setTriggerAssignChecklistItem,
   setTriggerUnassignChecklistItem,
-  setShowChecklistInput,
+  setShowChecklistInput
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

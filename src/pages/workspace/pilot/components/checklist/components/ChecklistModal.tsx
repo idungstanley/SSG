@@ -1,17 +1,14 @@
-import React, { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { BsThreeDots } from "react-icons/bs";
+import React, { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { BsThreeDots } from 'react-icons/bs';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
-  setToggleAssignChecklistItemId,
-} from "../../../../../../features/task/checklist/checklistSlice";
-import { useAppDispatch } from "../../../../../../app/hooks";
-import { Disclosure } from "@headlessui/react";
-import {
-  useDeleteChecklist,
-  useDeleteChecklistItem,
-} from "../../../../../../features/task/checklist/checklistService";
+  setToggleAssignChecklistItemId
+} from '../../../../../../features/task/checklist/checklistSlice';
+import { useAppDispatch } from '../../../../../../app/hooks';
+import { Disclosure } from '@headlessui/react';
+import { useDeleteChecklist, useDeleteChecklistItem } from '../../../../../../features/task/checklist/checklistService';
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -25,12 +22,7 @@ interface ChecklistModalProps {
   }[];
 }
 
-export default function ChecklistModal({
-  options,
-  checklistId,
-  checklistItemId,
-  focus,
-}: ChecklistModalProps) {
+export default function ChecklistModal({ options, checklistId, checklistItemId, focus }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
   const { mutate: onChecklistDelete } = useDeleteChecklist();
@@ -38,32 +30,32 @@ export default function ChecklistModal({
 
   const handleDelChecklist = () => {
     onChecklistDelete({
-      query: checklistId,
+      query: checklistId
     });
   };
 
   const handleChecklistItemDel = () => {
     onChecklistItemDelete({
       query: checklistId,
-      itemId: checklistItemId,
+      itemId: checklistItemId
     });
   };
 
   const handleOptions = (option: { name: string }) => {
-    if (option.name === "Delete Checklist") {
+    if (option.name === 'Delete Checklist') {
       handleDelChecklist();
-    } else if (option.name === "Delete Item") {
+    } else if (option.name === 'Delete Item') {
       handleChecklistItemDel();
-    } else if (option.name === "Assign to" || option.name == "Unassign") {
+    } else if (option.name === 'Assign to' || option.name == 'Unassign') {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
-    } else if (option.name === "Rename") {
+    } else if (option.name === 'Rename') {
       focus();
     }
   };
   return (
-    <Menu as="div" className="relative inline-block text-left absolute">
+    <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           <BsThreeDots className="cursor-pointer" />
@@ -80,7 +72,7 @@ export default function ChecklistModal({
       >
         <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {options.map((option) =>
-            option.name === "New Item" ? (
+            option.name === 'New Item' ? (
               <Disclosure.Button key={option.id} className="w-full">
                 <Menu.Button className="flex w-full text-sm text-gray-400">
                   {() => (

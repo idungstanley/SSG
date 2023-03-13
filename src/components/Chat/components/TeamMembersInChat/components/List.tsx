@@ -17,12 +17,7 @@ export default function List({ chatId }: ListProps) {
   const { mutate: onRemove } = useDeleteTeamMemberFromChat(chatId);
 
   if (status === 'error') {
-    return (
-      <FullScreenMessage
-        title="Oops, an error occurred :("
-        description="Please try again later."
-      />
-    );
+    return <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />;
   }
 
   if (status === 'loading') {
@@ -36,7 +31,7 @@ export default function List({ chatId }: ListProps) {
   const handleRemove = (id: string) => {
     onRemove({
       chatId,
-      teamMemberId: id,
+      teamMemberId: id
     });
   };
 
@@ -46,20 +41,12 @@ export default function List({ chatId }: ListProps) {
         <h3>Members list:</h3>
         <ul role="list" className="divide-y divide-gray-200">
           {members.map((member) => (
-            <li
-              key={member.id}
-              className="flex py-4 w-full items-center justify-between"
-            >
+            <li key={member.id} className="flex py-4 w-full items-center justify-between">
               <div className="flex">
-                <AvatarWithInitials
-                  initials={member.initials}
-                  backgroundColour={member.colour}
-                />
+                <AvatarWithInitials initials={member.initials} backgroundColour={member.colour} />
 
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">
-                    {member.user.name}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900">{member.user.name}</p>
                   <p className="text-sm text-gray-500">{member.user.email}</p>
                 </div>
               </div>
@@ -73,10 +60,7 @@ export default function List({ chatId }: ListProps) {
         </ul>
       </div>
     ) : (
-      <FullScreenMessage
-        title="You have no watchers yet"
-        description="Get started by creating a new"
-      />
+      <FullScreenMessage title="You have no watchers yet" description="Get started by creating a new" />
     )
   ) : null;
 }

@@ -2,20 +2,20 @@ import React, {
   useEffect,
   useLayoutEffect,
   useMemo,
-  useRef,
+  useRef
   // useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   // useNavigate,
-  useParams,
+  useParams
 } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../../components/CenterMessage/FullScreenMessage';
 // import ItemPreviewSidebar from '../../../../components/ItemPreviewSidebar';
 import {
-  resetSelectedFilesAndFolders,
+  resetSelectedFilesAndFolders
   // setSelectedFiles,
   // setSelectedFolders,
   // setSelectedItem,
@@ -23,7 +23,7 @@ import {
 import {
   // useGetFile,
   // useGetFolder,
-  useGetSharedFilesAndFolders,
+  useGetSharedFilesAndFolders
 } from '../../../../features/shared/sharedService';
 // import { explorerItemType } from '../../../../types';
 
@@ -46,7 +46,7 @@ export default function SharedTable() {
   // const [indeterminate, setIndeterminate] = useState(false);
   const {
     selectedFileIds,
-    selectedFolderIds,
+    selectedFolderIds
     // selectedSortingId,
     // selectedItemId,
     // selectedItemType,
@@ -67,7 +67,7 @@ export default function SharedTable() {
           size: '-',
           item_type: 'folder',
           id: i.id,
-          updated_at: i.updated_at,
+          updated_at: i.updated_at
         })
       ),
     [data]
@@ -83,20 +83,16 @@ export default function SharedTable() {
           size: i.file.size,
           item_type: 'file',
           id: i.id,
-          updated_at: i.updated_at,
+          updated_at: i.updated_at
         })
       ),
     [data]
   );
 
   useLayoutEffect(() => {
-    const isIndeterminate =
-      selectedItems.length > 0 && selectedItems.length < items?.length;
+    const isIndeterminate = selectedItems.length > 0 && selectedItems.length < items?.length;
 
-    if (
-      selectedItems.length === items.length &&
-      +selectedItems.length + +items.length > 0
-    ) {
+    if (selectedItems.length === items.length && +selectedItems.length + +items.length > 0) {
       // setChecked(selectedItems.length === items.length);
     }
     // setIndeterminate(isIndeterminate);
@@ -198,10 +194,7 @@ export default function SharedTable() {
       <Spinner size={8} color="#0F70B7" />
     </div>
   ) : status.files === 'error' || status.folders ? (
-    <FullScreenMessage
-      title="Oops, an error occurred :("
-      description="Please try again later."
-    />
+    <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
   ) : !items.length ? (
     <FullScreenMessage
       title="No files or folders in your shared items"

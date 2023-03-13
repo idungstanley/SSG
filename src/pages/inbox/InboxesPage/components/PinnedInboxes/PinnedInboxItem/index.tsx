@@ -2,10 +2,7 @@ import React, { Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
-import {
-  useGetPinnedInbox,
-  usePinOrUnpinInbox,
-} from '../../../../../../features/inbox/inboxesService';
+import { useGetPinnedInbox, usePinOrUnpinInbox } from '../../../../../../features/inbox/inboxesService';
 import { cl } from '../../../../../../utils';
 
 interface PinnedInboxItemProps {
@@ -25,15 +22,12 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
   const onUnpinInbox = () => {
     unpinInbox({
       inboxId: pinnedInboxId,
-      isPinned: true,
+      isPinned: true
     });
   };
 
   return inbox ? (
-    <li
-      key={inbox.id}
-      className="relative col-span-1 flex shadow-sm rounded-md"
-    >
+    <li key={inbox.id} className="relative col-span-1 flex shadow-sm rounded-md">
       <div
         className="flex-shrink-0 flex items-center justify-center w-16 text-white text-sm font-medium rounded-l-md"
         style={{ backgroundColor: inbox.colour }}
@@ -43,11 +37,7 @@ function PinnedInboxItem({ pinnedInboxId }: PinnedInboxItemProps) {
       <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
         <div className="flex-1 px-4 py-2 text-sm truncate">
           <div className="space-x-2">
-            <Link
-              key={inbox.id}
-              to={`/inbox/${inbox.id}`}
-              className="text-gray-900 font-medium hover:text-gray-600"
-            >
+            <Link key={inbox.id} to={`/inbox/${inbox.id}`} className="text-gray-900 font-medium hover:text-gray-600">
               {inbox.name}
             </Link>
 

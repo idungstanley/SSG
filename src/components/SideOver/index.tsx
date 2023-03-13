@@ -11,21 +11,10 @@ interface SideOverProps {
   disableGapForChildren?: boolean;
 }
 
-export default function SideOver({
-  show,
-  onClose,
-  title,
-  children,
-  disableGapForChildren = false,
-}: SideOverProps) {
+export default function SideOver({ show, onClose, title, children, disableGapForChildren = false }: SideOverProps) {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative"
-        style={{ zIndex: 101 }}
-        onClose={onClose}
-      >
+      <Dialog as="div" className="relative" style={{ zIndex: 101 }} onClose={onClose}>
         <div className="absolute inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -44,9 +33,7 @@ export default function SideOver({
                   <div className="flex h-full pl-1.5 w-full flex-col overflow-y-scroll bg-white shadow-xl">
                     <div className="px-2 sm:px-3">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {title}
-                        </Dialog.Title>
+                        <Dialog.Title className="text-lg font-medium text-gray-900">{title}</Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"

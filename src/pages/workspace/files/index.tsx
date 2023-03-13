@@ -6,18 +6,18 @@ import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/
 import { cl } from '../../../utils';
 
 function Files() {
-  const {showSidebar} = useAppSelector(state=> state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   return (
     <>
-      <PlaceItem
-        label="Forms"
-        icon={<DocumentTextIcon className="w-4 h-4" />}
-      />
+      <PlaceItem label="Forms" icon={<DocumentTextIcon className="w-4 h-4" />} />
       <Link
         to="/explorer"
         id="home"
         key=""
-        className={cl('mb-2 flex items-center justify-start h-10 pl-2 space-x-3 rounded hover:bg-gray-200', !showSidebar && 'overflow-x-hidden w-12')}
+        className={cl(
+          'mb-2 flex items-center justify-start h-10 pl-2 space-x-3 rounded hover:bg-gray-200',
+          !showSidebar && 'overflow-x-hidden w-12'
+        )}
       >
         <p>Explorer</p>
       </Link>

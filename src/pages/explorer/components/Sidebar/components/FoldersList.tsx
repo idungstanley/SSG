@@ -3,11 +3,7 @@ import { useGetExplorerFolder } from '../../../../../features/explorer/explorerS
 import { useNavigate, useParams } from 'react-router-dom';
 import FolderItem from './FolderItem';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import {
-  setFastPreview,
-  setSelectedFolderId,
-  setSelectedItem,
-} from '../../../../../features/explorer/explorerSlice';
+import { setFastPreview, setSelectedFolderId, setSelectedItem } from '../../../../../features/explorer/explorerSlice';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../../../../utils';
 
@@ -21,29 +17,24 @@ interface FoldersListProps {
   isSearchedResults: boolean;
 }
 
-export default function FoldersList({
-  folders,
-  isSearchedResults,
-}: FoldersListProps) {
+export default function FoldersList({ folders, isSearchedResults }: FoldersListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { folderId } = useParams();
-  const { selectedFolderId, draggableItem, fastPreview } = useAppSelector(
-    (state) => state.explorer
-  );
+  const { selectedFolderId, draggableItem, fastPreview } = useAppSelector((state) => state.explorer);
   const { data: sub } = useGetExplorerFolder(folderId);
 
   const handleClickFolder = (folderId: string, parentId: string | null) => {
     const isActiveFolder = selectedFolderId === folderId;
     dispatch(setSelectedFolderId(isActiveFolder ? parentId : folderId));
     navigate(`/explorer/${isActiveFolder ? parentId || '' : folderId}`, {
-      replace: true,
+      replace: true
     });
 
     dispatch(
       setSelectedItem({
         selectedItemId: folderId,
-        selectedItemType: 'folder',
+        selectedItemType: 'folder'
       })
     );
 
@@ -58,7 +49,7 @@ export default function FoldersList({
         name: i.name,
         ancestors: i.ancestors,
         id: i.id,
-        parentId: i.parent_id,
+        parentId: i.parent_id
       })),
     [sub]
   );
@@ -82,14 +73,11 @@ export default function FoldersList({
             name={rootFolder.name}
             handleClickFolder={handleClickFolder}
             isActiveFolder={rootFolder.id === selectedFolderId}
-            haveActiveChild={
-              !!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)
-            }
+            haveActiveChild={!!selectedFolder?.ancestors?.find((i) => i.id === rootFolder.id)}
           />
 
-          {selectedFolder?.ancestors
-            ?.map((i) => i.id)
-            .includes(rootFolder.id) || selectedFolder?.id === rootFolder.id ? (
+          {selectedFolder?.ancestors?.map((i) => i.id).includes(rootFolder.id) ||
+          selectedFolder?.id === rootFolder.id ? (
             <>
               {/* ancestors without root  */}
               {selectedFolder.ancestors
@@ -99,7 +87,7 @@ export default function FoldersList({
                   <div
                     key={ancestor.id}
                     style={{
-                      marginLeft: (index + 1) * 10,
+                      marginLeft: (index + 1) * 10
                     }}
                   >
                     <FolderItem
@@ -108,11 +96,7 @@ export default function FoldersList({
                       parentId={ancestor.parent_id}
                       handleClickFolder={handleClickFolder}
                       isActiveFolder={ancestor.id === selectedFolderId}
-                      haveActiveChild={
-                        !!selectedFolder?.ancestors?.find(
-                          (i) => i.id === ancestor.id
-                        )
-                      }
+                      haveActiveChild={!!selectedFolder?.ancestors?.find((i) => i.id === ancestor.id)}
                     />
                   </div>
                 ))}
@@ -136,9 +120,7 @@ export default function FoldersList({
                 <div
                   key={subFolder.id}
                   style={{
-                    marginLeft: ancestorsLength
-                      ? (ancestorsLength + 1) * 10
-                      : 10,
+                    marginLeft: ancestorsLength ? (ancestorsLength + 1) * 10 : 10
                   }}
                 >
                   <FolderItem
@@ -164,15 +146,12 @@ export default function FoldersList({
 function DragOverRoot() {
   const { isOver, setNodeRef: droppableRef } = useDroppable({
     id: 'root',
-    data: { parentId: null },
+    data: { parentId: null }
   });
 
   return (
     <div
-      className={cl(
-        'mt-2 w-full border text-center py-1 px-1 hover:bg-gray-100',
-        isOver ? 'bg-primary-100' : ''
-      )}
+      className={cl('mt-2 w-full border text-center py-1 px-1 hover:bg-gray-100', isOver ? 'bg-primary-100' : '')}
       ref={droppableRef}
     >
       Drag here to move to root folder

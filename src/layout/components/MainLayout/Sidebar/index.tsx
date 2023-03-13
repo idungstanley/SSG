@@ -10,28 +10,28 @@ import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 
-export const MIN_SIDEBAR_WIDTH = 260;
-export const MAX_SIDEBAR_WIDTH = 320;
+export const MIN_SIDEBAR_WIDTH = 240;
+export const MAX_SIDEBAR_WIDTH = 350;
 const RELATIVE_WIDTH = 10;
 
 interface SidebarProps {
-  allowSelect: boolean
-  setAllowSelect: (i: boolean) => void
+  allowSelect: boolean;
+  setAllowSelect: (i: boolean) => void;
+}
+// getting sidebar width from localStorage
+interface SidebarFromLSProp {
+  sidebarWidth: number;
+  showSidebar: boolean;
 }
 
 // getting sidebar width from localStorage
-const sidebarFromLS: {
-  sidebarWidth: number
-  showSidebar: boolean
-} = JSON.parse(localStorage.getItem('sidebar') || '""');
+const sidebarFromLS: SidebarFromLSProp = JSON.parse(localStorage.getItem('sidebar') || '""') as SidebarFromLSProp;
 const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [sidebarWidth, setSidebarWidth] = useState(
-    sidebarWidthFromLS || MIN_SIDEBAR_WIDTH,
-  );
+  const [sidebarWidth, setSidebarWidth] = useState(sidebarWidthFromLS || MIN_SIDEBAR_WIDTH);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -61,11 +61,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
 
         // adjusted width according to min and max values
         const adjustedWidth =
-          width >= MAX_SIDEBAR_WIDTH
-            ? MAX_SIDEBAR_WIDTH
-            : width <= MIN_SIDEBAR_WIDTH
-            ? MIN_SIDEBAR_WIDTH
-            : width;
+          width >= MAX_SIDEBAR_WIDTH ? MAX_SIDEBAR_WIDTH : width <= MIN_SIDEBAR_WIDTH ? MIN_SIDEBAR_WIDTH : width;
 
         setSidebarWidth(adjustedWidth);
       };
@@ -80,18 +76,14 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         if (sidebarRef.current) {
           const width = sidebarRef.current.clientWidth;
           const adjustedWidth =
-            width >= MAX_SIDEBAR_WIDTH
-              ? MAX_SIDEBAR_WIDTH
-              : width <= MIN_SIDEBAR_WIDTH
-              ? MIN_SIDEBAR_WIDTH
-              : width;
+            width >= MAX_SIDEBAR_WIDTH ? MAX_SIDEBAR_WIDTH : width <= MIN_SIDEBAR_WIDTH ? MIN_SIDEBAR_WIDTH : width;
 
           localStorage.setItem(
             'sidebar',
             JSON.stringify({
               adjustedWidth,
-              showSidebar: width >= MIN_SIDEBAR_WIDTH,
-            }),
+              showSidebar: width >= MIN_SIDEBAR_WIDTH
+            })
           );
         }
       };
@@ -99,7 +91,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseEnd);
     },
-    [allowSelect],
+    [allowSelect]
   );
 
   // dynamic width for sidebar
@@ -107,33 +99,27 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
     () => ({
       width: sidebarWidth + 'px',
       minWidth: MIN_SIDEBAR_WIDTH + 'px',
-      maxWidth: MAX_SIDEBAR_WIDTH + 'px',
+      maxWidth: MAX_SIDEBAR_WIDTH + 'px'
     }),
-    [sidebarWidth],
+    [sidebarWidth]
   );
   useMemo(() => dispatch(setSidebarWidthRD(sidebarWidth)), [sidebarWidth]);
 
   return (
-    <aside
-      ref={sidebarRef}
-      className={cl(
-        'flex text-center relative overflow-x-hidden',
-      )}
-    >
+    <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-hidden')}>
       {/* show / hide sidebar icon */}
       <Toggle />
-
       {/* sidebar */}
       <section
         className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-300"
         style={showSidebar ? style : undefined}
       >
         <Header />
-          <section className="relative flex flex-col pr-1.5 overflow-x-hidden overflow-y-scroll">
-            {showSidebar ? <Search /> : null}
-            <NavigationItems />
-            <Places />
-          </section>
+        <section className="relative flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden">
+          {showSidebar ? <Search /> : null}
+          <NavigationItems />
+          <Places />
+        </section>
       </section>
       <ResizeBorder sidebarWidth={sidebarWidth} onMouseDown={onMouseDown} />
     </aside>

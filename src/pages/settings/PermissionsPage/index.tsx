@@ -2,10 +2,10 @@ import React from 'react';
 import { Spinner } from '../../../common';
 import { SimpleSectionHeading } from '../../../components';
 import Breadcrumb from '../components/Breadcrumb';
-import Table from './components/Table.jsx';
+import Table from './components/Table';
 import {
   useGetPermissionsList,
-  useGetPermissionsValues,
+  useGetPermissionsValues
 } from '../../../features/settings/permissions/permissionsService';
 
 export default function PermissionsPage() {
@@ -19,9 +19,9 @@ export default function PermissionsPage() {
           {
             name: 'Team members',
             href: '/settings/team-members',
-            current: false,
+            current: false
           },
-          { name: 'Permissions', href: '/settings/permissions', current: true },
+          { name: 'Permissions', href: '/settings/permissions', current: true }
         ]}
       />
       <main className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
@@ -32,8 +32,7 @@ export default function PermissionsPage() {
           />
         </div>
 
-        {permissionsValuesStatus === 'loading' ||
-        permissionsListStatus === 'loading' ? (
+        {permissionsValuesStatus === 'loading' || permissionsListStatus === 'loading' ? (
           <div className="mx-auto w-6 justify-center">
             <Spinner size={8} color="#0F70B7" />
           </div>

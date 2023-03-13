@@ -1,11 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
-import {
-  SimpleSectionHeading,
-  Button,
-  EmptyStateSimple,
-} from '../../../../components';
+import { SimpleSectionHeading, Button, EmptyStateSimple } from '../../../../components';
 // import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import InviteTeamMemberSlideOver from './components/InviteTeamMemberSlideOver';
@@ -16,13 +12,9 @@ import { useAppSelector } from '../../../../app/hooks';
 export default function TeamMemberInvitesPage() {
   const dispatch = useDispatch();
 
-  const { teamMemberInvitesPaginationPage } = useAppSelector(
-    (state) => state.teamMemberInvite
-  );
+  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
 
-  const { status, data } = useGetTeamMemberInvites(
-    teamMemberInvitesPaginationPage
-  );
+  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
 
   const showInviteTeamMemberSlideOver = () => {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));
@@ -74,18 +66,14 @@ export default function TeamMemberInvitesPage() {
                 title="Send your first invite"
                 description="Invite team members to your workspace"
                 ctaText="Invite"
-                ctaOnClick={() =>
-                  dispatch(setInviteTeamMemberSlideOverVisibility(true))
-                }
+                ctaOnClick={() => dispatch(setInviteTeamMemberSlideOverVisibility(true))}
                 showCta
               />
             </div>
           </div>
         )}
 
-        {status === 'success' && data.data.team_member_invites.length !== 0 && (
-          <Table />
-        )}
+        {status === 'success' && data.data.team_member_invites.length !== 0 && <Table />}
       </main>
 
       <InviteTeamMemberSlideOver />

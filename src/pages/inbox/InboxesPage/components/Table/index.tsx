@@ -1,9 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Body from './Body';
-import {
-  IInbox,
-} from '../../../../../features/inbox/inbox.interfaces';
+import { IInbox } from '../../../../../features/inbox/inbox.interfaces';
 import { inboxType } from '../../../../../types';
 
 interface TableProps {

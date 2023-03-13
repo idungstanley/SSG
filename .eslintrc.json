@@ -8,7 +8,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -19,31 +20,33 @@
     "project": "./tsconfig.json",
     "allowImportExportEverywhere": true
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
+    "@typescript-eslint/no-unsafe-call": "error",
+    "@typescript-eslint/no-unsafe-member-access": "error",
+    "@typescript-eslint/no-unsafe-assignment": "error",
+    "@typescript-eslint/no-unsafe-argument": "error",
+    "no-tabs": "error",
+    "no-whitespace-before-property": "error",
+    "no-spaced-func": "error",
+    "no-multi-spaces": "error",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unused-vars": "error",
-    "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
     "no-empty": "error",
-    "linebreak-style": 0,
     "no-console": "warn",
     "semi-spacing": ["error", { "before": false, "after": true }],
     "space-infix-ops": "error",
-    "key-spacing": [
-      "error",
-      { "mode": "strict", "afterColon": true, "beforeColon": false }
-    ],
+    "key-spacing": ["error", { "mode": "strict", "afterColon": true, "beforeColon": false }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "semi": "error",
+    "semi": ["error", "always"],
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
     "no-trailing-spaces": "error",
     "@typescript-eslint/semi": "error",
     "@typescript-eslint/comma-dangle": 0,
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/space-before-function-paren": [
-      "error",
-      { "named": "ignore", "asyncArrow": "ignore" }
-    ],
+    "@typescript-eslint/space-before-function-paren": ["error", { "named": "ignore", "asyncArrow": "ignore" }],
     "@typescript-eslint/strict-boolean-expressions": 0,
     "no-var": 2,
     "no-loop-func": "off",
@@ -64,7 +67,11 @@
         "code": 500
       }
     ],
-    "jsx-quotes": [2, "prefer-double"]
+    "jsx-quotes": ["error", "prefer-double"],
+    "prettier/prettier": [
+      "error",
+      { "singleQuote": true, "jsxSingleQuote": false, "tabWidth": 2, "indent": ["error"], "endOfLine": "auto" }
+    ]
   },
   "settings": {
     "react": {

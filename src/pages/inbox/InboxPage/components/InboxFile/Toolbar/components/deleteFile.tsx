@@ -13,12 +13,12 @@ export default function DeleteFile() {
   const { mutate: onDelete } = useDeleteInboxFile();
   const handleClick = () => {
     onDelete({
-      fileId: selectedInboxFileId,
+      fileId: selectedInboxFileId
     });
     dispatch(
       setCurrentInboxFile({
         inboxFileId: null,
-        inboxFileIndex: 1,
+        inboxFileIndex: 1
       })
     );
   };

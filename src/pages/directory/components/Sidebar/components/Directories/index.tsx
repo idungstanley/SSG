@@ -17,7 +17,7 @@ function updateNestedArray(
         } else if (item.children) {
           return {
             ...item,
-            children: updateNestedArray(item.children, updateFn, idToUpdate),
+            children: updateNestedArray(item.children, updateFn, idToUpdate)
           };
         }
         return item;
@@ -57,7 +57,7 @@ export default function Directories() {
         id: i.id,
         name: i.name,
         parent_id: i.parent_id,
-        children: [],
+        children: []
       }));
 
       if (isSavedIdFromURL) {
@@ -70,7 +70,7 @@ export default function Directories() {
                 oldData,
                 (item) => ({
                   ...item,
-                  children: stringifiedData,
+                  children: stringifiedData
                 }),
                 directoryId
               )

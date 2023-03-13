@@ -8,9 +8,7 @@ import AssignInboxFileSlideOver from './components/SlideOvers/AssignInboxFileSli
 import UploadModal from '../../../components/UploadModal';
 import { useParams } from 'react-router-dom';
 
-const Watchers = React.lazy(
-  () => import('../../../components/Watchers/WatchersForPilot')
-);
+const Watchers = React.lazy(() => import('../../../components/Watchers/WatchersForPilot'));
 
 function InboxPage() {
   const { inboxId } = useParams();
@@ -33,9 +31,7 @@ function InboxPage() {
         </div>
 
         {/* Slide Overs */}
-        <Suspense fallback={<div>Loading...</div>}>
-          {inboxId ? <Watchers /> : null}
-        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>{inboxId ? <Watchers /> : null}</Suspense>
         <AssignInboxFileSlideOver />
       </div>
     </>

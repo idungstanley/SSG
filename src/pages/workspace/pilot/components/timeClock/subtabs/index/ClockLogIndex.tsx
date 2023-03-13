@@ -5,12 +5,10 @@ import EntryList, { entriesProps } from '../../../../../tasks/timeclock/entryLis
 import NoEntriesFound from './NoEntriesFound';
 
 export default function ClockLogIndex() {
-  const { activeItemId, activeItemType } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { data: getTaskEntries } = GetTimeEntriesService({
     taskId: activeItemId,
-    trigger: activeItemType,
+    trigger: activeItemType
   });
 
   const renderItemEntries = () => {
@@ -18,11 +16,9 @@ export default function ClockLogIndex() {
       if (getTaskEntries?.data.time_entries.length == 0) {
         return <NoEntriesFound />;
       } else {
-        return getTaskEntries?.data?.time_entries?.map(
-          (entries: entriesProps) => (
-            <EntryList entries={entries} key={entries.id} />
-          )
-        );
+        return getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => (
+          <EntryList entries={entries} key={entries.id} />
+        ));
       }
     else {
       return <NoEntriesFound />;

@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  AiOutlinePaperClip,
-  AiOutlineFlag,
-  AiOutlineEye,
-} from 'react-icons/ai';
+import { AiOutlinePaperClip, AiOutlineFlag, AiOutlineEye } from 'react-icons/ai';
 import { BsTags, BsCalendar3 } from 'react-icons/bs';
 import { createTaskService } from '../../../../features/task/taskService';
 import { Button, Input, SlideOver } from '../../../../components';
-import {
-  setSubDropdownMenu,
-  setshowMenuDropdown,
-} from '../../../../features/hubs/hubSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateTaskSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useAppSelector } from '../../../../app/hooks';
@@ -20,9 +13,7 @@ function TaskModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
-  const { showCreateTaskSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -30,14 +21,14 @@ function TaskModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null,
+          showMenuDropdown: null
         })
       );
-    },
+    }
   });
   const defaultListFormState = {
     name: '',
-    description: '',
+    description: ''
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
@@ -45,7 +36,7 @@ function TaskModal() {
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -55,7 +46,7 @@ function TaskModal() {
     await createTask.mutateAsync({
       name,
       description,
-      showMenuDropdown,
+      showMenuDropdown
     });
   };
 
@@ -64,7 +55,7 @@ function TaskModal() {
     dispatch(setSubDropdownMenu(false));
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: null,
+        showMenuDropdown: null
       })
     );
   };
@@ -94,18 +85,12 @@ function TaskModal() {
             />
           </div>
           <div className=" mt-5 space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5  flex justify-between items-center">
-            <section
-              id="attachement"
-              className="flex items-center justify-start space-x-1 text-sm"
-            >
+            <section id="attachement" className="flex items-center justify-start space-x-1 text-sm">
               <AiOutlinePaperClip className="text-gray-500" />
               <input type="file" name="file" id="file" className="hidden" />
               <label htmlFor="file" className="italic">
                 Drag & Drop files to attach or
-                <span className="decoration-dotted text-blue-400 cursor-pointer">
-                  {' '}
-                  Browse
-                </span>
+                <span className="decoration-dotted text-blue-400 cursor-pointer"> Browse</span>
               </label>
             </section>
             <section className="flex space-x-2 text-gray-500">

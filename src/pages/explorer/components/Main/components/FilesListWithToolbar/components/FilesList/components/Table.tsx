@@ -13,12 +13,7 @@ interface TableProps {
   items: IStringifiedFile[];
 }
 
-export default function Table({
-  checkbox,
-  checked,
-  toggleAll,
-  items,
-}: TableProps) {
+export default function Table({ checkbox, checked, toggleAll, items }: TableProps) {
   const { draggableItem } = useAppSelector((state) => state.explorer);
 
   const checkboxRef = checkbox as LegacyRef<HTMLInputElement>;
@@ -37,26 +32,17 @@ export default function Table({
             />
           </th>
           {/* eye */}
-          <th
-            scope="col"
-            className="px-3 pl-5 py-2 uppercase text-left text-sm font-normal text-gray-400"
-          />
+          <th scope="col" className="px-3 pl-5 py-2 uppercase text-left text-sm font-normal text-gray-400" />
           <th
             scope="col"
             className="min-w-[12rem] pr-3.5 py-2  pl-3 uppercase text-left text-sm font-normal text-gray-400"
           >
             Name
           </th>
-          <th
-            scope="col"
-            className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400"
-          >
+          <th scope="col" className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400">
             Created at
           </th>
-          <th
-            scope="col"
-            className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400"
-          >
+          <th scope="col" className="px-3 py-2  uppercase text-left text-xs font-normal text-gray-400">
             Size
           </th>
         </tr>

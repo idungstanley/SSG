@@ -2,11 +2,7 @@ import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserMinusIcon } from '@heroicons/react/24/outline';
 import { removeTeamMemberFromGroupService } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
-import {
-  AvatarWithInitials,
-  StatusDot,
-  Dropdown,
-} from '../../../../../../components';
+import { AvatarWithInitials, StatusDot, Dropdown } from '../../../../../../components';
 import { ITeamMemberGroup } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroups.interfaces';
 
 interface RowProps {
@@ -16,22 +12,16 @@ interface RowProps {
 export default function Row({ groupTeamMember }: RowProps) {
   const queryClient = useQueryClient();
 
-  const removeTeamMemberFromGroupMutation = useMutation(
-    removeTeamMemberFromGroupService,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([
-          'team_member_group',
-          groupTeamMember.team_member_group_id,
-        ]);
-      },
+  const removeTeamMemberFromGroupMutation = useMutation(removeTeamMemberFromGroupService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['team_member_group', groupTeamMember.team_member_group_id]);
     }
-  );
+  });
 
   const removeTeamMemberFromGroup = () => {
     removeTeamMemberFromGroupMutation.mutate({
       teamMemberGroupId: groupTeamMember.team_member_group_id,
-      teamMemberId: groupTeamMember.team_member_id,
+      teamMemberId: groupTeamMember.team_member_id
     });
   };
 
@@ -50,12 +40,8 @@ export default function Row({ groupTeamMember }: RowProps) {
             />
           </div>
           <div className="ml-4">
-            <div className="font-medium text-gray-900">
-              {groupTeamMember.team_member.user.name}
-            </div>
-            <div className="text-gray-500">
-              {groupTeamMember.team_member.user.email}
-            </div>
+            <div className="font-medium text-gray-900">{groupTeamMember.team_member.user.name}</div>
+            <div className="text-gray-500">{groupTeamMember.team_member.user.email}</div>
           </div>
         </div>
       </td>
@@ -67,12 +53,9 @@ export default function Row({ groupTeamMember }: RowProps) {
                 label: 'Remove from group',
                 onClick: removeTeamMemberFromGroup,
                 icon: (
-                  <UserMinusIcon
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                ),
-              },
+                  <UserMinusIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                )
+              }
             ]}
           />
         </div>

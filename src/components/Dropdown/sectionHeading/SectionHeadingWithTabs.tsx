@@ -14,23 +14,12 @@ interface SectionHeadingWithTabsProps {
   titleSize: string;
 }
 
-function SectionHeadingWithTabs({
-  title,
-  actions,
-  tabs,
-  titleSize = 'text-xl',
-}: SectionHeadingWithTabsProps) {
+function SectionHeadingWithTabs({ title, actions, tabs, titleSize = 'text-xl' }: SectionHeadingWithTabsProps) {
   return (
     <div className="relative pb-5 border-b border-gray-200 sm:pb-0">
       <div className="md:flex md:items-center md:justify-between">
-        <h3 className={`${titleSize} leading-6 font-medium text-gray-900`}>
-          {title}
-        </h3>
-        {actions && (
-          <div className="mt-3 flex md:mt-0 md:absolute md:top-8 md:right-0">
-            {actions}
-          </div>
-        )}
+        <h3 className={`${titleSize} leading-6 font-medium text-gray-900`}>{title}</h3>
+        {actions && <div className="mt-3 flex md:mt-0 md:absolute md:top-8 md:right-0">{actions}</div>}
       </div>
       {tabs && (
         <div className="mt-4">
@@ -67,9 +56,7 @@ function SectionHeadingWithTabs({
                   {tab.count !== null ? (
                     <span
                       className={cl(
-                        tab.current
-                          ? 'bg-indigo-100 text-indigo-600'
-                          : 'bg-gray-100 text-gray-900',
+                        tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900',
                         'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block'
                       )}
                     >

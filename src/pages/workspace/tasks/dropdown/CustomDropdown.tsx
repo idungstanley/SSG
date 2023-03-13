@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../app/hooks';
-import {
-  setShowAddHotKeyDropdown,
-  setShowRemoveHotKeyDropdown,
-} from '../../../../features/workspace/workspaceSlice';
+import { setShowAddHotKeyDropdown, setShowRemoveHotKeyDropdown } from '../../../../features/workspace/workspaceSlice';
 
 export interface IColumn {
   name: string;
@@ -24,16 +21,10 @@ interface CustomDropdownProps {
   handleClick: (id: number | undefined) => void;
 }
 
-export default function CustomDropdown({
-  title,
-  listItems,
-  handleClick,
-}: CustomDropdownProps) {
+export default function CustomDropdown({ title, listItems, handleClick }: CustomDropdownProps) {
   const ref = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showAddHotKeyDropdown, showRemoveHotKeyDropdown } = useAppSelector((state) => state.workspace);
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
@@ -58,9 +49,7 @@ export default function CustomDropdown({
         <button type="button" className="p-2 font-semibold">
           {title}
         </button>
-        {title && (
-          <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700 pb-0.5 mb-1" />
-        )}
+        {title && <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700 pb-0.5 mb-1" />}
         {listItems?.map((listItem) => (
           <div
             key={listItem.name}
@@ -77,11 +66,7 @@ export default function CustomDropdown({
                 {listItem.icon ? (
                   listItem.icon
                 ) : (
-                  <img
-                    src={listItem.source}
-                    alt={listItem.name + ' icon'}
-                    className="w-3 h-3"
-                  />
+                  <img src={listItem.source} alt={listItem.name + ' icon'} className="w-3 h-3" />
                 )}
               </span>
               {listItem.name ? listItem.name : listItem.label}
@@ -89,16 +74,12 @@ export default function CustomDropdown({
             {/* <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" /> */}
           </div>
         ))}
-        {listItems?.length === 0 && (
-          <div className="p-2 text-sm font-medium">
-            There is no Item on this list. . .
-          </div>
-        )}
+        {listItems?.length === 0 && <div className="p-2 text-sm font-medium">There is no Item on this list. . .</div>}
       </div>
     </div>
   );
 }
 
 CustomDropdown.defaultProps = {
-  title: '',
+  title: ''
 };

@@ -1,41 +1,27 @@
-import React, { useState, useRef } from "react";
-import { Disclosure } from "@headlessui/react";
-import { GrDrag } from "react-icons/gr";
-import { BiCaretRight } from "react-icons/bi";
-import ChecklistModal from "./components/ChecklistModal";
-import { completeOptions } from "./ModalOptions";
-import { itemProps } from "./components/ChecklistItem";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { UseUpdateChecklistService } from "../../../../../features/task/checklist/checklistService";
-import { setTriggerChecklistUpdate } from "../../../../../features/task/checklist/checklistSlice";
-import ChecklistItem from "./components/ChecklistItem";
-import { useSortable } from "@dnd-kit/sortable";
+import React, { useState, useRef } from 'react';
+import { Disclosure } from '@headlessui/react';
+import { GrDrag } from 'react-icons/gr';
+import { BiCaretRight } from 'react-icons/bi';
+import ChecklistModal from './components/ChecklistModal';
+import { completeOptions } from './ModalOptions';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { UseUpdateChecklistService } from '../../../../../features/task/checklist/checklistService';
+import { setTriggerChecklistUpdate } from '../../../../../features/task/checklist/checklistSlice';
+import ChecklistItem from './components/ChecklistItem';
+import { useSortable } from '@dnd-kit/sortable';
+import { ICheckListRes } from '../../../../../features/task/interface.tasks';
 
-interface checklistArr {
-  id: string;
-  name: string;
-  is_done: number;
-  items: itemProps[];
-}
-
-function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
+function SingleChecklist({ item, id }: { item: ICheckListRes; id: string }) {
   const dispatch = useAppDispatch();
-  const [checklistName, setChecklistName] = useState<string>("");
+  const [checklistName, setChecklistName] = useState<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [checklistId, setChecklistId] = useState<string>("");
+  const [checklistId, setChecklistId] = useState<string>('');
 
   const { triggerChecklistUpdate } = useAppSelector((state) => state.checklist);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id,
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id
   });
 
   const handleEdit = (id: string) => {
@@ -48,16 +34,14 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
   UseUpdateChecklistService({
     checklist_id: checklistId,
     name: checklistName,
-    triggerUpdate: triggerChecklistUpdate,
+    triggerUpdate: triggerChecklistUpdate
   });
 
   const style = {
-    transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
-      : undefined,
+    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
-    backgroundColor: isDragging ? "#f3f4f6" : undefined,
-    zIndex: isDragging ? 1 : undefined,
+    backgroundColor: isDragging ? '#f3f4f6' : undefined,
+    zIndex: isDragging ? 1 : undefined
   };
 
   const done = item.items.filter((e: { is_done: number }) => e.is_done);
@@ -83,18 +67,14 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
               <span className="px-5 flex items-center">
                 <Disclosure.Button>
                   <div className="mx-1">
-                    <BiCaretRight
-                      className={open ? "rotate-90 transform w-4 h-4" : ""}
-                    />
+                    <BiCaretRight className={open ? 'rotate-90 transform w-4 h-4' : ''} />
                   </div>
                 </Disclosure.Button>
                 <div
                   suppressContentEditableWarning={true}
                   ref={inputRef}
                   contentEditable={true}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" ? handleEdit(item.id) : null
-                  }
+                  onKeyDown={(e) => (e.key === 'Enter' ? handleEdit(item.id) : null)}
                   className="cursor-text"
                 >
                   {item.name}
@@ -104,11 +84,7 @@ function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
                 </label>
               </span>
               <div className="opacity-0 group-hover:opacity-100">
-                <ChecklistModal
-                  options={completeOptions}
-                  checklistId={item.id}
-                  focus={focusItem}
-                />
+                <ChecklistModal options={completeOptions} checklistId={item.id} focus={focusItem} />
               </div>
             </div>
             <Disclosure.Panel className="ml-6">

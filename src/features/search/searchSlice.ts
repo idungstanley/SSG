@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
 interface SearchState {
@@ -14,7 +14,7 @@ const initialState: SearchState = {
   searchFileContents: false,
   selectedItemId: null,
   selectedItemType: null,
-  selectedItemPath: null,
+  selectedItemPath: null
 };
 
 export const searchSlice = createSlice({
@@ -32,24 +32,24 @@ export const searchSlice = createSlice({
       state.selectedItemType = null;
       state.selectedItemPath = null;
     },
-    setSelectedItem: (state, action) => {
+    setSelectedItem: (
+      state,
+      action: PayloadAction<{
+        selectedItemId: null | string;
+        selectedItemType: null | string;
+        selectedItemPath: null | string;
+      }>
+    ) => {
       state.selectedItemId = action.payload.selectedItemId;
       state.selectedItemType = action.payload.selectedItemType;
       state.selectedItemPath = action.payload.selectedItemPath;
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(switchWorkspace, () => initialState)
-      .addCase(logout, () => initialState);
-  },
+    builder.addCase(switchWorkspace, () => initialState).addCase(logout, () => initialState);
+  }
 });
 
-export const {
-  setSearchQuery,
-  setSearchFileContents,
-  resetSelectedItem,
-  setSelectedItem,
-} = searchSlice.actions;
+export const { setSearchQuery, setSearchFileContents, resetSelectedItem, setSelectedItem } = searchSlice.actions;
 
 export default searchSlice.reducer;

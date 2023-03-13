@@ -1,11 +1,7 @@
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { Spinner } from '../../../../common';
-import {
-  SimpleSectionHeading,
-  Button,
-  EmptyStateSimple,
-} from '../../../../components';
+import { SimpleSectionHeading, Button, EmptyStateSimple } from '../../../../components';
 import Breadcrumb from '../../components/Breadcrumb';
 import Table from './components/Table';
 import { setCreateTeamMemberGroupSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
@@ -16,12 +12,8 @@ import { useAppSelector } from '../../../../app/hooks';
 export default function TeamMemberGroupsPage() {
   const dispatch = useDispatch();
 
-  const { teamMemberGroupsPaginationPage } = useAppSelector(
-    (state) => state.teamMemberGroup
-  );
-  const { status, data } = useGetTeamMemberGroups(
-    teamMemberGroupsPaginationPage
-  );
+  const { teamMemberGroupsPaginationPage } = useAppSelector((state) => state.teamMemberGroup);
+  const { status, data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 
   return (
     <>
@@ -31,13 +23,13 @@ export default function TeamMemberGroupsPage() {
             {
               name: 'Team members',
               href: '/settings/team-members',
-              current: false,
+              current: false
             },
             {
               name: 'Groups',
               href: '/settings/team-members/groups',
-              current: true,
-            },
+              current: true
+            }
           ]}
         />
         <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
@@ -48,9 +40,7 @@ export default function TeamMemberGroupsPage() {
               actions={
                 <Button
                   buttonStyle="primary"
-                  onClick={() =>
-                    dispatch(setCreateTeamMemberGroupSlideOverVisibility(true))
-                  }
+                  onClick={() => dispatch(setCreateTeamMemberGroupSlideOverVisibility(true))}
                   loading={false}
                   label="Create group"
                   width={50}
@@ -65,27 +55,21 @@ export default function TeamMemberGroupsPage() {
             </div>
           )}
 
-          {status === 'success' &&
-            data.data.team_member_groups?.length === 0 && (
-              <div className="flex flex-1 h-full">
-                <div className="m-auto">
-                  <EmptyStateSimple
-                    title="Create your first group"
-                    description="Do more with team member groups"
-                    ctaText="Create"
-                    ctaOnClick={() =>
-                      dispatch(
-                        setCreateTeamMemberGroupSlideOverVisibility(true)
-                      )
-                    }
-                    showCta
-                  />
-                </div>
+          {status === 'success' && data.data.team_member_groups?.length === 0 && (
+            <div className="flex flex-1 h-full">
+              <div className="m-auto">
+                <EmptyStateSimple
+                  title="Create your first group"
+                  description="Do more with team member groups"
+                  ctaText="Create"
+                  ctaOnClick={() => dispatch(setCreateTeamMemberGroupSlideOverVisibility(true))}
+                  showCta
+                />
               </div>
-            )}
+            </div>
+          )}
 
-          {status === 'success' &&
-            data.data.team_member_groups?.length !== 0 && <Table />}
+          {status === 'success' && data.data.team_member_groups?.length !== 0 && <Table />}
         </main>
       </div>
       <CreateTeamMemberGroupSlideOver />

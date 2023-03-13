@@ -13,10 +13,7 @@ interface MenuWithTransitionProps {
   }[];
 }
 
-export default function MenuWithTransition({
-  icon,
-  menuItems,
-}: MenuWithTransitionProps) {
+export default function MenuWithTransition({ icon, menuItems }: MenuWithTransitionProps) {
   return (
     <Menu as="div" className="relative">
       <div>
@@ -51,10 +48,7 @@ export default function MenuWithTransition({
                 ) : typeof i.onClick === 'string' ? (
                   <Link
                     to={i.onClick}
-                    className={cl(
-                      active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700 text-left'
-                    )}
+                    className={cl(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 text-left')}
                   >
                     {i.title}
                   </Link>

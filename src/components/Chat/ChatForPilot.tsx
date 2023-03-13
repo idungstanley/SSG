@@ -9,13 +9,10 @@ export default function ChatForPilot() {
 
   const sections = [
     { id: 0, element: <ChatSection /> },
-    { id: 1, element: <Contacts /> },
+    { id: 1, element: <Contacts /> }
   ];
 
-  const selectedSection = useMemo(
-    () => sections.find((section) => section.id === activeTabId),
-    [activeTabId]
-  );
+  const selectedSection = useMemo(() => sections.find((section) => section.id === activeTabId), [activeTabId]);
 
   return (
     <>

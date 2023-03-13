@@ -15,8 +15,7 @@ import { useAcceptTeamMemberInvite } from '../../../../../features/settings/team
 function RegisterPage() {
   const dispatch = useAppDispatch();
   const { inviteCode } = useParams();
-  const [acceptInviteTrigger, setAcceptInviteTrigger] =
-    useState<boolean>(false);
+  const [acceptInviteTrigger, setAcceptInviteTrigger] = useState<boolean>(false);
 
   const { mutate: onRegister, data } = useRegisterService();
   useAcceptTeamMemberInvite(acceptInviteTrigger);
@@ -30,22 +29,17 @@ function RegisterPage() {
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
-      localStorage.setItem(
-        'currentWorkspaceId',
-        JSON.stringify(default_workspace_id)
-      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(default_workspace_id));
       dispatch(
         setAuthData({
           user,
           accessToken,
           currentWorkspaceId: default_workspace_id,
-          currentUserId: user_id,
+          currentUserId: user_id
         })
       );
 
-      const workspaceInvite = JSON.parse(
-        localStorage.getItem('teamMemberInviteCode') as string
-      );
+      const workspaceInvite = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
 
       if (workspaceInvite) {
         window.location.href = `/accept-invite/${workspaceInvite}`;
@@ -55,16 +49,12 @@ function RegisterPage() {
     }
   }, [data]);
 
-  const onSubmit = (values: {
-    name?: string;
-    email: string;
-    password: string;
-  }) => {
+  const onSubmit = (values: { name?: string; email: string; password: string }) => {
     onRegister({
       name: values.name || '',
       email: values.email,
       password: values.password,
-      inviteCode,
+      inviteCode
     });
   };
 
@@ -72,7 +62,7 @@ function RegisterPage() {
     initValues: {
       name: '',
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -80,11 +70,9 @@ function RegisterPage() {
         .max(20, 'Must be 20 characters or less')
         .required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string()
-        .min(8, 'Password must be 8 characters or longer!')
-        .required('Required'),
+      password: Yup.string().min(8, 'Password must be 8 characters or longer!').required('Required')
     }),
-    buttonTitle: 'Sign Up',
+    buttonTitle: 'Sign Up'
   };
 
   const [firstCheckbox, setFirstCheckbox] = useState(false);
@@ -93,18 +81,17 @@ function RegisterPage() {
   const checkboxConfig = [
     {
       id: 'First',
-      label:
-        'By checking this box, you agree to receive emails for marketing from Also Workspace',
+      label: 'By checking this box, you agree to receive emails for marketing from Also Workspace',
       value: firstCheckbox,
-      onChange: () => setFirstCheckbox(!firstCheckbox),
+      onChange: () => setFirstCheckbox(!firstCheckbox)
     },
     {
       id: 'Second',
       label:
         'By checking this box, you agree to our Terms of Service and Privacy Policy, and consent to data transfer, hosting, and processing outside of the UK.',
       value: secondCheckbox,
-      onChange: () => setSecondCheckbox(!secondCheckbox),
-    },
+      onChange: () => setSecondCheckbox(!secondCheckbox)
+    }
   ];
 
   return (
@@ -115,11 +102,7 @@ function RegisterPage() {
 
           <InviteDetails />
 
-          <Form
-            onSubmit={(values) => onSubmit(values)}
-            formikConfig={formikConfig}
-            checkboxConfig={checkboxConfig}
-          />
+          <Form onSubmit={(values) => onSubmit(values)} formikConfig={formikConfig} checkboxConfig={checkboxConfig} />
 
           <GoogleLogin title="Or sign up with Google" />
         </div>

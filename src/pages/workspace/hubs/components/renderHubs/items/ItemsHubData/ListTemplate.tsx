@@ -17,13 +17,11 @@ export interface dataProps {
 
 export default function ListTemplate({ listId }: listIdprops) {
   const { data } = getTaskListService({ listId });
-  const { currentParentTaskId, getSubTaskId } = useAppSelector(
-    (state) => state.task
-  );
+  const { currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
 
   return (
     <div className="">
-      {data?.data.tasks.map((task: ImyTaskData) => {
+      {data?.data.tasks.map((task) => {
         return (
           <div key={task.id} className="capitalize">
             <TaskData task={task} />

@@ -3,10 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
 import PageWrapper from '../../components/PageWrapper';
-import {
-  useGetDirectoryTemplate,
-  useGetDirectoryTemplates,
-} from '../../features/directory/directoryService';
+import { useGetDirectoryTemplate, useGetDirectoryTemplates } from '../../features/directory/directoryService';
 import { cl } from '../../utils';
 import FieldItem from './components/FieldItem';
 import PilotSection, { pilotConfig } from './components/PilotSection';
@@ -16,27 +13,23 @@ import TemplateItems from './components/TemplateItems';
 const tabs = [
   {
     id: 1,
-    label: 'Directory',
+    label: 'Directory'
   },
   {
     id: 2,
-    label: 'New',
-  },
+    label: 'New'
+  }
 ];
 
 function Directory() {
   const { directoryId } = useParams();
   const [activeTabId, setActiveTabId] = useState(1);
 
-  const [selectedTemplateId, setSelectedTemplateId] = useState<null | string>(
-    null
-  );
+  const [selectedTemplateId, setSelectedTemplateId] = useState<null | string>(null);
 
-  const { data: templates, status: templatesStatus } =
-    useGetDirectoryTemplates(directoryId);
+  const { data: templates, status: templatesStatus } = useGetDirectoryTemplates(directoryId);
 
-  const { data: template, status: templateStatus } =
-    useGetDirectoryTemplate(selectedTemplateId);
+  const { data: template, status: templateStatus } = useGetDirectoryTemplate(selectedTemplateId);
 
   return (
     <>
@@ -78,10 +71,7 @@ function Directory() {
             </div>
           ) : templatesStatus === 'error' ? (
             <div className="w-full h-full">
-              <FullScreenMessage
-                title="Oops, an error occurred :("
-                description="Please try again later."
-              />
+              <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
             </div>
           ) : null}
 
@@ -89,20 +79,13 @@ function Directory() {
           {templates ? (
             !templates.length ? (
               <div className="w-full h-full">
-                <FullScreenMessage
-                  title="No records yet :("
-                  description="Create one."
-                />
+                <FullScreenMessage title="No records yet :(" description="Create one." />
               </div>
             ) : (
               <div className="flex flex-col gap-3">
                 {templates.map((template) => (
                   <p
-                    onClick={() =>
-                      setSelectedTemplateId((prev) =>
-                        prev === template.id ? null : template.id
-                      )
-                    }
+                    onClick={() => setSelectedTemplateId((prev) => (prev === template.id ? null : template.id))}
                     key={template.id}
                     className={cl(
                       'border p-2 rounded-xl cursor-pointer text-black border-gray-700 hover:border-black',
@@ -129,20 +112,14 @@ function Directory() {
 
               <div className="flex flex-col space-y-4 divide-y divide-gray-200">
                 {template.fields.map((field) => (
-                  <FieldItem
-                    key={field.id}
-                    selectedTemplateId={selectedTemplateId}
-                    fieldData={field}
-                  />
+                  <FieldItem key={field.id} selectedTemplateId={selectedTemplateId} fieldData={field} />
                 ))}
                 <FieldItem selectedTemplateId={selectedTemplateId} />
               </div>
             </div>
           ) : null}
 
-          {selectedTemplateId ? (
-            <TemplateItems selectedTemplateId={selectedTemplateId} />
-          ) : null}
+          {selectedTemplateId ? <TemplateItems selectedTemplateId={selectedTemplateId} /> : null}
         </div>
       </PageWrapper>
     </>

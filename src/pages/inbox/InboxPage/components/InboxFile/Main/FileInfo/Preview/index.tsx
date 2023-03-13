@@ -27,10 +27,7 @@ function Preview() {
   return inboxFile ? (
     <div className="w-full h-full overflow-y-scroll mx-px">
       {fileData ? (
-        <FilePreview
-          fileData={fileData}
-          fileExtension={inboxFile.inbox_file_source.file_format.extension}
-        />
+        <FilePreview fileData={fileData} fileExtension={inboxFile.inbox_file_source.file_format.extension} />
       ) : (
         <div className="mx-auto w-6 mt-10 justify-center">
           <Spinner size={8} color="#0F70B7" />

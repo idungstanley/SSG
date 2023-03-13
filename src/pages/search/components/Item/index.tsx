@@ -28,7 +28,7 @@ function Item({ data }: dataProps) {
       setSelectedItem({
         selectedItemType: icon === 'folder' ? 'folder' : 'file',
         selectedItemId: id,
-        selectedItemPath: from,
+        selectedItemPath: from
       })
     );
   };
@@ -38,9 +38,7 @@ function Item({ data }: dataProps) {
       key={id}
       onClick={handleClick}
       className={`select-none cursor-pointer ${
-        selectedItemId === id
-          ? 'bg-gray-200'
-          : 'hover:bg-gray-100 active:bg-gray-200'
+        selectedItemId === id ? 'bg-gray-200' : 'hover:bg-gray-100 active:bg-gray-200'
       }`}
     >
       <td className="px-6 py-4 whitespace-nowrap">
@@ -49,9 +47,7 @@ function Item({ data }: dataProps) {
             <FileIcon extensionKey={icon} size={10} />
           </div>
           <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900 select-text">
-              {name}
-            </div>
+            <div className="text-sm font-medium text-gray-900 select-text">{name}</div>
           </div>
         </div>
       </td>
@@ -60,16 +56,10 @@ function Item({ data }: dataProps) {
         <PathBadge expanded={!!size} />
       </td>
 
-      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        {from}
-      </td>
+      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{from}</td>
 
-      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        {OutputDateTime(createdAt)}
-      </td>
-      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        {size ? OutputFileSize(size) : '-'}
-      </td>
+      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{OutputDateTime(createdAt)}</td>
+      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{size ? OutputFileSize(size) : '-'}</td>
     </tr>
   );
 }

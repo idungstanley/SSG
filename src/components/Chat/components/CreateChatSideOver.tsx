@@ -29,21 +29,9 @@ export default function CreateChatSideOver() {
   };
 
   return (
-    <SideOver
-      show={showCreateChatSideOver}
-      onClose={onClose}
-      title="Create new Chat"
-    >
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className="flex flex-col gap-5 px-4 sm:px-6"
-      >
-        <Input
-          name="name"
-          value={name}
-          placeholder="enter chat name:"
-          onChange={(e) => setName(e.target.value)}
-        />
+    <SideOver show={showCreateChatSideOver} onClose={onClose} title="Create new Chat">
+      <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-5 px-4 sm:px-6">
+        <Input name="name" value={name} placeholder="enter chat name:" onChange={(e) => setName(e.target.value)} />
         <button
           type="submit"
           className="w-full rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-center font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none ring-0 focus:ring-0"

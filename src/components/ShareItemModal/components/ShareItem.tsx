@@ -16,16 +16,14 @@ export default function ShareItem() {
 
   const { currentUserId } = useAppSelector((state) => state.auth);
 
-  const membersWithoutActive = teamMembers?.filter(
-    (member) => member.user.id !== currentUserId
-  );
+  const membersWithoutActive = teamMembers?.filter((member) => member.user.id !== currentUserId);
 
   const handleShare = (member: ISelectedData | null) => {
     if (member && type && id) {
       onShare({
         type,
         userId: member.id,
-        itemId: id,
+        itemId: id
       });
     }
   };
@@ -43,7 +41,7 @@ export default function ShareItem() {
             name: i.name || i.user.name,
             email: i.user?.email,
             accessLevel: i.id,
-            type: 'member',
+            type: 'member'
           }))}
           selectedData={null}
           setSelectedData={handleShare}

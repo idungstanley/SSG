@@ -3,7 +3,6 @@ import Layout from '../components/Layout';
 import SideOver from '../components/SideOver';
 
 function TeamMembersSettingsPage() {
-
   return (
     <>
       <Layout isGroups={false} />

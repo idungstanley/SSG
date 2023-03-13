@@ -9,18 +9,11 @@ interface ChangeAccessProps {
   accessToId: string;
 }
 
-export default function ChangeAccess({
-  actualAccess,
-  itemType,
-  accessToId,
-}: ChangeAccessProps) {
+export default function ChangeAccess({ actualAccess, itemType, accessToId }: ChangeAccessProps) {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { id, type } = pilotSideOver;
 
-  const { mutate: onChange } = useChangeAccessForData(
-    type as 'file' | 'folder',
-    id
-  );
+  const { mutate: onChange } = useChangeAccessForData(type as 'file' | 'folder', id);
 
   const onChangeAccess = (key: string) => {
     if (id && type) {
@@ -29,7 +22,7 @@ export default function ChangeAccess({
         key,
         accessToId,
         type: type as 'file' | 'folder',
-        itemType,
+        itemType
       });
     }
   };
@@ -40,7 +33,7 @@ export default function ChangeAccess({
         { id: 'read', name: 'Read-only' },
         { id: 'modify', name: 'Manage' },
         { id: 'full-control', name: 'Full control' },
-        { id: 'owner', name: 'Owner' },
+        { id: 'owner', name: 'Owner' }
       ]}
       onChange={onChangeAccess}
       selectedId={actualAccess}

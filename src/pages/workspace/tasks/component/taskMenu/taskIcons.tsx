@@ -2,12 +2,7 @@ import React from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsTags } from 'react-icons/bs';
 import { TbSubtask } from 'react-icons/tb';
-import {
-  MdOutlineDeveloperBoard,
-  MdOutlineDriveFileMove,
-  MdDateRange,
-  MdDeleteForever,
-} from 'react-icons/md';
+import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
@@ -19,98 +14,98 @@ const TaskIcons = [
     id: 1,
     icons: <IoEyeOutline />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 2,
     icons: <UserPlusIcon />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 3,
     icons: <MdOutlineDeveloperBoard />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 4,
     icons: <BsTags />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 5,
     icons: <TbSubtask />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 6,
     icons: <MdOutlineDriveFileMove />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 7,
     icons: <HiOutlineDocumentDuplicate />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 8,
     icons: <TbFolderX />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 9,
     icons: <MdDateRange />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 10,
     icons: <FlagIcon />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 11,
     icons: <GiStoneStack />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 12,
     icons: <BiMerge />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 13,
     icons: <GiJusticeStar />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 14,
     icons: <BiEdit />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 15,
     icons: <HiInbox />,
     handleClick: () => ({}),
-    isVisible: true,
+    isVisible: true
   },
   {
     id: 16,
     icons: <MdDeleteForever />,
     handleClick: () => ({}),
-    isVisible: true,
-  },
+    isVisible: true
+  }
 ];
 
 export default TaskIcons;

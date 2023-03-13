@@ -22,7 +22,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center rounded-full cursor-pointer text-gray-700 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+        <Menu.Button className="flex items-center text-gray-700 rounded-full cursor-pointer hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
@@ -42,7 +42,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 w-56 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 w-40 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {config.map((i) => (
             <Menu.Item key={i.label}>
               {({ active }) => (

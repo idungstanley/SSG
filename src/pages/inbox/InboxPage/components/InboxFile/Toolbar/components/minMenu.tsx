@@ -6,30 +6,22 @@ import {
   ArrowDownTrayIcon,
   InboxIcon,
   InboxArrowDownIcon,
-  NoSymbolIcon,
+  NoSymbolIcon
 } from '@heroicons/react/24/solid';
 import { useDispatch } from 'react-redux';
-import {
-  useArchiveOrUnarchiveInboxFile,
-  useGetInboxFile,
-} from '../../../../../../../features/inbox/inboxService';
+import { useArchiveOrUnarchiveInboxFile, useGetInboxFile } from '../../../../../../../features/inbox/inboxService';
 import {
   setAssignInboxFileSlideOverVisibility,
-  setShowWatchersSideOver,
+  setShowWatchersSideOver
 } from '../../../../../../../features/general/slideOver/slideOverSlice';
-import {
-  useBlacklistFile,
-  useGetBlacklistFiles,
-} from '../../../../../../../features/inbox/inboxesService';
+import { useBlacklistFile, useGetBlacklistFiles } from '../../../../../../../features/inbox/inboxesService';
 import { DownloadFile } from '../../../../../../../app/helpers';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { EyeIcon } from '@heroicons/react/24/outline';
 
 export default function MinMenu() {
   const dispatch = useDispatch();
-  const selectedInboxFileId = useAppSelector(
-    (state) => state.inbox.selectedInboxFileId
-  );
+  const selectedInboxFileId = useAppSelector((state) => state.inbox.selectedInboxFileId);
   const { data: inboxFile } = useGetInboxFile(selectedInboxFileId);
   const { mutate: archiveFile } = useArchiveOrUnarchiveInboxFile();
   const { mutate: addOrRemoveFromBlacklist } = useBlacklistFile();
@@ -45,24 +37,19 @@ export default function MinMenu() {
     inboxFile &&
       archiveFile({
         inboxFileId: inboxFile.id,
-        type: inboxFile.archived_at ? 'unarchive' : 'archive',
+        type: inboxFile.archived_at ? 'unarchive' : 'archive'
       });
   };
 
   const blacklist = () => {
     addOrRemoveFromBlacklist({
       type: fileInBlacklist ? 'remove' : 'add',
-      fileId: selectedInboxFileId,
+      fileId: selectedInboxFileId
     });
   };
 
   const onDownload = async () => {
-    inboxFile &&
-      DownloadFile(
-        'inboxFile',
-        inboxFile.id,
-        inboxFile.inbox_file_source.display_name
-      );
+    inboxFile && DownloadFile('inboxFile', inboxFile.id, inboxFile.inbox_file_source.display_name);
   };
 
   const items = [
@@ -70,45 +57,26 @@ export default function MinMenu() {
       label: inboxFile?.archived_at ? 'Unarchive' : 'Archive',
       onClick: archive,
       icon: inboxFile?.archived_at ? (
-        <InboxIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
+        <InboxIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
       ) : (
-        <ArchiveBoxXMarkIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
-      ),
+        <ArchiveBoxXMarkIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+      )
     },
     {
       label: 'Watchers',
-      onClick: () =>
-        dispatch(setShowWatchersSideOver({ show: true, type: 'inbox_file' })),
-      icon: (
-        <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
-      ),
+      onClick: () => dispatch(setShowWatchersSideOver({ show: true, type: 'inbox_file' })),
+      icon: <EyeIcon className="mr-2.5 h-5 w-5 text-gray-500" aria-hidden="true" />
     },
     {
       label: 'Assign',
       onClick: () => dispatch(setAssignInboxFileSlideOverVisibility(true)),
-      icon: (
-        <InboxArrowDownIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
-      ),
+      icon: <InboxArrowDownIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
     },
     {
       label: fileInBlacklist ? 'Remove from blacklist' : 'Add to blacklist',
       onClick: blacklist,
-      icon: (
-        <NoSymbolIcon
-          className="mr-2.5 h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
-      ),
-    },
+      icon: <NoSymbolIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+    }
   ];
 
   return (
@@ -138,24 +106,15 @@ export default function MinMenu() {
                       className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3 cursor-pointer"
                     >
                       {item.icon}
-                      <p className="block py-2 text-sm text-gray-700">
-                        {item.label}
-                      </p>
+                      <p className="block py-2 text-sm text-gray-700">{item.label}</p>
                     </div>
                   )}
                 </Menu.Item>
               ))}
 
               <div className="flex whitespace-nowrap items-center hover:bg-gray-100 px-3">
-                <ArrowDownTrayIcon
-                  className="mr-2.5 h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-                <button
-                  type="button"
-                  onClick={onDownload}
-                  className="block py-2 text-sm text-gray-700"
-                >
+                <ArrowDownTrayIcon className="mr-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                <button type="button" onClick={onDownload} className="block py-2 text-sm text-gray-700">
                   Download
                 </button>
               </div>

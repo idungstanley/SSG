@@ -44,8 +44,8 @@ export interface NotificationType {
 }
 
 export interface CardItemTypes {
-  assigned: AccumulatedNotificationType;
-  unassigned: AccumulatedNotificationType;
+  assigned?: AccumulatedNotificationType;
+  unassigned?: AccumulatedNotificationType;
 }
 
 export interface CardNotificationType {

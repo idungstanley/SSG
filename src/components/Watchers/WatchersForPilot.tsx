@@ -6,10 +6,7 @@ import AddNew from './components/AddNew';
 export default function WatchersForPilot() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
-  const item =
-    pilotSideOver?.type && pilotSideOver?.id
-      ? { type: pilotSideOver.type, id: pilotSideOver.id }
-      : null;
+  const item = pilotSideOver?.type && pilotSideOver?.id ? { type: pilotSideOver.type, id: pilotSideOver.id } : null;
 
   return (
     <div className="flex flex-col pt-2">

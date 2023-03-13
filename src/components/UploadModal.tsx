@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Uppy from '@uppy/core';
+import Uppy, { SuccessResponse } from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
@@ -10,14 +10,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { setShowUploadModal } from '../features/general/uploadFile/uploadFileSlice';
 import { useAppSelector } from '../app/hooks';
 
-const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null');
-const currentWorkspaceId = JSON.parse(
-  localStorage.getItem('currentWorkspaceId') || 'null'
-);
+const accessToken = JSON.parse(localStorage.getItem('accessToken') || 'null') as string | null;
+const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
 const headers = {
   Authorization: `Bearer ${accessToken}`,
-  current_workspace_id: currentWorkspaceId,
+  current_workspace_id: currentWorkspaceId
 };
 
 export default function UploadModal() {
@@ -35,19 +33,19 @@ export default function UploadModal() {
     new Uppy({
       debug: true,
       autoProceed: true,
-      meta: {},
+      meta: {}
     }).use(XHRUpload, {
       endpoint: '',
       bundle: false,
-      headers,
+      headers
     })
   );
 
   const { xhrUpload } = uppy.getState();
 
-  uppy.on('upload-success', (file, response) => {
+  uppy.on('upload-success', (file, response: SuccessResponse) => {
     const httpStatus = response.status;
-    const httpBody = response.body;
+    const httpBody = response.body as { success: boolean };
 
     if (httpStatus === 200) {
       if (httpBody.success === true) {
@@ -60,11 +58,7 @@ export default function UploadModal() {
           //     : httpBody.data.uploaded_to_folder_id,
           // ]);
         } else {
-          queryClient.invalidateQueries([
-            'inbox_files',
-            inboxId,
-            { isArchived: 0 },
-          ]);
+          queryClient.invalidateQueries(['inbox_files', inboxId, { isArchived: 0 }]);
           queryClient.invalidateQueries(['inboxes']);
           queryClient.invalidateQueries(['inbox_files', inboxId]);
         }
@@ -73,9 +67,7 @@ export default function UploadModal() {
   });
 
   useEffect(() => {
-    const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${
-      isExplorerPath ? 'files' : 'inboxes'
-    }`;
+    const uploadUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af/${isExplorerPath ? 'files' : 'inboxes'}`;
     const endpoint = isExplorerPath
       ? folderId == null
         ? uploadUrl
@@ -85,8 +77,8 @@ export default function UploadModal() {
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint,
-      },
+        endpoint
+      }
     });
   }, [dataId]);
 

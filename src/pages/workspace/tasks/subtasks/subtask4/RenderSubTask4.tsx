@@ -11,12 +11,10 @@ interface RenderSubTask2Props {
 }
 
 export default function RendersubTask4({ parentId }: RenderSubTask2Props) {
-  const { currentParentTaskId, currentParentSubTaskId4 } = useAppSelector(
-    (state) => state.task
-  );
+  const { currentParentTaskId, currentParentSubTaskId4 } = useAppSelector((state) => state.task);
 
   const { data } = getTaskListService2({
-    parentId: parentId,
+    parentId: parentId
   });
 
   return (

@@ -1,36 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import requestNew from '../../app/requestNew';
-import { itemType } from '../../types';
+import requestNew from '../../../app/requestNew';
+import { itemType } from '../../../types';
+import { ICommentsRes } from './comments.interfaces';
 
-export const useGetItemComments = (data: {
-  type?: itemType | string;
-  id?: string | null;
-}) =>
+export const useGetItemComments = (data: { type?: itemType | string; id?: string | null }) =>
   useQuery(
     ['comments', data.id],
     () =>
-      requestNew(
+      requestNew<ICommentsRes>(
         {
           url: 'comments',
           method: 'GET',
           params: {
             type: data.type,
-            id: data.id,
-          },
+            id: data.id
+          }
         },
         true
       ),
     {
       enabled: !!data.type && !!data.id,
-      select: (comments) => comments.data.comments,
+      select: (comments) => comments.data.comments
     }
   );
 
-const createItemComment = (data: {
-  id: string;
-  message: string;
-  type: itemType | string;
-}) => {
+const createItemComment = (data: { id: string; message: string; type: itemType | string }) => {
   const request = requestNew(
     {
       url: 'comments',
@@ -38,8 +32,8 @@ const createItemComment = (data: {
       data: {
         message: data.message,
         type: data.type,
-        id: data.id,
-      },
+        id: data.id
+      }
     },
     true
   );
@@ -52,7 +46,7 @@ export const useCreateItemComment = (id?: string | null) => {
   return useMutation(createItemComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['comments', id]);
-    },
+    }
   });
 };
 
@@ -60,7 +54,7 @@ const deleteItemComment = (data: { id: string }) => {
   const request = requestNew(
     {
       url: `comments/${data.id}`,
-      method: 'DELETE',
+      method: 'DELETE'
     },
     true
   );
@@ -73,7 +67,7 @@ export const useDeleteItemComment = (id?: string | null) => {
   return useMutation(deleteItemComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['comments', id]);
-    },
+    }
   });
 };
 
@@ -83,8 +77,8 @@ const editItemComment = (data: { id: string; message: string }) => {
       url: `comments/${data.id}`,
       method: 'PUT',
       data: {
-        message: data.message,
-      },
+        message: data.message
+      }
     },
     true
   );
@@ -97,6 +91,6 @@ export const useEditItemComment = (id?: string | null) => {
   return useMutation(editItemComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['comments', id]);
-    },
+    }
   });
 };

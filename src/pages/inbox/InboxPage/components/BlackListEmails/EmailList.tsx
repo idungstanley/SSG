@@ -1,9 +1,6 @@
 import React from 'react';
 import { TrashIcon } from '@heroicons/react/24/solid';
-import {
-  useDeleteEmailFromList,
-  useGetEmailList,
-} from '../../../../../features/inbox/inboxService';
+import { useDeleteEmailFromList, useGetEmailList } from '../../../../../features/inbox/inboxService';
 import { Spinner } from '../../../../../common';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { useParams } from 'react-router-dom';
@@ -18,7 +15,7 @@ export default function EmailList() {
   const handleDelete = (emailId: string) => {
     deleteEmail({
       inboxId,
-      emailId,
+      emailId
     });
   };
 
@@ -43,9 +40,6 @@ export default function EmailList() {
       <FullScreenMessage title="No emails yes." description="Create one." />
     )
   ) : (
-    <FullScreenMessage
-      title="Oops, an error occurred :("
-      description="Please try again later."
-    />
+    <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
   );
 }

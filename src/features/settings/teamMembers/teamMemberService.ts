@@ -4,11 +4,7 @@ import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
-export const useGetTeamMembers = (data: {
-  page: number;
-  query: string;
-  isEnabled?: boolean;
-}) => {
+export const useGetTeamMembers = (data: { page: number; query: string; isEnabled?: boolean }) => {
   const queryClient = useQueryClient();
   const enabled = data.isEnabled ? data.isEnabled : true;
 
@@ -23,8 +19,8 @@ export const useGetTeamMembers = (data: {
           method: 'GET',
           params: {
             page: data.page,
-            search: data.query,
-          },
+            search: data.query
+          }
         },
         true
       );
@@ -35,7 +31,7 @@ export const useGetTeamMembers = (data: {
         successData.data.team_members?.map((teamMember) =>
           queryClient.setQueryData(['team_member', teamMember.id], teamMember)
         );
-      },
+      }
     }
   );
 };
@@ -47,10 +43,10 @@ export const useGetTeamMember = (teamMemberId: string) => {
   return useQuery<ITeamMember>(
     ['team_member', teamMemberId],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<{ data: { team_member: ITeamMember } }>(
         {
           url: `settings/team-members/${teamMemberId}`,
-          method: 'GET',
+          method: 'GET'
         },
         true
       );
@@ -58,19 +54,17 @@ export const useGetTeamMember = (teamMemberId: string) => {
     },
     {
       initialData: queryClient.getQueryData(['team_member', teamMemberId]),
-      enabled: teamMemberId != null,
+      enabled: teamMemberId != null
     }
   );
 };
 
 // Deactivate team member service
-export const deactivateTeamMemberService = async (data: {
-  teamMemberId: string;
-}) => {
-  const response = requestNew(
+export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
+  const response = requestNew<{ data: { team_member: ITeamMember } }>(
     {
       url: `/settings/team-members/${data.teamMemberId}/deactivate`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -82,22 +76,17 @@ export function useDeactivateTeamMember(teamMemberId: string) {
 
   return useMutation(() => deactivateTeamMemberService({ teamMemberId }), {
     onSuccess: (successData) => {
-      queryClient.setQueryData(
-        ['team_member', teamMemberId],
-        successData.data.team_member
-      );
-    },
+      queryClient.setQueryData(['team_member', teamMemberId], successData.data.team_member);
+    }
   });
 }
 
 // Reactivate team member service
-export const reactivateTeamMemberService = async (data: {
-  teamMemberId: string;
-}) => {
-  const response = requestNew(
+export const reactivateTeamMemberService = async (data: { teamMemberId: string }) => {
+  const response = requestNew<{ data: { team_member: ITeamMember } }>(
     {
       url: `/settings/team-members/${data.teamMemberId}/reactivate`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -109,22 +98,17 @@ export function useReactivateTeamMember(teamMemberId: string) {
 
   return useMutation(() => reactivateTeamMemberService({ teamMemberId }), {
     onSuccess: (successData) => {
-      queryClient.setQueryData(
-        ['team_member', teamMemberId],
-        successData.data.team_member
-      );
-    },
+      queryClient.setQueryData(['team_member', teamMemberId], successData.data.team_member);
+    }
   });
 }
 
 // Remove team member
-export const removeTeamMemberService = async (data: {
-  teamMemberId: string;
-}) => {
+export const removeTeamMemberService = async (data: { teamMemberId: string }) => {
   const response = requestNew(
     {
       url: `/settings/team-members/${data.teamMemberId}/remove`,
-      method: 'POST',
+      method: 'POST'
     },
     true
   );
@@ -138,6 +122,6 @@ export function useRemoveTeamMember(teamMemberId: string) {
     onSuccess: () => {
       // Invalidate all pages of team_members
       queryClient.invalidateQueries(['team_members']);
-    },
+    }
   });
 }

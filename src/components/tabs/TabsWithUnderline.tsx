@@ -9,10 +9,7 @@ interface TabsWithUnderlineProps {
 export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
   const { selectedInboxTabKey } = useAppSelector((state) => state.inbox);
   return (
-    <nav
-      className="flex w-full -mb-px bg-white border-b border-gray-200"
-      aria-label="Tabs"
-    >
+    <nav className="flex w-full -mb-px bg-white border-b border-gray-200" aria-label="Tabs">
       {tabs.map((tab) => (
         <button
           key={tab.name}
@@ -31,9 +28,7 @@ export default function TabsWithUnderline({ tabs }: TabsWithUnderlineProps) {
             {tab.badge !== null && (
               <span
                 className={cl(
-                  tab.key === selectedInboxTabKey
-                    ? 'bg-primary-100 text-primary-600'
-                    : 'bg-gray-100 text-gray-900',
+                  tab.key === selectedInboxTabKey ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-900',
                   'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block text-center'
                 )}
               >

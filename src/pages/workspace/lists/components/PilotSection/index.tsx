@@ -4,7 +4,7 @@ import {
   DocumentTextIcon,
   EyeIcon,
   InformationCircleIcon,
-  SignalIcon,
+  SignalIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,67 +14,61 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import Details from '../../../pilot/components/details/Details';
-import TimeClock from '../../../pilot/components/timeClock/TimeClock';
 
 const sections = [
-  {
-    id: 1,
-    element: <Details />,
-  },
+  // {
+  //   id: 1,
+  //   element: <Details />
+  // },
   {
     id: 2,
-    element: <History />,
+    element: <History />
   },
   {
     id: 3,
-    element: <CommentsForPilot />,
+    element: <CommentsForPilot />
   },
   {
     id: 4,
-    element: <WatchersForPilot />,
+    element: <WatchersForPilot />
   },
   {
     id: 5,
-    element: <ChatForPilot />,
-  },
-  {
-    id: 6,
-    element: <TimeClock />,
-  },
+    element: <ChatForPilot />
+  }
 ];
 
 const tabs = [
   {
     id: 1,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />,
+    icon: <InformationCircleIcon className="w-4 h-4" />
   },
   {
     id: 2,
     label: 'Logs',
-    icon: <DocumentTextIcon className="w-4 h-4" />,
+    icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
     id: 3,
     label: 'Comments',
-    icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />,
+    icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />
   },
   {
     id: 4,
     label: 'Watchers',
-    icon: <EyeIcon className="w-4 h-4" />,
+    icon: <EyeIcon className="w-4 h-4" />
   },
   {
     id: 5,
     label: 'Connect',
-    icon: <SignalIcon className="w-4 h-4" />,
+    icon: <SignalIcon className="w-4 h-4" />
   },
   {
     id: 6,
     label: 'Time clock',
-    icon: <ClockIcon className="w-4 h-4" />,
-  },
+    icon: <ClockIcon className="w-4 h-4" />
+  }
 ];
 
 export const pilotConfig = { sections, tabs };
@@ -96,7 +90,7 @@ export default function PilotSection() {
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: activeItemName ?? '',
+          title: activeItemName ?? ''
         })
       );
     }

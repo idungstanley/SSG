@@ -1,33 +1,28 @@
-import requestNew from "../../../app/requestNew";
-import { useDispatch } from "react-redux";
+import requestNew from '../../../app/requestNew';
+import { useDispatch } from 'react-redux';
 import {
   setToggleAssignChecklistItemId,
   setTriggerAssignChecklistItem,
   setTriggerChecklistUpdate,
   setTriggerItemtUpdate,
-  setTriggerUnassignChecklistItem,
-} from "./checklistSlice";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAppDispatch } from "../../../app/hooks";
-import { setCurrTeamMemId } from "../taskSlice";
+  setTriggerUnassignChecklistItem
+} from './checklistSlice';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../../../app/hooks';
+import { setCurrTeamMemId } from '../taskSlice';
+import { ITaskRes } from '../interface.tasks';
 
-export const UseCreateClistService = ({
-  task_id,
-  name,
-}: {
-  task_id: string | null | undefined;
-  name: string;
-}) => {
-  const url = `/checklists`;
+export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
+  const url = '/checklists';
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
         name: name,
         id: task_id,
-        type: "task",
-      },
+        type: 'task'
+      }
     },
     true
   );
@@ -36,44 +31,38 @@ export const UseCreateClistService = ({
 
 export const UseGetAllClistService = ({
   task_id,
-  activeItemType,
+  activeItemType
 }: {
   task_id: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
   return useQuery(
-    ["checklist", { task_id }],
+    ['checklist', { task_id }],
     async () => {
-      const data = await requestNew(
+      const data = await requestNew<ITaskRes>(
         {
-          url: `at/tasks/${task_id}`,
-          method: "GET",
+          url: `tasks/${task_id}`,
+          method: 'GET'
         },
         true
       );
       return data;
     },
     {
-      enabled: task_id != null && activeItemType == "task",
+      enabled: task_id != null && activeItemType == 'task'
     }
   );
 };
 
-export const UseCreatelistItemService = ({
-  checklist_id,
-  name,
-}: {
-  checklist_id: string;
-  name: string;
-}) => {
+export const UseCreatelistItemService = ({ checklist_id, name }: { checklist_id: string; name: string }) => {
   const url = `/checklists/${checklist_id}`;
   const response = requestNew(
     {
       url,
-      method: "POST",
+      method: 'POST',
       data: {
-        name: name,
-      },
+        name: name
+      }
     },
     true
   );
@@ -83,7 +72,7 @@ export const UseCreatelistItemService = ({
 export const UseUpdateChecklistService = ({
   checklist_id,
   name,
-  triggerUpdate,
+  triggerUpdate
 }: {
   checklist_id: string;
   name: string;
@@ -92,15 +81,15 @@ export const UseUpdateChecklistService = ({
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   return useQuery(
-    ["checklist", { checklist_id }],
+    ['checklist', { checklist_id }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
-            name: name,
-          },
+            name: name
+          }
         },
         true
       );
@@ -110,8 +99,8 @@ export const UseUpdateChecklistService = ({
       enabled: checklist_id != null && triggerUpdate !== false,
       onSuccess: () => {
         dispatch(setTriggerChecklistUpdate(false));
-        queryClient.invalidateQueries(["checklist"]);
-      },
+        queryClient.invalidateQueries(['checklist']);
+      }
     }
   );
 };
@@ -121,7 +110,7 @@ export const UseUpdateChecklistItemService = ({
   name,
   triggerItemUpdate,
   itemId,
-  done,
+  done
 }: {
   triggerItemUpdate: boolean;
   itemId: string;
@@ -132,16 +121,16 @@ export const UseUpdateChecklistItemService = ({
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   return useQuery(
-    ["checklist", { itemId, done, name }],
+    ['checklist', { itemId, done, name }],
     async () => {
       const data = requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}`,
-          method: "PUT",
+          method: 'PUT',
           params: {
             name: name,
-            is_done: done,
-          },
+            is_done: done
+          }
         },
         true
       );
@@ -152,7 +141,7 @@ export const UseUpdateChecklistItemService = ({
       onSuccess: () => {
         queryClient.invalidateQueries();
         dispatch(setTriggerItemtUpdate(false));
-      },
+      }
     }
   );
 };
@@ -163,7 +152,7 @@ const deleteChecklist = (data: { query: string | null }) => {
   const request = requestNew(
     {
       url: `checklists/${checklist_id}`,
-      method: "DELETE",
+      method: 'DELETE'
     },
     true
   );
@@ -175,22 +164,19 @@ export const useDeleteChecklist = () => {
 
   return useMutation(deleteChecklist, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["checklist"]);
-    },
+      queryClient.invalidateQueries(['checklist']);
+    }
   });
 };
 
 //Delete a Checklist Item
-const deleteChecklistItem = (data: {
-  query: string | null;
-  itemId: string | undefined;
-}) => {
+const deleteChecklistItem = (data: { query: string | null; itemId: string | undefined }) => {
   const checklist_id = data.query;
   const itemId = data.itemId;
   const request = requestNew(
     {
       url: `/checklists/${checklist_id}/item/${itemId}`,
-      method: "DELETE",
+      method: 'DELETE'
     },
     true
   );
@@ -202,8 +188,8 @@ export const useDeleteChecklistItem = () => {
 
   return useMutation(deleteChecklistItem, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["checklist"]);
-    },
+      queryClient.invalidateQueries(['checklist']);
+    }
   });
 };
 
@@ -212,10 +198,10 @@ export const UseAssignChecklistItemService = ({
   checklist_id,
   itemId,
   team_member_id,
-  triggerAssignChecklistItem,
+  triggerAssignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerAssignChecklistItem: boolean;
 }) => {
@@ -223,18 +209,18 @@ export const UseAssignChecklistItemService = ({
   const dispatch = useAppDispatch();
   return useQuery(
     [
-      "assign",
+      'assign',
       {
         team_member_id: team_member_id,
         itemId: itemId,
-        checklist_id: checklist_id,
-      },
+        checklist_id: checklist_id
+      }
     ],
     async () => {
       const data = await requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}/assign/${team_member_id}`,
-          method: "POST",
+          method: 'POST'
         },
         true
       );
@@ -248,7 +234,7 @@ export const UseAssignChecklistItemService = ({
         queryClient.invalidateQueries();
       },
       // initialData: queryClient.getQueryData(["assign", team_member_id]),
-      enabled: !!team_member_id && triggerAssignChecklistItem,
+      enabled: !!team_member_id && triggerAssignChecklistItem
     }
   );
 };
@@ -257,10 +243,10 @@ export const UseUnAssignChecklistItemService = ({
   checklist_id,
   itemId,
   team_member_id,
-  triggerUnassignChecklistItem,
+  triggerUnassignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerUnassignChecklistItem: boolean;
 }) => {
@@ -268,18 +254,18 @@ export const UseUnAssignChecklistItemService = ({
   const dispatch = useAppDispatch();
   return useQuery(
     [
-      "unassign",
+      'unassign',
       {
         team_member_id: team_member_id,
         itemId: itemId,
-        checklist_id: checklist_id,
-      },
+        checklist_id: checklist_id
+      }
     ],
     async () => {
       const data = await requestNew(
         {
           url: `/checklists/${checklist_id}/item/${itemId}/unassign/${team_member_id}`,
-          method: "POST",
+          method: 'POST'
         },
         true
       );
@@ -293,7 +279,7 @@ export const UseUnAssignChecklistItemService = ({
         queryClient.invalidateQueries();
       },
       // initialData: queryClient.getQueryData(["unassign", team_member_id]),
-      enabled: !!team_member_id && triggerUnassignChecklistItem,
+      enabled: !!team_member_id && triggerUnassignChecklistItem
     }
   );
 };

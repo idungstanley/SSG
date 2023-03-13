@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setInviteTeamMemberSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
-import {
-  SlideOver,
-  Button,
-  Input,
-  SelectMenuSimple,
-} from '../../../../../../components';
+import { SlideOver, Button, Input, SelectMenuSimple } from '../../../../../../components';
 import { createTeamMemberInviteService } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import { useAppSelector } from '../../../../../../app/hooks';
 
@@ -18,22 +13,20 @@ function InviteTeamMemberSlideOver() {
   // Form state
   const defaultFormState = {
     email: '',
-    name: '',
+    name: ''
   };
 
   const [formState, setFormState] = useState(defaultFormState);
   const [selectedRoleKey, setSelectedRoleKey] = useState<string | null>(null);
 
-  const { showInviteTeamMemberSlideOver } = useAppSelector(
-    (state) => state.slideOver
-  );
+  const { showInviteTeamMemberSlideOver } = useAppSelector((state) => state.slideOver);
 
   const { email, name } = formState;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
@@ -41,24 +34,21 @@ function InviteTeamMemberSlideOver() {
     setSelectedRoleKey(key);
   };
 
-  const createTeamMemberInviteMutation = useMutation(
-    createTeamMemberInviteService,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['team_member_invites']);
+  const createTeamMemberInviteMutation = useMutation(createTeamMemberInviteService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['team_member_invites']);
 
-        setFormState(defaultFormState);
-        setSelectedRoleKey(null);
-        dispatch(setInviteTeamMemberSlideOverVisibility(false));
-      },
+      setFormState(defaultFormState);
+      setSelectedRoleKey(null);
+      dispatch(setInviteTeamMemberSlideOverVisibility(false));
     }
-  );
+  });
 
   const onSubmit = async () => {
     createTeamMemberInviteMutation.mutate({
       email,
       name,
-      teamMemberRoleKey: selectedRoleKey || '',
+      teamMemberRoleKey: selectedRoleKey || ''
     });
   };
 
@@ -78,7 +68,7 @@ function InviteTeamMemberSlideOver() {
                 { id: 'low', name: 'Low' },
                 { id: 'high', name: 'High' },
                 { id: 'admin', name: 'Admin' },
-                { id: 'owner', name: 'Owner' },
+                { id: 'owner', name: 'Owner' }
               ]}
               onChange={onChangeRole}
               selectedId={selectedRoleKey || ''}

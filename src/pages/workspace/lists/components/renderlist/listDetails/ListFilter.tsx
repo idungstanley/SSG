@@ -1,13 +1,13 @@
-import React from "react";
-import { BiShow } from "react-icons/bi";
-import { BsLayers } from "react-icons/bs";
-import { GrFormSearch } from "react-icons/gr";
-import { IoPeopleOutline } from "react-icons/io5";
-import { MdFilterList, MdOutlinePersonOutline } from "react-icons/md";
-import { RxDividerVertical } from "react-icons/rx";
-import { TbSubtask } from "react-icons/tb";
-import { VscEllipsis } from "react-icons/vsc";
-import { useAppSelector } from "../../../../../../app/hooks";
+import React from 'react';
+import { BiShow } from 'react-icons/bi';
+import { BsLayers } from 'react-icons/bs';
+import { GrFormSearch } from 'react-icons/gr';
+import { IoPeopleOutline } from 'react-icons/io5';
+import { MdFilterList, MdOutlinePersonOutline } from 'react-icons/md';
+import { RxDividerVertical } from 'react-icons/rx';
+import { TbSubtask } from 'react-icons/tb';
+import { VscEllipsis } from 'react-icons/vsc';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function ListFilter() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -21,12 +21,12 @@ export default function ListFilter() {
           type="text"
           placeholder="Search tasks..."
           className="border-transparent focus:border-transparent h-5 w-full focus:ring-0 font-bold"
-          style={{ fontSize: "11px" }}
+          style={{ fontSize: '11px' }}
         />
-        <div className=" p-1 border-gray-400	hover:bg-gray-200  rounded ">
+        <div className=" p-1 border-gray-400 hover:bg-gray-200  rounded ">
           <VscEllipsis className=" " />
         </div>
-        <div className=" border-gray-100	 ">
+        <div className="border-gray-100">
           <RxDividerVertical className=" " />
         </div>
       </div>
@@ -39,14 +39,14 @@ export default function ListFilter() {
         </p>
         <span>
           {show === false ? (
-            <p className="flex items-center gap-1 bg-blue-100	p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800">
+            <p className="flex items-center gap-1 bg-blue-100 p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800">
               <span>
                 <BsLayers />
               </span>
               Group by: Status
             </p>
           ) : (
-            <p className="flex items-center gap-1 bg-blue-100	p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800 w-32">
+            <p className="flex items-center gap-1 bg-blue-100 p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800 w-32">
               <span>
                 <BsLayers />
               </span>

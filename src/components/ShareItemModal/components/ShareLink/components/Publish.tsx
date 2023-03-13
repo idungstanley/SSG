@@ -14,24 +14,24 @@ interface PublishProps {
 const options: { id: string; name: expiresIn }[] = [
   {
     id: '2',
-    name: '1-hour',
+    name: '1-hour'
   },
   {
     id: '3',
-    name: '3-hours',
+    name: '3-hours'
   },
   {
     id: '4',
-    name: '24-hours',
+    name: '24-hours'
   },
   {
     id: '5',
-    name: '3-days',
+    name: '3-days'
   },
   {
     id: '6',
-    name: '7-days',
-  },
+    name: '7-days'
+  }
 ];
 
 export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
@@ -44,7 +44,7 @@ export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
   const handlePublish = () => {
     onPublish({
       linkId: shareLinkId,
-      expiresIn: selectedOption.name,
+      expiresIn: selectedOption.name
     });
   };
 
@@ -57,14 +57,7 @@ export default function Publish({ shareLinkId, setShareLinkId }: PublishProps) {
       setShareLinkId(null);
 
       // show toast with message
-      toast.custom((t) => (
-        <Toast
-          type="success"
-          title={`Copied link to clipboard`}
-          body={null}
-          toastId={t.id}
-        />
-      ));
+      toast.custom((t) => <Toast type="success" title={'Copied link to clipboard'} body={null} toastId={t.id} />);
     }
   }, [data?.data]);
 

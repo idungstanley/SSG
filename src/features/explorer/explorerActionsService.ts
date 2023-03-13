@@ -17,8 +17,8 @@ export const pasteService = async (data: {
     method: 'POST',
     params: {
       file_ids: fileIds,
-      folder_ids: folderIds,
-    },
+      folder_ids: folderIds
+    }
   });
   return response;
 };
@@ -31,26 +31,20 @@ export const useCopyItems = (folderId?: string, isFolder?: boolean) => {
       if (!isFolder) {
         queryClient.invalidateQueries(['explorer-files', folderId || 'root']);
       } else {
-        queryClient.invalidateQueries(
-          folderId ? ['explorer-folder', folderId] : ['explorer-folders']
-        );
+        queryClient.invalidateQueries(folderId ? ['explorer-folder', folderId] : ['explorer-folders']);
       }
-    },
+    }
   });
 };
 
-const renameItemService = (data: {
-  type: string | null;
-  id: string | null;
-  name: string | null;
-}) => {
+const renameItemService = (data: { type: string | null; id: string | null; name: string | null }) => {
   const url = `${data.type}s/${data.id}/rename`;
   return requestNew({
     url,
     method: 'POST',
     params: {
-      name: data.name,
-    },
+      name: data.name
+    }
   });
 };
 
@@ -61,7 +55,7 @@ export const useRenameItem = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
       queryClient.invalidateQueries(['explorer-folders']);
-    },
+    }
   });
 };
 
@@ -72,8 +66,8 @@ const createFolder = (data: { folderName: string; parentId?: string }) => {
     method: 'POST',
     params: {
       name: data.folderName,
-      parent_id: data.parentId,
-    },
+      parent_id: data.parentId
+    }
   });
   return response;
 };
@@ -86,14 +80,14 @@ export const useCreateFolder = (id: string) => {
       queryClient.invalidateQueries(['explorer-folder', id]);
       queryClient.invalidateQueries(['explorer-folders']);
       queryClient.invalidateQueries(['explorer_files_and_folders']); // ! remove this
-    },
+    }
   });
 };
 
 const deleteExplorerItem = (data: { type: explorerItemType; id: string }) => {
   const response = requestNew({
     url: `${data.type}s/${data.id}`,
-    method: 'DELETE',
+    method: 'DELETE'
   });
   return response;
 };
@@ -108,15 +102,11 @@ export const useDeleteExplorerItem = (id: string, type: explorerItemType) => {
       if (type === 'folder') {
         queryClient.invalidateQueries(['explorer-folders']);
       }
-    },
+    }
   });
 };
 
-const moveExplorerItems = (data: {
-  targetFolderId: string;
-  fileIds?: string[];
-  folderIds?: string[];
-}) => {
+const moveExplorerItems = (data: { targetFolderId: string; fileIds?: string[]; folderIds?: string[] }) => {
   const { targetFolderId, fileIds, folderIds } = data;
 
   const response = requestNew({
@@ -124,8 +114,8 @@ const moveExplorerItems = (data: {
     method: 'POST',
     data: {
       file_ids: fileIds,
-      folder_ids: folderIds,
-    },
+      folder_ids: folderIds
+    }
   });
   return response;
 };

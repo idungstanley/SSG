@@ -43,7 +43,7 @@ function InputAvatar({ size, upload, action }: inputAvatarType) {
 InputAvatar.defaultProps = {
   size: null,
   upload: null,
-  action: null,
+  action: null
 };
 
 export default InputAvatar;

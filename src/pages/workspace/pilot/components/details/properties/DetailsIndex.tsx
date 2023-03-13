@@ -16,33 +16,28 @@ export default function DetailsIndex() {
 
   const { data: hub } = UseGetHubDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: wallet } = UseGetWalletDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: list } = UseGetListDetails({
     activeItemId,
-    activeItemType,
+    activeItemType
   });
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
-  const hubDetails = hub?.data.hub;
-  const walletDetails = wallet?.data.wallet;
-  const listDetails = list?.data.list;
 
   const showDetailsType = () => {
     if (activeItemType == 'hub' || activeItemType == 'subhub') {
-      return <PropertyDetails Details={hubDetails} key={hubDetails?.id} />;
+      return <PropertyDetails Details={hub?.data.hub} key={hub?.data.hub.id} />;
     } else if (activeItemType == 'task') {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
     } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
-      return (
-        <PropertyDetails Details={walletDetails} key={walletDetails?.id} />
-      );
+      return <PropertyDetails Details={wallet?.data.wallet} key={wallet?.data.wallet.id} />;
     } else if (activeItemType == 'list') {
-      return <PropertyDetails Details={listDetails} key={listDetails?.id} />;
+      return <PropertyDetails Details={list?.data.list} key={list?.data.list.id} />;
     }
   };
 

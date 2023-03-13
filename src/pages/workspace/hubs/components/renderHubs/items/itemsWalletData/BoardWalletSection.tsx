@@ -1,5 +1,5 @@
-import React from "react";
-import { dataProps } from "../ItemsHubData/ListTemplate";
+import React from 'react';
+import { dataProps } from '../ItemsHubData/ListTemplate';
 
 interface Iprops {
   data: dataProps;

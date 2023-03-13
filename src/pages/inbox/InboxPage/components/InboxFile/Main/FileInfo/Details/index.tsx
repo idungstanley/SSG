@@ -18,29 +18,13 @@ function Details() {
             <div className="">
               <h3 className="font-medium text-gray-900">Information</h3>
               <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-                <div
-                  key={1}
-                  className="py-3 flex justify-between text-sm font-medium"
-                >
+                <div key={1} className="py-3 flex justify-between text-sm font-medium">
                   <dt className="text-gray-500">Created at</dt>
-                  <dd className="text-gray-900">
-                    {OutputDateTime(
-                      inboxFile.inbox_file_source.created_at,
-                      null
-                    )}
-                  </dd>
+                  <dd className="text-gray-900">{OutputDateTime(inboxFile.inbox_file_source.created_at, null)}</dd>
                 </div>
-                <div
-                  key={2}
-                  className="py-3 flex justify-between text-sm font-medium"
-                >
+                <div key={2} className="py-3 flex justify-between text-sm font-medium">
                   <dt className="text-gray-500">Modified at</dt>
-                  <dd className="text-gray-900">
-                    {OutputDateTime(
-                      inboxFile.inbox_file_source.updated_at,
-                      null
-                    )}
-                  </dd>
+                  <dd className="text-gray-900">{OutputDateTime(inboxFile.inbox_file_source.updated_at, null)}</dd>
                 </div>
               </dl>
             </div>

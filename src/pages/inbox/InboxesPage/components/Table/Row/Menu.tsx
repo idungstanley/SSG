@@ -6,7 +6,7 @@ import {
   useArchiveOrUnarchiveInbox,
   useHideOrUnhideInbox,
   usePinOrUnpinInbox,
-  useRestoreOrDeleteInbox,
+  useRestoreOrDeleteInbox
 } from '../../../../../../features/inbox/inboxesService';
 import { cl } from '../../../../../../utils';
 import { inboxType } from '../../../../../../types';
@@ -31,7 +31,7 @@ export default function Menu({ inboxId, type }: MenuProps) {
   const onPinInbox = () => {
     pinOrUnpinInbox({
       inboxId,
-      isPinned: false,
+      isPinned: false
     });
   };
 
@@ -42,14 +42,14 @@ export default function Menu({ inboxId, type }: MenuProps) {
   const onArchiveInbox = () => {
     archiveInbox({
       id: inboxId,
-      isArchived: type === 'archived',
+      isArchived: type === 'archived'
     });
   };
 
   const onRestoreInbox = () => {
     restoreInbox({
       inboxId,
-      isDeleted: type === 'trashed',
+      isDeleted: type === 'trashed'
     });
   };
 
@@ -58,32 +58,32 @@ export default function Menu({ inboxId, type }: MenuProps) {
       id: 2,
       onClick: onViewInbox,
       title: 'View',
-      isVisible: type === 'active' || type === 'archived',
+      isVisible: type === 'active' || type === 'archived'
     },
     {
       id: 3,
       onClick: onPinInbox,
       title: 'Pin',
-      isVisible: type === 'active',
+      isVisible: type === 'active'
     },
     {
       id: 4,
       onClick: onHideInbox,
       title: type === 'hidden' ? 'Unhide' : 'Hide',
-      isVisible: type === 'active' || type === 'hidden',
+      isVisible: type === 'active' || type === 'hidden'
     },
     {
       id: 5,
       onClick: onArchiveInbox,
       title: type === 'archived' ? 'Unarchive' : 'Archive',
-      isVisible: type === 'active' || type === 'archived',
+      isVisible: type === 'active' || type === 'archived'
     },
     {
       id: 1,
       onClick: onRestoreInbox,
       title: type === 'trashed' ? 'Restore' : 'Delete',
-      isVisible: true,
-    },
+      isVisible: true
+    }
   ];
 
   return (

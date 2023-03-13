@@ -14,12 +14,7 @@ export default function Main() {
   const showFilePreview = showPreview || fastPreview.show;
 
   return (
-    <div
-      className={cl(
-        'border-t h-full w-full grid',
-        showFilePreview ? 'grid-cols-2' : 'grid-cols-1'
-      )}
-    >
+    <div className={cl('border-t h-full w-full grid', showFilePreview ? 'grid-cols-2' : 'grid-cols-1')}>
       <FilesListWithToolbar />
 
       {/* file preview */}

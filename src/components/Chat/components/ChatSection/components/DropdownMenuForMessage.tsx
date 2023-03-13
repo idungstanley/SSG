@@ -7,16 +7,16 @@ export default function DropdownMenuForMessage() {
   const options = [
     {
       title: 'Account settings',
-      onClick: () => ({}),
+      onClick: () => ({})
     },
     {
       title: 'Support',
-      onClick: () => ({}),
+      onClick: () => ({})
     },
     {
       title: 'License',
-      onClick: () => ({}),
-    },
+      onClick: () => ({})
+    }
   ];
 
   return (

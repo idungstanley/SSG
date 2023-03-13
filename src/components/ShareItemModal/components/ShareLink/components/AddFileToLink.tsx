@@ -3,10 +3,7 @@ import { Combobox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { IExplorerFile } from '../../../../../features/explorer/explorer.interfaces';
 import { useGetSearchFiles } from '../../../../../features/explorer/explorerService';
-import {
-  useAddOrRemoveItemToOrFromLink,
-  useGetShareLink,
-} from '../../../../../features/shared/sharedService';
+import { useAddOrRemoveItemToOrFromLink, useGetShareLink } from '../../../../../features/shared/sharedService';
 import { useDebounce } from '../../../../../hooks';
 import { cl } from '../../../../../utils';
 
@@ -26,17 +23,13 @@ export default function AddFileToLink({ shareLinkId }: AddFileToLinkProps) {
   const debouncedQuery = useDebounce(query, 500);
   const { data: searchedFiles } = useGetSearchFiles(debouncedQuery);
 
-  const filesWithoutSelected = searchedFiles?.filter(
-    (i) => !selectedFileIds?.includes(i.id)
-  );
+  const filesWithoutSelected = searchedFiles?.filter((i) => !selectedFileIds?.includes(i.id));
 
   const filteredFiles =
     debouncedQuery === ''
       ? filesWithoutSelected
       : filesWithoutSelected?.filter((file) => {
-          return file.display_name
-            .toLowerCase()
-            .includes(debouncedQuery.toLowerCase());
+          return file.display_name.toLowerCase().includes(debouncedQuery.toLowerCase());
         });
 
   const onSelect = (selectedFile: IExplorerFile | string) => {
@@ -46,15 +39,13 @@ export default function AddFileToLink({ shareLinkId }: AddFileToLinkProps) {
       linkId: shareLinkId,
       itemId: file.id,
       type: 'file',
-      action: 'add',
+      action: 'add'
     });
   };
 
   return (
     <Combobox as="div" value={''} onChange={onSelect}>
-      <Combobox.Label className="block text-sm font-medium text-gray-700">
-        Add file to link
-      </Combobox.Label>
+      <Combobox.Label className="block text-sm font-medium text-gray-700">Add file to link</Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input
           placeholder="enter file name"
@@ -71,11 +62,7 @@ export default function AddFileToLink({ shareLinkId }: AddFileToLinkProps) {
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
           </svg>
         </Combobox.Button>
 
@@ -94,14 +81,7 @@ export default function AddFileToLink({ shareLinkId }: AddFileToLinkProps) {
               >
                 {({ active, selected }) => (
                   <>
-                    <span
-                      className={cl(
-                        'block truncate',
-                        selected ? 'font-semibold' : ''
-                      )}
-                    >
-                      {file.display_name}
-                    </span>
+                    <span className={cl('block truncate', selected ? 'font-semibold' : '')}>{file.display_name}</span>
 
                     {selected && (
                       <span
