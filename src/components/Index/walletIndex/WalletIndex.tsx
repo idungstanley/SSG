@@ -32,7 +32,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
-  const { data } = getWalletServices({
+  const { data: walletData } = getWalletServices({
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
   });
@@ -81,8 +81,8 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
       {walletAndListData?.data.lists.length === 0 && walletAndListData?.data.wallets.length === 0 && (
         <CreateWL paddingLeft={paddingLeft} />
       )}
-      {data?.data.wallets.length !== 0 &&
-        data?.data.wallets.map((wallet: dataProps) => (
+      {walletData?.data.wallets.length !== 0 &&
+        walletData?.data.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>
             <WalletItem
               wallet={wallet}

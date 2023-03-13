@@ -19,10 +19,13 @@ interface SidebarProps {
   setAllowSelect: (i: boolean) => void;
 }
 // getting sidebar width from localStorage
-const sidebarFromLS: {
+interface SidebarFromLSProp {
   sidebarWidth: number;
   showSidebar: boolean;
-} = JSON.parse(localStorage.getItem('sidebar') || '""');
+}
+
+// getting sidebar width from localStorage
+const sidebarFromLS: SidebarFromLSProp = JSON.parse(localStorage.getItem('sidebar') || '""') as SidebarFromLSProp;
 const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
