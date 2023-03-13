@@ -119,7 +119,7 @@ export default function WorkspaceSettingsModal() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-30 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg -right-2 ring-1 ring-black ring-opacity-5 focus:outline-none ">
+        <Menu.Items className="absolute z-30 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg -right-10 ring-1 ring-black ring-opacity-5 focus:outline-none ">
           <section className="flex flex-col">
             <div className="pt-3">
               <h4 className="px-4 font-bold capitalize truncate " style={{ fontSize: '11px' }}>

@@ -8,7 +8,7 @@ import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces
 export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
   const response = requestNew<ICreateWallet>(
     {
-      url: 'wallets',
+      url: '/wallets',
       method: 'POST',
       data: {
         name: data.name,
@@ -26,7 +26,7 @@ export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
     const response = await requestNew<IWalletRes | undefined>(
       {
-        url: 'wallets',
+        url: '/wallets',
         method: 'GET',
         params: {
           parent_id: currentWalletId //this returns for subwallet
@@ -83,7 +83,7 @@ export const UseDeleteWalletService = (data: { query: string | null | undefined;
     async () => {
       const data = await requestNew(
         {
-          url: `wallets/${walletId}`,
+          url: `/wallets/${walletId}`,
           method: 'DELETE'
         },
         true
@@ -110,7 +110,7 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
     async () => {
       const data = await requestNew(
         {
-          url: `wallets/${walletId}/archive`,
+          url: `/wallets/${walletId}/archive`,
           method: 'POST'
         },
         true
