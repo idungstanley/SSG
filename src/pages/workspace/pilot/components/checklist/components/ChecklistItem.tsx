@@ -32,7 +32,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const [newItem, setNewItem] = useState<string>('');
   const [itemId, setItemId] = useState<string>('');
   const [done, setDone] = useState<number>(0);
-  const [editName, setEditName] = useState<string>('');
+  const [editName, setEditName] = useState<string | undefined>('');
 
   const { triggerItemUpdate, toggleAssignChecklistItemId } = useAppSelector((state) => state.checklist);
 
@@ -66,7 +66,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   };
 
   const handleEditItemName = (id: string, done: number) => {
-    setEditName(inputRef.current!.innerText);
+    setEditName(inputRef.current?.innerText);
     setItemId(id);
     setDone(done);
     dispatch(setTriggerItemtUpdate(true));

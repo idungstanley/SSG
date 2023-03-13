@@ -13,7 +13,7 @@ import { ICheckListRes } from '../../../../../features/task/interface.tasks';
 
 function SingleChecklist({ item, id }: { item: ICheckListRes; id: string }) {
   const dispatch = useAppDispatch();
-  const [checklistName, setChecklistName] = useState<string>('');
+  const [checklistName, setChecklistName] = useState<string | null | undefined>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [checklistId, setChecklistId] = useState<string>('');
@@ -25,10 +25,10 @@ function SingleChecklist({ item, id }: { item: ICheckListRes; id: string }) {
   });
 
   const handleEdit = (id: string) => {
-    setChecklistName(inputRef.current!.innerText);
+    setChecklistName(inputRef.current?.innerText);
     dispatch(setTriggerChecklistUpdate(true));
     setChecklistId(id);
-    inputRef.current!.blur();
+    inputRef.current?.blur();
   };
 
   UseUpdateChecklistService({

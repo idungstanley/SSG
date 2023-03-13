@@ -66,7 +66,7 @@ export const UseUpdateChecklistService = ({
   triggerUpdate
 }: {
   checklist_id: string;
-  name: string;
+  name: string | null | undefined;
   triggerUpdate: boolean;
 }) => {
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ export const UseUpdateChecklistItemService = ({
   itemId: string;
   done: number;
   checklist_id: string;
-  name: string | null;
+  name: string | null | undefined;
 }) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
