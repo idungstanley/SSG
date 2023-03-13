@@ -4,7 +4,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import {
   setClickChecklistId,
   setClickChecklistItemId
-  // setToggleAssignChecklistItemId
+  setToggleAssignChecklistItemId
 } from '../../../../../../../../features/task/checklist/checklistSlice';
 import { useAppDispatch } from '../../../../../../../../app/hooks';
 import { Disclosure } from '@headlessui/react';
@@ -25,7 +25,7 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
 
   const handleDelChecklist = () => {
     dispatch(setClickChecklistId(checklistId));
-    // dispatch(setTriggerDelChecklist(true));
+    dispatch(setTriggerDelChecklist(true));
   };
 
   const handleChecklistItemDel = () => {
@@ -39,9 +39,9 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
     } else if (option.name === 'Delete Item') {
       handleChecklistItemDel();
     } else if (option.name == 'Assign to' || option.name == 'Unassign') {
-      // dispatch(setToggleAssignChecklistItemId(checklistItemId));
+      dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
-      // dispatch(setClickChecklistItemId(checklistItemId));
+      dispatch(setClickChecklistItemId(checklistItemId));
     } else if (option.name == 'Rename') {
       focus();
     }

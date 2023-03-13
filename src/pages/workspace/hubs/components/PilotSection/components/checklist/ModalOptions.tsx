@@ -23,7 +23,7 @@ export const completeOptions = [
     id: 6,
     name: 'Delete Checklist',
     handleClick: () => {
-      // const dispatch = useAppDispatch();
+      const dispatch = useAppDispatch();
     }
   }
 ];

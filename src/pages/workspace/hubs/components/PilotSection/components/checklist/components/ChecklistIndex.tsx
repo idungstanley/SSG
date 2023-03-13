@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useAppSelector } from '../../../../../../../../app/hooks';
 import {
   UseCreateClistService
-  // UseDeleteChecklistItemService,
-  // UseGetAllClistService
+  UseDeleteChecklistItemService,
+  UseGetAllClistService
 } from '../../../../../../../../features/task/checklist/checklistService';
 import { Spinner } from '../../../../../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GoPlus } from 'react-icons/go';
-// import SingleChecklist from '../SingleChecklist';
-// import { itemProps } from './ChecklistItem';
+import SingleChecklist from '../SingleChecklist';
+import { itemProps } from './ChecklistItem';
 import { useAppDispatch } from '../../../../../../../../app/hooks';
 import { setShowChecklistInput } from '../../../../../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
@@ -39,16 +39,16 @@ export default function ChecklistIndex() {
   };
 
   // Get Checklists
-  // const { data, status } = UseGetAllClistService({
-  //   task_id: activeItemId,
-  //   activeItemType: activeItemType
-  // });
-  // const task_checklist = data?.data.task.checklists;
+  const { data, status } = UseGetAllClistService({
+    task_id: activeItemId,
+    activeItemType: activeItemType
+  });
+  const task_checklist = data?.data.task.checklists;
 
-  // UseDeleteChecklistItemService({
-  // query: clickedChecklistId,
-  // delChecklist: triggerDelChecklist
-  // });
+  UseDeleteChecklistItemService({
+  query: clickedChecklistId,
+  delChecklist: triggerDelChecklist
+  });
 
   if (status == 'loading') {
     <Spinner size={20} color={'blue'} />;
@@ -86,11 +86,11 @@ export default function ChecklistIndex() {
         </form>
       )}
       <div>
-        {/* {task_checklist?.length > 0
+        {task_checklist?.length > 0
           ? task_checklist?.map((item: { id: string; name: string; is_done: number; items: itemProps[] }) => {
               return <SingleChecklist key={item.id} item={item} id={item.id} />;
             })
-          : 'This task has no Checklist, click on the plus sign to create one'} */}
+          : 'This task has no Checklist, click on the plus sign to create one'}
       </div>
     </div>
   ) : null;
