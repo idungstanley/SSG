@@ -30,6 +30,7 @@ export default function Details() {
         {showPilot && <DetailsSubTab />}
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>
+      <h1>Alpha</h1>
     </>
   );
 }

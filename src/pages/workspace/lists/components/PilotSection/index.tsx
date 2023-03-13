@@ -15,6 +15,7 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Details from '../../../hubs/components/PilotSection/components/details/Details';
+import Checklists from '../../../hubs/components/PilotSection/components/checklist/components/Checklist';
 
 const sections = [
   {
@@ -36,6 +37,10 @@ const sections = [
   {
     id: 5,
     element: <ChatForPilot />
+  },
+  {
+    id: 7,
+    element: <Checklists />
   }
 ];
 
@@ -68,6 +73,11 @@ const tabs = [
   {
     id: 6,
     label: 'Time clock',
+    icon: <ClockIcon className="w-4 h-4" />
+  },
+  {
+    id: 7,
+    label: 'Checklists',
     icon: <ClockIcon className="w-4 h-4" />
   }
 ];
