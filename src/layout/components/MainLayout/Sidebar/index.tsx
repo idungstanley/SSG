@@ -18,7 +18,6 @@ interface SidebarProps {
   allowSelect: boolean;
   setAllowSelect: (i: boolean) => void;
 }
-
 // getting sidebar width from localStorage
 const sidebarFromLS: {
   sidebarWidth: number;
