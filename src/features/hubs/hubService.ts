@@ -150,7 +150,7 @@ export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?
     ['hubs', query],
     async () => {
       const data = await requestNew<IHubDetailRes>({
-        url: `at/hubs/${query.activeItemId}/details`,
+        url: `hubs/${query.activeItemId}/details`,
         method: 'GET'
       });
       return data;
