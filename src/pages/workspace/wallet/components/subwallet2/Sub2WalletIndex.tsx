@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getWalletServices } from '../../../../../features/wallet/walletService';
-import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
 import { useDispatch } from 'react-redux';
-import { setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
-import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import WalletItem from '../../../../../components/tasks/WalletItem';
 import ListItem from '../../../../../components/tasks/ListItem';
+import LastListIndex from './LastListIndex';
 
 interface SubWalletIndexProps {
   paddingLeft?: string;
@@ -20,35 +19,35 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) {
   // eslint-disable-next-line no-console
   console.log(paddingLeft);
   const dispatch = useDispatch();
-  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
-  const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
-  const [currWalId, setCurrWalId] = useState('');
+  const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
+  const [finalParentId, setFinalWalletParentId] = useState('');
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currentWalletParentId
+    parentId: currWalId
   });
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
-    setShowSubWallet2(id);
-    setCurrWalId(id);
-    if (showSubWallet2 === id) {
-      return setShowSubWallet2(null);
+    if (showSubWallet3 === id) {
+      return setShowSubWallet3(null);
     }
+    setFinalWalletParentId(id);
+    setShowSubWallet3(id);
   };
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, type = 'subWallet') => {
+
+  const handleLocation = (id: string, type = 'sub2wallet') => {
     dispatch(setShowHub(true));
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    setShowSubWallet2(id);
-    setCurrWalId(id);
+    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };
 
   return (
@@ -61,11 +60,9 @@ function SubWalletIndex({ paddingLeft = '32' }: SubWalletIndexProps) {
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft="64"
-            showSubWallet={showSubWallet2}
+            showSubWallet={showSubWallet3}
           />
-          <div>{showSubWallet2 === wallet.id ? <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" /> : null}</div>
-          {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-          {SubMenuId === wallet.id ? <SubDropdown /> : null}
+          {showSubWallet3 === wallet.id ? <LastListIndex finalParentId={finalParentId} /> : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
