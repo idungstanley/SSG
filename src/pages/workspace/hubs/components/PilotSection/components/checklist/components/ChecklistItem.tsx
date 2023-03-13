@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   UseCreatelistItemService,
-  UseDeleteChecklistItemService,
+  // UseDeleteChecklistItemService,
   UseUpdateChecklistItemService
 } from '../../../../../../../../features/task/checklist/checklistService';
 import { GrDrag } from 'react-icons/gr';
@@ -19,15 +19,10 @@ import {
 import AssignTask from '../../../../../../tasks/assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../../../../components';
 import ToolTip from '../../../../../../../../components/Tooltip';
+import { ICheckListItems } from '../../../../../../../../features/task/interface.tasks';
 
-export interface itemProps {
-  id: string;
-  name: string;
-  is_done: number;
-  assignees: [{ id: string; initials: string; colour: string }];
-}
 export interface checkListItemProps {
-  Item: itemProps[];
+  Item: ICheckListItems[];
   checklistId: string;
 }
 
@@ -40,9 +35,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const [done, setDone] = useState<number>(0);
   const [editName, setEditName] = useState<string>('');
 
-  const { clickedChecklistId, clickedChecklistItemId, triggerItemUpdate, toggleAssignChecklistItemId } = useAppSelector(
-    (state) => state.checklist
-  );
+  const { triggerItemUpdate, toggleAssignChecklistItemId } = useAppSelector((state) => state.checklist);
 
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: () => {
@@ -80,12 +73,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     dispatch(setTriggerItemtUpdate(true));
   };
 
-  UseDeleteChecklistItemService({
-    query: clickedChecklistId,
-    itemId: clickedChecklistItemId,
-    delItem: true
-  });
-
   const focusItem = () => {
     inputRef.current?.focus();
   };
@@ -114,80 +101,73 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
           onKeyDown={(e) => (e.key == 'Enter' ? handleSubmit() : null)}
         />
       </span>
-      {Item.map(
-        (item: {
-          id: string;
-          is_done: number;
-          name: string;
-          assignees: [{ id: string; initials: string; colour: string }];
-        }) => {
-          return (
-            <div key={item.id}>
-              <div className="group flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
-                <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
-                  <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
-                </span>
-                <input
-                  type="checkbox"
-                  checked={item.is_done == 0 ? false : true}
-                  className="rounded-lg mx-3"
-                  onChange={() => {
-                    setItemId(item.id);
-                    isDone(item.id, item.is_done, item.name);
-                  }}
-                />
-                <div
-                  ref={inputRef}
-                  suppressContentEditableWarning={true}
-                  contentEditable={true}
-                  onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
-                  className="cursor-text"
-                >
-                  {item.name}
-                </div>
-                {item.assignees.length ? (
-                  <span
-                    className="flex mx-4 cursor-pointer"
-                    onClick={() => {
-                      dispatch(setToggleAssignChecklistItemId(item.id));
-                      dispatch(setClickChecklistId(checklistId));
-                      dispatch(setClickChecklistItemId(item.id));
-                    }}
-                  >
-                    {groupAssignee(item.assignees)}
-                  </span>
-                ) : (
-                  <span className="mx-4 cursor-pointer">
-                    <ToolTip tooltip="Assign Team member">
-                      <CgProfile
-                        onClick={() => {
-                          dispatch(setToggleAssignChecklistItemId(item.id));
-                          dispatch(setClickChecklistId(checklistId));
-                          dispatch(setClickChecklistItemId(item.id));
-                        }}
-                      />
-                    </ToolTip>
-                  </span>
-                )}
-
-                <div className="opacity-0 group-hover:opacity-100">
-                  <ChecklistModal
-                    options={lessOptions}
-                    checklistId={checklistId}
-                    checklistItemId={item.id}
-                    focus={focusItem}
-                  />
-                </div>
-                {toggleAssignChecklistItemId == item.id ? (
-                  <span className="absolute shadow-2xl z-30 ml-20 mt-10">
-                    <AssignTask option={'checklstItem'} item={item} />
-                  </span>
-                ) : null}
+      {Item.map((item) => {
+        return (
+          <div key={item.id}>
+            <div className="group flex items-center px-5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
+              <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
+                <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
+              </span>
+              <input
+                type="checkbox"
+                checked={item.is_done == 0 ? false : true}
+                className="rounded-lg mx-3"
+                onChange={() => {
+                  setItemId(item.id);
+                  isDone(item.id, item.is_done, item.name);
+                }}
+              />
+              <div
+                ref={inputRef}
+                suppressContentEditableWarning={true}
+                contentEditable={true}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
+                className="cursor-text"
+              >
+                {item.name}
               </div>
+              {item.assignees.length ? (
+                <span
+                  className="flex mx-4 cursor-pointer"
+                  onClick={() => {
+                    dispatch(setToggleAssignChecklistItemId(item.id));
+                    dispatch(setClickChecklistId(checklistId));
+                    dispatch(setClickChecklistItemId(item.id));
+                  }}
+                >
+                  {groupAssignee(item.assignees)}
+                </span>
+              ) : (
+                <span className="mx-4 cursor-pointer">
+                  <ToolTip tooltip="Assign Team member">
+                    <CgProfile
+                      onClick={() => {
+                        dispatch(setToggleAssignChecklistItemId(item.id));
+                        dispatch(setClickChecklistId(checklistId));
+                        dispatch(setClickChecklistItemId(item.id));
+                      }}
+                    />
+                  </ToolTip>
+                </span>
+              )}
+
+              <div className="opacity-0 group-hover:opacity-100">
+                <ChecklistModal
+                  options={lessOptions}
+                  checklistId={checklistId}
+                  checklistItemId={item.id}
+                  focus={focusItem}
+                />
+              </div>
+              {toggleAssignChecklistItemId == item.id ? (
+                <span className="absolute shadow-2xl z-30 ml-20 mt-10">
+                  <AssignTask option={'checklstItem'} item={item} />
+                </span>
+              ) : null}
             </div>
-          );
-        }
-      )}
+          </div>
+        );
+      })}
     </div>
   );
 }

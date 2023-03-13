@@ -8,6 +8,27 @@ export interface IHub {
   updated_at: string;
 }
 
+export interface IHubDetails {
+  id: string;
+  name: string;
+  color: null;
+  shape: null;
+  parent_id: null;
+  updated_at: string;
+  created_at: string;
+  archived_at: null;
+  deleted_at: null;
+  description: null;
+  directory_items: [];
+  checklists: [];
+}
+
+export interface IHubDetailRes {
+  data: {
+    hub: IHubDetails;
+  };
+}
+
 export interface IWallet {
   id: string;
   name: string;

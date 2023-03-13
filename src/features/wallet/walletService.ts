@@ -3,11 +3,11 @@ import requestNew from '../../app/requestNew';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
-import { ICreateWallet, IWalletRes } from './wallet.interfaces';
+import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 
 export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
   const response = requestNew<ICreateWallet>({
-    url: 'at/wallets',
+    url: 'wallets',
     method: 'POST',
     data: {
       name: data.name,
@@ -22,7 +22,7 @@ export const createWalletService = (data: { name: string; hubID?: string | null;
 export const getWalletService = (currentWalletId: string | null) => {
   return useQuery(['wallet', currentWalletId], async () => {
     const response = await requestNew<IWalletRes | undefined>({
-      url: 'at/wallets',
+      url: 'wallets',
       method: 'GET',
       params: {
         parent_id: currentWalletId //this returns for subwallet
@@ -70,7 +70,7 @@ export const UseDeleteWalletService = (data: { query: string | null | undefined;
     ['wallets'],
     async () => {
       const data = await requestNew({
-        url: `at/wallets/${walletId}`,
+        url: `wallets/${walletId}`,
         method: 'DELETE'
       });
       return data;
@@ -94,7 +94,7 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
     ['wallet', walletId],
     async () => {
       const data = await requestNew({
-        url: `at/wallets/${walletId}/archive`,
+        url: `wallets/${walletId}/archive`,
         method: 'POST'
       });
       return data;
@@ -116,8 +116,8 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew({
-        url: `at/wallets/${query.activeItemId}`,
+      const data = await requestNew<IWalletDetailRes>({
+        url: `wallets/${query.activeItemId}`,
         method: 'GET'
       });
       return data;

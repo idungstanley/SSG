@@ -82,7 +82,7 @@ interface TaskState {
   initial_start_date: null | undefined | string;
   initial_end_date: null | undefined | string;
   openUpdateEntryId: null | undefined | string;
-  updateStatusModalId: null | string;
+  updateStatusModalId: string | null;
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
   currentTaskPriorityId: string | null | undefined;

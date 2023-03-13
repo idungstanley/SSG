@@ -4,10 +4,11 @@ import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
+import { IListDetailRes } from './list.interfaces';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
-    url: 'at/lists',
+    url: 'lists',
     method: 'POST',
     data: {
       name: data.listName,
@@ -22,7 +23,7 @@ export const createListService = (data: { listName: string; hubId?: string | nul
 export const getListService = (data: { queryKey: (string | undefined)[] }) => {
   const hubID = data.queryKey[1];
   const response = requestNew({
-    url: 'at/lists',
+    url: 'lists',
     method: 'GET',
     params: {
       hub_id: hubID
@@ -34,7 +35,7 @@ export const getListService = (data: { queryKey: (string | undefined)[] }) => {
 export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
   const walletID = data.queryKey[1];
   const response = requestNew({
-    url: 'at/lists',
+    url: 'lists',
     method: 'GET',
     params: {
       wallet_id: walletID
@@ -62,7 +63,7 @@ export const getListServices = (data: { Archived: boolean; walletId?: string | n
 export const getListsDetailsService = (data: { queryKey: (string | undefined)[] }) => {
   const listID = data.queryKey[1];
   const response = requestNew({
-    url: `at/lists/${listID}`,
+    url: `lists/${listID}`,
     method: 'GET'
   });
   return response;
@@ -89,7 +90,7 @@ export const UseDeleteListService = (data: { query: string | null | undefined; d
     ['lists'],
     async () => {
       const data = await requestNew({
-        url: `at/lists/${listId}`,
+        url: `lists/${listId}`,
         method: 'DELETE'
       });
       return data;
@@ -113,7 +114,7 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
     ['lists', listId],
     async () => {
       const data = await requestNew({
-        url: `at/lists/${listId}/archive`,
+        url: `lists/${listId}/archive`,
         method: 'POST'
       });
       return data;
@@ -138,8 +139,8 @@ export const UseGetListDetails = (query: {
   return useQuery(
     ['hubs', query],
     async () => {
-      const data = await requestNew({
-        url: `at/lists/${query.activeItemId}`,
+      const data = await requestNew<IListDetailRes>({
+        url: `lists/${query.activeItemId}`,
         method: 'GET'
       });
       return data;

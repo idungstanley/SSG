@@ -4,21 +4,14 @@ import { GrDrag } from 'react-icons/gr';
 import { BiCaretRight } from 'react-icons/bi';
 import ChecklistModal from './components/ChecklistModal';
 import { completeOptions } from './ModalOptions';
-import { itemProps } from './components/ChecklistItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { UseUpdateChecklistService } from '../../../../../../../features/task/checklist/checklistService';
 import { setTriggerChecklistUpdate } from '../../../../../../../features/task/checklist/checklistSlice';
 import ChecklistItem from './components/ChecklistItem';
 import { useSortable } from '@dnd-kit/sortable';
+import { ICheckListRes } from '../../../../../../../features/task/interface.tasks';
 
-interface checklistArr {
-  id: string;
-  name: string;
-  is_done: number;
-  items: itemProps[];
-}
-
-function SingleChecklist({ item, id }: { item: checklistArr; id: string }) {
+function SingleChecklist({ item, id }: { item: ICheckListRes; id: string }) {
   const dispatch = useAppDispatch();
   const [checklistName, setChecklistName] = useState<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);

@@ -10,6 +10,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
 import { setCurrTeamMemId } from '../taskSlice';
+import { ITaskRes } from '../interface.tasks';
 
 export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
   const url = '/checklists';
@@ -35,8 +36,8 @@ export const UseGetAllClistService = ({
   return useQuery(
     ['checklist', { task_id }],
     async () => {
-      const data = await requestNew({
-        url: `at/tasks/${task_id}`,
+      const data = await requestNew<ITaskRes>({
+        url: `tasks/${task_id}`,
         method: 'GET'
       });
       return data;
@@ -179,7 +180,7 @@ export const UseAssignChecklistItemService = ({
   triggerAssignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerAssignChecklistItem: boolean;
 }) => {
@@ -221,7 +222,7 @@ export const UseUnAssignChecklistItemService = ({
   triggerUnassignChecklistItem
 }: {
   checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
   triggerUnassignChecklistItem: boolean;
 }) => {
@@ -252,35 +253,6 @@ export const UseUnAssignChecklistItemService = ({
       },
       // initialData: queryClient.getQueryData(["unassign", team_member_id]),
       enabled: !!team_member_id && triggerUnassignChecklistItem
-    }
-  );
-};
-
-//Delete a Checklist Item
-export const UseDeleteChecklistItemService = (data: {
-  query: string | null;
-  itemId: string | null;
-  delItem: boolean;
-}) => {
-  // const dispatch = useDispatch();
-  const checklist_id = data.query;
-  const itemId = data.itemId;
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['checklist'],
-    async () => {
-      const data = await requestNew({
-        url: `/checklists/${checklist_id}/item/${itemId}`,
-        method: 'DELETE'
-      });
-      return data;
-    },
-    {
-      enabled: data.delItem,
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-        // dispatch(setTriggererChecklistItemDel(false));
-      }
     }
   );
 };
