@@ -9,7 +9,7 @@ import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
 import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
 import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/task/interface.tasks';
-import PilotSection, { pilotConfig } from '../../../../explorer/components/PilotSection';
+import PilotSection, { pilotConfig } from '../PilotSection';
 
 interface HubDetailTypes {
   activeItemId: string;

@@ -7,7 +7,6 @@ import {
   SignalIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
@@ -18,6 +17,7 @@ import { VscChecklist } from 'react-icons/vsc';
 import Details from './components/details/Details';
 import TimeClock from './components/TimeClock';
 import Checklists from './components/checklist/components/Checklist';
+import { useParams } from 'react-router-dom';
 
 const sections = [
   {
@@ -95,7 +95,6 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  console.log(activeItemName);
 
   // set data for pilot
   useEffect(() => {

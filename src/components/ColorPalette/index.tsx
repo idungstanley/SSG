@@ -58,15 +58,9 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     height: '15px',
     width: '15px'
   };
-  interface PaletteArrayProps {
-    paletteDropDown: string | null;
-    color: string;
-  }
 
-  const paletteColorArray: PaletteArrayProps[] = [];
   const handleClick = (color: string) => {
     setPaletteColor(color);
-    paletteColorArray.push({ paletteDropDown, color });
     dispatch(setPaletteDropDown(null));
   };
 
