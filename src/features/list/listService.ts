@@ -9,7 +9,7 @@ import { IListDetailRes } from './list.interfaces';
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew(
     {
-      url: 'lists',
+      url: '/lists',
       method: 'POST',
       data: {
         name: data.listName,
@@ -27,7 +27,7 @@ export const getListService = (data: { queryKey: (string | undefined)[] }) => {
   const hubID = data.queryKey[1];
   const response = requestNew(
     {
-      url: 'lists',
+      url: '/lists',
       method: 'GET',
       params: {
         hub_id: hubID

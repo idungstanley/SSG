@@ -10,8 +10,8 @@ import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 
-export const MIN_SIDEBAR_WIDTH = 260;
-export const MAX_SIDEBAR_WIDTH = 320;
+export const MIN_SIDEBAR_WIDTH = 240;
+export const MAX_SIDEBAR_WIDTH = 350;
 const RELATIVE_WIDTH = 10;
 
 interface SidebarProps {
@@ -19,13 +19,11 @@ interface SidebarProps {
   setAllowSelect: (i: boolean) => void;
 }
 
-interface SidebarFromLSProp {
+// getting sidebar width from localStorage
+const sidebarFromLS: {
   sidebarWidth: number;
   showSidebar: boolean;
-}
-
-// getting sidebar width from localStorage
-const sidebarFromLS: SidebarFromLSProp = JSON.parse(localStorage.getItem('sidebar') || '""') as SidebarFromLSProp;
+} = JSON.parse(localStorage.getItem('sidebar') || '""');
 const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
 
 export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
@@ -109,14 +107,13 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
     <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-hidden')}>
       {/* show / hide sidebar icon */}
       <Toggle />
-
       {/* sidebar */}
       <section
         className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-300"
         style={showSidebar ? style : undefined}
       >
         <Header />
-        <section className="relative flex flex-col pr-1.5 overflow-x-hidden overflow-y-scroll">
+        <section className="relative flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden">
           {showSidebar ? <Search /> : null}
           <NavigationItems />
           <Places />

@@ -95,6 +95,7 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  console.log(activeItemName);
 
   // set data for pilot
   useEffect(() => {

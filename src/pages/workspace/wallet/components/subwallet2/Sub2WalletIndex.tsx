@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { setActiveEntity, setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
-import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import WalletItem from '../../../../../components/tasks/WalletItem';
 import ListItem from '../../../../../components/tasks/ListItem';
 import LastListIndex from './LastListIndex';
@@ -32,7 +31,7 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
     Archived: toggleArchiveWallet,
     parentId: currWalId
   });
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet3 === id) {
@@ -64,8 +63,6 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
             showSubWallet={showSubWallet3}
           />
           {showSubWallet3 === wallet.id ? <LastListIndex finalParentId={finalParentId} /> : null}
-          {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-          {SubMenuId === wallet.id ? <SubDropdown /> : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
