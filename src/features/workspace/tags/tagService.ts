@@ -4,28 +4,22 @@ import { ITagRes } from './tag.interfaces';
 
 export const UseCreateTagService = ({ name }: { name: string }) => {
   const url = 'tags';
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      data: {
-        name: name
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'POST',
+    data: {
+      name: name
+    }
+  });
   return response;
 };
 
 export const UseGetAllTagsService = () => {
   return useQuery(['tags'], async () => {
-    const data = await requestNew<ITagRes | undefined>(
-      {
-        url: 'tags',
-        method: 'GET'
-      },
-      true
-    );
+    const data = await requestNew<ITagRes | undefined>({
+      url: 'tags',
+      method: 'GET'
+    });
     return data;
   });
 };
@@ -40,32 +34,26 @@ export const UseUpdateTagService = ({
   name?: string;
 }) => {
   const url = `tags/${tag_id}`;
-  const response = requestNew(
-    {
-      url,
-      method: 'PUT',
-      data: {
-        name: name,
-        color: color
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'PUT',
+    data: {
+      name: name,
+      color: color
+    }
+  });
   return response;
 };
 
 export const UseDeleteTagsService = ({ trigger, tag_id }: { trigger: number; tag_id: string | null }) => {
   const url = `tags/${tag_id}`;
-  const response = requestNew(
-    {
-      url,
-      method: 'DELETE',
-      params: {
-        confirm: trigger
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'DELETE',
+    params: {
+      confirm: trigger
+    }
+  });
   return response;
 };
 
@@ -78,17 +66,14 @@ export const UseAssignTagService = ({
   currentTaskIdForTag: string | null;
 }) => {
   const url = `tags/${tagId}/assign`;
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      params: {
-        type: 'task',
-        id: currentTaskIdForTag
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'POST',
+    params: {
+      type: 'task',
+      id: currentTaskIdForTag
+    }
+  });
   return response;
 };
 
@@ -101,17 +86,14 @@ export const UseUnAssignTagService = ({
   currentTaskIdForTag: string | null;
 }) => {
   const url = `tags/${tagId}/unassign`;
-  const response = requestNew(
-    {
-      url,
-      method: 'POST',
-      params: {
-        type: 'task',
-        id: currentTaskIdForTag
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url,
+    method: 'POST',
+    params: {
+      type: 'task',
+      id: currentTaskIdForTag
+    }
+  });
   return response;
 };
 
@@ -127,17 +109,14 @@ export const UseUnAssignTagFromTask = ({
   return useQuery(
     ['task', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {
-      const data = await requestNew(
-        {
-          url: `tags/${tagId}/unassign`,
-          method: 'POST',
-          params: {
-            type: 'task',
-            id: currentTaskIdForTag
-          }
-        },
-        true
-      );
+      const data = await requestNew({
+        url: `tags/${tagId}/unassign`,
+        method: 'POST',
+        params: {
+          type: 'task',
+          id: currentTaskIdForTag
+        }
+      });
       return data;
     },
     {

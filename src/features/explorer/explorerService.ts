@@ -11,13 +11,10 @@ export const useGetExplorerFolders = () => {
   return useQuery<IExplorerFoldersRes, unknown, IExplorerFolder[]>(
     ['explorer-folders'],
     () =>
-      requestNew(
-        {
-          url: 'explorer-folders',
-          method: 'GET'
-        },
-        true
-      ),
+      requestNew({
+        url: 'explorer-folders',
+        method: 'GET'
+      }),
     {
       select: (res) => res.data.folders,
       onSuccess: (res) =>

@@ -10,11 +10,11 @@ import { TbShield } from 'react-icons/tb';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ChatForPilot from '../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../components/Comments/CommentsForPilot';
+import History from '../../../../components/Pilot/components/History';
 import Permissions from '../../../../components/Pilot/components/Permissions';
 import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
 import { useGetExplorerFile, useGetExplorerFolder } from '../../../../features/explorer/explorerService';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import History from '../Pilot/components/History';
 import Details from './components/Details';
 
 const sections = [

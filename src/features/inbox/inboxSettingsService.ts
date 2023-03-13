@@ -17,17 +17,14 @@ export const useGetInboxAccess = (inboxId?: string) =>
 
 // Update inbox settings
 export const updateInboxSettingsService = async (data: { inboxId?: string; name: string; emailUsername: string }) => {
-  const response = requestNew(
-    {
-      url: `inboxes/${data.inboxId}/update-settings`,
-      method: 'POST',
-      data: {
-        name: data.name,
-        email_username: data.emailUsername
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: `inboxes/${data.inboxId}/update-settings`,
+    method: 'POST',
+    data: {
+      name: data.name,
+      email_username: data.emailUsername
+    }
+  });
   return response;
 };
 
@@ -170,17 +167,14 @@ export const useGetTeamMembersOrGroups = ({ query, isGroups }: { query: string; 
     async ({ pageParam = 0 }) => {
       const url = `settings/${title.replaceAll('_', '-')}`;
 
-      return requestNew(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page: pageParam as number,
-            search: query
-          }
-        },
-        true
-      );
+      return requestNew({
+        url,
+        method: 'GET',
+        params: {
+          page: pageParam as number,
+          search: query
+        }
+      });
     },
     {
       onSuccess: (data) => {

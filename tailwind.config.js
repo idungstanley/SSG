@@ -15,10 +15,12 @@ module.exports = {
         sky: colors.sky
       },
       gridTemplateColumns: {
-        sidebarItem: 'auto 1fr auto'
+        sidebarItem: 'auto 1fr auto',
+        frAuto: '1fr auto'
       },
       gridTemplateRows: {
-        autoFrAuto: 'auto 1fr auto'
+        autoFrAuto: 'auto 1fr auto',
+        autoAutoAutoFr: 'auto auto auto auto 1fr'
       },
       height: {
         204: '51rem'

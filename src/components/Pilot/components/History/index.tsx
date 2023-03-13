@@ -4,6 +4,8 @@ import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
 import { InitialsAvatar, Spinner } from '../../../../common';
 import { useGetItemHistory } from '../../../../features/general/history/historyService';
 import { OutputDateTime } from '../../../../app/helpers';
+import SectionArea from '../SectionArea';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 
 export default function History() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -15,8 +17,10 @@ export default function History() {
   const { data: logs, status } = useGetItemHistory({ type, id });
 
   return (
-    <div className="h-full flex-1">
-      <div className="relative h-full">
+    <>
+      <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
+
+      <div className="relative h-full w-full">
         {/* status checking */}
         {status === 'error' ? (
           <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
@@ -24,39 +28,34 @@ export default function History() {
           <div className="mx-auto w-6 justify-center mt-12">
             <Spinner size={8} color="#0F70B7" />
           </div>
-        ) : (
-          <div className="absolute inset-0 flex h-full overflow-y-scroll flex-col">
-            {/* message if logs are empty */}
-            {logs ? (
-              !logs.length ? (
-                <FullScreenMessage title="No logs yet" description="Do any action." />
-              ) : (
-                <ul className="divide-y divide-gray-200 h-full flex-1">
-                  {/* logs list */}
-                  {logs.map((activityLog) => (
-                    <li key={activityLog.id} className="py-2 flex justify-between items-center">
-                      <div className="flex items-center">
-                        <InitialsAvatar
-                          size={10}
-                          colour={activityLog.team_member.colour}
-                          initials={activityLog.team_member.initials}
-                        />
+        ) : logs ? (
+          !logs.length ? (
+            <FullScreenMessage title="No logs yet" description="Do any action." />
+          ) : (
+            <ul className="absolute top-0 left-0 flex w-full h-full overflow-y-scroll flex-col divide-y divide-gray-200">
+              {/* logs list */}
+              {logs.map((activityLog) => (
+                <li key={activityLog.id} className="py-2 flex justify-between items-center">
+                  <div className="flex items-center">
+                    <InitialsAvatar
+                      size={10}
+                      colour={activityLog.team_member.colour}
+                      initials={activityLog.team_member.initials}
+                    />
 
-                        <div className="ml-3">
-                          <p className="text-indigo-600">{activityLog.team_member.name}</p>
-                          <p className="text-gray-400">{activityLog.category}</p>
-                        </div>
-                      </div>
+                    <div className="ml-3">
+                      <p className="text-indigo-600">{activityLog.team_member.name}</p>
+                      <p className="text-gray-400">{activityLog.category}</p>
+                    </div>
+                  </div>
 
-                      <p className="text-gray-400 text-sm">{OutputDateTime(activityLog.created_at)}</p>
-                    </li>
-                  ))}
-                </ul>
-              )
-            ) : null}
-          </div>
-        )}
+                  <p className="text-gray-400 text-sm">{OutputDateTime(activityLog.created_at)}</p>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : null}
       </div>
-    </div>
+    </>
   );
 }

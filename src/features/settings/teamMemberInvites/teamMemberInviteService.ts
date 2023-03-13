@@ -14,16 +14,13 @@ export const useGetTeamMemberInvites = (page: number) => {
     async () => {
       const url = 'settings/team-member-invites';
 
-      return requestNew(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page
-          }
-        },
-        true
-      );
+      return requestNew({
+        url,
+        method: 'GET',
+        params: {
+          page
+        }
+      });
     },
     {
       onSuccess: (data) => {
@@ -42,13 +39,10 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
   return useQuery(
     ['team_member_invite', teamMemberInviteId],
     async () => {
-      const data = await requestNew<ITeamMemberInviteRes>(
-        {
-          url: `settings/team-member-invites/${teamMemberInviteId}`,
-          method: 'GET'
-        },
-        true
-      );
+      const data = await requestNew<ITeamMemberInviteRes>({
+        url: `settings/team-member-invites/${teamMemberInviteId}`,
+        method: 'GET'
+      });
       return data.data.team_member_invite;
     },
     {
@@ -63,13 +57,10 @@ export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
   return useQuery(
     ['team_member_invite', inviteCode],
     async () => {
-      const data = await requestNew<{ data: { user: IUser } }>(
-        {
-          url: `workspace/accept-invite/${inviteCode}`,
-          method: 'POST'
-        },
-        true
-      );
+      const data = await requestNew<{ data: { user: IUser } }>({
+        url: `workspace/accept-invite/${inviteCode}`,
+        method: 'POST'
+      });
       return data;
     },
     {
@@ -84,13 +75,10 @@ export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
 
 // Delete team member invite
 export const deleteTeamMemberInviteService = async (data: { teamMemberId: string }) => {
-  const response = requestNew(
-    {
-      url: `/settings/team-member-invites/${data.teamMemberId}`,
-      method: 'DELETE'
-    },
-    true
-  );
+  const response = requestNew({
+    url: `/settings/team-member-invites/${data.teamMemberId}`,
+    method: 'DELETE'
+  });
   return response;
 };
 
@@ -107,13 +95,10 @@ export function useDeleteTeamMemberInvite(teamMemberId: string) {
 
 // Resend team member invite
 export const resendTeamMemberInviteService = async (data: { teamMemberId: string }) => {
-  const response = requestNew(
-    {
-      url: `/settings/team-member-invites/${data.teamMemberId}/resend`,
-      method: 'POST'
-    },
-    true
-  );
+  const response = requestNew({
+    url: `/settings/team-member-invites/${data.teamMemberId}/resend`,
+    method: 'POST'
+  });
   return response;
 };
 
@@ -127,17 +112,14 @@ export const createTeamMemberInviteService = async (data: {
   teamMemberRoleKey: string;
   name: string;
 }) => {
-  const response = requestNew(
-    {
-      url: 'settings/team-member-invites',
-      method: 'POST',
-      params: {
-        email: data.email,
-        name: data.name,
-        team_member_role_key: data.teamMemberRoleKey
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'settings/team-member-invites',
+    method: 'POST',
+    params: {
+      email: data.email,
+      name: data.name,
+      team_member_role_key: data.teamMemberRoleKey
+    }
+  });
   return response;
 };

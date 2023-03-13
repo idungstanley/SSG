@@ -60,31 +60,25 @@ export const useGetSavedSearches = () => {
   return useQuery<ISavedSearchesRes, unknown, ISavedSearch[]>(
     ['savedSearches'],
     () =>
-      requestNew(
-        {
-          url: 'settings',
-          method: 'GET',
-          params: {
-            keys: 'task_search'
-          }
-        },
-        true
-      ),
+      requestNew({
+        url: 'settings',
+        method: 'GET',
+        params: {
+          keys: 'task_search'
+        }
+      }),
     { select: (saved) => saved.data.settings }
   );
 };
 
 const saveSearchValue = (valuesArr: string[]) => {
-  const request = requestNew(
-    {
-      url: 'settings',
-      method: 'PUT',
-      data: {
-        keys: [{ key: 'task_search', value: valuesArr }]
-      }
-    },
-    true
-  );
+  const request = requestNew({
+    url: 'settings',
+    method: 'PUT',
+    data: {
+      keys: [{ key: 'task_search', value: valuesArr }]
+    }
+  });
   return request;
 };
 

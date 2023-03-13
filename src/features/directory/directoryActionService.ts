@@ -5,17 +5,14 @@ import { FieldType } from './directory.interfaces';
 const createDirectory = (data: { name: string; parentId?: string }) => {
   const { name, parentId } = data;
 
-  const response = requestNew(
-    {
-      url: 'directories',
-      method: 'POST',
-      params: {
-        name,
-        parent_id: parentId
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'directories',
+    method: 'POST',
+    params: {
+      name,
+      parent_id: parentId
+    }
+  });
   return response;
 };
 
@@ -32,17 +29,14 @@ export const useCreateDirectory = (parentId?: string) => {
 const createDirectoryTemplate = (data: { name: string; directoryId: string }) => {
   const { name, directoryId } = data;
 
-  const response = requestNew(
-    {
-      url: 'directory-templates',
-      method: 'POST',
-      data: {
-        name,
-        directory_id: directoryId
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: 'directory-templates',
+    method: 'POST',
+    data: {
+      name,
+      directory_id: directoryId
+    }
+  });
   return response;
 };
 
@@ -68,22 +62,19 @@ const updateOrAddTemplateField = (data: {
 }) => {
   const { templateId, fields } = data;
 
-  const response = requestNew(
-    {
-      url: `directory-templates/${templateId}/fields`,
-      method: 'PUT',
-      data: {
-        fields: fields.map((field) => ({
-          id: field.id,
-          name: field.name,
-          type: field.type,
-          is_title: field.isTitle,
-          is_required: field.isRequired
-        }))
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: `directory-templates/${templateId}/fields`,
+    method: 'PUT',
+    data: {
+      fields: fields.map((field) => ({
+        id: field.id,
+        name: field.name,
+        type: field.type,
+        is_title: field.isTitle,
+        is_required: field.isRequired
+      }))
+    }
+  });
   return response;
 };
 
@@ -100,16 +91,13 @@ export const useUpdateOrAddTemplateField = (templateId: string) => {
 const createTemplateItem = (data: { templateId: string; fields: Record<string, string> }) => {
   const { templateId, fields } = data;
 
-  const response = requestNew(
-    {
-      url: `/directory-templates/${templateId}/item`,
-      method: 'POST',
-      data: {
-        fields
-      }
-    },
-    true
-  );
+  const response = requestNew({
+    url: `/directory-templates/${templateId}/item`,
+    method: 'POST',
+    data: {
+      fields
+    }
+  });
   return response;
 };
 

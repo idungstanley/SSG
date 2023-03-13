@@ -19,17 +19,14 @@ export const useGetTeamMemberGroups = ({ query }: Iprops) => {
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       const url = 'settings/team-member-groups';
 
-      return requestNew<ITeamMembersAndGroupsReq>(
-        {
-          url,
-          method: 'GET',
-          params: {
-            page: pageParam,
-            search: query
-          }
-        },
-        true
-      );
+      return requestNew<ITeamMembersAndGroupsReq>({
+        url,
+        method: 'GET',
+        params: {
+          page: pageParam,
+          search: query
+        }
+      });
     },
     {
       onSuccess: (data: InfiniteData<ITeamMembersAndGroupsReq>) => {

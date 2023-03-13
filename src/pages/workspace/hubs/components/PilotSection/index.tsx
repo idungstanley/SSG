@@ -15,9 +15,9 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { VscChecklist } from 'react-icons/vsc';
-import Checklists from '../../../pilot/components/checklist/components/Checklist';
-import Details from '../../../pilot/components/details/Details';
-import TimeClock from '../../../pilot/components/timeClock/TimeClock';
+import Details from './components/details/Details';
+import TimeClock from './components/TimeClock';
+import Checklists from './components/checklist/components/Checklist';
 
 const sections = [
   {
