@@ -59,17 +59,23 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 };
 
 //edit wallet
-export const UseEditWalletService = (data: { walletName?: string; WalletId?: string | null }) => {
+export const UseEditWalletService = (data: {
+  walletName?: string;
+  WalletId?: string | null;
+  walletColor?: string | null;
+}) => {
   const response = requestNew(
     {
       url: `wallets/${data.WalletId}`,
       method: 'PUT',
       params: {
-        name: data.walletName
+        name: data.walletName,
+        color: data.walletColor
       }
     },
     true
   );
+  console.log(response);
   return response;
 };
 

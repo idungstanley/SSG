@@ -11,7 +11,7 @@ interface WalletState {
   delWallet: boolean;
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
-  paletteDropDown: null | string;
+  paletteDropDown?: null | string;
 }
 
 const initialState: WalletState = {

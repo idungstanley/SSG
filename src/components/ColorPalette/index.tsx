@@ -1,5 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { UseEditWalletService } from '../../features/wallet/walletService';
 import { setPaletteDropDown } from '../../features/wallet/walletSlice';
 
 interface PaletteProps {
@@ -10,6 +12,8 @@ interface PaletteProps {
 export default function Palette({ title, setPaletteColor, bottomContent }: PaletteProps) {
   const { paletteDropDown } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
   const ref = useRef<HTMLInputElement>(null);
 
   const palette = [
@@ -40,6 +44,12 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     '#CC951B'
   ];
 
+  const editWalletColorMutation = useMutation(UseEditWalletService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
+
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
@@ -58,15 +68,13 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     height: '15px',
     width: '15px'
   };
-  interface PaletteArrayProps {
-    paletteDropDown: string | null;
-    color: string;
-  }
 
-  const paletteColorArray: PaletteArrayProps[] = [];
   const handleClick = (color: string) => {
+    editWalletColorMutation.mutateAsync({
+      WalletId: paletteDropDown,
+      walletColor: color
+    });
     setPaletteColor(color);
-    paletteColorArray.push({ paletteDropDown, color });
     dispatch(setPaletteDropDown(null));
   };
 

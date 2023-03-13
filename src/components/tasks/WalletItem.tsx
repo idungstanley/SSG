@@ -15,6 +15,7 @@ interface WalletItemProps {
   wallet: {
     id: string;
     name: string;
+    color: string | null;
   };
   showSubWallet: string | null;
   paddingLeft: string | number;
@@ -31,7 +32,7 @@ export default function WalletItem({
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropDown } = useAppSelector((state) => state.wallet);
-  const [paletteColor, setPaletteColor] = useState<string>('rgba(72, 67, 67, 0.64)');
+  const [paletteColor, setPaletteColor] = useState<string | null | undefined>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
     dispatch(
@@ -41,6 +42,7 @@ export default function WalletItem({
       })
     );
   };
+
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown(id));
@@ -78,12 +80,15 @@ export default function WalletItem({
             {showSubWallet === wallet.id ? (
               <>
                 <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
-                <FaFolderOpen color={paletteColor} onClick={(e) => handleWalletColour(wallet.id, e)} />
+                <FaFolderOpen
+                  color={wallet.color != null ? wallet.color : paletteColor}
+                  onClick={(e) => handleWalletColour(wallet.id, e)}
+                />
               </>
             ) : (
               <>
                 <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
-                <FaFolder color={paletteColor} onClick={(e) => handleWalletColour(wallet.id, e)} />
+                <FaFolder color={paletteColor || wallet.color} onClick={(e) => handleWalletColour(wallet.id, e)} />
               </>
             )}
           </div>
