@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -12,7 +12,7 @@ import { getWalletService } from '../../../../../features/wallet/walletService';
 import Sub2WalletIndex from '../../../../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
-import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
+// import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import SHubDropdownList from '../../../../../components/ItemsListInSidebar/components/SHubDropdownList';
 import ActiveSubHub from './ActiveSubHub';
 import DropdownList from '../../../../../components/ItemsListInSidebar/components/DropdownList';
@@ -20,7 +20,7 @@ import { dataProps } from '../../../../../components/Index/walletIndex/WalletInd
 
 export default function ActiveHub() {
   const dispatch = useDispatch();
-  const [isHovering, setIsHovering] = useState<number>(-1);
+  // const [isHovering, setIsHovering] = useState<number>(-1);
   const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
@@ -36,12 +36,12 @@ export default function ActiveHub() {
   if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
   }
-  const handleMouseOver = (i: number) => {
-    setIsHovering(i);
-  };
-  const handleMouseOut = () => {
-    setIsHovering(-1);
-  };
+  // const handleMouseOver = (i: number) => {
+  //   setIsHovering(i);
+  // };
+  // const handleMouseOut = () => {
+  //   setIsHovering(-1);
+  // };
 
   if (status === 'error') {
     return (
@@ -142,7 +142,7 @@ export default function ActiveHub() {
   return status === 'success' ? (
     <ul className="w-full">
       {items?.map(
-        (i: { id: string; name: string }, index) =>
+        (i: { id: string; name: string }) =>
           i.id === currentItemId && (
             <li key={i.id} className="flex flex-col">
               <div
@@ -150,15 +150,15 @@ export default function ActiveHub() {
                   i.id === currentItemId && 'bg-green-100 text-black-500'
                 }`}
                 style={{ height: '28px' }}
-                onMouseEnter={() => handleMouseOver(index)}
-                onMouseLeave={handleMouseOut}
+                // onMouseEnter={() => handleMouseOver(index)}
+                // onMouseLeave={handleMouseOut}
               >
                 {i.id === currentItemId && <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />}
                 <div
                   className="relative flex items-center justify-between gap-2 hover:bg-gray-100"
                   style={{ height: '28px' }}
-                  onMouseEnter={() => handleMouseOver(index)}
-                  onMouseLeave={handleMouseOut}
+                  // onMouseEnter={() => handleMouseOver(index)}
+                  // onMouseLeave={handleMouseOut}
                 >
                   {i.id === currentItemId && (
                     <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
@@ -190,13 +190,13 @@ export default function ActiveHub() {
                     </div>
                   </div>
                 </div>
-                <div
+                {/* <div
                   className={`flex items-center space-x-1 justify-end pr-1 ${
                     isHovering === index ? 'block' : 'hidden'
                   }`}
                 >
                   <MenuDropdown />
-                </div>
+                </div> */}
               </div>
               <div className="flex items-center w-full border bg-green-50">{displayClickedParent()}</div>
               <hr />
