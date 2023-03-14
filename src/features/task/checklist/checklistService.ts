@@ -1,15 +1,8 @@
 import requestNew from '../../../app/requestNew';
 import { useDispatch } from 'react-redux';
-import {
-  setToggleAssignChecklistItemId,
-  setTriggerAssignChecklistItem,
-  setTriggerChecklistUpdate,
-  setTriggerItemtUpdate,
-  setTriggerUnassignChecklistItem
-} from './checklistSlice';
+import { setToggleAssignChecklistItemId, setTriggerChecklistUpdate, setTriggerItemtUpdate } from './checklistSlice';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
-import { setCurrTeamMemId } from '../taskSlice';
 import { ITaskRes } from '../interface.tasks';
 
 export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
@@ -173,95 +166,65 @@ export const useDeleteChecklistItem = () => {
 };
 
 // Assign Checklist Item
-export const UseAssignChecklistItemService = ({
-  checklist_id,
+const AssignChecklistItem = ({
   itemId,
-  team_member_id,
-  triggerAssignChecklistItem
+  team_member_id
 }: {
-  checklist_id: string | null;
-  itemId: string | null;
+  itemId: string | null | undefined;
   team_member_id: string | null;
-  triggerAssignChecklistItem: boolean;
 }) => {
-  const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
-  return useQuery(
-    [
-      'assign',
-      {
-        team_member_id: team_member_id,
-        itemId: itemId,
-        checklist_id: checklist_id
-      }
-    ],
-    async () => {
-      const data = await requestNew({
-        url: '/assignee/assign',
-        method: 'POST',
-        params: {
-          team_member_id: team_member_id,
-          id: itemId,
-          type: 'checklist_item'
-        }
-      });
-      return data;
-    },
-    {
-      onSuccess: () => {
-        dispatch(setToggleAssignChecklistItemId(null));
-        dispatch(setTriggerAssignChecklistItem(false));
-        dispatch(setCurrTeamMemId(null));
-        queryClient.invalidateQueries(['checklist']);
-      },
-      // initialData: queryClient.getQueryData(["assign", team_member_id]),
-      enabled: !!team_member_id && triggerAssignChecklistItem
+  const request = requestNew({
+    url: '/assignee/assign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: itemId,
+      type: 'checklist_item'
     }
-  );
+  });
+  return request;
 };
 
-export const UseUnAssignChecklistItemService = ({
-  checklist_id,
-  itemId,
-  team_member_id,
-  triggerUnassignChecklistItem
-}: {
-  checklist_id: string | null;
-  itemId: string | null;
-  team_member_id: string | null;
-  triggerUnassignChecklistItem: boolean;
-}) => {
+export const UseChecklistItemAssignee = () => {
   const queryClient = useQueryClient();
+
   const dispatch = useAppDispatch();
-  return useQuery(
-    [
-      'checklist',
-      {
-        team_member_id: team_member_id,
-        itemId: itemId,
-        checklist_id: checklist_id
-      }
-    ],
-    async () => {
-      const data = await requestNew({
-        url: '/assignee/unassign',
-        method: 'POST',
-        params: {
-          team_member_id: team_member_id,
-          id: itemId,
-          type: 'checklist_item'
-        }
-      });
-      return data;
-    },
-    {
-      onSuccess: () => {
-        dispatch(setToggleAssignChecklistItemId(null));
-        dispatch(setCurrTeamMemId(null));
-        dispatch(setTriggerUnassignChecklistItem(false));
-        queryClient.invalidateQueries(['checklist']);
-      },
-      enabled: !!team_member_id && triggerUnassignChecklistItem
+  return useMutation(AssignChecklistItem, {
+    onSuccess: () => {
+      dispatch(setToggleAssignChecklistItemId(null));
+      queryClient.invalidateQueries(['checklist']);
     }
-  );
+  });
+};
+
+// Unassign Checklist Item
+const UnassignChecklistItem = ({
+  itemId,
+  team_member_id
+}: {
+  itemId: string | null | undefined;
+  team_member_id: string | null;
+}) => {
+  const request = requestNew({
+    url: '/assignee/unassign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: itemId,
+      type: 'checklist_item'
+    }
+  });
+  return request;
+};
+
+export const UseChecklistItemUnassignee = () => {
+  const queryClient = useQueryClient();
+
+  const dispatch = useAppDispatch();
+  return useMutation(UnassignChecklistItem, {
+    onSuccess: () => {
+      dispatch(setToggleAssignChecklistItemId(null));
+      queryClient.invalidateQueries(['checklist']);
+    }
+  });
 };

@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import {
-  UseCreateClistService,
-  UseGetAllClistService
-} from '../../../../../../features/task/checklist/checklistService';
-import { Spinner } from '../../../../../../common';
+import { UseCreateClistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
+import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import SingleChecklist from '../SingleChecklist';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setShowChecklistInput } from '../../../../../../features/task/checklist/checklistSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
 import { VscChecklist } from 'react-icons/vsc';
@@ -51,12 +48,12 @@ export default function ChecklistIndex() {
   }
 
   return status == 'success' ? (
-    <div className="p-1">
-      <div className="border-2 flex items-center text-center py-2 bg-white">
-        <VscChecklist className="w-6 h-6 ml-2" />
-        <h1 className="text-xl mx-6">Checklists</h1>
+    <div className="p">
+      <div className="border-2 flex items-center text-center py-1 bg-white">
+        <VscChecklist className="w-4 h-4 ml-2" />
+        <h1 className="text-base-xl mx-4">Checklists</h1>
         <button
-          className="p-0.5 border-blue-400 border-solid border-2 rounded-lg"
+          className="p-0.5 border-blue-400 border-solid border-2 rounded-lg text-xs"
           onClick={() => dispatch(setShowChecklistInput(true))}
         >
           ADD

@@ -1,16 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { BiCaretRight } from 'react-icons/bi';
-import { useAppSelector } from '../../../../../../app/hooks';
-import { UseUpdateChecklistService } from '../../../../../../features/task/checklist/checklistService';
-import {
-  setOpenedDisclosureId,
-  setTriggerChecklistUpdate
-} from '../../../../../../features/task/checklist/checklistSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { UseUpdateChecklistService } from '../../../../features/task/checklist/checklistService';
+import { setOpenedDisclosureId, setTriggerChecklistUpdate } from '../../../../features/task/checklist/checklistSlice';
 import ChecklistItem from './ChecklistItem';
-import { useAppDispatch } from '../../../../../../app/hooks';
 import ChecklistModal from './ChecklistModal';
-import { completeOptions } from '../ModalOptions';
-import { ICheckListRes } from '../../../../../../features/task/interface.tasks';
+import { completeOptions } from './ModalOptions';
+import { ICheckListRes } from '../../../../features/task/interface.tasks';
 
 function Disclosures({ item: checklist }: { item: ICheckListRes }) {
   const dispatch = useAppDispatch();
@@ -61,7 +57,7 @@ function Disclosures({ item: checklist }: { item: ICheckListRes }) {
             contentEditable={true}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEdit(checklist.id) : null)}
             style={{ backgroundColor: '#CAC9C9' }}
-            className="cursor-text p-1 rounded mx-2 text-white text-base text-xs"
+            className="cursor-text p-1 rounded mx-2 text-white text-sm"
           >
             {checklist.name.toUpperCase()}
           </div>

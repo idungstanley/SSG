@@ -3,21 +3,21 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   UseCreatelistItemService,
   UseUpdateChecklistItemService
-} from '../../../../../../features/task/checklist/checklistService';
+} from '../../../../features/task/checklist/checklistService';
 // import { GrDrag } from "react-icons/gr";
 import { CgProfile } from 'react-icons/cg';
 import ChecklistModal from './ChecklistModal';
-import { lessOptions } from '../ModalOptions';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { lessOptions } from './ModalOptions';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
   setToggleAssignChecklistItemId,
   setTriggerItemtUpdate
-} from '../../../../../../features/task/checklist/checklistSlice';
-import AssignTask from '../../../../tasks/assignTask/AssignTask';
-import { AvatarWithInitials } from '../../../../../../components';
-import ToolTip from '../../../../../../components/Tooltip';
+} from '../../../../features/task/checklist/checklistSlice';
+import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask';
+import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import ToolTip from '../../../Tooltip';
 import { AiFillTags } from 'react-icons/ai';
 
 export interface itemProps {
@@ -119,7 +119,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
           assignees: [{ id: string; initials: string; colour: string }];
         }) => {
           return (
-            <div key={item.id} className="bg-white p-1 border-b border-gray-300 border-b-1">
+            <div key={item.id} className="bg-white p-1 mb-0.5">
               <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
                 {/* <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
                   <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
@@ -181,8 +181,8 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   />
                 </div>
                 {toggleAssignChecklistItemId == item.id ? (
-                  <span className="absolute shadow-2xl z-30 ml-20 mt-10">
-                    <AssignTask option={'checklstItem'} item={item} />
+                  <span className="absolute shadow-2xl z-30 ml-20 mt-16">
+                    <AssignTask option="checklstItem" item={item} />
                   </span>
                 ) : null}
               </div>
