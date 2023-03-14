@@ -11,11 +11,11 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { useAppSelector } from '../../../../app/hooks';
+import { ReactNode, useCallback, useRef, useState } from 'react';
+import { useResize } from '../../../../hooks/useResize';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
+import ShowTabsLabelToggle from './components/ShowTabsLabelToggle';
 import Tab from './components/Tab';
 
 interface TabsProps {
@@ -25,41 +25,11 @@ interface TabsProps {
 }
 
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
-interface ShowTabsLabelToggleProps {
-  showTabLabel: boolean;
-  setShowTabLabel: (i: boolean) => void;
-}
-
-function ShowTabsLabelToggle({ showTabLabel, setShowTabLabel }: ShowTabsLabelToggleProps) {
-  const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
-
-  const toggleShowTabLabel = () => {
-    localStorage.setItem(
-      'pilot',
-      JSON.stringify({
-        ...pilotFromLS,
-        showTabLabel: !showTabLabel
-      })
-    );
-    setShowTabLabel(!showTabLabel);
-  };
-
-  return show ? (
-    <button
-      type="button"
-      onClick={toggleShowTabLabel}
-      className={cl(
-        'border flex items-center justify-center text-gray-600',
-        showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'p-2 mb-1'
-      )}
-    >
-      {showTabLabel ? <ChevronDoubleUpIcon className="w-4 h-4" /> : <ChevronDoubleDownIcon className="w-4 h-4" />}
-    </button>
-  ) : null;
-}
-
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
+
+const MIN = 100;
+const MAX = 200;
 
 export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
   const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
@@ -67,6 +37,67 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
 
+  const navRef = useRef<HTMLDivElement>(null);
+  const disableOverflow = (disable: boolean) => {
+    if (navRef.current) {
+      navRef.current.style.overflow = disable ? 'hidden' : 'auto';
+    }
+  };
+
+  const { blockRef, Dividers } = useResize({
+    dimensions: {
+      min: MIN,
+      max: MAX
+    },
+    storageKey: 'pilotFeaturesHeight',
+    direction: 'Y'
+  });
+
+  return (
+    <div
+      style={{ height: !showTabLabel ? 'auto' : '' }}
+      ref={showTabLabel ? blockRef : null}
+      className={cl('relative col-span-1 flex items-center', !showTabLabel && 'overflow-x-scroll')}
+    >
+      {showTabLabel ? <Dividers /> : null}
+      <nav
+        ref={navRef}
+        className={cl(
+          'relative w-full grid border h-fit',
+          showTabLabel
+            ? 'grid-cols-1 h-full overflow-y-scroll divide-y'
+            : 'divide-x overflow-x-scroll grid-rows-1 grid-flow-col'
+        )}
+        aria-label="Tabs"
+      >
+        <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
+          {tabItems.map((tab) => (
+            <Tab
+              key={tab.id}
+              id={tab.id}
+              icon={tab.icon}
+              label={tab.label}
+              activeTabId={activeTabId}
+              setActiveTabId={setActiveTabId}
+              showTabLabel={showTabLabel}
+            />
+          ))}
+        </SortableProvider>
+      </nav>
+
+      <ShowTabsLabelToggle setShowTabLabel={setShowTabLabel} showTabLabel={showTabLabel} />
+    </div>
+  );
+}
+
+interface SortableProviderProps {
+  items: IPilotTab[];
+  setItems: (i: IPilotTab[]) => void;
+  children: ReactNode;
+  disableOverflow: (i: boolean) => void;
+}
+
+function SortableProvider({ items, children, setItems, disableOverflow }: SortableProviderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -74,19 +105,19 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
     })
   );
 
-  const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e;
+  const handleDragEnd = useCallback(
+    (e: DragEndEvent) => {
+      const { active, over } = e;
 
-    if (active.id !== over?.id) {
-      const findActive = tabItems.find((i) => i.id === active.id);
-      const findOver = tabItems.find((i) => i.id === over?.id);
+      if (active.id !== over?.id) {
+        const findActive = items.find((i) => i.id === active.id);
+        const findOver = items.find((i) => i.id === over?.id);
 
-      if (findActive && findOver) {
-        setTabItems((tabItems) => {
-          const oldIndex = tabItems.indexOf(findActive);
-          const newIndex = tabItems.indexOf(findOver);
+        if (findActive && findOver) {
+          const oldIndex = items.indexOf(findActive);
+          const newIndex = items.indexOf(findOver);
 
-          const sortArray = arrayMove(tabItems, oldIndex, newIndex);
+          const sortArray = arrayMove(items, oldIndex, newIndex);
 
           localStorage.setItem(
             'pilot',
@@ -96,39 +127,26 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
             })
           );
 
-          return [...sortArray];
-        });
+          setItems([...sortArray]);
+          disableOverflow(false);
+        }
       }
-    }
-  };
+    },
+    [items]
+  );
+
+  const handleDragStart = useCallback(() => disableOverflow(true), []);
 
   return (
-    <div className="col-span-1 relative flex items-center overflow-x-scroll">
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
-        <nav
-          className={cl(
-            'relative grid overflow-x-scroll w-full',
-            showTabLabel ? 'grid-cols-1 h-40' : 'grid-rows-1 grid-flow-col'
-          )}
-          aria-label="Tabs"
-        >
-          <SortableContext strategy={rectSortingStrategy} items={tabItems}>
-            {tabItems.map((tab) => (
-              <Tab
-                key={tab.id}
-                id={tab.id}
-                icon={tab.icon}
-                label={tab.label}
-                activeTabId={activeTabId}
-                setActiveTabId={setActiveTabId}
-                showTabLabel={showTabLabel}
-              />
-            ))}
-          </SortableContext>
-        </nav>
-      </DndContext>
-
-      <ShowTabsLabelToggle setShowTabLabel={setShowTabLabel} showTabLabel={showTabLabel} />
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext strategy={rectSortingStrategy} items={items}>
+        {children}
+      </SortableContext>
+    </DndContext>
   );
 }
