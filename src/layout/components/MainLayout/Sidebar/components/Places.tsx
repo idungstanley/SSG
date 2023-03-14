@@ -91,6 +91,7 @@ function Places() {
   const { activePlaceId } = useAppSelector((state) => state.workspace);
 
   const handleClick = (id: number, name: string | null, link?: string) => {
+    localStorage.setItem('activePlaceIdLocale', JSON.stringify(id));
     dispatch(setActivePlaceId(id));
     dispatch(setActivePlaceName(name));
     dispatch(

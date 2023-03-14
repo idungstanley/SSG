@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
+  null) as number | null;
+
 interface workspaceState {
   workspace: string[];
   currentItemId: string | null;
@@ -42,7 +45,7 @@ const initialState: workspaceState = {
   workspace: [],
   currentItemId: null,
   currentItemType: null,
-  activePlaceId: null,
+  activePlaceId: initialActivePlaceId,
   activePlaceName: null,
   pilotWidth: 400,
   showHub: false,

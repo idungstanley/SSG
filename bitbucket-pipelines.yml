@@ -7,7 +7,7 @@ pipelines:
         script:
           - apt-get update
           - apt-get install -y sshpass
-          # - npm install --force
-          # - npm run build
           - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'cd /var/www/alsodev_frontend/ && pwd'
           - sshpass -p $SSH_PASSWORD scp -o StrictHostKeyChecking=no -r build/* $SSH_USER@$SSH_HOST:/var/www/alsodev_frontend/
+          # - npm install
+          # - npm run build
