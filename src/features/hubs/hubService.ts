@@ -74,12 +74,18 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
 };
 
 //edit a hub
-export const useEditHubService = (data: { name: string; currentWorkspaceId?: string; currHubId?: string | null }) => {
+export const useEditHubService = (data: {
+  name?: string;
+  currentWorkspaceId?: string;
+  currHubId?: string | null;
+  color?: string | null;
+}) => {
   const response = requestNew({
     url: `hubs/${data.currHubId}`,
     method: 'PUT',
     params: {
       name: data.name,
+      color: data.color,
       current_workspace_id: data.currentWorkspaceId
     }
   });

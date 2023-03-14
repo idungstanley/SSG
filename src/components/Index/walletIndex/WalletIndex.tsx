@@ -25,6 +25,7 @@ interface WalletIndexProps {
 export interface dataProps {
   id: string;
   name: string;
+  color?: string | null;
 }
 
 function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
@@ -36,7 +37,6 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
   });
-
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
     dispatch(setShowHub(true));

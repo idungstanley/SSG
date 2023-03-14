@@ -1,15 +1,20 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setPaletteDropDown } from '../../features/wallet/walletSlice';
+import { useEditHubService } from '../../features/hubs/hubService';
+import { UseEditWalletService } from '../../features/wallet/walletService';
+import { setPaletteDropDown } from '../../features/account/accountSlice';
 
 interface PaletteProps {
   title?: string;
   bottomContent?: JSX.Element;
-  setPaletteColor: (color: string) => void;
+  setPaletteColor: (color?: string) => void;
 }
 export default function Palette({ title, setPaletteColor, bottomContent }: PaletteProps) {
-  const { paletteDropDown } = useAppSelector((state) => state.wallet);
+  const { paletteDropdown, paletteType } = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
   const ref = useRef<HTMLInputElement>(null);
 
   const palette = [
@@ -40,11 +45,22 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     '#CC951B'
   ];
 
+  const editWalletColorMutation = useMutation(UseEditWalletService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
+  const editHubColorMutation = useMutation(useEditHubService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
+
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
-        if (paletteDropDown !== null) {
-          dispatch(setPaletteDropDown(null));
+        if (paletteDropdown !== null) {
+          dispatch(setPaletteDropDown({ paletteId: null }));
         }
       }
     };
@@ -59,9 +75,20 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     width: '15px'
   };
 
-  const handleClick = (color: string) => {
+  const handleClick = (color?: string) => {
+    if (paletteType === 'hub') {
+      editHubColorMutation.mutateAsync({
+        currHubId: paletteDropdown,
+        color: color
+      });
+    } else if (paletteType === 'wallet') {
+      editWalletColorMutation.mutateAsync({
+        WalletId: paletteDropdown,
+        walletColor: color
+      });
+    }
     setPaletteColor(color);
-    dispatch(setPaletteDropDown(null));
+    dispatch(setPaletteDropDown({ paletteId: null, paletteType: null }));
   };
 
   const colorBoxes = palette.map((c) => (
@@ -70,7 +97,7 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
 
   return (
     <div
-      className="absolute top-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-2 h-fit drop-shadow-2xl drop-shadow-md"
+      className="absolute top-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-2 h-fit drop-shadow-2xl"
       style={{ zIndex: '999' }}
       ref={ref}
     >
