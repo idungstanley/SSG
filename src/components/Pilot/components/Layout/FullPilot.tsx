@@ -35,7 +35,8 @@ export default function FullPilot({
       min: MIN_PILOT_WIDTH,
       max: MAX_PILOT_WIDTH
     },
-    storageKey: LS_PILOT_KEY
+    storageKey: LS_PILOT_KEY,
+    direction: 'X'
   });
 
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
@@ -48,7 +49,7 @@ export default function FullPilot({
       }}
       className={cl(
         showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-10 translate-x-full',
-        'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 p-2 divide-y transition-transform duration-500'
+        'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 p-2 transition-transform duration-500'
       )}
     >
       {showFullPilot ? <Dividers /> : null}
