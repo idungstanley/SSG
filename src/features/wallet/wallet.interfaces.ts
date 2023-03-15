@@ -14,7 +14,7 @@ export interface IWallet {
   name: string;
   hub_id: string;
   parent_id: null;
-  color: string | null;
+  color?: string;
   updated_at: string;
   created_at: string;
   archived_at: null;
