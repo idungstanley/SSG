@@ -4,8 +4,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
-// import { useAppDispatch } from '../../app/hooks';
-// import { setChecklists } from '../task/checklist/checklistSlice';
 
 export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
   const response = requestNew<ICreateWallet>({
@@ -115,7 +113,6 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
-  // const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {

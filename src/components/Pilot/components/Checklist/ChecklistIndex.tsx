@@ -8,7 +8,6 @@ import { setShowChecklistInput } from '../../../../features/task/checklist/check
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
 import { VscChecklist } from 'react-icons/vsc';
-// import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>('Checklist');
@@ -39,26 +38,30 @@ export default function ChecklistIndex() {
     task_id: activeItemId,
     activeItemType: activeItemType
   });
+  // dispatch(setChecklists(checkListData?.data.task.checklists));
 
-  // const { data: hub } = UseGetHubDetails({
+  // const { data: hubChecklist, status: hubStatus } = UseGetHubDetails({
   //   activeItemId,
   //   activeItemType
   // });
 
-  // const { data: wallet } = UseGetWalletDetails({
-  //   activeItemId,
-  //   activeItemType
-  // });
-  // // console.log(wallet?.data.wallet);
-  // const { data: list } = UseGetListDetails({
+  // const { data: walletData, status: walletStatus } = UseGetWalletDetails({
   //   activeItemId,
   //   activeItemType
   // });
 
-  // UseDeleteChecklistService({
-  //   query: clickedChecklistId,
-  //   delChecklist: triggerDelChecklist,
+  // const { data: listData, status: listStatus } = UseGetListDetails({
+  //   activeItemId,
+  //   activeItemType
   // });
+
+  // if (hubStatus === 'success') {
+  //   console.log(hubChecklist);
+  // } else if (walletStatus === 'success') {
+  //   console.log(walletData);
+  // } else if (listStatus === 'success') {
+  //   console.log(listData);
+  // }
 
   if (status == 'loading') {
     <Spinner size={20} color={'blue'} />;
@@ -94,7 +97,13 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      <div>{activeItemType === 'task' && <Disclosures item={checkListData?.data.task.checklists} />}</div>
+      <div>
+        {checkListData?.data.task.checklists.length > 0
+          ? checkListData?.data.task.checklists.map((item) => {
+              return <Disclosures key={item.id} item={item} />;
+            })
+          : 'This task has no Checklist, click on the plus sign to create one'}
+      </div>
     </div>
   ) : null;
 }

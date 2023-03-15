@@ -2,7 +2,7 @@ import { ICheckListRes } from './../interface.tasks';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface checklistState {
-  checklists: ICheckListRes[];
+  checklists: ICheckListRes[] | undefined;
   triggerChecklistUpdate: boolean;
   triggerItemUpdate: boolean;
   clickedChecklistId: string;
@@ -33,6 +33,7 @@ export const checklistSlice = createSlice({
   reducers: {
     setChecklists(state, action: PayloadAction<ICheckListRes[]>) {
       state.checklists = action.payload;
+      // alert('yoo');
     },
     setTriggerChecklistUpdate(state, action: PayloadAction<boolean>) {
       state.triggerChecklistUpdate = action.payload;
