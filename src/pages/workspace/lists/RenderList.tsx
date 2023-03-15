@@ -5,15 +5,15 @@ import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setAddNewTaskItem } from '../../../features/task/taskSlice';
-import TaskListViews from '../tasks/component/views/TaskListViews';
+import TaskListViews from '../tasks/component/views/listLevel/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
 import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
 import SubTask from '../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
-import Board from '../tasks/component/views/Board';
-import TaskTableView from '../tasks/component/views/TaskTableView';
+import Board from '../tasks/component/views/listLevel/TaskBoardView';
+import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 
@@ -55,9 +55,14 @@ function RenderList() {
           </section>
         }
       >
+        {listView && (
+          <div
+            className="left-0 top-0 w-1 rounded-l-md"
+            style={{ backgroundColor: '#78828d', minHeight: 'auto' }}
+          ></div>
+        )}
         <div className="w-full overflow-y-scroll ">
           <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
-            {listView && <ListFilter />}
             {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
@@ -66,9 +71,7 @@ function RenderList() {
             {/* BoardView */}
             {boardView && <ListFilter />}
             {boardView && (
-              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>
-                <Board />
-              </div>
+              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>{<Board />}</div>
             )}
 
             {/* card */}
