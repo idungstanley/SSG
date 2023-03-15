@@ -117,7 +117,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
-      const data = await requestNew<ITaskRes>({
+      const data = await requestNew<ITaskRes | undefined>({
         url: `tasks/${task_id}`,
         method: 'GET'
       });
@@ -487,8 +487,13 @@ export const UseAssignTaskService = ({
     ['task', { team_member_id: team_member_id, task_id: task_id }],
     async () => {
       const data = await requestNew({
-        url: `at/tasks/${task_id}/assign-member/${team_member_id}`,
-        method: 'POST'
+        url: 'assignee/assign',
+        method: 'POST',
+        params: {
+          team_member_id,
+          id: task_id,
+          type: 'task'
+        }
       });
       return data;
     },

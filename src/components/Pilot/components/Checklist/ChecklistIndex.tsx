@@ -83,16 +83,3 @@ export default function ChecklistIndex() {
     </div>
   ) : null;
 }
-
-//  {
-//    checkListData?.data.task.checklists.length > 0
-//      ? checkListData?.data.task.checklists.map((item) => {
-//          return (
-//            <>
-//              {/* <SingleChecklist key={item.id} item={item} id={item.id} /> */}
-//              <Disclosures item={item} />
-//            </>
-//          );
-//        })
-//      : 'This task has no Checklist, click on the plus sign to create one';
-//  }

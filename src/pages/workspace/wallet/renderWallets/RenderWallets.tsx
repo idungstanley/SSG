@@ -5,7 +5,7 @@ import PageWrapper from '../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
 import { UseGetFullTaskListWallet } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
-import TaskTemplateData from '../../tasks/component/taskData/TaskTemplateData';
+import TaskTemplateData from '../../tasks/component/views/hubLevel/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
 import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../features/task/interface.tasks';

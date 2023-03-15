@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { IPilotSection, IPilotTab } from '../../types';

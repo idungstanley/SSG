@@ -1,28 +1,23 @@
-import React, { useMemo } from "react";
-import { useAppSelector } from "../../../../../app/hooks";
-import ChatForPilot from "../../../../../components/Chat/ChatForPilot";
-import CommunicationSubTab from "./CommunicationSubTab";
+import React, { useMemo } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
+import CommunicationSubTab from './CommunicationSubTab';
 
 export const communicationOptions = [
   {
     id: 1,
-    element: <ChatForPilot />,
+    element: <ChatForPilot />
   },
   { id: 2, element: <ChatForPilot /> },
   {
     id: 3,
-    element: <ChatForPilot />,
-  },
+    element: <ChatForPilot />
+  }
 ];
 export default function Commnunication() {
-  const { activeSubCommunicationTabId, showPilot } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { activeSubCommunicationTabId, showPilot } = useAppSelector((state) => state.workspace);
   const selectedSubSection = useMemo(
-    () =>
-      communicationOptions.find(
-        (option) => option.id === activeSubCommunicationTabId
-      ),
+    () => communicationOptions.find((option) => option.id === activeSubCommunicationTabId),
     [activeSubCommunicationTabId]
   );
   return (

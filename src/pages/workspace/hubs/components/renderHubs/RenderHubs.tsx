@@ -4,12 +4,13 @@ import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { UseGetFullTaskList } from '../../../../../features/task/taskService';
-import TaskTemplateData from '../../../tasks/component/taskData/TaskTemplateData';
+import TaskTemplateData from '../../../tasks/component/views/hubLevel/TaskTemplateData';
 import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
-import TaskTableTemplateData from '../../../tasks/component/taskData/TaskTableTemplateData';
+import TaskTableTemplateData from '../../../tasks/component/views/hubLevel/TaskTableTemplateData';
 import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/task/interface.tasks';
 import PilotSection, { pilotConfig } from '../PilotSection';
+import TaskBoardTemplate from '../../../tasks/component/views/hubLevel/TaskBoardTemplate';
 
 interface HubDetailTypes {
   activeItemId: string;
@@ -19,7 +20,7 @@ interface HubDetailTypes {
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  const { listView, tableView } = useAppSelector((state) => state.task);
+  const { listView, tableView, boardView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem('hubDetailsStorage');
   const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
@@ -29,6 +30,8 @@ function RenderHubs() {
     itemType: hubdetail.activeItemType
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
+
+  const unFilteredTaskData2 = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
   useEffect(() => {
     if (status !== 'success') {
@@ -44,7 +47,6 @@ function RenderHubs() {
           GroupedTaskByListID[currentTask.list_id] = {
             groupListName: currentTask.list?.name,
             key: currentTask.list_id,
-
             tasks: []
           };
         }
@@ -96,6 +98,12 @@ function RenderHubs() {
                   }
                 />
               )}
+            </div>
+          </div>
+        )}
+        {tableView && (
+          <div className="pr-1 pt-0.5 w-full h-full">
+            <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
               {tableView && (
                 <TaskTableTemplateData
                   filteredTaskData={
@@ -113,26 +121,10 @@ function RenderHubs() {
             </div>
           </div>
         )}
-        {tableView && (
+        {boardView && (
           <div className="pr-1 pt-0.5 w-full h-full">
             <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-              {/* <div className="w-full">
-                <ListFilter />
-              </div> */}
-              {tableView && (
-                <TaskTableTemplateData
-                  filteredTaskData={
-                    TaskDataGroupings as {
-                      [key: string]: {
-                        [key: string]: string | ImyTaskData[];
-                        tasks: ImyTaskData[];
-                        key: string;
-                        groupListName: string;
-                      };
-                    }
-                  }
-                />
-              )}
+              {boardView && <TaskBoardTemplate unFilteredTaskData={unFilteredTaskData2 as ITaskFullList[]} />}
             </div>
           </div>
         )}

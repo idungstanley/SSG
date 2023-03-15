@@ -58,7 +58,7 @@ function Notification() {
       ) => {
         if (!AccumulatedNotifications[currentNotification.type]) {
           AccumulatedNotifications[currentNotification.type] = {
-            name: currentNotification.model.name,
+            name: currentNotification.model?.name,
             key: currentNotification.type,
             notifications: []
           };

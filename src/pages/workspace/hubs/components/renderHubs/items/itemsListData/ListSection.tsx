@@ -1,6 +1,6 @@
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
-import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
+import TaskListViews from '../../../../../tasks/component/views/listLevel/TaskListViews';
 import ItemsListsData from './ItemsListsData';
 import '../ItemsHubData/wallet.css';
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';

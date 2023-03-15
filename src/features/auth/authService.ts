@@ -90,15 +90,19 @@ export const useGetInviteByCode = (inviteCode?: string) =>
     async () =>
       requestNew<{
         data: {
-          team_member_invite_id: string;
-          workspace: {
+          team_member_invite: {
+            email: string;
             id: string;
             name: string;
-            colour: string;
-            initials: string;
-            last_activty_at: string;
+            workspace: {
+              id: string;
+              name: string;
+              colour: string;
+              initials: string;
+              last_activty_at: string;
+            };
+            user: IUser;
           };
-          user: IUser;
         };
       }>({
         url: `auth/invite-details/${inviteCode}`,

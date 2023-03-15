@@ -86,15 +86,7 @@ export const routes = (user: IUser | null) =>
   createBrowserRouter([
     {
       path: 'onboarding',
-      element: user ? (
-        user.default_workspace_id ? (
-          <Navigate to="/" />
-        ) : (
-          <CreateWorkspace />
-        )
-      ) : (
-        <Navigate to="/auth/login" />
-      )
+      element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
     },
     {
       path: 'accept-invite/:inviteCode',

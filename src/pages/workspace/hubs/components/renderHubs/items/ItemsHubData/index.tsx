@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useGetHubChildren } from '../../../../../../../features/hubs/hubService';
 import '../ItemsHubData/wallet.css';
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
+import TaskListViews from '../../../../../tasks/component/views/listLevel/TaskListViews';
 import ListTemplate, { dataProps } from './ListTemplate';
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
 import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
