@@ -9,6 +9,7 @@ interface ItemsHubDataProps {
 }
 
 export default function BoardHubData({ hubId, hubName }: ItemsHubDataProps) {
+  // eslint-disable-next-line no-console
   console.log(hubId, hubName);
   const { data } = useGetHubChildren({ query: hubId });
 

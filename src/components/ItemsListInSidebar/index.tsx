@@ -46,7 +46,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   }
 
   const handleLocation = (id: string, name: string) => {
-    console.log(name);
     dispatch(
       setActiveItem({
         activeItemId: id,
