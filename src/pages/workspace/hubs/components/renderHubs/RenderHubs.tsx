@@ -31,6 +31,8 @@ function RenderHubs() {
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
+  const unFilteredTaskData2 = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
+
   useEffect(() => {
     if (status !== 'success') {
       return setTaskDataGroupings({});
@@ -122,7 +124,7 @@ function RenderHubs() {
         {boardView && (
           <div className="pr-1 pt-0.5 w-full h-full">
             <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-              {boardView && <TaskBoardTemplate unFilteredTaskData={unFilteredTaskData as ITaskFullList[]} />}
+              {boardView && <TaskBoardTemplate unFilteredTaskData={unFilteredTaskData2 as ITaskFullList[]} />}
             </div>
           </div>
         )}
