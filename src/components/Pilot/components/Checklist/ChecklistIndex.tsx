@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
 import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import SingleChecklist from '../SingleChecklist';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
