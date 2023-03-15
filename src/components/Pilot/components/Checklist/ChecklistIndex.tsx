@@ -38,30 +38,6 @@ export default function ChecklistIndex() {
     task_id: activeItemId,
     activeItemType: activeItemType
   });
-  // dispatch(setChecklists(checkListData?.data.task.checklists));
-
-  // const { data: hubChecklist, status: hubStatus } = UseGetHubDetails({
-  //   activeItemId,
-  //   activeItemType
-  // });
-
-  // const { data: walletData, status: walletStatus } = UseGetWalletDetails({
-  //   activeItemId,
-  //   activeItemType
-  // });
-
-  // const { data: listData, status: listStatus } = UseGetListDetails({
-  //   activeItemId,
-  //   activeItemType
-  // });
-
-  // if (hubStatus === 'success') {
-  //   console.log(hubChecklist);
-  // } else if (walletStatus === 'success') {
-  //   console.log(walletData);
-  // } else if (listStatus === 'success') {
-  //   console.log(listData);
-  // }
 
   if (status == 'loading') {
     <Spinner size={20} color={'blue'} />;
