@@ -41,7 +41,7 @@ export interface ITaskFullList {
   status: string | null;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  assignees?: [{ id: string; initials: string; colour: string; name: string }] | undefined;
   group_assignees?: [];
   custom_fields?: [];
   tags?: [];
