@@ -1,81 +1,80 @@
-import React from 'react';
-// import { useAppSelector } from '../../../../../app/hooks';
-// import { IoChevronBackOutline } from 'react-icons/io5';
-// import { VscEllipsis } from 'react-icons/vsc';
-// import { BsPlus } from 'react-icons/bs';
-// import { useDispatch } from 'react-redux';
-// import { ImyTaskData, setToggleAssignCurrentTaskId } from '../../../../../features/task/taskSlice';
-// import CardState from './CardState';
-// import AssignTask from '../../assignTask/AssignTask';
-// import { AvatarWithInitials } from '../../../../../components';
-// import { RiUserAddLine } from 'react-icons/ri';
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { VscEllipsis } from 'react-icons/vsc';
+import { BsPlus } from 'react-icons/bs';
+import { useDispatch } from 'react-redux';
+import { ImyTaskData, setToggleAssignCurrentTaskId } from '../../../../../../features/task/taskSlice';
+import CardState from '../CardState';
+import AssignTask from '../../../assignTask/AssignTask';
+import { AvatarWithInitials } from '../../../../../../components';
+import { RiUserAddLine } from 'react-icons/ri';
 
 function Board() {
-  // const dispatch = useDispatch();
-  // const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
-  // type GroupedData = {
-  //   [key: string]: ImyTaskData[];
-  // };
-  // const groupBy = (key: string, arr: ImyTaskData[]): GroupedData =>
-  //   arr?.reduce(
-  //     (cache: GroupedData, product) => {
-  //       const group = product[key];
-  //       return {
-  //         ...cache,
-  //         [group]: group in cache ? cache[group].concat(product) : [product]
-  //       };
-  //     },
-  //     {} as GroupedData // explicitly type the initial value of cache as GroupedData
-  //   );
+  const dispatch = useDispatch();
+  const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  type GroupedData = {
+    [key: string]: ImyTaskData[];
+  };
+  const groupBy = (key: string, arr: ImyTaskData[]): GroupedData =>
+    arr.reduce((cache: GroupedData, product) => {
+      const cacheKey = product[key] as string;
+      if (!cacheKey) {
+        return cache;
+      }
+      return { ...cache, [cacheKey]: cacheKey in cache ? cache[cacheKey].concat(product) : [product] };
+    }, {} as GroupedData);
 
-  // const newData = groupBy('status', myTaskData);
+  const newData = groupBy('status', myTaskData);
 
-  // const handleAssigneeModal = (id: string) => {
-  //   if (toggleAssignCurrentTaskId == id) {
-  //     dispatch(setToggleAssignCurrentTaskId(null));
-  //   } else {
-  //     dispatch(setToggleAssignCurrentTaskId(id));
-  //   }
-  // };
+  const handleAssigneeModal = (id: string) => {
+    if (toggleAssignCurrentTaskId == id) {
+      dispatch(setToggleAssignCurrentTaskId(null));
+    } else {
+      dispatch(setToggleAssignCurrentTaskId(id));
+    }
+  };
 
-  // const groupAssignee = (data) => {
-  //   return data?.length >= 3 ? (
-  //     <div className="flex items-center justify-center ">
-  //       {data?.slice(0, 2).map((newData) => (
-  //         <div key={newData.id} className="">
-  //           <span key={newData.id} className="flex items-center gap-1 justify center">
-  //             <AvatarWithInitials
-  //               initials={newData.initials}
-  //               backgroundColour={newData.colour}
-  //               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-  //               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-  //             />
-  //           </span>
-  //         </div>
-  //       ))}
-  //       <span>{data?.length - 2 !== 0 ? <span>+{data?.length - 2}</span> : null}</span>
-  //     </div>
-  //   ) : (
-  //     data?.map((newData) => (
-  //       <div key={newData.id} className="flex">
-  //         <span key={newData.id}>
-  //           <AvatarWithInitials
-  //             initials={newData.initials}
-  //             backgroundColour={newData.colour}
-  //             height={`${CompactView ? 'h-4' : 'h-5'}`}
-  //             width={`${CompactView ? 'w-4' : 'w-5'}`}
-  //           />
-  //         </span>
-  //       </div>
-  //     ))
-  //   );
-  // };
-
-  // const [icons, setIcons] = useState(null);
+  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+    return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
+      <div className="flex items-center justify-center ">
+        {data?.slice(0, 2).map((newData) => (
+          <div key={newData.id} className="">
+            <span key={newData.id} className="flex items-center gap-1 justify center">
+              <AvatarWithInitials
+                initials={newData.initials}
+                backgroundColour={newData.colour}
+                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+              />
+            </span>
+          </div>
+        ))}
+        <span>
+          {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
+            <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
+          ) : null}
+        </span>
+      </div>
+    ) : (
+      data?.map((newData) => (
+        <div key={newData.id} className="flex">
+          <span key={newData.id}>
+            <AvatarWithInitials
+              initials={newData.initials}
+              backgroundColour={newData.colour}
+              height={`${CompactView ? 'h-4' : 'h-5'}`}
+              width={`${CompactView ? 'w-4' : 'w-5'}`}
+            />
+          </span>
+        </div>
+      ))
+    );
+  };
+  const [icons, setIcons] = useState('');
   return (
     <div className="gap-5 pl-5 dynamic pt-14">
-      <p>to be fixed soon</p>
-      {/* {Object.keys(newData).map((key) => {
+      {Object.keys(newData).map((key) => {
         return (
           <>
             <div
@@ -122,7 +121,7 @@ function Board() {
                       </p>
                       <div>
                         <span>
-                          {items.assignees && (items?.assignees).length == 0 ? (
+                          {items.assignees && (items?.assignees).length < 1 ? (
                             <>
                               <div onClick={() => handleAssigneeModal(items.id)}>
                                 <RiUserAddLine className="text-gray-400 cursor-pointer " aria-hidden="true" />
@@ -156,7 +155,7 @@ function Board() {
             </div>
           </>
         );
-      })} */}
+      })}
     </div>
   );
 }

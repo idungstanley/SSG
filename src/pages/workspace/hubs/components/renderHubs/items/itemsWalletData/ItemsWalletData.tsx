@@ -5,7 +5,7 @@ import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../fea
 import { setAddNewTaskItem } from '../../../../../../../features/task/taskSlice';
 import { getWalletServices } from '../../../../../../../features/wallet/walletService';
 import AddNewItem from '../../../../../tasks/component/taskColumn/AddNewItem';
-import TaskListViews from '../../../../../tasks/component/views/TaskListViews';
+import TaskListViews from '../../../../../tasks/component/views/listLevel/TaskListViews';
 import ListTemplate, { dataProps } from '../ItemsHubData/ListTemplate';
 
 interface ItemsWalletDataProps {
