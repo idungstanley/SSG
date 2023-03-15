@@ -34,28 +34,42 @@ export interface ICheckListRes {
 export interface ITaskFullList {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   list_id: string;
-  parent_id: null;
-  priority: null;
-  status: string;
-  start_date: null;
-  end_date: null;
-  assignees: [];
-  group_assignees: [];
-  custom_fields: [];
-  tags: [];
+  parent_id: string | null;
+  priority: string | null;
+  status: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  group_assignees?: [];
+  custom_fields?: [];
+  tags?: [];
   updated_at: string;
   created_at: string;
-  archived_at: null;
-  deleted_at: null;
-  directory_items: [];
-  checklists: ICheckListRes[];
-  list: {
+  archived_at: string | null;
+  deleted_at: string | null;
+  directory_items?: [];
+  checklists?: ICheckListRes[];
+  list?: {
     id: string;
     name: string;
     parents: IParent;
   };
+
+  [key: string]:
+    | string
+    | number
+    | undefined
+    | null
+    | []
+    | ICheckListRes[]
+    | {
+        id: string;
+        name: string;
+        parents: IParent;
+      }
+    | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 export interface IPaginator {
