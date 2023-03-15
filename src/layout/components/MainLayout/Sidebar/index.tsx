@@ -10,9 +10,12 @@ import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 
-export const MIN_SIDEBAR_WIDTH = 240;
-export const MAX_SIDEBAR_WIDTH = 350;
-const RELATIVE_WIDTH = 10;
+//The WIDTH of the your window screen.
+const RELATIVE_WIDTH = window.innerWidth;
+// 15% OF YOUR WINDOW SCREEN
+export const MIN_SIDEBAR_WIDTH = 0.15 * RELATIVE_WIDTH;
+//25% OF YOUR WINDOW SCREEN
+export const MAX_SIDEBAR_WIDTH = 0.25 * RELATIVE_WIDTH;
 
 interface SidebarProps {
   allowSelect: boolean;
@@ -48,10 +51,6 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         // actual size is bigger than bax
         if (width > MAX_SIDEBAR_WIDTH) {
           return;
-        }
-        // actual size is smaller than min
-        if (width < MIN_SIDEBAR_WIDTH - RELATIVE_WIDTH) {
-          return dispatch(setShowSidebar(false));
         }
 
         // sidebar hidden and becomes bigger

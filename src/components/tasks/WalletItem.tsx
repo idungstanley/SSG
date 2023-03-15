@@ -15,7 +15,7 @@ interface WalletItemProps {
   wallet: {
     id: string;
     name: string;
-    color?: string | null;
+    color?: string;
   };
   showSubWallet: string | null;
   paddingLeft: string | number;
@@ -32,7 +32,7 @@ export default function WalletItem({
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const [paletteColor, setPaletteColor] = useState<string | null | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | undefined>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
     dispatch(
