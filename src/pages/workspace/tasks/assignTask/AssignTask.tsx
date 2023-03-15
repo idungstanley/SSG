@@ -73,7 +73,7 @@ export default function AssignTask({ option, item }: option) {
     task_id: toggleAssignCurrentTaskId
   });
 
-  const assignedUser = getTaskAssignees?.data.task.assignees.map(({ id }: { id: string }) => id);
+  const assignedUser = getTaskAssignees?.data?.task?.assignees?.map(({ id }: { id: string }) => id);
 
   const assignees = item?.assignees.map(({ id }: { id: string }) => id);
 
