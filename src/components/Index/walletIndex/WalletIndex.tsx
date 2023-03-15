@@ -25,7 +25,7 @@ interface WalletIndexProps {
 export interface dataProps {
   id: string;
   name: string;
-  color?: string | null;
+  color?: string;
 }
 
 function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
