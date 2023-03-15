@@ -6,6 +6,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { setshowMenuDropdown, setSubDropdownMenu } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateSubHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
 
 function SubHubModal() {
   const queryClient = useQueryClient();
@@ -14,6 +15,7 @@ function SubHubModal() {
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
+      dispatch(setVisibility(false));
       dispatch(setCreateSubHubSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
@@ -52,11 +54,29 @@ function SubHubModal() {
   const { name } = formState;
 
   const onSubmit = async () => {
-    await createHub.mutateAsync({
-      name,
-      currentWorkspaceId,
-      currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId
-    });
+    dispatch(
+      displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+        {
+          label: 'Create Subhub',
+          style: 'danger',
+          callback: async () => {
+            await createHub.mutateAsync({
+              name,
+              currentWorkspaceId,
+              currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+              confirm: 1
+            });
+          }
+        },
+        {
+          label: 'Cancel',
+          style: 'plain',
+          callback: () => {
+            dispatch(setVisibility(false));
+          }
+        }
+      ])
+    );
   };
 
   const { showCreateSubHubSlideOver } = useAppSelector((state) => state.slideOver);
@@ -83,7 +103,7 @@ function SubHubModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label="Create  Sub Hub"
+          label="Create Sub Hub"
           padding="py-2 px-4"
           height="h-10"
           width="w-40"
