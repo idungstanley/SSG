@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { setChecklists } from '../task/checklist/checklistSlice';
+// import { setChecklists } from '../task/checklist/checklistSlice';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes } from './hubs.interfaces';
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
@@ -141,7 +141,7 @@ export const ArchiveHubService = (hub: { query: string | null | undefined; archi
 
 //get hub details
 export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?: string | null }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -152,10 +152,7 @@ export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?
       return data;
     },
     {
-      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId,
-      onSuccess: (data) => {
-        dispatch(setChecklists(data.data.hub.checklists));
-      }
+      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId
     }
   );
 };

@@ -18,14 +18,17 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
+
   const { data: wallet } = UseGetWalletDetails({
     activeItemId,
     activeItemType
   });
+  // console.log(wallet?.data.wallet);
   const { data: list } = UseGetListDetails({
     activeItemId,
     activeItemType
   });
+  // console.log(list?.data.list);
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
 

@@ -5,7 +5,7 @@ import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes } from './list.interfaces';
-import { setChecklists } from '../task/checklist/checklistSlice';
+// import { setChecklists } from '../task/checklist/checklistSlice';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -137,7 +137,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -148,10 +148,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list',
-      onSuccess: (data) => {
-        dispatch(setChecklists(data.data.list.checklists));
-      }
+      enabled: query.activeItemType === 'list'
     }
   );
 };

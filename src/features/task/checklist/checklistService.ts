@@ -5,15 +5,23 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
 import { ITaskRes } from '../interface.tasks';
 
-export const UseCreateClistService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
+export const UseCreateChecklistService = ({
+  item_id,
+  name,
+  type
+}: {
+  item_id: string | null | undefined;
+  name: string;
+  type: string | null | undefined;
+}) => {
   const url = '/checklists';
   const response = requestNew({
     url,
     method: 'POST',
     data: {
       name: name,
-      id: task_id,
-      type: 'task'
+      id: item_id,
+      type: type
     }
   });
   return response;

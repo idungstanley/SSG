@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UseCreateClistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
+import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
 import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import SingleChecklist from '../SingleChecklist';
@@ -8,6 +8,7 @@ import { setShowChecklistInput } from '../../../../features/task/checklist/check
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
 import { VscChecklist } from 'react-icons/vsc';
+// import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>('Checklist');
@@ -18,7 +19,7 @@ export default function ChecklistIndex() {
   const { showChecklistInput } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
-  const createChecklist = useMutation(UseCreateClistService, {
+  const createChecklist = useMutation(UseCreateChecklistService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
       dispatch(setShowChecklistInput(false));
@@ -27,8 +28,9 @@ export default function ChecklistIndex() {
 
   const handleSubmit = async (name: string) => {
     await createChecklist.mutateAsync({
-      task_id: activeItemId,
-      name
+      item_id: activeItemId,
+      name,
+      type: activeItemType
     });
   };
 
@@ -37,6 +39,21 @@ export default function ChecklistIndex() {
     task_id: activeItemId,
     activeItemType: activeItemType
   });
+
+  // const { data: hub } = UseGetHubDetails({
+  //   activeItemId,
+  //   activeItemType
+  // });
+
+  // const { data: wallet } = UseGetWalletDetails({
+  //   activeItemId,
+  //   activeItemType
+  // });
+  // // console.log(wallet?.data.wallet);
+  // const { data: list } = UseGetListDetails({
+  //   activeItemId,
+  //   activeItemType
+  // });
 
   // UseDeleteChecklistService({
   //   query: clickedChecklistId,
@@ -77,18 +94,20 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      <div>
-        {checkListData?.data.task.checklists.length > 0
-          ? checkListData?.data.task.checklists.map((item) => {
-              return (
-                <>
-                  {/* <SingleChecklist key={item.id} item={item} id={item.id} /> */}
-                  <Disclosures item={item} />
-                </>
-              );
-            })
-          : 'This task has no Checklist, click on the plus sign to create one'}
-      </div>
+      <div>{activeItemType === 'task' && <Disclosures item={checkListData?.data.task.checklists} />}</div>
     </div>
   ) : null;
 }
+
+//  {
+//    checkListData?.data.task.checklists.length > 0
+//      ? checkListData?.data.task.checklists.map((item) => {
+//          return (
+//            <>
+//              {/* <SingleChecklist key={item.id} item={item} id={item.id} /> */}
+//              <Disclosures item={item} />
+//            </>
+//          );
+//        })
+//      : 'This task has no Checklist, click on the plus sign to create one';
+//  }

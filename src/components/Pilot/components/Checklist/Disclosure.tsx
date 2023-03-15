@@ -41,40 +41,44 @@ function Disclosures({ item: checklist }: { item: ICheckListRes }) {
 
   return (
     <div>
-      <div key={checklist.id}>
-        <div className="group flex items-center p-1 hover:text-gray-700 hover:bg-gray-200 cursor-pointer pl-2">
-          <div
-            onClick={() => handleItemClick(checklist.id)}
-            className="border-gray-400 border-solid border-2 rounded-full"
-          >
-            <BiCaretRight
-              className={openedDisclosureId.includes(checklist.id) ? 'rotate-90 transform w-3 h-3' : 'w-3 h-3'}
-            />
-          </div>
-          <div
-            suppressContentEditableWarning={true}
-            ref={inputRef}
-            contentEditable={true}
-            onKeyDown={(e) => (e.key === 'Enter' ? handleEdit(checklist.id) : null)}
-            style={{ backgroundColor: '#CAC9C9' }}
-            className="cursor-text p-1 rounded mx-2 text-white text-sm"
-          >
-            {checklist.name.toUpperCase()}
-          </div>
-          <label>
-            ({done.length}/{checklist.items.length})
-          </label>
-          <div className="mx-2">
-            <ChecklistModal options={completeOptions} checklistId={checklist.id} focus={focusItem} />
-          </div>
-        </div>
+      {checklist.map((e) => {
+        return (
+          <div key={checklist.id}>
+            <div className="group flex items-center p-1 hover:text-gray-700 hover:bg-gray-200 cursor-pointer pl-2">
+              <div
+                onClick={() => handleItemClick(checklist.id)}
+                className="border-gray-400 border-solid border-2 rounded-full"
+              >
+                <BiCaretRight
+                  className={openedDisclosureId.includes(checklist.id) ? 'rotate-90 transform w-3 h-3' : 'w-3 h-3'}
+                />
+              </div>
+              <div
+                suppressContentEditableWarning={true}
+                ref={inputRef}
+                contentEditable={true}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleEdit(checklist.id) : null)}
+                style={{ backgroundColor: '#CAC9C9' }}
+                className="cursor-text p-1 rounded mx-2 text-white text-sm"
+              >
+                {checklist.name.toUpperCase()}
+              </div>
+              <label>
+                ({done.length}/{checklist.items.length})
+              </label>
+              <div className="mx-2">
+                <ChecklistModal options={completeOptions} checklistId={checklist.id} focus={focusItem} />
+              </div>
+            </div>
 
-        {openedDisclosureId.includes(checklist.id) && (
-          <div className="w-10/12 m-auto">
-            <ChecklistItem Item={checklist.items} checklistId={checklist.id} />
+            {openedDisclosureId.includes(checklist.id) && (
+              <div className="w-10/12 m-auto">
+                <ChecklistItem Item={checklist.items} checklistId={checklist.id} />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        );
+      })}
     </div>
   );
 }
