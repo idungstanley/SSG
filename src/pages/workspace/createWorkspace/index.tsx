@@ -15,13 +15,16 @@ import { createWorkspaceService } from '../../../features/workspace/workspaceSer
 import { selectCurrentUser, setCurrentUser, setCurrentWorkspace } from '../../../features/auth/authSlice';
 import { avatarBg, companySizeBtn } from './colors';
 import { useAppDispatch } from '../../../app/hooks';
+import { useNavigate } from 'react-router-dom';
 
 function CreateWorkspace() {
   const user = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: (successData) => {
+      navigate('/');
       localStorage.setItem(
         'user',
         JSON.stringify({
