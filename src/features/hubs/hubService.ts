@@ -10,7 +10,7 @@ export const createHubService = (data: {
   name: string;
   currHubId?: string | null;
   currentWorkspaceId?: string;
-  confirm?: number | undefined;
+  confirmAction?: number | undefined;
 }) => {
   const response = requestNew({
     url: 'hubs',
@@ -19,7 +19,7 @@ export const createHubService = (data: {
       name: data.name,
       current_workspace_id: data.currentWorkspaceId,
       parent_id: data.currHubId,
-      confirm: 1
+      confirm: data.confirmAction
     }
   });
   return response;
