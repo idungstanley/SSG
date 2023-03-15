@@ -74,8 +74,8 @@ export default function ChecklistIndex() {
         </form>
       )}
       <div>
-        {checkListData?.data.task.checklists.length > 0
-          ? checkListData?.data.task.checklists.map((item) => {
+        {checkListData?.data.task.checklists
+          ? checkListData?.data.task.checklists?.map((item) => {
               return <Disclosures key={item.id} item={item} />;
             })
           : 'This task has no Checklist, click on the plus sign to create one'}
