@@ -6,6 +6,7 @@ interface Iprops {
 }
 
 export default function BoardWalletSection({ data }: Iprops) {
+  // eslint-disable-next-line no-console
   console.log(data);
 
   return (

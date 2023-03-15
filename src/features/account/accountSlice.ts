@@ -17,16 +17,25 @@ const showSidebar = sidebarFromLS
     ).showSidebar
   : true;
 
+interface PaletteDropdownProps {
+  paletteId?: string | null;
+  paletteType?: string | null;
+}
+
 interface AccountState {
   settings: IUserState;
   showSidebar: boolean;
+  paletteDropdown?: string | null;
+  paletteType?: string | null;
 }
 
 const initialState: AccountState = {
   settings: {
     showPreview: JSON.parse(showPreviewFromLS ?? 'false') as boolean
   },
-  showSidebar
+  showSidebar,
+  paletteDropdown: null,
+  paletteType: null
 };
 
 export const accountSlice = createSlice({
@@ -38,10 +47,14 @@ export const accountSlice = createSlice({
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
+    },
+    setPaletteDropDown: (state, action: PayloadAction<PaletteDropdownProps>) => {
+      state.paletteDropdown = action.payload.paletteId;
+      state.paletteType = action.payload.paletteType;
     }
   }
 });
 
-export const { setAccountSettings, setShowSidebar } = accountSlice.actions;
+export const { setAccountSettings, setShowSidebar, setPaletteDropDown } = accountSlice.actions;
 
 export default accountSlice.reducer;

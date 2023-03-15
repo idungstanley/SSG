@@ -18,7 +18,7 @@ export const columnsHead: listColumnProps[] = [
   {
     field: 'tags',
     value: 'Tags',
-    hidden: false
+    hidden: true
   },
   {
     field: 'priority',

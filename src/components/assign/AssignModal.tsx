@@ -29,7 +29,7 @@ export default function AssignModal() {
     task_id: toggleAssignCurrentTaskId
   });
 
-  const assignedUser = getTaskAssignees?.data.task.assignees.map(({ id }: { id: string }) => id);
+  const assignedUser = getTaskAssignees?.data?.task?.assignees?.map(({ id }: { id: string }) => id);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
