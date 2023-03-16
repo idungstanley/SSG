@@ -6,7 +6,8 @@ import { useGetExplorerFiles } from '../../../../../../features/explorer/explore
 import { useDebounce } from '../../../../../../hooks';
 import { sortItems } from './components/FilesList/components/Sorting';
 import { useAppSelector } from '../../../../../../app/hooks';
-import UploadModal from '../../../../../../components/UploadModal';
+import UploadFileModal from '../../../../../../components/UploadFileModal';
+import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 export default function FilesListWithToolbar() {
   const { folderId } = useParams();
@@ -44,7 +45,11 @@ export default function FilesListWithToolbar() {
     <div className="h-full w-full relative">
       <section className="border-r h-full">
         <div className="flex flex-col w-full h-full">
-          <UploadModal />
+          {/* <UploadModal /> */}
+          <UploadFileModal
+            endpoint={`files/${folderId || ''}`}
+            invalidateQuery={['explorer-files', folderId || 'root'] as InvalidateQueryFilters<unknown>}
+          />
           {/* toolbar */}
           <Toolbar data={sortedItems} query={query} setQuery={setQuery} />
 

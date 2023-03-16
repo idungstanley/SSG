@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 // import TopMenu from './TopMenu';
 // import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
-import UploadModal from '../../../components/UploadModal';
+// import UploadModal from '../../../components/UploadModal';
 import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
 import Header from './Header';
@@ -38,7 +38,7 @@ function MainLayout() {
           </div>
         </div>
       </div>
-      <UploadModal />
+      {/* <UploadModal /> */}
       {/* <MyWorkspacesSlideOver /> */}
     </div>
   );

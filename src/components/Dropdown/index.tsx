@@ -50,7 +50,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
                   onClick={i.link ? () => navigate(i.link || '') : i.onClick}
                   className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'px-4 py-2 text-sm flex w-full items-center gap-3'
+                    'px-4 py-2 text-sm flex w-full items-center gap-3 whitespace-nowrap'
                   )}
                 >
                   {i.icon}
