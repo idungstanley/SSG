@@ -1,4 +1,3 @@
-import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
@@ -9,7 +8,7 @@ import './styles/index.css';
 
 function App() {
   const user = useSelector(selectCurrentUser);
-  console.log(user);
+
   return (
     <>
       <RouterProvider router={routes(user)} />

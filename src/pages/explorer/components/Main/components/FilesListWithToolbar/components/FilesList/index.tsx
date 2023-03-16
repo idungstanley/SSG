@@ -32,7 +32,6 @@ export default function FilesList({ data }: FilesListProps) {
   const [indeterminate, setIndeterminate] = useState(false);
   const { selectedFileIds } = useAppSelector((state) => state.explorer);
 
-  // const selectedIds = [...selectedFileIds, selectedFileId || ''].filter((i) => i);
   const selectedIds = [...selectedFileIds];
 
   useLayoutEffect(() => {
