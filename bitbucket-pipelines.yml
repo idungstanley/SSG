@@ -1,0 +1,10 @@
+pipelines:
+  pull-requests:
+    'branches:development':
+      - step:
+          name: Linting
+          script:
+            - yarn install
+            - yarn ts:check
+            - yarn lint:check
+            - yarn format:check
