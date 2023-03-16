@@ -13,13 +13,13 @@ import {
   getOneTaskServices
 } from '../../../../features/task/taskService';
 import {
-  UseAssignChecklistItemService,
-  UseUnAssignChecklistItemService
+  UseChecklistItemAssignee,
+  UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-import {
-  setTriggerAssignChecklistItem,
-  setTriggerUnassignChecklistItem
-} from '../../../../features/task/checklist/checklistSlice';
+// import {
+//   // setTriggerAssignChecklistItem,
+//   setTriggerUnassignChecklistItem
+// } from '../../../../features/task/checklist/checklistSlice';
 
 interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
@@ -40,22 +40,16 @@ export default function AssignTask({ option, item }: option) {
   });
   const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } = useAppSelector((state) => state.task);
 
-  const { clickedChecklistId, clickedChecklistItemId, triggerAssignChecklistItem, triggerUnassignChecklistItem } =
-    useAppSelector((state) => state.checklist);
+  const { clickedChecklistItemId } = useAppSelector((state) => state.checklist);
 
-  UseAssignChecklistItemService({
-    checklist_id: clickedChecklistId,
-    itemId: clickedChecklistItemId,
-    team_member_id: currTeamMemberId,
-    triggerAssignChecklistItem: triggerAssignChecklistItem
-  });
+  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
+  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
 
-  UseUnAssignChecklistItemService({
-    checklist_id: clickedChecklistId,
-    itemId: clickedChecklistItemId,
-    team_member_id: currTeamMemberId,
-    triggerUnassignChecklistItem: triggerUnassignChecklistItem
-  });
+  // UseAssignChecklistItemService({
+  //   itemId: clickedChecklistItemId,
+  //   team_member_id: currTeamMemberId,
+  //   triggerAssignChecklistItem: triggerAssignChecklistItem
+  // });
 
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
@@ -83,15 +77,18 @@ export default function AssignTask({ option, item }: option) {
   };
 
   const handleUnAssignChecklistItem = (id: string) => {
-    dispatch(setCurrTeamMemId(id));
-    dispatch(setTriggerUnassignChecklistItem(true));
+    onCheklistItemUnassign({
+      itemId: clickedChecklistItemId,
+      team_member_id: id
+    });
   };
 
-  // const handleAssignModal = (e) => {
-  //   if (assigneeRef.current?.getAttribute('id') !== 'assignModal') {
-  //     dispatch(setToggleAssignCurrentTaskId(null));
-  //   }
-  // };
+  const handleAssignModal = (id: string) => {
+    onCheklistItemAssign({
+      itemId: clickedChecklistItemId,
+      team_member_id: id
+    });
+  };
   return (
     <div className="relative">
       <section
@@ -113,9 +110,7 @@ export default function AssignTask({ option, item }: option) {
                   className="relative flex items-center cursor-pointer  space-x-2"
                   onClick={() => {
                     dispatch(setCurrTeamMemId(item.id));
-                    option === 'checklstItem'
-                      ? dispatch(setTriggerAssignChecklistItem(true))
-                      : dispatch(setTriggerAsssignTask(true));
+                    option === 'checklstItem' ? handleAssignModal(item.id) : dispatch(setTriggerAsssignTask(true));
                   }}
                 >
                   <AvatarWithInitials

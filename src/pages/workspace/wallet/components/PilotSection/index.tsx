@@ -16,6 +16,8 @@ import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilo
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Details from '../../../hubs/components/PilotSection/components/details/Details';
 import TimeClock from '../../../hubs/components/PilotSection/components/TimeClock';
+import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
+import { VscChecklist } from 'react-icons/vsc';
 
 const sections = [
   {
@@ -41,6 +43,10 @@ const sections = [
   {
     id: 6,
     element: <TimeClock />
+  },
+  {
+    id: 6,
+    element: <Checklists />
   }
 ];
 
@@ -74,6 +80,11 @@ const tabs = [
     id: 6,
     label: 'Time clock',
     icon: <ClockIcon className="w-4 h-4" />
+  },
+  {
+    id: 7,
+    label: 'Checklists',
+    icon: <VscChecklist className="w-4 h-4" />
   }
 ];
 

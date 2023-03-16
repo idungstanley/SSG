@@ -151,7 +151,10 @@ export const ArchiveHubService = (hub: { query: string | null | undefined; archi
 };
 
 //get hub details
-export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?: string | null }) => {
+export const UseGetHubDetails = (query: {
+  activeItemId: string | null | undefined;
+  activeItemType?: string | null;
+}) => {
   return useQuery(
     ['hubs', query],
     async () => {
