@@ -28,7 +28,7 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
-  const { data: task } = getOneTaskServices({ task_id: activeItemId });
+  const { data: task } = getOneTaskService({ task_id: activeItemId });
   const taskDetails = task?.data.task;
 
   const showDetailsType = () => {
