@@ -45,12 +45,6 @@ export default function AssignTask({ option, item }: option) {
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
   const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
 
-  // UseAssignChecklistItemService({
-  //   itemId: clickedChecklistItemId,
-  //   team_member_id: currTeamMemberId,
-  //   triggerAssignChecklistItem: triggerAssignChecklistItem
-  // });
-
   UseAssignTaskService({
     task_id: toggleAssignCurrentTaskId,
     team_member_id: currTeamMemberId,
