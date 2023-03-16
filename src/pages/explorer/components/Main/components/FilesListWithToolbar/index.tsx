@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Toolbar from './components/Toolbar';
 import FilesList, { IStringifiedFile } from './components/FilesList';
 import { useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 export default function FilesListWithToolbar() {
   const { folderId } = useParams();
   const { data } = useGetExplorerFiles(folderId);
-  const { selectedSortingId } = useAppSelector((state) => state.explorer);
+  const { selectedSortingId, selectedFolderId } = useAppSelector((state) => state.explorer);
 
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
@@ -48,7 +48,7 @@ export default function FilesListWithToolbar() {
           {/* <UploadModal /> */}
           <UploadFileModal
             endpoint={`files/${folderId || ''}`}
-            invalidateQuery={['explorer-files', folderId || 'root'] as InvalidateQueryFilters<unknown>}
+            invalidateQuery={['explorer-files', selectedFolderId || 'root'] as InvalidateQueryFilters<unknown>}
           />
           {/* toolbar */}
           <Toolbar data={sortedItems} query={query} setQuery={setQuery} />

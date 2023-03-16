@@ -7,6 +7,7 @@ import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 import { useAppSelector } from '../../app/hooks';
 import { setShowUploadModal } from '../../features/general/uploadFile/uploadFileSlice';
+import { useEffect } from 'react';
 
 interface UploadFileModalProps {
   invalidateQuery: InvalidateQueryFilters<unknown>;
@@ -25,7 +26,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
       autoProceed: true,
       meta: {}
     }).use(XHRUpload, {
-      endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`,
+      endpoint: '',
       bundle: false,
       headers: currentWorkspaceId
         ? {
@@ -35,6 +36,17 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
         : undefined
     })
   );
+
+  const { xhrUpload } = uppy.getState();
+
+  useEffect(() => {
+    uppy.setState({
+      xhrUpload: {
+        ...xhrUpload,
+        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`
+      }
+    });
+  }, [endpoint]);
 
   uppy.on('upload-success', (_file, response) => {
     const { status } = response;
