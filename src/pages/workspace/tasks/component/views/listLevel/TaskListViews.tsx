@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
-import { useAppSelector } from '../../../../../app/hooks';
-import AddColumnDropdown from '../../dropdown/AddColumnDropdown';
+import { useAppSelector } from '../../../../../../app/hooks';
+import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
 import { useDispatch } from 'react-redux';
-import { getTaskColumns, setCloseTaskListView } from '../../../../../features/task/taskSlice';
-import './view.css';
-import '../taskData/task.css';
+import { getTaskColumns, setCloseTaskListView } from '../../../../../../features/task/taskSlice';
+import '../../views/view.css';
+import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
-import { columnsHead } from './ListColumns';
+import { columnsHead } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 

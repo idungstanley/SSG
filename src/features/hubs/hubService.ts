@@ -6,14 +6,20 @@ import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes } from './hubs.
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
-export const createHubService = (data: { name: string; currHubId?: string | null; currentWorkspaceId?: string }) => {
+export const createHubService = (data: {
+  name: string;
+  currHubId?: string | null;
+  currentWorkspaceId?: string;
+  confirmAction?: number | undefined;
+}) => {
   const response = requestNew({
     url: 'hubs',
     method: 'POST',
     data: {
       name: data.name,
       current_workspace_id: data.currentWorkspaceId,
-      parent_id: data.currHubId
+      parent_id: data.currHubId,
+      confirm: data.confirmAction
     }
   });
   return response;
@@ -145,7 +151,10 @@ export const ArchiveHubService = (hub: { query: string | null | undefined; archi
 };
 
 //get hub details
-export const UseGetHubDetails = (query: { activeItemId?: string; activeItemType?: string | null }) => {
+export const UseGetHubDetails = (query: {
+  activeItemId: string | null | undefined;
+  activeItemType?: string | null;
+}) => {
   return useQuery(
     ['hubs', query],
     async () => {

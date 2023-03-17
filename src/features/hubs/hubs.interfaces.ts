@@ -28,6 +28,13 @@ export interface IHubDetailRes {
     hub: IHubDetails;
   };
 }
+export interface IHubDetailResErr {
+  data: {
+    data: {
+      need_confirmation?: boolean;
+    };
+  };
+}
 
 export interface IWallet {
   id: string;
