@@ -12,13 +12,13 @@ import { RiUserAddLine } from 'react-icons/ri';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 
 export interface IUnFilteredTaskData {
-  unFilteredTaskData: ITaskFullList[] | undefined;
+  unFilteredTaskData: ITaskFullList[];
 }
 [];
 
 function TaskBoardTemplate({ unFilteredTaskData }: IUnFilteredTaskData) {
   const dispatch = useDispatch();
-  const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   type GroupedData = {
     [key: string]: ImyTaskData[];
   };
@@ -31,9 +31,7 @@ function TaskBoardTemplate({ unFilteredTaskData }: IUnFilteredTaskData) {
       return { ...cache, [cacheKey]: cacheKey in cache ? cache[cacheKey].concat(product) : [product] };
     }, {} as GroupedData);
 
-  const newData = groupBy('status', myTaskData);
-
-  console.log(unFilteredTaskData);
+  const newData = groupBy('status', unFilteredTaskData as ImyTaskData[]);
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {

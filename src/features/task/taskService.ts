@@ -117,7 +117,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
-      const data = await requestNew<ITaskRes>({
+      const data = await requestNew<ITaskRes | undefined>({
         url: `tasks/${task_id}`,
         method: 'GET'
       });

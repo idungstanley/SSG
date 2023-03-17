@@ -24,6 +24,7 @@
     "moment-timezone": "^0.5.34",
     "pusher-js": "^8.0.0",
     "react": "^17.0.2",
+    "react-color": "^2.19.3",
     "react-dnd": "^16.0.1",
     "react-dom": "^17.0.2",
     "react-file-viewer": "^1.2.1",
@@ -41,8 +42,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco --openssl-legacy-provider start",
-    "build": "craco build",
+    "start": "craco start --openssl-legacy-provider",
+    "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint:check": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json",
