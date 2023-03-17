@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from './components/Header';
 import BreadcrumbSection from './components/Breadcrumb';
 import Main from './components/Main';

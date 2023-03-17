@@ -23,7 +23,8 @@ module.exports = {
         autoAutoAutoFr: 'auto auto auto auto 1fr'
       },
       height: {
-        204: '51rem'
+        204: '51rem',
+        13: '3.125rem'
       },
       maxHeight: {
         204: '51rem'

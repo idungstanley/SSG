@@ -5,7 +5,6 @@ import InboxFile from './components/InboxFile';
 import LeftSidebar from './components/LeftSidebar';
 import Header from './components/Header';
 import AssignInboxFileSlideOver from './components/SlideOvers/AssignInboxFileSlideOver';
-import UploadModal from '../../../components/UploadModal';
 import { useParams } from 'react-router-dom';
 
 const Watchers = React.lazy(() => import('../../../components/Watchers/WatchersForPilot'));
@@ -15,7 +14,6 @@ function InboxPage() {
 
   return (
     <>
-      <UploadModal />
       <div className="h-full flex flex-col w-full flex-1 bg-white overflow-hidden">
         <Header />
         <div className="flex flex-1 h-full w-full overflow-x-hidden">
