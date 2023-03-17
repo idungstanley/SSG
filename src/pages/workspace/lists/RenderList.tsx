@@ -55,12 +55,6 @@ function RenderList() {
           </section>
         }
       >
-        {listView && (
-          <div
-            className="left-0 top-0 w-1 rounded-l-md"
-            style={{ backgroundColor: '#78828d', minHeight: 'auto' }}
-          ></div>
-        )}
         <div className="w-full overflow-y-scroll ">
           <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
             {listView && <TaskQuickAction listDetailsData={activeItemName} />}
