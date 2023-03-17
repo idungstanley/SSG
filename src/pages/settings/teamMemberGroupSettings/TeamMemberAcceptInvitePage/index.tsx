@@ -24,25 +24,47 @@ export default function TeamMemberAcceptInvite() {
     if (data?.data) {
       localStorage.setItem('user', JSON.stringify(data?.data.user));
     }
-    window.location.href = '/workspace';
+    window.location.href = '/';
   };
 
-  return !token ? (
-    <RegisterPage />
-  ) : inviteCode ? (
-    <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">
-      <p className="mt-2 text-base text-gray-500">Click on this button to proceed into workspace</p>
-      <div className="mt-6">
-        <Button
-          buttonStyle="primary"
-          onClick={handleAcceptInvite}
-          label={'Accept'}
-          padding="py-2 px-4"
-          height="h-10"
-          width="w-40"
-        />
-      </div>
-    </main>
+  // return !token ? (
+  //   <RegisterPage />
+  // ) : inviteCode ? (
+  //   <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">
+  //     <p className="mt-2 text-base text-gray-500">Click on this button to proceed into workspace</p>
+  //     <div className="mt-6">
+  //       <Button
+  //         buttonStyle="primary"
+  //         onClick={handleAcceptInvite}
+  //         label={'Accept'}
+  //         padding="py-2 px-4"
+  //         height="h-10"
+  //         width="w-40"
+  //       />
+  //     </div>
+  //   </main>
+  // ) : (
+  //   <NotFoundPage />
+  // );
+
+  return inviteCode ? (
+    token ? (
+      <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">
+        <p className="mt-2 text-base text-gray-500">Click on this button to proceed into workspace</p>
+        <div className="mt-6">
+          <Button
+            buttonStyle="primary"
+            onClick={handleAcceptInvite}
+            label={'Accept'}
+            padding="py-2 px-4"
+            height="h-10"
+            width="w-40"
+          />
+        </div>
+      </main>
+    ) : (
+      <RegisterPage />
+    )
   ) : (
     <NotFoundPage />
   );

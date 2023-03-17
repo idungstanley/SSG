@@ -4,7 +4,7 @@ import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closeMenu, getPrevName, getSubMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
-import { setPaletteDropDown } from '../../features/wallet/walletSlice';
+import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
@@ -15,6 +15,7 @@ interface WalletItemProps {
   wallet: {
     id: string;
     name: string;
+    color?: string;
   };
   showSubWallet: string | null;
   paddingLeft: string | number;
@@ -30,8 +31,8 @@ export default function WalletItem({
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropDown } = useAppSelector((state) => state.wallet);
-  const [paletteColor, setPaletteColor] = useState<string>('rgba(72, 67, 67, 0.64)');
+  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const [paletteColor, setPaletteColor] = useState<string | undefined>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
     dispatch(
@@ -41,9 +42,10 @@ export default function WalletItem({
       })
     );
   };
+
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown(id));
+    dispatch(setPaletteDropDown({ paletteId: id, paletteType: 'wallet' }));
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
@@ -64,8 +66,8 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-          wallet.id === activeItemId && 'bg-green-100 text-black font-medium'
+        className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm h-8 group ${
+          wallet.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
       >
@@ -78,12 +80,18 @@ export default function WalletItem({
             {showSubWallet === wallet.id ? (
               <>
                 <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
-                <FaFolderOpen color={paletteColor} onClick={(e) => handleWalletColour(wallet.id, e)} />
+                <FaFolderOpen
+                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  onClick={(e) => handleWalletColour(wallet.id, e)}
+                />
               </>
             ) : (
               <>
                 <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
-                <FaFolder color={paletteColor} onClick={(e) => handleWalletColour(wallet.id, e)} />
+                <FaFolder
+                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  onClick={(e) => handleWalletColour(wallet.id, e)}
+                />
               </>
             )}
           </div>
@@ -110,7 +118,7 @@ export default function WalletItem({
           <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
         </div>
       </section>
-      {paletteDropDown === wallet.id ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
+      {paletteDropdown === wallet.id ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
     </>

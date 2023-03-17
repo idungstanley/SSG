@@ -1,5 +1,4 @@
 import { IPilotSection, IPilotTab } from '../../../../types';
-import React from 'react';
 import { cl } from '../../../../utils';
 import Menu from '../HotKeys/components/Dropdown';
 import { MAX_PILOT_WIDTH, MIN_PILOT_WIDTH } from '../..';
@@ -36,7 +35,8 @@ export default function FullPilot({
       min: MIN_PILOT_WIDTH,
       max: MAX_PILOT_WIDTH
     },
-    storageKey: LS_PILOT_KEY
+    storageKey: LS_PILOT_KEY,
+    direction: 'X'
   });
 
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
@@ -48,8 +48,8 @@ export default function FullPilot({
         width: showFullPilot ? pilotWidthFromLS : undefined
       }}
       className={cl(
-        showFullPilot ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-100',
-        'border-t absolute top-10 right-0 bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 p-2 border-l divide-y transition-transform duration-700'
+        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-10 translate-x-full',
+        'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 p-2 transition-transform duration-500'
       )}
     >
       {showFullPilot ? <Dividers /> : null}

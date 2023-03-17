@@ -7,6 +7,7 @@ import {
   SignalIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
@@ -14,10 +15,8 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { VscChecklist } from 'react-icons/vsc';
+import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from './components/details/Details';
-import TimeClock from './components/TimeClock';
-import Checklists from './components/checklist/components/Checklist';
-import { useParams } from 'react-router-dom';
 
 const sections = [
   {
@@ -40,10 +39,10 @@ const sections = [
     id: 5,
     element: <ChatForPilot />
   },
-  {
-    id: 6,
-    element: <TimeClock />
-  },
+  // {
+  //   id: 6,
+  //   element: <TimeClock />
+  // },
   {
     id: 7,
     element: <Checklists />

@@ -42,6 +42,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   //     );
   //   });
   // };
+  // console.log(Details);
 
   return (
     <>

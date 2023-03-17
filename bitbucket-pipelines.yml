@@ -1,13 +1,19 @@
-image: node:14.16.0
+image: node:14
 
 pipelines:
-  default:
-    - step:
-        name: Build and deploy to EC2
-        script:
-          - apt-get update
-          - apt-get install -y sshpass
-          - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'cd /var/www/alsodev_frontend/ && pwd'
-          - sshpass -p $SSH_PASSWORD scp -o StrictHostKeyChecking=no -r build/* $SSH_USER@$SSH_HOST:/var/www/alsodev_frontend/
-          # - npm install
-          # - npm run build
+  pull-requests:
+    '**':
+      - step:
+          name: Install Yarn and Linting
+          caches:
+            - node
+          script:
+            - apt-get update && apt-get install -y curl
+            - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            - apt-get update && apt-get install -y yarn
+            - export TERM=xterm
+            - yarn install
+            - yarn ts:check
+            - yarn lint:check
+            - yarn format:check

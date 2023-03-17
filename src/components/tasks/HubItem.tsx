@@ -3,7 +3,7 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getSubMenu } from '../../features/hubs/hubSlice';
-import { setPaletteDropDown } from '../../features/wallet/walletSlice';
+import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 
@@ -11,6 +11,7 @@ interface TaskItemProps {
   item: {
     id: string;
     name: string;
+    color?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
   handleLocation: (id: string, name: string) => void;
@@ -28,12 +29,12 @@ export default function HubItem({
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { paletteDropDown } = useAppSelector((state) => state.wallet);
+  const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [paletteColor, setPaletteColor] = useState<string>(type === 'hub' ? 'blue' : 'orange');
+  const [paletteColor, setPaletteColor] = useState<string | undefined>(type === 'hub' ? 'blue' : 'orange');
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown(id));
+    dispatch(setPaletteDropDown({ paletteId: id, paletteType: 'hub' }));
   };
   const handleItemAction = (id: string) => {
     dispatch(
@@ -47,17 +48,13 @@ export default function HubItem({
   return (
     <>
       <div
-        className={`flex justify-between items-center hover:bg-gray-100 group ${
-          item.id === activeItemId && 'bg-green-100 text-green-500'
+        className={`flex justify-between items-center group ${
+          item.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         tabIndex={0}
         onClick={() => handleClick(item.id)}
       >
-        <div
-          className={`flex relative justify-between items-center hover:bg-gray-100 ${
-            item.id === activeItemId && 'text-green-500'
-          }`}
-        >
+        <div className="relative flex items-center justify-between">
           {item.id === activeItemId && (
             <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
           )}
@@ -89,7 +86,7 @@ export default function HubItem({
                     .toUpperCase()}
                   height={showSidebar ? 'h-4' : 'h-6'}
                   width={showSidebar ? 'w-4' : 'w-6'}
-                  backgroundColour={paletteColor}
+                  backgroundColour={item.color !== null ? item.color : paletteColor}
                   roundedStyle="rounded"
                 />
               </div>
@@ -119,7 +116,7 @@ export default function HubItem({
           <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
         </div>
       </div>
-      {paletteDropDown === item.id ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
+      {paletteDropdown === item.id ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
     </>
   );
 }

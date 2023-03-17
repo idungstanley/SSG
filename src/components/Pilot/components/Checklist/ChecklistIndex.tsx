@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import {
-  UseCreateClistService,
-  // UseDeleteChecklistItemService,
-  UseGetAllClistService
-} from '../../../../../../../../features/task/checklist/checklistService';
-import { Spinner } from '../../../../../../../../common';
+import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
+import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GoPlus } from 'react-icons/go';
-import SingleChecklist from '../SingleChecklist';
-import { useAppDispatch } from '../../../../../../../../app/hooks';
-import { setShowChecklistInput } from '../../../../../../../../features/task/checklist/checklistSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
-import ToolTip from '../../../../../../../../components/Tooltip';
+import Disclosures from './Disclosure';
+import { VscChecklist } from 'react-icons/vsc';
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>('Checklist');
@@ -23,7 +17,7 @@ export default function ChecklistIndex() {
   const { showChecklistInput } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
-  const createChecklist = useMutation(UseCreateClistService, {
+  const createChecklist = useMutation(UseCreateChecklistService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
       dispatch(setShowChecklistInput(false));
@@ -32,8 +26,9 @@ export default function ChecklistIndex() {
 
   const handleSubmit = async (name: string) => {
     await createChecklist.mutateAsync({
-      task_id: activeItemId,
-      name
+      item_id: activeItemId,
+      name,
+      type: activeItemType
     });
   };
 
@@ -43,27 +38,21 @@ export default function ChecklistIndex() {
     activeItemType: activeItemType
   });
 
-  // UseDeleteChecklistService({
-  //   query: clickedChecklistId,
-  //   delChecklist: triggerDelChecklist,
-  // });
-
   if (status == 'loading') {
     <Spinner size={20} color={'blue'} />;
   }
 
   return status == 'success' ? (
-    <div className="p-1">
-      <div className="border-2 flex justify-between items-center text-center py-2">
-        <h1 className="text-xl ml-8">Checklists</h1>
-        <div
-          className="rounded-full text-xl cursor-pointer hover:bg-gray-300 mx-3 p-1"
+    <div className="p">
+      <div className="border-2 flex items-center text-center py-1 bg-white">
+        <VscChecklist className="w-4 h-4 ml-2" />
+        <h1 className="text-base-xl mx-4">Checklists</h1>
+        <button
+          className="p-0.5 border-blue-400 border-solid border-2 rounded-lg text-xs"
           onClick={() => dispatch(setShowChecklistInput(true))}
         >
-          <ToolTip tooltip="Add Checklist">
-            <GoPlus className="w-3 h-3" />
-          </ToolTip>
-        </div>
+          ADD
+        </button>
       </div>
       {showChecklistInput && (
         <form
@@ -84,9 +73,9 @@ export default function ChecklistIndex() {
         </form>
       )}
       <div>
-        {checkListData?.data.task.checklists.length > 0
-          ? checkListData?.data.task.checklists.map((item) => {
-              return <SingleChecklist key={item.id} item={item} id={item.id} />;
+        {checkListData?.data.task.checklists
+          ? checkListData?.data.task.checklists?.map((item) => {
+              return <Disclosures key={item.id} item={item} />;
             })
           : 'This task has no Checklist, click on the plus sign to create one'}
       </div>

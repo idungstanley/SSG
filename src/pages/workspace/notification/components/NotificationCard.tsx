@@ -35,7 +35,7 @@ export default function NotificationCard({ cardItems }: CardNotificationType) {
                                 />
                               </div>
                               <div className="pb-3 pt-2 pr-3 text-left text-xs font-semibold cursor-pointer capitalize">
-                                {data.model.name}
+                                {data.model?.name}
                               </div>
                             </div>
                             <div className="flex items-center space-x-1">
