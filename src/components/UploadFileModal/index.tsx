@@ -20,6 +20,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { showUploadModal } = useAppSelector((state) => state.upload);
 
+  // init
   const uppy = useUppy(() =>
     new Uppy({
       debug: true,
@@ -39,6 +40,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
 
   const { xhrUpload } = uppy.getState();
 
+  // setup data
   useEffect(() => {
     uppy.setState({
       xhrUpload: {
@@ -48,6 +50,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
     });
   }, [endpoint]);
 
+  // invalidate query
   uppy.on('upload-success', (_file, response) => {
     const { status } = response;
     const { success } = response.body as { success: boolean };
