@@ -48,17 +48,13 @@ export default function HubItem({
   return (
     <>
       <div
-        className={`flex justify-between items-center hover:bg-gray-100 group ${
-          item.id === activeItemId && 'bg-green-100 text-green-500'
+        className={`flex justify-between items-center group ${
+          item.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         tabIndex={0}
         onClick={() => handleClick(item.id)}
       >
-        <div
-          className={`flex relative justify-between items-center hover:bg-gray-100 ${
-            item.id === activeItemId && 'text-green-500'
-          }`}
-        >
+        <div className="relative flex items-center justify-between">
           {item.id === activeItemId && (
             <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
           )}

@@ -66,8 +66,8 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group ${
-          wallet.id === activeItemId && 'bg-green-100 text-black font-medium'
+        className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm h-8 group ${
+          wallet.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
       >
@@ -81,7 +81,7 @@ export default function WalletItem({
               <>
                 <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                 <FaFolderOpen
-                  color={wallet.color != null ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : paletteColor}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>
@@ -89,7 +89,7 @@ export default function WalletItem({
               <>
                 <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                 <FaFolder
-                  color={wallet.color != null ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : paletteColor}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>
