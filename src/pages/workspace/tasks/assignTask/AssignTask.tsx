@@ -16,10 +16,6 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-// import {
-//   // setTriggerAssignChecklistItem,
-//   setTriggerUnassignChecklistItem
-// } from '../../../../features/task/checklist/checklistSlice';
 
 interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
@@ -83,25 +79,26 @@ export default function AssignTask({ option, item }: option) {
       team_member_id: id
     });
   };
+
   return (
     <div className="relative">
       <section
-        className="w-60 absolute ml-10 bottom-0 left-0 rounded-md shadow-lg bg-gray-50 overflow-auto"
+        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50"
         style={{ maxHeight: '40vh' }}
         ref={assigneeRef}
         id="assignModal"
       >
         <div className="text-xs">
-          <section className="flex relative">
-            <AiOutlineSearch className="h-5 w-5 absolute right-3 top-3" />
-            <input type="text" placeholder="Search..." className="p-2 w-full border-0 focus:outline-none" />
+          <section className="relative flex">
+            <AiOutlineSearch className="absolute w-5 h-5 right-3 top-3" />
+            <input type="text" placeholder="Search..." className="w-full p-2 border-0 focus:outline-none" />
           </section>
           <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           {data?.data.team_members.map((item) => (
-            <section className="space-x-2 hover:bg-gray-300 p-3" key={item?.id}>
+            <section className="p-3 space-x-2 hover:bg-gray-300" key={item?.id}>
               <div className="flex items-center justify-between cursor-pointer">
                 <div
-                  className="relative flex items-center cursor-pointer  space-x-2"
+                  className="relative flex items-center space-x-2 cursor-pointer"
                   onClick={() => {
                     dispatch(setCurrTeamMemId(item.id));
                     option === 'checklstItem' ? handleAssignModal(item.id) : dispatch(setTriggerAsssignTask(true));
@@ -117,12 +114,12 @@ export default function AssignTask({ option, item }: option) {
                 </div>
                 {assignees?.includes(item.id) && option === 'checklstItem' ? (
                   <button type="button" onClick={() => handleUnAssignChecklistItem(item.id)}>
-                    <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                    <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}
                 {assignedUser?.includes(item.id) && option !== 'checklstItem' ? (
                   <button type="button" onClick={() => handleUnAssign(item.id)}>
-                    <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                    <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}
               </div>
