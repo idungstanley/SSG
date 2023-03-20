@@ -48,7 +48,6 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
           className={cl(
             'flex gap-4 items-center content-center self-center',
             isActivePlace ? 'justify-center text-black font-bold' : ''
-            // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
           <span className="flex items-center w-6 h-6 hover:text-green-400">{icon}</span>
