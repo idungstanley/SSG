@@ -12,22 +12,22 @@ import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../features/t
 import PilotSection, { pilotConfig } from '../PilotSection';
 import TaskBoardTemplate from '../../../tasks/component/views/hubLevel/TaskBoardTemplate';
 
-interface HubDetailTypes {
-  activeItemId: string;
-  activeItemType: string;
-}
+// interface HubDetailTypes {
+//   activeItemId: string;
+//   activeItemType: string;
+// }
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView, boardView } = useAppSelector((state) => state.task);
 
-  const retrievedObject = localStorage.getItem('hubDetailsStorage');
-  const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
+  // const retrievedObject = localStorage.getItem('hubDetailsStorage');
+  // const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
 
   const { data: TaskFullList, status } = UseGetFullTaskList({
-    itemId: hubdetail.activeItemId,
-    itemType: hubdetail.activeItemType
+    itemId: null,
+    itemType: 'hub'
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 

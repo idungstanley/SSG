@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetHubList } from '../../../features/hubs/hubService';
 import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
@@ -17,6 +16,7 @@ import ListModal from '../lists/components/modals/ListModal';
 import TaskModal from '../tasks/component/TaskModal';
 import { BsListCheck } from 'react-icons/bs';
 import WalletModal from '../wallet/components/modals/WalletModal';
+import Tree from './components/Tree';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ function Hubs() {
   const { data, status } = useGetHubList({
     query: toggleArchive
   });
+
   if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
   }
@@ -59,6 +60,7 @@ function Hubs() {
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
+      <Tree />
       <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
       <Modal />
       <SubHubModal />
