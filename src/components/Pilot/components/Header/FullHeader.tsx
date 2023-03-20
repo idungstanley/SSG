@@ -22,7 +22,7 @@ export default function FullHeader({ children, setActiveTabId }: HeaderProps) {
   };
 
   return (
-    <div className="w-full grid grid-cols-frAuto grid-rows-1 pb-4 pt-2 border-none col-span-1">
+    <div className="w-full grid grid-cols-frAuto grid-rows-1 p-2 border-none col-span-1">
       {/* item type and title */}
 
       <p className="truncate capitalize text-xs font-semibold">
