@@ -321,7 +321,7 @@ export default function MenuDropdown() {
   return (
     <div className="" ref={ref}>
       <div
-        className="absolute top-auto w-auto p-2 origin-top-right bg-white rounded-md left-2 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        className="fixed w-auto p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
         style={{
           boxShadow: '0 1px 10px #00000040',
           minWidth: '200px',

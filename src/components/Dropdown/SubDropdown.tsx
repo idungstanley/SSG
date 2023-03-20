@@ -24,7 +24,8 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const { showMenuDropdownType, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
+
   const {
     showCreateSubWalletSlideOver,
     showEditHubSlideOver,
@@ -165,8 +166,10 @@ export default function SubDropdown() {
   return (
     <div className="" ref={ref}>
       <div
-        className="fixed z-50 w-56 p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px' }}
+        className={`fixed w-56 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          showMenuDropdown == null ? 'left-56' : 'left-96'
+        }`}
+        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
       >
         {itemsList.map((item) =>
           item.isVisible ? (
