@@ -116,6 +116,7 @@ export const secondaryNavigation: ItemData[] = [
 function ExpandedNav() {
   const dispatch = useDispatch();
   const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
@@ -149,7 +150,7 @@ function ExpandedNav() {
     };
   }, [resize, stopResizing]);
 
-  if (activePlaceName === null) {
+  if (activePlaceName === null && showSidebar) {
     dispatch(setShowExtendedBar(false));
     dispatch(setExtendedSidebarWidth(240));
   }
