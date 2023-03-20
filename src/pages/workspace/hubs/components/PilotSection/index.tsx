@@ -16,12 +16,13 @@ import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilo
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { VscChecklist } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
+import Details from '../../../../../components/Pilot/components/details/Details';
 
 const sections = [
-  // {
-  //   id: 1,
-  //   element: <Details />
-  // },
+  {
+    id: 1,
+    element: <Details />
+  },
   {
     id: 2,
     element: <History />

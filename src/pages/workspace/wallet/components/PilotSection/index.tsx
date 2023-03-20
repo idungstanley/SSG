@@ -45,7 +45,7 @@ const sections = [
     element: <TimeClock />
   },
   {
-    id: 6,
+    id: 7,
     element: <Checklists />
   }
 ];

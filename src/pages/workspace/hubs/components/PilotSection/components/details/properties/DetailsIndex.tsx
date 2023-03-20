@@ -23,7 +23,6 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
-  // console.log(wallet?.data.wallet);
   const { data: list } = UseGetListDetails({
     activeItemId,
     activeItemType

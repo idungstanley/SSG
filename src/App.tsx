@@ -9,7 +9,7 @@ import './styles/index.css';
 
 function App() {
   const user = useSelector(selectCurrentUser);
-  console.log(user);
+  // console.log(user);
   return (
     <>
       <RouterProvider router={routes(user)} />

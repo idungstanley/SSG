@@ -16,10 +16,6 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-// import {
-//   // setTriggerAssignChecklistItem,
-//   setTriggerUnassignChecklistItem
-// } from '../../../../features/task/checklist/checklistSlice';
 
 interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
