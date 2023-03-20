@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
-import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
@@ -35,12 +34,12 @@ export default function ChecklistIndex() {
   };
 
   // Get Checklists
-  const { data: checkListData, status: taskStatus } = UseGetAllClistService({
+  const { data: checkListData } = UseGetAllClistService({
     task_id: activeItemId,
     activeItemType: activeItemType
   });
 
-  const { data: hub, status: hubStatus } = UseGetHubDetails({
+  const { data: hub } = UseGetHubDetails({
     activeItemId,
     activeItemType
   });
@@ -49,24 +48,20 @@ export default function ChecklistIndex() {
   //   dispatch(setChecklists(hub.data.hub.checklists));
   // }
 
-  const { data: wallet, status: walletStatus } = UseGetWalletDetails({
+  const { data: wallet } = UseGetWalletDetails({
     activeItemId,
     activeItemType
   });
   // if (walletStatus === 'success') {
   //   console.log(wallet);
   // }
-  const { data: list, status: listStatus } = UseGetListDetails({
+  const { data: list } = UseGetListDetails({
     activeItemId,
     activeItemType
   });
   // console.log(list);
 
   const { showChecklistInput } = useAppSelector((state) => state.checklist);
-
-  if (status == 'loading') {
-    <Spinner size={20} color={'blue'} />;
-  }
 
   return (
     <div className="p">
@@ -98,22 +93,22 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      {taskStatus == 'success' && activeItemType === 'task' && (
+      {activeItemType === 'task' && (
         <div>
           <Disclosures item={checkListData?.data.task.checklists} />
         </div>
       )}
-      {hubStatus == 'success' && activeItemType === 'hub' && (
+      {activeItemType === 'hub' && (
         <div>
           <Disclosures item={hub?.data.hub.checklists} />
         </div>
       )}
-      {walletStatus == 'success' && activeItemType === 'wallet' && (
+      {activeItemType === 'wallet' && (
         <div>
           <Disclosures item={wallet?.data.wallet.checklists} />
         </div>
       )}
-      {listStatus == 'success' && activeItemType === 'list' && (
+      {activeItemType === 'list' && (
         <div>
           <Disclosures item={list?.data.list.checklists} />
         </div>
