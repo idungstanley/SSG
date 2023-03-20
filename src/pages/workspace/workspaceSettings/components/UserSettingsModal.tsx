@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setVisibility, displayPrompt } from '../../../../features/general/prompt/promptSlice';
 import { logout, setAuthData } from '../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface UserSettingsType {
   id: number;
@@ -23,6 +24,7 @@ interface User {
 export default function UserSettingsModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const logoutMutation = useMutation(logoutService, {
     onSuccess: () => {
@@ -135,21 +137,25 @@ export default function UserSettingsModal() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute z-30 mt-2 w-48 rounded-md shadow-lg -right-2 bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+        <Menu.Items
+          className={`z-30 mt-2 w-48 px-1 rounded shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none ${
+            showSidebar ? 'absolute -right-2' : 'fixed left-10'
+          }`}
+        >
           <div className="pt-3">
             {userSettings?.map((i) => (
               <Menu.Item key={i.id}>
                 <button
                   type="button"
-                  className="flex items-center cursor-pointer px-4 py-2 text-xs text-gray-600 w-full hover:bg-gray-100"
+                  className="flex items-center w-full px-4 py-2 text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
                   onClick={i.handleClick}
                 >
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-between">
                     <p>{i.title}</p>
                     <span>
                       {i.id == 7 ? (
                         <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
-                          <BsToggleOff className="h-4 w-4 test-sm" />
+                          <BsToggleOff className="w-4 h-4 test-sm" />
                         </button>
                       ) : null}
                     </span>

@@ -5,14 +5,15 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
 import { MIN_SIDEBAR_WIDTH } from '../..';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
+import { setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
 
 export default function Toggle() {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { activePlaceId } = useAppSelector((state) => state.workspace);
 
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
-
     // saving sidebar data with MIN size to localStorage
     localStorage.setItem(
       'sidebar',
@@ -22,6 +23,10 @@ export default function Toggle() {
       })
     );
   };
+
+  if (!showSidebar && activePlaceId !== null) {
+    dispatch(setShowExtendedBar(true));
+  }
 
   return (
     <div
