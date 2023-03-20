@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useRef } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -29,6 +29,7 @@ import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
+import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 
 export interface tagItem {
   id: string;
@@ -72,6 +73,8 @@ export default function DataRenderFunc({
   const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [updateTask, setUpdateTask] = useState<string | undefined>('');
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
     onSuccess: () => {
@@ -84,6 +87,18 @@ export default function DataRenderFunc({
       queryClient.invalidateQueries();
     }
   });
+  const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
+
+  const handleEditTask = async (id: string) => {
+    await editTaskMutation.mutateAsync({
+      name: inputRef.current?.innerText as string,
+      task_id: id
+    });
+  };
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {
@@ -397,7 +412,10 @@ export default function DataRenderFunc({
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <div
+              contentEditable="true"
+              ref={inputRef}
               onClick={() => handleTaskPilot(task.id as string, task.name as string)}
+              onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task.id) : null)}
               className={`${
                 comfortableView
                   ? 'text-lg whitespace-nowrap'

@@ -151,6 +151,18 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
   );
 };
 
+export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null; name: string }) => {
+  const url = `tasks/${task_id}`;
+  const response = requestNew({
+    url,
+    method: 'PUT',
+    data: {
+      name: name
+    }
+  });
+  return response;
+};
+
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
   const queryClient = useQueryClient();
   return useQuery(
