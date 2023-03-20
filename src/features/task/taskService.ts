@@ -156,7 +156,7 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   const response = requestNew({
     url,
     method: 'PUT',
-    data: {
+    params: {
       name: name
     }
   });
