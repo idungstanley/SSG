@@ -2,7 +2,7 @@
 set -e
 
 yarn ts:check
-yarn lint:check
+yarn eslint .
 yarn format:check
 yarn format:fix
-yarn lint:fix
+# yarn lint:fix

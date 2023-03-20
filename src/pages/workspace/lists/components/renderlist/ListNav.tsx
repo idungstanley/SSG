@@ -8,7 +8,6 @@ import { Bars3Icon, EllipsisHorizontalCircleIcon } from '@heroicons/react/24/out
 import { BsListStars } from 'react-icons/bs';
 import { RxDividerVertical } from 'react-icons/rx';
 import { CiViewTable } from 'react-icons/ci';
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import ListViewSettingsModal from '../../../tasks/viewSettingsModal/ListViewSettingsModal';
 
 interface ListNavProps {
@@ -22,7 +21,7 @@ interface ListNavProps {
 }
 
 function ListNav({ navName, viewsList, viewsList1, viewsList2, changeViews, Assigned, buttonLabel }: ListNavProps) {
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { showTaskNavigation, listView, tableView, boardView } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
   const handleBoardView = () => {
@@ -54,62 +53,145 @@ function ListNav({ navName, viewsList, viewsList1, viewsList2, changeViews, Assi
         className="flex items-center justify-between  overflow-hidden bg-white border-b border-gray-200 h-30"
         style={{ padding: '15px' }}
       >
-        <section className="flex items-center justify-start text-gray-500">
+        <section className="flex items-center justify-start">
           <span className="space-x-2">
-            <span className="font-bold">{navName}</span>
+            <span className="font-bold font-bold pr-2">{navName}</span>
           </span>
-          <span className="flex items-center justify-start space-x-1">
-            <span>
-              <BsListStars className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
-            </span>
-            <span
-              className="viewSettingsParent gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer"
-              onClick={handleListView}
-            >
-              {viewsList}
-              <span>
-                <ListViewSettingsModal />
+          <div className="flex pt-3">
+            <p className="flex items-center justify-start space-x-1 " onClick={handleListView}>
+              <span className="flex">
+                <span
+                  className={`${
+                    listView
+                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
+                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                  }`}
+                >
+                  <span>
+                    <BsListStars
+                      className={`${listView ? 'flex-shrink-0 w-5 text-purple-600 h-4' : 'flex-shrink-0 w-5 h-4'}`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span
+                    className={`${
+                      listView
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                    }`}
+                  >
+                    {viewsList}
+                    <span>
+                      <ListViewSettingsModal
+                        viewSettings="List Settings"
+                        comfortableView="Comfortable View"
+                        comfortableViewWrap="Comfortable Wrap"
+                        compactViews="Compact View"
+                        compactViewsWrap="Compact Wrap"
+                      />
+                    </span>
+                  </span>
+                </span>
+                <RxDividerVertical className="mt-0.5" />
               </span>
-            </span>
-          </span>
-          <span className="flex items-center justify-start space-x-1">
-            <span>
-              <CiViewTable className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
-            </span>
-            <span
-              className="group flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2"
-              onClick={handleTableView}
-            >
-              {viewsList1}
-              <span className="">
-                <BiDotsHorizontalRounded />
+            </p>
+
+            <p className="flex items-center justify-start space-x-1" onClick={handleTableView}>
+              <span className="flex">
+                <span
+                  className={`${
+                    tableView
+                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
+                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                  }`}
+                >
+                  <span>
+                    <CiViewTable
+                      className={`${tableView ? 'flex-shrink-0 w-5 text-purple-600 h-4' : 'flex-shrink-0 w-5 h-4'}`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span
+                    className={`${
+                      tableView
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                    }`}
+                  >
+                    {viewsList1}
+                    <span className="">
+                      <ListViewSettingsModal
+                        viewSettings="Table Settings"
+                        comfortableView=""
+                        comfortableViewWrap=""
+                        compactViews=""
+                        compactViewsWrap=""
+                      />
+                    </span>
+                  </span>
+                </span>
+                <RxDividerVertical className="mt-0.5" />
               </span>
-            </span>
-            <RxDividerVertical />
-          </span>
-          <span className="flex items-center justify-start space-x-1 cursor-pointer" onClick={handleBoardView}>
-            <span>
-              <BsListStars className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
-            </span>
-            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
-              {viewsList2}
-              <span className="">
-                <BiDotsHorizontalRounded />
+            </p>
+
+            <p className="flex items-center justify-start space-x-1" onClick={handleBoardView}>
+              <span className="flex">
+                <span
+                  className={`${
+                    boardView
+                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
+                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                  }`}
+                >
+                  <span>
+                    <BsListStars
+                      className={`${boardView ? 'flex-shrink-0 w-5 text-purple-600 h-4' : 'flex-shrink-0 w-5 h-4'}`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span
+                    className={`${
+                      boardView
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                    }`}
+                  >
+                    {viewsList2}
+                    <span className="">
+                      <ListViewSettingsModal
+                        viewSettings="Board Settings"
+                        comfortableView=""
+                        comfortableViewWrap=""
+                        compactViews=""
+                        compactViewsWrap=""
+                      />
+                    </span>
+                  </span>
+                </span>
+                <RxDividerVertical className="mt-0.5" />
               </span>
-              <RxDividerVertical />
-            </span>
-          </span>
-          <span className="flex items-center justify-start space-x-1">
-            <span>
-              <Bars3Icon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
-            </span>
-            <span className="group gap-2 flex items-center text-sm hover:bg-gray-100 cursor-pointer">
-              {changeViews}
-              <span className="">
-                <BiDotsHorizontalRounded />
+            </p>
+
+            <p className="flex items-center justify-start space-x-1">
+              <span className="viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer">
+                <span>
+                  <Bars3Icon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
+                </span>
+                <span className="group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold">
+                  {changeViews}
+                  <span className="">
+                    <ListViewSettingsModal
+                      viewSettings="Change View"
+                      comfortableView=""
+                      comfortableViewWrap=""
+                      compactViews=""
+                      compactViewsWrap=""
+                    />
+                  </span>
+                </span>
               </span>
-            </span>
-          </span>
+            </p>
+          </div>
         </section>
         <section className="flex items-center space-x-5 text-gray-500">
           <span>
