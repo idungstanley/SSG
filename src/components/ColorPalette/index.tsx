@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useEditHubService } from '../../features/hubs/hubService';
-import { ChromePicker } from 'react-color';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
+import { ChromePicker } from 'react-color';
 
 interface PaletteProps {
   title?: string;
