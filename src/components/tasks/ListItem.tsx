@@ -49,8 +49,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   return (
     <section
-      className={`relative flex items-center justify-between h-8 space-x-1 hover:bg-gray-100 group ${
-        list.id === activeItemId && 'bg-green-100 text-black font-medium'
+      className={`relative flex items-center justify-between h-8 space-x-1 group ${
+        list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
       }`}
       style={{ paddingLeft: `${paddingLeft}px` }}
     >

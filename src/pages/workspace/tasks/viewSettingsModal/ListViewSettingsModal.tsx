@@ -9,18 +9,30 @@ import {
   getComfortableViewWrap
 } from '../../../../features/task/taskSlice';
 
-export default function ListViewSettingsModal() {
+export default function ListViewSettingsModal({
+  viewSettings,
+  comfortableView,
+  comfortableViewWrap,
+  compactViews,
+  compactViewsWrap
+}: {
+  viewSettings: string;
+  comfortableView: string;
+  comfortableViewWrap: string;
+  compactViews: string;
+  compactViewsWrap: string;
+}) {
   const dispatch = useAppDispatch();
 
   const ViewSettings = [
     {
       id: 1,
-      label: 'View Settings',
+      label: viewSettings,
       handleClick: () => dispatch(getComfortableView(true))
     },
     {
       id: 2,
-      label: 'Comfortable View',
+      label: comfortableView,
       handleClick: () => {
         dispatch(getComfortableView(true));
         dispatch(getComfortableViewWrap(false));
@@ -30,7 +42,7 @@ export default function ListViewSettingsModal() {
     },
     {
       id: 3,
-      label: 'Comfortable Wrap',
+      label: comfortableViewWrap,
       handleClick: () => {
         dispatch(getComfortableView(false));
         dispatch(getComfortableViewWrap(true));
@@ -40,7 +52,7 @@ export default function ListViewSettingsModal() {
     },
     {
       id: 4,
-      label: 'Compact View',
+      label: compactViews,
       handleClick: () => {
         dispatch(getComfortableView(false));
         dispatch(getComfortableViewWrap(false));
@@ -50,7 +62,7 @@ export default function ListViewSettingsModal() {
     },
     {
       id: 4,
-      label: 'Compact Wrap',
+      label: compactViewsWrap,
       handleClick: () => {
         dispatch(getComfortableView(false));
         dispatch(getComfortableViewWrap(false));
