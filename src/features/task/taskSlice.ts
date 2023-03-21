@@ -68,6 +68,8 @@ interface TaskState {
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
+  calenderView: boolean;
+  mapView: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
@@ -106,6 +108,8 @@ const initialState: TaskState = {
   CompactViewWrap: false,
   tableView: false,
   boardView: false,
+  calenderView: false,
+  mapView: false,
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
@@ -199,6 +203,12 @@ export const taskSlice = createSlice({
     getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
     },
+    getCalendeView(state, action: PayloadAction<boolean>) {
+      state.calenderView = action.payload;
+    },
+    getMapView(state, action: PayloadAction<boolean>) {
+      state.mapView = action.payload;
+    },
 
     setShowTaskNavigation(state, action: PayloadAction<boolean>) {
       state.showTaskNavigation = action.payload;
@@ -287,6 +297,8 @@ export const {
   getCompactViewWrap,
   getTableView,
   getBoardView,
+  getCalendeView,
+  getMapView,
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
