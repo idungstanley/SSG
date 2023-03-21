@@ -92,7 +92,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
               showSubWallet={showSubWallet}
               paddingLeft={paddingLeft}
             />
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 25} /> : null}</div>
+            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}</div>
           </div>
         ))}
     </div>

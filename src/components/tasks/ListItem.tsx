@@ -11,7 +11,7 @@ interface ListItemProps {
     id: string;
     name: string;
   };
-  paddingLeft: string;
+  paddingLeft: string | number;
 }
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);

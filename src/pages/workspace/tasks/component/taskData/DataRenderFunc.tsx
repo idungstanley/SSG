@@ -174,7 +174,7 @@ export default function DataRenderFunc({
                         value={tagState}
                         onChange={(e) => handleEditTagChange(e)}
                         name="tag"
-                        className="text-gray-400 w-full h-10"
+                        className="w-full h-10 text-gray-400"
                       />
                     </form>
                   ) : (
@@ -198,7 +198,7 @@ export default function DataRenderFunc({
 
                       <ToolTip tooltip="unassign tag">
                         <button
-                          className="pr-2 text-gray-300 font-bold"
+                          className="pr-2 font-bold text-gray-300"
                           style={{ fontSize: '9px' }}
                           onClick={() =>
                             unAssignTagMutation.mutateAsync({
@@ -407,7 +407,7 @@ export default function DataRenderFunc({
               </span>
             )}
           </div>
-          <div className="flex group items-center">
+          <div className="flex items-center group">
             <p onClick={() => handleTaskStatus(task.id as string)} className="relative pt-1 pr-1">
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
@@ -436,7 +436,7 @@ export default function DataRenderFunc({
                 (taskColField as ReactNode)
               )}
             </div>
-            <p id="iconWrapper" className="flex opacity-0 group-hover:opacity-100 items-center ml-1 space-x-1 ">
+            <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
               </span>
