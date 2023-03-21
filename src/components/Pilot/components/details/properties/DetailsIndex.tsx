@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import { UseGetHubDetails } from '../../../../../../../../features/hubs/hubService';
-import { UseGetWalletDetails } from '../../../../../../../../features/wallet/walletService';
-import { UseGetListDetails } from '../../../../../../../../features/list/listService';
-import { getOneTaskServices } from '../../../../../../../../features/task/taskService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../../features/list/listService';
+import { getOneTaskServices } from '../../../../../features/task/taskService';
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
 
 export default function DetailsIndex() {

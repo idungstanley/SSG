@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MdArrowRight } from 'react-icons/md';
 import { AiOutlineCheck } from 'react-icons/ai';
-import ToolTip from '../../../../../../../../../components/Tooltip';
-import { useDispatch } from 'react-redux';
-import { setUpdateStatusModalId } from '../../../../../../../../../features/task/taskSlice';
-import { UseUpdateTaskStatusService } from '../../../../../../../../../features/task/taskService';
+import ToolTip from '../../../../../Tooltip';
+import { useAppDispatch } from '../../../../../../app/hooks';
+import { setUpdateStatusModalId } from '../../../../../../features/task/taskSlice';
+import { UseUpdateTaskStatusService } from '../../../../../../features/task/taskService';
 
 interface StatusDetailsProps {
   Details: {
@@ -19,7 +19,7 @@ interface StatusDetailsProps {
 export default function Status({ Details }: StatusDetailsProps) {
   const [statusBg, setStatusBg] = useState('');
   const [complete, setComplete] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const StatusData = Details?.status;
 
   const { status } = UseUpdateTaskStatusService({

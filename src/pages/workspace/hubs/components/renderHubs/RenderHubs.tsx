@@ -68,7 +68,15 @@ function RenderHubs() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <ListNav navName={activeItemName} viewsList="List" viewsList1="Table" viewsList2="Board" changeViews="View" />
+          <section id="nav" className="capitalize ">
+            <ListNav
+              navName={activeItemName}
+              viewsList="List"
+              viewsList1="Table"
+              viewsList2="Board"
+              changeViews="View"
+            />
+          </section>
         }
       >
         {listView && (

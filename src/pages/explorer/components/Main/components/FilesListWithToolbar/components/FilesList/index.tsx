@@ -30,9 +30,9 @@ export default function FilesList({ data }: FilesListProps) {
   const checkbox = useRef<HTMLInputElement | null>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const { selectedFileIds, selectedFileId } = useAppSelector((state) => state.explorer);
+  const { selectedFileIds } = useAppSelector((state) => state.explorer);
 
-  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter((i) => i);
+  const selectedIds = [...selectedFileIds];
 
   useLayoutEffect(() => {
     const isIndeterminate = selectedIds.length > 0 && selectedIds.length < data?.length;

@@ -55,14 +55,13 @@ function RenderList() {
           </section>
         }
       >
-        {listView && (
-          <div
-            className="left-0 top-0 w-1 rounded-l-md"
-            style={{ backgroundColor: '#78828d', minHeight: 'auto' }}
-          ></div>
-        )}
-        <div className="w-full overflow-y-scroll ">
-          <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
+        <div className="w-full overflow-y-scroll">
+          {listView && (
+            <div className="w-full">
+              <ListFilter />
+            </div>
+          )}
+          <div className="block p-2 mx-2 rounded-md border-l-4 border-gray-500" style={{ backgroundColor: '#e1e4e5' }}>
             {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
@@ -76,19 +75,24 @@ function RenderList() {
 
             {/* card */}
             {listView && <TaskListViews />}
-            {listView &&
-              listDetailsData?.data.tasks.map((task) => (
-                <div key={task.id}>
-                  {closeTaskListView && <TaskData task={task} />}
+            {listView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                  {listDetailsData?.data.tasks.map((task) => (
+                    <div key={task.id}>
+                      {closeTaskListView && <TaskData task={task} />}
 
-                  {currentParentTaskId === task.id ? (
-                    <div>
-                      <SubTask parentTaskId={currentParentTaskId} />
+                      {currentParentTaskId === task.id ? (
+                        <div>
+                          <SubTask parentTaskId={currentParentTaskId} />
+                        </div>
+                      ) : null}
+                      {getSubTaskId === task.id ? <RenderSubTasks /> : null}
                     </div>
-                  ) : null}
-                  {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                  ))}
                 </div>
-              ))}
+              </div>
+            )}
 
             {/* toggle */}
             {addNewTaskItem && <AddNewItem listId={listId} />}

@@ -25,7 +25,7 @@ export default function Row({ fileId }: RowProps) {
   const { settings } = useAppSelector((state) => state.account);
   const { showPreview } = settings;
 
-  const selectedIds = [...selectedFileIds, selectedFileId || ''].filter((i) => i);
+  const selectedIds = [...selectedFileIds];
 
   const onClickRow = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, fileId: string) => {
     const isCheckboxTarget = (e.target as HTMLButtonElement).value;

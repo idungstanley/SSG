@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
 import { cl } from '../../utils';
 
 interface MenuWithTransitionProps {
@@ -14,6 +15,8 @@ interface MenuWithTransitionProps {
 }
 
 export default function MenuWithTransition({ icon, menuItems }: MenuWithTransitionProps) {
+  const { showSidebar } = useAppSelector((state) => state.account);
+
   return (
     <Menu as="div" className="relative">
       <div>
@@ -30,7 +33,11 @@ export default function MenuWithTransition({ icon, menuItems }: MenuWithTransiti
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items
+          className={`fixed z-50 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg left-18 ring-1 ring-black ring-opacity-5 focus:outline-none ${
+            showSidebar ? 'fixed left-18' : 'fixed left-10'
+          }`}
+        >
           {menuItems.map((i) => (
             <Menu.Item key={i.id}>
               {({ active }) =>

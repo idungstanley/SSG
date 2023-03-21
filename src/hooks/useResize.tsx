@@ -71,7 +71,7 @@ export function useResize({ dimensions, storageKey, direction }: UseResizeProps)
       <div
         style={{ cursor: 'row-resize' }}
         onMouseDown={handleMouseDown}
-        className="z-10 absolute group h-3 -bottom-1.5 w-full right-0 transition-all duration-200"
+        className="z-10 absolute group h-2 -bottom-1 w-full right-0 transition-all duration-200"
       >
         <div
           className={cl(
@@ -96,7 +96,7 @@ export function useResize({ dimensions, storageKey, direction }: UseResizeProps)
       <div
         style={{ cursor: 'col-resize' }}
         onMouseDown={handleMouseDown}
-        className="absolute group top-0 w-3 -left-1.5 h-full transition-all duration-200"
+        className="absolute group top-0 w-2 -left-1 h-full transition-all duration-200"
       >
         <div
           className={cl(

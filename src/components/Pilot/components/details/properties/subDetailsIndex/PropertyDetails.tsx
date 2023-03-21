@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
+// import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
+import SubTask from '../../../../../../pages/workspace/subtasks/subtask1/SubTask';
 import moment from 'moment';
 // import Status from '../status/Status';
 // import Priority from '../priority/Priority';
@@ -9,10 +10,10 @@ import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
-import { AvatarWithInitials } from '../../../../../../../../../components';
-import ToolTip from '../../../../../../../../../components/Tooltip';
-import { ITaskFullList } from '../../../../../../../../../features/task/interface.tasks';
-import { IHubDetails } from '../../../../../../../../../features/hubs/hubs.interfaces';
+import AvatarWithInitials from '../../../../../avatar/AvatarWithInitials';
+import ToolTip from '../../../../../Tooltip';
+import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
+import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 
 export interface tagItem {
   id: string;
