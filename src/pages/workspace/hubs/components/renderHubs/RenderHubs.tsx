@@ -81,9 +81,8 @@ function RenderHubs() {
   function handleScroll(event) {
     const container = event.target;
     const scrollDifference = container.scrollHeight - container.scrollTop - container.clientHeight;
-    const range = 1; // Adjust this value to increase or decrease the range of acceptable differences
+    const range = 1;
 
-    console.log(hasNextPage);
     if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
       fetchNextPage();
     }
