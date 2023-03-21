@@ -51,7 +51,9 @@ export default function UserSettingsModal() {
     {
       id: 1,
       title: 'My Settings',
-      handleClick: () => ({})
+      handleClick: () => {
+        navigate('settings/profiles');
+      }
     },
     {
       id: 2,
