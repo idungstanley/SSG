@@ -52,7 +52,7 @@ export default function UserSettingsModal() {
       id: 1,
       title: 'My Settings',
       handleClick: () => {
-        navigate('settings/profiles');
+        navigate('settings/profile');
       }
     },
     {

@@ -1,4 +1,7 @@
-import React, { useMemo, useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
@@ -21,11 +24,18 @@ function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listView, tableView, boardView } = useAppSelector((state) => state.task);
+  const containerRef = useRef(null);
 
   const retrievedObject = localStorage.getItem('hubDetailsStorage');
   const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
 
-  const { data: TaskFullList, status } = UseGetFullTaskList({
+  const {
+    data: TaskFullList,
+    status,
+    // isFetching,
+    hasNextPage,
+    fetchNextPage
+  } = UseGetFullTaskList({
     itemId: hubdetail.activeItemId,
     itemType: hubdetail.activeItemType
   });
@@ -62,6 +72,23 @@ function RenderHubs() {
     };
   }, [unFilteredTaskData, status]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [containerRef, fetchNextPage, hasNextPage]);
+
+  function handleScroll(event) {
+    const container = event.target;
+    const scrollDifference = container.scrollHeight - container.scrollTop - container.clientHeight;
+    const range = 1; // Adjust this value to increase or decrease the range of acceptable differences
+
+    console.log(hasNextPage);
+    if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+      fetchNextPage();
+    }
+  }
+
   return (
     <>
       <PilotSection />
@@ -81,7 +108,7 @@ function RenderHubs() {
       >
         {listView && (
           <div className="pr-1 pt-0.5 w-full h-full">
-            <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }}>
+            <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
               <div className="w-full">
                 <ListFilter />
               </div>
