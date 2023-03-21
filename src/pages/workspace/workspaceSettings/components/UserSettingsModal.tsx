@@ -118,7 +118,7 @@ export default function UserSettingsModal() {
   const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
+      <div className="mt-1">
         <Menu.Button>
           <ToolTip tooltip="User Settings">
             <AvatarWithInitials
