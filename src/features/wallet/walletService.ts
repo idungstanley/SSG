@@ -129,6 +129,9 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
     },
     {
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId
+      // onSuccess(data) {
+      //   console.log(data.data.wallet);
+      // }
     }
   );
 };

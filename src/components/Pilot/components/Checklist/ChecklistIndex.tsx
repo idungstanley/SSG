@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
-import { Spinner } from '../../../../common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
 import { VscChecklist } from 'react-icons/vsc';
+import { UseGetHubDetails } from '../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../features/list/listService';
 
 export default function ChecklistIndex() {
   const [checklistName, setChecklistName] = useState<string>('Checklist');
@@ -14,7 +16,6 @@ export default function ChecklistIndex() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { showChecklistInput } = useAppSelector((state) => state.checklist);
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateChecklistService, {
@@ -33,16 +34,36 @@ export default function ChecklistIndex() {
   };
 
   // Get Checklists
-  const { data: checkListData, status } = UseGetAllClistService({
+  const { data: checkListData } = UseGetAllClistService({
     task_id: activeItemId,
     activeItemType: activeItemType
   });
 
-  if (status == 'loading') {
-    <Spinner size={20} color={'blue'} />;
-  }
+  const { data: hub } = UseGetHubDetails({
+    activeItemId,
+    activeItemType
+  });
 
-  return status == 'success' ? (
+  // if (hubStatus === 'success') {
+  //   dispatch(setChecklists(hub.data.hub.checklists));
+  // }
+
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId,
+    activeItemType
+  });
+  // if (walletStatus === 'success') {
+  //   console.log(wallet);
+  // }
+  const { data: list } = UseGetListDetails({
+    activeItemId,
+    activeItemType
+  });
+  // console.log(list);
+
+  const { showChecklistInput } = useAppSelector((state) => state.checklist);
+
+  return (
     <div className="p">
       <div className="border-2 flex items-center text-center py-1 bg-white">
         <VscChecklist className="w-4 h-4 ml-2" />
@@ -72,13 +93,26 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      <div>
-        {checkListData?.data.task.checklists
-          ? checkListData?.data.task.checklists?.map((item) => {
-              return <Disclosures key={item.id} item={item} />;
-            })
-          : 'This task has no Checklist, click on the plus sign to create one'}
-      </div>
+      {activeItemType === 'task' && (
+        <div>
+          <Disclosures item={checkListData?.data.task.checklists} />
+        </div>
+      )}
+      {activeItemType === 'hub' && (
+        <div>
+          <Disclosures item={hub?.data.hub.checklists} />
+        </div>
+      )}
+      {activeItemType === 'wallet' && (
+        <div>
+          <Disclosures item={wallet?.data.wallet.checklists} />
+        </div>
+      )}
+      {activeItemType === 'list' && (
+        <div>
+          <Disclosures item={list?.data.list.checklists} />
+        </div>
+      )}
     </div>
-  ) : null;
+  );
 }

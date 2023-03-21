@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { getBoardView, getCalendeView, getListView, getMapView } from '../../../../../features/task/taskSlice';
 import { getTableView } from '../../../../../features/task/taskSlice';
 import TaskMenu from '../../../tasks/component/taskMenu/TaskMenu';
-import { Bars3Icon, EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { BsListStars } from 'react-icons/bs';
 import { RxDividerVertical } from 'react-icons/rx';
 import { CiViewTable } from 'react-icons/ci';
 import ListViewSettingsModal from '../../../tasks/viewSettingsModal/ListViewSettingsModal';
+import { HiOutlinePlusSm } from 'react-icons/hi';
+import { MdOutlineSpaceDashboard } from 'react-icons/md';
 
 interface ListNavProps {
   navName?: string | null;
@@ -84,7 +86,7 @@ function ListNav({
         )}
       </div>
       <nav
-        className="flex items-center justify-between  overflow-hidden bg-white border-b border-gray-200 h-30"
+        className="flex items-center justify-between  overflow-hidden bg-white border-b border-gray-200 h-14"
         style={{ padding: '15px' }}
       >
         <section className="flex items-center justify-start">
@@ -97,8 +99,8 @@ function ListNav({
                 <span
                   className={`${
                     listView
-                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
-                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                      ? 'border-b-4 rounded border-purple-600 gap-2 pb-3  flex items-center text-sm  cursor-pointer'
+                      : 'viewSettingsHoverBorder gap-2 flex items-center pb-3  text-sm  cursor-pointer'
                   }`}
                 >
                   <span>
@@ -110,8 +112,8 @@ function ListNav({
                   <span
                     className={`${
                       listView
-                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
-                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm  cursor-pointer gap-2 font-bold'
+                        : 'group flex items-center text-sm  cursor-pointer gap-2 font-bold'
                     }`}
                   >
                     {viewsList}
@@ -135,8 +137,8 @@ function ListNav({
                 <span
                   className={`${
                     tableView
-                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
-                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                      ? 'border-b-4 rounded border-purple-600  gap-2 pb-3  flex items-center text-sm  cursor-pointer'
+                      : ' viewSettingsHoverBorder gap-2 flex items-center pb-3  text-sm  cursor-pointer'
                   }`}
                 >
                   <span>
@@ -148,8 +150,8 @@ function ListNav({
                   <span
                     className={`${
                       tableView
-                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
-                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm  cursor-pointer gap-2 font-bold'
+                        : 'group flex items-center text-sm  cursor-pointer gap-2 font-bold'
                     }`}
                   >
                     {viewsList1}
@@ -168,17 +170,17 @@ function ListNav({
               </span>
             </p>
 
-            <p className="flex items-center justify-start space-x-1" onClick={handleBoardView}>
-              <span className="flex">
+            <p className=" flex items-center justify-start space-x-1" onClick={handleBoardView}>
+              <span className="group flex">
                 <span
                   className={`${
                     boardView
-                      ? 'border-b-4 rounded border-purple-600 viewSettingsParent gap-2 pb-3  flex items-center text-sm hover:bg-gray-100 cursor-pointer'
-                      : 'viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer'
+                      ? 'border-b-4 rounded border-purple-600  gap-2 pb-3  flex items-center text-sm cursor-pointer'
+                      : 'viewSettingsHoverBorder gap-2 flex items-center pb-3  text-sm cursor-pointer group-hover:border-b-4 '
                   }`}
                 >
                   <span>
-                    <BsListStars
+                    <MdOutlineSpaceDashboard
                       className={`${boardView ? 'flex-shrink-0 w-5 text-purple-600 h-4' : 'flex-shrink-0 w-5 h-4'}`}
                       aria-hidden="true"
                     />
@@ -186,8 +188,8 @@ function ListNav({
                   <span
                     className={`${
                       boardView
-                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
-                        : 'group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold'
+                        ? 'group viewSettingsParent text-purple-600 flex items-center text-sm cursor-pointer gap-2 font-bold'
+                        : 'group flex items-center text-sm  cursor-pointer gap-2 font-bold'
                     }`}
                   >
                     {viewsList2}
@@ -281,11 +283,11 @@ function ListNav({
             </p>
 
             <p className="flex items-center justify-start space-x-1">
-              <span className="viewSettingsParent gap-2 flex items-center pb-3  text-sm hover:bg-gray-100 cursor-pointer">
+              <span className="viewSettingsHoverBorder gap-2 flex items-center pb-3  text-sm  cursor-pointer">
                 <span>
-                  <Bars3Icon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
+                  <HiOutlinePlusSm className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
                 </span>
-                <span className="group viewSettingsParent flex items-center text-sm hover:bg-gray-100 cursor-pointer gap-2 font-bold">
+                <span className="group  flex items-center text-sm  cursor-pointer gap-2 font-bold">
                   {changeViews}
                   <span className="">
                     <ListViewSettingsModal
@@ -305,8 +307,8 @@ function ListNav({
           <span>
             <Button buttonStyle="primary" label={buttonLabel} padding="py-2 px-4" height="h-6" width="w-full" />
           </span>
-          <span className="px-2 py-1 text-sm rounded-full hover:bg-gray-100">{Assigned}</span>
-          <span className="px-2 py-1 text-sm rounded-full hover:bg-gray-100">@mentions</span>
+          <span className="px-2 py-1 text-sm rounded-full ">{Assigned}</span>
+          <span className="px-2 py-1 text-sm rounded-full ">@mentions</span>
           <span className="flex items-center px-2 py-1 text-xl font-bold rounded-full hover:bg-gray-200">
             <EllipsisHorizontalCircleIcon className="h-5 w-5" aria-hidden="true" />
           </span>

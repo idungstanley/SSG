@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import { UseGetHubDetails } from '../../../../../../../../features/hubs/hubService';
-import { UseGetWalletDetails } from '../../../../../../../../features/wallet/walletService';
-import { UseGetListDetails } from '../../../../../../../../features/list/listService';
-import { getOneTaskServices } from '../../../../../../../../features/task/taskService';
+import { useAppSelector } from '../../../../../app/hooks';
+import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../../features/list/listService';
+import { getOneTaskServices } from '../../../../../features/task/taskService';
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
 
 export default function DetailsIndex() {
@@ -28,6 +28,7 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
+  // console.log(list?.data.list);
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
 
