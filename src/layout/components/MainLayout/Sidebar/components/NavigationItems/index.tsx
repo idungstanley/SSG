@@ -142,7 +142,7 @@ export default function NavigationItems() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <nav className="flex flex-col mt-1">
+          <nav className="flex flex-col mt-1 items.center">
             {navigation.map((item) => (
               <NavigationItem key={item.name} item={item} isVisible={item.alwaysShow || showMore} />
             ))}
@@ -151,8 +151,8 @@ export default function NavigationItems() {
             <div
               onClick={() => setShowMore((prev) => !prev)}
               className={cl(
-                !showSidebar ? 'justify-center' : 'gap-2 items-center',
-                'flex cursor-pointer gap-2 items-center pl-6 p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
               style={{ height: '30px' }}
             >

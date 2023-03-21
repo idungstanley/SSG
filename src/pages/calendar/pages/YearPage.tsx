@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import Calendar from '../..';
-import ChangeYear from '../ChangeYear';
+import Calendar from '..';
+import ChangeYear from '../ui/ChangeYear';
 
 const currentDate = dayjs();
 

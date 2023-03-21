@@ -8,7 +8,6 @@ export function PopAssignModal({
   modalLoader,
   roundedStyle,
   height,
-
   width
 }: {
   userData: {
@@ -26,12 +25,12 @@ export function PopAssignModal({
   width: string;
 }) {
   return (
-    <div className="absolute  bg-white shadow-xl z-1000  w-64  opacity-1  rounded mb-8">
+    <div style={{ zIndex: 99 }} className="absolute w-64 mb-8 bg-white rounded shadow-xl opacity-1">
       {modalLoader ? (
         <Spinner color="#4f46e5" />
       ) : (
-        <div className="flex flex-col space-y-5 items-start justify-center p-4  ">
-          <div className="flex items-center w-20 h-20 rounded-full bg-gray-400 justify-center text-white">
+        <div className="flex flex-col items-start justify-center p-4 space-y-5 ">
+          <div className="flex items-center justify-center w-20 h-20 text-white bg-gray-400 rounded-full">
             {userData.avatar_path ? (
               <img
                 src={userData.avatar_path}
@@ -48,25 +47,25 @@ export function PopAssignModal({
             ofline
           </div>
 
-          <div className="flex space-y-4 flex-col items-start">
+          <div className="flex flex-col items-start space-y-4">
             <span className="text-sm subpixel-antialiased text-black text-decoration-thickness: 1px;">
               {userData.name}
             </span>
-            <div className="space-x-2 flex items-center">
+            <div className="flex items-center space-x-2">
               <CiMail className="w-4 h-4 text-black" />
-              <span className="text-black text-sm subpixel-antialiased" style={{ fontSize: '8px' }}>
+              <span className="text-sm subpixel-antialiased text-black" style={{ fontSize: '8px' }}>
                 email
               </span>
             </div>
-            <div className="space-x-2  flex items-center">
+            <div className="flex items-center space-x-2">
               <ClockIcon className="w-4 h-4 text-black" />
-              <span className="text-black text-sm subpixel-antialiased" style={{ fontSize: '8px' }}>
+              <span className="text-sm subpixel-antialiased text-black" style={{ fontSize: '8px' }}>
                 {moment.utc(new Date()).format('MMMM Do YYYY, h:mm:ss a')}
               </span>
             </div>
             <div>
               <div>
-                <button className="flex   px-8 subpixel-antialiased text-black hover:bg-gray-400 mx-6  border rounded w-full items-center justify-center ">
+                <button className="flex items-center justify-center w-full px-8 mx-6 subpixel-antialiased text-black border rounded hover:bg-gray-400 ">
                   View profile
                 </button>
               </div>

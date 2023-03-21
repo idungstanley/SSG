@@ -1,8 +1,5 @@
 import React from 'react';
-// import { useGetHubList } from '../../../features/hubs/hubService';
-// import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
-// import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
@@ -68,7 +65,7 @@ function Hubs() {
         )}
       >
         <div className="flex items-center content-center self-center py-2">
-          <img src={everythingIcon} alt="Hub Icon" className={showSidebar ? 'w-5 h-5 mr-5' : 'h-6 w-6 mr-5'} />
+          <img src={everythingIcon} alt="Hub Icon" className={showSidebar ? 'w-5 h-5 mr-5' : 'h-5 w-5 mr-5'} />
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
