@@ -9,6 +9,7 @@ import { setVisibility, displayPrompt } from '../../../../features/general/promp
 import { logout, setAuthData } from '../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
+import ToolTip from '../../../../components/Tooltip';
 
 interface UserSettingsType {
   id: number;
@@ -119,12 +120,14 @@ export default function UserSettingsModal() {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button>
-          <AvatarWithInitials
-            initials={workspaceInitials.toUpperCase()}
-            height="h-5"
-            width="w-5"
-            backgroundColour={getLocalWS?.colour}
-          />
+          <ToolTip tooltip="User Settings">
+            <AvatarWithInitials
+              initials={workspaceInitials.toUpperCase()}
+              height="h-5"
+              width="w-5"
+              backgroundColour={getLocalWS?.colour}
+            />
+          </ToolTip>
         </Menu.Button>
       </div>
 

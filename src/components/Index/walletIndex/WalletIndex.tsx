@@ -12,7 +12,7 @@ import {
 } from '../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../features/wallet/walletSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
-import { useGetHubWallet } from '../../../features/hubs/hubService';
+import { useGetHubWallet, useGetSubHub } from '../../../features/hubs/hubService';
 import WalletItem from '../../tasks/WalletItem';
 import CreateWL from '../../tasks/CreateWL';
 
@@ -36,6 +36,10 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
   const { data: walletData } = getWalletServices({
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
+  });
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { data } = useGetSubHub({
+    parentId: currentItemId
   });
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
@@ -78,9 +82,9 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
 
   return walletAndListData?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {walletAndListData?.data.lists.length === 0 && walletAndListData?.data.wallets.length === 0 && (
-        <CreateWL paddingLeft={paddingLeft} />
-      )}
+      {walletAndListData?.data.lists.length === 0 &&
+        walletAndListData?.data.wallets.length === 0 &&
+        data?.data?.hubs.length === 0 && <CreateWL paddingLeft={Number(paddingLeft) + 25} />}
       {walletData?.data.wallets.length !== 0 &&
         walletData?.data.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>

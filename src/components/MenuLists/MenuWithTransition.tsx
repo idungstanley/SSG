@@ -3,9 +3,11 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { cl } from '../../utils';
+import ToolTip from '../Tooltip';
 
 interface MenuWithTransitionProps {
   icon: JSX.Element;
+  tooltip?: string;
   menuItems: {
     id: number;
     type: string;
@@ -14,14 +16,14 @@ interface MenuWithTransitionProps {
   }[];
 }
 
-export default function MenuWithTransition({ icon, menuItems }: MenuWithTransitionProps) {
+export default function MenuWithTransition({ icon, menuItems, tooltip }: MenuWithTransitionProps) {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
     <Menu as="div" className="relative">
       <div>
         <Menu.Button className="flex items-center p-1 text-sm text-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-          {icon}
+          <ToolTip tooltip={tooltip}>{icon}</ToolTip>
         </Menu.Button>
       </div>
       <Transition
