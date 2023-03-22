@@ -125,7 +125,24 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       enabled: false
-      // enabled: task_id != null,
+      // enabled: task_id != null
+    }
+  );
+};
+export const getOneTaskServices2 = ({ task_id }: { task_id: string | undefined | null }) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id }],
+    async () => {
+      const data = await requestNew<ITaskRes | undefined>({
+        url: `tasks/${task_id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      // enabled: false
+      enabled: task_id != null
     }
   );
 };
@@ -522,33 +539,39 @@ export const UseAssignTaskService = ({
 };
 
 //Unassign task from team member
-export const UseUnAssignTaskService = ({
-  task_id,
-  team_member_id,
-  unAssignTrigger
-}: {
-  task_id: string | null | undefined;
-  team_member_id: string | null;
-  unAssignTrigger: boolean;
-}) => {
-  const queryClient = useQueryClient();
-  const dispatch = useDispatch();
-  return useQuery(
-    ['task', { team_member_id: team_member_id }],
-    async () => {
-      const data = await requestNew({
-        url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
-        method: 'POST'
-      });
-      return data;
-    },
-    {
-      enabled: unAssignTrigger,
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-      }
-      // enabled: !!team_member_id,
-    }
-  );
-};
+
+// export const UseUnAssignTaskService = ({
+//   task_id,
+//   team_member_id,
+//   unAssignTrigger
+// }: {
+//   task_id: string | null | undefined;
+//   team_member_id: string | null;
+//   unAssignTrigger: boolean;
+// }) => {
+//   const queryClient = useQueryClient();
+//   const dispatch = useDispatch();
+//   return useQuery(
+//     ['task', { team_member_id: team_member_id }],
+//     async () => {
+//       const data = await requestNew({
+//         url: '/assignee/unassign',
+//         method: 'POST',
+//         params: {
+//           team_member_id: team_member_id,
+//           id: task_id,
+//           type: 'task'
+//         }
+//       });
+//       return data;
+//     },
+//     {
+//       enabled: unAssignTrigger,
+//       onSuccess: () => {
+//         queryClient.invalidateQueries(['task']);
+//         dispatch(setToggleAssignCurrentTaskId(null));
+//       }
+//       // enabled: !!team_member_id,
+//     }
+//   );
+// };

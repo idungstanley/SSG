@@ -186,7 +186,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                 </div>
                 {toggleAssignChecklistItemId == item.id ? (
                   <span className="absolute shadow-2xl z-30 ml-20 mt-16">
-                    <AssignTask option="checklstItem" item={item} />
+                    <AssignTask option="checklst_item" item={item} />
                   </span>
                 ) : null}
               </div>

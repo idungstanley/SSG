@@ -9,8 +9,8 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 
 import {
   UseAssignTaskService,
-  UseUnAssignTaskService,
-  getOneTaskServices
+  getOneTaskServices2
+  // getOneTaskServices
 } from '../../../../features/task/taskService';
 import {
   UseChecklistItemAssignee,
@@ -21,14 +21,14 @@ interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
 }
 
-interface option {
+interface optionProps {
   option?: string;
   item?: checklistItem;
 }
 
-export default function AssignTask({ option, item }: option) {
+export default function AssignTask({ option, item }: optionProps) {
   const dispatch = useDispatch();
-  const [unAssignTrigger, setUnAssignTrigger] = React.useState(false);
+  // const [unAssignTrigger] = React.useState(false);
   const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
@@ -47,13 +47,13 @@ export default function AssignTask({ option, item }: option) {
     triggerAsssignTask: triggerAsssignTask
   });
 
-  UseUnAssignTaskService({
-    task_id: toggleAssignCurrentTaskId,
-    team_member_id: currTeamMemberId,
-    unAssignTrigger
-  });
+  // UseUnAssignTaskService({
+  //   task_id: toggleAssignCurrentTaskId,
+  //   team_member_id: currTeamMemberId,
+  //   unAssignTrigger
+  // });
 
-  const { data: getTaskAssignees } = getOneTaskServices({
+  const { data: getTaskAssignees } = getOneTaskServices2({
     task_id: toggleAssignCurrentTaskId
   });
 
@@ -61,15 +61,16 @@ export default function AssignTask({ option, item }: option) {
 
   const assignees = item?.assignees.map(({ id }: { id: string }) => id);
 
-  const handleUnAssign = (id: string) => {
-    dispatch(setCurrTeamMemId(id));
-    setUnAssignTrigger(true);
-  };
+  // const handleUnAssign = (id: string) => {
+  //   dispatch(setCurrTeamMemId(id));
+  //   setUnAssignTrigger(true);
+  // };
 
   const handleUnAssignChecklistItem = (id: string) => {
     onCheklistItemUnassign({
-      itemId: clickedChecklistItemId,
-      team_member_id: id
+      itemId: clickedChecklistItemId || toggleAssignCurrentTaskId,
+      team_member_id: id,
+      type: option
     });
   };
 
@@ -101,7 +102,7 @@ export default function AssignTask({ option, item }: option) {
                   className="relative flex items-center space-x-2 cursor-pointer"
                   onClick={() => {
                     dispatch(setCurrTeamMemId(item.id));
-                    option === 'checklstItem' ? handleAssignModal(item.id) : dispatch(setTriggerAsssignTask(true));
+                    option === 'checklst_item' ? handleAssignModal(item.id) : dispatch(setTriggerAsssignTask(true));
                   }}
                 >
                   <AvatarWithInitials
@@ -112,13 +113,13 @@ export default function AssignTask({ option, item }: option) {
                   />
                   <p className="text-xs text-black">{item.user.name.toLocaleUpperCase()}</p>
                 </div>
-                {assignees?.includes(item.id) && option === 'checklstItem' ? (
+                {assignees?.includes(item.id) && option === 'checklst_item' ? (
                   <button type="button" onClick={() => handleUnAssignChecklistItem(item.id)}>
                     <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}
-                {assignedUser?.includes(item.id) && option !== 'checklstItem' ? (
-                  <button type="button" onClick={() => handleUnAssign(item.id)}>
+                {assignedUser?.includes(item.id) && option !== 'checklst_item' ? (
+                  <button type="button" onClick={() => handleUnAssignChecklistItem(item.id)}>
                     <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}

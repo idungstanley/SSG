@@ -15,12 +15,14 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
+  setTaskStatus,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
 import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
+
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
@@ -30,6 +32,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
+import ViewStatusDropdown from '../../../../../components/status/ViewStatusDropdown';
 
 export interface tagItem {
   id: string;
@@ -274,7 +277,7 @@ export default function DataRenderFunc({
           </div>
         </div>
         <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+          {toggleAssignCurrentTaskId == task.id ? <AssignTask option="task" /> : null}
         </span>
       </>
     );
@@ -321,7 +324,7 @@ export default function DataRenderFunc({
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <ViewStatusDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -332,7 +335,7 @@ export default function DataRenderFunc({
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <ViewStatusDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -343,7 +346,7 @@ export default function DataRenderFunc({
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <ViewStatusDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -354,7 +357,7 @@ export default function DataRenderFunc({
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <ViewStatusDropdown TaskCurrentStatus={task?.status} statusName="Todo" />
           </div>
         </>
       );
@@ -364,8 +367,11 @@ export default function DataRenderFunc({
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
+            onClick={() => {
+              dispatch(setTaskStatus('Todo'));
+            }}
           >
-            Todo
+            <ViewStatusDropdown TaskCurrentStatus={task.id} statusName="Todo" />
           </div>
         </>
       );
