@@ -6,6 +6,9 @@ import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import subtask from '../../../../assets/icons/subtask.png';
+import todoIcon from '../../../../assets/icons/todoIcon.png';
+import completedIcon from '../../../../assets/icons/completedIcon.png';
+import archiveIcon from '../../../../assets/icons/archiveIcon.png';
 import { useSubTasks } from '../../../../features/task/taskService';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -69,7 +72,18 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           )}
         </button>
 
-        <img src={subtask} alt="subtask" className="pr-1" />
+        {task.status == 'in progress' ? (
+          <img src={subtask} alt="subtask" className="pr-1" />
+        ) : task.status == 'completed' ? (
+          <img src={completedIcon} alt="subtask" className="pr-1" />
+        ) : task.status == 'todo' ? (
+          <img src={todoIcon} alt="subtask" className="pr-1" />
+        ) : task.status == 'archived' ? (
+          <img src={archiveIcon} alt="subtask" className="pr-1" />
+        ) : (
+          <img src={todoIcon} alt="subtask" className="pr-1" />
+        )}
+
         <p>{task.name}</p>
 
         {children}
