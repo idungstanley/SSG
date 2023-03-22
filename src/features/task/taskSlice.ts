@@ -73,7 +73,7 @@ interface TaskState {
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
-  getSubTaskId: null | string;
+  getSubTaskId: null | string | undefined;
   currentParentSubTaskId: null | string;
   currentParentSubTaskId2: null | string;
   currentParentSubTaskId3: null | string;
@@ -227,7 +227,7 @@ export const taskSlice = createSlice({
     setCurrentParentTaskId(state, action: PayloadAction<string | null>) {
       state.currentParentTaskId = action.payload;
     },
-    setGetSubTaskId(state, action: PayloadAction<null | string>) {
+    setGetSubTaskId(state, action: PayloadAction<null | string | undefined>) {
       state.getSubTaskId = action.payload;
     },
     setCurrentParentSubTaskId(state, action: PayloadAction<null | string>) {

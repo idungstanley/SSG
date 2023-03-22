@@ -54,6 +54,7 @@ import ExplorerPage from './pages/explorer';
 import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
+import UserSettingsProfile from './pages/settings/UserSettings';
 
 const inbox = [
   {
@@ -130,6 +131,10 @@ export const routes = (user: IUser | null) =>
         {
           path: 'settings/notifications',
           element: <NotificationSettingsPage />
+        },
+        {
+          path: 'settings/profile',
+          element: <UserSettingsProfile />
         },
         { path: 'settings/team-members', element: <TeamMembersPage /> },
         {
