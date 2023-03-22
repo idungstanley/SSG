@@ -10,8 +10,8 @@ function WorkSpaceSelection() {
 
   const { data: workSpaceData, status } = getWorkspaceService();
 
+  // const workSpaceName: string = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
   const workspaceName = workSpaceData?.data.workspace.name;
-
   if (status == 'loading') {
     return <Spinner size={10} color={'#6B7280'} />;
   }

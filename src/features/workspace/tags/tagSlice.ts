@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface TagState {
-  currentTaskIdForTag: string | null;
+  currentTaskIdForTag: string | null | undefined;
   unAssignTadId: null;
-  renameTagId: string | null;
+  renameTagId: string | null | undefined;
   showTagColorDialogueBox: boolean;
-  currentTagId: string | null;
+  currentTagId: string | null | undefined;
 }
 
 const initialState: TagState = {
@@ -20,10 +20,10 @@ export const tagSlice = createSlice({
   name: 'tag',
   initialState,
   reducers: {
-    setCurrentTaskIdForTag(state, action: PayloadAction<null | string>) {
+    setCurrentTaskIdForTag(state, action: PayloadAction<null | string | undefined>) {
       state.currentTaskIdForTag = action.payload;
     },
-    setRenameTagId(state, action: PayloadAction<string | null>) {
+    setRenameTagId(state, action: PayloadAction<string | null | undefined>) {
       state.renameTagId = action.payload;
     },
     setShowTagColorDialogBox(state, action: PayloadAction<boolean>) {
@@ -38,7 +38,7 @@ export const tagSlice = createSlice({
         state.currentTaskIdForTag = action.payload.currentTaskIdForTag;
       }
     },
-    setCurrentTagId(state, action: PayloadAction<string | null>) {
+    setCurrentTagId(state, action: PayloadAction<string | null | undefined>) {
       state.currentTagId = action.payload;
     }
   }

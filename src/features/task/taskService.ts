@@ -3,7 +3,8 @@ import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
-  getTaskData,
+  ImyTaskData2,
+  // getTaskData,
   // getTaskData,
   setToggleAssignCurrentTaskId,
   setTriggerAsssignTask
@@ -167,7 +168,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
   );
 };
 
-export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null; name: string }) => {
+export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
     url,
@@ -229,34 +230,45 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 };
 
 export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
-  const dispatch = useAppDispatch();
-  // const queryClient = useQueryClient();
-  return useQuery(
+  // const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  return useInfiniteQuery(
     ['task', { listId: listId }],
-    async () => {
-      const data = await requestNew<ITaskListRes | undefined>({
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
+      return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
         method: 'POST',
         params: {
-          list_id: listId
+          list_id: listId,
+          page: pageParam
         }
       });
-      return data;
     },
     {
       onSuccess: (data) => {
-        const taskData = data?.data.tasks.map((task: { id: string }) => {
-          // queryClient.setQueryData(['task', task.id], task);
-          return { ...task };
-        });
-        dispatch(getTaskData(taskData));
-        // queryClient.invalidateQueries();
+        data.pages.map((page) =>
+          page?.data.tasks.map((task: ImyTaskData2) => queryClient.setQueryData(['task', task.id], task))
+        );
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
       }
     }
   );
 };
 
-export const getTaskListService2 = (query: { parentId: string | null }) => {
+// const taskData = data?.data.tasks.map((task: { id: string }) => {
+//   queryClient.setQueryData(['task', task.id], task);
+//   return { ...task };
+// });
+// dispatch(getTaskData(taskData));
+// queryClient.invalidateQueries();
+
+export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
   // const dispatch = useAppDispatch();
 
   // const queryClient = useQueryClient();
