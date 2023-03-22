@@ -86,6 +86,7 @@ interface TaskState {
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
   currentTaskPriorityId: string | null | undefined;
+  triggerAsssignTask: boolean;
 }
 
 const initialState: TaskState = {
@@ -122,7 +123,8 @@ const initialState: TaskState = {
   updateStatusModalId: null,
   updateStatusModalIdForPilot: null,
   currentTaskStatusId: null,
-  currentTaskPriorityId: null
+  currentTaskPriorityId: null,
+  triggerAsssignTask: false
 };
 
 export const taskSlice = createSlice({
@@ -263,7 +265,10 @@ export const taskSlice = createSlice({
     setUpdateStatusModalId(state, action: PayloadAction<string | null>) {
       state.updateStatusModalId = action.payload;
     },
-    checkIfTask: (state) => state
+    checkIfTask: (state) => state,
+    setTriggerAsssignTask(state, action: PayloadAction<boolean>) {
+      state.triggerAsssignTask = action.payload;
+    }
   }
 });
 
@@ -298,6 +303,7 @@ export const {
   setUpdateEntries,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
-  setCurrentTaskPriorityId
+  setCurrentTaskPriorityId,
+  setTriggerAsssignTask
 } = taskSlice.actions;
 export default taskSlice.reducer;
