@@ -6,6 +6,7 @@ import { cl } from '../../../../../../utils';
 import { MIN_SIDEBAR_WIDTH } from '../..';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
 import { setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
+import ToolTip from '../../../../../../components/Tooltip';
 
 export default function Toggle() {
   const dispatch = useAppDispatch();
@@ -36,7 +37,13 @@ export default function Toggle() {
         showSidebar ? 'top-6 right-2' : 'top-36 right-6 mt-2'
       )}
     >
-      {!showSidebar ? <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" /> : <CompactIcon />}
+      {!showSidebar ? (
+        <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
+      ) : (
+        <ToolTip tooltip="Collapse Sidebar">
+          <CompactIcon />
+        </ToolTip>
+      )}
     </div>
   );
 }
