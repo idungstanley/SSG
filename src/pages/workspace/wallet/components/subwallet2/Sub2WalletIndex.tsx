@@ -10,7 +10,7 @@ import ListItem from '../../../../../components/tasks/ListItem';
 import LastListIndex from './LastListIndex';
 
 interface SubWalletIndexProps {
-  paddingLeft?: string;
+  paddingLeft?: string | number;
   currWalId: string;
 }
 
@@ -43,7 +43,7 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
 
   const navigate = useNavigate();
 
-  const handleLocation = (id: string, type = 'sub2wallet') => {
+  const handleLocation = (id: string, type = 'subwallet3') => {
     dispatch(setShowHub(true));
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
@@ -56,18 +56,20 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
         <div key={wallet.id}>
           <WalletItem
             wallet={wallet}
-            walletType="subwallet2"
+            walletType="subwallet3"
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
-            paddingLeft="64"
+            paddingLeft={paddingLeft}
             showSubWallet={showSubWallet3}
           />
-          {showSubWallet3 === wallet.id ? <LastListIndex finalParentId={finalParentId} /> : null}
+          {showSubWallet3 === wallet.id ? (
+            <LastListIndex finalParentId={finalParentId} paddingLeft={Number(paddingLeft) + 13} />
+          ) : null}
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-          <ListItem list={list} paddingLeft="87" />
+          <ListItem list={list} paddingLeft={Number(paddingLeft) + 15} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}
