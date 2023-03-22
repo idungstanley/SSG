@@ -34,11 +34,11 @@ export default function TagModal() {
   };
 
   return status == 'success' ? (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="group relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
-          <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-            <AiOutlineTags className="w-3  text-gray-500" />
+          <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5 opacity-0 group-hover:opacity-100">
+            <AiOutlineTags className="w-3  text-gray-500 " />
           </span>
         </Menu.Button>
       </div>

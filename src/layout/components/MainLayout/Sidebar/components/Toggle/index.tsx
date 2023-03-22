@@ -5,14 +5,16 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
 import { MIN_SIDEBAR_WIDTH } from '../..';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
+import { setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
+import ToolTip from '../../../../../../components/Tooltip';
 
 export default function Toggle() {
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { activePlaceId } = useAppSelector((state) => state.workspace);
 
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
-
     // saving sidebar data with MIN size to localStorage
     localStorage.setItem(
       'sidebar',
@@ -23,6 +25,10 @@ export default function Toggle() {
     );
   };
 
+  if (!showSidebar && activePlaceId !== null) {
+    dispatch(setShowExtendedBar(true));
+  }
+
   return (
     <div
       onClick={closeOrShowSidebar}
@@ -31,7 +37,13 @@ export default function Toggle() {
         showSidebar ? 'top-6 right-2' : 'top-36 right-6 mt-2'
       )}
     >
-      {!showSidebar ? <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" /> : <CompactIcon />}
+      {!showSidebar ? (
+        <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />
+      ) : (
+        <ToolTip tooltip="Collapse Sidebar">
+          <CompactIcon />
+        </ToolTip>
+      )}
     </div>
   );
 }

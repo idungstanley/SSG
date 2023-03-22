@@ -1,5 +1,5 @@
 import React from 'react';
-import PriorityDropdown from '../../../../../../../../../components/priority/PriorityDropdown';
+import PriorityDropdown from '../../../../../priority/PriorityDropdown';
 
 interface PriorityProps {
   Details: {

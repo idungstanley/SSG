@@ -48,16 +48,22 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
           className={cl(
             'flex gap-4 items-center content-center self-center',
             isActivePlace ? 'justify-center text-black font-bold' : ''
-            // showSidebar && isActivePlace ? 'ml-16' : '',
           )}
         >
           <span className="flex items-center w-6 h-6 hover:text-green-400">{icon}</span>
           <span
             className={cl(
               showSidebar ? 'block' : 'hidden',
-              'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
+              'w-full cursor-pointer uppercase truncate',
               isActivePlace ? 'text-black font-black' : ''
             )}
+            style={{
+              fontSize: '12px',
+              lineHeight: '20px',
+              verticalAlign: 'baseline',
+              letterSpacing: '0.28px',
+              fontWeight: '700'
+            }}
           >
             {label}
           </span>

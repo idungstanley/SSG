@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MdAddToPhotos } from 'react-icons/md';
-import SubtabDrag from '../SubtabDnd';
+import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import {
   closestCenter,
   DndContext,
@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { BsClipboardData } from 'react-icons/bs';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { useAppSelector } from '../../../../app/hooks';
 
 export const DetailOptions = [
   {

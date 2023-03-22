@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
 import PageWrapper from '../../../../components/PageWrapper';
@@ -14,8 +14,14 @@ function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
 
   const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data: TaskFullList, status } = UseGetFullTaskListWallet({
+  const {
+    data: TaskFullList,
+    status, // isFetching,
+    hasNextPage,
+    fetchNextPage
+  } = UseGetFullTaskListWallet({
     itemId: activeItemId,
     itemType: activeItemType
   });
@@ -52,6 +58,22 @@ function RenderWallets() {
     };
   }, [unFilteredTaskData, status]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    container?.addEventListener('scroll', handleScroll);
+    return () => container?.removeEventListener('scroll', handleScroll);
+  }, [containerRef, fetchNextPage, hasNextPage]);
+
+  function handleScroll(event: UIEvent | Event) {
+    const container = event.target as HTMLElement;
+    const scrollDifference = container?.scrollHeight - container.scrollTop - container.clientHeight;
+    const range = 1;
+
+    if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+      fetchNextPage();
+    }
+  }
+
   return (
     <>
       <PilotSection />
@@ -60,7 +82,11 @@ function RenderWallets() {
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
       >
         <div className="pr-1 pt-0.5 w-full h-full">
-          <div className="w-full scrollbarDynCol ok" style={{ minHeight: '0', maxHeight: '100vh' }}>
+          <div
+            className="w-full scrollbarDynCol overflow-auto"
+            style={{ minHeight: '0', maxHeight: '100vh' }}
+            ref={containerRef}
+          >
             <div className="w-full">
               <ListFilter />
             </div>

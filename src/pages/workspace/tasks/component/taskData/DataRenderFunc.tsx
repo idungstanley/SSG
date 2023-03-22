@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useRef } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -29,6 +29,7 @@ import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
+import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 
 export interface tagItem {
   id: string;
@@ -45,9 +46,9 @@ interface renderDataProps {
     | null
     | Array<{ id: string; initials: string; colour: string }>;
   colfield: string;
-  task: ImyTaskData;
-  getSubTaskId: string | null;
-  handleGetSubTask?: (id: string) => void;
+  task: ImyTaskData | undefined;
+  getSubTaskId: string | null | undefined;
+  handleGetSubTask?: (id: string | undefined) => void;
   ShowPlusIcon?: null | boolean;
 }
 
@@ -72,6 +73,8 @@ export default function DataRenderFunc({
   const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [updateTask, setUpdateTask] = useState<string | undefined>('');
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
     onSuccess: () => {
@@ -84,8 +87,20 @@ export default function DataRenderFunc({
       queryClient.invalidateQueries();
     }
   });
+  const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
 
-  const handleAssigneeModal = (id: string) => {
+  const handleEditTask = async (id: string | undefined) => {
+    await editTaskMutation.mutateAsync({
+      name: inputRef.current?.innerText as string,
+      task_id: id
+    });
+  };
+
+  const handleAssigneeModal = (id: string | undefined) => {
     if (toggleAssignCurrentTaskId == id) {
       dispatch(setToggleAssignCurrentTaskId(null));
     } else {
@@ -152,14 +167,14 @@ export default function DataRenderFunc({
                 <div className="">{groupTags(item)}</div>
               ) : (
                 <>
-                  {renameTagId == item.id && currentTaskIdForTag == task.id ? (
+                  {renameTagId == item.id && currentTaskIdForTag == task?.id ? (
                     <form onSubmit={(e) => handleEditTagSubmit(e, item.id)}>
                       <input
                         type="text"
                         value={tagState}
                         onChange={(e) => handleEditTagChange(e)}
                         name="tag"
-                        className="text-gray-400 w-full h-10"
+                        className="w-full h-10 text-gray-400"
                       />
                     </form>
                   ) : (
@@ -177,18 +192,18 @@ export default function DataRenderFunc({
                       </div>
                       <ToolTip tooltip="edit tag">
                         <button className="mt-1">
-                          <EditTagModal taskId={task.id} tagId={item.id} />
+                          <EditTagModal taskId={task?.id} tagId={item?.id} />
                         </button>
                       </ToolTip>
 
                       <ToolTip tooltip="unassign tag">
                         <button
-                          className="pr-2 text-gray-300 font-bold"
+                          className="pr-2 font-bold text-gray-300"
                           style={{ fontSize: '9px' }}
                           onClick={() =>
                             unAssignTagMutation.mutateAsync({
                               tagId: item.id,
-                              currentTaskIdForTag: task.id
+                              currentTaskIdForTag: task?.id
                             })
                           }
                         >
@@ -237,7 +252,7 @@ export default function DataRenderFunc({
     }
   };
 
-  const handleTaskPriority = (id: string) => {
+  const handleTaskPriority = (id: string | undefined) => {
     dispatch(setCurrentTaskPriorityId(id));
   };
 
@@ -254,12 +269,12 @@ export default function DataRenderFunc({
     return (
       <>
         <div className="">
-          <div onClick={() => handleAssigneeModal(task.id)} className="flex cursor-pointer ">
-            {groupAssignee(task.assignees)}
+          <div onClick={() => handleAssigneeModal(task?.id)} className="flex cursor-pointer ">
+            {groupAssignee(task?.assignees)}
           </div>
         </div>
         <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+          {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
         </span>
       </>
     );
@@ -279,10 +294,10 @@ export default function DataRenderFunc({
           className="ml-2 text-xl text-gray-400 cursor-pointer "
           style={{ width: '30px' }}
           aria-hidden="true"
-          onClick={() => handleAssigneeModal(task.id)}
+          onClick={() => handleAssigneeModal(task?.id)}
         />
         <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+          {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
         </span>
       </>
     );
@@ -365,13 +380,13 @@ export default function DataRenderFunc({
               id="checked-checkbox"
               className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-8"
               onClick={() => {
-                displayNav(task.id as string);
+                displayNav(task?.id as string);
               }}
             />
             <MdDragIndicator className="absolute text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
           </div>
-          <div onClick={() => (handleGetSubTask ? handleGetSubTask(task.id) : null)} className="items-center">
-            {task.id == getSubTaskId ? (
+          <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
+            {task?.id == getSubTaskId ? (
               <span>
                 <img
                   src={ArrowDown}
@@ -393,11 +408,14 @@ export default function DataRenderFunc({
             )}
           </div>
           <div className="flex group items-center">
-            <p onClick={() => handleTaskStatus(task.id as string)} className="relative pt-1 pr-1">
+            <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
               <StatusDropdown TaskCurrentStatus={task?.status} />
             </p>
             <div
-              onClick={() => handleTaskPilot(task.id as string, task.name as string)}
+              contentEditable="true"
+              ref={inputRef}
+              onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
+              onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
               className={`${
                 comfortableView
                   ? 'text-lg whitespace-nowrap'
@@ -418,7 +436,7 @@ export default function DataRenderFunc({
                 (taskColField as ReactNode)
               )}
             </div>
-            <p id="iconWrapper" className="flex opacity-0 group-hover:opacity-100 items-center ml-1 space-x-1 ">
+            <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
               </span>
@@ -427,12 +445,12 @@ export default function DataRenderFunc({
                   <PlusIcon
                     className="w-3 text-gray-500 "
                     aria-hidden="true"
-                    onClick={() => handleCreateSubTask(task.id as string)}
+                    onClick={() => handleCreateSubTask(task?.id as string)}
                   />
                 </span>
               )}
               {/* tag here */}
-              <button onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
+              <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
                 <TagModal />
               </button>
             </p>
@@ -445,7 +463,10 @@ export default function DataRenderFunc({
   } else if (colfield === 'priority') {
     return (
       <>
-        <span className="relative border-gray-300 border-dotted " onClick={() => handleTaskPriority(task.id as string)}>
+        <span
+          className="relative border-gray-300 border-dotted "
+          onClick={() => handleTaskPriority(task?.id as string)}
+        >
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
       </>

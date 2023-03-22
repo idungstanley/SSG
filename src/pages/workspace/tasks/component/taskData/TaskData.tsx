@@ -5,7 +5,7 @@ import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 
 interface TaskDataProps {
-  task: ImyTaskData;
+  task?: ImyTaskData | undefined;
 }
 
 export default function TaskData({ task }: TaskDataProps) {
@@ -14,7 +14,7 @@ export default function TaskData({ task }: TaskDataProps) {
 
   const dispatch = useAppDispatch();
 
-  const handleGetSubTask = (id: string) => {
+  const handleGetSubTask = (id: string | undefined) => {
     if (id == getSubTaskId) {
       dispatch(setGetSubTaskId(null));
     } else {
@@ -49,11 +49,11 @@ export default function TaskData({ task }: TaskDataProps) {
                         className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12"
                       >
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task?.[col.field]}
                           colfield={col.field}
                           task={task}
                           getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task.id)}
+                          handleGetSubTask={() => handleGetSubTask(task?.id)}
                         />
                       </div>
                     )
@@ -67,11 +67,11 @@ export default function TaskData({ task }: TaskDataProps) {
                         className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-12/12"
                       >
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task?.[col.field]}
                           colfield={col.field}
                           task={task}
                           getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task.id)}
+                          handleGetSubTask={() => handleGetSubTask(task?.id)}
                         />
                       </div>
                     )
@@ -85,11 +85,11 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task?.[col.field]}
                           colfield={col.field}
                           task={task}
                           getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task.id)}
+                          handleGetSubTask={() => handleGetSubTask(task?.id)}
                         />
                       </div>
                     )
@@ -100,11 +100,11 @@ export default function TaskData({ task }: TaskDataProps) {
                     !col.hidden && (
                       <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task?.[col.field]}
                           colfield={col.field}
                           task={task}
                           getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task.id)}
+                          handleGetSubTask={() => handleGetSubTask(task?.id)}
                         />
                       </div>
                     )
@@ -124,11 +124,11 @@ export default function TaskData({ task }: TaskDataProps) {
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
-                        taskColField={task[col.field]}
+                        taskColField={task?.[col.field]}
                         colfield={col.field}
                         task={task}
                         getSubTaskId={getSubTaskId}
-                        handleGetSubTask={() => handleGetSubTask(task.id)}
+                        handleGetSubTask={() => handleGetSubTask(task?.id)}
                       />
                     </div>
                   )
@@ -144,11 +144,11 @@ export default function TaskData({ task }: TaskDataProps) {
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
-                        taskColField={task[col.field]}
+                        taskColField={task?.[col.field]}
                         colfield={col.field}
                         task={task}
                         getSubTaskId={getSubTaskId}
-                        handleGetSubTask={() => handleGetSubTask(task.id)}
+                        handleGetSubTask={() => handleGetSubTask(task?.id)}
                       />
                     </div>
                   )

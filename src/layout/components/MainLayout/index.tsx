@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-// import TopMenu from './TopMenu';
-// import MyWorkspacesSlideOver from '../../../pages/account/components/MyWorkspacesSlideOver';
 import ProgressBar from './ProgressBar';
-import UploadModal from '../../../components/UploadModal';
 import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
 import Header from './Header';
@@ -30,6 +27,7 @@ function MainLayout() {
             {/* show the extended side navigation component*/}
             {showExtendedBar && <ExpandedNav />}
             <div className="flex flex-col flex-1 w-full">
+              <AdditionalHeader />
               <Header />
               <div className="w-full h-full">
                 <Outlet />
@@ -38,10 +36,16 @@ function MainLayout() {
           </div>
         </div>
       </div>
-      <UploadModal />
-      {/* <MyWorkspacesSlideOver /> */}
     </div>
   );
 }
 
 export default MainLayout;
+
+function AdditionalHeader() {
+  return (
+    <div className="w-full h-13 border-b p-2">
+      <h1 className="text-center">Header</h1>
+    </div>
+  );
+}

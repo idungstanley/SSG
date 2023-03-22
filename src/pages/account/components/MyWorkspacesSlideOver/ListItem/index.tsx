@@ -54,7 +54,7 @@ function ListItem({ userWorkspace }: ListItemProps) {
       key={userWorkspace.id}
       title={userWorkspace.name}
       description={`Last activity ${moment(userWorkspace.last_activity_at).fromNow()}`}
-      icon={<AvatarWithInitials backgroundColour={userWorkspace.colour} initials={userWorkspace.initials} />}
+      icon={<AvatarWithInitials backgroundColour={userWorkspace.color} initials={userWorkspace.initials} />}
       button={
         <Button
           buttonStyle="white"
@@ -64,9 +64,9 @@ function ListItem({ userWorkspace }: ListItemProps) {
           label={currentWorkspaceId === userWorkspace.id ? 'Current' : 'Switch'}
           icon={
             currentWorkspaceId === userWorkspace.id ? (
-              <CheckCircleIcon className="mr-1 -ml-2 h-5 w-5 text-green-500" aria-hidden="true" />
+              <CheckCircleIcon className="w-5 h-5 mr-1 -ml-2 text-green-500" aria-hidden="true" />
             ) : (
-              <ArrowRightOnRectangleIcon className="mr-1 -ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+              <ArrowRightOnRectangleIcon className="w-5 h-5 mr-1 -ml-2 text-gray-400" aria-hidden="true" />
             )
           }
           width="w-36"

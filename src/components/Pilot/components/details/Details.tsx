@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import AddTo from '../attachments/AddTo';
+import AddTo from '../../../../pages/workspace/pilot/components/attachments/AddTo';
 import DetailsIndex from './properties/DetailsIndex';
 import DetailsSubTab from './DetailsSubTab';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import { useAppSelector } from '../../../../../../../app/hooks';
-import SectionArea from '../../../../../../../components/Pilot/components/SectionArea';
+import { useAppSelector } from '../../../../app/hooks';
+import SectionArea from '../SectionArea';
 
 export const DetailOptions = [
   {
@@ -30,7 +30,6 @@ export default function Details() {
         {showPilot && <DetailsSubTab />}
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>
-      <h1>Alpha</h1>
     </>
   );
 }

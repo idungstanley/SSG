@@ -25,8 +25,8 @@ interface itemsType {
 }
 
 interface EditTagModalProps {
-  tagId: string | null;
-  taskId: string | null;
+  tagId: string | null | undefined;
+  taskId: string | null | undefined;
 }
 
 export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {

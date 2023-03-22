@@ -14,7 +14,7 @@ export interface IWorkspaceRes {
 interface IWorkspace {
   id: string;
   name: string;
-  colour: string;
+  color: string;
   initials: string;
   last_activity_at: string;
 }

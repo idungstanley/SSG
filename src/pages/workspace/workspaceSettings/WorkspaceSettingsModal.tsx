@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import { IWorkspace } from '../../../features/account/account.interfaces';
 import { BsPinAngle, BsPinFill } from 'react-icons/bs';
+import { useAppSelector } from '../../../app/hooks';
 
 interface workspaceSettingsListType {
   id: number;
@@ -22,7 +23,7 @@ interface workspaceSettingsListType {
   handleClick: () => void;
 }
 interface WorkspaceProps {
-  colour: string;
+  color: string;
   id: string;
   initials: string;
   last_activity_at: string;
@@ -33,11 +34,12 @@ export default function WorkspaceSettingsModal() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { data: AllMyWorkSpace } = getAllWorkSpaceService();
   const { data: currentWorkspaceName } = getWorkspaceService();
   const [isSearch, setIssearch] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredResults, setFilteredResults] = useState<IWorkspace[] | undefined>([]);
+  const [filteredResults, setFilteredResults] = useState<IWorkspace[]>([]);
   const [pinnedIds, setPinnedIds] = useState<string[]>([]);
 
   const togglePin = (id: string, e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -70,9 +72,8 @@ export default function WorkspaceSettingsModal() {
     {
       id: 3,
       title: 'People',
-      handleClick: () => ({})
+      handleClick: () => navigate('settings/team-members/invites')
     },
-
     {
       id: 4,
       title: 'Analytics',
@@ -102,6 +103,9 @@ export default function WorkspaceSettingsModal() {
 
   const handleAddWorkSpace = () => {
     navigate('/onboarding');
+  };
+  const handleInvite = () => {
+    navigate('settings/team-members/invites');
   };
 
   const searchItem = (value: string) => {
@@ -158,7 +162,11 @@ export default function WorkspaceSettingsModal() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-30 w-48 px-1 pb-1 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg -right-12 ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items
+          className={` z-30 w-48 px-1 pb-1 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+            showSidebar ? 'absolute -right-12' : 'fixed left-12'
+          }`}
+        >
           <section className="flex flex-col">
             <div className="pt-3">
               <h4 className="px-4 font-bold capitalize truncate " style={{ fontSize: '11px' }}>
@@ -175,7 +183,10 @@ export default function WorkspaceSettingsModal() {
                   <p className="flex ">
                     {i.title}{' '}
                     {i.id == 3 ? (
-                      <button className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
+                      <button
+                        className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1"
+                        onClick={() => handleInvite()}
+                      >
                         <MdOutlineGroupAdd className="w-4 h-4 test-sm" /> <p>Invite</p>
                       </button>
                     ) : null}
@@ -224,7 +235,7 @@ export default function WorkspaceSettingsModal() {
                                   height="h-5"
                                   width="w-5"
                                   roundedStyle="rounded"
-                                  backgroundColour={i.colour}
+                                  backgroundColour={i.color}
                                 />
                               </p>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
@@ -260,7 +271,7 @@ export default function WorkspaceSettingsModal() {
                                   height="h-5"
                                   width="w-5"
                                   roundedStyle="rounded"
-                                  backgroundColour={i.colour}
+                                  backgroundColour={i.color}
                                 />
                               </p>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
