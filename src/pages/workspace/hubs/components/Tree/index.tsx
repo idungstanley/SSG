@@ -28,20 +28,79 @@ interface InputData {
   lists: List[];
 }
 
-function updateNestedArray(array: Hub[], updateFn: (i: Hub) => Hub, id?: string): Hub[] {
-  return !id
-    ? array
-    : array.map((item) => {
-        if (item.id === id) {
-          return updateFn(item);
-        } else if (item.children) {
-          return {
-            ...item,
-            children: updateNestedArray(item.children, updateFn, id)
-          };
-        }
-        return item;
-      });
+function updateList(existingTree: List[], updateFn: (i: List) => List, idToUpdate: string): List[] {
+  return existingTree.map((list) => {
+    if (list.id === idToUpdate) {
+      return updateFn(list);
+    } else if (list.children) {
+      return {
+        ...list,
+        children: updateList(list.children, updateFn, idToUpdate)
+      };
+    }
+
+    return list;
+  });
+}
+
+function updateWallet(
+  existingTree: Wallet[],
+  updateFn: <T extends Wallet | List>(i: T) => T,
+  idToUpdate: string
+): Wallet[] {
+  return existingTree.map((wallet) => {
+    if (wallet.id === idToUpdate) {
+      return updateFn(wallet);
+    }
+    if (wallet.children.length) {
+      return {
+        ...wallet,
+        children: updateWallet(wallet.children, updateFn, idToUpdate),
+        lists: updateList(wallet.lists, updateFn, idToUpdate)
+      };
+    }
+    if (wallet.lists.length) {
+      return {
+        ...wallet,
+        lists: updateList(wallet.lists, updateFn, idToUpdate)
+      };
+    }
+
+    return wallet;
+  });
+}
+
+function updateTree(
+  existingTree: Hub[],
+  updateFn: <T extends Hub | Wallet | List>(i: T) => T,
+  idToUpdate?: string
+): Hub[] {
+  if (!idToUpdate) {
+    return existingTree;
+  }
+
+  return existingTree.map((hub) => {
+    if (hub.id === idToUpdate) {
+      return updateFn(hub);
+    } else if (hub.children.length) {
+      return {
+        ...hub,
+        children: updateTree(hub.children, updateFn, idToUpdate)
+      };
+    } else if (hub.wallets.length) {
+      return {
+        ...hub,
+        wallets: updateWallet(hub.wallets, updateFn, idToUpdate)
+      };
+    } else if (hub.lists.length) {
+      return {
+        ...hub,
+        lists: updateList(hub.lists, updateFn, idToUpdate)
+      };
+    }
+
+    return hub;
+  });
 }
 
 function createTree(data: InputData): Hub[] {
@@ -79,9 +138,17 @@ function createTree(data: InputData): Hub[] {
   }
 
   for (const list of listsById.values()) {
-    const wallet = walletsById.get(list.parent_id as string);
-    if (wallet) {
-      wallet.lists.push(list as List);
+    if (list.hub_id) {
+      const hub = hubsById.get(list.hub_id as string);
+      if (hub) {
+        hub.lists.push(list as List);
+      }
+    }
+    if (list.parent_id) {
+      const parent = listsById.get(list.parent_id as string);
+      if (parent) {
+        parent.children.push(list as List);
+      }
     }
     if (list.wallet_id !== null) {
       const wallet = walletsById.get(list.wallet_id as string);
@@ -116,31 +183,47 @@ export default function Tree() {
 
   useEffect(() => {
     if (data) {
-      const newData: InputData = {
+      const incoming: InputData = {
         hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
         wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
         lists: data.lists ? [...data.lists.map((i) => ({ ...i, children: [] }))] : []
       };
 
       if (fetchTree) {
-        const hubTree = createTree(newData);
-        setHubs(hubTree);
+        setHubs(() => [...createTree(incoming)]);
       } else {
         setHubs((prev) =>
-          prev.length
-            ? [
-                ...updateNestedArray(
-                  prev,
-                  (item) => ({
-                    ...item,
-                    ...(newData.hubs ? { children: newData.hubs } : {}),
-                    ...(newData.wallets ? { wallets: newData.wallets } : {}),
-                    ...(newData.lists ? { lists: newData.lists } : {})
-                  }),
+          !prev.length
+            ? [...incoming.hubs]
+            : [
+                ...updateTree(
+                  hubs,
+                  (item) => {
+                    if ('wallets' in item && 'lists' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.hubs],
+                        wallets: [...incoming.wallets],
+                        lists: [...incoming.lists]
+                      };
+                    } else if ('lists' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.wallets],
+                        lists: [...incoming.lists]
+                      };
+                    } else if ('children' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.lists]
+                      };
+                    } else {
+                      return item;
+                    }
+                  },
                   hubId || walletId || listId
                 )
               ]
-            : createTree(newData)
         );
       }
     }
