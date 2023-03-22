@@ -23,7 +23,7 @@ interface workspaceSettingsListType {
   handleClick: () => void;
 }
 interface WorkspaceProps {
-  colour: string;
+  color: string;
   id: string;
   initials: string;
   last_activity_at: string;
@@ -39,7 +39,7 @@ export default function WorkspaceSettingsModal() {
   const { data: currentWorkspaceName } = getWorkspaceService();
   const [isSearch, setIssearch] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredResults, setFilteredResults] = useState<IWorkspace[] | undefined>([]);
+  const [filteredResults, setFilteredResults] = useState<IWorkspace[]>([]);
   const [pinnedIds, setPinnedIds] = useState<string[]>([]);
 
   const togglePin = (id: string, e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -235,7 +235,7 @@ export default function WorkspaceSettingsModal() {
                                   height="h-5"
                                   width="w-5"
                                   roundedStyle="rounded"
-                                  backgroundColour={i.colour}
+                                  backgroundColour={i.color}
                                 />
                               </p>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
@@ -271,7 +271,7 @@ export default function WorkspaceSettingsModal() {
                                   height="h-5"
                                   width="w-5"
                                   roundedStyle="rounded"
-                                  backgroundColour={i.colour}
+                                  backgroundColour={i.color}
                                 />
                               </p>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
