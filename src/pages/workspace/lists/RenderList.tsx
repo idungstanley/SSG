@@ -82,7 +82,7 @@ function RenderList() {
           </section>
         }
       >
-        <div className="w-full overflow-y-scroll">
+        <div className="w-full">
           {listView && (
             <div className="w-full">
               <ListFilter />
