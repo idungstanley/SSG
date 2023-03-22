@@ -39,7 +39,7 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   };
 
   const navigate = useNavigate();
-  const handleLocation = (id: string, type = 'subWallet') => {
+  const handleLocation = (id: string, type = 'subWallet2') => {
     dispatch(setShowHub(true));
     navigate(`/wallet/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
@@ -59,12 +59,16 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
             paddingLeft={paddingLeft}
             showSubWallet={showSubWallet2}
           />
-          <div>{showSubWallet2 === wallet.id ? <Sub2WalletIndex currWalId={currWalId} paddingLeft="72" /> : null}</div>
+          <div>
+            {showSubWallet2 === wallet.id ? (
+              <Sub2WalletIndex currWalId={currWalId} paddingLeft={Number(paddingLeft) + 15} />
+            ) : null}
+          </div>
         </div>
       ))}
       {subwallet?.data?.lists.map((list: dataProps) => (
         <div key={list.id}>
-          <ListItem list={list} paddingLeft="65" />
+          <ListItem list={list} paddingLeft={Number(paddingLeft) + 15} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}

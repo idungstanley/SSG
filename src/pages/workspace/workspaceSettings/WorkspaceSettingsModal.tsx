@@ -72,9 +72,8 @@ export default function WorkspaceSettingsModal() {
     {
       id: 3,
       title: 'People',
-      handleClick: () => ({})
+      handleClick: () => navigate('settings/team-members/invites')
     },
-
     {
       id: 4,
       title: 'Analytics',
@@ -104,6 +103,9 @@ export default function WorkspaceSettingsModal() {
 
   const handleAddWorkSpace = () => {
     navigate('/onboarding');
+  };
+  const handleInvite = () => {
+    navigate('settings/team-members/invites');
   };
 
   const searchItem = (value: string) => {
@@ -181,7 +183,10 @@ export default function WorkspaceSettingsModal() {
                   <p className="flex ">
                     {i.title}{' '}
                     {i.id == 3 ? (
-                      <button className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
+                      <button
+                        className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1"
+                        onClick={() => handleInvite()}
+                      >
                         <MdOutlineGroupAdd className="w-4 h-4 test-sm" /> <p>Invite</p>
                       </button>
                     ) : null}

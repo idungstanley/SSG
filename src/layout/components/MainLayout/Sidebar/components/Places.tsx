@@ -24,6 +24,8 @@ import { MdAlternateEmail } from 'react-icons/md';
 import { InboxStackIcon } from '@heroicons/react/24/solid';
 import Email from '../../../../../pages/workspace/email';
 import { BsListCheck } from 'react-icons/bs';
+import Tracker from '../../../../../pages/workspace/tracker';
+import { SiPivotaltracker } from 'react-icons/si';
 
 export const places = [
   {
@@ -64,20 +66,27 @@ export const places = [
     icon: <ClockIcon className="w-4 h-4" />
   },
   {
-    name: 'Route Planner',
+    name: 'TRACKER',
     id: 8,
+    place: <Tracker />,
+    icon: <SiPivotaltracker className="w-4 h-4" />
+  },
+
+  {
+    name: 'Route Planner',
+    id: 9,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
-    id: 9,
+    id: 10,
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
     name: 'Commerce',
-    id: 10,
+    id: 11,
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />
   }

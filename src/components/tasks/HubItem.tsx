@@ -92,8 +92,13 @@ export default function HubItem({
               </div>
               <span className="ml-4 overflow-hidden">
                 <a
-                  className="tracking-wider capitalize truncate cursor-pointer"
-                  style={{ fontSize: '12px' }}
+                  className="capitalize truncate cursor-pointer"
+                  style={{
+                    fontSize: '13px',
+                    lineHeight: '15.56px',
+                    verticalAlign: 'baseline',
+                    letterSpacing: '0.28px'
+                  }}
                   onClick={() => handleLocation(item.id, item.name)}
                 >
                   {item.name}

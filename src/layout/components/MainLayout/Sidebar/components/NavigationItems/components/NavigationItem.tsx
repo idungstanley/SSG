@@ -45,7 +45,22 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg " />
       ) : null}
       <span className="w-4 h-4">{item.icon || <img className="w-4 h-4" src={item.source} alt={item.name} />}</span>
-      {showSidebar ? <p className="ml-3 text-xs truncate">{item.name}</p> : null}
+      {showSidebar ? (
+        <p
+          className="ml-3 truncate"
+          style={{
+            fontSize: '12px',
+            lineHeight: '12px',
+            verticalAlign: 'baseline',
+            letterSpacing: 'normal',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            textDecoration: 'none solid rgb(83,87,94)'
+          }}
+        >
+          {item.name}
+        </p>
+      ) : null}
     </div>
   );
 }
