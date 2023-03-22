@@ -88,7 +88,7 @@ function RenderList() {
               <ListFilter />
             </div>
           )}
-          <div className="block p-2 mx-2 rounded-md border-l-4 border-gray-500" style={{ backgroundColor: '#e1e4e5' }}>
+          <div className="block p-2 mx-2 border-l-4 border-gray-500 rounded-md" style={{ backgroundColor: '#e1e4e5' }}>
             {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
