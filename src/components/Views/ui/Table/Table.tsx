@@ -25,7 +25,7 @@ export function Table({ heads, data, label }: TableProps) {
   const tableElement = useRef<HTMLTableElement>(null);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
-
+  const taskLength = data.length;
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const mouseMove = useCallback(
@@ -113,6 +113,7 @@ export function Table({ heads, data, label }: TableProps) {
       >
         <Head
           collapseTasks={collapseTasks}
+          taskLength={taskLength}
           onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
           label={label}
           columns={columns}

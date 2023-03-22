@@ -11,9 +11,10 @@ function PreviewSwitch() {
   const dispatch = useAppDispatch();
 
   const { mutate: onChangeKeys } = useSetUserSettingsKeys();
+  const key = 'sidebar';
 
   // request will be send only of showPreview from localStorage is null
-  const { data } = useGetUserSettingsKeys(!showPreviewFromLS);
+  const { data } = useGetUserSettingsKeys(!showPreviewFromLS, key);
 
   useEffect(() => {
     // if request sended, add values from it to localStorage and store
