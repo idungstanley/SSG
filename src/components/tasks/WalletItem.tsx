@@ -100,7 +100,15 @@ export default function WalletItem({
             className="cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
-            <p className="tracking-wider capitalize truncate cursor-pointer" style={{ fontSize: '12px' }}>
+            <p
+              className="capitalize truncate cursor-pointer"
+              style={{
+                fontSize: '13px',
+                lineHeight: '15.56px',
+                verticalAlign: 'baseline',
+                letterSpacing: '0.28px'
+              }}
+            >
               {wallet.name}
             </p>
           </div>

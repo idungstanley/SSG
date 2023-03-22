@@ -54,9 +54,16 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
           <span
             className={cl(
               showSidebar ? 'block' : 'hidden',
-              'font-semibold text-xs w-full cursor-pointer uppercase leading-3 truncate tracking-wider',
+              'w-full cursor-pointer uppercase truncate',
               isActivePlace ? 'text-black font-black' : ''
             )}
+            style={{
+              fontSize: '12px',
+              lineHeight: '20px',
+              verticalAlign: 'baseline',
+              letterSpacing: '0.28px',
+              fontWeight: '700'
+            }}
           >
             {label}
           </span>
