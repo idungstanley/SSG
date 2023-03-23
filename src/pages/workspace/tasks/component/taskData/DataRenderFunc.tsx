@@ -30,6 +30,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
+import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
 
 export interface tagItem {
   id: string;
@@ -268,7 +269,7 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <div className="">
+        <div className="ml-3">
           <div onClick={() => handleAssigneeModal(task?.id)} className="flex cursor-pointer ">
             {groupAssignee(task?.assignees)}
           </div>
@@ -321,7 +322,7 @@ export default function DataRenderFunc({
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -332,7 +333,7 @@ export default function DataRenderFunc({
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -343,7 +344,7 @@ export default function DataRenderFunc({
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -351,10 +352,10 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
+            className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-gray-400"
             style={{ marginLeft: '-30px' }}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -365,7 +366,7 @@ export default function DataRenderFunc({
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
           >
-            Todo
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName="Todo" />
           </div>
         </>
       );

@@ -15,9 +15,8 @@ export default function PageWrapper({ header, children, additional, pilotConfig 
       <main className="flex flex-col w-full h-full">
         {header}
 
-        <div className="grid grid-cols-frAuto w-full h-full">
-          {children}
-
+        <div className="grid grid-cols-frAuto w-full overflow-y-auto" style={{ maxHeight: '83vh' }}>
+          <div>{children}</div>
           <Pilot pilotConfig={pilotConfig} />
         </div>
       </main>
