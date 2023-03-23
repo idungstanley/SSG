@@ -37,7 +37,7 @@ export interface ITaskFullList {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null;
+  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
   status: string | null;
   start_date: string | null;
   end_date: string | null;
