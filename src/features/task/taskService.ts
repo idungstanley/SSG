@@ -371,14 +371,14 @@ export const GetTimeEntriesService = ({
         url: 'time-entries',
         method: 'GET',
         params: {
-          type: 'task',
+          type: trigger,
           id: taskId
         }
       });
       return data;
     },
     {
-      enabled: trigger == 'task'
+      enabled: true
     }
   );
 };
