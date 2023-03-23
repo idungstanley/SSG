@@ -32,7 +32,12 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
       (
         GroupedTaskByListID: {
           [key: string]: {
-            groupListName: string | undefined | null;
+            groupListName:
+              | string
+              | number
+              | [{ id: string; initials: string; colour: string; name: string }]
+              | null
+              | undefined;
             key?: string;
             tasksByStatus: {
               [key: string]: ImyTaskData[];
@@ -47,8 +52,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
         if (status !== null && status !== undefined) {
           if (!GroupedTaskByListID[listId]) {
             GroupedTaskByListID[listId] = {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              groupListName: currentTask?.list?.name,
+              groupListName: currentTask?.list,
               key: listId,
               tasksByStatus: {}
             };
