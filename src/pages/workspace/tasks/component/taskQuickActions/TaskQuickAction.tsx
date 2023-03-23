@@ -1,11 +1,20 @@
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
+import { setCreateTaskFromTop } from '../../../../../features/list/listSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import AddNewItem from '../taskColumn/AddNewItem';
+import { useParams } from 'react-router-dom';
 
 interface TaskQuickActionProps {
   listDetailsData: string | null | undefined;
 }
 
 export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProps) {
+  const dispatch = useAppDispatch();
+  const { createTaskFromTop } = useAppSelector((state) => state.list);
+
+  const { listId } = useParams();
+
   return (
     <>
       <div id="listTitle" className="flex justify-between items-center">
@@ -16,6 +25,9 @@ export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProp
           <p
             className="uppercase px-1 py-1 text-xs font-medium cursor-pointer hover:bg-gray-200"
             style={{ color: '#78828d', fontSize: '11px' }}
+            onClick={() => {
+              dispatch(setCreateTaskFromTop(!createTaskFromTop));
+            }}
           >
             + New Task
           </p>
@@ -54,6 +66,7 @@ export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProp
           </span>
         </div>
       </section>
+      {createTaskFromTop && <AddNewItem listId={listId} />}
     </>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
 import { Button } from '../../../../../components';
@@ -7,6 +6,7 @@ import { FaGlobeAfrica, FaTimes } from 'react-icons/fa';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTaskService } from '../../../../../features/task/taskService';
 import { CalendarIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { setCreateTaskFromTop } from '../../../../../features/list/listSlice';
 
 interface AddNewItemProps {
   listId: string | undefined;
@@ -14,14 +14,16 @@ interface AddNewItemProps {
 
 export default function AddNewItem({ listId }: AddNewItemProps) {
   const dispatch = useDispatch();
-  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  // const { addNewTaskItem } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      dispatch(setAddNewTaskItem(!addNewTaskItem));
+      dispatch(setAddNewTaskItem(false));
+      dispatch(setCreateTaskFromTop(false));
     }
   });
+
   const defaultTaskFormState = {
     name: ''
   };
@@ -84,7 +86,12 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
           roundedLeft={false}
           roundedRight={false}
         />
-        <div onClick={() => dispatch(setAddNewTaskItem(!addNewTaskItem))}>
+        <div
+          onClick={() => {
+            dispatch(setAddNewTaskItem(false));
+            dispatch(setCreateTaskFromTop(false));
+          }}
+        >
           <FaTimes className="text-xl text-gray-400 cursor-pointer" />
         </div>
       </div>

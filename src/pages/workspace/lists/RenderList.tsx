@@ -108,7 +108,6 @@ function RenderList() {
                   {paginatedTaskData?.map((task) => (
                     <div key={task?.id}>
                       {closeTaskListView && <TaskData task={task} />}
-
                       {currentParentTaskId === task?.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />
