@@ -13,7 +13,7 @@ import Toggle from './components/Toggle';
 //The WIDTH of the your window screen.
 const RELATIVE_WIDTH = window.innerWidth;
 // 15% OF YOUR WINDOW SCREEN
-export const MIN_SIDEBAR_WIDTH = 0.18 * RELATIVE_WIDTH;
+export const MIN_SIDEBAR_WIDTH = 0.15 * RELATIVE_WIDTH;
 //25% OF YOUR WINDOW SCREEN
 export const MAX_SIDEBAR_WIDTH = 0.225 * RELATIVE_WIDTH;
 
