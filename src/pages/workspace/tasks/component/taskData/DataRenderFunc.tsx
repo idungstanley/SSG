@@ -274,7 +274,7 @@ export default function DataRenderFunc({
           </div>
         </div>
         <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
+          {toggleAssignCurrentTaskId == task?.id ? <AssignTask option="task" /> : null}
         </span>
       </>
     );

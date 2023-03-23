@@ -1,7 +1,7 @@
 import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
-// import { useAppDispatch } from '../../app/hooks';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../../app/hooks';
 import {
   ImyTaskData2,
   // getTaskData,
@@ -9,7 +9,6 @@ import {
   setToggleAssignCurrentTaskId,
   setTriggerAsssignTask
 } from './taskSlice';
-import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
 
@@ -126,7 +125,24 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       enabled: false
-      // enabled: task_id != null,
+      // enabled: task_id != null
+    }
+  );
+};
+export const getOneTaskService = ({ task_id }: { task_id: string | undefined | null }) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id }],
+    async () => {
+      const data = await requestNew<ITaskRes | undefined>({
+        url: `tasks/${task_id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      // enabled: false
+      enabled: task_id != null
     }
   );
 };
@@ -495,7 +511,6 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   );
 };
 
-//Assign task to team member
 export const UseAssignTaskService = ({
   task_id,
   team_member_id,
@@ -505,7 +520,7 @@ export const UseAssignTaskService = ({
   team_member_id: string | null;
   triggerAsssignTask?: boolean;
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useQuery(
     ['task', { team_member_id: team_member_id, task_id: task_id }],
@@ -533,34 +548,65 @@ export const UseAssignTaskService = ({
   );
 };
 
-//Unassign task from team member
-export const UseUnAssignTaskService = ({
-  task_id,
-  team_member_id,
-  unAssignTrigger
+// Assign Checklist Item
+const AssignTask = ({
+  taskId,
+  team_member_id
 }: {
-  task_id: string | null | undefined;
+  taskId: string | null | undefined;
   team_member_id: string | null;
-  unAssignTrigger: boolean;
 }) => {
-  const queryClient = useQueryClient();
-  const dispatch = useDispatch();
-  return useQuery(
-    ['task', { team_member_id: team_member_id }],
-    async () => {
-      const data = await requestNew({
-        url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
-        method: 'POST'
-      });
-      return data;
-    },
-    {
-      enabled: unAssignTrigger,
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-      }
-      // enabled: !!team_member_id,
+  const request = requestNew({
+    url: '/assignee/assign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: taskId,
+      type: 'task'
     }
-  );
+  });
+  return request;
+};
+
+export const UseTaskAssignService = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+  return useMutation(AssignTask, {
+    onSuccess: () => {
+      dispatch(setToggleAssignCurrentTaskId(null));
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+};
+
+// Unassign Task
+const UnassignTask = ({
+  taskId,
+  team_member_id
+}: {
+  taskId: string | null | undefined;
+  team_member_id: string | null;
+}) => {
+  const request = requestNew({
+    url: '/assignee/unassign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: taskId,
+      type: 'task'
+    }
+  });
+  return request;
+};
+
+export const UseUnassignTask = () => {
+  const queryClient = useQueryClient();
+
+  const dispatch = useAppDispatch();
+  return useMutation(UnassignTask, {
+    onSuccess: () => {
+      dispatch(setToggleAssignCurrentTaskId(null));
+      queryClient.invalidateQueries(['task']);
+    }
+  });
 };
