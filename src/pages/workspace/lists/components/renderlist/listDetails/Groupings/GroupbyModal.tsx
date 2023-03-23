@@ -8,61 +8,57 @@ import { CgArrowsScrollV } from 'react-icons/cg';
 import { TiTags } from 'react-icons/ti';
 import { CiCalendarDate } from 'react-icons/ci';
 import { PlusIcon } from '@heroicons/react/24/solid';
+import { useDispatch } from 'react-redux';
+import { setGroupByStatus } from '../../../../../../../features/task/taskSlice';
 
 const groupings = [
   {
-    id: 0,
+    id: 'none',
     category: 'None',
-    icon: <AiOutlineStop className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <AiOutlineStop className="w-5 text-gray-700 h-5" aria-hidden="true" />
   },
   {
-    id: 1,
+    id: 'status',
     category: 'Status (default)',
-    icon: <RiCheckboxBlankFill className="w-5 text-gray-400 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <RiCheckboxBlankFill className="w-5 text-gray-400 h-5" aria-hidden="true" />
   },
   {
-    id: 2,
+    id: 'status',
     category: 'Assignee',
-    icon: <CgArrowsScrollV className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <CgArrowsScrollV className="w-5 text-gray-700 h-5" aria-hidden="true" />
   },
   {
-    id: 3,
+    id: 'status',
     category: 'Priority',
-    icon: <RiFlag2Line className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <RiFlag2Line className="w-5 text-gray-700 h-5" aria-hidden="true" />
   },
   {
-    id: 4,
+    id: 'status',
     category: 'Tags',
-    icon: <TiTags className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <TiTags className="w-5 text-gray-700 h-5" aria-hidden="true" />
   },
   {
-    id: 5,
+    id: 'status',
     category: 'Due date',
-    icon: <CiCalendarDate className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <CiCalendarDate className="w-5 text-gray-700 h-5" aria-hidden="true" />
   },
   {
-    id: 6,
+    id: 'status',
     category: 'Custom fields',
-    icon: <PlusIcon className="w-5 text-gray-700 h-5" aria-hidden="true" />,
-    handleClick: () => ({})
+    icon: <PlusIcon className="w-5 text-gray-700 h-5" aria-hidden="true" />
   }
 ];
 
 export default function GroupbyModal() {
   const [selected, setSelected] = useState(groupings[1]);
+  const dispatch = useDispatch();
 
   return (
     <div>
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative mt-1 px-4">
-          <Listbox.Button className="relative z-10 w-full cursor-pointer rounded-md p-2">
-            <div className="flex items-center gap-1 bg-blue-100 rounded p-2 text-blue-600 cursor-pointer hover:text-blue-800">
+        <div className="relative mt-1">
+          <Listbox.Button className="relative z-10 w-full cursor-pointer rounded-md ">
+            <div className="flex items-center gap-1 bg-blue-100 rounded p-1 text-blue-600 cursor-pointer hover:text-blue-800">
               <span>
                 <BsLayers />
               </span>
@@ -83,18 +79,22 @@ export default function GroupbyModal() {
                     }`
                   }
                   value={grouped}
-                  onClick={grouped.handleClick}
                 >
                   {({ selected }) => (
-                    <section className="flex item-center justify-start space-x-2">
+                    <section
+                      className="flex item-center justify-start space-x-2"
+                      onClick={() => dispatch(setGroupByStatus(grouped?.id))}
+                    >
                       <span>{grouped.icon}</span>
                       <span className={`block ${selected ? 'font-medium text-sm' : 'font-normal text-sm'}`}>
-                        {grouped.category}
+                        {grouped?.category}
                       </span>
                       {selected ? (
-                        <span className="pl-3 text-blue-600">
-                          <CheckIcon className="h-5 w-7" aria-hidden="true" />
-                        </span>
+                        <>
+                          <span className="pl-3 text-blue-600">
+                            <CheckIcon className="h-5 w-7" aria-hidden="true" />
+                          </span>
+                        </>
                       ) : null}
                     </section>
                   )}
