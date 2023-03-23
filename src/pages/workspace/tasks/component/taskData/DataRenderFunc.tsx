@@ -268,7 +268,7 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <div className="">
+        <div className="ml-3">
           <div onClick={() => handleAssigneeModal(task?.id)} className="flex cursor-pointer ">
             {groupAssignee(task?.assignees)}
           </div>
