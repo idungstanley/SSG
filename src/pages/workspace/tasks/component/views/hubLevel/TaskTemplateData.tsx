@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../features/list/listSlice';
@@ -9,17 +9,71 @@ import TaskListViews from '../listLevel/TaskListViews';
 //   KeyItemTypes,
 // } from '../../../../../features/task/interface.tasks';
 import TaskData from '../../taskData/TaskData';
-import { setAddNewTaskItem } from '../../../../../../features/task/taskSlice';
+import { ImyTaskData, setAddNewTaskItem } from '../../../../../../features/task/taskSlice';
 import AddNewItem from '../../taskColumn/AddNewItem';
 import SubTask from '../../../subtasks/create/SubTask';
 import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 import { ITaskTemplateData } from './TaskTableTemplateData';
+import { TaskDataGroupingsProps } from '../../../../../../features/task/interface.tasks';
 
 export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData) {
   const dispatch = useDispatch();
   const { createTaskFromTop, currentListId } = useAppSelector((state) => state.list);
-  // console.log(filteredTaskData);
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
+  const [taskDataGroupingsByStatus, setTaskDataGroupingsByStatus] = useState<TaskDataGroupingsProps | unknown>({});
+
+  const getTaskDataGrouping = useMemo(
+    () => Object.keys(filteredTaskData)?.flatMap((data) => filteredTaskData[data].tasks),
+    [filteredTaskData]
+  );
+
+  useEffect(() => {
+    const taskDataGroupedByStatusAndListID = getTaskDataGrouping?.reduce(
+      (
+        GroupedTaskByListID: {
+          [key: string]: {
+            groupListName: string | undefined | null;
+            key?: string;
+            tasksByStatus: {
+              [key: string]: ImyTaskData[];
+            };
+          };
+        },
+        currentTask
+      ) => {
+        const listId = currentTask.list_id;
+        const status = currentTask.status;
+
+        if (status !== null && status !== undefined) {
+          if (!GroupedTaskByListID[listId]) {
+            GroupedTaskByListID[listId] = {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              groupListName: currentTask?.list?.name,
+              key: listId,
+              tasksByStatus: {}
+            };
+          }
+
+          if (!GroupedTaskByListID[listId].tasksByStatus[status]) {
+            GroupedTaskByListID[listId].tasksByStatus[status] = [];
+          }
+
+          GroupedTaskByListID[listId].tasksByStatus[status].push(currentTask);
+        }
+
+        return GroupedTaskByListID;
+      },
+      {}
+    );
+    setTaskDataGroupingsByStatus(taskDataGroupedByStatusAndListID as TaskDataGroupingsProps | unknown);
+
+    return () => {
+      true;
+    };
+  }, [getTaskDataGrouping]);
+
+  console.log(getTaskDataGrouping);
+  console.log(taskDataGroupingsByStatus);
 
   return (
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
