@@ -3,19 +3,16 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { AvatarWithInitials } from '../../../../components';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { useAppSelector } from '../../../../app/hooks';
-import { setCurrTeamMemId, setTriggerAsssignTask } from '../../../../features/task/taskSlice';
+import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
 import { TrashIcon } from '@heroicons/react/24/outline';
-
-import {
-  UseAssignTaskService,
-  UseUnAssignTaskService,
-  getOneTaskServices
-} from '../../../../features/task/taskService';
+import { getOneTaskService, UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
 import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
+import { setToggleAssignChecklistItemId } from '../../../../features/task/checklist/checklistSlice';
+import { setToggleAssignCurrentTaskId } from '../../../../features/task/taskSlice';
 
 interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
@@ -27,33 +24,37 @@ interface option {
 }
 
 export default function AssignTask({ option, item }: option) {
+  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const [unAssignTrigger, setUnAssignTrigger] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        dispatch(setToggleAssignChecklistItemId(null));
+        dispatch(setToggleAssignCurrentTaskId(null));
+      }
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
     query: ''
   });
-  const { toggleAssignCurrentTaskId, currTeamMemberId, triggerAsssignTask } = useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
 
   const { clickedChecklistItemId } = useAppSelector((state) => state.checklist);
 
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
   const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
+  const { mutate: onTaskAssign } = UseTaskAssignService();
+  const { mutate: onTaskUnassign } = UseUnassignTask();
 
-  UseAssignTaskService({
-    task_id: toggleAssignCurrentTaskId,
-    team_member_id: currTeamMemberId,
-    triggerAsssignTask: triggerAsssignTask
-  });
-
-  UseUnAssignTaskService({
-    task_id: toggleAssignCurrentTaskId,
-    team_member_id: currTeamMemberId,
-    unAssignTrigger
-  });
-
-  const { data: getTaskAssignees } = getOneTaskServices({
+  const { data: getTaskAssignees } = getOneTaskService({
     task_id: toggleAssignCurrentTaskId
   });
 
@@ -61,9 +62,11 @@ export default function AssignTask({ option, item }: option) {
 
   const assignees = item?.assignees.map(({ id }: { id: string }) => id);
 
-  const handleUnAssign = (id: string) => {
-    dispatch(setCurrTeamMemId(id));
-    setUnAssignTrigger(true);
+  const handleAssignTask = (id: string) => {
+    onTaskAssign({
+      taskId: toggleAssignCurrentTaskId,
+      team_member_id: id
+    });
   };
 
   const handleUnAssignChecklistItem = (id: string) => {
@@ -72,8 +75,14 @@ export default function AssignTask({ option, item }: option) {
       team_member_id: id
     });
   };
+  const handleUnAssignTask = (id: string) => {
+    onTaskUnassign({
+      taskId: toggleAssignCurrentTaskId,
+      team_member_id: id
+    });
+  };
 
-  const handleAssignModal = (id: string) => {
+  const handleAssignChecklist = (id: string) => {
     onCheklistItemAssign({
       itemId: clickedChecklistItemId,
       team_member_id: id
@@ -81,9 +90,9 @@ export default function AssignTask({ option, item }: option) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={modalRef}>
       <section
-        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50"
+        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0 bottom-0"
         style={{ maxHeight: '40vh' }}
         ref={assigneeRef}
         id="assignModal"
@@ -101,7 +110,7 @@ export default function AssignTask({ option, item }: option) {
                   className="relative flex items-center space-x-2 cursor-pointer"
                   onClick={() => {
                     dispatch(setCurrTeamMemId(item.id));
-                    option === 'checklstItem' ? handleAssignModal(item.id) : dispatch(setTriggerAsssignTask(true));
+                    option === 'checklst_item' ? handleAssignChecklist(item.id) : handleAssignTask(item.id);
                   }}
                 >
                   <AvatarWithInitials
@@ -112,13 +121,13 @@ export default function AssignTask({ option, item }: option) {
                   />
                   <p className="text-xs text-black">{item.user.name.toLocaleUpperCase()}</p>
                 </div>
-                {assignees?.includes(item.id) && option === 'checklstItem' ? (
+                {assignees?.includes(item.id) && option === 'checklst_item' ? (
                   <button type="button" onClick={() => handleUnAssignChecklistItem(item.id)}>
                     <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}
-                {assignedUser?.includes(item.id) && option !== 'checklstItem' ? (
-                  <button type="button" onClick={() => handleUnAssign(item.id)}>
+                {assignedUser?.includes(item.id) && option !== 'checklst_item' ? (
+                  <button type="button" onClick={() => handleUnAssignTask(item.id)}>
                     <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
                   </button>
                 ) : null}
