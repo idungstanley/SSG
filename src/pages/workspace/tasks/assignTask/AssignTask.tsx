@@ -11,6 +11,8 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
+import { setToggleAssignChecklistItemId } from '../../../../features/task/checklist/checklistSlice';
+import { setToggleAssignCurrentTaskId } from '../../../../features/task/taskSlice';
 
 interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
@@ -22,7 +24,22 @@ interface option {
 }
 
 export default function AssignTask({ option, item }: option) {
+  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        dispatch(setToggleAssignChecklistItemId(null));
+        dispatch(setToggleAssignCurrentTaskId(null));
+      }
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const assigneeRef = useRef<HTMLInputElement>(null);
   const { data } = useGetTeamMembers({
     page: 0,
@@ -73,9 +90,9 @@ export default function AssignTask({ option, item }: option) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={modalRef}>
       <section
-        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50"
+        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0 bottom-0"
         style={{ maxHeight: '40vh' }}
         ref={assigneeRef}
         id="assignModal"
@@ -121,57 +138,4 @@ export default function AssignTask({ option, item }: option) {
       </section>
     </div>
   );
-}
-
-{
-  /* <Menu as="div" className="group relative inline-block text-left absolute">
-  <div>
-  <Transition
-    as={Fragment}
-    enter="transition ease-out duration-100"
-    enterFrom="transform opacity-0 scale-95"
-    enterTo="transform opacity-100 scale-100"
-    leave="transition ease-in duration-75"
-    leaveFrom="transform opacity-100 scale-100"
-    leaveTo="transform opacity-0 scale-95"
-  >
-    <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-      {data?.data.team_members.map((option) => (
-        <Menu.Item key={option.id}>
-          {() => (
-                       <section className="p-3 space-x-2 hover:bg-gray-300" key={item?.id}>
-              <div className="flex items-center justify-between cursor-pointer">
-                <div
-                  className="relative flex items-center space-x-2 cursor-pointer"
-                  onClick={() => {
-                    dispatch(setCurrTeamMemId(item.id));
-                    option === 'checklst_item' ? handleAssignChecklist(item.id) : handleAssignTask(item.id);
-                  }}
-                >
-                  <AvatarWithInitials
-                    initials={item.initials}
-                    backgroundColour={item.colour}
-                    height="h-5"
-                    width="w-5"
-                  />
-                  <p className="text-xs text-black">{item.user.name.toLocaleUpperCase()}</p>
-                </div>
-                {assignees?.includes(item.id) && option === 'checklst_item' ? (
-                  <button type="button" onClick={() => handleUnAssignChecklistItem(item.id)}>
-                    <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
-                  </button>
-                ) : null}
-                {assignedUser?.includes(item.id) && option !== 'checklst_item' ? (
-                  <button type="button" onClick={() => handleUnAssignTask(item.id)}>
-                    <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
-                  </button>
-                ) : null}
-              </div>
-            </section>
-          )}
-        </Menu.Item>
-      ))}
-    </Menu.Items>
-  </Transition>
-</Menu>; */
 }
