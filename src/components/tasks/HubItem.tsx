@@ -6,8 +6,8 @@ import { getSubMenu } from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
-import UploadFileModal from '../UploadFileModal';
-import { InvalidateQueryFilters } from '@tanstack/react-query';
+import { setShowUploadModal } from '../../features/general/uploadFile/uploadFileSlice';
+import UploadImage from '../ColorPalette/UploadImage';
 
 interface TaskItemProps {
   item: {
@@ -45,6 +45,9 @@ export default function HubItem({
         SubMenuType: type == 'hub' ? 'hubs' : 'subhub'
       })
     );
+  };
+  const handleImageUpload = () => {
+    dispatch(setShowUploadModal(true));
   };
 
   return (
@@ -123,15 +126,17 @@ export default function HubItem({
           <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
         </div>
       </div>
+      <UploadImage />
       {paletteDropdown === item.id ? (
         <Palette
           title="Hub Colour"
           setPaletteColor={setPaletteColor}
           bottomContent={
-            <UploadFileModal
-              endpoint={`hubs/${item.id || ''}`}
-              invalidateQuery={['hub-image'] as InvalidateQueryFilters<unknown>}
-            />
+            <div>
+              <div className="cursor-pointer" onClick={() => handleImageUpload()}>
+                Upload Image
+              </div>
+            </div>
           }
         />
       ) : null}
