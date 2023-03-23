@@ -19,6 +19,7 @@ import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask'
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import ToolTip from '../../../Tooltip';
 import TagModal from '../../../tags/TagModal';
+import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 // import { AiFillTags } from 'react-icons/ai';
 
 export interface itemProps {
@@ -168,6 +169,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                     </ToolTip>
                   </span>
                 )}
+                <Assignee />
                 {/* <div className="border-2 border-gray-400 rounded-full p-0.5"> */}
                 {/* <span className="border-2 border-slate-400 rounded-full"> */}
                 {/* <AiFillTags className="w-2 h-2" /> */}

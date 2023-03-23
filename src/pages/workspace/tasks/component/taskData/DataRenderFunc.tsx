@@ -17,7 +17,7 @@ import {
   setTaskIdForPilot,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
-import AssignTask from '../../assignTask/AssignTask';
+// import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
@@ -30,6 +30,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
+import Assignee from '../../assignTask/Assignee';
 
 export interface tagItem {
   id: string;
@@ -273,9 +274,7 @@ export default function DataRenderFunc({
             {groupAssignee(task.assignees)}
           </div>
         </div>
-        <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-        </span>
+        <span className="absolute z-30 shadow-2xl ">{toggleAssignCurrentTaskId == task.id ? <Assignee /> : null}</span>
       </>
     );
   } else if (
@@ -296,9 +295,7 @@ export default function DataRenderFunc({
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
-        <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
-        </span>
+        <span className="absolute z-30 shadow-2xl ">{toggleAssignCurrentTaskId == task.id ? <Assignee /> : null}</span>
       </>
     );
   } else if (colfield === 'tags') {
