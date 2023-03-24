@@ -279,7 +279,7 @@ export default function DataRenderFunc({
         <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask option="task" /> : null}
         </span>
-        <Assignee />
+        <Assignee itemId={task?.id} />
       </>
     );
   } else if (
@@ -303,7 +303,7 @@ export default function DataRenderFunc({
         <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
         </span>
-        <Assignee />
+        <Assignee itemId={task?.id} />
       </>
     );
   } else if (colfield === 'tags') {
