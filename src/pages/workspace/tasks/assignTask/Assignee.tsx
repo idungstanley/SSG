@@ -3,7 +3,9 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
-import { getOneTaskServices } from '../../../../features/task/taskService';
+// import { getOneTaskService } from '../../../../features/task/taskService';
+// import { useAppSelector } from '../../../../app/hooks';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 
 export default function Assignee() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -14,10 +16,17 @@ export default function Assignee() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const { data: getTaskAssignees } = getOneTaskServices({
-    task_id: toggleAssignCurrentTaskId
+  // Get Team Members
+  const { data } = useGetTeamMembers({
+    page: 0,
+    query: ''
   });
+
+  // const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
+  // const { data: getTaskAssignees } = getOneTaskService({
+  //   task_id: toggleAssignCurrentTaskId
+  // });
+  // const assignedUser = getTaskAssignees?.data?.task?.assignees?.map(({ id }: { id: string }) => id);
 
   return (
     <div>
@@ -43,9 +52,15 @@ export default function Assignee() {
           'aria-labelledby': 'basic-button'
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {data?.data.team_members.map((item) => {
+          return (
+            <MenuItem key={item.id} onClick={handleClose}>
+              {item.user.name}
+            </MenuItem>
+          );
+        })}
+        {/* <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
     </div>
   );
