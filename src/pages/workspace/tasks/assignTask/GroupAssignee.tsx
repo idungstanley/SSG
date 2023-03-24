@@ -4,13 +4,37 @@ import { AvatarWithInitials } from '../../../../components';
 
 function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour: string }] | undefined }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
-  return data && data?.length >= 3 ? (
-    <div className="flex items-center justify-center">
-      {data
-        ?.slice(0, 2)
-        .map((newData: { id: React.Key | null | undefined; initials: string; colour: string | undefined }) => (
-          <div key={newData.id} className="">
-            <span key={newData.id} className="flex items-center gap-1 justify center">
+
+  // console.log(data);
+
+  return (
+    <>
+      {data && data?.length >= 3 ? (
+        <div className="flex items-center justify-center">
+          {data
+            ?.slice(0, 2)
+            .map((newData: { id: React.Key | null | undefined; initials: string; colour: string | undefined }) => (
+              <div key={newData.id} className="">
+                <span key={newData.id} className="flex items-center gap-1 justify center">
+                  <AvatarWithInitials
+                    initials={newData.initials}
+                    backgroundColour={newData.colour}
+                    height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+                    width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+                  />
+                </span>
+              </div>
+            ))}
+          <span>
+            {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
+              <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
+            ) : null}
+          </span>
+        </div>
+      ) : (
+        data?.map((newData) => (
+          <div key={newData.id} className="flex">
+            <span key={newData.id}>
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
@@ -19,64 +43,10 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               />
             </span>
           </div>
-        ))}
-      <span>
-        {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-          <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
-        ) : null}
-      </span>
-    </div>
-  ) : (
-    data?.map((newData) => (
-      <div key={newData.id} className="flex">
-        <span key={newData.id}>
-          <AvatarWithInitials
-            initials={newData.initials}
-            backgroundColour={newData.colour}
-            height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-            width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-          />
-        </span>
-      </div>
-    ))
+        ))
+      )}
+    </>
   );
 }
 
 export default GroupAssignee;
-
-// const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-//   return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
-//     <div className="flex items-center justify-center">
-//       {data?.slice(0, 2).map((newData) => (
-//         <div key={newData.id} className="">
-//           <span key={newData.id} className="flex items-center gap-1 justify center">
-//             <AvatarWithInitials
-//               initials={newData.initials}
-//               backgroundColour={newData.colour}
-//               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-//               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-//             />
-//           </span>
-//         </div>
-//       ))}
-//       <span>
-//         {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-//           <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
-//         ) : null}
-//       </span>
-//     </div>
-//   ) : (
-//     data?.map((newData) => (
-//       <div key={newData.id} className="flex">
-//         <span key={newData.id}>
-//           <AvatarWithInitials
-//             initials={newData.initials}
-//             backgroundColour={newData.colour}
-//             height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-//             width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-//           />
-//         </span>
-//       </div>
-//     ))
-//   );
-// };

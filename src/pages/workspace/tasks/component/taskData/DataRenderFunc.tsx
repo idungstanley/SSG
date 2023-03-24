@@ -3,7 +3,7 @@ import React, { ReactNode, useState, useRef } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../../components';
+// import { AvatarWithInitials } from '../../../../../components';
 import ColorsModal from '../../../../../components/tags/ColorsModal';
 import EditTagModal from '../../../../../components/tags/EditTagModal';
 import ToolTip from '../../../../../components/Tooltip';
@@ -14,8 +14,7 @@ import {
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
-  setTaskIdForPilot,
-  setToggleAssignCurrentTaskId
+  setTaskIdForPilot
 } from '../../../../../features/task/taskSlice';
 // import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
@@ -25,14 +24,14 @@ import { setActiveItem } from '../../../../../features/workspace/workspaceSlice'
 import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
 import Assignee from '../../assignTask/Assignee';
-import AssignTask from '../../assignTask/AssignTask';
+// import AssignTask from '../../assignTask/AssignTask';
 
 export interface tagItem {
   id: string;
@@ -65,7 +64,7 @@ export default function DataRenderFunc({
 }: renderDataProps) {
   const {
     showTaskNavigation,
-    toggleAssignCurrentTaskId,
+    // toggleAssignCurrentTaskId,
     currentParentTaskId,
     comfortableView,
     comfortableViewWrap,
@@ -103,14 +102,6 @@ export default function DataRenderFunc({
     });
   };
 
-  const handleAssigneeModal = (id: string | undefined) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
-
   const handleEditTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagState(e.target.value);
   };
@@ -123,42 +114,42 @@ export default function DataRenderFunc({
     });
   };
 
-  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-    return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
-      <div className="flex items-center justify-center">
-        {data?.slice(0, 2).map((newData) => (
-          <div key={newData.id} className="">
-            <span key={newData.id} className="flex items-center gap-1 justify center">
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-              />
-            </span>
-          </div>
-        ))}
-        <span>
-          {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-            <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
-          ) : null}
-        </span>
-      </div>
-    ) : (
-      data?.map((newData) => (
-        <div key={newData.id} className="flex">
-          <span key={newData.id}>
-            <AvatarWithInitials
-              initials={newData.initials}
-              backgroundColour={newData.colour}
-              height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-              width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-            />
-          </span>
-        </div>
-      ))
-    );
-  };
+  // const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+  //   return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
+  //     <div className="flex items-center justify-center">
+  //       {data?.slice(0, 2).map((newData) => (
+  //         <div key={newData.id} className="">
+  //           <span key={newData.id} className="flex items-center gap-1 justify center">
+  //             <AvatarWithInitials
+  //               initials={newData.initials}
+  //               backgroundColour={newData.colour}
+  //               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+  //               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+  //             />
+  //           </span>
+  //         </div>
+  //       ))}
+  //       <span>
+  //         {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
+  //           <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
+  //         ) : null}
+  //       </span>
+  //     </div>
+  //   ) : (
+  //     data?.map((newData) => (
+  //       <div key={newData.id} className="flex">
+  //         <span key={newData.id}>
+  //           <AvatarWithInitials
+  //             initials={newData.initials}
+  //             backgroundColour={newData.colour}
+  //             height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+  //             width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+  //           />
+  //         </span>
+  //       </div>
+  //     ))
+  //   );
+  // };
 
   const groupTags = (arr: tagItem[]) => {
     return (
@@ -272,14 +263,11 @@ export default function DataRenderFunc({
     return (
       <>
         <div className="ml-3">
-          <div onClick={() => handleAssigneeModal(task?.id)} className="flex cursor-pointer ">
-            {groupAssignee(task?.assignees)}
-          </div>
+          <Assignee itemId={task?.id} assigneeLength={true} option="task" />
         </div>
-        <span className="absolute z-30 shadow-2xl ">
+        {/* <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask option="task" /> : null}
-        </span>
-        <Assignee itemId={task?.id} />
+        </span> */}
       </>
     );
   } else if (
@@ -294,16 +282,16 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <UserPlusIcon
+        {/* <UserPlusIcon
           className="ml-2 text-xl text-gray-400 cursor-pointer "
           style={{ width: '30px' }}
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task?.id)}
-        />
-        <span className="absolute z-30 shadow-2xl ">
+        /> */}
+        <Assignee itemId={task?.id} assigneeLength={true} option="task" />
+        {/* <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
-        </span>
-        <Assignee itemId={task?.id} />
+        </span> */}
       </>
     );
   } else if (colfield === 'tags') {
