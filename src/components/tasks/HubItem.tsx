@@ -6,6 +6,8 @@ import { getSubMenu } from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
+import UploadFileModal from '../UploadFileModal';
+import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 interface TaskItemProps {
   item: {
@@ -92,8 +94,13 @@ export default function HubItem({
               </div>
               <span className="ml-4 overflow-hidden">
                 <a
-                  className="tracking-wider capitalize truncate cursor-pointer"
-                  style={{ fontSize: '12px' }}
+                  className="capitalize truncate cursor-pointer"
+                  style={{
+                    fontSize: '13px',
+                    lineHeight: '15.56px',
+                    verticalAlign: 'baseline',
+                    letterSpacing: '0.28px'
+                  }}
                   onClick={() => handleLocation(item.id, item.name)}
                 >
                   {item.name}
@@ -116,7 +123,18 @@ export default function HubItem({
           <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
         </div>
       </div>
-      {paletteDropdown === item.id ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
+      {paletteDropdown === item.id ? (
+        <Palette
+          title="Hub Colour"
+          setPaletteColor={setPaletteColor}
+          bottomContent={
+            <UploadFileModal
+              endpoint={`hubs/${item.id || ''}`}
+              invalidateQuery={['hub-image'] as InvalidateQueryFilters<unknown>}
+            />
+          }
+        />
+      ) : null}
     </>
   );
 }

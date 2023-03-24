@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+// import { useAppDispatch } from '../../../app/hooks';
 import requestNew from '../../../app/requestNew';
 import { ITagRes } from './tag.interfaces';
 
@@ -30,7 +31,7 @@ export const UseUpdateTagService = ({
   name
 }: {
   color?: string;
-  tag_id: string | null;
+  tag_id: string | null | undefined;
   name?: string;
 }) => {
   const url = `tags/${tag_id}`;
@@ -45,7 +46,7 @@ export const UseUpdateTagService = ({
   return response;
 };
 
-export const UseDeleteTagsService = ({ trigger, tag_id }: { trigger: number; tag_id: string | null }) => {
+export const UseDeleteTagsService = ({ trigger, tag_id }: { trigger: number; tag_id: string | null | undefined }) => {
   const url = `tags/${tag_id}`;
   const response = requestNew({
     url,
@@ -63,7 +64,7 @@ export const UseAssignTagService = ({
   currentTaskIdForTag
 }: {
   tagId: string | null;
-  currentTaskIdForTag: string | null;
+  currentTaskIdForTag: string | null | undefined;
 }) => {
   const url = `tags/${tagId}/assign`;
   const response = requestNew({
@@ -83,7 +84,7 @@ export const UseUnAssignTagService = ({
   currentTaskIdForTag
 }: {
   tagId: string | null;
-  currentTaskIdForTag: string | null;
+  currentTaskIdForTag: string | null | undefined;
 }) => {
   const url = `tags/${tagId}/unassign`;
   const response = requestNew({

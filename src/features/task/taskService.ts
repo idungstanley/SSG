@@ -1,14 +1,14 @@
 import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
 import {
-  getTaskData,
+  ImyTaskData2,
+  // getTaskData,
   // getTaskData,
   setToggleAssignCurrentTaskId,
   setTriggerAsssignTask
 } from './taskSlice';
-import { useDispatch } from 'react-redux';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
 
@@ -49,8 +49,7 @@ export const UseGetFullTaskList = ({
         method: 'POST',
         params: {
           page: pageParam,
-          hub_id: itemId,
-          wallet_id: itemId
+          hub_id: itemId
         }
       });
     },
@@ -125,7 +124,24 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       enabled: false
-      // enabled: task_id != null,
+      // enabled: task_id != null
+    }
+  );
+};
+export const getOneTaskService = ({ task_id }: { task_id: string | undefined | null }) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id }],
+    async () => {
+      const data = await requestNew<ITaskRes | undefined>({
+        url: `tasks/${task_id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      // enabled: false
+      enabled: task_id != null
     }
   );
 };
@@ -151,7 +167,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
   );
 };
 
-export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null; name: string }) => {
+export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
     url,
@@ -213,34 +229,45 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 };
 
 export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
-  const dispatch = useAppDispatch();
-  // const queryClient = useQueryClient();
-  return useQuery(
+  // const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  return useInfiniteQuery(
     ['task', { listId: listId }],
-    async () => {
-      const data = await requestNew<ITaskListRes | undefined>({
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
+      return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
         method: 'POST',
         params: {
-          list_id: listId
+          list_id: listId,
+          page: pageParam
         }
       });
-      return data;
     },
     {
       onSuccess: (data) => {
-        const taskData = data?.data.tasks.map((task: { id: string }) => {
-          // queryClient.setQueryData(['task', task.id], task);
-          return { ...task };
-        });
-        dispatch(getTaskData(taskData));
-        // queryClient.invalidateQueries();
+        data.pages.map((page) =>
+          page?.data.tasks.map((task: ImyTaskData2) => queryClient.setQueryData(['task', task.id], task))
+        );
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
       }
     }
   );
 };
 
-export const getTaskListService2 = (query: { parentId: string | null }) => {
+// const taskData = data?.data.tasks.map((task: { id: string }) => {
+//   queryClient.setQueryData(['task', task.id], task);
+//   return { ...task };
+// });
+// dispatch(getTaskData(taskData));
+// queryClient.invalidateQueries();
+
+export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
   // const dispatch = useAppDispatch();
 
   // const queryClient = useQueryClient();
@@ -483,7 +510,6 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   );
 };
 
-//Assign task to team member
 export const UseAssignTaskService = ({
   task_id,
   team_member_id,
@@ -493,7 +519,7 @@ export const UseAssignTaskService = ({
   team_member_id: string | null;
   triggerAsssignTask?: boolean;
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useQuery(
     ['task', { team_member_id: team_member_id, task_id: task_id }],
@@ -521,34 +547,65 @@ export const UseAssignTaskService = ({
   );
 };
 
-//Unassign task from team member
-export const UseUnAssignTaskService = ({
-  task_id,
-  team_member_id,
-  unAssignTrigger
+// Assign Checklist Item
+const AssignTask = ({
+  taskId,
+  team_member_id
 }: {
-  task_id: string | null | undefined;
+  taskId: string | null | undefined;
   team_member_id: string | null;
-  unAssignTrigger: boolean;
 }) => {
-  const queryClient = useQueryClient();
-  const dispatch = useDispatch();
-  return useQuery(
-    ['task', { team_member_id: team_member_id }],
-    async () => {
-      const data = await requestNew({
-        url: `at/tasks/${task_id}/unassign-member/${team_member_id}`,
-        method: 'POST'
-      });
-      return data;
-    },
-    {
-      enabled: unAssignTrigger,
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-      }
-      // enabled: !!team_member_id,
+  const request = requestNew({
+    url: '/assignee/assign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: taskId,
+      type: 'task'
     }
-  );
+  });
+  return request;
+};
+
+export const UseTaskAssignService = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+  return useMutation(AssignTask, {
+    onSuccess: () => {
+      dispatch(setToggleAssignCurrentTaskId(null));
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+};
+
+// Unassign Task
+const UnassignTask = ({
+  taskId,
+  team_member_id
+}: {
+  taskId: string | null | undefined;
+  team_member_id: string | null;
+}) => {
+  const request = requestNew({
+    url: '/assignee/unassign',
+    method: 'POST',
+    params: {
+      team_member_id: team_member_id,
+      id: taskId,
+      type: 'task'
+    }
+  });
+  return request;
+};
+
+export const UseUnassignTask = () => {
+  const queryClient = useQueryClient();
+
+  const dispatch = useAppDispatch();
+  return useMutation(UnassignTask, {
+    onSuccess: () => {
+      dispatch(setToggleAssignCurrentTaskId(null));
+      queryClient.invalidateQueries(['task']);
+    }
+  });
 };

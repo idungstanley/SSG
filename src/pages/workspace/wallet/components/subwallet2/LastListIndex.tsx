@@ -7,9 +7,10 @@ import ListItem from '../../../../../components/tasks/ListItem';
 
 interface LastListIndexProps {
   finalParentId: string;
+  paddingLeft?: string | number;
 }
 
-export default function LastListIndex({ finalParentId }: LastListIndexProps) {
+export default function LastListIndex({ finalParentId, paddingLeft }: LastListIndexProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { toggleArchiveList } = useAppSelector((state) => state.list);
 
@@ -21,7 +22,7 @@ export default function LastListIndex({ finalParentId }: LastListIndexProps) {
     <section>
       {dataList?.data.lists.map((list: dataProps) => (
         <div key={list.id}>
-          <ListItem paddingLeft="100" list={list} />
+          <ListItem paddingLeft={Number(paddingLeft) + 15} list={list} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}

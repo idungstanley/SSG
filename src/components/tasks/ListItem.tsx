@@ -11,7 +11,7 @@ interface ListItemProps {
     id: string;
     name: string;
   };
-  paddingLeft: string;
+  paddingLeft: string | number;
 }
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -55,12 +55,17 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       style={{ paddingLeft: `${paddingLeft}px` }}
     >
       {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
-      <div className="flex items-center space-x-1 tracking-wider capitalize truncate cursor-pointer">
+      <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
         <ListIcon />
         <div
           onClick={() => handleListLocation(list.id, list.name)}
-          style={{ fontSize: '12px' }}
-          className="pl-4 tracking-wider capitalize truncate cursor-pointer"
+          style={{
+            fontSize: '13px',
+            lineHeight: '15.56px',
+            verticalAlign: 'baseline',
+            letterSpacing: '0.28px'
+          }}
+          className="pl-4 capitalize truncate cursor-pointer"
         >
           {list.name}
         </div>

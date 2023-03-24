@@ -10,8 +10,8 @@ function WorkSpaceSelection() {
 
   const { data: workSpaceData, status } = getWorkspaceService();
 
-  const workspaceName = workSpaceData?.data.workspace.name;
-
+  const workspaceName = workSpaceData?.data?.workspace.name;
+  const workspaceColor = workSpaceData?.data?.workspace.color as string;
   if (status == 'loading') {
     return <Spinner size={10} color={'#6B7280'} />;
   }
@@ -36,7 +36,7 @@ function WorkSpaceSelection() {
                 }
                 height="h-5"
                 width="w-5"
-                backgroundColour="#34C6BE"
+                backgroundColour={workspaceColor}
                 roundedStyle="rounded"
                 textColor="black"
               />
@@ -50,7 +50,7 @@ function WorkSpaceSelection() {
       ) : (
         <p
           className="flex items-center justify-center flex-1 w-full p-1 truncate rounded grow"
-          style={{ fontSize: '5px', backgroundColor: '#D2AAF0' }}
+          style={{ fontSize: '5px', backgroundColor: workspaceColor }}
         >
           {workspaceName}
         </p>

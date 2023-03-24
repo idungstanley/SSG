@@ -73,7 +73,7 @@ interface TaskState {
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
-  getSubTaskId: null | string;
+  getSubTaskId: null | string | undefined;
   currentParentSubTaskId: null | string;
   currentParentSubTaskId2: null | string;
   currentParentSubTaskId3: null | string;
@@ -87,6 +87,7 @@ interface TaskState {
   currentTaskStatusId: string | null;
   currentTaskPriorityId: string | null | undefined;
   triggerAsssignTask: boolean;
+  groupByStatus: string | null;
 }
 
 const initialState: TaskState = {
@@ -124,7 +125,8 @@ const initialState: TaskState = {
   updateStatusModalIdForPilot: null,
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
-  triggerAsssignTask: false
+  triggerAsssignTask: false,
+  groupByStatus: 'status'
 };
 
 export const taskSlice = createSlice({
@@ -227,7 +229,7 @@ export const taskSlice = createSlice({
     setCurrentParentTaskId(state, action: PayloadAction<string | null>) {
       state.currentParentTaskId = action.payload;
     },
-    setGetSubTaskId(state, action: PayloadAction<null | string>) {
+    setGetSubTaskId(state, action: PayloadAction<null | string | undefined>) {
       state.getSubTaskId = action.payload;
     },
     setCurrentParentSubTaskId(state, action: PayloadAction<null | string>) {
@@ -268,6 +270,9 @@ export const taskSlice = createSlice({
     checkIfTask: (state) => state,
     setTriggerAsssignTask(state, action: PayloadAction<boolean>) {
       state.triggerAsssignTask = action.payload;
+    },
+    setGroupByStatus(state, action: PayloadAction<string | null>) {
+      state.groupByStatus = action.payload;
     }
   }
 });
@@ -304,6 +309,7 @@ export const {
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
-  setTriggerAsssignTask
+  setTriggerAsssignTask,
+  setGroupByStatus
 } = taskSlice.actions;
 export default taskSlice.reducer;

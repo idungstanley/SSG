@@ -2,6 +2,7 @@ export interface IWorkspaceRes {
   data: {
     workspace: {
       id: string;
+      color: string;
       name: string | undefined;
       company_size: {
         key: string;
@@ -14,7 +15,7 @@ export interface IWorkspaceRes {
 interface IWorkspace {
   id: string;
   name: string;
-  colour: string;
+  color: string;
   initials: string;
   last_activity_at: string;
 }
