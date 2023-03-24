@@ -110,7 +110,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
 
   return status === 'success' ? (
     <ul className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}>
-      {items?.map((i: { id: string; name: string }) => (
+      {items?.map((i: { id: string; name: string; path?: string | null }) => (
         <li key={i.id} className="relative flex flex-col">
           <HubItem
             item={i}

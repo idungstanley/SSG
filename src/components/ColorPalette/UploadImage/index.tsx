@@ -2,12 +2,13 @@ import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
+import Webcam from '@uppy/webcam';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAppSelector } from '../../../app/hooks';
-import { setShowUploadModal } from '../../../features/general/uploadFile/uploadFileSlice';
+import { setShowUploadImage } from '../../../features/account/accountSlice';
 
 interface UploadFileModalProps {
   invalidateQuery?: InvalidateQueryFilters<unknown>;
@@ -18,24 +19,43 @@ export default function UploadImage({ invalidateQuery, endpoint }: UploadFileMod
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
-  const { showUploadModal } = useAppSelector((state) => state.upload);
+  const { showUploadImage } = useAppSelector((state) => state.account);
 
   // init
   const uppy = useUppy(() =>
     new Uppy({
       debug: true,
       autoProceed: true,
-      meta: {}
-    }).use(XHRUpload, {
-      endpoint: '',
-      bundle: false,
-      headers: currentWorkspaceId
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-            current_workspace_id: currentWorkspaceId
-          }
-        : undefined
+      meta: {},
+      restrictions: {
+        maxFileSize: null,
+        minFileSize: null,
+        maxTotalFileSize: null,
+        maxNumberOfFiles: 1,
+        minNumberOfFiles: null,
+        allowedFileTypes: ['image/*']
+      }
     })
+      .use(XHRUpload, {
+        metaFields: ['image', 'path'],
+        endpoint: '',
+        bundle: false,
+        headers: currentWorkspaceId
+          ? {
+              Authorization: `Bearer ${accessToken}`,
+              current_workspace_id: currentWorkspaceId
+            }
+          : undefined,
+        method: 'POST',
+        formData: true,
+        fieldName: 'image'
+      })
+      .use(Webcam, {
+        mirror: true,
+        facingMode: 'user',
+        showRecordingLength: false,
+        modes: ['picture']
+      })
   );
 
   const { xhrUpload } = uppy.getState();
@@ -65,8 +85,8 @@ export default function UploadImage({ invalidateQuery, endpoint }: UploadFileMod
       uppy={uppy}
       closeModalOnClickOutside
       proudlyDisplayPoweredByUppy={false}
-      open={showUploadModal}
-      onRequestClose={() => dispatch(setShowUploadModal(false))}
+      open={showUploadImage}
+      onRequestClose={() => dispatch(setShowUploadImage(false))}
       showRemoveButtonAfterComplete={false}
       animateOpenClose={true}
       plugins={['Webcam']}
