@@ -7,10 +7,13 @@ import Header from './Header';
 import { useAppSelector } from '../../../app/hooks';
 import ExpandedNav from './extendedNavigation/ExpandedNav';
 import OpenExtBtn from './extendedNavigation/components/extendBtn/OpenExtBtn';
+import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
+import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function MainLayout() {
   const [allowSelect, setAllowSelect] = useState(true);
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
 
   return (
     <div className={cl('h-full flex flex-col', !allowSelect && 'select-none')}>
@@ -32,6 +35,10 @@ function MainLayout() {
               <div className="w-full h-full">
                 <Outlet />
               </div>
+              <AddFileModal
+                endpoint={`attachments/${currentTaskIdForPilot || ''}?type=task`}
+                invalidateQuery={['tasks'] as InvalidateQueryFilters<unknown>}
+              />
             </div>
           </div>
         </div>

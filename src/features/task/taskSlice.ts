@@ -88,6 +88,7 @@ interface TaskState {
   currentTaskPriorityId: string | null | undefined;
   triggerAsssignTask: boolean;
   groupByStatus: string | null;
+  showTaskUploadModal: boolean;
 }
 
 const initialState: TaskState = {
@@ -126,7 +127,8 @@ const initialState: TaskState = {
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
   triggerAsssignTask: false,
-  groupByStatus: 'status'
+  groupByStatus: 'status',
+  showTaskUploadModal: false
 };
 
 export const taskSlice = createSlice({
@@ -273,6 +275,9 @@ export const taskSlice = createSlice({
     },
     setGroupByStatus(state, action: PayloadAction<string | null>) {
       state.groupByStatus = action.payload;
+    },
+    setShowTaskUploadModal(state, action: PayloadAction<boolean>) {
+      state.showTaskUploadModal = action.payload;
     }
   }
 });
@@ -310,6 +315,7 @@ export const {
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
   setTriggerAsssignTask,
-  setGroupByStatus
+  setGroupByStatus,
+  setShowTaskUploadModal
 } = taskSlice.actions;
 export default taskSlice.reducer;
