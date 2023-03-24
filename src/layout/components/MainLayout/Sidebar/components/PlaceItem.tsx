@@ -47,7 +47,7 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
         <div
           className={cl(
             'flex gap-4 items-center content-center self-center',
-            isActivePlace ? 'justify-center text-black font-bold' : ''
+            isActivePlace ? 'justify-center text-black font-extrabold' : ''
           )}
         >
           <span className="flex items-center w-6 h-6 hover:text-green-400">{icon}</span>
@@ -58,10 +58,10 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
               isActivePlace ? 'text-black font-black' : ''
             )}
             style={{
-              fontSize: '12px',
-              lineHeight: '20px',
+              fontSize: '13px',
+              lineHeight: '18px',
               verticalAlign: 'baseline',
-              letterSpacing: '0.28px',
+              letterSpacing: '0.65px',
               fontWeight: '700'
             }}
           >

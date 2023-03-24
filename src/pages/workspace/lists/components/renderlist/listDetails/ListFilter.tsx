@@ -6,7 +6,7 @@ import { MdFilterList, MdOutlinePersonOutline } from 'react-icons/md';
 import { RxDividerVertical } from 'react-icons/rx';
 import { TbSubtask } from 'react-icons/tb';
 import { VscEllipsis } from 'react-icons/vsc';
-import GroupbyModal from './GroupbyModal';
+import GroupbyModal from './Groupings/GroupbyModal';
 
 export default function ListFilter() {
   return (
@@ -26,7 +26,7 @@ export default function ListFilter() {
           <RxDividerVertical className=" " />
         </div>
       </div>
-      <div className="flex gap-3 items-center  text-xs font-bold">
+      <div className="flex gap-2 items-center  text-xs font-bold">
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
           <span>
             <MdFilterList />
@@ -34,12 +34,6 @@ export default function ListFilter() {
           filter
         </p>
         <span>
-          {/* <p className="flex items-center gap-1 bg-blue-100 p-1 rounded  text-blue-600 cursor-pointer hover:text-blue-800">
-            <span>
-              <BsLayers />
-            </span>
-            Group by: Status
-          </p> */}
           <GroupbyModal />
         </span>
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">

@@ -11,7 +11,7 @@ import { columnsHead } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 
-export default function TaskListViews({ taskLength }: { taskLength?: number }) {
+export default function TaskListViews({ taskLength, status }: { taskLength?: number; status?: string }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
@@ -42,7 +42,9 @@ export default function TaskListViews({ taskLength }: { taskLength?: number }) {
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
               <div className="group flex items-center">
-                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2">OPEN</span>
+                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain">
+                  {status ? status : 'To Do'}
+                </span>
               </div>
               <span className="text-xs text-gray-400 ml-3 mr-px font-bold">{taskLength}</span>
             </div>
