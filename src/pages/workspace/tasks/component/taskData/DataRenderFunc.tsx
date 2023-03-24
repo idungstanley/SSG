@@ -31,6 +31,7 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import Assignee from '../../assignTask/Assignee';
+import AssignTask from '../../assignTask/AssignTask';
 
 export interface tagItem {
   id: string;
@@ -274,7 +275,10 @@ export default function DataRenderFunc({
             {groupAssignee(task.assignees)}
           </div>
         </div>
-        <span className="absolute z-30 shadow-2xl ">{toggleAssignCurrentTaskId == task.id ? <Assignee /> : null}</span>
+        <span className="absolute z-30 shadow-2xl ">
+          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+        </span>
+        <Assignee />
       </>
     );
   } else if (
@@ -295,7 +299,10 @@ export default function DataRenderFunc({
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task.id)}
         />
-        <span className="absolute z-30 shadow-2xl ">{toggleAssignCurrentTaskId == task.id ? <Assignee /> : null}</span>
+        <span className="absolute z-30 shadow-2xl ">
+          {toggleAssignCurrentTaskId == task.id ? <AssignTask /> : null}
+        </span>
+        <Assignee />
       </>
     );
   } else if (colfield === 'tags') {

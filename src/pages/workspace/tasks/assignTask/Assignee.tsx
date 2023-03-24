@@ -2,6 +2,8 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { UserPlusIcon } from '@heroicons/react/24/solid';
+import { getOneTaskServices } from '../../../../features/task/taskService';
 
 export default function Assignee() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -13,16 +15,24 @@ export default function Assignee() {
     setAnchorEl(null);
   };
 
+  const { data: getTaskAssignees } = getOneTaskServices({
+    task_id: toggleAssignCurrentTaskId
+  });
+
   return (
     <div>
       <Button
         id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
+        // aria-controls={open ? 'basic-menu' : undefined}
+        // aria-haspopup="true"
+        // aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        Dashboard
+        <UserPlusIcon
+          className="ml-2 text-xl text-gray-400 cursor-pointer "
+          style={{ width: '30px' }}
+          aria-hidden="true"
+        />
       </Button>
       <Menu
         id="basic-menu"
