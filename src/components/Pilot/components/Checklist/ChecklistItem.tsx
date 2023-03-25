@@ -17,13 +17,11 @@ import {
 } from '../../../../features/task/checklist/checklistSlice';
 // import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask';
 // import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import ToolTip from '../../../Tooltip';
+// import ToolTip from '../../../Tooltip';
 import TagModal from '../../../tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-// import Tags from './Tags';
-// import { AiFillTags } from 'react-icons/ai';
 
 export interface checkListItemProps {
   Item: ICheckListItems[];
@@ -111,7 +109,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
       {Item.map((item) => {
         return (
           <div key={item.id} className="bg-white p-1 mb-0.5">
-            <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5">
+            <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5 h-auto">
               {/* <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
                   <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
                 </span> */}
@@ -134,37 +132,15 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
               >
                 {item.name}
               </div>
-              {item.assignees.length ? (
-                <span
-                  className="flex mx-4 cursor-pointer z-50"
-                  onClick={() => {
-                    dispatch(setToggleAssignChecklistItemId(item.id));
-                    dispatch(setClickChecklistId(checklistId));
-                    dispatch(setClickChecklistItemId(item.id));
-                  }}
-                >
-                  {/* {groupAssignee(item.assignees)} */}
-                  <Assignee itemId={item.id} assigneeLength={true} option="checklist" assigneeChecklistItem={item} />
-                </span>
-              ) : (
-                <span className="mx-4 cursor-pointer">
-                  <ToolTip tooltip="Assign Team member">
-                    <Assignee itemId={item.id} assigneeLength={false} option="checklist" />
-                    {/* <CgProfile
-                      onClick={() => {
-                        dispatch(setToggleAssignChecklistItemId(item.id));
-                        dispatch(setClickChecklistId(checklistId));
-                        dispatch(setClickChecklistItemId(item.id));
-                      }}
-                    /> */}
-                  </ToolTip>
-                </span>
-              )}
-              {/* <div className="border-2 border-gray-400 rounded-full p-0.5"> */}
-              {/* <span className="border-2 border-slate-400 rounded-full"> */}
-              {/* <AiFillTags className="w-2 h-2" /> */}
-              {/* </span> */}
-              {/* </div> */}
+              <div
+                onClick={() => {
+                  dispatch(setToggleAssignChecklistItemId(item.id));
+                  dispatch(setClickChecklistId(checklistId));
+                  dispatch(setClickChecklistItemId(item.id));
+                }}
+              >
+                <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
+              </div>
               <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
                 <TagModal />
               </span>
@@ -176,11 +152,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   focus={focusItem}
                 />
               </div>
-              {/* {toggleAssignChecklistItemId == item.id ? (
-                <span className="absolute shadow-2xl z-30 ml-20 mt-16">
-                  <Assignee itemId={item.id} assigneeLength={true} option="checklist" />{' '}
-                </span>
-              ) : null} */}
             </div>
           </div>
         );

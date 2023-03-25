@@ -5,8 +5,6 @@ import { AvatarWithInitials } from '../../../../components';
 function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour: string }] | undefined }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
 
-  // console.log(data);
-
   return (
     <>
       {data && data?.length >= 3 ? (
@@ -18,7 +16,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                 <span key={newData.id} className="flex items-center gap-1 justify center">
                   <AvatarWithInitials
                     initials={newData.initials}
-                    backgroundColour={newData.colour}
+                    backgroundColour={'red'}
                     height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
                     width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
                   />
@@ -37,7 +35,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
             <span key={newData.id}>
               <AvatarWithInitials
                 initials={newData.initials}
-                backgroundColour={newData.colour}
+                backgroundColour={'red'}
                 height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
                 width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
               />

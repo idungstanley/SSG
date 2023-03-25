@@ -250,48 +250,12 @@ export default function DataRenderFunc({
     dispatch(setCurrentTaskPriorityId(id));
   };
 
-  if (
-    colfield === 'assignees' &&
-    (
-      taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>
-    ).length !== 0
-  ) {
+  if (colfield === 'assignees') {
     return (
       <>
         <div className="ml-3">
-          <Assignee itemId={task?.id} assigneeLength={true} option="task" />
+          <Assignee task={task} itemId={task?.id} option="task" />
         </div>
-        {/* <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task?.id ? <AssignTask option="task" /> : null}
-        </span> */}
-      </>
-    );
-  } else if (
-    colfield === 'assignees' &&
-    (
-      taskColField as Array<{
-        id: string;
-        initials: string;
-        colour: string;
-      }>
-    ).length === 0
-  ) {
-    return (
-      <>
-        {/* <UserPlusIcon
-          className="ml-2 text-xl text-gray-400 cursor-pointer "
-          style={{ width: '30px' }}
-          aria-hidden="true"
-          onClick={() => handleAssigneeModal(task?.id)}
-        /> */}
-        <Assignee itemId={task?.id} assigneeLength={true} option="task" />
-        {/* <span className="absolute z-30 shadow-2xl ">
-          {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
-        </span> */}
       </>
     );
   } else if (colfield === 'tags') {
