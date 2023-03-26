@@ -16,7 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Timer from 'react-timer-wrapper';
 import moment from 'moment';
 import Timecode from 'react-timecode';
-import { getOneTaskServices, createTimeEntriesService } from '../../../../features/task/taskService';
+import { createTimeEntriesService, getOneTaskServices } from '../../../../features/task/taskService';
 import Watcher from '../watchers/index';
 
 function RenderTaskModal() {

@@ -15,12 +15,14 @@ import {
   setCurrentTaskStatusId,
   setShowTaskNavigation,
   setTaskIdForPilot,
+  // setTaskStatus,
   setToggleAssignCurrentTaskId
 } from '../../../../../features/task/taskSlice';
 import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
+
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
