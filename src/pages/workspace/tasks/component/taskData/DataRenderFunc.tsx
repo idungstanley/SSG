@@ -426,7 +426,7 @@ export default function DataRenderFunc({
               onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
               className={`${
                 comfortableView
-                  ? 'text-sm whitespace-nowrap'
+                  ? 'text-sm whitespace-nowrap s'
                   : comfortableViewWrap
                   ? 'text-sm'
                   : CompactView
