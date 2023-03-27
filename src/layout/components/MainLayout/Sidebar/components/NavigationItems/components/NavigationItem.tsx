@@ -49,7 +49,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         <p
           className="ml-3 truncate"
           style={{
-            fontSize: '12px',
+            fontSize: '13px',
             lineHeight: '12px',
             verticalAlign: 'baseline',
             letterSpacing: 'normal',

@@ -82,13 +82,16 @@ function RenderList() {
           </section>
         }
       >
-        <div className="w-full overflow-y-scroll">
+        <div className="w-full">
           {listView && (
             <div className="w-full">
               <ListFilter />
             </div>
           )}
-          <div className="block p-2 mx-2 rounded-md border-l-4 border-gray-500" style={{ backgroundColor: '#e1e4e5' }}>
+          <div
+            className="block relative p-2 mx-2 border-l-4 border-gray-500 rounded-md"
+            style={{ backgroundColor: '#e1e4e5' }}
+          >
             {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
@@ -108,7 +111,6 @@ function RenderList() {
                   {paginatedTaskData?.map((task) => (
                     <div key={task?.id}>
                       {closeTaskListView && <TaskData task={task} />}
-
                       {currentParentTaskId === task?.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />

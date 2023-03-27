@@ -49,8 +49,7 @@ export const UseGetFullTaskList = ({
         method: 'POST',
         params: {
           page: pageParam,
-          hub_id: itemId,
-          wallet_id: itemId
+          hub_id: itemId
         }
       });
     },

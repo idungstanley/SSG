@@ -5,7 +5,7 @@ import {
   UseUpdateChecklistItemService
 } from '../../../../features/task/checklist/checklistService';
 // import { GrDrag } from "react-icons/gr";
-import { CgProfile } from 'react-icons/cg';
+// import { CgProfile } from 'react-icons/cg';
 import ChecklistModal from './ChecklistModal';
 import { lessOptions } from './ModalOptions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -15,12 +15,13 @@ import {
   setToggleAssignChecklistItemId,
   setTriggerItemtUpdate
 } from '../../../../features/task/checklist/checklistSlice';
-import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask';
-import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+// import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask';
+// import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import ToolTip from '../../../Tooltip';
 import TagModal from '../../../tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
+import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 // import Tags from './Tags';
 // import { AiFillTags } from 'react-icons/ai';
 
@@ -38,9 +39,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const [done, setDone] = useState<number>(0);
   const [editName, setEditName] = useState<string | undefined>('');
 
-  const { triggerItemUpdate, toggleAssignChecklistItemId, showChecklistItemInput, clickedChecklistId } = useAppSelector(
-    (state) => state.checklist
-  );
+  const { triggerItemUpdate, showChecklistItemInput, clickedChecklistId } = useAppSelector((state) => state.checklist);
 
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: () => {
@@ -82,15 +81,15 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     inputRef.current?.focus();
   };
 
-  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-    return data?.map((newData) => (
-      <div key={newData.id} className="">
-        <span key={newData.id}>
-          <AvatarWithInitials initials={newData.initials} backgroundColour={newData.colour} height="h-5" width="w-5" />
-        </span>
-      </div>
-    ));
-  };
+  // const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+  //   return data?.map((newData) => (
+  //     <div key={newData.id} className="">
+  //       <span key={newData.id}>
+  //         <AvatarWithInitials initials={newData.initials} backgroundColour={newData.colour} height="h-5" width="w-5" />
+  //       </span>
+  //     </div>
+  //   ));
+  // };
 
   return (
     <div>
@@ -144,18 +143,20 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                     dispatch(setClickChecklistItemId(item.id));
                   }}
                 >
-                  {groupAssignee(item.assignees)}
+                  {/* {groupAssignee(item.assignees)} */}
+                  <Assignee itemId={item.id} assigneeLength={true} option="checklist" assigneeChecklistItem={item} />
                 </span>
               ) : (
                 <span className="mx-4 cursor-pointer">
                   <ToolTip tooltip="Assign Team member">
-                    <CgProfile
+                    <Assignee itemId={item.id} assigneeLength={false} option="checklist" />
+                    {/* <CgProfile
                       onClick={() => {
                         dispatch(setToggleAssignChecklistItemId(item.id));
                         dispatch(setClickChecklistId(checklistId));
                         dispatch(setClickChecklistItemId(item.id));
                       }}
-                    />
+                    /> */}
                   </ToolTip>
                 </span>
               )}
@@ -175,11 +176,11 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   focus={focusItem}
                 />
               </div>
-              {toggleAssignChecklistItemId == item.id ? (
+              {/* {toggleAssignChecklistItemId == item.id ? (
                 <span className="absolute shadow-2xl z-30 ml-20 mt-16">
-                  <AssignTask option="checklst_item" item={item} />
+                  <Assignee itemId={item.id} assigneeLength={true} option="checklist" />{' '}
                 </span>
-              ) : null}
+              ) : null} */}
             </div>
           </div>
         );

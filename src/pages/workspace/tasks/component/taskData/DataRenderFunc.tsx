@@ -3,7 +3,7 @@ import React, { ReactNode, useState, useRef } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../../components';
+// import { AvatarWithInitials } from '../../../../../components';
 import ColorsModal from '../../../../../components/tags/ColorsModal';
 import EditTagModal from '../../../../../components/tags/EditTagModal';
 import ToolTip from '../../../../../components/Tooltip';
@@ -14,10 +14,9 @@ import {
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
   setShowTaskNavigation,
-  setTaskIdForPilot,
-  setToggleAssignCurrentTaskId
+  setTaskIdForPilot
 } from '../../../../../features/task/taskSlice';
-import AssignTask from '../../assignTask/AssignTask';
+// import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
@@ -25,11 +24,14 @@ import { setActiveItem } from '../../../../../features/workspace/workspaceSlice'
 import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
-import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/tagSlice';
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
+import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
+import Assignee from '../../assignTask/Assignee';
+// import AssignTask from '../../assignTask/AssignTask';
 
 export interface tagItem {
   id: string;
@@ -62,7 +64,7 @@ export default function DataRenderFunc({
 }: renderDataProps) {
   const {
     showTaskNavigation,
-    toggleAssignCurrentTaskId,
+    // toggleAssignCurrentTaskId,
     currentParentTaskId,
     comfortableView,
     comfortableViewWrap,
@@ -100,14 +102,6 @@ export default function DataRenderFunc({
     });
   };
 
-  const handleAssigneeModal = (id: string | undefined) => {
-    if (toggleAssignCurrentTaskId == id) {
-      dispatch(setToggleAssignCurrentTaskId(null));
-    } else {
-      dispatch(setToggleAssignCurrentTaskId(id));
-    }
-  };
-
   const handleEditTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagState(e.target.value);
   };
@@ -120,42 +114,42 @@ export default function DataRenderFunc({
     });
   };
 
-  const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-    return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
-      <div className="flex items-center justify-center">
-        {data?.slice(0, 2).map((newData) => (
-          <div key={newData.id} className="">
-            <span key={newData.id} className="flex items-center gap-1 justify center">
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-              />
-            </span>
-          </div>
-        ))}
-        <span>
-          {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-            <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
-          ) : null}
-        </span>
-      </div>
-    ) : (
-      data?.map((newData) => (
-        <div key={newData.id} className="flex">
-          <span key={newData.id}>
-            <AvatarWithInitials
-              initials={newData.initials}
-              backgroundColour={newData.colour}
-              height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-              width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-            />
-          </span>
-        </div>
-      ))
-    );
-  };
+  // const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
+  //   return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
+  //     <div className="flex items-center justify-center">
+  //       {data?.slice(0, 2).map((newData) => (
+  //         <div key={newData.id} className="">
+  //           <span key={newData.id} className="flex items-center gap-1 justify center">
+  //             <AvatarWithInitials
+  //               initials={newData.initials}
+  //               backgroundColour={newData.colour}
+  //               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+  //               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+  //             />
+  //           </span>
+  //         </div>
+  //       ))}
+  //       <span>
+  //         {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
+  //           <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
+  //         ) : null}
+  //       </span>
+  //     </div>
+  //   ) : (
+  //     data?.map((newData) => (
+  //       <div key={newData.id} className="flex">
+  //         <span key={newData.id}>
+  //           <AvatarWithInitials
+  //             initials={newData.initials}
+  //             backgroundColour={newData.colour}
+  //             height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
+  //             width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
+  //           />
+  //         </span>
+  //       </div>
+  //     ))
+  //   );
+  // };
 
   const groupTags = (arr: tagItem[]) => {
     return (
@@ -268,14 +262,12 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <div className="">
-          <div onClick={() => handleAssigneeModal(task?.id)} className="flex cursor-pointer ">
-            {groupAssignee(task?.assignees)}
-          </div>
+        <div className="ml-3">
+          <Assignee itemId={task?.id} assigneeLength={true} option="task" />
         </div>
-        <span className="absolute z-30 shadow-2xl ">
+        {/* <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask option="task" /> : null}
-        </span>
+        </span> */}
       </>
     );
   } else if (
@@ -290,15 +282,16 @@ export default function DataRenderFunc({
   ) {
     return (
       <>
-        <UserPlusIcon
+        {/* <UserPlusIcon
           className="ml-2 text-xl text-gray-400 cursor-pointer "
           style={{ width: '30px' }}
           aria-hidden="true"
           onClick={() => handleAssigneeModal(task?.id)}
-        />
-        <span className="absolute z-30 shadow-2xl ">
+        /> */}
+        <Assignee itemId={task?.id} assigneeLength={true} option="task" />
+        {/* <span className="absolute z-30 shadow-2xl ">
           {toggleAssignCurrentTaskId == task?.id ? <AssignTask /> : null}
-        </span>
+        </span> */}
       </>
     );
   } else if (colfield === 'tags') {
@@ -320,8 +313,9 @@ export default function DataRenderFunc({
           <div
             className="capitalize text-xs font-medium bg-green-500 text-white py-2.5 px-1 w-20 absolute text-center h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
+            onClick={() => handleTaskStatus(task?.id as string)}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -331,8 +325,9 @@ export default function DataRenderFunc({
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
             style={{ marginLeft: '-30px' }}
+            onClick={() => handleTaskStatus(task?.id as string)}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -342,8 +337,9 @@ export default function DataRenderFunc({
           <div
             className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
             style={{ marginLeft: '-30px' }}
+            onClick={() => handleTaskStatus(task?.id as string)}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -351,10 +347,11 @@ export default function DataRenderFunc({
       return (
         <>
           <div
-            className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
+            className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-gray-400"
             style={{ marginLeft: '-30px' }}
+            onClick={() => handleTaskStatus(task?.id as string)}
           >
-            {taskColField}
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField} />
           </div>
         </>
       );
@@ -364,8 +361,9 @@ export default function DataRenderFunc({
           <div
             className="capitalize text-center text-xs font-medium bg-gray-400 w-20 text-white py-2.5 px-1 absolute h-full top-0 flex flex-col justify-center"
             style={{ marginLeft: '-30px' }}
+            onClick={() => handleTaskStatus(task?.id as string)}
           >
-            Todo
+            <StatusNameDropdown TaskCurrentStatus={task?.status} statusName="Todo" />
           </div>
         </>
       );
