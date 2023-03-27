@@ -5,8 +5,6 @@ import { AvatarWithInitials } from '../../../../components';
 function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour: string }] | undefined }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
 
-  // console.log(data);
-
   return (
     <>
       {data && data?.length >= 3 ? (
