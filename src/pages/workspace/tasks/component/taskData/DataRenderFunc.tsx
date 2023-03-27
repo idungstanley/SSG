@@ -21,7 +21,7 @@ import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
@@ -31,6 +31,7 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 export interface tagItem {
   id: string;
@@ -235,14 +236,22 @@ export default function DataRenderFunc({
   };
 
   const handleTaskPilot = (id: string, name: string) => {
-    dispatch(setTaskIdForPilot(id));
+    // dispatch(
+    //   setActiveItem({
+    //     activeItemId: id,
+    //     activeItemType: 'task',
+    //     activeItemName: name
+    //   })
+    // );
     dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name
+      setShowPilotSideOver({
+        id: id,
+        type: 'task',
+        show: true,
+        title: name
       })
     );
+    dispatch(setTaskIdForPilot(id));
   };
 
   const handleCreateSubTask = (id: string) => {
