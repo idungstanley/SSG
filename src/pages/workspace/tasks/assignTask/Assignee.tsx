@@ -14,6 +14,7 @@ import {
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import { CgProfile } from 'react-icons/cg';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 export default function Assignee({
   itemId,
@@ -87,13 +88,7 @@ export default function Assignee({
   return (
     <div>
       {option === 'task' && (
-        <Button
-          id="basic-button"
-          // aria-controls={open ? 'basic-menu' : undefined}
-          // aria-haspopup="true"
-          // aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
+        <Button id="basic-button" onClick={handleClick}>
           {assignees?.length ? (
             <GroupAssignee data={assignees} />
           ) : (
@@ -106,13 +101,7 @@ export default function Assignee({
         </Button>
       )}
       {option === 'checklist' && (
-        <Button
-          id="basic-button"
-          // aria-controls={open ? 'basic-menu' : undefined}
-          // aria-haspopup="true"
-          // aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
+        <Button id="basic-button" onClick={handleClick}>
           {checklistAssignedUserId?.length ? (
             <GroupAssignee data={assigneeChecklistItem?.assignees} />
           ) : (
@@ -132,10 +121,18 @@ export default function Assignee({
         }}
         className="ml-10"
       >
+        <section className="relative flex">
+          <AiOutlineSearch className="absolute w-5 h-5 right-3 top-3" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+          />
+        </section>
         {data?.data.team_members.map((item) => {
           return (
-            <MenuItem key={item.id} onClick={handleClose}>
-              <div className="flex items-center justify-between cursor-pointer">
+            <MenuItem key={item.id} onClick={handleClose} className="w-60">
+              <div className="flex items-center justify-between cursor-pointer w-full">
                 <div
                   className="relative flex items-center space-x-2 cursor-pointer"
                   onClick={() =>
