@@ -15,6 +15,9 @@ import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import { CgProfile } from 'react-icons/cg';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
+// import { ITeamMemberGroup } from '../../../../features/settings/teamMemberGroups/teamMemberGroups.interfaces';
+import { useState } from 'react';
+import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 
 export default function Assignee({
   itemId,
@@ -28,14 +31,16 @@ export default function Assignee({
   task?: ImyTaskData | undefined;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [searchInput, setSearchInput] = React.useState<string>('');
+  const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   // Get Team Members
   const { data } = useGetTeamMembers({
     page: 0,
@@ -49,6 +54,8 @@ export default function Assignee({
 
   // const dispatch = useAppDispatch();
   // const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
+
+  const teamMembers = data?.data.team_members;
 
   const assignees = task?.assignees;
 
@@ -83,6 +90,19 @@ export default function Assignee({
       itemId: itemId,
       team_member_id: id
     });
+  };
+
+  const searchItem = (value: string) => {
+    // setSearchInput(value);
+    setSearchInput(value);
+    if (searchInput !== '') {
+      const filtered = teamMembers?.filter((item) => {
+        return item.user.name.includes(searchInput);
+      });
+      setFilteredMembers(filtered);
+    } else {
+      setFilteredMembers(teamMembers);
+    }
   };
 
   return (
@@ -122,6 +142,13 @@ export default function Assignee({
           'aria-labelledby': 'basic-button'
         }}
         className="ml-10"
+        PaperProps={{
+          style: {
+            height: 300,
+            overflowY: 'auto',
+            width: '300px'
+          }
+        }}
       >
         <section className="relative flex">
           <AiOutlineSearch className="absolute w-5 h-5 right-3 top-3" />
@@ -129,45 +156,86 @@ export default function Assignee({
             type="text"
             placeholder="Search..."
             className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+            onChange={(e) => searchItem(e.target.value)}
           />
         </section>
-        {data?.data.team_members.map((item) => {
-          return (
-            <MenuItem key={item.id} onClick={handleClose} className="w-60">
-              <div className="flex items-center justify-between cursor-pointer w-full">
-                <div
-                  className="relative flex items-center space-x-2 cursor-pointer"
-                  onClick={() =>
-                    option === 'checklist'
-                      ? handleAssignChecklist(item.id)
-                      : option === 'task'
-                      ? handleAssignTask(item.id)
-                      : null
-                  }
-                >
-                  <AvatarWithInitials
-                    initials={item.initials}
-                    backgroundColour={item.colour}
-                    height="h-5"
-                    width="w-5"
-                  />
-                  <p className="text-xs text-black">{item.user.name.toLocaleUpperCase()}</p>
-                </div>
-                {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
-                  <button
-                    type="button"
-                    className="mx-2"
-                    onClick={() =>
-                      option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
-                    }
-                  >
-                    <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
-                  </button>
-                ) : null}
-              </div>
-            </MenuItem>
-          );
-        })}
+
+        {searchInput.length > 1
+          ? filteredMembers?.map((item) => {
+              return (
+                <MenuItem key={item.id} onClick={handleClose} className="w-full">
+                  <div className="flex items-center justify-between cursor-pointer w-full">
+                    <div
+                      className="relative flex items-center space-x-2 cursor-pointer"
+                      onClick={() =>
+                        option === 'checklist'
+                          ? handleAssignChecklist(item.id)
+                          : option === 'task'
+                          ? handleAssignTask(item.id)
+                          : null
+                      }
+                    >
+                      <AvatarWithInitials
+                        initials={item.initials}
+                        backgroundColour={item.colour}
+                        height="h-8"
+                        width="w-8"
+                      />
+                      <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
+                    </div>
+                    {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
+                      <button
+                        type="button"
+                        className="mx-2"
+                        onClick={() =>
+                          option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
+                        }
+                      >
+                        <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
+                      </button>
+                    ) : null}
+                  </div>
+                </MenuItem>
+              );
+            })
+          : teamMembers?.map((item) => {
+              return (
+                <MenuItem key={item.id} onClick={handleClose} className="w-full">
+                  <div className="flex items-center justify-between cursor-pointer w-full">
+                    <div
+                      className="relative flex items-center space-x-2 cursor-pointer"
+                      onClick={() =>
+                        option === 'checklist'
+                          ? handleAssignChecklist(item.id)
+                          : option === 'task'
+                          ? handleAssignTask(item.id)
+                          : null
+                      }
+                    >
+                      <AvatarWithInitials
+                        initials={item.initials}
+                        backgroundColour={item.colour}
+                        height="h-8"
+                        width="w-8"
+                      />
+                      <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
+                    </div>
+                    {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
+                      <button
+                        type="button"
+                        className="mx-2"
+                        onClick={() =>
+                          option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
+                        }
+                      >
+                        <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
+                      </button>
+                    ) : null}
+                  </div>
+                </MenuItem>
+              );
+            })}
+
         {/* <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
