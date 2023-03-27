@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
@@ -19,14 +19,13 @@ interface StatusDropdownProps {
 }
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
-  const [statusValue, setStatus] = useState('');
+  // const [statusValue, setStatus] = useState('');
   const statusList: statusType[] = [
     {
       id: 1,
       title: 'Todo',
       handleClick: () => {
-        setStatus('todo');
-        handleUpdateTaskStatus();
+        handleUpdateTaskStatus('todo');
       },
       color: '#d3d3d3',
       bg: 'gray'
@@ -35,8 +34,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 2,
       title: 'In Progress',
       handleClick: () => {
-        setStatus('in progress');
-        handleUpdateTaskStatus();
+        handleUpdateTaskStatus('in progress');
       },
       color: '#a875ff',
       bg: 'purple'
@@ -45,8 +43,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 3,
       title: 'Archived',
       handleClick: () => {
-        setStatus('archived');
-        handleUpdateTaskStatus();
+        handleUpdateTaskStatus('archived');
       },
       color: '#f7cb04',
       bg: 'yellow'
@@ -55,8 +52,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 4,
       title: 'Completed',
       handleClick: () => {
-        setStatus('completed');
-        handleUpdateTaskStatus();
+        handleUpdateTaskStatus('completed');
       },
       color: '#6bc951',
       bg: 'green'
@@ -75,10 +71,10 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
     }
   });
 
-  const handleUpdateTaskStatus = async () => {
+  const handleUpdateTaskStatus = async (status: string) => {
     await updateStatusMutation.mutateAsync({
       task_id: currentTaskStatusId,
-      statusDataUpdate: statusValue
+      statusDataUpdate: status
     });
   };
 
