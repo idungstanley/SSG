@@ -178,6 +178,18 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   });
   return response;
 };
+export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+  const url = `tasks/${task_id}`;
+  const response = requestNew({
+    url,
+    method: 'PUT',
+    params: {
+      status: statusDataUpdate
+      // priority: priorityDataUpdate,
+    }
+  });
+  return response;
+};
 
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
   const queryClient = useQueryClient();
