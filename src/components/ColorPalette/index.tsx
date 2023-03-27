@@ -18,7 +18,8 @@ interface ChromePickerProps {
   hex: string;
 }
 export default function Palette({ title, setPaletteColor, bottomContent }: PaletteProps) {
-  const { paletteDropdown, paletteType } = useAppSelector((state) => state.account);
+  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const { paletteId, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
@@ -75,7 +76,7 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
         if (paletteDropdown !== null) {
-          dispatch(setPaletteDropDown({ paletteId: null }));
+          dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
         }
       }
     };
@@ -93,17 +94,17 @@ export default function Palette({ title, setPaletteColor, bottomContent }: Palet
   const handleClick = (color?: string) => {
     if (paletteType === 'hub') {
       editHubColorMutation.mutateAsync({
-        currHubId: paletteDropdown,
+        currHubId: paletteId,
         color: color
       });
     } else if (paletteType === 'wallet') {
       editWalletColorMutation.mutateAsync({
-        WalletId: paletteDropdown,
+        WalletId: paletteId,
         walletColor: color
       });
     }
     setPaletteColor(color);
-    dispatch(setPaletteDropDown({ paletteId: null, paletteType: null }));
+    dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
   const colorBoxes = palette.map((c) => (

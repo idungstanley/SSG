@@ -7,6 +7,7 @@ import {
   getCurrHubId,
   getCurrSubHubId,
   getPrevName,
+  setCreateWLID,
   setHubParentId,
   setshowMenuDropdown
 } from '../../../features/hubs/hubSlice';
@@ -33,6 +34,7 @@ export default function SubHubIndex() {
 
   const handleClick = (id: string, name?: string) => {
     setShowSubChidren(id);
+    dispatch(setCreateWLID(id));
     dispatch(
       setActiveItem({
         activeItemType: 'subhub',
