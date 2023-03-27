@@ -3,6 +3,7 @@ export interface IInbox {
   email_key: string;
   name: string;
   initials: string;
+  path?: string | null;
   colour: string;
   unfiled_count: number;
   is_new: boolean;

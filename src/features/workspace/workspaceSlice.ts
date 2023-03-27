@@ -36,6 +36,7 @@ interface workspaceState {
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
   activePlaceIdForNavigation: number | null;
+  createWlLink: boolean;
 }
 
 const initialState: workspaceState = {
@@ -73,7 +74,8 @@ const initialState: workspaceState = {
   showRemoveHotKeyDropdown: false,
   activeEntity: { id: null, type: null },
   activePlaceNameForNavigation: null,
-  activePlaceIdForNavigation: null
+  activePlaceIdForNavigation: null,
+  createWlLink: false
 };
 
 export const wsSlice = createSlice({
@@ -88,6 +90,9 @@ export const wsSlice = createSlice({
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
+    },
+    setCreateWlLink(state, action: PayloadAction<boolean>) {
+      state.createWlLink = action.payload;
     },
     setShowExtendedBar(state, action: PayloadAction<boolean>) {
       state.showExtendedBar = action.payload;
@@ -238,7 +243,8 @@ export const {
   setShowExtendedBar,
   setExtendedSidebarWidth,
   setActivePlaceName,
-  setActivePlaceForNav
+  setActivePlaceForNav,
+  setCreateWlLink
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

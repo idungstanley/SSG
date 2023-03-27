@@ -6,12 +6,16 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setCreateWlLink } from '../../../../../features/workspace/workspaceSlice';
 
 function ListModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   // const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, showMenuDropdownType, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown, showMenuDropdownType, SubMenuId, SubMenuType, createWLID } = useAppSelector(
+    (state) => state.hub
+  );
+  const { createWlLink } = useAppSelector((state) => state.workspace);
   const { showCreateListSlideOver } = useAppSelector((state) => state.slideOver);
 
   const createList = useMutation(createListService, {
@@ -21,9 +25,11 @@ function ListModal() {
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
-          showMenuDropdown: null
+          showMenuDropdown: null,
+          showMenuDropdownType: null
         })
       );
+      dispatch(setCreateWlLink(false));
     }
   });
 
@@ -45,12 +51,13 @@ function ListModal() {
     await createList.mutateAsync({
       listName: name,
       hubId:
+        (createWlLink ? createWLID : null) ||
         (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
         (SubMenuType == 'subhub' ? SubMenuId : null),
       walletId:
-        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet3' ? showMenuDropdown : null) ||
         (SubMenuType == 'wallet' ? SubMenuId : null) ||

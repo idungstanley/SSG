@@ -88,7 +88,7 @@ export const useEditHubService = (data: {
 }) => {
   const response = requestNew({
     url: `hubs/${data.currHubId}`,
-    method: 'PUT',
+    method: 'POST',
     params: {
       name: data.name,
       color: data.color,
