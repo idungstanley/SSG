@@ -139,10 +139,7 @@ export default function HubItem({
           <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
         </div>
       </div>
-      <UploadImage
-        endpoint={`hubs/${uploadId}`}
-        invalidateQuery={['image', uploadId || 'root'] as InvalidateQueryFilters<unknown>}
-      />
+      <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId == item.id && show ? (
         <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
       ) : null}
