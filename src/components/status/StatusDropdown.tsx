@@ -3,7 +3,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
-import { UseUpdateTaskStatusService } from '../../features/task/taskService';
+import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface statusType {
   id: number;
   title: string;
@@ -24,6 +25,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       title: 'Todo',
       handleClick: () => {
         setStatus('todo');
+        handleUpdateTaskStatus();
       },
       color: '#d3d3d3',
       bg: 'gray'
@@ -33,6 +35,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       title: 'In Progress',
       handleClick: () => {
         setStatus('in progress');
+        handleUpdateTaskStatus();
       },
       color: '#a875ff',
       bg: 'purple'
@@ -42,6 +45,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       title: 'Archived',
       handleClick: () => {
         setStatus('archived');
+        handleUpdateTaskStatus();
       },
       color: '#f7cb04',
       bg: 'yellow'
@@ -51,6 +55,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       title: 'Completed',
       handleClick: () => {
         setStatus('completed');
+        handleUpdateTaskStatus();
       },
       color: '#6bc951',
       bg: 'green'
@@ -61,17 +66,29 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   //update task status
 
-  const { status } = UseUpdateTaskStatusService({
-    task_id: currentTaskStatusId,
-    statusDataUpdate: statusValue
+  // const { status } = UseUpdateTaskStatusService({
+  //   task_id: currentTaskStatusId,
+  //   statusDataUpdate: statusValue
+  // });
+
+  // if (status == 'success') {
+  //   setStatus('');
+  // }
+
+  const queryClient = useQueryClient();
+
+  const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
   });
 
-  if (status == 'success') {
-    setStatus('');
-  }
-
-  // console.log(updateTaskStatus);
-  // console.log(statusValue);
+  const handleUpdateTaskStatus = async () => {
+    await updateStatusMutation.mutateAsync({
+      task_id: currentTaskStatusId,
+      statusDataUpdate: statusValue
+    });
+  };
 
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
     if (status == 'new' || status == 'todo') {
