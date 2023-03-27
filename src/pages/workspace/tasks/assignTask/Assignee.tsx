@@ -90,10 +90,12 @@ export default function Assignee({
       {option === 'task' && (
         <Button id="basic-button" onClick={handleClick}>
           {assignees?.length ? (
-            <GroupAssignee data={assignees} />
+            <div className="flex">
+              <GroupAssignee data={assignees} />
+            </div>
           ) : (
             <UserPlusIcon
-              className="ml-2 text-xl text-gray-400 cursor-pointer "
+              className="text-xl text-gray-400 cursor-pointer "
               style={{ width: '30px' }}
               aria-hidden="true"
             />

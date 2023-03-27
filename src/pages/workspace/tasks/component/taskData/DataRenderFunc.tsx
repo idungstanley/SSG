@@ -253,7 +253,7 @@ export default function DataRenderFunc({
   if (colfield === 'assignees') {
     return (
       <>
-        <div className="ml-3">
+        <div>
           <Assignee task={task} itemId={task?.id} option="task" />
         </div>
       </>
@@ -376,7 +376,6 @@ export default function DataRenderFunc({
             <div
               contentEditable="true"
               ref={inputRef}
-              onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
               onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
               className={`${
                 comfortableView
@@ -390,13 +389,15 @@ export default function DataRenderFunc({
                   : null
               }`}
             >
-              {(taskColField as string)?.length > 50 && comfortableView ? (
-                <span>{(taskColField as string)?.substring(0, 40)}...</span>
-              ) : (taskColField as string)?.length > 61 && CompactView ? (
-                <span>{(taskColField as string)?.substring(0, 60)}...</span>
-              ) : (
-                (taskColField as ReactNode)
-              )}
+              <p onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
+                {(taskColField as string)?.length > 50 && comfortableView ? (
+                  <span>{(taskColField as string)?.substring(0, 40)}...</span>
+                ) : (taskColField as string)?.length > 61 && CompactView ? (
+                  <span>{(taskColField as string)?.substring(0, 60)}...</span>
+                ) : (
+                  (taskColField as ReactNode)
+                )}
+              </p>
             </div>
             <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
