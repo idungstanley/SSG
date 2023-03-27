@@ -67,7 +67,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
 
   const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
     }
   });
 

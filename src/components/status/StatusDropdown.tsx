@@ -74,7 +74,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
     }
   });
 
