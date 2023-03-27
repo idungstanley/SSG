@@ -5,6 +5,7 @@ import {
   setActiveEntity,
   setActiveItem,
   setActiveTabId,
+  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
@@ -15,7 +16,7 @@ import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
-import { closeMenu, getCurrHubId, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { closeMenu, getCurrHubId, getPrevName, setCreateWLID, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useNavigate } from 'react-router-dom';
 import { cl } from '../../utils';
@@ -69,6 +70,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
 
   const handleClick = (id: string) => {
     const isMatch = id === showChildren;
+    dispatch(setCreateWLID(id));
     if (isMatch) {
       dispatch(setShowHub(false));
       setShowChidren(null);
@@ -94,6 +96,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
     dispatch(getCurrHubId(id));
+    dispatch(setCreateWlLink(false));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,

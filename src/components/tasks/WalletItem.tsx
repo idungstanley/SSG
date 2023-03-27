@@ -8,6 +8,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
@@ -36,6 +37,7 @@ export default function WalletItem({
   const [paletteColor, setPaletteColor] = useState<string | undefined>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
         SubMenuId: id,
@@ -50,6 +52,7 @@ export default function WalletItem({
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,

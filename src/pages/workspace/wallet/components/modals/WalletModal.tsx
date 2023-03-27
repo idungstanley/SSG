@@ -6,11 +6,14 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { setCreateWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
+import { setCreateWlLink } from '../../../../../features/workspace/workspaceSlice';
 
 function WalletModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType, createWLID } = useAppSelector(
+    (state) => state.hub
+  );
   const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
@@ -18,6 +21,7 @@ function WalletModal() {
       dispatch(setCreateWalletSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+      dispatch(setCreateWlLink(false));
     }
   });
 
@@ -36,12 +40,13 @@ function WalletModal() {
     await createWallet.mutateAsync({
       name,
       hubID:
+        (createWLID ? createWLID : null) ||
         (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
         (SubMenuType == 'subhub' ? SubMenuId : null),
       walletId:
-        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
         (SubMenuType == 'wallet' ? SubMenuId : null) ||
         (SubMenuType == 'subwallet2' ? SubMenuId : null)

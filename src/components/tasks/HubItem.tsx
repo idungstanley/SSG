@@ -3,11 +3,13 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getSubMenu } from '../../features/hubs/hubSlice';
-import { setPaletteDropDown, setShowUploadImage } from '../../features/account/accountSlice';
+import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
-import UploadImage from '../ColorPalette/UploadImage';
+import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 
 interface TaskItemProps {
   item: {
@@ -45,15 +47,13 @@ export default function HubItem({
     setUploadId(paletteId);
   }, [paletteId]);
   const handleItemAction = (id: string) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
         SubMenuId: id,
         SubMenuType: type == 'hub' ? 'hubs' : 'subhub'
       })
     );
-  };
-  const handleImageUpload = () => {
-    dispatch(setShowUploadImage(true));
   };
 
   return (
@@ -87,9 +87,12 @@ export default function HubItem({
             )}
 
             <div className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}>
-              <div onClick={(e) => handleHubColour(item.id, e)} className={`${showSidebar ? 'h-4 w-4' : 'h-6 w-6'}`}>
+              <div
+                onClick={(e) => handleHubColour(item.id, e)}
+                className={`${showSidebar ? 'h-5 w-5' : 'h-6 w-6'} flex items-center justify-center`}
+              >
                 {item.path !== null ? (
-                  <img src={item.path} alt="hubs image" />
+                  <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
                   <AvatarWithInitials
                     initials={item.name
@@ -98,8 +101,8 @@ export default function HubItem({
                       .map((word) => word[0])
                       .join('')
                       .toUpperCase()}
-                    height={showSidebar ? 'h-4' : 'h-6'}
-                    width={showSidebar ? 'w-4' : 'w-6'}
+                    height={showSidebar ? 'h-5' : 'h-6'}
+                    width={showSidebar ? 'w-5' : 'w-6'}
                     backgroundColour={item.color !== null ? item.color : paletteColor}
                     roundedStyle="rounded"
                   />
@@ -141,17 +144,7 @@ export default function HubItem({
         invalidateQuery={['image', uploadId || 'root'] as InvalidateQueryFilters<unknown>}
       />
       {paletteId == item.id && show ? (
-        <Palette
-          title="Hub Colour"
-          setPaletteColor={setPaletteColor}
-          bottomContent={
-            <div>
-              <div className="cursor-pointer" onClick={() => handleImageUpload()}>
-                Upload Image
-              </div>
-            </div>
-          }
-        />
+        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
       ) : null}
     </>
   );
