@@ -1,4 +1,4 @@
-import { ImyTaskData, ImyTaskData2 } from './taskSlice';
+import { ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
   task_id: string | null | undefined;
@@ -13,7 +13,18 @@ export interface IParent {
 }
 
 export interface TaskDataGroupingsProps {
-  [key: string]: { groupListName?: string; key?: string; tasks: ImyTaskData2[] } | undefined;
+  [key: string]: {
+    groupListName:
+      | string
+      | number
+      | [{ id: string; initials: string; colour: string; name: string }]
+      | null
+      | undefined;
+    key?: string;
+    tasksByStatus: {
+      [key: string]: ImyTaskData[];
+    };
+  };
 }
 
 export interface ICheckListItems {
@@ -37,7 +48,7 @@ export interface ITaskFullList {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null;
+  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
   status: string | null;
   start_date: string | null;
   end_date: string | null;

@@ -18,7 +18,6 @@ import { ITaskTemplateData } from './TaskTableTemplateData';
 export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData) {
   const dispatch = useDispatch();
   const { createTaskFromTop, currentListId } = useAppSelector((state) => state.list);
-  // console.log(filteredTaskData);
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
 
   return (
