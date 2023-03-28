@@ -29,7 +29,7 @@ export default function DetailsIndex() {
     activeItemType
   });
   // console.log(list?.data.list);
-  const { data: task } = getOneTaskServices({ task_id: activeItemId });
+  const { data: task } = getOneTaskServices({ task_id: activeItemType === 'task' ? activeItemId : null });
   const taskDetails = task?.data.task;
 
   const showDetailsType = () => {

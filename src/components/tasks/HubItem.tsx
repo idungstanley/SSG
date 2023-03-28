@@ -34,9 +34,9 @@ export default function HubItem({
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
+  const { paletteDropdown } = useAppSelector((state) => state.account);
   const [paletteColor, setPaletteColor] = useState<string | undefined>(type === 'hub' ? 'blue' : 'orange');
   const { paletteId, show } = paletteDropdown;
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

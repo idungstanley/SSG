@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import ListIcon from '../../assets/icons/ListIcon';
+import { setPaletteDropDown } from '../../features/account/accountSlice';
+// import ListIcon from '../../assets/icons/ListIcon';
 import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
+import Palette from '../ColorPalette';
+import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 
 interface ListItemProps {
   list: {
@@ -16,6 +19,13 @@ interface ListItemProps {
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const [paletteColour, setPaletteColour] = useState<string | undefined>('black');
+  const { paletteId, show } = paletteDropdown;
+  // const { innerColour, outterColour } = paletteColour;
+  const innerColour = 'white';
+  const outterColour = 'black';
+  console.log(paletteColour);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -47,43 +57,53 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
+  const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'list' }));
+  };
+
   return (
-    <section
-      className={`relative flex items-center justify-between h-8 space-x-1 group ${
-        list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
-      }`}
-      style={{ paddingLeft: `${paddingLeft}px` }}
-    >
-      {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
-      <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
-        <ListIcon />
-        <div
-          onClick={() => handleListLocation(list.id, list.name)}
-          style={{
-            fontSize: '13px',
-            lineHeight: '15.56px',
-            verticalAlign: 'baseline',
-            letterSpacing: '0.28px'
-          }}
-          className="pl-4 capitalize truncate cursor-pointer"
-        >
-          {list.name}
-        </div>
-      </div>
-      {/* ends here */}
-      <button
-        type="button"
-        id="listright"
-        className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
-        onClick={(e) => e.stopPropagation()}
+    <>
+      <section
+        className={`relative flex items-center justify-between h-8 space-x-1 group ${
+          list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
+        }`}
+        style={{ paddingLeft: `${paddingLeft}px` }}
       >
-        {/* <TaskDropdown /> */}
-        <AiOutlineEllipsis
-          className="cursor-pointer"
-          id="menusettings"
-          onClick={(e) => handleListSettings(list.id, list.name, e)}
-        />
-      </button>
-    </section>
+        {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
+        <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
+          <div onClick={(e) => handleListColour(list.id, e)}>
+            <ListIconComponent shapes="square-in-circle" innerColour={innerColour} outterColour={outterColour} />
+          </div>
+          <div
+            onClick={() => handleListLocation(list.id, list.name)}
+            style={{
+              fontSize: '13px',
+              lineHeight: '15.56px',
+              verticalAlign: 'baseline',
+              letterSpacing: '0.28px'
+            }}
+            className="pl-4 capitalize truncate cursor-pointer"
+          >
+            {list.name}
+          </div>
+        </div>
+        {/* ends here */}
+        <button
+          type="button"
+          id="listright"
+          className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* <TaskDropdown /> */}
+          <AiOutlineEllipsis
+            className="cursor-pointer"
+            id="menusettings"
+            onClick={(e) => handleListSettings(list.id, list.name, e)}
+          />
+        </button>
+      </section>
+      {paletteId == list.id && show ? <Palette title="List Colour" setPaletteColor={setPaletteColour} /> : null}
+    </>
   );
 }
