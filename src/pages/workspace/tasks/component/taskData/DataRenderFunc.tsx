@@ -30,9 +30,15 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import Assignee from '../../assignTask/Assignee';
 // import AssignTask from '../../assignTask/AssignTask';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 export interface tagItem {
   id: string;
@@ -229,13 +235,6 @@ export default function DataRenderFunc({
   };
 
   const handleTaskPilot = (id: string, name: string) => {
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
     dispatch(
       setShowPilotSideOver({
         id: id,
@@ -245,6 +244,14 @@ export default function DataRenderFunc({
       })
     );
     dispatch(setTaskIdForPilot(id));
+
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
   };
 
   const handleCreateSubTask = (id: string) => {
@@ -388,9 +395,9 @@ export default function DataRenderFunc({
               onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
               className={`${
                 comfortableView
-                  ? 'text-lg whitespace-nowrap'
+                  ? 'text-sm whitespace-nowrap s'
                   : comfortableViewWrap
-                  ? 'text-lg'
+                  ? 'text-sm'
                   : CompactView
                   ? 'text-xs whitespace-nowrap'
                   : CompactViewWrap

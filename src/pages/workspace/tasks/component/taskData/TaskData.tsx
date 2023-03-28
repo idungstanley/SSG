@@ -38,7 +38,19 @@ export default function TaskData({ task }: TaskDataProps) {
         }`}
       >
         <div className="flex items-center justify-between w-6/12 pr-24 ">
-          <div className="w-5/6">
+          <div
+            className={`${
+              comfortableView
+                ? 'text-sm whitespace-nowrap w-5/6'
+                : comfortableViewWrap
+                ? 'text-sm w-5/6'
+                : CompactView
+                ? 'text-xs whitespace-nowrap w-5/6'
+                : CompactViewWrap
+                ? 'text-xs text-justify w-5/6'
+                : null
+            }`}
+          >
             {hideTask.length
               ? hideTask.map(
                   (col) =>

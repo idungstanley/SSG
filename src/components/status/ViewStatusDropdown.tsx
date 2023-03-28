@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
-import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UseUpdateTaskStatusService } from '../../features/task/taskService';
 interface statusType {
   id: number;
   title: string;
@@ -18,13 +17,14 @@ interface StatusDropdownProps {
   statusName?: string | null;
 }
 
-export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
+export default function ViewStatusDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
+  const [statusValue, setStatus] = useState('');
   const statusList: statusType[] = [
     {
       id: 1,
       title: 'Todo',
       handleClick: () => {
-        handleUpdateTaskStatus('todo');
+        setStatus('todo');
       },
       color: '#d3d3d3',
       bg: 'gray'
@@ -33,7 +33,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       id: 2,
       title: 'In Progress',
       handleClick: () => {
-        handleUpdateTaskStatus('in progress');
+        setStatus('in progress');
       },
       color: '#a875ff',
       bg: 'purple'
@@ -42,7 +42,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       id: 3,
       title: 'Archived',
       handleClick: () => {
-        handleUpdateTaskStatus('archived');
+        setStatus('archived');
       },
       color: '#f7cb04',
       bg: 'yellow'
@@ -51,7 +51,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       id: 4,
       title: 'Completed',
       handleClick: () => {
-        handleUpdateTaskStatus('completed');
+        setStatus('completed');
       },
       color: '#6bc951',
       bg: 'green'
@@ -60,30 +60,45 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
-  const queryClient = useQueryClient();
+  //update task status
 
-  const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-    }
+  const { status } = UseUpdateTaskStatusService({
+    task_id: currentTaskStatusId,
+    statusDataUpdate: statusValue
   });
 
-  const handleUpdateTaskStatus = async (status: string) => {
-    await updateStatusMutation.mutateAsync({
-      task_id: currentTaskStatusId,
-      statusDataUpdate: status
-    });
-  };
+  if (status == 'success') {
+    setStatus('');
+  }
+
+  // console.log(updateTaskStatus);
+  // console.log(statusValue);
 
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
     if (status == 'new' || status == 'todo') {
-      return <RiCheckboxBlankFill className="pl-px text-gray-400 text-xs" aria-hidden="true" />;
+      return (
+        <p className="pl-3.5 text-white " aria-hidden="true">
+          {statusName}
+        </p>
+      );
     } else if (status == 'in progress') {
-      return <RiCheckboxBlankFill className="pl-px text-purple-400 text-xs" aria-hidden="true" />;
+      return (
+        <p className=" text-white whitespace-nowrap " aria-hidden="true">
+          {statusName}
+        </p>
+      );
     } else if (status == 'completed') {
-      return <RiCheckboxBlankFill className="pl-px text-green-400 text-xs" aria-hidden="true" />;
+      return (
+        <p className="text-white" aria-hidden="true">
+          {statusName}
+        </p>
+      );
     } else if (status == 'archived') {
-      return <RiCheckboxBlankFill className="pl-px text-yellow-400 text-xs" aria-hidden="true" />;
+      return (
+        <p className="pl-2 text-white" aria-hidden="true">
+          {statusName}
+        </p>
+      );
     }
   };
   return (
