@@ -6,8 +6,7 @@ import {
   ImyTaskData2,
   // getTaskData,
   // getTaskData,
-  setToggleAssignCurrentTaskId,
-  setTriggerAsssignTask
+  setToggleAssignCurrentTaskId
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
@@ -178,6 +177,18 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   });
   return response;
 };
+export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+  const url = `tasks/${task_id}`;
+  const response = requestNew({
+    url,
+    method: 'PUT',
+    params: {
+      status: statusDataUpdate
+      // priority: priorityDataUpdate,
+    }
+  });
+  return response;
+};
 
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
   const queryClient = useQueryClient();
@@ -309,8 +320,11 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
-export const StartTimeEntryService = (query: { taskId?: string | null; trigger: boolean }) => {
-  // const queryClient = useQueryClient();
+export const StartTimeEntryService = (query: {
+  taskId?: string | null;
+  trigger: boolean;
+  type: string | null | undefined;
+}) => {
   return useQuery(
     ['timeclock', { query: query.taskId }],
     async () => {
@@ -318,26 +332,25 @@ export const StartTimeEntryService = (query: { taskId?: string | null; trigger: 
         url: 'time-entries/start',
         method: 'POST',
         params: {
-          type: 'task',
+          type: query.type,
           id: query.taskId
         }
       });
       return data;
     },
     {
-      enabled: query.trigger,
-      onSuccess: () => {
-        // queryClient.invalidateQueries();
-      }
+      enabled: query.trigger
     }
   );
 };
 
 export const EndTimeEntriesService = (data: {
-  description: string | undefined;
-  isBillable: string | undefined;
+  id: string | null | undefined;
+  description: string;
+  is_Billable: boolean;
   trigger: boolean;
 }) => {
+  // const queryClient = useQueryClient();
   return useQuery(
     ['timeclock'],
     async () => {
@@ -346,13 +359,16 @@ export const EndTimeEntriesService = (data: {
         method: 'POST',
         params: {
           description: data.description,
-          is_billable: data.isBillable
+          isbillable: data.is_Billable
         }
       });
       return response;
     },
     {
       enabled: data.trigger
+      // onSuccess: () => {
+      //   queryClient.invalidateQueries(['timeclock']);
+      // }
     }
   );
 };
@@ -364,6 +380,7 @@ export const GetTimeEntriesService = ({
   taskId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
+  const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { taskId: taskId }],
     async () => {
@@ -378,7 +395,10 @@ export const GetTimeEntriesService = ({
       return data;
     },
     {
-      enabled: true
+      enabled: true,
+      onSuccess: () => {
+        queryClient.invalidateQueries(['task, timeclock']);
+      }
     }
   );
 };
@@ -506,43 +526,6 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null
-    }
-  );
-};
-
-export const UseAssignTaskService = ({
-  task_id,
-  team_member_id,
-  triggerAsssignTask
-}: {
-  task_id: string | null | undefined;
-  team_member_id: string | null;
-  triggerAsssignTask?: boolean;
-}) => {
-  const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { team_member_id: team_member_id, task_id: task_id }],
-    async () => {
-      const data = await requestNew({
-        url: 'assignee/assign',
-        method: 'POST',
-        params: {
-          team_member_id,
-          id: task_id,
-          type: 'task'
-        }
-      });
-      return data;
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-        dispatch(setTriggerAsssignTask(false));
-      },
-      // initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: !!team_member_id && triggerAsssignTask
     }
   );
 };

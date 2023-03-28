@@ -11,11 +11,12 @@ export default function ClockInOutIndex() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
   const [isBillable, setIsBillable] = useState(false);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   StartTimeEntryService({
     taskId: activeItemId,
-    trigger: startTimeClicked
+    trigger: startTimeClicked,
+    type: activeItemType
   });
 
   // EndTimeEntriesService({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -6,13 +6,16 @@ import { getSubMenu } from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
-import { setShowUploadModal } from '../../features/general/uploadFile/uploadFileSlice';
-import UploadImage from '../ColorPalette/UploadImage';
+import UploadImage from '../ColorPalette/component/UploadImage';
+import { InvalidateQueryFilters } from '@tanstack/react-query';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 
 interface TaskItemProps {
   item: {
     id: string;
     name: string;
+    path?: string | null;
     color?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
@@ -33,21 +36,24 @@ export default function HubItem({
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
+  const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined>(type === 'hub' ? 'blue' : 'orange');
+  const { paletteId, show } = paletteDropdown;
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ paletteId: id, paletteType: 'hub' }));
+    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
   };
+  useEffect(() => {
+    setUploadId(paletteId);
+  }, [paletteId]);
   const handleItemAction = (id: string) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
         SubMenuId: id,
         SubMenuType: type == 'hub' ? 'hubs' : 'subhub'
       })
     );
-  };
-  const handleImageUpload = () => {
-    dispatch(setShowUploadModal(true));
   };
 
   return (
@@ -81,19 +87,26 @@ export default function HubItem({
             )}
 
             <div className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}>
-              <div onClick={(e) => handleHubColour(item.id, e)}>
-                <AvatarWithInitials
-                  initials={item.name
-                    .split(' ')
-                    .slice(0, 2)
-                    .map((word) => word[0])
-                    .join('')
-                    .toUpperCase()}
-                  height={showSidebar ? 'h-4' : 'h-6'}
-                  width={showSidebar ? 'w-4' : 'w-6'}
-                  backgroundColour={item.color !== null ? item.color : paletteColor}
-                  roundedStyle="rounded"
-                />
+              <div
+                onClick={(e) => handleHubColour(item.id, e)}
+                className={`${showSidebar ? 'h-5 w-5' : 'h-6 w-6'} flex items-center justify-center`}
+              >
+                {item.path !== null ? (
+                  <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
+                ) : (
+                  <AvatarWithInitials
+                    initials={item.name
+                      .split(' ')
+                      .slice(0, 2)
+                      .map((word) => word[0])
+                      .join('')
+                      .toUpperCase()}
+                    height={showSidebar ? 'h-5' : 'h-6'}
+                    width={showSidebar ? 'w-5' : 'w-6'}
+                    backgroundColour={item.color !== null ? item.color : paletteColor}
+                    roundedStyle="rounded"
+                  />
+                )}
               </div>
               <span className="ml-4 overflow-hidden">
                 <a
@@ -126,19 +139,9 @@ export default function HubItem({
           <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
         </div>
       </div>
-      <UploadImage />
-      {paletteDropdown === item.id ? (
-        <Palette
-          title="Hub Colour"
-          setPaletteColor={setPaletteColor}
-          bottomContent={
-            <div>
-              <div className="cursor-pointer" onClick={() => handleImageUpload()}>
-                Upload Image
-              </div>
-            </div>
-          }
-        />
+      <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
+      {paletteId == item.id && show ? (
+        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
       ) : null}
     </>
   );

@@ -3,8 +3,12 @@ import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePauseCircle, AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Timer from 'react-compound-timer';
-import { EndTimeEntriesService, StartTimeEntryService } from '../../../../../../../../../features/task/taskService';
-import { useAppSelector } from '../../../../../../../../../app/hooks';
+import {
+  EndTimeEntriesService,
+  // GetTimeEntriesService,
+  StartTimeEntryService
+} from '../../../../../../../../features/task/taskService';
+import { useAppSelector } from '../../../../../../../../app/hooks';
 import moment from 'moment';
 
 enum TimerState {
@@ -74,6 +78,7 @@ export default function ClockInOutIndex() {
       startTimeClicked: !prevState.startTimeClicked,
       stopTimeClock: prevState.stopTimeClock
     }));
+    console.log(state);
   };
 
   const HandleStopTimer = () => {
@@ -98,13 +103,16 @@ export default function ClockInOutIndex() {
             />
           </div>
           <div id="entries" className="px-3 py-1 flex items-center justify-between">
-            <div id="left" className="flex items-center space-x-1 cursor-pointer" onClick={() => handleTimeTrigger()}>
+            <div id="left" className="flex items-center space-x-1 cursor-pointer">
+              {/* <Timer active={startTimeClicked} duration={null} onStop={HandleStopTimer}>
+                <Timecode />
+              </Timer> */}
               <Timer
                 initialTime={55000}
                 startImmediately={false}
-                onStart={() => handleTimeTrigger}
-                onPause={() => HandleStopTimer}
-                onStop={() => HandleStopTimer}
+                onStart={() => handleTimeTrigger()}
+                onPause={() => HandleStopTimer()}
+                onStop={() => HandleStopTimer()}
               >
                 {({ start, pause, stop, timerState, getTime }: TimePropsRenderProps) => (
                   <React.Fragment>

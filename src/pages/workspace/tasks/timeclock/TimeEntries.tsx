@@ -25,7 +25,8 @@ export default function TimeEntries() {
 
   StartTimeEntryService({
     taskId: currentTaskIdForPilot,
-    trigger: startTimeClicked
+    trigger: startTimeClicked,
+    type: activeItemType
   });
 
   // EndTimeEntriesService({
