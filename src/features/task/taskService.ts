@@ -320,15 +320,11 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
-export const StartTimeEntryService = (query: {
-  taskId?: string | null;
-  trigger: boolean;
-  type: string | null | undefined;
-}) => {
-  return useQuery(
-    ['timeclock', { query: query.taskId }],
-    async () => {
-      const data = await requestNew({
+export const StartTimeEntryService = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async (query: { taskId?: string | null; trigger: boolean; type: string | null | undefined }) => {
+      const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',
         params: {
@@ -336,25 +332,20 @@ export const StartTimeEntryService = (query: {
           id: query.taskId
         }
       });
-      return data;
+      return res;
     },
     {
-      enabled: query.trigger
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
+  return mutation;
 };
 
-export const EndTimeEntriesService = (data: {
-  id: string | null | undefined;
-  description: string;
-  is_Billable: boolean;
-  trigger: boolean;
-}) => {
-  // const queryClient = useQueryClient();
-  return useQuery(
-    ['timeclock'],
-    async () => {
-      const response = requestNew({
+export const EndTimeEntriesService = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async (data: { id: string | null | undefined; description: string; is_Billable: boolean }) => {
+      const response = await requestNew({
         url: 'time-entries/stop',
         method: 'POST',
         params: {
@@ -365,12 +356,11 @@ export const EndTimeEntriesService = (data: {
       return response;
     },
     {
-      enabled: data.trigger
-      // onSuccess: () => {
-      //   queryClient.invalidateQueries(['timeclock']);
-      // }
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
+
+  return mutation;
 };
 
 export const GetTimeEntriesService = ({
@@ -380,7 +370,6 @@ export const GetTimeEntriesService = ({
   taskId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
-  const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { taskId: taskId }],
     async () => {
@@ -395,10 +384,7 @@ export const GetTimeEntriesService = ({
       return data;
     },
     {
-      enabled: true,
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task, timeclock']);
-      }
+      enabled: true
     }
   );
 };
@@ -423,7 +409,8 @@ export const UpdateTimeEntriesService = (data: {
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null | undefined }) => {
+export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null }) => {
+  const queryClient = useQueryClient();
   return useQuery(
     ['timeclock', { data: data.timeEntryDeleteTriggerId }],
     async () => {
@@ -434,7 +421,8 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
       return response;
     },
     {
-      enabled: data.timeEntryDeleteTriggerId != null
+      enabled: data.timeEntryDeleteTriggerId != null,
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
 };
@@ -455,7 +443,6 @@ export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
 //Get watcher
 export const UseGetWatcherService = (taskId: { query: string | null | undefined }) => {
   const queryClient = useQueryClient();
-  // const dispatch = useDispatch();
   return useQuery(
     ['watcher', taskId],
     async () => {

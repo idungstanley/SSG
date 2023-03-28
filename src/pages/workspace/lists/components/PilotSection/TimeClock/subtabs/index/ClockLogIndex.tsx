@@ -11,8 +11,6 @@ export default function ClockLogIndex() {
     trigger: activeItemType
   });
 
-  // console.log(getTaskEntries);
-
   const renderItemEntries = () => {
     if (getTaskEntries?.data.time_entries)
       if (getTaskEntries?.data.time_entries.length == 0) {

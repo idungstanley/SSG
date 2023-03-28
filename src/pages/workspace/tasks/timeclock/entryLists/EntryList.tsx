@@ -27,6 +27,8 @@ export default function EntryList({ entries }: EntryListProps) {
     timeEntryDeleteTriggerId
   });
 
+  const handleDelete = (id: string) => setTimeEntryDeleteTriggerId(id);
+
   const handleUpdateEntry = (id: string) => {
     if (openUpdateEntryId == id) {
       dispatch(
@@ -46,13 +48,6 @@ export default function EntryList({ entries }: EntryListProps) {
     }
   };
 
-  const handleDeleteEntry = (id: string) => {
-    // if (timeEntryDeleteTriggerId == id) {
-    //   setTimeEntryDeleteTriggerId(null);
-    // } else {
-    setTimeEntryDeleteTriggerId(id);
-    // }
-  };
   return (
     <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
       <div id="left" className="flex items-center space-x-3 text-xs">
@@ -64,7 +59,7 @@ export default function EntryList({ entries }: EntryListProps) {
           <PencilIcon className="flex-shrink-0 h-3 w-5 text-gray-400" aria-hidden="true" />
         </button>
         {openUpdateEntryId == entries.id ? <UpdateTimeEntryDropdown time_entry_id={entries.id} /> : null}
-        <button type="button" onClick={() => handleDeleteEntry(entries.id)}>
+        <button type="button" onClick={() => handleDelete(entries.id)}>
           <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
         </button>
       </div>

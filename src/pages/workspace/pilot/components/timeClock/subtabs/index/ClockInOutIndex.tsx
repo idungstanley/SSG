@@ -13,16 +13,7 @@ export default function ClockInOutIndex() {
   const [isBillable, setIsBillable] = useState(false);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
-  StartTimeEntryService({
-    taskId: activeItemId,
-    trigger: startTimeClicked,
-    type: activeItemType
-  });
-
-  // EndTimeEntriesService({
-  //   taskId: activeItemId,
-  //   trigger: stopTimeClock,
-  // });
+  const { mutate } = StartTimeEntryService();
 
   const handleTimeTrigger = () => {
     setStartTimeClicked(!startTimeClicked);
@@ -38,7 +29,6 @@ export default function ClockInOutIndex() {
             <input
               type="text"
               name="description"
-              // onChange={handleEndTimeChange}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
@@ -51,7 +41,11 @@ export default function ClockInOutIndex() {
                 <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
               )}
               <Timer
-                active={startTimeClicked}
+                active={mutate({
+                  taskId: activeItemId,
+                  trigger: startTimeClicked,
+                  type: activeItemType
+                })}
                 duration={null}
                 // onStop={HandleStopTimer}
               >

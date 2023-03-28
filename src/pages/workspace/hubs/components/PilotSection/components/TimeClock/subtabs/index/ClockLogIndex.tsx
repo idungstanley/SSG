@@ -2,7 +2,6 @@ import React from 'react';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../../../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../../../../tasks/timeclock/entryLists/EntryList';
-// import EntryList, { entriesProps } from '../../../../../tasks/timeclock/entryLists/EntryList';
 import NoEntriesFound from './NoEntriesFound';
 
 export default function ClockLogIndex() {

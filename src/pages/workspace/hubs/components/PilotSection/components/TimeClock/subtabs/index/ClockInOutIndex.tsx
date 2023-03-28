@@ -38,6 +38,7 @@ type ClockInOutState = {
 export default function ClockInOutIndex() {
   const [isBillable, setIsBillable] = useState(false);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { mutate } = EndTimeEntriesService();
   const [state, setState] = useState<ClockInOutState>({
     startTimeClicked: false,
     stopTimeClock: false,
@@ -49,33 +50,15 @@ export default function ClockInOutIndex() {
     trigger: activeItemType
   });
 
-  StartTimeEntryService({
-    taskId: activeItemId,
-    trigger: state.startTimeClicked,
-    type: activeItemType
-  });
-
-  EndTimeEntriesService({
-    id: activeItemId,
-    description: '',
-    is_Billable: isBillable,
-    trigger: state.stopTimeClock
-  });
-
-  const handleTimeTrigger = () => {
-    setState((prevState) => ({
-      ...prevState,
-      startTimeClicked: !prevState.startTimeClicked,
-      stopTimeClock: prevState.stopTimeClock
-    }));
-  };
+  const handleTimeTrigger = StartTimeEntryService();
 
   const HandleStopTimer = () => {
-    setState((prevState) => ({
-      ...prevState,
-      startTimeClicked: prevState.startTimeClicked,
-      stopTimeClock: !prevState.stopTimeClock
-    }));
+    setState({ ...state, stopTimeClock: !state.stopTimeClock });
+    // setState((prevState) => ({
+    //   ...prevState,
+    //   startTimeClicked: prevState.startTimeClicked,
+    //   stopTimeClock: !prevState.stopTimeClock
+    // }));
   };
 
   return (
@@ -84,7 +67,7 @@ export default function ClockInOutIndex() {
         <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
           <div
             id="taskUser"
-            className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 hover:bg-gray-200 cursor-pointer"
+            className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 cursor-pointer"
           >
             <div className="p-2 flex items-center justify-start space-x-1 cursor-pointer">
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
@@ -104,11 +87,23 @@ export default function ClockInOutIndex() {
           <div id="entries" className="px-3 py-1 flex items-center justify-between">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <Timer
-                initialTime={55000}
+                initialTime={0}
                 startImmediately={false}
-                onStart={() => handleTimeTrigger()}
+                onStart={() =>
+                  handleTimeTrigger.mutate({
+                    taskId: activeItemId,
+                    trigger: true,
+                    type: activeItemType
+                  })
+                }
                 onPause={() => HandleStopTimer()}
-                onStop={() => HandleStopTimer()}
+                onStop={() =>
+                  mutate({
+                    id: activeItemId,
+                    description: '',
+                    is_Billable: isBillable
+                  })
+                }
               >
                 {({ start, pause, stop, getTime }: TimePropsRenderProps) => (
                   <React.Fragment>
