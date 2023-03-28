@@ -31,7 +31,13 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 export interface tagItem {
   id: string;
@@ -236,13 +242,6 @@ export default function DataRenderFunc({
   };
 
   const handleTaskPilot = (id: string, name: string) => {
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
     dispatch(
       setShowPilotSideOver({
         id: id,
@@ -252,6 +251,14 @@ export default function DataRenderFunc({
       })
     );
     dispatch(setTaskIdForPilot(id));
+
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
   };
 
   const handleCreateSubTask = (id: string) => {

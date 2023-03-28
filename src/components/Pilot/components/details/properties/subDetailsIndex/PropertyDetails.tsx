@@ -25,25 +25,6 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  // const groupTags = (arr: tagItem[] | [tagItem[]]) => {
-  //   return arr?.map((item) => {
-  //     return Array.isArray(item) ? (
-  //       <span className="flex">{groupTags(item)}</span>
-  //     ) : (
-  //       <>
-  //         <span
-  //           className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
-  //             item.name.length > 10 ? 'object-contain' : 'w-20'
-  //           }`}
-  //           style={{ backgroundColor: `${item.color}` }}
-  //         >
-  //           {item.name}
-  //         </span>
-  //       </>
-  //     );
-  //   });
-  // };
-  // console.log(Details);
 
   return (
     <>

@@ -78,15 +78,6 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
     });
   };
 
-  // const { status } = UseUpdateTaskStatusService({
-  //   task_id: currentTaskStatusId,
-  //   statusDataUpdate: statusValue
-  // });
-
-  // if (status == 'success') {
-  //   setStatus('');
-  // }
-
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
     if (status == 'new' || status == 'todo') {
       return (

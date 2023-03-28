@@ -123,12 +123,19 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
       return data;
     },
     {
-      enabled: false
-      // enabled: task_id != null
+      // enabled: false
+      enabled: task_id != null
     }
   );
 };
-export const getOneTaskService = ({ task_id }: { task_id: string | undefined | null }) => {
+
+export const getOneTaskService = ({
+  task_id,
+  activeItemType
+}: {
+  task_id: string | undefined | null;
+  activeItemType?: string | null | undefined;
+}) => {
   // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
@@ -141,7 +148,7 @@ export const getOneTaskService = ({ task_id }: { task_id: string | undefined | n
     },
     {
       // enabled: false
-      enabled: task_id != null
+      enabled: activeItemType === 'task' && task_id != null
     }
   );
 };
@@ -189,31 +196,6 @@ export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: Updat
     }
   });
   return response;
-};
-
-export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
-    async () => {
-      const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
-          status: statusDataUpdate
-          // priority: priorityDataUpdate,
-        }
-      });
-      return data;
-    },
-    {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && statusDataUpdate !== '',
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-      }
-    }
-  );
 };
 
 export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
@@ -272,17 +254,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   );
 };
 
-// const taskData = data?.data.tasks.map((task: { id: string }) => {
-//   queryClient.setQueryData(['task', task.id], task);
-//   return { ...task };
-// });
-// dispatch(getTaskData(taskData));
-// queryClient.invalidateQueries();
-
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
-  // const dispatch = useAppDispatch();
-
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {

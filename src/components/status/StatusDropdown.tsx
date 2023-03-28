@@ -59,17 +59,6 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
-  //update task status
-
-  // const { status } = UseUpdateTaskStatusService({
-  //   task_id: currentTaskStatusId,
-  //   statusDataUpdate: statusValue
-  // });
-
-  // if (status == 'success') {
-  //   setStatus('');
-  // }
-
   const queryClient = useQueryClient();
 
   const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {

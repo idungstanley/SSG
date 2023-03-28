@@ -7,12 +7,10 @@ import { getOneTaskServices } from '../../../../../features/task/taskService';
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
 
 export default function DetailsIndex() {
-  // const { activeItemId, activeItemType } = useAppSelector(
-  //   (state) => state.workspace
-  // );
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  // const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
-  const { id: activeItemId, type: activeItemType } = pilotSideOver;
+  // const { id: activeItemId, type: activeItemType } = pilotSideOver;
 
   const { data: hub } = UseGetHubDetails({
     activeItemId,
@@ -28,8 +26,9 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
-  // console.log(list?.data.list);
-  const { data: task } = getOneTaskServices({ task_id: activeItemId });
+
+  const { data: task } = getOneTaskServices({ task_id: activeItemType === 'task' ? activeItemId : null });
+
   const taskDetails = task?.data.task;
 
   const showDetailsType = () => {
