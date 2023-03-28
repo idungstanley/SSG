@@ -209,12 +209,10 @@ export const UseChecklistItemAssignee = () => {
 // Unassign Checklist Item
 const UnassignChecklistItem = ({
   itemId,
-  team_member_id,
-  type
+  team_member_id
 }: {
   itemId: string | null | undefined;
   team_member_id: string | null;
-  type: string | undefined;
 }) => {
   const request = requestNew({
     url: '/assignee/unassign',
@@ -222,7 +220,7 @@ const UnassignChecklistItem = ({
     params: {
       team_member_id: team_member_id,
       id: itemId,
-      type: type
+      type: 'checklist_item'
     }
   });
   return request;

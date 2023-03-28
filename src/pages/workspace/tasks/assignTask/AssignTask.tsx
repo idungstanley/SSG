@@ -72,8 +72,7 @@ export default function AssignTask({ option, item }: optionProps) {
   const handleUnAssignChecklistItem = (id: string) => {
     onCheklistItemUnassign({
       itemId: clickedChecklistItemId || toggleAssignCurrentTaskId,
-      team_member_id: id,
-      type: option
+      team_member_id: id
     });
   };
   const handleUnAssignTask = (id: string) => {
