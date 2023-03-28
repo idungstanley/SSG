@@ -6,8 +6,12 @@
     "@craco/craco": "^6.4.0",
     "@dnd-kit/core": "^6.0.7",
     "@dnd-kit/sortable": "^7.0.2",
+    "@emotion/react": "^11.10.6",
+    "@emotion/style": "^0.8.0",
+    "@emotion/styled": "^11.10.6",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^2.0.13",
+    "@mui/material": "^5.11.14",
     "@react-oauth/google": "^0.7.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@tanstack/react-query": "^4.0.8",
@@ -43,7 +47,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco start --openssl-legacy-provider ",
+    "start": "craco --openssl-legacy-provider start",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",

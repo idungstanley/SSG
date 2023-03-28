@@ -92,7 +92,7 @@ export default function AssignTask({ option, item }: option) {
   return (
     <div className="relative" ref={modalRef}>
       <section
-        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0 bottom-0"
+        className="absolute left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0"
         style={{ maxHeight: '40vh' }}
         ref={assigneeRef}
         id="assignModal"

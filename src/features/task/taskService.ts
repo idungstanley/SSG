@@ -6,8 +6,7 @@ import {
   ImyTaskData2,
   // getTaskData,
   // getTaskData,
-  setToggleAssignCurrentTaskId,
-  setTriggerAsssignTask
+  setToggleAssignCurrentTaskId
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
@@ -355,14 +354,14 @@ export const GetTimeEntriesService = ({
         url: 'time-entries',
         method: 'GET',
         params: {
-          type: 'task',
+          type: trigger,
           id: taskId
         }
       });
       return data;
     },
     {
-      enabled: trigger == 'task'
+      enabled: true
     }
   );
 };
@@ -490,43 +489,6 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null
-    }
-  );
-};
-
-export const UseAssignTaskService = ({
-  task_id,
-  team_member_id,
-  triggerAsssignTask
-}: {
-  task_id: string | null | undefined;
-  team_member_id: string | null;
-  triggerAsssignTask?: boolean;
-}) => {
-  const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { team_member_id: team_member_id, task_id: task_id }],
-    async () => {
-      const data = await requestNew({
-        url: 'assignee/assign',
-        method: 'POST',
-        params: {
-          team_member_id,
-          id: task_id,
-          type: 'task'
-        }
-      });
-      return data;
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-        dispatch(setTriggerAsssignTask(false));
-      },
-      // initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: !!team_member_id && triggerAsssignTask
     }
   );
 };
