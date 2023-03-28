@@ -5,28 +5,20 @@ import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Timer from 'react-compound-timer';
 import {
   EndTimeEntriesService,
+  GetTimeEntriesService,
   // GetTimeEntriesService,
   StartTimeEntryService
 } from '../../../../../../../../features/task/taskService';
 import { useAppSelector } from '../../../../../../../../app/hooks';
 import moment from 'moment';
+import { AvatarWithInitials } from '../../../../../../../../components';
+import { ITimeEntriesRes } from '../../../../../../../../features/task/interface.tasks';
 
-enum TimerState {
-  Stopped,
-  Running,
-  Paused
-}
-
-// type TimeProps = {
-//   initialTime?: number;
-//   startImmediately?: boolean;
-//   onStart?: () => void;
-//   onPause?: () => void;
-//   onResume?: () => void;
-//   onStop?: () => void;
-//   onReset?: () => void;
-//   children: (timeProps: TimePropsRenderProps) => React.ReactNode;
-// };
+// enum TimerState {
+//   Stopped,
+//   Running,
+//   Paused
+// }
 
 type TimePropsRenderProps = {
   getTime: () => number;
@@ -36,7 +28,6 @@ type TimePropsRenderProps = {
   resume: () => void;
   stop: () => void;
   reset: () => void;
-  timerState: TimerState;
 };
 
 type ClockInOutState = {
@@ -54,10 +45,10 @@ export default function ClockInOutIndex() {
     isBillable: false
   });
 
-  // const { data: getEntries, refetch } = GetTimeEntriesService({
-  //   taskId: activeItemId,
-  //   trigger: activeItemType
-  // });
+  const { data: getEntries } = GetTimeEntriesService({
+    taskId: activeItemId,
+    trigger: activeItemType
+  });
 
   StartTimeEntryService({
     taskId: activeItemId,
@@ -78,7 +69,6 @@ export default function ClockInOutIndex() {
       startTimeClicked: !prevState.startTimeClicked,
       stopTimeClock: prevState.stopTimeClock
     }));
-    console.log(state);
   };
 
   const HandleStopTimer = () => {
@@ -93,6 +83,16 @@ export default function ClockInOutIndex() {
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
         <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
+          <div
+            id="taskUser"
+            className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 hover:bg-gray-200 cursor-pointer"
+          >
+            <div className="p-2 flex items-center justify-start space-x-1 cursor-pointer">
+              <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
+            </div>
+            {/* total time here */}
+            <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
+          </div>
           <div id="descNote" className="text-white w-full my-3">
             <input
               type="text"
@@ -104,9 +104,6 @@ export default function ClockInOutIndex() {
           </div>
           <div id="entries" className="px-3 py-1 flex items-center justify-between">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              {/* <Timer active={startTimeClicked} duration={null} onStop={HandleStopTimer}>
-                <Timecode />
-              </Timer> */}
               <Timer
                 initialTime={55000}
                 startImmediately={false}
@@ -114,10 +111,9 @@ export default function ClockInOutIndex() {
                 onPause={() => HandleStopTimer()}
                 onStop={() => HandleStopTimer()}
               >
-                {({ start, pause, stop, timerState, getTime }: TimePropsRenderProps) => (
+                {({ start, pause, stop, getTime }: TimePropsRenderProps) => (
                   <React.Fragment>
                     <div>{moment.utc(getTime()).format('HH:mm:ss')}</div>
-                    <div>{timerState}</div>
                     <br />
                     <div>
                       <button onClick={start}>
