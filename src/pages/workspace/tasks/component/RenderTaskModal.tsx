@@ -27,42 +27,11 @@ function RenderTaskModal() {
 
   const { data: taskData } = getOneTaskServices({ task_id: taskId });
 
-  // const { data: taskData } = useQuery({
-  //   queryKey: ['taskData', taskId],
-  //   queryFn: getOneTaskService,
-  // });
-
   useQuery({
     queryKey: ['startTimeClock', taskId],
     queryFn: createTimeEntriesService,
     enabled: startTimeClicked
   });
-
-  // useQuery({
-  //   queryKey: ['endTimeClock', taskId],
-  //   queryFn: EndTimeEntriesService,
-  //   enabled: stopTimer,
-  // });
-
-  // const defaultEndTimeClockFormState = {
-  //   description: '',
-  // };
-
-  // const [formState, setFormState] = useState(defaultEndTimeClockFormState);
-
-  // const { description } = formState;
-  // useMutation(EndTimeEntriesService, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries();
-  //   },
-  // });
-
-  // const onSubmit = async () => {
-  //   await endClockTimer.mutateAsync({
-  //     description,
-  //     isBillable: isBillable === false ? 0 : 1,
-  //   });
-  // };
 
   const navigate = useNavigate();
   const closeTaskModal = () => {
@@ -158,20 +127,6 @@ function RenderTaskModal() {
                           aria-hidden="true"
                           onClick={() => setShowTimeEntries(!showTimeEntries)}
                         />
-                        {/* {showTimeEntries && (
-                          <TimeEntriesDropdown
-                            taskId={taskId}
-                            startTimeClicked={startTimeClicked}
-                            setShowEntries={setShowEntries}
-                            showEntries={showEntries}
-                            isBillable={isBillable}
-                            setIsBillable={setIsBillable}
-                            // setFormState={setFormState}
-                            // formState={formState}
-                            // onSubmit={onSubmit}
-                            handleTimeTracker={handleTimeTracker}
-                          />
-                        )} */}
                       </div>
                     </div>
                   </div>

@@ -10,6 +10,7 @@ import {
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
+// import { ImyTaskData } from './taskSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -103,7 +104,6 @@ export const UseGetFullTaskListWallet = ({
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
         }
-
         return false;
       }
     }
@@ -111,7 +111,6 @@ export const UseGetFullTaskListWallet = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -184,7 +183,7 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   });
   return response;
 };
-export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
     url,
@@ -195,6 +194,25 @@ export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: Updat
     }
   });
   return response;
+};
+
+export const UseUpdateTaskStatusService2 = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateTaskStatusService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      // queryClient.setQueryData(['task'], (oldQueryData) => {
+      //   return oldQueryData?.pages?.[0].data.tasks.map((task) => {
+      //     if (task.id == data.data.task.id) {
+      //       return {
+      //         ...task,
+      //         status: data.data.task.status
+      //       };
+      //     }
+      //   });
+      // });
+    }
+  });
 };
 
 export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {

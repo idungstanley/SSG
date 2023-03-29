@@ -8,9 +8,6 @@ import PropertyDetails from './subDetailsIndex/PropertyDetails';
 
 export default function DetailsIndex() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  // const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
-  // const { id: activeItemId, type: activeItemType } = pilotSideOver;
 
   const { data: hub } = UseGetHubDetails({
     activeItemId,
