@@ -3,7 +3,6 @@ import React, { ReactNode, useState, useRef } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-// import { AvatarWithInitials } from '../../../../../components';
 import ColorsModal from '../../../../../components/tags/ColorsModal';
 import EditTagModal from '../../../../../components/tags/EditTagModal';
 import ToolTip from '../../../../../components/Tooltip';
@@ -16,12 +15,9 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot
 } from '../../../../../features/task/taskSlice';
-// import AssignTask from '../../assignTask/AssignTask';
 import ArrowRigt from '../../../../../../src/assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../src/assets/branding/ArrowDown.svg';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
-// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-// import { FiEdit2 } from 'react-icons/fi';
 import TagModal from '../../../../../components/tags/TagModal';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import { PlusIcon } from '@heroicons/react/24/solid';
@@ -30,8 +26,8 @@ import { setCurrentTaskIdForTag } from '../../../../../features/workspace/tags/t
 import { UseUnAssignTagService, UseUpdateTagService } from '../../../../../features/workspace/tags/tagService';
 import { UseUpdateTaskService } from '../../../../../features/task/taskService';
 import StatusNameDropdown from '../../../../../components/status/StatusNameDropdown';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import Assignee from '../../assignTask/Assignee';
-// import AssignTask from '../../assignTask/AssignTask';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 
 export interface tagItem {
@@ -115,43 +111,6 @@ export default function DataRenderFunc({
     });
   };
 
-  // const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-  //   return (data as [{ id: string; initials: string; colour: string }])?.length >= 3 ? (
-  //     <div className="flex items-center justify-center">
-  //       {data?.slice(0, 2).map((newData) => (
-  //         <div key={newData.id} className="">
-  //           <span key={newData.id} className="flex items-center gap-1 justify center">
-  //             <AvatarWithInitials
-  //               initials={newData.initials}
-  //               backgroundColour={newData.colour}
-  //               height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-  //               width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-  //             />
-  //           </span>
-  //         </div>
-  //       ))}
-  //       <span>
-  //         {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-  //           <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
-  //         ) : null}
-  //       </span>
-  //     </div>
-  //   ) : (
-  //     data?.map((newData) => (
-  //       <div key={newData.id} className="flex">
-  //         <span key={newData.id}>
-  //           <AvatarWithInitials
-  //             initials={newData.initials}
-  //             backgroundColour={newData.colour}
-  //             height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-5'}`}
-  //             width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-5'}`}
-  //           />
-  //         </span>
-  //       </div>
-  //     ))
-  //   );
-  // };
-
   const groupTags = (arr: tagItem[]) => {
     return (
       <div key={arr.length} className="flex items-center -mr-5 drop-shadow-xl">
@@ -229,13 +188,16 @@ export default function DataRenderFunc({
   };
 
   const handleTaskPilot = (id: string, name: string) => {
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
+    dispatch(
+      setShowPilotSideOver({
+        id: id,
+        type: 'task',
+        show: true,
+        title: name
+      })
+    );
+    dispatch(setTaskIdForPilot(id));
+
     dispatch(
       setShowPilotSideOver({
         id: id,
@@ -388,9 +350,9 @@ export default function DataRenderFunc({
               onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
               className={`${
                 comfortableView
-                  ? 'text-lg whitespace-nowrap'
+                  ? 'text-sm whitespace-nowrap s'
                   : comfortableViewWrap
-                  ? 'text-lg'
+                  ? 'text-sm'
                   : CompactView
                   ? 'text-xs whitespace-nowrap'
                   : CompactViewWrap
@@ -409,9 +371,6 @@ export default function DataRenderFunc({
               </p>
             </div>
             <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
-              {/* <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <FiEdit2 className="w-3 text-gray-500 " aria-hidden="true" />
-              </span> */}
               {!ShowPlusIcon && (
                 <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                   <PlusIcon

@@ -4,6 +4,7 @@ import { setToggleAssignChecklistItemId, setTriggerChecklistUpdate, setTriggerIt
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
 import { ITaskRes } from '../interface.tasks';
+import { setToggleAssignCurrentTaskId } from '../taskSlice';
 
 export const UseCreateChecklistService = ({
   item_id,
@@ -232,7 +233,9 @@ export const UseChecklistItemUnassignee = () => {
   return useMutation(UnassignChecklistItem, {
     onSuccess: () => {
       dispatch(setToggleAssignChecklistItemId(null));
-      queryClient.invalidateQueries(['checklist']);
+      dispatch(setToggleAssignCurrentTaskId(null));
+
+      queryClient.invalidateQueries(['task']);
     }
   });
 };
