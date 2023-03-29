@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { CubeIcon, RectangleStackIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IHub, IList, IWallet } from '../../../../../features/hubs/hubs.interfaces';
-import { useGetHubs } from '../../../../../features/hubs/hubService';
-import { cl } from '../../../../../utils';
+import { IHub, IList, IWallet } from '../../../../features/hubs/hubs.interfaces';
+import { useGetHubs } from '../../../../features/hubs/hubService';
+import { cl } from '../../../../utils';
 
 interface Wallet extends IWallet {
   children: Wallet[];
