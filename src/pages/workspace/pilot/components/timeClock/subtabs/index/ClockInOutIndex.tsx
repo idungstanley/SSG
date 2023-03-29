@@ -43,7 +43,6 @@ export default function ClockInOutIndex() {
               <Timer
                 active={mutate({
                   taskId: activeItemId,
-                  trigger: startTimeClicked,
                   type: activeItemType
                 })}
                 duration={null}

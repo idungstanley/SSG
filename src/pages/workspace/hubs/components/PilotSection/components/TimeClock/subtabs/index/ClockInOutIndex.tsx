@@ -12,12 +12,8 @@ import { useAppSelector } from '../../../../../../../../../app/hooks';
 import moment from 'moment';
 import { AvatarWithInitials } from '../../../../../../../../../components';
 import { ITimeEntriesRes } from '../../../../../../../../../features/task/interface.tasks';
-
-// enum TimerState {
-//   Stopped,
-//   Running,
-//   Paused
-// }
+import { useDispatch } from 'react-redux';
+import { setTimerStatus } from '../../../../../../../../../features/task/taskSlice';
 
 type TimePropsRenderProps = {
   getTime: () => number;
@@ -29,21 +25,12 @@ type TimePropsRenderProps = {
   reset: () => void;
 };
 
-type ClockInOutState = {
-  startTimeClicked: boolean;
-  stopTimeClock: boolean;
-  isBillable: boolean;
-};
-
 export default function ClockInOutIndex() {
+  const dispatch = useDispatch();
   const [isBillable, setIsBillable] = useState(false);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { timerStatus } = useAppSelector((state) => state.task);
   const { mutate } = EndTimeEntriesService();
-  const [state, setState] = useState<ClockInOutState>({
-    startTimeClicked: false,
-    stopTimeClock: false,
-    isBillable: false
-  });
 
   const { data: getEntries } = GetTimeEntriesService({
     taskId: activeItemId,
@@ -52,13 +39,21 @@ export default function ClockInOutIndex() {
 
   const handleTimeTrigger = StartTimeEntryService();
 
+  const handleStartTimer = () => {
+    handleTimeTrigger.mutate({
+      taskId: activeItemId,
+      type: activeItemType
+    });
+    dispatch(setTimerStatus(true));
+  };
+
   const HandleStopTimer = () => {
-    setState({ ...state, stopTimeClock: !state.stopTimeClock });
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   startTimeClicked: prevState.startTimeClicked,
-    //   stopTimeClock: !prevState.stopTimeClock
-    // }));
+    mutate({
+      id: activeItemId,
+      description: '',
+      is_Billable: isBillable
+    });
+    dispatch(setTimerStatus(false));
   };
 
   return (
@@ -89,28 +84,16 @@ export default function ClockInOutIndex() {
               <Timer
                 initialTime={0}
                 startImmediately={false}
-                onStart={() =>
-                  handleTimeTrigger.mutate({
-                    taskId: activeItemId,
-                    trigger: true,
-                    type: activeItemType
-                  })
-                }
+                onStart={() => handleStartTimer()}
                 onPause={() => HandleStopTimer()}
-                onStop={() =>
-                  mutate({
-                    id: activeItemId,
-                    description: '',
-                    is_Billable: isBillable
-                  })
-                }
+                onStop={() => HandleStopTimer()}
               >
                 {({ start, pause, stop, getTime }: TimePropsRenderProps) => (
                   <React.Fragment>
                     <div>{moment.utc(getTime()).format('HH:mm:ss')}</div>
                     <br />
                     <div>
-                      <button onClick={start}>
+                      <button onClick={!timerStatus ? start : undefined}>
                         <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
                       </button>
                       <button onClick={pause}>

@@ -295,7 +295,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
 export const StartTimeEntryService = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    async (query: { taskId?: string | null; trigger: boolean; type: string | null | undefined }) => {
+    async (query: { taskId?: string | null; type: string | null | undefined }) => {
       const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',

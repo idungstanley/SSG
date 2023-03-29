@@ -52,22 +52,22 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
   };
 
   return (
-    <div className="">
-      <section className="absolute -left-44 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+    <div className="z-50 relative">
+      <section className="absolute -left-96 -top-56 z-50 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
         <div className="flex justify-between items-center px-3 py-3 text-xs">
           <p>Edit Session</p>
           <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>
             X
           </button>
         </div>
-        <div id="descNote" className=" w-5/6 my-2 mx-3">
+        <div id="descNote" className="w-5/6 my-2 mx-3">
           <input
             type="text"
             placeholder="Enter a note"
             name="description"
             value={description}
             onChange={handleUpdateTimeChange}
-            className="border-0 shadow-sm rounded text-gray-600"
+            className="border-0 shadow-sm rounded text-gray-600 w-full mx-auto"
           />
         </div>
         <div id="billable" className="flex items-center justify-start space-x-1 text-sm px-3">
@@ -88,6 +88,7 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
             type="text"
             name="start_date"
             placeholder="HH:MM"
+            onChange={handleUpdateTimeChange}
             value={moment(start_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
@@ -97,6 +98,7 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
           <input
             type="text"
             placeholder="HH:MM"
+            onChange={handleUpdateTimeChange}
             name="end_date"
             value={moment(end_date).format('YYYY-MM-D h:mm:ss')}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "

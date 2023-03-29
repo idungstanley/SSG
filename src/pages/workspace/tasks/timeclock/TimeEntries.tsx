@@ -89,7 +89,6 @@ export default function TimeEntries() {
               <Timer
                 active={mutate({
                   taskId: currentTaskIdForPilot,
-                  trigger: startTimeClicked,
                   type: activeItemType
                 })}
                 duration={null}
