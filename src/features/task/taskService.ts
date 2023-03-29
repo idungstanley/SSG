@@ -384,7 +384,7 @@ export const GetTimeEntriesService = ({
       return data;
     },
     {
-      enabled: true
+      enabled: trigger != null
     }
   );
 };
