@@ -115,8 +115,8 @@ export default function Assignee({
             </div>
           ) : (
             <UserPlusIcon
-              className="text-xl text-gray-400 cursor-pointer "
-              style={{ width: '30px' }}
+              className="text-xl text-gray-400 cursor-pointer"
+              style={{ width: '23px' }}
               aria-hidden="true"
             />
           )}

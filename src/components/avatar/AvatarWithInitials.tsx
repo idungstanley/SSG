@@ -1,5 +1,4 @@
 import React from 'react';
-
 interface AvatarWithInitialsProps {
   initials: string;
   height?: string;
@@ -16,11 +15,11 @@ function AvatarWithInitials({
   width = 'w-10',
   backgroundColour = '#6B7280',
   roundedStyle = 'circular',
-  textSize = '8px '
+  textSize = '8px'
 }: AvatarWithInitialsProps) {
   return (
     <span
-      className={`inline-flex p-1 items-center justify-center ${height} ${width} ${
+      className={`inline-flex p-1 items-center justify-center ${height} ${width}  ${
         roundedStyle === 'circular' && 'rounded-full'
       } ${roundedStyle === 'rounded' && 'rounded'}`}
       style={{ backgroundColor: backgroundColour }}

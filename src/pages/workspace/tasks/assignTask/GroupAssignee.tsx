@@ -31,7 +31,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
         </div>
       ) : (
         data?.map((newData) => (
-          <div key={newData.id} className="flex">
+          <div key={newData.id} className="flex w-3">
             <span key={newData.id}>
               <AvatarWithInitials
                 initials={newData.initials}
