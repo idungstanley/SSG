@@ -1,4 +1,7 @@
-import React, { Fragment } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
@@ -6,12 +9,55 @@ import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../../features/task/interface.tasks';
 
-export default function FilterByAssigneesSliderOver() {
+export default function FilterByAssigneesSliderOver({ unFilteredTaskData }: ITaskFullList[] | undefined) {
   const dispatch = useDispatch();
 
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
+
+  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsProps | unknown>({});
+  useEffect(() => {
+    const taskDataGroupedByAssignee = unFilteredTaskData?.reduce((GroupedTaskByAssignee, currentTask) => {
+      const assignees = currentTask.assignees;
+
+      if (assignees !== null && assignees !== undefined && assignees.length > 0) {
+        assignees.forEach((assignee) => {
+          const assigneeId = assignee.id;
+          if (!GroupedTaskByAssignee[assigneeId]) {
+            GroupedTaskByAssignee[assigneeId] = {
+              assigneeName: assignee.name,
+              assigneeId: assignee.id,
+              tasks: [] // create an empty tasks array for each assignee
+            };
+          }
+
+          GroupedTaskByAssignee[assigneeId].tasks.push(currentTask);
+        });
+      } else {
+        // handle tasks with no assignee
+        if (!GroupedTaskByAssignee['unassigned']) {
+          GroupedTaskByAssignee['unassigned'] = {
+            assigneeName: 'Unassigned',
+            assigneeId: 'unassigned',
+            tasks: [] // create an empty tasks array for unassigned tasks
+          };
+        }
+
+        GroupedTaskByAssignee['unassigned'].tasks.push(currentTask);
+      }
+
+      return GroupedTaskByAssignee;
+    }, {});
+
+    setTaskDataGroupingsAssignees(taskDataGroupedByAssignee as TaskDataGroupingsProps);
+
+    return () => {
+      true;
+    };
+  }, [unFilteredTaskData, setTaskDataGroupingsAssignees]);
+  console.log(TaskDataGroupingsAssignees);
   return (
     <Transition.Root show={!!showFilterByAssigneeSlideOver} as={Fragment}>
       <Dialog as="div" className="relative z-10 border-2 border-gray-500" onClose={onClose}>

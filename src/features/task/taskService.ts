@@ -35,12 +35,15 @@ export const createTaskService = (data: {
 export const UseGetFullTaskList = ({
   itemId,
   itemType
-}: {
+}: // assigneeUserId
+{
   itemId: string | undefined | null;
   itemType: string | null | undefined;
+  // assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
   const enabled = itemType == 'hub' || itemType == 'subhub';
+  // const assignees =  assignees[0] == '544ee973-d875-431c-874b-b40b1d9bca42'
   return useInfiniteQuery(
     ['task', itemId, itemType],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -50,6 +53,7 @@ export const UseGetFullTaskList = ({
         params: {
           page: pageParam,
           hub_id: itemId
+          // assignees: ['544ee973-d875-431c-874b-b40b1d9bca42']
         }
       });
     },
