@@ -14,7 +14,12 @@ import {
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import SubDropdown from '../../Dropdown/SubDropdown';
-import { setActiveEntity, setActiveItem, setShowHub } from '../../../features/workspace/workspaceSlice';
+import {
+  setActiveEntity,
+  setActiveEntityName,
+  setActiveItem,
+  setShowHub
+} from '../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
 
@@ -72,6 +77,7 @@ export default function SubHubIndex() {
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemId: id,

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIcon from '../../assets/icons/ListIcon';
 import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
-import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
 
 interface ListItemProps {
   list: {
@@ -22,6 +22,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleListLocation = (id: string, name: string) => {
     navigate(`/list/${id}`);
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: 'list',
