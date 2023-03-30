@@ -15,9 +15,9 @@ import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import { CgProfile } from 'react-icons/cg';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
-// import { ITeamMemberGroup } from '../../../../features/settings/teamMemberGroups/teamMemberGroups.interfaces';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
+import { useAppSelector } from '../../../../app/hooks';
 
 export default function Assignee({
   itemId,
@@ -62,7 +62,8 @@ export default function Assignee({
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
   const checklistAssignedUserId = assigneeChecklistItem?.assignees.map(({ id }: { id: string }) => id);
-  // const { clickedChecklistItemId } = useAppSelector((state) => state.checklist);
+
+  const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
 
   const handleAssignTask = (id: string) => {
     onTaskAssign({
@@ -115,8 +116,10 @@ export default function Assignee({
             </div>
           ) : (
             <UserPlusIcon
-              className="text-xl text-gray-400 cursor-pointer"
-              style={{ width: '23px' }}
+              className="text-xl text-gray-400 cursor-pointer "
+              style={{
+                width: `'23px' ${CompactView || CompactViewWrap ? '30px' : '35px'}`
+              }}
               aria-hidden="true"
             />
           )}

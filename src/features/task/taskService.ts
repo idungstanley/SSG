@@ -10,6 +10,7 @@ import {
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
+// import { ImyTaskData } from './taskSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -103,7 +104,6 @@ export const UseGetFullTaskListWallet = ({
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
         }
-
         return false;
       }
     }
@@ -111,24 +111,6 @@ export const UseGetFullTaskListWallet = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { task_id: task_id }],
-    async () => {
-      const data = await requestNew<ITaskRes | undefined>({
-        url: `tasks/${task_id}`,
-        method: 'GET'
-      });
-      return data;
-    },
-    {
-      enabled: false
-      // enabled: task_id != null
-    }
-  );
-};
-export const getOneTaskService = ({ task_id }: { task_id: string | undefined | null }) => {
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -141,6 +123,30 @@ export const getOneTaskService = ({ task_id }: { task_id: string | undefined | n
     {
       // enabled: false
       enabled: task_id != null
+    }
+  );
+};
+
+export const getOneTaskService = ({
+  task_id,
+  activeItemType
+}: {
+  task_id: string | undefined | null;
+  activeItemType?: string | null | undefined;
+}) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id }],
+    async () => {
+      const data = await requestNew<ITaskRes | undefined>({
+        url: `tasks/${task_id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      // enabled: false
+      enabled: activeItemType === 'task' && task_id != null
     }
   );
 };
@@ -177,7 +183,7 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   });
   return response;
 };
-export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
     url,
@@ -189,30 +195,34 @@ export const UseUpdateTaskStatusService2 = ({ task_id, statusDataUpdate }: Updat
   });
   return response;
 };
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
+export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
-    async () => {
-      const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
-          status: statusDataUpdate
-          // priority: priorityDataUpdate,
-        }
-      });
-      return data;
-    },
-    {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && statusDataUpdate !== '',
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-      }
+  return useMutation(updateTaskStatusService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      // queryClient.setQueryData(['task'], (oldQueryData) => {
+      // return oldQueryData?.pages?.[0].data.tasks.map((task) => {
+      //   if (task.id == data.data.task.id) {
+      //     console.log(oldQueryData?.pages?.[0].data.tasks);
+      //     // return {
+      //     //   ...task,
+      //     //   status: data.data.task.status
+      //     // };
+      //   }
+      // });
+
+      // const newData = oldQueryData?.pages?.[0].data.tasks.filter((task) => {
+      //   return task.id !== data.data.task.id;
+      // });
+      // newData.push(data.data.task);
+      // return newData;
+      // });
     }
-  );
+  });
 };
 
 export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
@@ -243,7 +253,8 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useInfiniteQuery(
-    ['task', { listId: listId }],
+    ['task'],
+    // ['task', { listId: listId }],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
@@ -271,17 +282,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   );
 };
 
-// const taskData = data?.data.tasks.map((task: { id: string }) => {
-//   queryClient.setQueryData(['task', task.id], task);
-//   return { ...task };
-// });
-// dispatch(getTaskData(taskData));
-// queryClient.invalidateQueries();
-
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
-  // const dispatch = useAppDispatch();
-
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {

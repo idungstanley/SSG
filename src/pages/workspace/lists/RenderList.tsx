@@ -30,7 +30,7 @@ function RenderList() {
     currentParentTaskId,
     getSubTaskId
   } = useAppSelector((state) => state.task);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
@@ -73,7 +73,7 @@ function RenderList() {
         header={
           <section id="nav" className="capitalize ">
             <ListNav
-              navName={activeItemName}
+              navName={activeEntityName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
@@ -92,7 +92,7 @@ function RenderList() {
             className="block relative p-2 mx-2 border-l-4 border-gray-500 rounded-md"
             style={{ backgroundColor: '#e1e4e5' }}
           >
-            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
+            {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
 
             {/* task list logic */}
             {tableView && closeTaskListView && <TaskTableView />}

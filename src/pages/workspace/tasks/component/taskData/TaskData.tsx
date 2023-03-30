@@ -31,14 +31,26 @@ export default function TaskData({ task }: TaskDataProps) {
             : comfortableViewWrap
             ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : CompactView
-            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
             : CompactViewWrap
             ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : null
         }`}
       >
         <div className="flex items-center justify-between w-6/12 pr-24 ">
-          <div className="w-5/6">
+          <div
+            className={`${
+              comfortableView
+                ? 'text-sm whitespace-nowrap w-5/6'
+                : comfortableViewWrap
+                ? 'text-sm w-5/6'
+                : CompactView
+                ? 'text-xs whitespace-nowrap w-5/6'
+                : CompactViewWrap
+                ? 'text-xs text-justify w-5/6'
+                : null
+            }`}
+          >
             {hideTask.length
               ? hideTask.map(
                   (col) =>

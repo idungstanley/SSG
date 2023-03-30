@@ -4,7 +4,6 @@ import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface statusType {
   id: number;
   title: string;
@@ -15,6 +14,7 @@ interface statusType {
 
 interface StatusDropdownProps {
   TaskCurrentStatus: string | null | undefined | [{ id: string; initials: string; colour: string }];
+  statusName?: string | null;
 }
 
 export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
@@ -59,30 +59,14 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
-  //update task status
+  const { mutate } = UseUpdateTaskStatusService2();
 
-  // const { status } = UseUpdateTaskStatusService({
-  //   task_id: currentTaskStatusId,
-  //   statusDataUpdate: statusValue
-  // });
-
-  // if (status == 'success') {
-  //   setStatus('');
-  // }
-
-  const queryClient = useQueryClient();
-
-  const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-    }
-  });
-
-  const handleUpdateTaskStatus = async (status: string) => {
-    await updateStatusMutation.mutateAsync({
+  const handleUpdateTaskStatus = (status: string) => {
+    const updateStatusMutation = {
       task_id: currentTaskStatusId,
       statusDataUpdate: status
-    });
+    };
+    mutate(updateStatusMutation);
   };
 
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {

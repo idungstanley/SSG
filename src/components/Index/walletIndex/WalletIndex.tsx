@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import {
   setActiveEntity,
+  setActiveEntityName,
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName,
@@ -53,6 +54,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
         currentWalletParentType: 'wallet'
       })
     );
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: type,
