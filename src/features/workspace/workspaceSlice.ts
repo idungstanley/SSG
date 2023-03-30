@@ -17,6 +17,7 @@ interface workspaceState {
   activeItemId?: string | null;
   activeItemType?: string | null;
   activeItemName: string | null | undefined;
+  activeEntityName: string | null | undefined;
   currentWalletId: string | null;
   currentSubWalletId: string | null;
   currentWalletName: string | null;
@@ -55,6 +56,7 @@ const initialState: workspaceState = {
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
+  activeEntityName: null,
   currentSubWalletId: null,
   currentWalletId: null,
   currentWalletName: null,
@@ -165,6 +167,9 @@ export const wsSlice = createSlice({
       state.activeItemType = action.payload.activeItemType;
       state.activeItemName = action.payload.activeItemName;
     },
+    setActiveEntityName(state, action: PayloadAction<string | undefined | null>) {
+      state.activeEntityName = action.payload;
+    },
     setCurrentWalletId(state, action: PayloadAction<string | null>) {
       state.currentWalletId = action.payload;
     },
@@ -223,6 +228,7 @@ export const {
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
+  setActiveEntityName,
   setCurrentWalletId,
   setCurrenSubtWalletId,
   setCurrentWalletName,
