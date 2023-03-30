@@ -336,21 +336,21 @@ export const EndTimeEntriesService = () => {
 };
 
 export const GetTimeEntriesService = ({
-  taskId,
+  itemId,
   trigger
 }: {
-  taskId: string | null | undefined;
+  itemId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
   return useQuery(
-    ['timeclock', { taskId: taskId }],
+    ['timeclock', { itemId: itemId }],
     async () => {
       const data = await requestNew<ITimeEntriesRes | undefined>({
         url: 'time-entries',
         method: 'GET',
         params: {
           type: trigger,
-          id: taskId
+          id: itemId
         }
       });
       return data;

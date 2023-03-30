@@ -1,13 +1,12 @@
-import React from 'react';
-import { useAppSelector } from '../../../../../../../../../app/hooks';
-import { GetTimeEntriesService } from '../../../../../../../../../features/task/taskService';
-import EntryList, { entriesProps } from '../../../../../../../tasks/timeclock/entryLists/EntryList';
-import NoEntriesFound from './NoEntriesFound';
+import { useAppSelector } from '../../../../app/hooks';
+import { GetTimeEntriesService } from '../../../../features/task/taskService';
+import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
+import NoEntriesFound from './NoEntries';
 
-export default function ClockLogIndex() {
+export default function ClockLog() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { data: getTaskEntries } = GetTimeEntriesService({
-    taskId: activeItemId,
+    itemId: activeItemId,
     trigger: activeItemType
   });
 

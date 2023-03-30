@@ -13,11 +13,11 @@ import {
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import Timer from 'react-timer-wrapper';
+import Timer from 'react-compound-timer/build';
 import moment from 'moment';
-import Timecode from 'react-timecode';
 import { createTimeEntriesService, getOneTaskServices } from '../../../../features/task/taskService';
 import Watcher from '../watchers/index';
+import { AiOutlinePlayCircle } from 'react-icons/ai';
 
 function RenderTaskModal() {
   const { taskId } = useParams();
@@ -147,8 +147,26 @@ function RenderTaskModal() {
                         )}
                       </div>
                       <div className="text-xs cursor-pointer">
-                        <Timer active={startTimeClicked} duration={null}>
-                          <Timecode />
+                        <Timer
+                          initialTime={0}
+                          startImmediately={false}
+                          onStart={undefined}
+                          onPause={undefined}
+                          onStop={undefined}
+                        >
+                          {() => (
+                            <React.Fragment>
+                              <br />
+                              <div>
+                                <button onClick={undefined}>
+                                  <AiOutlinePlayCircle
+                                    className="text-green-500 cursor-pointer text-2xl"
+                                    aria-hidden="true"
+                                  />
+                                </button>
+                              </div>
+                            </React.Fragment>
+                          )}
                         </Timer>
                       </div>
 

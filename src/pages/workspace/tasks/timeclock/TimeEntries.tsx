@@ -19,7 +19,7 @@ export default function TimeEntries() {
   const [stopTimeClock, setStopTimeClock] = useState(false);
 
   const { data: getEntries, refetch } = GetTimeEntriesService({
-    taskId: activeItemId,
+    itemId: activeItemId,
     trigger: activeItemType
   });
 

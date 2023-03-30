@@ -1,4 +1,3 @@
-// import React, { useState } from 'react';
 import moment from 'moment';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
@@ -22,7 +21,6 @@ export interface EntryListProps {
 export default function EntryList({ entries }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
-  // const [setTimeEntryDeleteTriggerId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
@@ -30,8 +28,6 @@ export default function EntryList({ entries }: EntryListProps) {
       queryClient.invalidateQueries(['timeclock']);
     }
   });
-
-  // const handleDelete = (id: string) => setTimeEntryDeleteTriggerId(id);
 
   const handleUpdateEntry = (id: string) => {
     if (openUpdateEntryId == id) {

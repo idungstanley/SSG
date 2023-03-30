@@ -17,7 +17,6 @@ import { setShowPilotSideOver } from '../../../../../features/general/slideOver/
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import { VscChecklist } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
-// import TimeEntries from '../../../tasks/timeclock/TimeEntries';
 import TimeClock from './TimeClock/index';
 
 const sections = [

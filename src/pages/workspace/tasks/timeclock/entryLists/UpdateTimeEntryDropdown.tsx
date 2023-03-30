@@ -52,8 +52,8 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
   };
 
   return (
-    <div className="z-50 relative">
-      <section className="absolute -left-96 -top-56 z-50 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+    <div className="absolute -left-64 top-8 z-50 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+      <section className="">
         <div className="flex justify-between items-center px-3 py-3 text-xs">
           <p>Edit Session</p>
           <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>

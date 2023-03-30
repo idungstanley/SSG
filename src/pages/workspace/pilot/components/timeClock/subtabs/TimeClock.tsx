@@ -1,22 +1,22 @@
 import React, { useMemo } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import TimeSubTab from './TimeSubTab';
-import ClockLogIndex from './index/ClockLogIndex';
-import ClockInOutIndex from './index/ClockInOutIndex';
-import ClockPreference from './index/ClockPreference';
+import ClockInOut from '../../../../../../components/Pilot/components/TimeClock/ClockInOut';
+import ClockLog from '../../../../../../components/Pilot/components/TimeClock/ClockLog';
+import ClockPreferences from '../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
 
 export const TimeClockOptions = [
   {
     id: 0,
-    element: <ClockInOutIndex />
+    element: <ClockInOut />
   },
   {
     id: 1,
-    element: <ClockLogIndex />
+    element: <ClockLog />
   },
   {
     id: 2,
-    element: <ClockPreference />
+    element: <ClockPreferences />
   }
 ];
 export default function TimeClock() {
