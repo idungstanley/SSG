@@ -195,6 +195,9 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
   });
   return response;
 };
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
@@ -243,7 +246,8 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useInfiniteQuery(
-    ['task', { listId: listId }],
+    ['task'],
+    // ['task', { listId: listId }],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
