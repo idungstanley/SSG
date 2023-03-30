@@ -99,7 +99,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                   <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
 
                   <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
-                    {filteredTaskData[value].groupListName}
+                    {filteredTaskData[value]?.groupListName}
                   </p>
 
                   <InformationCircleIcon
