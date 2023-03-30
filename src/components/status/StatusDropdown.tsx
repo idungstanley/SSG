@@ -4,7 +4,6 @@ import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface statusType {
   id: number;
   title: string;
@@ -60,19 +59,14 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
-  const queryClient = useQueryClient();
+  const { mutate } = UseUpdateTaskStatusService2();
 
-  const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-    }
-  });
-
-  const handleUpdateTaskStatus = async (status: string) => {
-    await updateStatusMutation.mutateAsync({
+  const handleUpdateTaskStatus = (status: string) => {
+    const updateStatusMutation = {
       task_id: currentTaskStatusId,
       statusDataUpdate: status
-    });
+    };
+    mutate(updateStatusMutation);
   };
 
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {

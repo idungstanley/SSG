@@ -14,6 +14,7 @@ import TaskBoardTemplate from '../../../tasks/component/views/hubLevel/TaskBoard
 import GroupByStatusTemplate from '../../../lists/components/renderlist/listDetails/Groupings/components/GroupByStatus';
 import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
+import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 
 interface HubDetailTypes {
   activeItemId: string;
@@ -111,6 +112,7 @@ function RenderHubs() {
             changeViews="View"
           />
         }
+        additional={<FilterByAssigneesSliderOver />}
       >
         <section>
           <div className="w-full">

@@ -88,7 +88,10 @@ function SubTask({ parentTaskId }: SubTaskProps) {
             roundedLeft={false}
             roundedRight={false}
           />
-          <FaTimes className="text-xl text-gray-400 cursor-pointer" />
+          <FaTimes
+            className="text-xl text-gray-400 cursor-pointer"
+            onClick={() => dispatch(setCurrentParentTaskId(null))}
+          />
         </div>
       </div>
     </>
