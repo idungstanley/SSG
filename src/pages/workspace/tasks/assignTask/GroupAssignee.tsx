@@ -15,7 +15,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               <div key={newData.id} className="">
                 <span
                   key={newData.id}
-                  className="flex items-center justify-center -ml-2.5 border-white border-2 rounded-full"
+                  className="flex items-center justify-center -ml-3 border-white border-2 rounded-full"
                 >
                   <AvatarWithInitials
                     initials={newData.initials}
