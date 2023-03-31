@@ -109,16 +109,16 @@ export default function Assignee({
   return (
     <div>
       {option === 'task' && (
-        <Button id="basic-button" onClick={handleClick}>
+        <Button id="basic-button" onClick={handleClick} style={{ marginLeft: '-25px' }}>
           {assignees?.length ? (
-            <div className="flex">
+            <div className="flex -pr-5">
               <GroupAssignee data={assignees} />
             </div>
           ) : (
             <UserPlusIcon
               className="text-xl text-gray-400 cursor-pointer "
               style={{
-                width: `${CompactView || CompactViewWrap ? '30px' : '35px'}`
+                width: `${CompactView || CompactViewWrap ? '25px' : '35px'}`
               }}
               aria-hidden="true"
             />

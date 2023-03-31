@@ -16,7 +16,7 @@ function AvatarWithInitials({
   width = 'w-10',
   backgroundColour = '#6B7280',
   roundedStyle = 'circular',
-  textSize = '8px '
+  textSize = '10px '
 }: AvatarWithInitialsProps) {
   return (
     <span

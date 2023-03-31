@@ -12,13 +12,13 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
           {data
             ?.slice(0, 2)
             .map((newData: { id: React.Key | null | undefined; initials: string; colour: string | undefined }) => (
-              <div key={newData.id} className="">
-                <span key={newData.id} className="flex items-center gap-1 justify center">
+              <div key={newData.id}>
+                <span key={newData.id} className="flex  items-center gap-1 justify center">
                   <AvatarWithInitials
                     initials={newData.initials}
                     backgroundColour={newData.colour}
-                    height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-8'}`}
-                    width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-8'}`}
+                    height={`${CompactView || CompactViewWrap ? 'h-4' : 'w-8'}`}
+                    width={`${CompactView || CompactViewWrap ? 'h-4' : 'w-8'}`}
                   />
                 </span>
               </div>
