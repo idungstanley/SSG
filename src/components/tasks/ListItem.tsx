@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
@@ -5,31 +6,47 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 // import ListIcon from '../../assets/icons/ListIcon';
 import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { UseEditListService } from '../../features/list/listService';
+import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
+import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 
 interface ListItemProps {
   list: {
     id: string;
     name: string;
+    color?: ListColourProps | string;
+    shape?: string;
   };
   paddingLeft: string | number;
+}
+export interface ListColourProps {
+  innerColour?: string;
+  outerColour?: string;
 }
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const [paletteColour, setPaletteColour] = useState<string | undefined>('black');
-  const { paletteId, show } = paletteDropdown;
-  // const { innerColour, outterColour } = paletteColour;
-  const innerColour = 'white';
-  const outterColour = 'black';
-  console.log(paletteColour);
-
+  const { listColour } = useAppSelector((state) => state.list);
+  const [activeShape, setActiveShape] = useState(list.shape);
+  // const [listPaletteColor, setListPaletteColor] = useState<ListColourProps>();
+  const { paletteId, show, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
+  const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
+  const innerColour = list?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
+  const outerColour = list?.color ? (color.outerColour as string) : (listColour as ListColourProps)?.outerColour;
+  const listComboColour = { innerColour, outerColour };
+  const editListColorMutation = useMutation(UseEditListService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  });
+  // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     navigate(`/list/${id}`);
     dispatch(
@@ -40,6 +57,16 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       })
     );
     dispatch(setActiveEntity({ id: id, type: 'wallet' }));
+  };
+
+  const handleSelection = (shape: string) => {
+    setActiveShape(shape);
+    if (paletteType === 'list') {
+      editListColorMutation.mutateAsync({
+        listId: paletteId,
+        shape: shape
+      });
+    }
   };
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
@@ -60,6 +87,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'list' }));
+    dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
   return (
@@ -73,7 +101,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
-            <ListIconComponent shapes="square-in-circle" innerColour={innerColour} outterColour={outterColour} />
+            <ListIconComponent shape={activeShape} innerColour={innerColour} outterColour={outerColour} />
           </div>
           <div
             onClick={() => handleListLocation(list.id, list.name)}
@@ -103,7 +131,14 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           />
         </button>
       </section>
-      {paletteId == list.id && show ? <Palette title="List Colour" setPaletteColor={setPaletteColour} /> : null}
+      {paletteId == list.id && show ? (
+        <Palette
+          topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
+          title="List Colour"
+          listComboColour={listComboColour}
+          shape={activeShape}
+        />
+      ) : null}
     </>
   );
 }

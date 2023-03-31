@@ -84,7 +84,7 @@ export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
   currHubId?: string | null;
-  color?: string | null;
+  color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
     url: `hubs/${data.currHubId}`,

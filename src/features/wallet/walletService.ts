@@ -53,7 +53,7 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 export const UseEditWalletService = (data: {
   walletName?: string;
   WalletId?: string | null;
-  walletColor?: string | null;
+  walletColor?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
     url: `wallets/${data.WalletId}`,

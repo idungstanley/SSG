@@ -70,12 +70,19 @@ export const getListsDetailsService = (data: { queryKey: (string | undefined)[] 
 };
 
 //edit list
-export const UseEditListService = (data: { listName?: string; listId?: string | null }) => {
+export const UseEditListService = (data: {
+  listName?: string;
+  listId?: string | null;
+  colour?: string | null | { innerColour?: string; outerColour?: string };
+  shape?: string;
+}) => {
   const response = requestNew({
     url: `lists/${data.listId}`,
     method: 'PUT',
     params: {
-      name: data.listName
+      name: data.listName,
+      color: data.colour,
+      shape: data.shape
     }
   });
   return response;
