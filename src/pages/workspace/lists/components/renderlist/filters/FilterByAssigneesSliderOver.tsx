@@ -1,63 +1,82 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable */
 import React, { Fragment, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
 import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
-import { ITaskFullList, TaskDataGroupingsProps } from '../../../../../../features/task/interface.tasks';
+import {
+  // IGroupingAssignee,
+  ITaskFullList,
+  TaskDataGroupingsAssigneeProps
+} from '../../../../../../features/task/interface.tasks';
+import { setFilterTaskByAssigneeIds } from '../../../../../../features/task/taskSlice';
+// import { ImyTaskData } from '../../../../../../features/task/taskSlice';
 
-export default function FilterByAssigneesSliderOver({ unFilteredTaskData }: ITaskFullList[] | undefined) {
-  const dispatch = useDispatch();
-
+export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullList[] }) {
+  const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
 
-  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsProps | unknown>({});
+  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsAssigneeProps>({});
   useEffect(() => {
-    const taskDataGroupedByAssignee = unFilteredTaskData?.reduce((GroupedTaskByAssignee, currentTask) => {
-      const assignees = currentTask.assignees;
+    const taskDataGroupedByAssignee = data?.reduce(
+      (
+        GroupedTaskByAssignee: {
+          [key: string]: {
+            assigneeName: string;
+            assigneeId?: string | null | undefined;
+            tasks: ITaskFullList[];
+          };
+        },
+        currentTask
+      ) => {
+        const assignees = currentTask.assignees;
 
-      if (assignees !== null && assignees !== undefined && assignees.length > 0) {
-        assignees.forEach((assignee) => {
-          const assigneeId = assignee.id;
-          if (!GroupedTaskByAssignee[assigneeId]) {
-            GroupedTaskByAssignee[assigneeId] = {
-              assigneeName: assignee.name,
-              assigneeId: assignee.id,
-              tasks: [] // create an empty tasks array for each assignee
+        if (assignees !== null && assignees !== undefined && assignees.length > 0) {
+          assignees?.forEach((assignee) => {
+            const assigneeId = assignee.id;
+            if (!GroupedTaskByAssignee[assigneeId]) {
+              GroupedTaskByAssignee[assigneeId] = {
+                assigneeName: assignee.name,
+                assigneeId: assignee.id,
+                tasks: [] // create an empty tasks array for each assignee
+              };
+            }
+
+            GroupedTaskByAssignee[assigneeId].tasks.push(currentTask);
+          });
+        } else {
+          // handle tasks with no assignee
+          if (!GroupedTaskByAssignee['unassigned']) {
+            GroupedTaskByAssignee['unassigned'] = {
+              assigneeName: 'Unassigned',
+              assigneeId: 'unassigned',
+              tasks: [] // create an empty tasks array for unassigned tasks
             };
           }
 
-          GroupedTaskByAssignee[assigneeId].tasks.push(currentTask);
-        });
-      } else {
-        // handle tasks with no assignee
-        if (!GroupedTaskByAssignee['unassigned']) {
-          GroupedTaskByAssignee['unassigned'] = {
-            assigneeName: 'Unassigned',
-            assigneeId: 'unassigned',
-            tasks: [] // create an empty tasks array for unassigned tasks
-          };
+          GroupedTaskByAssignee['unassigned'].tasks.push(currentTask);
         }
 
-        GroupedTaskByAssignee['unassigned'].tasks.push(currentTask);
-      }
+        return GroupedTaskByAssignee;
+      },
+      {}
+    );
 
-      return GroupedTaskByAssignee;
-    }, {});
-
-    setTaskDataGroupingsAssignees(taskDataGroupedByAssignee as TaskDataGroupingsProps);
+    setTaskDataGroupingsAssignees(taskDataGroupedByAssignee as TaskDataGroupingsAssigneeProps);
 
     return () => {
-      true;
+      // cleanup function
     };
-  }, [unFilteredTaskData, setTaskDataGroupingsAssignees]);
+  }, [data, setTaskDataGroupingsAssignees]);
+
   console.log(TaskDataGroupingsAssignees);
+
   return (
     <Transition.Root show={!!showFilterByAssigneeSlideOver} as={Fragment}>
       <Dialog as="div" className="relative z-10 border-2 border-gray-500" onClose={onClose}>
@@ -96,32 +115,49 @@ export default function FilterByAssigneesSliderOver({ unFilteredTaskData }: ITas
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      <input type="text" placeholder="Search" className="w-full" />
 
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                      {/* {console.log(TaskDataGroupingsAssignees[value].assigneeName)} */}
+                      <input type="text" placeholder="Search" className="w-full" />
                       <section>
                         <div id="header" className="flex justify-between items-center mt-5">
                           <p>Assignees</p>
                           <p>Select all</p>
                         </div>
+                        {TaskDataGroupingsAssignees
+                          ? Object.keys(TaskDataGroupingsAssignees).map((value) => (
+                              <div
+                                key={TaskDataGroupingsAssignees[value].assigneeId}
+                                className="flex justify-between"
+                                onClick={() =>
+                                  dispatch(setFilterTaskByAssigneeIds(TaskDataGroupingsAssignees[value]?.assigneeId))
+                                }
+                              >
+                                <div className="flex space-x-3 bg-red-300">
+                                  <AvatarWithInitials
+                                    initials={'ND'}
+                                    textColor={'white'}
+                                    height="h-8"
+                                    width="w-8"
+                                    backgroundColour={'blue'}
+                                    textSize={'8px'}
+                                  />
+                                  <div className="flex flex-col text-left">
+                                    <p className="capitalize" style={{ fontSize: '13px' }}>
+                                      {TaskDataGroupingsAssignees[value]?.assigneeName}
+                                    </p>
+                                    <p style={{ fontSize: '10px' }}>
+                                      {TaskDataGroupingsAssignees[value].tasks.length} tasks
+                                    </p>
+                                  </div>
+                                </div>
 
-                        <div className="flex justify-between">
-                          <AvatarWithInitials
-                            initials={'ND'}
-                            textColor={'white'}
-                            height="h-8"
-                            width="w-8"
-                            backgroundColour={'blue'}
-                            textSize={'8px'}
-                          />
-                          <div>
-                            <p>Nicholas Diamond</p>
-                            <p>3 tasks</p>
-                          </div>
-                          <button>
-                            <AiOutlineCheckCircle />
-                          </button>
-                        </div>
+                                <button>
+                                  <AiOutlineCheckCircle />
+                                </button>
+                              </div>
+                            ))
+                          : null}
                       </section>
                     </div>
                   </div>

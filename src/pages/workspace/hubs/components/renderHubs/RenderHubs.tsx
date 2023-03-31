@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable */
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
@@ -25,9 +24,8 @@ interface HubDetailTypes {
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  // const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsProps | unknown>({});
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  const { groupByStatus } = useAppSelector((state) => state.task);
+  const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
 
@@ -42,7 +40,8 @@ function RenderHubs() {
     fetchNextPage
   } = UseGetFullTaskList({
     itemId: hubdetail.activeItemId,
-    itemType: hubdetail.activeItemType
+    itemType: hubdetail.activeItemType,
+    assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
@@ -81,49 +80,7 @@ function RenderHubs() {
     return () => {
       true;
     };
-  }, [unFilteredTaskData, status]);
-
-  // useEffect(() => {
-  //   const taskDataGroupedByAssignee = unFilteredTaskData?.reduce((GroupedTaskByAssignee, currentTask) => {
-  //     const assignees = currentTask.assignees;
-
-  //     if (assignees !== null && assignees !== undefined && assignees.length > 0) {
-  //       assignees.forEach((assignee) => {
-  //         const assigneeId = assignee.id;
-  //         if (!GroupedTaskByAssignee[assigneeId]) {
-  //           GroupedTaskByAssignee[assigneeId] = {
-  //             assigneeName: assignee.name,
-  //             assigneeId: assignee.id,
-  //             tasks: [] // create an empty tasks array for each assignee
-  //           };
-  //         }
-
-  //         GroupedTaskByAssignee[assigneeId].tasks.push(currentTask);
-  //       });
-  //     } else {
-  //       // handle tasks with no assignee
-  //       if (!GroupedTaskByAssignee['unassigned']) {
-  //         GroupedTaskByAssignee['unassigned'] = {
-  //           assigneeName: 'Unassigned',
-  //           assigneeId: 'unassigned',
-  //           tasks: [] // create an empty tasks array for unassigned tasks
-  //         };
-  //       }
-
-  //       GroupedTaskByAssignee['unassigned'].tasks.push(currentTask);
-  //     }
-
-  //     return GroupedTaskByAssignee;
-  //   }, {});
-
-  //   setTaskDataGroupingsAssignees(taskDataGroupedByAssignee as TaskDataGroupingsProps);
-
-  //   return () => {
-  //     true;
-  //   };
-  // }, [unFilteredTaskData, setTaskDataGroupingsAssignees]);
-
-  // console.log(TaskDataGroupingsAssignees);
+  }, [unFilteredTaskData, status, filterTaskByAssigneeIds]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -157,7 +114,7 @@ function RenderHubs() {
             changeViews="View"
           />
         }
-        additional={<FilterByAssigneesSliderOver unFilteredTaskData={unFilteredTaskData as ITaskFullList[]} />}
+        additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <section>
           <div className="w-full">
