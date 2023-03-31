@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Spinner } from '../../common';
 import {
   setActiveEntity,
+  setActiveEntityName,
   setActiveItem,
   setActiveTabId,
   setCreateWlLink,
@@ -47,6 +48,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   }
 
   const handleLocation = (id: string, name: string) => {
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemId: id,
