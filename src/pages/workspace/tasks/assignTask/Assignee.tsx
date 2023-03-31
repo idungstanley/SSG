@@ -109,7 +109,7 @@ export default function Assignee({
   return (
     <div>
       {option === 'task' && (
-        <Button id="basic-button" onClick={handleClick} style={{ marginLeft: '-25px' }}>
+        <Button id="basic-button" onClick={handleClick} style={{ marginLeft: '-8px' }}>
           {assignees?.length ? (
             <div className="flex -pr-5">
               <GroupAssignee data={assignees} />

@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 
-interface TaskDataProps {
+export interface TaskDataProps {
   task?: ImyTaskData | undefined;
+  tasks?: (ImyTaskData | undefined)[] | undefined;
 }
 
 export default function TaskData({ task }: TaskDataProps) {
