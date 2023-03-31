@@ -4,6 +4,8 @@ import { Button } from '../../../../components';
 import { createTaskService } from '../../../../features/task/taskService';
 import { FaTimes } from 'react-icons/fa';
 import { CalendarIcon, FlagIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { setCurrentParentTaskId } from '../../../../features/task/taskSlice';
+import { useAppDispatch } from '../../../../app/hooks';
 
 interface SubTaskProps {
   parentTaskId?: string;
@@ -20,6 +22,8 @@ function SubTask({ parentTaskId }: SubTaskProps) {
   const defaultTaskFormState = {
     name: ''
   };
+
+  const dispatch = useAppDispatch();
 
   const [taskFormState, setTaskFormState] = useState(defaultTaskFormState);
 
@@ -84,7 +88,10 @@ function SubTask({ parentTaskId }: SubTaskProps) {
             roundedLeft={false}
             roundedRight={false}
           />
-          <FaTimes className="text-xl text-gray-400 cursor-pointer" />
+          <FaTimes
+            className="text-xl text-gray-400 cursor-pointer"
+            onClick={() => dispatch(setCurrentParentTaskId(null))}
+          />
         </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTaskService } from '../../../../../features/task/taskService';
 import { CalendarIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { setCreateTaskFromTop } from '../../../../../features/list/listSlice';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface AddNewItemProps {
   listId: string | undefined;
@@ -14,13 +15,14 @@ interface AddNewItemProps {
 
 export default function AddNewItem({ listId }: AddNewItemProps) {
   const dispatch = useDispatch();
-  // const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
+  const { createTaskFromTop } = useAppSelector((state) => state.list);
   const queryClient = useQueryClient();
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      dispatch(setAddNewTaskItem(false));
-      dispatch(setCreateTaskFromTop(false));
+      dispatch(setAddNewTaskItem(!addNewTaskItem));
+      dispatch(setCreateTaskFromTop(!createTaskFromTop));
     }
   });
 

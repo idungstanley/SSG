@@ -65,6 +65,7 @@ interface SideOverState {
   pilotSideOverHub: PilotHub;
   itemActionForSideOver: itemAction | null;
   showCreateDirectorySlideOver: boolean;
+  showFilterByAssigneeSlideOver: boolean;
 }
 
 const initialState: SideOverState = {
@@ -92,7 +93,8 @@ const initialState: SideOverState = {
   shareSideOver: { show: false },
   pilotSideOver: { show: false },
   pilotSideOverHub: { show: true },
-  itemActionForSideOver: null
+  itemActionForSideOver: null,
+  showFilterByAssigneeSlideOver: false
 };
 
 export const slideOverSlice = createSlice({
@@ -173,6 +175,9 @@ export const slideOverSlice = createSlice({
     },
     setShowPilotSideOverHub: (state, action: PayloadAction<PilotHub>) => {
       state.pilotSideOverHub = action.payload;
+    },
+    setShowFilterByAssigneeSlideOver: (state, action: PayloadAction<boolean>) => {
+      state.showFilterByAssigneeSlideOver = action.payload;
     }
   }
 });
@@ -202,7 +207,8 @@ export const {
   setShowShareSideOver,
   setShowPilotSideOver,
   setShowPilotSideOverHub,
-  setCreateSubHubSlideOverVisibility
+  setCreateSubHubSlideOverVisibility,
+  setShowFilterByAssigneeSlideOver
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;

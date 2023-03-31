@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
   setActiveEntity,
+  setActiveEntityName,
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName
@@ -36,6 +37,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
     dispatch(setActiveEntity({ id: id, type: type }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
+    dispatch(setActiveEntityName(name));
   };
 
   return data?.data?.wallets != null ? (

@@ -153,7 +153,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list'
+      enabled: query.activeItemType === 'list' && !!query.activeItemId
     }
   );
 };

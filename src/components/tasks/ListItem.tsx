@@ -8,7 +8,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveEntity, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -49,6 +49,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     navigate(`/list/${id}`);
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: 'list',

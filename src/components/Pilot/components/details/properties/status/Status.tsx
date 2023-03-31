@@ -4,7 +4,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import ToolTip from '../../../../../Tooltip';
 import { useAppDispatch } from '../../../../../../app/hooks';
 import { setUpdateStatusModalId } from '../../../../../../features/task/taskSlice';
-import { UseUpdateTaskStatusService } from '../../../../../../features/task/taskService';
+import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/taskService';
 
 interface StatusDetailsProps {
   Details: {
@@ -22,14 +22,29 @@ export default function Status({ Details }: StatusDetailsProps) {
   const dispatch = useAppDispatch();
   const StatusData = Details?.status;
 
-  const { status } = UseUpdateTaskStatusService({
-    task_id: Details?.id,
-    statusDataUpdate: complete
-  });
+  // const { status } = UseUpdateTaskStatusService({
+  //   task_id: Details?.id,
+  //   statusDataUpdate: complete
+  // });
 
-  if (status == 'success') {
-    setComplete('');
-  }
+  // if (status == 'success') {
+  //   setComplete('');
+  // }
+
+  const { mutate } = UseUpdateTaskStatusService2();
+
+  const handleUpdateTaskStatus = () => {
+    const updateStatusMutation = {
+      task_id: Details?.id,
+      statusDataUpdate: complete
+    };
+    mutate(updateStatusMutation);
+  };
+
+  const handleStatusModal = () => {
+    dispatch(setUpdateStatusModalId(Details?.id || ''));
+    handleUpdateTaskStatus();
+  };
 
   const handleStatusBg = () => {
     if (StatusData == 'todo') {
@@ -64,7 +79,7 @@ export default function Status({ Details }: StatusDetailsProps) {
         <ToolTip tooltip="Current status">
           <button
             className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
-            onClick={() => dispatch(setUpdateStatusModalId(Details?.id || ''))}
+            onClick={() => handleStatusModal()}
           >
             {handleStatusMessage(Details?.status)}
           </button>
