@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
-import Timer from 'react-compound-timer/build';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
@@ -12,55 +13,72 @@ import {
   GetTimeEntriesService,
   StartTimeEntryService
 } from '../../../../features/task/taskService';
-import { setTimerStatus } from '../../../../features/task/taskSlice';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-
-type TimePropsRenderProps = {
-  getTime: () => number;
-  setTime: (time: number) => void;
-  start: () => void;
-  pause: () => void;
-  resume: () => void;
-  stop: () => void;
-  reset: () => void;
-};
 
 export default function ClockInOut() {
   const [isBillable, setIsBillable] = useState(false);
+  const { activeItemId, activeItemType, activeItemName } = useAppSelector((state) => state.workspace);
+  const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [btnClicked, setBtnClicked] = useState(false);
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { timerStatus } = useAppSelector((state) => state.task);
-  const dispatch = useDispatch();
+  const [period, setPeriod] = useState(null);
 
-  const { data: getEntries } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType
-  });
-
-  const timeMemory = useRef(getEntries?.data ? getEntries.data.total_duration : 0);
+  useEffect(() => {
+    reset();
+    return reset();
+  }, [activeItemName]);
 
   const { mutate } = EndTimeEntriesService();
   const mutation = StartTimeEntryService();
 
-  const handleStartTimer = () => {
+  const start = () => {
+    RunTimer();
+    setBtnClicked(!btnClicked);
     mutation.mutate({
       taskId: activeItemId,
       type: activeItemType
     });
-    dispatch(setTimerStatus(true));
-    setBtnClicked(!btnClicked);
+    setPeriod(setInterval(RunTimer, 10));
   };
-
-  const HandleStopTimer = () => {
+  const stop = () => {
     mutate({
       id: activeItemId,
       description: '',
       is_Billable: isBillable
     });
-    dispatch(setTimerStatus(false));
-    setBtnClicked(!btnClicked);
+    reset();
   };
 
+  const reset = () => {
+    clearInterval(period);
+    setBtnClicked(false);
+    setTime({ ms: 0, s: 0, m: 0, h: 0 });
+  };
+
+  let updateH = time.h,
+    updateM = time.m,
+    updateS = time.s,
+    updateMS = time.ms;
+  const RunTimer = () => {
+    if (updateM >= 60) {
+      updateH++;
+      updateM = 0;
+    }
+    if (updateS >= 60) {
+      updateM++;
+      updateS = 0;
+    }
+    if (updateMS >= 100) {
+      updateS++;
+      updateMS = 0;
+    }
+    updateMS++;
+    return setTime({ ms: updateMS, s: updateS, m: updateM, h: updateH });
+  };
+
+  const { data: getEntries } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType
+  });
   return (
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
@@ -86,30 +104,23 @@ export default function ClockInOut() {
           </div>
           <div id="entries" className="px-3 py-1 flex items-center justify-between">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <Timer
-                initialTime={timeMemory.current * 1000}
-                startImmediately={false}
-                onStart={() => handleStartTimer()}
-                onStop={() => HandleStopTimer()}
-              >
-                {({ start, stop, getTime }: TimePropsRenderProps) => (
-                  <React.Fragment>
-                    <div>{moment.utc(getTime()).format('HH:mm:ss')}</div>
-                    <br />
-                    <div>
-                      {btnClicked ? (
-                        <button onClick={stop}>
-                          <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
-                        </button>
-                      ) : (
-                        <button onClick={!timerStatus ? start : undefined}>
-                          <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
-                        </button>
-                      )}
-                    </div>
-                  </React.Fragment>
+              <div className="mr-1">
+                {btnClicked ? (
+                  <button onClick={stop}>
+                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                  </button>
+                ) : (
+                  <button onClick={start}>
+                    <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
+                  </button>
                 )}
-              </Timer>
+              </div>
+              {/* timer goes here */}
+              {time.h < 10 ? `0${time.h}` : time.h}
+              {':'}
+              {time.m < 10 ? `0${time.m}` : time.m}
+              {':'}
+              {time.s < 10 ? `0${time.s}` : time.s}
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
