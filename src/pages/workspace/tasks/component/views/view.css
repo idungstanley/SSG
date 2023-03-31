@@ -56,3 +56,11 @@ textarea {
 .scaleBigger:hover {
   scale: 1.1;
 }
+
+.littleBigger:hover {
+  scale: 1.1;
+}
+
+.bigScale {
+  scale: 1.1;
+}

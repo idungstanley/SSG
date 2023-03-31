@@ -7,7 +7,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
 
   return (
     <>
-      {data && data?.length ? (
+      {data && data?.length >= 5 ? (
         <div className="flex items-center justify-center">
           {data
             ?.slice(0, 3)
@@ -18,7 +18,9 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               ) => (
                 <div
                   key={newData.id}
-                  className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : 'z-10'} `}
+                  className={`scaleBigger ${index === 0 ? ' z-40  ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
+                    index === 2 ? 'z-20' : 'z-10'
+                  }  `}
                 >
                   <span
                     key={newData.id}
@@ -35,15 +37,25 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               )
             )}
           <span>
-            {(data as [{ id: string; initials: string; colour: string }])?.length - 2 !== 0 ? (
-              <span>+{(data as [{ id: string; initials: string; colour: string }])?.length - 2}</span>
+            {(data as [{ id: string; initials: string; colour: string }])?.length - 3 !== 0 ? (
+              <span className="-ml-3 border-white border-2  rounded-full bg-gray-200 p-1.5">
+                +{(data as [{ id: string; initials: string; colour: string }])?.length - 3}
+              </span>
             ) : null}
           </span>
         </div>
       ) : (
-        data?.map((newData) => (
-          <div key={newData.id} className="flex">
-            <span key={newData.id}>
+        data?.map((newData, index: number) => (
+          <div
+            key={newData.id}
+            className={`scaleBigger ${index === 0 ? ' z-40  ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
+              index === 2 ? 'z-20' : 'z-10'
+            } `}
+          >
+            <span
+              key={newData.id}
+              className="flex items-center justify-center -ml-3.5 border-white border-2  rounded-full"
+            >
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}

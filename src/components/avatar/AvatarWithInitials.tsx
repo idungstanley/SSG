@@ -19,12 +19,12 @@ function AvatarWithInitials({
 }: AvatarWithInitialsProps) {
   return (
     <span
-      className={`inline-flex p-1 items-center justify-center ${height} ${width}  ${
+      className={`inline-flex p-1 items-center justify-center  ${height} ${width} ${
         roundedStyle === 'circular' && 'rounded-full'
       } ${roundedStyle === 'rounded' && 'rounded'}`}
       style={{ backgroundColor: backgroundColour }}
     >
-      <span className="font-bold leading-none" style={{ fontSize: textSize, color: textColor }}>
+      <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
         {initials}
       </span>
     </span>
