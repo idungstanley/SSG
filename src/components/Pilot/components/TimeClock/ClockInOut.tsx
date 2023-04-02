@@ -20,27 +20,31 @@ export default function ClockInOut() {
   const { activeItemId, activeItemType, activeItemName } = useAppSelector((state) => state.workspace);
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [btnClicked, setBtnClicked] = useState(false);
-  const [period, setPeriod] = useState(null);
+  const [period, setPeriod] = useState<string | number | undefined>(undefined);
 
   useEffect(() => {
     reset();
     return reset();
   }, [activeItemName]);
 
-  const { mutate } = EndTimeEntriesService();
-  const mutation = StartTimeEntryService();
+  const { data: getEntries } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType
+  });
+  const mutation = EndTimeEntriesService();
+  const { mutate } = StartTimeEntryService();
 
   const start = () => {
-    RunTimer();
-    setBtnClicked(!btnClicked);
-    mutation.mutate({
+    mutate({
       taskId: activeItemId,
       type: activeItemType
     });
-    setPeriod(setInterval(RunTimer, 10));
+    setBtnClicked(!btnClicked);
+    RunTimer();
+    setPeriod(window.setInterval(RunTimer, 10));
   };
   const stop = () => {
-    mutate({
+    mutation.mutate({
       id: activeItemId,
       description: '',
       is_Billable: isBillable
@@ -75,10 +79,6 @@ export default function ClockInOut() {
     return setTime({ ms: updateMS, s: updateS, m: updateM, h: updateH });
   };
 
-  const { data: getEntries } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType
-  });
   return (
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
