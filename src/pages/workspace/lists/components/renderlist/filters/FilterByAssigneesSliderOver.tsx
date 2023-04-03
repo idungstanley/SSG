@@ -128,12 +128,12 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
                           ? Object.keys(TaskDataGroupingsAssignees).map((value) => (
                               <div
                                 key={TaskDataGroupingsAssignees[value].assigneeId}
-                                className="flex justify-between"
+                                className="flex justify-between cursor-pointer hover:bg-gray-200"
                                 onClick={() =>
                                   dispatch(setFilterTaskByAssigneeIds(TaskDataGroupingsAssignees[value]?.assigneeId))
                                 }
                               >
-                                <div className="flex space-x-3 bg-red-300">
+                                <div className="flex space-x-3">
                                   <AvatarWithInitials
                                     initials={'ND'}
                                     textColor={'white'}
