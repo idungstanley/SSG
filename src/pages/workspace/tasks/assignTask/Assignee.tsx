@@ -118,7 +118,7 @@ export default function Assignee({
             <UserPlusIcon
               className="text-xl text-gray-400 cursor-pointer "
               style={{
-                width: `'23px' ${CompactView || CompactViewWrap ? '30px' : '35px'}`
+                width: ` ${CompactView || CompactViewWrap ? '30px' : '35px'}`
               }}
               aria-hidden="true"
             />
