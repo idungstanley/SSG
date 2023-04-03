@@ -21,7 +21,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const navigate = useNavigate();
 
   const handleListLocation = (id: string, name: string) => {
-    navigate(`/list/${id}`);
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -30,7 +29,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
+    navigate(`/list/${id}`);
+    dispatch(setActiveEntity({ id: id, type: 'list' }));
   };
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
