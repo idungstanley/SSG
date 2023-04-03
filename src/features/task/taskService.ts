@@ -4,6 +4,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { useAppDispatch } from '../../app/hooks';
 import {
   ImyTaskData2,
+  setTimerStatus,
   // getTaskData,
   // getTaskData,
   setToggleAssignCurrentTaskId
@@ -323,6 +324,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
 
 export const StartTimeEntryService = () => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const mutation = useMutation(
     async (query: { taskId?: string | null; type: string | null | undefined }) => {
       const res = await requestNew({
@@ -336,7 +338,12 @@ export const StartTimeEntryService = () => {
       return res;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+      onSuccess: () => queryClient.invalidateQueries(['timeclock']),
+      onError: (res: unknown) => {
+        if ((res as { data: { message?: { title?: string } } })?.data?.message?.title === 'Timer already started') {
+          dispatch(setTimerStatus(true));
+        }
+      }
     }
   );
   return mutation;

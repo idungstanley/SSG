@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import {
   EndTimeEntriesService,
@@ -14,10 +11,13 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import { setTimerStatus } from '../../../../features/task/taskSlice';
 
 export default function ClockInOut() {
   const [isBillable, setIsBillable] = useState(false);
   const { activeItemId, activeItemType, activeItemName } = useAppSelector((state) => state.workspace);
+  const { timerStatus } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [btnClicked, setBtnClicked] = useState(false);
   const [period, setPeriod] = useState<string | number | undefined>(undefined);
@@ -25,7 +25,7 @@ export default function ClockInOut() {
   useEffect(() => {
     reset();
     return reset();
-  }, [activeItemName]);
+  }, [activeItemName, timerStatus]);
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -39,6 +39,9 @@ export default function ClockInOut() {
       taskId: activeItemId,
       type: activeItemType
     });
+    if (timerStatus) {
+      return setBtnClicked(!btnClicked);
+    }
     setBtnClicked(!btnClicked);
     RunTimer();
     setPeriod(window.setInterval(RunTimer, 10));
@@ -50,6 +53,7 @@ export default function ClockInOut() {
       is_Billable: isBillable
     });
     reset();
+    dispatch(setTimerStatus(false));
   };
 
   const reset = () => {
@@ -106,14 +110,35 @@ export default function ClockInOut() {
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
                 {btnClicked ? (
-                  <button onClick={stop}>
-                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
-                  </button>
+                  !btnClicked && timerStatus ? (
+                    <button onClick={start}>
+                      <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
+                    </button>
+                  ) : (
+                    <button onClick={stop}>
+                      <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                    </button>
+                  )
                 ) : (
                   <button onClick={start}>
                     <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
                   </button>
                 )}
+                {/* {btnClicked ? (
+                  btnClicked && timerStatus ? (
+                    <button onClick={start}>
+                      <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
+                    </button>
+                  ) : (
+                    <button onClick={stop}>
+                      <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                    </button>
+                  )
+                ) : (
+                  <button onClick={stop}>
+                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                  </button>
+                )} */}
               </div>
               {/* timer goes here */}
               {time.h < 10 ? `0${time.h}` : time.h}
