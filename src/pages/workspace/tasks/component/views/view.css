@@ -70,3 +70,17 @@ textarea {
   width: 20px;
   height: 20px;
 }
+
+.ComfortableWithInitialsH {
+  height: 30px;
+}
+.CompactWithInitialsH {
+  height: 20px;
+}
+.ComfortableWithInitialsW {
+  width: 30px;
+}
+
+.CompactWithInitialsW {
+  width: 20px;
+}
