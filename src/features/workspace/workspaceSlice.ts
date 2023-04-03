@@ -8,6 +8,7 @@ interface workspaceState {
   activePlaceName: string | null;
   pilotWidth: number;
   showHub: boolean;
+  fetchAllWorkspace: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
   showMenuDropDown: boolean;
@@ -71,6 +72,7 @@ const initialState: workspaceState = {
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
+  fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
@@ -92,6 +94,9 @@ export const wsSlice = createSlice({
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
+    },
+    setFetchAllWorkspace(state, action: PayloadAction<boolean>) {
+      state.fetchAllWorkspace = action.payload;
     },
     setCreateWlLink(state, action: PayloadAction<boolean>) {
       state.createWlLink = action.payload;
@@ -250,7 +255,8 @@ export const {
   setExtendedSidebarWidth,
   setActivePlaceName,
   setActivePlaceForNav,
-  setCreateWlLink
+  setCreateWlLink,
+  setFetchAllWorkspace
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

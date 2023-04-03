@@ -10,6 +10,7 @@ import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
+import { ListColourProps } from './ListItem';
 
 interface TaskItemProps {
   item: {
@@ -34,18 +35,24 @@ export default function HubItem({
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
-  const [paletteColor, setPaletteColor] = useState<string | undefined>(type === 'hub' ? 'blue' : 'orange');
+  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
+    type === 'hub' ? 'blue' : 'orange'
+  );
+
   const { paletteId, show } = paletteDropdown;
+
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
   };
+
   useEffect(() => {
     setUploadId(paletteId);
   }, [paletteId]);
+
   const handleItemAction = (id: string) => {
     dispatch(setCreateWlLink(false));
     dispatch(
@@ -103,7 +110,7 @@ export default function HubItem({
                       .toUpperCase()}
                     height={showSidebar ? 'h-5' : 'h-6'}
                     width={showSidebar ? 'w-5' : 'w-6'}
-                    backgroundColour={item.color !== null ? item.color : paletteColor}
+                    backgroundColour={item.color !== null ? item.color : (paletteColor as string)}
                     roundedStyle="rounded"
                   />
                 )}
