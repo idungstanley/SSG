@@ -1,12 +1,12 @@
 import { IPilotSection, IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
-import Menu from '../HotKeys/components/Dropdown';
 import { MAX_PILOT_WIDTH, MIN_PILOT_WIDTH } from '../..';
 import { useAppSelector } from '../../../../app/hooks';
-import FullHeader from '../Header/FullHeader';
 import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
 import { useResize } from '../../../../hooks/useResize';
+import Header from '../Header';
+import { PrinterIcon, ShareIcon } from '@heroicons/react/24/outline';
 
 interface FullPilotProps {
   activeTabId: number | null;
@@ -39,7 +39,7 @@ export default function FullPilot({
     direction: 'X'
   });
 
-  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   return (
     <div
@@ -54,9 +54,23 @@ export default function FullPilot({
     >
       {showFullPilot ? <Dividers /> : null}
 
-      <FullHeader setActiveTabId={setActiveTabId}>
-        <Menu setShowModal={setShowModal} />
-      </FullHeader>
+      <Header
+        isMinified={false}
+        setActiveTabId={setActiveTabId}
+        additionalNavItems={
+          <>
+            <ShareIcon className="w-4 h-4" />
+
+            <PrinterIcon className="w-4 h-4" />
+
+            <Header.Menu setShowModal={setShowModal} />
+          </>
+        }
+      >
+        <p className="truncate capitalize text-xs font-semibold">
+          {type}: <span className="font-normal">{title}</span>
+        </p>
+      </Header>
 
       <FullHotkeysList
         tabs={featureTabs}
