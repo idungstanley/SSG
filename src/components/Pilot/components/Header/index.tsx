@@ -44,8 +44,8 @@ export default function Header({ menu, children, setActiveTabId, isMinified, add
           {menu}
 
           {/* show / hide pilot toggle */}
-          <button type="button" onClick={togglePilot} className="text-gray-600">
-            <ChevronDoubleRightIcon className="w-4 h-4 " />
+          <button type="button" onClick={togglePilot} className="text-gray-400">
+            <ChevronDoubleRightIcon className="w-4 h-4" />
           </button>
         </div>
       </div>

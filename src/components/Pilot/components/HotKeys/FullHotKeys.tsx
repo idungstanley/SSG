@@ -40,14 +40,14 @@ export default function FullHotkeysList({
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex">
+        <div className="flex border-t">
           {/* unknown */}
-          <div className="flex flex-col p-1 bg-gray-50 text-gray-400">
-            <ChevronRightIcon className="h-3 w-3" aria-hidden="true" />
-            <p className="flex flex-col px-0.5">
+          <div className="flex flex-col p-1 bg-gray-50 text-gray-700 m-1">
+            <ChevronRightIcon className="h-2 w-2" aria-hidden="true" />
+            <p className="flex flex-col px-0.5 items-center" style={{ fontSize: '5px' }}>
               <span>1</span> <span className="w-full h-0.5 bg-gray-400"></span> <span>3</span>
             </p>
-            <ChevronLeftIcon className="h-3 w-3 text-gray-200" aria-hidden="true" />
+            <ChevronLeftIcon className="h-2 w-2 text-gray-400" aria-hidden="true" />
           </div>
 
           <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-row w-full">

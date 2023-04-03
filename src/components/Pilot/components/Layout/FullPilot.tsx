@@ -48,8 +48,8 @@ export default function FullPilot({
         width: showFullPilot ? pilotWidthFromLS : undefined
       }}
       className={cl(
-        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full',
-        'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-1000'
+        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
+        'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-500'
       )}
     >
       {showFullPilot ? <Dividers /> : null}
@@ -64,7 +64,7 @@ export default function FullPilot({
 
             <UploadIcon className="w-4 h-4" />
 
-            <CopyIcon className="w-4 h-4" />
+            <CopyIcon className="w-6 h-6" />
 
             <ShareIcon className="w-4 h-4" />
 
