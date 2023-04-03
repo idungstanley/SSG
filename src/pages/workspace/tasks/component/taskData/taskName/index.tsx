@@ -66,7 +66,8 @@ export default function TaskName({
     setContentEditable(true);
   };
 
-  const handleEditTask = async (id: string | undefined) => {
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string | undefined) => {
+    e.preventDefault();
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
       task_id: id
@@ -145,16 +146,16 @@ export default function TaskName({
             contentEditable={contentEditable}
             onDoubleClick={handleDoubleClick}
             ref={inputRef}
-            onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
+            onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
               comfortableView
-                ? 'text-sm whitespace-nowrap s'
+                ? 'text-sm whitespace-nowrap cursor-text'
                 : comfortableViewWrap
-                ? 'text-sm'
+                ? 'text-sm cursor-text'
                 : CompactView
-                ? 'text-xs whitespace-nowrap'
+                ? 'text-xs whitespace-nowrap cursor-text'
                 : CompactViewWrap
-                ? 'text-xs text-justify'
+                ? 'text-xs text-justify cursor-text'
                 : null
             }`}
           >
