@@ -64,3 +64,9 @@ textarea {
 .bigScale {
   scale: 1.1;
 }
+
+.AddColumnDropdownButton:hover {
+  color: #8b5cf6;
+  width: 20px;
+  height: 20px;
+}

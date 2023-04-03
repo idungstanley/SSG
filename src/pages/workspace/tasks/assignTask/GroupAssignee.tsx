@@ -29,8 +29,8 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                     <AvatarWithInitials
                       initials={newData.initials}
                       backgroundColour={newData.colour}
-                      height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-8'}`}
-                      width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-8'}`}
+                      height={`${CompactView || CompactViewWrap ? 'h-5' : 'h-8'}`}
+                      width={`${CompactView || CompactViewWrap ? 'w-5' : 'w-8'}`}
                     />
                   </span>
                 </div>
@@ -38,7 +38,10 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
             )}
           <span>
             {(data as [{ id: string; initials: string; colour: string }])?.length - 3 !== 0 ? (
-              <span className="-ml-3 border-white border-2  rounded-full bg-gray-200 p-1.5">
+              <span
+                className="-ml-3 border-white border-2  rounded-full bg-gray-200"
+                style={{ padding: `${CompactView || CompactViewWrap ? '5px' : '7px'}` }}
+              >
                 +{(data as [{ id: string; initials: string; colour: string }])?.length - 3}
               </span>
             ) : null}
@@ -59,8 +62,8 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'h-4' : 'h-8'}`}
-                width={`${CompactView || CompactViewWrap ? 'w-4' : 'w-8'}`}
+                height={`${CompactView || CompactViewWrap ? 'h-5' : 'h-8'}`}
+                width={`${CompactView || CompactViewWrap ? 'w-5' : 'w-8'}`}
               />
             </span>
           </div>

@@ -137,7 +137,7 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
           className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
           style={{ color: '#78828d' }}
         >
-          <FiPlusCircle className=" font-black text-purple-400 h-4 w-4" onClick={() => handleDropDown()} />
+          <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
           <span className="text-sm z-50">
             {dropDown && <AddColumnDropdown title="" listItems={hideTask.length ? hideTask : taskColumns} />}
           </span>
