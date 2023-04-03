@@ -70,3 +70,10 @@ textarea {
   width: 20px;
   height: 20px;
 }
+
+.truncateTextView {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

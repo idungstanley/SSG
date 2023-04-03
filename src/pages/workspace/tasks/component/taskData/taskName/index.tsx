@@ -1,7 +1,11 @@
-import React, { useRef, ReactNode } from 'react';
+import React, { useRef, ReactNode, useState } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
+  getComfortableView,
+  getComfortableViewWrap,
+  getCompactView,
+  getCompactViewWrap,
   setCurrentParentTaskId,
   setCurrentTaskId,
   setCurrentTaskStatusId,
@@ -52,12 +56,23 @@ export default function TaskName({
       queryClient.invalidateQueries(['task']);
     }
   });
+  const [contentEditable, setContentEditable] = useState(false);
+
+  const handleDoubleClick = () => {
+    dispatch(getComfortableView(false));
+    dispatch(getCompactView(false));
+    dispatch(getCompactViewWrap(false));
+    dispatch(getComfortableViewWrap(true));
+    setContentEditable(true);
+  };
+
   const handleEditTask = async (id: string | undefined) => {
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
       task_id: id
     });
   };
+
   const handleTaskPilot = (id: string, name: string) => {
     dispatch(
       setShowPilotSideOver({
@@ -127,7 +142,8 @@ export default function TaskName({
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
           <div
-            contentEditable="true"
+            contentEditable={contentEditable}
+            onDoubleClick={handleDoubleClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(task?.id) : null)}
             className={`${
