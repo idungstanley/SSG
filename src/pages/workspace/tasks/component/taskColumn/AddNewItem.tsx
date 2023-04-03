@@ -53,6 +53,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
             type="text"
             name="name"
             onChange={(e) => handleTaskChange(e)}
+            onKeyDown={(e) => (e.key == 'Enter' ? onSubmit() : null)}
             placeholder="Click to add task"
             className=" border-transparent h-9 text-xs  focus:border-transparent focus:ring-0"
           />
