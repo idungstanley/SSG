@@ -18,7 +18,7 @@ export default function Header({ children, setActiveTabId, isMinified, additiona
 
   const togglePilot = () => {
     setActiveTabId(null);
-    dispatch(setShowPilotSideOver({ ...pilotSideOver, show: false }));
+    dispatch(setShowPilotSideOver({ ...pilotSideOver, show: isMinified }));
   };
 
   return (
