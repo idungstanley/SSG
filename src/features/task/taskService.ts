@@ -254,7 +254,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useInfiniteQuery(
-    ['task'],
+    ['task', { listId: listId }],
     // ['task', { listId: listId }],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
