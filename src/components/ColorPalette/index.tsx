@@ -65,9 +65,14 @@ export default function Palette({
     'yellow',
     'blue',
     'pink',
+    'black',
+    'orange',
+    'white',
+    '#ED1500',
     'magenta',
     '#5CEE4F',
     'teal',
+    '#1e2533',
     '#8EFAD3',
     '#5E5CCB',
     '#57A1E4',
@@ -90,17 +95,17 @@ export default function Palette({
 
   const editWalletColorMutation = useMutation(UseEditWalletService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['wallets-and-list']);
     }
   });
   const editHubColorMutation = useMutation(useEditHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['hubs']);
     }
   });
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ['wallets-and-list'] });
     }
   });
 
@@ -121,7 +126,8 @@ export default function Palette({
 
   const style = {
     height: '15px',
-    width: '15px'
+    width: '15px',
+    border: '1px solid black'
   };
 
   const handleClick = (color?: string | ListColourProps) => {

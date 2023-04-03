@@ -36,7 +36,7 @@ export const getWalletService = (currentWalletId: string | null) => {
 
 export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
   // const queryClient = useQueryClient();
-  return useQuery(['wallet', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
+  return useQuery(['wallets', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
     requestNew<IWalletRes | undefined>({
       url: 'wallets',
       method: 'GET',

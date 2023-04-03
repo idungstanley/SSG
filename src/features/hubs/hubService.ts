@@ -171,7 +171,7 @@ export const UseGetHubDetails = (query: {
 };
 
 export const useGetHubWallet = (hubId: string | null) =>
-  useQuery([`hub-${hubId}`], () =>
+  useQuery(['wallets-and-list'], () =>
     requestNew<IHubReq | undefined>({
       url: `hubs/${hubId}`,
       method: 'GET'

@@ -43,7 +43,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const listComboColour = { innerColour, outerColour };
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['lists']);
     }
   });
   // function for the list shape selection

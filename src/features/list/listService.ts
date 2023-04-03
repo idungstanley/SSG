@@ -46,7 +46,7 @@ export const getListsListService = (data: { queryKey: (string | undefined)[] }) 
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();
-  return useQuery(['wallet', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
+  return useQuery(['lists', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
     requestNew<IWalletRes | undefined>({
       url: 'lists',
       method: 'GET',
@@ -153,7 +153,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list' && !!query.activeItemId
+      enabled: query.activeItemType === 'list'
     }
   );
 };

@@ -9,6 +9,7 @@ interface ListState {
   archiveList: boolean;
   toggleArchiveList: boolean;
   listColour: ListColourProps | undefined | string;
+  editList: boolean;
 }
 
 const initialState: ListState = {
@@ -18,7 +19,8 @@ const initialState: ListState = {
   delList: false,
   archiveList: false,
   toggleArchiveList: false,
-  listColour: { innerColour: 'white', outerColour: 'black' }
+  listColour: { innerColour: 'white', outerColour: 'black' },
+  editList: false
 };
 
 export const listSlice = createSlice({
@@ -33,6 +35,9 @@ export const listSlice = createSlice({
     },
     setArchiveList(state, action: PayloadAction<boolean>) {
       state.archiveList = action.payload;
+    },
+    setEditList(state, action: PayloadAction<boolean>) {
+      state.editList = action.payload;
     },
     setListPaletteColor(state, action: PayloadAction<ListColourProps | undefined | string>) {
       (state.listColour as ListColourProps).innerColour = (action.payload as ListColourProps).innerColour;
@@ -63,6 +68,7 @@ export const {
   setDeleteList,
   setArchiveList,
   setToggleArchiveList,
-  setListPaletteColor
+  setListPaletteColor,
+  setEditList
 } = listSlice.actions;
 export default listSlice.reducer;
