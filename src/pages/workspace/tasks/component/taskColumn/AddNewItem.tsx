@@ -18,7 +18,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
   const [isEditInputVisible, setIsEditInputVisible] = useState(false);
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
       dispatch(setAddNewTaskItem(false));
       dispatch(setCreateTaskFromTop(false));
       setIsEditInputVisible(false);
@@ -55,16 +55,16 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
   }
 
   return (
-    <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center">
+    <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center" onBlur={handleOutsideClick}>
       <div className="flex items-center w-10/12">
         {/* data and input */}
         <div>
           <input
             type="text"
             name="name"
+            autoFocus
             onChange={(e) => handleTaskChange(e)}
             onKeyDown={(e) => (e.key == 'Enter' ? onSubmit() : null)}
-            onBlur={handleOutsideClick}
             placeholder="Click to add task"
             className=" border-transparent h-9 text-xs  focus:border-transparent focus:ring-0"
           />
@@ -100,6 +100,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
         <div
           ref={saveButtonRef}
           onClick={() => {
+            setIsEditInputVisible(true);
             dispatch(setAddNewTaskItem(false));
             dispatch(setCreateTaskFromTop(false));
           }}

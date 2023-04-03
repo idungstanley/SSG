@@ -42,11 +42,11 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
               <div className="group flex items-center">
-                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain">
+                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
                   {status ? status : 'To Do'}
                 </span>
               </div>
-              <span className="text-xs text-gray-400 ml-3 mr-px font-bold">{taskLength}</span>
+              <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
             </div>
           </div>
           <div className="relative w-6/12 flex     items-center ">

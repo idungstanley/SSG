@@ -75,7 +75,7 @@ function RenderList() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <section id="nav" className="capitalize ">
+          <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
               navName={activeEntityName}
               viewsList="List"
