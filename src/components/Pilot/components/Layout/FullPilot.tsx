@@ -6,7 +6,7 @@ import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
 import { useResize } from '../../../../hooks/useResize';
 import Header from '../Header';
-import { PrinterIcon, ShareIcon } from '@heroicons/react/24/outline';
+import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
 
 interface FullPilotProps {
   activeTabId: number | null;
@@ -57,18 +57,23 @@ export default function FullPilot({
       <Header
         isMinified={false}
         setActiveTabId={setActiveTabId}
+        menu={<Header.Menu setShowModal={setShowModal} />}
         additionalNavItems={
           <>
+            <EditPageIcon className="w-4 h-4" />
+
+            <UploadIcon className="w-4 h-4" />
+
+            <CopyIcon className="w-4 h-4" />
+
             <ShareIcon className="w-4 h-4" />
 
-            <PrinterIcon className="w-4 h-4" />
-
-            <Header.Menu setShowModal={setShowModal} />
+            <PrintIcon className="w-4 h-4" />
           </>
         }
       >
         <p className="truncate capitalize text-xs font-semibold">
-          {type}: <span className="font-normal">{title}</span>
+          {type} | <span className="font-normal">{title}</span>
         </p>
       </Header>
 

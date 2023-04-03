@@ -4,7 +4,6 @@ import { cl } from '../../../../utils';
 import MinHotkeysList from '../HotKeys/MinHotKeys';
 import MinTabs from '../Tabs/MinTabs';
 import Header from '../Header';
-import { PrinterIcon, ShareIcon } from '@heroicons/react/24/outline';
 
 interface MinPilotProps {
   activeTabId: number | null;
@@ -37,19 +36,7 @@ export default function MinPilot({
         {activeSection?.element}
       </div>
 
-      <Header
-        isMinified
-        setActiveTabId={setActiveTabId}
-        additionalNavItems={
-          <>
-            <ShareIcon className="w-4 h-4" />
-
-            <PrinterIcon className="w-4 h-4" />
-
-            <Header.Menu setShowModal={setShowModal} />
-          </>
-        }
-      />
+      <Header isMinified setActiveTabId={setActiveTabId} menu={<Header.Menu setShowModal={setShowModal} />} />
 
       <MinHotkeysList
         tabs={featureTabs}
