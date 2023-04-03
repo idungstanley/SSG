@@ -24,6 +24,7 @@ interface HubState {
   triggerFavUpdate: boolean;
   favUpdateName: null | string;
   createWLID: string | null;
+  editHub: boolean;
 }
 
 const initialState: HubState = {
@@ -48,7 +49,8 @@ const initialState: HubState = {
   showFavEditInput: null,
   triggerFavUpdate: false,
   favUpdateName: null,
-  createWLID: null
+  createWLID: null,
+  editHub: false
 };
 
 export const hubSlice = createSlice({
@@ -63,6 +65,9 @@ export const hubSlice = createSlice({
     },
     setDelHub(state, action: PayloadAction<boolean>) {
       state.delHub = action.payload;
+    },
+    setEditHub(state, action: PayloadAction<boolean>) {
+      state.editHub = action.payload;
     },
     setShowEditHubModal(state, action: PayloadAction<boolean>) {
       state.showEditHubModal = action.payload;
@@ -157,6 +162,7 @@ export const {
   setShowFavEditInput,
   setTriggerFavUpdate,
   setFavUpdateName,
-  setCreateWLID
+  setCreateWLID,
+  setEditHub
 } = hubSlice.actions;
 export default hubSlice.reducer;

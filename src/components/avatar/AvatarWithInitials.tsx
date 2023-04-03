@@ -17,7 +17,7 @@ function AvatarWithInitials({
   width = 'w-10',
   backgroundColour = '#6B7280',
   roundedStyle = 'circular',
-  textSize = '12px'
+  textSize = '10px'
 }: AvatarWithInitialsProps) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   return (
@@ -29,7 +29,7 @@ function AvatarWithInitials({
     >
       <span
         className="font-bold leading-none "
-        style={{ fontSize: `${CompactView || CompactViewWrap ? '7px' : textSize}`, color: textColor }}
+        style={{ fontSize: `${CompactView || CompactViewWrap ? '10px' : textSize}`, color: textColor }}
       >
         {initials}
       </span>

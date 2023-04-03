@@ -71,9 +71,16 @@ textarea {
   height: 20px;
 }
 
-.truncateTextView {
-  width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.ComfortableWithInitialsH {
+  height: 30px;
+}
+.CompactWithInitialsH {
+  height: 20px;
+}
+.ComfortableWithInitialsW {
+  width: 30px;
+}
+
+.CompactWithInitialsW {
+  width: 20px;
 }

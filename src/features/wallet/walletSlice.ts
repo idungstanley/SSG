@@ -12,6 +12,7 @@ interface WalletState {
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
   paletteDropDown?: null | string;
+  editWallet: boolean;
 }
 
 const initialState: WalletState = {
@@ -21,7 +22,8 @@ const initialState: WalletState = {
   delWallet: false,
   archiveWallet: false,
   toggleArchiveWallet: false,
-  paletteDropDown: null
+  paletteDropDown: null,
+  editWallet: false
 };
 
 export const walletSlice = createSlice({
@@ -36,6 +38,9 @@ export const walletSlice = createSlice({
     },
     setArchiveWallet(state, action: PayloadAction<boolean>) {
       state.archiveWallet = action.payload;
+    },
+    setEditWallet(state, action: PayloadAction<boolean>) {
+      state.editWallet = action.payload;
     },
     setToggleArchiveWallet(state, action: PayloadAction<boolean>) {
       state.toggleArchiveWallet = action.payload;
@@ -77,6 +82,7 @@ export const {
   setDeleteWallet,
   setArchiveWallet,
   setToggleArchiveWallet,
-  setPaletteDropDown
+  setPaletteDropDown,
+  setEditWallet
 } = walletSlice.actions;
 export default walletSlice.reducer;
