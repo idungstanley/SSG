@@ -24,7 +24,7 @@ interface HubDetailTypes {
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
@@ -105,7 +105,7 @@ function RenderHubs() {
         pilotConfig={pilotConfig}
         header={
           <ListNav
-            navName={activeItemName}
+            navName={activeEntityName}
             viewsList="List"
             viewsList1="Table"
             viewsList2="Board"

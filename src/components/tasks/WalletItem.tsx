@@ -9,6 +9,7 @@ import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { ListColourProps } from './ListItem';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
@@ -34,7 +35,7 @@ export default function WalletItem({
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
-  const [paletteColor, setPaletteColor] = useState<string | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
     dispatch(setCreateWlLink(false));
@@ -85,7 +86,7 @@ export default function WalletItem({
               <>
                 <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                 <FaFolderOpen
-                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>
@@ -93,7 +94,7 @@ export default function WalletItem({
               <>
                 <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                 <FaFolder
-                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>

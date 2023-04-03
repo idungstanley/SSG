@@ -1,7 +1,7 @@
 export interface IHub {
   id: string;
   name: string;
-  path?: string | null;
+  path: string | null;
   parent_id: string | null;
   archived_at: string | null;
   deleted_at: string | null;

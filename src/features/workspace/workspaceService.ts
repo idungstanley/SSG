@@ -1,6 +1,8 @@
 import requestNew from '../../app/requestNew';
 import { useQuery } from '@tanstack/react-query';
 import { IAllWorkspacesRes, IWorkspaceRes } from './workspace.interfaces';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setFetchAllWorkspace } from './workspaceSlice';
 
 interface IData {
   name: string | number;
@@ -32,13 +34,24 @@ export const getWorkspaceService = () => {
 };
 
 export const getAllWorkSpaceService = () => {
-  return useQuery(['workspaces'], async () => {
-    const data = await requestNew<IAllWorkspacesRes | undefined>({
-      url: 'auth/account/workspaces',
-      method: 'GET'
-    });
-    return data;
-  });
+  const { fetchAllWorkspace } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
+  return useQuery(
+    ['workspaces'],
+    async () => {
+      const data = await requestNew<IAllWorkspacesRes | undefined>({
+        url: 'auth/account/workspaces',
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: !!fetchAllWorkspace,
+      onSuccess: () => {
+        dispatch(setFetchAllWorkspace(false));
+      }
+    }
+  );
 };
 
 export const checkIfWorkspaceService = async () => {

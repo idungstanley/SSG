@@ -209,14 +209,21 @@ export const UseUpdateTaskStatusService2 = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
       // queryClient.setQueryData(['task'], (oldQueryData) => {
-      //   return oldQueryData?.pages?.[0].data.tasks.map((task) => {
-      //     if (task.id == data.data.task.id) {
-      //       return {
-      //         ...task,
-      //         status: data.data.task.status
-      //       };
-      //     }
-      //   });
+      // return oldQueryData?.pages?.[0].data.tasks.map((task) => {
+      //   if (task.id == data.data.task.id) {
+      //     console.log(oldQueryData?.pages?.[0].data.tasks);
+      //     // return {
+      //     //   ...task,
+      //     //   status: data.data.task.status
+      //     // };
+      //   }
+      // });
+
+      // const newData = oldQueryData?.pages?.[0].data.tasks.filter((task) => {
+      //   return task.id !== data.data.task.id;
+      // });
+      // newData.push(data.data.task);
+      // return newData;
       // });
     }
   });
@@ -250,7 +257,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   return useInfiniteQuery(
-    ['task'],
+    ['task', { listId: listId }],
     // ['task', { listId: listId }],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({

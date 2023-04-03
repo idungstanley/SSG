@@ -12,9 +12,10 @@ import moment, { MomentInput } from 'moment';
 import { BsArrowsAngleExpand } from 'react-icons/bs';
 import AssignTask from '../../../assignTask/AssignTask';
 import { MdOutlineDragIndicator } from 'react-icons/md';
+import { TaskDataProps } from '../../taskData/TaskData';
 
-function TaskTableView() {
-  const { myTaskData, hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
+function TaskTableView({ tasks }: TaskDataProps) {
+  const { hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
   const handleAssigneeModal = (id: string | undefined) => {
@@ -163,6 +164,10 @@ function TaskTableView() {
     } else return taskColField;
   };
 
+  /* eslint-disable @typescript-eslint/no-unsafe-call */
+  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
   return (
     <>
       <div className="overflow-y-auto border rounded-lg h-min" style={{ maxHeight: '87vh' }}>
@@ -198,9 +203,9 @@ function TaskTableView() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {myTaskData.map((task, index) => {
+            {tasks?.map((task, index) => {
               return (
-                <tr key={task.id} className=" bg-gray-50 hover:bg-purple-100 group">
+                <tr key={task?.id} className=" bg-gray-50 hover:bg-purple-100 group">
                   <td className="px-2 py-1 text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300">
                     <div className="flex">
                       <span className="opacity-0 group-hover:opacity-100">
@@ -217,7 +222,7 @@ function TaskTableView() {
                           className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
                           key={col.field}
                         >
-                          {renderData(task[col.field], col.field, task) as ReactNode}
+                          {renderData((task as ImyTaskData)[col.field], col.field, task) as ReactNode}
                         </td>
                       )
                   )}
