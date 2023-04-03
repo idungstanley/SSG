@@ -8,7 +8,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
 import {
   // IGroupingAssignee,
   ITaskFullList,
@@ -21,6 +21,8 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
   const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
+  const [checkFilterClicked, setCheckFilterClicked] = useState<string | null | undefined>(null);
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsAssigneeProps>({});
   useEffect(() => {
@@ -126,36 +128,50 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
                         </div>
                         {TaskDataGroupingsAssignees
                           ? Object.keys(TaskDataGroupingsAssignees).map((value) => (
-                              <div
-                                key={TaskDataGroupingsAssignees[value].assigneeId}
-                                className="flex justify-between cursor-pointer hover:bg-gray-200"
-                                onClick={() =>
-                                  dispatch(setFilterTaskByAssigneeIds(TaskDataGroupingsAssignees[value]?.assigneeId))
-                                }
+                              <section
+                                onClick={() => setCheckFilterClicked(TaskDataGroupingsAssignees[value]?.assigneeId)}
                               >
-                                <div className="flex space-x-3">
-                                  <AvatarWithInitials
-                                    initials={'ND'}
-                                    textColor={'white'}
-                                    height="h-8"
-                                    width="w-8"
-                                    backgroundColour={'blue'}
-                                    textSize={'8px'}
-                                  />
-                                  <div className="flex flex-col text-left">
-                                    <p className="capitalize" style={{ fontSize: '13px' }}>
-                                      {TaskDataGroupingsAssignees[value]?.assigneeName}
-                                    </p>
-                                    <p style={{ fontSize: '10px' }}>
-                                      {TaskDataGroupingsAssignees[value].tasks.length} tasks
-                                    </p>
+                                <div
+                                  key={TaskDataGroupingsAssignees[value].assigneeId}
+                                  className="flex justify-between cursor-pointer hover:bg-gray-200"
+                                  onClick={() => {
+                                    if (filterTaskByAssigneeIds == TaskDataGroupingsAssignees[value]?.assigneeId) {
+                                      dispatch(setFilterTaskByAssigneeIds(null));
+                                    } else {
+                                      dispatch(
+                                        setFilterTaskByAssigneeIds(TaskDataGroupingsAssignees[value]?.assigneeId)
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <div className="flex space-x-3">
+                                    <AvatarWithInitials
+                                      initials={'ND'}
+                                      textColor={'white'}
+                                      height="h-8"
+                                      width="w-8"
+                                      backgroundColour={'blue'}
+                                      textSize={'8px'}
+                                    />
+                                    <div className="flex flex-col text-left">
+                                      <p className="capitalize" style={{ fontSize: '13px' }}>
+                                        {TaskDataGroupingsAssignees[value]?.assigneeName}
+                                      </p>
+                                      <p style={{ fontSize: '10px' }}>
+                                        {TaskDataGroupingsAssignees[value].tasks.length} tasks
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
 
-                                <button>
-                                  <AiOutlineCheckCircle />
-                                </button>
-                              </div>
+                                  <button>
+                                    {filterTaskByAssigneeIds == TaskDataGroupingsAssignees[value]?.assigneeId ? (
+                                      <AiFillCheckCircle />
+                                    ) : (
+                                      <AiOutlineCheckCircle />
+                                    )}
+                                  </button>
+                                </div>
+                              </section>
                             ))
                           : null}
                       </section>

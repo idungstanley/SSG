@@ -43,7 +43,7 @@ export const UseGetFullTaskList = ({
 }) => {
   const queryClient = useQueryClient();
   const enabled = itemType == 'hub' || itemType == 'subhub';
-  const assignees = assigneeUserId ? [assigneeUserId] : null;
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
