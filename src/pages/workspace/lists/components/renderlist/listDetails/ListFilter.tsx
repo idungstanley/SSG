@@ -11,6 +11,7 @@ import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/gen
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils/index';
+import FilterGroups from './filterGroup/FilterGroups';
 
 export default function ListFilter() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export default function ListFilter() {
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
           <span>
             <MdFilterList />
+            <FilterGroups />
           </span>
           filter
         </p>
