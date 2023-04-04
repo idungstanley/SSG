@@ -13,11 +13,12 @@ import {
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import Timer from 'react-compound-timer/build';
+// import Timer from 'react-compound-timer/build';
 import moment from 'moment';
 import { createTimeEntriesService, getOneTaskServices } from '../../../../features/task/taskService';
 import Watcher from '../watchers/index';
-import { AiOutlinePlayCircle } from 'react-icons/ai';
+// import { AiOutlinePlayCircle } from 'react-icons/ai';
+import ClockInOut from '../../../../components/Pilot/components/TimeClock/ClockInOut';
 
 function RenderTaskModal() {
   const { taskId } = useParams();
@@ -116,27 +117,7 @@ function RenderTaskModal() {
                         )}
                       </div>
                       <div className="text-xs cursor-pointer">
-                        <Timer
-                          initialTime={0}
-                          startImmediately={false}
-                          onStart={undefined}
-                          onPause={undefined}
-                          onStop={undefined}
-                        >
-                          {() => (
-                            <React.Fragment>
-                              <br />
-                              <div>
-                                <button onClick={undefined}>
-                                  <AiOutlinePlayCircle
-                                    className="text-green-500 cursor-pointer text-2xl"
-                                    aria-hidden="true"
-                                  />
-                                </button>
-                              </div>
-                            </React.Fragment>
-                          )}
-                        </Timer>
+                        <ClockInOut />
                       </div>
 
                       <div className="relative">
