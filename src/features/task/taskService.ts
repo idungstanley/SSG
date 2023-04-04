@@ -46,7 +46,6 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  console.log(assigneeUserId);
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
