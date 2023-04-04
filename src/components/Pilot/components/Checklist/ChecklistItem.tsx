@@ -15,9 +15,6 @@ import {
   setToggleAssignChecklistItemId,
   setTriggerItemtUpdate
 } from '../../../../features/task/checklist/checklistSlice';
-// import AssignTask from '../../../../pages/workspace/tasks/assignTask/AssignTask';
-// import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-// import ToolTip from '../../../Tooltip';
 import TagModal from '../../../tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';

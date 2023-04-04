@@ -104,15 +104,17 @@ function RenderHubs() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <ListNav
-            navName={activeEntityName}
-            viewsList="List"
-            viewsList1="Table"
-            viewsList2="Board"
-            viewsList3="Calender"
-            viewsList4="Map"
-            changeViews="View"
-          />
+          <section id="nav" className="capitalize" style={{ height: '50px' }}>
+            <ListNav
+              navName={activeEntityName}
+              viewsList="List"
+              viewsList1="Table"
+              viewsList2="Board"
+              viewsList3="Calender"
+              viewsList4="Map"
+              changeViews="View"
+            />
+          </section>
         }
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
