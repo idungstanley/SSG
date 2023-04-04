@@ -32,7 +32,7 @@ function SubHubModal() {
       );
     },
     onError: (data: IHubDetailResErr) => {
-      if (data?.data.data.need_confirmation == true) {
+      if (data?.data?.data.need_confirmation == true) {
         dispatch(
           displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
             {

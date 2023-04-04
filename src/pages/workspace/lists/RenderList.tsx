@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
@@ -16,6 +16,10 @@ import Board from '../tasks/component/views/listLevel/TaskBoardView';
 import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
+import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
+import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
+import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
+import { ITaskFullList } from '../../../features/task/interface.tasks';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -25,18 +29,48 @@ function RenderList() {
     tableView,
     listView,
     boardView,
+    calenderView,
+    mapView,
     addNewTaskItem,
     closeTaskListView,
     currentParentTaskId,
-    getSubTaskId
+    getSubTaskId,
+    filterTaskByAssigneeIds
   } = useAppSelector((state) => state.task);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { show } = pilotSideOver;
 
-  const { data: listDetailsData } = getTaskListService({ listId });
+  const {
+    data: listDetailsData, // isFetching,
+    hasNextPage,
+    fetchNextPage
+  } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+
+  const paginatedTaskData = useMemo(
+    () => listDetailsData?.pages.flatMap((page) => page?.data.tasks),
+    [listDetailsData]
+  );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    container?.addEventListener('scroll', handleScroll);
+    return () => container?.removeEventListener('scroll', handleScroll);
+  }, [containerRef, fetchNextPage, hasNextPage]);
+
+  function handleScroll(event: UIEvent | Event) {
+    const container = event.target as HTMLElement;
+    const scrollDifference = container?.scrollHeight - container.scrollTop - container.clientHeight;
+    const range = 1;
+
+    if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+      fetchNextPage();
+    }
+  }
 
   return (
     <>
@@ -44,51 +78,78 @@ function RenderList() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <section id="nav" className="capitalize ">
+          <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
-              navName={activeItemName}
+              navName={activeEntityName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
+              viewsList3="Calender"
+              viewsList4="Map"
               changeViews="View"
             />
           </section>
         }
+        additional={<FilterByAssigneesSliderOver data={paginatedTaskData as ITaskFullList[]} />}
       >
-        {listView && (
+        <div className="w-full">
+          {listView && (
+            <div className="w-full">
+              <ListFilter />
+            </div>
+          )}
           <div
-            className="left-0 top-0 w-1 rounded-l-md"
-            style={{ backgroundColor: '#78828d', minHeight: 'auto' }}
-          ></div>
-        )}
-        <div className="w-full overflow-y-scroll ">
-          <div className="block p-2 border-2 border-gray-200" style={{ backgroundColor: '#e1e4e5' }}>
-            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
+            className="block relative p-2 mx-2 border-l-4 border-gray-500 rounded-md"
+            style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
+          >
+            {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
 
             {/* task list logic */}
-            {tableView && closeTaskListView && <TaskTableView />}
+            {tableView && closeTaskListView && <TaskTableView tasks={paginatedTaskData} />}
 
             {/* BoardView */}
             {boardView && <ListFilter />}
             {boardView && (
-              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>{<Board />}</div>
+              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>
+                {<Board tasks={paginatedTaskData} />}
+              </div>
             )}
 
             {/* card */}
-            {listView && <TaskListViews />}
-            {listView &&
-              listDetailsData?.data.tasks.map((task) => (
-                <div key={task.id}>
-                  {closeTaskListView && <TaskData task={task} />}
-
-                  {currentParentTaskId === task.id ? (
-                    <div>
-                      <SubTask parentTaskId={currentParentTaskId} />
+            {listView && <TaskListViews taskLength={paginatedTaskData?.length} />}
+            {listView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
+                  {paginatedTaskData?.map((task) => (
+                    <div key={task?.id}>
+                      {closeTaskListView && <TaskData task={task} />}
+                      {currentParentTaskId === task?.id ? (
+                        <div>
+                          <SubTask parentTaskId={currentParentTaskId} />
+                        </div>
+                      ) : null}
+                      {getSubTaskId === task?.id ? <RenderSubTasks /> : null}
                     </div>
-                  ) : null}
-                  {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                  ))}
                 </div>
-              ))}
+              </div>
+            )}
+
+            {calenderView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                  <TaskCalenderTemplate />
+                </div>
+              </div>
+            )}
+
+            {mapView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                  <NoTaskFound />
+                </div>
+              </div>
+            )}
 
             {/* toggle */}
             {addNewTaskItem && <AddNewItem listId={listId} />}

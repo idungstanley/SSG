@@ -11,7 +11,7 @@ import { columnsHead } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 
-export default function TaskListViews({ taskLength }: { taskLength?: number }) {
+export default function TaskListViews({ taskLength, status }: { taskLength?: number; status?: string }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
@@ -42,9 +42,11 @@ export default function TaskListViews({ taskLength }: { taskLength?: number }) {
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
               <div className="group flex items-center">
-                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2">OPEN</span>
+                <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
+                  {status ? status : 'To Do'}
+                </span>
               </div>
-              <span className="text-xs text-gray-400 ml-3 mr-px font-bold">{taskLength}</span>
+              <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
             </div>
           </div>
           <div className="relative w-6/12 flex     items-center ">
@@ -135,7 +137,7 @@ export default function TaskListViews({ taskLength }: { taskLength?: number }) {
           className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
           style={{ color: '#78828d' }}
         >
-          <FiPlusCircle className=" font-black hover:bg-white" onClick={() => handleDropDown()} />
+          <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
           <span className="text-sm z-50">
             {dropDown && <AddColumnDropdown title="" listItems={hideTask.length ? hideTask : taskColumns} />}
           </span>

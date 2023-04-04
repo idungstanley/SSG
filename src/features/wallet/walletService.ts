@@ -36,7 +36,7 @@ export const getWalletService = (currentWalletId: string | null) => {
 
 export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
   // const queryClient = useQueryClient();
-  return useQuery(['wallet', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
+  return useQuery(['wallets', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
     requestNew<IWalletRes | undefined>({
       url: 'wallets',
       method: 'GET',
@@ -53,7 +53,7 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 export const UseEditWalletService = (data: {
   walletName?: string;
   WalletId?: string | null;
-  walletColor?: string | null;
+  walletColor?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
     url: `wallets/${data.WalletId}`,
@@ -129,6 +129,9 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
     },
     {
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId
+      // onSuccess(data) {
+      //   console.log(data.data.wallet);
+      // }
     }
   );
 };

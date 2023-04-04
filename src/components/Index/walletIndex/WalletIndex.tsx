@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import {
   setActiveEntity,
+  setActiveEntityName,
   setActiveItem,
   setCurrentWalletId,
   setCurrentWalletName,
@@ -12,7 +13,7 @@ import {
 } from '../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../features/wallet/walletSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
-import { useGetHubWallet } from '../../../features/hubs/hubService';
+import { useGetHubWallet, useGetSubHub } from '../../../features/hubs/hubService';
 import WalletItem from '../../tasks/WalletItem';
 import CreateWL from '../../tasks/CreateWL';
 
@@ -37,6 +38,10 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
   });
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { data } = useGetSubHub({
+    parentId: currentItemId
+  });
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
     dispatch(setShowHub(true));
@@ -49,6 +54,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
         currentWalletParentType: 'wallet'
       })
     );
+    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: type,
@@ -78,9 +84,9 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
 
   return walletAndListData?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {walletAndListData?.data.lists.length === 0 && walletAndListData?.data.wallets.length === 0 && (
-        <CreateWL paddingLeft={paddingLeft} />
-      )}
+      {walletAndListData?.data.lists.length === 0 &&
+        walletAndListData?.data.wallets.length === 0 &&
+        data?.data?.hubs.length === 0 && <CreateWL paddingLeft={Number(paddingLeft) + 25} />}
       {walletData?.data.wallets.length !== 0 &&
         walletData?.data.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>
@@ -92,7 +98,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
               showSubWallet={showSubWallet}
               paddingLeft={paddingLeft}
             />
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 25} /> : null}</div>
+            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}</div>
           </div>
         ))}
     </div>

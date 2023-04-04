@@ -46,7 +46,7 @@ export const getListsListService = (data: { queryKey: (string | undefined)[] }) 
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();
-  return useQuery(['wallet', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
+  return useQuery(['lists', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
     requestNew<IWalletRes | undefined>({
       url: 'lists',
       method: 'GET',
@@ -70,12 +70,19 @@ export const getListsDetailsService = (data: { queryKey: (string | undefined)[] 
 };
 
 //edit list
-export const UseEditListService = (data: { listName?: string; listId?: string | null }) => {
+export const UseEditListService = (data: {
+  listName?: string;
+  listId?: string | null;
+  colour?: string | null | { innerColour?: string; outerColour?: string };
+  shape?: string;
+}) => {
   const response = requestNew({
     url: `lists/${data.listId}`,
     method: 'PUT',
     params: {
-      name: data.listName
+      name: data.listName,
+      color: data.colour,
+      shape: data.shape
     }
   });
   return response;

@@ -22,10 +22,6 @@
   overflow-y: auto;
 } */
 
-.viewSettings {
-  display: none;
-}
-
 .comfortableView {
   /* width: 400px; */
   white-space: nowrap;
@@ -49,6 +45,16 @@
   white-space: normal;
 }
 
+.viewSettings {
+  display: none;
+  font-size: 25px;
+}
+
 .viewSettingsParent:hover .viewSettings {
   display: block;
+}
+
+.viewSettingsHoverBorder:hover {
+  border-bottom: solid grey 4px;
+  border-radius: 4px;
 }

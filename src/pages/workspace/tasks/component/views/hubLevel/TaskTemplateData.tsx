@@ -18,7 +18,6 @@ import { ITaskTemplateData } from './TaskTableTemplateData';
 export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData) {
   const dispatch = useDispatch();
   const { createTaskFromTop, currentListId } = useAppSelector((state) => state.list);
-  // console.log(filteredTaskData);
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
 
   return (
@@ -42,7 +41,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                   <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
 
                   <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
-                    {filteredTaskData[value].groupListName}
+                    {filteredTaskData[value]?.groupListName}
                   </p>
 
                   <InformationCircleIcon
@@ -90,6 +89,17 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                   </p>
                 </div>
               </div>
+              <section id="border">
+                <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
+                  <hr className="my-2 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
+                  <span
+                    className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
+                    style={{ backgroundColor: '#eee' }}
+                  >
+                    Add New Status dot com
+                  </span>
+                </div>
+              </section>
               {createTaskFromTop && currentListId === filteredTaskData[value].key && (
                 <AddNewItem listId={filteredTaskData[value].key} />
               )}

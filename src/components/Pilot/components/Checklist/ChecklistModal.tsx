@@ -65,7 +65,7 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
   };
 
   return (
-    <Menu as="div" className="group relative inline-block text-left absolute">
+    <Menu as="div" className="group relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           <BsThreeDots className="cursor-pointer opacity-0 group-hover:opacity-100" />
@@ -80,7 +80,7 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="fixed right-8 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {options.map((option) => (
             <Menu.Item key={option.id}>
               {() => (

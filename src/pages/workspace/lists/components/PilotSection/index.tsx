@@ -14,9 +14,10 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import Details from '../../../hubs/components/PilotSection/components/details/Details';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import { VscChecklist } from 'react-icons/vsc';
+import Details from '../../../../../components/Pilot/components/details/Details';
+import TimeEntries from '../../../tasks/timeclock/TimeEntries';
 
 const sections = [
   {
@@ -38,6 +39,10 @@ const sections = [
   {
     id: 5,
     element: <ChatForPilot />
+  },
+  {
+    id: 6,
+    element: <TimeEntries />
   },
   {
     id: 7,

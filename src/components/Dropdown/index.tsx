@@ -42,7 +42,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 w-40 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {config.map((i) => (
             <Menu.Item key={i.label}>
               {({ active }) => (
@@ -50,7 +50,7 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
                   onClick={i.link ? () => navigate(i.link || '') : i.onClick}
                   className={cl(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'px-4 py-2 text-sm flex w-full items-center gap-3'
+                    'px-4 py-2 text-sm flex w-full items-center gap-3 whitespace-nowrap'
                   )}
                 >
                   {i.icon}

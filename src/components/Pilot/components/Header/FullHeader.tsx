@@ -13,8 +13,9 @@ interface HeaderProps {
 export default function FullHeader({ children, setActiveTabId }: HeaderProps) {
   const dispatch = useAppDispatch();
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
 
-  const { title, type } = pilotSideOver;
+  const { title } = pilotSideOver;
 
   const togglePilot = () => {
     setActiveTabId(null);
@@ -22,11 +23,11 @@ export default function FullHeader({ children, setActiveTabId }: HeaderProps) {
   };
 
   return (
-    <div className="w-full grid grid-cols-frAuto grid-rows-1 pb-4 pt-2 border-none col-span-1">
+    <div className="w-full grid grid-cols-frAuto grid-rows-1 p-2 border-none col-span-1">
       {/* item type and title */}
 
       <p className="truncate capitalize text-xs font-semibold">
-        {type}: <span className="font-normal">{title}</span>
+        {activeItemType}: <span className="font-normal">{title}</span>
       </p>
 
       {/* show / hide pilot toggle */}

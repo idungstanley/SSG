@@ -2,7 +2,11 @@ import React from 'react';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { setActivePlaceName, setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
+import {
+  setActivePlaceId,
+  setActivePlaceName,
+  setShowExtendedBar
+} from '../../../../../../features/workspace/workspaceSlice';
 
 export default function CloseExtBtn() {
   const dispatch = useDispatch();
@@ -10,6 +14,7 @@ export default function CloseExtBtn() {
   const handleCloseExt = () => {
     dispatch(setShowExtendedBar(false));
     dispatch(setActivePlaceName(null));
+    dispatch(setActivePlaceId(null));
   };
 
   return (

@@ -12,12 +12,11 @@ interface PageWrapperProps {
 export default function PageWrapper({ header, children, additional, pilotConfig }: PageWrapperProps) {
   return (
     <>
-      <main className="flex flex-col w-full h-auto">
+      <main className="flex flex-col w-full h-full">
         {header}
 
-        <div className="flex w-full h-auto">
-          {children}
-
+        <div className="grid grid-cols-frAuto w-full h-screen" style={{ maxHeight: '100vh' }}>
+          <div>{children}</div>
           <Pilot pilotConfig={pilotConfig} />
         </div>
       </main>

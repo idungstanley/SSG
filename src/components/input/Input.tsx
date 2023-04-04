@@ -46,7 +46,7 @@ function Input({
           id={name}
           name={name}
           autoComplete={autoComplete}
-          className={`appearance-none block w-full px-3  ${leadingIcon && 'pl-10'} ${
+          className={`appearance-none block w-full px-3  ${leadingIcon && 'pl-8'} ${
             trailingIcon && 'pr-10'
           } border border-gray-300 ${
             name === 'search' ? 'rounded-full py-0.5' : 'rounded-md py-2'
@@ -54,6 +54,7 @@ function Input({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          style={{ fontSize: '10px' }}
         />
 
         {trailingIcon && (

@@ -5,7 +5,7 @@ import WorkSpaceSelection from '../WorkSpaceSelection';
 import MainLogo from '../../../../../../assets/icons/mainIcon.svg';
 import { cl } from '../../../../../../utils';
 import TeamSettings from '../../../../../../pages/workspace/workspaceSettings/components/TeamSettings';
-import UserSettingsModal from '../../../../../../pages/workspace/workspaceSettings/components/UserSettingsModal';
+import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettingsModal';
 
 export default function Header() {
   const dispatch = useAppDispatch();
