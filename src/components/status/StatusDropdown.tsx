@@ -5,6 +5,7 @@ import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 interface statusType {
   id: number;
   title: string;

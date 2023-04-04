@@ -79,16 +79,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     inputRef.current?.focus();
   };
 
-  // const groupAssignee = (data: [{ id: string; initials: string; colour: string }] | undefined) => {
-  //   return data?.map((newData) => (
-  //     <div key={newData.id} className="">
-  //       <span key={newData.id}>
-  //         <AvatarWithInitials initials={newData.initials} backgroundColour={newData.colour} height="h-5" width="w-5" />
-  //       </span>
-  //     </div>
-  //   ));
-  // };
-
   return (
     <div>
       {showChecklistItemInput && clickedChecklistId === checklistId && (

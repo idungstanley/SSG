@@ -138,6 +138,7 @@ export default function Assignee({
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        autoFocus={false}
         MenuListProps={{
           'aria-labelledby': 'basic-button'
         }}
