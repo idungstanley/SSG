@@ -9,10 +9,11 @@ import CardState from '../CardState';
 import AssignTask from '../../../assignTask/AssignTask';
 import { AvatarWithInitials } from '../../../../../../components';
 import { RiUserAddLine } from 'react-icons/ri';
+import { TaskDataProps } from '../../taskData/TaskData';
 
-function Board() {
+function Board({ tasks }: TaskDataProps) {
   const dispatch = useDispatch();
-  const { myTaskData, toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const { toggleAssignCurrentTaskId, CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   type GroupedData = {
     [key: string]: ImyTaskData[];
   };
@@ -25,7 +26,7 @@ function Board() {
       return { ...cache, [cacheKey]: cacheKey in cache ? cache[cacheKey].concat(product) : [product] };
     }, {} as GroupedData);
 
-  const newData = groupBy('status', myTaskData);
+  const newData = groupBy('status', tasks as ImyTaskData[]);
 
   const handleAssigneeModal = (id: string) => {
     if (toggleAssignCurrentTaskId == id) {

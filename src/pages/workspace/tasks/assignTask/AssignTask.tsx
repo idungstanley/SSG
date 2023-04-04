@@ -18,12 +18,12 @@ interface checklistItem {
   assignees: [{ id: string; initials: string; colour: string }];
 }
 
-interface option {
+interface optionProps {
   option?: string;
   item?: checklistItem;
 }
 
-export default function AssignTask({ option, item }: option) {
+export default function AssignTask({ option, item }: optionProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -71,7 +71,7 @@ export default function AssignTask({ option, item }: option) {
 
   const handleUnAssignChecklistItem = (id: string) => {
     onCheklistItemUnassign({
-      itemId: clickedChecklistItemId,
+      itemId: clickedChecklistItemId || toggleAssignCurrentTaskId,
       team_member_id: id
     });
   };
@@ -92,7 +92,7 @@ export default function AssignTask({ option, item }: option) {
   return (
     <div className="relative" ref={modalRef}>
       <section
-        className="absolute bottom-0 left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0 bottom-0"
+        className="absolute left-0 ml-10 overflow-auto rounded-md shadow-lg w-60 bg-gray-50 right-0"
         style={{ maxHeight: '40vh' }}
         ref={assigneeRef}
         id="assignModal"

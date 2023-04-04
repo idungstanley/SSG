@@ -68,6 +68,9 @@ interface TaskState {
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
+  calenderView: boolean;
+  mapView: boolean;
+  taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   closeTaskListView: boolean;
@@ -89,6 +92,7 @@ interface TaskState {
   triggerAsssignTask: boolean;
   groupByStatus: string | null;
   showTaskUploadModal: boolean;
+  filterTaskByAssigneeIds: string | null | undefined;
 }
 
 const initialState: TaskState = {
@@ -108,6 +112,9 @@ const initialState: TaskState = {
   CompactViewWrap: false,
   tableView: false,
   boardView: false,
+  calenderView: false,
+  mapView: false,
+  taskStatus: null,
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
@@ -128,7 +135,8 @@ const initialState: TaskState = {
   currentTaskPriorityId: null,
   triggerAsssignTask: false,
   groupByStatus: 'status',
-  showTaskUploadModal: false
+  showTaskUploadModal: false,
+  filterTaskByAssigneeIds: null
 };
 
 export const taskSlice = createSlice({
@@ -202,6 +210,15 @@ export const taskSlice = createSlice({
     },
     getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
+    },
+    getCalendeView(state, action: PayloadAction<boolean>) {
+      state.calenderView = action.payload;
+    },
+    getMapView(state, action: PayloadAction<boolean>) {
+      state.mapView = action.payload;
+    },
+    setTaskStatus(state, action: PayloadAction<string | null>) {
+      state.taskStatus = action.payload;
     },
 
     setShowTaskNavigation(state, action: PayloadAction<boolean>) {
@@ -278,6 +295,9 @@ export const taskSlice = createSlice({
     },
     setShowTaskUploadModal(state, action: PayloadAction<boolean>) {
       state.showTaskUploadModal = action.payload;
+    },
+    setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
+      state.filterTaskByAssigneeIds = action.payload;
     }
   }
 });
@@ -297,6 +317,9 @@ export const {
   getCompactViewWrap,
   getTableView,
   getBoardView,
+  getCalendeView,
+  getMapView,
+  setTaskStatus,
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
@@ -316,6 +339,7 @@ export const {
   setCurrentTaskPriorityId,
   setTriggerAsssignTask,
   setGroupByStatus,
-  setShowTaskUploadModal
+  setShowTaskUploadModal,
+  setFilterTaskByAssigneeIds
 } = taskSlice.actions;
 export default taskSlice.reducer;

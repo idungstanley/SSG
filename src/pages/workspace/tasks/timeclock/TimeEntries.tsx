@@ -14,12 +14,12 @@ import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 export default function TimeEntries() {
   const [showEntries, setShowEntries] = useState(false);
   const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
-  const { activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeItemName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimeClock, setStopTimeClock] = useState(false);
 
   const { data: getEntries, refetch } = GetTimeEntriesService({
-    taskId: currentTaskIdForPilot,
+    taskId: activeItemId,
     trigger: activeItemType
   });
 
@@ -63,11 +63,11 @@ export default function TimeEntries() {
               <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
             </div>
             {/* total time here */}
-            <p>{moment.utc((getEntries as ITimeEntriesRes).data.total_duration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
           {/* render time enteries */}
           {showEntries &&
-            getEntries?.data.time_entries.map(
+            getEntries?.data?.time_entries.map(
               (entries: {
                 id: string;
                 duration: number;

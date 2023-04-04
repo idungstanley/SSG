@@ -1,6 +1,7 @@
 export interface IHub {
   id: string;
   name: string;
+  path: string | null;
   parent_id: string | null;
   archived_at: string | null;
   deleted_at: string | null;
@@ -12,6 +13,7 @@ export interface IHubDetails {
   id: string;
   name: string;
   color: null;
+  path?: string | null;
   shape: null;
   parent_id: null;
   updated_at: string;

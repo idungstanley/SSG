@@ -14,6 +14,7 @@ import AvatarWithInitials from '../../../../../avatar/AvatarWithInitials';
 import ToolTip from '../../../../../Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export interface tagItem {
   id: string;
@@ -25,26 +26,8 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  // const groupTags = (arr: tagItem[] | [tagItem[]]) => {
-  //   return arr?.map((item) => {
-  //     return Array.isArray(item) ? (
-  //       <span className="flex">{groupTags(item)}</span>
-  //     ) : (
-  //       <>
-  //         <span
-  //           className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
-  //             item.name.length > 10 ? 'object-contain' : 'w-20'
-  //           }`}
-  //           style={{ backgroundColor: `${item.color}` }}
-  //         >
-  //           {item.name}
-  //         </span>
-  //       </>
-  //     );
-  //   });
-  // };
-  // console.log(Details);
 
+  const { activeItemName } = useAppSelector((state) => state.workspace);
   return (
     <>
       <div className="flex items-center justify-between p-2">
@@ -85,7 +68,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p className="capitalize">{Details?.name}</p>
+            <p className="capitalize">{activeItemName}</p>
           </div>
         </div>
         {/* description */}

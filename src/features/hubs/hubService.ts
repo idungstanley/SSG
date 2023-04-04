@@ -84,11 +84,11 @@ export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
   currHubId?: string | null;
-  color?: string | null;
+  color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
     url: `hubs/${data.currHubId}`,
-    method: 'PUT',
+    method: 'POST',
     params: {
       name: data.name,
       color: data.color,
@@ -171,7 +171,7 @@ export const UseGetHubDetails = (query: {
 };
 
 export const useGetHubWallet = (hubId: string | null) =>
-  useQuery([`hub-${hubId}`], () =>
+  useQuery(['wallets-and-list'], () =>
     requestNew<IHubReq | undefined>({
       url: `hubs/${hubId}`,
       method: 'GET'

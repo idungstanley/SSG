@@ -16,6 +16,7 @@ import { CiSearch } from 'react-icons/ci';
 import { IWorkspace } from '../../../features/account/account.interfaces';
 import { BsPinAngle, BsPinFill } from 'react-icons/bs';
 import { useAppSelector } from '../../../app/hooks';
+import { setFetchAllWorkspace } from '../../../features/workspace/workspaceSlice';
 
 interface workspaceSettingsListType {
   id: number;
@@ -133,7 +134,6 @@ export default function WorkspaceSettingsModal() {
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       navigate('/');
-
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
     }
@@ -147,7 +147,7 @@ export default function WorkspaceSettingsModal() {
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
+      <div onClick={() => dispatch(setFetchAllWorkspace(true))}>
         <Menu.Button>
           <VscTriangleDown className="text-xs text-gray-400" />
         </Menu.Button>

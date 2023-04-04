@@ -7,8 +7,13 @@ import { RxDividerVertical } from 'react-icons/rx';
 import { TbSubtask } from 'react-icons/tb';
 import { VscEllipsis } from 'react-icons/vsc';
 import GroupbyModal from './Groupings/GroupbyModal';
+import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
+import { cl } from '../../../../../../utils/index';
 
 export default function ListFilter() {
+  const dispatch = useAppDispatch();
+  const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   return (
     <nav className="flex items-center justify-between bg-white h-8 pr-5  ">
       <div className="flex items-center justify-between p-2">
@@ -48,7 +53,13 @@ export default function ListFilter() {
           </span>
           Me
         </p>
-        <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+        <p
+          className={cl(
+            'flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded',
+            showFilterByAssigneeSlideOver ? 'bg-purple-600 text-white' : 'bg-gray-200'
+          )}
+          onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}
+        >
           <span>
             <IoPeopleOutline />
           </span>

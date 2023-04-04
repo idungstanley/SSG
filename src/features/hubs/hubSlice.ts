@@ -23,6 +23,8 @@ interface HubState {
   showFavEditInput: null | string;
   triggerFavUpdate: boolean;
   favUpdateName: null | string;
+  createWLID: string | null;
+  editHub: boolean;
 }
 
 const initialState: HubState = {
@@ -46,7 +48,9 @@ const initialState: HubState = {
   prevName: '',
   showFavEditInput: null,
   triggerFavUpdate: false,
-  favUpdateName: null
+  favUpdateName: null,
+  createWLID: null,
+  editHub: false
 };
 
 export const hubSlice = createSlice({
@@ -62,11 +66,17 @@ export const hubSlice = createSlice({
     setDelHub(state, action: PayloadAction<boolean>) {
       state.delHub = action.payload;
     },
+    setEditHub(state, action: PayloadAction<boolean>) {
+      state.editHub = action.payload;
+    },
     setShowEditHubModal(state, action: PayloadAction<boolean>) {
       state.showEditHubModal = action.payload;
     },
     getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
+    },
+    setCreateWLID(state, action: PayloadAction<string | null>) {
+      state.createWLID = action.payload;
     },
     getCurrSubHubId(state, action: PayloadAction<{ currSubHubId: string | null; currSubHubIdType: string | null }>) {
       state.currSubHubId = action.payload.currSubHubId;
@@ -151,6 +161,8 @@ export const {
   getPrevName,
   setShowFavEditInput,
   setTriggerFavUpdate,
-  setFavUpdateName
+  setFavUpdateName,
+  setCreateWLID,
+  setEditHub
 } = hubSlice.actions;
 export default hubSlice.reducer;

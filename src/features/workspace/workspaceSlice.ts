@@ -8,6 +8,7 @@ interface workspaceState {
   activePlaceName: string | null;
   pilotWidth: number;
   showHub: boolean;
+  fetchAllWorkspace: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
   showMenuDropDown: boolean;
@@ -17,6 +18,7 @@ interface workspaceState {
   activeItemId?: string | null;
   activeItemType?: string | null;
   activeItemName: string | null | undefined;
+  activeEntityName: string | null | undefined;
   currentWalletId: string | null;
   currentSubWalletId: string | null;
   currentWalletName: string | null;
@@ -36,6 +38,7 @@ interface workspaceState {
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
   activePlaceIdForNavigation: number | null;
+  createWlLink: boolean;
 }
 
 const initialState: workspaceState = {
@@ -54,6 +57,7 @@ const initialState: workspaceState = {
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
+  activeEntityName: null,
   currentSubWalletId: null,
   currentWalletId: null,
   currentWalletName: null,
@@ -68,12 +72,14 @@ const initialState: workspaceState = {
   activeSubTimeClockTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
+  fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
   activeEntity: { id: null, type: null },
   activePlaceNameForNavigation: null,
-  activePlaceIdForNavigation: null
+  activePlaceIdForNavigation: null,
+  createWlLink: false
 };
 
 export const wsSlice = createSlice({
@@ -88,6 +94,12 @@ export const wsSlice = createSlice({
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
+    },
+    setFetchAllWorkspace(state, action: PayloadAction<boolean>) {
+      state.fetchAllWorkspace = action.payload;
+    },
+    setCreateWlLink(state, action: PayloadAction<boolean>) {
+      state.createWlLink = action.payload;
     },
     setShowExtendedBar(state, action: PayloadAction<boolean>) {
       state.showExtendedBar = action.payload;
@@ -160,6 +172,9 @@ export const wsSlice = createSlice({
       state.activeItemType = action.payload.activeItemType;
       state.activeItemName = action.payload.activeItemName;
     },
+    setActiveEntityName(state, action: PayloadAction<string | undefined | null>) {
+      state.activeEntityName = action.payload;
+    },
     setCurrentWalletId(state, action: PayloadAction<string | null>) {
       state.currentWalletId = action.payload;
     },
@@ -218,6 +233,7 @@ export const {
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
+  setActiveEntityName,
   setCurrentWalletId,
   setCurrenSubtWalletId,
   setCurrentWalletName,
@@ -238,7 +254,9 @@ export const {
   setShowExtendedBar,
   setExtendedSidebarWidth,
   setActivePlaceName,
-  setActivePlaceForNav
+  setActivePlaceForNav,
+  setCreateWlLink,
+  setFetchAllWorkspace
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

@@ -10,12 +10,25 @@ import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 
-//The WIDTH of the your window screen.
-const RELATIVE_WIDTH = window.innerWidth;
+//INNER_WIDTH OF YOUR SCREEN.
+const INNER_WIDTH = window.innerWidth;
+//RELATIVE_WIDTH IN PIXEL.
+const RELATIVE_WIDTH = 1550;
 // 15% OF YOUR WINDOW SCREEN
-export const MIN_SIDEBAR_WIDTH = 0.15 * RELATIVE_WIDTH;
+const PER_MIN_LG_SCREEN = 0.15;
+// 18% OF YOUR WINDOW SCREEN
+const PER_MIN_MD_SCREEN = 0.16;
+// 22.5% OF YOUR WINDOW SCREEN AS MAX FOR MD
+const PER_MAX_MD_SCREEN = 0.225;
+// 22.5% OF YOUR WINDOW SCREEN AS MAX FOR LG
+const PER_MAX_LG_SCREEN = 0.2;
+
+export const MIN_SIDEBAR_WIDTH =
+  INNER_WIDTH >= RELATIVE_WIDTH ? PER_MIN_LG_SCREEN * INNER_WIDTH : PER_MIN_MD_SCREEN * RELATIVE_WIDTH;
+
 //25% OF YOUR WINDOW SCREEN
-export const MAX_SIDEBAR_WIDTH = 0.225 * RELATIVE_WIDTH;
+export const MAX_SIDEBAR_WIDTH =
+  INNER_WIDTH >= RELATIVE_WIDTH ? PER_MAX_LG_SCREEN * RELATIVE_WIDTH : PER_MAX_MD_SCREEN * RELATIVE_WIDTH;
 
 interface SidebarProps {
   allowSelect: boolean;

@@ -6,11 +6,11 @@ import {
   ImyTaskData2,
   // getTaskData,
   // getTaskData,
-  setToggleAssignCurrentTaskId,
-  setTriggerAsssignTask
+  setToggleAssignCurrentTaskId
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
+// import { ImyTaskData } from './taskSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -34,62 +34,29 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType
+  itemType,
+  assigneeUserId
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
+  assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-  const enabled = itemType == 'hub' || itemType == 'subhub';
+  const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
+  const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
+  const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
-    ['task', itemId, itemType],
+    ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
         params: {
           page: pageParam,
-          hub_id: itemId
-        }
-      });
-    },
-    {
-      enabled,
-      onSuccess: (data) => {
-        data.pages.map((page) =>
-          page.data.tasks.map((task: ITaskFullList) => queryClient.setQueryData(['task', task.id], task))
-        );
-      },
-      getNextPageParam: (lastPage) => {
-        if (lastPage?.data?.paginator.has_more_pages) {
-          return Number(lastPage.data.paginator.page) + 1;
-        }
-
-        return false;
-      }
-    }
-  );
-};
-
-export const UseGetFullTaskListWallet = ({
-  itemId,
-  itemType
-}: {
-  itemId: string | undefined | null;
-  itemType: string | null | undefined;
-}) => {
-  const queryClient = useQueryClient();
-  const enabled = itemType == 'wallet' || itemType == 'subwallet';
-
-  return useInfiniteQuery(
-    ['task', itemId, itemType],
-    async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<IFullTaskRes>({
-        url: 'tasks/full-list',
-        method: 'POST',
-        params: {
-          page: pageParam,
-          wallet_id: itemId
+          hub_id,
+          wallet_id,
+          assignees
         }
       });
     },
@@ -112,24 +79,6 @@ export const UseGetFullTaskListWallet = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { task_id: task_id }],
-    async () => {
-      const data = await requestNew<ITaskRes | undefined>({
-        url: `tasks/${task_id}`,
-        method: 'GET'
-      });
-      return data;
-    },
-    {
-      enabled: false
-      // enabled: task_id != null
-    }
-  );
-};
-export const getOneTaskService = ({ task_id }: { task_id: string | undefined | null }) => {
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -142,6 +91,30 @@ export const getOneTaskService = ({ task_id }: { task_id: string | undefined | n
     {
       // enabled: false
       enabled: task_id != null
+    }
+  );
+};
+
+export const getOneTaskService = ({
+  task_id,
+  activeItemType
+}: {
+  task_id: string | undefined | null;
+  activeItemType?: string | null | undefined;
+}) => {
+  // const queryClient = useQueryClient();
+  return useQuery(
+    ['task', { task_id: task_id }],
+    async () => {
+      const data = await requestNew<ITaskRes | undefined>({
+        url: `tasks/${task_id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      // enabled: false
+      enabled: activeItemType === 'task' && task_id != null
     }
   );
 };
@@ -178,30 +151,46 @@ export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null
   });
   return response;
 };
-
-export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate, priorityDataUpdate }: UpdateTaskProps) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { task_id, statusDataUpdate, priorityDataUpdate }],
-    async () => {
-      const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
-          status: statusDataUpdate
-          // priority: priorityDataUpdate,
-        }
-      });
-      return data;
-    },
-    {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && statusDataUpdate !== '',
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-      }
+const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+  const url = `tasks/${task_id}`;
+  const response = requestNew({
+    url,
+    method: 'PUT',
+    params: {
+      status: statusDataUpdate
+      // priority: priorityDataUpdate,
     }
-  );
+  });
+  return response;
+};
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+export const UseUpdateTaskStatusService2 = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateTaskStatusService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      // queryClient.setQueryData(['task'], (oldQueryData) => {
+      // return oldQueryData?.pages?.[0].data.tasks.map((task) => {
+      //   if (task.id == data.data.task.id) {
+      //     console.log(oldQueryData?.pages?.[0].data.tasks);
+      //     // return {
+      //     //   ...task,
+      //     //   status: data.data.task.status
+      //     // };
+      //   }
+      // });
+
+      // const newData = oldQueryData?.pages?.[0].data.tasks.filter((task) => {
+      //   return task.id !== data.data.task.id;
+      // });
+      // newData.push(data.data.task);
+      // return newData;
+      // });
+    }
+  });
 };
 
 export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
@@ -228,18 +217,27 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
   );
 };
 
-export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
+export const getTaskListService = ({
+  listId,
+  assigneeUserId
+}: {
+  listId: string | null | undefined;
+  assigneeUserId: string | undefined | null;
+}) => {
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
-    ['task', { listId: listId }],
+    ['task', { listId: listId, assigneeUserId }],
+
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
         method: 'POST',
         params: {
           list_id: listId,
-          page: pageParam
+          page: pageParam,
+          assignees
         }
       });
     },
@@ -260,17 +258,7 @@ export const getTaskListService = ({ listId }: { listId: string | null | undefin
   );
 };
 
-// const taskData = data?.data.tasks.map((task: { id: string }) => {
-//   queryClient.setQueryData(['task', task.id], task);
-//   return { ...task };
-// });
-// dispatch(getTaskData(taskData));
-// queryClient.invalidateQueries();
-
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
-  // const dispatch = useAppDispatch();
-
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {
@@ -371,14 +359,14 @@ export const GetTimeEntriesService = ({
         url: 'time-entries',
         method: 'GET',
         params: {
-          type: 'task',
+          type: trigger,
           id: taskId
         }
       });
       return data;
     },
     {
-      enabled: trigger == 'task'
+      enabled: true
     }
   );
 };
@@ -506,43 +494,6 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       },
       initialData: queryClient.getQueryData(['watcher', query]),
       enabled: query[0] != null
-    }
-  );
-};
-
-export const UseAssignTaskService = ({
-  task_id,
-  team_member_id,
-  triggerAsssignTask
-}: {
-  task_id: string | null | undefined;
-  team_member_id: string | null;
-  triggerAsssignTask?: boolean;
-}) => {
-  const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['task', { team_member_id: team_member_id, task_id: task_id }],
-    async () => {
-      const data = await requestNew({
-        url: 'assignee/assign',
-        method: 'POST',
-        params: {
-          team_member_id,
-          id: task_id,
-          type: 'task'
-        }
-      });
-      return data;
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task']);
-        dispatch(setToggleAssignCurrentTaskId(null));
-        dispatch(setTriggerAsssignTask(false));
-      },
-      // initialData: queryClient.getQueryData(['assign', team_member_id]),
-      enabled: !!team_member_id && triggerAsssignTask
     }
   );
 };

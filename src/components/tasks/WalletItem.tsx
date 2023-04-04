@@ -8,6 +8,8 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { ListColourProps } from './ListItem';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
@@ -32,9 +34,11 @@ export default function WalletItem({
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const [paletteColor, setPaletteColor] = useState<string | undefined>('');
+  const { paletteId, show } = paletteDropdown;
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
         SubMenuId: id,
@@ -45,10 +49,11 @@ export default function WalletItem({
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ paletteId: id, paletteType: 'wallet' }));
+    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+    dispatch(setCreateWlLink(false));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -67,12 +72,13 @@ export default function WalletItem({
     <>
       <section
         className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm h-8 group ${
-          wallet.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
+          wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
+        style={{ backgroundColor: `${wallet.id === activeItemId ? '#BF00FF21' : ''}` }}
       >
         {wallet.id === activeItemId && (
-          <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
+          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div id="walletLeft" className="flex items-center justify-center" style={{ paddingLeft: `${paddingLeft}px` }}>
           {/* showsub1 */}
@@ -81,7 +87,7 @@ export default function WalletItem({
               <>
                 <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                 <FaFolderOpen
-                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>
@@ -89,7 +95,7 @@ export default function WalletItem({
               <>
                 <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                 <FaFolder
-                  color={paletteColor === '' ? wallet.color : paletteColor}
+                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
                   onClick={(e) => handleWalletColour(wallet.id, e)}
                 />
               </>
@@ -126,7 +132,7 @@ export default function WalletItem({
           <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
         </div>
       </section>
-      {paletteDropdown === wallet.id ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
+      {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
     </>

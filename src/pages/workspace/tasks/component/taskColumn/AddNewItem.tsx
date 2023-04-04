@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAddNewTaskItem } from '../../../../../features/task/taskSlice';
 import { Button } from '../../../../../components';
@@ -14,22 +14,22 @@ interface AddNewItemProps {
 
 export default function AddNewItem({ listId }: AddNewItemProps) {
   const dispatch = useDispatch();
-  // const { addNewTaskItem } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
+  const [isEditInputVisible, setIsEditInputVisible] = useState(false);
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
       dispatch(setAddNewTaskItem(false));
       dispatch(setCreateTaskFromTop(false));
+      setIsEditInputVisible(false);
     }
   });
 
+  const saveButtonRef = useRef(null);
   const defaultTaskFormState = {
     name: ''
   };
-
   const [formState, setFormState] = useState(defaultTaskFormState);
-
   const { name } = formState;
 
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,15 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
       getListId: listId
     });
   };
+
+  function handleOutsideClick() {
+    setIsEditInputVisible(true);
+    if (!isEditInputVisible) {
+      return;
+    }
+    onSubmit();
+  }
+
   return (
     <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center">
       <div className="flex items-center w-10/12">
@@ -53,7 +62,9 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
           <input
             type="text"
             name="name"
+            autoFocus
             onChange={(e) => handleTaskChange(e)}
+            onKeyDown={(e) => (e.key == 'Enter' ? onSubmit() : null)}
             placeholder="Click to add task"
             className=" border-transparent h-9 text-xs  focus:border-transparent focus:ring-0"
           />
@@ -78,7 +89,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
         </span>
         <Button
           buttonStyle="primary"
-          onClick={onSubmit}
+          onClick={handleOutsideClick}
           label="SAVE"
           padding="py-3 px-4"
           height="h-5"
@@ -87,7 +98,9 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
           roundedRight={false}
         />
         <div
+          ref={saveButtonRef}
           onClick={() => {
+            setIsEditInputVisible(true);
             dispatch(setAddNewTaskItem(false));
             dispatch(setCreateTaskFromTop(false));
           }}

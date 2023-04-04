@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
@@ -13,6 +14,8 @@ import PilotSection, { pilotConfig } from '../PilotSection';
 import TaskBoardTemplate from '../../../tasks/component/views/hubLevel/TaskBoardTemplate';
 import GroupByStatusTemplate from '../../../lists/components/renderlist/listDetails/Groupings/components/GroupByStatus';
 import { Spinner } from '../../../../../common';
+import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
+import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 
 interface HubDetailTypes {
   activeItemId: string;
@@ -21,10 +24,10 @@ interface HubDetailTypes {
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeItemName } = useAppSelector((state) => state.workspace);
-  const { groupByStatus } = useAppSelector((state) => state.task);
-  const { listView, tableView, boardView } = useAppSelector((state) => state.task);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
 
   const retrievedObject = localStorage.getItem('hubDetailsStorage');
   const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
@@ -37,7 +40,8 @@ function RenderHubs() {
     fetchNextPage
   } = UseGetFullTaskList({
     itemId: hubdetail.activeItemId,
-    itemType: hubdetail.activeItemType
+    itemType: hubdetail.activeItemType,
+    assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
@@ -76,7 +80,7 @@ function RenderHubs() {
     return () => {
       true;
     };
-  }, [unFilteredTaskData, status]);
+  }, [unFilteredTaskData, status, filterTaskByAssigneeIds]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -100,16 +104,19 @@ function RenderHubs() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <section id="nav" className="capitalize ">
+          <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
-              navName={activeItemName}
+              navName={activeEntityName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
+              viewsList3="Calender"
+              viewsList4="Map"
               changeViews="View"
             />
           </section>
         }
+        additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <section>
           <div className="w-full">
@@ -199,6 +206,22 @@ function RenderHubs() {
             <div className="pr-1 pt-0.5 w-full h-full">
               <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }}>
                 {boardView && <TaskBoardTemplate unFilteredTaskData={unFilteredTaskData2 as ITaskFullList[]} />}
+              </div>
+            </div>
+          )}
+
+          {calenderView && (
+            <div className="pr-1 pt-0.5 w-full h-full">
+              <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                <TaskCalenderTemplate />
+              </div>
+            </div>
+          )}
+
+          {mapView && (
+            <div className="pr-1 pt-0.5 w-full h-full">
+              <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                <NoTaskFound />
               </div>
             </div>
           )}

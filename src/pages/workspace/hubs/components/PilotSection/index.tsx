@@ -17,6 +17,7 @@ import { setShowPilotSideOver } from '../../../../../features/general/slideOver/
 import { VscChecklist } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
+import TimeClock from './components/TimeClock';
 
 const sections = [
   {
@@ -39,10 +40,10 @@ const sections = [
     id: 5,
     element: <ChatForPilot />
   },
-  // {
-  //   id: 6,
-  //   element: <TimeClock />
-  // },
+  {
+    id: 6,
+    element: <TimeClock />
+  },
   {
     id: 7,
     element: <Checklists />
