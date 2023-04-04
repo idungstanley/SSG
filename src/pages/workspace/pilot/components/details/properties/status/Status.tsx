@@ -5,7 +5,6 @@ import ToolTip from '../../../../../../../components/Tooltip';
 import { useDispatch } from 'react-redux';
 import { setUpdateStatusModalId } from '../../../../../../../features/task/taskSlice';
 import { UseUpdateTaskStatusService2 } from '../../../../../../../features/task/taskService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface StatusDetailsProps {
   Details: {
@@ -23,19 +22,14 @@ export default function Status({ Details }: StatusDetailsProps) {
   const dispatch = useDispatch();
   const StatusData = Details?.status;
 
-  const queryClient = useQueryClient();
+  const { mutate } = UseUpdateTaskStatusService2();
 
-  const updateStatusMutation = useMutation(UseUpdateTaskStatusService2, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-    }
-  });
-
-  const handleUpdateTaskStatus = async () => {
-    await updateStatusMutation.mutateAsync({
+  const handleUpdateTaskStatus = () => {
+    const updateStatusMutation = {
       task_id: Details?.id,
       statusDataUpdate: complete
-    });
+    };
+    mutate(updateStatusMutation);
   };
 
   const handleStatusModal = () => {

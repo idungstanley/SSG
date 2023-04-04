@@ -14,6 +14,7 @@ import TaskBoardTemplate from '../../../tasks/component/views/hubLevel/TaskBoard
 import GroupByStatusTemplate from '../../../lists/components/renderlist/listDetails/Groupings/components/GroupByStatus';
 import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
+import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 
 interface HubDetailTypes {
   activeItemId: string;
@@ -22,7 +23,7 @@ interface HubDetailTypes {
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { groupByStatus } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
@@ -102,7 +103,7 @@ function RenderHubs() {
         pilotConfig={pilotConfig}
         header={
           <ListNav
-            navName={activeItemName}
+            navName={activeEntityName}
             viewsList="List"
             viewsList1="Table"
             viewsList2="Board"
@@ -111,6 +112,7 @@ function RenderHubs() {
             changeViews="View"
           />
         }
+        additional={<FilterByAssigneesSliderOver />}
       >
         <section>
           <div className="w-full">

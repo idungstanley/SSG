@@ -16,6 +16,8 @@ import Board from '../tasks/component/views/listLevel/TaskBoardView';
 import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
+import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
+import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -25,12 +27,14 @@ function RenderList() {
     tableView,
     listView,
     boardView,
+    calenderView,
+    mapView,
     addNewTaskItem,
     closeTaskListView,
     currentParentTaskId,
     getSubTaskId
   } = useAppSelector((state) => state.task);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
@@ -71,12 +75,14 @@ function RenderList() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={
-          <section id="nav" className="capitalize ">
+          <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
-              navName={activeItemName}
+              navName={activeEntityName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
+              viewsList3="Calender"
+              viewsList4="Map"
               changeViews="View"
             />
           </section>
@@ -90,17 +96,19 @@ function RenderList() {
           )}
           <div
             className="block relative p-2 mx-2 border-l-4 border-gray-500 rounded-md"
-            style={{ backgroundColor: '#e1e4e5' }}
+            style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
           >
-            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
+            {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
 
             {/* task list logic */}
-            {tableView && closeTaskListView && <TaskTableView />}
+            {tableView && closeTaskListView && <TaskTableView tasks={paginatedTaskData} />}
 
             {/* BoardView */}
             {boardView && <ListFilter />}
             {boardView && (
-              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>{<Board />}</div>
+              <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>
+                {<Board tasks={paginatedTaskData} />}
+              </div>
             )}
 
             {/* card */}
@@ -119,6 +127,22 @@ function RenderList() {
                       {getSubTaskId === task?.id ? <RenderSubTasks /> : null}
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {calenderView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                  <TaskCalenderTemplate />
+                </div>
+              </div>
+            )}
+
+            {mapView && (
+              <div className="pr-1 pt-0.5 w-full h-full">
+                <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
+                  <NoTaskFound />
                 </div>
               </div>
             )}
