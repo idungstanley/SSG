@@ -92,6 +92,7 @@ interface TaskState {
   triggerAsssignTask: boolean;
   groupByStatus: string | null;
   timerStatus: boolean;
+  filterTaskByAssigneeIds: string | null | undefined;
 }
 
 const initialState: TaskState = {
@@ -134,7 +135,8 @@ const initialState: TaskState = {
   currentTaskPriorityId: null,
   triggerAsssignTask: false,
   groupByStatus: 'status',
-  timerStatus: false
+  timerStatus: false,
+  filterTaskByAssigneeIds: null
 };
 
 export const taskSlice = createSlice({
@@ -293,6 +295,9 @@ export const taskSlice = createSlice({
     },
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
+    },
+    setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
+      state.filterTaskByAssigneeIds = action.payload;
     }
   }
 });
@@ -334,6 +339,7 @@ export const {
   setCurrentTaskPriorityId,
   setTriggerAsssignTask,
   setGroupByStatus,
-  setTimerStatus
+  setTimerStatus,
+  setFilterTaskByAssigneeIds
 } = taskSlice.actions;
 export default taskSlice.reducer;
