@@ -218,19 +218,27 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
   );
 };
 
-export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
+export const getTaskListService = ({
+  listId,
+  assigneeUserId
+}: {
+  listId: string | null | undefined;
+  assigneeUserId: string | undefined | null;
+}) => {
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
-    ['task', { listId: listId }],
-    // ['task', { listId: listId }],
+    ['task', { listId: listId, assigneeUserId }],
+
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
         method: 'POST',
         params: {
           list_id: listId,
-          page: pageParam
+          page: pageParam,
+          assignees
         }
       });
     },

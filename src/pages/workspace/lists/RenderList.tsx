@@ -18,6 +18,8 @@ import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
+import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
+import { ITaskFullList } from '../../../features/task/interface.tasks';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -32,7 +34,8 @@ function RenderList() {
     addNewTaskItem,
     closeTaskListView,
     currentParentTaskId,
-    getSubTaskId
+    getSubTaskId,
+    filterTaskByAssigneeIds
   } = useAppSelector((state) => state.task);
   const { activeEntityName } = useAppSelector((state) => state.workspace);
 
@@ -46,7 +49,7 @@ function RenderList() {
     data: listDetailsData, // isFetching,
     hasNextPage,
     fetchNextPage
-  } = getTaskListService({ listId });
+  } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
 
   const paginatedTaskData = useMemo(
     () => listDetailsData?.pages.flatMap((page) => page?.data.tasks),
@@ -87,6 +90,7 @@ function RenderList() {
             />
           </section>
         }
+        additional={<FilterByAssigneesSliderOver data={paginatedTaskData as ITaskFullList[]} />}
       >
         <div className="w-full">
           {listView && (
