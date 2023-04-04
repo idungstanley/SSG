@@ -40,9 +40,6 @@ export default function Tab({ id, label, icon, activeTabId, setActiveTabId, show
       )}
       aria-current={isActiveTab ? 'page' : undefined}
     >
-      {/* green line on active */}
-      {isActiveTab ? <div className="absolute bg-green-400 left-0 top-0 w-full h-0.5" /> : null}
-
       {/* drag area */}
       <span ref={setNodeRef} {...attributes} {...listeners} className="opacity-0 group-hover:opacity-100">
         <MdDragIndicator aria-hidden="true" className="w-4 h-4 cursor-move text-gray-400" />
