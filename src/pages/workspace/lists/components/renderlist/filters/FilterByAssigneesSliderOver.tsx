@@ -5,13 +5,8 @@ import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
-import {
-  // IGroupingAssignee,
-  ITaskFullList,
-  TaskDataGroupingsAssigneeProps
-} from '../../../../../../features/task/interface.tasks';
+import { ITaskFullList, TaskDataGroupingsAssigneeProps } from '../../../../../../features/task/interface.tasks';
 import { setFilterTaskByAssigneeIds } from '../../../../../../features/task/taskSlice';
-// import { ImyTaskData } from '../../../../../../features/task/taskSlice';
 
 export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullList[] }) {
   const dispatch = useAppDispatch();
