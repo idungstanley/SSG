@@ -12,8 +12,7 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function MainLayout() {
   const [allowSelect, setAllowSelect] = useState(true);
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
-  const { currentTaskIdForPilot } = useAppSelector((state) => state.task);
+  const { showExtendedBar, activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
 
   return (
     <div className={cl('h-full flex flex-col', !allowSelect && 'select-none')}>
@@ -36,8 +35,11 @@ function MainLayout() {
                 <Outlet />
               </div>
               <AddFileModal
-                endpoint={`attachments/${currentTaskIdForPilot || ''}?type=task`}
-                invalidateQuery={['tasks'] as InvalidateQueryFilters<unknown>}
+                // endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
+                endpoint={'attachments'}
+                activeItemId={activeItemId}
+                activeType={activeItemType}
+                invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
             </div>
           </div>

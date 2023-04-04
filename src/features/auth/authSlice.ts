@@ -20,7 +20,7 @@ export interface IUser {
 interface AuthState {
   user: IUser | null;
   accessToken: string | null;
-  currentWorkspaceId: string | null;
+  currentWorkspaceId: string | null | undefined;
   currentUserId: string | null;
 }
 

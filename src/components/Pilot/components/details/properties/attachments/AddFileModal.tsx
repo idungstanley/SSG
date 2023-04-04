@@ -13,9 +13,11 @@ import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlic
 interface UploadFileModalProps {
   invalidateQuery?: InvalidateQueryFilters<unknown>;
   endpoint?: string;
+  activeItemId: string | null | undefined;
+  activeType: string | null | undefined;
 }
 
-export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileModalProps) {
+export default function AddFileModal({ invalidateQuery, endpoint, activeItemId, activeType }: UploadFileModalProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
@@ -43,7 +45,9 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
         headers: currentWorkspaceId
           ? {
               Authorization: `Bearer ${accessToken}`,
-              current_workspace_id: currentWorkspaceId
+              current_workspace_id: currentWorkspaceId,
+              id: activeItemId,
+              type: activeType
             }
           : undefined,
         method: 'POST',
