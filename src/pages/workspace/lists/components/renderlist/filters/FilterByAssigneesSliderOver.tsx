@@ -19,7 +19,9 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
-  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsAssigneeProps>({});
+  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<
+    TaskDataGroupingsAssigneeProps | undefined
+  >(undefined);
   useEffect(() => {
     const taskDataGroupedByAssignee = data?.reduce(
       (

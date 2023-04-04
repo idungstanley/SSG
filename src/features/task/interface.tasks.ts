@@ -29,7 +29,7 @@ export interface TaskDataGroupingsProps {
 
 export interface TaskDataGroupingsAssigneeProps {
   [key: string]: {
-    assigneeName: string | number | [{ id: string; initials: string; colour: string; name: string }] | null | undefined;
+    assigneeName: string | undefined;
     assigneeId?: string | undefined;
     tasks: ITaskFullList[];
   };
