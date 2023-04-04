@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import IsIsNot from './isIsNotIsSetIsNotSet/IsIsNot';
 import PriorityFllter from './filterOptions/PriorityFllter';
+import IsSetIsNotSet from './isIsNotIsSetIsNotSet/IsSetIsNotSet';
+import TagFilter from './filterOptions/TagFilter';
+import AssigneeFilter from './filterOptions/AssigneeFilter';
+import DueDateFilter from './filterOptions/DueDateFilter';
+import ArchivedFilter from './filterOptions/ArchivedFilter';
+import StatusFilter from './filterOptions/StatusFilter';
 
 export default function FilterGroups() {
   const [selectOptions, setSelectOptions] = useState<null | string>(null);
@@ -24,17 +30,34 @@ export default function FilterGroups() {
             >
               <option value="Value">Select filter</option>
               <option value="status">Status</option>
-              <option value="tags">Tags</option>
-              <option value="due_date">Due Date</option>
               <option value="priority">Priority</option>
               <option value="assignee">Assignee</option>
               <option value="archived">Archived</option>
+              <option value="tags">Tags</option>
+              <option value="due_date">Due Date</option>
             </select>
           </div>
+
           <div>
             {selectOptions == 'status' ? (
-              <div id="isIsNot">
+              <div id="filterDrop">
                 <IsIsNot />
+              </div>
+            ) : selectOptions == 'priority' ? (
+              <div id="filterDrop">
+                <IsSetIsNotSet />
+              </div>
+            ) : selectOptions == 'tags' ? (
+              <div id="filterDrop">
+                <IsSetIsNotSet />
+              </div>
+            ) : selectOptions == 'assignee' ? (
+              <div id="filterDrop">
+                <IsSetIsNotSet />
+              </div>
+            ) : selectOptions == 'due_date' ? (
+              <div id="filterDrop">
+                <IsSetIsNotSet />
               </div>
             ) : null}
           </div>
@@ -42,7 +65,27 @@ export default function FilterGroups() {
           <div>
             {selectOptions == 'status' ? (
               <div id="filterDrop">
+                <StatusFilter />
+              </div>
+            ) : selectOptions == 'priority' ? (
+              <div id="filterDrop">
                 <PriorityFllter />
+              </div>
+            ) : selectOptions == 'tags' ? (
+              <div id="filterDrop">
+                <TagFilter />
+              </div>
+            ) : selectOptions == 'assignee' ? (
+              <div id="filterDrop">
+                <AssigneeFilter />
+              </div>
+            ) : selectOptions == 'due_date' ? (
+              <div id="filterDrop">
+                <DueDateFilter />
+              </div>
+            ) : selectOptions == 'archived' ? (
+              <div id="filterDrop">
+                <ArchivedFilter />
               </div>
             ) : null}
           </div>
