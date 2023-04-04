@@ -9,8 +9,8 @@ export default function RoutePlanner() {
 
   return (
     <div>
-      <PlaceItem label="ROUTE PLANNER" icon={<FaRoute className="w-4 h-4" />} />
-      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>ROUTE PLANNER</div>
+      <PlaceItem label="ROUTEPLAN" icon={<FaRoute className="w-4 h-4" />} />
+      <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>ROUTEPLAN</div>
     </div>
   );
 }

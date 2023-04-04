@@ -97,9 +97,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         className={`relative flex items-center justify-between h-8 space-x-1 group ${
           list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
-        style={{ paddingLeft: `${paddingLeft}px` }}
+        style={{ paddingLeft: `${paddingLeft}px`, backgroundColor: `${list.id === activeItemId ? '#BF00FF21' : ''}` }}
       >
-        {list.id === activeItemId && <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />}
+        {list.id === activeItemId && (
+          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
+        )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent shape={activeShape} innerColour={innerColour} outterColour={outerColour} />
