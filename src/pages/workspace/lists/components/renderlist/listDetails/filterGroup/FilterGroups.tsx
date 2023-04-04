@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
-import IsIsNot from './isIsNot/IsIsNot';
+import IsIsNot from './isIsNotIsSetIsNotSet/IsIsNot';
 import PriorityFllter from './filterOptions/PriorityFllter';
 
 export default function FilterGroups() {
