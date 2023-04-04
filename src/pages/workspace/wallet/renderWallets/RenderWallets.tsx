@@ -3,15 +3,17 @@ import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppSelector } from '../../../../app/hooks';
 import PageWrapper from '../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
-import { UseGetFullTaskListWallet } from '../../../../features/task/taskService';
+import { UseGetFullTaskList } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
 import TaskTemplateData from '../../tasks/component/views/hubLevel/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
 import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../features/task/interface.tasks';
+import FilterByAssigneesSliderOver from '../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 
 function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,9 +23,10 @@ function RenderWallets() {
     status, // isFetching,
     hasNextPage,
     fetchNextPage
-  } = UseGetFullTaskListWallet({
+  } = UseGetFullTaskList({
     itemId: activeItemId,
-    itemType: activeItemType
+    itemType: activeItemType,
+    assigneeUserId: filterTaskByAssigneeIds
   });
 
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
@@ -80,6 +83,7 @@ function RenderWallets() {
       <PageWrapper
         pilotConfig={pilotConfig}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
+        additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
