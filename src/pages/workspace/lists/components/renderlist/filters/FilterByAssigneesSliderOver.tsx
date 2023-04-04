@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable */
 import React, { Fragment, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
@@ -21,7 +17,6 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
   const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
-  const [checkFilterClicked, setCheckFilterClicked] = useState<string | null | undefined>(null);
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<TaskDataGroupingsAssigneeProps>({});
@@ -77,8 +72,6 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
     };
   }, [data, setTaskDataGroupingsAssignees]);
 
-  console.log(TaskDataGroupingsAssignees);
-
   return (
     <Transition.Root show={!!showFilterByAssigneeSlideOver} as={Fragment}>
       <Dialog as="div" className="relative z-10 border-2 border-gray-500" onClose={onClose}>
@@ -128,11 +121,8 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
                         </div>
                         {TaskDataGroupingsAssignees
                           ? Object.keys(TaskDataGroupingsAssignees).map((value) => (
-                              <section
-                                onClick={() => setCheckFilterClicked(TaskDataGroupingsAssignees[value]?.assigneeId)}
-                              >
+                              <section key={TaskDataGroupingsAssignees[value].assigneeId}>
                                 <div
-                                  key={TaskDataGroupingsAssignees[value].assigneeId}
                                   className="flex justify-between cursor-pointer hover:bg-gray-200"
                                   onClick={() => {
                                     if (filterTaskByAssigneeIds == TaskDataGroupingsAssignees[value]?.assigneeId) {

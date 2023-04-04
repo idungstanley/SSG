@@ -42,8 +42,11 @@ export const UseGetFullTaskList = ({
   assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-  const enabled = itemType == 'hub' || itemType == 'subhub';
+  const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
+  const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
+  const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  console.log(assigneeUserId);
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -52,7 +55,8 @@ export const UseGetFullTaskList = ({
         method: 'POST',
         params: {
           page: pageParam,
-          hub_id: itemId,
+          hub_id,
+          wallet_id,
           assignees
         }
       });
@@ -69,45 +73,6 @@ export const UseGetFullTaskList = ({
           return Number(lastPage.data.paginator.page) + 1;
         }
 
-        return false;
-      }
-    }
-  );
-};
-
-export const UseGetFullTaskListWallet = ({
-  itemId,
-  itemType
-}: {
-  itemId: string | undefined | null;
-  itemType: string | null | undefined;
-}) => {
-  const queryClient = useQueryClient();
-  const enabled = itemType == 'wallet' || itemType == 'subwallet';
-
-  return useInfiniteQuery(
-    ['task', itemId, itemType],
-    async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<IFullTaskRes>({
-        url: 'tasks/full-list',
-        method: 'POST',
-        params: {
-          page: pageParam,
-          wallet_id: itemId
-        }
-      });
-    },
-    {
-      enabled,
-      onSuccess: (data) => {
-        data.pages.map((page) =>
-          page.data.tasks.map((task: ITaskFullList) => queryClient.setQueryData(['task', task.id], task))
-        );
-      },
-      getNextPageParam: (lastPage) => {
-        if (lastPage?.data?.paginator.has_more_pages) {
-          return Number(lastPage.data.paginator.page) + 1;
-        }
         return false;
       }
     }
