@@ -35,10 +35,10 @@ function MainLayout() {
                 <Outlet />
               </div>
               <AddFileModal
-                // endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
-                endpoint={'attachments'}
-                activeItemId={activeItemId}
-                activeType={activeItemType}
+                endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
+                // endpoint={`attachments/${folderId || ''}`}
+                // activeItemId={activeItemId}
+                // activeType={activeItemType}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
             </div>

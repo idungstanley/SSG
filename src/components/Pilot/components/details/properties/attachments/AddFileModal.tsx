@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
-import Webcam from '@uppy/webcam';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
@@ -13,11 +12,11 @@ import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlic
 interface UploadFileModalProps {
   invalidateQuery?: InvalidateQueryFilters<unknown>;
   endpoint?: string;
-  activeItemId: string | null | undefined;
-  activeType: string | null | undefined;
+  // activeItemId: string | null | undefined;
+  // activeType: string | null | undefined;
 }
 
-export default function AddFileModal({ invalidateQuery, endpoint, activeItemId, activeType }: UploadFileModalProps) {
+export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileModalProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
@@ -37,29 +36,19 @@ export default function AddFileModal({ invalidateQuery, endpoint, activeItemId, 
         minNumberOfFiles: null,
         allowedFileTypes: ['image/*']
       }
+    }).use(XHRUpload, {
+      metaFields: ['image', 'path'],
+      endpoint: '',
+      bundle: false,
+      headers: currentWorkspaceId
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+            current_workspace_id: currentWorkspaceId
+          }
+        : undefined,
+      method: 'POST',
+      formData: true
     })
-      .use(XHRUpload, {
-        metaFields: ['image', 'path'],
-        endpoint: '',
-        bundle: false,
-        headers: currentWorkspaceId
-          ? {
-              Authorization: `Bearer ${accessToken}`,
-              current_workspace_id: currentWorkspaceId,
-              id: activeItemId,
-              type: activeType
-            }
-          : undefined,
-        method: 'POST',
-        formData: true,
-        fieldName: 'image'
-      })
-      .use(Webcam, {
-        mirror: true,
-        facingMode: 'user',
-        showRecordingLength: false,
-        modes: ['picture']
-      })
   );
 
   const { xhrUpload } = uppy.getState();

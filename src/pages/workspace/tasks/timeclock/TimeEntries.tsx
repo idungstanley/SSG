@@ -19,19 +19,11 @@ export default function TimeEntries() {
   const [stopTimeClock, setStopTimeClock] = useState(false);
 
   const { data: getEntries, refetch } = GetTimeEntriesService({
-    taskId: activeItemId,
+    itemId: activeItemId,
     trigger: activeItemType
   });
 
-  StartTimeEntryService({
-    taskId: currentTaskIdForPilot,
-    trigger: startTimeClicked
-  });
-
-  // EndTimeEntriesService({
-  //   taskId: currentTaskIdForPilot,
-  //   trigger: stopTimeClock,
-  // });
+  const { mutate } = StartTimeEntryService();
 
   const handleTimeTrigger = () => {
     setStartTimeClicked(!startTimeClicked);
@@ -95,9 +87,11 @@ export default function TimeEntries() {
                 <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
               )}
               <Timer
-                active={startTimeClicked}
+                active={mutate({
+                  taskId: currentTaskIdForPilot,
+                  type: activeItemType
+                })}
                 duration={null}
-                // onStop={HandleStopTimer}
               >
                 <Timecode />
               </Timer>
