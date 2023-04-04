@@ -55,7 +55,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
   }
 
   return (
-    <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center" onBlur={handleOutsideClick}>
+    <div className="bg-white border border-sky-500  ml-4 h-10 flex  items-center">
       <div className="flex items-center w-10/12">
         {/* data and input */}
         <div>
