@@ -22,7 +22,6 @@ export default function TimeEntries() {
     taskId: activeItemId,
     trigger: activeItemType
   });
-  console.log(getEntries);
 
   StartTimeEntryService({
     taskId: currentTaskIdForPilot,

@@ -72,12 +72,13 @@ export default function WalletItem({
     <>
       <section
         className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm h-8 group ${
-          wallet.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
+          wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
+        style={{ backgroundColor: `${wallet.id === activeItemId ? '#BF00FF21' : ''}` }}
       >
         {wallet.id === activeItemId && (
-          <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
+          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div id="walletLeft" className="flex items-center justify-center" style={{ paddingLeft: `${paddingLeft}px` }}>
           {/* showsub1 */}
