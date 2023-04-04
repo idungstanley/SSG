@@ -71,9 +71,8 @@ export const places = [
     place: <Tracker />,
     icon: <SiPivotaltracker className="w-4 h-4" />
   },
-
   {
-    name: 'Route Planner',
+    name: 'ROUTEPLAN',
     id: 9,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />
