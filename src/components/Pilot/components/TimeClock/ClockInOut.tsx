@@ -25,7 +25,7 @@ export default function ClockInOut() {
   useEffect(() => {
     reset();
     return reset();
-  }, [activeItemName, timerStatus]);
+  }, [activeItemName]);
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -110,7 +110,7 @@ export default function ClockInOut() {
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
                 {btnClicked ? (
-                  !btnClicked && timerStatus ? (
+                  !btnClicked && !timerStatus ? (
                     <button onClick={start}>
                       <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
                     </button>
