@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
+import IsIsNot from './isIsNot/IsIsNot';
+import PriorityFllter from './filterOptions/PriorityFllter';
 
 export default function FilterGroups() {
+  const [selectOptions, setSelectOptions] = useState<null | string>(null);
   return (
     <div className="groupFiltalModal">
       <header className="flex  justify-between w-11/12 m-auto mt-5 mb-6">
@@ -11,38 +14,37 @@ export default function FilterGroups() {
 
       <div id="dropdown">
         <div id="selectOptions" className="flex w-10/12 m-auto justify-between items-center">
-          <p className="text-xl">Where</p>
-          <div id="filterField">
-            <select name="" id="" className="rounded-md">
-              <option value="">Status</option>
-              <option value="">Tags</option>
-              <option value="">Due Date</option>
-              <option value="">Priority</option>
-              <option value="">Assignee</option>
-              <option value="">Archived</option>
-              <option value="">Assigned comment</option>
-              <option value="">Created by</option>
-              <option value="">Date closed</option>
-              <option value="">Date created</option>
-              <option value="">Date updated</option>
-              <option value="">Date done</option>
+          <p className="text-xl ">Where</p>
+          <div id="filterField ">
+            <select
+              name="Select Filter"
+              id=""
+              className="rounded-md"
+              onChange={(e) => setSelectOptions(e.target.value)}
+            >
+              <option value="Value">Select filter</option>
+              <option value="status">Status</option>
+              <option value="tags">Tags</option>
+              <option value="due_date">Due Date</option>
+              <option value="priority">Priority</option>
+              <option value="assignee">Assignee</option>
+              <option value="archived">Archived</option>
             </select>
           </div>
-          <div id="isIsNot">
-            <select name="" id="" className="rounded-md">
-              <option value="">Is</option>
-              <option value="">Is not</option>
-            </select>
+          <div>
+            {selectOptions == 'status' ? (
+              <div id="isIsNot">
+                <IsIsNot />
+              </div>
+            ) : null}
           </div>
 
-          <div id="filterDrop">
-            <select name="" id="" className="rounded-md">
-              <option value="">High</option>
-              <option value="">low</option>
-              <option value="">urgent</option>
-              <option value="">normal</option>
-              <option value="">No Priority</option>
-            </select>
+          <div>
+            {selectOptions == 'status' ? (
+              <div id="filterDrop">
+                <PriorityFllter />
+              </div>
+            ) : null}
           </div>
 
           <div id="trashButton">
