@@ -70,7 +70,7 @@ export default function HubItem({
           item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         tabIndex={0}
-        onClick={() => handleClick(item.id)}
+        onClick={() => handleClick(item.id, item.name)}
         style={{ backgroundColor: `${item.id === activeItemId ? '#BF00FF21' : ''}` }}
       >
         <div className="relative flex items-center justify-between">

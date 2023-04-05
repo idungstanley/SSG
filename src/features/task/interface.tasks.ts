@@ -156,6 +156,7 @@ export interface IEntries {
   start_date: string;
   end_date: string;
   description: string;
+  is_billable: number;
 }
 
 export interface ITimeEntriesRes {

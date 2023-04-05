@@ -13,6 +13,7 @@ export interface entriesProps {
   start_date: string;
   end_date: string;
   description: string;
+  is_billable: number;
 }
 export interface EntryListProps {
   entries: entriesProps;
@@ -58,7 +59,9 @@ export default function EntryList({ entries }: EntryListProps) {
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
           <PencilIcon className="flex-shrink-0 h-3 w-5 text-gray-400" aria-hidden="true" />
         </button>
-        {openUpdateEntryId == entries.id ? <UpdateTimeEntryDropdown time_entry_id={entries.id} /> : null}
+        {openUpdateEntryId == entries.id ? (
+          <UpdateTimeEntryDropdown time_entry_id={entries.id} billable={entries.is_billable} />
+        ) : null}
         <button type="button" onClick={() => handledelete.mutateAsync({ timeEntryDeleteTriggerId: entries.id })}>
           <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
         </button>
