@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import AddTo from '../../../../pages/workspace/pilot/components/attachments/AddTo';
 import DetailsIndex from './properties/DetailsIndex';
 import DetailsSubTab from './DetailsSubTab';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../../../app/hooks';
 import SectionArea from '../SectionArea';
+import { DetailsIcon } from '../../../../assets/icons';
 
 export const DetailOptions = [
   {
@@ -25,7 +25,7 @@ export default function Details() {
 
   return (
     <>
-      <SectionArea label="Details" icon={<InformationCircleIcon className="w-4 h-4" />} />
+      <SectionArea label="Details" icon={<DetailsIcon className="w-4 h-4" />} />
       <section className="flex flex-col overflow-y-scroll h-fit ">
         {showPilot && <DetailsSubTab />}
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>

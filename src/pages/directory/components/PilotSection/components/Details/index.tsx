@@ -1,6 +1,6 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { DetailsIcon } from '../../../../../../assets/icons';
 import DetailsSection from '../../../../../../components/Pilot/components/DetailsSection';
 import SectionArea from '../../../../../../components/Pilot/components/SectionArea';
 import { useGetDirectory, useGetDirectoryTemplate } from '../../../../../../features/directory/directoryService';
@@ -27,7 +27,7 @@ export default function Details() {
 
   return config ? (
     <>
-      <SectionArea label="Details" icon={<InformationCircleIcon className="w-4 h-4" />} />
+      <SectionArea label="Details" icon={<DetailsIcon className="w-4 h-4" />} />
       <DetailsSection config={config} />
     </>
   ) : null;
