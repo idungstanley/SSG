@@ -15,6 +15,8 @@ import ToolTip from '../../../../../Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 
 export interface tagItem {
   id: string;
@@ -26,8 +28,43 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [title, setTitle] = useState<string>(activeItemName as string);
+  const [description, setDescription] = useState<string | null>(Details?.description || null);
+  const queryClient = useQueryClient();
+
+  const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+
+  const handleBlur = () => {
+    setEditingTitle(false);
+    setEditingDescription(false);
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleBlur();
+    await editTaskMutation.mutateAsync({
+      name: title,
+      task_id: Details?.id,
+      description
+    });
+  };
+
+  console.log(Details);
+
   return (
     <>
       <div className="flex items-center justify-between p-2">
@@ -68,14 +105,47 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="border p-1 bg-gray-100 border-white rounded-md">
-            <p className="capitalize">{activeItemName}</p>
+            {editingTitle ? (
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={handleTitleChange}
+                  onBlur={handleBlur}
+                  autoFocus
+                  className="bg-transparent border-none rounded-md outline-none focus:outline-none w-full"
+                />
+              </form>
+            ) : (
+              <p className="capitalize" onClick={() => setEditingTitle(true)}>
+                {title}
+              </p>
+            )}
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md h-20">
-            <p>{Details?.description}</p>
+          <div
+            className="border p-1 bg-gray-100 border-white rounded-md h-20"
+            onClick={() => setEditingDescription(true)}
+          >
+            {editingDescription ? (
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  value={description ?? ''}
+                  onChange={handleDescriptionChange}
+                  onBlur={handleBlur}
+                  autoFocus
+                  className="bg-transparent border-none rounded-md outline-none focus:outline-none w-full h-20"
+                />
+              </form>
+            ) : (
+              <div className="capitalize">
+                <p>{description ?? ''}</p>
+              </div>
+            )}
           </div>
         </div>
         {/* created time */}
