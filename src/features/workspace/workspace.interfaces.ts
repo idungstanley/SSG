@@ -26,6 +26,25 @@ export interface IAllWorkspacesRes {
   };
 }
 
+export interface IUserData {
+  avatar_path: string | null;
+  color: string | null;
+  date_format: string;
+  default_workspace_id: string;
+  email: string;
+  initials: string;
+  name: string;
+  start_week: string;
+  theme_color: string | null;
+  timezone: string;
+}
+
+export interface IUserRes {
+  data: {
+    user: IUserData;
+  };
+}
+
 export interface ITeamMember {
   id: string;
   user: {
