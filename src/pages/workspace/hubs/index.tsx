@@ -1,5 +1,5 @@
 import { useGetHubList } from '../../../features/hubs/hubService';
-import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
+// import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
 import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
@@ -16,7 +16,7 @@ import ListModal from '../lists/components/modals/ListModal';
 import TaskModal from '../tasks/component/TaskModal';
 import { BsListCheck } from 'react-icons/bs';
 import WalletModal from '../wallet/components/modals/WalletModal';
-import Tree from './components/Tree';
+import ActiveTress from './components/ActiveTree/ActiveTress';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -60,8 +60,8 @@ function Hubs() {
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
-      <Tree />
-      <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
+      <ActiveTress />
+      {/* <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" /> */}
       <Modal />
       <SubHubModal />
       <SubWalletModal />

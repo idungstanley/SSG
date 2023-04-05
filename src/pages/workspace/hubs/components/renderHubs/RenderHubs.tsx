@@ -17,10 +17,10 @@ import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 
-// interface HubDetailTypes {
-//   activeItemId: string;
-//   activeItemType: string;
-// }
+interface HubDetailTypes {
+  activeItemId: string;
+  activeItemType: string;
+}
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -29,8 +29,8 @@ function RenderHubs() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
 
-  // const retrievedObject = localStorage.getItem('hubDetailsStorage');
-  // const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
+  const retrievedObject = localStorage.getItem('hubDetailsStorage');
+  const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
 
   const {
     data: TaskFullList,

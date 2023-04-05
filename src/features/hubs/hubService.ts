@@ -43,11 +43,11 @@ export const useGetHubs = ({
   const isActiveList = listId ? `lists${`?parent_id=${listId}`}` : null;
 
   return useQuery(
-    ['hubs', id ?? 'root', includeTree ? 'tree' : undefined],
+    [id ?? 'root', includeTree ? 'tree' : undefined],
     () =>
       requestNew<IHubsRes>({
         url: includeTree ? 'active-tree' : isActiveHub || isActiveWallet || isActiveList || 'hubs',
-        // url: includeTree ? 'active-tree' : `hubs${hubId ? '/' + hubId : '' ?? ''}`,
+
         method: 'GET',
         params: includeTree
           ? {
@@ -58,6 +58,7 @@ export const useGetHubs = ({
           : undefined
       }),
     {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       select: (res) => res.data
     }
   );
