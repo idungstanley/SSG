@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../../../app/hooks';
 import TimeSubTab from './TimeSubTab';
-import ClockInOut from '../../../../../../components/Pilot/components/TimeClock/ClockInOut';
-import ClockLog from '../../../../../../components/Pilot/components/TimeClock/ClockLog';
-import ClockPreferences from '../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
+import ClockInOut from '../../../../../../../../components/Pilot/components/TimeClock/ClockInOut';
+import ClockLog from '../../../../../../../../components/Pilot/components/TimeClock/ClockLog';
+import ClockPreferences from '../../../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
 
 export const TimeClockOptions = [
   {
@@ -19,7 +19,7 @@ export const TimeClockOptions = [
     element: <ClockPreferences />
   }
 ];
-export default function TimeClock() {
+export default function TimeClockTabs() {
   const { activeSubTimeClockTabId, showPilot } = useAppSelector((state) => state.workspace);
   const selectedSubSection = useMemo(
     () => TimeClockOptions.find((option) => option.id === activeSubTimeClockTabId),

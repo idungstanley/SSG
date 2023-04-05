@@ -68,3 +68,33 @@ code {
   cursor: pointer;
   /* width: 10px; */
 }
+
+.color {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+}
+
+/* .color_theme {
+  width: 32px;
+  height: 32px;
+} */
+
+.color_theme:hover {
+  animation-name: grow;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes grow {
+  from {
+    width: 32px;
+    height: 32px;
+  }
+  to {
+    width: 48px;
+    height: 48px;
+  }
+}

@@ -8,12 +8,11 @@ import { TbSubtask } from 'react-icons/tb';
 import { VscEllipsis } from 'react-icons/vsc';
 import GroupbyModal from './Groupings/GroupbyModal';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils/index';
 
 export default function ListFilter() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   return (
     <nav className="flex items-center justify-between bg-white h-8 pr-5  ">

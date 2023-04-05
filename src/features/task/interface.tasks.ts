@@ -27,6 +27,22 @@ export interface TaskDataGroupingsProps {
   };
 }
 
+export interface TaskDataGroupingsAssigneeProps {
+  [key: string]: {
+    assigneeName: string | undefined;
+    assigneeId?: string | undefined;
+    tasks: ITaskFullList[];
+  };
+}
+
+export interface TaskAssignee {
+  id: string;
+  color: string;
+  name: string;
+  initials: string;
+  avatar_path: null;
+}
+
 export interface ICheckListItems {
   id: string;
   name: string;
@@ -83,6 +99,10 @@ export interface ITaskFullList {
     | [{ id: string; initials: string; colour: string; name: string }];
 }
 
+export interface IGroupingAssignee {
+  unFilteredTaskData: ITaskFullList[];
+}
+
 export interface IPaginator {
   page: number;
   per_page: number;
@@ -136,6 +156,7 @@ export interface IEntries {
   start_date: string;
   end_date: string;
   description: string;
+  is_billable: number;
 }
 
 export interface ITimeEntriesRes {
