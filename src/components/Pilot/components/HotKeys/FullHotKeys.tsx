@@ -56,8 +56,8 @@ export default function FullHotkeysList({
                 onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
                 title={hotkey.label}
                 className={cl(
-                  activeTabId === hotkey.id ? 'text-green-500' : 'text-gray-600',
-                  'flex items-center justify-center border-r border-l px-4 py-1'
+                  activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
+                  'flex items-center justify-center border-r border-l px-4 py-1 rounded-md'
                 )}
                 key={hotkey.id}
               >
