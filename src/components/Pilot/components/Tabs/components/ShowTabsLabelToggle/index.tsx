@@ -29,7 +29,7 @@ function ShowTabsLabelToggle({ showTabLabel, setShowTabLabel }: ShowTabsLabelTog
       type="button"
       onClick={toggleShowTabLabel}
       className={cl(
-        'border flex items-center justify-center text-gray-600',
+        'border bg-white flex items-center justify-center text-gray-600',
         showTabLabel ? 'absolute right-1 top-1 w-7 h-7' : 'p-2 w-8 h-9'
       )}
     >
