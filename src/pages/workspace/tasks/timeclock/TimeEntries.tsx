@@ -66,6 +66,7 @@ export default function TimeEntries() {
                 start_date: string;
                 end_date: string;
                 description: string;
+                is_billable: number;
               }) => <EntryList entries={entries} key={entries.id} />
             )}
         </section>
