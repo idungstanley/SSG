@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function StatusFilter() {
+export default function StatusFilterModal() {
   return (
     <div>
       <select name="" id="" className="rounded-md">

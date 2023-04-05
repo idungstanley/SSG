@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import IsIsNot from './isIsNotIsSetIsNotSet/IsIsNot';
-import PriorityFllter from './filterOptions/PriorityFllter';
+import PriorityFllter from './filterOptions/PriorityFllter/PriorityFllter';
 import IsSetIsNotSet from './isIsNotIsSetIsNotSet/IsSetIsNotSet';
-import TagFilter from './filterOptions/TagFilter';
-import AssigneeFilter from './filterOptions/AssigneeFilter';
-import DueDateFilter from './filterOptions/DueDateFilter';
-import ArchivedFilter from './filterOptions/ArchivedFilter';
-import StatusFilter from './filterOptions/StatusFilter';
+import TagFilter from './filterOptions/TagFilter/TagFilter';
+import AssigneeFilter from './filterOptions/AssigneeFilter/AssigneeFilter';
+import DueDateFilter from './filterOptions/DueDateFilter/DueDateFilter';
+import ArchivedFilter from './filterOptions/ArchivedFilter/ArchivedFilter';
+import StatusFilter from './filterOptions/StatusFilter/StatusFilter';
 
 export default function FilterGroups() {
   const [selectOptions, setSelectOptions] = useState<null | string>(null);

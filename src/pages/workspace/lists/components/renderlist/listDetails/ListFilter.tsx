@@ -40,7 +40,7 @@ export default function ListFilter() {
           <span>
             <MdFilterList />
           </span>
-          <span onClick={() => setShowFilter(!showFilter)}>filter</span>
+          <span onClick={() => setShowFilter(false)}>filter</span>
         </p>
         <span>
           <GroupbyModal />
@@ -60,7 +60,7 @@ export default function ListFilter() {
         <p
           className={cl(
             'flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded',
-            showFilterByAssigneeSlideOver ? 'bg-purple-600 text-white' : 'bg-gray-200'
+            showFilterByAssigneeSlideOver ? 'bg-purple-600 text-white' : ''
           )}
           onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}
         >
