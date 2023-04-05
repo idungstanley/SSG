@@ -4,8 +4,6 @@ import {
   UseCreatelistItemService,
   UseUpdateChecklistItemService
 } from '../../../../features/task/checklist/checklistService';
-// import { GrDrag } from "react-icons/gr";
-// import { CgProfile } from 'react-icons/cg';
 import ChecklistModal from './ChecklistModal';
 import { lessOptions } from './ModalOptions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';

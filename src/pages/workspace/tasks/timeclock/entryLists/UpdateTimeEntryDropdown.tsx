@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CalendarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import moment from 'moment';
+// import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
 import { UpdateTimeEntriesService } from '../../../../../features/task/taskService';
@@ -10,12 +10,13 @@ import { useDispatch } from 'react-redux';
 
 interface UpdateTimeEntryDropdownProps {
   time_entry_id: string | undefined;
+  billable: number;
 }
 
-function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps) {
+function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDropdownProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const [isBillable, setIsBillable] = useState(false);
+  const [isBillable, setIsBillable] = useState(billable === 1 && true);
   const { initial_description, initial_start_date, initial_end_date } = useAppSelector((state) => state.task);
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {
@@ -44,7 +45,7 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
   const onSubmit = async () => {
     await updateClockTimer.mutateAsync({
       description,
-      isBillable: isBillable === false ? 0 : 1,
+      isBillable: isBillable ? 1 : 0,
       start_date,
       end_date,
       time_entry_id
@@ -52,22 +53,22 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
   };
 
   return (
-    <div className="">
-      <section className="absolute -left-44 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+    <div className="absolute -left-64 top-8 z-50 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+      <section className="">
         <div className="flex justify-between items-center px-3 py-3 text-xs">
           <p>Edit Session</p>
           <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>
             X
           </button>
         </div>
-        <div id="descNote" className=" w-5/6 my-2 mx-3">
+        <div id="descNote" className="w-5/6 my-2 mx-3">
           <input
             type="text"
             placeholder="Enter a note"
             name="description"
             value={description}
             onChange={handleUpdateTimeChange}
-            className="border-0 shadow-sm rounded text-gray-600"
+            className="border-0 shadow-sm rounded text-gray-600 w-full mx-auto"
           />
         </div>
         <div id="billable" className="flex items-center justify-start space-x-1 text-sm px-3">
@@ -87,8 +88,9 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
           <input
             type="text"
             name="start_date"
-            placeholder="HH:MM"
-            value={moment(start_date).format('YYYY-MM-D h:mm:ss')}
+            placeholder="HH:MM:SS"
+            onChange={handleUpdateTimeChange}
+            value={start_date?.slice(10) as string}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>
@@ -96,9 +98,10 @@ function UpdateTimeEntryDropdown({ time_entry_id }: UpdateTimeEntryDropdownProps
           <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
-            placeholder="HH:MM"
+            placeholder="HH:MM:SS"
+            onChange={handleUpdateTimeChange}
             name="end_date"
-            value={moment(end_date).format('YYYY-MM-D h:mm:ss')}
+            value={end_date?.slice(10) as string}
             className="border-0 border-b-2 border-dotted bg-transparent w-4/5 "
           />
         </div>

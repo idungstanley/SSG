@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import AddTo from '../../../../pages/workspace/pilot/components/attachments/AddTo';
+import AddTo from './properties/attachments/AddTo';
 import DetailsIndex from './properties/DetailsIndex';
 import DetailsSubTab from './DetailsSubTab';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';

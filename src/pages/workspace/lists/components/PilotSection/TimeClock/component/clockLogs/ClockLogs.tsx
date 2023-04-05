@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function AddTo() {
+export default function ClockLogs() {
   return (
     <div>
-      <p>AddTo</p>
+      <p>ClockLogs</p>
     </div>
   );
 }

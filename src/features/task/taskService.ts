@@ -4,6 +4,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { useAppDispatch } from '../../app/hooks';
 import {
   ImyTaskData2,
+  setTimerStatus,
   // getTaskData,
   // getTaskData,
   setToggleAssignCurrentTaskId
@@ -34,22 +35,29 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType
+  itemType,
+  assigneeUserId
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
+  assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-  const enabled = itemType == 'hub' || itemType == 'subhub';
+  const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
+  const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
+  const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
-    ['task', itemId, itemType],
+    ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
         params: {
           page: pageParam,
-          hub_id: itemId
+          hub_id,
+          wallet_id,
+          assignees
         }
       });
     },
@@ -65,45 +73,6 @@ export const UseGetFullTaskList = ({
           return Number(lastPage.data.paginator.page) + 1;
         }
 
-        return false;
-      }
-    }
-  );
-};
-
-export const UseGetFullTaskListWallet = ({
-  itemId,
-  itemType
-}: {
-  itemId: string | undefined | null;
-  itemType: string | null | undefined;
-}) => {
-  const queryClient = useQueryClient();
-  const enabled = itemType == 'wallet' || itemType == 'subwallet';
-
-  return useInfiniteQuery(
-    ['task', itemId, itemType],
-    async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<IFullTaskRes>({
-        url: 'tasks/full-list',
-        method: 'POST',
-        params: {
-          page: pageParam,
-          wallet_id: itemId
-        }
-      });
-    },
-    {
-      enabled,
-      onSuccess: (data) => {
-        data.pages.map((page) =>
-          page.data.tasks.map((task: ITaskFullList) => queryClient.setQueryData(['task', task.id], task))
-        );
-      },
-      getNextPageParam: (lastPage) => {
-        if (lastPage?.data?.paginator.has_more_pages) {
-          return Number(lastPage.data.paginator.page) + 1;
-        }
         return false;
       }
     }
@@ -249,19 +218,27 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
   );
 };
 
-export const getTaskListService = ({ listId }: { listId: string | null | undefined }) => {
+export const getTaskListService = ({
+  listId,
+  assigneeUserId
+}: {
+  listId: string | null | undefined;
+  assigneeUserId: string | undefined | null;
+}) => {
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   return useInfiniteQuery(
-    ['task', { listId: listId }],
-    // ['task', { listId: listId }],
+    ['task', { listId: listId, assigneeUserId }],
+
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
         url: 'tasks/list',
         method: 'POST',
         params: {
           list_id: listId,
-          page: pageParam
+          page: pageParam,
+          assignees
         }
       });
     },
@@ -321,76 +298,77 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
-export const StartTimeEntryService = (query: { taskId?: string | null; trigger: boolean }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(
-    ['timeclock', { query: query.taskId }],
-    async () => {
-      const data = await requestNew({
+export const StartTimeEntryService = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+  const mutation = useMutation(
+    async (query: { taskId?: string | null; type: string | null | undefined }) => {
+      const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',
         params: {
-          type: 'task',
+          type: query.type,
           id: query.taskId
         }
       });
-      return data;
+      return res;
     },
     {
-      enabled: query.trigger,
-      onSuccess: () => {
-        // queryClient.invalidateQueries();
+      onSuccess: () => queryClient.invalidateQueries(['timeclock']),
+      onError: (res: unknown) => {
+        if ((res as { data: { message?: { title?: string } } })?.data?.message?.title === 'Timer already started') {
+          dispatch(setTimerStatus(true));
+        }
       }
     }
   );
+  return mutation;
 };
 
-export const EndTimeEntriesService = (data: {
-  description: string | undefined;
-  isBillable: string | undefined;
-  trigger: boolean;
-}) => {
-  return useQuery(
-    ['timeclock'],
-    async () => {
-      const response = requestNew({
+export const EndTimeEntriesService = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async (data: { id: string | null | undefined; description: string; is_Billable: boolean }) => {
+      const response = await requestNew({
         url: 'time-entries/stop',
         method: 'POST',
         params: {
           description: data.description,
-          is_billable: data.isBillable
+          isbillable: data.is_Billable
         }
       });
       return response;
     },
     {
-      enabled: data.trigger
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
+
+  return mutation;
 };
 
 export const GetTimeEntriesService = ({
-  taskId,
+  itemId,
   trigger
 }: {
-  taskId: string | null | undefined;
+  itemId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
   return useQuery(
-    ['timeclock', { taskId: taskId }],
+    ['timeclock', { itemId: itemId }],
     async () => {
       const data = await requestNew<ITimeEntriesRes | undefined>({
         url: 'time-entries',
         method: 'GET',
         params: {
           type: trigger,
-          id: taskId
+          id: itemId
         }
       });
       return data;
     },
     {
-      enabled: true
+      enabled: trigger != null
     }
   );
 };
@@ -415,21 +393,23 @@ export const UpdateTimeEntriesService = (data: {
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null | undefined }) => {
-  return useQuery(
-    ['timeclock', { data: data.timeEntryDeleteTriggerId }],
-    async () => {
-      const response = requestNew({
-        url: `time-entries/${data.timeEntryDeleteTriggerId}`,
-        method: 'DELETE'
-      });
-      return response;
-    },
-    {
-      enabled: data.timeEntryDeleteTriggerId != null
-    }
-  );
+export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null }) => {
+  // const queryClient = useQueryClient();
+  // return useQuery(
+  //   ['timeclock', { data: data.timeEntryDeleteTriggerId }],
+  //   async () => {
+  const response = requestNew({
+    url: `time-entries/${data.timeEntryDeleteTriggerId}`,
+    method: 'DELETE'
+  });
+  return response;
 };
+// {
+//   enabled: data.timeEntryDeleteTriggerId != null,
+//   onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+// }
+// );
+// };
 
 export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];
@@ -447,7 +427,6 @@ export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
 //Get watcher
 export const UseGetWatcherService = (taskId: { query: string | null | undefined }) => {
   const queryClient = useQueryClient();
-  // const dispatch = useDispatch();
   return useQuery(
     ['watcher', taskId],
     async () => {

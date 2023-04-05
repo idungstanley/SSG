@@ -1,6 +1,5 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setActiveSubTimeClockTabId } from '../../../../../../../features/workspace/workspaceSlice';
+import { setActiveSubTimeClockTabId } from '../../../../features/workspace/workspaceSlice';
 
 export default function NoEntriesFound() {
   const dispatch = useDispatch();
