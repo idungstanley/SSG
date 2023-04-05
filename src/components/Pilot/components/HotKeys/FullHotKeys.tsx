@@ -1,4 +1,4 @@
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useMemo, useState } from 'react';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
@@ -40,20 +40,31 @@ export default function FullHotkeysList({
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-row w-full">
-          {hotkeys.map((hotkey) => (
-            <button
-              onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
-              title={hotkey.label}
-              className={cl(
-                activeTabId === hotkey.id ? 'text-green-500' : 'text-gray-600',
-                'flex items-center justify-center border-r border-l px-4 py-1'
-              )}
-              key={hotkey.id}
-            >
-              {hotkey.icon}
-            </button>
-          ))}
+        <div className="flex border-t">
+          {/* unknown */}
+          <div className="flex flex-col p-1 bg-gray-50 text-gray-700 m-1">
+            <ChevronRightIcon className="h-2 w-2" aria-hidden="true" />
+            <p className="flex flex-col px-0.5 items-center" style={{ fontSize: '5px' }}>
+              <span>1</span> <span className="w-full h-0.5 bg-gray-400"></span> <span>3</span>
+            </p>
+            <ChevronLeftIcon className="h-2 w-2 text-gray-400" aria-hidden="true" />
+          </div>
+
+          <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-row w-full">
+            {hotkeys.map((hotkey) => (
+              <button
+                onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
+                title={hotkey.label}
+                className={cl(
+                  activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
+                  'flex items-center justify-center border-r border-l px-4 py-1 rounded-md'
+                )}
+                key={hotkey.id}
+              >
+                {hotkey.icon}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <div />
