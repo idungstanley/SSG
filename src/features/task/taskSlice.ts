@@ -91,6 +91,8 @@ interface TaskState {
   currentTaskPriorityId: string | null | undefined;
   triggerAsssignTask: boolean;
   groupByStatus: string | null;
+  showTaskUploadModal: boolean;
+  timerStatus: boolean;
   filterTaskByAssigneeIds: string | null | undefined;
 }
 
@@ -134,6 +136,8 @@ const initialState: TaskState = {
   currentTaskPriorityId: null,
   triggerAsssignTask: false,
   groupByStatus: 'status',
+  showTaskUploadModal: false,
+  timerStatus: false,
   filterTaskByAssigneeIds: null
 };
 
@@ -291,6 +295,12 @@ export const taskSlice = createSlice({
     setGroupByStatus(state, action: PayloadAction<string | null>) {
       state.groupByStatus = action.payload;
     },
+    setShowTaskUploadModal(state, action: PayloadAction<boolean>) {
+      state.showTaskUploadModal = action.payload;
+    },
+    setTimerStatus(state, action: PayloadAction<boolean>) {
+      state.timerStatus = action.payload;
+    },
     setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
       state.filterTaskByAssigneeIds = action.payload;
     }
@@ -334,6 +344,8 @@ export const {
   setCurrentTaskPriorityId,
   setTriggerAsssignTask,
   setGroupByStatus,
+  setShowTaskUploadModal,
+  setTimerStatus,
   setFilterTaskByAssigneeIds
 } = taskSlice.actions;
 export default taskSlice.reducer;

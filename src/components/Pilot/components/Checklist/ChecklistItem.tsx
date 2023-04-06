@@ -4,8 +4,6 @@ import {
   UseCreatelistItemService,
   UseUpdateChecklistItemService
 } from '../../../../features/task/checklist/checklistService';
-// import { GrDrag } from "react-icons/gr";
-// import { CgProfile } from 'react-icons/cg';
 import ChecklistModal from './ChecklistModal';
 import { lessOptions } from './ModalOptions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -97,14 +95,10 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
         return (
           <div key={item.id} className="bg-white p-1 mb-0.5">
             <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5 h-auto">
-              {/* <span className="text-gray-200 justify-center cursor-move opacity-0 group-hover:opacity-100">
-                  <GrDrag className="text-base text-gray-200 opacity-30 w-4 h-4" />
-                </span> */}
               <input
                 type="checkbox"
                 checked={item.is_done == 0 ? false : true}
                 className="rounded-lg mx-3 text-green-500 border-green-800"
-                // text-indigo-600 border-indigo-800
                 onChange={() => {
                   setItemId(item.id);
                   isDone(item.id, item.is_done, item.name);

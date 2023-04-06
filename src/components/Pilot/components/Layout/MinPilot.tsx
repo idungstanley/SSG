@@ -1,10 +1,9 @@
 import { IPilotSection, IPilotTab } from '../../../../types';
 import React from 'react';
 import { cl } from '../../../../utils';
-import MinHeader from '../Header/MinHeader';
-import Menu from '../HotKeys/components/Dropdown';
 import MinHotkeysList from '../HotKeys/MinHotKeys';
 import MinTabs from '../Tabs/MinTabs';
+import Header from '../Header';
 
 interface MinPilotProps {
   activeTabId: number | null;
@@ -37,9 +36,7 @@ export default function MinPilot({
         {activeSection?.element}
       </div>
 
-      <MinHeader setActiveTabId={setActiveTabId}>
-        <Menu setShowModal={setShowModal} />
-      </MinHeader>
+      <Header isMinified setActiveTabId={setActiveTabId} menu={<Header.Menu setShowModal={setShowModal} />} />
 
       <MinHotkeysList
         tabs={featureTabs}
