@@ -10,8 +10,8 @@ export default function CurrentUser() {
       {user?.avatar_path === null ? (
         <AvatarWithInitials
           initials="ND"
-          height="h-20"
-          width="w-20"
+          height="h-16"
+          width="w-16"
           roundedStyle="circular"
           backgroundColour={user?.colour}
           textSize="12px"
@@ -22,7 +22,9 @@ export default function CurrentUser() {
         </div>
       )}
 
-      <p className="mt-3 font-extrabold text-left">{user?.name}</p>
+      <div className="flex justify-center">
+        <p className="font-extrabold text-left">{user?.name.toUpperCase()}</p>
+      </div>
     </div>
   );
 }
