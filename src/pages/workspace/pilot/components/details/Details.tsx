@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import AddTo from '../attachments/AddTo';
+import AddTo from '../../../../../components/Pilot/components/details/properties/attachments/AddTo';
 import DetailsIndex from './properties/DetailsIndex';
 import { useAppSelector } from '../../../../../app/hooks';
 import DetailsSubTab from './DetailsSubTab';

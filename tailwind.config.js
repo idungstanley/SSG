@@ -11,7 +11,7 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
       },
       colors: {
-        primary: colors.indigo,
+        primary: colors.fuchsia,
         sky: colors.sky
       },
       gridTemplateColumns: {

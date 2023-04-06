@@ -64,8 +64,9 @@ code {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #b4b4b4e9;
-  width: 10px;
+  background-color: #797979e9;
+  cursor: pointer;
+  /* width: 10px; */
 }
 
 .color {

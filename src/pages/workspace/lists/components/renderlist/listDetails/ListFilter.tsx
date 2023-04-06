@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BiShow } from 'react-icons/bi';
 import { GrFormSearch } from 'react-icons/gr';
 import { IoPeopleOutline } from 'react-icons/io5';
@@ -8,13 +8,14 @@ import { TbSubtask } from 'react-icons/tb';
 import { VscEllipsis } from 'react-icons/vsc';
 import GroupbyModal from './Groupings/GroupbyModal';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils/index';
+import FilterGroups from './filterGroup/FilterGroups';
 
 export default function ListFilter() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   return (
     <nav className="flex items-center justify-between bg-white h-8 pr-5  ">
       <div className="flex items-center justify-between p-2">
@@ -34,10 +35,11 @@ export default function ListFilter() {
       </div>
       <div className="flex gap-2 items-center  text-xs font-bold">
         <p className="flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded">
+          <span>{showFilter && <FilterGroups />}</span>
           <span>
             <MdFilterList />
           </span>
-          filter
+          <span onClick={() => setShowFilter(false)}>filter</span>
         </p>
         <span>
           <GroupbyModal />
@@ -57,7 +59,7 @@ export default function ListFilter() {
         <p
           className={cl(
             'flex items-center gap-1 cursor-pointer hover:bg-gray-200 p-1 rounded',
-            showFilterByAssigneeSlideOver ? 'bg-purple-600 text-white' : 'bg-gray-200'
+            showFilterByAssigneeSlideOver ? 'bg-purple-600 text-white' : ''
           )}
           onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}
         >
@@ -72,7 +74,7 @@ export default function ListFilter() {
           </span>
           show
         </p>
-        <span className="hover:bg-gray-200 p-1 rounded ">
+        <span className="hover:bg-gray-200 p-1 rounded">
           <VscEllipsis />
         </span>
       </div>

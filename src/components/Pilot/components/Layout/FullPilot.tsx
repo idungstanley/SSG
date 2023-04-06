@@ -1,12 +1,12 @@
 import { IPilotSection, IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
-import Menu from '../HotKeys/components/Dropdown';
 import { MAX_PILOT_WIDTH, MIN_PILOT_WIDTH } from '../..';
 import { useAppSelector } from '../../../../app/hooks';
-import FullHeader from '../Header/FullHeader';
 import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
 import { useResize } from '../../../../hooks/useResize';
+import Header from '../Header';
+import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
 
 interface FullPilotProps {
   activeTabId: number | null;
@@ -39,7 +39,7 @@ export default function FullPilot({
     direction: 'X'
   });
 
-  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   return (
     <div
@@ -48,15 +48,34 @@ export default function FullPilot({
         width: showFullPilot ? pilotWidthFromLS : undefined
       }}
       className={cl(
-        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-10 translate-x-full',
+        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
         'right-0 border-l bottom-0 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-500'
       )}
     >
       {showFullPilot ? <Dividers /> : null}
 
-      <FullHeader setActiveTabId={setActiveTabId}>
-        <Menu setShowModal={setShowModal} />
-      </FullHeader>
+      <Header
+        isMinified={false}
+        setActiveTabId={setActiveTabId}
+        menu={<Header.Menu setShowModal={setShowModal} />}
+        additionalNavItems={
+          <>
+            <EditPageIcon className="w-4 h-4" />
+
+            <UploadIcon className="w-4 h-4" />
+
+            <CopyIcon className="w-6 h-6" />
+
+            <ShareIcon className="w-4 h-4" />
+
+            <PrintIcon className="w-4 h-4" />
+          </>
+        }
+      >
+        <p className="truncate capitalize text-xs font-semibold">
+          {type} | <span className="font-normal">{title}</span>
+        </p>
+      </Header>
 
       <FullHotkeysList
         tabs={featureTabs}

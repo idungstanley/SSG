@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { useAppSelector } from '../../app/hooks';
+// import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { IPilotSection, IPilotTab } from '../../types';
 import MinPilot from './components/Layout/MinPilot';
 import FullPilot from './components/Layout/FullPilot';
@@ -15,20 +15,25 @@ interface PilotProps {
 }
 
 export default function Pilot({ pilotConfig }: PilotProps) {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [activeTabId, setActiveTabId] = useState<null | number>(1);
   const [showModal, setShowModal] = useState(false);
   const { sections, tabs } = pilotConfig;
 
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  // reset active tab and current item id on unmount
+  // set first tab as active on open full pilot
   useEffect(() => {
-    return () => {
+    if (showFullPilot && !activeTabId) {
       setActiveTabId(1);
-      dispatch(setShowPilotSideOver({ show: true }));
-    };
-  }, []);
+    }
+
+    // reset active tab and current item id on unmount
+    // return () => {
+    //   setActiveTabId(1);
+    //   dispatch(setShowPilotSideOver({ show: true }));
+    // };
+  }, [showFullPilot]);
 
   // find active section
   const activeSection = useMemo(() => sections.find((section) => section.id === activeTabId), [activeTabId]);
