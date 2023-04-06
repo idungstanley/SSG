@@ -5,7 +5,7 @@ import Languages from './Languages';
 import Preferences from './Preferences';
 import Region from './Region';
 import TwoFactorAuthentication from './TwoFactorAuthentication';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/hooks';
 // import { selectCurrentUser } from '../../../../features/auth/authSlice';
 import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 import { setUserName } from '../../../../features/account/accountSlice';
@@ -15,8 +15,6 @@ interface userData {
 }
 
 export default function SettingsGrid({ user }: userData) {
-  const { userName } = useAppSelector((state) => state.account);
-  console.log(userName);
   const dispatch = useAppDispatch();
   const [name, setName] = useState<string | undefined>(user?.name);
   const [email, setEmail] = useState<string | undefined>(user?.email);
