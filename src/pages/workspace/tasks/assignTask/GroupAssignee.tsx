@@ -24,7 +24,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                 >
                   <span
                     key={newData.id}
-                    className="flex items-center justify-center -ml-2.5 border-white border-2  rounded-full hover:bg-blue-500"
+                    className="relative flex items-center justify-center -ml-2.5  border-2  rounded-full "
                   >
                     <AvatarWithInitials
                       initials={newData.initials}
@@ -39,7 +39,7 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
           <span>
             {(data as [{ id: string; initials: string; colour: string }])?.length - 3 !== 0 ? (
               <span
-                className="-ml-3 border-white border-2  rounded-full bg-gray-100"
+                className="-ml-3 border-white border-2  rounded-full bg-gray-100 "
                 style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
               >
                 +{(data as [{ id: string; initials: string; colour: string }])?.length - 3}
@@ -55,14 +55,11 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               index === 2 ? 'z-20' : 'z-10'
             } `}
           >
-            <span
-              key={newData.id}
-              className="flex items-center justify-center -ml-2.5 border-white border-2  rounded-full"
-            >
+            <span key={newData.id} className="flex items-center justify-center -ml-2.5  border-2  rounded-full ">
               <AvatarWithInitials
                 initials={newData.initials}
                 backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'ompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
+                height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
                 width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
               />
             </span>
