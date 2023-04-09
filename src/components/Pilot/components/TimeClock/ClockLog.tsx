@@ -15,9 +15,19 @@ export default function ClockLog() {
       if (getTaskEntries?.data.time_entries.length == 0) {
         return <NoEntriesFound />;
       } else {
-        return getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => (
-          <EntryList entries={entries} key={entries.id} />
-        ));
+        return (
+          <>
+            <div className="flex items-center text-xs font-extralight border-b pb-2 border-gray-400">
+              <span className="w-20">Duration</span>
+              <span className="w-12">Start Date</span>
+              <span className="w-12">End Date</span>
+              <span className="w-12">Assignee</span>
+            </div>
+            {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => (
+              <EntryList entries={entries} key={entries.id} />
+            ))}
+          </>
+        );
       }
     else {
       return <NoEntriesFound />;

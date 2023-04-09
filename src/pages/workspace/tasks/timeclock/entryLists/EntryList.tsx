@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
+import { AvatarWithInitials } from '../../../../../components';
 
 export interface entriesProps {
   id: string;
@@ -23,6 +25,9 @@ export default function EntryList({ entries }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
+
+  // refactor when back is ready with user data on the time entries
+  const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
@@ -51,9 +56,22 @@ export default function EntryList({ entries }: EntryListProps) {
 
   return (
     <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
-      <div id="left" className="flex items-center space-x-3 text-xs">
-        <p>{moment.utc(entries.duration * 1000).format('HH:mm:ss')}</p>
-        <p>{moment(entries.start_date).format('MMM D')}</p>
+      <div id="left" className="flex items-center justify-evenly space-x-3 text-xs">
+        <p className="w-14" style={{ cursor: 'default' }}>
+          {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
+        </p>
+        <p className="w-10" style={{ cursor: 'default' }}>
+          {moment(entries.start_date).format('MMM D')}
+        </p>
+        <p className="w-10" style={{ cursor: 'default' }}>
+          {moment(entries.end_date).format('MMM D')}
+        </p>
+        <div className="flex items-center justify-start cursor-pointer -space-x-4">
+          <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
+        </div>
+        <p className="p-1 w-14 text-center" style={{ cursor: 'default' }}>
+          details
+        </p>
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
