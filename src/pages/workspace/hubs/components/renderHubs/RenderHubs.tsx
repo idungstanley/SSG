@@ -16,6 +16,7 @@ import GroupByStatusTemplate from '../../../lists/components/renderlist/listDeta
 import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
+import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 
 interface HubDetailTypes {
   activeItemId: string;
@@ -221,7 +222,7 @@ function RenderHubs() {
           {mapView && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-                <NoTaskFound />
+                <TaskMapTemplate />
               </div>
             </div>
           )}
