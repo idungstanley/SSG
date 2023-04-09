@@ -51,7 +51,7 @@ export default function MinHotkeysList({
               onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
               title={hotkey.label}
               className={cl(
-                activeTabId === hotkey.id ? 'text-green-500' : 'text-gray-600',
+                activeTabId === hotkey.id ? 'text-primary-500' : 'text-gray-600',
                 'flex items-center justify-center px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg'
               )}
               key={hotkey.id}
