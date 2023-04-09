@@ -17,9 +17,9 @@ import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
-import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
 import { ITaskFullList } from '../../../features/task/interface.tasks';
+import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -146,7 +146,7 @@ function RenderList() {
             {mapView && (
               <div className="pr-1 pt-0.5 w-full h-full">
                 <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-                  <NoTaskFound />
+                  <TaskMapTemplate />
                 </div>
               </div>
             )}

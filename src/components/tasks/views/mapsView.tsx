@@ -115,7 +115,7 @@ const mapStyles = [
 
 const containerStyle = {
   width: '100%',
-  height: '85vh'
+  height: '88vh'
 };
 
 // Center on Abuja
