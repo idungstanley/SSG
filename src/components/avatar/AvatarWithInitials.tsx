@@ -36,9 +36,6 @@ function AvatarWithInitials({
           {initials}
         </span>
       </span>
-      <div className="absolute top-0 right-0  border-white-400 border rounded-full" style={{ fontSize: '8px' }}>
-        <div className="border-4 rounded-full border-green-400"></div>
-      </div>
     </div>
   );
 }

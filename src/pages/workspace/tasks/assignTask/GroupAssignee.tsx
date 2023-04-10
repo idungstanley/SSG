@@ -32,6 +32,17 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                       height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
                       width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
                     />
+
+                    <button>
+                      <div
+                        className="absolute top-0 right-0  border-white-400 border h-3 w-3 rounded-full border opacity-0 hover:opacity-100 bg-gray-500  text-white"
+                        style={{
+                          fontSize: '6px'
+                        }}
+                      >
+                        X
+                      </div>
+                    </button>
                   </span>
                 </div>
               )
@@ -62,6 +73,20 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                 height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
                 width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
               />
+              <button
+              // type="button"
+              // className="mx-2"
+              // onClick={() => (option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id))}
+              >
+                <div
+                  className="absolute top-0 right-0  border-white-400 border h-3 w-3 rounded-full border opacity-0 group-hover:opacity-100 bg-gray-500  text-white "
+                  style={{
+                    fontSize: '6px'
+                  }}
+                >
+                  X
+                </div>
+              </button>
             </span>
           </div>
         ))

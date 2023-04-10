@@ -218,7 +218,7 @@ export default function Assignee({
                     >
                       <span
                         className={`${
-                          assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full' : null
+                          assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null
                         }`}
                       >
                         <AvatarWithInitials
