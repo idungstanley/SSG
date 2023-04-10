@@ -18,6 +18,7 @@ import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
+import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 
 const sections = [
   {
@@ -50,7 +51,7 @@ const sections = [
   },
   {
     id: 8,
-    element: <Checklists />
+    element: <RecordScreen />
   }
 ];
 
