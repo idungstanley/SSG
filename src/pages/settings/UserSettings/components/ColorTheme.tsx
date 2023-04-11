@@ -68,26 +68,30 @@ function ColorTheme() {
 
   return (
     <div>
-      <div className="my-4 mt-8">
-        <h1 className="text-xl font-bold">Your color theme</h1>
+      <div>
+        <h1 className="text-xs font-bold">SELECT YOUR THEME</h1>
       </div>
       <div className="flex flex-wrap">
         {colors.map((item) => {
           return (
-            <div key={item.id} className="color m-3" onClick={() => setSelectedColor(item.id)}>
+            <div
+              key={item.id}
+              className="mx-4 my-2 w-8 h-8 flex items-center justify-center"
+              onClick={() => setSelectedColor(item.id)}
+            >
               {selectedColor === item.id ? (
                 <div
                   className={
-                    'rounded-full hover:rounded-full cursor-pointer w-16 h-16 flex justify-center items-center hover:w-16 hover-h-16'
+                    'rounded-full hover:rounded-full cursor-pointer w-8 h-8 flex justify-center items-center hover:w-8 hover-h-8'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 >
-                  <MdDone className="text-white w-8 h-8" />
+                  <MdDone className="text-white w-4 h-4" />
                 </div>
               ) : (
                 <div
                   className={
-                    'rounded-full hover:rounded-full cursor-pointer color_theme w-8 h-8 flex justify-center items-center'
+                    'rounded-full hover:rounded-full cursor-pointer color_theme w-6 h-6 flex justify-center items-center'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 ></div>

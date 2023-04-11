@@ -1,6 +1,6 @@
 import requestNew from '../../app/requestNew';
 import { useQuery } from '@tanstack/react-query';
-import { IAllWorkspacesRes, IWorkspaceRes } from './workspace.interfaces';
+import { IAllWorkspacesRes, IUserRes, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace } from './workspaceSlice';
 
@@ -60,4 +60,14 @@ export const checkIfWorkspaceService = async () => {
     method: 'GET'
   });
   return response;
+};
+
+export const getSelf = () => {
+  return useQuery(['self'], async () => {
+    const data = await requestNew<IUserRes | undefined>({
+      url: 'user/self',
+      method: 'GET'
+    });
+    return data;
+  });
 };
