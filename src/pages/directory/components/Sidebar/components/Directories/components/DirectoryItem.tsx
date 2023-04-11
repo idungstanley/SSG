@@ -1,4 +1,3 @@
-import React from 'react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { AiOutlineBranches } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
