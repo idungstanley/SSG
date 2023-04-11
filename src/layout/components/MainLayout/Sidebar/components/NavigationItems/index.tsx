@@ -21,31 +21,31 @@ const navigation = [
   {
     name: 'Notifications',
     href: '/notification',
-    icon: <IoNotificationsOutline className="w-4 h4" aria-hidden="true" />,
+    icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: true
   },
   {
     name: 'Calendar',
     href: '/calendar',
-    icon: <VscCalendar className="w-4 h4" aria-hidden="true" />,
+    icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
     name: 'Community',
     href: '/community',
-    icon: <HiOutlineUserGroup className="w-4 h4" aria-hidden="true" />,
+    icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
     name: 'Library',
     href: '/directory',
-    icon: <HiOutlineLibrary className="w-4 h4" aria-hidden="true" />,
+    icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
     name: 'Template',
     href: '/template',
-    icon: <CgTemplate className="w-4 h4" aria-hidden="true" />,
+    icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
@@ -57,7 +57,7 @@ const navigation = [
   {
     name: 'Dashboards',
     href: '/dashboard',
-    icon: <Squares2X2Icon className="w-4 h4" aria-hidden="true" />,
+    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
@@ -71,11 +71,11 @@ const navigation = [
 const showLessOrMore = [
   {
     name: 'Show Less',
-    icon: <ArrowUpIcon className="w-4 h4" aria-hidden="true" />
+    icon: <ArrowUpIcon className="w-5 h-5" aria-hidden="true" />
   },
   {
     name: 'Show More',
-    icon: <ArrowDownIcon className="w-4 h4" aria-hidden="true" />
+    icon: <ArrowDownIcon className="w-5 h-5" aria-hidden="true" />
   }
 ];
 
