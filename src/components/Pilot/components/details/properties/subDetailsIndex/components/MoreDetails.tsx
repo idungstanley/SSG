@@ -24,9 +24,12 @@ export default function MoreDetails(): JSX.Element {
 
   return (
     <div className="border border-gray-200 rounded-b">
-      <div className="relative">
-        <DatePicker />
-      </div>
+      {showDataPicker ? (
+        <div className="relative">
+          <DatePicker />
+        </div>
+      ) : null}
+
       <table className="w-full">
         <tbody>
           {Object.entries(tableData).map(([key, value]) => {

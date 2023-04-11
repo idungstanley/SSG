@@ -12,7 +12,7 @@ export default function DatePicker() {
   const [selectDate, setSelectDate] = useState(currentDate);
   return (
     <section
-      className=" mt-1 w-5/6  origin-top-right absolute z-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+      className=" mt-1 w-5/6  origin-top-right absolute z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none right-14 bottom-2"
       style={{ height: '280px' }}
     >
       <div className="border border-gray-200 w-full p-2 h-10 flex justify-start items-center space-x-2">
