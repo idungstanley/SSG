@@ -22,7 +22,7 @@ import Priority from '../priority/Priority';
 import { useEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
-import MoreDetails from './MoreDetails';
+import MoreDetails from './components/MoreDetails';
 
 export interface tagItem {
   id: string;
@@ -211,7 +211,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           </div>
         </div>
 
-        <div>
+        <div className="mt-2">
           <MoreDetails />
         </div>
 
