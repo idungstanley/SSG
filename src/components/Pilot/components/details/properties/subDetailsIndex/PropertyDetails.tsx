@@ -20,6 +20,7 @@ import { UseUpdateTaskService } from '../../../../../../features/task/taskServic
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { useEditHubService } from '../../../../../../features/hubs/hubService';
+import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 
 export interface tagItem {
   id: string;
@@ -46,7 +47,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
 
   const editHubMutation = useMutation(useEditHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['hub-details']);
+    }
+  });
+  const editWalletMutation = useMutation(UseEditWalletService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['wallet-details']);
     }
   });
 
@@ -77,10 +83,14 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         currHubId: Details?.id,
         description
       });
+    } else if (activeItemType === 'wallet' || activeItemType === 'subwallet') {
+      await editWalletMutation.mutateAsync({
+        walletName: title,
+        WalletId: Details?.id,
+        description
+      });
     }
   };
-
-  console.log(Details);
 
   return (
     <>

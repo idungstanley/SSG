@@ -158,7 +158,7 @@ export const UseGetHubDetails = (query: {
   activeItemType?: string | null;
 }) => {
   return useQuery(
-    ['hubs', query],
+    ['hub-details', query],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,
