@@ -65,7 +65,7 @@ export interface ITaskFullList {
   list_id: string;
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
-  status: string | null;
+  status: string | null | undefined;
   start_date: string | null;
   end_date: string | null;
   assignees?: [{ id: string; initials: string; colour: string; name: string }] | undefined;

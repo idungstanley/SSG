@@ -17,6 +17,8 @@ import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
+import Status from '../status/Status';
+import Priority from '../priority/Priority';
 
 export interface tagItem {
   id: string;
@@ -68,12 +70,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   return (
     <>
       <div className="flex items-center justify-between p-2">
-        {/* <section className="flex items-center space-x-3">
+        <section className="flex items-center space-x-3">
           <Status Details={Details} />
           <ToolTip tooltip="Priority">
             <Priority Details={Details} />
           </ToolTip>
-        </section> */}
+        </section>
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
@@ -95,16 +97,20 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       </section>
       <section className="p-2" key={Details?.id}>
         {/* tags */}
-        <div id="tags" className="mt-2">
-          <label className="text-xs text-gray-500">Tags</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md">
-            {/* <p> {groupTags(Details?.tags)}</p> */}
+
+        {Details?.tags && (
+          <div id="tags" className="mt-2">
+            <label className="text-xs text-gray-500">Tags</label>
+            <div className="border p-1 bg-gray-100 border-white rounded-md">
+              {/* <p> {groupTags(Details?.tags)}</p> */}
+            </div>
           </div>
-        </div>
+        )}
+
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md">
+          <div className="border p-1 bg-gray-100 border-white rounded-md cursor-text">
             {editingTitle ? (
               <form onSubmit={handleSubmit}>
                 <input
@@ -127,7 +133,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div
-            className="border p-1 bg-gray-100 border-white rounded-md h-20"
+            className="border p-1 bg-gray-100 border-white rounded-md h-20 cursor-text"
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
