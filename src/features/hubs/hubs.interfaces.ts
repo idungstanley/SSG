@@ -53,6 +53,11 @@ export interface IWallet {
 }
 
 export interface IList {
+  hub_id: string | null;
+  wallet_id: null | string;
+  parent_id: null | string;
+  archived_at: null | string;
+  deleted_at: null | string;
   id: string;
   name: string;
   updated_at: string;
@@ -90,6 +95,14 @@ export interface IFavoritesRes {
 }
 
 export interface IHubReq {
+  data: {
+    hubs: IHub[];
+    wallets: IWallet[];
+    lists: IList[];
+  };
+}
+
+export interface IHubsRes {
   data: {
     hubs: IHub[];
     wallets: IWallet[];

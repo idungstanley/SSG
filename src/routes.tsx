@@ -120,6 +120,7 @@ export const routes = (user: IUser | null) =>
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
+        { path: 'hub', element: <RenderHubs /> },
         { path: 'hub/:hubId', element: <RenderHubs /> },
         { path: 'wallet/:walletId', element: <RenderWallets /> },
         { path: 'list/:listId', element: <RenderList /> },
