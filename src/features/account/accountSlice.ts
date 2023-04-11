@@ -28,6 +28,7 @@ interface AccountState {
   showSidebar: boolean;
   paletteDropdown: PaletteDropdownProps;
   showUploadImage: boolean;
+  userName: string;
 }
 
 const initialState: AccountState = {
@@ -36,7 +37,8 @@ const initialState: AccountState = {
   },
   showSidebar,
   paletteDropdown: { show: false },
-  showUploadImage: false
+  showUploadImage: false,
+  userName: ''
 };
 
 export const accountSlice = createSlice({
@@ -54,10 +56,14 @@ export const accountSlice = createSlice({
     },
     setShowUploadImage: (state, action: PayloadAction<boolean>) => {
       state.showUploadImage = action.payload;
+    },
+    setUserName: (state, action: PayloadAction<string>) => {
+      state.userName = action.payload;
     }
   }
 });
 
-export const { setAccountSettings, setShowSidebar, setPaletteDropDown, setShowUploadImage } = accountSlice.actions;
+export const { setAccountSettings, setShowSidebar, setPaletteDropDown, setShowUploadImage, setUserName } =
+  accountSlice.actions;
 
 export default accountSlice.reducer;

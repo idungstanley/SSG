@@ -13,11 +13,13 @@ import { ListColourProps } from './ListItem';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, parentId?: string) => void;
   wallet: {
     id: string;
     name: string;
     color?: string;
+    parent_id?: string | null;
+    hub_id?: string;
   };
   showSubWallet: string | null;
   paddingLeft: string | number;
@@ -46,7 +48,7 @@ export default function WalletItem({
       })
     );
   };
-
+  const parentId = wallet.parent_id || wallet.hub_id;
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
@@ -102,7 +104,7 @@ export default function WalletItem({
             )}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name)}
+            onClick={() => handleLocation(wallet.id, wallet.name, parentId)}
             className="cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >

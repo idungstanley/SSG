@@ -141,13 +141,22 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
   );
 };
 
-export const UseUpdateTaskService = ({ task_id, name }: { task_id: string | null | undefined; name: string }) => {
+export const UseUpdateTaskService = ({
+  task_id,
+  name,
+  description
+}: {
+  task_id: string | null | undefined;
+  name: string;
+  description?: string | null;
+}) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
     url,
     method: 'PUT',
     params: {
-      name: name
+      name: name,
+      description: description
     }
   });
   return response;

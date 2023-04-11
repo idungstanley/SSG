@@ -45,7 +45,17 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
       {activePlaceName === item.name ? (
         <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
       ) : null}
-      <span className="w-4 h-4">{item.icon || <img className="w-4 h-4" src={item.source} alt={item.name} />}</span>
+      <span className="relative w-5 h-5">
+        {item.name === 'Notifications' && (
+          <p
+            className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
+            style={{ fontSize: '8px', borderRadius: '50px' }}
+          >
+            24
+          </p>
+        )}
+        {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
+      </span>
       {showSidebar ? (
         <p
           className="ml-3 truncate"
