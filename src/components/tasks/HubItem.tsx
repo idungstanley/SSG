@@ -18,10 +18,10 @@ interface TaskItemProps {
     name: string;
     path?: string | null;
     color?: string | null;
-    parent_id: string | null;
+    parent_id?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
-  handleLocation: (id: string, name: string, parentId: string | null) => void;
+  handleLocation: (id: string, name: string, parentId?: string | null) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   showChildren: string | null;
   type: string;

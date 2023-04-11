@@ -13,7 +13,7 @@ export default function Search() {
         onClick={() => setCommandSearchModal(true)}
       >
         <div
-          className="absolute flex items-center justify-between w-auto w-full tracking-wider text-gray-400 grow left-4 hover:text-green-500"
+          className="absolute flex items-center justify-between w-auto w-full tracking-wider text-gray-400 grow left-4 hover:text-fuchsia-500"
           style={{ fontSize: '10px' }}
         >
           <div className="flex items-center justify-between">
@@ -23,7 +23,7 @@ export default function Search() {
           <p className="mr-8">Ctrl+k</p>
         </div>
         <input
-          className="w-full pl-3 text-xs border-gray-400 h-7 rounded-2xl group-hover:border-green-500 group-hover:text-primary-400"
+          className="w-full pl-3 text-xs border-gray-400 h-7 rounded-2xl group-hover:border-fuchsia-500 group-hover:text-primary-400"
           disabled
           type="text"
         />

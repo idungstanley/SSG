@@ -42,10 +42,10 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASKS"
-        icon={<BsListCheck className="w-4 h-4" />}
+        icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <Dropdown config={configForDropdown} iconType="plus" />
+            <Dropdown config={configForDropdown} iconType="plus" iconColor="#BF00FFB2" />
           </div>
         }
       />
