@@ -13,8 +13,16 @@ import {
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { setTimerStatus } from '../../../../features/task/taskSlice';
 
+interface User {
+  initials: string;
+  // add other properties as needed
+}
+
 export default function ClockInOut() {
-  const [isBillable, setIsBillable] = useState(false);
+  const [data, setData] = useState({
+    isBillable: false,
+    description: ''
+  });
   const { activeItemId, activeItemType, activeItemName } = useAppSelector((state) => state.workspace);
   const { timerStatus } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
@@ -26,10 +34,11 @@ export default function ClockInOut() {
     reset();
     return reset();
   }, [activeItemName]);
+  const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
-    trigger: activeItemType
+    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
   });
   const mutation = EndTimeEntriesService();
   const { mutate } = StartTimeEntryService();
@@ -37,7 +46,7 @@ export default function ClockInOut() {
   const start = () => {
     mutate({
       taskId: activeItemId,
-      type: activeItemType
+      type: activeItemType === 'subhub' ? 'hub' : activeItemType
     });
     if (timerStatus) {
       return setBtnClicked(!btnClicked);
@@ -49,11 +58,15 @@ export default function ClockInOut() {
   const stop = () => {
     mutation.mutate({
       id: activeItemId,
-      description: '',
-      is_Billable: isBillable
+      description: data.description,
+      is_Billable: data.isBillable
     });
     reset();
     dispatch(setTimerStatus(false));
+  };
+
+  const handleEndTimeChange = (value: string) => {
+    setData((prev) => ({ ...prev, isBillable: data.isBillable, description: value }));
   };
 
   const reset = () => {
@@ -87,12 +100,9 @@ export default function ClockInOut() {
     <div className="mt-6 p-2 rounded-t-md">
       <div className="bg-gray-100">
         <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
-          <div
-            id="taskUser"
-            className="flex justify-between items-center text-xs font-normal h-10 py-3 px-3 cursor-pointer"
-          >
-            <div className="p-2 flex items-center justify-start space-x-1 cursor-pointer">
-              <AvatarWithInitials height="h-7" width="w-7" initials="AU" />
+          <div id="taskUser" className="flex justify-between items-center text-xs font-normal h-10 py-3 cursor-pointer">
+            <div className="flex items-center justify-start cursor-pointer">
+              <AvatarWithInitials height="h-7" width="w-7" initials={initials} />
             </div>
             {/* total time here */}
             <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
@@ -101,12 +111,12 @@ export default function ClockInOut() {
             <input
               type="text"
               name="description"
-              // onChange={handleEndTimeChange}
+              onChange={(e) => handleEndTimeChange(e.target.value)}
               placeholder="Enter a note"
               className="border-0 shadow-sm rounded text-gray-600 w-full"
             />
           </div>
-          <div id="entries" className="px-3 py-1 flex items-center justify-between">
+          <div id="entries" className="py-1 flex items-center justify-between">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
                 {btnClicked ? (
@@ -124,21 +134,6 @@ export default function ClockInOut() {
                     <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
                   </button>
                 )}
-                {/* {btnClicked ? (
-                  btnClicked && timerStatus ? (
-                    <button onClick={start}>
-                      <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
-                    </button>
-                  ) : (
-                    <button onClick={stop}>
-                      <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
-                    </button>
-                  )
-                ) : (
-                  <button onClick={stop}>
-                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
-                  </button>
-                )} */}
               </div>
               {/* timer goes here */}
               {time.h < 10 ? `0${time.h}` : time.h}
@@ -153,12 +148,14 @@ export default function ClockInOut() {
               </span>
               <CurrencyDollarIcon
                 className={`${
-                  isBillable
+                  data.isBillable
                     ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-xl'
                     : 'text-white cursor-pointer text-xl rounded-full h-9'
                 }`}
                 aria-hidden="true"
-                onClick={() => setIsBillable(!isBillable)}
+                onClick={() =>
+                  setData((prev) => ({ ...prev, isBillable: !data.isBillable, description: data.description }))
+                }
               />
             </div>
           </div>

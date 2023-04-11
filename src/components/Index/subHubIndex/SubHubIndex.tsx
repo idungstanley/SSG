@@ -22,6 +22,7 @@ import {
 } from '../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
+import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -78,11 +79,20 @@ export default function SubHubIndex() {
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
+
     dispatch(
       setActiveItem({
         activeItemId: id,
         activeItemType: 'subhub',
         activeItemName: name
+      })
+    );
+    dispatch(
+      setShowPilotSideOver({
+        id: id,
+        type: 'subhub',
+        show: true,
+        title: name
       })
     );
     navigate(`/hub/${id}`);
