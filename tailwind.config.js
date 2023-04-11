@@ -12,7 +12,8 @@ module.exports = {
       },
       colors: {
         primary: colors.fuchsia,
-        sky: colors.sky
+        sky: colors.sky,
+        ...colors
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
