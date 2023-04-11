@@ -22,6 +22,7 @@ import Priority from '../priority/Priority';
 import { useEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
+import MoreDetails from './MoreDetails';
 
 export interface tagItem {
   id: string;
@@ -39,6 +40,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [title, setTitle] = useState<string>(activeItemName as string);
   const [description, setDescription] = useState<string | null>(Details?.description || null);
   const queryClient = useQueryClient();
+
+  console.log(Details);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -206,6 +209,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           <div className="border p-1 bg-gray-100 border-white rounded-md">
             <p>Dec 31 2022</p>
           </div>
+        </div>
+
+        <div>
+          <MoreDetails />
         </div>
 
         {/* create subtask */}
