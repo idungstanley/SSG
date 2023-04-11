@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
+import { useEditHubService } from '../../../../../../features/hubs/hubService';
 
 export interface tagItem {
   id: string;
@@ -30,7 +31,7 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [title, setTitle] = useState<string>(activeItemName as string);
@@ -38,6 +39,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+
+  const editHubMutation = useMutation(useEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
     }
@@ -58,11 +65,19 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleBlur();
-    await editTaskMutation.mutateAsync({
-      name: title,
-      task_id: Details?.id,
-      description
-    });
+    if (activeItemType === 'task') {
+      await editTaskMutation.mutateAsync({
+        name: title,
+        task_id: Details?.id,
+        description
+      });
+    } else if (activeItemType === 'hub' || activeItemType === 'subhub') {
+      await editHubMutation.mutateAsync({
+        name: title,
+        currHubId: Details?.id,
+        description
+      });
+    }
   };
 
   console.log(Details);
