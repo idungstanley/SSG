@@ -1,14 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 
 function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour: string }] | undefined }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const [displayed, setDisplayed] = useState(false);
 
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center ">
           {data
             ?.slice(0, 3)
             .map(
@@ -22,27 +23,29 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                     index === 2 ? 'z-20' : 'z-10'
                   }  `}
                 >
-                  <span
-                    key={newData.id}
-                    className="relative flex items-center justify-center -ml-2.5  border-2  rounded-full "
-                  >
-                    <AvatarWithInitials
-                      initials={newData.initials}
-                      backgroundColour={newData.colour}
-                      height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
-                      width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
-                    />
-
-                    <button>
-                      <div
-                        className="absolute top-0 right-0  border-white-400 border h-3 w-3 rounded-full border opacity-0 hover:opacity-100 bg-gray-500  text-white"
-                        style={{
-                          fontSize: '6px'
-                        }}
-                      >
-                        X
-                      </div>
-                    </button>
+                  <span key={newData.id} className=" flex items-center  -ml-2.5  border-2  rounded-full  ">
+                    <div onMouseEnter={() => setDisplayed(true)} onMouseLeave={() => setDisplayed(false)}>
+                      <AvatarWithInitials
+                        initials={newData.initials}
+                        backgroundColour={newData.colour}
+                        height={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                        }`}
+                        width={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                        }`}
+                      />
+                      {displayed && (
+                        <button
+                          className="absolute top-0 right-0 border h-3 w-3 rounded-full    bg-gray-500  text-white "
+                          style={{
+                            fontSize: '6px'
+                          }}
+                        >
+                          X
+                        </button>
+                      )}
+                    </div>
                   </span>
                 </div>
               )
@@ -66,27 +69,25 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
               index === 2 ? 'z-20' : 'z-10'
             } `}
           >
-            <span key={newData.id} className="flex items-center justify-center -ml-2.5  border-2  rounded-full ">
-              <AvatarWithInitials
-                initials={newData.initials}
-                backgroundColour={newData.colour}
-                height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
-                width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
-              />
-              <button
-              // type="button"
-              // className="mx-2"
-              // onClick={() => (option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id))}
-              >
-                <div
-                  className="absolute top-0 right-0  border-white-400 border h-3 w-3 rounded-full border opacity-0 group-hover:opacity-100 bg-gray-500  text-white "
-                  style={{
-                    fontSize: '6px'
-                  }}
-                >
-                  X
-                </div>
-              </button>
+            <span key={newData.id} className="flex items-center justify-center -ml-2.5  border-2  rounded-full">
+              <div onMouseEnter={() => setDisplayed(true)} onMouseLeave={() => setDisplayed(false)}>
+                <AvatarWithInitials
+                  initials={newData.initials}
+                  backgroundColour={newData.colour}
+                  height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
+                  width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
+                />
+                {displayed && (
+                  <button
+                    className="absolute top-0 right-0  border h-3 w-3 rounded-full border   bg-gray-500  text-white "
+                    style={{
+                      fontSize: '6px'
+                    }}
+                  >
+                    X
+                  </button>
+                )}
+              </div>
             </span>
           </div>
         ))
