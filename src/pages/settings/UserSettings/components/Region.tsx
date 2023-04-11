@@ -8,6 +8,7 @@ import { RiArrowDropDownLine } from 'react-icons/ri';
 interface Timezone {
   value: string;
   label: string;
+  zone_name: string;
 }
 
 function Region() {
@@ -24,6 +25,7 @@ function Region() {
       const cityName = timezoneParts[1] || timezoneParts[0];
       timezoneList.push({
         value: timezone,
+        zone_name: `${countryName} / ${cityName}`,
         label: `(GMT${timezoneOffset}) ${countryName}/${cityName}(${timezoneAbbr})`
       });
     });
@@ -42,17 +44,14 @@ function Region() {
 
   return (
     <div>
-      <section>
-        <h2>Timezone</h2>
-      </section>
       <button
         id="basic-button"
         onClick={handleClick}
-        className="w-auto flex justify-between text-black items-center border border-gray-300 p-1 rounded w-1/3 cursor-pointer"
+        className="w-full h-6 flex justify-between items-center border border-gray-500 p-1 rounded cursor-pointer"
       >
-        <h1 className="text-sm">{timezoneList[0].label}</h1>
+        <h1 className="text-xs">{timezoneList[0].zone_name}</h1>
         <label className="cursor-pointer">
-          <RiArrowDropDownLine className="w-8 h-8" />
+          <RiArrowDropDownLine className="w-8 h-8 font-thin" />
         </label>
       </button>
       <Menu
