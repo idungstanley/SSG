@@ -73,6 +73,7 @@ export const getListsDetailsService = (data: { queryKey: (string | undefined)[] 
 export const UseEditListService = (data: {
   listName?: string;
   listId?: string | null;
+  description?: string | null | undefined;
   colour?: string | null | { innerColour?: string; outerColour?: string };
   shape?: string;
 }) => {
@@ -82,7 +83,8 @@ export const UseEditListService = (data: {
     params: {
       name: data.listName,
       color: data.colour,
-      shape: data.shape
+      shape: data.shape,
+      description: data.description
     }
   });
   return response;
