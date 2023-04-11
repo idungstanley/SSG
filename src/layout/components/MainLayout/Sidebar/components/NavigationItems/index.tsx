@@ -1,5 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../assets/branding/Group.png';
 import homeIcon from '../../../../../../assets/icons/Home.svg';
