@@ -18,12 +18,13 @@ interface TaskItemProps {
     name: string;
     path?: string | null;
     color?: string | null;
+    parent_id?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, parentId?: string | null) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   showChildren: string | null;
-  type?: string;
+  type: string;
 }
 export default function HubItem({
   handleClick,
@@ -128,7 +129,7 @@ export default function HubItem({
                     verticalAlign: 'baseline',
                     letterSpacing: '0.28px'
                   }}
-                  onClick={() => handleLocation(item.id, item.name)}
+                  onClick={() => handleLocation(item.id, item.name, item.parent_id)}
                 >
                   {item.name}
                 </a>

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
+import { MdDragIndicator } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
@@ -30,19 +31,21 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
       id={`${label}`}
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100',
-        'focus:flex flex-col w-full pl-5 py-5 items-center relative',
+        'focus:flex flex-col w-full pl-5 py-5 items-center relative group',
         bottomContent ? 'gap-2' : ''
       )}
       style={{
-        backgroundColor: `${
-          isActivePlace && activeItemId !== null ? 'rgba(0, 0, 0, 0.15)' : isActivePlace ? 'rgba(0, 0, 0, 0.35)' : ''
-        }`
+        backgroundColor: `${isActivePlace && activeItemId !== null ? '#BF00FF08' : isActivePlace ? '#BF00FF08' : ''}`
       }}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {isActivePlace && activeItemId == null && (
+      {/* {isActivePlace && activeItemId == null && (
         <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>
-      )}
+      )} */}
+      <MdDragIndicator
+        className="absolute text-lg opacity-0 left-1 hover:opacity-100"
+        style={{ top: '23', color: `${isActivePlace ? '#BF00FFB2' : ''}` }}
+      />
       <div className="flex justify-between w-full">
         <div
           className={cl(
@@ -50,14 +53,15 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
             isActivePlace ? 'justify-center text-black font-extrabold' : ''
           )}
         >
-          <span className="flex items-center w-6 h-6 hover:text-green-400">{icon}</span>
+          <span className={`${!showSidebar ? 'hover:text-purple-500' : ''} flex items-center w-6 h-6`}>{icon}</span>
           <span
             className={cl(
               showSidebar ? 'block' : 'hidden',
               'w-full cursor-pointer uppercase truncate',
-              isActivePlace ? 'text-black font-black' : ''
+              isActivePlace ? 'font-black' : ''
             )}
             style={{
+              color: `${isActivePlace ? '#BF00FFB2' : ''}`,
               fontSize: '13px',
               lineHeight: '18px',
               verticalAlign: 'baseline',
@@ -73,7 +77,7 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
 
           <span onClick={isActivePlace ? resetSelectedPlace : onClick} className={cl(showSidebar ? 'block' : 'hidden')}>
             {isActivePlace ? (
-              <FiChevronDown className="w-5 h-5 text-gray-500 cursor-pointer" />
+              <FiChevronDown className="w-5 h-5 text-gray-500 cursor-pointer" style={{ color: '#BF00FFB2' }} />
             ) : (
               <FiChevronRight className="w-5 h-5 text-gray-500 cursor-pointer" />
             )}

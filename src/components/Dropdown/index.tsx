@@ -14,9 +14,10 @@ interface IDropdownItem {
 interface DropdownProps {
   config: IDropdownItem[];
   iconType: 'dots' | 'plus';
+  iconColor?: string;
 }
 
-export default function Dropdown({ config, iconType }: DropdownProps) {
+export default function Dropdown({ config, iconType, iconColor = 'black' }: DropdownProps) {
   const navigate = useNavigate();
 
   return (
@@ -26,9 +27,9 @@ export default function Dropdown({ config, iconType }: DropdownProps) {
           <span className="sr-only">Open options</span>
 
           {iconType === 'dots' ? (
-            <EllipsisHorizontalIcon className="w-4 h-4" aria-hidden="true" />
+            <EllipsisHorizontalIcon className="w-4 h-4" aria-hidden="true" style={{ color: iconColor }} />
           ) : (
-            <PlusIcon className="w-4 h-4" aria-hidden="true" />
+            <PlusIcon className="w-4 h-4" aria-hidden="true" style={{ color: iconColor }} />
           )}
         </Menu.Button>
       </div>

@@ -53,6 +53,7 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 export const UseEditWalletService = (data: {
   walletName?: string;
   WalletId?: string | null;
+  description?: string | null | undefined;
   walletColor?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
@@ -60,7 +61,8 @@ export const UseEditWalletService = (data: {
     method: 'PUT',
     params: {
       name: data.walletName,
-      color: data.walletColor
+      color: data.walletColor,
+      description: data.description
     }
   });
   return response;
@@ -119,7 +121,7 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
   return useQuery(
-    ['hubs', query],
+    ['wallet-details', query],
     async () => {
       const data = await requestNew<IWalletDetailRes>({
         url: `wallets/${query.activeItemId}`,

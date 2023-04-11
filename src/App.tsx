@@ -8,6 +8,8 @@ import './styles/index.css';
 
 function App() {
   const user = useSelector(selectCurrentUser);
+  // currentWorkspaceId;
+  // const getCurrentWsId = JSON.parse(localStorage.getItem('currentWorkspaceId') as string) as string;
   return (
     <>
       <RouterProvider router={routes(user)} />

@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { MdDone } from 'react-icons/md';
+// import { MdDone } from 'react-icons/md';
+import { IUserData } from '../../../../features/workspace/workspace.interfaces';
+import MainLogo from '../../../../assets/icons/mainIcon.svg';
 
-function ColorTheme() {
+interface dataProps {
+  data: IUserData | undefined;
+}
+
+function ColorTheme({ data }: dataProps) {
   const colors = [
     {
       id: 1,
@@ -64,8 +70,7 @@ function ColorTheme() {
       color_code: '#202020'
     }
   ];
-  const [selectedColor, setSelectedColor] = useState<number | null>(null);
-
+  const [selectedColor, setSelectedColor] = useState<string | null | undefined>(data?.theme_color);
   return (
     <div>
       <div>
@@ -77,16 +82,16 @@ function ColorTheme() {
             <div
               key={item.id}
               className="mx-4 my-2 w-8 h-8 flex items-center justify-center"
-              onClick={() => setSelectedColor(item.id)}
+              onClick={() => setSelectedColor(item.color_code)}
             >
-              {selectedColor === item.id ? (
+              {selectedColor === item.color_code ? (
                 <div
                   className={
                     'rounded-full hover:rounded-full cursor-pointer w-8 h-8 flex justify-center items-center hover:w-8 hover-h-8'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 >
-                  <MdDone className="text-white w-4 h-4" />
+                  <img src={MainLogo} alt="" />
                 </div>
               ) : (
                 <div

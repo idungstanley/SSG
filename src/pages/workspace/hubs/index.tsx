@@ -1,6 +1,5 @@
-import React from 'react';
 import { useGetHubList } from '../../../features/hubs/hubService';
-import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
+// import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
 import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
@@ -17,6 +16,7 @@ import ListModal from '../lists/components/modals/ListModal';
 import TaskModal from '../tasks/component/TaskModal';
 import { BsListCheck } from 'react-icons/bs';
 import WalletModal from '../wallet/components/modals/WalletModal';
+import ActiveTress from './components/ActiveTree/ActiveTress';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ function Hubs() {
   const { data, status } = useGetHubList({
     query: toggleArchive
   });
+
   if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
   }
@@ -41,10 +42,10 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASKS"
-        icon={<BsListCheck className="w-4 h-4" />}
+        icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <Dropdown config={configForDropdown} iconType="plus" />
+            <Dropdown config={configForDropdown} iconType="plus" iconColor="#BF00FFB2" />
           </div>
         }
       />
@@ -59,7 +60,8 @@ function Hubs() {
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
-      <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" />
+      <ActiveTress />
+      {/* <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" /> */}
       <Modal />
       <SubHubModal />
       <SubWalletModal />

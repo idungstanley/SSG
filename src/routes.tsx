@@ -34,7 +34,6 @@ import SharedPage from './pages/shared';
 // At workspace
 import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
-import Community from './pages/workspace/community';
 import Dashboard from './pages/workspace/dashboard';
 import Active from './pages/inbox/InboxesPage/components/Active';
 import Hidden from './pages/inbox/InboxesPage/components/Hidden';
@@ -56,6 +55,7 @@ import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
 // import UserSettingsProfile from './pages/settings/UserSettings';
 import UserSettings from './pages/settings/UserSettings/Settings';
+import CommunityPage from './pages/community';
 
 const inbox = [
   {
@@ -114,12 +114,13 @@ export const routes = (user: IUser | null) =>
         { path: 'directory/shelf', element: <Directory /> },
         { path: 'directory/shelf/:directoryId', element: <Directory /> },
         { path: 'notification', element: <Notification /> },
-        { path: 'community', element: <Community /> },
+        { path: 'community', element: <CommunityPage /> },
         { path: 'calendar', element: <Calendar /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
+        { path: 'hub', element: <RenderHubs /> },
         { path: 'hub/:hubId', element: <RenderHubs /> },
         { path: 'wallet/:walletId', element: <RenderWallets /> },
         { path: 'list/:listId', element: <RenderList /> },

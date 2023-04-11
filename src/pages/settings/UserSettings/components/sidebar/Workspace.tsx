@@ -1,4 +1,5 @@
 import React from 'react';
+import { getWorkspaceService } from '../../../../../features/workspace/workspaceService';
 
 function Workspace() {
   const workspaceOptions = [
@@ -44,18 +45,22 @@ function Workspace() {
     }
   ];
 
+  // Get current workspace name
+  const { data: workSpaceData } = getWorkspaceService();
+
   return (
     <div>
       <div className="heading h-auto py-2 bg-gray-200 flex items-center px-6">
         <h1 className="font-bold" style={{ fontSize: '10px' }}>
-          ELASTIC GROUP WORKSPACE
+          {workSpaceData?.data.workspace.name}
         </h1>
       </div>
       {workspaceOptions.map((setting) => {
         return (
           <div
             key={setting.id}
-            className="py-1 border-b border-gray-400 flex items-center px-6 hover:bg-gray-200 cursor-pointer"
+            className="py-1 border-gray-400 flex items-center px-6 hover:bg-gray-200 cursor-pointer"
+            style={{ borderBottom: '0.1px solid' }}
           >
             <h3 className="font-medium" style={{ fontSize: '10px' }}>
               {setting.title}

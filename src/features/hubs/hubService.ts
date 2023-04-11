@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes } from './hubs.interfaces';
+import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
@@ -23,6 +23,45 @@ export const createHubService = (data: {
     }
   });
   return response;
+};
+
+export const useGetHubs = ({
+  includeTree,
+  hubId,
+  walletId,
+  listId
+}: {
+  includeTree?: boolean;
+  hubId?: string;
+  walletId?: string;
+  listId?: string;
+}) => {
+  const id = hubId || walletId || listId;
+
+  const isActiveHub = hubId ? `hubs${'/' + hubId}` : null;
+  const isActiveWallet = walletId ? `wallets${`?parent_id=${walletId}`}` : null;
+  const isActiveList = listId ? `lists${`?parent_id=${listId}`}` : null;
+
+  return useQuery(
+    [id ?? 'root', includeTree ? 'tree' : undefined],
+    () =>
+      requestNew<IHubsRes>({
+        url: includeTree ? 'active-tree' : isActiveHub || isActiveWallet || isActiveList || 'hubs',
+
+        method: 'GET',
+        params: includeTree
+          ? {
+              hub_id: hubId,
+              list_id: listId,
+              wallet_id: walletId
+            }
+          : undefined
+      }),
+    {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      select: (res) => res.data
+    }
+  );
 };
 
 // get all hubs
@@ -84,6 +123,7 @@ export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
   currHubId?: string | null;
+  description?: string | null | undefined;
   color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
@@ -92,7 +132,8 @@ export const useEditHubService = (data: {
     params: {
       name: data.name,
       color: data.color,
-      current_workspace_id: data.currentWorkspaceId
+      current_workspace_id: data.currentWorkspaceId,
+      description: data.description
     }
   });
   return response;
@@ -156,7 +197,7 @@ export const UseGetHubDetails = (query: {
   activeItemType?: string | null;
 }) => {
   return useQuery(
-    ['hubs', query],
+    ['hub-details', query],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,

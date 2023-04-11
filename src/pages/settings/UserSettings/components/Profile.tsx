@@ -1,8 +1,13 @@
 import React from 'react';
 import CurrentUser from './CurrentUser';
 import Region from './Region';
+import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 
-function Profile() {
+interface dataProps {
+  data: IUserData | undefined;
+}
+
+function Profile({ data }: dataProps) {
   return (
     <div className="w-2/6 bg-white m-2 h-full p-4 rounded-lg">
       <h1 className="font-bold" style={{ fontSize: '10px' }}>
@@ -20,11 +25,11 @@ function Profile() {
           </div>
           <div className="my">
             <h5 className="font-bold text-xs">Full Name</h5>
-            <input type="text" className="w-full rounded h-6 text-xs" value="Salifu Nurudeen" />
+            <input type="text" className="w-full rounded h-6 text-xs" value={data?.name} />
           </div>
           <div className="my-2">
             <h5 className="font-bold text-xs">Email</h5>
-            <input type="text" className="w-full rounded h-6 text-xs" value="n.salifu@simpsgroup.co.uk" />
+            <input type="text" className="w-full rounded h-6 text-xs" value={data?.email} />
           </div>
           <div className="my-2">
             <h5 className="font-bold text-xs">Password</h5>
@@ -43,11 +48,12 @@ function Profile() {
                 Language
               </h5>
               <select name="language" className="h-6 py-0 text-xs rounded my w-full">
-                <option value="">One</option>
-                <option value="">One</option>
-                <option value="">One</option>
-                <option value="">One</option>
-                <option value="">One</option>
+                <option value="">English</option>
+                <option value="">Spanish</option>
+                <option value="">Français </option>
+                <option value="">Español </option>
+                <option value="">Português brasileiro</option>
+                <option value="">Deutsch </option>
               </select>
             </div>
             <div className="" style={{ width: '48%' }}>
@@ -60,16 +66,26 @@ function Profile() {
               <h5 className="font-bold" style={{ fontSize: '10px' }}>
                 Start of the week
               </h5>
-              <select name="Day" className="h-6 py-0 rounded my w-full" style={{ fontSize: '10px' }}>
+              <select
+                name="Day"
+                className="h-6 py-0 rounded my w-full"
+                style={{ fontSize: '10px' }}
+                value={data?.start_week}
+              >
                 <option value="1">Monday</option>
-                <option value="2">Sunday</option>
+                <option value="0">Sunday</option>
               </select>
             </div>
             <div style={{ width: '48%' }}>
               <h5 className="font-bold" style={{ fontSize: '10px' }}>
                 Time Format
               </h5>
-              <select name="Time-format" className="h-6 py-0 rounded my w-full" style={{ fontSize: '10px' }}>
+              <select
+                name="Time-format"
+                className="h-6 py-0 rounded my w-full"
+                style={{ fontSize: '10px' }}
+                value={data?.date_format}
+              >
                 <option value="24 hours">24-hours</option>
                 <option value="12 hours">12-hours</option>
               </select>
@@ -80,7 +96,12 @@ function Profile() {
               <h5 className="font-bold" style={{ fontSize: '10px' }}>
                 Date Format
               </h5>
-              <select name="Date-format" className="h-6 py-0 rounded my w-full" style={{ fontSize: '10px' }}>
+              <select
+                name="Date-format"
+                className="h-6 py-0 rounded my w-full"
+                style={{ fontSize: '10px' }}
+                value={data?.date_format}
+              >
                 <option value="dd/mm/yyyy">dd/mm/yyyy</option>
                 <option value="mm/dd/yyyy">mm/dd/yyyy</option>
                 <option value="yyyy/mm/dd">yyyy/mm/dd</option>
