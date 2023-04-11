@@ -4,7 +4,7 @@ export default function Recording() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
 
   const startRecording = async () => {
     const displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
@@ -36,36 +36,17 @@ export default function Recording() {
     <div>
       {isRecording ? (
         <>
-          <video src={videoUrl!} controls />
-          <button onClick={stopRecording}>Stop Recording</button>
+          <video src={videoUrl} controls />
+          <button onClick={stopRecording} className="screenRecording"></button>
         </>
       ) : (
-        <button onClick={startRecording}>Start Recording</button>
+        <>
+          <div className="screenRecording">
+            {videoUrl && <video src={videoUrl} controls />}
+            <button onClick={startRecording}>Start Recording</button>
+          </div>
+        </>
       )}
     </div>
   );
 }
-
-// export default Recording;
-
-// export default function Recording() {
-//   return (
-//     <div className="screenRecording">
-//       <div id="startRecord">
-//         <ToolTip tooltip="Start Screen Recording">
-//           <HiOutlinePlayCircle className="h-6 w-6" />
-//         </ToolTip>
-//       </div>
-//       <div id="pauseRecording">
-//         <ToolTip tooltip="Pause Screen Recording">
-//           <MdOutlinePauseCircle className="h-6 w-6" />
-//         </ToolTip>
-//       </div>
-//       <div id="stopRecording">
-//         <ToolTip tooltip="Stop Screen Recording">
-//           <IoStopCircleOutline className="h-6 w-6" />
-//         </ToolTip>
-//       </div>
-//     </div>
-//   );
-// }
