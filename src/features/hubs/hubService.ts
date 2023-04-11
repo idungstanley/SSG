@@ -123,6 +123,7 @@ export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
   currHubId?: string | null;
+  description?: string | null | undefined;
   color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew({
@@ -131,7 +132,8 @@ export const useEditHubService = (data: {
     params: {
       name: data.name,
       color: data.color,
-      current_workspace_id: data.currentWorkspaceId
+      current_workspace_id: data.currentWorkspaceId,
+      description: data.description
     }
   });
   return response;
@@ -195,7 +197,7 @@ export const UseGetHubDetails = (query: {
   activeItemType?: string | null;
 }) => {
   return useQuery(
-    ['hubs', query],
+    ['hub-details', query],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,

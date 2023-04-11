@@ -23,6 +23,9 @@ export interface IHubDetails {
   description: null;
   directory_items: [];
   checklists: [];
+  tags?: [];
+  status?: string | null | undefined;
+  priority?: string | null | undefined;
 }
 
 export interface IHubDetailRes {

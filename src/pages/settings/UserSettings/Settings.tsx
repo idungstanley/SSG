@@ -26,10 +26,7 @@ function UserSettings() {
   }
   return status === 'success' ? (
     <div className="w-screen h-screen bg-gray-200 flex">
-      <section
-        style={{ height: '100vh' }}
-        className="w-1/5 bg-white h-screen overflow-auto border-r border-gray-400 overflow-auto"
-      >
+      <section style={{ height: '100vh' }} className="w-1/5 bg-white h-screen overflow-auto border-r border-gray-400">
         <SideBar data={data?.data.user} />
       </section>
       <div className="w-4/5">
