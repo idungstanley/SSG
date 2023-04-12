@@ -37,17 +37,19 @@ export default function ClockLog() {
         return <NoEntriesFound />;
       } else {
         return (
-          <>
-            <div className="flex items-center text-xs font-extralight border-b pb-2 border-gray-400 space-x-6 relative">
-              {headers.map((col) => {
-                return (
-                  !col.hidden && (
-                    <span key={col.id} className="w-12 cursor-default capitalize">
-                      {col.title}
-                    </span>
-                  )
-                );
-              })}
+          <table className="w-full">
+            <thead className="flex items-center text-xs font-extralight border-b pb-2 border-gray-400 space-x-1 relative">
+              <tr className="w-9/12 flex space-x-5 items-center">
+                {headers.map((col) => {
+                  return (
+                    !col.hidden && (
+                      <th key={col.id} className="w-12 cursor-default capitalize">
+                        {col.title}
+                      </th>
+                    )
+                  );
+                })}
+              </tr>
               <FiPlusCircle
                 className="AddColumnDropdownButton cursor-pointer font-black h-4 w-4"
                 onClick={() => setShowModal(!showModal)}
@@ -74,11 +76,13 @@ export default function ClockLog() {
                   </ul>
                 </div>
               )}
-            </div>
-            {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => (
-              <EntryList entries={entries} key={entries.id} switchHeader={headers} />
-            ))}
-          </>
+            </thead>
+            <tbody>
+              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => (
+                <EntryList entries={entries} key={entries.id} switchHeader={headers} />
+              ))}
+            </tbody>
+          </table>
         );
       }
     else {

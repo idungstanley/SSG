@@ -58,43 +58,43 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   };
 
   return (
-    <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10 border-b py-2">
+    <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10 border-b py-2">
       <div id="left" className="flex items-center justify-evenly space-x-4 text-xs">
         {headers.map((col) => {
           if (col.title === 'assignee' && !col.hidden) {
             return (
-              <div key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
+              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
                 <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
-              </div>
+              </td>
             );
           }
 
           if (col.title === 'duration' && !col.hidden) {
             return (
-              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
                 {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
-              </p>
+              </td>
             );
           }
 
           if (col.title === 'start date' && !col.hidden) {
             return (
-              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
                 {moment(entries.start_date).format('MMM D HH:mm')}
-              </p>
+              </td>
             );
           }
 
           if (col.title === 'end date' && !col.hidden) {
             return (
-              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
                 {moment(entries.end_date).format('MMM D HH:mm')}
-              </p>
+              </td>
             );
           }
 
           if (col.title === 'description' && !col.hidden) {
-            return <p key={col.id}>{entries.description}</p>;
+            return <td key={col.id}>{entries.description}</td>;
           }
         })}
       </div>
@@ -109,6 +109,6 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
           <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
         </button>
       </div>
-    </section>
+    </tr>
   );
 }
