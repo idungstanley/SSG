@@ -12,3 +12,16 @@ export const useCommunity = () =>
       }),
     { select: (res) => res.data }
   );
+
+export const setOnlineStatus = () =>
+  useQuery(
+    ['active-status'],
+    () =>
+      requestNew({
+        url: 'pulse',
+        method: 'POST'
+      }),
+    {
+      refetchInterval: 300000 // 5m
+    }
+  );
