@@ -8,6 +8,7 @@ import { DeleteTimeEntriesService } from '../../../../../features/task/taskServi
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import { AvatarWithInitials } from '../../../../../components';
+import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 
 export interface entriesProps {
   id: string;
@@ -19,15 +20,17 @@ export interface entriesProps {
 }
 export interface EntryListProps {
   entries: entriesProps;
+  switchHeader: Header[];
 }
 
-export default function EntryList({ entries }: EntryListProps) {
+export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
 
   // refactor when back is ready with user data on the time entries
   const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
+  const headers = switchHeader;
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
@@ -55,23 +58,45 @@ export default function EntryList({ entries }: EntryListProps) {
   };
 
   return (
-    <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
+    <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10 border-b py-2">
       <div id="left" className="flex items-center justify-evenly space-x-4 text-xs">
-        <div className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
-          <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
-        </div>
-        <p className="w-14" style={{ cursor: 'default' }}>
-          {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
-        </p>
-        <p className="w-14" style={{ cursor: 'default' }}>
-          {moment(entries.start_date).format('MMM D HH:mm')}
-        </p>
-        <p className="w-14" style={{ cursor: 'default' }}>
-          {moment(entries.end_date).format('MMM D HH:mm')}
-        </p>
-        {/* <p className="p-1 w-14 text-center" style={{ cursor: 'default' }}>
-          details
-        </p> */}
+        {headers.map((col) => {
+          if (col.title === 'assignee' && !col.hidden) {
+            return (
+              <div key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
+                <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
+              </div>
+            );
+          }
+
+          if (col.title === 'duration' && !col.hidden) {
+            return (
+              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
+              </p>
+            );
+          }
+
+          if (col.title === 'start date' && !col.hidden) {
+            return (
+              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment(entries.start_date).format('MMM D HH:mm')}
+              </p>
+            );
+          }
+
+          if (col.title === 'end date' && !col.hidden) {
+            return (
+              <p key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment(entries.end_date).format('MMM D HH:mm')}
+              </p>
+            );
+          }
+
+          if (col.title === 'description' && !col.hidden) {
+            return <p key={col.id}>{entries.description}</p>;
+          }
+        })}
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
