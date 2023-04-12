@@ -60,10 +60,10 @@ export default function ClockLog() {
               })}
               <FiPlusCircle
                 className="AddColumnDropdownButton cursor-pointer font-black h-4 w-4"
-                onClick={() => setShowModal(true)}
+                onClick={() => setShowModal(!showModal)}
               />
               {showModal && (
-                <div className="w-44 absolute top-10 right-10 shadow-md bg-white" ref={ref}>
+                <div className="w-44 absolute top-10 right-10 shadow-md bg-white">
                   <ul className="flex flex-col space-y-2 px-4 py-6">
                     {headers.map((header) => {
                       return (
