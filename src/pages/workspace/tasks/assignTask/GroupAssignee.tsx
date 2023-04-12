@@ -77,7 +77,7 @@ function GroupAssignee({
                       </span>
                       {displayed.show && index == displayed?.index && (
                         <button
-                          className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white "
+                          className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700 "
                           style={{
                             fontSize: '6px'
                           }}
@@ -138,7 +138,7 @@ function GroupAssignee({
                 </span>
                 {displayed.show && index == displayed?.index && (
                   <button
-                    className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white "
+                    className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
                     style={{
                       fontSize: '6px'
                     }}
