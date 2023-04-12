@@ -52,6 +52,7 @@ export interface ITeamMember {
     name: string;
     email: string;
     avatar_path: null | string;
+    initials: string;
   };
   role: {
     key: string;

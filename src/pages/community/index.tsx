@@ -19,12 +19,12 @@ export default function CommunityPage() {
 
   const filteredOnline = useMemo(
     () => online.filter((i) => i.user.name.toLowerCase().includes(query.toLowerCase())),
-    [query]
+    [online, query]
   );
 
   const filteredOffline = useMemo(
     () => offline.filter((i) => i.user.name.toLowerCase().includes(query.toLowerCase())),
-    [query]
+    [offline, query]
   );
 
   return (

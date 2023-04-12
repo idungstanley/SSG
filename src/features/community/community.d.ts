@@ -10,6 +10,8 @@ export interface TeamMemberWithStatus extends ITeamMember {
 }
 
 export interface CommunityRes {
-  graph: GraphItem[];
-  team_members: TeamMemberWithStatus[];
+  data: {
+    graph: GraphItem[];
+    team_members: TeamMemberWithStatus[];
+  };
 }

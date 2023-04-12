@@ -19,7 +19,7 @@ export default function Diagram() {
               title={`${item.count} users`}
               className={cl(
                 item.count ? 'from-orange-600 to-orange-200' : 'bg-white',
-                'rounded-sm h-20 w-3 bg-gradient-to-t '
+                'rounded-sm h-20 w-3 bg-gradient-to-t cursor-pointer'
               )}
             />
             <p className="text-xs text-gray-800">{item.hour}h</p>

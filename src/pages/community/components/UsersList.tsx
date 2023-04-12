@@ -46,10 +46,10 @@ export default function UsersList({ users, title, isColored, showDetails }: User
               key={user.id}
               className={cl(
                 showDetails && 'p-2 border rounded-md bg-white justify-start items-start shadow-md"',
-                'flex flex-col gap-2 cursor-pointer'
+                'flex flex-col gap-2 cursor-pointer transition'
               )}
             >
-              <div className={cl(showDetails ? '' : 'flex-col', 'flex gap-2 items-center justify-start')}>
+              <div className={cl(showDetails ? '' : 'flex-col', 'group flex gap-2 items-center justify-start')}>
                 <div
                   title={user.user.name}
                   className={cl(
@@ -61,13 +61,13 @@ export default function UsersList({ users, title, isColored, showDetails }: User
                     <span className="absolute top-0 right-0 border-2 border-white w-3 h-3 rounded-full bg-green-500" />
                   ) : null}
 
-                  <span>{user.initials}</span>
+                  <span>{user.user.initials}</span>
                 </div>
 
                 <p
                   className={cl(
-                    isColored ? 'text-gray-500' : 'text-gray-200',
-                    'truncate text-xs hover:text-orange-500'
+                    isColored ? 'text-gray-500 group-hover:text-orange-500' : 'text-gray-200 group-hover:text-gray-500',
+                    'truncate text-xs'
                   )}
                 >
                   {user.user.id === currentUserId ? 'You' : user.user.name}
