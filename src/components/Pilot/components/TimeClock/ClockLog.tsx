@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import NoEntriesFound from './NoEntries';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
 
 export type Header = {
@@ -26,20 +26,10 @@ export default function ClockLog() {
     { title: 'description', id: 5, hidden: true }
   ]);
   const [showModal, setShowModal] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
   const handleColumnHide = (col: number) => {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
   };
-
-  useEffect(() => {
-    const handleModalBlur = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setShowModal(false);
-    };
-    document.addEventListener('click', handleModalBlur);
-
-    return () => document.removeEventListener('click', handleModalBlur);
-  }, []);
 
   const renderItemEntries = () => {
     if (getTaskEntries?.data.time_entries)
@@ -63,7 +53,11 @@ export default function ClockLog() {
                 onClick={() => setShowModal(!showModal)}
               />
               {showModal && (
-                <div className="w-44 absolute top-10 right-10 shadow-md bg-white">
+                <div
+                  className="w-44 absolute top-10 right-10 shadow-md bg-white"
+                  tabIndex={0}
+                  onBlur={() => setShowModal(!showModal)}
+                >
                   <ul className="flex flex-col space-y-2 px-4 py-6">
                     {headers.map((header) => {
                       return (
