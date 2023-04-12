@@ -45,8 +45,8 @@ export default function UsersList({ users, title, isColored, showDetails }: User
             <div
               key={user.id}
               className={cl(
-                showDetails && 'p-2 border rounded-md bg-white justify-start items-start shadow-md"',
-                'flex flex-col gap-2 cursor-pointer transition'
+                showDetails && 'p-2 border rounded-md bg-white justify-start items-start shadow-md',
+                'flex group flex-col gap-2 cursor-pointer'
               )}
             >
               <div className={cl(showDetails ? '' : 'flex-col', 'group flex gap-2 items-center justify-start')}>
@@ -54,7 +54,7 @@ export default function UsersList({ users, title, isColored, showDetails }: User
                   title={user.user.name}
                   className={cl(
                     isColored ? 'bg-orange-500' : 'bg-gray-200',
-                    'relative w-10 h-10 rounded-full p-2 flex items-center justify-center transform hover:scale-125'
+                    'relative w-10 h-10 rounded-full p-2 flex items-center justify-center transform transition hover:scale-125'
                   )}
                 >
                   {isColored ? (

@@ -16,7 +16,7 @@ export default function Diagram() {
         {graph.map((item) => (
           <div key={item.hour} className="flex flex-col gap-4 items-center">
             <div
-              title={`${item.count} users`}
+              title={`${item.count} ${item.count === 1 ? 'user' : 'users'}`}
               className={cl(
                 item.count ? 'from-orange-600 to-orange-200' : 'bg-white',
                 'rounded-sm h-20 w-3 bg-gradient-to-t cursor-pointer'

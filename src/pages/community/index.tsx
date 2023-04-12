@@ -18,12 +18,18 @@ export default function CommunityPage() {
   const { online, offline } = useMemo(() => useSplitTeamMembers(teamMembers), [teamMembers]);
 
   const filteredOnline = useMemo(
-    () => online.filter((i) => i.user.name.toLowerCase().includes(query.toLowerCase())),
+    () =>
+      online.filter((i) =>
+        i.user.name.toLowerCase().includes(query.toLowerCase()) && showGuests ? true : i.role.key !== 'guest'
+      ),
     [online, query]
   );
 
   const filteredOffline = useMemo(
-    () => offline.filter((i) => i.user.name.toLowerCase().includes(query.toLowerCase())),
+    () =>
+      offline.filter((i) =>
+        i.user.name.toLowerCase().includes(query.toLowerCase()) && showGuests ? true : i.role.key !== 'guest'
+      ),
     [offline, query]
   );
 
