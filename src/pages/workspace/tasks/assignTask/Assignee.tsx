@@ -117,7 +117,7 @@ export default function Assignee({
           ) : (
             <span onClick={handleClick}>
               <UserPlusIcon
-                className="text-xl ml-5 text-gray-400 cursor-pointer"
+                className="text-xl -ml-5 text-gray-400 cursor-pointer"
                 style={{
                   width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
                 }}
