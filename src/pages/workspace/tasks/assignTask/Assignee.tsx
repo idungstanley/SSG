@@ -109,19 +109,21 @@ export default function Assignee({
   return (
     <div>
       {option === 'task' && (
-        <Button id="basic-button" onClick={handleClick} style={{ marginLeft: '-25px' }}>
+        <Button id="basic-button" style={{ marginLeft: '-25px' }}>
           {assignees?.length ? (
             <div className="flex">
-              <GroupAssignee data={assignees} />
+              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
             </div>
           ) : (
-            <UserPlusIcon
-              className="text-xl ml-5 text-gray-400 cursor-pointer"
-              style={{
-                width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
-              }}
-              aria-hidden="true"
-            />
+            <span onClick={handleClick}>
+              <UserPlusIcon
+                className="text-xl ml-5 text-gray-400 cursor-pointer"
+                style={{
+                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
+                }}
+                aria-hidden="true"
+              />
+            </span>
           )}
         </Button>
       )}
@@ -165,7 +167,6 @@ export default function Assignee({
 
         {searchInput.length > 1
           ? filteredMembers?.map((item) => {
-              console.log(item);
               return (
                 <MenuItem key={item.id} onClick={handleClose} className="w-full ">
                   <div className="flex items-center justify-between cursor-pointer w-full">

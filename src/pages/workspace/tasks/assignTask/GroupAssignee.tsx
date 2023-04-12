@@ -1,8 +1,17 @@
 import { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
+import { UseUnassignTask } from '../../../../features/task/taskService';
 
-function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour: string }] | undefined }) {
+function GroupAssignee({
+  data,
+  itemId,
+  handleClick
+}: {
+  data: [{ id: string; initials: string; colour: string }] | undefined;
+  itemId?: string;
+  handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   const [displayed, setDisplayed] = useState<{
     show: boolean;
@@ -11,6 +20,15 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
     show: false,
     index: null
   });
+
+  const { mutate: onTaskUnassign } = UseUnassignTask();
+
+  const handleUnAssignTask = (id: string) => {
+    onTaskUnassign({
+      taskId: itemId,
+      team_member_id: id
+    });
+  };
 
   return (
     <>
@@ -45,22 +63,25 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                       }
                       className="relative"
                     >
-                      <AvatarWithInitials
-                        initials={newData.initials}
-                        backgroundColour={newData.colour}
-                        height={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                        }`}
-                        width={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                        }`}
-                      />
+                      <span onClick={handleClick}>
+                        <AvatarWithInitials
+                          initials={newData.initials}
+                          backgroundColour={newData.colour}
+                          height={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                          }`}
+                          width={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                          }`}
+                        />
+                      </span>
                       {displayed.show && index == displayed?.index && (
                         <button
                           className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white "
                           style={{
                             fontSize: '6px'
                           }}
+                          onClick={() => handleUnAssignTask(newData.id as string)}
                         >
                           X
                         </button>
@@ -107,18 +128,21 @@ function GroupAssignee({ data }: { data: [{ id: string; initials: string; colour
                   })
                 }
               >
-                <AvatarWithInitials
-                  initials={newData.initials}
-                  backgroundColour={newData.colour}
-                  height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
-                  width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
-                />
+                <span onClick={handleClick}>
+                  <AvatarWithInitials
+                    initials={newData.initials}
+                    backgroundColour={newData.colour}
+                    height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
+                    width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
+                  />
+                </span>
                 {displayed.show && index == displayed?.index && (
                   <button
-                    className="absolute top-0 right-0  border h-3 w-3 rounded-full border   bg-gray-500  text-white "
+                    className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white "
                     style={{
                       fontSize: '6px'
                     }}
+                    onClick={() => handleUnAssignTask(newData.id as string)}
                   >
                     X
                   </button>
