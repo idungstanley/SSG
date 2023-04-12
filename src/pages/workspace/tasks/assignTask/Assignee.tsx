@@ -165,6 +165,7 @@ export default function Assignee({
 
         {searchInput.length > 1
           ? filteredMembers?.map((item) => {
+              console.log(item);
               return (
                 <MenuItem key={item.id} onClick={handleClose} className="w-full ">
                   <div className="flex items-center justify-between cursor-pointer w-full">
@@ -179,18 +180,17 @@ export default function Assignee({
                       }
                     >
                       <AvatarWithInitials
-                        initials={item.initials}
+                        initials={item.user.initials as string}
                         backgroundColour={item.colour}
                         height="h-8"
                         width="w-8"
                       />
-
                       <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
                       <button
                         type="button"
-                        className="mx-2 "
+                        className="mx-2"
                         onClick={() =>
                           option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
                         }
@@ -222,13 +222,12 @@ export default function Assignee({
                         }`}
                       >
                         <AvatarWithInitials
-                          initials={item.initials}
+                          initials={item.user.initials as string}
                           backgroundColour={item.colour}
                           height="h-8"
                           width="w-8"
                         />
                       </span>
-
                       <p className="text-sm text-black ">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
 
