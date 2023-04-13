@@ -23,6 +23,7 @@ interface workspaceSettingsListType {
   title: string;
   handleClick: () => void;
 }
+
 interface WorkspaceProps {
   color: string;
   id: string;
@@ -134,6 +135,7 @@ export default function WorkspaceSettingsModal() {
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       navigate('/');
+
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
     }

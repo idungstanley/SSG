@@ -21,6 +21,7 @@ interface ListItemProps {
     shape?: string;
   };
   paddingLeft: string | number;
+  parentId?: string | null;
 }
 export interface ListColourProps {
   innerColour?: string;

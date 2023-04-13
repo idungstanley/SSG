@@ -14,10 +14,11 @@ export default function OpenExtBtn() {
   if (activePlaceName === 'Library' || activePlaceName === 'Favorites') {
     dispatch(setShowExtendedBar(true));
   }
+
   //so if clicked item is not in extended list, the extended bar should close
-  if (extendedAppName === undefined) {
-    dispatch(setShowExtendedBar(false));
-  }
+  // if (extendedAppName === undefined) {
+  //   dispatch(setShowExtendedBar(false));
+  // }
 
   return (
     <span
