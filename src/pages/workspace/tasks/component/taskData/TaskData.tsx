@@ -1,8 +1,10 @@
 import React from 'react';
-import { ImyTaskData, setGetSubTaskId } from '../../../../../features/task/taskSlice';
+import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 
 export interface TaskDataProps {
   task?: ImyTaskData | undefined;
@@ -24,11 +26,30 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
-  // bg-primary-200 text-prmary-700
+  const handleTaskPilot = (id: string, name: string) => {
+    dispatch(
+      setShowPilotSideOver({
+        id: id,
+        type: 'task',
+        show: true,
+        title: name
+      })
+    );
+    dispatch(setTaskIdForPilot(id));
+
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
+  };
 
   return (
     <div className="relative ">
       <div
+        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && activeItemId == task?.id
             ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
