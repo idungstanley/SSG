@@ -13,7 +13,7 @@ interface PlaceItemProps {
   icon: JSX.Element;
   rightContent?: ReactNode;
   bottomContent?: ReactNode;
-  id: number;
+  id: string;
 }
 
 export default function PlaceItem({ label, onClick, icon, rightContent, bottomContent, id }: PlaceItemProps) {

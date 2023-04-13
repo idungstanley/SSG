@@ -9,7 +9,7 @@ function Tracker() {
 
   return (
     <>
-      <PlaceItem label="TRACKER" id={7} icon={<SiPivotaltracker className="w-4 h-4" />} />
+      <PlaceItem label="TRACKER" id="7" icon={<SiPivotaltracker className="w-4 h-4" />} />
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>TRACKER</div>
     </>
   );

@@ -42,7 +42,7 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASKS"
-        id={2}
+        id="2"
         icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>

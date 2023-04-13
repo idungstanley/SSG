@@ -40,63 +40,63 @@ import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordi
 export const places = [
   {
     name: 'Email',
-    id: 1,
+    id: '1',
     place: <Email />,
     icon: <MdAlternateEmail className="w-4 h-4" />
   },
   {
     name: 'TASKS',
-    id: 2,
+    id: '2',
     place: <Hubs />,
     icon: <BsListCheck className="w-4 h-4" />,
     link: 'hub'
   },
   {
     name: 'In-tray',
-    id: 3,
+    id: '3',
     place: <Inbox />,
     icon: <InboxStackIcon className="w-4 h-4" />
   },
   {
     name: 'Cabinet',
-    id: 4,
+    id: '4',
     place: <ExtendedBar />,
     source: cabinetIcon,
     link: 'explorer'
   },
   {
     name: 'Forms',
-    id: 5,
+    id: '5',
     place: <Files />,
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
     name: 'Time clock',
-    id: 6,
+    id: '6',
     place: <Dashboard />,
     icon: <ClockIcon className="w-4 h-4" />
   },
   {
     name: 'TRACKER',
-    id: 7,
+    id: '7',
     place: <Tracker />,
     icon: <SiPivotaltracker className="w-4 h-4" />
   },
   {
     name: 'ROUTEPLAN',
-    id: 8,
+    id: '8',
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
-    id: 9,
+    id: '9',
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
     name: 'Commerce',
-    id: 10,
+    id: '10',
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />
   }
@@ -114,7 +114,7 @@ function Places() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-  const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as number[];
+  const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
   const [items, setItems] = useState(places.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -139,7 +139,7 @@ function Places() {
     }
   };
 
-  const handleClick = (id: number, name: string | null, link?: string) => {
+  const handleClick = (id: string, name: string | null, link?: string) => {
     localStorage.setItem('activePlaceIdLocale', JSON.stringify(id));
     dispatch(setActivePlaceId(id));
     dispatch(setActivePlaceName(name));
