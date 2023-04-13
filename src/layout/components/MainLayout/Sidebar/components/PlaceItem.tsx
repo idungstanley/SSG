@@ -29,13 +29,7 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
-    backgroundColor: isDragging
-      ? '#f3f4f6'
-      : isActivePlace && activeItemId !== null
-      ? '#BF00FF08'
-      : isActivePlace
-      ? '#BF00FF08'
-      : undefined,
+    backgroundColor: isDragging ? '#f3f4f6' : isActivePlace && activeItemId !== null ? '#BF00FF08' : undefined,
     zIndex: isDragging ? 1 : undefined
   };
 
