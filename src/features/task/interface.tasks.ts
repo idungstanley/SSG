@@ -1,3 +1,4 @@
+import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
@@ -157,6 +158,7 @@ export interface IEntries {
   end_date: string;
   description: string;
   is_billable: number;
+  team_member: teamMember;
 }
 
 export interface ITimeEntriesRes {

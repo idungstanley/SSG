@@ -6,10 +6,14 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
+// import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
-
+export interface teamMember {
+  user: {
+    initials: string;
+  };
+}
 export interface entriesProps {
   id: string;
   duration: number;
@@ -17,6 +21,7 @@ export interface entriesProps {
   end_date: string;
   description: string;
   is_billable: number;
+  team_member: teamMember;
 }
 export interface EntryListProps {
   entries: entriesProps;
@@ -27,10 +32,8 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
-
-  // refactor when back is ready with user data on the time entries
-  const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
   const headers = switchHeader;
+  const { initials } = entries.team_member.user;
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
