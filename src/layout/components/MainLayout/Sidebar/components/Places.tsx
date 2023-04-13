@@ -66,37 +66,37 @@ export const places = [
   },
   {
     name: 'Forms',
-    id: 6,
+    id: 5,
     place: <Files />,
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
     name: 'Time clock',
-    id: 7,
+    id: 6,
     place: <Dashboard />,
     icon: <ClockIcon className="w-4 h-4" />
   },
   {
     name: 'TRACKER',
-    id: 8,
+    id: 7,
     place: <Tracker />,
     icon: <SiPivotaltracker className="w-4 h-4" />
   },
   {
     name: 'ROUTEPLAN',
-    id: 9,
+    id: 8,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
-    id: 10,
+    id: 9,
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
     name: 'Commerce',
-    id: 11,
+    id: 10,
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />
   }

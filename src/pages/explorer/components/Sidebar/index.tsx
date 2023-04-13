@@ -74,6 +74,7 @@ export default function ExtendedBar() {
     <>
       <PlaceItem
         label="Cabinet"
+        id={4}
         icon={<img src={cabinetIcon} alt={'cabinet' + 'Icon'} className="w-4 h-4" />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>

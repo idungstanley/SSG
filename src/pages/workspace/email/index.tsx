@@ -9,7 +9,7 @@ export default function Email() {
 
   return (
     <div>
-      <PlaceItem label="EMAIL" icon={<MdAlternateEmail className="w-4 h-4 " />} />
+      <PlaceItem label="EMAIL" id={1} icon={<MdAlternateEmail className="w-4 h-4" />} />
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>EMAIL</div>
     </div>
   );

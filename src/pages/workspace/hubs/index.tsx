@@ -42,6 +42,7 @@ function Hubs() {
     <>
       <PlaceItem
         label="TASKS"
+        id={2}
         icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
@@ -52,7 +53,7 @@ function Hubs() {
       <div
         className={cl(
           !showSidebar && 'overflow-x-hidden w-12',
-          'flex items-center justify-between pl-4 hover:bg-gray-100'
+          'flex items-center justify-between pl-7 hover:bg-gray-100'
         )}
       >
         <div className="flex items-center content-center self-center py-2">
