@@ -23,63 +23,63 @@ import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordi
 
 const navigation = [
   {
-    id: 1,
+    id: '1',
     name: 'Home',
     href: '/',
     source: homeIcon,
     alwaysShow: true
   },
   {
-    id: 2,
+    id: '2',
     name: 'Notifications',
     href: '/notification',
     icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: true
   },
   {
-    id: 3,
+    id: '3',
     name: 'Calendar',
     href: '/calendar',
     icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: 4,
+    id: '4',
     name: 'Community',
     href: '/community',
     icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: 5,
+    id: '5',
     name: 'Library',
     href: '/directory',
     icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: 6,
+    id: '6',
     name: 'Template',
     href: '/template',
     icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: 7,
+    id: '7',
     name: 'Goals',
     href: '/goals',
     source: groupIcon,
     alwaysShow: false
   },
   {
-    id: 8,
+    id: '8',
     name: 'Dashboards',
     href: '/dashboard',
     icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: 9,
+    id: '9',
     name: 'Favorites',
     href: '/favorites',
     source: favoriteIcon,
@@ -107,7 +107,7 @@ export default function NavigationItems() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-  const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as number[];
+  const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
   // const firstItem = navigation[0];
   // const restOfItems = navigation.slice(1).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id));
   // const sortedArray = [firstItem, ...restOfItems];

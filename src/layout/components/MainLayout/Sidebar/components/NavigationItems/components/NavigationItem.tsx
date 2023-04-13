@@ -13,7 +13,7 @@ interface NavigationItemProps {
     alwaysShow: boolean;
     source?: string;
     icon?: JSX.Element;
-    id: number;
+    id: string;
   };
   isVisible: boolean;
 }
