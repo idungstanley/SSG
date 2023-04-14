@@ -57,9 +57,6 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
       >
         <MdDragIndicator style={{ color: `${isActivePlace ? '#BF00FFB2' : undefined}` }} />
       </span>
-      {/* {isActivePlace && activeItemId == null && (
-        <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>
-      )} */}
       <div className="flex justify-between w-full">
         <div
           className={cl(

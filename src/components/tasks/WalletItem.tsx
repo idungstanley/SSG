@@ -81,7 +81,7 @@ export default function WalletItem({
         onClick={() => handleShowSubWallet(wallet.id)}
         style={{ backgroundColor: `${wallet.id === activeItemId || wallet.id === walletId ? '#BF00FF21' : ''}` }}
       >
-        {(wallet.id === activeItemId || wallet.id === walletId) && (
+        {wallet.id === walletId && (
           <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div id="walletLeft" className="flex items-center justify-center" style={{ paddingLeft: `${paddingLeft}px` }}>

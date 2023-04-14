@@ -77,7 +77,7 @@ export default function HubItem({
         style={{ backgroundColor: `${item.id === activeItemId || item.id === hubId ? '#BF00FF21' : ''}` }}
       >
         <div className="relative flex items-center justify-between pl-3">
-          {(item.id === activeItemId || item.id === hubId) && (
+          {item.id === hubId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg"
               style={{ backgroundColor: '#BF00FF' }}

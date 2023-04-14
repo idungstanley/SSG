@@ -104,7 +104,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           backgroundColor: `${list.id === activeItemId || list.id === listId ? '#BF00FF21' : ''}`
         }}
       >
-        {(list.id === activeItemId || list.id === listId) && (
+        {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
