@@ -74,7 +74,7 @@ export default function HubItem({
         }`}
         tabIndex={0}
         onClick={() => handleClick(item.id, item.name)}
-        style={{ backgroundColor: `${item.id === activeItemId || item.id === hubId ? '#BF00FF21' : ''}` }}
+        style={{ backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}` }}
       >
         <div className="relative flex items-center justify-between pl-3">
           {item.id === hubId && (
