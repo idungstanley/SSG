@@ -8,6 +8,7 @@ import { Spinner } from '../../../common';
 import TwoFactorAuthentication from './components/TwoFactorAuthentication';
 import Region from './components/Region';
 import Preferences from './components/Preferences';
+import Confirmation from './components/Modal/Confirmation';
 
 export default function UserSettingsProfile() {
   const { userName } = useAppSelector((state) => state.account);
@@ -82,6 +83,9 @@ export default function UserSettingsProfile() {
         </div>
       </section>
       <div className="bg-white flex items-center h-20 fixed bottom-0 w-full">
+        <div>
+          <Confirmation />
+        </div>
         <button
           className={
             userName === data?.data.user.name || userName !== ''

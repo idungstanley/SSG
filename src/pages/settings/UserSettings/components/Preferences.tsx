@@ -7,7 +7,7 @@ function Preferences() {
       <h1 className="text-xs font-bold my-2">Preferences</h1>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -20,7 +20,7 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -33,7 +33,7 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -45,7 +45,7 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -57,7 +57,7 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">

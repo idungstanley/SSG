@@ -53,7 +53,7 @@ function User({ userName }: username) {
       </div>
       {userOptions.map((setting) => {
         return (
-          <div key={setting.id} className="py-1 flex items-center px-6 hover:bg-gray-200 cursor-pointer">
+          <div key={setting.id} className="py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer">
             <h3 className="font-medium" style={{ fontSize: '10px' }}>
               {setting.title}
             </h3>

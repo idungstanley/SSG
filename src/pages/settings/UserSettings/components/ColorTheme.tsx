@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-// import { MdDone } from 'react-icons/md';
-import { IUserData } from '../../../../features/workspace/workspace.interfaces';
+import React from 'react';
 import MainLogo from '../../../../assets/icons/mainIcon.svg';
+import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
+import { setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
 
-interface dataProps {
-  data: IUserData | undefined;
-}
-
-function ColorTheme({ data }: dataProps) {
+function ColorTheme() {
+  const { theme_color } = useAppSelector((state) => state.userSetting);
+  const dispatch = useAppDispatch();
   const colors = [
     {
       id: 1,
@@ -70,7 +68,6 @@ function ColorTheme({ data }: dataProps) {
       color_code: '#202020'
     }
   ];
-  const [selectedColor, setSelectedColor] = useState<string | null | undefined>(data?.theme_color);
   return (
     <div>
       <div>
@@ -82,9 +79,9 @@ function ColorTheme({ data }: dataProps) {
             <div
               key={item.id}
               className="mx-4 my-2 w-8 h-8 flex items-center justify-center"
-              onClick={() => setSelectedColor(item.color_code)}
+              onClick={() => dispatch(setUserInfo({ theme_color: item.color_code }))}
             >
-              {selectedColor === item.color_code ? (
+              {theme_color === item.color_code ? (
                 <div
                   className={
                     'rounded-full hover:rounded-full cursor-pointer w-8 h-8 flex justify-center items-center hover:w-8 hover-h-8'

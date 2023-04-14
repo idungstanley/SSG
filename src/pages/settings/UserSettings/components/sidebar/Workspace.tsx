@@ -59,8 +59,8 @@ function Workspace() {
         return (
           <div
             key={setting.id}
-            className="py-1 border-gray-400 flex items-center px-6 hover:bg-gray-200 cursor-pointer"
-            style={{ borderBottom: '0.1px solid' }}
+            className="py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer border-b border-gray-300"
+            // style={{ borderBottom: '0.5px solid gray' }}
           >
             <h3 className="font-medium" style={{ fontSize: '10px' }}>
               {setting.title}

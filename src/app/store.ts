@@ -21,6 +21,7 @@ import uploadFileSlice from '../features/general/uploadFile/uploadFileSlice';
 import chatSlice from '../features/chat/chatSlice';
 import accountSlice from '../features/account/accountSlice';
 import checklistSlice from '../features/task/checklist/checklistSlice';
+import userSettingSlice from '../features/settings/user/userSettingsSlice';
 export const store = configureStore({
   reducer: {
     auth: authSlice,
@@ -43,7 +44,8 @@ export const store = configureStore({
     chat: chatSlice,
     account: accountSlice,
     checklist: checklistSlice,
-    tag: tagSlice
+    tag: tagSlice,
+    userSetting: userSettingSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
