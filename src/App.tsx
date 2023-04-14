@@ -5,9 +5,12 @@ import routes from './routes';
 import Prompt from './common/Prompt';
 import { selectCurrentUser } from './features/auth/authSlice';
 import './styles/index.css';
+import { setOnlineStatus } from './features/community/communityService';
 
 function App() {
   const user = useSelector(selectCurrentUser);
+  setOnlineStatus();
+
   // currentWorkspaceId;
   // const getCurrentWsId = JSON.parse(localStorage.getItem('currentWorkspaceId') as string) as string;
   return (

@@ -6,7 +6,14 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
+// import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
+import { AvatarWithInitials } from '../../../../../components';
+import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
+export interface teamMember {
+  user: {
+    initials: string;
+  };
+}
 export interface entriesProps {
   id: string;
   duration: number;
@@ -14,15 +21,19 @@ export interface entriesProps {
   end_date: string;
   description: string;
   is_billable: number;
+  team_member: teamMember;
 }
 export interface EntryListProps {
   entries: entriesProps;
+  switchHeader: Header[];
 }
 
-export default function EntryList({ entries }: EntryListProps) {
+export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
+  const headers = switchHeader;
+  const { initials } = entries.team_member.user;
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
@@ -50,10 +61,45 @@ export default function EntryList({ entries }: EntryListProps) {
   };
 
   return (
-    <section key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10">
-      <div id="left" className="flex items-center space-x-3 text-xs">
-        <p>{moment.utc(entries.duration * 1000).format('HH:mm:ss')}</p>
-        <p>{moment(entries.start_date).format('MMM D')}</p>
+    <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10 border-b py-2">
+      <div id="left" className="flex items-center justify-evenly space-x-4 text-xs">
+        {headers.map((col) => {
+          if (col.title === 'assignee' && !col.hidden) {
+            return (
+              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
+                <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
+              </td>
+            );
+          }
+
+          if (col.title === 'duration' && !col.hidden) {
+            return (
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
+              </td>
+            );
+          }
+
+          if (col.title === 'start date' && !col.hidden) {
+            return (
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment(entries.start_date).format('MMM D HH:mm')}
+              </td>
+            );
+          }
+
+          if (col.title === 'end date' && !col.hidden) {
+            return (
+              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+                {moment(entries.end_date).format('MMM D HH:mm')}
+              </td>
+            );
+          }
+
+          if (col.title === 'description' && !col.hidden) {
+            return <td key={col.id}>{entries.description}</td>;
+          }
+        })}
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
@@ -66,6 +112,6 @@ export default function EntryList({ entries }: EntryListProps) {
           <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
         </button>
       </div>
-    </section>
+    </tr>
   );
 }

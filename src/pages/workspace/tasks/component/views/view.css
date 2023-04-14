@@ -57,14 +57,6 @@ textarea {
   scale: 1.1;
 }
 
-.littleBigger:hover {
-  scale: 1.1;
-}
-
-.bigScale {
-  scale: 1.1;
-}
-
 .AddColumnDropdownButton:hover {
   color: #8b5cf6;
   width: 20px;
@@ -75,14 +67,14 @@ textarea {
   height: 30px;
 }
 .CompactWithInitialsH {
-  height: 20px;
+  height: 25px;
 }
 .ComfortableWithInitialsW {
   width: 30px;
 }
 
 .CompactWithInitialsW {
-  width: 20px;
+  width: 25px;
 }
 
 .groupFiltalModal {
