@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
+
 interface AvatarWithInitialsProps {
   initials: string;
   height?: string;
@@ -21,19 +22,21 @@ function AvatarWithInitials({
 }: AvatarWithInitialsProps) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   return (
-    <span
-      className={`inline-flex p-1 items-center justify-center  ${height} ${width} ${
-        roundedStyle === 'circular' && 'rounded-full'
-      } ${roundedStyle === 'rounded' && 'rounded'}`}
-      style={{ backgroundColor: backgroundColour }}
-    >
+    <div className="relative ">
       <span
-        className="font-bold leading-none "
-        style={{ fontSize: `${CompactView || CompactViewWrap ? '10px' : textSize}`, color: textColor }}
+        className={`inline-flex  items-center justify-center  ${height} ${width} ${
+          roundedStyle === 'circular' && 'rounded-full'
+        } ${roundedStyle === 'rounded' && 'rounded'}`}
+        style={{ backgroundColor: backgroundColour }}
       >
-        {initials}
+        <span
+          className="font-bold leading-none "
+          style={{ fontSize: `${CompactView || CompactViewWrap ? '10px' : textSize}`, color: textColor }}
+        >
+          {initials}
+        </span>
       </span>
-    </span>
+    </div>
   );
 }
 
