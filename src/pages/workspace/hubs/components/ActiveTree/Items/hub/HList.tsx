@@ -137,7 +137,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                 />
               ) : null}
               {hub.lists.length && id ? (
-                <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '10'}`} />
+                <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '50'}`} />
               ) : null}
               {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
               {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
