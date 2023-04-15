@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setShowConfirmationModal } from '../../../../../features/settings/user/userSettingsSlice';
+import { UseChangePassword } from '../../../../../features/settings/user/userSettingsServices';
 
 export default function Confirmation() {
   const { showConfirmationModal } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
+
+  const [oldPassword, setOldPassword] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+
+  const { mutate: onPasswordChange } = UseChangePassword();
   return (
     <>
       {showConfirmationModal ? (
@@ -36,6 +43,8 @@ export default function Confirmation() {
                       className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="password"
                       type="password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
                       placeholder="******************"
                     />
                   </div>
@@ -46,6 +55,8 @@ export default function Confirmation() {
                       id="password"
                       type="password"
                       placeholder="******************"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </div>
                   <div className="mb-6">
@@ -55,6 +66,8 @@ export default function Confirmation() {
                       id="password"
                       type="password"
                       placeholder="******************"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
                 </div>
@@ -70,7 +83,15 @@ export default function Confirmation() {
                   <button
                     className="bg-emerald-500 text-red-500 active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => dispatch(setShowConfirmationModal(false))}
+                    onClick={() => {
+                      console.log({ oldPassword, newPassword, confirmPassword });
+                      dispatch(setShowConfirmationModal(false));
+                      onPasswordChange({
+                        oldPassword: oldPassword,
+                        newPassword: newPassword,
+                        confirmPassword: confirmPassword
+                      });
+                    }}
                   >
                     Save Changes
                   </button>

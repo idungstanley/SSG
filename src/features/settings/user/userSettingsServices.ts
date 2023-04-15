@@ -13,6 +13,12 @@ interface IUserSettings {
   color?: string;
 }
 
+interface IPasswordprops {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 //Get Self
 export const useGetSelf = () => {
   return useQuery(['self'], async () => {
@@ -71,4 +77,29 @@ export const UseRemoveAvatar = () => {
     method: 'DELETE'
   });
   return response;
+};
+
+// Change user password
+const changePassword = ({ oldPassword, newPassword, confirmPassword }: IPasswordprops) => {
+  const request = requestNew({
+    url: '/auth/account/change-password',
+    method: 'PUT',
+    params: {
+      current_password: oldPassword,
+      password: newPassword,
+      password_confirmation: confirmPassword
+    }
+  });
+  return request;
+};
+
+// Update User Settings Mutation
+export const UseChangePassword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(changePassword, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+    }
+  });
 };

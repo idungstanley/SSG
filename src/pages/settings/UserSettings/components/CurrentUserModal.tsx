@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 function CurrentUserModal() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-  const { avatar_path } = useAppSelector((state) => state.userSetting);
+  const { userData } = useAppSelector((state) => state.userSetting);
   const modalRef = useRef<HTMLInputElement>(null);
   const palette = [
     'white',
@@ -82,9 +82,8 @@ function CurrentUserModal() {
     // Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      deleteAvatarMutation.reset();
     };
-  }, [modalRef, deleteAvatarMutation]);
+  }, [modalRef]);
 
   const handleClick = (c?: string) => {
     dispatch(setUserInfo({ color: c }));
@@ -107,7 +106,7 @@ function CurrentUserModal() {
       >
         <button className="text-xs">Add custom avatar</button>
       </div>
-      {avatar_path && (
+      {userData?.avatar_path && (
         <div
           className="cursor-pointer w-full flex justify-center text-red-600 border border-red-500 p-1 rounded hover:bg-red-600 hover:text-white my-1"
           onClick={() => deleteAvatarMutation.mutateAsync()}
