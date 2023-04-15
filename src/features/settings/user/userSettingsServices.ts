@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
+import { IUserRes } from '../../workspace/workspace.interfaces';
 // import { useAppDispatch } from '../../../app/hooks';
 interface IUserSettings {
   name?: string | undefined;
@@ -11,6 +12,17 @@ interface IUserSettings {
   time_format?: string;
   color?: string;
 }
+
+//Get Self
+export const useGetSelf = () => {
+  return useQuery(['self'], async () => {
+    const data = await requestNew<IUserRes | undefined>({
+      url: 'user/self',
+      method: 'GET'
+    });
+    return data;
+  });
+};
 
 // Update User Settings
 const updateUserSettings = ({
@@ -49,4 +61,14 @@ export const UseUpdateUserSettings = () => {
       queryClient.invalidateQueries(['self']);
     }
   });
+};
+
+// Remove Avatar
+export const UseRemoveAvatar = () => {
+  const url = '/auth/account/avatar';
+  const response = requestNew({
+    url,
+    method: 'DELETE'
+  });
+  return response;
 };

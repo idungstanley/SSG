@@ -18,7 +18,7 @@ export default function Confirmation() {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">Confirm Password</h3>
+                  <h3 className="text-xl font-semibold">Change Password</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => dispatch(setShowConfirmationModal(false))}
@@ -30,10 +30,33 @@ export default function Confirmation() {
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                    This Page is for password confirmation when you are changing email or password. Not yet implemented
-                    from backend
-                  </p>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Old Password</label>
+                    <input
+                      className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                      id="password"
+                      type="password"
+                      placeholder="******************"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">New Password</label>
+                    <input
+                      className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                      id="password"
+                      type="password"
+                      placeholder="******************"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Old Password</label>
+                    <input
+                      className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                      id="password"
+                      type="password"
+                      placeholder="******************"
+                    />
+                  </div>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">

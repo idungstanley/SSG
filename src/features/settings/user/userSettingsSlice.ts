@@ -18,6 +18,7 @@ interface userSettingState {
   currentUserModal: boolean;
   showAvatarUpload: boolean;
   showConfirmationModal: boolean;
+  triggerDeleteAvatar: boolean;
 }
 
 const initialState: userSettingState = {
@@ -36,7 +37,8 @@ const initialState: userSettingState = {
   time_format: '',
   currentUserModal: false,
   showAvatarUpload: false,
-  showConfirmationModal: false
+  showConfirmationModal: false,
+  triggerDeleteAvatar: false
 };
 
 export const userSettingSlice = createSlice({

@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import CurrentUser from './components/CurrentUser';
-// import SettingsGrid from './components/SettingsGrid';
 import { useAppSelector } from '../../../app/hooks';
-// import { selectCurrentUser } from '../../../features/auth/authSlice';
-import { getSelf } from '../../../features/workspace/workspaceService';
 import { Spinner } from '../../../common';
 import TwoFactorAuthentication from './components/TwoFactorAuthentication';
 import Region from './components/Region';
 import Preferences from './components/Preferences';
 import Confirmation from './components/Modal/Confirmation';
+import { useGetSelf } from '../../../features/settings/user/userSettingsServices';
 
 export default function UserSettingsProfile() {
   const { userName } = useAppSelector((state) => state.account);
   const [name, setName] = useState<string | undefined>('');
   const [isName, setIsname] = useState<boolean>(false);
-  const { data, status } = getSelf();
+  const { data, status } = useGetSelf();
   if (status === 'loading') {
     return (
       <div className="w-full h-full flex items-center justify-center">

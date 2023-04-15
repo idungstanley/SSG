@@ -5,15 +5,25 @@ import Preferences from './Preferences';
 import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
 import { UseUpdateUserSettings } from '../../../../features/settings/user/userSettingsServices';
+import Confirmation from './Modal/Confirmation';
 
 interface dataProps {
   data: IUserData | undefined;
 }
 
 function Personalization({ data }: dataProps) {
-  const { timezone, name, email, time_format, date_format, start_week, theme_color, userData, color } = useAppSelector(
-    (state) => state.userSetting
-  );
+  const {
+    timezone,
+    name,
+    email,
+    time_format,
+    date_format,
+    start_week,
+    theme_color,
+    userData,
+    color,
+    showConfirmationModal
+  } = useAppSelector((state) => state.userSetting);
   const { mutate: onUserSettingsUpdate } = UseUpdateUserSettings();
   const handleSubmit = () => {
     onUserSettingsUpdate({
@@ -96,7 +106,7 @@ function Personalization({ data }: dataProps) {
           )}
         </div>
         {/* For the confirmation modal */}
-        {/* {showConfirmationModal && <Confirmation />} */}
+        {showConfirmationModal && <Confirmation />}
       </div>
     </div>
   );

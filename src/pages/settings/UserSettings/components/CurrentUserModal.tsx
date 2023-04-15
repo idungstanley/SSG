@@ -6,9 +6,12 @@ import {
   setShowAvatarUpload,
   setUserInfo
 } from '../../../../features/settings/user/userSettingsSlice';
+import { UseRemoveAvatar } from '../../../../features/settings/user/userSettingsServices';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function CurrentUserModal() {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   const { avatar_path } = useAppSelector((state) => state.userSetting);
   const modalRef = useRef<HTMLInputElement>(null);
   const palette = [
@@ -59,6 +62,13 @@ function CurrentUserModal() {
     </div>
   ));
 
+  const deleteAvatarMutation = useMutation(UseRemoveAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+      dispatch(setCurrentUserModal(false));
+    }
+  });
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -72,8 +82,9 @@ function CurrentUserModal() {
     // Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      deleteAvatarMutation.reset();
     };
-  }, [modalRef]);
+  }, [modalRef, deleteAvatarMutation]);
 
   const handleClick = (c?: string) => {
     dispatch(setUserInfo({ color: c }));
@@ -99,7 +110,7 @@ function CurrentUserModal() {
       {avatar_path && (
         <div
           className="cursor-pointer w-full flex justify-center text-red-600 border border-red-500 p-1 rounded hover:bg-red-600 hover:text-white my-1"
-          onClick={() => dispatch(setShowAvatarUpload(true))}
+          onClick={() => deleteAvatarMutation.mutateAsync()}
         >
           <button className="text-xs">Remove Avatar</button>
         </div>

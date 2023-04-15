@@ -3,7 +3,11 @@ import CurrentUser from './CurrentUser';
 import Region from './Region';
 // import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
-import { setCurrentUserModal, setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
+import {
+  setCurrentUserModal,
+  setShowConfirmationModal,
+  setUserInfo
+} from '../../../../features/settings/user/userSettingsSlice';
 import CurrentUserModal from './CurrentUserModal';
 import UploadAvatar from './UploadAvatar';
 
@@ -58,7 +62,14 @@ function Profile() {
           </div>
           <div className="my-2">
             <h5 className="font-bold text-xs">Password</h5>
-            <input type="password" className="w-full rounded h-6 text-xs" value="n.salifu@simpsgroup.co.uk" />
+            <input
+              type="password"
+              className="w-full rounded h-6 text-xs"
+              defaultValue="https://www.alsoit.io"
+              onFocus={() => {
+                dispatch(setShowConfirmationModal(true));
+              }}
+            />
           </div>
         </section>
         <section>
