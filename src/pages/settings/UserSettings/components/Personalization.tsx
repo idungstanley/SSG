@@ -57,10 +57,10 @@ function Personalization({ data }: dataProps) {
         <section>
           <TwoFactorAuthentication />
         </section>
-        <section className="overflow-auto" style={{ maxHeight: '40vh' }}>
+        <section className="overflow-auto" style={{ maxHeight: '45vh' }}>
           <Preferences />
         </section>
-        <div className="w-full flex fixed bottom-5 left-0 py-1 justify-center absolute bg-white">
+        <div className="w-full flex items-center py-1 justify-center absolute bg-white">
           {data?.theme_color !== null ? (
             <div>
               {!isNewData ? (

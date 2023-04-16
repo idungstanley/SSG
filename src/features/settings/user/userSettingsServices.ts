@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { IUserRes } from '../../workspace/workspace.interfaces';
+import { setShowConfirmationModal } from './userSettingsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 // import { useAppDispatch } from '../../../app/hooks';
 interface IUserSettings {
   name?: string | undefined;
@@ -95,11 +97,10 @@ const changePassword = ({ oldPassword, newPassword, confirmPassword }: IPassword
 
 // Update User Settings Mutation
 export const UseChangePassword = () => {
-  const queryClient = useQueryClient();
-
+  const dispatch = useAppDispatch();
   return useMutation(changePassword, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['self']);
+      dispatch(setShowConfirmationModal(false));
     }
   });
 };

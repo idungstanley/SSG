@@ -54,9 +54,9 @@ function Region() {
         onClick={handleClick}
         className="w-full h-6 flex justify-between items-center border border-gray-500 p-1 rounded cursor-pointer"
       >
-        <h1 className="text-xs">{timezone}</h1>
+        <h1 style={{ fontSize: '10px' }}>{timezone}</h1>
         <label className="cursor-pointer">
-          <RiArrowDropDownLine className="w-8 h-8 font-thin" />
+          <RiArrowDropDownLine className="w-5 h-5" style={{ fontSize: '10px' }} />
         </label>
       </button>
       <Menu

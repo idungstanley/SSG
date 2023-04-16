@@ -3,13 +3,10 @@ import CurrentUser from './CurrentUser';
 import Region from './Region';
 // import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
-import {
-  setCurrentUserModal,
-  setShowConfirmationModal,
-  setUserInfo
-} from '../../../../features/settings/user/userSettingsSlice';
+import { setShowConfirmationModal, setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
 import CurrentUserModal from './CurrentUserModal';
 import UploadAvatar from './UploadAvatar';
+import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function Profile() {
   const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload } = useAppSelector(
@@ -18,13 +15,13 @@ function Profile() {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="w-2/6 bg-white m-2 h-full p-4 rounded-lg h-full">
+    <div className="w-2/6 bg-white m-2 p-4 rounded-lg">
       <h1 className="font-bold" style={{ fontSize: '10px' }}>
         PERSONAL PROFILE
       </h1>
       <section>
         <div className="flex justify-center my-2">
-          <div className="cursor-pointer" onClick={() => dispatch(setCurrentUserModal(!currentUserModal))}>
+          <div>
             <CurrentUser />
           </div>
         </div>
@@ -149,7 +146,9 @@ function Profile() {
           </div>
         </section>
       </section>
-      {showAvatarUpload && <UploadAvatar />}
+      {showAvatarUpload && (
+        <UploadAvatar endpoint={'auth/account/avatar'} invalidateQuery={['self'] as InvalidateQueryFilters<unknown>} />
+      )}
     </div>
   );
 }

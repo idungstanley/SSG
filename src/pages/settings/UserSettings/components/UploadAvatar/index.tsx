@@ -65,7 +65,7 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
     uppy.setState({
       xhrUpload: {
         ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/auth/account/avatar`
+        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`
       }
     });
   }, [endpoint]);
