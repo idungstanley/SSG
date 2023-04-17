@@ -12,8 +12,8 @@ export default function CurrentUser() {
         <div className="flex justify-center cursor-pointer" onClick={() => dispatch(setCurrentUserModal(true))}>
           <AvatarWithInitials
             initials="ND"
-            height="h-20"
-            width="w-20"
+            height="h-44"
+            width="w-44"
             roundedStyle="circular"
             backgroundColour={color}
             textSize="12px"
@@ -21,7 +21,7 @@ export default function CurrentUser() {
         </div>
       ) : (
         <div className="flex justify-center">
-          <div className="w-20 h-20 rounded-full">
+          <div className="w-44 h-44 rounded-full">
             <img
               className="w-full h-full rounded-full cursor-pointer"
               src={userData.avatar_path}
@@ -32,7 +32,9 @@ export default function CurrentUser() {
         </div>
       )}
       <div className="flex justify-center">
-        <p className="font-extrabold text-left">{userData?.name?.toUpperCase()}</p>
+        <p className="font-extrabold text-left" style={{ fontSize: '15px' }}>
+          {userData?.name?.toUpperCase()}
+        </p>
       </div>
     </div>
   );

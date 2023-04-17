@@ -50,19 +50,18 @@ function Workspace() {
 
   return (
     <div>
-      <div className="heading h-auto py-2 bg-gray-200 flex items-center px-6">
-        <h1 className="font-bold" style={{ fontSize: '10px' }}>
-          {workSpaceData?.data.workspace.name}
+      <div className="heading h-14 bg-gray-200 flex items-center px-6">
+        <h1 className="font-bold" style={{ fontSize: '15px' }}>
+          {workSpaceData?.data.workspace.name?.toUpperCase()}
         </h1>
       </div>
       {workspaceOptions.map((setting) => {
         return (
           <div
             key={setting.id}
-            className="py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer border-b border-gray-300"
-            // style={{ borderBottom: '0.5px solid gray' }}
+            className="h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer border-b border-gray-300"
           >
-            <h3 className="font-medium" style={{ fontSize: '10px' }}>
+            <h3 className="font-semibold text-gray-500" style={{ fontSize: '15px' }}>
               {setting.title}
             </h3>
           </div>

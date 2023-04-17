@@ -33,7 +33,7 @@ function UserSettings() {
         style={{ height: '100vh' }}
         className="w-1/5 bg-white h-screen overflow-auto border-r-2 border-gray-300 overflow-auto"
       >
-        <SideBar data={data?.data.user} />
+        <SideBar />
       </section>
       <div className="w-4/5 flex">
         <section className="m-auto flex h-full w-1/3">

@@ -2,12 +2,8 @@ import React from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import { cl } from '../../../../../utils';
 
-interface username {
-  userName: string | undefined;
-}
-
-function User({ userName }: username) {
-  const { activeTab, theme_color } = useAppSelector((state) => state.userSetting);
+function User() {
+  const { activeTab, theme_color, userData } = useAppSelector((state) => state.userSetting);
   const userOptions = [
     {
       id: 1,
@@ -46,12 +42,13 @@ function User({ userName }: username) {
       title: 'Wiki Docs'
     }
   ];
-  const userNameFormatted = userName ? userName.slice(0, 1).toUpperCase() + userName.slice(1) : '';
+
+  const userNameFormatted = userData?.name ? userData?.name.slice(0, 1).toUpperCase() + userData?.name.slice(1) : '';
   return (
     <div>
-      <div className="heading h-auto py-2 bg-gray-200 flex items-center px-6">
-        <h1 className="font-bold" style={{ fontSize: '10px' }}>
-          {userNameFormatted}
+      <div className="heading h-14 bg-gray-200 flex items-center px-6">
+        <h1 className="font-bold" style={{ fontSize: '15px' }}>
+          {userNameFormatted.toUpperCase()}
         </h1>
       </div>
       {userOptions.map((setting) => {
@@ -59,12 +56,14 @@ function User({ userName }: username) {
           <div
             key={setting.id}
             className={cl(
-              activeTab === setting.title ? 'text-white' : '',
-              'py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer'
+              activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
+              'h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer'
             )}
-            style={{ backgroundColor: activeTab === setting.title ? (theme_color as string) : '' }}
+            style={{
+              backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
+            }}
           >
-            <h3 className="font-medium" style={{ fontSize: '10px' }}>
+            <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
               {setting.title}
             </h3>
           </div>
