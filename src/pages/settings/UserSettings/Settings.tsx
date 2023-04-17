@@ -4,7 +4,7 @@ import Profile from './components/Profile';
 import Personalization from './components/Personalization';
 import { Spinner } from '../../../common';
 import { useAppDispatch } from '../../../app/hooks';
-import { setUserData, setUserInfo } from '../../../features/settings/user/userSettingsSlice';
+import { setActiveTab, setUserData, setUserInfo } from '../../../features/settings/user/userSettingsSlice';
 import { useGetSelf } from '../../../features/settings/user/userSettingsServices';
 
 function UserSettings() {
@@ -12,6 +12,7 @@ function UserSettings() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(setActiveTab('My Settings'));
     if (status === 'success') {
       dispatch(setUserData(data?.data.user));
       dispatch(setUserInfo({ ...data?.data.user }));
@@ -34,9 +35,11 @@ function UserSettings() {
       >
         <SideBar data={data?.data.user} />
       </section>
-      <div className="w-4/5">
-        <section className="m-auto flex h-full">
+      <div className="w-4/5 flex">
+        <section className="m-auto flex h-full w-1/3">
           <Profile />
+        </section>
+        <section className="m-auto flex h-full w-2/3">
           <Personalization data={data?.data.user} />
         </section>
       </div>

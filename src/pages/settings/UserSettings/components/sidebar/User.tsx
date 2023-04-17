@@ -1,10 +1,13 @@
 import React from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import { cl } from '../../../../../utils';
 
 interface username {
   userName: string | undefined;
 }
 
 function User({ userName }: username) {
+  const { activeTab, theme_color } = useAppSelector((state) => state.userSetting);
   const userOptions = [
     {
       id: 1,
@@ -53,7 +56,14 @@ function User({ userName }: username) {
       </div>
       {userOptions.map((setting) => {
         return (
-          <div key={setting.id} className="py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer">
+          <div
+            key={setting.id}
+            className={cl(
+              activeTab === setting.title ? 'text-white' : '',
+              'py-2 flex items-center px-6 hover:bg-gray-200 cursor-pointer'
+            )}
+            style={{ backgroundColor: activeTab === setting.title ? (theme_color as string) : '' }}
+          >
             <h3 className="font-medium" style={{ fontSize: '10px' }}>
               {setting.title}
             </h3>

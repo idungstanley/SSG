@@ -49,23 +49,26 @@ function Personalization({ data }: dataProps) {
     color === userData?.color;
 
   return (
-    <div className="w-4/6 m-2 bg-white m-2 p-4 rounded-lg relative" style={{ maxHeight: '100vh' }}>
+    <div className="w-full bg-white m-2 p-4 rounded-lg relative" style={{ maxHeight: '100vh' }}>
       <div className="bg-white w-full">
-        <section className="">
+        <section className="my-2">
           <ColorTheme />
         </section>
-        <section>
+        <section className="my-2 py-2">
           <TwoFactorAuthentication />
         </section>
-        <section className="overflow-auto" style={{ maxHeight: '45vh' }}>
+        <section className="overflow-auto my-2" style={{ maxHeight: '40vh' }}>
           <Preferences />
         </section>
-        <div className="w-full flex items-center py-1 justify-center absolute bg-white">
+        <div
+          className="w-full flex items-center py-1 justify-center absolute bg-white fixed bottom-3 right-0"
+          style={{ height: '5vh' }}
+        >
           {data?.theme_color !== null ? (
             <div>
               {!isNewData ? (
                 <button
-                  className="flex justify-end hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
+                  className="bottom-5 flex hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
                   onClick={handleSubmit}
                   style={{ backgroundColor: `${data?.theme_color}` }}
                 >
@@ -73,12 +76,8 @@ function Personalization({ data }: dataProps) {
                 </button>
               ) : (
                 <button
-                  className="flex justify-end hover:bg-green-600 text-white font-bold py-2 px-6 rounded opacity-30"
+                  className=" bottom-5 flex hover:bg-green-600 text-white font-bold py-2 px-6 rounded opacity-30"
                   style={{ backgroundColor: `${data?.theme_color}` }}
-                  // For confirmation modal
-                  // onClick={() => {
-                  //   dispatch(setShowConfirmationModal(true));
-                  // }}
                 >
                   Saved
                 </button>
@@ -88,7 +87,7 @@ function Personalization({ data }: dataProps) {
             <div>
               {!isNewData ? (
                 <button
-                  className="flex justify-end hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
+                  className=" bottom-5 flex hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
                   style={{ backgroundColor: '#FF00FC' }}
                   onClick={handleSubmit}
                 >
@@ -96,7 +95,7 @@ function Personalization({ data }: dataProps) {
                 </button>
               ) : (
                 <button
-                  className="flex justify-end hover:bg-green-600 text-white font-bold py-2 px-6 rounded opacity-30"
+                  className=" bottom-5 flex hover:bg-green-600 text-white font-bold py-2 px-6 rounded opacity-30"
                   style={{ backgroundColor: '#FF00FC' }}
                 >
                   Saved

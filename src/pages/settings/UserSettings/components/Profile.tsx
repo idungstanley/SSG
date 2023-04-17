@@ -15,10 +15,8 @@ function Profile() {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="w-2/6 bg-white m-2 p-4 rounded-lg">
-      <h1 className="font-bold" style={{ fontSize: '10px' }}>
-        PERSONAL PROFILE
-      </h1>
+    <div className="w-full bg-white m-2 p-4 rounded-lg">
+      <h1 className="font-bold text-=xs">PERSONAL PROFILE</h1>
       <section>
         <div className="flex justify-center my-2">
           <div>
@@ -33,9 +31,7 @@ function Profile() {
 
         <section>
           <div>
-            <h1 className="font-bold" style={{ fontSize: '10px' }}>
-              EDIT PROFILE
-            </h1>
+            <h1 className="font-bold text-xs">EDIT PROFILE</h1>
           </div>
           <div className="my">
             <h5 className="font-bold text-xs">Full Name</h5>
@@ -71,15 +67,11 @@ function Profile() {
         </section>
         <section>
           <div className="my">
-            <h1 className="font-bold" style={{ fontSize: '10px' }}>
-              LANGUAGE & REGION SETTINGS
-            </h1>
+            <h1 className="font-bold text-xs">LANGUAGE & REGION SETTINGS</h1>
           </div>
           <div className="flex justify-between my-2">
             <div className="" style={{ width: '48%' }}>
-              <h5 className="font-bold text-xs" style={{ fontSize: '10px' }}>
-                Language
-              </h5>
+              <h5 className="font-bold text-xs">Language</h5>
               <select name="language" className="h-6 py-0 text-xs rounded my w-full">
                 <option value="en">English</option>
               </select>
@@ -91,13 +83,10 @@ function Profile() {
           </div>
           <div className="my-2 flex justify-between ">
             <div style={{ width: '48%' }}>
-              <h5 className="font-bold" style={{ fontSize: '10px' }}>
-                Start of the week
-              </h5>
+              <h5 className="font-bold text-xs">Start of the week</h5>
               <select
                 name="Day"
-                className="h-6 py-0 rounded my w-full"
-                style={{ fontSize: '10px' }}
+                className="h-6 py-0 rounded my w-full text-xs"
                 value={start_week}
                 onChange={(e) => dispatch(setUserInfo({ start_week: e.target.value }))}
               >
@@ -106,13 +95,10 @@ function Profile() {
               </select>
             </div>
             <div style={{ width: '48%' }}>
-              <h5 className="font-bold" style={{ fontSize: '10px' }}>
-                Time Format
-              </h5>
+              <h5 className="font-bold text-xs">Time Format</h5>
               <select
                 name="Time-format"
-                className="h-6 py-0 rounded my w-full"
-                style={{ fontSize: '10px' }}
+                className="h-6 py-0 rounded my w-full text-xs"
                 value={time_format}
                 onChange={(e) => dispatch(setUserInfo({ time_format: e.target.value }))}
               >
@@ -123,13 +109,10 @@ function Profile() {
           </div>
           <div className="my-2 flex justify-between ">
             <div style={{ width: '48%' }}>
-              <h5 className="font-bold" style={{ fontSize: '10px' }}>
-                Date Format
-              </h5>
+              <h5 className="font-bold text-xs">Date Format</h5>
               <select
                 name="Date-format"
-                className="h-6 py-0 rounded my w-full"
-                style={{ fontSize: '10px' }}
+                className="h-6 py-0 rounded my w-full text-xs"
                 value={date_format}
                 onChange={(e) => dispatch(setUserInfo({ date_format: e.target.value }))}
               >
@@ -140,7 +123,7 @@ function Profile() {
             </div>
           </div>
           <div className="w-full flex justify-center">
-            <button className="flex justify-end text-white font-bold py-2 px-4 rounded my-2 border-2 text-red-500 border-red-500">
+            <button className="flex justify-end text-white font-bold py-1 px-3 rounded my-2 border-2 text-red-500 border-red-500">
               Delete Account
             </button>
           </div>

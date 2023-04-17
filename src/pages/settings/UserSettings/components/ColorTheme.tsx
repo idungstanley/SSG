@@ -78,13 +78,13 @@ function ColorTheme() {
           return (
             <div
               key={item.id}
-              className="mx-4 my-2 w-8 h-8 flex items-center justify-center"
+              className="mx-4 my-2 w-10 h-10 flex items-center justify-center"
               onClick={() => dispatch(setUserInfo({ theme_color: item.color_code }))}
             >
               {theme_color === item.color_code ? (
                 <div
                   className={
-                    'rounded-full hover:rounded-full cursor-pointer w-8 h-8 flex justify-center items-center hover:w-8 hover-h-8'
+                    'rounded-full hover:rounded-full cursor-pointer w-10 h-10 flex justify-center items-center hover:w-10 hover-h-10'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 >
