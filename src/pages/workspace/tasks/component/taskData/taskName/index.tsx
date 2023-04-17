@@ -121,18 +121,26 @@ export default function TaskName({
           </p>
           <div
             contentEditable={contentEditable}
-            onDoubleClick={handleDoubleClick}
+            onClick={handleDoubleClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
-              comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text'
+              comfortableView && contentEditable
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-500 p-2'
+                : comfortableView
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : comfortableViewWrap && contentEditable
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : comfortableViewWrap
-                ? 'text-sm cursor-text'
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : CompactView && contentEditable
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : CompactView
-                ? 'text-xs whitespace-nowrap cursor-text'
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : CompactViewWrap && contentEditable
+                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : CompactViewWrap
-                ? 'text-xs text-justify cursor-text'
+                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
                 : null
             }`}
           >
