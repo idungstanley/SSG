@@ -42,8 +42,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [description, setDescription] = useState<string | null>(Details?.description || null);
   const queryClient = useQueryClient();
 
-  console.log(Details);
-
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);

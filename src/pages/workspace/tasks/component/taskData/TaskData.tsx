@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
 import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
@@ -42,13 +41,13 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     );
     dispatch(setTaskIdForPilot(id));
 
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name
-      })
-    );
+    // dispatch(
+    //   setActiveItem({
+    //     activeItemId: id,
+    //     activeItemType: 'task',
+    //     activeItemName: name
+    //   })
+    // );
   };
 
   const { data } = useList(listId);

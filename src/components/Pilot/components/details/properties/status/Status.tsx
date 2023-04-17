@@ -92,7 +92,7 @@ export default function Status({ Details }: StatusDetailsProps) {
       <div>
         <ToolTip tooltip="Set to complete">
           <button
-            className=" p-2 text-xs rounded-md border border-gray-300 hover:border-green-300"
+            className="p-2 text-xs border border-gray-300 rounded-md hover:border-green-300"
             onClick={() => setComplete('completed')}
           >
             <AiOutlineCheck className="hover:border-green-300" />
