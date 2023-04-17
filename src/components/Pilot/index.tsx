@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
-// import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { IPilotSection, IPilotTab } from '../../types';
 import MinPilot from './components/Layout/MinPilot';
 import FullPilot from './components/Layout/FullPilot';
@@ -27,12 +26,6 @@ export default function Pilot({ pilotConfig }: PilotProps) {
     if (showFullPilot && !activeTabId) {
       setActiveTabId(1);
     }
-
-    // reset active tab and current item id on unmount
-    // return () => {
-    //   setActiveTabId(1);
-    //   dispatch(setShowPilotSideOver({ show: true }));
-    // };
   }, [showFullPilot]);
 
   // find active section

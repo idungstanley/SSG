@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import ColorTheme from './ColorTheme';
-import DateTimeFormat from './DateTimeFormat';
-import Languages from './Languages';
 import Preferences from './Preferences';
 import Region from './Region';
 import TwoFactorAuthentication from './TwoFactorAuthentication';
@@ -52,18 +49,11 @@ export default function SettingsGrid({ user }: userData) {
         </div>
       </form>
       <TwoFactorAuthentication />
-      <ColorTheme />
       <div>
         <h1 className="text-xl font-bold">Language & Region settings</h1>
       </div>
       <div>
-        <Languages />
-      </div>
-      <div>
         <Region />
-      </div>
-      <div>
-        <DateTimeFormat />
       </div>
       <div>
         <Preferences />

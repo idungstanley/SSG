@@ -5,15 +5,11 @@ import ToolTip from '../../../../../Tooltip';
 import { useAppDispatch } from '../../../../../../app/hooks';
 import { setUpdateStatusModalId } from '../../../../../../features/task/taskSlice';
 import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/taskService';
+import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
+import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 
 interface StatusDetailsProps {
-  Details: {
-    id: string;
-    name: string;
-    description: string;
-    created_at: string;
-    status: string;
-  };
+  Details: IHubDetails | undefined | ITaskFullList;
 }
 
 export default function Status({ Details }: StatusDetailsProps) {
@@ -60,7 +56,7 @@ export default function Status({ Details }: StatusDetailsProps) {
     }
   };
 
-  const handleStatusMessage = (status: string) => {
+  const handleStatusMessage = (status: string | null | undefined) => {
     if (status === 'new') {
       return 'todo';
     } else if (!status) {
@@ -93,7 +89,7 @@ export default function Status({ Details }: StatusDetailsProps) {
       <div>
         <ToolTip tooltip="Set to complete">
           <button
-            className=" p-2 text-xs rounded-md border border-gray-300 hover:border-green-300"
+            className="p-2 text-xs border border-gray-300 rounded-md hover:border-green-300"
             onClick={() => setComplete('completed')}
           >
             <AiOutlineCheck className="hover:border-green-300" />

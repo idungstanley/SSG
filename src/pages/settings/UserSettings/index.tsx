@@ -6,10 +6,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { getSelf } from '../../../features/workspace/workspaceService';
 import { Spinner } from '../../../common';
 import TwoFactorAuthentication from './components/TwoFactorAuthentication';
-import ColorTheme from './components/ColorTheme';
-import Languages from './components/Languages';
 import Region from './components/Region';
-import DateTimeFormat from './components/DateTimeFormat';
 import Preferences from './components/Preferences';
 
 export default function UserSettingsProfile() {
@@ -70,18 +67,11 @@ export default function UserSettingsProfile() {
             </div>
           </form>
           <TwoFactorAuthentication />
-          <ColorTheme />
           <div>
             <h1 className="text-xl font-bold">Language & Region settings</h1>
           </div>
           <div>
-            <Languages />
-          </div>
-          <div>
             <Region />
-          </div>
-          <div>
-            <DateTimeFormat />
           </div>
           <div>
             <Preferences />

@@ -57,14 +57,6 @@ textarea {
   scale: 1.1;
 }
 
-.littleBigger:hover {
-  scale: 1.1;
-}
-
-.bigScale {
-  scale: 1.1;
-}
-
 .AddColumnDropdownButton:hover {
   color: #8b5cf6;
   width: 20px;
@@ -75,14 +67,14 @@ textarea {
   height: 30px;
 }
 .CompactWithInitialsH {
-  height: 20px;
+  height: 25px;
 }
 .ComfortableWithInitialsW {
   width: 30px;
 }
 
 .CompactWithInitialsW {
-  width: 20px;
+  width: 25px;
 }
 
 .groupFiltalModal {
@@ -94,4 +86,12 @@ textarea {
   margin: 20px 0 0 -50px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.screenRecording {
+  width: 90%;
+  display: flex;
+  color: #c025d3;
+  font-size: 20px;
+  justify-content: center;
+  margin: 15px 0 0 0;
 }

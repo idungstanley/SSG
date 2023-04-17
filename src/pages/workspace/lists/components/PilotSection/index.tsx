@@ -15,9 +15,10 @@ import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
-import { VscChecklist } from 'react-icons/vsc';
+import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './TimeClock/index';
+import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 
 const sections = [
   {
@@ -47,6 +48,10 @@ const sections = [
   {
     id: 7,
     element: <Checklists />
+  },
+  {
+    id: 8,
+    element: <RecordScreen />
   }
 ];
 
@@ -85,6 +90,11 @@ const tabs = [
     id: 7,
     label: 'Checklist',
     icon: <VscChecklist className="w-4 h-4" />
+  },
+  {
+    id: 8,
+    label: 'Screen Record',
+    icon: <VscScreenFull className="w-4 h-4" />
   }
 ];
 
