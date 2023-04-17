@@ -43,23 +43,26 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
+        <div className="px-2 py-1 absolute right-0 top-5 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg focus:outline-none">
+          <p className="uppercase whitespace-nowrap pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
+            select an option
+          </p>
+          <Menu.Items className="space-y-2 pt-3">
             {options?.map((option) => (
               <Menu.Item key={option}>
                 <button
                   onClick={() => handleClick(option)}
                   className={cl(
                     option === activeOption && 'bg-gray-100',
-                    'text-gray-700 text-left w-full block px-4 py-2 pr-20 text-sm hover:bg-gray-100 hover:text-gray-900'
+                    'text-gray-700 py-2 border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
                   )}
                 >
                   {option}
                 </button>
               </Menu.Item>
             ))}
-          </div>
-        </Menu.Items>
+          </Menu.Items>
+        </div>
       </Transition>
     </Menu>
   );

@@ -116,7 +116,11 @@ function RenderList() {
             )}
 
             {/* card */}
-            {listView && <TaskListViews taskLength={paginatedTaskData?.length} />}
+            {listView && listId ? (
+              <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
+            ) : (
+              <span>listId required</span>
+            )}
             {listView && (
               <div className="pr-1 pt-0.5 w-full h-full">
                 <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>

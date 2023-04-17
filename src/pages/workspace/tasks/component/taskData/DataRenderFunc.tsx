@@ -99,9 +99,7 @@ export default function DataRenderFunc({
     const activeProperty = property ? property.values[0].value : '-';
 
     return field ? (
-      <span className="relative border-gray-300 border-dotted">
-        <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
-      </span>
+      <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
     ) : null;
   } else return <>{taskColField}</>;
 }
