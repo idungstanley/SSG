@@ -109,19 +109,21 @@ export default function Assignee({
   return (
     <div>
       {option === 'task' && (
-        <Button id="basic-button" onClick={handleClick} style={{ marginLeft: '-8px' }}>
+        <Button id="basic-button" style={{ marginLeft: '-25px' }}>
           {assignees?.length ? (
-            <div className="flex -pr-5">
-              <GroupAssignee data={assignees} />
+            <div className="flex">
+              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
             </div>
           ) : (
-            <UserPlusIcon
-              className="text-xl text-gray-400 cursor-pointer "
-              style={{
-                width: `${CompactView || CompactViewWrap ? '20px' : '26px'}`
-              }}
-              aria-hidden="true"
-            />
+            <span onClick={handleClick}>
+              <UserPlusIcon
+                className="text-xl -ml-5 text-gray-400 cursor-pointer"
+                style={{
+                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
+                }}
+                aria-hidden="true"
+              />
+            </span>
           )}
         </Button>
       )}
@@ -167,7 +169,7 @@ export default function Assignee({
         {searchInput.length > 1
           ? filteredMembers?.map((item) => {
               return (
-                <MenuItem key={item.id} onClick={handleClose} className="w-full">
+                <MenuItem key={item.id} onClick={handleClose} className="w-full ">
                   <div className="flex items-center justify-between cursor-pointer w-full">
                     <div
                       className="relative flex items-center space-x-2 cursor-pointer"
@@ -180,7 +182,7 @@ export default function Assignee({
                       }
                     >
                       <AvatarWithInitials
-                        initials={item.initials}
+                        initials={item.user.initials as string}
                         backgroundColour={item.colour}
                         height="h-8"
                         width="w-8"
@@ -205,9 +207,9 @@ export default function Assignee({
           : teamMembers?.map((item) => {
               return (
                 <MenuItem key={item.id} onClick={handleClose} className="w-full">
-                  <div className="flex items-center justify-between cursor-pointer w-full">
+                  <div className="flex items-center justify-between cursor-pointer w-full  ">
                     <div
-                      className="relative flex items-center space-x-2 cursor-pointer"
+                      className="relative flex items-center space-x-2 cursor-pointer "
                       onClick={() =>
                         option === 'checklist'
                           ? handleAssignChecklist(item.id)
@@ -216,14 +218,21 @@ export default function Assignee({
                           : null
                       }
                     >
-                      <AvatarWithInitials
-                        initials={item.initials}
-                        backgroundColour={item.colour}
-                        height="h-8"
-                        width="w-8"
-                      />
-                      <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
+                      <span
+                        className={`${
+                          assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null
+                        }`}
+                      >
+                        <AvatarWithInitials
+                          initials={item.user.initials as string}
+                          backgroundColour={item.colour}
+                          height="h-8"
+                          width="w-8"
+                        />
+                      </span>
+                      <p className="text-sm text-black ">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
+
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
                       <button
                         type="button"
