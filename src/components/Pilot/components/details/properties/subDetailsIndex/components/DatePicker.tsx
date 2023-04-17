@@ -12,38 +12,38 @@ export default function DatePicker() {
   const [selectDate, setSelectDate] = useState(currentDate);
   return (
     <section
-      className=" mt-1 w-5/6  origin-top-right absolute z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none right-14 bottom-2"
+      className="absolute z-50 w-5/6 mt-1 origin-top-right bg-white rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none right-14 bottom-2"
       style={{ height: '280px' }}
     >
-      <div className="border border-gray-200 w-full p-2 h-10 flex justify-start items-center space-x-2">
+      <div className="flex items-center justify-start w-full h-10 p-2 space-x-2 border border-gray-200">
         <MdOutlineDateRange className="w-4 h-4 font-light" />
         <p className="font-semibold">{selectDate.toDate().toDateString()}</p>
       </div>
-      <div className="flex justify-center items-center px-3" style={{ height: '250px' }}>
-        <div className="w-40 space-y-2 pt-1 border-r border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">Today </p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">Later</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">Tomorrow</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">This Weekend</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">Next Week</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">Next Weekend</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">2 Weeks</p>
-          <p className="hover:bg-gray-200 px-1 rounded-md font-semibold">4 Weeks</p>
+      <div className="flex items-center justify-center px-3" style={{ height: '250px' }}>
+        <div className="w-40 pt-1 space-y-2 border-r border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Today </p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Later</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Tomorrow</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">This Weekend</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Next Week</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Next Weekend</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">2 Weeks</p>
+          <p className="px-1 font-semibold rounded-md hover:bg-gray-200">4 Weeks</p>
         </div>
         <div className="p-2" style={{ height: '280px' }}>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <h1 className="select-none" style={{ fontSize: '14px', fontWeight: '500' }}>
               {months[today.month()]}, {today.year()}
             </h1>
-            <div className="flex gap-3 items-center ">
+            <div className="flex items-center gap-3 ">
               <GrFormPrevious
-                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                className="w-5 h-5 transition-all cursor-pointer hover:scale-105"
                 onClick={() => {
                   setToday(today.month(today.month() - 1));
                 }}
               />
               <h1
-                className=" cursor-pointer hover:scale-105 hover:bg-gray-200 p-2 rounded-md transition-all"
+                className="p-2 transition-all rounded-md cursor-pointer  hover:scale-105 hover:bg-gray-200"
                 onClick={() => {
                   setToday(currentDate);
                 }}
@@ -51,7 +51,7 @@ export default function DatePicker() {
                 Today
               </h1>
               <GrFormNext
-                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                className="w-5 h-5 transition-all cursor-pointer hover:scale-105"
                 onClick={() => {
                   setToday(today.month(today.month() + 1));
                 }}
@@ -63,7 +63,7 @@ export default function DatePicker() {
               return (
                 <h1
                   key={index}
-                  className="p-2 text-xs font-extrabold  w-14 grid place-content-center text-gray-400 select-none"
+                  className="grid p-2 text-xs font-extrabold text-gray-400 select-none w-14 place-content-center"
                 >
                   {day}
                 </h1>
@@ -71,7 +71,7 @@ export default function DatePicker() {
             })}
           </div>
 
-          <div className=" grid grid-cols-7 h-10">
+          <div className="grid h-10 grid-cols-7 ">
             {generateDate(today.month(), today.year()).map(({ date, currentMonth, today }, index) => {
               return (
                 <div key={index} className="text-center grid place-content-center text-sm border-t p-0.5">
