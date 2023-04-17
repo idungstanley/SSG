@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
@@ -159,3 +159,66 @@ export const UseGetListDetails = (query: {
     }
   );
 };
+
+const createDropdownField = (data: { listId?: string; name: string; properties: string[] }) => {
+  const { listId, properties, name } = data;
+
+  const response = requestNew({
+    url: 'custom-fields',
+    method: 'POST',
+    data: {
+      type: 'dropdown',
+      name,
+      list_id: listId,
+      properties
+    }
+  });
+  return response;
+};
+
+export const useCreateDropdownField = (listId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createDropdownField, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['list', listId]);
+    }
+  });
+};
+
+const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: string }) => {
+  const { taskId, fieldId, value } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${fieldId}`,
+    method: 'PUT',
+    data: {
+      type: 'task',
+      id: taskId,
+      values: [value]
+    }
+  });
+  return response;
+};
+
+export const useUpdateEntityCustomFieldValue = (listId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateEntityCustomFieldValue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task', { listId }]);
+      queryClient.invalidateQueries(['task', listId, 'hub']);
+    }
+  });
+};
+
+export const useList = (listId?: string) =>
+  useQuery(
+    ['list', listId],
+    () =>
+      requestNew<IListDetailRes>({
+        url: `lists/${listId}`,
+        method: 'GET'
+      }),
+    { enabled: !!listId, select: (res) => res.data.list }
+  );

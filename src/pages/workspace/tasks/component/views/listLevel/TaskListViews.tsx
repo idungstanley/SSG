@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
@@ -10,14 +10,29 @@ import { IoIosArrowDropdown } from 'react-icons/io';
 import { columnsHead } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useList } from '../../../../../../features/list/listService';
+import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 
 export default function TaskListViews({ taskLength, status }: { taskLength?: number; status?: string }) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
 
-  dispatch(getTaskColumns(columnsHead));
+  const { listId, hubId, walletId } = useParams();
+  const { data } = useList(listId ?? hubId ?? walletId);
+
+  const customFieldNames = useMemo(
+    () => data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: 'dropdown', hidden: false })) ?? [],
+    [data]
+  );
+  const columns = useMemo(() => [...columnsHead, ...customFieldNames], [customFieldNames]);
+
+  useEffect(() => {
+    dispatch(getTaskColumns(columns));
+  }, [columns]);
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
@@ -139,7 +154,16 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
         >
           <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
           <span className="text-sm z-50">
-            {dropDown && <AddColumnDropdown title="" listItems={hideTask.length ? hideTask : taskColumns} />}
+            {dropDown && (
+              <AddColumnDropdown
+                setShowDropdownFieldModal={setShowDropdownFieldModal}
+                setdropDown={setdropDown}
+                title=""
+                listItems={hideTask.length ? hideTask : taskColumns}
+              />
+            )}
+
+            <CreateDropdownFieldModal show={showDropdownFieldModal} setShow={setShowDropdownFieldModal} />
           </span>
         </span>
       </div>
