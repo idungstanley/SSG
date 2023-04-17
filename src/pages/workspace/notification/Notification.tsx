@@ -84,7 +84,7 @@ function Notification() {
           <NoNotificationFound />
         </div>
       ) : (
-        <div className="overflow-y-scroll">
+        <div className="overflow-auto">
           <NotificationCard cardItems={notificationDataType} />
         </div>
       )}
