@@ -2,19 +2,26 @@ import { Transition } from '@headlessui/react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import { Fragment, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { useCreateDropdownField } from '../../../../features/list/listService';
 
 interface CreateDropdownFieldModalProps {
   show: boolean;
   setShow: (i: boolean) => void;
+  listId: string;
 }
 
-export default function CreateDropdownFieldModal({ show, setShow }: CreateDropdownFieldModalProps) {
+export default function CreateDropdownFieldModal({ show, setShow, listId }: CreateDropdownFieldModalProps) {
   const fieldNameRef = useRef<HTMLInputElement>(null);
   const [formInputs, setFormInputs] = useState<{ id: number; value: string }[]>([{ id: 1, value: '' }]);
-  const { listId } = useParams();
-  const { mutate: onCreate } = useCreateDropdownField(listId);
+  // const { listId, hubId, walletId } = useParams();
+
+  const entity = {
+    type: 'list', // listId ? 'list' : hubId ? 'hub' : 'wallet',
+    id: listId //listId ?? walletId ?? hubId
+  };
+
+  const { mutate: onCreate } = useCreateDropdownField(entity.type, entity.id);
 
   const handleAddOption = () =>
     setFormInputs((prevInputs) => [...prevInputs, { id: (prevInputs.at(-1)?.id || 1) + 1, value: '' }]);
@@ -29,7 +36,8 @@ export default function CreateDropdownFieldModal({ show, setShow }: CreateDropdo
       onCreate({
         name,
         properties,
-        listId
+        id: entity.id,
+        type: entity.type
       });
 
       setShow(false);

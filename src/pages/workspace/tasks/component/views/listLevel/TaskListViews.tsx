@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
@@ -10,19 +10,25 @@ import { IoIosArrowDropdown } from 'react-icons/io';
 import { columnsHead } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 
-export default function TaskListViews({ taskLength, status }: { taskLength?: number; status?: string }) {
+export default function TaskListViews({
+  taskLength,
+  status,
+  listId
+}: {
+  taskLength?: number;
+  status?: string;
+  listId?: string;
+}) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
 
-  const { listId, hubId, walletId } = useParams();
-  const { data } = useList(listId ?? hubId ?? walletId);
+  const { data } = useList(listId);
 
   const customFieldNames = useMemo(
     () => data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: 'dropdown', hidden: false })) ?? [],
@@ -79,7 +85,7 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                       </div>
                     )
                 )
-              : columnsHead.map(
+              : columns.map(
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
@@ -122,7 +128,7 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                     </div>
                   )
               )
-            : columnsHead.map(
+            : columns.map(
                 (col) =>
                   col.value !== 'Task' &&
                   col.value !== 'Tags' &&
@@ -163,7 +169,13 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
               />
             )}
 
-            <CreateDropdownFieldModal show={showDropdownFieldModal} setShow={setShowDropdownFieldModal} />
+            {listId ? (
+              <CreateDropdownFieldModal
+                listId={listId}
+                show={showDropdownFieldModal}
+                setShow={setShowDropdownFieldModal}
+              />
+            ) : null}
           </span>
         </span>
       </div>

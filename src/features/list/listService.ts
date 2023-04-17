@@ -5,6 +5,7 @@ import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes } from './list.interfaces';
+import { useAppSelector } from '../../app/hooks';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -160,8 +161,8 @@ export const UseGetListDetails = (query: {
   );
 };
 
-const createDropdownField = (data: { listId?: string; name: string; properties: string[] }) => {
-  const { listId, properties, name } = data;
+const createDropdownField = (data: { id?: string; name: string; properties: string[]; type: string }) => {
+  const { id, properties, name, type } = data;
 
   const response = requestNew({
     url: 'custom-fields',
@@ -169,19 +170,25 @@ const createDropdownField = (data: { listId?: string; name: string; properties: 
     data: {
       type: 'dropdown',
       name,
-      list_id: listId,
+      entity_id: id,
+      entity_type: type,
       properties
     }
   });
   return response;
 };
 
-export const useCreateDropdownField = (listId?: string) => {
+export const useCreateDropdownField = (type: string, id?: string) => {
   const queryClient = useQueryClient();
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['list', listId]);
+      if (type === 'hub') {
+        queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
+      }
+      queryClient.invalidateQueries([type, id]);
     }
   });
 };

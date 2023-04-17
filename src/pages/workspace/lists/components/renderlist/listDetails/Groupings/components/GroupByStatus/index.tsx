@@ -168,6 +168,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                     {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
                       <li key={status}>
                         <TaskListViews
+                          listId={taskDataGroupingsByStatus[value].key}
                           taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
                           status={status}
                         />
