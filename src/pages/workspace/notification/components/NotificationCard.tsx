@@ -9,7 +9,7 @@ import { CardItemTypes } from './notificaiton.interface';
 
 export default function NotificationCard({ cardItems }: CardNotificationType) {
   return (
-    <>
+    <div>
       {Object.keys(cardItems).map((value) => (
         <div key={cardItems[value as keyof CardItemTypes]?.key}>
           <main className="mx-40 mt-10 flex flex-col -my-2 overflow-x-auto">
@@ -79,6 +79,6 @@ export default function NotificationCard({ cardItems }: CardNotificationType) {
           </main>
         </div>
       ))}
-    </>
+    </div>
   );
 }
