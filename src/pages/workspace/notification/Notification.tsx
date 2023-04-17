@@ -78,17 +78,17 @@ function Notification() {
   }, [NotificationResponse, status]);
 
   return (
-    <>
+    <div className="overflow-scroll h-full">
       {Object.keys(notificationDataType).length === 0 ? (
         <div className="min-w-full">
           <NoNotificationFound />
         </div>
       ) : (
-        <div className="overflow-auto">
+        <div className="overflow-scroll h-5/6">
           <NotificationCard cardItems={notificationDataType} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

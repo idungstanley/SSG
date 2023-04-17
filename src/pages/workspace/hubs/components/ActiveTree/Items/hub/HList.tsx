@@ -42,7 +42,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const type = 'hub';
 
   const handleLocation = (id: string, name: string, parentId?: string | null) => {
-    const isActiveHub = hubId === id;
+    // const isActiveHub = hubId === id;
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -51,10 +51,11 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
         activeItemName: name
       })
     );
+    console.log(parentId);
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/hub/${isActiveHub ? parentId || '' : id}`, {
+    navigate(`/hub/${id}`, {
       replace: true
     });
     localStorage.setItem(
@@ -69,6 +70,9 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
 
   const handleClick = (id: string) => {
     const isMatch = id === showChildren;
+    // navigate(`/hub/${id}`, {
+    //   replace: true
+    // });
     dispatch(setCreateWLID(id));
     if (isMatch) {
       dispatch(setShowHub(false));
@@ -125,9 +129,9 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
             showChildren={showChildren}
             type={taskType === 'subhub' ? 'subhub' : 'hub'}
           />
-          {showSidebar && (
+          {showSidebar && (showChildren === hub.id || showChildren === hubId) && (
             <div>
-              {hub.children.length && id ? <HList hubs={hub.children} taskType="subhub" leftMargin={false} /> : null}
+              {hub.children.length ? <HList hubs={hub.children} taskType="subhub" leftMargin={false} /> : null}
               {hub.wallets.length && id ? (
                 <WList
                   wallets={hub.wallets}
