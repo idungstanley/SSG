@@ -45,7 +45,7 @@ export default function Template({ task }: TemplateProps) {
                       <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -60,7 +60,7 @@ export default function Template({ task }: TemplateProps) {
                       <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -78,7 +78,7 @@ export default function Template({ task }: TemplateProps) {
                       <div key={col.field} className="flex items-center capitalize text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -93,7 +93,7 @@ export default function Template({ task }: TemplateProps) {
                       <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -117,7 +117,7 @@ export default function Template({ task }: TemplateProps) {
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}
                         handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -137,7 +137,7 @@ export default function Template({ task }: TemplateProps) {
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}
                         handleGetSubTask={() => handleShowSubTask(task.id)}

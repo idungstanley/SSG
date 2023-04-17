@@ -1,7 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { IField } from '../list/list.interfaces';
 import { IParent } from './interface.tasks';
+
+export interface ICustomField {
+  id: string;
+  task_id: null | string;
+  custom_field_id: string;
+  custom_field: IField;
+  values: [
+    {
+      id: string;
+      value: string;
+    }
+  ];
+}
 
 export interface ImyTaskData {
   id: string;
@@ -18,7 +32,14 @@ export interface ImyTaskData {
   created_at?: string;
   archived_at?: string | null;
   deleted_at?: string | null;
-  [key: string]: string | number | undefined | null | [{ id: string; initials: string; colour: string; name: string }];
+  custom_fields: ICustomField[];
+  [key: string]:
+    | ICustomField[]
+    | string
+    | number
+    | undefined
+    | null
+    | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 export interface ImyTaskData2 {

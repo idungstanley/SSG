@@ -1,11 +1,13 @@
 import React from 'react';
-import { ImyTaskData } from '../../../../../features/task/taskSlice';
+import { ICustomField, ImyTaskData } from '../../../../../features/task/taskSlice';
 import Assignee from '../../assignTask/Assignee';
 import TaskStatus from './status/index';
 import TaskName from './taskName';
 import TaskPriority from './priority/index';
 import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
+import { useList } from '../../../../../features/list/listService';
+import DropdownField from './dropdown/DropdownField';
 
 export interface tagItem {
   id: string;
@@ -20,8 +22,9 @@ export interface renderDataProps {
     | undefined
     | tagItem[]
     | null
+    | ICustomField[]
     | Array<{ id: string; initials: string; colour: string }>;
-  colfield?: string;
+  col?: { field: string; id: string };
   task?: ImyTaskData | undefined;
   getSubTaskId?: string | null | undefined;
   handleGetSubTask?: (id: string | undefined) => void;
@@ -30,13 +33,16 @@ export interface renderDataProps {
 
 export default function DataRenderFunc({
   taskColField,
-  colfield,
+  col,
   task,
   getSubTaskId,
   handleGetSubTask,
   ShowPlusIcon
 }: renderDataProps) {
-  if (colfield === 'assignees') {
+  const { data } = useList(task?.list_id);
+  const customFields = data?.custom_fields ?? [];
+
+  if (col?.field === 'assignees') {
     return (
       <>
         <div>
@@ -44,7 +50,7 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield === 'tags') {
+  } else if (col?.field === 'tags') {
     return (
       <>
         <div>
@@ -52,13 +58,13 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield == 'created_at' || colfield == 'updated_at') {
+  } else if (col?.field == 'created_at' || col?.field == 'updated_at') {
     return (
       <>
         <DateForTask taskColField={taskColField} />
       </>
     );
-  } else if (colfield == 'status') {
+  } else if (col?.field == 'status') {
     return (
       <>
         <div>
@@ -66,7 +72,7 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield === 'name') {
+  } else if (col?.field === 'name') {
     return (
       <>
         <div>
@@ -80,11 +86,22 @@ export default function DataRenderFunc({
         </div>
       </>
     );
-  } else if (colfield === 'priority') {
+  } else if (col?.field === 'priority') {
     return (
       <>
         <TaskPriority task={task} />
       </>
     );
+  } else if (col && col.field === 'dropdown' && task) {
+    const field = customFields.find((i) => i.id === col.id);
+    const property = task.custom_fields.find((i) => i.custom_field.id === col.id);
+
+    const activeProperty = property ? property.values[0].value : '-';
+
+    return field ? (
+      <span className="relative border-gray-300 border-dotted">
+        <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
+      </span>
+    ) : null;
   } else return <>{taskColField}</>;
 }
