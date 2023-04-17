@@ -20,7 +20,6 @@ import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalender
 import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
 import { ITaskFullList } from '../../../features/task/interface.tasks';
-import { useList } from '../../../features/list/listService';
 
 function RenderList() {
   const dispatch = useDispatch();
@@ -72,10 +71,6 @@ function RenderList() {
       fetchNextPage();
     }
   }
-
-  const { data } = useList(listId);
-  const customFields =
-    data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
     <>
@@ -131,7 +126,7 @@ function RenderList() {
                 <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                   {paginatedTaskData?.map((task) => (
                     <div key={task?.id}>
-                      {closeTaskListView && <TaskData additionalCols={customFields} task={task} />}
+                      {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
                       {currentParentTaskId === task?.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />

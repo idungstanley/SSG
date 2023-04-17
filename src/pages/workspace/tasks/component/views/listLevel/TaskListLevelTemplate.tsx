@@ -15,7 +15,6 @@ import SubTask from '../../../subtasks/create/SubTask';
 import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 import AddNewItem from '../../taskColumn/AddNewItem';
 import { useParams } from 'react-router-dom';
-import { useList } from '../../../../../../features/list/listService';
 
 export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskData[] }) {
   const dispatch = useDispatch();
@@ -23,10 +22,6 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
   const { activeItemName } = useAppSelector((state) => state.workspace);
   const { listId } = useParams();
-
-  const { data } = useList(listId);
-  const customFields =
-    data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
@@ -113,7 +108,7 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
                 {listId ? <TaskListViews listId={listId} /> : <span>listId required</span>}
                 {listTask?.map((task) => (
                   <Fragment key={task.id}>
-                    <TaskData additionalCols={customFields} task={task} />
+                    <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>
                         <SubTask parentTaskId={currentParentTaskId} />

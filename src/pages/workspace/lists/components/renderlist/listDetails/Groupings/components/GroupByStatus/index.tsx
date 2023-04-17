@@ -11,7 +11,6 @@ import { useAppSelector } from '../../../../../../../../../app/hooks';
 import AddNewItem from '../../../../../../../tasks/component/taskColumn/AddNewItem';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../../../features/list/listSlice';
 import { useDispatch } from 'react-redux';
-import { useList } from '../../../../../../../../../features/list/listService';
 
 export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplateData) {
   const [taskDataGroupingsByStatus, setTaskDataGroupingsByStatus] = useState<TaskDataGroupingsProps>({});
@@ -79,10 +78,6 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
       true;
     };
   }, [getTaskDataGrouping, setTaskDataGroupingsByStatus]);
-
-  const { data } = useList(currentListId ?? undefined);
-  const customFields =
-    data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
@@ -180,7 +175,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                         />
                         {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
                           <Fragment key={task.id}>
-                            <TaskData additionalCols={customFields} task={task} />
+                            <TaskData listId={task.list_id} task={task} />
                             {currentParentTaskId === task.id ? (
                               <div>
                                 <SubTask parentTaskId={currentParentTaskId} />

@@ -14,16 +14,11 @@ import AddNewItem from '../../taskColumn/AddNewItem';
 import SubTask from '../../../subtasks/create/SubTask';
 import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 import { ITaskTemplateData } from './TaskTableTemplateData';
-import { useList } from '../../../../../../features/list/listService';
 
 export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData) {
   const dispatch = useDispatch();
   const { createTaskFromTop, currentListId } = useAppSelector((state) => state.list);
   const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
-
-  const { data } = useList(currentListId ?? undefined);
-  const customFields =
-    data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
@@ -118,7 +113,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                   )}
                   {filteredTaskData[value].tasks?.map((task) => (
                     <Fragment key={task.id}>
-                      <TaskData task={task} additionalCols={customFields} />
+                      <TaskData task={task} listId={task.list_id} />
                       {currentParentTaskId === task.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />
