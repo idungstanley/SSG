@@ -9,6 +9,8 @@ export interface ICustomField {
   task_id: null | string;
   custom_field_id: string;
   custom_field: IField;
+  name: string;
+  type: string;
   values: [
     {
       id: string;

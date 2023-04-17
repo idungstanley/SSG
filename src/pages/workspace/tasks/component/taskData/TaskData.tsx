@@ -6,15 +6,18 @@ import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { columnsHead, listColumnProps } from '../views/ListColumns';
 
 export interface TaskDataProps {
   task?: ImyTaskData | undefined;
   tasks?: (ImyTaskData | undefined)[] | undefined;
+  additionalCols?: listColumnProps[];
 }
 
-export default function TaskData({ task }: TaskDataProps) {
-  const { taskColumns, hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } =
-    useAppSelector((state) => state.task);
+export default function TaskData({ task, additionalCols }: TaskDataProps) {
+  const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
+    (state) => state.task
+  );
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
@@ -48,7 +51,7 @@ export default function TaskData({ task }: TaskDataProps) {
   };
 
   return (
-    <div className="relative ">
+    <div className="relative">
       <div
         // onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
@@ -101,7 +104,8 @@ export default function TaskData({ task }: TaskDataProps) {
                       </div>
                     )
                 )
-              : taskColumns.map(
+              : task &&
+                [...columnsHead, ...(additionalCols ?? [])].map(
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
@@ -137,7 +141,8 @@ export default function TaskData({ task }: TaskDataProps) {
                       </div>
                     )
                 )
-              : taskColumns.map(
+              : task &&
+                [...columnsHead, ...(additionalCols ?? [])].map(
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
@@ -176,7 +181,8 @@ export default function TaskData({ task }: TaskDataProps) {
                     </div>
                   )
               )
-            : taskColumns.map(
+            : task &&
+              [...columnsHead, ...(additionalCols ?? [])].map(
                 (col) =>
                   col.value !== 'Task' &&
                   col.value !== 'Tags' &&
