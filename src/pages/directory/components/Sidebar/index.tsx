@@ -26,6 +26,7 @@ function Sidebar() {
     <>
       <PlaceItem
         label="Library"
+        id="13"
         icon={<img src={libraryIcon} alt="library Icon" className="w-4 h-4" />}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>

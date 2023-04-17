@@ -1,8 +1,10 @@
 import React from 'react';
-import { ImyTaskData, setGetSubTaskId } from '../../../../../features/task/taskSlice';
+import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 
 export interface TaskDataProps {
   task?: ImyTaskData | undefined;
@@ -12,6 +14,7 @@ export interface TaskDataProps {
 export default function TaskData({ task }: TaskDataProps) {
   const { taskColumns, hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } =
     useAppSelector((state) => state.task);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
 
@@ -23,16 +26,45 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
+  const handleTaskPilot = (id: string, name: string) => {
+    dispatch(
+      setShowPilotSideOver({
+        id: id,
+        type: 'task',
+        show: true,
+        title: name
+      })
+    );
+    dispatch(setTaskIdForPilot(id));
+
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
+  };
+
   return (
-    <div className="relative">
+    <div className="relative ">
       <div
+        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
-          comfortableView
-            ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+          comfortableView && activeItemId == task?.id
+            ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            : comfortableView
+            ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            : comfortableViewWrap && activeItemId == task?.id
+            ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableViewWrap
             ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            : CompactView && activeItemId == task?.id
+            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
             : CompactView
-            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
+            ? 'compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
+            : CompactViewWrap && activeItemId == task?.id
+            ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : CompactViewWrap
             ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : null

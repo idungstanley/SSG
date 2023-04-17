@@ -13,7 +13,7 @@ import {
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { setTimerStatus } from '../../../../features/task/taskSlice';
 
-interface User {
+export interface User {
   initials: string;
   // add other properties as needed
 }
@@ -101,9 +101,7 @@ export default function ClockInOut() {
       <div className="bg-gray-100">
         <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
           <div id="taskUser" className="flex justify-between items-center text-xs font-normal h-10 py-3 cursor-pointer">
-            <div className="flex items-center justify-start cursor-pointer">
-              <AvatarWithInitials height="h-7" width="w-7" initials={initials} />
-            </div>
+            <span>Tags: </span>
             {/* total time here */}
             <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
@@ -136,11 +134,16 @@ export default function ClockInOut() {
                 )}
               </div>
               {/* timer goes here */}
-              {time.h < 10 ? `0${time.h}` : time.h}
-              {':'}
-              {time.m < 10 ? `0${time.m}` : time.m}
-              {':'}
-              {time.s < 10 ? `0${time.s}` : time.s}
+              <div className="items-center">
+                {time.h < 10 ? `0${time.h}` : time.h}
+                {':'}
+                {time.m < 10 ? `0${time.m}` : time.m}
+                {':'}
+                {time.s < 10 ? `0${time.s}` : time.s}
+              </div>
+              <div className="flex items-center justify-start cursor-pointer -space-x-4">
+                <AvatarWithInitials height="h-7" width="w-7" initials={initials} />
+              </div>
             </div>
             <div id="right" className="flex items-center space-x-1">
               <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">

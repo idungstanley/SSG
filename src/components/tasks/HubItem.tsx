@@ -11,6 +11,7 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
+import { useParams } from 'react-router-dom';
 
 interface TaskItemProps {
   item: {
@@ -18,12 +19,13 @@ interface TaskItemProps {
     name: string;
     path?: string | null;
     color?: string | null;
+    parent_id?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, parentId?: string | null) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   showChildren: string | null;
-  type?: string;
+  type: string;
 }
 export default function HubItem({
   handleClick,
@@ -42,6 +44,7 @@ export default function HubItem({
     type === 'hub' ? 'blue' : 'orange'
   );
 
+  const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -71,10 +74,10 @@ export default function HubItem({
         }`}
         tabIndex={0}
         onClick={() => handleClick(item.id, item.name)}
-        style={{ backgroundColor: `${item.id === activeItemId ? '#BF00FF21' : ''}` }}
+        style={{ backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}` }}
       >
-        <div className="relative flex items-center justify-between">
-          {item.id === activeItemId && (
+        <div className="relative flex items-center justify-between pl-3">
+          {item.id === hubId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg"
               style={{ backgroundColor: '#BF00FF' }}
@@ -128,7 +131,7 @@ export default function HubItem({
                     verticalAlign: 'baseline',
                     letterSpacing: '0.28px'
                   }}
-                  onClick={() => handleLocation(item.id, item.name)}
+                  onClick={() => handleLocation(item.id, item.name, item.parent_id)}
                 >
                   {item.name}
                 </a>

@@ -9,15 +9,12 @@ import {
   setCurrentParentTaskId,
   setCurrentTaskId,
   setCurrentTaskStatusId,
-  setShowTaskNavigation,
-  setTaskIdForPilot
+  setShowTaskNavigation
 } from '../../../../../../features/task/taskSlice';
 import { renderDataProps } from '../DataRenderFunc';
 import StatusDropdown from '../../../../../../components/status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
-import { setShowPilotSideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { setActiveItem } from '../../../../../../features/workspace/workspaceSlice';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import TagModal from '../../../../../../components/tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../../../features/workspace/tags/tagSlice';
@@ -74,26 +71,6 @@ export default function TaskName({
     });
   };
 
-  const handleTaskPilot = (id: string, name: string) => {
-    dispatch(
-      setShowPilotSideOver({
-        id: id,
-        type: 'task',
-        show: true,
-        title: name
-      })
-    );
-    dispatch(setTaskIdForPilot(id));
-
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name
-      })
-    );
-  };
-
   const handleCreateSubTask = (id: string) => {
     if (id == currentParentTaskId) {
       dispatch(setCurrentParentTaskId(null));
@@ -104,7 +81,7 @@ export default function TaskName({
 
   return (
     <>
-      <div className="relative flex items-center ">
+      <div className="relative flex items-center">
         <div className="flex items-center ">
           <input
             type="checkbox"
@@ -144,22 +121,30 @@ export default function TaskName({
           </p>
           <div
             contentEditable={contentEditable}
-            onDoubleClick={handleDoubleClick}
+            onClick={handleDoubleClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
-              comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text'
+              comfortableView && contentEditable
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-500 p-2'
+                : comfortableView
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : comfortableViewWrap && contentEditable
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : comfortableViewWrap
-                ? 'text-sm cursor-text'
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : CompactView && contentEditable
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : CompactView
-                ? 'text-xs whitespace-nowrap cursor-text'
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                : CompactViewWrap && contentEditable
+                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : CompactViewWrap
-                ? 'text-xs text-justify cursor-text'
+                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
                 : null
             }`}
           >
-            <p onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
+            <p>
               {(taskColField as string)?.length > 50 && comfortableView ? (
                 <span>{(taskColField as string)?.substring(0, 40)}...</span>
               ) : (taskColField as string)?.length > 61 && CompactView ? (

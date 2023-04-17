@@ -9,7 +9,7 @@ function Dashboard() {
 
   return (
     <>
-      <PlaceItem label="Time clock" icon={<ClockIcon className="w-4 h-4" />} />
+      <PlaceItem label="Time clock" id="6" icon={<ClockIcon className="w-4 h-4" />} />
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>Dashboard</div>
     </>
   );

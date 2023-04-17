@@ -24,7 +24,7 @@ interface HubDetailTypes {
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
@@ -39,8 +39,8 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: hubdetail.activeItemId,
-    itemType: hubdetail.activeItemType,
+    itemId: activeItemId,
+    itemType: activeItemType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
@@ -125,7 +125,7 @@ function RenderHubs() {
           {listView && groupByStatus == 'none' && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div
-                className="w-full overflow-auto mb-10"
+                className="w-full mb-10 overflow-auto"
                 style={{ minHeight: '0', maxHeight: '90vh' }}
                 ref={containerRef}
               >
@@ -155,7 +155,7 @@ function RenderHubs() {
           {listView && groupByStatus == 'status' && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div
-                className="w-full overflow-auto mb-10"
+                className="w-full mb-10 overflow-auto"
                 style={{ minHeight: '0', maxHeight: '90vh' }}
                 ref={containerRef}
               >

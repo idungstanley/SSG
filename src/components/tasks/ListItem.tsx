@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 // import ListIcon from '../../assets/icons/ListIcon';
@@ -21,6 +21,7 @@ interface ListItemProps {
     shape?: string;
   };
   paddingLeft: string | number;
+  parentId?: string | null;
 }
 export interface ListColourProps {
   innerColour?: string;
@@ -41,6 +42,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const innerColour = list?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
   const outerColour = list?.color ? (color.outerColour as string) : (listColour as ListColourProps)?.outerColour;
   const listComboColour = { innerColour, outerColour };
+  const { listId } = useParams();
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['lists']);
@@ -97,9 +99,12 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         className={`relative flex items-center justify-between h-8 space-x-1 group ${
           list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
-        style={{ paddingLeft: `${paddingLeft}px`, backgroundColor: `${list.id === activeItemId ? '#BF00FF21' : ''}` }}
+        style={{
+          paddingLeft: `${paddingLeft}px`,
+          backgroundColor: `${list.id === activeItemId || list.id === listId ? '#BF00FF21' : ''}`
+        }}
       >
-        {list.id === activeItemId && (
+        {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
