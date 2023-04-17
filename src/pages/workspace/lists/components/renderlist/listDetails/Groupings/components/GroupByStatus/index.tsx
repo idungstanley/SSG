@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { ITaskTemplateData } from '../../../../../../../tasks/component/views/hubLevel/TaskTableTemplateData';
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import { ImyTaskData, setAddNewTaskItem } from '../../../../../../../../../features/task/taskSlice';
+import { ICustomField, ImyTaskData, setAddNewTaskItem } from '../../../../../../../../../features/task/taskSlice';
 import { TaskDataGroupingsProps } from '../../../../../../../../../features/task/interface.tasks';
 import TaskListViews from '../../../../../../../tasks/component/views/listLevel/TaskListViews';
 import TaskData from '../../../../../../../tasks/component/taskData/TaskData';
@@ -37,6 +37,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
             groupListName:
               | string
               | number
+              | ICustomField[]
               | [{ id: string; initials: string; colour: string; name: string }]
               | null
               | undefined;

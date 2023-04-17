@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import '../../taskData/task.css';
 import PriorityDropdown from '../../../../../../components/priority/PriorityDropdown';
 import {
+  ICustomField,
   ImyTaskData,
   setCurrentTaskPriorityId,
   setCurrentTaskStatusId,
@@ -64,6 +65,7 @@ function TaskTableView({ tasks }: TaskDataProps) {
       | number
       | undefined
       | null
+      | ICustomField[]
       | Array<{ id: string; initials: string; colour: string; name: string }>,
     colfield: string,
     task?: ImyTaskData
