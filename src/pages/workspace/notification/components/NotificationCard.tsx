@@ -9,13 +9,13 @@ import { CardItemTypes } from './notificaiton.interface';
 
 export default function NotificationCard({ cardItems }: CardNotificationType) {
   return (
-    <>
+    <div>
       {Object.keys(cardItems).map((value) => (
         <div key={cardItems[value as keyof CardItemTypes]?.key}>
-          <main className="mx-40 mt-10 flex flex-col -my-2 overflow-x-auto overflow-y-hidden">
+          <main className="mx-40 mt-10 flex flex-col -my-2 overflow-x-auto">
             <div className="inline-block min-w-full py-2 align-middle border border-gray-200 p-2 rounded-md bg-gray-100 mb-2 pb-4 md:px-6 lg:px-6">
               <p className="capitalize font-bold mb-1 text-xs">{cardItems[value as keyof CardItemTypes]?.key}</p>
-              <div className="overflow-scroll shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <div className="min-w-full">
                   {cardItems[value as keyof CardItemTypes]?.notifications.map((data: NotificationType) => (
                     <div key={data.id} className="gap-2 p-2">
@@ -79,6 +79,6 @@ export default function NotificationCard({ cardItems }: CardNotificationType) {
           </main>
         </div>
       ))}
-    </>
+    </div>
   );
 }
