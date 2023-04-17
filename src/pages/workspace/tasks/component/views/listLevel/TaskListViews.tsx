@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
@@ -7,11 +7,13 @@ import { getTaskColumns, setCloseTaskListView } from '../../../../../../features
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
-import { columnsHead } from '../ListColumns';
+import { columnsHead, listColumnProps } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
+
+const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
 export default function TaskListViews({
   taskLength,
@@ -27,18 +29,25 @@ export default function TaskListViews({
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
+  const [columns, setColumns] = useState([...columnsHead]);
 
   const { data } = useList(listId);
 
-  const customFieldNames = useMemo(
-    () => data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: 'dropdown', hidden: false })) ?? [],
-    [data]
-  );
-  const columns = useMemo(() => [...columnsHead, ...customFieldNames], [customFieldNames]);
-
   useEffect(() => {
-    dispatch(getTaskColumns(columns));
-  }, [columns]);
+    if (!data) {
+      return;
+    }
+
+    const customFieldNames = data.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
+
+    setColumns(() => {
+      const newColumns = unique([...columnsHead, ...customFieldNames]);
+
+      dispatch(getTaskColumns(newColumns));
+
+      return newColumns;
+    });
+  }, [data]);
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
@@ -77,7 +86,7 @@ export default function TaskListViews({
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex  items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
                         style={{ color: '#78828d', fontSize: '11px' }}
                       >
@@ -90,7 +99,7 @@ export default function TaskListViews({
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex  items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
                         style={{ color: '#78828d', fontSize: '10px' }}
                       >
@@ -109,7 +118,7 @@ export default function TaskListViews({
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
                         color: '#78828d',
@@ -134,7 +143,7 @@ export default function TaskListViews({
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
                         color: '#78828d',

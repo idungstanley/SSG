@@ -40,6 +40,7 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
         type: entity.type
       });
 
+      setFormInputs([{ id: 1, value: '' }]);
       setShow(false);
     }
   };

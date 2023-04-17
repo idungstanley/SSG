@@ -222,7 +222,7 @@ function TaskTableView({ tasks }: TaskDataProps) {
                       !col.hidden && (
                         <td
                           className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
-                          key={col.field}
+                          key={col.id}
                         >
                           {renderData((task as ImyTaskData)[col.field], col.field, task) as ReactNode}
                         </td>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -49,7 +50,7 @@ export default function TaskData({ task }: TaskDataProps) {
   return (
     <div className="relative ">
       <div
-        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
+        // onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && activeItemId == task?.id
             ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
@@ -89,10 +90,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12"
-                      >
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -108,7 +106,7 @@ export default function TaskData({ task }: TaskDataProps) {
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-12/12"
                       >
                         <DataRenderFunc
@@ -128,7 +126,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -143,7 +141,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -164,7 +162,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
@@ -184,7 +182,7 @@ export default function TaskData({ task }: TaskDataProps) {
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >

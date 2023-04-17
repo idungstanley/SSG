@@ -210,9 +210,14 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
 
 export const useUpdateEntityCustomFieldValue = (listId?: string) => {
   const queryClient = useQueryClient();
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   return useMutation(updateEntityCustomFieldValue, {
     onSuccess: () => {
+      // if (activeItemType === 'hub') {
+      queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
+      // }
       queryClient.invalidateQueries(['task', { listId }]);
       queryClient.invalidateQueries(['task', listId, 'hub']);
     }
