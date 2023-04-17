@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setActivePlaceName, setShowExtendedBar } from '../../../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../../../utils';
 import { useNavigate } from 'react-router-dom';
+import { MdDragIndicator } from 'react-icons/md';
+import { useSortable } from '@dnd-kit/sortable';
 
 interface NavigationItemProps {
   item: {
@@ -11,6 +13,7 @@ interface NavigationItemProps {
     alwaysShow: boolean;
     source?: string;
     icon?: JSX.Element;
+    id: string;
   };
   isVisible: boolean;
 }
@@ -19,6 +22,10 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { id, name } = item;
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id
+  });
   const { activePlaceName } = useAppSelector((state) => state.workspace);
   const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
@@ -26,6 +33,13 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
     if (name !== 'Favorites') {
       navigate(link);
     }
+  };
+
+  const style = {
+    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transition,
+    backgroundColor: isDragging ? '#f3f4f6' : activePlaceName === name ? '#BF00FF21' : undefined,
+    zIndex: isDragging ? 1 : undefined
   };
 
   if (!isVisible) {
@@ -37,14 +51,24 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
       className={cl(
         activePlaceName === item.name ? 'hover:bg-green-200' : 'hover:bg-gray-100',
         !showSidebar ? 'justify-center' : 'gap-2 items-center',
-        'relative flex cursor-pointer pl-4 p-2 w-full'
+        'relative flex cursor-pointer pl-6 p-2 w-full group'
       )}
       onClick={() => handleClick(item.name, item.href)}
-      style={{ backgroundColor: `${activePlaceName === item.name ? '#BF00FF21' : ''}` }}
+      style={style}
     >
       {activePlaceName === item.name ? (
         <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
       ) : null}
+      <span
+        className={`absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1.5 group-hover:opacity-100 ${
+          name !== 'Home' ? 'block' : 'hidden'
+        }`}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+      >
+        <MdDragIndicator />
+      </span>
       <span className="relative w-5 h-5">
         {item.name === 'Notifications' && (
           <p

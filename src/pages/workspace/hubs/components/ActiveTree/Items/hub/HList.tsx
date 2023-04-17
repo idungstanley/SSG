@@ -133,11 +133,11 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                   wallets={hub.wallets}
                   leftMargin={false}
                   type="wallet"
-                  paddingLeft={`${taskType === 'hub' ? '10' : '25'}`}
+                  paddingLeft={`${taskType === 'hub' ? '10' : '35'}`}
                 />
               ) : null}
               {hub.lists.length && id ? (
-                <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '40'}`} />
+                <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '50'}`} />
               ) : null}
               {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
               {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
