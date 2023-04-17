@@ -47,7 +47,11 @@ export default function ClockLog() {
                 {headers.map((col) => {
                   return (
                     !col.hidden && (
-                      <th key={col.id} className="w-12 flex justify-center gap-1 group cursor-default capitalize">
+                      <th
+                        key={col.id}
+                        className="w-12 flex justify-center gap-1 group cursor-default capitalize"
+                        style={{ fontSize: '8px' }}
+                      >
                         {col.title}
                         {col.title === 'user' && (
                           <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
@@ -98,9 +102,6 @@ export default function ClockLog() {
           </table>
         );
       }
-    else {
-      return <NoEntriesFound />;
-    }
   };
 
   return <div className="p-2">{renderItemEntries()}</div>;
