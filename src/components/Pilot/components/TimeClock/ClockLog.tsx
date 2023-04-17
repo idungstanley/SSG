@@ -5,6 +5,7 @@ import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timec
 import NoEntriesFound from './NoEntries';
 import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
+import { FaSort } from 'react-icons/fa';
 
 export type Header = {
   title: string;
@@ -19,7 +20,7 @@ export default function ClockLog() {
     trigger: activeItemType
   });
   const [headers, setHeaders] = useState<Header[]>([
-    { title: 'assignee', id: 1, hidden: false },
+    { title: 'user', id: 1, hidden: false },
     { title: 'duration', id: 2, hidden: false },
     { title: 'start date', id: 3, hidden: false },
     { title: 'end date', id: 4, hidden: false },
@@ -31,27 +32,33 @@ export default function ClockLog() {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
   };
 
+  const handleShowAllColumns = () => {
+    setHeaders((prev) => prev.map((header) => ({ ...header, hidden: false })));
+  };
   const renderItemEntries = () => {
     if (getTaskEntries?.data.time_entries)
       if (getTaskEntries?.data.time_entries.length == 0) {
         return <NoEntriesFound />;
       } else {
         return (
-          <table className="w-full">
+          <table className="w-full relative">
             <thead className="flex items-center text-xs font-extralight border-b pb-2 border-gray-400 space-x-1 relative">
-              <tr className="w-9/12 flex space-x-5 items-center">
+              <tr className="w-9/12 flex space-x-4 items-center">
                 {headers.map((col) => {
                   return (
                     !col.hidden && (
-                      <th key={col.id} className="w-12 cursor-default capitalize">
+                      <th key={col.id} className="w-12 flex justify-center gap-1 group cursor-default capitalize">
                         {col.title}
+                        {col.title === 'user' && (
+                          <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                        )}
                       </th>
                     )
                   );
                 })}
               </tr>
               <FiPlusCircle
-                className="AddColumnDropdownButton cursor-pointer font-black h-4 w-4"
+                className="AddColumnDropdownButton cursor-pointer font-black h-4 w-4 absolute right-4"
                 onClick={() => setShowModal(!showModal)}
               />
               {showModal && (
@@ -61,6 +68,12 @@ export default function ClockLog() {
                   onBlur={() => setShowModal(!showModal)}
                 >
                   <ul className="flex flex-col space-y-2 px-4 py-6">
+                    <li
+                      className="cursor-pointer border-b py-1 capitalize flex justify-between"
+                      onClick={() => handleShowAllColumns()}
+                    >
+                      show all
+                    </li>
                     {headers.map((header) => {
                       return (
                         <li
