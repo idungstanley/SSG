@@ -24,7 +24,7 @@ interface workspaceState {
   activeEntityName: string | null | undefined;
   currentWalletId: string | null;
   currentSubWalletId: string | null;
-  currentWalletName: string | null;
+  currentWalletName: string | null | undefined;
   showPilot: boolean;
   sidebarWidthRD: number;
   showPilotIconView: boolean;
@@ -199,7 +199,7 @@ export const wsSlice = createSlice({
     setActiveSubChecklistTabId(state, action: PayloadAction<number | null>) {
       state.activeSubChecklistTabId = action.payload;
     },
-    setCurrentWalletName(state, action: PayloadAction<string | null>) {
+    setCurrentWalletName(state, action: PayloadAction<string | null | undefined>) {
       state.currentWalletName = action.payload;
     },
     setCurrenSubtWalletId(state, action: PayloadAction<string | null>) {

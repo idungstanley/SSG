@@ -13,6 +13,7 @@ import Subscribers from '../subscribers/Subscribers';
 import { AvatarWithInitials } from '../../../../../../../components';
 import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
+import { IListDetails } from '../../../../../../../features/list/list.interfaces';
 
 export interface tagItem {
   id: string;
@@ -20,7 +21,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);

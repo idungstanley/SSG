@@ -79,7 +79,7 @@ export default function WalletItem({
           wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
-        style={{ backgroundColor: `${wallet.id === activeItemId || wallet.id === walletId ? '#BF00FF21' : ''}` }}
+        style={{ backgroundColor: `${wallet.id === walletId ? '#BF00FF21' : ''}` }}
       >
         {wallet.id === walletId && (
           <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />

@@ -1,6 +1,5 @@
-/* eslint-disable */
 import React, { useMemo, useState, useEffect, useRef } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
 import PageWrapper from '../../../../../components/PageWrapper';
@@ -16,21 +15,27 @@ import GroupByStatusTemplate from '../../../lists/components/renderlist/listDeta
 import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-
-interface HubDetailTypes {
-  activeItemId: string;
-  activeItemType: string;
-}
+import { useParams } from 'react-router-dom';
+import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
-
-  const retrievedObject = localStorage.getItem('hubDetailsStorage');
-  const hubdetail: HubDetailTypes = JSON.parse(retrievedObject as string) as HubDetailTypes;
+  const { hubId } = useParams();
+  const hubType = 'hub';
+  const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: hubType });
+  const hubName = data?.data.hub.name;
+  useEffect(() => {
+    if (hubId) {
+      dispatch(setActiveItem({ activeItemId: hubId, activeItemType: hubType, activeItemName: hubName }));
+      dispatch(setActiveEntityName(hubName));
+    }
+  }, [hubId, data]);
 
   const {
     data: TaskFullList,
@@ -39,8 +44,8 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: hubId,
+    itemType: hubType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);

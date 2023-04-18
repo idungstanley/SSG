@@ -106,10 +106,14 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
 
               <div>
                 <div>
-                  <TaskListViews taskLength={filteredTaskData[value].tasks.length} />
+                  {currentListId ? (
+                    <TaskListViews listId={currentListId} taskLength={filteredTaskData[value].tasks.length} />
+                  ) : (
+                    <span>listId required</span>
+                  )}
                   {filteredTaskData[value].tasks?.map((task) => (
                     <Fragment key={task.id}>
-                      <TaskData task={task} />
+                      <TaskData task={task} listId={task.list_id} />
                       {currentParentTaskId === task.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />
