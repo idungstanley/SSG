@@ -129,8 +129,8 @@ function RenderHubs() {
         }
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
-        <section>
-          <div className="w-full ">
+        <section className="relative flex flex-col space-y-8">
+          <div className="w-full fixed z-50" style={{ width: '62%' }}>
             <ListFilter />
           </div>
           {listView && groupByStatus == 'none' && (

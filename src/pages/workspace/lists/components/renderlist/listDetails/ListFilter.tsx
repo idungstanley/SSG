@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiShow } from 'react-icons/bi';
 import { GrFormSearch } from 'react-icons/gr';
 import { IoPeopleOutline } from 'react-icons/io5';
@@ -13,11 +13,41 @@ import { cl } from '../../../../../../utils/index';
 import FilterGroups from './filterGroup/FilterGroups';
 
 export default function ListFilter() {
+  const [navTop, setNavTop] = useState<number | undefined>(undefined);
+  const [navWidth, setNavWidth] = useState<number | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const [showFilter, setShowFilter] = useState<boolean>(false);
+
+  useEffect(() => {
+    const Navbar = document.querySelector('.navbar')?.getBoundingClientRect();
+    if (Navbar) {
+      setNavTop(Navbar.top as number);
+      setNavWidth(Navbar.width as number);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!navTop) return;
+
+    window.addEventListener('scroll', isSticky);
+    return () => {
+      window.removeEventListener('scroll', isSticky);
+    };
+  }, [navTop]);
+
+  const isSticky = () => {
+    const sidebarEl = document.querySelector('.navbar');
+    const scrollTop = window.scrollY;
+    if (scrollTop >= navTop! - 10) {
+      sidebarEl?.classList.add('fixed');
+    } else {
+      sidebarEl?.classList.remove('fixed');
+    }
+  };
+
   return (
-    <nav className="flex items-center justify-between bg-white h-8 pr-5 ">
+    <nav className="flex items-center justify-between bg-white h-8 pr-5 " style={{ width: navWidth }}>
       <div className="flex items-center justify-between p-2">
         <GrFormSearch className="w-5 h-5 " />
         <input
