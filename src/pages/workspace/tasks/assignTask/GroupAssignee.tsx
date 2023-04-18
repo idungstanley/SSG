@@ -43,7 +43,7 @@ function GroupAssignee({
               ) => (
                 <div
                   key={newData.id}
-                  className={`scaleBigger ${index === 0 ? ' z-40  ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
+                  className={`scaleBigger ${index === 0 ? 'z-40 h' : ''} ${index === 1 ? 'z-30 ' : ''} ${
                     index === 2 ? 'z-20' : 'z-10'
                   }  `}
                 >
