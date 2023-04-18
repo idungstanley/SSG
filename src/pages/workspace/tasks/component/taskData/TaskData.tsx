@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 
 export interface TaskDataProps {
   task?: ImyTaskData | undefined;
@@ -37,13 +37,13 @@ export default function TaskData({ task }: TaskDataProps) {
     );
     dispatch(setTaskIdForPilot(id));
 
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'task',
-        activeItemName: name
-      })
-    );
+    // dispatch(
+    //   setActiveItem({
+    //     activeItemId: id,
+    //     activeItemType: 'task',
+    //     activeItemName: name
+    //   })
+    // );
   };
 
   return (
