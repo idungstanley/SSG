@@ -11,6 +11,7 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
+import { useParams } from 'react-router-dom';
 
 interface TaskItemProps {
   item: {
@@ -43,6 +44,7 @@ export default function HubItem({
     type === 'hub' ? 'blue' : 'orange'
   );
 
+  const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -72,10 +74,10 @@ export default function HubItem({
         }`}
         tabIndex={0}
         onClick={() => handleClick(item.id, item.name)}
-        style={{ backgroundColor: `${item.id === activeItemId ? '#BF00FF21' : ''}` }}
+        style={{ backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}` }}
       >
-        <div className="relative flex items-center justify-between">
-          {item.id === activeItemId && (
+        <div className="relative flex items-center justify-between pl-3">
+          {item.id === hubId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg"
               style={{ backgroundColor: '#BF00FF' }}

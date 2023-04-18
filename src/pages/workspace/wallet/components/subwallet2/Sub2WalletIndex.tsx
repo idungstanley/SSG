@@ -20,8 +20,6 @@ interface dataProps {
 }
 
 function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) {
-  // eslint-disable-next-line no-console
-  console.log(paddingLeft);
   const dispatch = useDispatch();
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 

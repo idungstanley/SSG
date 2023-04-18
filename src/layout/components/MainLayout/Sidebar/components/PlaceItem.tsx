@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../utils';
+import { useSortable } from '@dnd-kit/sortable';
 
 interface PlaceItemProps {
   label: string;
@@ -12,14 +13,25 @@ interface PlaceItemProps {
   icon: JSX.Element;
   rightContent?: ReactNode;
   bottomContent?: ReactNode;
+  id: string;
 }
 
-export default function PlaceItem({ label, onClick, icon, rightContent, bottomContent }: PlaceItemProps) {
+export default function PlaceItem({ label, onClick, icon, rightContent, bottomContent, id }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id
+  });
   const isActivePlace = !onClick;
+
+  const style = {
+    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transition,
+    backgroundColor: isDragging ? '#f3f4f6' : isActivePlace && activeItemId !== null ? '#BF00FF08' : undefined,
+    zIndex: isDragging ? 1 : undefined
+  };
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
@@ -31,21 +43,20 @@ export default function PlaceItem({ label, onClick, icon, rightContent, bottomCo
       id={`${label}`}
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : 'hover:bg-gray-100',
-        'focus:flex flex-col w-full pl-5 py-5 items-center relative group',
+        'focus:flex flex-col w-full pl-7 py-5 items-center relative group',
         bottomContent ? 'gap-2' : ''
       )}
-      style={{
-        backgroundColor: `${isActivePlace && activeItemId !== null ? '#BF00FF08' : isActivePlace ? '#BF00FF08' : ''}`
-      }}
+      style={style}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {/* {isActivePlace && activeItemId == null && (
-        <span className="absolute top-0 bottom-0 left-0 w-1 bg-gray-700"></span>
-      )} */}
-      <MdDragIndicator
-        className="absolute text-lg opacity-0 left-1 hover:opacity-100"
-        style={{ top: '23', color: `${isActivePlace ? '#BF00FFB2' : ''}` }}
-      />
+      <span
+        className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1 group-hover:opacity-100"
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+      >
+        <MdDragIndicator style={{ color: `${isActivePlace ? '#BF00FFB2' : undefined}` }} />
+      </span>
       <div className="flex justify-between w-full">
         <div
           className={cl(
