@@ -1,10 +1,11 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes } from './list.interfaces';
+import { useAppSelector } from '../../app/hooks';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -159,3 +160,77 @@ export const UseGetListDetails = (query: {
     }
   );
 };
+
+const createDropdownField = (data: { id?: string; name: string; properties: string[]; type: string }) => {
+  const { id, properties, name, type } = data;
+
+  const response = requestNew({
+    url: 'custom-fields',
+    method: 'POST',
+    data: {
+      type: 'dropdown',
+      name,
+      entity_id: id,
+      entity_type: type,
+      properties
+    }
+  });
+  return response;
+};
+
+export const useCreateDropdownField = (type: string, id?: string) => {
+  const queryClient = useQueryClient();
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  return useMutation(createDropdownField, {
+    onSuccess: () => {
+      if (type === 'hub') {
+        queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
+      }
+      queryClient.invalidateQueries([type, id]);
+    }
+  });
+};
+
+const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: string }) => {
+  const { taskId, fieldId, value } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${fieldId}`,
+    method: 'PUT',
+    data: {
+      type: 'task',
+      id: taskId,
+      values: [value]
+    }
+  });
+  return response;
+};
+
+export const useUpdateEntityCustomFieldValue = (listId?: string) => {
+  const queryClient = useQueryClient();
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  return useMutation(updateEntityCustomFieldValue, {
+    onSuccess: () => {
+      // if (activeItemType === 'hub') {
+      queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
+      // }
+      queryClient.invalidateQueries(['task', { listId }]);
+      queryClient.invalidateQueries(['task', listId, 'hub']);
+    }
+  });
+};
+
+export const useList = (listId?: string) =>
+  useQuery(
+    ['list', listId],
+    () =>
+      requestNew<IListDetailRes>({
+        url: `lists/${listId}`,
+        method: 'GET'
+      }),
+    { enabled: !!listId, select: (res) => res.data.list }
+  );

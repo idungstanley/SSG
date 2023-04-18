@@ -30,9 +30,16 @@ import { listColumnProps } from '../component/views/ListColumns';
 interface CustomDropdownProps {
   title: string;
   listItems: listColumnProps[];
+  setShowDropdownFieldModal: (i: boolean) => void;
+  setdropDown: (i: boolean) => void;
 }
 
-export default function AddColumnDropdown({ title, listItems }: CustomDropdownProps) {
+export default function AddColumnDropdown({
+  title,
+  listItems,
+  setShowDropdownFieldModal,
+  setdropDown
+}: CustomDropdownProps) {
   const [column, setColumn] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -67,7 +74,13 @@ export default function AddColumnDropdown({ title, listItems }: CustomDropdownPr
         {column && (
           <div>
             <div>
-              <p className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full z-30">
+              <p
+                onClick={() => {
+                  setShowDropdownFieldModal(true);
+                  setdropDown(false);
+                }}
+                className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 w-full z-30"
+              >
                 <span>
                   <BiCaretDownSquare />
                 </span>

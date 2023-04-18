@@ -105,10 +105,10 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
             {createTaskFromTop && <AddNewItem listId={listId} />}
             <div>
               <div>
-                <TaskListViews />
+                {listId ? <TaskListViews listId={listId} /> : <span>listId required</span>}
                 {listTask?.map((task) => (
                   <Fragment key={task.id}>
-                    <TaskData task={task} />
+                    <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>
                         <SubTask parentTaskId={currentParentTaskId} />
