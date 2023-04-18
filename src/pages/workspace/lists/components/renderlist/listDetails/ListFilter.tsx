@@ -17,7 +17,7 @@ export default function ListFilter() {
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   return (
-    <nav className="flex items-center justify-between bg-white h-8 pr-5  ">
+    <nav className="flex items-center justify-between bg-white h-8 pr-5 ">
       <div className="flex items-center justify-between p-2">
         <GrFormSearch className="w-5 h-5 " />
         <input
