@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { columnsHead, listColumnProps } from '../views/ListColumns';
+import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
 
 export interface TaskDataProps {
@@ -41,13 +40,13 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     );
     dispatch(setTaskIdForPilot(id));
 
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
   };
 
   const { data } = useList(listId);
@@ -57,7 +56,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   return (
     <div className="relative">
       <div
-        // onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
+        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && activeItemId == task?.id
             ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
