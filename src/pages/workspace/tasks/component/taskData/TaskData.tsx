@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
-import { columnsHead, listColumnProps } from '../views/ListColumns';
+import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
 
 export interface TaskDataProps {
@@ -41,13 +40,13 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     );
     dispatch(setTaskIdForPilot(id));
 
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
   };
 
   const { data } = useList(listId);
@@ -57,24 +56,24 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   return (
     <div className="relative">
       <div
-        // onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
+        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && activeItemId == task?.id
-            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableView
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableViewWrap && activeItemId == task?.id
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableViewWrap
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
+            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
             : CompactView
-            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
+            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : CompactViewWrap
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : null
         }`}
       >

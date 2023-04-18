@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
@@ -20,14 +19,9 @@ import { useParams } from 'react-router-dom';
 import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 
-interface HubDetailTypes {
-  activeItemId: string;
-  activeItemType: string;
-}
-
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,8 +44,8 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: hubId,
+    itemType: hubType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
