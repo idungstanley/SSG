@@ -122,6 +122,7 @@ export const routes = (user: IUser | null) =>
         { path: 'docs', element: <Docs /> },
         { path: 'hub', element: <RenderHubs /> },
         { path: 'hub/:hubId', element: <RenderHubs /> },
+        { path: 'hub/:hubId/t/:taskId', element: <RenderHubs /> },
         { path: 'wallet/:walletId', element: <RenderWallets /> },
         { path: 'list/:listId', element: <RenderList /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
