@@ -26,7 +26,7 @@ export default function Details() {
   return (
     <>
       <SectionArea label="Details" icon={<DetailsIcon className="w-4 h-4" />} />
-      <section className="flex flex-col overflow-y-scroll h-fit ">
+      <section className="flex flex-col overflow-y-scroll h-fit mb-11 ">
         {showPilot && <DetailsSubTab />}
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>

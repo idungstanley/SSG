@@ -7,16 +7,17 @@ import { setUpdateStatusModalId } from '../../../../../../features/task/taskSlic
 import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/taskService';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
+import { IListDetails } from '../../../../../../features/list/list.interfaces';
 
 interface StatusDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 
 export default function Status({ Details }: StatusDetailsProps) {
   const [statusBg, setStatusBg] = useState('');
   const [complete, setComplete] = useState('');
   const dispatch = useAppDispatch();
-  const StatusData = Details?.status;
+  const StatusData = Details ? ('status' in Details ? Details?.status : null) : null;
 
   // const { status } = UseUpdateTaskStatusService({
   //   task_id: Details?.id,
@@ -72,14 +73,16 @@ export default function Status({ Details }: StatusDetailsProps) {
   return (
     <section className="flex items-center space-x-1">
       <div className="flex space-x-0.5">
-        <ToolTip tooltip="Current status">
-          <button
-            className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
-            onClick={() => handleStatusModal()}
-          >
-            {handleStatusMessage(Details?.status)}
-          </button>
-        </ToolTip>
+        {Details && 'status' in Details ? (
+          <ToolTip tooltip="Current status">
+            <button
+              className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
+              onClick={() => handleStatusModal()}
+            >
+              {handleStatusMessage(Details.status)}
+            </button>
+          </ToolTip>
+        ) : null}
         <ToolTip tooltip="Next status">
           <button className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
             <MdArrowRight />
@@ -89,7 +92,7 @@ export default function Status({ Details }: StatusDetailsProps) {
       <div>
         <ToolTip tooltip="Set to complete">
           <button
-            className=" p-2 text-xs rounded-md border border-gray-300 hover:border-green-300"
+            className="p-2 text-xs border border-gray-300 rounded-md hover:border-green-300"
             onClick={() => setComplete('completed')}
           >
             <AiOutlineCheck className="hover:border-green-300" />

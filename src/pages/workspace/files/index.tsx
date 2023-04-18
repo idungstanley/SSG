@@ -9,7 +9,7 @@ function Files() {
   const { showSidebar } = useAppSelector((state) => state.account);
   return (
     <>
-      <PlaceItem label="Forms" icon={<DocumentTextIcon className="w-4 h-4" />} />
+      <PlaceItem label="Forms" id="5" icon={<DocumentTextIcon className="w-4 h-4" />} />
       <Link
         to="/explorer"
         id="home"

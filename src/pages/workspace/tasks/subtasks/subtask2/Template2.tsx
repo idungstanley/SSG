@@ -34,10 +34,10 @@ export default function Template2({ task }: TemplateProps) {
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
+                      <div key={col.id} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -49,10 +49,10 @@ export default function Template2({ task }: TemplateProps) {
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center capitalize ml-2 text-xs font-medium  group">
+                      <div key={col.id} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -67,10 +67,10 @@ export default function Template2({ task }: TemplateProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center capitalize text-xs font-medium  group">
+                      <div key={col.id} className="flex items-center capitalize text-xs font-medium  group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -82,10 +82,10 @@ export default function Template2({ task }: TemplateProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center capitalize text-xs font-medium group">
+                      <div key={col.id} className="flex items-center capitalize text-xs font-medium group">
                         <DataRenderFunc
                           taskColField={task[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
                           handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -103,13 +103,13 @@ export default function Template2({ task }: TemplateProps) {
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}
                         handleGetSubTask={() => handleShowSubTask(task.id)}
@@ -123,13 +123,13 @@ export default function Template2({ task }: TemplateProps) {
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className=" items-center uppercase    text-gray-400 py-px   font-medium  group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}
                         handleGetSubTask={() => handleShowSubTask(task.id)}

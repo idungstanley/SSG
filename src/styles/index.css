@@ -90,11 +90,11 @@ code {
 
 @keyframes grow {
   from {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
   }
   to {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
   }
 }

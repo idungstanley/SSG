@@ -10,6 +10,7 @@ import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
+import { useParams } from 'react-router-dom';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string) => void;
@@ -38,6 +39,7 @@ export default function WalletItem({
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
+  const { walletId } = useParams();
   const dispatch = useAppDispatch();
   const handleItemAction = (id: string) => {
     dispatch(setCreateWlLink(false));
@@ -77,9 +79,9 @@ export default function WalletItem({
           wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
         }`}
         onClick={() => handleShowSubWallet(wallet.id)}
-        style={{ backgroundColor: `${wallet.id === activeItemId ? '#BF00FF21' : ''}` }}
+        style={{ backgroundColor: `${wallet.id === walletId ? '#BF00FF21' : ''}` }}
       >
-        {wallet.id === activeItemId && (
+        {wallet.id === walletId && (
           <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
         )}
         <div id="walletLeft" className="flex items-center justify-center" style={{ paddingLeft: `${paddingLeft}px` }}>
