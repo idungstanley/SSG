@@ -55,12 +55,12 @@ export default function TaskName({
   });
   const [contentEditable, setContentEditable] = useState(false);
 
-  const handleDoubleClick = () => {
+  const handleTaskNameClick = () => {
+    setContentEditable(true);
     dispatch(getComfortableView(false));
     dispatch(getCompactView(false));
     dispatch(getCompactViewWrap(false));
     dispatch(getComfortableViewWrap(true));
-    setContentEditable(true);
   };
 
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string | undefined) => {
@@ -120,8 +120,8 @@ export default function TaskName({
             <StatusDropdown TaskCurrentStatus={task?.status} />
           </p>
           <div
-            contentEditable={contentEditable}
-            onClick={handleDoubleClick}
+            contentEditable={true}
+            onClick={handleTaskNameClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
