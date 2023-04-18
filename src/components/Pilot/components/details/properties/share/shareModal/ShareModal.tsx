@@ -52,7 +52,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
       >
         <Menu.Items
           className="thickBoxShadow origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-32 p-2"
-          style={{ minHeight: '140px', width: '380px', marginLeft: '-302px', marginTop: '60px', zIndex: '100' }}
+          style={{ minHeight: '140px', width: '940%', marginLeft: '-302px', marginTop: '60px', zIndex: '100' }}
         >
           <div id="taskDetals">
             <h1 className="text-black pt-1 text-xl">Share this task</h1>
@@ -122,28 +122,6 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
               </div>
             </div>
           </div>
-
-          {/* <p className="pt-5 pl-3 cursor-pointer bg-bl">
-            <button
-              className={`${
-                !isCopied ? 'bg-blue-900 text-white p-1 rounded-md' : 'bg-green-900 text-white p-1 rounded-md'
-              }`}
-              onClick={handleCopy}
-            >
-              {!isCopied ? 'Copy task ID' : 'ID Copid'}
-            </button>
-          </p> */}
-
-          {/* <p className="pt-5 pl-3 cursor-pointer bg-bl z-50">
-            <button
-              className={`${
-                !isBranchCopied ? 'bg-blue-900 text-white p-1 rounded-md ' : 'bg-green-900 text-white p-1 rounded-md'
-              }`}
-              onClick={handleBranchName}
-            >
-              {!isBranchCopied ? 'Copy Branch Name' : 'Branch Name Copid'}
-            </button>
-          </p> */}
         </Menu.Items>
       </Transition>
     </Menu>
