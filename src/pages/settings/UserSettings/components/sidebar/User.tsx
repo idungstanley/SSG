@@ -14,7 +14,7 @@ function User() {
       title: 'My Settings',
       onClick: () => {
         dispatch(setActiveTab('My Settings'));
-        navigate('/profile');
+        navigate('/settings/profile');
       }
     },
     {
@@ -22,7 +22,7 @@ function User() {
       title: 'Workspaces',
       onClick: () => {
         dispatch(setActiveTab('Workspaces'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -30,7 +30,7 @@ function User() {
       title: 'Notifications',
       onClick: () => {
         dispatch(setActiveTab('Notifications'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -38,7 +38,7 @@ function User() {
       title: 'Reward',
       onClick: () => {
         dispatch(setActiveTab('Reward'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -46,7 +46,7 @@ function User() {
       title: 'Logout',
       onClick: () => {
         dispatch(setActiveTab('Logout'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -55,7 +55,7 @@ function User() {
       category: 'my_app',
       onClick: () => {
         dispatch(setActiveTab('Time Clock'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -64,7 +64,7 @@ function User() {
       category: 'my_app',
       onClick: () => {
         dispatch(setActiveTab('Time Tracker'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     },
     {
@@ -73,7 +73,7 @@ function User() {
       category: 'my_app',
       onClick: () => {
         dispatch(setActiveTab('Wiki Docs'));
-        navigate('/construction');
+        navigate('/settings/construction');
       }
     }
   ];

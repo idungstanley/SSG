@@ -57,6 +57,7 @@ import NotificationSettingsPage from './pages/settings/NotificationSettings/inde
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
+import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 
 const inbox = [
   {
@@ -158,7 +159,6 @@ export const routes = (user: IUser | null) =>
         }
       ]
     },
-
     {
       path: '/auth',
       element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
@@ -168,13 +168,21 @@ export const routes = (user: IUser | null) =>
         { path: 'register/:inviteCode', element: <RegisterPage /> }
       ]
     },
+
     {
       path: '/settings',
-      element: <UserSettings />,
+      element: user ? (
+        user.default_workspace_id ? (
+          <SideBarSettings />
+        ) : (
+          <Navigate to="/onboarding" />
+        )
+      ) : (
+        <Navigate to="/auth/login" />
+      ),
       children: [
         { path: 'profile', element: <UserSettings /> },
         { path: 'construction', element: <UnderConstruction /> }
-        // { path: 'register/:inviteCode', element: <RegisterPage /> }
       ]
     },
     { path: '*', element: <NotFoundPage /> }
