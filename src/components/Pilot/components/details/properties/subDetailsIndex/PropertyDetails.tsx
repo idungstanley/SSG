@@ -119,7 +119,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
-            <Share />
+            <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -128,7 +128,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <ToolTip tooltip="Assignees">
           <Assignees />
         </ToolTip>
-        <span className="text-gray-300">|</span>
+        <span className=" text-gray-300">|</span>
         <ToolTip tooltip="Subscribers">
           <Subscribers />
         </ToolTip>

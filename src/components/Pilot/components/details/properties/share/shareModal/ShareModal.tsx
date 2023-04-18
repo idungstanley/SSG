@@ -1,37 +1,44 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { TfiWorld } from 'react-icons/tfi';
+import { BsInfoLg } from 'react-icons/bs';
+import { BiLinkAlt } from 'react-icons/bi';
+import { AiOutlineBranches } from 'react-icons/ai';
 
-export default function ShareModal() {
-  const [isCopied, setIsCopied] = useState(false);
+export default function ShareModal({ taskId, taskName }: { taskId?: string; taskName?: string }) {
+  const [isBranchCopied, setIsBranchCopied] = useState(false);
 
-  const { activeItemId: taskId } = useAppSelector((state) => state.workspace);
+  // const handleCopy = async () => {
+  //   try {
+  //     await navigator.clipboard.writeText(taskId as string);
+  //     setIsCopied(true);
+  //     setTimeout(() => {
+  //       setIsCopied(false);
+  //     }, 2000);
+  //   } catch (error) {
+  //     alert(`Failed to copy: ${error}`);
+  //   }
+  // };
 
-  const handleCopy = () => {
-    const tempInput = document.createElement('input');
+  const branchName = `${taskId}/${taskName?.split(' ').join('_')}`;
 
-    tempInput.value = taskId as string;
-
-    document.body.appendChild(tempInput);
-
-    tempInput.select();
-
-    document.execCommand('copy');
-
-    document.body.removeChild(tempInput);
-
-    setIsCopied(true);
-
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
+  const handleBranchName = async () => {
+    try {
+      await navigator.clipboard.writeText(branchName);
+      setIsBranchCopied(true);
+      setTimeout(() => {
+        setIsBranchCopied(false);
+      }, 1000);
+    } catch (error) {
+      alert(`Failed to copy: ${error}`);
+    }
   };
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">
-          <p>Share</p>
+        <Menu.Button className="flex text-sm ">
+          <p className="text-gray-400 ">Share</p>
         </Menu.Button>
       </div>
       <Transition
@@ -44,10 +51,79 @@ export default function ShareModal() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className="origin-top-right absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-32"
-          style={{ height: '140px' }}
+          className="thickBoxShadow origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none -ml-32 p-2"
+          style={{ minHeight: '140px', width: '380px', marginLeft: '-302px', marginTop: '60px', zIndex: '100' }}
         >
-          <p className="pt-5 pl-3 cursor-pointer bg-bl">
+          <div id="taskDetals">
+            <h1 className="text-black pt-1 text-xl">Share this task</h1>
+            <br />
+            <p className="pb-3 text-lg">Sharing a task</p>
+
+            <div id="inviteInput" className="flex items-center w-12/12">
+              <input
+                type="text"
+                placeholder="Invite by name or email"
+                className=""
+                style={{ width: '80%', height: '30px' }}
+              />
+              <p
+                className="flex justify-center items-center text-white bg-purple-500"
+                style={{ width: '20%', height: '30px' }}
+              >
+                Invite
+              </p>
+            </div>
+
+            <div id="shareWithEveryOne" className="text-lg">
+              <div id="iconText" className="flex justify-between items-center py-1 ">
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <TfiWorld />
+                  </p>
+                  <p>Share link with anyone</p>
+                  <p id="infoIcon">
+                    <BsInfoLg />
+                  </p>
+                </div>
+                <input type="checkbox" />
+              </div>
+              <div id="private" className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-2 py-1">
+                  <p>
+                    <BiLinkAlt />
+                  </p>
+                  <p>Private link</p>
+                  <p id="infoIcon">
+                    <BsInfoLg />
+                  </p>
+                </div>
+                <button className="border-2 p-1 rounded text-sm">Copy link</button>
+              </div>
+
+              <div id="branch" className="flex justify-between items-center pb-2">
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <AiOutlineBranches />
+                  </p>
+                  <p>Create Branch</p>
+                </div>
+                <p className=" cursor-pointer bg-bl z-50">
+                  <button
+                    className={`${
+                      !isBranchCopied
+                        ? 'bg-white border-2 text-black p-1 rounded-md text-sm hover:bg-gray-300'
+                        : 'bg-gray-400 border-2 text-white p-1 rounded-md text-sm'
+                    }`}
+                    onClick={handleBranchName}
+                  >
+                    {!isBranchCopied ? 'Copy Branch Name' : 'Branch Name Copid'}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* <p className="pt-5 pl-3 cursor-pointer bg-bl">
             <button
               className={`${
                 !isCopied ? 'bg-blue-900 text-white p-1 rounded-md' : 'bg-green-900 text-white p-1 rounded-md'
@@ -56,7 +132,18 @@ export default function ShareModal() {
             >
               {!isCopied ? 'Copy task ID' : 'ID Copid'}
             </button>
-          </p>
+          </p> */}
+
+          {/* <p className="pt-5 pl-3 cursor-pointer bg-bl z-50">
+            <button
+              className={`${
+                !isBranchCopied ? 'bg-blue-900 text-white p-1 rounded-md ' : 'bg-green-900 text-white p-1 rounded-md'
+              }`}
+              onClick={handleBranchName}
+            >
+              {!isBranchCopied ? 'Copy Branch Name' : 'Branch Name Copid'}
+            </button>
+          </p> */}
         </Menu.Items>
       </Transition>
     </Menu>
