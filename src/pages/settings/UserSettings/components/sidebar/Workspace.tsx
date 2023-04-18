@@ -1,12 +1,14 @@
 import React from 'react';
 import { getWorkspaceService } from '../../../../../features/workspace/workspaceService';
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { setActiveTab } from '../../../../../features/settings/user/userSettingsSlice';
+import { cl } from '../../../../../utils';
 
 function Workspace() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { activeTab, theme_color } = useAppSelector((state) => state.userSetting);
   const workspaceOptions = [
     {
       id: 1,
@@ -21,7 +23,7 @@ function Workspace() {
       title: 'People',
       onClick: () => {
         dispatch(setActiveTab('People'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
@@ -29,7 +31,7 @@ function Workspace() {
       title: 'Teams',
       onClick: () => {
         dispatch(setActiveTab('Teams'));
-        navigate('/construction');
+        navigate('team-members');
       }
     },
     {
@@ -37,7 +39,7 @@ function Workspace() {
       title: 'Spaces',
       onClick: () => {
         dispatch(setActiveTab('Spaces'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
@@ -45,7 +47,7 @@ function Workspace() {
       title: 'Imports/Exports',
       onClick: () => {
         dispatch(setActiveTab('Imports/Exports'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
@@ -53,7 +55,7 @@ function Workspace() {
       title: 'Apps',
       onClick: () => {
         dispatch(setActiveTab('Apps'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
@@ -61,15 +63,15 @@ function Workspace() {
       title: 'Integrations',
       onClick: () => {
         dispatch(setActiveTab('Integrations'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
       id: 8,
       title: 'Upgrade',
       onClick: () => {
-        dispatch(setActiveTab('People'));
-        navigate('/construction');
+        dispatch(setActiveTab('Upgrade'));
+        navigate('construction');
       }
     },
     {
@@ -77,7 +79,7 @@ function Workspace() {
       title: 'Trash',
       onClick: () => {
         dispatch(setActiveTab('Trash'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {
@@ -85,7 +87,7 @@ function Workspace() {
       title: 'Security & Permissions',
       onClick: () => {
         dispatch(setActiveTab('Security & Permissions'));
-        navigate('/construction');
+        navigate('construction');
       }
     }
   ];
@@ -104,7 +106,14 @@ function Workspace() {
         return (
           <div
             key={setting.id}
-            className="h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer border-b border-gray-300"
+            className={cl(
+              activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
+              'h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer'
+            )}
+            style={{
+              backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
+            }}
+            onClick={setting.onClick}
           >
             <h3 className="font-semibold text-gray-500" style={{ fontSize: '15px' }}>
               {setting.title}
