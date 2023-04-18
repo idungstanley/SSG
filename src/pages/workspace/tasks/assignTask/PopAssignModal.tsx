@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { cl } from '../../utils';
+import { cl } from '../../../../utils';
 import { AiFillFlag } from 'react-icons/ai';
-import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
+import { UseUpdateTaskStatusServices } from '../../../../features/task/taskService';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface priorityType {
   id: number;
@@ -13,10 +13,7 @@ interface priorityType {
   bg: string;
 }
 
-interface TaskCurrentPriorityProps {
-  TaskCurrentPriority: string | [{ id: string; initials: string; colour: string }] | null | undefined;
-}
-export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
+export default function PopAssignModal() {
   const [priorityValue, setPriority] = useState('');
   const { currentTaskPriorityId } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
@@ -65,24 +62,13 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
   if (status == 'success') {
     setPriority('');
   }
-  const setPriorityColor = (
-    priority: string | null | undefined | [{ id: string; initials: string; colour: string }]
-  ) => {
-    if (priority == null || priority == 'low') {
-      return <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />;
-    } else if (priority == 'normal') {
-      return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority == 'high') {
-      return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority == 'urgent') {
-      return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
-    }
-  };
 
   return (
     <Menu as="div" className="relative inline-block text-left ">
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">{setPriorityColor(TaskCurrentPriority)}</Menu.Button>
+        <Menu.Button className="flex text-sm text-gray-400">
+          <p>opennUp</p>
+        </Menu.Button>
       </div>
       <Transition
         as={Fragment}

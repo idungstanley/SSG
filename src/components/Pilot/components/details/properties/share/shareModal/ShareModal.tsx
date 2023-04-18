@@ -8,18 +8,6 @@ import { AiOutlineBranches } from 'react-icons/ai';
 export default function ShareModal({ taskId, taskName }: { taskId?: string; taskName?: string }) {
   const [isBranchCopied, setIsBranchCopied] = useState(false);
 
-  // const handleCopy = async () => {
-  //   try {
-  //     await navigator.clipboard.writeText(taskId as string);
-  //     setIsCopied(true);
-  //     setTimeout(() => {
-  //       setIsCopied(false);
-  //     }, 2000);
-  //   } catch (error) {
-  //     alert(`Failed to copy: ${error}`);
-  //   }
-  // };
-
   const branchName = `${taskId}/${taskName?.split(' ').join('_')}`;
 
   const handleBranchName = async () => {
