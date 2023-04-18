@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-// import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 
 export interface TaskDataProps {
   task?: ImyTaskData | undefined;
@@ -37,13 +37,13 @@ export default function TaskData({ task }: TaskDataProps) {
     );
     dispatch(setTaskIdForPilot(id));
 
-    // dispatch(
-    //   setActiveItem({
-    //     activeItemId: id,
-    //     activeItemType: 'task',
-    //     activeItemName: name
-    //   })
-    // );
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
   };
 
   return (
@@ -52,19 +52,19 @@ export default function TaskData({ task }: TaskDataProps) {
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && activeItemId == task?.id
-            ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? '  flex justify-between group  ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableView
             ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : comfortableViewWrap && activeItemId == task?.id
-            ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableViewWrap
             ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
+            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
             : CompactView
             ? 'compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : CompactViewWrap
             ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
             : null

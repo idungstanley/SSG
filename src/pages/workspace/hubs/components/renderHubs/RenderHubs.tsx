@@ -50,8 +50,8 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: hubId,
+    itemType: hubType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
