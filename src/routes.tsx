@@ -140,7 +140,7 @@ export const routes = (user: IUser | null) =>
         //   path: 'settings/profile',
         //   element: <UserSettingsProfile />
         // },
-        { path: 'settings/team-members', element: <TeamMembersPage /> },
+        // { path: '/settings/team-members', element: <TeamMembersPage /> },
         {
           path: 'settings/team-members/invites',
           element: <TeamMemberInvitesPage />
@@ -168,7 +168,6 @@ export const routes = (user: IUser | null) =>
         { path: 'register/:inviteCode', element: <RegisterPage /> }
       ]
     },
-
     {
       path: '/settings',
       element: user ? (
@@ -182,7 +181,8 @@ export const routes = (user: IUser | null) =>
       ),
       children: [
         { path: 'profile', element: <UserSettings /> },
-        { path: 'construction', element: <UnderConstruction /> }
+        { path: 'construction', element: <UnderConstruction /> },
+        { path: 'team-members', element: <TeamMembersPage /> }
       ]
     },
     { path: '*', element: <NotFoundPage /> }
