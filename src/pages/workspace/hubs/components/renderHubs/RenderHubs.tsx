@@ -123,17 +123,13 @@ function RenderHubs() {
         }
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
-        <section className="relative flex flex-col space-y-8">
-          <div className="w-full fixed z-50" style={{ width: '62%' }}>
+        <section>
+          <div className="w-full ">
             <ListFilter />
           </div>
           {listView && groupByStatus == 'none' && (
             <div className="pr-1 pt-0.5 w-full h-full">
-              <div
-                className="w-full mb-10 overflow-auto"
-                style={{ minHeight: '0', maxHeight: '90vh' }}
-                ref={containerRef}
-              >
+              <div className="w-full mb-10" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                 {Object.keys(
                   TaskDataGroupings as {
                     [key: string]: { groupListName: string; key: string; tasks: ImyTaskData2[] };
