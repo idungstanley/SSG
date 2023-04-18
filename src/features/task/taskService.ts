@@ -2,16 +2,9 @@ import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../app/hooks';
-import {
-  ImyTaskData2,
-  setTimerStatus,
-  // getTaskData,
-  // getTaskData,
-  setToggleAssignCurrentTaskId
-} from './taskSlice';
+import { setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
-// import { ImyTaskData } from './taskSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -253,9 +246,7 @@ export const getTaskListService = ({
     },
     {
       onSuccess: (data) => {
-        data.pages.map((page) =>
-          page?.data.tasks.map((task: ImyTaskData2) => queryClient.setQueryData(['task', task.id], task))
-        );
+        data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {

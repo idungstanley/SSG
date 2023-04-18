@@ -23,6 +23,7 @@ import { useEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
 import MoreDetails from './components/MoreDetails';
+import { IListDetails } from '../../../../../../features/list/list.interfaces';
 
 export interface tagItem {
   id: string;
@@ -30,7 +31,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
@@ -119,7 +120,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
-            <Share />
+            <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -128,7 +129,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <ToolTip tooltip="Assignees">
           <Assignees />
         </ToolTip>
-        <span className="text-gray-300">|</span>
+        <span className=" text-gray-300">|</span>
         <ToolTip tooltip="Subscribers">
           <Subscribers />
         </ToolTip>
@@ -138,14 +139,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       <section className="p-2" key={Details?.id}>
         {/* tags */}
 
-        {Details?.tags && (
-          <div id="tags" className="mt-2">
-            <label className="text-xs text-gray-500">Tags</label>
-            <div className="border p-1 bg-gray-100 border-white rounded-md">
-              {/* <p> {groupTags(Details?.tags)}</p> */}
-            </div>
-          </div>
-        )}
+        {Details
+          ? 'tags' in Details && (
+              <div id="tags" className="mt-2">
+                <label className="text-xs text-gray-500">Tags</label>
+                <div className="border p-1 bg-gray-100 border-white rounded-md">
+                  {/* <p> {groupTags(Details?.tags)}</p> */}
+                </div>
+              </div>
+            )
+          : null}
 
         {/* name */}
         <div id="entity name">
