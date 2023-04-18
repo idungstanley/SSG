@@ -55,9 +55,13 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
           style={{ minHeight: '140px', width: '940%', marginLeft: '-302px', marginTop: '60px', zIndex: '100' }}
         >
           <div id="taskDetals">
-            <h1 className="text-black pt-1 text-xl">Share this task</h1>
+            <h1 className="text-black pt-1" style={{ fontSize: '18px' }}>
+              Share this task
+            </h1>
             <br />
-            <p className="pb-3 text-lg">Sharing a task</p>
+            <p className="pb-3 " style={{ fontSize: '14px' }}>
+              Sharing a task
+            </p>
 
             <div id="inviteInput" className="flex items-center w-12/12">
               <input
@@ -74,13 +78,13 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
               </p>
             </div>
 
-            <div id="shareWithEveryOne" className="text-lg">
+            <div id="shareWithEveryOne" style={{ fontSize: '14px' }}>
               <div id="iconText" className="flex justify-between items-center py-1 ">
                 <div className="flex justify-between items-center gap-2">
                   <p>
                     <TfiWorld />
                   </p>
-                  <p>Share link with anyone</p>
+                  <p className="text-md">Share link with anyone</p>
                   <p id="infoIcon">
                     <BsInfoLg />
                   </p>
