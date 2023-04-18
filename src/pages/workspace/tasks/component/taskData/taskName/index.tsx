@@ -20,6 +20,7 @@ import TagModal from '../../../../../../components/tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../../../features/workspace/tags/tagSlice';
 import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
+import { useSortable } from '@dnd-kit/sortable';
 
 export default function TaskName({
   taskColField,
@@ -79,19 +80,35 @@ export default function TaskName({
     }
   };
 
+  type UniqueIdentifier = string | number;
+
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task?.id as UniqueIdentifier
+  });
+
+  const style = {
+    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transition,
+    backgroundColor: isDragging ? '#f3f4f6' : undefined,
+    zIndex: isDragging ? 1 : undefined
+  };
+
   return (
     <>
-      <div className="relative flex items-center">
+      <div className="relative flex items-center" style={style}>
         <div className="flex items-center ">
           <input
             type="checkbox"
             id="checked-checkbox"
             className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-8"
+            ref={setNodeRef}
+            {...attributes}
+            {...listeners}
             onClick={() => {
               displayNav(task?.id as string);
             }}
           />
-          <MdDragIndicator className="absolute text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
+          <MdDragIndicator className="absolute text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
         </div>
         <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
           {task?.id == getSubTaskId ? (
