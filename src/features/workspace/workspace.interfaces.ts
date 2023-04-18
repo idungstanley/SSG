@@ -37,6 +37,7 @@ export interface IUserData {
   start_week: string;
   theme_color: string | null;
   timezone: string;
+  time_format: string;
 }
 
 export interface IUserRes {
