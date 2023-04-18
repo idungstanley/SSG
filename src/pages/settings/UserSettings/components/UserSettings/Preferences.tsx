@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../../styles/usersetting.css';
+import '../../../../../styles/usersetting.css';
 
 function Preferences() {
   return (

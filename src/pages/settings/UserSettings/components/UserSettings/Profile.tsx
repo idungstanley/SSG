@@ -1,10 +1,10 @@
 import React from 'react';
 import CurrentUser from './CurrentUser';
 import Region from './Region';
-import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
-import { setShowConfirmationModal, setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
+import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
+import { setShowConfirmationModal, setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 import CurrentUserModal from './CurrentUserModal';
-import UploadAvatar from './UploadAvatar';
+import UploadAvatar from '../UploadAvatar';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function Profile() {

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { RxCircleBackslash } from 'react-icons/rx';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   setCurrentUserModal,
   setShowAvatarUpload,
   setUserInfo
-} from '../../../../features/settings/user/userSettingsSlice';
-import { UseRemoveAvatar } from '../../../../features/settings/user/userSettingsServices';
+} from '../../../../../features/settings/user/userSettingsSlice';
+import { UseRemoveAvatar } from '../../../../../features/settings/user/userSettingsServices';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function CurrentUserModal() {

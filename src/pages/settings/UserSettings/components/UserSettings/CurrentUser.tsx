@@ -1,7 +1,7 @@
 import React from 'react';
-import { AvatarWithInitials } from '../../../../components';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setCurrentUserModal } from '../../../../features/settings/user/userSettingsSlice';
+import { AvatarWithInitials } from '../../../../../components';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setCurrentUserModal } from '../../../../../features/settings/user/userSettingsSlice';
 
 export default function CurrentUser() {
   const { color, userData } = useAppSelector((state) => state.userSetting);

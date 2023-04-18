@@ -2,10 +2,10 @@ import React from 'react';
 import ColorTheme from './ColorTheme';
 import TwoFactorAuthentication from './TwoFactorAuthentication';
 import Preferences from './Preferences';
-import { IUserData } from '../../../../features/workspace/workspace.interfaces';
-import { useAppSelector } from '../../../../app/hooks';
-import { UseUpdateUserSettings } from '../../../../features/settings/user/userSettingsServices';
-import Confirmation from './Modal/Confirmation';
+import { IUserData } from '../../../../../features/workspace/workspace.interfaces';
+import { useAppSelector } from '../../../../../app/hooks';
+import { UseUpdateUserSettings } from '../../../../../features/settings/user/userSettingsServices';
+import Confirmation from '../Modal/Confirmation';
 
 interface dataProps {
   data: IUserData | undefined;
@@ -51,7 +51,7 @@ function Personalization({ data }: dataProps) {
   return (
     <div
       className="w-full bg-white m-2 p-4 rounded-lg relative overflow-y-auto overflow-x-hidden flex flex-col min-h-screen"
-      style={{ maxHeight: '98vh' }}
+      style={{ maxHeight: '95vh' }}
     >
       <div className="bg-white w-full mb-10">
         <section className="my-2 px-4">

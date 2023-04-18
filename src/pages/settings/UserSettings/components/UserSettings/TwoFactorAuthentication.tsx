@@ -1,6 +1,6 @@
 import React from 'react';
 import { MdOutlineCall } from 'react-icons/md';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppSelector } from '../../../../../app/hooks';
 
 export default function TwoFactorAuthentication() {
   const { theme_color } = useAppSelector((state) => state.userSetting);

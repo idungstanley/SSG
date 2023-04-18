@@ -54,8 +54,9 @@ import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs'
 import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
 // import UserSettingsProfile from './pages/settings/UserSettings';
-import UserSettings from './pages/settings/UserSettings/Settings';
+import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
+import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 
 const inbox = [
   {
@@ -171,8 +172,8 @@ export const routes = (user: IUser | null) =>
       path: '/settings',
       element: <UserSettings />,
       children: [
-        { path: 'profile', element: <UserSettings /> }
-        // { path: 'register', element: <RegisterPage /> },
+        { path: 'profile', element: <UserSettings /> },
+        { path: 'construction', element: <UnderConstruction /> }
         // { path: 'register/:inviteCode', element: <RegisterPage /> }
       ]
     },

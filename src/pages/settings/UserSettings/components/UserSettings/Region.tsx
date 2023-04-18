@@ -4,8 +4,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import moment from 'moment-timezone';
 import { RiArrowDropDownLine } from 'react-icons/ri';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 
 interface Timezone {
   value: string;

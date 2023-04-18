@@ -1,7 +1,7 @@
 import React from 'react';
-import MainLogo from '../../../../assets/icons/mainIcon.svg';
-import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
-import { setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
+import MainLogo from '../../../../../assets/icons/mainIcon.svg';
+import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
+import { setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 
 function ColorTheme() {
   const { theme_color } = useAppSelector((state) => state.userSetting);

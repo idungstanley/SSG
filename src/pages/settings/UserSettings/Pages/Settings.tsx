@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import SideBar from './components/sidebar/SideBar';
-import Profile from './components/Profile';
-import Personalization from './components/Personalization';
-import { Spinner } from '../../../common';
-import { useAppDispatch } from '../../../app/hooks';
-import { setActiveTab, setUserData, setUserInfo } from '../../../features/settings/user/userSettingsSlice';
-import { useGetSelf } from '../../../features/settings/user/userSettingsServices';
+import SideBar from '../components/sidebar/SideBar';
+import Profile from '../components/UserSettings/Profile';
+import Personalization from '../components/UserSettings/Personalization';
+import { Spinner } from '../../../../common';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setActiveTab, setUserData, setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
+import { useGetSelf } from '../../../../features/settings/user/userSettingsServices';
 
 function UserSettings() {
   const { data, status } = useGetSelf();
