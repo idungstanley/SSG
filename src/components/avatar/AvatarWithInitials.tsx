@@ -24,13 +24,13 @@ function AvatarWithInitials({
   return (
     <div className="relative ">
       <span
-        className={`inline-flex  items-center justify-center  ${height} ${width} ${
+        className={`inline-flex  items-center justify-center ${height} ${width} ${
           roundedStyle === 'circular' && 'rounded-full'
         } ${roundedStyle === 'rounded' && 'rounded'}`}
         style={{ backgroundColor: backgroundColour }}
       >
         <span
-          className="font-bold leading-none "
+          className="font-bold leading-none"
           style={{ fontSize: `${CompactView || CompactViewWrap ? '10px' : textSize}`, color: textColor }}
         >
           {initials}
