@@ -11,14 +11,10 @@ function Calendar() {
   return (
     <div className="w-full h-full overflow-y-scroll pb-20">
       <section className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-        {/* <h1 className="text-base font-semibold leading-6 text-gray-900">
-          <time dateTime={String(year)}>{year}</time>
-        </h1> */}
-
         <ChangeYear year={year} setYear={setYear} />
 
         {/* action */}
-        <div className="hidden md:ml-4 md:flex md:items-center">
+        {/* <div className="hidden md:ml-4 md:flex md:items-center">
           <div className="ml-6 h-6 w-px bg-gray-300" />
           <button
             type="button"
@@ -26,7 +22,7 @@ function Calendar() {
           >
             Add event
           </button>
-        </div>
+        </div> */}
       </section>
 
       <YearCalendar year={year} />

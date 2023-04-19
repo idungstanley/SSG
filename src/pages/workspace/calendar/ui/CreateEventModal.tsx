@@ -6,8 +6,8 @@ import SelectTypeListbox from './SelectTypeListbox';
 
 interface CreateEventModal {
   show: boolean;
-  setShow: (i: boolean) => void;
-  newEventDates: Dayjs[];
+  setShow: VoidFunction;
+  dayOff: { start: Dayjs; end: Dayjs } | null;
   onSubmit: ({ type, reason }: { type: { id: number; title: string }; reason: string }) => void;
 }
 
@@ -22,7 +22,7 @@ const types = [
   }
 ];
 
-export default function CreateEventModal({ show, setShow, newEventDates, onSubmit }: CreateEventModal) {
+export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: CreateEventModal) {
   const [type, setType] = useState(types[0]);
   const reasonRef = useRef<HTMLInputElement>(null);
 
@@ -72,23 +72,28 @@ export default function CreateEventModal({ show, setShow, newEventDates, onSubmi
                   <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => setShow(false)}
+                    onClick={setShow}
                   >
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <div className="sm:flex sm:items-start w-full">
+                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                       Book time off
                     </Dialog.Title>
 
                     {/* main */}
-                    <div className="mt-2 p-2">
-                      {newEventDates.length ? (
+                    <div className="mt-2 p-2 w-full space-y-5">
+                      {dayOff ? (
                         <div className="flex w-full justify-between items-center">
-                          <p className="border rounded-md p-2">Starting {newEventDates[0].format('DD MM YYYY')}</p>
-                          <p className="border rounded-md p-2">Ending {newEventDates.at(-1)?.format('DD MM YYYY')}</p>
+                          <p>
+                            Starting{' '}
+                            <span className="border rounded-md p-2 ml-2">{dayOff.start.format('DD.MM.YYYY')}</span>
+                          </p>
+                          <p>
+                            Ending <span className="border rounded-md p-2 ml-2">{dayOff.end.format('DD MM YYYY')}</span>{' '}
+                          </p>
                         </div>
                       ) : null}
 
@@ -98,7 +103,7 @@ export default function CreateEventModal({ show, setShow, newEventDates, onSubmi
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
                           Reason
                         </label>
-                        <div className="mt-2">
+                        <div className="mt-1">
                           <input
                             required
                             min={2}
@@ -115,15 +120,14 @@ export default function CreateEventModal({ show, setShow, newEventDates, onSubmi
                 </div>
 
                 {/* bottom actions */}
-                <div className="mt-5 sm:mt-4 sm:flex gap-4">
+                <div className="mt-5 sm:mt-4 sm:flex gap-4 items-center">
                   <button
                     type="submit"
-                    className="inline-flex border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm sm:ml-3 sm:w-auto"
-                    onClick={() => setShow(false)}
+                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm sm:ml-3 sm:w-auto"
                   >
                     Send request
                   </button>
-                  <p>Takes {newEventDates.length} days from allowance</p>
+                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') || 1} days from allowance</p> : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

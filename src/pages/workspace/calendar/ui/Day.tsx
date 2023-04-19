@@ -1,5 +1,6 @@
+import { Menu } from '@headlessui/react';
 import { Dayjs } from 'dayjs';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cl } from '../../../../utils';
 
 interface DayProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,6 +17,7 @@ interface DayProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isHighlighted: boolean;
   isSelected: boolean;
   isHoliday: boolean;
+  children: ReactNode;
 }
 
 export default function Day({
@@ -27,10 +29,12 @@ export default function Day({
   isHighlighted,
   isSelected,
   isHoliday,
+  children,
   ...props
 }: DayProps) {
   return (
-    <button
+    <Menu
+      as="button"
       {...props}
       type="button"
       className={cl(
@@ -42,7 +46,7 @@ export default function Day({
               isHoliday && 'bg-primary-100 hover:bg-primary-100'
             )
           : 'bg-gray-50 text-gray-400',
-        'py-1.5 hover:bg-gray-100 focus:z-10 flex justify-center items-center ',
+        'relative py-1.5 hover:bg-gray-100 focus:z-10 flex justify-center items-center',
 
         rounded?.tl && 'rounded-tl-lg',
         rounded?.tr && 'rounded-tr-lg',
@@ -50,15 +54,16 @@ export default function Day({
         rounded?.br && 'rounded-br-lg'
       )}
     >
-      <time
-        dateTime={String(day.format())}
+      <Menu.Button
         className={cl(
           isCurrentDate && 'bg-primary-500 text-white',
           'w-7 h-7 flex items-center justify-center rounded-full'
         )}
       >
         {isCurrentDate ? day.date() : isHoliday ? (isHighlighted ? day.date() : '+') : day.date()}
-      </time>
-    </button>
+      </Menu.Button>
+
+      {children}
+    </Menu>
   );
 }
