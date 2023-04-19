@@ -131,23 +131,9 @@ export const routes = (user: IUser | null) =>
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox,
-        { path: 'settings/permissions', element: <PermissionsPage /> },
         {
           path: 'settings/notifications',
           element: <NotificationSettingsPage />
-        },
-        // {
-        //   path: 'settings/profile',
-        //   element: <UserSettingsProfile />
-        // },
-        // { path: '/settings/team-members', element: <TeamMembersPage /> },
-        {
-          path: 'settings/team-members/invites',
-          element: <TeamMemberInvitesPage />
-        },
-        {
-          path: 'settings/team-members/groups',
-          element: <TeamMemberGroupsPage />
         },
         {
           path: 'settings/team-members/groups/:teamMemberGroupId',
@@ -182,7 +168,10 @@ export const routes = (user: IUser | null) =>
       children: [
         { path: 'profile', element: <UserSettings /> },
         { path: 'construction', element: <UnderConstruction /> },
-        { path: 'team-members', element: <TeamMembersPage /> }
+        { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
+        { path: 'team-members', element: <TeamMembersPage /> },
+        { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
+        { path: 'settings/permisions', element: <PermissionsPage /> }
       ]
     },
     { path: '*', element: <NotFoundPage /> }
