@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
@@ -22,11 +22,6 @@ function GroupAssignee({
   });
 
   const { mutate: onTaskUnassign } = UseUnassignTask();
-  function handleModal(id: string) {
-    setTimeout(() => {
-      console.log(id);
-    }, 2000);
-  }
 
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
@@ -125,7 +120,6 @@ function GroupAssignee({
                     show: true,
                     index
                   });
-                  handleModal(newData.id);
                 }}
                 onMouseLeave={() =>
                   setDisplayed({

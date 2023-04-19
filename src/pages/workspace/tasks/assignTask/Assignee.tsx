@@ -18,7 +18,6 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
-import PopAssignModal from './PopAssignModal';
 
 export default function Assignee({
   itemId,
@@ -124,7 +123,6 @@ export default function Assignee({
                 }}
                 aria-hidden="true"
               />
-              <PopAssignModal />
             </span>
           )}
         </Button>
@@ -189,6 +187,7 @@ export default function Assignee({
                         height="h-8"
                         width="w-8"
                       />
+
                       <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
