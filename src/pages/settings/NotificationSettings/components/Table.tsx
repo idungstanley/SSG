@@ -1,4 +1,4 @@
-export default function NotificaitonTablle() {
+export default function NotificaitonTable() {
   return (
     <div className="flex flex-col -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-6">
       <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-6">

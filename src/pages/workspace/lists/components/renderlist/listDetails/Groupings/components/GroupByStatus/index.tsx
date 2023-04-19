@@ -11,16 +11,6 @@ import { useAppSelector } from '../../../../../../../../../app/hooks';
 import AddNewItem from '../../../../../../../tasks/component/taskColumn/AddNewItem';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../../../features/list/listSlice';
 import { useDispatch } from 'react-redux';
-import {
-  closestCenter,
-  DndContext,
-  // DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors
-} from '@dnd-kit/core';
-import { rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplateData) {
   const [taskDataGroupingsByStatus, setTaskDataGroupingsByStatus] = useState<TaskDataGroupingsProps>({});
@@ -39,39 +29,10 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     }
   };
 
-  const taskIds = Object.keys(taskDataGroupingsByStatus).map((key) => ({
-    id: key
-  }));
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
-  );
-  console.log(taskIds);
-  // const handleDragEnd = (e: DragEndEvent) => {
-  //   console.log(e);
-  //   const { active, over } = e;
-
-  //   if (active.id !== over?.id) {
-  //     const findActive = items.find((i) => i.id === active.id);
-  //     const findOver = items.find((i) => i.id === over?.id);
-
-  //     if (findActive && findOver) {
-  //       setItems((items) => {
-  //         const oldIndex = items.indexOf(findActive);
-  //         const newIndex = items.indexOf(findOver);
-
-  //         const sortArray = arrayMove(items, oldIndex, newIndex);
-
-  //         localStorage.setItem('subTab', JSON.stringify([...sortArray.map((i) => i.id)]));
-
-  //         return sortArray;
-  //       });
-  //     }
-  //   }
-  // };
+  // const taskIds = Object.keys(taskDataGroupingsByStatus).map((key) => ({
+  //   id: key
+  // }));
+  // console.log(taskIds);
 
   useEffect(() => {
     const taskDataGroupedByStatusAndListID = getTaskDataGrouping?.reduce(
@@ -219,23 +180,15 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                         />
                         {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
                           <Fragment key={task.id}>
-                            <DndContext
-                              sensors={sensors}
-                              collisionDetection={closestCenter}
-                              // onDragEnd={(e) => handleDragEnd(e)}
-                            >
-                              <SortableContext strategy={rectSortingStrategy} items={taskIds}>
-                                <section>
-                                  <TaskData listId={task.list_id} task={task} />
-                                  {currentParentTaskId === task.id ? (
-                                    <div>
-                                      <SubTask parentTaskId={currentParentTaskId} />
-                                    </div>
-                                  ) : null}
-                                  {getSubTaskId === task.id ? <RenderSubTasks /> : null}
-                                </section>
-                              </SortableContext>
-                            </DndContext>
+                            <section>
+                              <TaskData listId={task.list_id} task={task} />
+                              {currentParentTaskId === task.id ? (
+                                <div>
+                                  <SubTask parentTaskId={currentParentTaskId} />
+                                </div>
+                              ) : null}
+                              {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                            </section>
                           </Fragment>
                         ))}
                       </li>

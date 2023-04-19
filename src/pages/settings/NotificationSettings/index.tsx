@@ -1,6 +1,6 @@
 import React from 'react';
 import { SimpleSectionHeading } from '../../../components';
-import NotificaitonTablle from './components/Table';
+import NotificaitonTable from './components/Table';
 
 export default function NotificationSettingsPage() {
   return (
@@ -11,7 +11,7 @@ export default function NotificationSettingsPage() {
           description="Manage notification for each action within workspace"
         />
       </div>
-      <NotificaitonTablle />
+      <NotificaitonTable />
     </main>
   );
 }

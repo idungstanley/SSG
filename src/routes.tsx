@@ -136,10 +136,6 @@ export const routes = (user: IUser | null) =>
           path: 'settings/notifications',
           element: <NotificationSettingsPage />
         },
-        // {
-        //   path: 'settings/profile',
-        //   element: <UserSettingsProfile />
-        // },
         { path: 'settings/team-members', element: <TeamMembersPage /> },
         {
           path: 'settings/team-members/invites',
