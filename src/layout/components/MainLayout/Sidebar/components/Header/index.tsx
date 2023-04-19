@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <div
       className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}
-      style={{ height: `${showSidebar ? '100px' : ''}` }}
+      style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <img className="w-14 h-14" src={MainLogo} alt="Workflow" />
       <div className={cl('flex pt-2 flex-1', !showSidebar ? 'flex-col items-center justify-center' : undefined)}>
