@@ -2,7 +2,8 @@ import React, { memo, useEffect, useState } from 'react';
 import {
   setActivePlaceForNav,
   setActivePlaceId,
-  setActivePlaceName
+  setActivePlaceName,
+  setCurrentItem
 } from '../../../../../features/workspace/workspaceSlice';
 import Dashboard from '../../../../../pages/workspace/dashboard';
 import Files from '../../../../../pages/workspace/files';
@@ -152,6 +153,14 @@ function Places() {
 
     if (link) {
       navigate('/' + link);
+      if (name === 'TASKS') {
+        dispatch(
+          setCurrentItem({
+            currentItemId: null,
+            currentItemType: null
+          })
+        );
+      }
     }
   };
 

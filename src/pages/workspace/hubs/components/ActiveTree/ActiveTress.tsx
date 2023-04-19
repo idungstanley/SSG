@@ -14,9 +14,9 @@ export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
 
   const { listId, hubId, walletId } = useParams();
-  const { currentItemId, activeItemId } = useAppSelector((state) => state.workspace);
+  const { currentItemId } = useAppSelector((state) => state.workspace);
 
-  const id = currentItemId || activeItemId;
+  const id = currentItemId;
   const fetchTree = hubs.length === 0 && (!!listId || !!hubId || !!walletId);
 
   const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
