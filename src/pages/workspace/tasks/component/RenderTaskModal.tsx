@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   CalendarIcon,
   CheckIcon,
@@ -10,7 +11,6 @@ import {
   UserPlusIcon,
   VideoCameraIcon
 } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 // import Timer from 'react-compound-timer/build';
@@ -25,7 +25,6 @@ function RenderTaskModal() {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [showTimeEntries, setShowTimeEntries] = useState(false);
-
   const { data: taskData } = getOneTaskServices({ task_id: taskId });
 
   useQuery({
