@@ -20,7 +20,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   );
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const { hubId } = useParams();
+  const { hubId, walletId } = useParams();
 
   const dispatch = useAppDispatch();
 
@@ -35,7 +35,11 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   };
 
   const handleTaskPilot = (id: string, name: string) => {
-    navigate(`/hub/${hubId}/t/${id}`, { replace: true });
+    hubId
+      ? navigate(`/hub/${hubId}/t/${id}`, { replace: true })
+      : walletId
+      ? navigate(`/wallet/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/list/${listId}/t/${id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: id,

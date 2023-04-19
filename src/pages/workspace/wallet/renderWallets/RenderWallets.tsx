@@ -19,7 +19,7 @@ function RenderWallets() {
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
 
-  const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentWalletName } = useAppSelector((state) => state.workspace);
   const containerRef = useRef<HTMLDivElement>(null);
   const { walletId } = useParams();
   const walletType = 'wallet';
@@ -38,8 +38,8 @@ function RenderWallets() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: walletId,
+    itemType: walletType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);

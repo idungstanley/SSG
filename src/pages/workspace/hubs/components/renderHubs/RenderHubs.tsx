@@ -102,7 +102,6 @@ function RenderHubs() {
       fetchNextPage();
     }
   }
-
   return (
     <>
       <PilotSection />

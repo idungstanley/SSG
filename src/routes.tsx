@@ -90,6 +90,10 @@ export const routes = (user: IUser | null) =>
       path: 'onboarding',
       element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
     },
+    // {
+    //   path: 'workspaceId',
+    //   element: <MainLayout />
+    // },
     {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
@@ -124,7 +128,9 @@ export const routes = (user: IUser | null) =>
         { path: 'hub/:hubId', element: <RenderHubs /> },
         { path: 'hub/:hubId/t/:taskId', element: <RenderHubs /> },
         { path: 'wallet/:walletId', element: <RenderWallets /> },
+        { path: 'wallet/:walletId/t/:taskId', element: <RenderWallets /> },
         { path: 'list/:listId', element: <RenderList /> },
+        { path: 'list/:listId/t/:taskId', element: <RenderList /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
