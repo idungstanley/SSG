@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-// import { MdDone } from 'react-icons/md';
-import { IUserData } from '../../../../features/workspace/workspace.interfaces';
-import MainLogo from '../../../../assets/icons/mainIcon.svg';
+import React from 'react';
+import MainLogo from '../../../../../assets/icons/mainIcon.svg';
+import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
+import { setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 
-interface dataProps {
-  data: IUserData | undefined;
-}
-
-function ColorTheme({ data }: dataProps) {
+function ColorTheme() {
+  const { theme_color } = useAppSelector((state) => state.userSetting);
+  const dispatch = useAppDispatch();
   const colors = [
     {
       id: 1,
@@ -70,24 +68,25 @@ function ColorTheme({ data }: dataProps) {
       color_code: '#202020'
     }
   ];
-  const [selectedColor, setSelectedColor] = useState<string | null | undefined>(data?.theme_color);
   return (
     <div>
       <div>
-        <h1 className="text-xs font-bold">SELECT YOUR THEME</h1>
+        <h1 className="font-semibold" style={{ fontSize: '15px' }}>
+          SELECT YOUR THEME
+        </h1>
       </div>
       <div className="flex flex-wrap">
         {colors.map((item) => {
           return (
             <div
               key={item.id}
-              className="mx-4 my-2 w-8 h-8 flex items-center justify-center"
-              onClick={() => setSelectedColor(item.color_code)}
+              className="mx-4 my-2 w-16 h-16 flex items-center justify-center"
+              onClick={() => dispatch(setUserInfo({ theme_color: item.color_code }))}
             >
-              {selectedColor === item.color_code ? (
+              {theme_color === item.color_code ? (
                 <div
                   className={
-                    'rounded-full hover:rounded-full cursor-pointer w-8 h-8 flex justify-center items-center hover:w-8 hover-h-8'
+                    'rounded-full hover:rounded-full cursor-pointer w-16 h-16 flex justify-center items-center hover:w-16 hover:h-16'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 >
@@ -96,7 +95,7 @@ function ColorTheme({ data }: dataProps) {
               ) : (
                 <div
                   className={
-                    'rounded-full hover:rounded-full cursor-pointer color_theme w-6 h-6 flex justify-center items-center'
+                    'rounded-full hover:rounded-full cursor-pointer color_theme w-8 h-8 flex justify-center items-center'
                   }
                   style={{ backgroundColor: `${item.color_code}` }}
                 ></div>

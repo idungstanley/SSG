@@ -112,7 +112,7 @@ export default function TaskListLevelTemplateData() {
                 {/* <TaskListViews taskLength={filteredTaskData[value].tasks.length} /> */}
                 {myTaskData.map((task) => (
                   <Fragment key={task.id}>
-                    <TaskData task={task} />
+                    <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>
                         <SubTask parentTaskId={currentParentTaskId} />

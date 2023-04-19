@@ -44,6 +44,7 @@ export default function DetailsSubTab() {
   const [items, setItems] = useState(DetailOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
+    console.log(e);
     const { active, over } = e;
 
     if (active.id !== over?.id) {

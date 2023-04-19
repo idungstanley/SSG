@@ -54,8 +54,10 @@ import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs'
 import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
 // import UserSettingsProfile from './pages/settings/UserSettings';
-import UserSettings from './pages/settings/UserSettings/Settings';
+import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
+import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
+import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 
 const inbox = [
   {
@@ -138,7 +140,7 @@ export const routes = (user: IUser | null) =>
         //   path: 'settings/profile',
         //   element: <UserSettingsProfile />
         // },
-        { path: 'settings/team-members', element: <TeamMembersPage /> },
+        // { path: '/settings/team-members', element: <TeamMembersPage /> },
         {
           path: 'settings/team-members/invites',
           element: <TeamMemberInvitesPage />
@@ -157,7 +159,6 @@ export const routes = (user: IUser | null) =>
         }
       ]
     },
-
     {
       path: '/auth',
       element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
@@ -169,11 +170,19 @@ export const routes = (user: IUser | null) =>
     },
     {
       path: '/settings',
-      element: <UserSettings />,
+      element: user ? (
+        user.default_workspace_id ? (
+          <SideBarSettings />
+        ) : (
+          <Navigate to="/onboarding" />
+        )
+      ) : (
+        <Navigate to="/auth/login" />
+      ),
       children: [
-        { path: 'profile', element: <UserSettings /> }
-        // { path: 'register', element: <RegisterPage /> },
-        // { path: 'register/:inviteCode', element: <RegisterPage /> }
+        { path: 'profile', element: <UserSettings /> },
+        { path: 'construction', element: <UnderConstruction /> },
+        { path: 'team-members', element: <TeamMembersPage /> }
       ]
     },
     { path: '*', element: <NotFoundPage /> }
