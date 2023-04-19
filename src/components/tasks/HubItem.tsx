@@ -24,20 +24,13 @@ interface TaskItemProps {
   handleClick: (id: string, name?: string) => void;
   handleLocation: (id: string, name: string, parentId?: string | null) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
-  showChildren: string | null;
   type: string;
 }
-export default function HubItem({
-  handleClick,
-  item,
-  handleLocation,
-  showChildren,
-  handleHubSettings,
-  type
-}: TaskItemProps) {
+export default function HubItem({ handleClick, item, handleLocation, handleHubSettings, type }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { openedHubId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
@@ -76,10 +69,10 @@ export default function HubItem({
         onClick={() => handleClick(item.id, item.name)}
         style={{ backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}` }}
       >
-        <div className="relative flex items-center justify-between pl-3">
+        <div className="relative flex items-center justify-between pl-3" style={{ height: '30px' }}>
           {item.id === hubId && (
             <span
-              className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg"
+              className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500 rounded-r-lg"
               style={{ backgroundColor: '#BF00FF' }}
             />
           )}
@@ -90,7 +83,7 @@ export default function HubItem({
           >
             {showSidebar && (
               <div>
-                {item.id === showChildren ? (
+                {openedHubId.includes(item.id) ? (
                   <span className="flex flex-col">
                     <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                   </span>

@@ -8,15 +8,18 @@ import { useGetHubs } from '../../../../../features/hubs/hubService';
 import CreateTree from './CreateTree';
 import UpdateTree from './updateTree/UpdateTree';
 import HList from './Items/hub/HList';
+import { useAppSelector } from '../../../../../app/hooks';
 
 export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
 
-  const { hubId, listId, walletId } = useParams();
+  const { listId, hubId, walletId } = useParams();
+  const { currentItemId } = useAppSelector((state) => state.workspace);
 
-  const fetchTree = hubs.length === 0 && (!!hubId || !!listId || !!walletId);
+  const id = currentItemId;
+  const fetchTree = hubs.length === 0 && (!!listId || !!hubId || !!walletId);
 
-  const { data } = useGetHubs({ includeTree: fetchTree, hubId, walletId, listId });
+  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
 
   useEffect(() => {
     if (data) {
@@ -58,7 +61,7 @@ export default function ActiveTress() {
                       return item;
                     }
                   },
-                  hubId || walletId || listId
+                  id || listId
                 )
               ]
         );

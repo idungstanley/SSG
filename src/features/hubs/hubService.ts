@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
-import { useAppDispatch } from '../../app/hooks';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
 import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
@@ -27,19 +28,24 @@ export const createHubService = (data: {
 
 export const useGetHubs = ({
   includeTree,
-  hubId,
-  walletId,
+  hub_id,
+  wallet_id,
   listId
 }: {
   includeTree?: boolean;
-  hubId?: string;
-  walletId?: string;
+  hub_id?: string | null;
+  wallet_id?: string | null;
   listId?: string;
 }) => {
-  const id = hubId || walletId || listId;
+  const id = hub_id || wallet_id || listId;
+  const { hubId, walletId } = useParams();
+  const { currentItemType, activeItemType } = useAppSelector((state) => state.workspace);
 
-  const isActiveHub = hubId ? `hubs${'/' + hubId}` : null;
-  const isActiveWallet = walletId ? `wallets${`?parent_id=${walletId}`}` : null;
+  const isActiveHub = hub_id && (currentItemType === 'hub' || activeItemType === 'hub') ? `hubs${'/' + hub_id}` : null;
+  const isActiveWallet =
+    wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet')
+      ? `wallets${`?parent_id=${wallet_id}`}`
+      : null;
   const isActiveList = listId ? `lists${`?parent_id=${listId}`}` : null;
 
   return useQuery(

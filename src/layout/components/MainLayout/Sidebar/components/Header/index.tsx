@@ -14,12 +14,14 @@ export default function Header() {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   return (
-    <div className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}>
+    <div
+      className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}
+      style={{ height: `${showSidebar ? '115px' : ''}` }}
+    >
       <Link to="/">
         <img className="w-14 h-14" src={MainLogo} alt="Workflow" />
       </Link>
-
-      <div className={cl('flex pt-2 flex-1', !showSidebar ? 'flex-col items-center justify-center' : '')}>
+      <div className={cl('flex pt-2 flex-1', !showSidebar ? 'flex-col items-center justify-center' : undefined)}>
         <WorkSpaceSelection />
         {/* cog */}
         <div onClick={() => dispatch(setShowSidebarSettings(!sidebarSettings))}>

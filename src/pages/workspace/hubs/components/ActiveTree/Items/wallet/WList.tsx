@@ -3,11 +3,12 @@ import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
 import { useAppDispatch } from '../../../../../../../app/hooks';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   setActiveEntity,
   setActiveEntityName,
   setActiveItem,
+  setCurrentItem,
   setCurrentWalletId,
   setCurrentWalletName,
   setShowHub
@@ -28,12 +29,12 @@ export default function WList({
   const dispatch = useAppDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { walletId } = useParams();
+  // const { walletId } = useParams();
 
-  const handleLocation = (id: string, name: string, parentId?: string) => {
-    const isActive = walletId === id;
+  const handleLocation = (id: string, name: string) => {
+    // const isActive = walletId === id;
     dispatch(setShowHub(true));
-    navigate(`/wallet/${isActive ? parentId || '' : id}`, {
+    navigate(`/wallet/${id}`, {
       replace: true
     });
     setShowSubWallet(id);
@@ -63,6 +64,12 @@ export default function WList({
     } else {
       dispatch(setCurrentWalletId(id));
       setShowSubWallet(id);
+      dispatch(
+        setCurrentItem({
+          currentItemId: id,
+          currentItemType: 'wallet'
+        })
+      );
       dispatch(
         setWalletItem({
           currentWalletParentId: id,

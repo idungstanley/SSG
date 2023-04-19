@@ -5,7 +5,7 @@ import UpdateList from './UpdateList';
 export default function UpdateTree(
   existingTree: Hub[],
   updateFn: <T extends Hub | Wallet | List>(i: T) => T,
-  idToUpdate?: string
+  idToUpdate?: string | null
 ): Hub[] {
   if (!idToUpdate) {
     return existingTree;

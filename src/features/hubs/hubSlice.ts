@@ -25,6 +25,7 @@ interface HubState {
   favUpdateName: null | string;
   createWLID: string | null;
   editHub: boolean;
+  openedHubId: string[];
 }
 
 const initialState: HubState = {
@@ -50,7 +51,8 @@ const initialState: HubState = {
   triggerFavUpdate: false,
   favUpdateName: null,
   createWLID: null,
-  editHub: false
+  editHub: false,
+  openedHubId: []
 };
 
 export const hubSlice = createSlice({
@@ -136,6 +138,15 @@ export const hubSlice = createSlice({
     setFavUpdateName(state, action: PayloadAction<string | null>) {
       state.favUpdateName = action.payload;
     },
+    setOpenedHubId(state, action: PayloadAction<string>) {
+      let newArr = [];
+      if (state.openedHubId.includes(action.payload)) {
+        newArr = state.openedHubId.filter((i) => i !== action.payload);
+      } else {
+        newArr = [...state.openedHubId, action.payload];
+      }
+      state.openedHubId = newArr;
+    },
     chechIfHub: (state) => state
   }
 });
@@ -156,6 +167,7 @@ export const {
   setshowMenuDropdown,
   setSubDropdownMenu,
   setHubParentId,
+  setOpenedHubId,
   closeMenu,
   getMenuRef,
   getPrevName,
