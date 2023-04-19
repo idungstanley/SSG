@@ -1,11 +1,6 @@
 import { getDaysInMonth } from './getDaysInMonth';
 import dayjs from 'dayjs';
-
-interface MonthObject {
-  name: string;
-  month: dayjs.Dayjs;
-  days: dayjs.Dayjs[];
-}
+import { MonthObject } from '../types/calendar';
 
 export const getDaysInYear = (year: number): MonthObject[] => {
   const allMonths: MonthObject[] = [];

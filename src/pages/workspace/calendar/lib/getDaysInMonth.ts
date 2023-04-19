@@ -8,7 +8,7 @@ export const getDaysInMonth = (date: dayjs.Dayjs): dayjs.Dayjs[] => {
   const nextMonthStart = monthEnd.add(1, 'day');
 
   // Previous month dates
-  const prevMonthDays = prevMonthEnd.date();
+  const prevMonthDays = prevMonthEnd.date() + 1;
   const numDaysFromPrevMonth = (monthStart.day() + 6) % 7; // Calculate number of days to add from previous month
   for (let i = prevMonthDays - numDaysFromPrevMonth; i < prevMonthDays; i++) {
     daysInMonth.push(prevMonthEnd.date(i));
