@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
@@ -20,14 +19,9 @@ import { useParams } from 'react-router-dom';
 import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 
-interface HubDetailTypes {
-  activeItemId: string;
-  activeItemType: string;
-}
-
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,8 +44,8 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: hubId,
+    itemType: hubType,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
@@ -130,16 +124,12 @@ function RenderHubs() {
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <section>
-          <div className="w-full">
+          <div className="w-full ">
             <ListFilter />
           </div>
           {listView && groupByStatus == 'none' && (
             <div className="pr-1 pt-0.5 w-full h-full">
-              <div
-                className="w-full mb-10 overflow-auto"
-                style={{ minHeight: '0', maxHeight: '90vh' }}
-                ref={containerRef}
-              >
+              <div className="w-full mb-10" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                 {Object.keys(
                   TaskDataGroupings as {
                     [key: string]: { groupListName: string; key: string; tasks: ImyTaskData2[] };
@@ -166,7 +156,7 @@ function RenderHubs() {
           {listView && groupByStatus == 'status' && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div
-                className="w-full mb-10 overflow-auto"
+                className="w-full mb-12 overflow-auto"
                 style={{ minHeight: '0', maxHeight: '90vh' }}
                 ref={containerRef}
               >
