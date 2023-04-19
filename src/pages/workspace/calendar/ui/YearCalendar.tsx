@@ -7,9 +7,78 @@ interface YearCalendarProps {
   year: number;
 }
 
+interface Event {
+  id: string;
+  user: {
+    name: string;
+  };
+  daysOff: DayOff[];
+}
+
+interface DayOff {
+  id: string;
+  start: string;
+  end: string;
+  type: string;
+  reason: string;
+}
+
+const events: Event[] = [
+  {
+    id: '1',
+    user: {
+      name: 'Snanislau'
+    },
+    daysOff: [
+      {
+        id: '1',
+        start: '2023-04-19',
+        end: '2023-04-23',
+        type: 'sick leave',
+        reason: 'Blah blah blah'
+      },
+      {
+        id: '2',
+        start: '2023-04-25',
+        end: '2023-04-26',
+        type: 'holiday',
+        reason: 'Blah blah blah blah'
+      }
+    ]
+  },
+  {
+    id: '2',
+    user: {
+      name: 'John'
+    },
+    daysOff: [
+      {
+        id: '1',
+        start: '2023-04-28',
+        end: '2023-04-29',
+        type: 'sick leave',
+        reason: 'Blah blah blah'
+      },
+      {
+        id: '2',
+        start: '2023-05-01',
+        end: '2023-05-01',
+        type: 'sick leave',
+        reason: 'Blah blah blah'
+      }
+    ]
+  }
+];
+
 const currentDate = dayjs();
 
 const WEEKS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+const isSameOrBefore = (first: dayjs.Dayjs, second: dayjs.Dayjs) =>
+  first.isSame(second, 'date') || first.isBefore(second, 'date');
+
+const isSameOrAfter = (first: dayjs.Dayjs, second: dayjs.Dayjs) =>
+  first.isSame(second, 'date') || first.isAfter(second, 'date');
 
 const getDatesInRange = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => {
   const dates = [];
@@ -27,6 +96,27 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   const months = getDaysInYear(year);
   const [selectedDates, setSelectedDates] = useState<dayjs.Dayjs[]>([]);
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [highlightedDates, setHighlightedDates] = useState<string[]>([]);
+
+  console.log(highlightedDates);
+
+  const handleDateMouseEnter = (event?: DayOff) => {
+    if (!event) {
+      return;
+    }
+
+    const { start, end } = event;
+    const startDate = dayjs(start);
+    const endDate = dayjs(end);
+
+    const datesArray = [...Array(endDate.diff(startDate, 'day') + 1)].map((_, index) =>
+      startDate.add(index, 'day').format('YYYY-MM-DD')
+    );
+
+    setHighlightedDates(datesArray);
+  };
+
+  const handleDateMouseLeave = () => setHighlightedDates([]);
 
   const handleDateMouseDown = (day: dayjs.Dayjs) => {
     setIsMouseDown(true);
@@ -66,37 +156,57 @@ export default function YearCalendar({ year }: YearCalendarProps) {
               month.month.isSame(currentDate, 'month') && 'border-indigo-400'
             )}
           >
-            {month.days.map((day, dayIdx) => (
-              <button
-                key={day.format()}
-                type="button"
-                className={cl(
-                  day.isSame(month.month, 'month') ? 'bg-white font-medium text-gray-900' : 'bg-gray-50 text-gray-400',
-                  dayIdx === 0 && 'rounded-tl-lg',
-                  dayIdx === 6 && 'rounded-tr-lg',
-                  (Number(day.format('d')) === 0 || Number(day.format('d')) === 6) && 'bg-gray-100',
-                  dayIdx === month.days.length - 7 && 'rounded-bl-lg',
-                  dayIdx === month.days.length - 1 && 'rounded-br-lg',
-                  selectedDates.map((i) => i.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
-                    ? 'bg-blue-500'
-                    : '',
-                  isMouseDown && 'hover:bg-blue-500',
-                  'py-1.5 hover:bg-gray-100 focus:z-10 flex justify-center items-center'
-                )}
-              >
-                <time
-                  onMouseDown={() => handleDateMouseDown(day)}
-                  onMouseOver={isMouseDown ? () => handleDateMouseOver(day) : undefined}
-                  dateTime={String(day.format())}
+            {month.days.map((day, dayIdx) => {
+              const isHoliday = events.find((event) =>
+                event.daysOff.find(
+                  (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
+                )
+              );
+
+              return (
+                <button
+                  onMouseEnter={() =>
+                    handleDateMouseEnter(
+                      isHoliday?.daysOff.find(
+                        (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
+                      )
+                    )
+                  }
+                  onMouseLeave={handleDateMouseLeave}
+                  key={day.format()}
+                  type="button"
                   className={cl(
-                    day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') && 'bg-indigo-600 text-white',
-                    'w-7 h-7 flex items-center justify-center rounded-full'
+                    day.isSame(month.month, 'month')
+                      ? 'bg-white font-medium text-gray-900'
+                      : 'bg-gray-50 text-gray-400',
+                    dayIdx === 0 && 'rounded-tl-lg',
+                    dayIdx === 6 && 'rounded-tr-lg',
+                    (Number(day.format('d')) === 0 || Number(day.format('d')) === 6) && 'bg-gray-100',
+                    dayIdx === month.days.length - 7 && 'rounded-bl-lg',
+                    dayIdx === month.days.length - 1 && 'rounded-br-lg',
+                    selectedDates.map((i) => i.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
+                      ? 'bg-blue-500'
+                      : '',
+                    isMouseDown && 'hover:bg-blue-500',
+                    isHoliday && 'bg-red-500',
+                    'py-1.5 hover:bg-gray-100 focus:z-10 flex justify-center items-center',
+                    highlightedDates.includes(day.format('YYYY-MM-DD')) && 'bg-yellow-200 hover:bg-yellow-200'
                   )}
                 >
-                  {day.date()}
-                </time>
-              </button>
-            ))}
+                  <time
+                    onMouseDown={() => handleDateMouseDown(day)}
+                    onMouseOver={isMouseDown ? () => handleDateMouseOver(day) : undefined}
+                    dateTime={String(day.format())}
+                    className={cl(
+                      day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') && 'bg-indigo-600 text-white',
+                      'w-7 h-7 flex items-center justify-center rounded-full'
+                    )}
+                  >
+                    {isHoliday ? isHoliday.id : day.date()}
+                  </time>
+                </button>
+              );
+            })}
           </div>
         </div>
       ))}
