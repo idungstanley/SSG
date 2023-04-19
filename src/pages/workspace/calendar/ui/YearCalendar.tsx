@@ -63,28 +63,38 @@ const activeUserId = '1';
 export default function YearCalendar({ year }: YearCalendarProps) {
   const [daysOff, setDaysOff] = useState(events);
   const [showModal, setShowModal] = useState(false);
-  const [newEventDates, setNewEventDates] = useState<Dayjs[]>([]);
+  const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
   const months = useMemo(() => getDaysInYear(year), [year]);
 
-  const handleEvent = (i: Dayjs[]) => {
-    setNewEventDates(i);
+  const handleEvent = ({ start, end }: { start: Dayjs; end: Dayjs }) => {
+    setNewDayOff({ start, end });
     setShowModal(true);
   };
 
   const handleSubmit = ({ type, reason }: { type: { id: number; title: string }; reason: string }) => {
-    const newDayOff: DayOff = {
+    if (!newDayOff) {
+      return;
+    }
+
+    const dayOff: DayOff = {
       id: Date.now().toString(),
       reason,
       type: type.title,
-      start: newEventDates[0].format('YYYY-MM-DD'),
-      end: newEventDates.at(-1)?.format('YYYY-MM-DD') ?? ''
+      start: newDayOff.start.format('YYYY-MM-DD'),
+      end: newDayOff.end.format('YYYY-MM-DD')
     };
 
     setDaysOff((prev) => [
-      ...prev.map((i) => (i.user.id === activeUserId ? { ...i, daysOff: [...i.daysOff, newDayOff] } : i))
+      ...prev.map((i) => (i.user.id === activeUserId ? { ...i, daysOff: [...i.daysOff, dayOff] } : i))
     ]);
 
-    setNewEventDates([]);
+    setNewDayOff(null);
+    setShowModal(false);
+  };
+
+  const handleCloseModal = () => {
+    setNewDayOff(null);
+    setShowModal(false);
   };
 
   return (
@@ -93,7 +103,7 @@ export default function YearCalendar({ year }: YearCalendarProps) {
         <Month daysOff={daysOff} handleEvent={handleEvent} key={month.name} month={month} />
       ))}
 
-      <CreateEventModal onSubmit={handleSubmit} newEventDates={newEventDates} show={showModal} setShow={setShowModal} />
+      <CreateEventModal onSubmit={handleSubmit} dayOff={newDayOff} show={showModal} setShow={handleCloseModal} />
     </section>
   );
 }
