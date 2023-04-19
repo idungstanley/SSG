@@ -30,7 +30,7 @@ function User() {
       title: 'Notifications',
       onClick: () => {
         dispatch(setActiveTab('Notifications'));
-        navigate('construction');
+        navigate('notifications');
       }
     },
     {
