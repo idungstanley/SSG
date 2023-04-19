@@ -49,8 +49,8 @@ export default function ClockLog() {
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="w-12 flex justify-center gap-1 group cursor-default capitalize"
-                        style={{ fontSize: '8px' }}
+                        className="w-12 flex font-bold justify-center gap-1 group cursor-default capitalize"
+                        style={{ fontSize: '9px' }}
                       >
                         {col.title}
                         {col.title === 'user' && (
