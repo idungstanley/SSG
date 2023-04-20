@@ -22,15 +22,23 @@ interface TaskItemProps {
     parent_id?: string | null;
   };
   handleClick: (id: string, name?: string) => void;
+  showChildren: string | null | undefined;
   handleLocation: (id: string, name: string, parentId?: string | null) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   type: string;
 }
-export default function HubItem({ handleClick, item, handleLocation, handleHubSettings, type }: TaskItemProps) {
+export default function HubItem({
+  handleClick,
+  item,
+  handleLocation,
+  handleHubSettings,
+  showChildren,
+  type
+}: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { openedHubId } = useAppSelector((state) => state.hub);
+  // const { openedHubId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
@@ -83,7 +91,7 @@ export default function HubItem({ handleClick, item, handleLocation, handleHubSe
           >
             {showSidebar && (
               <div>
-                {openedHubId.includes(item.id) ? (
+                {showChildren === item.id ? (
                   <span className="flex flex-col">
                     <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                   </span>

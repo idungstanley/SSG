@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
+// import { BiSearch } from 'react-icons/bi';
 
 interface PlaceItemProps {
   label: string;

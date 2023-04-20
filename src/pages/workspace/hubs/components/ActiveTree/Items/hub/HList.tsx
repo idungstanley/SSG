@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ListProps } from '../../activetree.interfaces';
 // import HItem from './HItem';
 import WList from '../wallet/WList';
@@ -34,17 +34,20 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const { listId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [showChildren, setShowChidren] = useState<string | null>(null);
+  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { openedHubId } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const id = hubId || walletId || listId || currentItemId;
+
   const type = 'hub';
 
+  useEffect(() => {
+    setShowChidren(id);
+  }, []);
+
   const handleLocation = (id: string, name: string) => {
-    // const isActiveHub = hubId === id;
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -53,6 +56,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
         activeItemName: name
       })
     );
+    setShowChidren(id);
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
@@ -71,9 +75,6 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
 
   const handleClick = (id: string) => {
     const isMatch = id === showChildren;
-    // navigate(`/hub/${id}`, {
-    //   replace: true
-    // });
     dispatch(setOpenedHubId(id));
     dispatch(setCreateWLID(id));
     if (isMatch) {
@@ -127,14 +128,17 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
             <HubItem
               item={hub}
               handleClick={handleClick}
+              showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
             />
-            {showSidebar && (openedHubId.includes(hub.id) || id) && (
+            {showSidebar && (
               <div>
-                {hub.children.length ? <HList hubs={hub.children} taskType="subhub" leftMargin={false} /> : null}
-                {hub.wallets.length && id ? (
+                {hub.children.length && showChildren ? (
+                  <HList hubs={hub.children} taskType="subhub" leftMargin={false} />
+                ) : null}
+                {hub.wallets.length && showChildren ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -142,7 +146,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                     paddingLeft={`${taskType === 'hub' ? '10' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && id ? (
+                {hub.lists.length && showChildren ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '50'}`} />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
