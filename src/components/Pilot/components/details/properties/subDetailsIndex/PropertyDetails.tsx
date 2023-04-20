@@ -14,7 +14,6 @@ import AvatarWithInitials from '../../../../../avatar/AvatarWithInitials';
 import ToolTip from '../../../../../Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
-import { useAppSelector } from '../../../../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
@@ -23,6 +22,9 @@ import { useEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
 import MoreDetails from './components/MoreDetails';
+import { IListDetails } from '../../../../../../features/list/list.interfaces';
+import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 export interface tagItem {
   id: string;
@@ -30,18 +32,18 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
+  console.log('Details', Details);
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const { activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  const [title, setTitle] = useState<string>(activeItemName as string);
+  const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string | null>(Details?.description || null);
   const queryClient = useQueryClient();
 
-  console.log(Details);
+  const { hubId, walletId, listId, taskId } = useParams();
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -82,28 +84,28 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleBlur();
-    if (activeItemType === 'task') {
-      await editTaskMutation.mutateAsync({
-        name: title,
-        task_id: Details?.id,
-        description
-      });
-    } else if (activeItemType === 'hub' || activeItemType === 'subhub') {
+    if (hubId) {
       await editHubMutation.mutateAsync({
         name: title,
         currHubId: Details?.id,
         description
       });
-    } else if (activeItemType === 'wallet' || activeItemType === 'subwallet') {
+    } else if (walletId) {
       await editWalletMutation.mutateAsync({
         walletName: title,
         WalletId: Details?.id,
         description
       });
-    } else if (activeItemType === 'list') {
+    } else if (listId) {
       await editListMutation.mutateAsync({
         listName: title,
         listId: Details?.id,
+        description
+      });
+    } else if (taskId != undefined) {
+      await editTaskMutation.mutateAsync({
+        name: title,
+        task_id: Details?.id,
         description
       });
     }
@@ -121,7 +123,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
-            <Share />
+            <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -130,7 +132,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <ToolTip tooltip="Assignees">
           <Assignees />
         </ToolTip>
-        <span className="text-gray-300">|</span>
+        <span className=" text-gray-300">|</span>
         <ToolTip tooltip="Subscribers">
           <Subscribers />
         </ToolTip>
@@ -140,14 +142,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       <section className="p-2" key={Details?.id}>
         {/* tags */}
 
-        {Details?.tags && (
-          <div id="tags" className="mt-2">
-            <label className="text-xs text-gray-500">Tags</label>
-            <div className="border p-1 bg-gray-100 border-white rounded-md">
-              {/* <p> {groupTags(Details?.tags)}</p> */}
-            </div>
-          </div>
-        )}
+        {Details
+          ? 'tags' in Details && (
+              <div id="tags" className="mt-2">
+                <label className="text-xs text-gray-500">Tags</label>
+                <div className="border p-1 bg-gray-100 border-white rounded-md">
+                  {/* <p> {groupTags(Details?.tags)}</p> */}
+                </div>
+              </div>
+            )
+          : null}
 
         {/* name */}
         <div id="entity name">

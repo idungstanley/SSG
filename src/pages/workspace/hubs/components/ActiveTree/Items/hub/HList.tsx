@@ -21,6 +21,7 @@ import {
   getCurrHubId,
   getPrevName,
   setCreateWLID,
+  setOpenedHubId,
   setshowMenuDropdown
 } from '../../../../../../../features/hubs/hubSlice';
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
@@ -35,14 +36,15 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { openedHubId } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const id = hubId || walletId || listId;
+  const id = hubId || walletId || listId || currentItemId;
   const type = 'hub';
 
-  const handleLocation = (id: string, name: string, parentId?: string | null) => {
-    const isActiveHub = hubId === id;
+  const handleLocation = (id: string, name: string) => {
+    // const isActiveHub = hubId === id;
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -54,7 +56,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/hub/${isActiveHub ? parentId || '' : id}`, {
+    navigate(`/hub/${id}`, {
       replace: true
     });
     localStorage.setItem(
@@ -69,6 +71,10 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
 
   const handleClick = (id: string) => {
     const isMatch = id === showChildren;
+    // navigate(`/hub/${id}`, {
+    //   replace: true
+    // });
+    dispatch(setOpenedHubId(id));
     dispatch(setCreateWLID(id));
     if (isMatch) {
       dispatch(setShowHub(false));
@@ -115,34 +121,35 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
-          className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}
+          className={cl('z-10', !showSidebar && 'overflow-x-hidden w-12')}
         >
-          <HubItem
-            item={hub}
-            handleClick={handleClick}
-            handleHubSettings={handleHubSettings}
-            handleLocation={handleLocation}
-            showChildren={showChildren}
-            type={taskType === 'subhub' ? 'subhub' : 'hub'}
-          />
-          {showSidebar && (
-            <div>
-              {hub.children.length && id ? <HList hubs={hub.children} taskType="subhub" leftMargin={false} /> : null}
-              {hub.wallets.length && id ? (
-                <WList
-                  wallets={hub.wallets}
-                  leftMargin={false}
-                  type="wallet"
-                  paddingLeft={`${taskType === 'hub' ? '10' : '25'}`}
-                />
-              ) : null}
-              {hub.lists.length && id ? (
-                <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '40'}`} />
-              ) : null}
-              {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
-              {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
-            </div>
-          )}
+          <div className="relative flex flex-col">
+            <HubItem
+              item={hub}
+              handleClick={handleClick}
+              handleHubSettings={handleHubSettings}
+              handleLocation={handleLocation}
+              type={taskType === 'subhub' ? 'subhub' : 'hub'}
+            />
+            {showSidebar && (openedHubId.includes(hub.id) || id) && (
+              <div>
+                {hub.children.length ? <HList hubs={hub.children} taskType="subhub" leftMargin={false} /> : null}
+                {hub.wallets.length && id ? (
+                  <WList
+                    wallets={hub.wallets}
+                    leftMargin={false}
+                    type="wallet"
+                    paddingLeft={`${taskType === 'hub' ? '10' : '35'}`}
+                  />
+                ) : null}
+                {hub.lists.length && id ? (
+                  <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '26' : '50'}`} />
+                ) : null}
+                {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
+                {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
+              </div>
+            )}
+          </div>
         </div>
       ))}
     </>

@@ -1,19 +1,30 @@
-import React from 'react';
-import { ImyTaskData, setGetSubTaskId } from '../../../../../features/task/taskSlice';
+import { ImyTaskData, setGetSubTaskId, setTaskIdForPilot } from '../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import './task.css';
 import DataRenderFunc from './DataRenderFunc';
+import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { columnsHead } from '../views/ListColumns';
+import { useList } from '../../../../../features/list/listService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export interface TaskDataProps {
+  listId?: string;
   task?: ImyTaskData | undefined;
   tasks?: (ImyTaskData | undefined)[] | undefined;
 }
 
-export default function TaskData({ task }: TaskDataProps) {
-  const { taskColumns, hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } =
-    useAppSelector((state) => state.task);
+export default function TaskData({ task, listId }: TaskDataProps) {
+  const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
+    (state) => state.task
+  );
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+
+  const { hubId, walletId } = useParams();
 
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const handleGetSubTask = (id: string | undefined) => {
     if (id == getSubTaskId) {
@@ -23,18 +34,55 @@ export default function TaskData({ task }: TaskDataProps) {
     }
   };
 
+  const handleTaskPilot = (id: string, name: string) => {
+    hubId
+      ? navigate(`/hub/${hubId}/t/${id}`, { replace: true })
+      : walletId
+      ? navigate(`/wallet/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/list/${listId}/t/${id}`, { replace: true });
+    dispatch(
+      setShowPilotSideOver({
+        id: id,
+        type: 'task',
+        show: true,
+        title: name
+      })
+    );
+    dispatch(setTaskIdForPilot(id));
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'task',
+        activeItemName: name
+      })
+    );
+  };
+
+  const { data } = useList(listId);
+  const customFields =
+    data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
+
   return (
     <div className="relative">
       <div
+        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
-          comfortableView
-            ? '  flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+          comfortableView && activeItemId == task?.id
+            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            : comfortableView
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            : comfortableViewWrap && activeItemId == task?.id
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableViewWrap
-            ? 'flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            : CompactView && activeItemId == task?.id
+            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
             : CompactView
-            ? ' compactView flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10'
+            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
+            : CompactViewWrap && activeItemId == task?.id
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : CompactViewWrap
-            ? 'compactViewWrap flex justify-between group bg-white ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : null
         }`}
       >
@@ -57,13 +105,10 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
-                      <div
-                        key={col.field}
-                        className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12"
-                      >
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={getSubTaskId}
                           handleGetSubTask={() => handleGetSubTask(task?.id)}
@@ -71,17 +116,18 @@ export default function TaskData({ task }: TaskDataProps) {
                       </div>
                     )
                 )
-              : taskColumns.map(
+              : task &&
+                [...columnsHead, ...customFields].map(
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-12/12"
                       >
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={getSubTaskId}
                           handleGetSubTask={() => handleGetSubTask(task?.id)}
@@ -96,10 +142,10 @@ export default function TaskData({ task }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={getSubTaskId}
                           handleGetSubTask={() => handleGetSubTask(task?.id)}
@@ -107,14 +153,15 @@ export default function TaskData({ task }: TaskDataProps) {
                       </div>
                     )
                 )
-              : taskColumns.map(
+              : task &&
+                [...columnsHead, ...customFields].map(
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.field} className="flex items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
-                          colfield={col.field}
+                          col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={getSubTaskId}
                           handleGetSubTask={() => handleGetSubTask(task?.id)}
@@ -132,13 +179,13 @@ export default function TaskData({ task }: TaskDataProps) {
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={getSubTaskId}
                         handleGetSubTask={() => handleGetSubTask(task?.id)}
@@ -146,19 +193,20 @@ export default function TaskData({ task }: TaskDataProps) {
                     </div>
                   )
               )
-            : taskColumns.map(
+            : task &&
+              [...columnsHead, ...customFields].map(
                 (col) =>
                   col.value !== 'Task' &&
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="items-center py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
-                        colfield={col.field}
+                        col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={getSubTaskId}
                         handleGetSubTask={() => handleGetSubTask(task?.id)}

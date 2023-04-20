@@ -1,27 +1,29 @@
 import React from 'react';
 import Header from '../../../../../layout/components/MainLayout/Sidebar/components/Header/index';
 import Workspace from './Workspace';
+import { Outlet } from 'react-router-dom';
 import User from './User';
-import { IUserData } from '../../../../../features/workspace/workspace.interfaces';
 
-interface dataProps {
-  data: IUserData | undefined;
-}
-
-function SideBar({ data }: dataProps) {
+function SideBarSettings() {
   return (
-    <div>
-      <section>
-        <Header />
+    <section className="flex">
+      <section style={{ height: '100vh' }} className="w-1/5 bg-white h-screen border-r-2 border-gray-300 overflow-auto">
+        <section>
+          <Header />
+        </section>
+        <section>
+          <Workspace />
+        </section>
+        <section>
+          <User />
+        </section>
       </section>
-      <section>
-        <Workspace />
-      </section>
-      <section>
-        <User userName={data?.name} />
-      </section>
-    </div>
+      {/* outlets */}
+      <div style={{ height: '100vh' }} className="w-4/5 h-screen bg-gray-200 flex">
+        <Outlet />
+      </div>
+    </section>
   );
 }
 
-export default SideBar;
+export default SideBarSettings;

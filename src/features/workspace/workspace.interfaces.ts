@@ -37,6 +37,7 @@ export interface IUserData {
   start_week: string;
   theme_color: string | null;
   timezone: string;
+  time_format: string;
 }
 
 export interface IUserRes {
@@ -52,6 +53,7 @@ export interface ITeamMember {
     name: string;
     email: string;
     avatar_path: null | string;
+    initials: string;
   };
   role: {
     key: string;

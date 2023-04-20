@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
@@ -7,17 +7,47 @@ import { getTaskColumns, setCloseTaskListView } from '../../../../../../features
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
-import { columnsHead } from '../ListColumns';
+import { columnsHead, listColumnProps } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
+import { useList } from '../../../../../../features/list/listService';
+import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 
-export default function TaskListViews({ taskLength, status }: { taskLength?: number; status?: string }) {
+const unique = (arr: listColumnProps[]) => [...new Set(arr)];
+
+export default function TaskListViews({
+  taskLength,
+  status,
+  listId
+}: {
+  taskLength?: number;
+  status?: string;
+  listId?: string;
+}) {
   const dispatch = useDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
+  const [columns, setColumns] = useState([...columnsHead]);
 
-  dispatch(getTaskColumns(columnsHead));
+  const { data } = useList(listId);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    const customFieldNames = data.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
+
+    setColumns(() => {
+      const newColumns = unique([...columnsHead, ...customFieldNames]);
+
+      dispatch(getTaskColumns(newColumns));
+
+      return newColumns;
+    });
+  }, [data]);
 
   const handleDropDown = () => {
     setdropDown((prev) => !prev);
@@ -56,7 +86,7 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex  items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
                         style={{ color: '#78828d', fontSize: '11px' }}
                       >
@@ -64,12 +94,12 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                       </div>
                     )
                 )
-              : columnsHead.map(
+              : columns.map(
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
                       <div
-                        key={col.field}
+                        key={col.id}
                         className="flex  items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
                         style={{ color: '#78828d', fontSize: '10px' }}
                       >
@@ -88,7 +118,7 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
                         color: '#78828d',
@@ -107,13 +137,13 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
                     </div>
                   )
               )
-            : columnsHead.map(
+            : columns.map(
                 (col) =>
                   col.value !== 'Task' &&
                   col.value !== 'Tags' &&
                   !col.hidden && (
                     <div
-                      key={col.field}
+                      key={col.id}
                       className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
                       style={{
                         color: '#78828d',
@@ -139,7 +169,22 @@ export default function TaskListViews({ taskLength, status }: { taskLength?: num
         >
           <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
           <span className="text-sm z-50">
-            {dropDown && <AddColumnDropdown title="" listItems={hideTask.length ? hideTask : taskColumns} />}
+            {dropDown && (
+              <AddColumnDropdown
+                setShowDropdownFieldModal={setShowDropdownFieldModal}
+                setdropDown={setdropDown}
+                title=""
+                listItems={hideTask.length ? hideTask : taskColumns}
+              />
+            )}
+
+            {listId ? (
+              <CreateDropdownFieldModal
+                listId={listId}
+                show={showDropdownFieldModal}
+                setShow={setShowDropdownFieldModal}
+              />
+            ) : null}
           </span>
         </span>
       </div>

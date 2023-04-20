@@ -16,7 +16,7 @@ interface UpdateTimeEntryDropdownProps {
 function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDropdownProps) {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const [isBillable, setIsBillable] = useState(billable === 1 && true);
+  const [isBillable, setIsBillable] = useState(billable === 1 ? true : false);
   const { initial_description, initial_start_date, initial_end_date } = useAppSelector((state) => state.task);
   const updateClockTimer = useMutation(UpdateTimeEntriesService, {
     onSuccess: () => {

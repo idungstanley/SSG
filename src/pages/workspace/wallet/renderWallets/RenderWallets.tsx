@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import ListNav from '../../lists/components/renderlist/ListNav';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import PageWrapper from '../../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
 import { UseGetFullTaskList } from '../../../../features/task/taskService';
@@ -10,13 +10,27 @@ import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
 import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
 import { ITaskFullList, TaskDataGroupingsProps } from '../../../../features/task/interface.tasks';
 import FilterByAssigneesSliderOver from '../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
+import { useParams } from 'react-router-dom';
+import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
+import { setActiveItem, setCurrentWalletName } from '../../../../features/workspace/workspaceSlice';
 
 function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
 
-  const { currentWalletName, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentWalletName } = useAppSelector((state) => state.workspace);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { walletId } = useParams();
+  const walletType = 'wallet';
+  const { data } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: walletType });
+  const walletName = data?.data.wallet.name;
+  useEffect(() => {
+    if (walletId) {
+      dispatch(setActiveItem({ activeItemId: walletId, activeItemType: walletType, activeItemName: walletName }));
+      dispatch(setCurrentWalletName(walletName));
+    }
+  }, [walletId, data]);
 
   const {
     data: TaskFullList,
@@ -24,11 +38,10 @@ function RenderWallets() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: activeItemId,
-    itemType: activeItemType,
+    itemId: walletId,
+    itemType: walletType,
     assigneeUserId: filterTaskByAssigneeIds
   });
-
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
   useEffect(() => {

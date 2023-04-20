@@ -14,6 +14,13 @@ function MainLayout() {
   const [allowSelect, setAllowSelect] = useState(true);
   const { showExtendedBar, activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
 
+  // const id = 'workspaceI';
+
+  // useEffect(() => {
+  //   // Redirect to the URL with the ID parameter
+  //   window.location.href = `/${id}`;
+  // }, [id]);
+
   return (
     <div className={cl('h-full flex flex-col', !allowSelect && 'select-none')}>
       <ProgressBar />

@@ -6,6 +6,7 @@ export default function Subscribers() {
     <div>
       <button className="text-gray-300 rounded-full p-1 ml-1 text-xl cursor-pointer">
         <GrPowerCycle className="text-gray-300" />
+        {/* <p className="z-0">jfhhjef</p> */}
       </button>
     </div>
   );

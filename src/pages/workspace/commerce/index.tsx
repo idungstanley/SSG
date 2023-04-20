@@ -9,7 +9,7 @@ export default function Commerce() {
 
   return (
     <div>
-      <PlaceItem label="Commerce" icon={<IoBusinessOutline className="w-4 h-4" />} />
+      <PlaceItem label="Commerce" id="10" icon={<IoBusinessOutline className="w-4 h-4" />} />
       <div className={cl('mb-2', !showSidebar && 'overflow-x-hidden w-12')}>Commerce</div>
     </div>
   );

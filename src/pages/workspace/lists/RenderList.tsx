@@ -116,13 +116,17 @@ function RenderList() {
             )}
 
             {/* card */}
-            {listView && <TaskListViews taskLength={paginatedTaskData?.length} />}
+            {listView && listId ? (
+              <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
+            ) : (
+              <span>listId required</span>
+            )}
             {listView && (
               <div className="pr-1 pt-0.5 w-full h-full">
                 <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                   {paginatedTaskData?.map((task) => (
                     <div key={task?.id}>
-                      {closeTaskListView && <TaskData task={task} />}
+                      {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
                       {currentParentTaskId === task?.id ? (
                         <div>
                           <SubTask parentTaskId={currentParentTaskId} />
