@@ -58,7 +58,7 @@ import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
-// import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
+import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
 
 const inbox = [
   {
@@ -92,6 +92,10 @@ export const routes = (user: IUser | null) =>
     {
       path: 'onboarding',
       element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
+    },
+    {
+      path: 'onboarding/new',
+      element: user ? <NewWorkSpace /> : <Navigate to="/auth/login" />
     },
     // {
     //   path: 'workspaceId',

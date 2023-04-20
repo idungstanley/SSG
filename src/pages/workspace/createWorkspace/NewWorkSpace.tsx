@@ -74,7 +74,7 @@ function NewWorkSpace() {
             </div>
           )}
           {currentPage.color && (
-            <div className="w-full -ml-32" style={{ height: '80vh' }}>
+            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Customize your workspace</h1>
                 <div className="flex items-center w-full justify-center gap-20 mt-8 mb-20">
