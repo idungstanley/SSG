@@ -58,7 +58,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(`/list/${id}`);
+    navigate(`/l/${id}`);
     dispatch(setActiveEntity({ id: id, type: 'list' }));
   };
 
