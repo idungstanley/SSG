@@ -27,7 +27,7 @@ import { setShowPilotSideOver } from '../../../features/general/slideOver/slideO
 export default function SubHubIndex() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showSubChildren, setShowSubChidren] = useState<string | null>(null);
+  const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
     parentId: currentItemId
@@ -107,6 +107,7 @@ export default function SubHubIndex() {
             <HubItem
               item={subhub}
               handleClick={handleClick}
+              showChildren={showSubChildren}
               handleLocation={handleLocation}
               handleHubSettings={handleShowMenu}
               type="subhub"
