@@ -187,6 +187,7 @@ export default function Assignee({
                         height="h-8"
                         width="w-8"
                       />
+
                       <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (

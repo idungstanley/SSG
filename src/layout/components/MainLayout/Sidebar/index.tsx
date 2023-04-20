@@ -123,11 +123,11 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
       <Toggle />
       {/* sidebar */}
       <section
-        className="relative flex flex-col h-full gap-2 pr-1 border-r border-gray-300"
+        className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"
         style={showSidebar ? style : undefined}
       >
         <Header />
-        <section className="relative flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden">
+        <section className="relative h-full flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden">
           {showSidebar ? <Search /> : null}
           <NavigationItems />
           <Places />

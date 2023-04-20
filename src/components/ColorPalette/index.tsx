@@ -169,11 +169,11 @@ export default function Palette({
 
   return (
     <div
-      className="absolute top-auto w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
+      className="absolute inset-0 top-auto w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
       style={{ zIndex: '999' }}
       ref={ref}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col z-40">
         {paletteType !== 'list' && <p className="justify-center">{title}</p>}
         {topContent}
         {paletteType === 'list' && (
