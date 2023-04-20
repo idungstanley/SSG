@@ -95,7 +95,7 @@ export default function SubHubIndex() {
         title: name
       })
     );
-    navigate(`/hub/${id}`);
+    navigate(`/h/${id}`);
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
   };
 

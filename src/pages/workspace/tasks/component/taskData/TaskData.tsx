@@ -20,7 +20,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   );
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const { hubId, walletId } = useParams();
+  const { hubId, walletId, taskId } = useParams();
 
   const dispatch = useAppDispatch();
 
@@ -36,10 +36,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
 
   const handleTaskPilot = (id: string, name: string) => {
     hubId
-      ? navigate(`/hub/${hubId}/t/${id}`, { replace: true })
+      ? navigate(`/h/${hubId}/t/${id}`, { replace: true })
       : walletId
-      ? navigate(`/wallet/${walletId}/t/${id}`, { replace: true })
-      : navigate(`/list/${listId}/t/${id}`, { replace: true });
+      ? navigate(`/w/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/l/${listId}/t/${id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: id,
@@ -67,20 +67,20 @@ export default function TaskData({ task, listId }: TaskDataProps) {
       <div
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
-          comfortableView && activeItemId == task?.id
-            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+          comfortableView && taskId == task?.id
+            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableView
             ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
-            : comfortableViewWrap && activeItemId == task?.id
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            : comfortableViewWrap && taskId == task?.id
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableViewWrap
             ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
+            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
             : CompactView
             ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : CompactViewWrap
             ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : null

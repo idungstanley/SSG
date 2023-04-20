@@ -15,7 +15,7 @@ export default function HItem({ id, name, parentId }: ItemProps) {
   const onClickHub = (id: string) => {
     const isActiveHub = hubId === id;
 
-    navigate(`/hub/${isActiveHub ? parentId || '' : id}`, {
+    navigate(`/h/${isActiveHub ? parentId || '' : id}`, {
       replace: true
     });
   };
