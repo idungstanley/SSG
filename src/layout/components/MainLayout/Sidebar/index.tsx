@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
-import { setShowSidebar } from '../../../../features/account/accountSlice';
+import { setScrollTop, setShowSidebar } from '../../../../features/account/accountSlice';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
@@ -116,6 +116,9 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
     [sidebarWidth]
   );
   useMemo(() => dispatch(setSidebarWidthRD(sidebarWidth)), [sidebarWidth]);
+  const handleScroll = (event: React.UIEvent<HTMLElement, UIEvent>) => {
+    dispatch(setScrollTop(event.currentTarget.scrollTop));
+  };
 
   return (
     <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-hidden')}>
@@ -127,7 +130,10 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
         style={showSidebar ? style : undefined}
       >
         <Header />
-        <section className="relative h-full flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden">
+        <section
+          className="relative h-full flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden"
+          onScroll={(e) => handleScroll(e)}
+        >
           {showSidebar ? <Search /> : null}
           <NavigationItems />
           <Places />

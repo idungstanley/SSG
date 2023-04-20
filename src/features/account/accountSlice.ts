@@ -29,6 +29,7 @@ interface AccountState {
   paletteDropdown: PaletteDropdownProps;
   showUploadImage: boolean;
   userName: string;
+  scrollTop: string | number;
 }
 
 const initialState: AccountState = {
@@ -38,7 +39,8 @@ const initialState: AccountState = {
   showSidebar,
   paletteDropdown: { show: false },
   showUploadImage: false,
-  userName: ''
+  userName: '',
+  scrollTop: ''
 };
 
 export const accountSlice = createSlice({
@@ -59,11 +61,14 @@ export const accountSlice = createSlice({
     },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
+    },
+    setScrollTop: (state, action: PayloadAction<string | number>) => {
+      state.scrollTop = action.payload;
     }
   }
 });
 
-export const { setAccountSettings, setShowSidebar, setPaletteDropDown, setShowUploadImage, setUserName } =
+export const { setAccountSettings, setScrollTop, setShowSidebar, setPaletteDropDown, setShowUploadImage, setUserName } =
   accountSlice.actions;
 
 export default accountSlice.reducer;

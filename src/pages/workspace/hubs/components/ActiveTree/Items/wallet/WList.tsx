@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
 import { useAppDispatch } from '../../../../../../../app/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   setActiveEntity,
   setActiveEntityName,
@@ -29,10 +29,15 @@ export default function WList({
   const dispatch = useAppDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const navigate = useNavigate();
-  // const { walletId } = useParams();
+  const { walletId } = useParams();
+
+  useEffect(() => {
+    if (walletId) {
+      setShowSubWallet(walletId);
+    }
+  }, []);
 
   const handleLocation = (id: string, name: string) => {
-    // const isActive = walletId === id;
     dispatch(setShowHub(true));
     navigate(`/w/${id}`, {
       replace: true
@@ -92,7 +97,7 @@ export default function WList({
             paddingLeft={paddingLeft}
           />
 
-          {wallet.children.length ? (
+          {wallet.children.length && showSubWallet ? (
             <WList
               wallets={wallet.children}
               leftMargin={false}
@@ -100,7 +105,7 @@ export default function WList({
               paddingLeft={Number(paddingLeft) + 15}
             />
           ) : null}
-          {wallet.lists.length ? (
+          {wallet.lists.length && showSubWallet ? (
             <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
           ) : null}
         </div>
