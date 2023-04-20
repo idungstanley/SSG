@@ -39,7 +39,6 @@ export default function TaskData({ task, listId }: TaskDataProps) {
       })
     );
     dispatch(setTaskIdForPilot(id));
-
     dispatch(
       setActiveItem({
         activeItemId: id,

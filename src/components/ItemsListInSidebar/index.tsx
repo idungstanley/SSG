@@ -122,7 +122,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
             handleClick={handleClick}
             handleHubSettings={handleHubSettings}
             handleLocation={handleLocation}
-            showChildren={showChildren}
             type="hub"
           />
           {showChildren === i.id && showSidebar ? <DropdownList /> : null}

@@ -34,7 +34,7 @@ export default function Toggle() {
       onClick={closeOrShowSidebar}
       className={cl(
         'absolute z-20 text-indigo-900 cursor-pointer',
-        showSidebar ? 'top-8 right-2' : 'top-36 right-6 mt-2'
+        showSidebar ? 'top-12 right-2' : 'top-36 right-6 mt-2'
       )}
     >
       {!showSidebar ? (

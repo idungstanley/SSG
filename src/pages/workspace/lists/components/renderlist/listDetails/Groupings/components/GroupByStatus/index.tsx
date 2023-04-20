@@ -83,7 +83,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
       <section>
         {/* lists */}
-        <div className="pb-4">
+        <div className="mb-20">
           {Object.keys(taskDataGroupingsByStatus).map((value) => (
             <div key={taskDataGroupingsByStatus[value].key} className="relative p-5 border rounded-xl">
               {/* Breadcrumb goes here */}
