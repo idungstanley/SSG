@@ -139,8 +139,12 @@ export const routes = (user: IUser | null) =>
         { path: 'search', element: <SearchPage /> },
         ...inbox,
         {
-          path: 'settings/notifications',
-          element: <NotificationSettingsPage />
+          path: 'settings/team-members/invites',
+          element: <TeamMemberInvitesPage />
+        },
+        {
+          path: 'settings/team-members/groups',
+          element: <TeamMemberGroupsPage />
         },
         {
           path: 'settings/team-members/groups/:teamMemberGroupId',
@@ -175,6 +179,11 @@ export const routes = (user: IUser | null) =>
       children: [
         { path: 'profile', element: <UserSettings /> },
         { path: 'construction', element: <UnderConstruction /> },
+        { path: 'team-members', element: <TeamMembersPage /> },
+        {
+          path: 'notifications',
+          element: <NotificationSettingsPage />
+        },
         { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
