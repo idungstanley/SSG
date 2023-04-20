@@ -18,6 +18,7 @@ import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/fi
 import { useParams } from 'react-router-dom';
 import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
