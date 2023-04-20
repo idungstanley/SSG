@@ -112,9 +112,9 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-              </div>
-              <div className="mt-16 flex justify-center">
-                <img src={Scroll2} alt="" />
+                <div className="mt-16 flex justify-center">
+                  <img src={Scroll2} alt="" />
+                </div>
               </div>
             </div>
           )}
