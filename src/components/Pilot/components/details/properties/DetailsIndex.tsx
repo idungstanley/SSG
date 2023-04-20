@@ -23,7 +23,7 @@ export default function DetailsIndex() {
   });
   // console.log(wallet?.data.wallet);
   const { data: list } = UseGetListDetails({
-    activeItemId: listId,
+    activeItemId: listId != undefined ? listId : null,
     activeItemType: 'list'
   });
 
