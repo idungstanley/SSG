@@ -6,6 +6,7 @@ import { setShowPilotSideOver } from '../../../../../features/general/slideOver/
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export interface TaskDataProps {
   listId?: string;
@@ -19,7 +20,11 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   );
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
+  const { hubId, walletId } = useParams();
+
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const handleGetSubTask = (id: string | undefined) => {
     if (id == getSubTaskId) {
@@ -30,6 +35,11 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   };
 
   const handleTaskPilot = (id: string, name: string) => {
+    hubId
+      ? navigate(`/hub/${hubId}/t/${id}`, { replace: true })
+      : walletId
+      ? navigate(`/wallet/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/list/${listId}/t/${id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: id,
@@ -39,7 +49,6 @@ export default function TaskData({ task, listId }: TaskDataProps) {
       })
     );
     dispatch(setTaskIdForPilot(id));
-
     dispatch(
       setActiveItem({
         activeItemId: id,

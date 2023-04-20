@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
 import { cl } from '../../../../../utils';
 import { setActiveTab } from '../../../../../features/settings/user/userSettingsSlice';
 import { useNavigate } from 'react-router-dom';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 function User() {
   const { activeTab, theme_color, userData } = useAppSelector((state) => state.userSetting);
+  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userOptions = [
@@ -30,8 +32,31 @@ function User() {
       title: 'Notifications',
       onClick: () => {
         dispatch(setActiveTab('Notifications'));
-        navigate('construction');
-      }
+        navigate('notifications');
+      },
+      child: [
+        {
+          id: 1,
+          title: 'General Information',
+          onClick: () => {
+            navigate('notifications/general');
+          }
+        },
+        {
+          id: 2,
+          title: 'Subscriber Settings',
+          onClick: () => {
+            navigate('notifications/subscriber');
+          }
+        },
+        {
+          id: 3,
+          title: 'Smart Notifications',
+          onClick: () => {
+            navigate('notifications/smart');
+          }
+        }
+      ]
     },
     {
       id: 4,
@@ -90,21 +115,50 @@ function User() {
         return (
           <>
             {setting.category !== 'my_app' && (
-              <div
-                key={setting.id}
-                className={cl(
-                  activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
-                  'h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer'
-                )}
-                style={{
-                  backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
-                }}
-                onClick={setting.onClick}
-              >
-                <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
-                  {setting.title}
-                </h3>
-              </div>
+              <>
+                <div
+                  key={setting.id}
+                  className={cl(
+                    activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
+                    'h-10 flex items-center justify-between px-6 hover:bg-gray-200 cursor-pointer'
+                  )}
+                  style={{
+                    backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
+                  }}
+                  onClick={setting.onClick}
+                >
+                  <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
+                    {setting.title}
+                  </h3>
+                  {setting.child ? (
+                    <MdKeyboardArrowDown
+                      style={{ height: '20px', width: '20px' }}
+                      onClick={() => setIsVisible(!isVisible)}
+                    />
+                  ) : null}
+                </div>
+
+                {/* this carries child */}
+                <section>
+                  {isVisible &&
+                    setting?.child?.map((children) => (
+                      <div
+                        key={children.id}
+                        className={cl(
+                          activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
+                          'h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer  border-b-2 border-gray-200'
+                        )}
+                        style={{
+                          backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
+                        }}
+                      >
+                        <h3 className="font-semibold text-bold" style={{ fontSize: '15px', paddingLeft: '15px' }}>
+                          {children.title}
+                        </h3>
+                      </div>
+                    ))}
+                </section>
+              </>
             )}
           </>
         );

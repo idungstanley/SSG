@@ -107,7 +107,6 @@ export default function SubHubIndex() {
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={showSubChildren}
               handleLocation={handleLocation}
               handleHubSettings={handleShowMenu}
               type="subhub"

@@ -29,6 +29,11 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     }
   };
 
+  // const taskIds = Object.keys(taskDataGroupingsByStatus).map((key) => ({
+  //   id: key
+  // }));
+  // console.log(taskIds);
+
   useEffect(() => {
     const taskDataGroupedByStatusAndListID = getTaskDataGrouping?.reduce(
       (
@@ -83,7 +88,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
       <section>
         {/* lists */}
-        <div className="pb-4">
+        <div className="mb-20">
           {Object.keys(taskDataGroupingsByStatus).map((value) => (
             <div key={taskDataGroupingsByStatus[value].key} className="relative p-5 border rounded-xl">
               {/* Breadcrumb goes here */}
@@ -175,13 +180,15 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                         />
                         {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
                           <Fragment key={task.id}>
-                            <TaskData listId={task.list_id} task={task} />
-                            {currentParentTaskId === task.id ? (
-                              <div>
-                                <SubTask parentTaskId={currentParentTaskId} />
-                              </div>
-                            ) : null}
-                            {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                            <section>
+                              <TaskData listId={task.list_id} task={task} />
+                              {currentParentTaskId === task.id ? (
+                                <div>
+                                  <SubTask parentTaskId={currentParentTaskId} />
+                                </div>
+                              ) : null}
+                              {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                            </section>
                           </Fragment>
                         ))}
                       </li>

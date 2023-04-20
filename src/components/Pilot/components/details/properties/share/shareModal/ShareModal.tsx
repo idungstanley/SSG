@@ -20,7 +20,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
   //   }
   // };
 
-  const branchName = `${taskId}/${taskName?.split(' ').join('_')}`;
+  const branchName = `AWM-${taskId}-${taskName?.split(' ').join('_')}`;
 
   const handleBranchName = async () => {
     try {

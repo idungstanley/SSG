@@ -61,12 +61,12 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   };
 
   return (
-    <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 h-10 border-b py-2">
-      <div id="left" className="flex items-center justify-evenly space-x-4 text-xs">
+    <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 border-b">
+      <div id="left" className="flex items-center space-x-2 text-xs">
         {headers.map((col) => {
-          if (col.title === 'assignee' && !col.hidden) {
+          if (col.title === 'user' && !col.hidden) {
             return (
-              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4">
+              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4 py-1">
                 <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
               </td>
             );
@@ -74,7 +74,11 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'duration' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td
+                key={col.id}
+                className="w-14 text-center"
+                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+              >
                 {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
               </td>
             );
@@ -82,7 +86,11 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'start date' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td
+                key={col.id}
+                className="w-14 text-center"
+                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+              >
                 {moment(entries.start_date).format('MMM D HH:mm')}
               </td>
             );
@@ -90,14 +98,27 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'end date' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14" style={{ cursor: 'default' }}>
+              <td
+                key={col.id}
+                className="w-14 text-center"
+                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+              >
                 {moment(entries.end_date).format('MMM D HH:mm')}
               </td>
             );
           }
 
           if (col.title === 'description' && !col.hidden) {
-            return <td key={col.id}>{entries.description}</td>;
+            return (
+              <td
+                key={col.id}
+                className="w-14"
+                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+                title={entries.description}
+              >
+                {entries.description && entries.description.slice(0, 5) + '...'}
+              </td>
+            );
           }
         })}
       </div>

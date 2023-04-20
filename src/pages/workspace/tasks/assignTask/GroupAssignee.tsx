@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
@@ -43,7 +43,7 @@ function GroupAssignee({
               ) => (
                 <div
                   key={newData.id}
-                  className={`scaleBigger ${index === 0 ? ' z-40  ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
+                  className={`scaleBigger ${index === 0 ? ' z-40   ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
                     index === 2 ? 'z-20' : 'z-10'
                   }  `}
                 >
@@ -115,12 +115,12 @@ function GroupAssignee({
               className="flex items-center justify-center -ml-2.5  border-2  rounded-full relative"
             >
               <div
-                onMouseEnter={() =>
+                onMouseEnter={() => {
                   setDisplayed({
                     show: true,
                     index
-                  })
-                }
+                  });
+                }}
                 onMouseLeave={() =>
                   setDisplayed({
                     show: false,

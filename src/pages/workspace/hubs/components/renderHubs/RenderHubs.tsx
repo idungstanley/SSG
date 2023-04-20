@@ -102,7 +102,6 @@ function RenderHubs() {
       fetchNextPage();
     }
   }
-
   return (
     <>
       <PilotSection />
@@ -124,16 +123,12 @@ function RenderHubs() {
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <section>
-          <div className="w-full">
+          <div className="w-full ">
             <ListFilter />
           </div>
           {listView && groupByStatus == 'none' && (
             <div className="pr-1 pt-0.5 w-full h-full">
-              <div
-                className="w-full mb-10 overflow-auto"
-                style={{ minHeight: '0', maxHeight: '90vh' }}
-                ref={containerRef}
-              >
+              <div className="w-full mb-10" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                 {Object.keys(
                   TaskDataGroupings as {
                     [key: string]: { groupListName: string; key: string; tasks: ImyTaskData2[] };
@@ -160,7 +155,7 @@ function RenderHubs() {
           {listView && groupByStatus == 'status' && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div
-                className="w-full mb-10 overflow-auto"
+                className="w-full mb-12 overflow-auto"
                 style={{ minHeight: '0', maxHeight: '90vh' }}
                 ref={containerRef}
               >
