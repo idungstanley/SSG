@@ -58,6 +58,7 @@ import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
+import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
 
 const inbox = [
   {
@@ -91,6 +92,10 @@ export const routes = (user: IUser | null) =>
     {
       path: 'onboarding',
       element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
+    },
+    {
+      path: 'onboarding/new',
+      element: user ? <NewWorkSpace /> : <Navigate to="/auth/login" />
     },
     // {
     //   path: 'workspaceId',
@@ -147,10 +152,6 @@ export const routes = (user: IUser | null) =>
           element: <TeamMemberGroupsPage />
         },
         {
-          path: 'settings/team-members/groups/:teamMemberGroupId',
-          element: <TeamMemberGroupGeneralSettingsPage />
-        },
-        {
           path: 'settings/team-members/groups/:teamMemberGroupId/members',
           element: <TeamMemberGroupMembersPage />
         }
@@ -187,7 +188,11 @@ export const routes = (user: IUser | null) =>
         { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
-        { path: 'settings/permisions', element: <PermissionsPage /> }
+        { path: 'settings/permisions', element: <PermissionsPage /> },
+        {
+          path: 'team-members/groups/:teamMemberGroupId',
+          element: <TeamMemberGroupGeneralSettingsPage />
+        }
       ]
     },
     { path: '*', element: <NotFoundPage /> }
