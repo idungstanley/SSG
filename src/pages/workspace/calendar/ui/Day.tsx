@@ -2,6 +2,7 @@ import { Menu } from '@headlessui/react';
 import { Dayjs } from 'dayjs';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cl } from '../../../../utils';
+import { MdBeachAccess } from 'react-icons/md';
 
 interface DayProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   day: Dayjs;
@@ -60,7 +61,19 @@ export default function Day({
           'w-7 h-7 flex items-center justify-center rounded-full'
         )}
       >
-        {isCurrentDate ? day.date() : isHoliday ? (isHighlighted ? day.date() : '+') : day.date()}
+        {isCurrentDate ? (
+          day.date()
+        ) : isHoliday ? (
+          isHighlighted ? (
+            day.date()
+          ) : isActiveDate ? (
+            <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
+          ) : (
+            day.date()
+          )
+        ) : (
+          day.date()
+        )}
       </Menu.Button>
 
       {children}
