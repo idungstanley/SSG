@@ -29,6 +29,11 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     }
   };
 
+  // const taskIds = Object.keys(taskDataGroupingsByStatus).map((key) => ({
+  //   id: key
+  // }));
+  // console.log(taskIds);
+
   useEffect(() => {
     const taskDataGroupedByStatusAndListID = getTaskDataGrouping?.reduce(
       (
@@ -175,13 +180,15 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                         />
                         {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
                           <Fragment key={task.id}>
-                            <TaskData listId={task.list_id} task={task} />
-                            {currentParentTaskId === task.id ? (
-                              <div>
-                                <SubTask parentTaskId={currentParentTaskId} />
-                              </div>
-                            ) : null}
-                            {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                            <section>
+                              <TaskData listId={task.list_id} task={task} />
+                              {currentParentTaskId === task.id ? (
+                                <div>
+                                  <SubTask parentTaskId={currentParentTaskId} />
+                                </div>
+                              ) : null}
+                              {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                            </section>
                           </Fragment>
                         ))}
                       </li>

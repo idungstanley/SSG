@@ -18,6 +18,7 @@ import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/fi
 import { useParams } from 'react-router-dom';
 import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -102,7 +103,6 @@ function RenderHubs() {
       fetchNextPage();
     }
   }
-
   return (
     <>
       <PilotSection />
@@ -222,7 +222,7 @@ function RenderHubs() {
           {mapView && (
             <div className="pr-1 pt-0.5 w-full h-full">
               <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-                <NoTaskFound />
+                <TaskMapTemplate />
               </div>
             </div>
           )}
