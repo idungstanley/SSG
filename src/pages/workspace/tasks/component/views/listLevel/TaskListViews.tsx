@@ -34,14 +34,13 @@ export default function TaskListViews({
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
-  // const [isActive, setIsActive] = useState<{ id: string; active: boolean }>({ id: '', active: false });
+  const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
 
   const { data } = useList(listId);
   const [sortArr, setSortArr] = useState<string[]>([]);
 
   const handleSort = (header: string, id: string) => {
     setheaderId(id);
-    // setIsActive({ id, active: true });
     if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
     setShowSortModal(!showSortModal);
@@ -95,7 +94,7 @@ export default function TaskListViews({
               <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
             </div>
           </div>
-          <div className="relative w-6/12 flex     items-center ">
+          <div className="relative w-6/12 flex items-center ">
             {hideTask.length
               ? hideTask.map(
                   (col) =>
@@ -105,7 +104,6 @@ export default function TaskListViews({
                         key={col.id}
                         className="flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                         style={{ color: '#78828d', fontSize: '10px' }}
-                        onClick={() => handleSort(col.value, col.id)}
                       >
                         <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                           {col.value}
@@ -123,6 +121,14 @@ export default function TaskListViews({
                               className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                             />
                           </div>
+                        )}
+                        {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                          <span>
+                            <FaSort
+                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              onClick={() => handleSort(col.value, col.id)}
+                            />
+                          </span>
                         )}
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
@@ -138,7 +144,6 @@ export default function TaskListViews({
                         key={col.id}
                         className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                         style={{ color: '#78828d', fontSize: '10px' }}
-                        onClick={() => handleSort(col.value, col.id)}
                       >
                         <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                           {col.value}
@@ -156,6 +161,14 @@ export default function TaskListViews({
                               className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                             />
                           </div>
+                        )}
+                        {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                          <span>
+                            <FaSort
+                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              onClick={() => handleSort(col.value, col.id)}
+                            />
+                          </span>
                         )}
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
@@ -177,7 +190,6 @@ export default function TaskListViews({
                       key={col.id}
                       className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                       style={{ color: '#78828d', fontSize: '10px' }}
-                      onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
                         <MdDragIndicator />
@@ -185,7 +197,7 @@ export default function TaskListViews({
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      {sortArr.includes(col.value) && (
+                      {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
                         <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                           <span
                             className="font-bold hover:text-clip cursor-pointer"
@@ -199,9 +211,14 @@ export default function TaskListViews({
                           />
                         </div>
                       )}
-                      <span>
-                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                      </span>
+                      {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                        <span>
+                          <FaSort
+                            className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            onClick={() => handleSort(col.value, col.id)}
+                          />
+                        </span>
+                      )}
                       {showSortModal && headerId === col.id && (
                         <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                       )}
@@ -217,7 +234,6 @@ export default function TaskListViews({
                       key={col.id}
                       className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                       style={{ color: '#78828d', fontSize: '10px' }}
-                      onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
                         <MdDragIndicator />
@@ -225,7 +241,7 @@ export default function TaskListViews({
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      {sortArr.includes(col.value) && (
+                      {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
                         <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                           <span
                             className="font-bold hover:text-clip cursor-pointer"
@@ -239,9 +255,14 @@ export default function TaskListViews({
                           />
                         </div>
                       )}
-                      <span>
-                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                      </span>
+                      {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                        <span>
+                          <FaSort
+                            className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            onClick={() => handleSort(col.value, col.id)}
+                          />
+                        </span>
+                      )}
                       {showSortModal && headerId === col.id && (
                         <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                       )}
