@@ -3,7 +3,7 @@ import { MdOutlineAlternateEmail, MdOpenInBrowser, MdOutlineKeyboardArrowDown } 
 import { GoDeviceMobile } from 'react-icons/go';
 import { GrApps } from 'react-icons/gr';
 
-export default function THeadData() {
+export default function THeadData({ notificationHead }: { notificationHead: string }) {
   return (
     <>
       {' '}
@@ -11,7 +11,9 @@ export default function THeadData() {
         <th scope="col" className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
           <div className="flex items-center space-x-2">
             <MdOutlineKeyboardArrowDown />
-            <p>Comments</p>
+            <p className="uppercase" style={{ fontSize: '15px' }}>
+              {notificationHead}
+            </p>
           </div>
         </th>
         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">

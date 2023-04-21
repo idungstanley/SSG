@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { INotificationRes } from './notification.interfaces';
+import { INotificationRes, INotificationSettingsRes } from './notification.interfaces';
 
 export const useGetNotificationService = () => {
   return useQuery(
@@ -11,6 +11,24 @@ export const useGetNotificationService = () => {
         method: 'GET'
       });
       return data?.data.notifications;
+    }
+
+    // {
+    //   enabled: !!data.type && !!data.id,
+    //   select: (res) => res.data.activity_logs,
+    // }
+  );
+};
+
+export const GetNotificationSettingsService = () => {
+  return useQuery(
+    ['notification'],
+    async () => {
+      const data = await requestNew<INotificationSettingsRes>({
+        url: 'notification-settings',
+        method: 'GET'
+      });
+      return data?.data.notification_settings;
     }
 
     // {

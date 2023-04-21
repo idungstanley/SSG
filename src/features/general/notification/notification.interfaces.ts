@@ -37,6 +37,25 @@ export interface INotification {
   };
 }
 
+export interface ITypes {
+  [key: string]: {
+    name: string;
+    type?: string;
+    default_email: boolean;
+    default_site: boolean;
+    is_email: boolean;
+    is_site: boolean;
+  };
+}
+
+export interface INotificationSettings {
+  [key: string]: {
+    name: string;
+    category: string;
+    types: ITypes;
+  };
+}
+
 export interface IPagination {
   page: number;
   per_page: number;
@@ -46,6 +65,13 @@ export interface IPagination {
 export interface INotificationRes {
   data: {
     notifications: INotification[];
+    pagination: IPagination;
+  };
+}
+
+export interface INotificationSettingsRes {
+  data: {
+    notification_settings: INotificationSettings;
     pagination: IPagination;
   };
 }
