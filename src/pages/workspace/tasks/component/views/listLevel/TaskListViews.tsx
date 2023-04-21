@@ -33,14 +33,14 @@ export default function TaskListViews({
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
-  const [isActive, setIsActive] = useState<{ id: string; active: boolean }>({ id: '', active: false });
+  // const [isActive, setIsActive] = useState<{ id: string; active: boolean }>({ id: '', active: false });
 
   const { data } = useList(listId);
   const [sortArr, setSortArr] = useState<string[]>([]);
 
   const handleSort = (header: string, id: string) => {
     setheaderId(id);
-    setIsActive({ id, active: true });
+    // setIsActive({ id, active: true });
     if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
     setShowSortModal(!showSortModal);
@@ -101,18 +101,23 @@ export default function TaskListViews({
                       <div
                         key={col.id}
                         className={
-                          isActive.id === col.id && isActive.active
+                          sortArr.includes(col.value)
                             ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
                             : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
                         }
                         style={
-                          isActive.id === col.id && isActive.active
+                          sortArr.includes(col.value)
                             ? { color: '#fff', fontSize: '10px' }
                             : { color: '#78828d', fontSize: '10px' }
                         }
                         onClick={() => handleSort(col.value, col.id)}
                       >
-                        {col.value}
+                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                          {col.value}
+                        </span>
+                        <span className="font-bold hover:text-clip cursor-pointer">
+                          {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
+                        </span>
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                         )}
@@ -126,18 +131,23 @@ export default function TaskListViews({
                       <div
                         key={col.id}
                         className={
-                          isActive.id === col.id && isActive.active
-                            ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
-                            : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                          sortArr.includes(col.value)
+                            ? 'flex items-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md'
+                            : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
                         }
                         style={
-                          isActive.id === col.id && isActive.active
+                          sortArr.includes(col.value)
                             ? { color: '#fff', fontSize: '10px' }
                             : { color: '#78828d', fontSize: '10px' }
                         }
                         onClick={() => handleSort(col.value, col.id)}
                       >
-                        {col.value}
+                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                          {col.value}
+                        </span>
+                        <span className="font-bold hover:text-clip cursor-pointer">
+                          {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
+                        </span>
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                         )}
@@ -157,22 +167,25 @@ export default function TaskListViews({
                     <div
                       key={col.id}
                       className={
-                        isActive.id === col.id && isActive.active
-                          ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
-                          : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                        sortArr.includes(col.value)
+                          ? 'flex items-center space-x-1 rounded-md uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer'
+                          : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
                       }
                       style={
-                        isActive.id === col.id && isActive.active
+                        sortArr.includes(col.value)
                           ? { color: '#fff', fontSize: '10px' }
                           : { color: '#78828d', fontSize: '10px' }
                       }
                       onClick={() => handleSort(col.value, col.id)}
                     >
-                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
                         <MdDragIndicator />
                       </span>
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
+                      </span>
+                      <span className="font-bold hover:text-clip cursor-pointer">
+                        {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
                       </span>
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
@@ -191,12 +204,12 @@ export default function TaskListViews({
                     <div
                       key={col.id}
                       className={
-                        isActive.id === col.id && isActive.active
-                          ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
-                          : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                        sortArr.includes(col.value)
+                          ? 'flex items-center space-x-1 rounded-md uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer'
+                          : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
                       }
                       style={
-                        isActive.id === col.id && isActive.active
+                        sortArr.includes(col.value)
                           ? { color: '#fff', fontSize: '10px' }
                           : { color: '#78828d', fontSize: '10px' }
                       }
@@ -207,6 +220,9 @@ export default function TaskListViews({
                       </span>
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
+                      </span>
+                      <span className="font-bold hover:text-clip cursor-pointer">
+                        {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
                       </span>
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
@@ -275,7 +291,8 @@ function SortModal({ headers, toggleModal }: SortModalProps) {
           {headers.map((title: string, index: number) => (
             <div
               key={index}
-              className="flex justify-between items-center font-semibold text-xs capitalize py-2 group cursor-pointer text-black"
+              className="flex justify-between items-center font-semibold text-xs capitalize py-2 group cursor-pointer"
+              style={{ color: '#78828d' }}
             >
               {title}
               <div className="flex items-center space-x-1">
