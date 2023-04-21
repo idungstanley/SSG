@@ -5,6 +5,7 @@ import { cl } from '../../../../../../../utils';
 import { useNavigate } from 'react-router-dom';
 import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
+import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
 
 interface NavigationItemProps {
   item: {
@@ -27,6 +28,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
     id
   });
   const { activePlaceName } = useAppSelector((state) => state.workspace);
+  const { data: count } = useGetNotificationCountService();
   const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
@@ -70,12 +72,12 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         <MdDragIndicator />
       </span>
       <span className="relative w-5 h-5">
-        {item.name === 'Notifications' && (
+        {item.name === 'Notifications' && count > 0 && (
           <p
-            className="flex items-center justify-center px-0.5 h-3 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
-            style={{ fontSize: '8px', borderRadius: '50px' }}
+            className="flex items-center justify-center px-0.5 h-3 w-3 absolute top-0 text-white bg-red-600"
+            style={{ fontSize: '8px', borderRadius: '50px', left: '10px' }}
           >
-            24
+            {count}
           </p>
         )}
         {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}

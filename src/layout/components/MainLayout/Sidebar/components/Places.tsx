@@ -49,8 +49,8 @@ export const places = [
     name: 'TASKS',
     id: '2',
     place: <Hubs />,
-    icon: <BsListCheck className="w-4 h-4" />,
-    link: 'hub'
+    icon: <BsListCheck className="w-4 h-4" />
+    // link: ''
   },
   {
     name: 'In-tray',
@@ -151,16 +151,16 @@ function Places() {
       })
     );
 
+    if (name === 'TASKS') {
+      dispatch(
+        setCurrentItem({
+          currentItemId: null,
+          currentItemType: null
+        })
+      );
+    }
     if (link) {
       navigate('/' + link);
-      if (name === 'TASKS') {
-        dispatch(
-          setCurrentItem({
-            currentItemId: null,
-            currentItemType: null
-          })
-        );
-      }
     }
   };
 
