@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
@@ -6,12 +6,13 @@ import { useDispatch } from 'react-redux';
 import { getTaskColumns, setCloseTaskListView } from '../../../../../../features/task/taskSlice';
 import '../../views/view.css';
 import '../../taskData/task.css';
-import { IoIosArrowDropdown } from 'react-icons/io';
+import { IoIosArrowDropdown, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { columnsHead, listColumnProps } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
+import { CiFilter } from 'react-icons/ci';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
@@ -29,9 +30,21 @@ export default function TaskListViews({
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
+  const [showSortModal, setShowSortModal] = useState<boolean>(false);
+  const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
+  const [isActive, setIsActive] = useState<{ id: string; active: boolean }>({ id: '', active: false });
 
   const { data } = useList(listId);
+  const [sortArr, setSortArr] = useState<string[]>([]);
+
+  const handleSort = (header: string, id: string) => {
+    setheaderId(id);
+    setIsActive({ id, active: true });
+    if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
+    setSortArr((prev) => [...prev, header]);
+    setShowSortModal(!showSortModal);
+  };
 
   useEffect(() => {
     if (!data) {
@@ -87,10 +100,22 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex  items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                        style={{ color: '#78828d', fontSize: '11px' }}
+                        className={
+                          isActive.id === col.id && isActive.active
+                            ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
+                            : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                        }
+                        style={
+                          isActive.id === col.id && isActive.active
+                            ? { color: '#fff', fontSize: '10px' }
+                            : { color: '#78828d', fontSize: '10px' }
+                        }
+                        onClick={() => handleSort(col.value, col.id)}
                       >
                         {col.value}
+                        {showSortModal && headerId === col.id && (
+                          <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                        )}
                       </div>
                     )
                 )
@@ -100,10 +125,22 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex  items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
-                        style={{ color: '#78828d', fontSize: '10px' }}
+                        className={
+                          isActive.id === col.id && isActive.active
+                            ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
+                            : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                        }
+                        style={
+                          isActive.id === col.id && isActive.active
+                            ? { color: '#fff', fontSize: '10px' }
+                            : { color: '#78828d', fontSize: '10px' }
+                        }
+                        onClick={() => handleSort(col.value, col.id)}
                       >
                         {col.value}
+                        {showSortModal && headerId === col.id && (
+                          <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                        )}
                       </div>
                     )
                 )}
@@ -119,11 +156,17 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                      style={{
-                        color: '#78828d',
-                        fontSize: '10px'
-                      }}
+                      className={
+                        isActive.id === col.id && isActive.active
+                          ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
+                          : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                      }
+                      style={
+                        isActive.id === col.id && isActive.active
+                          ? { color: '#fff', fontSize: '10px' }
+                          : { color: '#78828d', fontSize: '10px' }
+                      }
+                      onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
                         <MdDragIndicator />
@@ -134,6 +177,9 @@ export default function TaskListViews({
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                       </span>
+                      {showSortModal && headerId === col.id && (
+                        <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                      )}
                     </div>
                   )
               )
@@ -144,11 +190,17 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                      style={{
-                        color: '#78828d',
-                        fontSize: '10px'
-                      }}
+                      className={
+                        isActive.id === col.id && isActive.active
+                          ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
+                          : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
+                      }
+                      style={
+                        isActive.id === col.id && isActive.active
+                          ? { color: '#fff', fontSize: '10px' }
+                          : { color: '#78828d', fontSize: '10px' }
+                      }
+                      onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
                         <MdDragIndicator />
@@ -159,6 +211,9 @@ export default function TaskListViews({
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                       </span>
+                      {showSortModal && headerId === col.id && (
+                        <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                      )}
                     </div>
                   )
               )}
@@ -187,6 +242,52 @@ export default function TaskListViews({
             ) : null}
           </span>
         </span>
+      </div>
+    </div>
+  );
+}
+
+type SortModalProps = {
+  headers: string[];
+  toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function SortModal({ headers, toggleModal }: SortModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        toggleModal(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [toggleModal]);
+  return (
+    <div className="fixed z-50 bg-white mt-20 shadow-lg" ref={modalRef}>
+      <div className="flex flex-col space-y-2 w-44 px-1">
+        <div className="flex flex-col space-y-1 border-b-2 justify-start px-2">
+          {headers.map((title: string, index: number) => (
+            <div
+              key={index}
+              className="flex justify-between items-center font-semibold text-xs capitalize py-2 group cursor-pointer text-black"
+            >
+              {title}
+              <div className="flex items-center space-x-1">
+                <CiFilter className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                <div className=" flex flex-col justify-center items-center w-6 h-6">
+                  <IoMdArrowDropup className="text-gray-400" />
+                  <IoMdArrowDropdown className="text-gray-400" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

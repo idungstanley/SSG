@@ -89,7 +89,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               <td
                 key={col.id}
                 className="w-14 text-center"
-                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
               >
                 {moment(entries.start_date).format('MMM D HH:mm')}
               </td>
@@ -101,7 +101,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               <td
                 key={col.id}
                 className="w-14 text-center"
-                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
               >
                 {moment(entries.end_date).format('MMM D HH:mm')}
               </td>
@@ -113,7 +113,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               <td
                 key={col.id}
                 className="w-14"
-                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
+                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
                 title={entries.description}
               >
                 {entries.description && entries.description.slice(0, 5) + '...'}
