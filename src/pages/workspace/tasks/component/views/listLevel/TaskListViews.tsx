@@ -111,7 +111,7 @@ export default function TaskListViews({
                           {col.value}
                         </span>
                         {sortArr.includes(col.value) && (
-                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                             <span
                               className="font-bold hover:text-clip cursor-pointer"
                               style={{ fontSize: '8px', marginTop: '.5px' }}
@@ -120,7 +120,7 @@ export default function TaskListViews({
                             </span>
                             <GiCancel
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="text-white font-bold h-3 w-3"
+                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                             />
                           </div>
                         )}
@@ -144,7 +144,7 @@ export default function TaskListViews({
                           {col.value}
                         </span>
                         {sortArr.includes(col.value) && (
-                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                             <span
                               className="font-bold hover:text-clip cursor-pointer"
                               style={{ fontSize: '8px', marginTop: '.5px' }}
@@ -153,7 +153,7 @@ export default function TaskListViews({
                             </span>
                             <GiCancel
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="text-white font-bold h-3 w-3"
+                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                             />
                           </div>
                         )}
@@ -186,7 +186,7 @@ export default function TaskListViews({
                         {col.value}
                       </span>
                       {sortArr.includes(col.value) && (
-                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                           <span
                             className="font-bold hover:text-clip cursor-pointer"
                             style={{ fontSize: '8px', marginTop: '.5px' }}
@@ -195,7 +195,7 @@ export default function TaskListViews({
                           </span>
                           <GiCancel
                             onClick={() => handleRemoveFilter(col.value)}
-                            className="text-white font-bold h-3 w-3"
+                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                           />
                         </div>
                       )}
@@ -226,7 +226,7 @@ export default function TaskListViews({
                         {col.value}
                       </span>
                       {sortArr.includes(col.value) && (
-                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
                           <span
                             className="font-bold hover:text-clip cursor-pointer"
                             style={{ fontSize: '8px', marginTop: '.5px' }}
@@ -235,7 +235,7 @@ export default function TaskListViews({
                           </span>
                           <GiCancel
                             onClick={() => handleRemoveFilter(col.value)}
-                            className="text-white font-bold h-3 w-3"
+                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
                           />
                         </div>
                       )}
