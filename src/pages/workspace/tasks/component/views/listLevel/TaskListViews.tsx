@@ -13,6 +13,7 @@ import { FaSort } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 import { CiFilter } from 'react-icons/ci';
+import { GiCancel } from 'react-icons/gi';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
@@ -45,6 +46,8 @@ export default function TaskListViews({
     setSortArr((prev) => [...prev, header]);
     setShowSortModal(!showSortModal);
   };
+
+  const handleRemoveFilter = (title: string): void => setSortArr((prev) => prev.filter((el) => el !== title));
 
   useEffect(() => {
     if (!data) {
@@ -100,24 +103,27 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className={
-                          sortArr.includes(col.value)
-                            ? 'flex items-center uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer'
-                            : 'flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
-                        }
-                        style={
-                          sortArr.includes(col.value)
-                            ? { color: '#fff', fontSize: '10px' }
-                            : { color: '#78828d', fontSize: '10px' }
-                        }
+                        className="flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                        style={{ color: '#78828d', fontSize: '10px' }}
                         onClick={() => handleSort(col.value, col.id)}
                       >
                         <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                           {col.value}
                         </span>
-                        <span className="font-bold hover:text-clip cursor-pointer">
-                          {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
-                        </span>
+                        {sortArr.includes(col.value) && (
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                            <GiCancel
+                              onClick={() => handleRemoveFilter(col.value)}
+                              className="text-white font-bold h-3 w-3"
+                            />
+                          </div>
+                        )}
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                         )}
@@ -130,24 +136,27 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className={
-                          sortArr.includes(col.value)
-                            ? 'flex items-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md'
-                            : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
-                        }
-                        style={
-                          sortArr.includes(col.value)
-                            ? { color: '#fff', fontSize: '10px' }
-                            : { color: '#78828d', fontSize: '10px' }
-                        }
+                        className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                        style={{ color: '#78828d', fontSize: '10px' }}
                         onClick={() => handleSort(col.value, col.id)}
                       >
                         <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                           {col.value}
                         </span>
-                        <span className="font-bold hover:text-clip cursor-pointer">
-                          {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
-                        </span>
+                        {sortArr.includes(col.value) && (
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                            <GiCancel
+                              onClick={() => handleRemoveFilter(col.value)}
+                              className="text-white font-bold h-3 w-3"
+                            />
+                          </div>
+                        )}
                         {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} />
                         )}
@@ -166,16 +175,8 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className={
-                        sortArr.includes(col.value)
-                          ? 'flex items-center space-x-1 rounded-md uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer'
-                          : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
-                      }
-                      style={
-                        sortArr.includes(col.value)
-                          ? { color: '#fff', fontSize: '10px' }
-                          : { color: '#78828d', fontSize: '10px' }
-                      }
+                      className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                      style={{ color: '#78828d', fontSize: '10px' }}
                       onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
@@ -184,9 +185,20 @@ export default function TaskListViews({
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      <span className="font-bold hover:text-clip cursor-pointer">
-                        {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
-                      </span>
+                      {sortArr.includes(col.value) && (
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                          <span
+                            className="font-bold hover:text-clip cursor-pointer"
+                            style={{ fontSize: '8px', marginTop: '.5px' }}
+                          >
+                            {sortArr.indexOf(col.value) + 1}
+                          </span>
+                          <GiCancel
+                            onClick={() => handleRemoveFilter(col.value)}
+                            className="text-white font-bold h-3 w-3"
+                          />
+                        </div>
+                      )}
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                       </span>
@@ -203,16 +215,8 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className={
-                        sortArr.includes(col.value)
-                          ? 'flex items-center space-x-1 rounded-md uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer'
-                          : 'flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer'
-                      }
-                      style={
-                        sortArr.includes(col.value)
-                          ? { color: '#fff', fontSize: '10px' }
-                          : { color: '#78828d', fontSize: '10px' }
-                      }
+                      className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                      style={{ color: '#78828d', fontSize: '10px' }}
                       onClick={() => handleSort(col.value, col.id)}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
@@ -221,9 +225,20 @@ export default function TaskListViews({
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      <span className="font-bold hover:text-clip cursor-pointer">
-                        {sortArr.includes(col.value) && sortArr.indexOf(col.value) + 1}
-                      </span>
+                      {sortArr.includes(col.value) && (
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md">
+                          <span
+                            className="font-bold hover:text-clip cursor-pointer"
+                            style={{ fontSize: '8px', marginTop: '.5px' }}
+                          >
+                            {sortArr.indexOf(col.value) + 1}
+                          </span>
+                          <GiCancel
+                            onClick={() => handleRemoveFilter(col.value)}
+                            className="text-white font-bold h-3 w-3"
+                          />
+                        </div>
+                      )}
                       <span>
                         <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                       </span>
