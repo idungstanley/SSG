@@ -59,8 +59,8 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
-import WallchartPage from './pages/workspace/calendar/ui/WallchartPage';
-import YearPage from './pages/workspace/calendar/ui/YearPage';
+import WallchartPage from './pages/workspace/calendar/ui/pages/WallchartPage';
+import YearPage from './pages/workspace/calendar/ui/pages/YearPage';
 
 const inbox = [
   {

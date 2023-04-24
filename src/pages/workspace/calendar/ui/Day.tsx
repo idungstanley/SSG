@@ -46,7 +46,7 @@ export default function Day({
               isHoliday && 'bg-primary-100 hover:bg-primary-100'
             )
           : 'bg-gray-50 text-gray-400',
-        'relative py-1.5 hover:bg-gray-100 focus:z-10 flex justify-center items-center',
+        'relative py-1.5 w-10 h-10 hover:bg-gray-100 focus:z-10 flex justify-center items-center',
 
         rounded?.tl && 'rounded-tl-lg',
         rounded?.tr && 'rounded-tr-lg',

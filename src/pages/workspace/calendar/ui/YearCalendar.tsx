@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
-import { getDaysInYear } from '../lib/getDaysInYear';
+import { getYear } from '../lib/getDaysInYear';
 import { DayOff, Event } from '../types/calendar';
 import CreateEventModal from './CreateEventModal';
 import Month from './Month';
@@ -64,7 +64,7 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   const [daysOff, setDaysOff] = useState(events);
   const [showModal, setShowModal] = useState(false);
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
-  const months = useMemo(() => getDaysInYear(year), [year]);
+  const months = useMemo(() => getYear(year), [year]);
 
   const handleEvent = ({ start, end }: { start: Dayjs; end: Dayjs }) => {
     setNewDayOff({ start, end });
@@ -98,7 +98,7 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   };
 
   return (
-    <section className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
+    <section className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 xl:max-w-none xl:grid-cols-3 2xl:grid-cols-4">
       {months.map((month) => (
         <Month daysOff={daysOff} handleEvent={handleEvent} key={month.name} month={month} />
       ))}
