@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useGetHubList } from '../../../features/hubs/hubService';
 // import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
@@ -17,11 +18,13 @@ import TaskModal from '../tasks/component/TaskModal';
 import { BsListCheck } from 'react-icons/bs';
 import WalletModal from '../wallet/components/modals/WalletModal';
 import ActiveTress from './components/ActiveTree/ActiveTress';
+import { BiSearch } from 'react-icons/bi';
 
 function Hubs() {
   const dispatch = useDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
   const { toggleArchive } = useAppSelector((state) => state.hub);
+  const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
   const { data, status } = useGetHubList({
     query: toggleArchive
   });
@@ -29,6 +32,11 @@ function Hubs() {
   if (status === 'success') {
     dispatch(getHub(data?.data.hubs));
   }
+
+  const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsSearchActive((prev) => !prev);
+  };
 
   const configForDropdown = [
     {
@@ -44,6 +52,9 @@ function Hubs() {
         label="TASKS"
         id="2"
         icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        setIsSearchActive={setIsSearchActive}
+        searchStatus={isSearchActive}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" iconColor="#BF00FFB2" />

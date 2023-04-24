@@ -33,17 +33,17 @@ export const getListService = (data: { queryKey: (string | undefined)[] }) => {
   return response;
 };
 
-export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
-  const walletID = data.queryKey[1];
-  const response = requestNew({
-    url: 'lists',
-    method: 'GET',
-    params: {
-      wallet_id: walletID
-    }
-  });
-  return response;
-};
+// export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
+//   const walletID = data.queryKey[1];
+//   const response = requestNew({
+//     url: 'lists',
+//     method: 'GET',
+//     params: {
+//       wallet_id: walletID
+//     }
+//   });
+//   return response;
+// };
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();
