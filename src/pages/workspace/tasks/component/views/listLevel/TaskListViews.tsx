@@ -16,6 +16,10 @@ import { CiFilter } from 'react-icons/ci';
 import { GiCancel } from 'react-icons/gi';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
+export type SortOption = {
+  dir: 'asc' | 'desc';
+  field: string;
+};
 
 export default function TaskListViews({
   taskLength,
@@ -35,6 +39,7 @@ export default function TaskListViews({
   const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
   const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
+  const [sortAbleArr, setSortAbleArr] = useState<Array<SortOption>>([]);
 
   const { data } = useList(listId);
   const [sortArr, setSortArr] = useState<string[]>([]);
@@ -43,10 +48,14 @@ export default function TaskListViews({
     setheaderId(id);
     if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
+    setSortAbleArr((prev) => [...prev, { dir: 'desc', field: header }]);
     setShowSortModal(!showSortModal);
   };
 
-  const handleRemoveFilter = (title: string): void => setSortArr((prev) => prev.filter((el) => el !== title));
+  const handleRemoveFilter = (title: string): void => {
+    setSortArr((prev) => prev.filter((el) => el !== title));
+    setSortAbleArr((prev) => prev.filter((el) => el.field !== title));
+  };
 
   useEffect(() => {
     if (!data) {
@@ -131,7 +140,12 @@ export default function TaskListViews({
                           </span>
                         )}
                         {showSortModal && headerId === col.id && (
-                          <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                          <SortModal
+                            headers={sortArr}
+                            toggleModal={setShowSortModal}
+                            arr={{ sortAbleArr, setSortAbleArr }}
+                            handleSortFn={handleSort}
+                          />
                         )}
                       </div>
                     )
@@ -171,7 +185,12 @@ export default function TaskListViews({
                           </span>
                         )}
                         {showSortModal && headerId === col.id && (
-                          <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                          <SortModal
+                            headers={sortArr}
+                            toggleModal={setShowSortModal}
+                            arr={{ sortAbleArr, setSortAbleArr }}
+                            handleSortFn={handleSort}
+                          />
                         )}
                       </div>
                     )
@@ -220,7 +239,12 @@ export default function TaskListViews({
                         </span>
                       )}
                       {showSortModal && headerId === col.id && (
-                        <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                        <SortModal
+                          headers={sortArr}
+                          toggleModal={setShowSortModal}
+                          arr={{ sortAbleArr, setSortAbleArr }}
+                          handleSortFn={handleSort}
+                        />
                       )}
                     </div>
                   )
@@ -264,7 +288,12 @@ export default function TaskListViews({
                         </span>
                       )}
                       {showSortModal && headerId === col.id && (
-                        <SortModal headers={sortArr} toggleModal={setShowSortModal} />
+                        <SortModal
+                          headers={sortArr}
+                          toggleModal={setShowSortModal}
+                          arr={{ sortAbleArr, setSortAbleArr }}
+                          handleSortFn={handleSort}
+                        />
                       )}
                     </div>
                   )
@@ -299,14 +328,34 @@ export default function TaskListViews({
   );
 }
 
+// type State = {
+//   dir: 'asc' | 'desc';
+//   field: string;
+// };
+
 type SortModalProps = {
   headers: string[];
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  arr: {
+    sortAbleArr: Array<SortOption>;
+    setSortAbleArr: React.Dispatch<React.SetStateAction<SortOption[]>>;
+  };
+  handleSortFn: (header: string, id: string) => void;
 };
 
-function SortModal({ headers, toggleModal }: SortModalProps) {
+function SortModal({ headers, toggleModal, arr, handleSortFn }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { sortAbleArr } = arr;
 
+  // const handleDirection = (title: string): void => {
+  //   // sortArr.some((entry) => {
+  //   //   if (entry.field !== title) {
+  //   //     setSortArr((prev) => [...prev, { dir: 'desc', field: title }]);
+  //   //   }
+  //   // });
+  // };
+
+  console.log(sortAbleArr);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -320,6 +369,11 @@ function SortModal({ headers, toggleModal }: SortModalProps) {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [toggleModal]);
+
+  // useEffect(() => {
+  //   getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds, sortArr });
+  // }, [listId, filterTaskByAssigneeIds, sortArr]);
+
   return (
     <div className="fixed z-50 bg-white mt-20 shadow-lg" ref={modalRef}>
       <div className="flex flex-col space-y-2 w-44 px-1">
@@ -335,7 +389,10 @@ function SortModal({ headers, toggleModal }: SortModalProps) {
                 <CiFilter className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                 <div className=" flex flex-col justify-center items-center w-6 h-6">
                   <IoMdArrowDropup className="text-gray-400" />
-                  <IoMdArrowDropdown className="text-gray-400" />
+                  <IoMdArrowDropdown
+                    className="text-gray-400"
+                    onClick={() => handleSortFn(title, index.toString() as string)}
+                  />
                 </div>
               </div>
             </div>

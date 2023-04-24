@@ -5,6 +5,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
+import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 
 export const createTaskService = (data: {
   name: string;
@@ -29,11 +30,15 @@ export const createTaskService = (data: {
 export const UseGetFullTaskList = ({
   itemId,
   itemType,
-  assigneeUserId
+  assigneeUserId,
+  sortArr,
+  direction
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
   assigneeUserId?: string | null | undefined;
+  sortArr?: string[] | undefined;
+  direction?: string | undefined;
 }) => {
   const queryClient = useQueryClient();
   const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
@@ -50,7 +55,9 @@ export const UseGetFullTaskList = ({
           page: pageParam,
           hub_id,
           wallet_id,
-          assignees
+          assignees,
+          sortArr,
+          direction
         }
       });
     },
@@ -222,14 +229,24 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 
 export const getTaskListService = ({
   listId,
-  assigneeUserId
+  assigneeUserId,
+  sortArr
 }: {
   listId: string | null | undefined;
   assigneeUserId: string | undefined | null;
+  sortArr?: SortOption[] | undefined;
 }) => {
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  // const sortDirection = 'asc';
+  // const sortParams = 'priority';
+  // const sorting = [
+  //   {
+  //     field: sortParams,
+  //     dir: sortDirection
+  //   }
+  // ];
   return useInfiniteQuery(
     ['task', { listId: listId, assigneeUserId }],
 
@@ -241,6 +258,9 @@ export const getTaskListService = ({
           list_id: listId,
           page: pageParam,
           assignees
+        },
+        data: {
+          sorting: sortArr
         }
       });
     },
