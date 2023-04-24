@@ -41,11 +41,11 @@ export default function Day({
         isActiveDate
           ? cl(
               'bg-white cursor-pointer font-medium text-gray-900',
-              isDayOff && 'bg-gray-100 text-red-500',
+              isDayOff && 'bg-gray-100 text-gray-500',
               isSelected && 'bg-primary-600 hover:bg-primary-600',
               isHoliday && 'bg-primary-100 hover:bg-primary-100'
             )
-          : 'bg-gray-50 text-gray-400',
+          : 'bg-gray-50 text-gray-300',
         'relative py-1.5 w-10 h-10 hover:bg-gray-100 focus:z-10 flex justify-center items-center',
 
         rounded?.tl && 'rounded-tl-lg',
@@ -73,6 +73,15 @@ export default function Day({
         ) : (
           day.date()
         )}
+        {/* {isHoliday ? (
+          isHighlighted ? (
+            day.date()
+          ) : (
+            <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
+          )
+        ) : (
+          day.date()
+        )} */}
       </Menu.Button>
 
       {children}

@@ -89,25 +89,29 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
             )
           );
 
+          const isDayOff = Number(day.format('d')) === 0 || Number(day.format('d')) === 6;
+          const isSelected = !!selectedDates.find((i) => i.isSame(day, 'date'));
+          const isActiveDate = day.isSame(month.month, 'month');
+
           return (
             <Day
               key={day.format()}
               isCurrentDate={currentDate.isSame(day, 'date')}
-              isActiveDate={day.isSame(month.month, 'month')}
+              isActiveDate={isActiveDate}
               rounded={{
                 tl: index === 0,
                 tr: index === 6,
                 bl: index === month.days.length - 7,
                 br: index === month.days.length - 1
               }}
-              isDayOff={Number(day.format('d')) === 0 || Number(day.format('d')) === 6}
+              isDayOff={isDayOff}
               day={day}
               isHighlighted={highlightedDates.includes(day.format('YYYY-MM-DD'))}
-              isSelected={!!selectedDates.find((i) => i.isSame(day, 'date'))} //.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
+              isSelected={isSelected} //.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
               isHoliday={!!isHoliday}
               // for event
               onMouseEnter={
-                isHoliday
+                isActiveDate && !isDayOff && isHoliday
                   ? () =>
                       handleDateMouseEnter(
                         isHoliday?.daysOff.find(
@@ -116,10 +120,10 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
                       )
                   : undefined
               }
-              onMouseLeave={isHoliday ? handleDateMouseLeave : undefined}
+              onMouseLeave={isActiveDate && !isDayOff && isHoliday ? handleDateMouseLeave : undefined}
               // for selection
-              onMouseDown={!isHoliday ? () => handleDateMouseDown(day) : undefined}
-              onMouseOver={isMouseDown ? () => handleDateMouseOver(day) : undefined}
+              onMouseDown={isActiveDate && !isDayOff && !isHoliday ? () => handleDateMouseDown(day) : undefined}
+              onMouseOver={isActiveDate && !isDayOff && isMouseDown ? () => handleDateMouseOver(day) : undefined}
             >
               {isHoliday ? (
                 <Transition

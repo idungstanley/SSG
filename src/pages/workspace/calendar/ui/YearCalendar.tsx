@@ -100,7 +100,7 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   };
 
   return (
-    <section className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 xl:max-w-none xl:grid-cols-3 2xl:grid-cols-4">
+    <section className="flex flex-wrap mx-auto max-w-3xl gap-x-8 gap-y-16 px-4 py-16 xl:max-w-none">
       {months.map((month) => (
         <Month
           daysOff={daysOff}
