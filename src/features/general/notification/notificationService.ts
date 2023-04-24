@@ -31,7 +31,7 @@ export const useGetNotificationCountService = () => {
         url: 'notifications/count-new',
         method: 'GET'
       });
-      return data?.data.count;
+      return data?.data?.count;
     },
     {
       onSuccess: (data) => {

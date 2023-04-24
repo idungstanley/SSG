@@ -23,12 +23,13 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { notificationCount } = useAppSelector((state) => state.notification);
   const { id, name } = item;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
   const { activePlaceName } = useAppSelector((state) => state.workspace);
-  const { data: count } = useGetNotificationCountService();
+  useGetNotificationCountService();
   const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
@@ -72,12 +73,12 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         <MdDragIndicator />
       </span>
       <span className="relative w-5 h-5">
-        {item.name === 'Notifications' && count > 0 && (
+        {item.name === 'Notifications' && notificationCount > 0 && (
           <p
             className="flex items-center justify-center px-0.5 h-3 w-3 absolute top-0 text-white bg-red-600"
             style={{ fontSize: '8px', borderRadius: '50px', left: '10px' }}
           >
-            {count}
+            {notificationCount}
           </p>
         )}
         {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
