@@ -4,7 +4,11 @@ import { Tabs } from './ui/Tabs';
 function Calendar() {
   return (
     <div className="w-full h-full overflow-y-scroll pb-20">
-      <Tabs />
+      {/* header */}
+      <section className="px-4 flex justify-between items-center border-b border-gray-200 w-full">
+        <h1 className="text-base font-semibold leading-6 text-gray-900">Stanislau</h1>
+        <Tabs />
+      </section>
 
       <Outlet />
     </div>

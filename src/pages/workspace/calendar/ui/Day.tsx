@@ -1,10 +1,10 @@
 import { Menu } from '@headlessui/react';
 import { Dayjs } from 'dayjs';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 import { cl } from '../../../../utils';
 import { MdBeachAccess } from 'react-icons/md';
 
-interface DayProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface DayProps extends HTMLAttributes<HTMLDivElement> {
   day: Dayjs;
   isCurrentDate: boolean;
   isActiveDate: boolean; // date from this month or from previous / next
@@ -35,9 +35,8 @@ export default function Day({
 }: DayProps) {
   return (
     <Menu
-      as="button"
+      as="div"
       {...props}
-      type="button"
       className={cl(
         isActiveDate
           ? cl(

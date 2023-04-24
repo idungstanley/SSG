@@ -10,7 +10,7 @@ export default function YearPage() {
 
   return (
     <>
-      <section className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+      <section className="flex items-center justify-between border-b border-gray-200 px-4 py-4">
         <ChangeYear year={year} setYear={setYear} />
 
         {/* action */}
