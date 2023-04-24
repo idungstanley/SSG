@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
 import { getYear } from '../lib/getDaysInYear';
-import { DayOff, Event } from '../types/calendar';
+import { Member, DayOff } from '../types/calendar';
 import CreateEventModal from './CreateEventModal';
 import Month from './Month';
 
@@ -9,12 +9,13 @@ interface YearCalendarProps {
   year: number;
 }
 
-const events: Event[] = [
+const members: Member[] = [
   {
     id: '1',
     user: {
       id: '1',
-      name: 'Snanislau'
+      name: 'Snanislau',
+      email: 'lorderetik@gmail.com'
     },
     daysOff: [
       {
@@ -37,7 +38,8 @@ const events: Event[] = [
     id: '2',
     user: {
       id: '2',
-      name: 'John'
+      name: 'John',
+      email: 'john@gmail.com'
     },
     daysOff: [
       {
@@ -61,7 +63,7 @@ const events: Event[] = [
 const activeUserId = '1';
 
 export default function YearCalendar({ year }: YearCalendarProps) {
-  const [daysOff, setDaysOff] = useState(events);
+  const [daysOff, setDaysOff] = useState(members);
   const [showModal, setShowModal] = useState(false);
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
   const months = useMemo(() => getYear(year), [year]);
@@ -100,7 +102,13 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   return (
     <section className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 xl:max-w-none xl:grid-cols-3 2xl:grid-cols-4">
       {months.map((month) => (
-        <Month daysOff={daysOff} handleEvent={handleEvent} key={month.name} month={month} />
+        <Month
+          daysOff={daysOff}
+          handleEvent={handleEvent}
+          key={month.name}
+          month={month}
+          title={<Month.Title title={month.name} />}
+        />
       ))}
 
       <CreateEventModal onSubmit={handleSubmit} dayOff={newDayOff} show={showModal} setShow={handleCloseModal} />

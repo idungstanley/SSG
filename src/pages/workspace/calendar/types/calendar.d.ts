@@ -6,7 +6,7 @@ export interface MonthObject {
   days: Dayjs[];
 }
 
-export interface Event {
+export interface Member {
   id: string;
   user: User;
   daysOff: DayOff[];
@@ -15,6 +15,7 @@ export interface Event {
 export interface User {
   id: string;
   name: string;
+  email: string;
 }
 
 export interface DayOff {

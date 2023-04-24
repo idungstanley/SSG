@@ -4,19 +4,21 @@ import { Fragment, useCallback, useState } from 'react';
 import { cl } from '../../../../utils';
 import { isSameOrAfter, isSameOrBefore } from '../lib/dateUtils';
 import { getDatesInRange } from '../lib/getDatesInRange';
-import { DayOff, Event, MonthObject } from '../types/calendar';
+import { DayOff, Member, MonthObject } from '../types/calendar';
 import Day from './Day';
+import MonthTitle from './MonthTitle';
 import Weeks from './Weeks';
 
 interface MonthProps {
-  daysOff: Event[];
+  daysOff: Member[];
   month: MonthObject;
   handleEvent: ({ start, end }: { start: Dayjs; end: Dayjs }) => void;
+  title: JSX.Element;
 }
 
 const currentDate = dayjs();
 
-export default function Month({ month, handleEvent, daysOff }: MonthProps) {
+export default function Month({ month, handleEvent, daysOff, title }: MonthProps) {
   const [selectedDates, setSelectedDates] = useState<Dayjs[]>([]);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [highlightedDates, setHighlightedDates] = useState<string[]>([]);
@@ -71,7 +73,7 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
       key={month.name}
       className="text-center relative"
     >
-      <h2 className="text-sm font-semibold text-gray-900">{month.name}</h2>
+      {title}
       <Weeks />
 
       <div
@@ -161,3 +163,5 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
     </div>
   );
 }
+
+Month.Title = MonthTitle;
