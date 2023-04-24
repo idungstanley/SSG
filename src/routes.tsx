@@ -59,6 +59,8 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
+import WallchartPage from './pages/workspace/calendar/ui/WallchartPage';
+import YearPage from './pages/workspace/calendar/ui/YearPage';
 
 const inbox = [
   {
@@ -126,7 +128,20 @@ export const routes = (user: IUser | null) =>
         { path: 'directory/shelf/:directoryId', element: <Directory /> },
         { path: 'notification', element: <Notification /> },
         { path: 'community', element: <CommunityPage /> },
-        { path: 'calendar', element: <Calendar /> },
+        {
+          path: 'calendar',
+          element: <Calendar />,
+          children: [
+            {
+              path: '',
+              element: <WallchartPage />
+            },
+            {
+              path: 'year',
+              element: <YearPage />
+            }
+          ]
+        },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
