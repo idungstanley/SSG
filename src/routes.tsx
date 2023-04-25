@@ -58,6 +58,7 @@ import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
+import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
 
 const inbox = [
   {
@@ -91,6 +92,10 @@ export const routes = (user: IUser | null) =>
     {
       path: 'onboarding',
       element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
+    },
+    {
+      path: 'onboarding/new',
+      element: user ? <NewWorkSpace /> : <Navigate to="/auth/login" />
     },
     // {
     //   path: 'workspaceId',
@@ -126,13 +131,13 @@ export const routes = (user: IUser | null) =>
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
-        { path: 'hub', element: <RenderHubs /> },
-        { path: 'hub/:hubId', element: <RenderHubs /> },
-        { path: 'hub/:hubId/t/:taskId', element: <RenderHubs /> },
-        { path: 'wallet/:walletId', element: <RenderWallets /> },
-        { path: 'wallet/:walletId/t/:taskId', element: <RenderWallets /> },
-        { path: 'list/:listId', element: <RenderList /> },
-        { path: 'list/:listId/t/:taskId', element: <RenderList /> },
+        { path: 'h', element: <RenderHubs /> },
+        { path: 'h/:hubId', element: <RenderHubs /> },
+        { path: 'h/:hubId/t/:taskId', element: <RenderHubs /> },
+        { path: 'w/:walletId', element: <RenderWallets /> },
+        { path: 'w/:walletId/t/:taskId', element: <RenderWallets /> },
+        { path: 'l/:listId', element: <RenderList /> },
+        { path: 'l/:listId/t/:taskId', element: <RenderList /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
@@ -145,10 +150,6 @@ export const routes = (user: IUser | null) =>
         {
           path: 'settings/team-members/groups',
           element: <TeamMemberGroupsPage />
-        },
-        {
-          path: 'settings/team-members/groups/:teamMemberGroupId',
-          element: <TeamMemberGroupGeneralSettingsPage />
         },
         {
           path: 'settings/team-members/groups/:teamMemberGroupId/members',
@@ -187,7 +188,11 @@ export const routes = (user: IUser | null) =>
         { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
-        { path: 'settings/permisions', element: <PermissionsPage /> }
+        { path: 'settings/permisions', element: <PermissionsPage /> },
+        {
+          path: 'team-members/groups/:teamMemberGroupId',
+          element: <TeamMemberGroupGeneralSettingsPage />
+        }
       ]
     },
     { path: '*', element: <NotFoundPage /> }

@@ -39,7 +39,7 @@ export default function WList({
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
-    navigate(`/wallet/${id}`, {
+    navigate(`/w/${id}`, {
       replace: true
     });
     setShowSubWallet(id);

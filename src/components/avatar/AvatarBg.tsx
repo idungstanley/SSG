@@ -10,7 +10,7 @@ function AvatarBg({ colour = '#4ADE80', size = 2.5, onClick }: avatarType) {
   return (
     <button
       type="button"
-      className={`rounded-full w-${size} h-${size}`}
+      className={`rounded w-${size} h-${size}`}
       style={{ backgroundColor: colour }}
       onClick={onClick}
     />

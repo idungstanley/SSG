@@ -60,7 +60,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/hub/${id}`, {
+    navigate(`/h/${id}`, {
       replace: true
     });
     localStorage.setItem(

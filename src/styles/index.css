@@ -98,3 +98,9 @@ code {
     height: 64px;
   }
 }
+
+.create-workspace {
+  background-image: url('../assets/icons/workspace_bg.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
+}

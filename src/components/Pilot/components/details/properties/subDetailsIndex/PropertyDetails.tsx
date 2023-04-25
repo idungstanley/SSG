@@ -35,7 +35,6 @@ interface PropertyDetailsProps {
   Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
-  console.log('Details', Details);
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
@@ -90,13 +89,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         currHubId: Details?.id,
         description
       });
-    } else if (walletId) {
+    } else if (walletId != undefined) {
       await editWalletMutation.mutateAsync({
         walletName: title,
         WalletId: Details?.id,
         description
       });
-    } else if (listId) {
+    } else if (listId != undefined) {
       await editListMutation.mutateAsync({
         listName: title,
         listId: Details?.id,

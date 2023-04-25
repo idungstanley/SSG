@@ -1,8 +1,8 @@
-import React from 'react';
 import { FaHandsHelping } from 'react-icons/fa';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import { cl } from '../../../utils';
+
 export default function AlsoHr() {
   const { showSidebar } = useAppSelector((state) => state.account);
   return (
