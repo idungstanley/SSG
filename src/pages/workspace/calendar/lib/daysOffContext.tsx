@@ -15,7 +15,7 @@ const initialData = [
       id: '2',
       title: 'Sick day',
       color: 'red',
-      icon: <AiOutlineHome className="w-5 h-5 text-primary-400 stroke-current" />
+      icon: <AiOutlineHome className="w-5 h-5 stroke-current" />
     },
     reason: 'Blah blah blah',
     user: {
@@ -30,7 +30,7 @@ const initialData = [
       id: '1',
       title: 'Holiday',
       color: 'primary',
-      icon: <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
+      icon: <MdBeachAccess className="w-5 h-5 stroke-current" />
     },
     reason: 'Blah blah blah blah',
     user: {
@@ -45,7 +45,7 @@ const initialData = [
       id: '2',
       title: 'Sick day',
       color: 'red',
-      icon: <AiOutlineHome className="w-5 h-5 text-primary-400 stroke-current" />
+      icon: <AiOutlineHome className="w-5 h-5 stroke-current" />
     },
     reason: 'Blah blah blah',
     user: {
@@ -60,7 +60,7 @@ const initialData = [
       id: '2',
       title: 'Sick day',
       color: 'red',
-      icon: <AiOutlineHome className="w-5 h-5 text-primary-400 stroke-current" />
+      icon: <AiOutlineHome className="w-5 h-5 stroke-current" />
     },
     reason: 'Blah blah blah',
     user: {
@@ -74,13 +74,13 @@ const initialTypes = [
     id: '1',
     title: 'Holiday',
     color: 'primary',
-    icon: <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
+    icon: <MdBeachAccess className="w-5 h-5 stroke-current" />
   },
   {
     id: '2',
     title: 'Sick day',
     color: 'red',
-    icon: <AiOutlineHome className="w-5 h-5 text-primary-400 stroke-current" />
+    icon: <AiOutlineHome className="w-5 h-5 stroke-current" />
   }
 ];
 
