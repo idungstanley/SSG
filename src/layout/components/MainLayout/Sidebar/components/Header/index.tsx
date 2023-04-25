@@ -14,6 +14,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const { showSidebar, scrollTop } = useAppSelector((state) => state.account);
+  const { notificationCount } = useAppSelector((state) => state.notification);
   const handleClick = () => {
     navigate('/notification');
   };
@@ -30,12 +31,15 @@ export default function Header() {
         <WorkSpaceSelection />
         {scrollTop > '108' ? (
           <span className="relative h-4 w-4 mr-0.5 mt-2 cursor-pointer flex items-center" onClick={handleClick}>
-            <p
-              className="flex items-center justify-center px-0.5 h-2.5 w-min-4 absolute -right-1.5 top-0 text-white bg-red-600"
-              style={{ fontSize: '7px', borderRadius: '50px' }}
-            >
-              24
-            </p>
+            {notificationCount > 0 && (
+              <p
+                className="flex items-center justify-center px-0.5 h-2.5 w-2.5 absolute top-0 text-white bg-red-600"
+                style={{ fontSize: '7px', borderRadius: '50px', left: '9px' }}
+              >
+                {notificationCount}
+              </p>
+            )}
+
             <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />
           </span>
         ) : null}
