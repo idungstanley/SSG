@@ -20,17 +20,24 @@ export interface DayOff {
   id: string;
   start: string;
   end: string;
-  type: string;
+  type: LeaveType;
   reason: string;
   user: User;
 }
 
 export interface onCreateDayOffProps {
-  type: { id: string; title: string };
+  type: LeaveType;
   reason: string;
   start: string;
   end: string;
   memberId: string;
+}
+
+interface LeaveType {
+  id: string;
+  title: string;
+  color: string;
+  icon: JSX.Element;
 }
 
 export interface DaysOffContextValue {
@@ -42,4 +49,6 @@ export interface DaysOffContextValue {
   setActiveMemberId: (i: string) => void;
   newDayOff: { start: Dayjs; end: Dayjs } | null;
   setNewDayOff: (i: { start: Dayjs; end: Dayjs } | null) => void;
+  leaveTypes: LeaveType[];
+  onAddLeaveType: (i: LeaveType) => void;
 }

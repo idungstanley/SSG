@@ -5,30 +5,20 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { useDaysOff } from '../lib/daysOffContext';
 import ListBox from './ListBox';
 
-const types = [
-  {
-    id: '1',
-    title: 'Holiday'
-  },
-  {
-    id: '2',
-    title: 'Sick day'
-  }
-];
-
 export default function CreateEventModal() {
-  const [type, setType] = useState(types[0]);
-  const reasonRef = useRef<HTMLInputElement>(null);
-  const [member, setMember] = useState<{ id: string; title: string } | null>(null);
-
   const {
     showCreateDayOffModal: show,
     newDayOff: dayOff,
     setNewDayOff,
     setShowCreateDayOffModal,
     onCreateDayOff,
-    activeMemberId
+    activeMemberId,
+    leaveTypes
   } = useDaysOff();
+
+  const [type, setType] = useState(leaveTypes[0]);
+  const reasonRef = useRef<HTMLInputElement>(null);
+  const [member, setMember] = useState<{ id: string; title: string } | null>(null);
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = useMemo(
@@ -71,7 +61,7 @@ export default function CreateEventModal() {
       setNewDayOff(null);
       setShowCreateDayOffModal(false);
 
-      setType(types[0]);
+      setType(leaveTypes[0]);
     }
   };
 
@@ -139,7 +129,7 @@ export default function CreateEventModal() {
                         <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
                       ) : null}
 
-                      <ListBox setSelected={setType} value={type} values={types} title="Type" />
+                      <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" />
 
                       <div>
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">

@@ -98,6 +98,7 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
           return (
             <Day
               key={day.format()}
+              leaveType={isDayOff?.type}
               isCurrentDate={currentDate.isSame(day, 'date')}
               isActiveDate={isActiveDate}
               rounded={{
@@ -137,7 +138,7 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
                     </div>
 
                     <span className="whitespace-nowrap rounded-lg px-2.5 py-1 border text-gray-600 text-sm font-semibold shadow-sm hover:bg-gray-50">
-                      {isDayOff.type}
+                      {isDayOff.type.title}
                     </span>
                   </Menu.Items>
                 </Transition>

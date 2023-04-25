@@ -5,14 +5,14 @@ import { cl } from '../../../../utils';
 
 type Value = { id: string; title: string };
 
-interface SelectTypeListboxProps {
-  value: Value;
-  values: Value[];
-  setSelected: (i: Value) => void;
+interface SelectTypeListboxProps<T> {
+  value: T;
+  values: T[];
+  setSelected: (i: T) => void;
   title: string;
 }
 
-export default function ListBox({ value, setSelected, values, title }: SelectTypeListboxProps) {
+export default function ListBox<T extends Value>({ value, setSelected, values, title }: SelectTypeListboxProps<T>) {
   return (
     <Listbox value={value} onChange={setSelected}>
       {({ open }) => (

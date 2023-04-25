@@ -3,6 +3,7 @@ import { Dayjs } from 'dayjs';
 import { HTMLAttributes, ReactNode } from 'react';
 import { cl } from '../../../../utils';
 import { MdBeachAccess } from 'react-icons/md';
+import { LeaveType } from '../types/calendar';
 
 interface DayProps extends HTMLAttributes<HTMLDivElement> {
   day: Dayjs;
@@ -19,6 +20,7 @@ interface DayProps extends HTMLAttributes<HTMLDivElement> {
   isSelected: boolean;
   isHoliday: boolean;
   children: ReactNode;
+  leaveType?: LeaveType;
 }
 
 export default function Day({
@@ -31,6 +33,7 @@ export default function Day({
   isSelected,
   isHoliday,
   children,
+  leaveType,
   ...props
 }: DayProps) {
   return (
@@ -57,22 +60,20 @@ export default function Day({
       <Menu.Button
         className={cl(
           isCurrentDate && 'bg-primary-500 text-white',
+          leaveType ? `text-${leaveType.color}-400` : '',
           'w-7 h-7 flex items-center justify-center rounded-full'
         )}
       >
-        {isCurrentDate ? (
-          day.date()
-        ) : isHoliday ? (
-          isHighlighted ? (
-            day.date()
-          ) : isActiveDate ? (
-            <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
-          ) : (
-            day.date()
-          )
-        ) : (
-          day.date()
-        )}
+        {isCurrentDate
+          ? day.date()
+          : isHoliday
+          ? isHighlighted
+            ? day.date()
+            : isActiveDate
+            ? leaveType?.icon
+            : // <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
+              day.date()
+          : day.date()}
       </Menu.Button>
 
       {children}
