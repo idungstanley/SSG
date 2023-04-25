@@ -73,15 +73,6 @@ export default function Day({
         ) : (
           day.date()
         )}
-        {/* {isHoliday ? (
-          isHighlighted ? (
-            day.date()
-          ) : (
-            <MdBeachAccess className="w-5 h-5 text-primary-400 stroke-current" />
-          )
-        ) : (
-          day.date()
-        )} */}
       </Menu.Button>
 
       {children}

@@ -1,15 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dayjs } from 'dayjs';
 import { Fragment, useRef, useState } from 'react';
+import { useDaysOff } from '../lib/daysOffContext';
 import SelectTypeListbox from './SelectTypeListbox';
-
-interface CreateEventModal {
-  show: boolean;
-  setShow: VoidFunction;
-  dayOff: { start: Dayjs; end: Dayjs } | null;
-  onSubmit: ({ type, reason }: { type: { id: number; title: string }; reason: string }) => void;
-}
 
 const types = [
   {
@@ -22,16 +15,41 @@ const types = [
   }
 ];
 
-export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: CreateEventModal) {
+export default function CreateEventModal() {
+  const {
+    showCreateDayOffModal: show,
+    newDayOff: dayOff,
+    setNewDayOff,
+    setShowCreateDayOffModal,
+    onCreateDayOff
+  } = useDaysOff();
+
+  const onClose = () => {
+    setNewDayOff(null);
+    setShowCreateDayOffModal(false);
+  };
+
   const [type, setType] = useState(types[0]);
   const reasonRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!dayOff) {
+      return;
+    }
+
     if (reasonRef.current) {
       const reason = reasonRef.current.value;
-      onSubmit({ type, reason });
+      onCreateDayOff({
+        type,
+        reason,
+        start: dayOff.start.format('YYYY-MM-DD'),
+        end: dayOff.end.format('YYYY-MM-DD')
+      });
+
+      setNewDayOff(null);
+      setShowCreateDayOffModal(false);
 
       setType(types[0]);
     }
@@ -39,7 +57,7 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
 
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setShow}>
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -72,7 +90,7 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                   <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={setShow}
+                    onClick={onClose}
                   >
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
