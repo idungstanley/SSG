@@ -46,23 +46,29 @@ export default function TaskListViews({
   const [querySwitch, setQuerySwitch] = useState<boolean>(false);
 
   const handleSort = (header: string, id: string) => {
+    const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'task' : header.toLowerCase();
     setheaderId(id);
-    if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
+    if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
-    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: header == 'Assignees' ? 'assignee' : header }]);
+    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: headerTxt }]);
     setShowSortModal(!showSortModal);
     setQuerySwitch(!querySwitch);
   };
 
-  if (querySwitch) {
+  const handleRemoveFilter = (title: string): void => {
+    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
+    setSortArr((prev) => prev.filter((el) => el !== title));
+    setSortAbleArr((prev) =>
+      prev.filter((el) => {
+        return el.field !== headerTxt;
+      })
+    );
+  };
+
+  useEffect(() => {
     dispatch(setSortArray(sortAbleArr));
     setQuerySwitch(!querySwitch);
-  }
-
-  const handleRemoveFilter = (title: string): void => {
-    setSortArr((prev) => prev.filter((el) => el !== title));
-    setSortAbleArr((prev) => prev.filter((el) => el.field !== title));
-  };
+  }, [sortAbleArr]);
 
   useEffect(() => {
     if (!data) {

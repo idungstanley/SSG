@@ -29,21 +29,19 @@ export const createTaskService = (data: {
 export const UseGetFullTaskList = ({
   itemId,
   itemType,
-  assigneeUserId,
-  sortArr,
-  direction
+  assigneeUserId
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
   assigneeUserId?: string | null | undefined;
-  sortArr?: string[] | undefined;
-  direction?: string | undefined;
 }) => {
   const queryClient = useQueryClient();
   const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  const { sortArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -54,9 +52,10 @@ export const UseGetFullTaskList = ({
           page: pageParam,
           hub_id,
           wallet_id,
-          assignees,
-          sortArr,
-          direction
+          assignees
+        },
+        data: {
+          sorting: sortArrUpdate
         }
       });
     },
@@ -237,14 +236,6 @@ export const getTaskListService = ({
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortArr } = useAppSelector((state) => state.task);
-  // const sortDirection = 'asc';
-  // const sortParams = 'priority';
-  // const sorting = [
-  //   {
-  //     field: sortParams,
-  //     dir: sortDirection
-  //   }
-  // ];
   const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
     ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
@@ -423,12 +414,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
   });
   return response;
 };
-// {
-//   enabled: data.timeEntryDeleteTriggerId != null,
-//   onSuccess: () => queryClient.invalidateQueries(['timeclock'])
-// }
-// );
-// };
 
 export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];

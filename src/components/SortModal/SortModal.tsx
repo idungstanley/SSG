@@ -21,8 +21,8 @@ export default function SortModal({ headers, toggleModal, arr }: SortModalProps)
     setSortAbleArr(
       sortAbleArr.map((sortOption) => {
         if (sortOption.field === title) {
-          const newDir = sortOption.dir === 'asc' ? 'desc' : 'asc';
-          return { ...sortOption, dir: newDir };
+          // const newDir = sortOption.dir === 'asc' ? 'desc' : 'asc';
+          return { ...sortOption, dir: 'desc' };
         }
         return sortOption;
       })
