@@ -26,7 +26,7 @@ export interface DayOff {
 }
 
 export interface onCreateDayOffProps {
-  type: { id: number; title: string };
+  type: { id: string; title: string };
   reason: string;
   start: string;
   end: string;

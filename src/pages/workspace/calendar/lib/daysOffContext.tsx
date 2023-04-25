@@ -12,9 +12,7 @@ const initialData = [
     type: 'sick leave',
     reason: 'Blah blah blah',
     user: {
-      id: '1'
-      // name: 'Snanislau',
-      // email: 'lorderetik@gmail.com'
+      id: '64dd1769-85b6-4877-a7f9-020278ed2947'
     }
   },
   {
@@ -24,9 +22,7 @@ const initialData = [
     type: 'holiday',
     reason: 'Blah blah blah blah',
     user: {
-      id: '1'
-      // name: 'Snanislau',
-      // email: 'lorderetik@gmail.com'
+      id: '64dd1769-85b6-4877-a7f9-020278ed2947'
     }
   },
   {
@@ -36,9 +32,7 @@ const initialData = [
     type: 'sick leave',
     reason: 'Blah blah blah',
     user: {
-      id: '2'
-      // name: 'John',
-      // email: 'john@gmail.com'
+      id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
     }
   },
   {
@@ -48,9 +42,7 @@ const initialData = [
     type: 'sick leave',
     reason: 'Blah blah blah',
     user: {
-      id: '2'
-      // name: 'John',
-      // email: 'john@gmail.com'
+      id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
     }
   }
 ];
@@ -80,22 +72,25 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const [activeMemberId, setActiveMemberId] = useState(currentUserId ?? '');
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
 
-  const onCreateDayOff = useCallback(({ type, reason, start, end }: onCreateDayOffProps) => {
-    const dayOff = {
-      id: Date.now().toString(),
-      reason,
-      type: type.title,
-      start,
-      end,
-      user: {
-        id: activeMemberId
-      }
-    };
+  const onCreateDayOff = useCallback(
+    ({ type, reason, start, end }: onCreateDayOffProps) => {
+      const dayOff = {
+        id: Date.now().toString(),
+        reason,
+        type: type.title,
+        start,
+        end,
+        user: {
+          id: activeMemberId
+        }
+      };
 
-    setDaysOff((prev) => [...prev, dayOff]);
+      setDaysOff((prev) => [...prev, dayOff]);
 
-    setShowCreateDayOffModal(false);
-  }, []);
+      setShowCreateDayOffModal(false);
+    },
+    [activeMemberId]
+  );
 
   return (
     <DaysOffContext.Provider

@@ -1,36 +1,55 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
-import SelectTypeListbox from './SelectTypeListbox';
+import ListBox from './ListBox';
 
 const types = [
   {
-    id: 1,
+    id: '1',
     title: 'Holiday'
   },
   {
-    id: 2,
+    id: '2',
     title: 'Sick day'
   }
 ];
 
 export default function CreateEventModal() {
+  const [type, setType] = useState(types[0]);
+  const reasonRef = useRef<HTMLInputElement>(null);
+  const [member, setMember] = useState<{ id: string; title: string } | null>(null);
+
   const {
     showCreateDayOffModal: show,
     newDayOff: dayOff,
     setNewDayOff,
     setShowCreateDayOffModal,
-    onCreateDayOff
+    onCreateDayOff,
+    activeMemberId
   } = useDaysOff();
+
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const members = useMemo(
+    () => data?.data.team_members.map((i) => ({ id: i.user.id, title: i.user.name })) ?? [],
+    [data]
+  );
 
   const onClose = () => {
     setNewDayOff(null);
     setShowCreateDayOffModal(false);
   };
 
-  const [type, setType] = useState(types[0]);
-  const reasonRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (members) {
+      const findMember = members.find((i) => i.id === activeMemberId);
+
+      if (findMember) {
+        setMember(findMember);
+      }
+    }
+  }, [members, activeMemberId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,7 +108,7 @@ export default function CreateEventModal() {
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
-                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     onClick={onClose}
                   >
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -115,7 +134,11 @@ export default function CreateEventModal() {
                         </div>
                       ) : null}
 
-                      <SelectTypeListbox setSelected={setType} value={type} values={types} />
+                      {member ? (
+                        <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
+                      ) : null}
+
+                      <ListBox setSelected={setType} value={type} values={types} title="Type" />
 
                       <div>
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
@@ -128,7 +151,7 @@ export default function CreateEventModal() {
                             ref={reasonRef}
                             type="text"
                             id="reason"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
                             placeholder="Reason for time off..."
                           />
                         </div>
@@ -145,7 +168,7 @@ export default function CreateEventModal() {
                   >
                     Send request
                   </button>
-                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') || 1} days from allowance</p> : null}
+                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance</p> : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

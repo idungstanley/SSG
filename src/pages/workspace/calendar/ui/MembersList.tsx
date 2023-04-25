@@ -4,14 +4,11 @@ import { Fragment } from 'react';
 import { AvatarWithInitials } from '../../../../components';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { cl } from '../../../../utils';
+import { useDaysOff } from '../lib/daysOffContext';
 
-interface MembersListProps {
-  activeMemberId: string;
-  onChange: (i: string) => void;
-}
-
-export default function MembersList({ activeMemberId, onChange }: MembersListProps) {
+export default function MembersList() {
   const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const { setActiveMemberId, activeMemberId } = useDaysOff();
 
   const members = data?.data.team_members ?? [];
 
@@ -19,7 +16,7 @@ export default function MembersList({ activeMemberId, onChange }: MembersListPro
     <div className="grid grid-cols-1 gap-4">
       {members.map((person) => (
         <div
-          onClick={() => onChange(person.user.id)}
+          onClick={() => setActiveMemberId(person.user.id)}
           key={person.id}
           className={cl(
             activeMemberId === person.user.id

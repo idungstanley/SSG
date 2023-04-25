@@ -1,6 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
-import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../../lib/daysOffContext';
 import { getMonth } from '../../lib/getDaysInYear';
 import MembersList from '../MembersList';
@@ -9,10 +8,7 @@ import Month from '../Month';
 const currentDate = dayjs();
 
 export default function WallchartPage() {
-  const { daysOff, activeMemberId, setActiveMemberId, setNewDayOff, setShowCreateDayOffModal } = useDaysOff();
-  const { data } = useGetTeamMembers({ page: 1, query: '' });
-  const members = data?.data.team_members ?? [];
-  console.log(members);
+  const { daysOff, activeMemberId, setNewDayOff, setShowCreateDayOffModal } = useDaysOff();
 
   const [selectedMonth, setSelectedMonth] = useState(currentDate);
   const month = useMemo(() => getMonth(selectedMonth.year(), selectedMonth.month()), [selectedMonth]);
@@ -22,15 +18,7 @@ export default function WallchartPage() {
     setShowCreateDayOffModal(true);
   };
 
-  const handleChangeMember = (id: string) => {
-    const member = members.find((i) => i.user.id === id);
-
-    if (member) {
-      setActiveMemberId(id);
-    }
-  };
-
-  const currentDaysOff = useMemo(() => daysOff.filter((i) => i.user.id === activeMemberId), [activeMemberId]);
+  const currentDaysOff = useMemo(() => daysOff.filter((i) => i.user.id === activeMemberId), [daysOff, activeMemberId]);
 
   const handleChangeMonth = (action: 'increment' | 'decrement') =>
     setSelectedMonth(action === 'decrement' ? selectedMonth.subtract(1, 'month') : selectedMonth.add(1, 'month'));
@@ -38,7 +26,7 @@ export default function WallchartPage() {
   return (
     <div className="p-4 grid grid-cols-2">
       <div>
-        <MembersList activeMemberId={activeMemberId} onChange={handleChangeMember} />
+        <MembersList />
       </div>
 
       <div className="text-center flex flex-col items-center justify-center">

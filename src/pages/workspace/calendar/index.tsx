@@ -5,7 +5,7 @@ import { Tabs } from './ui/Tabs';
 
 function Calendar() {
   return (
-    <>
+    <DaysOffProvider>
       <div className="w-full h-full overflow-y-scroll pb-20">
         {/* header */}
         <section className="px-4 flex justify-between items-center border-b border-gray-200 w-full">
@@ -13,13 +13,11 @@ function Calendar() {
           <Tabs />
         </section>
 
-        <DaysOffProvider>
-          <Outlet />
-        </DaysOffProvider>
+        <Outlet />
       </div>
 
       <CreateEventModal />
-    </>
+    </DaysOffProvider>
   );
 }
 
