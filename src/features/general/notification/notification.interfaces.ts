@@ -65,6 +65,7 @@ export interface IPagination {
 export interface INotificationRes {
   data: {
     notifications: INotification[];
+    count: string | number;
     pagination: IPagination;
   };
 }

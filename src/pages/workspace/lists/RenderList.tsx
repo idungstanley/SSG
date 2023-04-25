@@ -19,8 +19,9 @@ import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
 import { ITaskFullList } from '../../../features/task/interface.tasks';
+import { UseGetListDetails } from '../../../features/list/listService';
+import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
-
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
@@ -50,6 +51,15 @@ function RenderList() {
     hasNextPage,
     fetchNextPage
   } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const listType = 'list';
+  const { data: listData } = UseGetListDetails({ activeItemId: listId, activeItemType: listType });
+  const listName = listData?.data.list.name;
+  useEffect(() => {
+    if (listId) {
+      dispatch(setActiveItem({ activeItemId: listId, activeItemType: listType, activeItemName: listName }));
+      dispatch(setActiveEntityName(listName));
+    }
+  }, [listId, listData]);
 
   const paginatedTaskData = useMemo(
     () => listDetailsData?.pages.flatMap((page) => page?.data.tasks),
