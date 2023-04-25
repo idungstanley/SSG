@@ -61,6 +61,7 @@ import SideBarSettings from './pages/settings/UserSettings/components/sidebar/Si
 import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
 import WallchartPage from './pages/workspace/calendar/ui/pages/WallchartPage';
 import YearPage from './pages/workspace/calendar/ui/pages/YearPage';
+import LeaveTypesPage from './pages/workspace/calendar/ui/pages/LeaveTypesPage';
 
 const inbox = [
   {
@@ -139,6 +140,10 @@ export const routes = (user: IUser | null) =>
             {
               path: 'year',
               element: <YearPage />
+            },
+            {
+              path: 'types',
+              element: <LeaveTypesPage />
             }
           ]
         },
