@@ -330,7 +330,7 @@ export const taskSlice = createSlice({
     setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
       state.filterTaskByAssigneeIds = action.payload;
     },
-    setSortArr(state, action: PayloadAction<SortOption[]>) {
+    setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortArr = action.payload;
     }
   }
@@ -376,6 +376,6 @@ export const {
   setShowTaskUploadModal,
   setTimerStatus,
   setFilterTaskByAssigneeIds,
-  setSortArr
+  setSortArray
 } = taskSlice.actions;
 export default taskSlice.reducer;

@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
-import { useDispatch } from 'react-redux';
-import { getTaskColumns, setCloseTaskListView, setSortArr } from '../../../../../../features/task/taskSlice';
+import { getTaskColumns, setCloseTaskListView, setSortArray } from '../../../../../../features/task/taskSlice';
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
@@ -31,7 +30,7 @@ export default function TaskListViews({
   status?: string;
   listId?: string;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
@@ -49,8 +48,9 @@ export default function TaskListViews({
     setheaderId(id);
     if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
-    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: header }]);
+    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: header == 'Assignees' ? 'assignee' : header }]);
     setShowSortModal(!showSortModal);
+    dispatch(setSortArray(sortAbleArr));
   };
 
   const handleRemoveFilter = (title: string): void => {
@@ -341,8 +341,8 @@ type SortModalProps = {
 
 function SortModal({ headers, toggleModal, arr }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [queryState] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
+  // const [queryState] = useState<boolean>(false);
+  // const dispatch = useAppDispatch();
   const { sortAbleArr, setSortAbleArr } = arr;
   // const queryClient = useQueryClient();
 
@@ -358,7 +358,7 @@ function SortModal({ headers, toggleModal, arr }: SortModalProps) {
     );
   };
 
-  queryState && dispatch(setSortArr(sortAbleArr));
+  // queryState && dispatch(setSortArr(sortAbleArr));
 
   // useEffect(() => {
   //   setQueryState(!queryState);

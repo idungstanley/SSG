@@ -237,7 +237,6 @@ export const getTaskListService = ({
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortArr } = useAppSelector((state) => state.task);
-  console.log(sortArr);
   // const sortDirection = 'asc';
   // const sortParams = 'priority';
   // const sorting = [
