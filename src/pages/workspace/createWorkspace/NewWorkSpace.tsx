@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import Working from '../../../assets/icons/Working.svg';
 import MainLogo from '../../../assets/icons/mainIcon.svg';
-import Scroll1 from '../../../assets/icons/scroll1.svg';
-import Scroll3 from '../../../assets/icons/scroll3.png';
-import Scroll4 from '../../../assets/icons/scroll4.png';
-import Scroll2 from '../../../assets/icons/scroll2.png';
 import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
-import Scroll5 from '../../../assets/icons/scroll5.png';
-import Scroll6 from '../../../assets/icons/scroll6.png';
-import Scroll7 from '../../../assets/icons/scroll7.png';
 import { AvatarBg, InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
+import { GoPrimitiveDot } from 'react-icons/go';
+import { cl } from '../../../utils';
 
 interface currentPageProps {
   name: boolean;
@@ -24,8 +19,8 @@ interface currentPageProps {
 }
 
 function NewWorkSpace() {
-  const [currentPage, setCurrentPage] = useState<currentPageProps>({
-    name: true,
+  const [initPage] = useState<currentPageProps>({
+    name: false,
     color: false,
     size: false,
     email: false,
@@ -33,6 +28,12 @@ function NewWorkSpace() {
     pm_tools: false,
     completed: false
   });
+
+  const [currentPage, setCurrentPage] = useState<currentPageProps>({
+    ...initPage,
+    name: true
+  });
+
   return (
     <div className="w-screen h-screen create-workspace">
       <div className="w-full h-full flex">
@@ -46,7 +47,7 @@ function NewWorkSpace() {
             </article>
           </div>
         </section>
-        <section className="w-1/2 h-full">
+        <section className="w-1/2 h-full relative">
           <div className="w-full flex justify-end" style={{ height: '20vh' }}>
             <div className="w-24 h-24 m-8">
               <img src={MainLogo} alt="logo" className="w-full h-full" />
@@ -67,9 +68,9 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
+                {/* <div className="mt-32 flex justify-center">
                   <img src={Scroll1} alt="" />
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -112,9 +113,6 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-16 flex justify-center">
-                  <img src={Scroll2} alt="" />
-                </div>
               </div>
             </div>
           )}
@@ -140,9 +138,6 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-16 flex justify-center">
-                  <img src={Scroll3} alt="" />
-                </div>
               </div>
             </div>
           )}
@@ -166,9 +161,6 @@ function NewWorkSpace() {
                     Done
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll4} alt="" />
-                </div>
               </div>
             </div>
           )}
@@ -185,9 +177,6 @@ function NewWorkSpace() {
                   >
                     No, thanks
                   </button>
-                </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll5} alt="" />
                 </div>
               </div>
             </div>
@@ -206,9 +195,6 @@ function NewWorkSpace() {
                     No, thanks
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll6} alt="Project management tools" />
-                </div>
               </div>
             </div>
           )}
@@ -223,12 +209,63 @@ function NewWorkSpace() {
                     Get started
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll7} alt="Project management tools" />
-                </div>
               </div>
             </div>
           )}
+          <section
+            className="flex items-center fixed bottom-0 justify-center absolute w-3/5 "
+            style={{ height: '20vh' }}
+          >
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.name ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, name: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.color ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, color: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.size ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, size: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.email ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, email: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.apps ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, apps: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.pm_tools ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, pm_tools: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.completed ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, completed: true })}
+            />
+          </section>
         </section>
       </div>
     </div>
