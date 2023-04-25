@@ -73,7 +73,7 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
 
   const onCreateDayOff = useCallback(
-    ({ type, reason, start, end }: onCreateDayOffProps) => {
+    ({ type, reason, start, end, memberId }: onCreateDayOffProps) => {
       const dayOff = {
         id: Date.now().toString(),
         reason,
@@ -81,7 +81,7 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
         start,
         end,
         user: {
-          id: activeMemberId
+          id: memberId
         }
       };
 

@@ -30,11 +30,12 @@ export interface onCreateDayOffProps {
   reason: string;
   start: string;
   end: string;
+  memberId: string;
 }
 
 export interface DaysOffContextValue {
   daysOff: DayOff[];
-  onCreateDayOff: ({ type, reason, start, end, userId }: onCreateDayOffProps) => void;
+  onCreateDayOff: ({ type, reason, start, end, memberId }: onCreateDayOffProps) => void;
   showCreateDayOffModal: boolean;
   setShowCreateDayOffModal: (i: boolean) => void;
   activeMemberId: string;

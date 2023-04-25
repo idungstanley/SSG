@@ -58,13 +58,14 @@ export default function CreateEventModal() {
       return;
     }
 
-    if (reasonRef.current) {
+    if (reasonRef.current && member) {
       const reason = reasonRef.current.value;
       onCreateDayOff({
         type,
         reason,
         start: dayOff.start.format('YYYY-MM-DD'),
-        end: dayOff.end.format('YYYY-MM-DD')
+        end: dayOff.end.format('YYYY-MM-DD'),
+        memberId: member.id
       });
 
       setNewDayOff(null);
