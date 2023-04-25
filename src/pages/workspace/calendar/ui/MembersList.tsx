@@ -2,58 +2,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { AvatarWithInitials } from '../../../../components';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { cl } from '../../../../utils';
-
-const members = [
-  {
-    id: '1',
-    user: {
-      id: '1',
-      name: 'Snanislau',
-      email: 'lorderetik@gmail.com'
-    },
-    daysOff: [
-      {
-        id: '1',
-        start: '2023-04-19',
-        end: '2023-04-23',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      },
-      {
-        id: '2',
-        start: '2023-04-25',
-        end: '2023-04-26',
-        type: 'holiday',
-        reason: 'Blah blah blah blah'
-      }
-    ]
-  },
-  {
-    id: '2',
-    user: {
-      id: '2',
-      name: 'John',
-      email: 'john@gmail.com'
-    },
-    daysOff: [
-      {
-        id: '1',
-        start: '2023-04-28',
-        end: '2023-04-29',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      },
-      {
-        id: '2',
-        start: '2023-05-01',
-        end: '2023-05-01',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      }
-    ]
-  }
-];
 
 interface MembersListProps {
   activeMemberId: string;
@@ -61,6 +11,10 @@ interface MembersListProps {
 }
 
 export default function MembersList({ activeMemberId, onChange }: MembersListProps) {
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+
+  const members = data?.data.team_members ?? [];
+
   return (
     <div className="grid grid-cols-1 gap-4">
       {members.map((person) => (
@@ -75,7 +29,7 @@ export default function MembersList({ activeMemberId, onChange }: MembersListPro
           )}
         >
           <div className="flex-shrink-0">
-            <AvatarWithInitials initials={person.user.name.slice(0, 2)} />
+            <AvatarWithInitials initials={person.user.initials ?? ''} />
           </div>
           <div className="min-w-0 flex-1 focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />

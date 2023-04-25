@@ -1,70 +1,25 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
+import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { useDaysOff } from '../../lib/daysOffContext';
 import { getMonth } from '../../lib/getDaysInYear';
 import MembersList from '../MembersList';
 import Month from '../Month';
 
-const members = [
-  {
-    id: '1',
-    user: {
-      id: '1',
-      name: 'Snanislau',
-      email: 'lorderetik@gmail.com'
-    },
-    daysOff: [
-      {
-        id: '1',
-        start: '2023-04-19',
-        end: '2023-04-23',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      },
-      {
-        id: '2',
-        start: '2023-04-25',
-        end: '2023-04-26',
-        type: 'holiday',
-        reason: 'Blah blah blah blah'
-      }
-    ]
-  },
-  {
-    id: '2',
-    user: {
-      id: '2',
-      name: 'John',
-      email: 'john@gmail.com'
-    },
-    daysOff: [
-      {
-        id: '1',
-        start: '2023-04-28',
-        end: '2023-04-29',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      },
-      {
-        id: '2',
-        start: '2023-05-01',
-        end: '2023-05-01',
-        type: 'sick leave',
-        reason: 'Blah blah blah'
-      }
-    ]
-  }
-];
-
 const currentDate = dayjs();
 
 export default function WallchartPage() {
-  const [activeMemberId, setActiveMemberId] = useState('1');
-  const [daysOff, setDaysOff] = useState(members[0]);
+  const { daysOff, activeMemberId, setActiveMemberId, setNewDayOff, setShowCreateDayOffModal } = useDaysOff();
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const members = data?.data.team_members ?? [];
+  console.log(members);
+
   const [selectedMonth, setSelectedMonth] = useState(currentDate);
   const month = useMemo(() => getMonth(selectedMonth.year(), selectedMonth.month()), [selectedMonth]);
 
-  const handleEvent = () => {
-    console.log(setDaysOff);
+  const handleEvent = ({ start, end }: { start: Dayjs; end: Dayjs }) => {
+    setNewDayOff({ start, end });
+    setShowCreateDayOffModal(true);
   };
 
   const handleChangeMember = (id: string) => {
@@ -72,9 +27,10 @@ export default function WallchartPage() {
 
     if (member) {
       setActiveMemberId(id);
-      setDaysOff(member);
     }
   };
+
+  const currentDaysOff = useMemo(() => daysOff.filter((i) => i.user.id === activeMemberId), [activeMemberId]);
 
   const handleChangeMonth = (action: 'increment' | 'decrement') =>
     setSelectedMonth(action === 'decrement' ? selectedMonth.subtract(1, 'month') : selectedMonth.add(1, 'month'));
@@ -89,7 +45,7 @@ export default function WallchartPage() {
         {/* change month */}
 
         <Month
-          daysOff={[daysOff]}
+          daysOff={currentDaysOff}
           handleEvent={handleEvent}
           month={month}
           title={<Month.Title title={month.name} extended onChange={handleChangeMonth} />}
