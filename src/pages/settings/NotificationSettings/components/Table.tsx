@@ -4,6 +4,7 @@ import THeadData from './THead';
 
 export default function NotificaitonTable() {
   const { data } = GetNotificationSettingsService();
+
   return (
     <table className="min-w-full border border-gray-300">
       {data &&

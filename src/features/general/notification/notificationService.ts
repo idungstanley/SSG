@@ -5,12 +5,12 @@ import { INotificationRes, INotificationSettingsRes } from './notification.inter
 import { setNotificationCount } from './notificationSlice';
 
 export const useGetNotificationService = () => {
-  return useQuery(['notification'], async () => {
+  return useQuery(['notificationData'], async () => {
     const data = await requestNew<INotificationRes>({
       url: 'notifications',
       method: 'GET'
     });
-    return data?.data.notifications;
+    return data?.data?.notifications;
   });
 };
 
@@ -34,7 +34,7 @@ export const useGetNotificationCountService = () => {
 };
 
 export const GetNotificationSettingsService = () => {
-  return useQuery(['notification'], async () => {
+  return useQuery(['notificationSettings'], async () => {
     const data = await requestNew<INotificationSettingsRes>({
       url: 'notification-settings',
       method: 'GET'
