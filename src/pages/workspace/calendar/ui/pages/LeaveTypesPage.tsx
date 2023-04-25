@@ -18,10 +18,8 @@ export default function LeaveTypesPage() {
   const [icon, setIcon] = useState(icons[0]);
   const [color, setColor] = useState(colors[0]);
 
-  const handleCreateType = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (titleRef.current) {
+  const handleCreateType = () => {
+    if (titleRef.current && titleRef.current.value.length > 2) {
       const title = titleRef.current.value;
 
       onAddLeaveType({ icon, title, color });
@@ -81,7 +79,7 @@ export default function LeaveTypesPage() {
               </tr>
             ))}
 
-            <form onSubmit={handleCreateType}>
+            <tr>
               <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                 <input
                   required
@@ -111,19 +109,20 @@ export default function LeaveTypesPage() {
                 <Dropdown title={<span className={cl('rounded-md w-4 h-4', `bg-${color}-500`)} />}>
                   {colors.map((i, index) => (
                     <Dropdown.Item key={index}>
-                      <button onClick={() => setColor(i)} className="cursor-pointer block p-2 text-sm">
-                        <span className={cl('rounded-md w-4 h-4', `bg-${i}-500`)} />
-                      </button>
+                      <button
+                        onClick={() => setColor(i)}
+                        className={cl('rounded-md cursor-pointer block w-4 m-1 h-4 p-2 text-sm', `bg-${i}-500`)}
+                      ></button>
                     </Dropdown.Item>
                   ))}
                 </Dropdown>
               </td>
               <td className="whitespace-nowrap px-3 py-4">
-                <button type="submit">
+                <button onClick={handleCreateType}>
                   <PlusIcon className="w-5 h-5 cursor-pointer text-primary-500" aria-hidden="true" />
                 </button>
               </td>
-            </form>
+            </tr>
           </tbody>
         </table>
       </div>
