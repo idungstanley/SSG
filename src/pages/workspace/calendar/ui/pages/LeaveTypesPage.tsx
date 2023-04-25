@@ -13,7 +13,7 @@ const icons = [
 ];
 
 export default function LeaveTypesPage() {
-  const { leaveTypes, onAddLeaveType } = useDaysOff();
+  const { leaveTypes, onAddLeaveType, onRemoveLeaveType } = useDaysOff();
   const titleRef = useRef<HTMLInputElement>(null);
   const [icon, setIcon] = useState(icons[0]);
   const [color, setColor] = useState(colors[0]);
@@ -32,6 +32,8 @@ export default function LeaveTypesPage() {
       titleRef.current.value = '';
     }
   };
+
+  const onRemove = (id: string) => onRemoveLeaveType(id);
 
   return (
     <div className="w-full p-4">
@@ -71,7 +73,9 @@ export default function LeaveTypesPage() {
                   <span className={cl('rounded-md w-4 h-4', `bg-${type.color}-500`)} />
                 </td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <TrashIcon className="w-5 h-5 cursor-pointer text-red-400" aria-hidden="true" />
+                  <button type="button" onClick={() => onRemove(type.id)}>
+                    <TrashIcon className="w-5 h-5 cursor-pointer text-red-400" aria-hidden="true" />
+                  </button>
                 </td>
                 {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td> */}
               </tr>

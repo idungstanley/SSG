@@ -94,7 +94,8 @@ export const DaysOffContext = createContext<DaysOffContextValue>({
   newDayOff: null,
   setNewDayOff: () => ({}),
   leaveTypes: [],
-  onAddLeaveType: () => ({})
+  onAddLeaveType: () => ({}),
+  onRemoveLeaveType: () => ({})
 });
 
 interface DaysOffProviderProps {
@@ -112,9 +113,11 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const [activeMemberId, setActiveMemberId] = useState(currentUserId ?? '');
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
 
-  const onAddLeaveType = (leaveType: Omit<LeaveType, 'id'>) => {
+  const onAddLeaveType = (leaveType: Omit<LeaveType, 'id'>) =>
     setLeaveTypes((prev) => [...prev, { id: Date.now().toString(), ...leaveType }]);
-  };
+
+  const onRemoveLeaveType = (id: Pick<LeaveType, 'id'>['id']) =>
+    setLeaveTypes((prev) => [...prev.filter((i) => i.id !== id)]);
 
   const onCreateDayOff = useCallback(
     ({ type, reason, start, end, memberId }: onCreateDayOffProps) => {
@@ -141,6 +144,7 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
       value={{
         leaveTypes,
         onAddLeaveType,
+        onRemoveLeaveType,
         daysOff,
         onCreateDayOff,
         showCreateDayOffModal,

@@ -51,4 +51,5 @@ export interface DaysOffContextValue {
   setNewDayOff: (i: { start: Dayjs; end: Dayjs } | null) => void;
   leaveTypes: LeaveType[];
   onAddLeaveType: (i: Omit<LeaveType, 'id'>) => void;
+  onRemoveLeaveType: (i: Pick<LeaveType, 'id'>['id']) => void;
 }
