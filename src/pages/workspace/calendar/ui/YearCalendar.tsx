@@ -9,7 +9,7 @@ interface YearCalendarProps {
 }
 
 export default function YearCalendar({ year }: YearCalendarProps) {
-  const { daysOff, setShowCreateDayOffModal, setNewDayOff } = useDaysOff();
+  const { daysOff, setShowCreateDayOffModal, setNewDayOff, activeMemberId } = useDaysOff();
   const months = useMemo(() => getYear(year), [year]);
 
   const handleEvent = ({ start, end }: { start: Dayjs; end: Dayjs }) => {
@@ -17,11 +17,13 @@ export default function YearCalendar({ year }: YearCalendarProps) {
     setShowCreateDayOffModal(true);
   };
 
+  const currentDaysOff = useMemo(() => daysOff.filter((i) => i.user.id === activeMemberId), [daysOff, activeMemberId]);
+
   return (
-    <section className="flex flex-wrap mx-auto max-w-3xl gap-x-8 gap-y-16 px-4 py-16 xl:max-w-none">
+    <section className="flex justify-center flex-wrap mx-auto max-w-3xl gap-x-8 gap-y-16 px-4 py-16 xl:max-w-none">
       {months.map((month) => (
         <Month
-          daysOff={daysOff}
+          daysOff={currentDaysOff}
           handleEvent={handleEvent}
           key={month.name}
           month={month}
