@@ -1,11 +1,40 @@
+import { TrashIcon, PlusIcon, AcademicCapIcon, BeakerIcon, GiftIcon } from '@heroicons/react/24/outline';
+import { useRef, useState } from 'react';
 import { cl } from '../../../../../utils';
 import { useDaysOff } from '../../lib/daysOffContext';
+import Dropdown from '../Dropdown';
+
+const colors = ['green', 'red', 'teal', 'fuchsia', 'yellow'];
+
+const icons = [
+  <AcademicCapIcon key={1} className="w-5 h-5 stroke-current" aria-hidden="true" />,
+  <BeakerIcon key={2} className="w-5 h-5 stroke-current" aria-hidden="true" />,
+  <GiftIcon key={3} className="w-5 h-5 stroke-current" aria-hidden="true" />
+];
 
 export default function LeaveTypesPage() {
-  const { leaveTypes } = useDaysOff();
+  const { leaveTypes, onAddLeaveType } = useDaysOff();
+  const titleRef = useRef<HTMLInputElement>(null);
+  const [icon, setIcon] = useState(icons[0]);
+  const [color, setColor] = useState(colors[0]);
+
+  const handleCreateType = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (titleRef.current) {
+      const title = titleRef.current.value;
+
+      onAddLeaveType({ icon, title, color });
+
+      // reset
+      setIcon(icons[0]);
+      setColor(colors[0]);
+      titleRef.current.value = '';
+    }
+  };
 
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <div className="w-fit mx-auto">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">Leave types</h1>
@@ -27,6 +56,7 @@ export default function LeaveTypesPage() {
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                 Color
               </th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
             </tr>
           </thead>
 
@@ -37,12 +67,59 @@ export default function LeaveTypesPage() {
                   {type.title}
                 </td>
                 <td className={cl('whitespace-nowrap px-3 py-4', `text-${type.color}-500`)}>{type.icon}</td>
-                <td className="whitespace-nowrap px-3 py-4">
-                  <span className={cl('rounded-md w-5 h-5', `bg-${type.color}-500`)}>{type.color}</span>
+                <td className="flex whitespace-nowrap px-3 py-4">
+                  <span className={cl('rounded-md w-4 h-4', `bg-${type.color}-500`)} />
+                </td>
+                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <TrashIcon className="w-5 h-5 cursor-pointer text-red-400" aria-hidden="true" />
                 </td>
                 {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td> */}
               </tr>
             ))}
+
+            <form onSubmit={handleCreateType}>
+              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                <input
+                  required
+                  minLength={3}
+                  ref={titleRef}
+                  type="text"
+                  className="block w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+                  placeholder="New leave type..."
+                />
+              </td>
+              <td className={cl('whitespace-nowrap px-3 py-4', `text-${color}-700`)}>
+                <Dropdown title={icon}>
+                  {icons.map((i, index) => (
+                    <Dropdown.Item key={index}>
+                      <button
+                        onClick={() => setIcon(i)}
+                        className={cl(`text-${color}-700`, 'cursor-pointer block p-2 text-sm')}
+                      >
+                        {i}
+                      </button>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown>
+              </td>
+
+              <td className="whitespace-nowrap px-3 py-4">
+                <Dropdown title={<span className={cl('rounded-md w-4 h-4', `bg-${color}-500`)} />}>
+                  {colors.map((i, index) => (
+                    <Dropdown.Item key={index}>
+                      <button onClick={() => setColor(i)} className="cursor-pointer block p-2 text-sm">
+                        <span className={cl('rounded-md w-4 h-4', `bg-${i}-500`)} />
+                      </button>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown>
+              </td>
+              <td className="whitespace-nowrap px-3 py-4">
+                <button type="submit">
+                  <PlusIcon className="w-5 h-5 cursor-pointer text-primary-500" aria-hidden="true" />
+                </button>
+              </td>
+            </form>
           </tbody>
         </table>
       </div>

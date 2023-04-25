@@ -112,8 +112,8 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const [activeMemberId, setActiveMemberId] = useState(currentUserId ?? '');
   const [newDayOff, setNewDayOff] = useState<{ start: Dayjs; end: Dayjs } | null>(null);
 
-  const onAddLeaveType = (leaveType: LeaveType) => {
-    setLeaveTypes((prev) => [...prev, leaveType]);
+  const onAddLeaveType = (leaveType: Omit<LeaveType, 'id'>) => {
+    setLeaveTypes((prev) => [...prev, { id: Date.now().toString(), ...leaveType }]);
   };
 
   const onCreateDayOff = useCallback(
