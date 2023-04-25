@@ -1,11 +1,10 @@
 import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
-import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 
 export const createTaskService = (data: {
   name: string;
@@ -229,16 +228,16 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
 
 export const getTaskListService = ({
   listId,
-  assigneeUserId,
-  sortArr
+  assigneeUserId
 }: {
   listId: string | null | undefined;
   assigneeUserId: string | undefined | null;
-  sortArr?: SortOption[] | undefined;
 }) => {
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  const { sortArr } = useAppSelector((state) => state.task);
+  console.log(sortArr);
   // const sortDirection = 'asc';
   // const sortParams = 'priority';
   // const sorting = [
@@ -247,8 +246,9 @@ export const getTaskListService = ({
   //     dir: sortDirection
   //   }
   // ];
+  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
-    ['task', { listId: listId, assigneeUserId }],
+    ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
@@ -260,7 +260,7 @@ export const getTaskListService = ({
           assignees
         },
         data: {
-          sorting: sortArr
+          sorting: sortArrUpdate
         }
       });
     },

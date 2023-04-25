@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
 import { useDispatch } from 'react-redux';
-import { getTaskColumns, setCloseTaskListView } from '../../../../../../features/task/taskSlice';
+import { getTaskColumns, setCloseTaskListView, setSortArr } from '../../../../../../features/task/taskSlice';
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
@@ -14,6 +14,7 @@ import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 import { CiFilter } from 'react-icons/ci';
 import { GiCancel } from 'react-icons/gi';
+// import { useQueryClient } from '@tanstack/react-query';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 export type SortOption = {
@@ -39,7 +40,7 @@ export default function TaskListViews({
   const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
   const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
-  const [sortAbleArr, setSortAbleArr] = useState<Array<SortOption>>([]);
+  const [sortAbleArr, setSortAbleArr] = useState<SortOption[]>([]);
 
   const { data } = useList(listId);
   const [sortArr, setSortArr] = useState<string[]>([]);
@@ -48,7 +49,7 @@ export default function TaskListViews({
     setheaderId(id);
     if (sortArr.includes(header)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
-    setSortAbleArr((prev) => [...prev, { dir: 'desc', field: header }]);
+    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: header }]);
     setShowSortModal(!showSortModal);
   };
 
@@ -328,11 +329,6 @@ export default function TaskListViews({
   );
 }
 
-// type State = {
-//   dir: 'asc' | 'desc';
-//   field: string;
-// };
-
 type SortModalProps = {
   headers: string[];
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -343,19 +339,33 @@ type SortModalProps = {
   handleSortFn: (header: string, id: string) => void;
 };
 
-function SortModal({ headers, toggleModal, arr, handleSortFn }: SortModalProps) {
+function SortModal({ headers, toggleModal, arr }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { sortAbleArr } = arr;
+  const [queryState] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { sortAbleArr, setSortAbleArr } = arr;
+  // const queryClient = useQueryClient();
 
-  // const handleDirection = (title: string): void => {
-  //   // sortArr.some((entry) => {
-  //   //   if (entry.field !== title) {
-  //   //     setSortArr((prev) => [...prev, { dir: 'desc', field: title }]);
-  //   //   }
-  //   // });
-  // };
+  const handleClick = (title: string) => {
+    setSortAbleArr(
+      sortAbleArr.map((sortOption) => {
+        if (sortOption.field === title) {
+          const newDir = sortOption.dir === 'asc' ? 'desc' : 'asc';
+          return { ...sortOption, dir: newDir };
+        }
+        return sortOption;
+      })
+    );
+  };
 
-  console.log(sortAbleArr);
+  queryState && dispatch(setSortArr(sortAbleArr));
+
+  // useEffect(() => {
+  //   setQueryState(!queryState);
+  //   queryClient.invalidateQueries(['task']);
+  //   return setQueryState(!queryState);
+  // }, [sortAbleArr]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -369,10 +379,6 @@ function SortModal({ headers, toggleModal, arr, handleSortFn }: SortModalProps) 
       document.removeEventListener('click', handleClickOutside);
     };
   }, [toggleModal]);
-
-  // useEffect(() => {
-  //   getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds, sortArr });
-  // }, [listId, filterTaskByAssigneeIds, sortArr]);
 
   return (
     <div className="fixed z-50 bg-white mt-20 shadow-lg" ref={modalRef}>
@@ -389,10 +395,7 @@ function SortModal({ headers, toggleModal, arr, handleSortFn }: SortModalProps) 
                 <CiFilter className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                 <div className=" flex flex-col justify-center items-center w-6 h-6">
                   <IoMdArrowDropup className="text-gray-400" />
-                  <IoMdArrowDropdown
-                    className="text-gray-400"
-                    onClick={() => handleSortFn(title, index.toString() as string)}
-                  />
+                  <IoMdArrowDropdown className="text-gray-400" onClick={() => handleClick(title)} />
                 </div>
               </div>
             </div>
