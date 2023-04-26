@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
-import { cl } from '../../../../utils';
+import { cl } from '../../../utils';
 
 type Value = { id: string; title: string };
 

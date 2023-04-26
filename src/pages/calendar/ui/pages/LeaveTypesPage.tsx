@@ -1,6 +1,6 @@
 import { TrashIcon, PlusIcon, AcademicCapIcon, BeakerIcon, GiftIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
-import { cl } from '../../../../../utils';
+import { cl } from '../../../../utils';
 import { useDaysOff } from '../../lib/daysOffContext';
 import Dropdown from '../Dropdown';
 

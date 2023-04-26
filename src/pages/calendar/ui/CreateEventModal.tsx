@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
 import ListBox from './ListBox';
 

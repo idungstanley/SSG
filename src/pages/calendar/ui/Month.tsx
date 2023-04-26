@@ -1,8 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Fragment, useCallback, useState } from 'react';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { cl } from '../../../../utils';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { cl } from '../../../utils';
 import { isSameOrAfter, isSameOrBefore } from '../lib/dateUtils';
 import { getDatesInRange } from '../lib/getDatesInRange';
 import { DayOff, MonthObject } from '../types/calendar';
