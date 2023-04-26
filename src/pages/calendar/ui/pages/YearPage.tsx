@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import Calendar from '../..';
 import ChangeYear from '../ChangeYear';
-import YearCalendar from '../YearCalendar';
 
 const currentDate = dayjs();
 
@@ -14,7 +14,7 @@ export default function YearPage() {
         <ChangeYear year={year} setYear={setYear} />
       </section>
 
-      <YearCalendar year={year} />
+      <Calendar.Year year={year} />
     </>
   );
 }

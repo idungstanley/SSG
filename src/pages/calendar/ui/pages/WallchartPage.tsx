@@ -1,5 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
+import Calendar from '../..';
 import { useDaysOff } from '../../lib/daysOffContext';
 import { getMonth } from '../../lib/getDaysInYear';
 import MembersList from '../MembersList';
@@ -32,7 +33,7 @@ export default function WallchartPage() {
       <div className="text-center flex flex-col items-center justify-center">
         {/* change month */}
 
-        <Month
+        <Calendar.Month
           daysOff={currentDaysOff}
           handleEvent={handleEvent}
           month={month}
