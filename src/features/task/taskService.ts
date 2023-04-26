@@ -169,6 +169,7 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
