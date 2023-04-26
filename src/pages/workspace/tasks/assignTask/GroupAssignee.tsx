@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
+import PopAssignModal from './popAssignModal';
 
 function GroupAssignee({
   data,
@@ -20,6 +21,9 @@ function GroupAssignee({
     show: false,
     index: null
   });
+  //  const handleHoverInterval = () => {
+  //   setInterval(()=>)
+  //  }
 
   const { mutate: onTaskUnassign } = UseUnassignTask();
 
@@ -43,8 +47,8 @@ function GroupAssignee({
               ) => (
                 <div
                   key={newData.id}
-                  className={`scaleBigger ${index === 0 ? ' z-40   ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
-                    index === 2 ? 'z-20' : 'z-10'
+                  className={`scaleBigger ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+                    index === 2 ? 'z-10' : 'z-0'
                   }  `}
                 >
                   <span key={newData.id} className=" flex items-center  -ml-2.5  border-2  rounded-full ">
@@ -106,8 +110,8 @@ function GroupAssignee({
         data?.map((newData, index: number) => (
           <div
             key={newData.id}
-            className={`scaleBigger ${index === 0 ? ' z-40  ' : ''} ${index === 1 ? 'z-30 ' : ''} ${
-              index === 2 ? 'z-20' : 'z-10'
+            className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+              index === 2 ? 'z-10' : 'z-0'
             } `}
           >
             <span
@@ -127,6 +131,7 @@ function GroupAssignee({
                     index
                   })
                 }
+                className="relative "
               >
                 <span onClick={handleClick}>
                   <AvatarWithInitials
@@ -147,6 +152,8 @@ function GroupAssignee({
                     X
                   </button>
                 )}
+
+                {displayed.show && index == displayed?.index && <PopAssignModal />}
               </div>
             </span>
           </div>
