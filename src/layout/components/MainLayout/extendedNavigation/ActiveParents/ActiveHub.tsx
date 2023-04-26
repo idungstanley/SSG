@@ -6,7 +6,6 @@ import { resetCurrentItem, setCurrentItem, setShowHub } from '../../../../../fea
 import { AvatarWithInitials } from '../../../../../components';
 import { Spinner } from '../../../../../common';
 import { useGetHubList, useGetHubWallet, useGetSubHub } from '../../../../../features/hubs/hubService';
-import { getHub } from '../../../../../features/hubs/hubSlice';
 import SubWalletIndex from '../../../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
 import { getWalletService } from '../../../../../features/wallet/walletService';
 import Sub2WalletIndex from '../../../../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
@@ -33,16 +32,6 @@ export default function ActiveHub() {
   const { data, status } = useGetHubList({ query: null });
 
   const items = data?.data.hubs;
-  if (status === 'success') {
-    dispatch(getHub(data?.data.hubs));
-  }
-  // const handleMouseOver = (i: number) => {
-  //   setIsHovering(i);
-  // };
-  // const handleMouseOut = () => {
-  //   setIsHovering(-1);
-  // };
-
   if (status === 'error') {
     return (
       <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showOneThirdMessage />
@@ -146,10 +135,10 @@ export default function ActiveHub() {
           i.id === currentItemId && (
             <li key={i.id} className="flex flex-col">
               <div
-                className={`flex justify-between  items-center hover:bg-gray-100 relative ${
+                className={`flex justify-between items-center hover:bg-gray-100 relative ${
                   i.id === currentItemId && 'bg-green-100 text-black-500'
                 }`}
-                style={{ height: '28px' }}
+                style={{ height: '50px' }}
                 // onMouseEnter={() => handleMouseOver(index)}
                 // onMouseLeave={handleMouseOut}
               >
@@ -160,9 +149,6 @@ export default function ActiveHub() {
                   // onMouseEnter={() => handleMouseOver(index)}
                   // onMouseLeave={handleMouseOut}
                 >
-                  {i.id === currentItemId && (
-                    <span className="absolute top-0 bottom-0 left-0 w-1 bg-green-500 rounded-r-lg" />
-                  )}
                   <div
                     role="button"
                     tabIndex={0}

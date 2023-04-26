@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
-import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
+import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 
 export const createHubService = (data: {
@@ -73,8 +73,6 @@ export const useGetHubs = ({
 // get all hubs
 export const useGetHubList = ({ query }: { query: number | null }) => {
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
-
   return useQuery<IResponseGetHubs>(
     ['hubs', { isArchived: query ? 1 : 0 }],
     () =>
@@ -87,11 +85,10 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
       }),
     {
       onSuccess: (data) => {
-        const hubData = data.data.hubs.map((hub) => {
+        data.data.hubs.map((hub) => {
           queryClient.setQueryData(['hub', hub.id], hub);
           return { ...hub, isOpen: false };
         });
-        dispatch(getHub(hubData));
       }
     }
   );

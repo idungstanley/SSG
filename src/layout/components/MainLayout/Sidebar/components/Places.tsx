@@ -93,7 +93,8 @@ export const places = [
     name: 'Also HR',
     id: '9',
     place: <AlsoHr />,
-    icon: <FaHandsHelping className="w-4 h-4" />
+    icon: <FaHandsHelping className="w-4 h-4" />,
+    link: 'calendar'
   },
   {
     name: 'Commerce',

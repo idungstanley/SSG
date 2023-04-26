@@ -3,22 +3,23 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { cl } from '../../../../utils';
 
-type Value = { id: number; title: string };
+type Value = { id: string; title: string };
 
-interface SelectTypeListboxProps {
-  value: Value;
-  values: Value[];
-  setSelected: (i: Value) => void;
+interface SelectTypeListboxProps<T> {
+  value: T;
+  values: T[];
+  setSelected: (i: T) => void;
+  title: string;
 }
 
-export default function SelectTypeListbox({ value, setSelected, values }: SelectTypeListboxProps) {
+export default function ListBox<T extends Value>({ value, setSelected, values, title }: SelectTypeListboxProps<T>) {
   return (
     <Listbox value={value} onChange={setSelected}>
       {({ open }) => (
         <div>
-          <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Listbox.Label>
+          <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">{title}</Listbox.Label>
           <div className="relative mt-1">
-            <Listbox.Button className="relative cursor-pointer w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <Listbox.Button className="relative cursor-pointer w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-600 sm:text-sm sm:leading-6">
               <span className="block truncate">{value.title}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -38,7 +39,7 @@ export default function SelectTypeListbox({ value, setSelected, values }: Select
                     key={i.id}
                     className={({ active }) =>
                       cl(
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                        active ? 'bg-primary-600 text-white' : 'text-gray-900',
                         'relative cursor-default select-none py-2 pl-3 pr-9'
                       )
                     }
@@ -51,7 +52,7 @@ export default function SelectTypeListbox({ value, setSelected, values }: Select
                         {value === i ? (
                           <span
                             className={cl(
-                              active ? 'text-white' : 'text-indigo-600',
+                              active ? 'text-white' : 'text-primary-600',
                               'absolute inset-y-0 right-0 flex items-center pr-4'
                             )}
                           >
