@@ -52,24 +52,26 @@ export default function Recording() {
 
   return (
     <div>
+      <div className="my-2">
+        {status == 'recording' ? (
+          <>
+            <button onClick={stopRecording} className="screenRecording">
+              Stop Recording
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="screenRecording flex flex-col">
+              <button onClick={startRecording}>Start Recording</button>
+            </div>
+          </>
+        )}
+      </div>
       {data?.data.attachments.map((video) => (
         <p key={video.id}>
           <video src={video.path && data?.data.attachments[0].path} controls></video>
         </p>
       ))}
-      {status == 'recording' ? (
-        <>
-          <button onClick={stopRecording} className="screenRecording">
-            Stop Recording
-          </button>
-        </>
-      ) : (
-        <>
-          <div className="screenRecording flex flex-col">
-            <button onClick={startRecording}>Start Recording</button>
-          </div>
-        </>
-      )}
     </div>
   );
 }
