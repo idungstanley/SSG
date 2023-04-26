@@ -5,7 +5,10 @@ import { Spinner } from '../../../../common';
 
 export function PopAssignModal({
   userData,
-  modalLoader
+  modalLoader,
+  roundedStyle,
+  height,
+  width
 }: {
   userData: {
     id: React.Key | null | undefined;
@@ -16,6 +19,9 @@ export function PopAssignModal({
   };
   modalLoader: boolean;
   spinnerSize: number;
+  roundedStyle: string;
+  height: string;
+  width: string;
 }) {
   return (
     <div className="absolute  bg-white shadow-lg   w-56 h-64 rounded">
@@ -24,12 +30,17 @@ export function PopAssignModal({
           <Spinner color="#4f46e5" />
         </p>
       ) : (
-        <div className="flex flex-col space-y-6 items-start justify-center p-4  ">
-          <div className="flex items-center w-14 h-14 rounded-full bg-sky-200 justify-center">
+        <div className="flex flex-col space-y-5 items-start justify-center p-4  ">
+          <div className="flex items-center w-20 h-20 rounded-full bg-sky-200 justify-center">
             <p>
               {userData.avatar_path ? (
                 <span>
-                  <img src={userData.avatar_path}></img>
+                  <img
+                    src={userData.avatar_path}
+                    className={`inline-flex  items-center justify-center ${height} ${width} ${
+                      roundedStyle === 'circular' && 'rounded-full'
+                    } ${roundedStyle === 'rounded' && 'rounded'}`}
+                  ></img>
                 </span>
               ) : (
                 <span>{userData.initials}</span>
@@ -50,7 +61,7 @@ export function PopAssignModal({
                 {moment.utc(new Date()).format('MMMM Do YYYY, h:mm:ss a')}
               </span>
             </div>
-            <button className="border rounded border-black w-full py-2 text-black hover:bg-gray-400 ml-3">
+            <button className="border rounded border-black w-full py-2 text-black hover:bg-gray-400 ml-6 ">
               View profile
             </button>
           </div>

@@ -119,6 +119,9 @@ function GroupAssignee({
                     }
                     modalLoader={modalLoader}
                     spinnerSize={20}
+                    roundedStyle="circular"
+                    height="h-20"
+                    width="w-20"
                   />
                 )}
               </div>
@@ -187,6 +190,9 @@ function GroupAssignee({
                     }
                     modalLoader={modalLoader}
                     spinnerSize={20}
+                    roundedStyle="circular"
+                    height="h-20"
+                    width="w-20"
                   />
                 )}
               </div>
