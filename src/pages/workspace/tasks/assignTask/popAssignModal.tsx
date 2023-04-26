@@ -1,6 +1,7 @@
 import { ClockIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { CiMail } from 'react-icons/ci';
+import { Spinner } from '../../../../common';
 
 export function PopAssignModal({
   userData,
@@ -14,11 +15,14 @@ export function PopAssignModal({
     avatar_path: string;
   };
   modalLoader: boolean;
+  spinnerSize: number;
 }) {
   return (
     <div className="absolute  bg-white shadow-lg   w-56 h-64 rounded">
       {modalLoader ? (
-        <p>Loading</p>
+        <p>
+          <Spinner color="#4f46e5" />
+        </p>
       ) : (
         <div className="flex flex-col space-y-6 items-start justify-center p-4  ">
           <div className="flex items-center w-14 h-14 rounded-full bg-sky-200 justify-center">
