@@ -26,7 +26,15 @@ export function PopAssignModal({
       ) : (
         <div className="flex flex-col space-y-6 items-start justify-center p-4  ">
           <div className="flex items-center w-14 h-14 rounded-full bg-sky-200 justify-center">
-            <span>{userData.initials}</span>
+            <p>
+              {userData.avatar_path ? (
+                <span>
+                  <img src={userData.avatar_path}></img>
+                </span>
+              ) : (
+                <span>{userData.initials}</span>
+              )}
+            </p>
           </div>
           <div className="flex space-y-4 flex-col items-start">
             <span className="text-xs text-black text-decoration-thickness: 1px;">{userData.name}</span>
