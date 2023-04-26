@@ -32,7 +32,6 @@ import TeamMemberAcceptInvite from './pages/settings/teamMemberGroupSettings/Tea
 import SharedPage from './pages/shared';
 
 // At workspace
-import CreateWorkspace from './pages/workspace/createWorkspace';
 import Notification from './pages/workspace/notification/Notification';
 import Dashboard from './pages/workspace/dashboard';
 import Active from './pages/inbox/InboxesPage/components/Active';
@@ -53,12 +52,11 @@ import ExplorerPage from './pages/explorer';
 import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
-// import UserSettingsProfile from './pages/settings/UserSettings';
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
-import NewWorkSpace from './pages/workspace/createWorkspace/NewWorkSpace';
+import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
 import WallchartPage from './pages/workspace/calendar/ui/pages/WallchartPage';
 import YearPage from './pages/workspace/calendar/ui/pages/YearPage';
 import LeaveTypesPage from './pages/workspace/calendar/ui/pages/LeaveTypesPage';
@@ -94,16 +92,8 @@ export const routes = (user: IUser | null) =>
   createBrowserRouter([
     {
       path: 'onboarding',
-      element: user ? <CreateWorkspace /> : <Navigate to="/auth/login" />
+      element: user ? <CreateNewWorkspace /> : <Navigate to="/auth/login" />
     },
-    {
-      path: 'onboarding/new',
-      element: user ? <NewWorkSpace /> : <Navigate to="/auth/login" />
-    },
-    // {
-    //   path: 'workspaceId',
-    //   element: <MainLayout />
-    // },
     {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
