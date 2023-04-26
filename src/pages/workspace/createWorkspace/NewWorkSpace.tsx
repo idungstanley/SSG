@@ -160,9 +160,7 @@ function CreateNewWorkspace() {
                       type="button"
                       className="rounded w-24 h-24 text-white"
                       style={{ backgroundColor: formState.color }}
-                    >
-                      EG
-                    </button>
+                    ></button>
                   </section>
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
@@ -209,13 +207,13 @@ function CreateNewWorkspace() {
                       </button>
                     );
                   })}
-                  {errorMsg.size && (
-                    <div className="flex">
-                      <IoIosWarning className="w-6 h-6 text-red-600" />
-                      <h2 className="text-xl text-red-600">Please select your company size</h2>
-                    </div>
-                  )}
                 </div>
+                {errorMsg.size && (
+                  <div className="flex">
+                    <IoIosWarning className="w-6 h-6 text-red-600" />
+                    <h2 className="text-xl text-red-600">Please select your company size</h2>
+                  </div>
+                )}
                 <div className="flex justify-center mb-8 mt-16">
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
