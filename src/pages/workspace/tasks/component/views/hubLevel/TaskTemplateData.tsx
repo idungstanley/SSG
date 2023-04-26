@@ -33,7 +33,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                 {item.name}
               </p> */}
               <div
-                className=" absolute  left-0 top-0 h-full w-1 rounded-l-md"
+                className="absolute left-0 top-0 h-full w-1 rounded-l-md"
                 style={{ backgroundColor: '#78828d' }}
               ></div>
               <div id="listTitle" className="flex items-center justify-between">

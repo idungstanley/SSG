@@ -30,9 +30,10 @@ export default function ExtendedItem({ item }: ItemProps) {
   // };
   return (
     <section
-      className={`relative top-0 flex items-center h-8 text-gray-600 border-b cursor-pointer border-gray ${
+      className={`relative top-0 flex items-center text-gray-600 border-b cursor-pointer border-gray ${
         !isExtSearchActive && 'p-2'
       }`}
+      style={{ height: '50px' }}
     >
       {item?.name !== 'Favorites' && (
         <div

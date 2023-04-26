@@ -8,13 +8,17 @@ import { useGetHubs } from '../../../../../features/hubs/hubService';
 import CreateTree from './CreateTree';
 import UpdateTree from './updateTree/UpdateTree';
 import HList from './Items/hub/HList';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setFilteredResults } from '../../../../../features/search/searchSlice';
+import { getHub } from '../../../../../features/hubs/hubSlice';
 
 export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
 
   const { listId, hubId, walletId } = useParams();
+  const dispatch = useAppDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { filteredResults } = useAppSelector((state) => state.search);
 
   const id = currentItemId;
   const fetchTree = hubs.length === 0 && (!!listId || !!hubId || !!walletId);
@@ -69,9 +73,16 @@ export default function ActiveTress() {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (hubs) {
+      dispatch(setFilteredResults(hubs));
+      dispatch(getHub(hubs));
+    }
+  }, [hubs]);
+
   return (
     <div className="flex flex-col gap-2 space-x-2">
-      <HList hubs={hubs} leftMargin={false} taskType="hub" />
+      <HList hubs={filteredResults} leftMargin={false} taskType="hub" />
     </div>
   );
 }

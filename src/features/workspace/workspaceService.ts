@@ -9,6 +9,7 @@ interface IData {
   name: string | number;
   companySize: string | number;
   emails: string[] | null;
+  color: string | null;
 }
 
 export const createWorkspaceService = (data: IData) => {
@@ -18,7 +19,8 @@ export const createWorkspaceService = (data: IData) => {
     data: {
       name: data.name,
       company_size: data.companySize,
-      emails: data.emails
+      emails: data.emails,
+      color: data.color
     }
   });
   return response;
