@@ -1,22 +1,28 @@
 import { Menu, Transition } from '@headlessui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Fragment, useCallback, useState } from 'react';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { cl } from '../../../../utils';
 import { isSameOrAfter, isSameOrBefore } from '../lib/dateUtils';
 import { getDatesInRange } from '../lib/getDatesInRange';
-import { DayOff, Event, MonthObject } from '../types/calendar';
+import { DayOff, MonthObject } from '../types/calendar';
 import Day from './Day';
+import MonthTitle from './MonthTitle';
 import Weeks from './Weeks';
 
 interface MonthProps {
-  daysOff: Event[];
+  daysOff: DayOff[];
   month: MonthObject;
   handleEvent: ({ start, end }: { start: Dayjs; end: Dayjs }) => void;
+  title: JSX.Element;
 }
 
 const currentDate = dayjs();
 
-export default function Month({ month, handleEvent, daysOff }: MonthProps) {
+export default function Month({ month, handleEvent, daysOff, title }: MonthProps) {
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const members = data?.data.team_members ?? [];
+
   const [selectedDates, setSelectedDates] = useState<Dayjs[]>([]);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [highlightedDates, setHighlightedDates] = useState<string[]>([]);
@@ -71,7 +77,7 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
       key={month.name}
       className="text-center relative"
     >
-      <h2 className="text-sm font-semibold text-gray-900">{month.name}</h2>
+      {title}
       <Weeks />
 
       <div
@@ -81,45 +87,39 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
         )}
       >
         {month.days.map((day, index) => {
-          const isHoliday = daysOff.find((event) =>
-            event.daysOff.find(
-              (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
-            )
+          const isDayOff = daysOff.find(
+            (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
           );
+
+          const isWeekend = Number(day.format('d')) === 0 || Number(day.format('d')) === 6;
+          const isSelected = !!selectedDates.find((i) => i.isSame(day, 'date'));
+          const isActiveDate = day.isSame(month.month, 'month');
 
           return (
             <Day
               key={day.format()}
+              leaveType={isDayOff?.type}
               isCurrentDate={currentDate.isSame(day, 'date')}
-              isActiveDate={day.isSame(month.month, 'month')}
+              isActiveDate={isActiveDate}
               rounded={{
                 tl: index === 0,
                 tr: index === 6,
                 bl: index === month.days.length - 7,
                 br: index === month.days.length - 1
               }}
-              isDayOff={Number(day.format('d')) === 0 || Number(day.format('d')) === 6}
+              isDayOff={isWeekend}
               day={day}
               isHighlighted={highlightedDates.includes(day.format('YYYY-MM-DD'))}
-              isSelected={!!selectedDates.find((i) => i.isSame(day, 'date'))} //.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
-              isHoliday={!!isHoliday}
+              isSelected={isSelected} //.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
+              isHoliday={!!isDayOff}
               // for event
-              onMouseEnter={
-                isHoliday
-                  ? () =>
-                      handleDateMouseEnter(
-                        isHoliday?.daysOff.find(
-                          (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
-                        )
-                      )
-                  : undefined
-              }
-              onMouseLeave={isHoliday ? handleDateMouseLeave : undefined}
+              onMouseEnter={isActiveDate && !isWeekend && isDayOff ? () => handleDateMouseEnter(isDayOff) : undefined}
+              onMouseLeave={isActiveDate && !isWeekend && isDayOff ? handleDateMouseLeave : undefined}
               // for selection
-              onMouseDown={!isHoliday ? () => handleDateMouseDown(day) : undefined}
-              onMouseOver={isMouseDown ? () => handleDateMouseOver(day) : undefined}
+              onMouseDown={isActiveDate && !isWeekend && !isDayOff ? () => handleDateMouseDown(day) : undefined}
+              onMouseOver={isActiveDate && !isWeekend && isMouseDown ? () => handleDateMouseOver(day) : undefined}
             >
-              {isHoliday ? (
+              {isDayOff ? (
                 <Transition
                   as={Fragment}
                   enter="transition ease-out duration-100"
@@ -132,24 +132,13 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
                   <Menu.Items className="absolute p-2 gap-20 flex border justify-between items-start right-0 top-10 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="flex flex-col gap-2">
                       <p className="whitespace-nowrap text-left text-sm font-medium text-gray-900">
-                        {isHoliday.user.name}
+                        {members.find((i) => i.user.id === isDayOff.user.id)?.user.name}
                       </p>
-                      <p className="text-sm text-left w-32 text-gray-500">
-                        {
-                          isHoliday?.daysOff.find(
-                            (dayOff) =>
-                              isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
-                          )?.reason
-                        }
-                      </p>
+                      <p className="text-sm text-left w-32 text-gray-500">{isDayOff.reason}</p>
                     </div>
 
                     <span className="whitespace-nowrap rounded-lg px-2.5 py-1 border text-gray-600 text-sm font-semibold shadow-sm hover:bg-gray-50">
-                      {
-                        isHoliday?.daysOff.find(
-                          (dayOff) => isSameOrBefore(day, dayjs(dayOff.end)) && isSameOrAfter(day, dayjs(dayOff.start))
-                        )?.type
-                      }
+                      {isDayOff.type.title}
                     </span>
                   </Menu.Items>
                 </Transition>
@@ -161,3 +150,5 @@ export default function Month({ month, handleEvent, daysOff }: MonthProps) {
     </div>
   );
 }
+
+Month.Title = MonthTitle;
