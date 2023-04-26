@@ -106,3 +106,19 @@ textarea {
 [contenteditable] {
   outline: 0px solid transparent;
 }
+
+.sortClose-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+}
+
+.sortClose {
+  display: none;
+  transition: all .7s ease-in-out;
+}
+
+.sortClose-group:hover .sortClose {
+  display: inline-block;
+}

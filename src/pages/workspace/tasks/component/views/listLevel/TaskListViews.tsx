@@ -51,7 +51,6 @@ export default function TaskListViews({
     if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
     setSortArr((prev) => [...prev, header]);
     setSortAbleArr((prev) => [...prev, { dir: 'asc', field: headerTxt }]);
-    setShowSortModal(!showSortModal);
     setQuerySwitch(!querySwitch);
   };
 
@@ -127,20 +126,25 @@ export default function TaskListViews({
                         className="flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                         style={{ color: '#78828d', fontSize: '10px' }}
                       >
-                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                        <span
+                          className="truncate font-bold hover:text-clip cursor-pointer  hover:w-10"
+                          onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                        >
                           {col.value}
                         </span>
                         {sortArr.includes(col.value) && (
-                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
-                            <span
-                              className="font-bold hover:text-clip cursor-pointer"
-                              style={{ fontSize: '8px', marginTop: '.5px' }}
-                            >
-                              {sortArr.indexOf(col.value) + 1}
-                            </span>
+                          <div className=" sortClose-group">
+                            <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-1 rounded-md">
+                              <span
+                                className="font-bold hover:text-clip cursor-pointer"
+                                style={{ fontSize: '8px', marginTop: '.5px' }}
+                              >
+                                {sortArr.indexOf(col.value) + 1}
+                              </span>
+                            </div>
                             <GiCancel
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                              className="sortClose text-white font-bold h-3 w-3"
                             />
                           </div>
                         )}
@@ -169,23 +173,28 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                        className="flex items-center space-x-1 uppercase  text-xs font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                         style={{ color: '#78828d', fontSize: '10px' }}
                       >
-                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                        <span
+                          className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
+                          onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                        >
                           {col.value}
                         </span>
                         {sortArr.includes(col.value) && (
-                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
-                            <span
-                              className="font-bold hover:text-clip cursor-pointer"
-                              style={{ fontSize: '8px', marginTop: '.5px' }}
-                            >
-                              {sortArr.indexOf(col.value) + 1}
-                            </span>
+                          <div className=" sortClose-group">
+                            <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-1 rounded-md">
+                              <span
+                                className="font-bold hover:text-clip cursor-pointer"
+                                style={{ fontSize: '8px', marginTop: '.5px' }}
+                              >
+                                {sortArr.indexOf(col.value) + 1}
+                              </span>
+                            </div>
                             <GiCancel
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                              className="sortClose text-white font-bold h-3 w-3"
                             />
                           </div>
                         )}
@@ -220,26 +229,31 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                      className="flex items-center space-x-1 uppercase  text-xs font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                       style={{ color: '#78828d', fontSize: '10px' }}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
                         <MdDragIndicator />
                       </span>
-                      <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                      <span
+                        className="truncate font-bold hover:text-clip cursor-pointer  hover:w-10"
+                        onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                      >
                         {col.value}
                       </span>
                       {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
-                          <span
-                            className="font-bold hover:text-clip cursor-pointer"
-                            style={{ fontSize: '8px', marginTop: '.5px' }}
-                          >
-                            {sortArr.indexOf(col.value) + 1}
-                          </span>
+                        <div className="sortClose-group">
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-1 rounded-md">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                          </div>
                           <GiCancel
                             onClick={() => handleRemoveFilter(col.value)}
-                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                            className="sortClose text-white font-bold h-3 w-3"
                           />
                         </div>
                       )}
@@ -275,20 +289,25 @@ export default function TaskListViews({
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
                         <MdDragIndicator />
                       </span>
-                      <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                      <span
+                        className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10"
+                        onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                      >
                         {col.value}
                       </span>
                       {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
-                          <span
-                            className="font-bold hover:text-clip cursor-pointer"
-                            style={{ fontSize: '8px', marginTop: '.5px' }}
-                          >
-                            {sortArr.indexOf(col.value) + 1}
-                          </span>
+                        <div className="sortClose-group">
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-1 rounded-md">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                          </div>
                           <GiCancel
                             onClick={() => handleRemoveFilter(col.value)}
-                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                            className="sortClose text-white font-bold h-3 w-3"
                           />
                         </div>
                       )}
