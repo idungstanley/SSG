@@ -127,3 +127,7 @@ textarea {
   display: inline-block;
   transform: translateX(0, 20);
 }
+
+.alt-task:nth-child(odd) {
+  background-color: #edecefcd;
+}
