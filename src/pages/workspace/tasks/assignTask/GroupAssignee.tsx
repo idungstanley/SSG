@@ -32,6 +32,7 @@ function GroupAssignee({
   };
 
   const [hoverInterval, setHoverInterval] = useState(false);
+  const [modalLoader, setModalLoader] = useState(true);
 
   const handleHoverIntervalMouseIn = (index: number) => {
     setDisplayed({
@@ -41,6 +42,9 @@ function GroupAssignee({
     setTimeout(() => {
       setHoverInterval(true);
     }, 2000);
+    setTimeout(() => {
+      setModalLoader(false);
+    }, 3000);
   };
 
   const handleHoverIntervalMouseOut = (index: number) => {
@@ -49,6 +53,7 @@ function GroupAssignee({
       index
     });
     setHoverInterval(false);
+    setModalLoader(true);
   };
 
   return (
@@ -112,6 +117,7 @@ function GroupAssignee({
                         avatar_path: string;
                       }
                     }
+                    modalLoader={modalLoader}
                   />
                 )}
               </div>
@@ -178,6 +184,7 @@ function GroupAssignee({
                         avatar_path: string;
                       }
                     }
+                    modalLoader={modalLoader}
                   />
                 )}
               </div>
