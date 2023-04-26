@@ -24,6 +24,7 @@ function LoginPage() {
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
       localStorage.setItem('currentWorkspaceId', JSON.stringify(default_workspace_id));
+      localStorage.setItem('currentUserId', JSON.stringify(user_id));
       dispatch(
         setAuthData({
           user,

@@ -42,6 +42,7 @@
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
     "react-infinite-scroll-hook": "^4.0.3",
+    "react-media-recorder": "^1.6.6",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
@@ -52,7 +53,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco --openssl-legacy-provider start",
+    "start": "craco start --openssl-legacy-provider",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",
@@ -62,18 +63,11 @@
     "format:fix": "clear && prettier --write 'src/**/*.{ts,tsx,js}' --config .prettierrc.json",
     "lint:fix": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json --fix"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@tanstack/react-query-devtools": "^4.0.8",

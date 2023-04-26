@@ -1,7 +1,7 @@
 import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
@@ -40,6 +40,8 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  const { sortArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -51,6 +53,9 @@ export const UseGetFullTaskList = ({
           hub_id,
           wallet_id,
           assignees
+        },
+        data: {
+          sorting: sortArrUpdate
         }
       });
     },
@@ -169,6 +174,7 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
@@ -230,8 +236,10 @@ export const getTaskListService = ({
   // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+  const { sortArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
-    ['task', { listId: listId, assigneeUserId }],
+    ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes | undefined>({
@@ -241,6 +249,9 @@ export const getTaskListService = ({
           list_id: listId,
           page: pageParam,
           assignees
+        },
+        data: {
+          sorting: sortArrUpdate
         }
       });
     },
@@ -404,12 +415,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
   });
   return response;
 };
-// {
-//   enabled: data.timeEntryDeleteTriggerId != null,
-//   onSuccess: () => queryClient.invalidateQueries(['timeclock'])
-// }
-// );
-// };
 
 export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
   const taskID = data.queryKey[1];

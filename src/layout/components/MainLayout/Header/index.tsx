@@ -13,7 +13,7 @@ interface configData {
 
 const config: configData[] = [
   {
-    path: '/',
+    path: '',
     title: 'Home',
     newd: null,
     Cleared: null,
@@ -21,7 +21,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/notification',
+    path: 'notification',
     title: 'Notification',
     newd: 'New',
     Cleared: 'Clear',
@@ -29,7 +29,7 @@ const config: configData[] = [
     buttonLabel: 'All'
   },
   {
-    path: '/community',
+    path: 'community',
     title: 'Community',
     newd: null,
     Cleared: null,
@@ -37,7 +37,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/goals',
+    path: 'goals',
     title: 'Goals',
     newd: null,
     Cleared: null,
@@ -45,7 +45,7 @@ const config: configData[] = [
     buttonLabel: null
   },
   {
-    path: '/inbox',
+    path: 'inbox',
     title: 'Inbox',
     newd: null,
     Cleared: null,
@@ -53,7 +53,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/dashboard',
+    path: 'dashboard',
     title: 'Dashboard',
     newd: null,
     Cleared: null,
@@ -61,7 +61,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/calendar',
+    path: 'calendar',
     title: 'Calendar',
     newd: null,
     Cleared: null,
@@ -69,7 +69,7 @@ const config: configData[] = [
     buttonLabel: 'Calendar'
   },
   {
-    path: '/',
+    path: '',
     title: 'Favorites',
     newd: null,
     Cleared: null,
@@ -80,7 +80,7 @@ const config: configData[] = [
 
 export default function Header() {
   const { pathname } = useLocation();
-  const headerData = config.find((i) => `${i.path}` === pathname);
+  const headerData = config.find((i) => i.path === pathname.split('/')[1]);
 
   return headerData ? (
     <div className="border-b" style={{ height: '60px' }}>

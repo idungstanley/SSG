@@ -6,10 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
-import { BiSearch } from 'react-icons/bi';
-import { VscSettings } from 'react-icons/vsc';
-import { IoClose } from 'react-icons/io5';
-// import { BiSearch } from 'react-icons/bi';
+import SearchTaskView from './Search/SearchTaskView';
+import { setIsSearchActive } from '../../../../../features/search/searchSlice';
 
 interface PlaceItemProps {
   label: string;
@@ -19,7 +17,6 @@ interface PlaceItemProps {
   midContent?: ReactNode;
   bottomContent?: ReactNode;
   id: string;
-  setIsSearchActive?: React.Dispatch<React.SetStateAction<boolean>>;
   searchStatus?: boolean;
 }
 
@@ -31,12 +28,12 @@ export default function PlaceItem({
   rightContent,
   bottomContent,
   id,
-  searchStatus,
-  setIsSearchActive
+  searchStatus
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
@@ -47,7 +44,11 @@ export default function PlaceItem({
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
-    backgroundColor: isDragging ? '#f3f4f6' : isActivePlace && activeItemId !== null ? '#BF00FF08' : undefined,
+    backgroundColor: isDragging
+      ? '#f3f4f6'
+      : isActivePlace && activeItemId !== null && !searchStatus
+      ? '#BF00FF08'
+      : undefined,
     zIndex: isDragging ? 1 : undefined
   };
 
@@ -55,12 +56,15 @@ export default function PlaceItem({
     dispatch(setActivePlaceId(null));
     navigate('/');
   };
+  const handleCloseSearchView = () => {
+    dispatch(setIsSearchActive(false));
+  };
 
   return (
     <li
       id={`${label}`}
       className={cl(
-        !isActivePlace ? 'hover:bg-gray-100' : searchStatus ? undefined : 'hover:bg-gray-100',
+        !isActivePlace ? 'hover:bg-gray-100' : isActivePlace && searchStatus ? undefined : 'hover:bg-gray-100',
         'focus:flex flex-col w-full pl-7 py-5 items-center relative group',
         bottomContent ? 'gap-2' : ''
       )}
@@ -125,20 +129,7 @@ export default function PlaceItem({
         </>
       )}
       {searchStatus && (
-        <div className="w-full h-full relative" onClick={(e) => e.stopPropagation()}>
-          <BiSearch className="absolute w-6 h-4 -left-1 top-2.5" style={{ color: baseColor }} />
-          <input
-            type="text"
-            name=""
-            id=""
-            placeholder="Search Hubs. . ."
-            className="w-full h-fit pl-5 text-sm border-transparent border-none focus:border-transparent focus:ring-0"
-          />
-          <div className="flex absolute right-3 top-2.5" style={{ color: baseColor }}>
-            <VscSettings className="w-6 h-4" />
-            <IoClose className="w-6 h-4" onClick={() => setIsSearchActive?.(false)} />
-          </div>
-        </div>
+        <SearchTaskView items={hub} handleCloseSearchView={handleCloseSearchView} placeHolder="Search Hubs.." />
       )}
     </li>
   );
