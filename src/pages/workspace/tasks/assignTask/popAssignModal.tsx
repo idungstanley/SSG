@@ -2,19 +2,29 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { CiMail } from 'react-icons/ci';
 
-export function PopAssignModal() {
+export function PopAssignModal({
+  userData
+}: {
+  userData: {
+    id: React.Key | null | undefined;
+    initials: string;
+    colour: string | undefined;
+    name: string;
+    avatar_path: string;
+  };
+}) {
   return (
     <div className="absolute  bg-white shadow-lg   w-56 h-64 rounded">
       <div className="flex flex-col space-y-6 items-start justify-center p-4  ">
         <div className="flex items-center w-14 h-14 rounded-full bg-sky-200 justify-center">
-          <span>CH</span>
+          <span>{userData.initials}</span>
         </div>
         <div className="flex space-y-4 flex-col items-start">
-          <span className="text-xs text-black text-decoration-thickness: 1px;">Ezeigbo Chinonso</span>
+          <span className="text-xs text-black text-decoration-thickness: 1px;">{userData.name}</span>
           <div className="space-x-2 flex items-center">
             <CiMail className="w-4 h-4 text-black" />
             <span className="text-black" style={{ fontSize: '8px' }}>
-              c.ezeigbo@simpsgroup.co.uk
+              user email
             </span>
           </div>
           <div className="space-x-2  flex items-center">
