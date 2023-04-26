@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
 import { IParent } from './interface.tasks';
+import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 
 export interface ICustomField {
   id: string;
@@ -117,6 +118,7 @@ interface TaskState {
   showTaskUploadModal: boolean;
   timerStatus: boolean;
   filterTaskByAssigneeIds: string | null | undefined;
+  sortArr: SortOption[];
 }
 
 const initialState: TaskState = {
@@ -161,7 +163,8 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
-  filterTaskByAssigneeIds: null
+  filterTaskByAssigneeIds: null,
+  sortArr: []
 };
 
 export const taskSlice = createSlice({
@@ -326,6 +329,9 @@ export const taskSlice = createSlice({
     },
     setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
       state.filterTaskByAssigneeIds = action.payload;
+    },
+    setSortArray(state, action: PayloadAction<SortOption[]>) {
+      state.sortArr = action.payload;
     }
   }
 });
@@ -369,6 +375,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
-  setFilterTaskByAssigneeIds
+  setFilterTaskByAssigneeIds,
+  setSortArray
 } = taskSlice.actions;
 export default taskSlice.reducer;
