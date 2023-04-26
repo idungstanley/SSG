@@ -119,6 +119,11 @@ textarea {
   transition: all .7s ease-in-out;
 }
 
+.sortClose-group:hover {
+  background-color: rgba(161, 165, 168, 0.87);
+}
+
 .sortClose-group:hover .sortClose {
   display: inline-block;
+  transform: translateX(0, 20);
 }

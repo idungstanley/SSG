@@ -40,8 +40,8 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  const { sortArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
+  // const { sortArr } = useAppSelector((state) => state.task);
+  // const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -53,10 +53,10 @@ export const UseGetFullTaskList = ({
           hub_id,
           wallet_id,
           assignees
-        },
-        data: {
-          sorting: sortArrUpdate
         }
+        // data: {
+        //   sorting: sortArrUpdate
+        // }
       });
     },
     {
