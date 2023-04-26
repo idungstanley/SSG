@@ -17,10 +17,11 @@ import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/PageWrapper';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
-import NoTaskFound from '../tasks/component/taskData/NoTaskFound';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
 import { ITaskFullList } from '../../../features/task/interface.tasks';
-
+import { UseGetListDetails } from '../../../features/list/listService';
+import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
+import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
@@ -50,6 +51,15 @@ function RenderList() {
     hasNextPage,
     fetchNextPage
   } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const listType = 'list';
+  const { data: listData } = UseGetListDetails({ activeItemId: listId, activeItemType: listType });
+  const listName = listData?.data.list.name;
+  useEffect(() => {
+    if (listId) {
+      dispatch(setActiveItem({ activeItemId: listId, activeItemType: listType, activeItemName: listName }));
+      dispatch(setActiveEntityName(listName));
+    }
+  }, [listId, listData]);
 
   const paginatedTaskData = useMemo(
     () => listDetailsData?.pages.flatMap((page) => page?.data.tasks),
@@ -150,7 +160,7 @@ function RenderList() {
             {mapView && (
               <div className="pr-1 pt-0.5 w-full h-full">
                 <div className="w-full" style={{ minHeight: '0', maxHeight: '90vh' }}>
-                  <NoTaskFound />
+                  <TaskMapTemplate />
                 </div>
               </div>
             )}

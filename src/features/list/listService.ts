@@ -33,17 +33,17 @@ export const getListService = (data: { queryKey: (string | undefined)[] }) => {
   return response;
 };
 
-export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
-  const walletID = data.queryKey[1];
-  const response = requestNew({
-    url: 'lists',
-    method: 'GET',
-    params: {
-      wallet_id: walletID
-    }
-  });
-  return response;
-};
+// export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
+//   const walletID = data.queryKey[1];
+//   const response = requestNew({
+//     url: 'lists',
+//     method: 'GET',
+//     params: {
+//       wallet_id: walletID
+//     }
+//   });
+//   return response;
+// };
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();
@@ -61,14 +61,14 @@ export const getListServices = (data: { Archived: boolean; walletId?: string | n
 };
 
 // get list details
-export const getListsDetailsService = (data: { queryKey: (string | undefined)[] }) => {
-  const listID = data.queryKey[1];
-  const response = requestNew({
-    url: `lists/${listID}`,
-    method: 'GET'
-  });
-  return response;
-};
+// export const getListsDetailsService = (data: { queryKey: (string | undefined)[] }) => {
+//   const listID = data.queryKey[1];
+//   const response = requestNew({
+//     url: `lists/${listID}`,
+//     method: 'GET'
+//   });
+//   return response;
+// };
 
 //edit list
 export const UseEditListService = (data: {
@@ -156,7 +156,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list'
+      enabled: query.activeItemId != null
     }
   );
 };

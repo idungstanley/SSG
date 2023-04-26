@@ -6,6 +6,7 @@ interface NotificationStore {
   type: 'success' | 'error';
   title: string;
   body: string;
+  notificationCount: number | string;
   center: boolean;
   top: boolean;
   show_close: boolean;
@@ -18,6 +19,7 @@ const initialState: NotificationStore = {
   title: '-',
   body: '-',
   center: false,
+  notificationCount: '',
   top: true,
   show_close: true
 };
@@ -34,6 +36,9 @@ export const notificationSlice = createSlice({
         state.show = action.payload.show;
         state.duration = action.payload.duration;
       }
+    },
+    setNotificationCount: (state, action: PayloadAction<string | number>) => {
+      state.notificationCount = action.payload;
     },
     setContent: (
       state,
@@ -58,6 +63,6 @@ export const notificationSlice = createSlice({
   }
 });
 
-export const { setVisibility, setContent } = notificationSlice.actions;
+export const { setVisibility, setContent, setNotificationCount } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

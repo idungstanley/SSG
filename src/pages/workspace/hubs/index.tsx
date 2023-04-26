@@ -1,7 +1,8 @@
-import { useGetHubList } from '../../../features/hubs/hubService';
+import React from 'react';
+// import { useGetHubList } from '../../../features/hubs/hubService';
 // import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
-import { getHub } from '../../../features/hubs/hubSlice';
+// import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
@@ -17,18 +18,26 @@ import TaskModal from '../tasks/component/TaskModal';
 import { BsListCheck } from 'react-icons/bs';
 import WalletModal from '../wallet/components/modals/WalletModal';
 import ActiveTress from './components/ActiveTree/ActiveTress';
+import { BiSearch } from 'react-icons/bi';
+import { setIsSearchActive } from '../../../features/search/searchSlice';
 
 function Hubs() {
   const dispatch = useDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { toggleArchive } = useAppSelector((state) => state.hub);
-  const { data, status } = useGetHubList({
-    query: toggleArchive
-  });
+  // const { toggleArchive } = useAppSelector((state) => state.hub);
+  const { isSearchActive } = useAppSelector((state) => state.search);
+  // const { data, status } = useGetHubList({
+  //   query: toggleArchive
+  // });
 
-  if (status === 'success') {
-    dispatch(getHub(data?.data.hubs));
-  }
+  // if (status === 'success') {
+  //   dispatch(getHub(data?.data.hubs));
+  // }
+
+  const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    dispatch(setIsSearchActive(true));
+  };
 
   const configForDropdown = [
     {
@@ -44,6 +53,8 @@ function Hubs() {
         label="TASKS"
         id="2"
         icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        searchStatus={isSearchActive}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Dropdown config={configForDropdown} iconType="plus" iconColor="#BF00FFB2" />

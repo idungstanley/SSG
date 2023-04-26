@@ -57,6 +57,9 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
+import WallchartPage from './pages/workspace/calendar/ui/pages/WallchartPage';
+import YearPage from './pages/workspace/calendar/ui/pages/YearPage';
+import LeaveTypesPage from './pages/workspace/calendar/ui/pages/LeaveTypesPage';
 
 const inbox = [
   {
@@ -116,18 +119,35 @@ export const routes = (user: IUser | null) =>
         { path: 'directory/shelf/:directoryId', element: <Directory /> },
         { path: 'notification', element: <Notification /> },
         { path: 'community', element: <CommunityPage /> },
-        { path: 'calendar', element: <Calendar /> },
+        {
+          path: 'calendar',
+          element: <Calendar />,
+          children: [
+            {
+              path: '',
+              element: <WallchartPage />
+            },
+            {
+              path: 'year',
+              element: <YearPage />
+            },
+            {
+              path: 'types',
+              element: <LeaveTypesPage />
+            }
+          ]
+        },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
-        { path: 'hub', element: <RenderHubs /> },
-        { path: 'hub/:hubId', element: <RenderHubs /> },
-        { path: 'hub/:hubId/t/:taskId', element: <RenderHubs /> },
-        { path: 'wallet/:walletId', element: <RenderWallets /> },
-        { path: 'wallet/:walletId/t/:taskId', element: <RenderWallets /> },
-        { path: 'list/:listId', element: <RenderList /> },
-        { path: 'list/:listId/t/:taskId', element: <RenderList /> },
+        { path: 'h', element: <RenderHubs /> },
+        { path: 'h/:hubId', element: <RenderHubs /> },
+        { path: 'h/:hubId/t/:taskId', element: <RenderHubs /> },
+        { path: 'w/:walletId', element: <RenderWallets /> },
+        { path: 'w/:walletId/t/:taskId', element: <RenderWallets /> },
+        { path: 'l/:listId', element: <RenderList /> },
+        { path: 'l/:listId/t/:taskId', element: <RenderList /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },

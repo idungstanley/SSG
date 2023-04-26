@@ -121,7 +121,7 @@ export default function PilotSection() {
         })
       );
     }
-  }, [listId]);
+  }, [listId, activeItemName]);
 
   return null;
 }
