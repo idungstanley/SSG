@@ -1,8 +1,8 @@
 import { TrashIcon, PlusIcon, AcademicCapIcon, BeakerIcon, GiftIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
+import Dropdown from '../../../../components/Dropdown/VoidDropdown';
 import { cl } from '../../../../utils';
 import { useDaysOff } from '../../lib/daysOffContext';
-import Dropdown from '../Dropdown';
 
 const colors = ['green', 'red', 'teal', 'fuchsia', 'yellow'];
 
@@ -47,9 +47,7 @@ export default function LeaveTypesPage() {
               <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
                 Title
               </th>
-              {/* <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Email
-              </th> */}
+
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                 Icon
               </th>
@@ -75,7 +73,6 @@ export default function LeaveTypesPage() {
                     <TrashIcon className="w-5 h-5 cursor-pointer text-red-400" aria-hidden="true" />
                   </button>
                 </td>
-                {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td> */}
               </tr>
             ))}
 
