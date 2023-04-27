@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import Working from '../../../assets/icons/Working.svg';
 import MainLogo from '../../../assets/icons/mainIcon.svg';
-import Scroll1 from '../../../assets/icons/scroll1.svg';
-import Scroll3 from '../../../assets/icons/scroll3.png';
-import Scroll4 from '../../../assets/icons/scroll4.png';
-import Scroll2 from '../../../assets/icons/scroll2.png';
 import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
-import Scroll5 from '../../../assets/icons/scroll5.png';
-import Scroll6 from '../../../assets/icons/scroll6.png';
-import Scroll7 from '../../../assets/icons/scroll7.png';
 import { AvatarBg, InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
+import { GoPrimitiveDot } from 'react-icons/go';
+import { cl } from '../../../utils';
+import { useSelector } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
+import { selectCurrentUser, setCurrentUser, setCurrentWorkspace } from '../../../features/auth/authSlice';
+import { createWorkspaceService } from '../../../features/workspace/workspaceService';
+import { useAppDispatch } from '../../../app/hooks';
 
 interface currentPageProps {
   name: boolean;
@@ -23,9 +23,39 @@ interface currentPageProps {
   completed: boolean;
 }
 
-function NewWorkSpace() {
-  const [currentPage, setCurrentPage] = useState<currentPageProps>({
-    name: true,
+function CreateNewWorkspace() {
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useAppDispatch();
+  const createWSMutation = useMutation(createWorkspaceService, {
+    onSuccess: (successData) => {
+      setCurrentPage({ ...currentPage, email: false, apps: true });
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          ...user,
+          default_workspace_id: successData.data.workspace.id
+        })
+      );
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.workspace.id));
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: successData.data.workspace.id
+        })
+      );
+      // window.location.href = '/';
+      if (user) {
+        dispatch(
+          setCurrentUser({
+            ...user,
+            default_workspace_id: successData.data.workspace.id
+          })
+        );
+      }
+    }
+  });
+
+  const [initPage] = useState<currentPageProps>({
+    name: false,
     color: false,
     size: false,
     email: false,
@@ -33,6 +63,33 @@ function NewWorkSpace() {
     pm_tools: false,
     completed: false
   });
+
+  const [currentPage, setCurrentPage] = useState<currentPageProps>({
+    ...initPage,
+    name: true
+  });
+
+  const [formState, setFormState] = useState({
+    name: '',
+    color: '#D765FD',
+    companySize: '',
+    emails: ''
+  });
+
+  const handleSubmit = () => {
+    const emails = formState.emails.length ? formState.emails.split(' ') : null;
+    createWSMutation.mutate({
+      name: formState.name,
+      emails,
+      companySize: formState.companySize,
+      color: formState.color
+    });
+  };
+
+  const handleGetStarted = () => {
+    window.location.href = '/';
+  };
+
   return (
     <div className="w-screen h-screen create-workspace">
       <div className="w-full h-full flex">
@@ -46,17 +103,23 @@ function NewWorkSpace() {
             </article>
           </div>
         </section>
-        <section className="w-1/2 h-full">
+        <section className="w-1/2 h-full relative">
           <div className="w-full flex justify-end" style={{ height: '20vh' }}>
             <div className="w-24 h-24 m-8">
               <img src={MainLogo} alt="logo" className="w-full h-full" />
             </div>
           </div>
           {currentPage.name && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
-                <input type="text" className="mt-8 rounded" style={{ width: '1000px', height: '100px' }} />
+                <input
+                  type="text"
+                  className="mt-8 rounded text-3xl"
+                  style={{ width: '1000px', height: '100px' }}
+                  value={formState.name}
+                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                />
                 <h2 className="text-xl text-fuchsia-600">Name of company or organization can be used</h2>
                 <div className="flex justify-center my-8">
                   <button
@@ -67,14 +130,11 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll1} alt="" />
-                </div>
               </div>
             </div>
           )}
           {currentPage.color && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Customize your workspace</h1>
                 <div className="flex items-center w-full justify-center gap-20 mt-8 mb-20">
@@ -84,7 +144,7 @@ function NewWorkSpace() {
                     <button
                       type="button"
                       className="rounded w-24 h-24 text-white"
-                      style={{ backgroundColor: '#BF00FE' }}
+                      style={{ backgroundColor: formState.color }}
                     >
                       EG
                     </button>
@@ -97,7 +157,7 @@ function NewWorkSpace() {
                           size={10}
                           colour={colour}
                           // name="avatarBackgroudColor"
-                          onClick={() => console.log(colour)}
+                          onClick={() => setFormState({ ...formState, color: colour })}
                         />
                       );
                     })}
@@ -112,20 +172,24 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-16 flex justify-center">
-                  <img src={Scroll2} alt="" />
-                </div>
               </div>
             </div>
           )}
           {currentPage.size && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>How many people will you be working with?</h1>
                 <div className="flex justify-between my-8">
                   {companySizeBtn.map((size) => {
                     return (
-                      <button className="text-xl border border-gray-400 p-2 rounded" key={size.label}>
+                      <button
+                        className={cl(
+                          formState.companySize === size.value ? 'border-fuchsia-600 border-8' : 'border-gray-400',
+                          'text-xl border p-2 rounded'
+                        )}
+                        key={size.label}
+                        onClick={() => setFormState({ ...formState, companySize: size.value })}
+                      >
                         {size.label}
                       </button>
                     );
@@ -140,40 +204,35 @@ function NewWorkSpace() {
                     NEXT
                   </button>
                 </div>
-                <div className="mt-16 flex justify-center">
-                  <img src={Scroll3} alt="" />
-                </div>
               </div>
             </div>
           )}
           {currentPage.email && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Invite people to your workspace</h1>
                 <input
                   type="text"
-                  className="mt-8 rounded"
+                  className="mt-8 rounded text-3xl"
                   style={{ width: '1000px', height: '100px' }}
                   placeholder="Enter email addresses"
+                  onChange={(e) => setFormState({ ...formState, emails: e.target.value })}
                 />
                 <h2 className="text-xl text-fuchsia-600">Multiple email addresses can be pasted</h2>
                 <div className="flex justify-center my-8">
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
                     style={{ fontSize: '35px' }}
-                    onClick={() => setCurrentPage({ ...currentPage, email: false, apps: true })}
+                    onClick={handleSubmit}
                   >
                     Done
                   </button>
-                </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll4} alt="" />
                 </div>
               </div>
             </div>
           )}
           {currentPage.apps && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Do you use any of these apps?</h1>
                 <img src={Apps} alt="other applications" />
@@ -186,14 +245,11 @@ function NewWorkSpace() {
                     No, thanks
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll5} alt="" />
-                </div>
               </div>
             </div>
           )}
           {currentPage.pm_tools && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Do you use any of these project management tools?</h1>
                 <img src={PmTools} alt="other applications" />
@@ -206,33 +262,85 @@ function NewWorkSpace() {
                     No, thanks
                   </button>
                 </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll6} alt="Project management tools" />
-                </div>
               </div>
             </div>
           )}
           {currentPage.completed && (
-            <div className="w-full -ml-40 flex items-center" style={{ height: '80vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>
                   Your workspace is ready. Have a wonderful experience working with your team members and colleagues.
                 </h1>
                 <div className="flex justify-center my-8">
-                  <button className="bg-fuchsia-600 text-white p-2 rounded-lg" style={{ fontSize: '35px' }}>
+                  <button
+                    className="bg-fuchsia-600 text-white p-2 rounded-lg"
+                    style={{ fontSize: '35px' }}
+                    onClick={handleGetStarted}
+                  >
                     Get started
                   </button>
-                </div>
-                <div className="mt-32 flex justify-center">
-                  <img src={Scroll7} alt="Project management tools" />
                 </div>
               </div>
             </div>
           )}
+          <section
+            className="flex items-center fixed bottom-0 justify-center absolute w-4/5 m-auto"
+            style={{ height: '20vh' }}
+          >
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.name ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, name: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.color ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, color: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.size ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, size: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.email ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, email: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.apps ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, apps: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.pm_tools ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, pm_tools: true })}
+            />
+            <GoPrimitiveDot
+              className={cl(
+                currentPage.completed ? 'bg-fuchsia-600' : 'bg-gray-300',
+                'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
+              )}
+              onClick={() => setCurrentPage({ ...initPage, completed: true })}
+            />
+          </section>
         </section>
       </div>
     </div>
   );
 }
 
-export default NewWorkSpace;
+export default CreateNewWorkspace;

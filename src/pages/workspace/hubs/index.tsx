@@ -64,11 +64,11 @@ function Hubs() {
       <div
         className={cl(
           !showSidebar && 'overflow-x-hidden w-12',
-          'flex items-center justify-between pl-7 hover:bg-gray-100'
+          'flex items-center justify-between pl-6 hover:bg-gray-100'
         )}
       >
         <div className="flex items-center content-center self-center py-2">
-          <img src={everythingIcon} alt="Hub Icon" className="h-4 mr-4" />
+          <img src={everythingIcon} alt="Hub Icon" className={showSidebar ? 'w-5 h-5 mr-4' : 'h-6 w-6 mr-4'} />
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>

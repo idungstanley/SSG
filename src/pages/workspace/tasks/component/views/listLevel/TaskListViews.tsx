@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
-import { useDispatch } from 'react-redux';
-import { getTaskColumns, setCloseTaskListView } from '../../../../../../features/task/taskSlice';
+import { getTaskColumns, setCloseTaskListView, setSortArray } from '../../../../../../features/task/taskSlice';
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
@@ -12,8 +11,15 @@ import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
+import { GiCancel } from 'react-icons/gi';
+import SortModal from '../../../../../../components/SortModal/SortModal';
+// import { useQueryClient } from '@tanstack/react-query';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
+export type SortOption = {
+  dir: 'asc' | 'desc';
+  field: string;
+};
 
 export default function TaskListViews({
   taskLength,
@@ -24,14 +30,45 @@ export default function TaskListViews({
   status?: string;
   listId?: string;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
   const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
+  const [showSortModal, setShowSortModal] = useState<boolean>(false);
+  const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
+  const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
+  const [sortAbleArr, setSortAbleArr] = useState<SortOption[]>([]);
 
   const { data } = useList(listId);
+  const [sortArr, setSortArr] = useState<string[]>([]);
+  const [querySwitch, setQuerySwitch] = useState<boolean>(false);
+
+  const handleSort = (header: string, id: string) => {
+    const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'task' : header.toLowerCase();
+    setheaderId(id);
+    if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
+    setSortArr((prev) => [...prev, header]);
+    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: headerTxt }]);
+    setShowSortModal(!showSortModal);
+    setQuerySwitch(!querySwitch);
+  };
+
+  const handleRemoveFilter = (title: string): void => {
+    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
+    setSortArr((prev) => prev.filter((el) => el !== title));
+    setSortAbleArr((prev) =>
+      prev.filter((el) => {
+        return el.field !== headerTxt;
+      })
+    );
+  };
+
+  useEffect(() => {
+    dispatch(setSortArray(sortAbleArr));
+    setQuerySwitch(!querySwitch);
+  }, [sortAbleArr]);
 
   useEffect(() => {
     if (!data) {
@@ -79,7 +116,7 @@ export default function TaskListViews({
               <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
             </div>
           </div>
-          <div className="relative w-6/12 flex     items-center ">
+          <div className="relative w-6/12 flex items-center ">
             {hideTask.length
               ? hideTask.map(
                   (col) =>
@@ -87,10 +124,42 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex  items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group"
-                        style={{ color: '#78828d', fontSize: '11px' }}
+                        className="flex items-center uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                        style={{ color: '#78828d', fontSize: '10px' }}
                       >
-                        {col.value}
+                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                          {col.value}
+                        </span>
+                        {sortArr.includes(col.value) && (
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                            <GiCancel
+                              onClick={() => handleRemoveFilter(col.value)}
+                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                            />
+                          </div>
+                        )}
+                        {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                          <span>
+                            <FaSort
+                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              onClick={() => handleSort(col.value, col.id)}
+                            />
+                          </span>
+                        )}
+                        {showSortModal && headerId === col.id && (
+                          <SortModal
+                            headers={sortArr}
+                            toggleModal={setShowSortModal}
+                            arr={{ sortAbleArr, setSortAbleArr }}
+                            handleSortFn={handleSort}
+                          />
+                        )}
                       </div>
                     )
                 )
@@ -100,10 +169,42 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex  items-center uppercase    text-xs  font-bold hover:bg-gray-200 hover:text-gray-50  group"
+                        className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
                         style={{ color: '#78828d', fontSize: '10px' }}
                       >
-                        {col.value}
+                        <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
+                          {col.value}
+                        </span>
+                        {sortArr.includes(col.value) && (
+                          <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
+                            <span
+                              className="font-bold hover:text-clip cursor-pointer"
+                              style={{ fontSize: '8px', marginTop: '.5px' }}
+                            >
+                              {sortArr.indexOf(col.value) + 1}
+                            </span>
+                            <GiCancel
+                              onClick={() => handleRemoveFilter(col.value)}
+                              className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                            />
+                          </div>
+                        )}
+                        {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                          <span>
+                            <FaSort
+                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              onClick={() => handleSort(col.value, col.id)}
+                            />
+                          </span>
+                        )}
+                        {showSortModal && headerId === col.id && (
+                          <SortModal
+                            headers={sortArr}
+                            toggleModal={setShowSortModal}
+                            arr={{ sortAbleArr, setSortAbleArr }}
+                            handleSortFn={handleSort}
+                          />
+                        )}
                       </div>
                     )
                 )}
@@ -119,21 +220,45 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                      style={{
-                        color: '#78828d',
-                        fontSize: '10px'
-                      }}
+                      className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                      style={{ color: '#78828d', fontSize: '10px' }}
                     >
-                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                      <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
                         <MdDragIndicator />
                       </span>
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      <span>
-                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                      </span>
+                      {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
+                          <span
+                            className="font-bold hover:text-clip cursor-pointer"
+                            style={{ fontSize: '8px', marginTop: '.5px' }}
+                          >
+                            {sortArr.indexOf(col.value) + 1}
+                          </span>
+                          <GiCancel
+                            onClick={() => handleRemoveFilter(col.value)}
+                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                          />
+                        </div>
+                      )}
+                      {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                        <span>
+                          <FaSort
+                            className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            onClick={() => handleSort(col.value, col.id)}
+                          />
+                        </span>
+                      )}
+                      {showSortModal && headerId === col.id && (
+                        <SortModal
+                          headers={sortArr}
+                          toggleModal={setShowSortModal}
+                          arr={{ sortAbleArr, setSortAbleArr }}
+                          handleSortFn={handleSort}
+                        />
+                      )}
                     </div>
                   )
               )
@@ -144,11 +269,8 @@ export default function TaskListViews({
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="flex justify-around hover:bg-clip-border items-center uppercase  text-xs mt-1 font-bold  hover:w-10 hover:bg-gray-300  hover:text-gray-50   border-gray-400  group"
-                      style={{
-                        color: '#78828d',
-                        fontSize: '10px'
-                      }}
+                      className="flex items-center space-x-1 uppercase  text-xs  font-medium hover:bg-gray-400 hover:text-gray-50 group relative cursor-pointer"
+                      style={{ color: '#78828d', fontSize: '10px' }}
                     >
                       <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
                         <MdDragIndicator />
@@ -156,9 +278,36 @@ export default function TaskListViews({
                       <span className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10">
                         {col.value}
                       </span>
-                      <span>
-                        <FaSort className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
-                      </span>
+                      {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
+                        <div className="flex items-center justify-center space-x-1 uppercase  text-xs text-white font-medium bg-red-600 group relative cursor-pointer px-1 rounded-md group">
+                          <span
+                            className="font-bold hover:text-clip cursor-pointer"
+                            style={{ fontSize: '8px', marginTop: '.5px' }}
+                          >
+                            {sortArr.indexOf(col.value) + 1}
+                          </span>
+                          <GiCancel
+                            onClick={() => handleRemoveFilter(col.value)}
+                            className="opacity-0 group-hover:opacity-100 text-white font-bold h-3 w-3"
+                          />
+                        </div>
+                      )}
+                      {sortAbles.includes(col.value) && sortAbles.includes(col.value) && (
+                        <span>
+                          <FaSort
+                            className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            onClick={() => handleSort(col.value, col.id)}
+                          />
+                        </span>
+                      )}
+                      {showSortModal && headerId === col.id && (
+                        <SortModal
+                          headers={sortArr}
+                          toggleModal={setShowSortModal}
+                          arr={{ sortAbleArr, setSortAbleArr }}
+                          handleSortFn={handleSort}
+                        />
+                      )}
                     </div>
                   )
               )}

@@ -49,8 +49,10 @@ export default function HubItem({
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
+    if (showSidebar) {
+      e.stopPropagation();
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
+    }
   };
 
   useEffect(() => {

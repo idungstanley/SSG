@@ -20,12 +20,12 @@ import ResizeBorder from '../../../../components/ResizeBorder';
 import CloseExtBtn from './components/extendBtn/CloseExtBtn';
 import ExtendedItem from './components/extendedItem';
 import InboxData from '../../../../pages/workspace/inbox/InboxData';
-import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryData';
 import Email from '../../../../pages/workspace/email';
 import RoutePlanner from '../../../../pages/workspace/routePlanner';
 import AlsoHr from '../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../pages/workspace/commerce';
 import { IoBusinessOutline } from 'react-icons/io5';
+import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryTabs';
 
 interface ItemData {
   id?: number;

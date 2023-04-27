@@ -1,45 +1,73 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dayjs } from 'dayjs';
-import { Fragment, useRef, useState } from 'react';
-import SelectTypeListbox from './SelectTypeListbox';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { useDaysOff } from '../lib/daysOffContext';
+import ListBox from './ListBox';
 
-interface CreateEventModal {
-  show: boolean;
-  setShow: VoidFunction;
-  dayOff: { start: Dayjs; end: Dayjs } | null;
-  onSubmit: ({ type, reason }: { type: { id: number; title: string }; reason: string }) => void;
-}
+export default function CreateEventModal() {
+  const {
+    showCreateDayOffModal: show,
+    newDayOff: dayOff,
+    setNewDayOff,
+    setShowCreateDayOffModal,
+    onCreateDayOff,
+    activeMemberId,
+    leaveTypes
+  } = useDaysOff();
 
-const types = [
-  {
-    id: 1,
-    title: 'Holiday'
-  },
-  {
-    id: 2,
-    title: 'Sick day'
-  }
-];
-
-export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: CreateEventModal) {
-  const [type, setType] = useState(types[0]);
+  const [type, setType] = useState(leaveTypes[0]);
   const reasonRef = useRef<HTMLInputElement>(null);
+  const [member, setMember] = useState<{ id: string; title: string } | null>(null);
+
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const members = useMemo(
+    () => data?.data.team_members.map((i) => ({ id: i.user.id, title: i.user.name })) ?? [],
+    [data]
+  );
+
+  const onClose = () => {
+    setNewDayOff(null);
+    setShowCreateDayOffModal(false);
+  };
+
+  useEffect(() => {
+    if (members) {
+      const findMember = members.find((i) => i.id === activeMemberId);
+
+      if (findMember) {
+        setMember(findMember);
+      }
+    }
+  }, [members, activeMemberId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (reasonRef.current) {
-      const reason = reasonRef.current.value;
-      onSubmit({ type, reason });
+    if (!dayOff) {
+      return;
+    }
 
-      setType(types[0]);
+    if (reasonRef.current && member) {
+      const reason = reasonRef.current.value;
+      onCreateDayOff({
+        type,
+        reason,
+        start: dayOff.start.format('YYYY-MM-DD'),
+        end: dayOff.end.format('YYYY-MM-DD'),
+        memberId: member.id
+      });
+
+      setNewDayOff(null);
+      setShowCreateDayOffModal(false);
+
+      setType(leaveTypes[0]);
     }
   };
 
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setShow}>
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -71,8 +99,8 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
-                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={setShow}
+                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    onClick={onClose}
                   >
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
@@ -88,7 +116,7 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                       {dayOff ? (
                         <div className="flex w-full justify-between items-center">
                           <p>
-                            Starting{' '}
+                            Starting
                             <span className="border rounded-md p-2 ml-2">{dayOff.start.format('DD.MM.YYYY')}</span>
                           </p>
                           <p>
@@ -97,7 +125,11 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                         </div>
                       ) : null}
 
-                      <SelectTypeListbox setSelected={setType} value={type} values={types} />
+                      {member ? (
+                        <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
+                      ) : null}
+
+                      <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" />
 
                       <div>
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
@@ -110,7 +142,7 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                             ref={reasonRef}
                             type="text"
                             id="reason"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
                             placeholder="Reason for time off..."
                           />
                         </div>
@@ -127,7 +159,7 @@ export default function CreateEventModal({ show, setShow, dayOff, onSubmit }: Cr
                   >
                     Send request
                   </button>
-                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') || 1} days from allowance</p> : null}
+                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance</p> : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

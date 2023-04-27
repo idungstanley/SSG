@@ -3,6 +3,7 @@ import { useGetSubHub } from '../../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setHubParentId } from '../../../../../features/hubs/hubSlice';
+import { AvatarWithInitials } from '../../../../../components';
 
 export default function ActiveSubHub() {
   const dispatch = useDispatch();
@@ -21,15 +22,45 @@ export default function ActiveSubHub() {
         data?.data?.hubs.map((subhub) => (
           <div key={subhub.id}>
             {currSubHubId === subhub.id && (
-              <section className="flex items-center justify-between pl-3 pr-1.5 py-1.5 text-sm hover:bg-gray-100 h-8 group">
-                <div id="subhubleft" className="flex items-center justify-center">
+              <div className="relative flex items-center justify-between pl-2" style={{ height: '30px' }}>
+                <span
+                  className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
+                  style={{ backgroundColor: '#BF00FF' }}
+                />
+
+                <div role="button" className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm">
                   <div className="flex items-center flex-1 min-w-0">
-                    <h4 className="tracking-wider capitalize truncate" style={{ fontSize: '10px' }}>
-                      {subhub.name}
-                    </h4>
+                    <div className="flex items-center justify-center">
+                      <AvatarWithInitials
+                        initials={subhub.name
+                          .split(' ')
+                          .slice(0, 2)
+                          .map((word) => word[0])
+                          .join('')
+                          .toUpperCase()}
+                        height="h-4"
+                        width="w-4"
+                        backgroundColour={subhub.color !== null ? subhub.color : 'blue'}
+                        roundedStyle="rounded"
+                      />
+                    </div>
+                    <span className="ml-4 overflow-hidden">
+                      <a
+                        className="capitalize truncate cursor-pointer"
+                        style={{
+                          fontSize: '13px',
+                          lineHeight: '15.56px',
+                          verticalAlign: 'baseline',
+                          letterSpacing: '0.28px'
+                        }}
+                        // onClick={() => handleLocation(subhub.id, subhub.name, subhub.parent_id)}
+                      >
+                        {subhub.name}
+                      </a>
+                    </span>
                   </div>
                 </div>
-              </section>
+              </div>
             )}
           </div>
         ))}

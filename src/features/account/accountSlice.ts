@@ -30,6 +30,8 @@ interface AccountState {
   showUploadImage: boolean;
   userName: string;
   scrollTop: string | number;
+  baseColor: string;
+  lightBaseColor: string;
 }
 
 const initialState: AccountState = {
@@ -40,7 +42,9 @@ const initialState: AccountState = {
   paletteDropdown: { show: false },
   showUploadImage: false,
   userName: '',
-  scrollTop: ''
+  scrollTop: '',
+  baseColor: '#BF00FFB2',
+  lightBaseColor: '#BF00FF21'
 };
 
 export const accountSlice = createSlice({

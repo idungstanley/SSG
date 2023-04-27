@@ -74,7 +74,8 @@ function CreateWorkspace() {
     createWSMutation.mutate({
       name,
       emails,
-      companySize
+      companySize,
+      color: bgAvatar
     });
   };
 
