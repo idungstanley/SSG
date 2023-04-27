@@ -65,6 +65,11 @@ export default function TaskListViews({
     );
   };
 
+  const setOptions = (id: string) => {
+    setheaderId(id);
+    setShowSortModal(!showSortModal);
+  };
+
   useEffect(() => {
     dispatch(setSortArray(sortAbleArr));
     setQuerySwitch(!querySwitch);
@@ -129,7 +134,7 @@ export default function TaskListViews({
                       >
                         <span
                           className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
-                          onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                          onClick={() => sortArr.length > 0 && setOptions(col.id)}
                         >
                           {col.value}
                         </span>
@@ -183,7 +188,7 @@ export default function TaskListViews({
                       >
                         <span
                           className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
-                          onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                          onClick={() => sortArr.length > 0 && setOptions(col.id)}
                         >
                           {col.value}
                         </span>
@@ -246,7 +251,7 @@ export default function TaskListViews({
                       </span>
                       <span
                         className="truncate font-bold hover:text-clip cursor-pointer  hover:w-10"
-                        onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                        onClick={() => sortArr.length > 0 && setOptions(col.id)}
                       >
                         {col.value}
                       </span>
@@ -301,7 +306,7 @@ export default function TaskListViews({
                       </span>
                       <span
                         className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10"
-                        onClick={() => sortArr.length > 0 && setShowSortModal(!showSortModal)}
+                        onClick={() => sortArr.length > 0 && setOptions(col.id)}
                       >
                         {col.value}
                       </span>
