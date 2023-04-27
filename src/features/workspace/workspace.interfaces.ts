@@ -11,6 +11,31 @@ export interface IWorkspaceRes {
     };
   };
 }
+export interface IAttachments {
+  data: {
+    attachments: [
+      {
+        id: string;
+        path: string;
+        physical_file: {
+          created_at: string;
+          display_name: string;
+          id: string;
+          name: string;
+          size: number;
+          updated_at: string;
+          file_format: {
+            extension: string;
+            icon_name: string;
+            key: string;
+            mime: string;
+            name: string;
+          };
+        };
+      }
+    ];
+  };
+}
 
 interface IWorkspace {
   id: string;
