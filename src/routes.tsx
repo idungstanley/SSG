@@ -152,19 +152,7 @@ export const routes = (user: IUser | null) =>
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
-        ...inbox,
-        {
-          path: 'settings/team-members/invites',
-          element: <TeamMemberInvitesPage />
-        },
-        {
-          path: 'settings/team-members/groups',
-          element: <TeamMemberGroupsPage />
-        },
-        {
-          path: 'settings/team-members/groups/:teamMemberGroupId/members',
-          element: <TeamMemberGroupMembersPage />
-        }
+        ...inbox
       ]
     },
     {
@@ -202,6 +190,10 @@ export const routes = (user: IUser | null) =>
         {
           path: 'team-members/groups/:teamMemberGroupId',
           element: <TeamMemberGroupGeneralSettingsPage />
+        },
+        {
+          path: 'team-members/groups/:teamMemberGroupId/members',
+          element: <TeamMemberGroupMembersPage />
         }
       ]
     },
