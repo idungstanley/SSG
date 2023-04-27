@@ -24,7 +24,7 @@ export function PopAssignModal({
   width: string;
 }) {
   return (
-    <div className="absolute  bg-white shadow-lg   w-56 h-64 rounded">
+    <div className="absolute  bg-white shadow-xl z-1000  w-64  opacity-1  rounded mb-8">
       {modalLoader ? (
         <p>
           <Spinner color="#4f46e5" />
@@ -47,6 +47,11 @@ export function PopAssignModal({
               )}
             </p>
           </div>
+
+          <div className="flex absolute justify-center top-0 right-0 px-4 mx-4 text-xs text-black border rounded bg-gray-100  text-docoration-thickness: 1px;">
+            ofline
+          </div>
+
           <div className="flex space-y-4 flex-col items-start">
             <span className="text-xs text-black text-decoration-thickness: 1px;">{userData.name}</span>
             <div className="space-x-2 flex items-center">
@@ -61,9 +66,13 @@ export function PopAssignModal({
                 {moment.utc(new Date()).format('MMMM Do YYYY, h:mm:ss a')}
               </span>
             </div>
-            <button className="border rounded border-black w-full py-2 text-black hover:bg-gray-400 ml-6 ">
-              View profile
-            </button>
+            <div>
+              <div>
+                <button className="flex   px-8 text-black hover:bg-gray-400 mx-6  border rounded w-full items-center justify-center ">
+                  View profile
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
