@@ -117,7 +117,7 @@ export default function Assignee({
           ) : (
             <span onClick={handleClick}>
               <UserPlusIcon
-                className="text-xl -ml-5 text-gray-400 cursor-pointer"
+                className="text-xl   text-gray-400 items-center justify-center cursor-pointer -ml-3"
                 style={{
                   width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
                 }}
@@ -181,12 +181,14 @@ export default function Assignee({
                           : null
                       }
                     >
-                      <AvatarWithInitials
-                        initials={item.user.initials as string}
-                        backgroundColour={item.colour}
-                        height="h-8"
-                        width="w-8"
-                      />
+                      <div>
+                        <AvatarWithInitials
+                          initials={item.user.initials as string}
+                          backgroundColour={item.colour}
+                          height="h-8"
+                          width="w-8"
+                        />
+                      </div>
 
                       <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
                     </div>
