@@ -1,8 +1,9 @@
 import requestNew from '../../app/requestNew';
 import { useQuery } from '@tanstack/react-query';
-import { IAllWorkspacesRes, IWorkspaceRes } from './workspace.interfaces';
+import { IAllWorkspacesRes, IAttachments, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace } from './workspaceSlice';
+import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
 
 interface IData {
   name: string | number;
@@ -23,6 +24,51 @@ export const createWorkspaceService = (data: IData) => {
     }
   });
   return response;
+};
+
+export const createUploadAttatchment = ({
+  formData,
+  currentWorkspaceId,
+  accessToken
+}: {
+  formData: IFormData;
+  currentWorkspaceId: string;
+  accessToken: string;
+}) => {
+  const response = requestNew<IAttachments>({
+    url: 'attachments',
+    method: 'POST',
+    body: formData,
+    headers: currentWorkspaceId
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+          current_workspace_id: currentWorkspaceId
+        }
+      : undefined
+  });
+  return response;
+};
+
+export const getUploadAttatchment = ({ id, type }: { id: string; type: string }) => {
+  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+
+  return useQuery(['attachments', { id: id }], async () => {
+    const data = await requestNew<IAttachments | undefined>({
+      url: 'attachments',
+      method: 'GET',
+      params: {
+        type: type,
+        id: id
+      },
+      headers: currentWorkspaceId
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+            current_workspace_id: currentWorkspaceId
+          }
+        : undefined
+    });
+    return data;
+  });
 };
 
 export const getWorkspaceService = () => {
