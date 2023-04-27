@@ -17,15 +17,16 @@ interface UserSettingsType {
   handleClick: () => void;
 }
 
-interface User {
-  initials: string;
-  colour: string;
-}
+// interface User {
+//   initials: string;
+//   colour: string;
+// }
 
 export default function UserSettingsModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { userData } = useAppSelector((state) => state.userSetting);
 
   const logoutMutation = useMutation(logoutService, {
     onSuccess: () => {
@@ -115,19 +116,19 @@ export default function UserSettingsModal() {
     }
   ];
 
-  const getLocalWS: User = JSON.parse(localStorage.getItem('user') as string) as User;
+  // const getLocalWS: User = JSON.parse(localStorage.getItem('user') as string) as User;
 
-  const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
+  // const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div className="mt-1">
         <Menu.Button>
           <ToolTip tooltip="User Settings">
             <AvatarWithInitials
-              initials={workspaceInitials.toUpperCase()}
+              initials={userData?.initials.toUpperCase() as string}
               height="h-5"
               width="w-5"
-              backgroundColour={getLocalWS?.colour}
+              backgroundColour={userData?.color as string | undefined}
             />
           </ToolTip>
         </Menu.Button>
