@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { Dayjs } from 'dayjs';
 import { HTMLAttributes, ReactNode } from 'react';
-import { cl } from '../../../../utils';
+import { cl } from '../../../utils';
 import { LeaveType } from '../types/calendar';
 
 interface DayProps extends HTMLAttributes<HTMLDivElement> {

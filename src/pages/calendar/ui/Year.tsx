@@ -1,14 +1,15 @@
 import { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
+import Calendar from '..';
 import { useDaysOff } from '../lib/daysOffContext';
 import { getYear } from '../lib/getDaysInYear';
 import Month from './Month';
 
-interface YearCalendarProps {
+interface YearProps {
   year: number;
 }
 
-export default function YearCalendar({ year }: YearCalendarProps) {
+export default function Year({ year }: YearProps) {
   const { daysOff, setShowCreateDayOffModal, setNewDayOff, activeMemberId } = useDaysOff();
   const months = useMemo(() => getYear(year), [year]);
 
@@ -22,7 +23,7 @@ export default function YearCalendar({ year }: YearCalendarProps) {
   return (
     <section className="flex justify-center flex-wrap mx-auto max-w-3xl gap-x-8 gap-y-16 px-4 py-16 xl:max-w-none">
       {months.map((month) => (
-        <Month
+        <Calendar.Month
           daysOff={currentDaysOff}
           handleEvent={handleEvent}
           key={month.name}

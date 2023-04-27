@@ -44,7 +44,7 @@ import RenderList from './pages/workspace/lists/RenderList';
 import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import Calendar from './pages/workspace/calendar';
+import Calendar from './pages/calendar';
 import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
 import Home from './pages/workspace/home/Home';
@@ -57,9 +57,9 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import WallchartPage from './pages/workspace/calendar/ui/pages/WallchartPage';
-import YearPage from './pages/workspace/calendar/ui/pages/YearPage';
-import LeaveTypesPage from './pages/workspace/calendar/ui/pages/LeaveTypesPage';
+import WallchartPage from './pages/calendar/ui/pages/WallchartPage';
+import YearPage from './pages/calendar/ui/pages/YearPage';
+import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
 
 const inbox = [
   {
