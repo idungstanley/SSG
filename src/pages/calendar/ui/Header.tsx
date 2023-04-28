@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
 import { Tabs } from './Tabs';
 

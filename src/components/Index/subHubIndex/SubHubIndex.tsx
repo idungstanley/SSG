@@ -20,13 +20,13 @@ import {
   setActiveItem,
   setShowHub
 } from '../../../features/workspace/workspaceSlice';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data, status } = useGetSubHub({
@@ -95,7 +95,7 @@ export default function SubHubIndex() {
         title: name
       })
     );
-    navigate(`/h/${id}`);
+    // navigate(`/h/${id}`);
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
   };
 

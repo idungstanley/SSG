@@ -1,9 +1,9 @@
 import { Menu, Transition } from '@headlessui/react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
-import { AvatarWithInitials } from '../../../../components';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { cl } from '../../../../utils';
+import { AvatarWithInitials } from '../../../components';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { cl } from '../../../utils';
 import { useDaysOff } from '../lib/daysOffContext';
 
 export default function MembersList() {

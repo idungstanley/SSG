@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
-import React from 'react';
-import { useAppSelector } from '../../../../app/hooks';
-import DirectoryList from './components/Directories';
-import { cl } from '../../../../utils';
+import React, { useState } from 'react';
+import { useAppSelector } from '../../../../../app/hooks';
+import DirectoryList from '../components/Directories';
+import { cl } from '../../../../../utils';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { RiBook2Line } from 'react-icons/ri';
 
 function BookCaseIcon() {
   return (
@@ -29,26 +30,45 @@ function BookShelfIcon() {
   );
 }
 
-function LibraryData() {
+function DirectoryTab() {
   const { pathname } = useLocation();
-  const { showSidebar } = useAppSelector((state) => state.account);
-
+  const [showDirectoryFile, setShowDirectoryFile] = useState<boolean>(false);
+  const { showSidebar, lightBaseColor } = useAppSelector((state) => state.account);
+  const handleClick = () => {
+    setShowDirectoryFile((prev) => !prev);
+  };
   const isBookShelf = pathname.split('/')[2] === 'shelf';
 
   return (
     <div className={cl(!showSidebar && 'overflow-x-hidden w-12')}>
-      <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
-      <LibraryNavigation label="Shelf" path="shelf" icon={<BookShelfIcon />} />
-      {isBookShelf ? (
-        <div className="ml-5">
-          <DirectoryList />
+      <div
+        className="relative flex items-center gap-5 p-2 hover:bg-gray-100"
+        onClick={handleClick}
+        style={{ backgroundColor: showDirectoryFile ? lightBaseColor : undefined, height: '25px' }}
+      >
+        {showDirectoryFile && (
+          <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
+        )}
+        <RiBook2Line />
+        <p>Directory</p>
+      </div>
+      <hr />
+      {showDirectoryFile && (
+        <div className="pl-4">
+          <LibraryNavigation label="Case" path="case" icon={<BookCaseIcon />} />
+          <LibraryNavigation label="Shelf" path="shelf" icon={<BookShelfIcon />} />
+          {isBookShelf ? (
+            <div className="ml-5">
+              <DirectoryList />
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
 
-export default LibraryData;
+export default DirectoryTab;
 
 interface LibraryNavigationProps {
   label: string;

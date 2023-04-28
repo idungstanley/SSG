@@ -56,7 +56,6 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       bg: 'green'
     }
   ];
-
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
   const { mutate } = UseUpdateTaskStatusService2();

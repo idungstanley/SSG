@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
-import { useAppDispatch } from '../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   setActiveEntity,
@@ -28,6 +28,7 @@ export default function WList({
 }) {
   const dispatch = useAppDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
+  const { showExtendedBar } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
   const { walletId } = useParams();
 
@@ -105,7 +106,7 @@ export default function WList({
               paddingLeft={Number(paddingLeft) + 15}
             />
           ) : null}
-          {wallet.lists.length && showSubWallet ? (
+          {wallet.lists.length && showSubWallet && !showExtendedBar ? (
             <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
           ) : null}
         </div>

@@ -1,9 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { ListBox } from '../../../components/ListBox';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
-import ListBox from './ListBox';
 
 export default function CreateEventModal() {
   const {
@@ -116,7 +116,7 @@ export default function CreateEventModal() {
                       {dayOff ? (
                         <div className="flex w-full justify-between items-center">
                           <p>
-                            Starting{' '}
+                            Starting
                             <span className="border rounded-md p-2 ml-2">{dayOff.start.format('DD.MM.YYYY')}</span>
                           </p>
                           <p>

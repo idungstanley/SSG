@@ -35,7 +35,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
@@ -74,6 +74,11 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   };
 
   const handleClick = (id: string) => {
+    if (!showSidebar) {
+      navigate(`/h/${id}`, {
+        replace: true
+      });
+    }
     const isMatch = id === showChildren;
     dispatch(setOpenedHubId(id));
     dispatch(setCreateWLID(id));
@@ -122,7 +127,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
-          className={cl('z-10', !showSidebar && 'overflow-x-hidden w-12')}
+          className={cl('z-10', !showSidebar && 'overflow-hidden w-12')}
         >
           <div className="relative flex flex-col">
             <HubItem
@@ -146,7 +151,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                     paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && showChildren ? (
+                {hub.lists.length && showChildren && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '48' : '50'}`} />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}

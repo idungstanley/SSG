@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { cl } from '../../../../utils';
+import { cl } from '../../../utils';
 
 const tabs = [
   { name: 'Wallchart', href: '/calendar' },

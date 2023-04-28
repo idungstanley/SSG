@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
@@ -24,17 +24,18 @@ export default function Toggle() {
       })
     );
   };
-
-  if (!showSidebar && activePlaceId !== null) {
-    dispatch(setShowExtendedBar(true));
-  }
+  useEffect(() => {
+    if (!showSidebar && activePlaceId !== null) {
+      dispatch(setShowExtendedBar(true));
+    }
+  }, [showSidebar, activePlaceId]);
 
   return (
     <div
       onClick={closeOrShowSidebar}
       className={cl(
         'absolute z-20 text-indigo-900 cursor-pointer',
-        showSidebar ? 'top-12 right-2' : 'top-36 right-6 mt-2'
+        showSidebar ? 'top-12 right-2' : 'top-36 right-7 mt-2'
       )}
     >
       {!showSidebar ? (
