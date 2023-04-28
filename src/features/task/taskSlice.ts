@@ -118,7 +118,8 @@ interface TaskState {
   showTaskUploadModal: boolean;
   timerStatus: boolean;
   filterTaskByAssigneeIds: string | null | undefined;
-  sortArr: SortOption[];
+  sortAbleArr: SortOption[];
+  sortArr: string[];
 }
 
 const initialState: TaskState = {
@@ -164,6 +165,7 @@ const initialState: TaskState = {
   showTaskUploadModal: false,
   timerStatus: false,
   filterTaskByAssigneeIds: null,
+  sortAbleArr: [],
   sortArr: []
 };
 
@@ -331,6 +333,9 @@ export const taskSlice = createSlice({
       state.filterTaskByAssigneeIds = action.payload;
     },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
+      state.sortAbleArr = action.payload;
+    },
+    setSortArr(state, action: PayloadAction<string[]>) {
       state.sortArr = action.payload;
     }
   }
@@ -376,6 +381,7 @@ export const {
   setShowTaskUploadModal,
   setTimerStatus,
   setFilterTaskByAssigneeIds,
-  setSortArray
+  setSortArray,
+  setSortArr
 } = taskSlice.actions;
 export default taskSlice.reducer;
