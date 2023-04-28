@@ -116,7 +116,10 @@ textarea {
 
 .sortClose {
   display: none;
-  transition: all .7s ease-in-out;
+  transition: all 0.7s ease-in-out;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .sortClose-group:hover {
@@ -130,4 +133,13 @@ textarea {
 
 .alt-task:nth-child(odd) {
   background-color: #edecefcd;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 10;
+  }
 }

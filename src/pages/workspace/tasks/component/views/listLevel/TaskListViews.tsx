@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import AddColumnDropdown from '../../../dropdown/AddColumnDropdown';
-import { getTaskColumns, setCloseTaskListView, setSortArray } from '../../../../../../features/task/taskSlice';
+import {
+  getTaskColumns,
+  setCloseTaskListView,
+  setSortArr,
+  setSortArray
+} from '../../../../../../features/task/taskSlice';
 import '../../views/view.css';
 import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
@@ -11,10 +16,8 @@ import { MdDragIndicator } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
-// import { GiCancel } from 'react-icons/gi';
 import SortModal from '../../../../../../components/SortModal/SortModal';
 import { AiOutlineClose } from 'react-icons/ai';
-// import { useQueryClient } from '@tanstack/react-query';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 export type SortOption = {
@@ -34,46 +37,35 @@ export default function TaskListViews({
   const dispatch = useAppDispatch();
   const [dropDown, setdropDown] = useState(false);
   const { closeTaskListView } = useAppSelector((state) => state.task);
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const { taskColumns, hideTask, sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const [showDropdownFieldModal, setShowDropdownFieldModal] = useState(false);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const [headerId, setheaderId] = useState<string>('');
   const [columns, setColumns] = useState([...columnsHead]);
   const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
-  const [sortAbleArr, setSortAbleArr] = useState<SortOption[]>([]);
 
   const { data } = useList(listId);
-  const [sortArr, setSortArr] = useState<string[]>([]);
   const [querySwitch, setQuerySwitch] = useState<boolean>(false);
 
   const handleSort = (header: string, id: string) => {
     const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'task' : header.toLowerCase();
     setheaderId(id);
     if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
-    setSortArr((prev) => [...prev, header]);
-    setSortAbleArr((prev) => [...prev, { dir: 'asc', field: headerTxt }]);
+    dispatch(setSortArr([...sortArr, header]));
+    dispatch(setSortArray([...sortAbleArr, { dir: 'asc', field: headerTxt }]));
     setQuerySwitch(!querySwitch);
   };
 
   const handleRemoveFilter = (title: string): void => {
     const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
-    setSortArr((prev) => prev.filter((el) => el !== title));
-    setSortAbleArr((prev) =>
-      prev.filter((el) => {
-        return el.field !== headerTxt;
-      })
-    );
+    dispatch(setSortArr(sortArr.filter((el) => el !== title)));
+    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
   };
 
   const setOptions = (id: string) => {
     setheaderId(id);
     setShowSortModal(!showSortModal);
   };
-
-  useEffect(() => {
-    dispatch(setSortArray(sortAbleArr));
-    setQuerySwitch(!querySwitch);
-  }, [sortAbleArr]);
 
   useEffect(() => {
     if (!data) {
@@ -166,13 +158,8 @@ export default function TaskListViews({
                             )}
                           </>
                         )}
-                        {showSortModal && headerId === col.id && (
-                          <SortModal
-                            headers={sortArr}
-                            toggleModal={setShowSortModal}
-                            arr={{ sortAbleArr, setSortAbleArr }}
-                            handleSortFn={handleSort}
-                          />
+                        {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                          <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                         )}
                       </div>
                     )
@@ -220,13 +207,8 @@ export default function TaskListViews({
                             )}
                           </>
                         )}
-                        {showSortModal && headerId === col.id && (
-                          <SortModal
-                            headers={sortArr}
-                            toggleModal={setShowSortModal}
-                            arr={{ sortAbleArr, setSortAbleArr }}
-                            handleSortFn={handleSort}
-                          />
+                        {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                          <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                         )}
                       </div>
                     )
@@ -280,13 +262,8 @@ export default function TaskListViews({
                           )}
                         </>
                       )}
-                      {showSortModal && headerId === col.id && (
-                        <SortModal
-                          headers={sortArr}
-                          toggleModal={setShowSortModal}
-                          arr={{ sortAbleArr, setSortAbleArr }}
-                          handleSortFn={handleSort}
-                        />
+                      {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                        <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                       )}
                     </div>
                   )
@@ -335,13 +312,8 @@ export default function TaskListViews({
                           )}
                         </>
                       )}
-                      {showSortModal && headerId === col.id && (
-                        <SortModal
-                          headers={sortArr}
-                          toggleModal={setShowSortModal}
-                          arr={{ sortAbleArr, setSortAbleArr }}
-                          handleSortFn={handleSort}
-                        />
+                      {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                        <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                       )}
                     </div>
                   )
