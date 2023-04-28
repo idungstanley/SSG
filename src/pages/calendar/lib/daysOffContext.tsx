@@ -20,7 +20,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '64dd1769-85b6-4877-a7f9-020278ed2947'
-    }
+    },
+    isApproved: true
   },
   {
     id: '2',
@@ -35,7 +36,8 @@ const initialData = [
     reason: 'Blah blah blah blah',
     user: {
       id: '64dd1769-85b6-4877-a7f9-020278ed2947'
-    }
+    },
+    isApproved: true
   },
   {
     id: '3',
@@ -50,7 +52,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
-    }
+    },
+    isApproved: false
   },
   {
     id: '4',
@@ -65,7 +68,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
-    }
+    },
+    isApproved: false
   }
 ];
 
@@ -120,7 +124,7 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
     setLeaveTypes((prev) => [...prev.filter((i) => i.id !== id)]);
 
   const onCreateDayOff = useCallback(
-    ({ type, reason, start, end, memberId }: onCreateDayOffProps) => {
+    ({ type, reason, start, end, memberId, isApproved }: onCreateDayOffProps) => {
       const dayOff = {
         id: Date.now().toString(),
         reason,
@@ -129,7 +133,8 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
         end,
         user: {
           id: memberId
-        }
+        },
+        isApproved
       };
 
       setDaysOff((prev) => [...prev, dayOff]);
