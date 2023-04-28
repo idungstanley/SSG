@@ -22,7 +22,7 @@ export default function OpenExtBtn() {
 
   return (
     <span
-      className={`absolute -right-2 top-4 z-30 bg-white rounded-full border-2 border-inherit ${
+      className={`absolute cursor-pointer -right-2 top-4 z-30 bg-white rounded-full border-2 border-inherit ${
         extendedAppName ? 'block' : 'hidden'
       }`}
     >

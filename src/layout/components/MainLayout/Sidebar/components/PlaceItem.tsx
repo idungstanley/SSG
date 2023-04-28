@@ -49,7 +49,9 @@ export default function PlaceItem({
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : undefined
+    zIndex: isDragging ? 1 : undefined,
+    height: '50px',
+    paddingLeft: '25px'
   };
 
   const resetSelectedPlace = () => {
@@ -65,14 +67,14 @@ export default function PlaceItem({
       id={`${label}`}
       className={cl(
         !isActivePlace ? 'hover:bg-gray-100' : isActivePlace && searchStatus ? undefined : 'hover:bg-gray-100',
-        'focus:flex flex-col w-full pl-7 py-5 items-center relative group',
+        'focus:flex flex-col w-full flex justify-center relative group',
         bottomContent ? 'gap-2' : ''
       )}
       style={style}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
       {!searchStatus && (
-        <>
+        <div className="flex items-center">
           <span
             className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1 group-hover:opacity-100"
             ref={setNodeRef}
@@ -84,7 +86,7 @@ export default function PlaceItem({
           <div className="flex justify-between w-full">
             <div
               className={cl(
-                'flex gap-4 items-center content-center self-center',
+                'flex gap-5 items-center content-center self-center',
                 isActivePlace ? 'justify-center text-black font-extrabold' : ''
               )}
             >
@@ -98,7 +100,7 @@ export default function PlaceItem({
                 style={{
                   color: `${isActivePlace ? baseColor : ''}`,
                   fontSize: '13px',
-                  lineHeight: '18px',
+                  lineHeight: '16px',
                   verticalAlign: 'baseline',
                   letterSpacing: '0.65px',
                   fontWeight: '700'
@@ -108,7 +110,7 @@ export default function PlaceItem({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex items-center group-hover:opacity-100 opacity-0">
+              <div className="flex items-center opacity-0 group-hover:opacity-100">
                 {showSidebar && midContent}
                 {showSidebar && rightContent}
               </div>
@@ -126,7 +128,7 @@ export default function PlaceItem({
             </div>
           </div>
           {bottomContent}
-        </>
+        </div>
       )}
       {searchStatus && (
         <SearchTaskView items={hub} handleCloseSearchView={handleCloseSearchView} placeHolder="Search Hubs.." />

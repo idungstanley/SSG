@@ -116,7 +116,7 @@ export default function CreateEventModal() {
                       {dayOff ? (
                         <div className="flex w-full justify-between items-center">
                           <p>
-                            Starting{' '}
+                            Starting
                             <span className="border rounded-md p-2 ml-2">{dayOff.start.format('DD.MM.YYYY')}</span>
                           </p>
                           <p>

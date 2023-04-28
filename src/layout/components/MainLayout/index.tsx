@@ -60,8 +60,8 @@ export default MainLayout;
 
 function AdditionalHeader() {
   return (
-    <div className="w-full h-13 border-b p-2" style={{ height: '50px' }}>
-      <h1 className="text-center" style={{ height: '50px' }}>
+    <div className="w-full border-b" style={{ height: '50px' }}>
+      <h1 style={{ height: '50px' }} className="text-center">
         Header
       </h1>
     </div>

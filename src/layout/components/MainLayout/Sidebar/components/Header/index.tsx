@@ -22,7 +22,7 @@ export default function Header() {
   return (
     <div
       className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}
-      style={{ height: `${showSidebar ? '111px' : ''}` }}
+      style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/">
         <img className="w-14 h-14" src={MainLogo} alt="Workflow" />
@@ -39,7 +39,6 @@ export default function Header() {
                 {notificationCount}
               </p>
             )}
-
             <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />
           </span>
         ) : null}

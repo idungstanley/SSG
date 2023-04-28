@@ -31,7 +31,7 @@ export default function ExtendedItem({ item }: ItemProps) {
   return (
     <section
       className={`relative top-0 flex items-center text-gray-600 border-b cursor-pointer border-gray ${
-        !isExtSearchActive && 'p-2'
+        !isExtSearchActive && 'px-2'
       }`}
       style={{ height: '50px' }}
     >
