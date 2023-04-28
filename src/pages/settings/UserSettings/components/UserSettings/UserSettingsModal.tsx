@@ -6,7 +6,7 @@ import { AvatarWithInitials } from '../../../../../components';
 import { logoutService } from '../../../../../features/auth/authService';
 import { useDispatch } from 'react-redux';
 import { setVisibility, displayPrompt } from '../../../../../features/general/prompt/promptSlice';
-import { logout, setAuthData } from '../../../../../features/auth/authSlice';
+import { logout, selectCurrentUser, setAuthData } from '../../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip';
@@ -26,7 +26,8 @@ export default function UserSettingsModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { userData } = useAppSelector((state) => state.userSetting);
+  // const { userData } = useAppSelector((state) => state.userSetting);
+  const user = useAppSelector(selectCurrentUser);
 
   const logoutMutation = useMutation(logoutService, {
     onSuccess: () => {
@@ -125,10 +126,10 @@ export default function UserSettingsModal() {
         <Menu.Button>
           <ToolTip tooltip="User Settings">
             <AvatarWithInitials
-              initials={userData?.initials.toUpperCase() as string}
+              initials={user?.initials.toUpperCase() as string}
               height="h-5"
               width="w-5"
-              backgroundColour={userData?.color as string | undefined}
+              backgroundColour={user?.colour}
             />
           </ToolTip>
         </Menu.Button>

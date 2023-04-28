@@ -57,10 +57,10 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import { IUserData } from './features/workspace/workspace.interfaces';
 import WallchartPage from './pages/calendar/ui/pages/WallchartPage';
 import YearPage from './pages/calendar/ui/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
+import { IUser } from './types';
 
 const inbox = [
   {
@@ -89,7 +89,7 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUserData | undefined | null) =>
+export const routes = (user: IUser | null) =>
   createBrowserRouter([
     {
       path: 'onboarding',
