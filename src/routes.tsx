@@ -41,7 +41,7 @@ import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets';
 import RenderList from './pages/workspace/lists/RenderList';
-import { IUser } from './types';
+// import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Calendar from './pages/calendar';
@@ -57,6 +57,7 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
+import { IUserData } from './features/workspace/workspace.interfaces';
 import WallchartPage from './pages/calendar/ui/pages/WallchartPage';
 import YearPage from './pages/calendar/ui/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
@@ -88,7 +89,7 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUser | null) =>
+export const routes = (user: IUserData | undefined | null) =>
   createBrowserRouter([
     {
       path: 'onboarding',

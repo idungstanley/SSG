@@ -21,15 +21,15 @@ interface TaskItemProps {
     color?: string | null;
     parent_id?: string | null;
   };
-  handleClick: (id: string, index: number) => void;
-  index: number;
-  isSticky: boolean;
+  handleClick: (id: string, index?: number) => void;
+  index?: number;
+  isSticky?: boolean;
   showChildren: string | null | undefined;
-  handleLocation: (id: string, name: string, index: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   type: string;
-  topNumber: string;
-  zNumber: string;
+  topNumber?: string;
+  zNumber?: string;
 }
 export default function HubItem({
   handleClick,

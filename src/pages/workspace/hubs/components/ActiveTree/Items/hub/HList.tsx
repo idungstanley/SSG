@@ -39,7 +39,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const [stickyButtonIndex, setStickyButtonIndex] = useState<number>(-1);
+  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const id = hubId || walletId || listId || currentItemId;
 
   const type = 'hub';
@@ -48,7 +48,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     setShowChidren(id);
   }, []);
 
-  const handleLocation = (id: string, name: string, index: number) => {
+  const handleLocation = (id: string, name: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
     dispatch(
@@ -75,7 +75,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     );
   };
 
-  const handleClick = (id: string, index: number) => {
+  const handleClick = (id: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
       navigate(`/h/${id}`, {
@@ -136,7 +136,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
             <HubItem
               item={hub}
               index={index}
-              isSticky={stickyButtonIndex !== null && stickyButtonIndex <= index}
+              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
