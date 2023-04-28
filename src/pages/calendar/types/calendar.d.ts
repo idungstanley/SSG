@@ -23,6 +23,7 @@ export interface DayOff {
   type: LeaveType;
   reason: string;
   user: User;
+  isApproved: boolean;
 }
 
 export interface onCreateDayOffProps {
@@ -31,6 +32,7 @@ export interface onCreateDayOffProps {
   start: string;
   end: string;
   memberId: string;
+  isApproved: boolean;
 }
 
 interface LeaveType {

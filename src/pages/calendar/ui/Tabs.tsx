@@ -5,7 +5,8 @@ import { cl } from '../../../utils';
 const tabs = [
   { name: 'Wallchart', href: '/calendar' },
   { name: 'Calendar', href: '/calendar/year' },
-  { name: 'Leave types', href: '/calendar/types' }
+  { name: 'Leave types', href: '/calendar/types' },
+  { name: 'Manage', href: '/calendar/manage' }
 ];
 
 export function Tabs() {
