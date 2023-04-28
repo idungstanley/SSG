@@ -152,6 +152,7 @@ export default function NavigationItems() {
                 !showSidebar ? 'justify-center' : 'gap-2 items-center',
                 'flex cursor-pointer gap-2 items-center pl-6 p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
+              style={{ height: '30px' }}
             >
               {showLessOrMore[showMore ? 0 : 1].icon}
               {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}

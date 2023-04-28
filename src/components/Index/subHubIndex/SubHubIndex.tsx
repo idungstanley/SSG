@@ -38,14 +38,13 @@ export default function SubHubIndex() {
   }
   const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
-  const handleClick = (id: string, name?: string) => {
+  const handleClick = (id: string) => {
     setShowSubChidren(id);
     dispatch(setCreateWLID(id));
     dispatch(
       setActiveItem({
         activeItemType: 'subhub',
-        activeItemId: id,
-        activeItemName: name
+        activeItemId: id
       })
     );
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
