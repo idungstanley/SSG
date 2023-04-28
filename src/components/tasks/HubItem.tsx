@@ -21,19 +21,27 @@ interface TaskItemProps {
     color?: string | null;
     parent_id?: string | null;
   };
-  handleClick: (id: string, name?: string) => void;
+  handleClick: (id: string, index: number) => void;
+  index: number;
+  isSticky: boolean;
   showChildren: string | null | undefined;
-  handleLocation: (id: string, name: string, parentId?: string | null) => void;
+  handleLocation: (id: string, name: string, index: number) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
   type: string;
+  topNumber: string;
+  zNumber: string;
 }
 export default function HubItem({
   handleClick,
   item,
   handleLocation,
+  index,
+  isSticky,
   handleHubSettings,
   showChildren,
-  type
+  type,
+  topNumber = '0',
+  zNumber
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -74,10 +82,14 @@ export default function HubItem({
       <div
         className={`flex justify-between items-center group ${
           item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        }`}
+        } ${isSticky ? 'sticky z-50 bg-white divide-y' : ''}`}
         tabIndex={0}
-        onClick={() => handleClick(item.id, item.name)}
-        style={{ backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}` }}
+        onClick={() => handleClick(item.id, index)}
+        style={{
+          backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}`,
+          top: isSticky ? topNumber : '',
+          zIndex: isSticky ? zNumber : '10'
+        }}
       >
         <div className="relative flex items-center justify-between pl-3" style={{ height: '30px' }}>
           {item.id === hubId && (
@@ -134,7 +146,7 @@ export default function HubItem({
                     verticalAlign: 'baseline',
                     letterSpacing: '0.28px'
                   }}
-                  onClick={() => handleLocation(item.id, item.name, item.parent_id)}
+                  onClick={() => handleLocation(item.id, item.name, index)}
                 >
                   {item.name}
                 </a>

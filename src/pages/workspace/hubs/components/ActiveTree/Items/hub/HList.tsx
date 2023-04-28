@@ -39,6 +39,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const [stickyButtonIndex, setStickyButtonIndex] = useState<number>(-1);
   const id = hubId || walletId || listId || currentItemId;
 
   const type = 'hub';
@@ -47,7 +48,8 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     setShowChidren(id);
   }, []);
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, index: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -73,7 +75,8 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     );
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string, index: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
       navigate(`/h/${id}`, {
         replace: true
@@ -123,7 +126,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   };
   return (
     <>
-      {hubs.map((hub) => (
+      {hubs.map((hub, index) => (
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
@@ -132,11 +135,15 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
           <div className="relative flex flex-col">
             <HubItem
               item={hub}
+              index={index}
+              isSticky={stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
+              topNumber={taskType === 'subhub' ? '30px' : '0'}
+              zNumber={taskType === 'subhub' ? '100' : '999'}
             />
             {showSidebar && (
               <div>
