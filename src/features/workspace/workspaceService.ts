@@ -1,10 +1,9 @@
 import requestNew from '../../app/requestNew';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import { IAllWorkspacesRes, IAttachments, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace } from './workspaceSlice';
 import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
-import { useParams } from 'react-router-dom';
 
 interface IData {
   name: string | number;
@@ -52,20 +51,19 @@ export const createUploadAttatchment = ({
   return response;
 };
 
-export const uploadRecording = async (blob: Blob) => {
-  const { taskId } = useParams();
-  const queryClient = useQueryClient();
-  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
-  console.log('1', blob);
+export const uploadRecording = async (
+  blob: Blob,
+  currentWorkspaceId: string | null | undefined,
+  accessToken: string | null,
+  taskId: string,
+  queryClient: QueryClient
+) => {
   try {
     const formData: IFormData = new FormData();
     formData.append('files[0]', blob, 'recording.webm');
     formData.append('title', 'My Recording Title');
     formData.append('type', 'task');
     formData.append('id', `${taskId}`);
-
-    console.log('2', blob);
-
     const options: RequestInit = {
       method: 'POST',
       body: formData as BodyInit,

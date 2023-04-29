@@ -1,8 +1,10 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../../app/hooks';
 import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
-import { useMutation } from '@tanstack/react-query';
+// import { useMutation } from '@tanstack/react-query';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,21 +14,17 @@ export interface IFormData {
 export default function Recording() {
   const { taskId } = useParams();
 
-  // const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
 
   const { data } = getUploadAttatchment({ id: taskId as string, type: 'task' });
 
-  const createUpload = useMutation(uploadRecording, {
-    onSuccess: () => {
-      console.log('uploaded');
-    }
-  });
+  // const createUpload = useMutation(uploadRecording, {
+  //   onSuccess: () => {
+  //     console.log('uploaded');
+  //   }
+  // });
 
-  const handleSubmit = async (blob: Blob) => {
-    await createUpload.mutateAsync(blob);
-  };
-
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   // const uploadRecording = async (blob: Blob) => {
   //   try {
@@ -54,15 +52,19 @@ export default function Recording() {
   //   }
   // };
 
-  const { status, startRecording, stopRecording } = useReactMediaRecorder({
+  // const handleSubmit = async (blob: Blob) => {
+  //   uploadRecording(blob);
+  // };
+
+  const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
     screen: true,
     audio: true,
     mediaRecorderOptions: { mimeType: 'video/webm;codecs=vp9' },
     onStop: (blobUrl, blob) => {
-      handleSubmit(blob);
-      // uploadRecording(blob);
+      uploadRecording(blob, currentWorkspaceId, accessToken, taskId, queryClient);
     }
   });
+  console.log(mediaBlobUrl);
 
   return (
     <div>
