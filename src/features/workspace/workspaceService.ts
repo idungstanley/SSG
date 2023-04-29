@@ -1,9 +1,10 @@
 import requestNew from '../../app/requestNew';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { IAllWorkspacesRes, IAttachments, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace } from './workspaceSlice';
 import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
+import { useParams } from 'react-router-dom';
 
 interface IData {
   name: string | number;
@@ -32,13 +33,15 @@ export const createUploadAttatchment = ({
   accessToken
 }: {
   formData: IFormData;
-  currentWorkspaceId: string;
-  accessToken: string;
+  currentWorkspaceId: string | null | undefined;
+  accessToken: string | null | undefined;
 }) => {
   const response = requestNew<IAttachments>({
     url: 'attachments',
     method: 'POST',
-    body: formData,
+    data: {
+      formData
+    },
     headers: currentWorkspaceId
       ? {
           Authorization: `Bearer ${accessToken}`,
@@ -47,6 +50,38 @@ export const createUploadAttatchment = ({
       : undefined
   });
   return response;
+};
+
+export const uploadRecording = async (blob: Blob) => {
+  const { taskId } = useParams();
+  const queryClient = useQueryClient();
+  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  console.log('1', blob);
+  try {
+    const formData: IFormData = new FormData();
+    formData.append('files[0]', blob, 'recording.webm');
+    formData.append('title', 'My Recording Title');
+    formData.append('type', 'task');
+    formData.append('id', `${taskId}`);
+
+    console.log('2', blob);
+
+    const options: RequestInit = {
+      method: 'POST',
+      body: formData as BodyInit,
+      headers: currentWorkspaceId
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+            current_workspace_id: currentWorkspaceId
+          }
+        : undefined
+    };
+
+    await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, options);
+    queryClient.invalidateQueries(['attachments']);
+  } catch (error) {
+    return error;
+  }
 };
 
 export const getUploadAttatchment = ({ id, type }: { id: string; type: string }) => {
