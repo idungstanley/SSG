@@ -138,11 +138,12 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
               index={index}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
+              stickyButtonIndex={stickyButtonIndex}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
-              topNumber={taskType === 'subhub' ? '30px' : '0'}
+              topNumber={taskType === 'subhub' ? '80px' : '50px'}
               zNumber={taskType === 'subhub' ? '100' : '999'}
             />
             {showSidebar && (

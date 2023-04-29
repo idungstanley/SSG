@@ -30,6 +30,7 @@ interface TaskItemProps {
   type: string;
   topNumber?: string;
   zNumber?: string;
+  stickyButtonIndex: number | undefined;
 }
 export default function HubItem({
   handleClick,
@@ -37,6 +38,7 @@ export default function HubItem({
   handleLocation,
   index,
   isSticky,
+  stickyButtonIndex,
   handleHubSettings,
   showChildren,
   type,
@@ -82,7 +84,7 @@ export default function HubItem({
       <div
         className={`flex justify-between items-center group ${
           item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        } ${isSticky ? 'sticky z-50 bg-white divide-y' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky z-50 bg-white border-t border-b' : ''}`}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
         style={{
