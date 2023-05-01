@@ -6,31 +6,31 @@ import { LeaveType } from '../types/calendar';
 
 interface DayProps extends HTMLAttributes<HTMLDivElement> {
   day: Dayjs;
-  isCurrentDate: boolean;
-  isActiveDate: boolean; // date from this month or from previous / next
+  isCurrentDay: boolean;
+  isCurrentMonth: boolean; // date from this month or from previous / next
   rounded?: {
     bl: boolean;
     br: boolean;
     tl: boolean;
     tr: boolean;
   };
-  isDayOff: boolean; // Sat or Sun
+  isSatOrSun: boolean; // Saturday or Sunday
   isHighlighted: boolean;
   isSelected: boolean;
-  isHoliday: boolean;
+  isDayOff: boolean;
   children: ReactNode;
   leaveType?: LeaveType;
 }
 
 export default function Day({
-  isCurrentDate,
-  isActiveDate,
+  isCurrentDay,
+  isCurrentMonth,
   rounded,
-  isDayOff,
+  isSatOrSun,
   day,
   isHighlighted,
   isSelected,
-  isHoliday,
+  isDayOff,
   children,
   leaveType,
   ...props
@@ -40,10 +40,10 @@ export default function Day({
       as="div"
       {...props}
       className={cl(
-        isActiveDate
+        isCurrentMonth
           ? cl(
               'bg-white cursor-pointer font-medium text-gray-900',
-              isDayOff && 'bg-gray-100 text-gray-500',
+              isSatOrSun && 'bg-gray-100 text-gray-500',
               isSelected && 'bg-primary-600 hover:bg-primary-600',
               leaveType && `text-${leaveType.color}-400 bg-${leaveType.color}-100 hover:bg-${leaveType.color}-200`
               // : 'bg-primary-100 hover:bg-primary-200'
@@ -60,15 +60,15 @@ export default function Day({
       <Menu.Button
         className={cl(
           'w-7 h-7 flex items-center justify-center rounded-full',
-          isCurrentDate && 'bg-primary-500 text-white'
+          !isCurrentMonth && isCurrentDay && 'bg-primary-500 text-white'
         )}
       >
-        {isCurrentDate
+        {isCurrentDay
           ? day.date()
-          : isHoliday
+          : isDayOff
           ? isHighlighted
             ? day.date()
-            : isActiveDate
+            : isCurrentMonth
             ? leaveType?.icon
             : day.date()
           : day.date()}

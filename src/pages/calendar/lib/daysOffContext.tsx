@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
-import { DaysOffContextValue, LeaveType, onCreateDayOffProps } from '../types/calendar';
+import { DayOff, DaysOffContextValue, LeaveType, onCreateDayOffProps } from '../types/calendar';
 import { Dayjs } from 'dayjs';
 import { useAppSelector } from '../../../app/hooks';
 import { MdBeachAccess } from 'react-icons/md';
@@ -145,7 +145,7 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
     [activeMemberId]
   );
 
-  const manageStatus = (id: string, action: 'approve' | 'remove') =>
+  const manageStatus = (id: Pick<DayOff, 'id'>['id'], action: 'approve' | 'remove') =>
     action === 'approve'
       ? setDaysOff((prev) =>
           prev.map((i) => {
