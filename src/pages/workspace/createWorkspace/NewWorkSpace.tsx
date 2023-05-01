@@ -120,18 +120,16 @@ function CreateNewWorkspace() {
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
                 <input
                   type="text"
-                  className="mt-8 rounded text-3xl"
+                  className={cl(
+                    'mt-8 rounded text-3xl focus:outline-none',
+                    errorMsg.name ? 'border-4 border-solid border-red-600 focus:border-red-600 placeholder-red-500' : ''
+                  )}
+                  placeholder={errorMsg.name ? 'Name cannot be empty' : ''}
                   style={{ width: '1000px', height: '100px' }}
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 />
                 <h2 className="text-xl text-fuchsia-600">Name of company or organization can be used</h2>
-                {errorMsg.name && (
-                  <div className="flex">
-                    <IoIosWarning className="w-6 h-6 text-red-600" />
-                    <h2 className="text-xl text-red-600">Name cannot be empty</h2>
-                  </div>
-                )}
                 <div className="flex justify-center my-8">
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
