@@ -4,5 +4,7 @@ import { ITeamMembersAndGroup } from '../../../features/settings/teamMembersAndG
 export const isOwner = (members: ITeamMembersAndGroup[]) => {
   const { currentUserId } = useAppSelector((state) => state.auth);
 
-  return !!members.find((i) => i.user.id === currentUserId);
+  const user = members.find((i) => i.user.id === currentUserId);
+
+  return user?.role.key === 'owner';
 };

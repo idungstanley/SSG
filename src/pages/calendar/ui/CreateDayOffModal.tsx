@@ -72,7 +72,7 @@ export default function CreateDayOffModal() {
     }
   };
 
-  return show ? (
+  return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
@@ -187,5 +187,5 @@ export default function CreateDayOffModal() {
         </div>
       </Dialog>
     </Transition.Root>
-  ) : null;
+  );
 }

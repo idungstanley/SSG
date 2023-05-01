@@ -34,7 +34,7 @@ export default function MembersList() {
             <p className="truncate text-sm text-gray-500">{person.user.email}</p>
           </div>
 
-          <Menu as="div" className="absolute right-0 top-6 xl:relative xl:right-auto xl:top-auto xl:self-center">
+          <Menu as="div" className="">
             <div>
               <Menu.Button className="-m-2 flex items-center rounded-full p-2 text-gray-500 hover:text-gray-600">
                 <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
