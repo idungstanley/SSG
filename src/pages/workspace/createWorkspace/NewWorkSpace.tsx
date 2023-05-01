@@ -163,13 +163,6 @@ function CreateNewWorkspace() {
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
                       return (
-                        // <AvatarBg
-                        //   key={colour}
-                        //   size={10}
-                        //   colour={colour}
-                        //   // name="avatarBackgroudColor"
-                        //   onClick={() => setFormState({ ...formState, color: colour })}
-                        // />
                         <div key={colour} className="w-12 h-12 flex items-center">
                           <button
                             type="button"
