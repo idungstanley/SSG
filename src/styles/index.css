@@ -104,3 +104,8 @@ code {
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+.workspace-color-button:hover {
+    width: 48px !important;
+    height: 48px !important;
+}

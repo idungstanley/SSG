@@ -3,7 +3,7 @@ import Working from '../../../assets/icons/Working.svg';
 import MainLogo from '../../../assets/icons/mainIcon.svg';
 import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
-import { AvatarBg, InputAvatar } from '../../../components';
+import { InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { cl } from '../../../utils';
@@ -163,13 +163,21 @@ function CreateNewWorkspace() {
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
                       return (
-                        <AvatarBg
-                          key={colour}
-                          size={10}
-                          colour={colour}
-                          // name="avatarBackgroudColor"
-                          onClick={() => setFormState({ ...formState, color: colour })}
-                        />
+                        // <AvatarBg
+                        //   key={colour}
+                        //   size={10}
+                        //   colour={colour}
+                        //   // name="avatarBackgroudColor"
+                        //   onClick={() => setFormState({ ...formState, color: colour })}
+                        // />
+                        <div key={colour} className="w-12 h-12 flex items-center">
+                          <button
+                            type="button"
+                            className="rounded w-10 h-10 hover:w-20 hover:h-20 workspace-color-button"
+                            style={{ backgroundColor: colour }}
+                            onClick={() => setFormState({ ...formState, color: colour })}
+                          />
+                        </div>
                       );
                     })}
                   </div>
@@ -195,8 +203,10 @@ function CreateNewWorkspace() {
                     return (
                       <button
                         className={cl(
-                          formState.companySize === size.value ? 'border-fuchsia-600 border-8' : 'border-gray-400',
-                          'text-xl border p-2 rounded'
+                          formState.companySize === size.value
+                            ? 'bg-fuchsia-600 border-8 text-white'
+                            : 'border-gray-400 hover:text-fuchsia-600',
+                          'text-xl border p-2 rounded hover:border-fuchsia-600'
                         )}
                         key={size.label}
                         onClick={() => setFormState({ ...formState, companySize: size.value })}
