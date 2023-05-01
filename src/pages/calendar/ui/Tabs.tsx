@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { cl } from '../../../utils';
 import { useDaysOff } from '../lib/daysOffContext';
-import { isOwner } from '../lib/isOwner';
+import { isOwner } from '../lib/userUtils';
 
 const tabs = [
   { name: 'Wallchart', href: '/calendar' },

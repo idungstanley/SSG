@@ -4,7 +4,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { ListBox } from '../../../components/ListBox';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
-import { isOwner } from '../lib/isOwner';
+import { isOwner } from '../lib/userUtils';
 
 export default function CreateDayOffModal() {
   const {
