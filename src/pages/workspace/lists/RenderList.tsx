@@ -109,7 +109,7 @@ function RenderList() {
             </div>
           )}
           <div
-            className="block relative p-2 mx-2 border-l-4 border-gray-500 rounded-md"
+            className="block relative p-2 mx-2 pl-4 border-l-4 border-gray-500 rounded-md"
             style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
           >
             {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
@@ -133,7 +133,7 @@ function RenderList() {
             )}
             {listView && (
               <div className="pr-1 pt-0.5 w-full h-full">
-                <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
+                <div className="w-full overflow-auto " style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                   {paginatedTaskData?.map((task) => (
                     <div key={task?.id}>
                       {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}

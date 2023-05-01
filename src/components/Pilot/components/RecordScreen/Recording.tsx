@@ -1,10 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
-// import { useMutation } from '@tanstack/react-query';
+import { setRecording } from '../../../../features/workspace/workspaceSlice';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,59 +11,42 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { taskId } = useParams();
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { getRecording } = useAppSelector((state) => state.workspace);
 
-  const { data } = getUploadAttatchment({ id: taskId as string, type: 'task' });
+  console.log(getRecording);
 
-  // const createUpload = useMutation(uploadRecording, {
-  //   onSuccess: () => {
-  //     console.log('uploaded');
-  //   }
-  // });
-
+  const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
 
-  // const uploadRecording = async (blob: Blob) => {
-  //   try {
-  //     const formData: IFormData = new FormData();
-  //     formData.append('files[0]', blob, 'recording.webm');
-  //     formData.append('title', 'My Recording Title');
-  //     formData.append('type', 'task');
-  //     formData.append('id', `${taskId}`);
-
-  //     const options: RequestInit = {
-  //       method: 'POST',
-  //       body: formData as BodyInit,
-  //       headers: currentWorkspaceId
-  //         ? {
-  //             Authorization: `Bearer ${accessToken}`,
-  //             current_workspace_id: currentWorkspaceId
-  //           }
-  //         : undefined
-  //     };
-
-  //     await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, options);
-  //     queryClient.invalidateQueries(['attachments']);
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
-  // const handleSubmit = async (blob: Blob) => {
-  //   uploadRecording(blob);
-  // };
-
-  const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
+  const { status, startRecording, stopRecording } = useReactMediaRecorder({
     screen: true,
     audio: true,
     mediaRecorderOptions: { mimeType: 'video/webm;codecs=vp9' },
     onStop: (blobUrl, blob) => {
-      uploadRecording(blob, currentWorkspaceId, accessToken, taskId, queryClient);
+      uploadRecording(blob, currentWorkspaceId, accessToken, getRecording.id, queryClient, getRecording.type);
+      dispatch(
+        setRecording({
+          id: null,
+          type: null
+        })
+      );
     }
   });
-  console.log(mediaBlobUrl);
+
+  useEffect(() => {
+    if (status !== 'recording') {
+      dispatch(
+        setRecording({
+          id: activeItemId as string,
+          type: activeItemType as string
+        })
+      );
+    }
+  }, []);
 
   return (
     <div>
