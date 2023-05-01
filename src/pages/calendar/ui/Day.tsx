@@ -60,7 +60,7 @@ export default function Day({
       <Menu.Button
         className={cl(
           'w-7 h-7 flex items-center justify-center rounded-full',
-          !isCurrentMonth && isCurrentDay && 'bg-primary-500 text-white'
+          isCurrentMonth && isCurrentDay && 'bg-primary-500 text-white'
         )}
       >
         {isCurrentDay

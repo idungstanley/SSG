@@ -6,7 +6,7 @@ import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMe
 import { useDaysOff } from '../lib/daysOffContext';
 import { isOwner } from '../lib/isOwner';
 
-export default function CreateEventModal() {
+export default function CreateDayOffModal() {
   const {
     showCreateDayOffModal: show,
     newDayOff: dayOff,
@@ -65,14 +65,14 @@ export default function CreateEventModal() {
         isApproved
       });
 
+      // reset
       setNewDayOff(null);
-      setShowCreateDayOffModal(false);
-
       setType(leaveTypes[0]);
+      setShowCreateDayOffModal(false);
     }
   };
 
-  return (
+  return show ? (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
@@ -158,15 +158,28 @@ export default function CreateEventModal() {
                   </div>
                 </div>
 
+                {dayOff ? (
+                  <p className="py-2 text-center">
+                    Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance
+                  </p>
+                ) : null}
+
                 {/* bottom actions */}
-                <div className="mt-5 sm:mt-4 sm:flex gap-4 items-center">
+                <div className="mt-2 px-2 flex gap-4 justify-between items-center">
+                  <button
+                    onClick={onClose}
+                    type="button"
+                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-red-600 bg-red-100 hover:bg-red-200 border-red-300 shadow-sm sm:ml-3 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
+
                   <button
                     type="submit"
-                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm sm:ml-3 sm:w-auto"
+                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-primary-600 bg-primary-50 hover:bg-primary-200 border-primary-300 shadow-sm sm:ml-3 sm:w-auto"
                   >
                     {isUserOwner ? 'Create' : 'Send request'}
                   </button>
-                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance</p> : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -174,5 +187,5 @@ export default function CreateEventModal() {
         </div>
       </Dialog>
     </Transition.Root>
-  );
+  ) : null;
 }

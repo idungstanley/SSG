@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import { DayOff, DaysOffContextValue, LeaveType, onCreateDayOffProps } from '../types/calendar';
 import { Dayjs } from 'dayjs';
@@ -124,26 +124,21 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const onRemoveLeaveType = (id: Pick<LeaveType, 'id'>['id']) =>
     setLeaveTypes((prev) => [...prev.filter((i) => i.id !== id)]);
 
-  const onCreateDayOff = useCallback(
-    ({ type, reason, start, end, memberId, isApproved }: onCreateDayOffProps) => {
-      const dayOff = {
-        id: Date.now().toString(),
-        reason,
-        type,
-        start,
-        end,
-        user: {
-          id: memberId
-        },
-        isApproved
-      };
+  const onCreateDayOff = ({ type, reason, start, end, memberId, isApproved }: onCreateDayOffProps) => {
+    const dayOff = {
+      id: Date.now().toString(),
+      reason,
+      type,
+      start,
+      end,
+      user: {
+        id: memberId
+      },
+      isApproved
+    };
 
-      setDaysOff((prev) => [...prev, dayOff]);
-
-      setShowCreateDayOffModal(false);
-    },
-    [activeMemberId]
-  );
+    setDaysOff((prev) => [...prev, dayOff]);
+  };
 
   const manageStatus = (id: Pick<DayOff, 'id'>['id'], action: 'approve' | 'remove') =>
     action === 'approve'
