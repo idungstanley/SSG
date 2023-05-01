@@ -122,7 +122,7 @@ function CreateNewWorkspace() {
                   type="text"
                   className={cl(
                     'mt-8 rounded text-3xl focus:outline-none',
-                    errorMsg.name ? 'border-4 border-solid border-red-500 focus:border-red-500' : ''
+                    errorMsg.name ? 'border-4 border-solid border-red-600 focus:border-red-600 placeholder-red-500' : ''
                   )}
                   placeholder={errorMsg.name ? 'Name cannot be empty' : ''}
                   style={{ width: '1000px', height: '100px' }}
