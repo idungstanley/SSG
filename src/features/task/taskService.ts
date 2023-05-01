@@ -40,10 +40,10 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  const { sortArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   return useInfiniteQuery(
-    ['task', itemId, itemType, assigneeUserId],
+    ['task', itemId, itemType, assigneeUserId, sortArrUpdate],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -101,7 +101,6 @@ export const getOneTaskService = ({
   task_id: string | undefined | null;
   activeItemType?: string | null | undefined;
 }) => {
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -233,11 +232,10 @@ export const getTaskListService = ({
   listId: string | null | undefined;
   assigneeUserId: string | undefined | null;
 }) => {
-  // const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  const { sortArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortArr.length <= 0 ? null : sortArr;
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   return useInfiniteQuery(
     ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
 

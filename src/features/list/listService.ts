@@ -21,9 +21,9 @@ export const createListService = (data: { listName: string; hubId?: string | nul
 };
 
 // get lists
-export const getListService = (data: { queryKey: (string | undefined)[] }) => {
-  const hubID = data.queryKey[1];
-  const response = requestNew({
+export const getListService = (data: { getCurrentHubId: string | undefined | null }) => {
+  const hubID = data.getCurrentHubId;
+  const response = requestNew<IListDetailRes | undefined>({
     url: 'lists',
     method: 'GET',
     params: {
@@ -32,18 +32,6 @@ export const getListService = (data: { queryKey: (string | undefined)[] }) => {
   });
   return response;
 };
-
-// export const getListsListService = (data: { queryKey: (string | undefined)[] }) => {
-//   const walletID = data.queryKey[1];
-//   const response = requestNew({
-//     url: 'lists',
-//     method: 'GET',
-//     params: {
-//       wallet_id: walletID
-//     }
-//   });
-//   return response;
-// };
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
   // const queryClient = useQueryClient();

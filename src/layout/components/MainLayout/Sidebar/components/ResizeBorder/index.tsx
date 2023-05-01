@@ -26,7 +26,7 @@ export default function ResizeBorder({ onMouseDown, sidebarWidth }: ResizeBorder
         style={{
           cursor: 'ew-resize',
           width: `${sidebarWidth <= MIN_SIDEBAR_WIDTH ? '4px' : '2px'}`,
-          left: `${sidebarWidth <= MIN_SIDEBAR_WIDTH ? '5px' : '-1px'}`
+          right: `${sidebarWidth <= MIN_SIDEBAR_WIDTH ? '-2px' : '-1px'}`
         }}
         onMouseDown={(e) => onMouseDown(e)}
       ></div>

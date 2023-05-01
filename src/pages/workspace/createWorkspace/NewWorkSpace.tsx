@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { selectCurrentUser, setCurrentUser, setCurrentWorkspace } from '../../../features/auth/authSlice';
 import { createWorkspaceService } from '../../../features/workspace/workspaceService';
 import { useAppDispatch } from '../../../app/hooks';
+import { IoIosWarning } from 'react-icons/io';
 
 interface currentPageProps {
   name: boolean;
@@ -24,6 +25,10 @@ interface currentPageProps {
 }
 
 function CreateNewWorkspace() {
+  const [errorMsg, setErrorMsg] = useState({
+    name: false,
+    size: false
+  });
   const user = useSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
   const createWSMutation = useMutation(createWorkspaceService, {
@@ -115,7 +120,11 @@ function CreateNewWorkspace() {
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
                 <input
                   type="text"
-                  className="mt-8 rounded text-3xl"
+                  className={cl(
+                    'mt-8 rounded text-3xl focus:outline-none',
+                    errorMsg.name ? 'border-4 border-solid border-red-600 focus:border-red-600 placeholder-red-500' : ''
+                  )}
+                  placeholder={errorMsg.name ? 'Name cannot be empty' : ''}
                   style={{ width: '1000px', height: '100px' }}
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
@@ -125,7 +134,11 @@ function CreateNewWorkspace() {
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
                     style={{ fontSize: '35px' }}
-                    onClick={() => setCurrentPage({ ...currentPage, name: false, color: true })}
+                    onClick={() => {
+                      formState.name === ''
+                        ? setErrorMsg({ ...errorMsg, name: true })
+                        : setCurrentPage({ ...currentPage, name: false, color: true });
+                    }}
                   >
                     NEXT
                   </button>
@@ -145,9 +158,7 @@ function CreateNewWorkspace() {
                       type="button"
                       className="rounded w-24 h-24 text-white"
                       style={{ backgroundColor: formState.color }}
-                    >
-                      EG
-                    </button>
+                    ></button>
                   </section>
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
@@ -195,11 +206,21 @@ function CreateNewWorkspace() {
                     );
                   })}
                 </div>
+                {errorMsg.size && (
+                  <div className="flex">
+                    <IoIosWarning className="w-6 h-6 text-red-600" />
+                    <h2 className="text-xl text-red-600">Please select your company size</h2>
+                  </div>
+                )}
                 <div className="flex justify-center mb-8 mt-16">
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
                     style={{ fontSize: '35px' }}
-                    onClick={() => setCurrentPage({ ...currentPage, size: false, email: true })}
+                    onClick={() => {
+                      formState.companySize === ''
+                        ? setErrorMsg({ ...errorMsg, size: true })
+                        : setCurrentPage({ ...currentPage, size: false, email: true });
+                    }}
                   >
                     NEXT
                   </button>

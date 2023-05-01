@@ -34,10 +34,12 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
+  // console.log(walletAndListData);
   const { data: walletData } = getWalletServices({
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
   });
+  // console.log(walletData);
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { data } = useGetSubHub({
     parentId: currentItemId

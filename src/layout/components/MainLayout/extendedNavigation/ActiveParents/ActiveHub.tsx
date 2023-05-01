@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import FullScreenMessage from '../../../../../components/CenterMessage/FullScreenMessage';
-import { useAppSelector } from '../../../../../app/hooks';
-import { resetCurrentItem, setCurrentItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+// import { resetCurrentItem, setCurrentItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import { AvatarWithInitials } from '../../../../../components';
 import { Spinner } from '../../../../../common';
 import { useGetHubList, useGetHubWallet, useGetSubHub } from '../../../../../features/hubs/hubService';
@@ -16,17 +16,21 @@ import SHubDropdownList from '../../../../../components/ItemsListInSidebar/compo
 import ActiveSubHub from './ActiveSubHub';
 import DropdownList from '../../../../../components/ItemsListInSidebar/components/DropdownList';
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
+import { useNavigate, useParams } from 'react-router-dom';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { IHubDetails } from '../../../../../features/hubs/hubs.interfaces';
 
 export default function ActiveHub() {
-  const dispatch = useDispatch();
-  // const [isHovering, setIsHovering] = useState<number>(-1);
+  const dispatch = useAppDispatch();
   const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
+  const navigate = useNavigate();
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
   const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
     parentId: currentItemId
   });
+  const { hubId } = useParams();
   const subHubData = subHub?.data.hubs;
   const subWalletData = subwallet?.data.wallets;
   const { data, status } = useGetHubList({ query: null });
@@ -54,7 +58,7 @@ export default function ActiveHub() {
         }
         return null;
       });
-    } else if (activeItemType === 'subhub') {
+    } else if (hubId) {
       return subHubData?.map((subHub) => {
         if (subHub.id === activeItemId) {
           return <SHubDropdownList key={subHub.id} />;
@@ -81,7 +85,7 @@ export default function ActiveHub() {
 
   const displayClickedParent = () => {
     if (activeItemType === 'subhub') {
-      return subHubData?.map((subHub: dataProps) => {
+      return subHubData?.map((subHub: IHubDetails) => {
         if (subHub.id === activeItemId) {
           return <ActiveSubHub key={subHub.id} />;
         }
@@ -104,28 +108,15 @@ export default function ActiveHub() {
   };
 
   const handleClick = (id: string) => {
-    const isMatch = id === currentItemId;
-    if (isMatch) {
-      dispatch(setShowHub(false));
-      if (!currentItemId) {
-        dispatch(
-          setCurrentItem({
-            currentItemId: id,
-            currentItemType: 'hub'
-          })
-        );
-      } else {
-        dispatch(resetCurrentItem());
-      }
-    } else {
-      dispatch(setShowHub(true));
-      dispatch(
-        setCurrentItem({
-          currentItemId: id,
-          currentItemType: 'hub'
-        })
-      );
-    }
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: 'hub'
+      })
+    );
+    navigate(`/h/${id}`, {
+      replace: true
+    });
   };
 
   return status === 'success' ? (
@@ -136,23 +127,18 @@ export default function ActiveHub() {
             <li key={i.id} className="flex flex-col">
               <div
                 className={`flex justify-between items-center hover:bg-gray-100 relative ${
-                  i.id === currentItemId && 'bg-green-100 text-black-500'
+                  i.id === currentItemId && 'text-black-500'
                 }`}
-                style={{ height: '50px' }}
-                // onMouseEnter={() => handleMouseOver(index)}
-                // onMouseLeave={handleMouseOut}
+                style={{ height: '50px', backgroundColor: `${i.id === activeItemId ? '#BF00FF21' : ''}` }}
+                onClick={() => handleClick(i.id)}
               >
-                {i.id === currentItemId && <span className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500" />}
-                <div
-                  className="relative flex items-center justify-between gap-2 hover:bg-gray-100"
-                  style={{ height: '28px' }}
-                  // onMouseEnter={() => handleMouseOver(index)}
-                  // onMouseLeave={handleMouseOut}
-                >
+                {i.id === activeItemId && (
+                  <span className="absolute top-0 bottom-0 left-0 w-0.5" style={{ backgroundColor: '#BF00FF' }} />
+                )}
+                <div className="relative flex items-center justify-between gap-2" style={{ height: '28px' }}>
                   <div
                     role="button"
                     tabIndex={0}
-                    onClick={() => handleClick(i.id)}
                     className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
                   >
                     <div className="flex items-center flex-1 min-w-0 ml-2">
@@ -176,15 +162,10 @@ export default function ActiveHub() {
                     </div>
                   </div>
                 </div>
-                {/* <div
-                  className={`flex items-center space-x-1 justify-end pr-1 ${
-                    isHovering === index ? 'block' : 'hidden'
-                  }`}
-                >
-                  <MenuDropdown />
-                </div> */}
               </div>
-              <div className="flex items-center w-full border bg-green-50">{displayClickedParent()}</div>
+              <div className="flex items-center w-full" style={{ backgroundColor: '#BF00FF21' }}>
+                {displayClickedParent()}
+              </div>
               <hr />
               <div>{displayActiveItem()}</div>
             </li>

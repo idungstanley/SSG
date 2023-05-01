@@ -1,12 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Fragment, useCallback, useState } from 'react';
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { cl } from '../../../../utils';
+import Calendar from '..';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { cl } from '../../../utils';
 import { isSameOrAfter, isSameOrBefore } from '../lib/dateUtils';
 import { getDatesInRange } from '../lib/getDatesInRange';
 import { DayOff, MonthObject } from '../types/calendar';
-import Day from './Day';
 import MonthTitle from './MonthTitle';
 import Weeks from './Weeks';
 
@@ -96,7 +96,7 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
           const isActiveDate = day.isSame(month.month, 'month');
 
           return (
-            <Day
+            <Calendar.Day
               key={day.format()}
               leaveType={isDayOff?.type}
               isCurrentDate={currentDate.isSame(day, 'date')}
@@ -143,7 +143,7 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
                   </Menu.Items>
                 </Transition>
               ) : null}
-            </Day>
+            </Calendar.Day>
           );
         })}
       </div>

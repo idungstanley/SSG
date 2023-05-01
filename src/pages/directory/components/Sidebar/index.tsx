@@ -7,7 +7,7 @@ import Search from '../../../explorer/components/Search';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setShowCreateDirectorySlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import libraryIcon from '../../../../assets/icons/library.svg';
-import LibraryData from './LibraryData';
+import LibraryData from './LibraryTabs/DirectoryTab';
 
 function Sidebar() {
   const dispatch = useAppDispatch();
