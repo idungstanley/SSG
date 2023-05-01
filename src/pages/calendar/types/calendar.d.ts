@@ -54,4 +54,5 @@ export interface DaysOffContextValue {
   leaveTypes: LeaveType[];
   onAddLeaveType: (i: Omit<LeaveType, 'id'>) => void;
   onRemoveLeaveType: (i: Pick<LeaveType, 'id'>['id']) => void;
+  manageStatus: (id: string, action: 'approve' | 'remove') => void;
 }

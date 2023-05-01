@@ -99,7 +99,8 @@ export const DaysOffContext = createContext<DaysOffContextValue>({
   setNewDayOff: () => ({}),
   leaveTypes: [],
   onAddLeaveType: () => ({}),
-  onRemoveLeaveType: () => ({})
+  onRemoveLeaveType: () => ({}),
+  manageStatus: () => ({})
 });
 
 interface DaysOffProviderProps {
@@ -144,10 +145,24 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
     [activeMemberId]
   );
 
+  const manageStatus = (id: string, action: 'approve' | 'remove') =>
+    action === 'approve'
+      ? setDaysOff((prev) =>
+          prev.map((i) => {
+            if (i.id === id) {
+              i.isApproved = true;
+            }
+
+            return i;
+          })
+        )
+      : setDaysOff((prev) => prev.filter((i) => i.id !== id));
+
   return (
     <DaysOffContext.Provider
       value={{
         leaveTypes,
+        manageStatus,
         onAddLeaveType,
         onRemoveLeaveType,
         daysOff,

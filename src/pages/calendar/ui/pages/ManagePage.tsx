@@ -1,3 +1,4 @@
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import { AvatarWithInitials } from '../../../../components';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -16,20 +17,21 @@ export default function ManagePage() {
 
   const owner = isOwner(members);
 
-  const { daysOff } = useDaysOff();
-
-  const disapprovedDaysOff = filterDaysOff(daysOff, 'disapproved');
+  const { daysOff, manageStatus } = useDaysOff();
 
   if (!owner) {
     return <div>You have no right to do this</div>;
   }
 
+  const disapprovedDaysOff = filterDaysOff(daysOff, 'disapproved');
+
   return (
     <div className="w-full p-4">
       <div className="w-fit mx-auto">
-        <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
+        <ul role="list" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {disapprovedDaysOff.map((dayOff) => (
             <li key={dayOff.id} className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
+              {/* user info */}
               <div className="flex w-full items-center justify-between space-x-6 p-6">
                 <div className="flex-1 truncate">
                   <div className="flex items-center space-x-3">
@@ -44,23 +46,39 @@ export default function ManagePage() {
                 </div>
                 <AvatarWithInitials initials={getUser(members, dayOff.user.id)?.user.initials ?? ''} />
               </div>
-              <div>
-                <p>From {dayjs(dayOff.start).format('dddd, MMMM D, YYYY')}</p>
-                <p>To {dayjs(dayOff.end).format('dddd, MMMM D, YYYY')}</p>
-                <p>Reason: {dayOff.reason}</p>
-              </div>
-              <div>
-                <div className="-mt-px flex divide-x divide-gray-200">
-                  <div className="flex w-0 flex-1">
-                    <button className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold bg-red-50 text-red-900">
-                      Disapprove
-                    </button>
-                  </div>
-                  <div className="-ml-px flex w-0 flex-1">
-                    <button className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold bg-green-50 text-green-900">
-                      Approve
-                    </button>
-                  </div>
+
+              {/* day off info */}
+              <dl className="divide-y divide-gray-100 px-2 py-1 text-sm leading-6">
+                <div className="flex justify-between gap-x-4 py-1">
+                  <dt className="text-gray-500">Start</dt>
+                  <dd className="text-gray-700">
+                    <p>{dayjs(dayOff.start).format('MMMM D, YYYY')}</p>
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-x-4 py-1">
+                  <dt className="text-gray-500">End</dt>
+                  <dd className="text-gray-700">
+                    <p>{dayjs(dayOff.end).format('MMMM D, YYYY')}</p>
+                  </dd>
+                </div>
+                <div className="py-1">
+                  <dd className="text-gray-700">
+                    <p>{dayOff.reason}</p>
+                  </dd>
+                </div>
+              </dl>
+
+              {/* actions */}
+              <div className="grid grid-cols-2 py-1">
+                <div className="flex w-full h-full items-center justify-center">
+                  <button onClick={() => manageStatus(dayOff.id, 'remove')} className="text-red-900 p-2">
+                    <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="flex w-full h-full items-center justify-center">
+                  <button onClick={() => manageStatus(dayOff.id, 'approve')} className="text-green-900 p-2">
+                    <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
                 </div>
               </div>
             </li>
