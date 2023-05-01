@@ -108,7 +108,7 @@ export default function TaskListViews({
               />
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
-              <div className="group flex items-center">
+              <div className="group flex items-center ml-2">
                 <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
                   {status ? status : 'To Do'}
                 </span>

@@ -68,9 +68,9 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && taskId == task?.id
-            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? '  flex justify-between group ml-6 mb-px hover:bg-black-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableView
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
+            ? 'flex justify-between group ml-6 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableViewWrap && taskId == task?.id
             ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableViewWrap

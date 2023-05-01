@@ -48,7 +48,7 @@ export interface ICheckListItems {
   id: string;
   name: string;
   is_done: number;
-  assignees: [{ id: string; initials: string; colour: string }];
+  assignees: [{ id: string; initials: string; colour: string; name: string }];
   group_assignees: [];
   tags: [];
 }
@@ -63,13 +63,14 @@ export interface ITaskFullList {
   id: string;
   name: string;
   description: string | null;
+  avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
   status: string | null | undefined;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string }] | undefined;
+  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
   group_assignees?: [];
   custom_fields?: [];
   tags?: [];

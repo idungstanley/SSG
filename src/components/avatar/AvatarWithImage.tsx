@@ -14,16 +14,25 @@ function AvatarWithImage({
   roundedStyle = 'circular'
 }: AvatarWithInitialsProps) {
   return (
-    <div className="relative ">
-      <span
-        className={`inline-flex  items-center justify-center ${height} ${width} ${
+    <div className="relative">
+      <img
+        className={`inline-flex items-center justify-center  ${height} ${width} ${
           roundedStyle === 'circular' && 'rounded-full'
         } ${roundedStyle === 'rounded' && 'rounded'}`}
-      >
-        <img className="w-full h-full rounded-full cursor-pointer" src={image_path} alt="avatar" />
-      </span>
+        src={image_path}
+      />
     </div>
   );
 }
+
+// <div className="relative ">
+//   <span
+//     className={`inline-flex  items-center justify-center ${height} ${width} ${
+//       roundedStyle === 'circular' && 'rounded-full'
+//     } ${roundedStyle === 'rounded' && 'rounded'}`}
+//   >
+//     <img className="w-full h-full rounded-full cursor-pointer" src={image_path} alt="avatar" />
+//   </span>
+// </div>
 
 export default AvatarWithImage;
