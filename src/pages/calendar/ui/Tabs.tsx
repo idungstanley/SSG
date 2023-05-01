@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { cl } from '../../../utils';
 import { useDaysOff } from '../lib/daysOffContext';
-import { isOwner } from '../lib/userUtils';
+import { checkIsOwner } from '../lib/userUtils';
 
 const tabs = [
   { name: 'Wallchart', href: '/calendar' },
@@ -17,11 +17,11 @@ export function Tabs() {
   const members = data?.data.team_members ?? [];
   const { daysOff } = useDaysOff();
 
-  const owner = isOwner(members);
+  const isOwner = checkIsOwner(members);
 
   const count = daysOff.filter((i) => !i.isApproved).length;
 
-  const privateTabs = owner ? [{ name: 'Manage', href: '/calendar/manage', count }] : [];
+  const privateTabs = isOwner ? [{ name: 'Manage', href: '/calendar/manage', count }] : [];
 
   return (
     <nav className="-mb-px flex space-x-8" aria-label="Tabs">

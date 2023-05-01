@@ -4,7 +4,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { ListBox } from '../../../components/ListBox';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
-import { isOwner } from '../lib/userUtils';
+import { checkIsOwner } from '../lib/userUtils';
 
 export default function CreateDayOffModal() {
   const {
@@ -23,7 +23,7 @@ export default function CreateDayOffModal() {
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
-  const isUserOwner = isOwner(data?.data.team_members ?? []);
+  const isOwner = checkIsOwner(data?.data.team_members ?? []);
 
   const members = useMemo(
     () => data?.data.team_members.map((i) => ({ id: i.user.id, title: i.user.name })) ?? [],
@@ -54,7 +54,7 @@ export default function CreateDayOffModal() {
 
     if (reasonRef.current && member) {
       const reason = reasonRef.current.value;
-      const isApproved = isUserOwner;
+      const isApproved = isOwner;
 
       onCreateDayOff({
         type,
@@ -132,7 +132,7 @@ export default function CreateDayOffModal() {
                         </div>
                       ) : null}
 
-                      {isUserOwner && member ? (
+                      {isOwner && member ? (
                         <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
                       ) : null}
 
@@ -178,7 +178,7 @@ export default function CreateDayOffModal() {
                     type="submit"
                     className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-primary-600 bg-primary-50 hover:bg-primary-200 border-primary-300 shadow-sm sm:ml-3 sm:w-auto"
                   >
-                    {isUserOwner ? 'Create' : 'Send request'}
+                    {isOwner ? 'Create' : 'Send request'}
                   </button>
                 </div>
               </Dialog.Panel>
