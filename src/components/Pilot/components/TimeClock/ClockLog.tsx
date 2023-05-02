@@ -33,8 +33,11 @@ export default function ClockLog() {
   };
 
   const handleShowAllColumns = () => {
-    setHeaders((prev) => prev.map((header) => ({ ...header, hidden: false })));
+    setHeaders((prev) => prev.map((header) => ({ ...header, hidden: header.hidden ? !header.hidden : header.hidden })));
   };
+
+  const checkedField = headers.some((el) => el.hidden);
+
   const renderItemEntries = () => {
     if (getTaskEntries?.data.time_entries)
       if (getTaskEntries?.data.time_entries.length == 0) {
@@ -73,9 +76,10 @@ export default function ClockLog() {
                 >
                   <ul className="flex flex-col space-y-2 px-4 py-6">
                     <li
-                      className="cursor-pointer border-b py-1 capitalize flex justify-between"
+                      className="cursor-pointer border-b py-1 capitalize flex gap-1"
                       onClick={() => handleShowAllColumns()}
                     >
+                      <input type="checkbox" checked={checkedField ? false : true} />
                       show all
                     </li>
                     {headers.map((header) => {
