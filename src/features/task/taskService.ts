@@ -363,8 +363,10 @@ export const GetTimeEntriesService = ({
   itemId: string | null | undefined;
   trigger: string | null | undefined;
 }) => {
+  const { timeSortArr } = useAppSelector((state) => state.task);
+  const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
   return useQuery(
-    ['timeclock', { itemId: itemId }],
+    ['timeclock', { itemId: itemId }, updatesortArr],
     async () => {
       const data = await requestNew<ITimeEntriesRes | undefined>({
         url: 'time-entries',
@@ -372,6 +374,9 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId
+        },
+        data: {
+          sorting: updatesortArr
         }
       });
       return data;

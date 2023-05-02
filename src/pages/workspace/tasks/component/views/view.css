@@ -131,7 +131,7 @@ textarea {
   transform: translateX(0, 20);
 }
 
-.alt-task:nth-child(odd) {
+.alt-task:nth-child(even) {
   background-color: #edecefcd;
 }
 

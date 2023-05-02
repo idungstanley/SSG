@@ -4,6 +4,7 @@ import { listColumnProps } from '../../pages/workspace/tasks/component/views/Lis
 import { IField } from '../list/list.interfaces';
 import { IParent } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
+import { User } from '../../components/Pilot/components/TimeClock/ClockLog';
 
 export interface ICustomField {
   id: string;
@@ -121,7 +122,7 @@ interface TaskState {
   sortAbleArr: SortOption[];
   sortArr: string[];
   timeArr: string[];
-  timeSortArr: SortOption[];
+  timeSortArr: User[];
 }
 
 const initialState: TaskState = {
@@ -345,7 +346,7 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
+    setTimeSortArr(state, action: PayloadAction<User[]>) {
       state.timeSortArr = action.payload;
     }
   }
