@@ -9,6 +9,10 @@ export interface ITeamMembersAndGroup {
   };
   initials: string;
   colour: string;
+  role: {
+    key: string;
+    name: string;
+  };
 }
 
 export interface ITeamMembersAndGroupsReq {

@@ -35,10 +35,11 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const id = hubId || walletId || listId || currentItemId;
 
   const type = 'hub';
@@ -47,7 +48,8 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     setShowChidren(id);
   }, []);
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, index?: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -73,7 +75,13 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     );
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string, index?: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
+    if (!showSidebar) {
+      navigate(`/h/${id}`, {
+        replace: true
+      });
+    }
     const isMatch = id === showChildren;
     dispatch(setOpenedHubId(id));
     dispatch(setCreateWLID(id));
@@ -118,20 +126,24 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   };
   return (
     <>
-      {hubs.map((hub) => (
+      {hubs.map((hub, index) => (
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
-          className={cl('z-10', !showSidebar && 'overflow-x-hidden w-12')}
+          className={cl('z-10', !showSidebar && 'overflow-hidden w-12')}
         >
           <div className="relative flex flex-col">
             <HubItem
               item={hub}
+              index={index}
+              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
+              topNumber={taskType === 'subhub' ? '30px' : '0'}
+              zNumber={taskType === 'subhub' ? '100' : '999'}
             />
             {showSidebar && (
               <div>
@@ -146,7 +158,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                     paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && showChildren ? (
+                {hub.lists.length && showChildren && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '48' : '50'}`} />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}

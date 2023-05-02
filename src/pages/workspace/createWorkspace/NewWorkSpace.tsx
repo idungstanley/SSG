@@ -3,7 +3,7 @@ import Working from '../../../assets/icons/Working.svg';
 import MainLogo from '../../../assets/icons/mainIcon.svg';
 import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
-import { AvatarBg, InputAvatar } from '../../../components';
+import { InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { cl } from '../../../utils';
@@ -120,18 +120,16 @@ function CreateNewWorkspace() {
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
                 <input
                   type="text"
-                  className="mt-8 rounded text-3xl"
+                  className={cl(
+                    'mt-8 rounded text-3xl focus:outline-none',
+                    errorMsg.name ? 'border-4 border-solid border-red-600 focus:border-red-600 placeholder-red-500' : ''
+                  )}
+                  placeholder={errorMsg.name ? 'Name cannot be empty' : ''}
                   style={{ width: '1000px', height: '100px' }}
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 />
                 <h2 className="text-xl text-fuchsia-600">Name of company or organization can be used</h2>
-                {errorMsg.name && (
-                  <div className="flex">
-                    <IoIosWarning className="w-6 h-6 text-red-600" />
-                    <h2 className="text-xl text-red-600">Name cannot be empty</h2>
-                  </div>
-                )}
                 <div className="flex justify-center my-8">
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
@@ -165,13 +163,14 @@ function CreateNewWorkspace() {
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
                       return (
-                        <AvatarBg
-                          key={colour}
-                          size={10}
-                          colour={colour}
-                          // name="avatarBackgroudColor"
-                          onClick={() => setFormState({ ...formState, color: colour })}
-                        />
+                        <div key={colour} className="w-12 h-12 flex items-center">
+                          <button
+                            type="button"
+                            className="rounded w-10 h-10 hover:w-20 hover:h-20 workspace-color-button"
+                            style={{ backgroundColor: colour }}
+                            onClick={() => setFormState({ ...formState, color: colour })}
+                          />
+                        </div>
                       );
                     })}
                   </div>
@@ -197,8 +196,10 @@ function CreateNewWorkspace() {
                     return (
                       <button
                         className={cl(
-                          formState.companySize === size.value ? 'border-fuchsia-600 border-8' : 'border-gray-400',
-                          'text-xl border p-2 rounded'
+                          formState.companySize === size.value
+                            ? 'bg-fuchsia-600 border-8 text-white'
+                            : 'border-gray-400 hover:text-fuchsia-600',
+                          'text-xl border p-2 rounded hover:border-fuchsia-600'
                         )}
                         key={size.label}
                         onClick={() => setFormState({ ...formState, companySize: size.value })}

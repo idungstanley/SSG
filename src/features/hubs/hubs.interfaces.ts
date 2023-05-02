@@ -72,7 +72,7 @@ export interface IResponseCreateHubs {
 
 export interface IResponseGetHubs {
   data: {
-    hubs: IHub[];
+    hubs: IHubDetails[];
   };
 }
 

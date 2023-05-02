@@ -93,31 +93,31 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
 
           const isWeekend = Number(day.format('d')) === 0 || Number(day.format('d')) === 6;
           const isSelected = !!selectedDates.find((i) => i.isSame(day, 'date'));
-          const isActiveDate = day.isSame(month.month, 'month');
+          const isCurrentMonth = day.isSame(month.month, 'month');
 
           return (
             <Calendar.Day
               key={day.format()}
               leaveType={isDayOff?.type}
-              isCurrentDate={currentDate.isSame(day, 'date')}
-              isActiveDate={isActiveDate}
+              isCurrentDay={currentDate.isSame(day, 'date')}
+              isCurrentMonth={isCurrentMonth}
               rounded={{
                 tl: index === 0,
                 tr: index === 6,
                 bl: index === month.days.length - 7,
                 br: index === month.days.length - 1
               }}
-              isDayOff={isWeekend}
+              isSatOrSun={isWeekend}
               day={day}
               isHighlighted={highlightedDates.includes(day.format('YYYY-MM-DD'))}
               isSelected={isSelected} //.format('YYYY-MM-DD')).includes(day.format('YYYY-MM-DD'))
-              isHoliday={!!isDayOff}
+              isDayOff={!!isDayOff}
               // for event
-              onMouseEnter={isActiveDate && !isWeekend && isDayOff ? () => handleDateMouseEnter(isDayOff) : undefined}
-              onMouseLeave={isActiveDate && !isWeekend && isDayOff ? handleDateMouseLeave : undefined}
+              onMouseEnter={isCurrentMonth && !isWeekend && isDayOff ? () => handleDateMouseEnter(isDayOff) : undefined}
+              onMouseLeave={isCurrentMonth && !isWeekend && isDayOff ? handleDateMouseLeave : undefined}
               // for selection
-              onMouseDown={isActiveDate && !isWeekend && !isDayOff ? () => handleDateMouseDown(day) : undefined}
-              onMouseOver={isActiveDate && !isWeekend && isMouseDown ? () => handleDateMouseOver(day) : undefined}
+              onMouseDown={isCurrentMonth && !isWeekend && !isDayOff ? () => handleDateMouseDown(day) : undefined}
+              onMouseOver={isCurrentMonth && !isWeekend && isMouseDown ? () => handleDateMouseOver(day) : undefined}
             >
               {isDayOff ? (
                 <Transition

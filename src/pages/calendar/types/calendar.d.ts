@@ -23,6 +23,7 @@ export interface DayOff {
   type: LeaveType;
   reason: string;
   user: User;
+  isApproved: boolean;
 }
 
 export interface onCreateDayOffProps {
@@ -31,6 +32,7 @@ export interface onCreateDayOffProps {
   start: string;
   end: string;
   memberId: string;
+  isApproved: boolean;
 }
 
 interface LeaveType {
@@ -52,4 +54,5 @@ export interface DaysOffContextValue {
   leaveTypes: LeaveType[];
   onAddLeaveType: (i: Omit<LeaveType, 'id'>) => void;
   onRemoveLeaveType: (i: Pick<LeaveType, 'id'>['id']) => void;
+  manageStatus: (id: string, action: 'approve' | 'remove') => void;
 }

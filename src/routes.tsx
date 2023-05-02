@@ -41,7 +41,7 @@ import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets';
 import RenderList from './pages/workspace/lists/RenderList';
-import { IUser } from './types';
+// import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Calendar from './pages/calendar';
@@ -60,6 +60,8 @@ import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
 import WallchartPage from './pages/calendar/ui/pages/WallchartPage';
 import YearPage from './pages/calendar/ui/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
+import { IUser } from './types';
+import ManagePage from './pages/calendar/ui/pages/ManagePage';
 
 const inbox = [
   {
@@ -134,6 +136,10 @@ export const routes = (user: IUser | null) =>
             {
               path: 'types',
               element: <LeaveTypesPage />
+            },
+            {
+              path: 'manage',
+              element: <ManagePage />
             }
           ]
         },

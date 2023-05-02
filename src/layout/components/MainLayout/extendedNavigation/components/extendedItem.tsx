@@ -2,6 +2,7 @@ import React from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { BsPlusLg } from 'react-icons/bs';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId, setIsExtSearchActive, setShowModal } from '../../../../../features/workspace/workspaceSlice';
 import FavoritedExtension from '../../../../../pages/workspace/favorites/FavoritedExtension';
@@ -21,6 +22,7 @@ export interface ItemProps {
 export default function ExtendedItem({ item }: ItemProps) {
   const dispatch = useAppDispatch();
   const { isExtSearchActive, activePlaceName } = useAppSelector((state) => state.workspace);
+  const navigate = useNavigate();
 
   // const handleBack = () => {
   //   dispatch(setShowExtendedBar(false));
@@ -28,12 +30,18 @@ export default function ExtendedItem({ item }: ItemProps) {
   //   dispatch(setActivePlaceId(activePlaceIdForNavigation));
   //   dispatch(setActivePlaceName(activePlaceNameForNavigation));
   // };
+  const handleClick = () => {
+    if (item?.link) {
+      navigate(item.link);
+    }
+  };
   return (
     <section
       className={`relative top-0 flex items-center text-gray-600 border-b cursor-pointer border-gray ${
-        !isExtSearchActive && 'p-2'
+        !isExtSearchActive && 'px-2'
       }`}
       style={{ height: '50px' }}
+      onClick={handleClick}
     >
       {item?.name !== 'Favorites' && (
         <div

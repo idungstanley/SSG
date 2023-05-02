@@ -106,3 +106,40 @@ textarea {
 [contenteditable] {
   outline: 0px solid transparent;
 }
+
+.sortClose-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+}
+
+.sortClose {
+  display: none;
+  transition: all 0.7s ease-in-out;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.sortClose-group:hover {
+  background-color: rgba(161, 165, 168, 0.87);
+}
+
+.sortClose-group:hover .sortClose {
+  display: inline-block;
+  transform: translateX(0, 20);
+}
+
+.alt-task:nth-child(odd) {
+  background-color: #edecefcd;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 10;
+  }
+}

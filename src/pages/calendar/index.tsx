@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { DaysOffProvider } from './lib/daysOffContext';
-import CreateEventModal from './ui/CreateEventModal';
+import CreateDayOffModal from './ui/CreateDayOffModal';
 import Day from './ui/Day';
 import Header from './ui/Header';
 import Month from './ui/Month';
@@ -16,7 +16,7 @@ function Calendar() {
         <Outlet />
       </div>
 
-      <CreateEventModal />
+      <CreateDayOffModal />
     </DaysOffProvider>
   );
 }
