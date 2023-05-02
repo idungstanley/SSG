@@ -71,13 +71,29 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
 
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
     if (status == 'new' || status == 'todo') {
-      return <RiCheckboxBlankFill className="pl-px text-gray-400 text-xs" aria-hidden="true" />;
+      return (
+        <div className="statusHovergray">
+          <RiCheckboxBlankFill className="pl-px text-gray-400 text-xs " aria-hidden="true" />
+        </div>
+      );
     } else if (status == 'in progress') {
-      return <RiCheckboxBlankFill className="pl-px text-purple-400 text-xs" aria-hidden="true" />;
+      return (
+        <div className="statusHoverpurple">
+          <RiCheckboxBlankFill className="pl-px text-purple-400 text-xs" aria-hidden="true" />
+        </div>
+      );
     } else if (status == 'completed') {
-      return <RiCheckboxBlankFill className="pl-px text-green-400 text-xs" aria-hidden="true" />;
+      return (
+        <div className="statusHovergreen">
+          <RiCheckboxBlankFill className="pl-px text-green-400 text-xs" aria-hidden="true" />
+        </div>
+      );
     } else if (status == 'archived') {
-      return <RiCheckboxBlankFill className="pl-px text-yellow-400 text-xs" aria-hidden="true" />;
+      return (
+        <div className="statusHoveryellow">
+          <RiCheckboxBlankFill className="pl-px text-yellow-400 text-xs" aria-hidden="true" />
+        </div>
+      );
     }
   };
   return (
