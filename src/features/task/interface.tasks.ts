@@ -48,7 +48,7 @@ export interface ICheckListItems {
   id: string;
   name: string;
   is_done: number;
-  assignees: [{ id: string; initials: string; colour: string; name: string }];
+  assignees: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
   group_assignees: [];
   tags: [];
 }
