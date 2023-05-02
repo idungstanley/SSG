@@ -114,7 +114,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'hubs'
+        showMenuDropdownType: taskType === 'subhub' ? 'subhub' : 'hubs'
       })
     );
     dispatch(getPrevName(name));
@@ -135,16 +135,16 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
           <div className="relative flex flex-col">
             <HubItem
               item={hub}
-              index={index}
-              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
-              stickyButtonIndex={stickyButtonIndex}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
+              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
+              stickyButtonIndex={stickyButtonIndex}
+              index={index}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '100' : '999'}
+              zNumber={taskType === 'subhub' ? '100' : '110'}
             />
             {showSidebar && (
               <div>
