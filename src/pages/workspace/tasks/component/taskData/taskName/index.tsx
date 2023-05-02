@@ -109,17 +109,7 @@ export default function TaskName({
               displayNav(task?.id as string);
             }}
           />
-          <input
-            type="checkbox"
-            id="checked-checkbox"
-            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100  z-50"
-            ref={setNodeRef}
-            {...attributes}
-            {...listeners}
-            onClick={() => {
-              displayNav(task?.id as string);
-            }}
-          />
+
           <MdDragIndicator className="absolute text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
         </div>
         <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
