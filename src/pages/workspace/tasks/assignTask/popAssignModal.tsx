@@ -53,7 +53,7 @@ export function PopAssignModal({
             <div className="space-x-2 flex items-center">
               <CiMail className="w-4 h-4 text-black" />
               <span className="text-black text-sm subpixel-antialiased" style={{ fontSize: '8px' }}>
-                Email
+                email
               </span>
             </div>
             <div className="space-x-2  flex items-center">

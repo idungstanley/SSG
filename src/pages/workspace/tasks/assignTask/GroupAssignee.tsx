@@ -61,7 +61,7 @@ function GroupAssignee({
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center  -ml-5 relative ">
+        <div className="flex items-center justify-center  -ml-5 relative">
           {data?.slice(0, 3).map(
             (
               newData: {
@@ -135,6 +135,7 @@ function GroupAssignee({
                         colour: string | undefined;
                         name: string;
                         avatar_path: string;
+                        email: string;
                       }
                     }
                     modalLoader={modalLoader}
@@ -200,7 +201,7 @@ function GroupAssignee({
                     )}
                   </span>
 
-                  {displayed.show && index == displayed?.index && (
+                  {displayed.show && index == displayed?.index ? (
                     <button
                       className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
                       style={{
@@ -210,6 +211,8 @@ function GroupAssignee({
                     >
                       X
                     </button>
+                  ) : (
+                    <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
                   )}
 
                   {hoverInterval && displayed.show && index == displayed?.index && (
