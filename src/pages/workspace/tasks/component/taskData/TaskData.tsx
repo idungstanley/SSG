@@ -68,19 +68,19 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && taskId == task?.id
-            ? '  flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? '  flex justify-between group ml-4 mb-px w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableView
             ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : comfortableViewWrap && taskId == task?.id
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'flex justify-between group ml-4 mb-px  w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : comfortableViewWrap
             ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
+            ? ' compactView flex justify-between group ml-4 mb-px w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
             : CompactView
             ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
             : CompactViewWrap
             ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
             : null
