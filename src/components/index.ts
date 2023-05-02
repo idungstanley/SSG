@@ -2,7 +2,6 @@ export { default as Button } from './Button';
 export { default as Input } from './input/Input';
 export { default as InputWithTrailingAddon } from './input/InputWithTrailingAddon';
 export { default as InputAvatar } from './input/InputAvatar';
-export { default as AvatarBg } from './avatar/AvatarBg';
 export { default as Dropdown } from './Dropdown';
 export { default as SearchInput } from './SearchInput';
 export { default as Search } from './workspaceSearch/Search';
