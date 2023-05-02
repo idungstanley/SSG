@@ -31,7 +31,7 @@ export interface ImyTaskData {
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
   updated_at?: string;
   created_at?: string;
   archived_at?: string | null;

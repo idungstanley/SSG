@@ -30,6 +30,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
+  getRecording: { id: string | null; type: string | null };
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | null;
@@ -57,6 +58,7 @@ const initialState: workspaceState = {
   showModal: false,
   searchIsActive: false,
   isExtSearchActive: false,
+  getRecording: { id: null, type: null },
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
@@ -153,6 +155,9 @@ export const wsSlice = createSlice({
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
+    setRecording: (state, action: PayloadAction<{ id: string | null; type: string | null }>) => {
+      state.getRecording = action.payload;
+    },
     setActivePlaceId: (state, action: PayloadAction<number | boolean | null | undefined | string>) => {
       state.activePlaceId = action.payload;
     },
@@ -231,6 +236,7 @@ export const {
   checkIfWs,
   setCurrentItem,
   resetCurrentItem,
+  setRecording,
   setActivePlaceId,
   setShowHub,
   setShowWallet,
