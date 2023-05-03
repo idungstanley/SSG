@@ -1,9 +1,9 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
-import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import { cl } from '../../../utils';
-import { getCurrentDaysInMonth } from '../lib/getDaysInMonth';
-import { isSameOrBefore } from '../lib/dateUtils';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { cl } from '../../../../utils';
+import { getCurrentDaysInMonth } from '../../lib/getDaysInMonth';
+import { isSameOrBefore } from '../../lib/dateUtils';
 
 const currentDate = dayjs();
 
@@ -52,9 +52,40 @@ export const getDatesInRange = (startDate: ExtendedDate, endDate: ExtendedDate):
   return dates;
 };
 
+function isDateInRange(date: ExtendedDate, range: DayOff) {
+  const { day, part } = date;
+  const { start, end } = range;
+  const isAfterStart = day.isAfter(dayjs(start.day)) || (day.isSame(dayjs(start.day)) && part !== 'start');
+  const isBeforeEnd = day.isBefore(dayjs(end.day)) || (day.isSame(dayjs(end.day)) && part !== 'end');
+  return isAfterStart && isBeforeEnd;
+}
+
+interface Day {
+  day: string;
+  part: Part;
+}
+
+interface DayOff {
+  start: Day;
+  end: Day;
+  user: {
+    id: string;
+  };
+}
+
+const init: DayOff[] = [
+  {
+    user: {
+      id: '394be745-6391-4117-ab19-a942b3c79a38'
+    },
+    start: { day: '2023-05-03', part: 'end' },
+    end: { day: '2023-05-06', part: 'start' }
+  }
+];
+
 export default function NewWallchart() {
   const { data } = useGetTeamMembers({ page: 1, query: '' });
-  // const { activeMemberId } = useDaysOff();
+
   const days = getCurrentDaysInMonth(currentDate);
   const firstDay = days[0].format('ddd');
   const weeks = generateWeekDays(firstDay, days[0].daysInMonth());
@@ -79,7 +110,7 @@ export default function NewWallchart() {
               <h1>{i.user.name}</h1>
               <p>{i.user.email}</p>
             </div>
-            <Month />
+            <Month userId={i.user.id} />
           </div>
         ))}
       </div>
@@ -94,7 +125,12 @@ export interface ExtendedDate {
   part: Part;
 }
 
-function Month() {
+interface MonthProps {
+  userId: string;
+}
+
+function Month({ userId }: MonthProps) {
+  const [daysOff, setDaysOff] = useState<DayOff[]>(init);
   const [selectedDates, setSelectedDates] = useState<ExtendedDate[]>([]);
   const days = getCurrentDaysInMonth(currentDate);
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -124,8 +160,22 @@ function Month() {
     const end = selectedDates.at(-1);
     // const end = selectedDates[selectedDates.length - 1];
 
-    console.log({ start, end });
-    setSelectedDates([]);
+    if (end) {
+      const newDayOff: DayOff = {
+        start: {
+          day: start.day.format('YYYY-MM-DD'),
+          part: start.part
+        },
+        end: {
+          day: end.day.format('YYYY-MM-DD'),
+          part: end.part
+        },
+        user: { id: userId }
+      };
+
+      setDaysOff((prev) => [...prev, newDayOff]);
+      setSelectedDates([]);
+    }
   };
 
   return (
@@ -133,6 +183,12 @@ function Month() {
       {days.map((day) => {
         const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'start');
         const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'end');
+        const isDayOffStart = daysOff.some(
+          (range) => isDateInRange({ day, part: 'start' }, range) && range.user.id === userId
+        );
+        const isDayOffEnd = daysOff.some(
+          (range) => isDateInRange({ day, part: 'end' }, range) && range.user.id === userId
+        );
 
         return (
           <div className="relative p-2 border w-10 h-10 flex items-center justify-center" key={day.format()}>
@@ -140,16 +196,24 @@ function Month() {
               <span
                 onMouseOver={isMouseDown ? () => handleDateMouseOver(day, 'start') : undefined}
                 onMouseDown={() => handleDateMouseDown(day, 'start')}
-                className={cl('hover:bg-gray-200', isSelectedStart && 'bg-gray-200')}
+                className={cl(
+                  'hover:bg-gray-200',
+                  isSelectedStart && 'bg-gray-200',
+                  isDayOffStart && 'bg-primary-300 hover:bg-primary-300'
+                )}
               ></span>
 
               <span
                 onMouseOver={isMouseDown ? () => handleDateMouseOver(day, 'end') : undefined}
                 onMouseDown={() => handleDateMouseDown(day, 'end')}
-                className={cl('hover:bg-gray-200', isSelectedEnd && 'bg-gray-200')}
+                className={cl(
+                  'hover:bg-gray-200',
+                  isSelectedEnd && 'bg-gray-200',
+                  isDayOffEnd && 'bg-primary-300 hover:bg-primary-300'
+                )}
               ></span>
             </div>
-            <span className="select-none">{day.date()}</span>
+            <span className="select-none z-10">{day.date()}</span>
           </div>
         );
       })}
