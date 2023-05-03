@@ -4,6 +4,7 @@ import { listColumnProps } from '../../pages/workspace/tasks/component/views/Lis
 import { IField } from '../list/list.interfaces';
 import { IParent } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
+import { User } from '../../components/Pilot/components/TimeClock/ClockLog';
 
 export interface ICustomField {
   id: string;
@@ -120,6 +121,8 @@ interface TaskState {
   filterTaskByAssigneeIds: string | null | undefined;
   sortAbleArr: SortOption[];
   sortArr: string[];
+  timeArr: string[];
+  timeSortArr: User[];
 }
 
 const initialState: TaskState = {
@@ -166,7 +169,9 @@ const initialState: TaskState = {
   timerStatus: false,
   filterTaskByAssigneeIds: null,
   sortAbleArr: [],
-  sortArr: []
+  sortArr: [],
+  timeArr: [],
+  timeSortArr: []
 };
 
 export const taskSlice = createSlice({
@@ -337,6 +342,12 @@ export const taskSlice = createSlice({
     },
     setSortArr(state, action: PayloadAction<string[]>) {
       state.sortArr = action.payload;
+    },
+    setTimeArr(state, action: PayloadAction<string[]>) {
+      state.timeArr = action.payload;
+    },
+    setTimeSortArr(state, action: PayloadAction<User[]>) {
+      state.timeSortArr = action.payload;
     }
   }
 });
@@ -382,6 +393,8 @@ export const {
   setTimerStatus,
   setFilterTaskByAssigneeIds,
   setSortArray,
-  setSortArr
+  setSortArr,
+  setTimeArr,
+  setTimeSortArr
 } = taskSlice.actions;
 export default taskSlice.reducer;

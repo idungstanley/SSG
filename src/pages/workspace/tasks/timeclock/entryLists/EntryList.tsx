@@ -11,7 +11,9 @@ import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 export interface teamMember {
   user: {
+    id: string;
     initials: string;
+    name: string;
   };
 }
 export interface entriesProps {
