@@ -45,7 +45,7 @@ export default function Month({ month, handleEvent, daysOff, title }: MonthProps
 
   const handleDateMouseLeave = () => setHighlightedDates([]);
 
-  const handleDateMouseDown = (day: dayjs.Dayjs) => {
+  const handleDateMouseDown = (day: Dayjs) => {
     setIsMouseDown(true);
     setSelectedDates([day]);
   };
