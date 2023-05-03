@@ -30,7 +30,7 @@ function AvatarWithInitials({
         style={{ backgroundColor: backgroundColour }}
       >
         <span
-          className="font-bold leading-none"
+          className="font-bold leading-none "
           style={{ fontSize: `${CompactView || CompactViewWrap ? '10px' : textSize}`, color: textColor }}
         >
           {initials}

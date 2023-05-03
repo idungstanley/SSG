@@ -13,11 +13,12 @@ import '../../taskData/task.css';
 import { IoIosArrowDropdown } from 'react-icons/io';
 import { columnsHead, listColumnProps } from '../ListColumns';
 import { MdDragIndicator } from 'react-icons/md';
-import { FaSort } from 'react-icons/fa';
+import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 import SortModal from '../../../../../../components/SortModal/SortModal';
 import { AiOutlineClose } from 'react-icons/ai';
+import { RiArrowDownFill, RiArrowUpSFill } from 'react-icons/ri';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 export type SortOption = {
@@ -67,6 +68,8 @@ export default function TaskListViews({
     setShowSortModal(!showSortModal);
   };
 
+  const dirCheck = (col: string): boolean => sortAbleArr.some((el) => el.field === col && el.dir === 'desc');
+
   useEffect(() => {
     if (!data) {
       return;
@@ -105,7 +108,7 @@ export default function TaskListViews({
               />
             </span>
             <div className="flex items-center justify-center cursor-pointer relative">
-              <div className="group flex items-center">
+              <div className="group flex items-center ml-2">
                 <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
                   {status ? status : 'To Do'}
                 </span>
@@ -132,27 +135,42 @@ export default function TaskListViews({
                         </span>
                         {sortAbles.includes(col.value) && (
                           <>
-                            {sortArr.length > 1 && sortArr.includes(col.value) ? (
+                            {sortArr.length >= 1 && sortArr.includes(col.value) ? (
                               ''
                             ) : (
-                              <FaSort
-                                className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              <div
+                                className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
                                 onClick={() => handleSort(col.value, col.id)}
-                              />
+                              >
+                                <FaSortUp className="text-white" />
+                                <FaSortDown className="text-gray-200" />
+                              </div>
                             )}
                             {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                              <div className="sortClose-group rounded-md">
-                                <div className="flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer h-4 w-4 rounded-full">
-                                  <span
-                                    className="font-bold hover:text-clip cursor-pointer"
-                                    style={{ fontSize: '8px' }}
-                                  >
-                                    {sortArr.indexOf(col.value) + 1}
-                                  </span>
+                              <div className="sortClose-group rounded-xl">
+                                <div
+                                  className={
+                                    sortArr.length > 1
+                                      ? 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-2 rounded-full'
+                                      : 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer p-1 rounded-full'
+                                  }
+                                >
+                                  {sortArr.length === 1 ? (
+                                    <RiArrowUpSFill className="h-3 w-3" />
+                                  ) : (
+                                    <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
+                                      {sortArr.indexOf(col.value) + 1}
+                                      {dirCheck(col.value) ? (
+                                        <RiArrowDownFill className="h-3 w-3" />
+                                      ) : (
+                                        <RiArrowUpSFill className="h-3 w-3" />
+                                      )}
+                                    </span>
+                                  )}
                                 </div>
                                 <AiOutlineClose
                                   onClick={() => handleRemoveFilter(col.value)}
-                                  className="sortClose text-white font-bold h-3 w-3 m-1"
+                                  className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
                                 />
                               </div>
                             )}
@@ -181,27 +199,42 @@ export default function TaskListViews({
                         </span>
                         {sortAbles.includes(col.value) && (
                           <>
-                            {sortArr.length > 1 && sortArr.includes(col.value) ? (
+                            {sortArr.length >= 1 && sortArr.includes(col.value) ? (
                               ''
                             ) : (
-                              <FaSort
-                                className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                              <div
+                                className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
                                 onClick={() => handleSort(col.value, col.id)}
-                              />
+                              >
+                                <FaSortUp className="text-white" />
+                                <FaSortDown className="text-gray-200" />
+                              </div>
                             )}
                             {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                              <div className="sortClose-group rounded-md">
-                                <div className="flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer h-4 w-4 rounded-full">
-                                  <span
-                                    className="font-bold hover:text-clip cursor-pointer"
-                                    style={{ fontSize: '8px' }}
-                                  >
-                                    {sortArr.indexOf(col.value) + 1}
-                                  </span>
+                              <div className="sortClose-group rounded-xl">
+                                <div
+                                  className={
+                                    sortArr.length > 1
+                                      ? 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-2 rounded-full'
+                                      : 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer p-1 rounded-full'
+                                  }
+                                >
+                                  {sortArr.length === 1 ? (
+                                    <RiArrowUpSFill className="h-3 w-3" />
+                                  ) : (
+                                    <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
+                                      {sortArr.indexOf(col.value) + 1}{' '}
+                                      {dirCheck(col.value) ? (
+                                        <RiArrowDownFill className="h-3 w-3" />
+                                      ) : (
+                                        <RiArrowUpSFill className="h-3 w-3" />
+                                      )}
+                                    </span>
+                                  )}
                                 </div>
                                 <AiOutlineClose
                                   onClick={() => handleRemoveFilter(col.value)}
-                                  className="sortClose text-white font-bold h-3 w-3 m-1"
+                                  className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
                                 />
                               </div>
                             )}
@@ -239,24 +272,42 @@ export default function TaskListViews({
                       </span>
                       {sortAbles.includes(col.value) && (
                         <>
-                          {sortArr.length > 1 && sortArr.includes(col.value) ? (
+                          {sortArr.length >= 1 && sortArr.includes(col.value) ? (
                             ''
                           ) : (
-                            <FaSort
-                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            <div
+                              className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
                               onClick={() => handleSort(col.value, col.id)}
-                            />
+                            >
+                              <FaSortUp className="text-white" />
+                              <FaSortDown className="text-gray-200" />
+                            </div>
                           )}
                           {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                            <div className="sortClose-group rounded-md">
-                              <div className="flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer h-4 w-4 rounded-full">
-                                <span className="font-bold hover:text-clip cursor-pointer" style={{ fontSize: '8px' }}>
-                                  {sortArr.indexOf(col.value) + 1}
-                                </span>
+                            <div className="sortClose-group rounded-xl">
+                              <div
+                                className={
+                                  sortArr.length > 1
+                                    ? 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-2 rounded-full'
+                                    : 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer p-1 rounded-full'
+                                }
+                              >
+                                {sortArr.length === 1 ? (
+                                  <RiArrowUpSFill className="h-3 w-3" />
+                                ) : (
+                                  <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
+                                    {sortArr.indexOf(col.value) + 1}{' '}
+                                    {dirCheck(col.value) ? (
+                                      <RiArrowDownFill className="h-3 w-3" />
+                                    ) : (
+                                      <RiArrowUpSFill className="h-3 w-3" />
+                                    )}
+                                  </span>
+                                )}
                               </div>
                               <AiOutlineClose
                                 onClick={() => handleRemoveFilter(col.value)}
-                                className="sortClose text-white font-bold h-3 w-3 m-1"
+                                className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
                               />
                             </div>
                           )}
@@ -289,20 +340,38 @@ export default function TaskListViews({
                       </span>
                       {sortAbles.includes(col.value) && (
                         <>
-                          {sortArr.length > 1 && sortArr.includes(col.value) ? (
+                          {sortArr.length >= 1 && sortArr.includes(col.value) ? (
                             ''
                           ) : (
-                            <FaSort
-                              className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 "
+                            <div
+                              className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
                               onClick={() => handleSort(col.value, col.id)}
-                            />
+                            >
+                              <FaSortUp className="text-white" />
+                              <FaSortDown className="text-gray-200" />
+                            </div>
                           )}
                           {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                            <div className="sortClose-group rounded-md">
-                              <div className="flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer h-4 w-4 rounded-full">
-                                <span className="font-bold hover:text-clip cursor-pointer" style={{ fontSize: '8px' }}>
-                                  {sortArr.indexOf(col.value) + 1}
-                                </span>
+                            <div className="sortClose-group rounded-xl">
+                              <div
+                                className={
+                                  sortArr.length > 1
+                                    ? 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer px-2 rounded-full'
+                                    : 'flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer p-1 rounded-full'
+                                }
+                              >
+                                {sortArr.length === 1 ? (
+                                  <RiArrowUpSFill className="h-3 w-3" />
+                                ) : (
+                                  <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
+                                    {sortArr.indexOf(col.value) + 1}{' '}
+                                    {dirCheck(col.value) ? (
+                                      <RiArrowDownFill className="h-3 w-3" />
+                                    ) : (
+                                      <RiArrowUpSFill className="h-3 w-3" />
+                                    )}
+                                  </span>
+                                )}
                               </div>
                               <AiOutlineClose
                                 onClick={() => handleRemoveFilter(col.value)}

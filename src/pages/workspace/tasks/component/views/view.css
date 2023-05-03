@@ -114,12 +114,25 @@ textarea {
   gap: 2px;
 }
 
+.statusHovergray:hover {
+  border: 2px solid rgba(161, 161, 170);
+  padding: 1px;
+}
+.statusHoverpurple:hover {
+  border: 2px solid rgba(192, 132, 252);
+  padding: 1px;
+}
+.statusHovergreen:hover {
+  border: 2px solid rgba(74, 222, 128);
+  padding: 1px;
+}
+.statusHoveryellow:hover {
+  border: 2px solid rgb(250, 204, 21);
+  padding: 1px;
+}
+
 .sortClose {
   display: none;
-  transition: all 0.7s ease-in-out;
-  animation: fadeInAnimation ease 3s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 }
 
 .sortClose-group:hover {
@@ -128,10 +141,9 @@ textarea {
 
 .sortClose-group:hover .sortClose {
   display: inline-block;
-  transform: translateX(0, 20);
 }
 
-.alt-task:nth-child(odd) {
+.alt-task:nth-child(even) {
   background-color: #edecefcd;
 }
 

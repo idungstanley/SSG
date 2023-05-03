@@ -45,7 +45,8 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
     parentId: currentItemId
   });
   const navigate = useNavigate();
-  const handleLocation = (id: string, name: string, type = 'wallet') => {
+  const handleLocation = (id: string, name: string) => {
+    const type = 'wallet';
     dispatch(setShowHub(true));
     navigate(`/w/${id}`);
     setShowSubWallet(id);

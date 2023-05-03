@@ -1,15 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CiFilter } from 'react-icons/ci';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
-import { AiFillCaretLeft, AiFillCaretRight, AiOutlineFileSearch } from 'react-icons/ai';
+// import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { AiFillCaretRight, AiFillCaretDown, AiOutlineFileSearch } from 'react-icons/ai';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setSortArray } from '../../features/task/taskSlice';
+import { FaSortDown, FaSortUp } from 'react-icons/fa';
 
 type SortModalProps = {
   headers: string[];
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSortFn: (header: string, id: string) => void;
+};
+
+type filterSwitch = {
+  title: string;
+  toggle: boolean;
 };
 
 export default function SortModal({ headers, toggleModal }: SortModalProps) {
@@ -18,7 +24,11 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
   const dispatch = useDispatch();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [sortDropDown, setSortDropDown] = useState<boolean>(false);
-  const [filterDropDown, setFilterDropDown] = useState<boolean>(false);
+  const [filterDropDown, setFilterDropDown] = useState<filterSwitch[]>([
+    { title: 'color', toggle: false },
+    { title: 'condition', toggle: false },
+    { title: 'value', toggle: false }
+  ]);
 
   const handleClick = (title: string) => {
     const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
@@ -35,11 +45,14 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
     );
   };
 
-  const switchBtns = (field: string) => {
+  const switchBtns = (event: React.MouseEvent, field: string) => {
+    event.stopPropagation();
     if (field === 'sortBtn') {
       setSortDropDown((prev) => !prev);
-    } else if (field === 'filterBtn') {
-      setFilterDropDown((prev) => !prev);
+    } else {
+      setFilterDropDown((prev) => {
+        return prev.map((obj) => (obj.title === field ? { ...obj, toggle: !obj.toggle } : obj));
+      });
     }
   };
 
@@ -75,9 +88,9 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
                 {index === hoveredIndex && (
                   <CiFilter className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
                 )}
-                <div className=" flex flex-col justify-center items-center w-6 h-6">
-                  <IoMdArrowDropup className="text-gray-400" />
-                  <IoMdArrowDropdown className="text-gray-400" onClick={() => handleClick(title)} />
+                <div className="flex flex-col justify-center items-center -space-y-3 w-6 h-6">
+                  <FaSortUp className="text-gray-400" />
+                  <FaSortDown className="text-gray-400" onClick={() => handleClick(title)} />
                 </div>
               </div>
             </div>
@@ -86,9 +99,9 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
           <div className="flex justify-between pr-1 text-sm">
             <span>sort by color</span>
             {!sortDropDown ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('sortBtn')} />
+              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'sortBtn')} />
             ) : (
-              <AiFillCaretLeft className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('sortBtn')} />
+              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'sortBtn')} />
             )}
           </div>
         </div>
@@ -100,26 +113,32 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
           </div>
           <div className="flex justify-between pr-1 text-sm">
             <span>filter by color</span>
-            {!filterDropDown ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+            {!filterDropDown[0].toggle ? (
+              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'color')} />
             ) : (
-              <AiFillCaretLeft className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'color')} />
             )}
           </div>
           <div className="flex justify-between pr-1 text-sm">
             <span>filter by condition</span>
-            {!filterDropDown ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+            {!filterDropDown[1].toggle ? (
+              <AiFillCaretRight
+                className="text-gray-400 font-bold h-3 w-3"
+                onClick={(e) => switchBtns(e, 'condition')}
+              />
             ) : (
-              <AiFillCaretLeft className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+              <AiFillCaretDown
+                className="text-gray-400 font-bold h-3 w-3"
+                onClick={(e) => switchBtns(e, 'condition')}
+              />
             )}
           </div>
           <div className="flex justify-between pr-1 text-sm">
             <span>filter by values</span>
-            {!filterDropDown ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+            {!filterDropDown[2].toggle ? (
+              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'value')} />
             ) : (
-              <AiFillCaretLeft className="text-gray-400 font-bold h-3 w-3" onClick={() => switchBtns('filterBtn')} />
+              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'value')} />
             )}
           </div>
         </div>

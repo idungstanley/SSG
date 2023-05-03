@@ -19,16 +19,19 @@ export default function WList({
   wallets,
   leftMargin,
   paddingLeft,
-  type
+  type,
+  level = 1
 }: {
   wallets: Wallet[];
   leftMargin: boolean;
   paddingLeft: string | number;
   type: string;
+  level?: number;
 }) {
   const dispatch = useAppDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
+  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const navigate = useNavigate();
   const { walletId } = useParams();
 
@@ -38,7 +41,8 @@ export default function WList({
     }
   }, []);
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, index?: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setShowHub(true));
     navigate(`/w/${id}`, {
       replace: true
@@ -64,7 +68,8 @@ export default function WList({
     dispatch(setCurrentWalletId(id));
   };
 
-  const handleShowSubWallet = (id: string) => {
+  const handleShowSubWallet = (id: string, index?: number) => {
+    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (showSubWallet === id) {
       setShowSubWallet(null);
     } else {
@@ -87,15 +92,20 @@ export default function WList({
 
   return (
     <>
-      {wallets.map((wallet) => (
+      {wallets.map((wallet, index) => (
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <WalletItem
             wallet={wallet}
-            walletType="wallet"
+            walletType={level === 1 ? 'wallet' : level === 2 ? 'subwallet2' : 'subwallet3'}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             showSubWallet={showSubWallet}
             paddingLeft={paddingLeft}
+            isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
+            stickyButtonIndex={stickyButtonIndex}
+            index={index}
+            topNumber={type === 'subwallet2' ? '140px' : '110px'}
+            zNumber={type === 'subwallet2' ? '98' : '99'}
           />
 
           {wallet.children.length && showSubWallet ? (
@@ -104,6 +114,7 @@ export default function WList({
               leftMargin={false}
               type="subwallet2"
               paddingLeft={Number(paddingLeft) + 15}
+              level={level + 1}
             />
           ) : null}
           {wallet.lists.length && showSubWallet && !showExtendedBar ? (
