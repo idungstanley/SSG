@@ -1,4 +1,4 @@
-import { FiPlusCircle } from 'react-icons/fi';
+import { FiPlusCircle, FiSearch } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
@@ -23,7 +23,7 @@ export interface User {
 
 export default function ClockLog() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { timeArr, timeSortArr } = useAppSelector((state) => state.task);
+  const { timeArr } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const { data: getTaskEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -40,8 +40,7 @@ export default function ClockLog() {
   const [headerId, setHeaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const teamMember: User[] = [];
-
-  console.log(teamMember);
+  const teamMemberId: string[] = [];
 
   const handleColumnHide = (col: string) => {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
@@ -52,20 +51,16 @@ export default function ClockLog() {
   };
 
   const handleSort = (header: string, id: string) => {
-    const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'task' : header.toLowerCase();
     setHeaderId(id);
-    const newArray = teamMember.filter((obj, index, arr) => {
-      return arr.findIndex((item) => item.id === obj.id) === index;
-    });
-    if (timeArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
+    if (timeArr.includes(header)) return setShowSortModal(!showSortModal);
     dispatch(setTimeArr([...timeArr, header]));
-    dispatch(setTimeSortArr(newArray));
+    setShowSortModal(!showSortModal);
   };
 
   const handleRemoveFilter = (title: string): void => {
-    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
+    // const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
     dispatch(setTimeArr(timeArr.filter((el) => el !== title)));
-    dispatch(setTimeSortArr(timeSortArr.filter((el) => el.name !== headerTxt)));
+    dispatch(setTimeSortArr([]));
   };
 
   const checkedField = headers.some((el) => el.hidden);
@@ -118,7 +113,13 @@ export default function ClockLog() {
                             )}
                           </>
                         )}
-                        {showSortModal && col.id === headerId && <UserSortDropDown arr={teamMember} />}
+                        {showSortModal && col.id === headerId && (
+                          <UserSortDropDown
+                            arr={teamMember}
+                            toggleModalFn={setShowSortModal}
+                            memberIds={teamMemberId}
+                          />
+                        )}
                       </th>
                     )
                   );
@@ -161,7 +162,9 @@ export default function ClockLog() {
             <tbody>
               {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
                 const { id, initials, name } = entries.team_member.user;
+                const { id: teamId } = entries.team_member;
                 teamMember.push({ id, initials, name });
+                teamMemberId.push(teamId);
                 return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
               })}
             </tbody>
@@ -175,22 +178,42 @@ export default function ClockLog() {
 
 type UserSortParams = {
   arr: User[];
+  toggleModalFn: React.Dispatch<React.SetStateAction<boolean>>;
+  memberIds: string[];
 };
 
-function UserSortDropDown({ arr }: UserSortParams) {
+function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
+  const dispatch = useAppDispatch();
+  const { timeSortArr } = useAppSelector((state) => state.task);
+  const sortIds: string[] = [...new Set(memberIds)];
+
+  const teamMember = arr.filter((obj, index, arr) => {
+    return arr.findIndex((item) => item.id === obj.id) === index;
+  });
+  const handleSort = (id: number) => {
+    dispatch(setTimeSortArr([...timeSortArr, sortIds[id]]));
+  };
   return (
-    <>
-      <div className="absolute top-5 left-2 z-50 w-64 max-h-64 bg-white shadow-lg rounded-md">
-        <ul className="space-y-2">
-          {arr.map((el) => {
+    <div tabIndex={0} onBlur={() => toggleModalFn(false)}>
+      <div className="absolute top-5 left-2 z-50 w-60 max-h-204 bg-white shadow-xl rounded-md">
+        <div className="relative my-2 z-50 border-b-2 pb-2">
+          <input type="text" className="w-52 mx-auto pl-6 text-sm" placeholder="Search" />
+          <FiSearch className="w-5 h-5 absolute left-5 top-2.5" />
+        </div>
+        <ul className="space-y-2 overflow-auto">
+          {teamMember.map((el, index) => {
             return (
-              <li key={el.id} className="flex items-center py-2 alt-task px-4">
+              <li
+                key={el.id}
+                className="flex items-center py-2 alt-task px-4 cursor-pointer"
+                onClick={() => handleSort(index)}
+              >
                 {el.name}
               </li>
             );
           })}
         </ul>
       </div>
-    </>
+    </div>
   );
 }
