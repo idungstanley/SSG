@@ -21,7 +21,11 @@ export default function NotificaitonTable() {
                     </div>
                     <div className="flex w-2/4 justify-between">
                       <div className="px-3">
-                        <input checked={data[category].types[cat]?.default_email} type="checkbox" />
+                        <input
+                          checked={data[category].types[cat]?.default_email}
+                          className="h-4 w-4 bg-gray-300 border-gray-500"
+                          type="checkbox"
+                        />
                       </div>
                       <div className="px-3">
                         <input type="checkbox" checked={data[category].types[cat]?.default_site} />
