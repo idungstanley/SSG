@@ -106,9 +106,9 @@ export default function NewWallchart() {
       <div className="w-full space-y-6">
         {members.map((i) => (
           <div key={i.id} className="flex">
-            <div className="w-80">
-              <h1>{i.user.name}</h1>
-              <p>{i.user.email}</p>
+            <div className="w-80 space-y-3 bg-gray-50 p-2">
+              <h3 className="truncate text-sm font-medium text-gray-900">{i.user.name}</h3>
+              <p className="mt-1 truncate text-sm text-gray-500">{i.user.email}</p>
             </div>
             <Month userId={i.user.id} />
           </div>
@@ -181,8 +181,8 @@ function Month({ userId }: MonthProps) {
   return (
     <div className="flex" onMouseUp={isMouseDown ? () => handleDateMouseUp() : undefined}>
       {days.map((day) => {
-        const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'start');
-        const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'end');
+        const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'day') && i.part === 'start');
+        const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'day') && i.part === 'end');
         const isDayOffStart = daysOff.some(
           (range) => isDateInRange({ day, part: 'start' }, range) && range.user.id === userId
         );
