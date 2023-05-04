@@ -1,9 +1,28 @@
 // import { Fragment } from 'react';
-import { GetNotificationSettingsService } from '../../../../features/general/notification/notificationService';
+import {
+  GetNotificationSettingsService,
+  useChangeNotificationSettings
+} from '../../../../features/general/notification/notificationService';
 import THeadData from './THead';
 
 export default function NotificaitonTable() {
   const { data } = GetNotificationSettingsService();
+
+  const { mutate: onChange } = useChangeNotificationSettings();
+
+  const handleChange = (
+    category: string,
+    type: string | undefined,
+    notification_type: string,
+    notification_value: number | boolean
+  ) => {
+    onChange({
+      category,
+      type,
+      notification_type,
+      notification_value: notification_value === true ? 1 : notification_value === false ? 0 : notification_value
+    });
+  };
   return (
     <div className="w-full border border-gray-300">
       {data &&
@@ -20,21 +39,49 @@ export default function NotificaitonTable() {
                       {data[category].types[cat]?.name}
                     </div>
                     <div className="flex w-2/4 justify-between">
-                      <div className="px-3">
+                      <div className="px-3 flex justify-cemter">
                         <input
-                          checked={data[category].types[cat]?.default_email}
-                          className="h-4 w-4 bg-gray-300 border-gray-500"
+                          checked={data[category].types[cat]?.is_email}
+                          className="h-5 w-5 cursor-pointer bg-gray-300 border-gray-500 ml-2"
                           type="checkbox"
+                          onChange={() => {
+                            handleChange(
+                              category,
+                              data[category].types[cat]?.type,
+                              'email',
+                              data[category].types[cat]?.is_email
+                            );
+                          }}
                         />
                       </div>
-                      <div className="px-3">
-                        <input type="checkbox" checked={data[category].types[cat]?.default_site} />
+                      <div className="px-3 flex justify-cemter">
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
+                          checked
+                        />
                       </div>
-                      <div className="px-3">
-                        <input type="checkbox" checked={data[category].types[cat]?.is_email} />
+                      <div className="px-3 flex justify-cemter">
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
+                          checked={data[category].types[cat]?.is_site}
+                          onChange={() => {
+                            handleChange(
+                              category,
+                              data[category].types[cat]?.type,
+                              'site',
+                              data[category].types[cat]?.is_site
+                            );
+                          }}
+                        />
                       </div>
-                      <div className="px-3">
-                        <input type="checkbox" checked={data[category].types[cat]?.is_site} />
+                      <div className="px-3 flex justify-cemter">
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
+                          checked
+                        />
                       </div>
                     </div>
                   </div>
