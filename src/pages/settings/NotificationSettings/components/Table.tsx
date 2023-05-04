@@ -1,4 +1,4 @@
-// import { Fragment } from 'react';
+import React from 'react';
 import {
   GetNotificationSettingsService,
   useChangeNotificationSettings
@@ -35,7 +35,7 @@ export default function NotificaitonTable() {
               {data[category]?.types &&
                 Object.keys(data[category].types).map((cat: string) => (
                   <div key={cat} className="flex justify-between items-center w-full">
-                    <div className="pl-10  py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
+                    <div className="pl-10 py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
                       {data[category].types[cat]?.name}
                     </div>
                     <div className="flex w-2/4 justify-between">
