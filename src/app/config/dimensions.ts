@@ -1,4 +1,4 @@
-import { getRelativeWidth } from '../../utils/getRelativeWidth';
+import { getRelativeWidth } from '../../utils/widthUtils';
 
 const PILOT_WIDTH = {
   DEFAULT: 25,
@@ -18,6 +18,8 @@ const EXTENDED_BAR_WIDTH = {
   MIN: 8
 } as const;
 
+const NAVIGATION_AND_EXTENDED_MAX_ALLOWED = 30;
+
 const dimensions = {
   pilot: {
     default: getRelativeWidth(PILOT_WIDTH.DEFAULT),
@@ -36,4 +38,4 @@ const dimensions = {
   }
 };
 
-export { dimensions };
+export { dimensions, NAVIGATION_AND_EXTENDED_MAX_ALLOWED };

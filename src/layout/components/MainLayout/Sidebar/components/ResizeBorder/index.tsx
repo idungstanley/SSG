@@ -1,5 +1,7 @@
-import React from 'react';
-import { MAX_SIDEBAR_WIDTH, MIN_SIDEBAR_WIDTH } from '../..';
+import { dimensions } from '../../../../../../app/config/dimensions';
+
+const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
+const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 interface ResizeBorderProps {
   onMouseDown: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
