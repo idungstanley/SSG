@@ -16,7 +16,7 @@ const generateWeekDays = (startDay: string, datesInMonth: number): string[] => {
 };
 
 export const getDatesInRange = (startDate: ExtendedDate, endDate: ExtendedDate): ExtendedDate[] => {
-  if (startDate.part === endDate.part) {
+  if (startDate.part === endDate.part && startDate.day.day() === endDate.day.day()) {
     return [startDate];
   }
 
@@ -46,7 +46,7 @@ export const getDatesInRange = (startDate: ExtendedDate, endDate: ExtendedDate):
   if (endDate.part === 'start') {
     dates.push(endDate);
   } else {
-    dates.push(endDate, { day: endDate.day, part: 'start' });
+    dates.push({ day: endDate.day, part: 'start' }, endDate);
   }
 
   return dates;
@@ -55,9 +55,12 @@ export const getDatesInRange = (startDate: ExtendedDate, endDate: ExtendedDate):
 function isDateInRange(date: ExtendedDate, range: DayOff) {
   const { day, part } = date;
   const { start, end } = range;
-  const isAfterStart = day.isAfter(dayjs(start.day)) || (day.isSame(dayjs(start.day)) && part !== 'start');
-  const isBeforeEnd = day.isBefore(dayjs(end.day)) || (day.isSame(dayjs(end.day)) && part !== 'end');
-  return isAfterStart && isBeforeEnd;
+
+  const dates = [
+    ...getDatesInRange({ day: dayjs(start.day), part: start.part }, { day: dayjs(end.day), part: end.part })
+  ];
+
+  return dates.some((i) => day.isSame(i.day, 'date') && part === i.part);
 }
 
 interface Day {
@@ -105,7 +108,7 @@ export default function NewWallchart() {
       {/* members */}
       <div className="w-full space-y-6">
         {members.map((i) => (
-          <div key={i.id} className="flex">
+          <div key={i.id} className="flex items-center">
             <div className="w-80 space-y-3 bg-gray-50 p-2">
               <h3 className="truncate text-sm font-medium text-gray-900">{i.user.name}</h3>
               <p className="mt-1 truncate text-sm text-gray-500">{i.user.email}</p>
@@ -158,7 +161,6 @@ function Month({ userId }: MonthProps) {
     setIsMouseDown(false);
     const start = selectedDates[0];
     const end = selectedDates.at(-1);
-    // const end = selectedDates[selectedDates.length - 1];
 
     if (end) {
       const newDayOff: DayOff = {
@@ -179,10 +181,20 @@ function Month({ userId }: MonthProps) {
   };
 
   return (
-    <div className="flex" onMouseUp={isMouseDown ? () => handleDateMouseUp() : undefined}>
+    <div
+      className="flex"
+      onMouseLeave={
+        isMouseDown
+          ? () => {
+              setIsMouseDown(false);
+              setSelectedDates([]);
+            }
+          : undefined
+      }
+    >
       {days.map((day) => {
-        const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'day') && i.part === 'start');
-        const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'day') && i.part === 'end');
+        const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'start');
+        const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'end');
         const isDayOffStart = daysOff.some(
           (range) => isDateInRange({ day, part: 'start' }, range) && range.user.id === userId
         );
@@ -191,7 +203,11 @@ function Month({ userId }: MonthProps) {
         );
 
         return (
-          <div className="relative p-2 border w-10 h-10 flex items-center justify-center" key={day.format()}>
+          <div
+            onMouseUp={isMouseDown ? () => handleDateMouseUp() : undefined}
+            className="relative p-2 border w-10 h-10 flex items-center justify-center"
+            key={day.format()}
+          >
             <div className="top-0 left-0 w-10 h-10 absolute grid grid-cols-2">
               <span
                 onMouseOver={isMouseDown ? () => handleDateMouseOver(day, 'start') : undefined}
@@ -199,7 +215,7 @@ function Month({ userId }: MonthProps) {
                 className={cl(
                   'hover:bg-gray-200',
                   isSelectedStart && 'bg-gray-200',
-                  isDayOffStart && 'bg-primary-300 hover:bg-primary-300'
+                  isDayOffStart && 'bg-primary-500 opacity-50 hover:bg-primary-500'
                 )}
               ></span>
 
@@ -209,11 +225,11 @@ function Month({ userId }: MonthProps) {
                 className={cl(
                   'hover:bg-gray-200',
                   isSelectedEnd && 'bg-gray-200',
-                  isDayOffEnd && 'bg-primary-300 hover:bg-primary-300'
+                  isDayOffEnd && 'bg-primary-500 opacity-50 hover:bg-primary-500'
                 )}
               ></span>
             </div>
-            <span className="select-none z-10">{day.date()}</span>
+            <span className="select-none">{day.date()}</span>
           </div>
         );
       })}
