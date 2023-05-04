@@ -1,12 +1,12 @@
 import { IPilotSection, IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
-import { MAX_PILOT_WIDTH, MIN_PILOT_WIDTH } from '../..';
 import { useAppSelector } from '../../../../app/hooks';
 import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
 import { useResize } from '../../../../hooks/useResize';
 import Header from '../Header';
 import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
+import { dimensions } from '../../../../app/config/dimensions';
 
 interface FullPilotProps {
   activeTabId: number | null;
@@ -17,10 +17,10 @@ interface FullPilotProps {
   showModal: boolean;
 }
 
-const DEFAULT_PILOT_WIDTH = 400;
+const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 const LS_PILOT_KEY = 'pilotWidth';
 
-const pilotWidthFromLS = JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
+const pilotWidthFromLS = DEFAULT_PILOT_WIDTH; // JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
 
 export default function FullPilot({
   activeTabId,
@@ -32,8 +32,8 @@ export default function FullPilot({
 }: FullPilotProps) {
   const { blockRef, Dividers } = useResize({
     dimensions: {
-      min: MIN_PILOT_WIDTH,
-      max: MAX_PILOT_WIDTH
+      min: dimensions.pilot.min,
+      max: dimensions.pilot.max
     },
     storageKey: LS_PILOT_KEY,
     direction: 'X'
