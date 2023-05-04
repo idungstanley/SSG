@@ -69,12 +69,8 @@ export default function PlaceItem({
     <li
       id={`${label}`}
       className={cl(
-        !isActivePlace
-          ? 'hover:bg-gray-100 relative'
-          : isActivePlace && searchStatus
-          ? undefined
-          : 'hover:bg-gray-100 sticky top-0',
-        'focus:flex flex-col w-full flex justify-center group',
+        !isActivePlace ? 'relative' : isActivePlace && searchStatus ? undefined : 'sticky top-0',
+        'focus:flex hover:bg-gray-100 flex-col w-full flex justify-center group',
         bottomContent ? 'gap-2' : ''
       )}
       style={style}

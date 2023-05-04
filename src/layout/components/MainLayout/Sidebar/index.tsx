@@ -99,7 +99,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
   };
 
   return (
-    <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-hidden')}>
+    <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-visible')}>
       {/* show / hide sidebar icon */}
       <Toggle />
       {/* sidebar */}
@@ -109,7 +109,7 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
       >
         <Header />
         <section
-          className="relative h-full flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden"
+          className="relative h-full flex flex-col pr-1.5 overflow-y-visible overflow-x-hidden"
           onScroll={(e) => handleScroll(e)}
         >
           {showSidebar ? <Search /> : null}

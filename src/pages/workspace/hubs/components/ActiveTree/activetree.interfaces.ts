@@ -25,6 +25,7 @@ export interface ListProps {
   hubs: Hub[];
   leftMargin: boolean;
   taskType: string;
+  level?: number;
 }
 
 export interface ItemProps {

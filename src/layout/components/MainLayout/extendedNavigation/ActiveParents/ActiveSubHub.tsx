@@ -7,16 +7,18 @@ import { AvatarWithInitials } from '../../../../../components';
 
 export default function ActiveSubHub() {
   const dispatch = useDispatch();
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  // const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { parentHubExt } = useAppSelector((state) => state.hub);
+  const { id: parentHubId } = parentHubExt;
   const { data, status } = useGetSubHub({
-    parentId: currentItemId
+    parentId: parentHubId
   });
   if (status === 'success') {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
   const { hubParentId, currSubHubId } = useAppSelector((state) => state.hub);
 
-  return currentItemId === hubParentId ? (
+  return parentHubId === hubParentId ? (
     <div id="subhub">
       {data?.data?.hubs.length !== 0 &&
         data?.data?.hubs.map((subhub) => (
@@ -53,7 +55,6 @@ export default function ActiveSubHub() {
                           verticalAlign: 'baseline',
                           letterSpacing: '0.28px'
                         }}
-                        // onClick={() => handleLocation(subhub.id, subhub.name, subhub.parent_id)}
                       >
                         {subhub.name}
                       </a>
