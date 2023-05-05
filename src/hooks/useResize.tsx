@@ -8,7 +8,7 @@ interface UseResizeProps {
   defaultSize?: number;
 }
 
-export function useResize({ dimensions, direction, defaultSize }: UseResizeProps) {
+export function useResize({ dimensions, direction, defaultSize, storageKey }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const { min, max } = dimensions;
   const [size, setSize] = useState(defaultSize ?? min);
@@ -20,7 +20,10 @@ export function useResize({ dimensions, direction, defaultSize }: UseResizeProps
 
       const currentBlockWidth = blockRef.current.offsetWidth;
 
-      const newBlockWidth = widthFromLeftToCurrentBlock + mouseX - currentBlockWidth;
+      const newBlockWidth =
+        widthFromLeftToCurrentBlock -
+        (widthFromLeftToCurrentBlock - currentBlockWidth) -
+        (widthFromLeftToCurrentBlock - mouseX);
 
       const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
 
@@ -72,7 +75,7 @@ export function useResize({ dimensions, direction, defaultSize }: UseResizeProps
       document.removeEventListener('mouseup', handleMouseUp);
 
       // add current size to localStorage
-      // localStorage.setItem(storageKey, JSON.stringify(newSize));
+      localStorage.setItem(storageKey, JSON.stringify(newSize));
     }
   }, []);
 
