@@ -113,11 +113,10 @@ function User() {
       </div>
       {userOptions.map((setting) => {
         return (
-          <>
+          <div key={setting.id}>
             {setting.category !== 'my_app' && (
               <>
                 <div
-                  key={setting.id}
                   className={cl(
                     activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
                     'h-10 flex items-center justify-between px-6 hover:bg-gray-200 cursor-pointer'
@@ -160,7 +159,7 @@ function User() {
                 </section>
               </>
             )}
-          </>
+          </div>
         );
       })}
       <div className="heading h-14 bg-gray-200 flex items-center px-6">
@@ -170,7 +169,7 @@ function User() {
       </div>
       {userOptions.map((setting) => {
         return (
-          <>
+          <div key={setting.id}>
             {setting.category === 'my_app' && (
               <div
                 key={setting.id}
@@ -187,7 +186,7 @@ function User() {
                 </h3>
               </div>
             )}
-          </>
+          </div>
         );
       })}
     </div>
