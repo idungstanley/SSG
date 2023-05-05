@@ -1,4 +1,4 @@
-import { FiPlusCircle, FiSearch } from 'react-icons/fi';
+import { FiPlusCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
@@ -8,6 +8,7 @@ import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
 import { AiFillCaretUp, AiOutlineClose } from 'react-icons/ai';
+import { UserSortDropDown } from './TimeUserSortDropDown';
 
 export type Header = {
   title: string;
@@ -90,7 +91,7 @@ export default function ClockLog() {
                               onClick={() => handleSort(col.title, col.id)}
                             />
                             {timeArr.includes(col.title) && (
-                              <div className="sortClose-group rounded-md">
+                              <div className="sortClose-group rounded-full">
                                 <div className="flex items-center justify-center space-x-1 uppercase text-xs text-white font-medium bg-red-400 group relative cursor-pointer h-4 w-4 rounded-full">
                                   <div className="font-bold hover:text-clip cursor-pointer" style={{ fontSize: '8px' }}>
                                     <>
@@ -107,7 +108,7 @@ export default function ClockLog() {
                                 </div>
                                 <AiOutlineClose
                                   onClick={() => handleRemoveFilter(col.title)}
-                                  className="sortClose text-white font-bold h-3 w-3 m-1"
+                                  className="sortClose text-white font-bold h-3 w-3 m-1 cursor-pointer"
                                 />
                               </div>
                             )}
@@ -176,44 +177,44 @@ export default function ClockLog() {
   return <div className="p-2">{renderItemEntries()}</div>;
 }
 
-type UserSortParams = {
-  arr: User[];
-  toggleModalFn: React.Dispatch<React.SetStateAction<boolean>>;
-  memberIds: string[];
-};
+// type UserSortParams = {
+//   arr: User[];
+//   toggleModalFn: React.Dispatch<React.SetStateAction<boolean>>;
+//   memberIds: string[];
+// };
 
-function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
-  const dispatch = useAppDispatch();
-  const { timeSortArr } = useAppSelector((state) => state.task);
-  const sortIds: string[] = [...new Set(memberIds)];
+// function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
+//   const dispatch = useAppDispatch();
+//   const { timeSortArr } = useAppSelector((state) => state.task);
+//   const sortIds: string[] = [...new Set(memberIds)];
 
-  const teamMember = arr.filter((obj, index, arr) => {
-    return arr.findIndex((item) => item.id === obj.id) === index;
-  });
-  const handleSort = (id: number) => {
-    dispatch(setTimeSortArr([...timeSortArr, sortIds[id]]));
-  };
-  return (
-    <div tabIndex={0} onBlur={() => toggleModalFn(false)}>
-      <div className="absolute top-5 left-2 z-50 w-60 max-h-204 bg-white shadow-xl rounded-md">
-        <div className="relative my-2 z-50 border-b-2 pb-2">
-          <input type="text" className="w-52 mx-auto pl-6 text-sm" placeholder="Search" />
-          <FiSearch className="w-5 h-5 absolute left-5 top-2.5" />
-        </div>
-        <ul className="space-y-2 overflow-auto">
-          {teamMember.map((el, index) => {
-            return (
-              <li
-                key={el.id}
-                className="flex items-center py-2 alt-task px-4 cursor-pointer"
-                onClick={() => handleSort(index)}
-              >
-                {el.name}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
-  );
-}
+//   const teamMember = arr.filter((obj, index, arr) => {
+//     return arr.findIndex((item) => item.id === obj.id) === index;
+//   });
+//   const handleSort = (id: number) => {
+//     dispatch(setTimeSortArr([...timeSortArr, sortIds[id]]));
+//   };
+//   return (
+//     <div tabIndex={0} onBlur={() => toggleModalFn(false)}>
+//       <div className="absolute top-5 left-2 z-50 w-60 max-h-204 bg-white shadow-xl rounded-md">
+//         <div className="relative my-2 z-50 border-b-2 pb-2">
+//           <input type="text" className="w-52 mx-auto pl-6 text-sm" placeholder="Search" />
+//           <FiSearch className="w-5 h-5 absolute left-5 top-2.5" />
+//         </div>
+//         <ul className="space-y-2 overflow-auto">
+//           {teamMember.map((el, index) => {
+//             return (
+//               <li
+//                 key={el.id}
+//                 className="flex items-center py-2 alt-task px-4 cursor-pointer"
+//                 onClick={() => handleSort(index)}
+//               >
+//                 {el.name}
+//               </li>
+//             );
+//           })}
+//         </ul>
+//       </div>
+//     </div>
+//   );
+// }
