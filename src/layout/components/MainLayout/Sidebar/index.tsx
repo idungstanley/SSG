@@ -9,7 +9,6 @@ import Places from './components/Places';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
 import { dimensions } from '../../../../app/config/dimensions';
-import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { useResize } from '../../../../hooks/useResize';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
@@ -18,7 +17,7 @@ const DEFAULT_SIDEBAR_WIDTH = dimensions.navigationBar.default;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { sidebarWidthRD, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
+  const { extendedSidebarWidth } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size } = useResize({
@@ -28,7 +27,7 @@ export default function Sidebar() {
     },
     storageKey: 'empty',
     direction: 'XR',
-    isAllowResize: isAllowIncreaseWidth(extendedSidebarWidth, sidebarWidthRD)
+    additionalSize: extendedSidebarWidth
   });
 
   useEffect(() => {

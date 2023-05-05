@@ -1,14 +1,15 @@
 import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
+import { isAllowIncreaseWidth } from '../utils/widthUtils';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
   storageKey: string;
   direction: 'XL' | 'YB' | 'XR';
-  isAllowResize?: boolean;
+  additionalSize?: number;
 }
 
-export function useResize({ dimensions, direction, isAllowResize }: UseResizeProps) {
+export function useResize({ dimensions, direction, additionalSize }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const { min, max } = dimensions;
   const [size, setSize] = useState(min);
@@ -24,7 +25,7 @@ export function useResize({ dimensions, direction, isAllowResize }: UseResizePro
 
       const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
 
-      if (isAllowResize === false) {
+      if (additionalSize && !isAllowIncreaseWidth(additionalSize, adjustedWidth)) {
         return;
       }
 
