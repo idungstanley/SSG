@@ -23,10 +23,10 @@ function MainLayout() {
             <OpenExtBtn />
             <Sidebar />
           </div>
-          <div className="flex w-full h-full">
+          <div className={cl('grid h-full', !showExtendedBar ? 'grid-cols-1' : 'grid-cols-autoFr')}>
             {/* show the extended side navigation component*/}
             {showExtendedBar && <ExpandedNav />}
-            <div className="flex flex-col flex-1 w-full">
+            <div className="w-full">
               <AdditionalHeader />
               <Header />
               <div className="w-full h-full">
