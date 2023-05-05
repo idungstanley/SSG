@@ -1,17 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AvatarWithInitials } from '../../../components';
 import notificationFrame from '../../../assets/branding/notificationFrame.png';
 import { getAllWorkSpaceService } from '../../../features/workspace/workspaceService';
 import { useAppDispatch } from '../../../app/hooks';
 import { setFetchAllWorkspace } from '../../../features/workspace/workspaceSlice';
 import { Spinner } from '../../../common';
+import { cl } from '../../../utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { switchWorkspaceService } from '../../../features/account/accountService';
+import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
+import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
+import { useNavigate } from 'react-router-dom';
 
 function WorkspaceSettings() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [selectedWorkSpace, setSelectedWorkspace] = useState<string | undefined>('');
   const { data: AllMyWorkSpace, status } = getAllWorkSpaceService();
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
   }, []);
+
+  const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
+    onSuccess: (data) => {
+      // Clear react-query and redux cache
+      localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
+
+      dispatch(
+        setCurrentWorkspace({
+          workspaceId: data.data.workspace.id
+        })
+      );
+
+      dispatch(setMyWorkspacesSlideOverVisibility(false));
+      navigate('/');
+
+      queryClient.invalidateQueries();
+      dispatch(switchWorkspace());
+    }
+  });
+  const onSwitchWorkspace = () => {
+    switchWorkspaceMutation.mutate({
+      workspaceId: selectedWorkSpace as string
+    });
+    queryClient.invalidateQueries();
+  };
   return (
     <main className="flex-1 h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6 bg-white w-full">
       <div
@@ -26,10 +60,16 @@ function WorkspaceSettings() {
           </h3>
         </div>
         <div>
-          <button className="p-1 rounded text-sm border border-gray-500 mx-2 w-16 h-8">Cancel</button>
+          <button
+            className="p-1 rounded text-sm border border-gray-500 mx-2 w-16 h-8"
+            onClick={() => setSelectedWorkspace('')}
+          >
+            Cancel
+          </button>
           <button
             className="p-1 rounded text-sm border border-gray-500 mx-2 text-white w-16 h-8"
             style={{ backgroundColor: '#BF00FF' }}
+            onClick={onSwitchWorkspace}
           >
             Save
           </button>
@@ -61,7 +101,14 @@ function WorkspaceSettings() {
           <tbody>
             {AllMyWorkSpace?.data.workspaces.map((workspace) => {
               return (
-                <tr key={workspace.id} className="border border-slate-300 hover:bg-fuchsia-200 cursor-pointer">
+                <tr
+                  key={workspace.id}
+                  className={cl(
+                    'border border-slate-300 hover:bg-fuchsia-200 cursor-pointer',
+                    selectedWorkSpace === workspace.id ? 'bg-fuchsia-200' : ''
+                  )}
+                  onClick={() => setSelectedWorkspace(workspace.id)}
+                >
                   <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
                   <td className="text-center py-2">
                     <AvatarWithInitials
