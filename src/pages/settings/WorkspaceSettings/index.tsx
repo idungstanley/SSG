@@ -26,29 +26,47 @@ function WorkspaceSettings() {
           </button>
         </div>
       </section>
-      <div className="  m-auto shadow-xl" style={{ width: '1250px' }}>
-        <div
-          className="flex items-end m-auto justify-between mt-10 border-2 items-center bg-gray-200"
-          style={{ height: '60px', width: '1250px' }}
-        >
-          <div className="font-medium text-black p-6" style={{ fontSize: '15px' }}>
-            WORKSPACE
-          </div>
-          <div className="font-medium text-black" style={{ fontSize: '15px' }}>
-            AVATAR
-          </div>
-          <div className="font-medium text-black" style={{ fontSize: '15px' }}>
-            LAST TIME VISITED
-          </div>
-          <div className="font-medium text-black p-6" style={{ fontSize: '15px' }}>
-            DATE CREATED
-          </div>
-        </div>
-        <div
+      <table className="table-auto border-collapse  border border-slate-400 mt-10 m-auto" style={{ width: '1250px' }}>
+        <thead className="bg-gray-200" style={{ height: '60px' }}>
+          <tr className="border border-slate-300 ">
+            <th className="font-medium text-black   " style={{ fontSize: '15px' }}>
+              WORKSPACE
+            </th>
+            <th className="font-medium text-black" style={{ fontSize: '15px' }}>
+              AVATAR
+            </th>
+            <th className="font-medium text-black" style={{ fontSize: '15px' }}>
+              LAST TIME VISITED
+            </th>
+            <th className="font-medium text-black " style={{ fontSize: '15px' }}>
+              DATE CREATED
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border border-slate-300 hover:bg-fuchsia-200 " style={{ height: '60px' }}>
+            <td>ELASTIC GROUP</td>
+            <td>
+              <AvatarWithInitials initials={'NS'} backgroundColour={'red'} height="h-10" width="w-10" />
+            </td>
+            <td> 13 HOURS AGO</td>
+            <td>10/12/2023</td>
+          </tr>
+          <tr className="hover:bg-fuchsia-200" style={{ height: '60px' }}>
+            <td>ALSO WORKSPACE</td>
+            <td>
+              <AvatarWithInitials initials={'AW'} backgroundColour={'blue'} height="h-10" width="w-10" />
+            </td>
+            <td> 2 DAYS AGO</td>
+            <td>10/12/2023</td>
+          </tr>
+        </tbody>
+        {/* </div> */}
+        {/* <div
           className="flex items-end m-auto justify-between  border-2 items-center hover:bg-fuchsia-200"
           style={{ height: '60px', width: '1250px' }}
-        >
-          <div className="font-medium text-black p-6" style={{ fontSize: '15px' }}>
+        > */}
+        {/* <div className="font-medium text-black p-6" style={{ fontSize: '15px' }}>
             ELASTIC GROUP
           </div>
           <div className="font-medium text-black mr-8" style={{ fontSize: '15px' }}>
@@ -77,8 +95,8 @@ function WorkspaceSettings() {
           <div className="font-medium text-black p-6  mr-4" style={{ fontSize: '15px' }}>
             10/12/2023
           </div>
-        </div>
-      </div>
+        </div> */}
+      </table>
     </main>
   );
 }
