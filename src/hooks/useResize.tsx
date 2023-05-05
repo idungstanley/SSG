@@ -24,7 +24,11 @@ export function useResize({ dimensions, direction, isAllowResize }: UseResizePro
 
       const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
 
-      blockRef.current.style.width = isAllowResize ? `${adjustedWidth}px` : `${blockRef.current.offsetWidth}px`;
+      if (isAllowResize === false) {
+        return;
+      }
+
+      blockRef.current.style.width = `${adjustedWidth}px`;
     }
   }, []);
 

@@ -18,7 +18,7 @@ const DEFAULT_SIDEBAR_WIDTH = dimensions.navigationBar.default;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
+  const { sidebarWidthRD, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size } = useResize({
@@ -28,11 +28,11 @@ export default function Sidebar() {
     },
     storageKey: 'empty',
     direction: 'XR',
-    isAllowResize: true
+    isAllowResize: isAllowIncreaseWidth(extendedSidebarWidth, sidebarWidthRD)
   });
 
   useEffect(() => {
-    dispatch(setSidebarWidthRD(isAllowIncreaseWidth(size, sidebarWidthRD) ? size : MIN_SIDEBAR_WIDTH));
+    dispatch(setSidebarWidthRD(size));
   }, [size]);
 
   const handleScroll = (event: React.UIEvent<HTMLElement, UIEvent>) => {
