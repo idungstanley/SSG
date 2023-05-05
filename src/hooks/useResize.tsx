@@ -4,15 +4,31 @@ import { cl } from '../utils';
 interface UseResizeProps {
   dimensions: { min: number; max: number };
   storageKey: string;
-  direction: 'X' | 'Y';
+  direction: 'XL' | 'YB' | 'XR';
+  defaultSize?: number;
 }
 
-export function useResize({ dimensions, storageKey, direction }: UseResizeProps) {
+export function useResize({ dimensions, direction, defaultSize }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const { min, max } = dimensions;
-  const [size, setSize] = useState(min);
+  const [size, setSize] = useState(defaultSize ?? min);
 
-  const handleMouseMoveX = useCallback((e: MouseEvent) => {
+  const handleMouseMoveXR = useCallback((e: MouseEvent) => {
+    if (blockRef.current) {
+      const mouseX = e.clientX;
+      const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
+
+      const currentBlockWidth = blockRef.current.offsetWidth;
+
+      const newBlockWidth = widthFromLeftToCurrentBlock + mouseX - currentBlockWidth;
+
+      const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
+
+      blockRef.current.style.width = `${adjustedWidth}px`;
+    }
+  }, []);
+
+  const handleMouseMoveXL = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
@@ -43,9 +59,12 @@ export function useResize({ dimensions, storageKey, direction }: UseResizeProps)
   const handleMouseUp = useCallback(() => {
     document.body.style.userSelect = ''; // enable selecting text
 
+    const isXDirection = direction === 'XL' || direction === 'XR';
+
     if (blockRef.current) {
-      const newSize = direction === 'X' ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
-      const handleMouseMove = direction === 'X' ? handleMouseMoveX : handleMouseMoveY;
+      const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
+      const handleMouseMove =
+        direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
       setSize(newSize);
 
@@ -53,63 +72,57 @@ export function useResize({ dimensions, storageKey, direction }: UseResizeProps)
       document.removeEventListener('mouseup', handleMouseUp);
 
       // add current size to localStorage
-      localStorage.setItem(storageKey, JSON.stringify(newSize));
+      // localStorage.setItem(storageKey, JSON.stringify(newSize));
     }
   }, []);
 
   const handleMouseDown = useCallback(() => {
     document.body.style.userSelect = 'none'; // disable selecting text
 
-    const handleMouseMove = direction === 'X' ? handleMouseMoveX : handleMouseMoveY;
+    const handleMouseMove =
+      direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   }, []);
 
-  function DividersY() {
-    return (
-      <div
-        style={{ cursor: 'row-resize' }}
-        onMouseDown={handleMouseDown}
-        className="z-10 absolute group h-2 -bottom-1 w-full right-0 transition-all duration-200"
-      >
-        <div
-          className={cl(
-            size === min ? '' : 'group-hover:opacity-100',
+  function Dividers() {
+    const params = {
+      XL: {
+        root: 'top-0 w-2 -left-1 h-full',
+        firstDivider: 'top-0 left-0 w-0.5 h-full',
+        secondDivider: 'top-0 right-0 w-0.5 h-full'
+      },
+      YB: {
+        root: 'h-2 -bottom-1 w-full right-0',
+        firstDivider: 'top-0 left-0 h-0.5 w-full',
+        secondDivider: ' bottom-0 left-0 h-0.5 w-full'
+      },
+      XR: {
+        root: 'top-0 w-2 -right-1 h-full',
+        firstDivider: 'top-0 left-0 w-0.5 h-full',
+        secondDivider: 'top-0 right-0 w-0.5 h-full'
+      }
+    };
 
-            'absolute top-0 left-0 transition-all h-0.5 w-full opacity-0 bg-green-300'
-          )}
-        />
-        <div
-          className={cl(
-            size === max ? '' : 'group-hover:opacity-100',
-
-            'absolute bottom-0 left-0 transition-all h-0.5 w-full opacity-0 bg-green-300'
-          )}
-        />
-      </div>
-    );
-  }
-
-  function DividersX() {
     return (
       <div
         style={{ cursor: 'col-resize' }}
         onMouseDown={handleMouseDown}
-        className="z-10 absolute group top-0 w-2 -left-1 h-full transition-all duration-200"
+        className={cl('z-10 absolute group transition-all duration-200', params[direction].root)}
       >
         <div
           className={cl(
             size === max ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 left-0 transition-all w-0.5 h-full opacity-0 bg-green-300'
+            'absolute top-0 left-0 transition-all w-0.5 h-full opacity-0 bg-primary-300'
           )}
         />
         <div
           className={cl(
             size === min ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 right-0 transition-all w-0.5 h-full opacity-0 bg-green-300'
+            'absolute top-0 right-0 transition-all w-0.5 h-full opacity-0 bg-primary-300'
           )}
         />
       </div>
@@ -118,6 +131,7 @@ export function useResize({ dimensions, storageKey, direction }: UseResizeProps)
 
   return {
     blockRef, // for resizable element
-    Dividers: direction === 'X' ? DividersX : DividersY // dragging border
+    Dividers, // dragging border
+    size
   };
 }

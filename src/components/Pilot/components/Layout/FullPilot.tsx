@@ -36,7 +36,7 @@ export default function FullPilot({
       max: dimensions.pilot.max
     },
     storageKey: LS_PILOT_KEY,
-    direction: 'X'
+    direction: 'XL'
   });
 
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
