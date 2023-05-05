@@ -4,6 +4,8 @@ import { useReactMediaRecorder } from 'react-media-recorder';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
+import moment from 'moment';
+import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -15,8 +17,6 @@ export default function Recording() {
 
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { getRecording } = useAppSelector((state) => state.workspace);
-
-  console.log(getRecording);
 
   const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
   const queryClient = useQueryClient();
@@ -63,12 +63,49 @@ export default function Recording() {
           </div>
         </>
       )}
+      <table className="w-full mx-auto p-1">
+        <thead>
+          <tr className="flex mx-2 border-b-2 py-2 space-x-12">
+            <th className="capitalize font-bold">user</th>
+            <th className="capitalize font-bold">recording</th>
+            <th className="capitalize font-bold">duration</th>
+          </tr>
+        </thead>
+        {data?.data.attachments.map((video) => {
+          //  Leave for reference purposes
+          // console.log(data.data.attachments);
+          return (
+            <div key={video.id}>
+              <VideoEntries videoFile={video} />
+            </div>
+          );
+        })}
+      </table>
+    </div>
+  );
+}
 
-      {data?.data.attachments.map((video) => (
-        <p key={video.id}>
-          <video src={video.path && data?.data.attachments[0].path} controls></video>
-        </p>
-      ))}
+interface VideoEntriesProps {
+  videoFile: {
+    id: string;
+    path: string;
+    physical_file: {
+      id: string;
+      created_at: string;
+      updated_at: string;
+    };
+  };
+}
+
+function VideoEntries({ videoFile }: VideoEntriesProps) {
+  const { created_at, updated_at } = videoFile.physical_file;
+  const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
+  // const videoRef: React.MutableRefObject<HTMLVideoElement | null> = useRef(null);
+  return (
+    <div className="flex space-x-10 border-b items-center p-2">
+      <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
+      <video src={videoFile.path} controls height={60} width={100} tabIndex={0}></video>
+      <span>{moment(duration).format('HH:mm:ss')}</span>
     </div>
   );
 }
