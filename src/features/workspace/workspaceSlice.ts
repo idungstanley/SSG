@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { dimensions } from '../../app/config/dimensions';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -69,9 +70,9 @@ const initialState: workspaceState = {
   showPilot: false,
   showPilotIconView: false,
   showPilotListView: false,
-  extendedSidebarWidth: 240,
+  extendedSidebarWidth: dimensions.extendedBar.default,
   activeTabId: 0,
-  sidebarWidthRD: 260,
+  sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,

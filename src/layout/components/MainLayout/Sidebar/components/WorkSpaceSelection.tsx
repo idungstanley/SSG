@@ -1,10 +1,11 @@
-import React from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../components';
 import { getWorkspaceService } from '../../../../../features/workspace/workspaceService';
 import { Spinner } from '../../../../../common';
 import WorkspaceSettingsModal from '../../../../../pages/workspace/workspaceSettings/WorkspaceSettingsModal';
-import { MIN_SIDEBAR_WIDTH } from '..';
+import { dimensions } from '../../../../../app/config/dimensions';
+
+const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 function WorkSpaceSelection() {
   const { showSidebar } = useAppSelector((state) => state.account);

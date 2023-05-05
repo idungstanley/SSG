@@ -35,6 +35,7 @@ export default function PlaceItem({
   const { showSidebar } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  // const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
@@ -46,10 +47,12 @@ export default function PlaceItem({
     transition,
     backgroundColor: isDragging
       ? '#f3f4f6'
+      : isActivePlace
+      ? 'white'
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? '1000' : undefined,
     height: '50px',
     paddingLeft: '25px'
   };
@@ -66,8 +69,8 @@ export default function PlaceItem({
     <li
       id={`${label}`}
       className={cl(
-        !isActivePlace ? 'hover:bg-gray-100' : isActivePlace && searchStatus ? undefined : 'hover:bg-gray-100',
-        'focus:flex flex-col w-full flex justify-center relative group',
+        !isActivePlace ? 'relative' : isActivePlace && searchStatus ? undefined : 'sticky top-0',
+        'focus:flex hover:bg-gray-100 flex-col w-full flex justify-center group',
         bottomContent ? 'gap-2' : ''
       )}
       style={style}

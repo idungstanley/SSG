@@ -22,24 +22,26 @@ interface TaskItemProps {
     parent_id?: string | null;
   };
   handleClick: (id: string, index?: number) => void;
-  index?: number;
-  isSticky?: boolean;
   showChildren: string | null | undefined;
   handleLocation: (id: string, name: string, index?: number) => void;
   handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
+  index?: number;
+  isSticky?: boolean;
   type: string;
   topNumber?: string;
   zNumber?: string;
+  stickyButtonIndex?: number | undefined;
 }
 export default function HubItem({
   handleClick,
   item,
   handleLocation,
-  index,
-  isSticky,
   handleHubSettings,
   showChildren,
   type,
+  index,
+  isSticky,
+  stickyButtonIndex,
   topNumber = '0',
   zNumber
 }: TaskItemProps) {
@@ -82,7 +84,7 @@ export default function HubItem({
       <div
         className={`flex justify-between items-center group ${
           item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        } ${isSticky ? 'sticky z-50 bg-white divide-y' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky z-50 bg-white' : ''}`}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
         style={{
@@ -91,10 +93,13 @@ export default function HubItem({
           zIndex: isSticky ? zNumber : '10'
         }}
       >
-        <div className="relative flex items-center justify-between pl-3" style={{ height: '30px' }}>
+        <div
+          className={`relative flex items-center justify-between ${showSidebar ? 'pl-3' : 'pl-2.5'}`}
+          style={{ height: '30px' }}
+        >
           {item.id === hubId && (
             <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 bg-green-500 rounded-r-lg"
+              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
               style={{ backgroundColor: '#BF00FF' }}
             />
           )}
@@ -137,7 +142,7 @@ export default function HubItem({
                   />
                 )}
               </div>
-              <span className="ml-4 overflow-hidden">
+              <span className="ml-5 overflow-hidden">
                 <a
                   className="capitalize truncate cursor-pointer"
                   style={{

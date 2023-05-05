@@ -20,9 +20,9 @@ import Commerce from '../../../../../pages/workspace/commerce';
 import RoutePlanner from '../../../../../pages/workspace/routePlanner';
 import { IoBusinessOutline } from 'react-icons/io5';
 import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
-import { FaHandsHelping, FaRoute } from 'react-icons/fa';
+import { FaHandsHelping } from 'react-icons/fa';
 import { MdAlternateEmail } from 'react-icons/md';
-import { InboxStackIcon } from '@heroicons/react/24/solid';
+import { HiOutlineInbox } from 'react-icons/hi';
 import Email from '../../../../../pages/workspace/email';
 import { BsListCheck } from 'react-icons/bs';
 import Tracker from '../../../../../pages/workspace/tracker';
@@ -37,6 +37,7 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { CiRoute } from 'react-icons/ci';
 
 export const places = [
   {
@@ -56,7 +57,7 @@ export const places = [
     name: 'In-tray',
     id: '3',
     place: <Inbox />,
-    icon: <InboxStackIcon className="w-4 h-4" />
+    icon: <HiOutlineInbox className="w-4 h-4" />
   },
   {
     name: 'Cabinet',
@@ -87,7 +88,7 @@ export const places = [
     name: 'ROUTEPLAN',
     id: '8',
     place: <RoutePlanner />,
-    icon: <FaRoute className="w-4 h-4" />
+    icon: <CiRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',

@@ -12,6 +12,8 @@ interface HubState {
   archiveHub: boolean;
   sidebarSettings: boolean;
   toggleArchive: number;
+  parentHubExt: { id: string | null; type: string | null };
+  subHubExt: { id: string | null; type: string | null };
   showMenuDropdown: string | null | undefined;
   showMenuDropdownType: string | null | undefined;
   SubDropdownMenu: boolean;
@@ -52,7 +54,9 @@ const initialState: HubState = {
   favUpdateName: null,
   createWLID: null,
   editHub: false,
-  openedHubId: []
+  openedHubId: [],
+  parentHubExt: { id: null, type: null },
+  subHubExt: { id: null, type: null }
 };
 
 export const hubSlice = createSlice({
@@ -73,6 +77,12 @@ export const hubSlice = createSlice({
     },
     setShowEditHubModal(state, action: PayloadAction<boolean>) {
       state.showEditHubModal = action.payload;
+    },
+    setParentHubExt(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
+      state.parentHubExt = action.payload;
+    },
+    setSubHubExt(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
+      state.subHubExt = action.payload;
     },
     getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
@@ -175,6 +185,8 @@ export const {
   setTriggerFavUpdate,
   setFavUpdateName,
   setCreateWLID,
-  setEditHub
+  setEditHub,
+  setParentHubExt,
+  setSubHubExt
 } = hubSlice.actions;
 export default hubSlice.reducer;

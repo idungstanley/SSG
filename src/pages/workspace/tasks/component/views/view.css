@@ -133,10 +133,6 @@ textarea {
 
 .sortClose {
   display: none;
-  transition: all 0.7s ease-in-out;
-  animation: fadeInAnimation ease 3s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 }
 
 .sortClose-group:hover {
@@ -145,7 +141,6 @@ textarea {
 
 .sortClose-group:hover .sortClose {
   display: inline-block;
-  transform: translateX(0, 20);
 }
 
 .alt-task:nth-child(even) {

@@ -1,3 +1,4 @@
+import { ListColourProps } from '../../components/tasks/ListItem';
 import { ICheckListRes } from './../task/interface.tasks';
 
 export interface IField {
@@ -28,8 +29,20 @@ export interface IListDetails {
   checklists: ICheckListRes[];
 }
 
+export interface listProps {
+  id: string;
+  name: string;
+  color?: ListColourProps | string;
+  shape?: string;
+}
+
 export interface IListDetailRes {
   data: {
     list: IListDetails;
+  };
+}
+export interface listDetails {
+  data: {
+    lists: listProps[];
   };
 }

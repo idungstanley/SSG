@@ -163,7 +163,7 @@ function CreateNewWorkspace() {
                   <div className="grid grid-cols-8 gap-12">
                     {avatarBg.map(({ colour }) => {
                       return (
-                        <div key={colour} className="w-12 h-12 flex items-center">
+                        <div key={colour} className="w-12 h-12 flex items-center justify-center">
                           <button
                             type="button"
                             className="rounded w-10 h-10 hover:w-20 hover:h-20 workspace-color-button"

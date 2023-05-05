@@ -15,7 +15,7 @@ function Workspace() {
       title: 'Settings',
       onClick: () => {
         dispatch(setActiveTab('Settings'));
-        navigate('/construction');
+        navigate('construction');
       }
     },
     {

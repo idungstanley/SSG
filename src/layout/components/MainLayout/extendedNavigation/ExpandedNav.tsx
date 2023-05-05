@@ -26,6 +26,8 @@ import AlsoHr from '../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../pages/workspace/commerce';
 import { IoBusinessOutline } from 'react-icons/io5';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryTabs';
+import { dimensions } from '../../../../app/config/dimensions';
+import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 
 interface ItemData {
   id?: number;
@@ -113,6 +115,9 @@ export const secondaryNavigation: ItemData[] = [
   }
 ];
 
+const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
+const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
+
 function ExpandedNav() {
   const dispatch = useDispatch();
   const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
@@ -120,8 +125,7 @@ function ExpandedNav() {
 
   const sidebarRef = useRef<HTMLInputElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const MIN_SIDEBAR_WIDTH = 230;
-  const MAX_SIDEBAR_WIDTH = 320;
+
   const startResizing = React.useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -133,9 +137,10 @@ function ExpandedNav() {
       if (sidebarRef !== undefined) {
         if (sidebarRef.current !== undefined && sidebarRef.current !== null)
           if (isResizing) {
-            dispatch(
-              setExtendedSidebarWidth(mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left)
-            );
+            const width = mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left;
+
+            const { isAllow, allowedSize } = isAllowIncreaseWidth(width, extendedSidebarWidth);
+            dispatch(setExtendedSidebarWidth(isAllow ? width : allowedSize - width));
           }
       }
     },
