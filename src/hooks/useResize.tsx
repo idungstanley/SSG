@@ -1,18 +1,17 @@
 import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
-import { isAllowIncreaseWidth } from '../utils/widthUtils';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
   storageKey: string;
   direction: 'XL' | 'YB' | 'XR';
-  additionalSize?: number;
+  defaultSize?: number;
 }
 
-export function useResize({ dimensions, direction, additionalSize }: UseResizeProps) {
+export function useResize({ dimensions, direction, defaultSize }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const { min, max } = dimensions;
-  const [size, setSize] = useState(min);
+  const [size, setSize] = useState(defaultSize ?? min);
 
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
@@ -24,10 +23,6 @@ export function useResize({ dimensions, direction, additionalSize }: UseResizePr
       const newBlockWidth = widthFromLeftToCurrentBlock + mouseX - currentBlockWidth;
 
       const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
-
-      if (additionalSize && !isAllowIncreaseWidth(additionalSize, adjustedWidth)) {
-        return;
-      }
 
       blockRef.current.style.width = `${adjustedWidth}px`;
     }

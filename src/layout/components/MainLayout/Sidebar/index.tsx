@@ -10,14 +10,14 @@ import Search from './components/Search';
 import Toggle from './components/Toggle';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
+import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
-const DEFAULT_SIDEBAR_WIDTH = dimensions.navigationBar.default;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { extendedSidebarWidth } = useAppSelector((state) => state.workspace);
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size } = useResize({
@@ -27,11 +27,12 @@ export default function Sidebar() {
     },
     storageKey: 'empty',
     direction: 'XR',
-    additionalSize: extendedSidebarWidth
+    defaultSize: dimensions.navigationBar.default
   });
 
   useEffect(() => {
-    dispatch(setSidebarWidthRD(size));
+    const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
+    dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
   }, [size]);
 
   const handleScroll = (event: React.UIEvent<HTMLElement, UIEvent>) => {
@@ -47,7 +48,7 @@ export default function Sidebar() {
       {/* sidebar */}
       <section
         style={{
-          width: DEFAULT_SIDEBAR_WIDTH
+          width: sidebarWidthRD
         }}
         ref={blockRef}
         className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"

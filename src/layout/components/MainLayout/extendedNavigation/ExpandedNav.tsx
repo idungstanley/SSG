@@ -27,6 +27,7 @@ import Commerce from '../../../../pages/workspace/commerce';
 import { IoBusinessOutline } from 'react-icons/io5';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryTabs';
 import { dimensions } from '../../../../app/config/dimensions';
+import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 // import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 
 interface ItemData {
@@ -139,9 +140,9 @@ function ExpandedNav() {
           if (isResizing) {
             const width = mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left;
 
-            // const { isAllow, allowedSize } = isAllowIncreaseWidth(width, extendedSidebarWidth);
-            dispatch(setExtendedSidebarWidth(width));
-            // dispatch(setExtendedSidebarWidth(isAllow ? width : allowedSize - width));
+            const { isAllow, allowedSize } = isAllowIncreaseWidth(width, extendedSidebarWidth);
+
+            dispatch(setExtendedSidebarWidth(isAllow ? width : allowedSize - width));
           }
       }
     },
