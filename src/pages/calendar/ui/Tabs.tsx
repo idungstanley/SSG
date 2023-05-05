@@ -7,6 +7,7 @@ import { checkIsOwner } from '../lib/userUtils';
 
 const tabs = [
   { name: 'Wallchart', href: '/calendar' },
+  { name: 'NewWallchart', href: '/calendar/new' },
   { name: 'Calendar', href: '/calendar/year' },
   { name: 'Leave types', href: '/calendar/types' }
 ];
