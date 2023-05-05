@@ -9,5 +9,5 @@ export const isAllowIncreaseWidth = (first: number, second: number) => {
 
   const sum = first + second;
 
-  return { isAllow: sum <= width, allowedSize: width };
+  return sum <= width;
 };
