@@ -25,7 +25,7 @@ export default function Sidebar() {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
     },
-    storageKey: 'empty',
+    storageKey: 'sidebarWidth',
     direction: 'XR',
     defaultSize: dimensions.navigationBar.default
   });
