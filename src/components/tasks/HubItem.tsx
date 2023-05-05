@@ -142,7 +142,7 @@ export default function HubItem({
                   />
                 )}
               </div>
-              <span className="ml-4 overflow-hidden">
+              <span className="ml-5 overflow-hidden">
                 <a
                   className="capitalize truncate cursor-pointer"
                   style={{

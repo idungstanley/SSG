@@ -24,7 +24,7 @@ function User() {
       title: 'Workspaces',
       onClick: () => {
         dispatch(setActiveTab('Workspaces'));
-        navigate('construction');
+        navigate('workspaces');
       }
     },
     {
