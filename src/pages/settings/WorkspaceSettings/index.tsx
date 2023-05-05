@@ -63,7 +63,7 @@ function WorkspaceSettings() {
               return (
                 <tr key={workspace.id} className="border border-slate-300 hover:bg-fuchsia-200 cursor-pointer">
                   <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
-                  <td className="text-center py-3">
+                  <td className="text-center py-2">
                     <AvatarWithInitials
                       initials={workspace.initials}
                       backgroundColour={
