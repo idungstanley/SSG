@@ -1,11 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import moment from 'moment';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import '../../../../pages/workspace/tasks/component/views/view.css';
+import { RiPlayCircleFill, RiStopCircleFill } from 'react-icons/ri';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -100,11 +102,50 @@ interface VideoEntriesProps {
 function VideoEntries({ videoFile }: VideoEntriesProps) {
   const { created_at, updated_at } = videoFile.physical_file;
   const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
-  // const videoRef: React.MutableRefObject<HTMLVideoElement | null> = useRef(null);
+  const [playToggle, setPlayToggle] = useState<boolean>(false);
+  const videoRef: React.MutableRefObject<HTMLVideoElement | null> = useRef(null);
+  const handlePlayBack = () => {
+    if (videoRef.current) {
+      if (playToggle) {
+        videoRef.current.pause();
+        setPlayToggle(!playToggle);
+      } else {
+        videoRef.current.play();
+        setPlayToggle(!playToggle);
+      }
+    }
+  };
+  const toggleControls = () =>
+    videoRef.current?.hasAttribute('controls')
+      ? videoRef.current.removeAttribute('controls')
+      : videoRef.current?.setAttribute('controls', 'true');
+
   return (
-    <div className="flex space-x-10 border-b items-center p-2">
+    <div className="flex space-x-10 border-b items-center p-2 relative">
       <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
-      <video src={videoFile.path} controls height={60} width={100} tabIndex={0}></video>
+      <div className="relative">
+        <video
+          ref={videoRef}
+          src={videoFile.path}
+          height={60}
+          width={100}
+          tabIndex={0}
+          className="recording-tag"
+          onMouseEnter={toggleControls}
+          onMouseLeave={toggleControls}
+        />
+        {playToggle ? (
+          <RiStopCircleFill
+            className="absolute top-5 left-10 h-6 w-6 text-white cursor-pointer hover:text-gray-200"
+            onClick={() => handlePlayBack()}
+          />
+        ) : (
+          <RiPlayCircleFill
+            className="absolute top-5 left-10 h-6 w-6 text-white cursor-pointer hover:text-gray-200"
+            onClick={() => handlePlayBack()}
+          />
+        )}
+      </div>
       <span>{moment(duration).format('HH:mm:ss')}</span>
     </div>
   );
