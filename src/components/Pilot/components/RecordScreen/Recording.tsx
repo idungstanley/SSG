@@ -7,7 +7,7 @@ import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import moment from 'moment';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import '../../../../pages/workspace/tasks/component/views/view.css';
-import { RiPlayCircleFill, RiStopCircleFill } from 'react-icons/ri';
+import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -121,9 +121,11 @@ function VideoEntries({ videoFile }: VideoEntriesProps) {
       : videoRef.current?.setAttribute('controls', 'true');
 
   return (
-    <div className="flex space-x-10 border-b items-center p-2 relative">
-      <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
-      <div className="relative">
+    <tr className="flex space-x-10 border-b items-center p-2 relative">
+      <td>
+        <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
+      </td>
+      <td className="relative">
         <video
           ref={videoRef}
           src={videoFile.path}
@@ -133,20 +135,21 @@ function VideoEntries({ videoFile }: VideoEntriesProps) {
           className="recording-tag"
           onMouseEnter={toggleControls}
           onMouseLeave={toggleControls}
+          onEnded={() => setPlayToggle(!playToggle)}
         />
         {playToggle ? (
-          <RiStopCircleFill
-            className="absolute top-5 left-10 h-6 w-6 text-white cursor-pointer hover:text-gray-200"
+          <RiStopFill
+            className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
             onClick={() => handlePlayBack()}
           />
         ) : (
-          <RiPlayCircleFill
-            className="absolute top-5 left-10 h-6 w-6 text-white cursor-pointer hover:text-gray-200"
+          <RiPlayFill
+            className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
             onClick={() => handlePlayBack()}
           />
         )}
-      </div>
-      <span>{moment(duration).format('HH:mm:ss')}</span>
-    </div>
+      </td>
+      <td>{moment(duration).format('HH:mm:ss')}</td>
+    </tr>
   );
 }

@@ -158,14 +158,13 @@ textarea {
 
 .recording-tag::-webkit-media-controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px;
+  padding: 1px;
 }
 
 .recording-tag::-webkit-media-controls-play-button {
-  background-color: #fff;
   color: #000;
   border-radius: 50%;
   padding: 10px;
@@ -176,6 +175,5 @@ textarea {
 }
 
 .recording-tag::-webkit-media-controls-timeline {
-  width: 80%;
-  margin: 0 10px;
+  display: none;
 }
