@@ -4,6 +4,8 @@ import { useReactMediaRecorder } from 'react-media-recorder';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
+import '../../../../pages/workspace/tasks/component/views/view.css';
+import VideoEntries from './RecordingLogs';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -15,8 +17,6 @@ export default function Recording() {
 
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { getRecording } = useAppSelector((state) => state.workspace);
-
-  console.log(getRecording);
 
   const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
   const queryClient = useQueryClient();
@@ -63,12 +63,24 @@ export default function Recording() {
           </div>
         </>
       )}
-
-      {data?.data.attachments.map((video) => (
-        <p key={video.id}>
-          <video src={video.path && data?.data.attachments[0].path} controls></video>
-        </p>
-      ))}
+      <table className="w-full mx-auto p-1">
+        <thead>
+          <tr className="flex mx-2 border-b-2 py-2 space-x-12">
+            <th className="capitalize font-bold">user</th>
+            <th className="capitalize font-bold">recording</th>
+            <th className="capitalize font-bold">duration</th>
+          </tr>
+        </thead>
+        {data?.data.attachments.map((video) => {
+          //  Leave for reference purposes
+          // console.log(data.data.attachments);
+          return (
+            <div key={video.id}>
+              <VideoEntries videoFile={video} />
+            </div>
+          );
+        })}
+      </table>
     </div>
   );
 }
