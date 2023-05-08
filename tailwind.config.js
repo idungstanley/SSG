@@ -21,7 +21,9 @@ module.exports = {
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
-        frAuto: '1fr auto'
+        frAuto: '1fr auto',
+        autoFr: 'auto 1fr',
+        autoAuto: 'auto auto'
       },
       gridTemplateRows: {
         autoFrAuto: 'auto 1fr auto',

@@ -62,6 +62,7 @@ import YearPage from './pages/calendar/ui/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
 import { IUser } from './types';
 import ManagePage from './pages/calendar/ui/pages/ManagePage';
+import NewWallchart from './pages/calendar/ui/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
 
 const inbox = [
@@ -129,6 +130,10 @@ export const routes = (user: IUser | null) =>
             {
               path: '',
               element: <WallchartPage />
+            },
+            {
+              path: 'new',
+              element: <NewWallchart />
             },
             {
               path: 'year',

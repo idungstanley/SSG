@@ -28,3 +28,16 @@ export const getDaysInMonth = (date: dayjs.Dayjs): dayjs.Dayjs[] => {
 
   return daysInMonth;
 };
+
+export const getCurrentDaysInMonth = (date: dayjs.Dayjs): dayjs.Dayjs[] => {
+  const daysInMonth = [];
+  const monthStart = date.startOf('month');
+  const monthEnd = date.endOf('month');
+
+  // Current month dates
+  for (let i = 1; i <= monthEnd.date(); i++) {
+    daysInMonth.push(monthStart.date(i));
+  }
+
+  return daysInMonth;
+};

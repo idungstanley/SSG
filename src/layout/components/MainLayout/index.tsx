@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 import Sidebar from './Sidebar';
@@ -11,31 +10,23 @@ import AddFileModal from '../../../components/Pilot/components/details/propertie
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function MainLayout() {
-  const [allowSelect, setAllowSelect] = useState(true);
   const { showExtendedBar, activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
 
-  // const id = 'workspaceI';
-
-  // useEffect(() => {
-  //   // Redirect to the URL with the ID parameter
-  //   window.location.href = `/${id}`;
-  // }, [id]);
-
   return (
-    <div className={cl('h-full flex flex-col', !allowSelect && 'select-none')}>
+    <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
       <div className="flex h-full">
-        <div className="flex flex-row w-full h-full overflow-hidden">
-          <div className="relative flex grow">
+        <div className="grid grid-cols-autoFr grid-rows-1 w-full h-full overflow-hidden">
+          <div className="relative h-full">
             {/* show extended navigation button */}
             <OpenExtBtn />
-            <Sidebar allowSelect={allowSelect} setAllowSelect={setAllowSelect} />
+            <Sidebar />
           </div>
-          <div className="flex flex-1 grow">
+          <div className={cl('grid h-full', !showExtendedBar ? 'grid-cols-1' : 'grid-cols-autoFr')}>
             {/* show the extended side navigation component*/}
             {showExtendedBar && <ExpandedNav />}
-            <div className="flex flex-col flex-1 w-full">
+            <div className="w-full">
               <AdditionalHeader />
               <Header />
               <div className="w-full h-full">

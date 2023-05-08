@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FaHandsHelping, FaRoute, FaWpforms } from 'react-icons/fa';
 import Dashboard from '../../../../pages/workspace/dashboard';
 import Favourites from '../../../../pages/workspace/favorites';
@@ -16,7 +16,6 @@ import { useAppSelector } from '../../../../app/hooks';
 import ActiveHub from './ActiveParents/ActiveHub';
 import Extendedbar from '../../../../pages/explorer/components/Sidebar';
 import { BiCabinet } from 'react-icons/bi';
-import ResizeBorder from '../../../../components/ResizeBorder';
 import CloseExtBtn from './components/extendBtn/CloseExtBtn';
 import ExtendedItem from './components/extendedItem';
 import InboxData from '../../../../pages/workspace/inbox/InboxData';
@@ -28,6 +27,7 @@ import { IoBusinessOutline } from 'react-icons/io5';
 import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryTabs';
 import { dimensions } from '../../../../app/config/dimensions';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
+import { useResize } from '../../../../hooks/useResize';
 
 interface ItemData {
   id?: number;
@@ -120,40 +120,23 @@ const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
 
 function ExpandedNav() {
   const dispatch = useDispatch();
-  const { activePlaceName, showExtendedBar, extendedSidebarWidth } = useAppSelector((state) => state.workspace);
+  const { activePlaceName, extendedSidebarWidth, sidebarWidthRD } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const sidebarRef = useRef<HTMLInputElement>(null);
-  const [isResizing, setIsResizing] = useState(false);
-
-  const startResizing = React.useCallback(() => {
-    setIsResizing(true);
-  }, []);
-  const stopResizing = React.useCallback(() => {
-    setIsResizing(false);
-  }, []);
-  const resize = React.useCallback(
-    (mouseMoveEvent: MouseEvent) => {
-      if (sidebarRef !== undefined) {
-        if (sidebarRef.current !== undefined && sidebarRef.current !== null)
-          if (isResizing) {
-            const width = mouseMoveEvent.clientX - sidebarRef?.current?.getBoundingClientRect().left;
-
-            const { isAllow, allowedSize } = isAllowIncreaseWidth(width, extendedSidebarWidth);
-            dispatch(setExtendedSidebarWidth(isAllow ? width : allowedSize - width));
-          }
-      }
+  const { blockRef, Dividers, size } = useResize({
+    dimensions: {
+      min: MIN_SIDEBAR_WIDTH,
+      max: MAX_SIDEBAR_WIDTH
     },
-    [isResizing]
-  );
-  React.useEffect(() => {
-    window.addEventListener('mousemove', resize);
-    window.addEventListener('mouseup', stopResizing);
-    return () => {
-      window.removeEventListener('mousemove', resize);
-      window.removeEventListener('mouseup', stopResizing);
-    };
-  }, [resize, stopResizing]);
+    storageKey: 'extendedBarWidth',
+    direction: 'XR',
+    defaultSize: dimensions.extendedBar.default
+  });
+
+  useEffect(() => {
+    const { isAllow, allowedSize } = isAllowIncreaseWidth(size, sidebarWidthRD);
+    dispatch(setExtendedSidebarWidth(isAllow ? size : allowedSize - size));
+  }, [size]);
 
   if (activePlaceName === null && showSidebar) {
     dispatch(setShowExtendedBar(false));
@@ -167,36 +150,22 @@ function ExpandedNav() {
 
   return (
     <div
-      className="relative flex-none"
-      ref={sidebarRef}
-      style={
-        showExtendedBar
-          ? {
-              maxWidth: `${MAX_SIDEBAR_WIDTH}px`,
-              width: extendedSidebarWidth,
-              minWidth: `${MIN_SIDEBAR_WIDTH}px`
-            }
-          : { width: '1px', minWidth: '1px' }
-      }
+      className="relative"
+      ref={blockRef}
+      style={{
+        width: extendedSidebarWidth
+      }}
     >
       <CloseExtBtn />
-      <section
-        className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${
-          isResizing ? 'border-gray-500' : 'border-gray-300'
-        }`}
-      >
+      <section className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${'border-gray-300'}`}>
         <div aria-labelledby="projects-headline">
           <ExtendedItem item={sectionToExtend} />
           <div>{sectionToExtend?.place}</div>
         </div>
-        <ResizeBorder
-          width={extendedSidebarWidth}
-          minWidth={MIN_SIDEBAR_WIDTH}
-          maxWidth={MAX_SIDEBAR_WIDTH}
-          startResizing={startResizing}
-        />
+
+        <Dividers />
       </section>
     </div>
   );
 }
-export default memo(ExpandedNav);
+export default ExpandedNav;
