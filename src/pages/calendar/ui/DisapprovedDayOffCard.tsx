@@ -5,7 +5,7 @@ interface DisapprovedDayOffCardProps {
   roleName: string;
   userEmail: string;
   userInitials?: string;
-  reason: string;
+  reason: string | null;
   startDate: string;
   endDate: string;
   actions: JSX.Element;
@@ -53,7 +53,7 @@ export default function DisapprovedDayOffCard({
         </div>
         <div className="py-1">
           <dd className="text-gray-700">
-            <p>{reason}</p>
+            <p>{reason ?? 'No reason'}</p>
           </dd>
         </div>
       </dl>

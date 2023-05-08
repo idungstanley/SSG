@@ -5,12 +5,7 @@ import { Outlet } from 'react-router-dom';
 import User from './User';
 import { useGetSelf } from '../../../../../features/settings/user/userSettingsServices';
 import { useAppDispatch } from '../../../../../app/hooks';
-import {
-  setActiveTab,
-  setStatus,
-  setUserData,
-  setUserInfo
-} from '../../../../../features/settings/user/userSettingsSlice';
+import { setStatus, setUserData, setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 
 function SideBarSettings() {
   const { data, status } = useGetSelf();
@@ -18,7 +13,6 @@ function SideBarSettings() {
 
   useEffect(() => {
     dispatch(setStatus(status));
-    dispatch(setActiveTab('My Settings'));
     if (status === 'success') {
       dispatch(setUserData(data?.data.user));
       dispatch(setUserInfo({ ...data?.data.user }));
