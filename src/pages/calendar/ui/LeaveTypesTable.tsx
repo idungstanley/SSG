@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BeakerIcon, GiftIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRef, useState, InputHTMLAttributes } from 'react';
 import { MdBeachAccess } from 'react-icons/md';
@@ -78,27 +77,27 @@ export default function LeaveTypesTable() {
             <td className={cl('whitespace-nowrap px-3 py-4', `text-${type.color}-500`)}>
               <LeaveTypeIcon iconName={type?.icon ?? 'umbrella'} />
             </td>
-            <td className="flex whitespace-nowrap px-3 py-4">
+            <td className="flex whitespace-nowrap px-3 py-5">
               <span className={cl('rounded-md w-4 h-4', `bg-${type.color}-500`)} />
             </td>
-            <td className="flex whitespace-nowrap px-3 py-4">
+            <td className="whitespace-nowrap px-3 py-4">
               <Checkbox
-                className={`text-${type.color}-500`}
+                className={`text-${type.color}-500 border-${type.color}-500`}
                 checked={!!type.is_deducted}
                 setChecked={(e) => console.log(e)}
               />
             </td>
-            <td className="flex whitespace-nowrap px-3 py-4">
+            <td className="whitespace-nowrap px-3 py-4">
               <Checkbox
                 checked={!!type.is_require_approval}
-                className={`text-${type.color}-500`}
+                className={`text-${type.color}-500 border-${type.color}-500`}
                 setChecked={(e) => console.log(e)}
               />
             </td>
-            <td className="flex whitespace-nowrap px-3 py-4">
+            <td className="whitespace-nowrap px-3 py-4">
               <Checkbox
                 checked={!!type.is_include_max_off}
-                className={`text-${type.color}-500`}
+                className={`text-${type.color}-500 border-${type.color}-500`}
                 setChecked={(e) => console.log(e)}
               />
             </td>
@@ -111,7 +110,6 @@ export default function LeaveTypesTable() {
         ))}
 
         <tr>
-          {/* title */}
           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
             <input
               required
@@ -151,22 +149,26 @@ export default function LeaveTypesTable() {
             </Dropdown>
           </td>
 
-          <td className="whitespace-nowrap px-3 py-4">
-            <Checkbox checked={isDeducted} className={`text-${color}-500`} setChecked={(e) => setIsDeducted(e)} />
+          <td className="whitespace-nowrap px-3 pb-2">
+            <Checkbox
+              checked={isDeducted}
+              className={`text-${color}-500 border-${color}-500 cursor-pointer`}
+              setChecked={(e) => setIsDeducted(e)}
+            />
           </td>
 
-          <td className="whitespace-nowrap px-3 py-4">
+          <td className="whitespace-nowrap px-3 pb-2">
             <Checkbox
               checked={isRequireApproval}
-              className={`text-${color}-500`}
+              className={`text-${color}-500 border-${color}-500 cursor-pointer`}
               setChecked={(e) => setIsRequireApproval(e)}
             />
           </td>
 
-          <td className="whitespace-nowrap px-3 py-4">
+          <td className="whitespace-nowrap px-3 pb-2">
             <Checkbox
               checked={isIncludeMaxOff}
-              className={`text-${color}-500`}
+              className={`text-${color}-500 border-${color}-500 cursor-pointer`}
               setChecked={(e) => setIsIncludeMaxOff(e)}
             />
           </td>
@@ -217,7 +219,7 @@ function Checkbox({ checked, setChecked, ...props }: CheckboxProps) {
       checked={checked}
       onChange={(e) => setChecked(e.target.checked)}
       type="checkbox"
-      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+      className="h-4 w-4 rounded-md border-gray-300 focus:ring-gray-500 cursor-pointer"
       {...props}
     />
   );
