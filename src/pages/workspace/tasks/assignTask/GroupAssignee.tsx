@@ -3,13 +3,15 @@ import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
+import ToolTip from '../../../../components/Tooltip';
+import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 
 function GroupAssignee({
   data,
   itemId,
   handleClick
 }: {
-  data: [{ id: string; initials: string; colour: string }] | undefined;
+  data: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
   itemId?: string;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
@@ -41,10 +43,10 @@ function GroupAssignee({
     });
     setTimeout(() => {
       setHoverInterval(true);
-    }, 2000);
+    }, 500);
     setTimeout(() => {
       setModalLoader(false);
-    }, 3000);
+    }, 1000);
   };
 
   const handleHoverIntervalMouseOut = (index: number) => {
@@ -59,14 +61,15 @@ function GroupAssignee({
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center  -ml-5 ">
+        <div className="flex items-center justify-center  -ml-5 relative">
           {data?.slice(0, 3).map(
             (
               newData: {
                 id: React.Key | null | undefined;
                 initials: string;
                 colour: string | undefined;
-                name?: string;
+                name: string;
+                avatar_path: string | null;
               },
               index: number
             ) => (
@@ -80,20 +83,36 @@ function GroupAssignee({
                 }}
                 onMouseLeave={() => handleHoverIntervalMouseOut(index)}
               >
-                <div key={newData.id} className=" flex items-center justify-center -ml-2.5  border-2  rounded-full ">
-                  <div className="relative">
+                <div
+                  key={newData.id}
+                  className=" flex items-center justify-center -ml-2.5 border-2 rounded-full relative    "
+                >
+                  <ToolTip tooltip={newData.name}>
                     <span onClick={handleClick}>
-                      <AvatarWithInitials
-                        initials={newData.initials}
-                        backgroundColour={newData.colour}
-                        height={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                        }`}
-                        width={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                        }`}
-                      />
+                      {newData.avatar_path ? (
+                        <AvatarWithImage
+                          image_path={newData.avatar_path}
+                          height={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                          }`}
+                          width={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                          }`}
+                        />
+                      ) : (
+                        <AvatarWithInitials
+                          initials={newData.initials}
+                          backgroundColour={newData.colour}
+                          height={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                          }`}
+                          width={`${
+                            CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                          }`}
+                        />
+                      )}
                     </span>
+
                     {displayed.show && index == displayed?.index && (
                       <button
                         className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700 "
@@ -105,7 +124,7 @@ function GroupAssignee({
                         X
                       </button>
                     )}
-                  </div>
+                  </ToolTip>
                 </div>
                 {hoverInterval && displayed.show && index == displayed?.index && (
                   <PopAssignModal
@@ -116,6 +135,7 @@ function GroupAssignee({
                         colour: string | undefined;
                         name: string;
                         avatar_path: string;
+                        email: string;
                       }
                     }
                     modalLoader={modalLoader}
@@ -140,26 +160,15 @@ function GroupAssignee({
           </span>
         </div>
       ) : (
-        data?.map(
-          (
-            newData: {
-              id: React.Key | null | undefined;
-              initials: string;
-              colour: string | undefined;
-              name?: string;
-            },
-            index: number
-          ) => (
-            <div
-              key={newData.id}
-              className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
-                index === 2 ? 'z-10' : 'z-0'
-              } `}
-            >
-              <span
-                key={newData.id}
-                className="flex items-center justify-center -ml-2.5  border-2  rounded-full relative"
-              >
+        data?.map((newData, index: number) => (
+          <div
+            key={newData.id}
+            className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+              index === 2 ? 'z-10' : 'z-0'
+            } `}
+          >
+            <div key={newData.id} className="flex items-center justify-center -ml-2.5  border-2 rounded-full relative">
+              <ToolTip tooltip={newData.name}>
                 <div
                   onMouseEnter={() => {
                     handleHoverIntervalMouseIn(index);
@@ -168,15 +177,31 @@ function GroupAssignee({
                   className="relative "
                 >
                   <span onClick={handleClick}>
-                    <AvatarWithInitials
-                      initials={newData.initials}
-                      backgroundColour={newData.colour}
-                      height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
-                      width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
-                    />
+                    {newData.avatar_path ? (
+                      <AvatarWithImage
+                        image_path={newData.avatar_path}
+                        height={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                        }`}
+                        width={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                        }`}
+                      />
+                    ) : (
+                      <AvatarWithInitials
+                        initials={newData.initials}
+                        backgroundColour={newData.colour}
+                        height={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
+                        }`}
+                        width={`${
+                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
+                        }`}
+                      />
+                    )}
                   </span>
 
-                  {displayed.show && index == displayed?.index && (
+                  {displayed.show && index == displayed?.index ? (
                     <button
                       className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
                       style={{
@@ -186,6 +211,8 @@ function GroupAssignee({
                     >
                       X
                     </button>
+                  ) : (
+                    <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
                   )}
 
                   {hoverInterval && displayed.show && index == displayed?.index && (
@@ -207,10 +234,10 @@ function GroupAssignee({
                     />
                   )}
                 </div>
-              </span>
+              </ToolTip>
             </div>
-          )
-        )
+          </div>
+        ))
       )}
     </>
   );

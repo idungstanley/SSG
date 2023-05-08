@@ -101,7 +101,7 @@ export default function TaskName({
           <input
             type="checkbox"
             id="checked-checkbox"
-            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-8 z-50"
+            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-7 z-50"
             ref={setNodeRef}
             {...attributes}
             {...listeners}

@@ -1,137 +1,61 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
-import { setScrollTop, setShowSidebar } from '../../../../features/account/accountSlice';
+import { setScrollTop } from '../../../../features/account/accountSlice';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import ResizeBorder from './components/ResizeBorder';
 import Search from './components/Search';
 import Toggle from './components/Toggle';
+import { dimensions } from '../../../../app/config/dimensions';
+import { useResize } from '../../../../hooks/useResize';
+import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 
-//INNER_WIDTH OF YOUR SCREEN.
-const INNER_WIDTH = window.innerWidth;
-//RELATIVE_WIDTH IN PIXEL.
-const RELATIVE_WIDTH = 1550;
-// 15% OF YOUR WINDOW SCREEN
-const PER_MIN_LG_SCREEN = 0.15;
-// 18% OF YOUR WINDOW SCREEN
-const PER_MIN_MD_SCREEN = 0.16;
-// 22.5% OF YOUR WINDOW SCREEN AS MAX FOR MD
-const PER_MAX_MD_SCREEN = 0.225;
-// 22.5% OF YOUR WINDOW SCREEN AS MAX FOR LG
-const PER_MAX_LG_SCREEN = 0.2;
+const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
+const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
-export const MIN_SIDEBAR_WIDTH =
-  INNER_WIDTH >= RELATIVE_WIDTH ? PER_MIN_LG_SCREEN * INNER_WIDTH : PER_MIN_MD_SCREEN * RELATIVE_WIDTH;
-
-//25% OF YOUR WINDOW SCREEN
-export const MAX_SIDEBAR_WIDTH =
-  INNER_WIDTH >= RELATIVE_WIDTH ? PER_MAX_LG_SCREEN * RELATIVE_WIDTH : PER_MAX_MD_SCREEN * RELATIVE_WIDTH;
-
-interface SidebarProps {
-  allowSelect: boolean;
-  setAllowSelect: (i: boolean) => void;
-}
-// getting sidebar width from localStorage
-interface SidebarFromLSProp {
-  sidebarWidth: number;
-  showSidebar: boolean;
-}
-
-// getting sidebar width from localStorage
-const sidebarFromLS: SidebarFromLSProp = JSON.parse(localStorage.getItem('sidebar') || '""') as SidebarFromLSProp;
-const sidebarWidthFromLS = sidebarFromLS.sidebarWidth;
-
-export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
+export default function Sidebar() {
   const dispatch = useAppDispatch();
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [sidebarWidth, setSidebarWidth] = useState(sidebarWidthFromLS || MIN_SIDEBAR_WIDTH);
 
-  const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const onMouseDown = useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const startX = e.clientX;
-
-      const onMouseMove = (e: MouseEvent) => {
-        if (allowSelect) {
-          setAllowSelect(false);
-        }
-        // current width
-        const width = sidebarWidth + e.clientX - startX;
-        // actual size is bigger than bax
-        if (width > MAX_SIDEBAR_WIDTH) {
-          return;
-        }
-
-        // sidebar hidden and becomes bigger
-        if (width > startX) {
-          dispatch(setShowSidebar(true));
-        }
-
-        // adjusted width according to min and max values
-        const adjustedWidth =
-          width >= MAX_SIDEBAR_WIDTH ? MAX_SIDEBAR_WIDTH : width <= MIN_SIDEBAR_WIDTH ? MIN_SIDEBAR_WIDTH : width;
-
-        setSidebarWidth(adjustedWidth);
-      };
-
-      const onMouseEnd = () => {
-        setAllowSelect(true);
-
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseEnd);
-
-        // saving current sidebar size to localStorage
-        if (sidebarRef.current) {
-          const width = sidebarRef.current.clientWidth;
-          const adjustedWidth =
-            width >= MAX_SIDEBAR_WIDTH ? MAX_SIDEBAR_WIDTH : width <= MIN_SIDEBAR_WIDTH ? MIN_SIDEBAR_WIDTH : width;
-
-          localStorage.setItem(
-            'sidebar',
-            JSON.stringify({
-              adjustedWidth,
-              showSidebar: width >= MIN_SIDEBAR_WIDTH
-            })
-          );
-        }
-      };
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseEnd);
+  const { blockRef, Dividers, size } = useResize({
+    dimensions: {
+      min: MIN_SIDEBAR_WIDTH,
+      max: MAX_SIDEBAR_WIDTH
     },
-    [allowSelect]
-  );
+    storageKey: 'sidebarWidth',
+    direction: 'XR',
+    defaultSize: dimensions.navigationBar.default
+  });
 
-  // dynamic width for sidebar
-  const style = useMemo(
-    () => ({
-      width: sidebarWidth + 'px',
-      minWidth: MIN_SIDEBAR_WIDTH + 'px',
-      maxWidth: MAX_SIDEBAR_WIDTH + 'px'
-    }),
-    [sidebarWidth]
-  );
-  useMemo(() => dispatch(setSidebarWidthRD(sidebarWidth)), [sidebarWidth]);
+  useEffect(() => {
+    const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
+    dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
+  }, [size]);
+
   const handleScroll = (event: React.UIEvent<HTMLElement, UIEvent>) => {
     dispatch(setScrollTop(event.currentTarget.scrollTop));
   };
 
   return (
-    <aside ref={sidebarRef} className={cl('flex text-center relative overflow-x-hidden')}>
+    <aside className={cl('flex h-full text-center relative overflow-x-hidden')}>
+      <Dividers />
+
       {/* show / hide sidebar icon */}
       <Toggle />
       {/* sidebar */}
       <section
+        style={{
+          width: sidebarWidthRD
+        }}
+        ref={blockRef}
         className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"
-        style={showSidebar ? style : undefined}
       >
         <Header />
         <section
-          className="relative h-full flex flex-col pr-1.5 overflow-y-scroll overflow-x-hidden"
+          className="relative h-full flex flex-col pr-1.5 overflow-y-visible overflow-x-hidden"
           onScroll={(e) => handleScroll(e)}
         >
           {showSidebar ? <Search /> : null}
@@ -139,7 +63,6 @@ export default function Sidebar({ allowSelect, setAllowSelect }: SidebarProps) {
           <Places />
         </section>
       </section>
-      <ResizeBorder sidebarWidth={sidebarWidth} onMouseDown={onMouseDown} />
     </aside>
   );
 }

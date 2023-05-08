@@ -3,6 +3,10 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
+  content: [
+    // ...
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
+  ],
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -17,7 +21,9 @@ module.exports = {
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
-        frAuto: '1fr auto'
+        frAuto: '1fr auto',
+        autoFr: 'auto 1fr',
+        autoAuto: 'auto auto'
       },
       gridTemplateRows: {
         autoFrAuto: 'auto 1fr auto',
@@ -44,5 +50,5 @@ module.exports = {
   variants: {
     extend: {}
   },
-  plugins: [require('@tailwindcss/forms')]
+  plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')]
 };

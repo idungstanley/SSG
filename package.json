@@ -28,6 +28,8 @@
     "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
     "eslint-config-airbnb": "^19.0.4",
+    "flowbite": "^1.6.5",
+    "flowbite-react": "^0.4.4",
     "formik": "^2.2.9",
     "js-file-download": "^0.4.12",
     "moment": "^2.29.4",
@@ -53,7 +55,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco  --openssl-legacy-provider start",
+    "start": "if [[ $OSTYPE == linux* ]]; then craco --openssl-legacy-provider start; else craco start --openssl-legacy-provider; fi",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",

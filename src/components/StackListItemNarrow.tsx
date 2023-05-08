@@ -24,7 +24,7 @@ function StackListItemNarrow({
   return (
     <li className="bg-white">
       <div
-        className={`relative flex items-center space-x-3 py-${paddingVertical} px-${paddingHorizontal} min-w-0 flex-1 flex items-center space-x-3 ${
+        className={`relative flex  items-center space-x-3 py-${paddingVertical} px-${paddingHorizontal} min-w-0 flex-1 flex items-center space-x-1 ${
           selected && 'ring-2 ring-inset ring-indigo-500'
         } ${onClick && 'hover:bg-gray-50'}`}
       >

@@ -3,10 +3,12 @@ import { ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 import { setShowSidebar } from '../../../../../../features/account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
-import { MIN_SIDEBAR_WIDTH } from '../..';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
 import { setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
 import ToolTip from '../../../../../../components/Tooltip';
+import { dimensions } from '../../../../../../app/config/dimensions';
+
+const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 export default function Toggle() {
   const dispatch = useAppDispatch();

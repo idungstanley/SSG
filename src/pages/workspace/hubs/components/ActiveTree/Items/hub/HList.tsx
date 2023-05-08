@@ -19,16 +19,19 @@ import {
 import {
   closeMenu,
   getCurrHubId,
+  getCurrSubHubId,
   getPrevName,
   setCreateWLID,
   setOpenedHubId,
-  setshowMenuDropdown
+  setParentHubExt,
+  setshowMenuDropdown,
+  setSubHubExt
 } from '../../../../../../../features/hubs/hubSlice';
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 
-export default function HList({ hubs, leftMargin, taskType }: ListProps) {
+export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
   const { hubId } = useParams();
   const { walletId } = useParams();
   const { listId } = useParams();
@@ -42,24 +45,49 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const id = hubId || walletId || listId || currentItemId;
 
-  const type = 'hub';
-
   useEffect(() => {
     setShowChidren(id);
   }, []);
+  const parentType = 'hub';
+  const subType = 'subhub';
 
   const handleLocation = (id: string, name: string, index?: number) => {
+    if (level === 1) {
+      dispatch(setSubHubExt({ id: null, type: null }));
+      dispatch(setParentHubExt({ id: id, type: parentType }));
+      dispatch(
+        getCurrSubHubId({
+          currSubHubId: null,
+          currSubHubIdType: null
+        })
+      );
+      dispatch(
+        setActiveItem({
+          activeItemId: id,
+          activeItemType: parentType,
+          activeItemName: name
+        })
+      );
+    } else if (level === 2) {
+      dispatch(
+        setActiveItem({
+          activeItemId: id,
+          activeItemType: subType,
+          activeItemName: name
+        })
+      );
+      dispatch(setSubHubExt({ id: id, type: subType }));
+      dispatch(
+        getCurrSubHubId({
+          currSubHubId: id,
+          currSubHubIdType: subType
+        })
+      );
+    }
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
-    dispatch(
-      setActiveItem({
-        activeItemId: id,
-        activeItemType: 'hub',
-        activeItemName: name
-      })
-    );
     setShowChidren(id);
-    dispatch(setActiveEntity({ id: id, type: 'hub' }));
+    dispatch(setActiveEntity({ id: id, type: taskType }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`/h/${id}`, {
@@ -69,13 +97,19 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
       'hubDetailsStorage',
       JSON.stringify({
         activeItemId: id,
-        activeItemType: 'hub',
+        activeItemType: taskType,
         activeItemName: name
       })
     );
   };
 
   const handleClick = (id: string, index?: number) => {
+    if (taskType === 'hub') {
+      dispatch(setSubHubExt({ id: null, type: null }));
+      dispatch(setParentHubExt({ id: id, type: taskType }));
+    } else {
+      dispatch(setSubHubExt({ id: id, type: taskType }));
+    }
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
       navigate(`/h/${id}`, {
@@ -85,27 +119,26 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     const isMatch = id === showChildren;
     dispatch(setOpenedHubId(id));
     dispatch(setCreateWLID(id));
+    dispatch(setShowHub(true));
     if (isMatch) {
-      dispatch(setShowHub(false));
       setShowChidren(null);
-      if (!currentItemId) {
-        dispatch(
-          setCurrentItem({
-            currentItemId: id,
-            currentItemType: type
-          })
-        );
-      }
+      // if (!currentItemId) {
+      //   dispatch(
+      //     setCurrentItem({
+      //       currentItemId: id,
+      //       currentItemType: type
+      //     })
+      //   );
+      // }
     } else {
-      dispatch(setShowHub(true));
       setShowChidren(id);
-      dispatch(
-        setCurrentItem({
-          currentItemId: id,
-          currentItemType: type
-        })
-      );
     }
+    dispatch(
+      setCurrentItem({
+        currentItemId: id,
+        currentItemType: parentType
+      })
+    );
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
@@ -114,7 +147,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: 'hubs'
+        showMenuDropdownType: taskType === 'subhub' ? 'subhub' : 'hubs'
       })
     );
     dispatch(getPrevName(name));
@@ -135,22 +168,23 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
           <div className="relative flex flex-col">
             <HubItem
               item={hub}
-              index={index}
-              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               handleClick={handleClick}
               showChildren={showChildren}
               handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
+              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
+              stickyButtonIndex={stickyButtonIndex}
+              index={index}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
-              topNumber={taskType === 'subhub' ? '30px' : '0'}
-              zNumber={taskType === 'subhub' ? '100' : '999'}
+              topNumber={taskType === 'subhub' ? '80px' : '50px'}
+              zNumber={taskType === 'subhub' ? '100' : '110'}
             />
             {showSidebar && (
               <div>
-                {hub.children.length && showChildren ? (
-                  <HList hubs={hub.children} taskType="subhub" leftMargin={false} />
+                {hub.children.length && showChildren === hub.id ? (
+                  <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
                 ) : null}
-                {hub.wallets.length && showChildren ? (
+                {hub.wallets.length && showChildren === hub.id ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -158,7 +192,7 @@ export default function HList({ hubs, leftMargin, taskType }: ListProps) {
                     paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && showChildren && !showExtendedBar ? (
+                {hub.lists.length && showChildren === hub.id && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '48' : '50'}`} />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}

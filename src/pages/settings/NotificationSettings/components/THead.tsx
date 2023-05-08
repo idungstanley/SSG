@@ -6,41 +6,42 @@ import { GrApps } from 'react-icons/gr';
 export default function THeadData({ notificationHead }: { notificationHead: string }) {
   return (
     <>
-      {' '}
-      <tr>
-        <th scope="col" className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+      <div className="flex">
+        <div className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-2/4">
           <div className="flex items-center space-x-2">
             <MdOutlineKeyboardArrowDown />
             <p className="uppercase" style={{ fontSize: '15px' }}>
               {notificationHead}
             </p>
           </div>
-        </th>
-        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-          <div className="flex items-center flex-col">
-            <MdOutlineAlternateEmail />
-            <p>Email</p>
+        </div>
+        <div className="flex w-2/4 justify-between">
+          <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            <div className="flex items-center flex-col">
+              <MdOutlineAlternateEmail />
+              <p>Email</p>
+            </div>
           </div>
-        </th>
-        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-          <div className="flex items-center flex-col">
-            <GoDeviceMobile />
-            <p>Mobile</p>
+          <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            <div className="flex items-center flex-col">
+              <GoDeviceMobile />
+              <p>Mobile</p>
+            </div>
           </div>
-        </th>
-        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-          <div className="flex items-center flex-col">
-            <MdOpenInBrowser />
-            <p>Browser</p>
+          <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            <div className="flex items-center flex-col">
+              <MdOpenInBrowser />
+              <p>Browser</p>
+            </div>
           </div>
-        </th>
-        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-          <div className="flex items-center flex-col">
-            <GrApps />
-            <p>In-App</p>
+          <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            <div className="flex items-center flex-col">
+              <GrApps />
+              <p>In-App</p>
+            </div>
           </div>
-        </th>
-      </tr>
+        </div>
+      </div>
     </>
   );
 }

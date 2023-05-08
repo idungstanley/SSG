@@ -13,8 +13,8 @@ import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 
 interface WalletItemProps {
-  handleShowSubWallet: (id: string) => void;
-  handleLocation: (id: string, name: string, parentId?: string) => void;
+  handleShowSubWallet: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
   wallet: {
     id: string;
     name: string;
@@ -25,6 +25,11 @@ interface WalletItemProps {
   showSubWallet: string | null;
   paddingLeft: string | number;
   walletType: string;
+  index?: number;
+  isSticky?: boolean;
+  topNumber?: string;
+  zNumber?: string;
+  stickyButtonIndex?: number | undefined;
 }
 export default function WalletItem({
   handleShowSubWallet,
@@ -32,7 +37,12 @@ export default function WalletItem({
   showSubWallet,
   handleLocation,
   paddingLeft,
-  walletType
+  walletType,
+  index,
+  isSticky,
+  stickyButtonIndex,
+  topNumber = '0',
+  zNumber
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
@@ -50,7 +60,7 @@ export default function WalletItem({
       })
     );
   };
-  const parentId = wallet.parent_id || wallet.hub_id;
+  // const parentId = wallet.parent_id || wallet.hub_id;
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
@@ -75,16 +85,27 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`flex items-center relative justify-between pr-1.5 py-1.5 text-sm h-8 group ${
+        className={`flex items-center justify-between pr-1.5 text-sm group ${
           wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        }`}
-        onClick={() => handleShowSubWallet(wallet.id)}
-        style={{ backgroundColor: `${wallet.id === walletId ? '#BF00FF21' : ''}` }}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky z-50 bg-white' : ''}`}
+        onClick={() => handleShowSubWallet(wallet.id, index)}
+        style={{
+          backgroundColor: `${wallet.id === walletId ? '#BF00FF21' : ''}`,
+          top: isSticky ? topNumber : '',
+          zIndex: isSticky ? zNumber : '10'
+        }}
       >
-        {wallet.id === walletId && (
-          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
-        )}
-        <div id="walletLeft" className="flex items-center justify-center" style={{ paddingLeft: `${paddingLeft}px` }}>
+        <div
+          id="walletLeft"
+          className="relative flex items-center justify-center"
+          style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
+        >
+          {wallet.id === walletId && (
+            <span
+              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
+              style={{ backgroundColor: '#BF00FF' }}
+            />
+          )}
           {/* showsub1 */}
           <div className="flex items-center">
             {showSubWallet === wallet.id ? (
@@ -106,7 +127,7 @@ export default function WalletItem({
             )}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, parentId)}
+            onClick={() => handleLocation(wallet.id, wallet.name, index)}
             className="cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
