@@ -69,8 +69,8 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
         {headers.map((col) => {
           if (col.title === 'user' && !col.hidden) {
             return (
-              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer -space-x-4 py-1">
-                <AvatarWithInitials height="h-4" width="w-4" initials={initials} />
+              <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer py-1">
+                <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
               </td>
             );
           }
