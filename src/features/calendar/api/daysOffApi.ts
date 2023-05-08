@@ -18,9 +18,9 @@ export const useDaysOff = (hubId: string) =>
     }
   );
 
-export const useUnapprovedDaysOff = (hubId: string) =>
+export const useDisapprovedDaysOff = (hubId: string) =>
   useQuery(
-    ['daysOff', 'unapproved', hubId],
+    ['daysOff', 'disapproved', hubId],
     () =>
       requestNew<UnapprovedDaysOffRes>({
         url: 'hr/day-off/requests',
@@ -67,7 +67,26 @@ export const useApproveDayOff = (hubId?: string) => {
   return useMutation(approveDayOff, {
     onSuccess: () => {
       queryClient.invalidateQueries(['daysOff', hubId]);
-      queryClient.invalidateQueries(['daysOff', 'unapproved', hubId]);
+      queryClient.invalidateQueries(['daysOff', 'disapproved', hubId]);
+    }
+  });
+};
+
+const disapproveDayOff = (id: Pick<DayOff, 'id'>['id']) => {
+  const response = requestNew({
+    url: 'hr/day-off/' + id,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useDisapproveDayOff = (hubId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(disapproveDayOff, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['daysOff', hubId]);
+      queryClient.invalidateQueries(['daysOff', 'disapproved', hubId]);
     }
   });
 };
