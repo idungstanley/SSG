@@ -11,7 +11,7 @@ interface DayOff {
   start_date: string;
   end_date: string;
   reason: string | null;
-  is_approved: number;
+  is_approved: 0 | 1;
   updated_at: string;
   created_at: string;
 }

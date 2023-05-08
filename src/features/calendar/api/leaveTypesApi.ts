@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { AddLeaveTypeProps, LeaveTypesRes } from '../types/leaveTypes';
 
-export const useLaveTypes = () =>
+export const useLeaveTypes = () =>
   useQuery(
     ['leaveTypes'],
     () =>
