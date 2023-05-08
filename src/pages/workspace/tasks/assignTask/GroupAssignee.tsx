@@ -66,6 +66,7 @@ function GroupAssignee({
                 id: React.Key | null | undefined;
                 initials: string;
                 colour: string | undefined;
+                name?: string;
               },
               index: number
             ) => (
@@ -79,7 +80,7 @@ function GroupAssignee({
                 }}
                 onMouseLeave={() => handleHoverIntervalMouseOut(index)}
               >
-                <span key={newData.id} className=" flex items-center justify-center -ml-2.5  border-2  rounded-full ">
+                <div key={newData.id} className=" flex items-center justify-center -ml-2.5  border-2  rounded-full ">
                   <div className="relative">
                     <span onClick={handleClick}>
                       <AvatarWithInitials
@@ -105,7 +106,7 @@ function GroupAssignee({
                       </button>
                     )}
                   </div>
-                </span>
+                </div>
                 {hoverInterval && displayed.show && index == displayed?.index && (
                   <PopAssignModal
                     userData={
@@ -139,66 +140,77 @@ function GroupAssignee({
           </span>
         </div>
       ) : (
-        data?.map((newData, index: number) => (
-          <div
-            key={newData.id}
-            className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
-              index === 2 ? 'z-10' : 'z-0'
-            } `}
-          >
-            <span
+        data?.map(
+          (
+            newData: {
+              id: React.Key | null | undefined;
+              initials: string;
+              colour: string | undefined;
+              name?: string;
+            },
+            index: number
+          ) => (
+            <div
               key={newData.id}
-              className="flex items-center justify-center -ml-2.5  border-2  rounded-full relative"
+              className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+                index === 2 ? 'z-10' : 'z-0'
+              } `}
             >
-              <div
-                onMouseEnter={() => {
-                  handleHoverIntervalMouseIn(index);
-                }}
-                onMouseLeave={() => handleHoverIntervalMouseOut(index)}
-                className="relative "
+              <span
+                key={newData.id}
+                className="flex items-center justify-center -ml-2.5  border-2  rounded-full relative"
               >
-                <span onClick={handleClick}>
-                  <AvatarWithInitials
-                    initials={newData.initials}
-                    backgroundColour={newData.colour}
-                    height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
-                    width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
-                  />
-                </span>
-                {displayed.show && index == displayed?.index && (
-                  <button
-                    className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
-                    style={{
-                      fontSize: '6px'
-                    }}
-                    onClick={() => handleUnAssignTask(newData.id as string)}
-                  >
-                    X
-                  </button>
-                )}
+                <div
+                  onMouseEnter={() => {
+                    handleHoverIntervalMouseIn(index);
+                  }}
+                  onMouseLeave={() => handleHoverIntervalMouseOut(index)}
+                  className="relative "
+                >
+                  <span onClick={handleClick}>
+                    <AvatarWithInitials
+                      initials={newData.initials}
+                      backgroundColour={newData.colour}
+                      height={`${CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'}`}
+                      width={`${CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'}`}
+                    />
+                  </span>
 
-                {hoverInterval && displayed.show && index == displayed?.index && (
-                  <PopAssignModal
-                    userData={
-                      newData as {
-                        id: React.Key | null | undefined;
-                        initials: string;
-                        colour: string | undefined;
-                        name: string;
-                        avatar_path: string;
+                  {displayed.show && index == displayed?.index && (
+                    <button
+                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
+                      style={{
+                        fontSize: '6px'
+                      }}
+                      onClick={() => handleUnAssignTask(newData.id as string)}
+                    >
+                      X
+                    </button>
+                  )}
+
+                  {hoverInterval && displayed.show && index == displayed?.index && (
+                    <PopAssignModal
+                      userData={
+                        newData as {
+                          id: React.Key | null | undefined;
+                          initials: string;
+                          colour: string | undefined;
+                          name: string;
+                          avatar_path: string;
+                        }
                       }
-                    }
-                    modalLoader={modalLoader}
-                    spinnerSize={20}
-                    roundedStyle="circular"
-                    height="h-20"
-                    width="w-20"
-                  />
-                )}
-              </div>
-            </span>
-          </div>
-        ))
+                      modalLoader={modalLoader}
+                      spinnerSize={20}
+                      roundedStyle="circular"
+                      height="h-20"
+                      width="w-20"
+                    />
+                  )}
+                </div>
+              </span>
+            </div>
+          )
+        )
       )}
     </>
   );
