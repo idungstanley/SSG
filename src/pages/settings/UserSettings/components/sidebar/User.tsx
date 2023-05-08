@@ -1,23 +1,52 @@
-import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
 import { cl } from '../../../../../utils';
 import { setActiveTab } from '../../../../../features/settings/user/userSettingsSlice';
 import { useNavigate } from 'react-router-dom';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { Disclosure } from '@headlessui/react';
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
 
 function User() {
   const { activeTab, theme_color, userData } = useAppSelector((state) => state.userSetting);
-  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userOptions = [
     {
       id: 1,
       title: 'My Settings',
-      onClick: () => {
-        dispatch(setActiveTab('My Settings'));
-        navigate('profile');
-      }
+      child: [
+        {
+          id: 1,
+          title: 'My Account',
+          onClick: () => {
+            dispatch(setActiveTab('My Account'));
+            navigate('profile');
+          }
+        },
+        {
+          id: 2,
+          title: 'Workspace Styles',
+          onClick: () => {
+            dispatch(setActiveTab('Workspace Styles'));
+            navigate('construction');
+          }
+        },
+        {
+          id: 3,
+          title: 'HotKeys',
+          onClick: () => {
+            dispatch(setActiveTab('HotKeys'));
+            navigate('construction');
+          }
+        },
+        {
+          id: 4,
+          title: 'Themes',
+          onClick: () => {
+            dispatch(setActiveTab('Themes'));
+            navigate('construction');
+          }
+        }
+      ]
     },
     {
       id: 2,
@@ -30,30 +59,29 @@ function User() {
     {
       id: 3,
       title: 'Notifications',
-      onClick: () => {
-        dispatch(setActiveTab('Notifications'));
-        navigate('notifications');
-      },
       child: [
         {
           id: 1,
           title: 'General Information',
           onClick: () => {
-            navigate('notifications/general');
+            dispatch(setActiveTab('General Information'));
+            navigate('notifications');
           }
         },
         {
           id: 2,
           title: 'Subscriber Settings',
           onClick: () => {
-            navigate('notifications/subscriber');
+            dispatch(setActiveTab('Subscriber Settings'));
+            navigate('construction');
           }
         },
         {
           id: 3,
           title: 'Smart Notifications',
           onClick: () => {
-            navigate('notifications/smart');
+            dispatch(setActiveTab('Smart Notifications'));
+            navigate('construction');
           }
         }
       ]
@@ -114,50 +142,61 @@ function User() {
       {userOptions.map((setting) => {
         return (
           <div key={setting.id}>
-            {setting.category !== 'my_app' && (
-              <>
-                <div
-                  className={cl(
-                    activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
-                    'h-10 flex items-center justify-between px-6 hover:bg-gray-200 cursor-pointer'
-                  )}
-                  style={{
-                    backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
-                  }}
-                  onClick={setting.onClick}
-                >
-                  <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
-                    {setting.title}
-                  </h3>
-                  {setting.child ? (
-                    <MdKeyboardArrowDown
-                      style={{ height: '20px', width: '20px' }}
-                      onClick={() => setIsVisible(!isVisible)}
-                    />
-                  ) : null}
-                </div>
-
-                {/* this carries child */}
-                <section>
-                  {isVisible &&
-                    setting?.child?.map((children) => (
-                      <div
-                        key={children.id}
-                        className={cl(
-                          activeTab === setting.title ? 'opacity-50 text-black' : 'text-gray-500',
-                          'h-10 flex items-center px-6 hover:bg-gray-200 cursor-pointer  border-b-2 border-gray-200'
-                        )}
-                        style={{
-                          backgroundColor: activeTab === setting.title ? (theme_color as string) : ''
-                        }}
-                      >
-                        <h3 className="font-semibold text-bold" style={{ fontSize: '15px', paddingLeft: '15px' }}>
-                          {children.title}
-                        </h3>
-                      </div>
-                    ))}
-                </section>
-              </>
+            {setting.child ? (
+              <Disclosure>
+                {({ open }) => (
+                  <div className={cl('cursor-pointer text-gray-500')}>
+                    <Disclosure.Button
+                      className="flex justify-between items-center w-full font-semibold text-bold hover:bg-gray-200 pl-6 h-10"
+                      style={{ fontSize: '15px' }}
+                    >
+                      {setting.title}
+                      <ChevronRightIcon className={cl(open ? 'rotate-90 transform' : '', 'w-6 h-6')} />
+                    </Disclosure.Button>
+                    <Disclosure.Panel>
+                      {setting.child.map((children) => {
+                        return (
+                          <div
+                            key={children.id}
+                            className={cl(
+                              'h-10 flex items-center justify-between pl-10 hover:bg-gray-200 cursor-pointer'
+                            )}
+                            style={{
+                              backgroundColor: activeTab === children.title ? '#BF00FF21' : ''
+                            }}
+                            onClick={children.onClick}
+                          >
+                            <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
+                              {children.title}
+                            </h3>
+                          </div>
+                        );
+                      })}
+                    </Disclosure.Panel>
+                  </div>
+                )}
+              </Disclosure>
+            ) : (
+              <div>
+                {setting.category !== 'my_app' && (
+                  <>
+                    <div
+                      className={cl(
+                        'text-gray-500',
+                        'h-10 flex items-center justify-between px-6 hover:bg-gray-200 cursor-pointer'
+                      )}
+                      style={{
+                        backgroundColor: activeTab === setting.title ? '#BF00FF21' : ''
+                      }}
+                      onClick={setting.onClick}
+                    >
+                      <h3 className="font-semibold text-bold" style={{ fontSize: '15px' }}>
+                        {setting.title}
+                      </h3>
+                    </div>
+                  </>
+                )}
+              </div>
             )}
           </div>
         );
