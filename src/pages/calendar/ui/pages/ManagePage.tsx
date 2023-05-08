@@ -13,8 +13,8 @@ export default function ManagePage() {
   }
 
   return (
-    <div className="w-full p-4">
-      <div className="w-fit mx-auto">
+    <div className="w-full p-4 h-full">
+      <div className="w-fit mx-auto h-full">
         <DisapprovedDaysOffList />
       </div>
     </div>

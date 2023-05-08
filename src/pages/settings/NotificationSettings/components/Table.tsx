@@ -59,6 +59,7 @@ export default function NotificaitonTable() {
                           type="checkbox"
                           className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
                           checked
+                          onChange={() => null}
                         />
                       </div>
                       <div className="px-3 flex justify-cemter">
@@ -81,6 +82,7 @@ export default function NotificaitonTable() {
                           type="checkbox"
                           className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
                           checked
+                          onChange={() => null}
                         />
                       </div>
                     </div>
