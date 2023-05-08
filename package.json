@@ -55,12 +55,15 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco  --openssl-legacy-provider start",
-    "start:linux": "craco --openssl-legacy-provider start",
+    "start": "if [[ $OSTYPE == linux* ]]; then craco --openssl-legacy-provider start; else craco --openssl-legacy-provider start; fi",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint:ts": "tsc"
+    "lint:check": "clear && eslint 'src/*/.{ts,tsx,js}' --config .eslintrc.json",
+    "ts:check": "clear && tsc --allowJS false --pretty --strict true",
+    "format:check": "clear && prettier --check 'src/*/.{ts,tsx,js}' --config .prettierrc.json",
+    "format:fix": "clear && prettier --write 'src/*/.{ts,tsx,js}' --config .prettierrc.json",
+    "lint:fix": "clear && eslint 'src/*/.{ts,tsx,js}' --config .eslintrc.json --fix"
   },
   "browserslist": [
     ">0.2%",
