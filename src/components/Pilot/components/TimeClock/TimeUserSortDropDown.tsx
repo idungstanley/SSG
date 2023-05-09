@@ -3,6 +3,7 @@ import { setTimeSortArr } from '../../../../features/task/taskSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { User } from './ClockLog';
 import { useState } from 'react';
+import { GiCheckMark } from 'react-icons/gi';
 
 type UserSortParams = {
   arr: User[];
@@ -14,16 +15,21 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
   const dispatch = useAppDispatch();
   const sortIds: string[] = [...new Set(memberIds)];
   const [idArr, setArr] = useState<string[]>([]);
+  const [listIndex, setIndex] = useState<number[]>([]);
 
   const teamMember = arr.filter((obj, index, arr) => {
     return arr.findIndex((item) => item.id === obj.id) === index;
   });
   const handleSort = (id: number) => {
-    setArr((prev) => [...prev, sortIds[id]]);
+    !idArr.includes(sortIds[id])
+      ? setArr((prev) => [...prev, sortIds[id]])
+      : setArr((prev) => prev.filter((item) => item !== sortIds[id]));
+    !listIndex.includes(id) ? setIndex((prev) => [...prev, id]) : setIndex((prev) => prev.filter((item) => item != id));
   };
 
   const handleDispatch = () => {
     dispatch(setTimeSortArr(idArr));
+    toggleModalFn(false);
   };
 
   return (
@@ -38,9 +44,10 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
             return (
               <li
                 key={el.id}
-                className="flex items-center py-2 alt-task px-4 cursor-pointer"
+                className="flex items-center space-x-2 py-2 alt-task px-4 cursor-pointer"
                 onClick={() => handleSort(index)}
               >
+                {listIndex.includes(index) && <GiCheckMark className="mx-2" />}
                 {el.name}
               </li>
             );
