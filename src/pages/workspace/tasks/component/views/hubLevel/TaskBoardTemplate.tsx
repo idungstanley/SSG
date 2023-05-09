@@ -82,9 +82,8 @@ function TaskBoardTemplate({ unFilteredTaskData }: IUnFilteredTaskData) {
     <div className="gap-5 pl-5 dynamic pt-14">
       {Object.keys(newData).map((key) => {
         return (
-          <>
+          <div key={key}>
             <div
-              key={key}
               className="relative flex items-center justify-center w-56 h-10 p-3 -mt-10 font-bold uppercase bg-white rounded shadow-md group "
               style={{ fontSize: '12px' }}
             >
@@ -159,7 +158,7 @@ function TaskBoardTemplate({ unFilteredTaskData }: IUnFilteredTaskData) {
                 );
               })}
             </div>
-          </>
+          </div>
         );
       })}
     </div>

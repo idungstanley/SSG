@@ -75,9 +75,9 @@ export default function Recording() {
           //  Leave for reference purposes
           // console.log(data.data.attachments);
           return (
-            <div key={video.id}>
+            <tbody key={video.id}>
               <VideoEntries videoFile={video} />
-            </div>
+            </tbody>
           );
         })}
       </table>
