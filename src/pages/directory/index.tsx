@@ -62,6 +62,13 @@ function Directory() {
             <CreateDirectorySideOver />
           </>
         }
+        extendedBar={
+          <div className="w-full p-2 h-full space-y-5">
+            <h1>Extended bar for directory</h1>
+
+            <div className="w-45 h-35 flex items-center justify-center border">box</div>
+          </div>
+        }
       >
         <div className="flex flex-col items-start w-full h-full py-2">
           {/* status checking */}
