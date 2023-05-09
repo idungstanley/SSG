@@ -8,6 +8,7 @@ import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
 import { useList } from '../../../../../features/list/listService';
 import DropdownField from './dropdown/DropdownField';
+import ToolTip from '../../../../../components/Tooltip';
 
 export interface tagItem {
   id: string;
@@ -61,7 +62,9 @@ export default function DataRenderFunc({
   } else if (col?.field == 'created_at' || col?.field == 'updated_at') {
     return (
       <>
-        <DateForTask taskColField={taskColField} />
+        <ToolTip tooltip={col?.field}>
+          <DateForTask taskColField={taskColField} />
+        </ToolTip>
       </>
     );
   } else if (col?.field == 'status') {
