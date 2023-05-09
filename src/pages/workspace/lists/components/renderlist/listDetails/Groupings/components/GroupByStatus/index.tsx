@@ -85,7 +85,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
   }, [getTaskDataGrouping, setTaskDataGroupingsByStatus]);
 
   return (
-    <main className="block mb-20 m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
+    <main className="block m-1 rounded overflow-x-scroll" style={{ backgroundColor: '#e1e4e5', maxHeight: '85vh' }}>
       {/* lists */}
 
       {Object.keys(taskDataGroupingsByStatus).map((value) => (
@@ -164,9 +164,9 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
             <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
           )}
 
-          <ul className="w-full">
+          <ul className="">
             {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
-              <li className="overflow-x-scroll" key={status}>
+              <li className="overflow-x-scroll overflow-y-hidden w-fit" key={status}>
                 <TaskListViews
                   listId={taskDataGroupingsByStatus[value].key}
                   taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}

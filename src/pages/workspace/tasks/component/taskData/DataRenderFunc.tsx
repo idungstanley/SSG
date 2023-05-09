@@ -77,17 +77,13 @@ export default function DataRenderFunc({
     );
   } else if (col?.field === 'name') {
     return (
-      <>
-        <div>
-          <TaskName
-            taskColField={taskColField}
-            task={task}
-            handleGetSubTask={handleGetSubTask}
-            getSubTaskId={getSubTaskId}
-            ShowPlusIcon={ShowPlusIcon}
-          />
-        </div>
-      </>
+      <TaskName
+        taskColField={taskColField}
+        task={task}
+        handleGetSubTask={handleGetSubTask}
+        getSubTaskId={getSubTaskId}
+        ShowPlusIcon={ShowPlusIcon}
+      />
     );
   } else if (col?.field === 'priority') {
     return (

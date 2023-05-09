@@ -91,9 +91,9 @@ export default function TaskListViews({
   };
 
   return (
-    <div className="relative grid grid-flow-col pt-5 bg-gray-100 z-20" style={{ backgroundColor: '#e1e4e5' }}>
-      <div className="flex items-center ">
-        <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px ">
+    <div className="relative flex pt-5 bg-gray-100 z-10" style={{ backgroundColor: '#e1e4e5' }}>
+      <div className="sticky z-10 left-0 flex items-center w-fit">
+        <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px">
           <IoIosArrowDropdown
             className={` text-gray-400 text-sm hover:text-gray-200  ${
               closeTaskListView === false ? 'rotateimg90' : null
@@ -184,7 +184,7 @@ export default function TaskListViews({
                   <div
                     key={col.id}
                     className="flex items-center space-x-1 uppercase  text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
-                    // style={{ color: '#78828d', fontSize: '12px' }}
+                    style={{ color: '#78828d', fontSize: '12px' }}
                   >
                     <span
                       className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
@@ -243,7 +243,7 @@ export default function TaskListViews({
             )}
       </div>
 
-      <div style={{ left: '280px' }} className="absolute bottom-0 grid grid-flow-col">
+      <div style={{ left: 312 }} className="absolute bottom-0 grid grid-flow-col border bg-gray-200">
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -320,7 +320,7 @@ export default function TaskListViews({
                 !col.hidden && (
                   <div
                     key={col.id}
-                    className="flex items-center space-x-1 uppercase text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
+                    className="flex w-24 justify-center items-center space-x-1 uppercase text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
                     style={{ color: '#78828d', fontSize: '12px' }}
                   >
                     <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">

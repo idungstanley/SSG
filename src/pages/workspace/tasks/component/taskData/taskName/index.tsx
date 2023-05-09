@@ -96,7 +96,7 @@ export default function TaskName({
 
   return (
     <>
-      <div className="relative flex items-center" style={style}>
+      <div className="relative flex w-full items-center" style={style}>
         <div className="flex items-center ">
           <input
             type="checkbox"
