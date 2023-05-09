@@ -2,10 +2,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
+import { uploadRecording } from '../../../../features/workspace/workspaceService';
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
-import VideoEntries from './RecordingLogs';
+// import VideoEntries from './RecordingLogs';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -18,7 +18,7 @@ export default function Recording() {
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { getRecording } = useAppSelector((state) => state.workspace);
 
-  const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
+  // const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
 
@@ -63,7 +63,7 @@ export default function Recording() {
           </div>
         </>
       )}
-      <table className="w-full mx-auto p-1">
+      {/* <table className="w-full mx-auto p-1">
         <thead>
           <tr className="flex mx-2 border-b-2 py-2 space-x-12">
             <th className="capitalize font-bold">user</th>
@@ -80,7 +80,7 @@ export default function Recording() {
             </div>
           );
         })}
-      </table>
+      </table> */}
     </div>
   );
 }
