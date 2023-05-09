@@ -63,30 +63,51 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
-    <div className="relative w-fit">
+    <>
+      <div className="absolute left-6 right-0 z-10">
+        {[...columnsHead, ...customFields].map(
+          (col) =>
+            col.value == 'Task' &&
+            !col.hidden && (
+              <div
+                key={col.id}
+                className="flex w-full whitespace-normal items-center ml-2 text-xs font-medium capitalize cursor-pointer group mr-20"
+              >
+                <DataRenderFunc
+                  taskColField={task?.[col.field]}
+                  col={{ field: col.field, id: col.id }}
+                  task={task}
+                  getSubTaskId={getSubTaskId}
+                  handleGetSubTask={() => handleGetSubTask(task?.id)}
+                />
+              </div>
+            )
+        )}
+      </div>
+
       <div
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && taskId == task?.id
-            ? '  flex justify-between group ml-6 mb-px hover:bg-black-100 items-center relative border-1.5 bg-primary-200'
+            ? '  flex justify-between group ml-6 mb-px hover:bg-black-100 items-center border-1.5 bg-primary-200'
             : comfortableView
-            ? 'flex justify-between group ml-6 mb-px hover:bg-gray-100 items-center relative border-1.5 bg-white'
+            ? 'flex justify-between group ml-6 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : comfortableViewWrap && taskId == task?.id
-            ? 'flex justify-between group ml-4 mb-px  items-center relative border-1.5 bg-primary-200'
+            ? 'flex justify-between group ml-4 mb-px  items-center border-1.5 bg-primary-200'
             : comfortableViewWrap
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center relative border-1.5 bg-white'
+            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px items-center relative border-1.5 h-10 bg-primary-200'
+            ? ' compactView flex justify-between group ml-4 mb-px items-center border-1.5 h-10 bg-primary-200'
             : CompactView
-            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center relative border-1.5 h-10 bg-white'
+            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 h-10 bg-white'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px items-center relative border-1.5 bg-primary-200'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px items-center border-1.5 bg-primary-200'
             : CompactViewWrap
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center relative border-1.5 bg-white'
+            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : null
-        }`}
+        } relative`}
       >
-        <div className="relative flex bg-white items-center justify-between pr-24 w-full">
+        <div className="flex bg-white items-center justify-between pr-24 w-full">
           <div
             className={`${
               comfortableView
@@ -123,7 +144,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex w-60 whitespace-normal items-center ml-2 text-xs font-medium capitalize cursor-pointer group mr-20"
+                        className="flex w-full whitespace-normal items-center ml-2 text-xs font-medium capitalize cursor-pointer group mr-20"
                       >
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
@@ -171,6 +192,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 )}
           </div>
         </div>
+
         <div style={{ left: 312 }} className="absolute bottom-0 top-0 ml-3 dynamic bg-white py-1">
           {hideTask.length
             ? hideTask.map(
@@ -216,6 +238,6 @@ export default function TaskData({ task, listId }: TaskDataProps) {
               )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

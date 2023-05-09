@@ -174,7 +174,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                 />
 
                 {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                  <Fragment key={task.id}>
+                  <div className="relative" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>
@@ -183,7 +183,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                     ) : null}
 
                     {getSubTaskId === task.id ? <RenderSubTasks /> : null}
-                  </Fragment>
+                  </div>
                 ))}
               </li>
             ))}
