@@ -40,9 +40,8 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className={cl('flex h-full text-center relative overflow-x-hidden')}>
+    <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
       <Dividers />
-
       {/* show / hide sidebar icon */}
       <Toggle />
       {/* sidebar */}
@@ -55,7 +54,7 @@ export default function Sidebar() {
       >
         <Header />
         <section
-          className="relative h-full flex flex-col pr-1.5 overflow-y-visible overflow-x-hidden"
+          className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-visible"
           onScroll={(e) => handleScroll(e)}
         >
           {showSidebar ? <Search /> : null}
