@@ -85,136 +85,127 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
   }, [getTaskDataGrouping, setTaskDataGroupingsByStatus]);
 
   return (
-    <main className="block m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
-      <section>
-        {/* lists */}
-        <div className="mb-20">
-          {Object.keys(taskDataGroupingsByStatus).map((value) => (
-            <div key={taskDataGroupingsByStatus[value].key} className="relative p-5 border rounded-xl">
-              {/* Breadcrumb goes here */}
+    <main className="block mb-20 m-1 rounded" style={{ backgroundColor: '#e1e4e5' }}>
+      {/* lists */}
 
-              {/* <p className="text-xs font-semibold text-gray-400 capitalize">
+      {Object.keys(taskDataGroupingsByStatus).map((value) => (
+        <div key={taskDataGroupingsByStatus[value].key} className="relative p-5 border rounded-xl">
+          {/* Breadcrumb goes here */}
+
+          {/* <p className="text-xs font-semibold text-gray-400 capitalize">
                 {item.name}
               </p> */}
-              <div
-                className="absolute top-0 left-0 w-1 h-full rounded-l-md"
-                style={{ backgroundColor: '#78828d' }}
-              ></div>
-              <div id="listTitle" className="flex items-center justify-between">
-                <div className="flex items-center justify-center group " style={{ color: '#78828d', fontSize: '11px' }}>
-                  <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
+          <div className="absolute top-0 left-0 w-1 h-full rounded-l-md" style={{ backgroundColor: '#78828d' }}></div>
+          <div id="listTitle" className="flex items-center justify-between">
+            <div className="flex items-center justify-center group " style={{ color: '#78828d', fontSize: '11px' }}>
+              <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
 
-                  <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
-                    {filteredTaskData[value]?.groupListName}
-                  </p>
+              <p className="text-base font-semibold text-black" style={{ backgroundColor: '#e1e4e5' }}>
+                {filteredTaskData[value]?.groupListName}
+              </p>
 
-                  <InformationCircleIcon
-                    className="flex-shrink-0 w-5 h-4 ml-1 "
-                    style={{ color: '#78828d', fontSize: '11px' }}
-                    aria-hidden="true"
-                  />
-                  <div
-                    className=""
-                    id="newItem"
-                    onClick={() => {
-                      dispatch(setCurrentListId(taskDataGroupingsByStatus[value].key));
-                      dispatch(setCreateTaskFromTop(!createTaskFromTop));
-                    }}
-                  >
-                    <p
-                      className="px-1 py-1 text-xs font-medium uppercase cursor-pointer hover:bg-gray-200"
-                      style={{ color: '#78828d', fontSize: '11px' }}
-                    >
-                      + New Task
-                    </p>
-                  </div>
-
-                  <p
-                    className="px-1 py-1 text-xs font-medium uppercase transition duration-200 opacity-0 cursor-pointer group-hover:opacity-100 hover:bg-gray-200 "
-                    style={{ color: '#78828d', fontSize: '11px' }}
-                  >
-                    Add Description
-                  </p>
-                  <p
-                    className="px-1 py-1 text-xs font-medium uppercase transition duration-200 opacity-0 cursor-pointer rou group-hover:opacity-100 hover:bg-gray-200 "
-                    style={{ color: '#78828d', fontSize: '11px' }}
-                  >
-                    Add Comment
-                  </p>
-                </div>
-                <div className="flex items-center justify-center space-x-1 text-xs text-gray-400">
-                  <CheckIcon
-                    className="flex-shrink-0 w-5 h-4 font-medium uppercase "
-                    aria-hidden="true"
-                    style={{ color: '#78828d', fontSize: '11px' }}
-                  />
-                  <p className="font-medium uppercase" style={{ color: '#78828d', fontSize: '11px' }}>
-                    Show Closed
-                  </p>
-                </div>
-              </div>
-              <section id="border">
-                <div className="inline-flex items-center justify-center w-full p-3 opacity-0 hover:opacity-100">
-                  <hr className="w-full h-px my-2 bg-gray-300 border-0 dark:bg-gray-700" />
-                  <span
-                    className="absolute px-3 text-xs text-gray-400 -translate-x-1/2 cursor-pointer font-sm dark:text-white dark:bg-gray-900 hover:text-blue-700"
-                    style={{ backgroundColor: '#eee' }}
-                  >
-                    Add New Status dot com
-                  </span>
-                </div>
-              </section>
-              {createTaskFromTop && currentListId === taskDataGroupingsByStatus[value].key && (
-                <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
-              )}
-
-              <div>
-                <div>
-                  <ul>
-                    {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
-                      <li key={status}>
-                        <TaskListViews
-                          listId={taskDataGroupingsByStatus[value].key}
-                          taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
-                          status={status}
-                        />
-                        {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                          <Fragment key={task.id}>
-                            <section>
-                              <TaskData listId={task.list_id} task={task} />
-                              {currentParentTaskId === task.id ? (
-                                <div>
-                                  <SubTask parentTaskId={currentParentTaskId} />
-                                </div>
-                              ) : null}
-                              {getSubTaskId === task.id ? <RenderSubTasks /> : null}
-                            </section>
-                          </Fragment>
-                        ))}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              {addNewTaskItem && currentListId === taskDataGroupingsByStatus[value].key && (
-                <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
-              )}
+              <InformationCircleIcon
+                className="flex-shrink-0 w-5 h-4 ml-1 "
+                style={{ color: '#78828d', fontSize: '11px' }}
+                aria-hidden="true"
+              />
               <div
                 className=""
                 id="newItem"
-                onClick={() => handleNewItem(taskDataGroupingsByStatus[value].key, addNewTaskItem)}
+                onClick={() => {
+                  dispatch(setCurrentListId(taskDataGroupingsByStatus[value].key));
+                  dispatch(setCreateTaskFromTop(!createTaskFromTop));
+                }}
               >
                 <p
-                  className="px-1 mt-1 ml-5 text-xs font-semibold rounded-md cursor-pointer hover:bg-gray-300 border-1"
-                  style={{ color: '#78828d', fontSize: '11px', width: '70px' }}
+                  className="px-1 py-1 text-xs font-medium uppercase cursor-pointer hover:bg-gray-200"
+                  style={{ color: '#78828d', fontSize: '11px' }}
                 >
                   + New Task
                 </p>
               </div>
+
+              <p
+                className="px-1 py-1 text-xs font-medium uppercase transition duration-200 opacity-0 cursor-pointer group-hover:opacity-100 hover:bg-gray-200 "
+                style={{ color: '#78828d', fontSize: '11px' }}
+              >
+                Add Description
+              </p>
+              <p
+                className="px-1 py-1 text-xs font-medium uppercase transition duration-200 opacity-0 cursor-pointer rou group-hover:opacity-100 hover:bg-gray-200 "
+                style={{ color: '#78828d', fontSize: '11px' }}
+              >
+                Add Comment
+              </p>
             </div>
-          ))}
+            <div className="flex items-center justify-center space-x-1 text-xs text-gray-400">
+              <CheckIcon
+                className="flex-shrink-0 w-5 h-4 font-medium uppercase "
+                aria-hidden="true"
+                style={{ color: '#78828d', fontSize: '11px' }}
+              />
+              <p className="font-medium uppercase" style={{ color: '#78828d', fontSize: '11px' }}>
+                Show Closed
+              </p>
+            </div>
+          </div>
+          <section id="border">
+            <div className="inline-flex items-center justify-center w-full p-3 opacity-0 hover:opacity-100">
+              <hr className="w-full h-px my-2 bg-gray-300 border-0 dark:bg-gray-700" />
+              <span
+                className="absolute px-3 text-xs text-gray-400 -translate-x-1/2 cursor-pointer font-sm dark:text-white dark:bg-gray-900 hover:text-blue-700"
+                style={{ backgroundColor: '#eee' }}
+              >
+                Add New Status dot com
+              </span>
+            </div>
+          </section>
+          {createTaskFromTop && currentListId === taskDataGroupingsByStatus[value].key && (
+            <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
+          )}
+
+          <ul className="w-full">
+            {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
+              <li className="overflow-x-scroll" key={status}>
+                <TaskListViews
+                  listId={taskDataGroupingsByStatus[value].key}
+                  taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
+                  status={status}
+                />
+
+                {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
+                  <Fragment key={task.id}>
+                    <TaskData listId={task.list_id} task={task} />
+                    {currentParentTaskId === task.id ? (
+                      <div>
+                        <SubTask parentTaskId={currentParentTaskId} />
+                      </div>
+                    ) : null}
+
+                    {getSubTaskId === task.id ? <RenderSubTasks /> : null}
+                  </Fragment>
+                ))}
+              </li>
+            ))}
+          </ul>
+
+          {addNewTaskItem && currentListId === taskDataGroupingsByStatus[value].key && (
+            <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
+          )}
+          <div
+            className=""
+            id="newItem"
+            onClick={() => handleNewItem(taskDataGroupingsByStatus[value].key, addNewTaskItem)}
+          >
+            <p
+              className="px-1 mt-1 ml-5 text-xs font-semibold rounded-md cursor-pointer hover:bg-gray-300 border-1"
+              style={{ color: '#78828d', fontSize: '11px', width: '70px' }}
+            >
+              + New Task
+            </p>
+          </div>
         </div>
-      </section>
+      ))}
     </main>
   );
 }
