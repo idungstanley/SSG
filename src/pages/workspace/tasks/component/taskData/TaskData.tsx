@@ -123,7 +123,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-12/12"
+                        className="flex border border-red-500 items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-48"
                       >
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
