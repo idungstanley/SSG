@@ -94,7 +94,7 @@ function ListNav({
             <span className="font-bold font-bold pr-2">{navName}</span>
           </span>
           <div className="flex pt-3">
-            <p className="flex items-center justify-start space-x-1 " onClick={handleListView}>
+            <div className="flex items-center justify-start space-x-1 " onClick={handleListView}>
               <span className="flex">
                 <span
                   className={`${
@@ -130,9 +130,9 @@ function ListNav({
                 </span>
                 <RxDividerVertical className="mt-0.5" />
               </span>
-            </p>
+            </div>
 
-            <p className="flex items-center justify-start space-x-1" onClick={handleTableView}>
+            <div className="flex items-center justify-start space-x-1" onClick={handleTableView}>
               <span className="flex">
                 <span
                   className={`${
@@ -168,9 +168,9 @@ function ListNav({
                 </span>
                 <RxDividerVertical className="mt-0.5" />
               </span>
-            </p>
+            </div>
 
-            <p className=" flex items-center justify-start space-x-1" onClick={handleBoardView}>
+            <div className=" flex items-center justify-start space-x-1" onClick={handleBoardView}>
               <span className="group flex">
                 <span
                   className={`${
@@ -206,8 +206,8 @@ function ListNav({
                 </span>
                 <RxDividerVertical className="mt-0.5" />
               </span>
-            </p>
-            <p className="flex items-center justify-start space-x-1" onClick={handleCalenderView}>
+            </div>
+            <div className="flex items-center justify-start space-x-1" onClick={handleCalenderView}>
               <span className="flex">
                 <span
                   className={`${
@@ -243,8 +243,8 @@ function ListNav({
                 </span>
                 <RxDividerVertical className="mt-0.5" />
               </span>
-            </p>
-            <p className="flex items-center justify-start space-x-1" onClick={handleMapView}>
+            </div>
+            <div className="flex items-center justify-start space-x-1" onClick={handleMapView}>
               <span className="flex">
                 <span
                   className={`${
@@ -280,9 +280,9 @@ function ListNav({
                 </span>
                 <RxDividerVertical className="mt-0.5" />
               </span>
-            </p>
+            </div>
 
-            <p className="flex items-center justify-start space-x-1">
+            <div className="flex items-center justify-start space-x-1">
               <span className="viewSettingsHoverBorder gap-2 flex items-center pb-3  text-sm  cursor-pointer">
                 <span>
                   <HiOutlinePlusSm className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
@@ -300,7 +300,7 @@ function ListNav({
                   </span>
                 </span>
               </span>
-            </p>
+            </div>
           </div>
         </section>
         <section className="flex items-center space-x-5 text-gray-500">

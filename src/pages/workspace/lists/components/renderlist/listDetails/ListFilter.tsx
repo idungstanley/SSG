@@ -13,7 +13,7 @@ import { cl } from '../../../../../../utils/index';
 import FilterGroups from './filterGroup/FilterGroups';
 
 export default function ListFilter() {
-  const [navTop, setNavTop] = useState<number | undefined>(undefined);
+  const [navTop, setNavTop] = useState<number>(0);
   const [navWidth, setNavWidth] = useState<number | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
@@ -39,7 +39,7 @@ export default function ListFilter() {
   const isSticky = () => {
     const sidebarEl = document.querySelector('.navbar');
     const scrollTop = window.scrollY;
-    if (scrollTop >= navTop! - 10) {
+    if (scrollTop >= navTop - 10) {
       sidebarEl?.classList.add('fixed');
     } else {
       sidebarEl?.classList.remove('fixed');

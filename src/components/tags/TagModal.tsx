@@ -69,9 +69,6 @@ export default function TagModal() {
                     >
                       <p>{tags.name}</p>
                     </button>
-                    {/* <button onClick={() => <EditTagModal tagId={tags.id} />}>
-                      <AiOutlineEllipsis className="text-sm" />
-                    </button> */}
                   </div>
                 )}
               </Menu.Item>
