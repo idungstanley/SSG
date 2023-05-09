@@ -226,7 +226,6 @@ export default function WorkspaceSettingsModal() {
                             )}
                           >
                             <div
-                              type="button"
                               className={cl('flex items-center space-x-1 text-sm text-gray-600 text-left w-full')}
                               onClick={() => onSwitchWorkspace(i.id)}
                             >
