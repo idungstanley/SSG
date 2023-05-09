@@ -12,7 +12,7 @@ function UserSettings() {
   const { userData, status } = useAppSelector((state) => state.userSetting);
 
   useEffect(() => {
-    dispatch(setActiveTab('My Settings'));
+    dispatch(setActiveTab('My Account'));
   }, []);
 
   if (status === 'loading') {

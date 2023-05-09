@@ -135,19 +135,20 @@ export default function TaskName({
           )}
         </div>
         <div className="flex group items-center">
-          <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
+          <div onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
             <StatusDropdown TaskCurrentStatus={task?.status} />
-          </p>
+          </div>
           <div
             contentEditable={true}
+            suppressContentEditableWarning={true}
             onClick={handleTaskNameClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
               comfortableView && contentEditable
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
                 : comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap && contentEditable
                 ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap
@@ -163,7 +164,7 @@ export default function TaskName({
                 : null
             }`}
           >
-            <p>
+            <div>
               {(taskColField as string)?.length > 50 && comfortableView ? (
                 <span>{(taskColField as string)?.substring(0, 40)}...</span>
               ) : (taskColField as string)?.length > 61 && CompactView ? (
@@ -171,9 +172,9 @@ export default function TaskName({
               ) : (
                 (taskColField as ReactNode)
               )}
-            </p>
+            </div>
           </div>
-          <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
+          <div id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
             {!ShowPlusIcon && (
               <ToolTip tooltip="Add subtask">
                 <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
@@ -187,11 +188,11 @@ export default function TaskName({
             )}
             {/* tag here */}
             <ToolTip tooltip="Add Tag">
-              <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
+              <span onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
                 <TagModal />
-              </button>
+              </span>
             </ToolTip>
-          </p>
+          </div>
           {/* tags goes here */}
           {/* <div> {groupTags(task.tags)}</div>; */}
         </div>

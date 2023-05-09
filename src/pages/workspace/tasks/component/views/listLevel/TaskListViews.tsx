@@ -77,13 +77,9 @@ export default function TaskListViews({
 
     const customFieldNames = data.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
 
-    setColumns(() => {
-      const newColumns = unique([...columnsHead, ...customFieldNames]);
-
-      dispatch(getTaskColumns(newColumns));
-
-      return newColumns;
-    });
+    const newColumns = unique([...columnsHead, ...customFieldNames]);
+    dispatch(getTaskColumns(newColumns));
+    setColumns(newColumns);
   }, [data]);
 
   const handleDropDown = () => {

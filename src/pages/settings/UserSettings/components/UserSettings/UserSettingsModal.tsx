@@ -153,8 +153,7 @@ export default function UserSettingsModal() {
           <div className="pt-3">
             {userSettings?.map((i) => (
               <Menu.Item key={i.id}>
-                <button
-                  type="button"
+                <div
                   className="flex items-center w-full px-4 py-2 text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
                   onClick={i.handleClick}
                 >
@@ -168,7 +167,7 @@ export default function UserSettingsModal() {
                       ) : null}
                     </span>
                   </div>
-                </button>
+                </div>
               </Menu.Item>
             ))}
           </div>

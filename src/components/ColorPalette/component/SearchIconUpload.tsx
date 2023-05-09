@@ -13,13 +13,7 @@ export default function SearchIconUpload() {
   return (
     <div className="flex items-center justify-between w-full mt-2">
       <div className="w-3/5">
-        <Input
-          placeholder="Search"
-          type="text"
-          name="search"
-          leadingIcon={<CiSearch />}
-          onChange={() => console.log('se')}
-        />
+        <Input placeholder="Search" type="text" name="search" leadingIcon={<CiSearch />} onChange={() => null} />
       </div>
       <div
         className="flex items-center justify-between p-1 bg-gray-200 rounded-full cursor-pointer hover:bg-gray-300"
