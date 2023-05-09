@@ -18,9 +18,6 @@ export default function NotificationSettingsPage() {
       </div>
 
       <NotificaitonTable />
-      {/* <div className="border border-gray-300">
-        <NotificationSettings />
-      </div> */}
     </main>
   );
 }
