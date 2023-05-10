@@ -243,7 +243,7 @@ export default function TaskListViews({
             )}
       </div>
 
-      <div style={{ left: 312 }} className="absolute bottom-0 grid grid-flow-col border bg-gray-200">
+      <div style={{ left: 304 }} className="absolute bottom-0 grid grid-flow-col border bg-gray-200">
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -383,7 +383,7 @@ export default function TaskListViews({
             )}
       </div>
       <span
-        className=" flex absolute  right-5 mt-1  items-center h-5  text-xs  rounded-full p-1 font-semibold group"
+        className="flex absolute right-1 top-1 items-center h-5 text-xs rounded-full p-1 font-semibold group"
         style={{ color: '#78828d' }}
       >
         <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />

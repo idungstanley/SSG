@@ -108,7 +108,7 @@ export default function Assignee({
   };
 
   return (
-    <div>
+    <>
       {option === 'task' && (
         <Button id="basic-button" style={{ marginLeft: '-25px' }}>
           {assignees?.length ? (
@@ -119,7 +119,7 @@ export default function Assignee({
             <ToolTip tooltip="Assign">
               <span onClick={handleClick}>
                 <UserPlusIcon
-                  className="text-xl   text-gray-400 items-center justify-center cursor-pointer -ml-3"
+                  className="text-xl mt-1 text-gray-400 items-center justify-center cursor-pointer"
                   style={{
                     width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
                   }}
@@ -258,6 +258,6 @@ export default function Assignee({
         {/* <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
-    </div>
+    </>
   );
 }

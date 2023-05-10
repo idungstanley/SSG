@@ -174,7 +174,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                 />
 
                 {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                  <div className="relative" key={task.id}>
+                  <div className="relative pl-6" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>

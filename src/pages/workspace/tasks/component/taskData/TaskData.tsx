@@ -64,14 +64,15 @@ export default function TaskData({ task, listId }: TaskDataProps) {
 
   return (
     <>
-      <div className="absolute left-6 right-0 z-10">
+      {/* sticky task name */}
+      <div className="absolute pl-2 left-6 right-0 z-50" style={{ zIndex: '999', overflow: 'visible !important' }}>
         {[...columnsHead, ...customFields].map(
           (col) =>
             col.value == 'Task' &&
             !col.hidden && (
               <div
                 key={col.id}
-                className="flex w-full whitespace-normal items-center ml-2 text-xs font-medium capitalize cursor-pointer group mr-20"
+                className="flex w-full whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group mr-20"
               >
                 <DataRenderFunc
                   taskColField={task?.[col.field]}
@@ -89,21 +90,21 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
         className={`${
           comfortableView && taskId == task?.id
-            ? '  flex justify-between group ml-6 mb-px hover:bg-black-100 items-center border-1.5 bg-primary-200'
+            ? '  flex justify-between group mb-px hover:bg-black-100 items-center border-1.5 bg-primary-200'
             : comfortableView
-            ? 'flex justify-between group ml-6 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
+            ? 'flex justify-between group  mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : comfortableViewWrap && taskId == task?.id
-            ? 'flex justify-between group ml-4 mb-px  items-center border-1.5 bg-primary-200'
+            ? 'flex justify-between group  mb-px  items-center border-1.5 bg-primary-200'
             : comfortableViewWrap
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
+            ? 'flex justify-between group  mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px items-center border-1.5 h-10 bg-primary-200'
+            ? ' compactView flex justify-between group mb-px items-center border-1.5 h-10 bg-primary-200'
             : CompactView
-            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 h-10 bg-white'
+            ? 'compactView flex justify-between group mb-px hover:bg-gray-100 items-center border-1.5 h-10 bg-white'
             : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px items-center border-1.5 bg-primary-200'
+            ? 'compactViewWrap flex justify-between group  mb-px items-center border-1.5 bg-primary-200'
             : CompactViewWrap
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
+            ? 'compactViewWrap flex justify-between group  mb-px hover:bg-gray-100 items-center border-1.5 bg-white'
             : null
         } relative`}
       >
@@ -126,7 +127,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   (col) =>
                     col.value == 'Task' &&
                     !col.hidden && (
-                      <div key={col.id} className="flex w-full items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex w-full items-center text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -144,7 +145,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex w-full whitespace-normal items-center ml-2 text-xs font-medium capitalize cursor-pointer group mr-20"
+                        className="flex w-full pl-2 whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group mr-20"
                       >
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
@@ -163,7 +164,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.id} className="flex w-32 items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -179,7 +180,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   (col) =>
                     col.value == 'Tags' &&
                     !col.hidden && (
-                      <div key={col.id} className="flex w-32 items-center ml-2 text-xs font-medium capitalize group">
+                      <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
                         <DataRenderFunc
                           taskColField={task?.[col.field]}
                           col={{ field: col.field, id: col.id }}
@@ -193,7 +194,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
           </div>
         </div>
 
-        <div style={{ left: 312 }} className="absolute bottom-0 top-0 ml-3 dynamic bg-white py-1">
+        <div style={{ left: 312 }} className="absolute top-0 dynamic bottom-0 bg-white">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
@@ -202,7 +203,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="items-center py-px font-medium text-gray-400 uppercase group"
+                      className="items-center py-px h-10 font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
@@ -223,7 +224,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   !col.hidden && (
                     <div
                       key={col.id}
-                      className="items-center py-px font-medium text-gray-400 uppercase group"
+                      className="items-center h-10 py-px font-medium text-gray-400 uppercase group"
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
