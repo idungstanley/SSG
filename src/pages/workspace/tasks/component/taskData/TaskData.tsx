@@ -123,21 +123,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
             }`}
           >
             {hideTask.length
-              ? hideTask.map(
-                  (col) =>
-                    col.value == 'Task' &&
-                    !col.hidden && (
-                      <div key={col.id} className="flex w-full items-center text-xs font-medium capitalize group">
-                        <DataRenderFunc
-                          taskColField={task?.[col.field]}
-                          col={{ field: col.field, id: col.id }}
-                          task={task}
-                          getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task?.id)}
-                        />
-                      </div>
-                    )
-                )
+              ? hideTask.map((col) => col.value == 'Task' && !col.hidden && <></>)
               : task &&
                 [...columnsHead, ...customFields].map(
                   (col) =>
@@ -145,7 +131,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex w-full pl-2 whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group mr-20"
+                        className="flex opacity-0 w-full pl-2 whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group mr-20"
                       >
                         <DataRenderFunc
                           taskColField={task?.[col.field]}

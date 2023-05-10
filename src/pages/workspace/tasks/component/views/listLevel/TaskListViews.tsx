@@ -92,7 +92,7 @@ export default function TaskListViews({
 
   return (
     <div className="relative flex pt-5 bg-gray-100 z-10" style={{ backgroundColor: '#e1e4e5' }}>
-      <div className="sticky z-10 left-0 flex items-center w-fit">
+      <div className="sticky bg-gray-200 opacity-80 z-10 left-0 flex items-center w-fit">
         <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px">
           <IoIosArrowDropdown
             className={` text-gray-400 text-sm hover:text-gray-200  ${

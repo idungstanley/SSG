@@ -29,7 +29,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left w-full">
+    <Menu as="div" className="relative inline-block mt-2 text-left w-full">
       <Menu.Button className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full">
         {activeOption}
       </Menu.Button>
