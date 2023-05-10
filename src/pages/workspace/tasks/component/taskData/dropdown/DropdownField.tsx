@@ -44,7 +44,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
         leaveTo="transform opacity-0 scale-95"
       >
         <div className="px-2 py-1 absolute right-0 top-5 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg focus:outline-none">
-          <p className="uppercase whitespace-nowrap pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
+          <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
             select an option
           </p>
           <Menu.Items className="space-y-2 pt-3">
@@ -54,7 +54,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                   onClick={() => handleClick(option)}
                   className={cl(
                     option === activeOption && 'bg-gray-100',
-                    'text-gray-700 py-2 border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
+                    'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
                   )}
                 >
                   {option}

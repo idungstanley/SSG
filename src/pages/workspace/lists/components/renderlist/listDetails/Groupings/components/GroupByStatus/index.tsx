@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ITaskTemplateData } from '../../../../../../../tasks/component/views/hubLevel/TaskTableTemplateData';
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { ICustomField, ImyTaskData, setAddNewTaskItem } from '../../../../../../../../../features/task/taskSlice';
@@ -164,9 +164,9 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
             <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
           )}
 
-          <ul className="">
+          <ul className="relative">
             {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
-              <li className="overflow-x-scroll overflow-y-hidden w-fit" key={status}>
+              <li className="overflow-x-scroll" key={status}>
                 <TaskListViews
                   listId={taskDataGroupingsByStatus[value].key}
                   taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
@@ -174,7 +174,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                 />
 
                 {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                  <div className="relative pl-6" key={task.id}>
+                  <div className="pl-6" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>

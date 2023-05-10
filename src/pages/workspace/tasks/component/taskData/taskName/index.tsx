@@ -95,7 +95,7 @@ export default function TaskName({
   };
 
   return (
-    <div className="sticky bg-white w-72 mr-14 text-gray-900 opacity-80 left-0 flex items-center" style={style}>
+    <div className="sticky bg-white w-72 mr-4 text-gray-900 opacity-80 left-0 flex items-center" style={style}>
       <div className="flex items-center">
         <input
           type="checkbox"

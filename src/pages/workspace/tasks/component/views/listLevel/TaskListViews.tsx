@@ -91,26 +91,29 @@ export default function TaskListViews({
   };
 
   return (
-    <div className="relative flex pt-5 bg-gray-100 z-10" style={{ backgroundColor: '#e1e4e5' }}>
-      <div className="sticky bg-gray-200 opacity-80 z-10 left-0 flex items-center w-fit">
-        <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px">
-          <IoIosArrowDropdown
-            className={` text-gray-400 text-sm hover:text-gray-200  ${
-              closeTaskListView === false ? 'rotateimg90' : null
-            }`}
-            aria-hidden="true"
-            onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
-          />
-        </span>
-        <div className="flex items-center justify-center cursor-pointer relative">
-          <div className="group flex items-center ml-2">
-            <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
-              {status ? status : 'To Do'}
-            </span>
+    <div className="flex pt-5 bg-gray-100 z-10" style={{ backgroundColor: '#e1e4e5' }}>
+      <div className="absolute left-0 right-0">
+        <div className="sticky bg-gray-200 opacity-80 z-10 left-0 flex items-center w-60">
+          <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px">
+            <IoIosArrowDropdown
+              className={` text-gray-400 text-sm hover:text-gray-200  ${
+                closeTaskListView === false ? 'rotateimg90' : null
+              }`}
+              aria-hidden="true"
+              onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
+            />
+          </span>
+          <div className="flex items-center justify-center cursor-pointer relative">
+            <div className="group flex items-center ml-2">
+              <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
+                {status ? status : 'To Do'}
+              </span>
+            </div>
+            <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
           </div>
-          <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
         </div>
       </div>
+
       <div className="grid grid-flow-cols relative">
         {hideTask.length
           ? hideTask.map(
@@ -243,7 +246,7 @@ export default function TaskListViews({
             )}
       </div>
 
-      <div style={{ left: 304 }} className="absolute bottom-0 grid grid-flow-col border bg-gray-200">
+      <div style={{ marginLeft: 280 }} className="block text-gray-700 right-0 dynamic border">
         {hideTask.length
           ? hideTask.map(
               (col) =>

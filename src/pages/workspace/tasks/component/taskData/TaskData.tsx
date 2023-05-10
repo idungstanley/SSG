@@ -63,10 +63,12 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
-    <div className="relative w-full flex bg-white pl-2 border-t border-b">
+    <div className="w-full flex bg-white pl-2 border-t border-b">
       {/* sticky task name */}
-      <div className="absolute left-2 -right-96 z-50" style={{ zIndex: '99', overflow: 'visible !important' }}>
-        {/* <div className="sticky left-0 w-"> */}
+      <div
+        className="absolute left-8 -right-96 xl:right-0 z-50"
+        style={{ zIndex: '99', overflow: 'visible !important' }}
+      >
         {[...columnsHead, ...customFields]
           .filter((i) => i.value === 'Task')
           .map((col) => (
@@ -80,11 +82,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
               />
             </div>
           ))}
-        {/* </div> */}
       </div>
 
-      <div className="flex-grow">
-        {/* task name */}
+      <div className="flex-grow relative">
+        {/* task name (hidden, because we show sticky name) */}
         <div className="relative text-sm" onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
           {hideTask.length
             ? hideTask.map((col) => col.value == 'Task' && !col.hidden && <></>)
@@ -95,7 +96,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   <div
                     key={col.id}
                     // style={{ minWidth: 240 }}
-                    className="text-xs font-medium capitalize cursor-pointer group"
+                    className="text-xs opacity-0 font-medium capitalize cursor-pointer group"
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}
@@ -107,7 +108,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   </div>
                 ))}
         </div>
-        <div id="tags" className="">
+        <div id="tags" className="relative">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
@@ -143,7 +144,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         </div>
       </div>
 
-      <div className="dynamic place-items-stretch items-center place-content-stretch bg-white">
+      <div className="relative dynamic place-items-stretch items-center place-content-stretch bg-white">
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -186,172 +187,5 @@ export default function TaskData({ task, listId }: TaskDataProps) {
             )}
       </div>
     </div>
-    // <div className="h-10">
-    //   {/* sticky task name */}
-    //   <div className="absolute pl-2 left-6 right-0 z-50" style={{ zIndex: '99', overflow: 'visible !important' }}>
-    //     {[...columnsHead, ...customFields].map(
-    //       (col) =>
-    //         col.value == 'Task' &&
-    //         !col.hidden && (
-    //           <div
-    //             key={col.id}
-    //             className="flex w-full whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group mr-20"
-    //           >
-    //             <DataRenderFunc
-    //               taskColField={task?.[col.field]}
-    //               col={{ field: col.field, id: col.id }}
-    //               task={task}
-    //               getSubTaskId={getSubTaskId}
-    //               handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //             />
-    //           </div>
-    //         )
-    //     )}
-    //   </div>
-
-    //   <div
-    //     onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
-    //     className={`${
-    //       comfortableView && taskId == task?.id
-    //         ? 'flex justify-between group hover:bg-black-100 items-center border-1.5 bg-primary-200'
-    //         : comfortableView
-    //         ? 'flex justify-between group  hover:bg-gray-100 items-center border-1.5 bg-white'
-    //         : comfortableViewWrap && taskId == task?.id
-    //         ? 'flex justify-between group   items-center border-1.5 bg-primary-200'
-    //         : comfortableViewWrap
-    //         ? 'flex justify-between group  hover:bg-gray-100 items-center border-1.5 bg-white'
-    //         : CompactView && activeItemId == task?.id
-    //         ? ' compactView flex justify-between group items-center border-1.5 h-10 bg-primary-200'
-    //         : CompactView
-    //         ? 'compactView flex h-10 justify-between group hover:bg-gray-100 items-center border-1.5 bg-white'
-    //         : CompactViewWrap && activeItemId == task?.id
-    //         ? 'compactViewWrap flex justify-between group  items-center border-1.5 bg-primary-200'
-    //         : CompactViewWrap
-    //         ? 'compactViewWrap flex justify-between group  hover:bg-gray-100 items-center border-1.5 bg-white'
-    //         : null
-    //     } relative h-10 grid grid-cols-3 grid-rows-1`}
-    //   >
-    //     <div className="flex bg-white items-center justify-between pr-24 w-full">
-    //       <div
-    //         className={`${
-    //           comfortableView
-    //             ? 'text-sm whitespace-nowrap'
-    //             : comfortableViewWrap
-    //             ? 'text-sm'
-    //             : CompactView
-    //             ? 'text-xs whitespace-nowrap'
-    //             : CompactViewWrap
-    //             ? 'text-xs text-justify'
-    //             : null
-    //         }`}
-    //       >
-    //         {hideTask.length
-    //           ? hideTask.map((col) => col.value == 'Task' && !col.hidden && <></>)
-    //           : task &&
-    //             [...columnsHead, ...customFields].map(
-    //               (col) =>
-    //                 col.value == 'Task' &&
-    //                 !col.hidden && (
-    //                   <div
-    //                     key={col.id}
-    //                     // style={{ minWidth: 240 }}
-    //                     className="flex col-span-2 w-full opacity-0 pl-2 whitespace-normal items-center text-xs font-medium capitalize cursor-pointer group"
-    //                   >
-    //                     <DataRenderFunc
-    //                       taskColField={task?.[col.field]}
-    //                       col={{ field: col.field, id: col.id }}
-    //                       task={task}
-    //                       getSubTaskId={getSubTaskId}
-    //                       handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //                     />
-    //                   </div>
-    //                 )
-    //             )}
-    //       </div>
-    //       <div id="tags" className="">
-    //         {hideTask.length
-    //           ? hideTask.map(
-    //               (col) =>
-    //                 col.value == 'Tags' &&
-    //                 !col.hidden && (
-    //                   <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
-    //                     <DataRenderFunc
-    //                       taskColField={task?.[col.field]}
-    //                       col={{ field: col.field, id: col.id }}
-    //                       task={task}
-    //                       getSubTaskId={getSubTaskId}
-    //                       handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //                     />
-    //                   </div>
-    //                 )
-    //             )
-    //           : task &&
-    //             [...columnsHead, ...customFields].map(
-    //               (col) =>
-    //                 col.value == 'Tags' &&
-    //                 !col.hidden && (
-    //                   <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
-    //                     <DataRenderFunc
-    //                       taskColField={task?.[col.field]}
-    //                       col={{ field: col.field, id: col.id }}
-    //                       task={task}
-    //                       getSubTaskId={getSubTaskId}
-    //                       handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //                     />
-    //                   </div>
-    //                 )
-    //             )}
-    //       </div>
-    //     </div>
-
-    //     <div
-    //       // style={{ marginLeft: 312 }}
-    //       className="justify-items-center items-center dynamic bg-white"
-    //     >
-    //       {hideTask.length
-    //         ? hideTask.map(
-    //             (col) =>
-    //               col.value !== 'Task' &&
-    //               col.value !== 'Tags' &&
-    //               !col.hidden && (
-    //                 <div
-    //                   key={col.id}
-    //                   className="items-center w-32 py-px h-10 bg-white font-medium text-gray-400 uppercase group"
-    //                   // style={{ width: '50px' }}
-    //                 >
-    //                   <DataRenderFunc
-    //                     taskColField={task?.[col.field]}
-    //                     col={{ field: col.field, id: col.id }}
-    //                     task={task}
-    //                     getSubTaskId={getSubTaskId}
-    //                     handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //                   />
-    //                 </div>
-    //               )
-    //           )
-    //         : task &&
-    //           [...columnsHead, ...customFields].map(
-    //             (col) =>
-    //               col.value !== 'Task' &&
-    //               col.value !== 'Tags' &&
-    //               !col.hidden && (
-    //                 <div
-    //                   key={col.id}
-    //                   className="items-center w-32 h-10 py-px bg-white font-medium text-gray-400 uppercase group"
-    //                   // style={{ width: '50px' }}
-    //                 >
-    //                   <DataRenderFunc
-    //                     taskColField={task?.[col.field]}
-    //                     col={{ field: col.field, id: col.id }}
-    //                     task={task}
-    //                     getSubTaskId={getSubTaskId}
-    //                     handleGetSubTask={() => handleGetSubTask(task?.id)}
-    //                   />
-    //                 </div>
-    //               )
-    //           )}
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
