@@ -33,7 +33,7 @@ export default function NotificaitonTable() {
     <div className="bg-white border border-gray-300 ">
       {data &&
         Object.keys(data).map((category, index) => (
-          <Disclosure key={category} defaultOpen={index === 0 ? true : false}>
+          <Disclosure key={category} defaultOpen={index === 0}>
             {({ open }) => (
               <div className={cl('w-full', index !== 0 ? 'mt-2' : '')}>
                 <Disclosure.Button className="w-full">
@@ -106,6 +106,7 @@ export default function NotificaitonTable() {
                                 type="checkbox"
                                 className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
                                 checked
+                                onChange={() => null}
                               />
                             </div>
                             <div className="px-3 flex justify-center">
@@ -128,6 +129,7 @@ export default function NotificaitonTable() {
                                 type="checkbox"
                                 className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
                                 checked
+                                onChange={() => null}
                               />
                             </div>
                           </div>

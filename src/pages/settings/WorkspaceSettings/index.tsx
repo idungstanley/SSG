@@ -10,13 +10,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { switchWorkspaceService } from '../../../features/account/accountService';
 import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import { getWorkspaceService } from '../../../features/workspace/workspaceService';
 
 function WorkspaceSettings() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedWorkSpace, setSelectedWorkspace] = useState<string | undefined>('');
+  const { data: workSpaceData } = getWorkspaceService();
   const { data: AllMyWorkSpace, status } = getAllWorkSpaceService();
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
@@ -34,7 +36,7 @@ function WorkspaceSettings() {
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/');
+      // navigate('/');
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
@@ -44,7 +46,7 @@ function WorkspaceSettings() {
     switchWorkspaceMutation.mutate({
       workspaceId: selectedWorkSpace as string
     });
-    queryClient.invalidateQueries();
+    queryClient.invalidateQueries(['workspace']);
   };
   return (
     <main className="flex-1 h-full  pb-10 px-4 sm:px-6 lg:px-6 bg-white w-full overflow-y-scroll">
@@ -57,13 +59,13 @@ function WorkspaceSettings() {
           <div className="flex items-end">
             <AvatarWithInitials
               initials={'NS'}
-              backgroundColour={'red'}
+              backgroundColour={workSpaceData?.data.workspace.color}
               height="h-24"
               width="w-24"
               textSize="51.6286px"
             />
             <h3 className="font-medium text-black" style={{ fontSize: '15px' }}>
-              ELASTIC WORKSPACE
+              {workSpaceData?.data.workspace.name?.toUpperCase()}
             </h3>
           </div>
           <div>
@@ -73,13 +75,17 @@ function WorkspaceSettings() {
             >
               Cancel
             </button>
-            <button
-              className="p-1 rounded text-sm border border-gray-500 mx-2 text-white w-16 h-8"
-              style={{ backgroundColor: '#BF00FF' }}
-              onClick={onSwitchWorkspace}
-            >
-              Save
-            </button>
+            {selectedWorkSpace?.length ? (
+              <button
+                className="p-1 rounded text-sm border border-gray-500 mx-2 text-white w-16 h-8"
+                style={{ backgroundColor: '#BF00FF' }}
+                onClick={onSwitchWorkspace}
+              >
+                Save
+              </button>
+            ) : (
+              ''
+            )}
           </div>
         </section>
         {status === 'loading' && (
@@ -88,8 +94,8 @@ function WorkspaceSettings() {
           </div>
         )}
         {AllMyWorkSpace?.data.workspaces && (
-          <div>
-            <table className="rlative table-auto border-collapse border border-slate-400 mt-10 w-10/12  rounded ml-16 ">
+          <div className="flex justify-center">
+            <table className="rlative table-auto border-collapse border border-slate-400 mt-10 w-10/12  rounded">
               <thead className="bg-gray-200 py-3 h-16 position-sticky ">
                 <tr className="border border-slate-300 py-3">
                   <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
@@ -109,30 +115,32 @@ function WorkspaceSettings() {
 
               <tbody>
                 {AllMyWorkSpace?.data.workspaces.map((workspace) => {
-                  return (
-                    <tr
-                      key={workspace.id}
-                      className={cl(
-                        'border border-slate-300 hover:bg-fuchsia-200 cursor-pointer',
-                        selectedWorkSpace === workspace.id ? 'bg-fuchsia-200' : ''
-                      )}
-                      onClick={() => setSelectedWorkspace(workspace.id)}
-                    >
-                      <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
-                      <td className="text-center py-2">
-                        <AvatarWithInitials
-                          initials={workspace.initials}
-                          backgroundColour={
-                            workspace.color === '0' || workspace.color === '1' ? '#D879F9' : workspace.color
-                          }
-                          height="h-10"
-                          width="w-10"
-                        />
-                      </td>
-                      <td className="text-center py-3">{workspace.last_activity_at}</td>
-                      <td className="text-center py-3">10/12/2023</td>
-                    </tr>
-                  );
+                  if (workSpaceData?.data.workspace.id !== workspace.id) {
+                    return (
+                      <tr
+                        key={workspace.id}
+                        className={cl(
+                          'border border-slate-300 hover:bg-fuchsia-200 cursor-pointer',
+                          selectedWorkSpace === workspace.id ? 'bg-fuchsia-200' : ''
+                        )}
+                        onClick={() => setSelectedWorkspace(workspace.id)}
+                      >
+                        <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
+                        <td className="text-center py-2">
+                          <AvatarWithInitials
+                            initials={workspace.initials}
+                            backgroundColour={
+                              workspace.color === '0' || workspace.color === '1' ? '#D879F9' : workspace.color
+                            }
+                            height="h-10"
+                            width="w-10"
+                          />
+                        </td>
+                        <td className="text-center py-3">{workspace.last_activity_at}</td>
+                        <td className="text-center py-3">{new Date(workspace.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    );
+                  }
                 })}
               </tbody>
             </table>
