@@ -4,7 +4,7 @@ import React from 'react';
 export default function MapsView() {
   const { isLoaded } = useJsApiLoader({
     id: 'map-trials-SSG',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY!
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_KEY as string
   });
 
   const mapRef = React.useRef<google.maps.Map | null>(null);

@@ -176,13 +176,12 @@ export default function WorkspaceSettingsModal() {
               </h4>
               <hr />
               {workspaceSettingsList?.map((i) => (
-                <button
+                <div
                   key={i.id}
-                  type="button"
                   className="flex items-center w-full px-4 py-2 mt-0.5 text-xs text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
                   onClick={i.handleClick}
                 >
-                  <p className="flex ">
+                  <div className="flex ">
                     {i.title}{' '}
                     {i.id == 3 ? (
                       <button
@@ -192,8 +191,8 @@ export default function WorkspaceSettingsModal() {
                         <MdOutlineGroupAdd className="w-4 h-4 test-sm" /> <p>Invite</p>
                       </button>
                     ) : null}
-                  </p>
-                </button>
+                  </div>
+                </div>
               ))}
             </div>
             <div>
@@ -226,12 +225,11 @@ export default function WorkspaceSettingsModal() {
                               'flex items-center px-4 py-2 mt-1 justify-between rounded-md mr-1'
                             )}
                           >
-                            <button
-                              type="button"
+                            <div
                               className={cl('flex items-center space-x-1 text-sm text-gray-600 text-left w-full')}
                               onClick={() => onSwitchWorkspace(i.id)}
                             >
-                              <p>
+                              <div>
                                 <AvatarWithInitials
                                   initials={i.initials.toUpperCase()}
                                   height="h-5"
@@ -239,11 +237,11 @@ export default function WorkspaceSettingsModal() {
                                   roundedStyle="rounded"
                                   backgroundColour={i.color}
                                 />
-                              </p>
+                              </div>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
                                 {i.name}
                               </p>
-                            </button>
+                            </div>
                             {pinnedIds.includes(i.id) ? (
                               <BsPinFill className="mr-1" onClick={(e) => togglePin(i.id, e)} />
                             ) : (
@@ -267,7 +265,7 @@ export default function WorkspaceSettingsModal() {
                               className={cl('flex items-center space-x-1  text-sm text-gray-600 text-left w-full')}
                               onClick={() => onSwitchWorkspace(i.id)}
                             >
-                              <p>
+                              <div>
                                 <AvatarWithInitials
                                   initials={i.initials.toUpperCase()}
                                   height="h-5"
@@ -275,7 +273,7 @@ export default function WorkspaceSettingsModal() {
                                   roundedStyle="rounded"
                                   backgroundColour={i.color}
                                 />
-                              </p>
+                              </div>
                               <p className="capitalize truncate" style={{ fontSize: '10px' }}>
                                 {i.name}
                               </p>

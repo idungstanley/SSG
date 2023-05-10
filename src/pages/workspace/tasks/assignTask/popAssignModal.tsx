@@ -8,6 +8,7 @@ export function PopAssignModal({
   modalLoader,
   roundedStyle,
   height,
+
   width
 }: {
   userData: {
@@ -17,6 +18,7 @@ export function PopAssignModal({
     name: string;
     avatar_path: string;
   };
+
   modalLoader: boolean;
   spinnerSize: number;
   roundedStyle: string;
