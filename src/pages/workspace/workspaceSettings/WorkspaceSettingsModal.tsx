@@ -165,9 +165,10 @@ export default function WorkspaceSettingsModal() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className={` z-30 w-48 px-1 pb-1 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          className={`w-48 px-1 pb-1 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
             showSidebar ? 'absolute -right-12' : 'fixed left-12'
           }`}
+          style={{ zIndex: '9999' }}
         >
           <section className="flex flex-col">
             <div className="pt-3">

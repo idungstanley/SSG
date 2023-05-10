@@ -71,7 +71,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         {...attributes}
         {...listeners}
       >
-        <MdDragIndicator />
+        <MdDragIndicator className="hover:text-fuchsia-500" />
       </span>
       <span className="relative w-5 h-5">
         {item.name === 'Notifications' && notificationCount > 0 && (
