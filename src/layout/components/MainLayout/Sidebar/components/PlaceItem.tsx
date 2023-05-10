@@ -85,7 +85,7 @@ export default function PlaceItem({
             {...attributes}
             {...listeners}
           >
-            <MdDragIndicator style={{ color: `${isActivePlace ? baseColor : undefined}` }} />
+            <MdDragIndicator className="hover:text-fuchsia-500" />
           </span>
           <div className="flex justify-between w-full">
             <div

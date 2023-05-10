@@ -19,6 +19,7 @@ interface ListItemProps {
     name: string;
     color?: ListColourProps | string;
     shape?: string;
+    taskCount?: number;
   };
   paddingLeft: string | number;
   parentId?: string | null;
@@ -119,9 +120,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               verticalAlign: 'baseline',
               letterSpacing: '0.28px'
             }}
-            className="pl-4 capitalize truncate cursor-pointer"
+            className="flex items-center gap-1 pl-4 capitalize truncate cursor-pointer"
           >
             {list.name}
+            <p>({list.taskCount})</p>
           </div>
         </div>
         {/* ends here */}

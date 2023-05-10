@@ -126,6 +126,7 @@ function GroupAssignee({
                     )}
                   </ToolTip>
                 </div>
+
                 {hoverInterval && displayed.show && index == displayed?.index && (
                   <PopAssignModal
                     userData={
