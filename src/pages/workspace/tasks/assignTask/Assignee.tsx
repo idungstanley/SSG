@@ -18,6 +18,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
+import ToolTip from '../../../../components/Tooltip';
 
 export default function Assignee({
   itemId,
@@ -115,15 +116,17 @@ export default function Assignee({
               <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
             </div>
           ) : (
-            <span onClick={handleClick}>
-              <UserPlusIcon
-                className="text-xl   text-gray-400 items-center justify-center cursor-pointer -ml-3"
-                style={{
-                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
-                }}
-                aria-hidden="true"
-              />
-            </span>
+            <ToolTip tooltip="Assign">
+              <span onClick={handleClick}>
+                <UserPlusIcon
+                  className="text-xl   text-gray-400 items-center justify-center cursor-pointer -ml-3"
+                  style={{
+                    width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
+                  }}
+                  aria-hidden="true"
+                />
+              </span>
+            </ToolTip>
           )}
         </Button>
       )}

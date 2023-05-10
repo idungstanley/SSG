@@ -373,10 +373,8 @@ export const GetTimeEntriesService = ({
         method: 'GET',
         params: {
           type: trigger,
-          id: itemId
-        },
-        data: {
-          sorting: updatesortArr
+          id: itemId,
+          team_member_ids: updatesortArr
         }
       });
       return data;
