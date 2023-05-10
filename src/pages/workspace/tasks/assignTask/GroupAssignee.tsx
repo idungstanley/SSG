@@ -37,10 +37,7 @@ function GroupAssignee({
   const [modalLoader, setModalLoader] = useState(true);
 
   const handleHoverIntervalMouseIn = (index: number) => {
-    setDisplayed({
-      show: true,
-      index
-    });
+    setDisplayed((prev) => ({ ...prev, show: true, index }));
     setTimeout(() => {
       setHoverInterval(true);
     }, 500);
@@ -49,19 +46,16 @@ function GroupAssignee({
     }, 1000);
   };
 
-  const handleHoverIntervalMouseOut = (index: number) => {
-    setDisplayed({
-      show: false,
-      index
-    });
+  const handleHoverIntervalMouseOut = () => {
+    setDisplayed((prev) => ({ ...prev, show: false, index: null }));
     setHoverInterval(false);
     setModalLoader(true);
   };
-
+  console.log(data);
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center  -ml-5 relative">
+        <div className="flex items-center justify-center -ml-5 relative">
           {data?.slice(0, 3).map(
             (
               newData: {
@@ -81,7 +75,7 @@ function GroupAssignee({
                 onMouseEnter={() => {
                   handleHoverIntervalMouseIn(index);
                 }}
-                onMouseLeave={() => handleHoverIntervalMouseOut(index)}
+                onMouseLeave={() => handleHoverIntervalMouseOut()}
               >
                 <div
                   key={newData.id}
@@ -129,16 +123,6 @@ function GroupAssignee({
 
                 {hoverInterval && displayed.show && index == displayed?.index && (
                   <PopAssignModal
-                    userData={
-                      newData as {
-                        id: React.Key | null | undefined;
-                        initials: string;
-                        colour: string | undefined;
-                        name: string;
-                        avatar_path: string;
-                        email: string;
-                      }
-                    }
                     modalLoader={modalLoader}
                     spinnerSize={20}
                     roundedStyle="circular"
@@ -152,7 +136,7 @@ function GroupAssignee({
           <span>
             {(data as [{ id: string; initials: string; colour: string }])?.length - 3 !== 0 ? (
               <span
-                className="-ml-3 border-white border-2  rounded-full bg-gray-100 "
+                className="-ml-3 border-white border-2 rounded-full bg-gray-100 "
                 style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
               >
                 +{(data as [{ id: string; initials: string; colour: string }])?.length - 3}
@@ -168,13 +152,13 @@ function GroupAssignee({
               index === 2 ? 'z-10' : 'z-0'
             } `}
           >
-            <div key={newData.id} className="flex items-center justify-center -ml-2.5  border-2 rounded-full relative">
+            <div key={newData.id} className="flex items-center justify-center -ml-2.5 border-2 rounded-full relative">
               <ToolTip tooltip={newData.name}>
                 <div
                   onMouseEnter={() => {
                     handleHoverIntervalMouseIn(index);
                   }}
-                  onMouseLeave={() => handleHoverIntervalMouseOut(index)}
+                  onMouseLeave={() => handleHoverIntervalMouseOut()}
                   className="relative "
                 >
                   <span onClick={handleClick}>
@@ -204,7 +188,7 @@ function GroupAssignee({
 
                   {displayed.show && index == displayed?.index ? (
                     <button
-                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700"
+                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700"
                       style={{
                         fontSize: '6px'
                       }}
@@ -218,15 +202,6 @@ function GroupAssignee({
 
                   {hoverInterval && displayed.show && index == displayed?.index && (
                     <PopAssignModal
-                      userData={
-                        newData as {
-                          id: React.Key | null | undefined;
-                          initials: string;
-                          colour: string | undefined;
-                          name: string;
-                          avatar_path: string;
-                        }
-                      }
                       modalLoader={modalLoader}
                       spinnerSize={20}
                       roundedStyle="circular"

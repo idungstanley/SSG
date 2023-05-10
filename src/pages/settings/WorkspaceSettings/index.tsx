@@ -47,7 +47,7 @@ function WorkspaceSettings() {
     queryClient.invalidateQueries();
   };
   return (
-    <main className="flex-1 h-full  pb-10 px-4 sm:px-6 lg:px-6 bg-white w-full overflow-y-scroll">
+    <main className="flex-1 h-full pb-10 px-4 sm:px-6 lg:px-6 bg-white w-full overflow-y-scroll">
       <div className="border shadow-xl rounded-md mt-5 pb-8  ">
         <div
           className="  flex items-center rounded-t-md pl-5 "
@@ -55,13 +55,15 @@ function WorkspaceSettings() {
         ></div>
         <section className="-mt-12 w-11/12 m-auto flex justify-between items-end">
           <div className="flex items-end">
-            <AvatarWithInitials
-              initials={'NS'}
-              backgroundColour={'red'}
-              height="h-24"
-              width="w-24"
-              textSize="51.6286px"
-            />
+            <div className="border-2 rounded-full">
+              <AvatarWithInitials
+                initials={'NS'}
+                backgroundColour={'red'}
+                height="h-24"
+                width="w-24"
+                textSize="51.6286px"
+              />
+            </div>
             <h3 className="font-medium text-black" style={{ fontSize: '15px' }}>
               ELASTIC WORKSPACE
             </h3>
@@ -88,55 +90,53 @@ function WorkspaceSettings() {
           </div>
         )}
         {AllMyWorkSpace?.data.workspaces && (
-          <div>
-            <table className="rlative table-auto border-collapse border border-slate-400 mt-10 w-10/12  rounded ml-16 ">
-              <thead className="bg-gray-200 py-3 h-16 position-sticky ">
-                <tr className="border border-slate-300 py-3">
-                  <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
-                    WORKSPACE
-                  </th>
-                  <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
-                    AVATAR
-                  </th>
-                  <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
-                    LAST TIME VISITED
-                  </th>
-                  <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
-                    DATE CREATED
-                  </th>
-                </tr>
-              </thead>
+          <table className="rlative table-auto border-collapse border border-slate-400 mt-10 w-10/12 rounded ml-16 ">
+            <thead className="bg-gray-200 py-3 h-16 position-sticky ">
+              <tr className="border border-slate-300 py-3">
+                <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
+                  WORKSPACE
+                </th>
+                <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
+                  AVATAR
+                </th>
+                <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
+                  LAST TIME VISITED
+                </th>
+                <th className="font-medium text-black text-center py-3" style={{ fontSize: '15px' }}>
+                  DATE CREATED
+                </th>
+              </tr>
+            </thead>
 
-              <tbody>
-                {AllMyWorkSpace?.data.workspaces.map((workspace) => {
-                  return (
-                    <tr
-                      key={workspace.id}
-                      className={cl(
-                        'border border-slate-300 hover:bg-fuchsia-200 cursor-pointer',
-                        selectedWorkSpace === workspace.id ? 'bg-fuchsia-200' : ''
-                      )}
-                      onClick={() => setSelectedWorkspace(workspace.id)}
-                    >
-                      <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
-                      <td className="text-center py-2">
-                        <AvatarWithInitials
-                          initials={workspace.initials}
-                          backgroundColour={
-                            workspace.color === '0' || workspace.color === '1' ? '#D879F9' : workspace.color
-                          }
-                          height="h-10"
-                          width="w-10"
-                        />
-                      </td>
-                      <td className="text-center py-3">{workspace.last_activity_at}</td>
-                      <td className="text-center py-3">10/12/2023</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+            <tbody>
+              {AllMyWorkSpace?.data.workspaces.map((workspace) => {
+                return (
+                  <tr
+                    key={workspace.id}
+                    className={cl(
+                      'border border-slate-300 hover:bg-fuchsia-200 cursor-pointer',
+                      selectedWorkSpace === workspace.id ? 'bg-fuchsia-200' : ''
+                    )}
+                    onClick={() => setSelectedWorkspace(workspace.id)}
+                  >
+                    <td className="text-center py-3">{workspace.name.toUpperCase()}</td>
+                    <td className="text-center py-2">
+                      <AvatarWithInitials
+                        initials={workspace.initials}
+                        backgroundColour={
+                          workspace.color === '0' || workspace.color === '1' ? '#D879F9' : workspace.color
+                        }
+                        height="h-10"
+                        width="w-10"
+                      />
+                    </td>
+                    <td className="text-center py-3">{workspace.last_activity_at}</td>
+                    <td className="text-center py-3">10/12/2023</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
 
         <br />
