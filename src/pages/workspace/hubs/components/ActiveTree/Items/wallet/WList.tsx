@@ -44,7 +44,7 @@ export default function WList({
   const handleLocation = (id: string, name: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setShowHub(true));
-    navigate(`/w/${id}`, {
+    navigate(`w/${id}`, {
       replace: true
     });
     setShowSubWallet(id);

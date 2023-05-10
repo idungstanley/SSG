@@ -128,7 +128,7 @@ export default function ActiveHub() {
       })
     );
 
-    navigate(`/h/${id}`, {
+    navigate(`h/${id}`, {
       replace: true
     });
   };

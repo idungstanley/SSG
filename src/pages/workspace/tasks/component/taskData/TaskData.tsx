@@ -18,6 +18,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
     (state) => state.task
   );
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, taskId } = useParams();
@@ -36,10 +37,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
 
   const handleTaskPilot = (id: string, name: string) => {
     hubId
-      ? navigate(`/h/${hubId}/t/${id}`, { replace: true })
+      ? navigate(`/${currentWorkspaceId}/h/${hubId}/t/${id}`, { replace: true })
       : walletId
-      ? navigate(`/w/${walletId}/t/${id}`, { replace: true })
-      : navigate(`/l/${listId}/t/${id}`, { replace: true });
+      ? navigate(`/${currentWorkspaceId}w/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/${currentWorkspaceId}l/${listId}/t/${id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: id,

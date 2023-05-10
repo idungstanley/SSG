@@ -64,7 +64,7 @@ export const places = [
     id: '4',
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'explorer'
+    link: '/explorer'
   },
   {
     name: 'Forms',
@@ -95,7 +95,7 @@ export const places = [
     id: '9',
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />,
-    link: 'calendar'
+    link: '/calendar'
   },
   {
     name: 'Commerce',
@@ -119,6 +119,7 @@ function Places() {
   );
   const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
   const [items, setItems] = useState(places.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -162,7 +163,7 @@ function Places() {
       );
     }
     if (link) {
-      navigate('/' + link);
+      navigate(`/${currentWorkspaceId}` + link);
     }
   };
 

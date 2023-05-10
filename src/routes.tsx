@@ -64,6 +64,7 @@ import { IUser } from './types';
 import ManagePage from './pages/calendar/ui/pages/ManagePage';
 import NewWallchart from './pages/calendar/ui/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
+import { useAppSelector } from './app/hooks';
 
 const inbox = [
   {
@@ -92,8 +93,10 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUser | null) =>
-  createBrowserRouter([
+export const routes = (user: IUser | null) => {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  return createBrowserRouter([
     {
       path: 'onboarding',
       element: user ? <CreateNewWorkspace /> : <Navigate to="/auth/login" />
@@ -106,13 +109,18 @@ export const routes = (user: IUser | null) =>
       path: '/',
       element: user ? (
         user.default_workspace_id ? (
-          <MainLayout />
+          // <MainLayout />
+          <Navigate to={`/${currentWorkspaceId}`} />
         ) : (
           <Navigate to="/onboarding" />
         )
       ) : (
         <Navigate to="/auth/login" />
-      ),
+      )
+    },
+    {
+      path: `/${currentWorkspaceId}`,
+      element: <MainLayout />,
       children: [
         { path: '', element: <Home /> },
         { path: 'explorer', element: <ExplorerPage /> },
@@ -212,5 +220,6 @@ export const routes = (user: IUser | null) =>
     },
     { path: '*', element: <NotFoundPage /> }
   ]);
+};
 
 export default routes;

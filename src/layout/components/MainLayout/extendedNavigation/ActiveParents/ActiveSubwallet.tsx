@@ -25,7 +25,7 @@ function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {
-    navigate(`/w/${id}`);
+    navigate(`w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setActiveEntity({ id: id, type: 'wallet' }));
   };

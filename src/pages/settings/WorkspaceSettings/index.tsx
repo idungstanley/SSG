@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AvatarWithInitials } from '../../../components';
 import notificationFrame from '../../../assets/branding/notificationFrame.png';
 import { getAllWorkSpaceService } from '../../../features/workspace/workspaceService';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setFetchAllWorkspace } from '../../../features/workspace/workspaceSlice';
 import { Spinner } from '../../../common';
 import { cl } from '../../../utils';
@@ -22,6 +22,8 @@ function WorkspaceSettings() {
     dispatch(setFetchAllWorkspace(true));
   }, []);
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
       // Clear react-query and redux cache
@@ -34,7 +36,7 @@ function WorkspaceSettings() {
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/');
+      navigate(`/${currentWorkspaceId}`);
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());

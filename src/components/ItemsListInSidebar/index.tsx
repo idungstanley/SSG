@@ -36,12 +36,16 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
+  // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   if (status === 'error') {
     return (
       <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showOneThirdMessage />
     );
+  }
+  if (status === 'loading') {
     <div className="flex justify-center mx-auto mt-10">
       <Spinner size={8} color="#0F70B7" />
     </div>;
@@ -59,7 +63,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/h/${id}`);
+    navigate(`h/${id}`);
     localStorage.setItem(
       'hubDetailsStorage',
       JSON.stringify({

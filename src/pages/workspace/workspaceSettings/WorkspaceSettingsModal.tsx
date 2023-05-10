@@ -134,10 +134,14 @@ export default function WorkspaceSettingsModal() {
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/');
+      // navigate(`/${data.data.workspace.id}`);
+      // windows.location.href = `/${data.data.workspace.id}`;
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
+      if (data.data.workspace.id) {
+        window.location.href = `/${data.data.workspace.id}`;
+      }
     }
   });
   const onSwitchWorkspace = (id: string) => {

@@ -24,6 +24,7 @@ export default function DragContext({ children }: DragContextProps) {
   const navigate = useNavigate();
 
   const { draggableItem, selectedFolderId } = useAppSelector((state) => state.explorer);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   // const mouseSensor = useSensor(MouseSensor);
   // const touchSensor = useSensor(TouchSensor);
@@ -96,7 +97,7 @@ export default function DragContext({ children }: DragContextProps) {
       // reset selected folder if it moved to root
       if (activeId === selectedFolderId) {
         dispatch(resetSelectedItem());
-        navigate('/explorer');
+        navigate(`/${currentWorkspaceId}/explorer`);
       }
 
       // moving file / folder request data

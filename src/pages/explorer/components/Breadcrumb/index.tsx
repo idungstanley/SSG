@@ -3,11 +3,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetExplorerFolder } from '../../../../features/explorer/explorerService';
 import Breadcrumb from '../../../../components/Breadcrumb';
+import { useAppSelector } from '../../../../app/hooks';
 
 export default function BreadcrumbSection() {
   const { folderId } = useParams();
 
   const { data } = useGetExplorerFolder(folderId);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const navigationButtons = [
     {
@@ -29,7 +31,7 @@ export default function BreadcrumbSection() {
         ...folder.ancestors.map((ancestor) => ({
           name: ancestor.name,
           current: false,
-          href: `/explorer/${ancestor.id}`
+          href: `/${currentWorkspaceId}/explorer/${ancestor.id}`
         })),
         ...[{ name: folder.name, current: true, href: null }]
       ]
@@ -52,7 +54,7 @@ export default function BreadcrumbSection() {
       <Breadcrumb
         pages={pages}
         rootIcon={<HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />}
-        rootIconHref="/explorer"
+        rootIconHref={`/${currentWorkspaceId}/explorer`}
       />
     </div>
   );
