@@ -84,21 +84,21 @@ export default function LeaveTypesTable() {
               <Checkbox
                 className={`text-${type.color}-500 border-${type.color}-500`}
                 checked={!!type.is_deducted}
-                setChecked={() => null}
+                setChecked={(e) => console.log(e)}
               />
             </td>
             <td className="whitespace-nowrap px-3 py-4">
               <Checkbox
                 checked={!!type.is_require_approval}
                 className={`text-${type.color}-500 border-${type.color}-500`}
-                setChecked={() => null}
+                setChecked={(e) => console.log(e)}
               />
             </td>
             <td className="whitespace-nowrap px-3 py-4">
               <Checkbox
                 checked={!!type.is_include_max_off}
                 className={`text-${type.color}-500 border-${type.color}-500`}
-                setChecked={() => null}
+                setChecked={(e) => console.log(e)}
               />
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">

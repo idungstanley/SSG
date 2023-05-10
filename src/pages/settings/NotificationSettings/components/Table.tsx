@@ -32,10 +32,10 @@ export default function NotificaitonTable() {
   return (
     <div className="bg-white border border-gray-300 ">
       {data &&
-        Object.keys(data).map((category) => (
-          <Disclosure key={category}>
+        Object.keys(data).map((category, index) => (
+          <Disclosure key={category} defaultOpen={index === 0 ? true : false}>
             {({ open }) => (
-              <div className="w-full mt-2">
+              <div className={cl('w-full', index !== 0 ? 'mt-2' : '')}>
                 <Disclosure.Button className="w-full">
                   <div className="bg-gray-200">
                     <div className="flex">
@@ -86,10 +86,10 @@ export default function NotificaitonTable() {
                             {data[category].types[cat]?.name}
                           </div>
                           <div className="flex w-2/4 justify-between">
-                            <div className="px-3 flex justify-cemter">
+                            <div className="px-3 flex justify-center">
                               <input
                                 checked={data[category].types[cat]?.is_email}
-                                className="h-5 w-5 cursor-pointer bg-gray-300 border-gray-500 ml-2"
+                                className="h-5 w-5 cursor-pointer bg-gray-300 border-gray-500"
                                 type="checkbox"
                                 onChange={() => {
                                   handleChange(
@@ -101,14 +101,14 @@ export default function NotificaitonTable() {
                                 }}
                               />
                             </div>
-                            <div className="px-3 flex justify-cemter">
+                            <div className="px-3 flex justify-center">
                               <input
                                 type="checkbox"
                                 className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
                                 checked
                               />
                             </div>
-                            <div className="px-3 flex justify-cemter">
+                            <div className="px-3 flex justify-center">
                               <input
                                 type="checkbox"
                                 className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
@@ -123,7 +123,7 @@ export default function NotificaitonTable() {
                                 }}
                               />
                             </div>
-                            <div className="px-3 flex justify-cemter">
+                            <div className="px-3 flex justify-center">
                               <input
                                 type="checkbox"
                                 className="h-5 w-5 cursor-pointer checked:bg-gray-300 border-gray-500"
