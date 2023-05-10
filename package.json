@@ -55,7 +55,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "if [[ $OSTYPE == linux* ]]; then craco --openssl-legacy-provider start; else craco --openssl-legacy-provider start; fi",
+    "start": "craco --openssl-legacy-provider start",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
     "eject": "react-scripts eject",
