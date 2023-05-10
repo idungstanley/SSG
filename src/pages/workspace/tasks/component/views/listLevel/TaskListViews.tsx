@@ -53,7 +53,7 @@ export default function TaskListViews({
     setheaderId(id);
     if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
     dispatch(setSortArr([...sortArr, header]));
-    dispatch(setSortArray([...sortAbleArr, { dir: 'asc', field: headerTxt }]));
+    dispatch(setSortArray([...sortAbleArr, { dir: 'desc', field: headerTxt }]));
     setQuerySwitch(!querySwitch);
   };
 

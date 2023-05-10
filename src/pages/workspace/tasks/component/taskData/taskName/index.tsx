@@ -146,9 +146,9 @@ export default function TaskName({
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
               comfortableView && contentEditable
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
                 : comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap && contentEditable
                 ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap

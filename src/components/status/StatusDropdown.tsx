@@ -100,7 +100,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <ToolTip tooltip="Update Status">
+        <ToolTip tooltip={TaskCurrentStatus as string}>
           <Menu.Button className="flex text-sm text-gray-400">{setStatusColor(TaskCurrentStatus)}</Menu.Button>
         </ToolTip>
       </div>
