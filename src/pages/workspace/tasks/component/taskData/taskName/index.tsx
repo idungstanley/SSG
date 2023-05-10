@@ -95,7 +95,7 @@ export default function TaskName({
   };
 
   return (
-    <div className="sticky bg-white text-gray-900 opacity-80 w-60 left-0 flex items-center" style={style}>
+    <div className="sticky bg-white w-72 mr-14 text-gray-900 opacity-80 left-0 flex items-center" style={style}>
       <div className="flex items-center">
         <input
           type="checkbox"
@@ -144,25 +144,25 @@ export default function TaskName({
           onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
           className={`${
             comfortableView && contentEditable
-              ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
+              ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
               : comfortableView
-              ? 'text-sm whitespace-nowrap cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-sm cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
               : comfortableViewWrap && contentEditable
               ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : comfortableViewWrap
               ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactView && contentEditable
-              ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-xs cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactView
-              ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-xs cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactViewWrap && contentEditable
               ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
               : CompactViewWrap
               ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : null
-          }`}
+          } break-all`}
         >
-          <p>
+          {/* <p>
             {(taskColField as string)?.length > 50 && comfortableView ? (
               <span>{(taskColField as string)?.substring(0, 40)}...</span>
             ) : (taskColField as string)?.length > 61 && CompactView ? (
@@ -170,7 +170,8 @@ export default function TaskName({
             ) : (
               (taskColField as ReactNode)
             )}
-          </p>
+          </p> */}
+          <p>{taskColField as ReactNode}</p>
         </div>
         <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
           {!ShowPlusIcon && (

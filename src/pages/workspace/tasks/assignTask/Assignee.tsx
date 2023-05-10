@@ -119,7 +119,7 @@ export default function Assignee({
             <ToolTip tooltip="Assign">
               <span onClick={handleClick}>
                 <UserPlusIcon
-                  className="text-xl mt-1 text-gray-400 items-center justify-center cursor-pointer"
+                  className="text-xl text-gray-400 items-center justify-center cursor-pointer"
                   style={{
                     width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
                   }}

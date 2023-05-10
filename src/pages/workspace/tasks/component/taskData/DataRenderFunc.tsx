@@ -45,7 +45,7 @@ export default function DataRenderFunc({
 
   if (col?.field === 'assignees') {
     return (
-      <div className="z-1 -mt-1">
+      <div className="z-1 -mt-0.5">
         <Assignee task={task} itemId={task?.id} option="task" />
       </div>
     );
@@ -88,7 +88,9 @@ export default function DataRenderFunc({
     const activeProperty = property ? property.values[0].value : '-';
 
     return field ? (
-      <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
+      <div>
+        <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
+      </div>
     ) : null;
   } else return <>{taskColField}</>;
 }
