@@ -8,7 +8,7 @@ import { isSameOrAfter, isSameOrBefore } from '../../lib/dateUtils';
 import { getDatesInRange } from '../../lib/getDatesInRange';
 import { DayOff, MonthObject } from '../../types/calendar';
 import MonthTitle from './MonthTitle';
-import Weeks from '../Weeks';
+import Weeks from './Weeks';
 
 interface MonthProps {
   daysOff: DayOff[];

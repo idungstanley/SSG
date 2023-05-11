@@ -7,6 +7,7 @@ import { setActiveItem } from '../../../../../features/workspace/workspaceSlice'
 import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
 import { useNavigate, useParams } from 'react-router-dom';
+import { cl } from '../../../../../utils';
 
 export interface TaskDataProps {
   listId?: string;
@@ -21,6 +22,9 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, taskId } = useParams();
+
+  const isActive = taskId === task?.id;
+  const taskBg = isActive ? 'bg-primary-200' : 'bg-white';
 
   const dispatch = useAppDispatch();
 
@@ -63,16 +67,16 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
-    <div className="w-full flex bg-white border-t border-b">
+    <div className={cl('w-full flex border-t border-b', taskBg)}>
       {/* sticky task name */}
       <div
-        className="absolute pointer-events-none left-0 -right-96 xl:right-0 z-50"
+        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
         style={{ zIndex: '99', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]
           .filter((i) => i.value === 'Task')
           .map((col) => (
-            <div key={col.id} className="text-xs font-medium capitalize cursor-pointer group">
+            <div key={col.id} className="text-xs font-medium capitalize cursor-pointer">
               <DataRenderFunc
                 taskColField={task?.[col.field]}
                 col={{ field: col.field, id: col.id }}
@@ -144,7 +148,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         </div>
       </div>
 
-      <div className="relative dynamic place-items-stretch items-center place-content-stretch bg-white">
+      <div className={cl('relative dynamic place-items-stretch items-center place-content-stretch', taskBg)}>
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -153,7 +157,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 !col.hidden && (
                   <div
                     key={col.id}
-                    className="items-center flex py-px h-10 bg-white font-medium text-gray-400 uppercase group"
+                    className={cl('items-center flex py-px h-10 font-medium text-gray-400 uppercase group', taskBg)}
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}
@@ -173,7 +177,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 !col.hidden && (
                   <div
                     key={col.id}
-                    className="flex justify-center items-stretch h-10 py-px bg-white font-medium text-gray-400 uppercase group"
+                    className={cl(
+                      'flex justify-center items-stretch h-10 py-px font-medium text-gray-400 uppercase group',
+                      taskBg
+                    )}
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}

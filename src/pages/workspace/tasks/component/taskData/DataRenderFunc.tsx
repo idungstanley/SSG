@@ -1,4 +1,3 @@
-import React from 'react';
 import { ICustomField, ImyTaskData } from '../../../../../features/task/taskSlice';
 import Assignee from '../../assignTask/Assignee';
 import TaskStatus from './status/index';
