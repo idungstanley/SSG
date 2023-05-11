@@ -1,0 +1,50 @@
+import { BeakerIcon, GiftIcon } from '@heroicons/react/24/outline';
+import { MdBeachAccess } from 'react-icons/md';
+import Dropdown from '../../../../components/Dropdown/VoidDropdown';
+import { cl } from '../../../../utils';
+
+interface LeaveTypeIconProps {
+  iconName: string;
+}
+
+const iconsConfig = [
+  {
+    icon: <MdBeachAccess className="w-5 h-5 stroke-current" />,
+    name: 'umbrella'
+  },
+  {
+    icon: <BeakerIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
+    name: 'child'
+  },
+  {
+    icon: <GiftIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
+    name: 'groups'
+  }
+];
+
+function LeaveTypeIcon({ iconName }: LeaveTypeIconProps) {
+  return iconsConfig.find((i) => i.name === iconName)?.icon || iconsConfig[0].icon;
+}
+
+interface SelectProps {
+  icon: string;
+  setIcon: (i: string) => void;
+  color: string;
+}
+
+export function SelectIcon({ icon, setIcon, color }: SelectProps) {
+  return (
+    <Dropdown title={<LeaveTypeIcon iconName={icon} />}>
+      {iconsConfig.map((i) => (
+        <Dropdown.Item key={i.name}>
+          <button
+            onClick={() => setIcon(i.name)}
+            className={cl(`text-${color}-700`, 'cursor-pointer block p-2 text-sm')}
+          >
+            <LeaveTypeIcon iconName={i.name} />
+          </button>
+        </Dropdown.Item>
+      ))}
+    </Dropdown>
+  );
+}
