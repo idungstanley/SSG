@@ -1,6 +1,6 @@
-import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { checkIsOwner } from '../../lib/userUtils';
-import DisapprovedDaysOffList from '../DisapprovedDaysOffList';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+import { checkIsOwner } from '../lib/userUtils';
+import DisapprovedDaysOffList from '../ui/DisapprovedDaysOffList';
 
 export default function ManagePage() {
   const { data } = useGetTeamMembers({ page: 1, query: '' });

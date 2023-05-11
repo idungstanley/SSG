@@ -1,11 +1,11 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
-import Calendar from '../..';
-import { useDaysOff } from '../../lib/daysOffContext';
-import { filterDaysOff } from '../../lib/filterDaysOff';
-import { getMonth } from '../../lib/getDaysInYear';
-import MembersList from '../MembersList';
-import Month from '../Month';
+import Calendar from '..';
+import { useDaysOff } from '../lib/daysOffContext';
+import { filterDaysOff } from '../lib/filterDaysOff';
+import { getMonth } from '../lib/getDaysInYear';
+import MembersList from '../ui/MembersList';
+import Month from '../ui/Month';
 
 const currentDate = dayjs();
 

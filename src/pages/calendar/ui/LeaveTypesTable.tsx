@@ -2,7 +2,12 @@ import { BeakerIcon, GiftIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/o
 import { useRef, useState, InputHTMLAttributes } from 'react';
 import { MdBeachAccess } from 'react-icons/md';
 import Dropdown from '../../../components/Dropdown/VoidDropdown';
-import { useAddLeaveType, useDeleteLeaveType, useLeaveTypes } from '../../../features/calendar/api/leaveTypesApi';
+import {
+  useAddLeaveType,
+  useDeleteLeaveType,
+  useLeaveTypes,
+  useUpdateLeaveType
+} from '../../../features/calendar/api/leaveTypesApi';
 import { cl } from '../../../utils';
 
 const icons = ['child', 'umbrella', 'groups'];

@@ -1,4 +1,4 @@
-import LeaveTypesTable from '../LeaveTypesTable';
+import LeaveTypesTable from '../ui/LeaveTypesTable';
 
 export default function LeaveTypesPage() {
   return (
