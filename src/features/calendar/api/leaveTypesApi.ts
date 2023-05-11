@@ -65,12 +65,12 @@ const updateLeaveType = ({ id, data }: { id: Pick<LeaveType, 'id'>['id']; data: 
   return response;
 };
 
-export const useUpdateLeaveType = (id: Pick<LeaveType, 'id'>['id']) => {
+export const useUpdateLeaveType = () => {
   const queryClient = useQueryClient();
 
   return useMutation(updateLeaveType, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['leaveTypes', id]);
+      queryClient.invalidateQueries(['leaveTypes']);
     }
   });
 };

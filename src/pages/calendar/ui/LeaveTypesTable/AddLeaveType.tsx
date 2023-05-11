@@ -43,7 +43,7 @@ export function AddLeaveType() {
     <tr>
       {/* name */}
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-        <NameRow onChange={(e) => setName(e)} />
+        <NameRow defaultValue={name} onChange={(e) => setName(e)} />
       </td>
 
       {/* icon */}
@@ -59,7 +59,7 @@ export function AddLeaveType() {
       <td className="whitespace-nowrap px-3 pb-2">
         <Checkbox
           checked={isDeducted}
-          className={`text-${color}-500 border-${color}-500 cursor-pointer`}
+          styles={`text-${color}-500 border-${color}-500 focus:ring-${color}-300`}
           setChecked={(e) => setIsDeducted(e)}
         />
       </td>
@@ -67,7 +67,7 @@ export function AddLeaveType() {
       <td className="whitespace-nowrap px-3 pb-2">
         <Checkbox
           checked={isRequireApproval}
-          className={`text-${color}-500 border-${color}-500 cursor-pointer`}
+          styles={`text-${color}-500 border-${color}-500 focus:ring-${color}-300`}
           setChecked={(e) => setIsRequireApproval(e)}
         />
       </td>
@@ -75,7 +75,7 @@ export function AddLeaveType() {
       <td className="whitespace-nowrap px-3 pb-2">
         <Checkbox
           checked={isIncludeMaxOff}
-          className={`text-${color}-500 border-${color}-500 cursor-pointer`}
+          styles={`text-${color}-500 border-${color}-500 focus:ring-${color}-300`}
           setChecked={(e) => setIsIncludeMaxOff(e)}
         />
       </td>
