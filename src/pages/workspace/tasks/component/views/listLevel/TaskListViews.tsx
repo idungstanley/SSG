@@ -53,7 +53,7 @@ export default function TaskListViews({
     setheaderId(id);
     if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
     dispatch(setSortArr([...sortArr, header]));
-    dispatch(setSortArray([...sortAbleArr, { dir: 'asc', field: headerTxt }]));
+    dispatch(setSortArray([...sortAbleArr, { dir: 'desc', field: headerTxt }]));
     setQuerySwitch(!querySwitch);
   };
 
@@ -77,13 +77,9 @@ export default function TaskListViews({
 
     const customFieldNames = data.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
 
-    setColumns(() => {
-      const newColumns = unique([...columnsHead, ...customFieldNames]);
-
-      dispatch(getTaskColumns(newColumns));
-
-      return newColumns;
-    });
+    const newColumns = unique([...columnsHead, ...customFieldNames]);
+    dispatch(getTaskColumns(newColumns));
+    setColumns(newColumns);
   }, [data]);
 
   const handleDropDown = () => {

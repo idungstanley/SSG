@@ -56,11 +56,11 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
   ) => {
     return data?.map((newData, index) => {
       return (
-        <>
+        <div key={newData.id}>
           <div>
             {data.length !== index + 1 ? <p key={index}>{newData.name},</p> : <p key={index}>{newData.name}</p>}
           </div>
-        </>
+        </div>
       );
     });
   };
