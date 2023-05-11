@@ -57,9 +57,7 @@ export default function DataRenderFunc({
   } else if (col?.field == 'created_at' || col?.field == 'updated_at') {
     return (
       <div className="mt-2">
-        <ToolTip tooltip={col?.field}>
-          <DateForTask taskColField={taskColField} />
-        </ToolTip>
+        <DateForTask taskColField={taskColField} />
       </div>
     );
   } else if (col?.field == 'status') {

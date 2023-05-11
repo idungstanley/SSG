@@ -69,26 +69,24 @@ export default function TaskTag({ taskColField, task }: renderDataProps) {
                           {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
-                      <ToolTip tooltip="edit tag">
-                        <button className="mt-1">
-                          <EditTagModal taskId={task?.id} tagId={item?.id} />
-                        </button>
-                      </ToolTip>
 
-                      <ToolTip tooltip="unassign tag">
-                        <button
-                          className="pr-2 font-bold text-gray-300"
-                          style={{ fontSize: '9px' }}
-                          onClick={() =>
-                            unAssignTagMutation.mutateAsync({
-                              tagId: item.id,
-                              currentTaskIdForTag: task?.id
-                            })
-                          }
-                        >
-                          <IoCloseSharp />
-                        </button>
-                      </ToolTip>
+                      <button className="mt-1">
+                        <EditTagModal taskId={task?.id} tagId={item?.id} />
+                      </button>
+
+                      <button
+                        className="pr-2 font-bold text-gray-300"
+                        style={{ fontSize: '9px' }}
+                        onClick={() =>
+                          unAssignTagMutation.mutateAsync({
+                            tagId: item.id,
+                            currentTaskIdForTag: task?.id
+                          })
+                        }
+                      >
+                        <IoCloseSharp />
+                      </button>
+
                       {showTagColorDialogueBox && <ColorsModal />}
                     </div>
                   )}

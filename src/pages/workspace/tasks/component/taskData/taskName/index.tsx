@@ -154,23 +154,23 @@ export default function TaskName({
           onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
           className={`${
             comfortableView && contentEditable
-              ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
+              ? 'text-sm cursor-text w-64 whitespace-nowrap truncate border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
               : comfortableView
-              ? 'text-sm cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-sm cursor-text w-64 whitespace-nowrap truncate border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
               : comfortableViewWrap && contentEditable
-              ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-sm cursor-text break-all border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : comfortableViewWrap
-              ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-sm cursor-text break-all border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactView && contentEditable
               ? 'text-xs cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactView
-              ? 'text-xs cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-xs w-64 truncate cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : CompactViewWrap && contentEditable
-              ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
+              ? 'text-xs w-64 truncate text-justify break-all cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
               : CompactViewWrap
-              ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              ? 'text-xs text-justify break-all cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
               : null
-          } break-all`}
+          }`}
         >
           {/* <p>
             {(taskColField as string)?.length > 50 && comfortableView ? (
