@@ -95,12 +95,12 @@ export default function TaskName({
   };
 
   return (
-    <div className="sticky bg-white w-72 mr-4 text-gray-900 opacity-80 left-0 flex items-center" style={style}>
+    <div className="sticky bg-white w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center" style={style}>
       <div className="flex items-center">
         <input
           type="checkbox"
           id="checked-checkbox"
-          className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-7 z-50"
+          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 z-50"
           ref={setNodeRef}
           {...attributes}
           {...listeners}
@@ -109,7 +109,7 @@ export default function TaskName({
           }}
         />
 
-        <MdDragIndicator className="absolute text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
+        <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
       </div>
       <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
         {task?.id == getSubTaskId ? (

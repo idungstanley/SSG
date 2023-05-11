@@ -63,10 +63,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
-    <div className="w-full flex bg-white pl-2 border-t border-b">
+    <div className="w-full flex bg-white border-t border-b">
       {/* sticky task name */}
       <div
-        className="absolute left-8 -right-96 xl:right-0 z-50"
+        className="absolute pointer-events-none left-0 -right-96 xl:right-0 z-50"
         style={{ zIndex: '99', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]
