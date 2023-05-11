@@ -1,14 +1,15 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Checkbox } from '../../../../components/Checkbox/Checkbox';
 import { useAddLeaveType } from '../../../../features/calendar/api/leaveTypesApi';
 import { cl } from '../../../../utils';
 import { colors, icons } from '../../lib/config';
+import { NameRow } from './NameRow';
 import { SelectColor } from './SelectColor';
 import { SelectIcon } from './SelectIcon';
 
 export function AddLeaveType() {
-  const titleRef = useRef<HTMLInputElement>(null);
+  const [name, setName] = useState('');
   const [icon, setIcon] = useState(icons[0]);
   const [color, setColor] = useState(colors[0]);
   const [isDeducted, setIsDeducted] = useState(false);
@@ -18,9 +19,7 @@ export function AddLeaveType() {
   const { mutate: onCreate } = useAddLeaveType();
 
   const handleCreateType = () => {
-    if (titleRef.current && titleRef.current.value.length > 2) {
-      const name = titleRef.current.value;
-
+    if (name.length > 2) {
       onCreate({
         icon,
         name,
@@ -36,7 +35,7 @@ export function AddLeaveType() {
       setIsRequireApproval(false);
       setIsDeducted(false);
       setIsIncludeMaxOff(false);
-      titleRef.current.value = '';
+      setName('');
     }
   };
 
@@ -44,14 +43,7 @@ export function AddLeaveType() {
     <tr>
       {/* name */}
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-        <input
-          required
-          minLength={3}
-          ref={titleRef}
-          type="text"
-          className="block w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-          placeholder="New leave type..."
-        />
+        <NameRow onChange={(e) => setName(e)} />
       </td>
 
       {/* icon */}
@@ -97,3 +89,18 @@ export function AddLeaveType() {
     </tr>
   );
 }
+
+// function Input() {
+//   const titleRef = useRef<HTMLInputElement>(null);
+
+//   return (
+//     <input
+//       required
+//       minLength={3}
+//       ref={titleRef}
+//       type="text"
+//       className="block w-fit rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+//       placeholder="New leave type..."
+//     />
+//   );
+// }

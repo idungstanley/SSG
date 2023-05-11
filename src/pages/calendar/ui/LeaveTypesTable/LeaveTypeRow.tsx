@@ -3,6 +3,7 @@ import { Checkbox } from '../../../../components/Checkbox/Checkbox';
 import { useDeleteLeaveType, useUpdateLeaveType } from '../../../../features/calendar/api/leaveTypesApi';
 import { LeaveType } from '../../../../features/calendar/types/leaveTypes';
 import { cl } from '../../../../utils';
+import { NameRow } from './NameRow';
 import { SelectColor } from './SelectColor';
 import { SelectIcon } from './SelectIcon';
 
@@ -35,10 +36,14 @@ export function LeaveTypeRow({
   const handleChangeIsIncludeMaxOff = (newOption: Pick<LeaveType, 'is_include_max_off'>['is_include_max_off']) =>
     onUpdate({ id, data: { is_include_max_off: newOption } });
 
+  const handleChangeName = (newOption: Pick<LeaveType, 'name'>['name']) => onUpdate({ id, data: { name: newOption } });
+
   return (
     <tr key={id}>
       {/* name */}
-      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{name}</td>
+      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+        <NameRow defaultValue={name} onBlur={(e) => handleChangeName(e)} />
+      </td>
 
       {/* icon */}
       <td className={cl('whitespace-nowrap px-3 py-4', `text-${color}-500`)}>
@@ -74,6 +79,7 @@ export function LeaveTypeRow({
         />
       </td>
 
+      {/* delete */}
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         <button type="button" onClick={() => onDelete(id)}>
           <TrashIcon className="w-5 h-5 cursor-pointer text-red-400" aria-hidden="true" />
