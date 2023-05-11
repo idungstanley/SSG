@@ -35,7 +35,7 @@ code {
   width: auto;
   margin: 0;
   height: auto;
-  overflow-y: scroll;
+  overflow-y: visible;
 }
 
 .rotateimg180 {
@@ -103,4 +103,9 @@ code {
   background-image: url('../assets/icons/workspace_bg.webp');
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.workspace-color-button:hover {
+    width: 48px !important;
+    height: 48px !important;
 }

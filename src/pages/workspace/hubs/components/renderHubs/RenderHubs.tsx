@@ -22,7 +22,7 @@ import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemp
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { activeEntityName, activeEntity } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,7 +33,9 @@ function RenderHubs() {
   const hubName = data?.data.hub.name;
   useEffect(() => {
     if (hubId) {
-      dispatch(setActiveItem({ activeItemId: hubId, activeItemType: hubType, activeItemName: hubName }));
+      dispatch(
+        setActiveItem({ activeItemId: hubId, activeItemType: activeEntity.type || 'hub', activeItemName: hubName })
+      );
       dispatch(setActiveEntityName(hubName));
     }
   }, [hubId, data]);

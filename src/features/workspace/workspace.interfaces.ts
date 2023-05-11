@@ -43,6 +43,7 @@ interface IWorkspace {
   color: string;
   initials: string;
   last_activity_at: string;
+  created_at: string;
 }
 
 export interface IAllWorkspacesRes {

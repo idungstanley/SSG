@@ -9,7 +9,8 @@ import {
   getPrevName,
   setCreateWLID,
   setHubParentId,
-  setshowMenuDropdown
+  setshowMenuDropdown,
+  setSubHubExt
 } from '../../../features/hubs/hubSlice';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
@@ -32,20 +33,22 @@ export default function SubHubIndex() {
   const { data, status } = useGetSubHub({
     parentId: currentItemId
   });
+  const type = 'subhub';
 
   if (status === 'success') {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { hubParentId, subHubExt, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { id: subHubExtId } = subHubExt;
 
-  const handleClick = (id: string, name?: string) => {
+  const handleClick = (id: string) => {
+    dispatch(setSubHubExt({ id: id, type: type }));
     setShowSubChidren(id);
     dispatch(setCreateWLID(id));
     dispatch(
       setActiveItem({
         activeItemType: 'subhub',
-        activeItemId: id,
-        activeItemName: name
+        activeItemId: id
       })
     );
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
@@ -62,6 +65,7 @@ export default function SubHubIndex() {
 
   const handleShowMenu = (id: string, name: string, e: MouseEvent) => {
     dispatch(getCurrHubId(id));
+
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -77,9 +81,9 @@ export default function SubHubIndex() {
   };
 
   const handleLocation = (id: string, name: string) => {
+    dispatch(setSubHubExt({ id: id, type: type }));
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
-
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -112,7 +116,7 @@ export default function SubHubIndex() {
               handleHubSettings={handleShowMenu}
               type="subhub"
             />
-            {showSubChildren === subhub.id ? <SHubDropdownList /> : null}
+            {subHubExtId === subhub.id ? <SHubDropdownList /> : null}
             {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
             {SubMenuId === subhub.id ? <SubDropdown /> : null}
           </div>

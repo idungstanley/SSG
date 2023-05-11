@@ -1,10 +1,11 @@
-import React from 'react';
-import { useReactMediaRecorder } from 'react-media-recorder';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../app/hooks';
-import axios from 'axios';
-import { getUploadAttatchment } from '../../../../features/workspace/workspaceService';
 import { useQueryClient } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import { useReactMediaRecorder } from 'react-media-recorder';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { getUploadAttatchment, uploadRecording } from '../../../../features/workspace/workspaceService';
+import { setRecording } from '../../../../features/workspace/workspaceSlice';
+import '../../../../pages/workspace/tasks/component/views/view.css';
+import VideoEntries from './RecordingLogs';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,66 +13,74 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { taskId } = useParams();
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { getRecording } = useAppSelector((state) => state.workspace);
 
-  const { data } = getUploadAttatchment({ id: taskId as string, type: 'task' });
+  const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
   const queryClient = useQueryClient();
-
-  const uploadRecording = async (blob: Blob) => {
-    try {
-      const formData: IFormData = new FormData();
-      formData.append('files[0]', blob, 'recording.webm');
-      formData.append('title', 'My Recording Title');
-      formData.append('type', 'task');
-      formData.append('id', `${taskId}`);
-
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, formData, {
-        headers: currentWorkspaceId
-          ? {
-              Authorization: `Bearer ${accessToken}`,
-              current_workspace_id: currentWorkspaceId
-            }
-          : undefined
-      });
-      queryClient.invalidateQueries(['attachments']);
-    } catch (error) {
-      return error;
-    }
-  };
+  const dispatch = useAppDispatch();
 
   const { status, startRecording, stopRecording } = useReactMediaRecorder({
     screen: true,
     audio: true,
-    mediaRecorderOptions: { mimeType: 'video/webm;codecs=vp9' }, // Specify the MIME type as "video/webm" with the "vp9" codec
+    mediaRecorderOptions: { mimeType: 'video/webm;codecs=vp9' },
     onStop: (blobUrl, blob) => {
-      uploadRecording(blob);
+      uploadRecording(blob, currentWorkspaceId, accessToken, getRecording.id, queryClient, getRecording.type);
+      dispatch(
+        setRecording({
+          id: null,
+          type: null
+        })
+      );
     }
   });
 
+  useEffect(() => {
+    if (status !== 'recording') {
+      dispatch(
+        setRecording({
+          id: activeItemId as string,
+          type: activeItemType as string
+        })
+      );
+    }
+  }, []);
+
   return (
     <div>
-      <div className="my-2">
-        {status == 'recording' ? (
-          <>
-            <button onClick={stopRecording} className="screenRecording">
-              Stop Recording
-            </button>
-          </>
-        ) : (
-          <>
-            <div className="screenRecording flex flex-col">
-              <button onClick={startRecording}>Start Recording</button>
-            </div>
-          </>
-        )}
-      </div>
-      {data?.data.attachments.map((video) => (
-        <p key={video.id}>
-          <video src={video.path && data?.data.attachments[0].path} controls></video>
-        </p>
-      ))}
+      {status == 'recording' ? (
+        <>
+          <button onClick={stopRecording} className="screenRecording">
+            Stop Recording
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="screenRecording flex flex-col">
+            <button onClick={startRecording}>Start Recording</button>
+          </div>
+        </>
+      )}
+      <table className="w-full mx-auto p-1">
+        <thead>
+          <tr className="flex mx-2 border-b-2 py-2 space-x-12">
+            <th className="capitalize font-bold">user</th>
+            <th className="capitalize font-bold">recording</th>
+            <th className="capitalize font-bold">duration</th>
+          </tr>
+        </thead>
+        {data?.data.attachments.map((video) => {
+          //  Leave for reference purposes
+          // console.log(data.data.attachments);
+          return (
+            <tbody key={video.id}>
+              <VideoEntries videoFile={video} />
+            </tbody>
+          );
+        })}
+      </table>
     </div>
   );
 }

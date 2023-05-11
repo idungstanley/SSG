@@ -145,15 +145,15 @@ export default function UserSettingsModal() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className={`z-30 mt-2 w-48 px-1 rounded shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none ${
+          className={`mt-2 w-48 px-1 rounded shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none ${
             showSidebar ? 'absolute -right-2' : 'fixed left-10'
           }`}
+          style={{ zIndex: '9999' }}
         >
           <div className="pt-3">
             {userSettings?.map((i) => (
               <Menu.Item key={i.id}>
-                <button
-                  type="button"
+                <div
                   className="flex items-center w-full px-4 py-2 text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
                   onClick={i.handleClick}
                 >
@@ -167,7 +167,7 @@ export default function UserSettingsModal() {
                       ) : null}
                     </span>
                   </div>
-                </button>
+                </div>
               </Menu.Item>
             ))}
           </div>

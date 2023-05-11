@@ -4,8 +4,9 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { ListBox } from '../../../components/ListBox';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDaysOff } from '../lib/daysOffContext';
+import { checkIsOwner } from '../lib/userUtils';
 
-export default function CreateEventModal() {
+export default function CreateDayOffModal() {
   const {
     showCreateDayOffModal: show,
     newDayOff: dayOff,
@@ -21,6 +22,9 @@ export default function CreateEventModal() {
   const [member, setMember] = useState<{ id: string; title: string } | null>(null);
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
+
+  const isOwner = checkIsOwner(data?.data.team_members ?? []);
+
   const members = useMemo(
     () => data?.data.team_members.map((i) => ({ id: i.user.id, title: i.user.name })) ?? [],
     [data]
@@ -50,18 +54,21 @@ export default function CreateEventModal() {
 
     if (reasonRef.current && member) {
       const reason = reasonRef.current.value;
+      const isApproved = isOwner;
+
       onCreateDayOff({
         type,
         reason,
         start: dayOff.start.format('YYYY-MM-DD'),
         end: dayOff.end.format('YYYY-MM-DD'),
-        memberId: member.id
+        memberId: member.id,
+        isApproved
       });
 
+      // reset
       setNewDayOff(null);
-      setShowCreateDayOffModal(false);
-
       setType(leaveTypes[0]);
+      setShowCreateDayOffModal(false);
     }
   };
 
@@ -125,7 +132,7 @@ export default function CreateEventModal() {
                         </div>
                       ) : null}
 
-                      {member ? (
+                      {isOwner && member ? (
                         <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
                       ) : null}
 
@@ -151,15 +158,28 @@ export default function CreateEventModal() {
                   </div>
                 </div>
 
+                {dayOff ? (
+                  <p className="py-2 text-center">
+                    Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance
+                  </p>
+                ) : null}
+
                 {/* bottom actions */}
-                <div className="mt-5 sm:mt-4 sm:flex gap-4 items-center">
+                <div className="mt-2 px-2 flex gap-4 justify-between items-center">
+                  <button
+                    onClick={onClose}
+                    type="button"
+                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-red-600 bg-red-100 hover:bg-red-200 border-red-300 shadow-sm sm:ml-3 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
+
                   <button
                     type="submit"
-                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm sm:ml-3 sm:w-auto"
+                    className="inline-flex left-0 border w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-primary-600 bg-primary-50 hover:bg-primary-200 border-primary-300 shadow-sm sm:ml-3 sm:w-auto"
                   >
-                    Send request
+                    {isOwner ? 'Create' : 'Send request'}
                   </button>
-                  {dayOff ? <p>Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance</p> : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

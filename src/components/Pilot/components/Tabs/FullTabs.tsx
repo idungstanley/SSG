@@ -50,7 +50,7 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
       max: MAX
     },
     storageKey: 'pilotFeaturesHeight',
-    direction: 'Y'
+    direction: 'YB'
   });
 
   return (

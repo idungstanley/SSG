@@ -4,6 +4,7 @@ import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
+import ToolTip from '../Tooltip';
 interface statusType {
   id: number;
   title: string;
@@ -98,7 +99,9 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">{setStatusColor(TaskCurrentStatus)}</Menu.Button>
+        <ToolTip tooltip={TaskCurrentStatus as string}>
+          <Menu.Button className="flex text-sm text-gray-400">{setStatusColor(TaskCurrentStatus)}</Menu.Button>
+        </ToolTip>
       </div>
 
       <Transition

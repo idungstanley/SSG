@@ -16,21 +16,26 @@ import SHubDropdownList from '../../../../../components/ItemsListInSidebar/compo
 import ActiveSubHub from './ActiveSubHub';
 import DropdownList from '../../../../../components/ItemsListInSidebar/components/DropdownList';
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
-import { useNavigate, useParams } from 'react-router-dom';
-import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
+import { setActiveItem, setCurrentItem } from '../../../../../features/workspace/workspaceSlice';
 import { IHubDetails } from '../../../../../features/hubs/hubs.interfaces';
+import { setParentHubExt, setSubHubExt } from '../../../../../features/hubs/hubSlice';
 
 export default function ActiveHub() {
   const dispatch = useAppDispatch();
+  const hubType = 'hub';
   const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
+  const { parentHubExt } = useAppSelector((state) => state.hub);
+  const { id: parentHubId } = parentHubExt;
+  // const { id: parentHubId, type: parentHubType } = ;
   const navigate = useNavigate();
   const walletD = useGetHubWallet(currentItemId);
   const walletData = walletD?.data?.data.wallets;
   const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
-    parentId: currentItemId
+    parentId: parentHubId
   });
-  const { hubId } = useParams();
+  // const { hubId } = useParams();
   const subHubData = subHub?.data.hubs;
   const subWalletData = subwallet?.data.wallets;
   const { data, status } = useGetHubList({ query: null });
@@ -58,7 +63,7 @@ export default function ActiveHub() {
         }
         return null;
       });
-    } else if (hubId) {
+    } else if (activeItemType === 'subhub') {
       return subHubData?.map((subHub) => {
         if (subHub.id === activeItemId) {
           return <SHubDropdownList key={subHub.id} />;
@@ -111,9 +116,18 @@ export default function ActiveHub() {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'hub'
+        activeItemType: hubType
       })
     );
+    dispatch(setSubHubExt({ id: null, type: null }));
+    dispatch(setParentHubExt({ id: id, type: hubType }));
+    dispatch(
+      setCurrentItem({
+        currentItemId: id,
+        currentItemType: hubType
+      })
+    );
+
     navigate(`/h/${id}`, {
       replace: true
     });
@@ -123,11 +137,11 @@ export default function ActiveHub() {
     <ul className="w-full">
       {items?.map(
         (i: { id: string; name: string }) =>
-          i.id === currentItemId && (
+          i.id === parentHubId && (
             <li key={i.id} className="flex flex-col">
               <div
                 className={`flex justify-between items-center hover:bg-gray-100 relative ${
-                  i.id === currentItemId && 'text-black-500'
+                  i.id === parentHubId && 'text-black-500'
                 }`}
                 style={{ height: '50px', backgroundColor: `${i.id === activeItemId ? '#BF00FF21' : ''}` }}
                 onClick={() => handleClick(i.id)}

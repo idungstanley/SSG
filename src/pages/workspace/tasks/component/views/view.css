@@ -106,3 +106,74 @@ textarea {
 [contenteditable] {
   outline: 0px solid transparent;
 }
+
+.sortClose-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+}
+
+.statusHovergray:hover {
+  border: 2px solid rgba(161, 161, 170);
+  padding: 1px;
+}
+.statusHoverpurple:hover {
+  border: 2px solid rgba(192, 132, 252);
+  padding: 1px;
+}
+.statusHovergreen:hover {
+  border: 2px solid rgba(74, 222, 128);
+  padding: 1px;
+}
+.statusHoveryellow:hover {
+  border: 2px solid rgb(250, 204, 21);
+  padding: 1px;
+}
+
+.sortClose {
+  display: none;
+}
+
+.sortClose-group:hover {
+  background-color: rgba(161, 165, 168, 0.87);
+}
+
+.sortClose-group:hover .sortClose {
+  display: inline-block;
+}
+
+.alt-task:nth-child(even) {
+  background-color: #edecefcd;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 10;
+  }
+}
+
+.recording-tag::-webkit-media-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1px;
+}
+
+.recording-tag::-webkit-media-controls-play-button {
+  color: #000;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.recording-tag::-webkit-media-controls-volume-slider {
+  width: 50%;
+}
+
+.recording-tag::-webkit-media-controls-timeline {
+  display: none;
+}

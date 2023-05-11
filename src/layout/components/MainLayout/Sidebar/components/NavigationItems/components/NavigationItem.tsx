@@ -42,7 +42,8 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
     backgroundColor: isDragging ? '#f3f4f6' : activePlaceName === name ? '#BF00FF21' : undefined,
-    zIndex: isDragging ? 1 : undefined
+    zIndex: isDragging ? 1 : undefined,
+    height: '30px'
   };
 
   if (!isVisible) {
@@ -60,7 +61,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
       style={style}
     >
       {activePlaceName === item.name ? (
-        <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
+        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
       ) : null}
       <span
         className={`absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1.5 group-hover:opacity-100 ${
@@ -70,7 +71,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
         {...attributes}
         {...listeners}
       >
-        <MdDragIndicator />
+        <MdDragIndicator className="hover:text-fuchsia-500" />
       </span>
       <span className="relative w-5 h-5">
         {item.name === 'Notifications' && notificationCount > 0 && (

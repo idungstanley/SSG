@@ -20,6 +20,7 @@ interface userSettingState {
   showConfirmationModal: boolean;
   triggerDeleteAvatar: boolean;
   activeTab: string | null;
+  status: string;
 }
 
 const initialState: userSettingState = {
@@ -40,7 +41,8 @@ const initialState: userSettingState = {
   showAvatarUpload: false,
   showConfirmationModal: false,
   triggerDeleteAvatar: false,
-  activeTab: null
+  activeTab: null,
+  status: 'loading'
 };
 
 export const userSettingSlice = createSlice({
@@ -89,6 +91,9 @@ export const userSettingSlice = createSlice({
     },
     setActiveTab(state, action: PayloadAction<string | null>) {
       state.activeTab = action.payload;
+    },
+    setStatus(state, action: PayloadAction<string>) {
+      state.status = action.payload;
     }
   }
 });
@@ -99,7 +104,8 @@ export const {
   setCurrentUserModal,
   setShowAvatarUpload,
   setShowConfirmationModal,
-  setActiveTab
+  setActiveTab,
+  setStatus
 } = userSettingSlice.actions;
 
 export default userSettingSlice.reducer;

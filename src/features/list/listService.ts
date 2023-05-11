@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
-import { IListDetailRes } from './list.interfaces';
+import { IListDetailRes, listDetails } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
@@ -23,14 +23,16 @@ export const createListService = (data: { listName: string; hubId?: string | nul
 // get lists
 export const getListService = (data: { getCurrentHubId: string | undefined | null }) => {
   const hubID = data.getCurrentHubId;
-  const response = requestNew<IListDetailRes | undefined>({
-    url: 'lists',
-    method: 'GET',
-    params: {
-      hub_id: hubID
-    }
+  return useQuery(['list', hubID], async () => {
+    const response = await requestNew<listDetails | undefined>({
+      url: 'lists',
+      method: 'GET',
+      params: {
+        hub_id: hubID
+      }
+    });
+    return response;
   });
-  return response;
 };
 
 export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {

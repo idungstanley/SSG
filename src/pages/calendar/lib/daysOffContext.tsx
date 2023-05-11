@@ -1,6 +1,6 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
-import { DaysOffContextValue, LeaveType, onCreateDayOffProps } from '../types/calendar';
+import { DayOff, DaysOffContextValue, LeaveType, onCreateDayOffProps } from '../types/calendar';
 import { Dayjs } from 'dayjs';
 import { useAppSelector } from '../../../app/hooks';
 import { MdBeachAccess } from 'react-icons/md';
@@ -20,7 +20,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '64dd1769-85b6-4877-a7f9-020278ed2947'
-    }
+    },
+    isApproved: true
   },
   {
     id: '2',
@@ -35,7 +36,8 @@ const initialData = [
     reason: 'Blah blah blah blah',
     user: {
       id: '64dd1769-85b6-4877-a7f9-020278ed2947'
-    }
+    },
+    isApproved: true
   },
   {
     id: '3',
@@ -50,7 +52,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
-    }
+    },
+    isApproved: false
   },
   {
     id: '4',
@@ -65,7 +68,8 @@ const initialData = [
     reason: 'Blah blah blah',
     user: {
       id: '66ffdf5a-255e-4396-a103-4ec2a190c2f3'
-    }
+    },
+    isApproved: false
   }
 ];
 
@@ -95,7 +99,8 @@ export const DaysOffContext = createContext<DaysOffContextValue>({
   setNewDayOff: () => ({}),
   leaveTypes: [],
   onAddLeaveType: () => ({}),
-  onRemoveLeaveType: () => ({})
+  onRemoveLeaveType: () => ({}),
+  manageStatus: () => ({})
 });
 
 interface DaysOffProviderProps {
@@ -119,30 +124,40 @@ export function DaysOffProvider({ children }: DaysOffProviderProps) {
   const onRemoveLeaveType = (id: Pick<LeaveType, 'id'>['id']) =>
     setLeaveTypes((prev) => [...prev.filter((i) => i.id !== id)]);
 
-  const onCreateDayOff = useCallback(
-    ({ type, reason, start, end, memberId }: onCreateDayOffProps) => {
-      const dayOff = {
-        id: Date.now().toString(),
-        reason,
-        type,
-        start,
-        end,
-        user: {
-          id: memberId
-        }
-      };
+  const onCreateDayOff = ({ type, reason, start, end, memberId, isApproved }: onCreateDayOffProps) => {
+    const dayOff = {
+      id: Date.now().toString(),
+      reason,
+      type,
+      start,
+      end,
+      user: {
+        id: memberId
+      },
+      isApproved
+    };
 
-      setDaysOff((prev) => [...prev, dayOff]);
+    setDaysOff((prev) => [...prev, dayOff]);
+  };
 
-      setShowCreateDayOffModal(false);
-    },
-    [activeMemberId]
-  );
+  const manageStatus = (id: Pick<DayOff, 'id'>['id'], action: 'approve' | 'remove') =>
+    action === 'approve'
+      ? setDaysOff((prev) =>
+          prev.map((i) => {
+            if (i.id === id) {
+              i.isApproved = true;
+            }
+
+            return i;
+          })
+        )
+      : setDaysOff((prev) => prev.filter((i) => i.id !== id));
 
   return (
     <DaysOffContext.Provider
       value={{
         leaveTypes,
+        manageStatus,
         onAddLeaveType,
         onRemoveLeaveType,
         daysOff,

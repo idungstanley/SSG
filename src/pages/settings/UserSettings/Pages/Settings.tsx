@@ -2,21 +2,18 @@ import React, { useEffect } from 'react';
 import Profile from '../components/UserSettings/Profile';
 import Personalization from '../components/UserSettings/Personalization';
 import { Spinner } from '../../../../common';
-import { useAppDispatch } from '../../../../app/hooks';
-import { setActiveTab, setUserData, setUserInfo } from '../../../../features/settings/user/userSettingsSlice';
-import { useGetSelf } from '../../../../features/settings/user/userSettingsServices';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setActiveTab } from '../../../../features/settings/user/userSettingsSlice';
+import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 
 function UserSettings() {
-  const { data, status } = useGetSelf();
   const dispatch = useAppDispatch();
 
+  const { userData, status } = useAppSelector((state) => state.userSetting);
+
   useEffect(() => {
-    dispatch(setActiveTab('My Settings'));
-    if (status === 'success') {
-      dispatch(setUserData(data?.data.user));
-      dispatch(setUserInfo({ ...data?.data.user }));
-    }
-  }, [status, data, dispatch]);
+    dispatch(setActiveTab('My Account'));
+  }, []);
 
   if (status === 'loading') {
     return (
@@ -32,7 +29,7 @@ function UserSettings() {
         <Profile />
       </section>
       <section className="m-auto flex h-full w-2/3">
-        <Personalization data={data?.data.user} />
+        <Personalization data={userData as IUserData | undefined} />
       </section>
     </section>
   );

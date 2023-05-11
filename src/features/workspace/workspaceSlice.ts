@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { dimensions } from '../../app/config/dimensions';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -30,6 +31,7 @@ interface workspaceState {
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
+  getRecording: { id: string | null; type: string | null };
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | null;
@@ -57,6 +59,7 @@ const initialState: workspaceState = {
   showModal: false,
   searchIsActive: false,
   isExtSearchActive: false,
+  getRecording: { id: null, type: null },
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
@@ -67,9 +70,9 @@ const initialState: workspaceState = {
   showPilot: false,
   showPilotIconView: false,
   showPilotListView: false,
-  extendedSidebarWidth: 240,
+  extendedSidebarWidth: dimensions.extendedBar.default,
   activeTabId: 0,
-  sidebarWidthRD: 260,
+  sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
@@ -153,6 +156,9 @@ export const wsSlice = createSlice({
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
+    setRecording: (state, action: PayloadAction<{ id: string | null; type: string | null }>) => {
+      state.getRecording = action.payload;
+    },
     setActivePlaceId: (state, action: PayloadAction<number | boolean | null | undefined | string>) => {
       state.activePlaceId = action.payload;
     },
@@ -231,6 +237,7 @@ export const {
   checkIfWs,
   setCurrentItem,
   resetCurrentItem,
+  setRecording,
   setActivePlaceId,
   setShowHub,
   setShowWallet,

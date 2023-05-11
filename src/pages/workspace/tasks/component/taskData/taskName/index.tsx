@@ -21,6 +21,7 @@ import { setCurrentTaskIdForTag } from '../../../../../../features/workspace/tag
 import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
 import { useSortable } from '@dnd-kit/sortable';
+import ToolTip from '../../../../../../components/Tooltip';
 
 export default function TaskName({
   taskColField,
@@ -100,7 +101,7 @@ export default function TaskName({
           <input
             type="checkbox"
             id="checked-checkbox"
-            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-8"
+            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-7 z-50"
             ref={setNodeRef}
             {...attributes}
             {...listeners}
@@ -108,6 +109,7 @@ export default function TaskName({
               displayNav(task?.id as string);
             }}
           />
+
           <MdDragIndicator className="absolute text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
         </div>
         <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
@@ -133,35 +135,36 @@ export default function TaskName({
           )}
         </div>
         <div className="flex group items-center">
-          <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
+          <div onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
             <StatusDropdown TaskCurrentStatus={task?.status} />
-          </p>
+          </div>
           <div
             contentEditable={true}
+            suppressContentEditableWarning={true}
             onClick={handleTaskNameClick}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
             className={`${
               comfortableView && contentEditable
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-500 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
                 : comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                ? 'text-sm whitespace-nowrap cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap && contentEditable
-                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : comfortableViewWrap
-                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : CompactView && contentEditable
-                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : CompactView
-                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : CompactViewWrap && contentEditable
                 ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
                 : CompactViewWrap
-                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-300 p-2'
+                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
                 : null
             }`}
           >
-            <p>
+            <div>
               {(taskColField as string)?.length > 50 && comfortableView ? (
                 <span>{(taskColField as string)?.substring(0, 40)}...</span>
               ) : (taskColField as string)?.length > 61 && CompactView ? (
@@ -169,23 +172,27 @@ export default function TaskName({
               ) : (
                 (taskColField as ReactNode)
               )}
-            </p>
+            </div>
           </div>
-          <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
+          <div id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
             {!ShowPlusIcon && (
-              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                <PlusIcon
-                  className="w-3 text-gray-500 "
-                  aria-hidden="true"
-                  onClick={() => handleCreateSubTask(task?.id as string)}
-                />
-              </span>
+              <ToolTip tooltip="Add subtask">
+                <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                  <PlusIcon
+                    className="w-3 text-gray-500 "
+                    aria-hidden="true"
+                    onClick={() => handleCreateSubTask(task?.id as string)}
+                  />
+                </span>
+              </ToolTip>
             )}
             {/* tag here */}
-            <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
-              <TagModal />
-            </button>
-          </p>
+            <ToolTip tooltip="Add Tag">
+              <span onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
+                <TagModal />
+              </span>
+            </ToolTip>
+          </div>
           {/* tags goes here */}
           {/* <div> {groupTags(task.tags)}</div>; */}
         </div>

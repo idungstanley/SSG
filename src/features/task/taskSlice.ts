@@ -30,7 +30,7 @@ export interface ImyTaskData {
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
   updated_at?: string;
   created_at?: string;
   archived_at?: string | null;
@@ -118,7 +118,10 @@ interface TaskState {
   showTaskUploadModal: boolean;
   timerStatus: boolean;
   filterTaskByAssigneeIds: string | null | undefined;
-  sortArr: SortOption[];
+  sortAbleArr: SortOption[];
+  sortArr: string[];
+  timeArr: string[];
+  timeSortArr: string[];
 }
 
 const initialState: TaskState = {
@@ -164,7 +167,10 @@ const initialState: TaskState = {
   showTaskUploadModal: false,
   timerStatus: false,
   filterTaskByAssigneeIds: null,
-  sortArr: []
+  sortAbleArr: [],
+  sortArr: [],
+  timeArr: [],
+  timeSortArr: []
 };
 
 export const taskSlice = createSlice({
@@ -331,7 +337,16 @@ export const taskSlice = createSlice({
       state.filterTaskByAssigneeIds = action.payload;
     },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
+      state.sortAbleArr = action.payload;
+    },
+    setSortArr(state, action: PayloadAction<string[]>) {
       state.sortArr = action.payload;
+    },
+    setTimeArr(state, action: PayloadAction<string[]>) {
+      state.timeArr = action.payload;
+    },
+    setTimeSortArr(state, action: PayloadAction<string[]>) {
+      state.timeSortArr = action.payload;
     }
   }
 });
@@ -376,6 +391,9 @@ export const {
   setShowTaskUploadModal,
   setTimerStatus,
   setFilterTaskByAssigneeIds,
-  setSortArray
+  setSortArray,
+  setSortArr,
+  setTimeArr,
+  setTimeSortArr
 } = taskSlice.actions;
 export default taskSlice.reducer;
