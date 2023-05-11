@@ -1,18 +1,20 @@
 import { InputHTMLAttributes } from 'react';
+import { cl } from '../../utils';
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
-  checked: boolean;
   setChecked: (i: boolean) => void;
+  styles?: string;
 }
 
-export function Checkbox({ checked, setChecked, ...props }: CheckboxProps) {
+export function Checkbox({ setChecked, styles, ...props }: CheckboxProps) {
   return (
-    <input
-      checked={checked}
-      onChange={(e) => setChecked(e.target.checked)}
-      type="checkbox"
-      className="h-4 w-4 rounded-md border-gray-300 focus:ring-gray-500 cursor-pointer"
-      {...props}
-    />
+    <div className=" cursor-pointer">
+      <input
+        onChange={(e) => setChecked(e.target.checked)}
+        type="checkbox"
+        className={cl('h-4 w-4 rounded-md border-gray-300 cursor-pointer', styles)}
+        {...props}
+      />
+    </div>
   );
 }

@@ -1,5 +1,5 @@
-import { BeakerIcon, GiftIcon } from '@heroicons/react/24/outline';
-import { MdBeachAccess } from 'react-icons/md';
+import { UserGroupIcon } from '@heroicons/react/24/outline';
+import { MdBeachAccess, MdOutlineChildFriendly } from 'react-icons/md';
 import Dropdown from '../../../../components/Dropdown/VoidDropdown';
 import { cl } from '../../../../utils';
 
@@ -13,11 +13,11 @@ const iconsConfig = [
     name: 'umbrella'
   },
   {
-    icon: <BeakerIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
+    icon: <MdOutlineChildFriendly className="w-5 h-5 stroke-current" aria-hidden="true" />,
     name: 'child'
   },
   {
-    icon: <GiftIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
+    icon: <UserGroupIcon className="w-5 h-5 stroke-current" aria-hidden="true" />,
     name: 'groups'
   }
 ];

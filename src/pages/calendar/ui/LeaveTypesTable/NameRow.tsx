@@ -12,10 +12,10 @@ export function NameRow({ defaultValue, onBlur, onChange, disabled }: InputProps
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (titleRef.current && defaultValue) {
-      titleRef.current.value = defaultValue;
+    if (titleRef.current) {
+      titleRef.current.value = defaultValue ?? '';
     }
-  }, []);
+  }, [defaultValue]);
 
   const handleChange = () => {
     if (titleRef.current && onChange) {

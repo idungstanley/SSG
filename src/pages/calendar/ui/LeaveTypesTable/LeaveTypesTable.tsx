@@ -32,7 +32,8 @@ export default function LeaveTypesTable() {
         </tr>
       </thead>
 
-      <tbody className="divide-y divide-gray-200">
+      <tbody className="overflow-y-scroll divide-y divide-gray-200">
+        <AddLeaveType />
         {leaveTypes?.map((type) => (
           <LeaveTypeRow
             color={type.color}
@@ -45,8 +46,6 @@ export default function LeaveTypesTable() {
             is_require_approval={type.is_require_approval}
           />
         ))}
-
-        <AddLeaveType />
       </tbody>
     </table>
   );
