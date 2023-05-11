@@ -5,7 +5,7 @@ import { useDaysOff } from '../lib/daysOffContext';
 import { filterDaysOff } from '../lib/filterDaysOff';
 import { getMonth } from '../lib/getDaysInYear';
 import MembersList from '../ui/MembersList';
-import Month from '../ui/Month';
+import Month from '../ui/Month/Month';
 
 const currentDate = dayjs();
 

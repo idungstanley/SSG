@@ -1,14 +1,14 @@
 import { Menu, Transition } from '@headlessui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Fragment, useCallback, useState } from 'react';
-import Calendar from '..';
-import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import { cl } from '../../../utils';
-import { isSameOrAfter, isSameOrBefore } from '../lib/dateUtils';
-import { getDatesInRange } from '../lib/getDatesInRange';
-import { DayOff, MonthObject } from '../types/calendar';
+import Calendar from '../..';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
+import { cl } from '../../../../utils';
+import { isSameOrAfter, isSameOrBefore } from '../../lib/dateUtils';
+import { getDatesInRange } from '../../lib/getDatesInRange';
+import { DayOff, MonthObject } from '../../types/calendar';
 import MonthTitle from './MonthTitle';
-import Weeks from './Weeks';
+import Weeks from '../Weeks';
 
 interface MonthProps {
   daysOff: DayOff[];
