@@ -22,6 +22,8 @@ import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
 import { useSortable } from '@dnd-kit/sortable';
 import ToolTip from '../../../../../../components/Tooltip';
+import { useParams } from 'react-router-dom';
+import { cl } from '../../../../../../utils';
 
 export default function TaskName({
   taskColField,
@@ -94,8 +96,16 @@ export default function TaskName({
     zIndex: isDragging ? 1 : undefined
   };
 
+  const { taskId } = useParams();
+
+  const isActive = taskId === task?.id;
+  const taskBg = isActive ? 'bg-primary-200' : 'bg-white';
+
   return (
-    <div className="sticky bg-red-500 w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center" style={style}>
+    <div
+      className={cl('sticky w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center', taskBg)}
+      style={style}
+    >
       <div className="flex items-center absolute -left-8">
         <input
           type="checkbox"

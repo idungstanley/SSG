@@ -242,7 +242,7 @@ export default function TaskListViews({
         </div>
       </div>
 
-      <div style={{ marginRight: 350 }} className="h-5"></div>
+      <div style={{ marginRight: 330 }} className="h-5"></div>
 
       <div className="block text-gray-700 right-0 dynamic border">
         {hideTask.length
