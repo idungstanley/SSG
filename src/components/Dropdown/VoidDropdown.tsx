@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useRef } from 'react';
 
 interface DropdownProps {
   title: JSX.Element;
@@ -7,9 +7,11 @@ interface DropdownProps {
 }
 
 export default function Dropdown({ title, children }: DropdownProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
+      <div ref={ref}>
         <Menu.Button className="flex items-center rounded-full focus:outline-none">{title}</Menu.Button>
       </div>
 
@@ -22,7 +24,13 @@ export default function Dropdown({ title, children }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute p-2 divide-y right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items
+          style={{
+            left: (ref.current?.getBoundingClientRect().x ?? 0) + 20,
+            bottom: window.innerHeight - (ref.current?.getBoundingClientRect().y ?? 0) - 20
+          }}
+          className="fixed h-fit p-2 divide-y z-10 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        >
           {children}
         </Menu.Items>
       </Transition>

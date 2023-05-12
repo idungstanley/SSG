@@ -166,7 +166,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
 
           <ul className="relative">
             {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
-              <li className="relative overflow-x-scroll overflow-y-hidden" key={status}>
+              <li className="relative overflow-x-scroll" key={status}>
                 <TaskListViews
                   listId={taskDataGroupingsByStatus[value].key}
                   taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
