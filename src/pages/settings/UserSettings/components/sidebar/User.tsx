@@ -4,6 +4,12 @@ import { setActiveTab } from '../../../../../features/settings/user/userSettings
 import { useNavigate } from 'react-router-dom';
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { useMutation } from '@tanstack/react-query';
+import { displayPrompt } from '../../../../../features/general/prompt/promptSlice';
+import { logoutService } from '../../../../../features/auth/authService';
+import { setVisibility } from '../../../../../features/general/prompt/promptSlice';
+import { setAuthData } from '../../../../../features/auth/authSlice';
+import { logout } from '../../../../../features/auth/authSlice';
 
 function User() {
   const { activeTab, theme_color, userData } = useAppSelector((state) => state.userSetting);
@@ -99,7 +105,24 @@ function User() {
       title: 'Logout',
       onClick: () => {
         dispatch(setActiveTab('Logout'));
-        navigate('construction');
+        dispatch(
+          displayPrompt('Sign out', 'Would you like to sign out of your account?', [
+            {
+              label: 'Sign out',
+              style: 'danger',
+              callback: () => {
+                logoutMutation.mutate();
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
+        );
       }
     },
     {
@@ -130,6 +153,27 @@ function User() {
       }
     }
   ];
+
+  const logoutMutation = useMutation(logoutService, {
+    onSuccess: () => {
+      dispatch(setVisibility(false));
+
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('currentWorkspaceId');
+
+      dispatch(
+        setAuthData({
+          user: null,
+          accessToken: null,
+          currentWorkspaceId: null,
+          currentUserId: null
+        })
+      );
+
+      dispatch(logout());
+    }
+  });
 
   const userNameFormatted = userData?.name ? userData?.name.slice(0, 1).toUpperCase() + userData?.name.slice(1) : '';
   return (
