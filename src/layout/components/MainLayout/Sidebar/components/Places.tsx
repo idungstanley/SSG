@@ -111,6 +111,7 @@ function Places() {
   const { pathname } = useLocation();
 
   const { activePlaceId } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -183,7 +184,9 @@ function Places() {
         <section>
           <ul
             aria-labelledby="projects-headline relative"
-            className="border-t border-b border-gray-200 divide-y divide-gray-200"
+            className={`border-t border-b border-gray-200 divide-y divide-gray-200 ${
+              showSidebar ? '' : 'flex flex-col items-center'
+            }`}
           >
             {places.map((place) => (
               <div key={place.id}>

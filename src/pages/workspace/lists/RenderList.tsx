@@ -24,6 +24,7 @@ import { UseGetListDetails } from '../../../features/list/listService';
 import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
@@ -95,6 +96,7 @@ function RenderList() {
       <PilotSection />
       <PageWrapper
         pilotConfig={pilotConfig}
+        additionalHeader={<AdditionalHeader />}
         header={
           <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav

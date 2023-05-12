@@ -54,7 +54,7 @@ export default function PlaceItem({
       : undefined,
     zIndex: isDragging ? 1 : isActivePlace ? '1000' : undefined,
     height: '50px',
-    paddingLeft: '25px'
+    paddingLeft: showSidebar ? '25px' : '20px'
   };
 
   const resetSelectedPlace = () => {

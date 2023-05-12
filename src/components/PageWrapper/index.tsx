@@ -12,13 +12,21 @@ import Pilot from '../Pilot';
 
 interface PageWrapperProps {
   header: JSX.Element;
+  additionalHeader?: JSX.Element;
   children: ReactNode;
   additional?: JSX.Element;
   extendedBar?: ExtendedBarProps;
   pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
 }
 
-export default function PageWrapper({ header, children, additional, pilotConfig, extendedBar }: PageWrapperProps) {
+export default function PageWrapper({
+  header,
+  additionalHeader,
+  children,
+  additional,
+  pilotConfig,
+  extendedBar
+}: PageWrapperProps) {
   return (
     <main className="grid h-full grid-cols-autoFr">
       {extendedBar ? (
@@ -28,6 +36,7 @@ export default function PageWrapper({ header, children, additional, pilotConfig,
       ) : null}
 
       <section className="flex flex-col w-full h-full">
+        {additionalHeader}
         {header}
 
         <div className="relative grid w-full h-full grid-cols-frAuto">

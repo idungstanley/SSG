@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
 import Header from './Header';
 import { useAppSelector } from '../../../app/hooks';
-import ExpandedNav from './extendedNavigation/ExpandedNav';
+// import ExpandedNav from './extendedNavigation/ExpandedNav';
 // import OpenExtBtn from './extendedNavigation/components/extendBtn/OpenExtBtn';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
@@ -25,7 +25,7 @@ function MainLayout() {
           </div>
           <div className={cl('grid h-full', !showExtendedBar ? 'grid-cols-1' : 'grid-cols-autoFr')}>
             {/* show the extended side navigation component*/}
-            {showExtendedBar && <ExpandedNav />}
+            {/* {showExtendedBar && <ExpandedNav />} */}
             <div className="w-full">
               {/* <AdditionalHeader /> */}
               <Header />
@@ -48,13 +48,3 @@ function MainLayout() {
 }
 
 export default MainLayout;
-
-// function AdditionalHeader() {
-//   return (
-//     <div className="w-full border-b" style={{ height: '50px' }}>
-//       <h1 style={{ height: '50px' }} className="text-center">
-//         Header
-//       </h1>
-//     </div>
-//   );
-// }

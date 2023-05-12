@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { setActiveItem, setCurrentWalletName } from '../../../../features/workspace/workspaceSlice';
 import ActiveHub from '../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import AdditionalHeader from '../../../../layout/components/MainLayout/Header/AdditionHeader';
 
 function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -103,6 +104,7 @@ function RenderWallets() {
       <PilotSection />
       <PageWrapper
         pilotConfig={pilotConfig}
+        additionalHeader={<AdditionalHeader />}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
         extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}

@@ -13,7 +13,7 @@ const PILOT_WIDTH = {
 } as const;
 
 const NAVIGATION_BAR_WIDTH = {
-  DEFAULT: showSidebar === true ? 12 : 5,
+  DEFAULT: 12,
   MAX: 20,
   MIN: 8,
   COLLAPSE: 5
@@ -34,7 +34,7 @@ const dimensions = {
     max: getRelativeWidth(PILOT_WIDTH.MAX)
   },
   navigationBar: {
-    default: getRelativeWidth(NAVIGATION_BAR_WIDTH.DEFAULT),
+    default: showSidebar === true ? getRelativeWidth(NAVIGATION_BAR_WIDTH.DEFAULT) : 70,
     min: getRelativeWidth(NAVIGATION_BAR_WIDTH.MIN),
     max: getRelativeWidth(NAVIGATION_BAR_WIDTH.MAX),
     collapse: getRelativeWidth(NAVIGATION_BAR_WIDTH.COLLAPSE)

@@ -21,6 +21,7 @@ import { setActiveEntityName, setActiveItem } from '../../../../../features/work
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import AdditionalHeader from '../../../../../layout/components/MainLayout/Header/AdditionHeader';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -119,6 +120,7 @@ function RenderHubs() {
       <PilotSection />
       <PageWrapper
         pilotConfig={pilotConfig}
+        additionalHeader={<AdditionalHeader />}
         header={
           <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
