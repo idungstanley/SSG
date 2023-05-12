@@ -28,17 +28,17 @@ export default function Recording() {
       sampleRate: 44100
     };
 
-    const options = {
-      mimeType: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
-      audioBitsPerSecond: 128000,
-      videoBitsPerSecond: 128000
-    };
-
-    const stream: MediaStream = await mediaDevices.getDisplayMedia({
+    const videoStream: MediaStream = await mediaDevices.getDisplayMedia({
       audio: audioConstraints,
       video: true
     });
-    const recorder = new RecordRTC(stream, options);
+    const audioStream: MediaStream = await mediaDevices.getUserMedia({ audio: true });
+
+    const [videoTrack] = videoStream.getVideoTracks();
+    const [audioTrack] = audioStream.getAudioTracks();
+    const stream = new MediaStream([videoTrack, audioTrack]);
+
+    const recorder = new RecordRTC(stream, { type: 'video' });
     await recorder.startRecording();
     setRecorderState('recording');
     setRecorder(recorder as RecordRTC);
