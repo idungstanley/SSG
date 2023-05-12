@@ -22,6 +22,8 @@ import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
 import { useSortable } from '@dnd-kit/sortable';
 import ToolTip from '../../../../../../components/Tooltip';
+import { useParams } from 'react-router-dom';
+import { cl } from '../../../../../../utils';
 
 export default function TaskName({
   taskColField,
@@ -94,109 +96,115 @@ export default function TaskName({
     zIndex: isDragging ? 1 : undefined
   };
 
-  return (
-    <>
-      <div className="relative flex items-center" style={style}>
-        <div className="flex items-center ">
-          <input
-            type="checkbox"
-            id="checked-checkbox"
-            className="absolute w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 -left-7 z-50"
-            ref={setNodeRef}
-            {...attributes}
-            {...listeners}
-            onClick={() => {
-              displayNav(task?.id as string);
-            }}
-          />
+  const { taskId } = useParams();
 
-          <MdDragIndicator className="absolute text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100 -left-5 " />
-        </div>
-        <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
-          {task?.id == getSubTaskId ? (
-            <span>
-              <img
-                src={ArrowDown}
-                style={{ width: '6px', marginRight: '2px' }}
-                className="flex-shrink-0 h-2"
-                aria-hidden="true"
-                color="rgba(72, 67, 67, 0.64)"
-              />
-            </span>
-          ) : (
-            <span>
-              <img
-                src={ArrowRigt}
-                style={{ width: '5px', marginRight: '2px' }}
-                className="flex-shrink-0 h-2"
-                color="rgba(72, 67, 67, 0.64)"
-              />
-            </span>
-          )}
-        </div>
-        <div className="flex group items-center">
-          <div onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
-            <StatusDropdown TaskCurrentStatus={task?.status} />
-          </div>
-          <div
-            contentEditable={true}
-            suppressContentEditableWarning={true}
-            onClick={handleTaskNameClick}
-            ref={inputRef}
-            onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
-            className={`${
-              comfortableView && contentEditable
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
-                : comfortableView
-                ? 'text-sm whitespace-nowrap cursor-text border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
-                : comfortableViewWrap && contentEditable
-                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
-                : comfortableViewWrap
-                ? 'text-sm cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
-                : CompactView && contentEditable
-                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
-                : CompactView
-                ? 'text-xs whitespace-nowrap cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
-                : CompactViewWrap && contentEditable
-                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
-                : CompactViewWrap
-                ? 'text-xs text-justify cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
-                : null
-            }`}
-          >
-            <div>
-              {(taskColField as string)?.length > 50 && comfortableView ? (
-                <span>{(taskColField as string)?.substring(0, 40)}...</span>
-              ) : (taskColField as string)?.length > 61 && CompactView ? (
-                <span>{(taskColField as string)?.substring(0, 60)}...</span>
-              ) : (
-                (taskColField as ReactNode)
-              )}
-            </div>
-          </div>
-          <div id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
-            {!ShowPlusIcon && (
-              <ToolTip tooltip="Add subtask">
-                <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
-                  <PlusIcon
-                    className="w-3 text-gray-500 "
-                    aria-hidden="true"
-                    onClick={() => handleCreateSubTask(task?.id as string)}
-                  />
-                </span>
-              </ToolTip>
+  const isActive = taskId === task?.id;
+  const taskBg = isActive ? 'bg-primary-200' : 'bg-white';
+
+  return (
+    <div
+      className={cl('sticky w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center', taskBg)}
+      style={style}
+    >
+      <div className="flex items-center absolute -left-8">
+        <input
+          type="checkbox"
+          id="checked-checkbox"
+          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 z-50"
+          ref={setNodeRef}
+          {...attributes}
+          {...listeners}
+          onClick={() => {
+            displayNav(task?.id as string);
+          }}
+        />
+
+        <MdDragIndicator className="left-0 text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
+      </div>
+      <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
+        {task?.id == getSubTaskId ? (
+          <span>
+            <img
+              src={ArrowDown}
+              style={{ width: '6px', marginRight: '2px' }}
+              className="flex-shrink-0 h-2"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
+          </span>
+        ) : (
+          <span>
+            <img
+              src={ArrowRigt}
+              style={{ width: '5px', marginRight: '2px' }}
+              className="flex-shrink-0 h-2"
+              color="rgba(72, 67, 67, 0.64)"
+            />
+          </span>
+        )}
+      </div>
+      <div className="flex group items-center">
+        <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
+          <StatusDropdown TaskCurrentStatus={task?.status} />
+        </p>
+        <div
+          contentEditable={true}
+          onClick={handleTaskNameClick}
+          ref={inputRef}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
+          className={`${
+            comfortableView && contentEditable
+              ? 'text-sm cursor-text w-64 whitespace-nowrap truncate border-2 border-white border-opacity-0 hover:text-primary-600 p-2 '
+              : comfortableView
+              ? 'text-sm cursor-text w-64 whitespace-nowrap truncate border-2 border-gray-400 border-opacity-0 hover:text-primary-600 p-2'
+              : comfortableViewWrap && contentEditable
+              ? 'text-sm cursor-text break-all border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              : comfortableViewWrap
+              ? 'text-sm cursor-text break-all border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              : CompactView && contentEditable
+              ? 'text-xs cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              : CompactView
+              ? 'text-xs w-64 truncate cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              : CompactViewWrap && contentEditable
+              ? 'text-xs w-64 truncate text-justify break-all cursor-text border-2 border-white border-opacity-0 hover:border-gray-400 p-2'
+              : CompactViewWrap
+              ? 'text-xs text-justify break-all cursor-text border-2 border-white border-opacity-0 hover:text-primary-600 p-2'
+              : null
+          }`}
+        >
+          {/* <p>
+            {(taskColField as string)?.length > 50 && comfortableView ? (
+              <span>{(taskColField as string)?.substring(0, 40)}...</span>
+            ) : (taskColField as string)?.length > 61 && CompactView ? (
+              <span>{(taskColField as string)?.substring(0, 60)}...</span>
+            ) : (
+              (taskColField as ReactNode)
             )}
-            {/* tag here */}
-            <ToolTip tooltip="Add Tag">
-              <span onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
-                <TagModal />
+          </p> */}
+          <p>{taskColField as ReactNode}</p>
+        </div>
+        <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
+          {!ShowPlusIcon && (
+            <ToolTip tooltip="Add subtask">
+              <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
+                <PlusIcon
+                  className="w-3 text-gray-500 "
+                  aria-hidden="true"
+                  onClick={() => handleCreateSubTask(task?.id as string)}
+                />
               </span>
             </ToolTip>
-          </div>
-          {/* tags goes here */}
-          {/* <div> {groupTags(task.tags)}</div>; */}
-        </div>
+          )}
+          {/* tag here */}
+          <ToolTip tooltip="Add Tag">
+            <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
+              <TagModal />
+            </button>
+          </ToolTip>
+        </p>
+        {/* tags goes here */}
+        {/* <div> {groupTags(task.tags)}</div>; */}
       </div>
-    </>
+    </div>
   );
 }

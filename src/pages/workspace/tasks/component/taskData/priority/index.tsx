@@ -11,7 +11,10 @@ export default function TaskPriority({ task }: renderDataProps) {
     dispatch(setCurrentTaskPriorityId(id));
   };
   return (
-    <div className="relative border-gray-300 border-dotted " onClick={() => handleTaskPriority(task?.id as string)}>
+    <div
+      className="relative mt-2 border-gray-300 border-dotted "
+      onClick={() => handleTaskPriority(task?.id as string)}
+    >
       <PriorityDropdown TaskCurrentPriority={task?.priority} />
     </div>
   );

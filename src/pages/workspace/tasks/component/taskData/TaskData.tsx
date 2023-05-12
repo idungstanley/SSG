@@ -7,6 +7,7 @@ import { setActiveItem } from '../../../../../features/workspace/workspaceSlice'
 import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
 import { useNavigate, useParams } from 'react-router-dom';
+import { cl } from '../../../../../utils';
 
 export interface TaskDataProps {
   listId?: string;
@@ -21,6 +22,9 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, taskId } = useParams();
+
+  const isActive = taskId === task?.id;
+  const taskBg = isActive ? 'bg-primary-200' : 'bg-white';
 
   const dispatch = useAppDispatch();
 
@@ -63,126 +67,58 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     data?.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false })) ?? [];
 
   return (
-    <div className="relative">
+    <div className={cl('w-full flex border-t border-b', taskBg)}>
+      {/* sticky task name */}
       <div
-        onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}
-        className={`${
-          comfortableView && taskId == task?.id
-            ? '  flex justify-between group ml-6 mb-px hover:bg-black-100 w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
-            : comfortableView
-            ? 'flex justify-between group ml-6 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
-            : comfortableViewWrap && taskId == task?.id
-            ? 'flex justify-between group ml-4 mb-px  w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
-            : comfortableViewWrap
-            ? 'flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
-            : CompactView && activeItemId == task?.id
-            ? ' compactView flex justify-between group ml-4 mb-px w-12/12 items-center py-1 relative border-1.5 h-10 bg-primary-200'
-            : CompactView
-            ? 'compactView flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 h-10 bg-white'
-            : CompactViewWrap && activeItemId == task?.id
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px w-12/12 items-center py-1 relative border-1.5 bg-primary-200'
-            : CompactViewWrap
-            ? 'compactViewWrap flex justify-between group ml-4 mb-px hover:bg-gray-100 w-12/12 items-center py-1 relative border-1.5 bg-white'
-            : null
-        }`}
+        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
+        style={{ zIndex: '99', overflow: 'visible !important' }}
       >
-        <div className="flex items-center justify-between w-6/12 pr-24 ">
-          <div
-            className={`${
-              comfortableView
-                ? 'text-sm whitespace-nowrap w-5/6'
-                : comfortableViewWrap
-                ? 'text-sm w-5/6'
-                : CompactView
-                ? 'text-xs whitespace-nowrap w-5/6'
-                : CompactViewWrap
-                ? 'text-xs text-justify w-5/6'
-                : null
-            }`}
-          >
-            {hideTask.length
-              ? hideTask.map(
-                  (col) =>
-                    col.value == 'Task' &&
-                    !col.hidden && (
-                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group w-12/12">
-                        <DataRenderFunc
-                          taskColField={task?.[col.field]}
-                          col={{ field: col.field, id: col.id }}
-                          task={task}
-                          getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task?.id)}
-                        />
-                      </div>
-                    )
-                )
-              : task &&
-                [...columnsHead, ...customFields].map(
-                  (col) =>
-                    col.value == 'Task' &&
-                    !col.hidden && (
-                      <div
-                        key={col.id}
-                        className="flex items-center ml-2 text-xs font-medium capitalize cursor-pointer group w-12/12"
-                      >
-                        <DataRenderFunc
-                          taskColField={task?.[col.field]}
-                          col={{ field: col.field, id: col.id }}
-                          task={task}
-                          getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task?.id)}
-                        />
-                      </div>
-                    )
-                )}
-          </div>
-          <div id="tags" className="w-1/6">
-            {hideTask.length
-              ? hideTask.map(
-                  (col) =>
-                    col.value == 'Tags' &&
-                    !col.hidden && (
-                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
-                        <DataRenderFunc
-                          taskColField={task?.[col.field]}
-                          col={{ field: col.field, id: col.id }}
-                          task={task}
-                          getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task?.id)}
-                        />
-                      </div>
-                    )
-                )
-              : task &&
-                [...columnsHead, ...customFields].map(
-                  (col) =>
-                    col.value == 'Tags' &&
-                    !col.hidden && (
-                      <div key={col.id} className="flex items-center ml-2 text-xs font-medium capitalize group">
-                        <DataRenderFunc
-                          taskColField={task?.[col.field]}
-                          col={{ field: col.field, id: col.id }}
-                          task={task}
-                          getSubTaskId={getSubTaskId}
-                          handleGetSubTask={() => handleGetSubTask(task?.id)}
-                        />
-                      </div>
-                    )
-                )}
-          </div>
+        {[...columnsHead, ...customFields]
+          .filter((i) => i.value === 'Task')
+          .map((col) => (
+            <div key={col.id} className="text-xs font-medium capitalize cursor-pointer">
+              <DataRenderFunc
+                taskColField={task?.[col.field]}
+                col={{ field: col.field, id: col.id }}
+                task={task}
+                getSubTaskId={getSubTaskId}
+                handleGetSubTask={() => handleGetSubTask(task?.id)}
+              />
+            </div>
+          ))}
+      </div>
+
+      <div className="flex-grow relative">
+        {/* task name (hidden, because we show sticky name) */}
+        <div className="relative text-sm" onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
+          {hideTask.length
+            ? hideTask.map((col) => col.value == 'Task' && !col.hidden && <></>)
+            : task &&
+              [...columnsHead, ...customFields]
+                .filter((i) => i.value === 'Task')
+                .map((col) => (
+                  <div
+                    key={col.id}
+                    // style={{ minWidth: 240 }}
+                    className="text-xs opacity-0 font-medium capitalize cursor-pointer group"
+                  >
+                    <DataRenderFunc
+                      taskColField={task?.[col.field]}
+                      col={{ field: col.field, id: col.id }}
+                      task={task}
+                      getSubTaskId={getSubTaskId}
+                      handleGetSubTask={() => handleGetSubTask(task?.id)}
+                    />
+                  </div>
+                ))}
         </div>
-        <div className=" dynamic">
+        <div id="tags" className="relative">
           {hideTask.length
             ? hideTask.map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value == 'Tags' &&
                   !col.hidden && (
-                    <div
-                      key={col.id}
-                      className="items-center py-px font-medium text-gray-400 uppercase group"
-                      style={{ width: '50px' }}
-                    >
+                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
@@ -196,14 +132,9 @@ export default function TaskData({ task, listId }: TaskDataProps) {
             : task &&
               [...columnsHead, ...customFields].map(
                 (col) =>
-                  col.value !== 'Task' &&
-                  col.value !== 'Tags' &&
+                  col.value == 'Tags' &&
                   !col.hidden && (
-                    <div
-                      key={col.id}
-                      className="items-center py-px font-medium text-gray-400 uppercase group"
-                      style={{ width: '50px' }}
-                    >
+                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
@@ -215,6 +146,52 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   )
               )}
         </div>
+      </div>
+
+      <div className={cl('relative dynamic place-items-stretch items-center place-content-stretch', taskBg)}>
+        {hideTask.length
+          ? hideTask.map(
+              (col) =>
+                col.value !== 'Task' &&
+                col.value !== 'Tags' &&
+                !col.hidden && (
+                  <div
+                    key={col.id}
+                    className={cl('items-center flex py-px h-10 font-medium text-gray-400 uppercase group', taskBg)}
+                  >
+                    <DataRenderFunc
+                      taskColField={task?.[col.field]}
+                      col={{ field: col.field, id: col.id }}
+                      task={task}
+                      getSubTaskId={getSubTaskId}
+                      handleGetSubTask={() => handleGetSubTask(task?.id)}
+                    />
+                  </div>
+                )
+            )
+          : task &&
+            [...columnsHead, ...customFields].map(
+              (col) =>
+                col.value !== 'Task' &&
+                col.value !== 'Tags' &&
+                !col.hidden && (
+                  <div
+                    key={col.id}
+                    className={cl(
+                      'flex justify-center items-stretch h-10 py-px font-medium text-gray-400 uppercase group',
+                      taskBg
+                    )}
+                  >
+                    <DataRenderFunc
+                      taskColField={task?.[col.field]}
+                      col={{ field: col.field, id: col.id }}
+                      task={task}
+                      getSubTaskId={getSubTaskId}
+                      handleGetSubTask={() => handleGetSubTask(task?.id)}
+                    />
+                  </div>
+                )
+            )}
       </div>
     </div>
   );
