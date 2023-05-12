@@ -9,6 +9,7 @@ import TaskListViews from '../tasks/component/views/listLevel/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
 import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
+import hubIcon from '../../../assets/branding/hub.png';
 import SubTask from '../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
@@ -22,6 +23,8 @@ import { ITaskFullList } from '../../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../../features/list/listService';
 import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
+import ActiveHub from '../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
@@ -82,11 +85,18 @@ function RenderList() {
     }
   }
 
+  const extendedObj = {
+    name: 'TASKS',
+    children: <ActiveHub />,
+    source: hubIcon
+  };
+
   return (
     <>
       <PilotSection />
       <PageWrapper
         pilotConfig={pilotConfig}
+        additionalHeader={<AdditionalHeader />}
         header={
           <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
@@ -100,6 +110,7 @@ function RenderList() {
             />
           </section>
         }
+        extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={paginatedTaskData as ITaskFullList[]} />}
       >
         <div className="w-full">
@@ -109,7 +120,7 @@ function RenderList() {
             </div>
           )}
           <div
-            className="block relative  mx-2 border-l-4 border-gray-500 rounded-xl"
+            className="relative block mx-2 border-l-4 border-gray-500 rounded-xl"
             style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
           >
             {listView && <TaskQuickAction listDetailsData={activeEntityName} />}

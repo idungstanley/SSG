@@ -4,7 +4,7 @@ import Calendar from '..';
 import { useDaysOff } from '../lib/daysOffContext';
 import { filterDaysOff } from '../lib/filterDaysOff';
 import { getYear } from '../lib/getDaysInYear';
-import Month from './Month';
+import Month from './Month/Month';
 
 interface YearProps {
   year: number;

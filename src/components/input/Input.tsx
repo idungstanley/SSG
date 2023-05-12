@@ -54,7 +54,7 @@ function Input({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          style={{ fontSize: '10px' }}
+          style={{ fontSize: '13px' }}
         />
 
         {trailingIcon && (

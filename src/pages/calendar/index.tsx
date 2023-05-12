@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 import { DaysOffProvider } from './lib/daysOffContext';
 import CreateDayOffModal from './ui/CreateDayOffModal';
-import Day from './ui/Day';
+import Day from './ui/Month/Day';
 import Header from './ui/Header';
-import Month from './ui/Month';
+import Month from './ui/Month/Month';
 import Year from './ui/Year';
 
 function Calendar() {

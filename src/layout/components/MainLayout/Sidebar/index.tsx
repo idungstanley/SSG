@@ -7,7 +7,7 @@ import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import Search from './components/Search';
-import Toggle from './components/Toggle';
+// import Toggle from './components/Toggle';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
@@ -43,7 +43,7 @@ export default function Sidebar() {
     <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
       <Dividers />
       {/* show / hide sidebar icon */}
-      <Toggle />
+      {/* <Toggle /> */}
       {/* sidebar */}
       <section
         style={{

@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CiFilter } from 'react-icons/ci';
 // import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
-import { AiFillCaretRight, AiFillCaretDown, AiOutlineFileSearch } from 'react-icons/ai';
+import { AiFillCaretRight, AiFillCaretDown } from 'react-icons/ai';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setSortArray } from '../../features/task/taskSlice';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
+import Input from '../input/Input';
+import { BiSearch } from 'react-icons/bi';
+import { BsSortAlphaDown } from 'react-icons/bs';
 
 type SortModalProps = {
   headers: string[];
@@ -29,6 +32,7 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
     { title: 'condition', toggle: false },
     { title: 'value', toggle: false }
   ]);
+  console.log(filterDropDown);
 
   const handleClick = (title: string) => {
     const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
@@ -71,14 +75,22 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
   }, [toggleModal]);
 
   return (
-    <div className="fixed z-50 bg-white shadow-lg" ref={modalRef}>
-      <div className="flex flex-col bg-white w-80 absolute top-2 px-1 rounded-md shadow-2xl" style={{ height: '65vh' }}>
-        <span className="text-sm text-center mt-4">Sorted columns</span>
-        <div className="flex flex-col space-y-1 border-b-2 justify-start mx-4 capitalize pb-4">
+    <div className="fixed bg-white shadow-lg" style={{ zIndex: '9999' }} ref={modalRef}>
+      <div className="absolute flex flex-col p-3 bg-white rounded-md shadow-2xl w-80 top-2 h-fit">
+        <div className="px-3">
+          <Input
+            name="SearchInput"
+            placeholder="Search 'field name' Column"
+            onChange={() => ({})}
+            trailingIcon={<BiSearch />}
+          />
+        </div>
+        {/* <span className="mt-4 text-sm text-center">Sorted columns</span> */}
+        <div className="flex flex-col justify-start pb-4 mx-4 space-y-1 capitalize">
           {headers.map((title: string, index: number) => (
             <div
               key={index}
-              className="flex justify-between items-center font-semibold text-sm capitalize py-2 pl-1 space-y-2 my-1 group cursor-pointer alt-task rounded-md"
+              className="flex items-center justify-between py-2 pl-1 my-1 space-y-2 text-sm font-semibold capitalize rounded-md cursor-pointer group alt-task"
               style={{ color: '#78828d' }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -86,59 +98,36 @@ export default function SortModal({ headers, toggleModal }: SortModalProps) {
               {title}
               <div className="flex items-center space-x-1">
                 {index === hoveredIndex && (
-                  <CiFilter className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-100 bg-gray-400 rounded-full cursor-pointer text-sm h-3 w-3 " />
+                  <CiFilter className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-gray-400 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 " />
                 )}
-                <div className="flex flex-col justify-center items-center -space-y-3 w-6 h-6">
+                <div className="flex flex-col items-center justify-center w-6 h-6 -space-y-3">
                   <FaSortUp className="text-gray-400" />
                   <FaSortDown className="text-gray-400" onClick={() => handleClick(title)} />
                 </div>
               </div>
             </div>
           ))}
+          <div className="flex items-center justify-between py-2 space-y-2 text-sm font-semibold capitalize rounded-md cursor-pointer group alt-task">
+            <div className="flex items-center gap-1 ">
+              <BsSortAlphaDown />
+              <p className="text-xs">Sort A - Z</p>
+            </div>
+            {/* {title} */}
+            <div className="flex items-center space-x-1">
+              <CiFilter className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-gray-400 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 " />
+              <div className="flex flex-col items-center justify-center w-6 h-6 -space-y-3">
+                <FaSortUp className="text-gray-400" />
+                <FaSortDown className="text-gray-400" />
+              </div>
+            </div>
+          </div>
           {/* sort implementation */}
-          <div className="flex justify-between pr-1 text-sm">
+          <div className="flex justify-between text-sm">
             <span>sort by color</span>
             {!sortDropDown ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'sortBtn')} />
+              <AiFillCaretRight className="w-3 h-3 font-bold text-gray-400" onClick={(e) => switchBtns(e, 'sortBtn')} />
             ) : (
-              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'sortBtn')} />
-            )}
-          </div>
-        </div>
-        {/* filter implementation */}
-        <div className="flex flex-col space-y-6 mx-4 capitalize">
-          <div className="relative">
-            <input type="text" className="w-full border outline-none rounded-md" />
-            <AiOutlineFileSearch className="absolute right-2 top-2 w-6 h-6" />
-          </div>
-          <div className="flex justify-between pr-1 text-sm">
-            <span>filter by color</span>
-            {!filterDropDown[0].toggle ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'color')} />
-            ) : (
-              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'color')} />
-            )}
-          </div>
-          <div className="flex justify-between pr-1 text-sm">
-            <span>filter by condition</span>
-            {!filterDropDown[1].toggle ? (
-              <AiFillCaretRight
-                className="text-gray-400 font-bold h-3 w-3"
-                onClick={(e) => switchBtns(e, 'condition')}
-              />
-            ) : (
-              <AiFillCaretDown
-                className="text-gray-400 font-bold h-3 w-3"
-                onClick={(e) => switchBtns(e, 'condition')}
-              />
-            )}
-          </div>
-          <div className="flex justify-between pr-1 text-sm">
-            <span>filter by values</span>
-            {!filterDropDown[2].toggle ? (
-              <AiFillCaretRight className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'value')} />
-            ) : (
-              <AiFillCaretDown className="text-gray-400 font-bold h-3 w-3" onClick={(e) => switchBtns(e, 'value')} />
+              <AiFillCaretDown className="w-3 h-3 font-bold text-gray-400" onClick={(e) => switchBtns(e, 'sortBtn')} />
             )}
           </div>
         </div>

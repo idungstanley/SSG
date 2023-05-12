@@ -121,10 +121,7 @@ export default function HubItem({
             )}
 
             <div className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}>
-              <div
-                onClick={(e) => handleHubColour(item.id, e)}
-                className={`${showSidebar ? 'h-5 w-5' : 'h-6 w-6'} flex items-center justify-center`}
-              >
+              <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
@@ -135,8 +132,8 @@ export default function HubItem({
                       .map((word) => word[0])
                       .join('')
                       .toUpperCase()}
-                    height={showSidebar ? 'h-5' : 'h-6'}
-                    width={showSidebar ? 'w-5' : 'w-6'}
+                    height="h-5"
+                    width="w-5"
                     backgroundColour={item.color !== null ? item.color : (paletteColor as string)}
                     roundedStyle="rounded"
                   />
