@@ -26,7 +26,7 @@ export function PopAssignModal({
   width: string;
 }) {
   return (
-    <div style={{ zIndex: 99 }} className="absolute bg-white shadow-xl  w-64  opacity-1  rounded mb-8">
+    <div className="absolute bg-white shadow-xl  w-64  opacity-1  rounded mb-8">
       {modalLoader ? (
         <Spinner color="#4f46e5" />
       ) : (

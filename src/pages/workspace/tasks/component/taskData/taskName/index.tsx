@@ -106,7 +106,7 @@ export default function TaskName({
       className={cl('sticky w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center', taskBg)}
       style={style}
     >
-      <div className="flex items-center absolute -left-8">
+      <div className="flex items-center absolute -left-6">
         <input
           type="checkbox"
           id="checked-checkbox"

@@ -240,6 +240,31 @@ export default function TaskListViews({
                 )}
           </div>
         </div>
+
+        <span
+          className="flex absolute right-0 bottom-5 items-center h-5 text-xs rounded-full p-1 font-semibold group"
+          style={{ color: '#78828d' }}
+        >
+          <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
+          <span className="text-sm z-50">
+            {dropDown && (
+              <AddColumnDropdown
+                setShowDropdownFieldModal={setShowDropdownFieldModal}
+                setdropDown={setdropDown}
+                title=""
+                listItems={hideTask.length ? hideTask : taskColumns}
+              />
+            )}
+
+            {listId ? (
+              <CreateDropdownFieldModal
+                listId={listId}
+                show={showDropdownFieldModal}
+                setShow={setShowDropdownFieldModal}
+              />
+            ) : null}
+          </span>
+        </span>
       </div>
 
       <div style={{ marginRight: 330 }} className="h-5"></div>
@@ -383,30 +408,6 @@ export default function TaskListViews({
                 )
             )}
       </div>
-      <span
-        className="flex absolute right-1 top-1 items-center h-5 text-xs rounded-full p-1 font-semibold group"
-        style={{ color: '#78828d' }}
-      >
-        <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
-        <span className="text-sm z-50">
-          {dropDown && (
-            <AddColumnDropdown
-              setShowDropdownFieldModal={setShowDropdownFieldModal}
-              setdropDown={setdropDown}
-              title=""
-              listItems={hideTask.length ? hideTask : taskColumns}
-            />
-          )}
-
-          {listId ? (
-            <CreateDropdownFieldModal
-              listId={listId}
-              show={showDropdownFieldModal}
-              setShow={setShowDropdownFieldModal}
-            />
-          ) : null}
-        </span>
-      </span>
     </div>
   );
 }
