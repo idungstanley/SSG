@@ -31,7 +31,7 @@ export default function PageWrapper({ header, children, additional, pilotConfig,
         {header}
 
         <div className="relative grid w-full h-full grid-cols-frAuto">
-          <div>{children}</div>
+          <div className="overflow-scroll">{children}</div>
           <Pilot pilotConfig={pilotConfig} />
         </div>
       </section>
