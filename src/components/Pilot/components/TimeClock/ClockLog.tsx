@@ -59,9 +59,9 @@ export default function ClockLog() {
   };
 
   const handleRemoveFilter = (title: string): void => {
-    // const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'task' : title.toLowerCase();
     dispatch(setTimeArr(timeArr.filter((el) => el !== title)));
     dispatch(setTimeSortArr([]));
+    setHeaderId('');
   };
 
   const checkedField = headers.some((el) => el.hidden);
@@ -83,13 +83,20 @@ export default function ClockLog() {
                         className="flex justify-center w-12 gap-1 font-bold capitalize cursor-default group reloative"
                         style={{ fontSize: '9px' }}
                       >
-                        {col.title}
+                        <span
+                          className="cursor-pointer"
+                          onClick={() => col.id === headerId && setShowSortModal(!showSortModal)}
+                        >
+                          {col.title}
+                        </span>
                         {col.title === 'user' && (
                           <>
-                            <FaSort
-                              className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-gray-400 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
-                              onClick={() => handleSort(col.title, col.id)}
-                            />
+                            {headerId === '' && (
+                              <FaSort
+                                className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-gray-400 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
+                                onClick={() => handleSort(col.title, col.id)}
+                              />
+                            )}
                             {timeArr.includes(col.title) && (
                               <div className="rounded-full sortClose-group">
                                 <div className="relative flex items-center justify-center w-4 h-4 space-x-1 text-xs font-medium text-white uppercase bg-red-400 rounded-full cursor-pointer group">
