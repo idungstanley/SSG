@@ -34,6 +34,7 @@ export default function LeaveTypesTable() {
 
       <tbody className="overflow-y-scroll divide-y divide-gray-200">
         <AddLeaveType />
+
         {leaveTypes?.map((type) => (
           <LeaveTypeRow
             color={type.color}
