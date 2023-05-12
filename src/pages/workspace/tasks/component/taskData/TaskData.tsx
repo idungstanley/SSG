@@ -16,10 +16,7 @@ export interface TaskDataProps {
 }
 
 export default function TaskData({ task, listId }: TaskDataProps) {
-  const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
-    (state) => state.task
-  );
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { hideTask, getSubTaskId } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, taskId } = useParams();
 
@@ -70,8 +67,8 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     <div className={cl('w-full flex border-t border-b', taskBg)}>
       {/* sticky task name */}
       <div
-        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
-        style={{ zIndex: '99', overflow: 'visible !important' }}
+        className="absolute group pointer-events-none left-0 xl:left-6 -right-96 xl:right-0 z-50"
+        style={{ zIndex: '60', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]
           .filter((i) => i.value === 'Task')
