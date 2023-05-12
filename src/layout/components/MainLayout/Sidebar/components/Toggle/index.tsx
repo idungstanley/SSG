@@ -4,7 +4,7 @@ import { setShowSidebar } from '../../../../../../features/account/accountSlice'
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
-import { setShowExtendedBar } from '../../../../../../features/workspace/workspaceSlice';
+import { setShowExtendedBar, setSidebarWidthRD } from '../../../../../../features/workspace/workspaceSlice';
 import ToolTip from '../../../../../../components/Tooltip';
 import { dimensions } from '../../../../../../app/config/dimensions';
 
@@ -17,6 +17,8 @@ export default function Toggle() {
 
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
+    dispatch(setSidebarWidthRD(showSidebar ? dimensions.navigationBar.collapse : dimensions.navigationBar.max));
+
     // saving sidebar data with MIN size to localStorage
     localStorage.setItem(
       'sidebar',
@@ -35,10 +37,7 @@ export default function Toggle() {
   return (
     <div
       onClick={closeOrShowSidebar}
-      className={cl(
-        'absolute z-20 text-indigo-900 cursor-pointer',
-        showSidebar ? 'top-12 right-2' : 'top-36 right-7 mt-2'
-      )}
+      className={cl('z-20 text-indigo-900 cursor-pointer flex items-center', showSidebar ? 'pl-1' : 'pt-1')}
     >
       {!showSidebar ? (
         <ChevronDoubleRightIcon className="w-4 h-4" aria-hidden="true" />

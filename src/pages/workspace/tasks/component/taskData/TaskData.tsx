@@ -16,10 +16,7 @@ export interface TaskDataProps {
 }
 
 export default function TaskData({ task, listId }: TaskDataProps) {
-  const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
-    (state) => state.task
-  );
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { hideTask, getSubTaskId } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, taskId } = useParams();
 
@@ -70,7 +67,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     <div className={cl('w-full flex border-t border-b', taskBg)}>
       {/* sticky task name */}
       <div
-        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
+        className="absolute z-50 pointer-events-none group left-6 -right-96 xl:right-0"
         style={{ zIndex: '99', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]
@@ -88,7 +85,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
           ))}
       </div>
 
-      <div className="flex-grow relative">
+      <div className="relative flex-grow">
         {/* task name (hidden, because we show sticky name) */}
         <div className="relative text-sm" onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
           {hideTask.length
@@ -100,7 +97,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   <div
                     key={col.id}
                     // style={{ minWidth: 240 }}
-                    className="text-xs opacity-0 font-medium capitalize cursor-pointer group"
+                    className="text-xs font-medium capitalize opacity-0 cursor-pointer group"
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}
@@ -118,7 +115,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 (col) =>
                   col.value == 'Tags' &&
                   !col.hidden && (
-                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
+                    <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
@@ -134,7 +131,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 (col) =>
                   col.value == 'Tags' &&
                   !col.hidden && (
-                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
+                    <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
