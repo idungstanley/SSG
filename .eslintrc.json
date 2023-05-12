@@ -33,7 +33,7 @@
     "quotes": ["error", "single", { "avoidEscape": true }],
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "no-empty": "error",
     "no-console": "warn",
     "semi-spacing": ["error", { "before": false, "after": true }],

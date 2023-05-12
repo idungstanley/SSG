@@ -18,7 +18,6 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
-import ToolTip from '../../../../components/Tooltip';
 
 export default function Assignee({
   itemId,
@@ -108,7 +107,7 @@ export default function Assignee({
   };
 
   return (
-    <div>
+    <>
       {option === 'task' && (
         <Button id="basic-button" style={{ marginLeft: '-25px' }}>
           {assignees?.length ? (
@@ -116,17 +115,15 @@ export default function Assignee({
               <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
             </div>
           ) : (
-            <ToolTip tooltip="Assign">
-              <span onClick={handleClick}>
-                <UserPlusIcon
-                  className="text-xl   text-gray-400 items-center justify-center cursor-pointer -ml-3"
-                  style={{
-                    width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
-                  }}
-                  aria-hidden="true"
-                />
-              </span>
-            </ToolTip>
+            <span onClick={handleClick}>
+              <UserPlusIcon
+                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
+                style={{
+                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
+                }}
+                aria-hidden="true"
+              />
+            </span>
           )}
         </Button>
       )}
@@ -258,6 +255,6 @@ export default function Assignee({
         {/* <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
-    </div>
+    </>
   );
 }
