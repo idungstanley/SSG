@@ -5,6 +5,7 @@ import ListFilter from '../../../lists/components/renderlist/listDetails/ListFil
 import PageWrapper from '../../../../../components/PageWrapper';
 import { UseGetFullTaskList } from '../../../../../features/task/taskService';
 import TaskTemplateData from '../../../tasks/component/views/hubLevel/TaskTemplateData';
+import hubIcon from '../../../../../assets/branding/hub.png';
 import NoTaskFound from '../../../tasks/component/taskData/NoTaskFound';
 import TaskTableTemplateData from '../../../tasks/component/views/hubLevel/TaskTableTemplateData';
 import { ImyTaskData, ImyTaskData2 } from '../../../../../features/task/taskSlice';
@@ -19,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
+import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -105,6 +107,13 @@ function RenderHubs() {
       fetchNextPage();
     }
   }
+
+  const extendedObj = {
+    name: 'TASKS',
+    children: <ActiveHub />,
+    source: hubIcon
+  };
+
   return (
     <>
       <PilotSection />
@@ -123,6 +132,7 @@ function RenderHubs() {
             />
           </section>
         }
+        extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <section>

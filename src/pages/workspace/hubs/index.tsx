@@ -1,8 +1,5 @@
 import React from 'react';
-// import { useGetHubList } from '../../../features/hubs/hubService';
-// import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useDispatch } from 'react-redux';
-// import { getHub } from '../../../features/hubs/hubSlice';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
