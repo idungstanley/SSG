@@ -13,8 +13,9 @@ import { useAppSelector } from './app/hooks';
 
 function App() {
   const user = useAppSelector(selectCurrentUser);
-  // setOnlineStatus();
+  // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
+  // setOnlineStatus();
   // const { data, status } = useGetSelf();
 
   // useEffect(() => {

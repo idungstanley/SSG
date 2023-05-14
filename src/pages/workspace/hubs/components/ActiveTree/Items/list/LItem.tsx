@@ -11,7 +11,7 @@ export default function LItem({ id, name, parentId }: { id: string; name: string
   const onClick = (id: string) => {
     const isActive = listId === id;
 
-    navigate(`l/${isActive ? parentId || '' : id}`, {
+    navigate(`tasks/l/${isActive ? parentId || '' : id}`, {
       replace: true
     });
   };

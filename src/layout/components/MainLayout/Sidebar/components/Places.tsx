@@ -51,7 +51,7 @@ export const places = [
     id: '2',
     place: <Hubs />,
     icon: <BsListCheck className="w-4 h-4" />
-    // link: ''
+    // link: '/tasks'
   },
   {
     name: 'In-tray',

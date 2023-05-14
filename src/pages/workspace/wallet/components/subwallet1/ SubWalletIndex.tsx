@@ -41,7 +41,7 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet2') => {
     dispatch(setShowHub(true));
-    navigate(`w/${id}`);
+    navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     setShowSubWallet2(id);
     setCurrWalId(id);

@@ -63,7 +63,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`h/${id}`);
+    navigate(`tasks/h/${id}`);
     localStorage.setItem(
       'hubDetailsStorage',
       JSON.stringify({

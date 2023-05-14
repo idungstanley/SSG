@@ -48,6 +48,7 @@ function WorkspaceSettings() {
     });
     queryClient.invalidateQueries();
   };
+
   return (
     <main className="flex-1 h-full  pb-10 px-4 sm:px-6 lg:px-6 bg-white w-full overflow-y-scroll">
       <div className="border shadow-xl rounded-md mt-5 pb-8  ">

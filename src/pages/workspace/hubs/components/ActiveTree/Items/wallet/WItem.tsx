@@ -12,7 +12,7 @@ export default function WItem({ id, name, parentId }: { id: string; name: string
   const onClick = (id: string) => {
     const isActive = walletId === id;
 
-    navigate(`w/${isActive ? parentId || '' : id}`, {
+    navigate(`tasks/w/${isActive ? parentId || '' : id}`, {
       replace: true
     });
   };

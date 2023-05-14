@@ -32,7 +32,7 @@ function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
 
   const navigate = useNavigate();
   const handleLocation = (id: string, name: string, type = 'wallet') => {
-    navigate(`w/${id}`);
+    navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setActiveEntity({ id: id, type: type }));
     dispatch(setCurrentWalletName(name));
