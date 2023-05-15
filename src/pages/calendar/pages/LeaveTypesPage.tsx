@@ -13,9 +13,7 @@ export default function LeaveTypesPage() {
           <p className="mt-2 text-sm text-gray-700">Create different categories for different days off.</p>
         </div>
 
-        <div className="overflow-y-scroll h-2/3">
-          <LeaveTypesTable />
-        </div>
+        <LeaveTypesTable />
       </div>
     </div>
   );
