@@ -13,7 +13,7 @@ export default function LeaveTypesPage() {
           <p className="mt-2 text-sm text-gray-700">Create different categories for different days off.</p>
         </div>
 
-        <div style={{ height: '75vh' }} className="overflow-y-scroll">
+        <div className="overflow-y-scroll h-2/3">
           <LeaveTypesTable />
         </div>
       </div>
