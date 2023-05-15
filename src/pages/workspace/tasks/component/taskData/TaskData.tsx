@@ -16,11 +16,8 @@ export interface TaskDataProps {
 }
 
 export default function TaskData({ task, listId }: TaskDataProps) {
-  const { hideTask, getSubTaskId, CompactView, CompactViewWrap, comfortableView, comfortableViewWrap } = useAppSelector(
-    (state) => state.task
-  );
+  const { hideTask, getSubTaskId } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, taskId } = useParams();
 
