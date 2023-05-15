@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
 
@@ -11,6 +11,7 @@ interface DropdownModalProps {
 const regex = /\w+/g;
 
 export default function DropdownField({ field, taskId }: DropdownModalProps) {
+  const ref = useRef<HTMLDivElement>(null);
   const [activeOption, setActiveOption] = useState<string>(field.activeProperty);
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
@@ -30,9 +31,11 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   return (
     <Menu as="div" className="relative inline-block mt-2 text-left w-full">
-      <Menu.Button className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full">
-        {activeOption}
-      </Menu.Button>
+      <div ref={ref}>
+        <Menu.Button className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full">
+          {activeOption}
+        </Menu.Button>
+      </div>
 
       <Transition
         as={Fragment}
@@ -43,7 +46,13 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <div className="px-2 py-1 absolute right-0 top-5 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg focus:outline-none">
+        <div
+          style={{
+            left: (ref.current?.getBoundingClientRect().x ?? 0) + 40,
+            bottom: window.innerHeight - (ref.current?.getBoundingClientRect().y ?? 0)
+          }}
+          className="px-2 w-fit h-fit py-1 fixed mt-2 rounded-md bg-white shadow-lg focus:outline-none"
+        >
           <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
             select an option
           </p>

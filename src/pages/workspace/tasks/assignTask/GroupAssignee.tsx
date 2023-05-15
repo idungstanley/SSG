@@ -82,10 +82,7 @@ function GroupAssignee({
                 }}
                 onMouseLeave={() => handleHoverIntervalMouseOut(index)}
               >
-                <div
-                  key={newData.id}
-                  className=" flex items-center justify-center -ml-2.5 border-2 rounded-full relative    "
-                >
+                <div key={newData.id} className="flex -ml-3 items-center justify-center relative">
                   <span onClick={handleClick}>
                     {newData.avatar_path ? (
                       <AvatarWithImage
@@ -165,7 +162,7 @@ function GroupAssignee({
               index === 2 ? 'z-10' : 'z-0'
             } `}
           >
-            <div key={newData.id} className="flex items-center justify-center -ml-2.5  border-2 rounded-full relative">
+            <div key={newData.id} className="flex items-center -ml-3 justify-center relative">
               <div
                 onMouseEnter={() => {
                   handleHoverIntervalMouseIn(index);

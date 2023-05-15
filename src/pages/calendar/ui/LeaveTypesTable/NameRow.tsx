@@ -11,6 +11,7 @@ interface InputProps {
 export function NameRow({ defaultValue, onBlur, onChange, disabled }: InputProps) {
   const titleRef = useRef<HTMLInputElement>(null);
 
+  // set initial value + reset
   useEffect(() => {
     if (titleRef.current) {
       titleRef.current.value = defaultValue ?? '';
@@ -26,6 +27,7 @@ export function NameRow({ defaultValue, onBlur, onChange, disabled }: InputProps
   const handleFocusOff = () => {
     if (titleRef.current && onBlur) {
       const value = titleRef.current.value;
+
       if (value.length > 2 && value !== defaultValue) {
         onBlur(titleRef.current.value);
       }

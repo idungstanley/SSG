@@ -88,7 +88,10 @@ export default function ListViewSettingsModal({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+        <Menu.Items
+          style={{ zIndex: 61 }}
+          className="origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none "
+        >
           {ViewSettings.map((View) => (
             <Menu.Item
               as="a"
