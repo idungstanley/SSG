@@ -3,7 +3,6 @@ import { tagItem, renderDataProps } from '../DataRenderFunc';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTagService, UseUnAssignTagService } from '../../../../../../features/workspace/tags/tagService';
-import ToolTip from '../../../../../../components/Tooltip';
 import EditTagModal from '../../../../../../components/tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
 import ColorsModal from '../../../../../../components/tags/ColorsModal';
