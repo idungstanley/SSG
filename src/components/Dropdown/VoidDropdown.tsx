@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, ReactNode, useRef } from 'react';
+import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 
 interface DropdownProps {
   title: JSX.Element;
@@ -7,12 +7,21 @@ interface DropdownProps {
 }
 
 export default function Dropdown({ title, children }: DropdownProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
+  const [cords, setCords] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (ref.current) {
+      setCords(ref.current.getBoundingClientRect());
+    }
+  }, []);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div ref={ref}>
-        <Menu.Button className="flex items-center rounded-full focus:outline-none">{title}</Menu.Button>
+      <div>
+        <Menu.Button ref={ref} className="flex items-center rounded-full focus:outline-none">
+          {title}
+        </Menu.Button>
       </div>
 
       <Transition
@@ -26,8 +35,8 @@ export default function Dropdown({ title, children }: DropdownProps) {
       >
         <Menu.Items
           style={{
-            left: (ref.current?.getBoundingClientRect().x ?? 0) + 20,
-            bottom: window.innerHeight - (ref.current?.getBoundingClientRect().y ?? 0) - 20
+            left: cords.x + 20,
+            bottom: window.innerHeight - cords.y - 20
           }}
           className="fixed h-fit p-2 divide-y z-10 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
