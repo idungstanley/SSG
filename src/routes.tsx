@@ -65,6 +65,7 @@ import ManagePage from './pages/calendar/pages/ManagePage';
 import NewWallchart from './pages/calendar/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
 import { useAppSelector } from './app/hooks';
+import TasksIndex from './pages/workspace/tasksIndex';
 
 const inbox = [
   {
@@ -158,6 +159,7 @@ export const routes = (user: IUser | null) => {
           ]
         },
         { path: 'dashboard', element: <Dashboard /> },
+        { path: 'tasks', element: <TasksIndex /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },

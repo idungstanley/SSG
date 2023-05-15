@@ -50,8 +50,8 @@ export const places = [
     name: 'TASKS',
     id: '2',
     place: <Hubs />,
-    icon: <BsListCheck className="w-4 h-4" />
-    // link: '/tasks'
+    icon: <BsListCheck className="w-4 h-4" />,
+    link: '/tasks'
   },
   {
     name: 'In-tray',
