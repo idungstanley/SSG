@@ -85,7 +85,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
           ))}
       </div>
 
-      <div className="flex-grow relative">
+      <div className="relative flex-grow">
         {/* task name (hidden, because we show sticky name) */}
         <div className="relative text-sm" onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
           {hideTask.length
@@ -97,7 +97,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   <div
                     key={col.id}
                     // style={{ minWidth: 240 }}
-                    className="text-xs opacity-0 font-medium capitalize cursor-pointer group"
+                    className="text-xs font-medium capitalize opacity-0 cursor-pointer group"
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}
@@ -115,7 +115,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 (col) =>
                   col.value == 'Tags' &&
                   !col.hidden && (
-                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
+                    <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
@@ -131,7 +131,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                 (col) =>
                   col.value == 'Tags' &&
                   !col.hidden && (
-                    <div key={col.id} className="flex w-32 items-center text-xs font-medium capitalize group">
+                    <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
                         taskColField={task?.[col.field]}
                         col={{ field: col.field, id: col.id }}
