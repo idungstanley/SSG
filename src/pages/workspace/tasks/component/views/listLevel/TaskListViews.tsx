@@ -87,10 +87,10 @@ export default function TaskListViews({
   };
 
   return (
-    <div className="flex w-full justify-between pt-5 bg-gray-100 z-10" style={{ backgroundColor: '#e1e4e5' }}>
+    <div className="z-10 flex justify-between w-full pt-5 bg-gray-100" style={{ backgroundColor: '#e1e4e5' }}>
       <div className="absolute left-0 right-0">
-        <div className="sticky bg-gray-200 opacity-95 z-10 left-0 flex items-center w-60">
-          <span className="bg-gray-200 hover:bg-gray-200 rounded-full p-px">
+        <div className="sticky left-0 z-10 flex items-center bg-gray-200 opacity-95 w-60">
+          <span className="p-px bg-gray-200 rounded-full hover:bg-gray-200">
             <IoIosArrowDropdown
               className={` text-gray-400 text-sm hover:text-gray-200  ${
                 closeTaskListView === false ? 'rotateimg90' : null
@@ -99,16 +99,16 @@ export default function TaskListViews({
               onClick={() => dispatch(setCloseTaskListView(!closeTaskListView))}
             />
           </span>
-          <div className="flex items-center justify-center cursor-pointer relative">
-            <div className="group flex items-center ml-2">
-              <span className="text-xs rounded-t-md text-black p-1 bg-gray-300 pr-2 capitalize object-contain whitespace-nowrap">
+          <div className="relative flex items-center justify-center cursor-pointer">
+            <div className="flex items-center ml-2 group">
+              <span className="object-contain p-1 pr-2 text-xs text-black capitalize bg-gray-300 rounded-t-md whitespace-nowrap">
                 {status ? status : 'To Do'}
               </span>
             </div>
-            <span className="text-xs text-gray-400 ml-3 mr-px font-bold ">{taskLength}</span>
+            <span className="ml-3 mr-px text-xs font-bold text-gray-400 ">{taskLength}</span>
           </div>
 
-          <div className="grid grid-flow-cols relative">
+          <div className="relative grid grid-flow-cols">
             {hideTask.length
               ? hideTask.map(
                   (col) =>
@@ -116,12 +116,12 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex items-center uppercase text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
+                        className="relative flex items-center text-xs font-medium uppercase cursor-pointer hover:bg-gray-200 hover:text-gray-50 group"
                         style={{ color: '#78828d', fontSize: '12px' }}
                       >
                         <span
-                          className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
-                          onClick={() => sortArr.length > 0 && setOptions(col.id)}
+                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                          onClick={() => setOptions(col.id)}
                         >
                           {col.value}
                         </span>
@@ -131,7 +131,7 @@ export default function TaskListViews({
                               ''
                             ) : (
                               <div
-                                className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
+                                className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-3 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100"
                                 onClick={() => handleSort(col.value, col.id)}
                               >
                                 <FaSortUp className="text-white" />
@@ -148,27 +148,27 @@ export default function TaskListViews({
                                   }
                                 >
                                   {sortArr.length === 1 ? (
-                                    <RiArrowUpSFill className="h-3 w-3" />
+                                    <RiArrowUpSFill className="w-3 h-3" />
                                   ) : (
                                     <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
                                       {sortArr.indexOf(col.value) + 1}
                                       {dirCheck(col.value) ? (
-                                        <RiArrowDownFill className="h-3 w-3" />
+                                        <RiArrowDownFill className="w-3 h-3" />
                                       ) : (
-                                        <RiArrowUpSFill className="h-3 w-3" />
+                                        <RiArrowUpSFill className="w-3 h-3" />
                                       )}
                                     </span>
                                   )}
                                 </div>
                                 <AiOutlineClose
                                   onClick={() => handleRemoveFilter(col.value)}
-                                  className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
+                                  className="w-3 h-3 m-1 font-bold text-white transition-opacity duration-500 opacity-100 sortClose"
                                 />
                               </div>
                             )}
                           </>
                         )}
-                        {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                        {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                         )}
                       </div>
@@ -180,12 +180,13 @@ export default function TaskListViews({
                     !col.hidden && (
                       <div
                         key={col.id}
-                        className="flex items-center space-x-1 uppercase  text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
+                        className="relative flex items-center space-x-1 text-xs font-medium uppercase cursor-pointer hover:bg-gray-200 hover:text-gray-50 group"
                         style={{ color: '#78828d', fontSize: '12px' }}
                       >
                         <span
-                          className="truncate font-bold hover:text-clip cursor-pointer hover:w-10"
-                          onClick={() => sortArr.length > 0 && setOptions(col.id)}
+                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                          onClick={() => setOptions(col.id)}
+                          // onClick={() => sortArr.length > 0 && setOptions(col.id)}
                         >
                           {col.value}
                         </span>
@@ -195,7 +196,7 @@ export default function TaskListViews({
                               ''
                             ) : (
                               <div
-                                className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
+                                className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-3 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100"
                                 onClick={() => handleSort(col.value, col.id)}
                               >
                                 <FaSortUp className="text-white" />
@@ -212,27 +213,27 @@ export default function TaskListViews({
                                   }
                                 >
                                   {sortArr.length === 1 ? (
-                                    <RiArrowUpSFill className="h-3 w-3" />
+                                    <RiArrowUpSFill className="w-3 h-3" />
                                   ) : (
                                     <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
                                       {sortArr.indexOf(col.value) + 1}{' '}
                                       {dirCheck(col.value) ? (
-                                        <RiArrowDownFill className="h-3 w-3" />
+                                        <RiArrowDownFill className="w-3 h-3" />
                                       ) : (
-                                        <RiArrowUpSFill className="h-3 w-3" />
+                                        <RiArrowUpSFill className="w-3 h-3" />
                                       )}
                                     </span>
                                   )}
                                 </div>
                                 <AiOutlineClose
                                   onClick={() => handleRemoveFilter(col.value)}
-                                  className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
+                                  className="w-3 h-3 m-1 font-bold text-white transition-opacity duration-500 opacity-100 sortClose"
                                 />
                               </div>
                             )}
                           </>
                         )}
-                        {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
+                        {showSortModal && headerId === col.id && (
                           <SortModal headers={sortArr} toggleModal={setShowSortModal} handleSortFn={handleSort} />
                         )}
                       </div>
@@ -244,7 +245,7 @@ export default function TaskListViews({
 
       <div style={{ marginRight: 330 }} className="h-5"></div>
 
-      <div className="block text-gray-700 right-0 dynamic border">
+      <div className="right-0 block text-gray-700 border dynamic">
         {hideTask.length
           ? hideTask.map(
               (col) =>
@@ -253,14 +254,14 @@ export default function TaskListViews({
                 !col.hidden && (
                   <div
                     key={col.id}
-                    className="flex items-center space-x-1 uppercase  text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
+                    className="relative flex items-center space-x-1 text-xs font-medium uppercase cursor-pointer hover:bg-gray-200 hover:text-gray-50 group"
                     style={{ color: '#78828d', fontSize: '12px' }}
                   >
-                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-600 cursor-move   text-sm">
+                    <span className="text-sm text-gray-600 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
                       <MdDragIndicator />
                     </span>
                     <span
-                      className="truncate font-bold hover:text-clip cursor-pointer  hover:w-10"
+                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
                       onClick={() => sortArr.length > 0 && setOptions(col.id)}
                     >
                       {col.value}
@@ -271,7 +272,7 @@ export default function TaskListViews({
                           ''
                         ) : (
                           <div
-                            className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
+                            className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-3 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100"
                             onClick={() => handleSort(col.value, col.id)}
                           >
                             <FaSortUp className="text-white" />
@@ -288,21 +289,21 @@ export default function TaskListViews({
                               }
                             >
                               {sortArr.length === 1 ? (
-                                <RiArrowUpSFill className="h-3 w-3" />
+                                <RiArrowUpSFill className="w-3 h-3" />
                               ) : (
                                 <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
                                   {sortArr.indexOf(col.value) + 1}{' '}
                                   {dirCheck(col.value) ? (
-                                    <RiArrowDownFill className="h-3 w-3" />
+                                    <RiArrowDownFill className="w-3 h-3" />
                                   ) : (
-                                    <RiArrowUpSFill className="h-3 w-3" />
+                                    <RiArrowUpSFill className="w-3 h-3" />
                                   )}
                                 </span>
                               )}
                             </div>
                             <AiOutlineClose
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="sortClose opacity-100 transition-opacity duration-500 text-white font-bold h-3 w-3 m-1"
+                              className="w-3 h-3 m-1 font-bold text-white transition-opacity duration-500 opacity-100 sortClose"
                             />
                           </div>
                         )}
@@ -321,14 +322,14 @@ export default function TaskListViews({
                 !col.hidden && (
                   <div
                     key={col.id}
-                    className="flex w-24 justify-center items-center space-x-1 uppercase text-xs font-medium hover:bg-gray-200 hover:text-gray-50 group relative cursor-pointer"
+                    className="relative flex items-center justify-center w-24 space-x-1 text-xs font-medium uppercase cursor-pointer hover:bg-gray-200 hover:text-gray-50 group"
                     style={{ color: '#78828d', fontSize: '12px' }}
                   >
-                    <span className="opacity-0 transition duration-200 group-hover:opacity-100 text-gray-400 cursor-move   text-sm">
+                    <span className="text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
                       <MdDragIndicator />
                     </span>
                     <span
-                      className="truncate  font-bold hover:text-clip cursor-pointer  hover:w-10"
+                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
                       onClick={() => sortArr.length > 0 && setOptions(col.id)}
                     >
                       {col.value}
@@ -339,7 +340,7 @@ export default function TaskListViews({
                           ''
                         ) : (
                           <div
-                            className="flex flex-col justify-center items-center -space-y-3 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-1 rounded-full bg-gray-300"
+                            className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-3 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100"
                             onClick={() => handleSort(col.value, col.id)}
                           >
                             <FaSortUp className="text-white" />
@@ -356,21 +357,21 @@ export default function TaskListViews({
                               }
                             >
                               {sortArr.length === 1 ? (
-                                <RiArrowUpSFill className="h-3 w-3" />
+                                <RiArrowUpSFill className="w-3 h-3" />
                               ) : (
                                 <span className="flex items-center justify-center" style={{ fontSize: '8px' }}>
                                   {sortArr.indexOf(col.value) + 1}{' '}
                                   {dirCheck(col.value) ? (
-                                    <RiArrowDownFill className="h-3 w-3" />
+                                    <RiArrowDownFill className="w-3 h-3" />
                                   ) : (
-                                    <RiArrowUpSFill className="h-3 w-3" />
+                                    <RiArrowUpSFill className="w-3 h-3" />
                                   )}
                                 </span>
                               )}
                             </div>
                             <AiOutlineClose
                               onClick={() => handleRemoveFilter(col.value)}
-                              className="sortClose text-white font-bold h-3 w-3 m-1"
+                              className="w-3 h-3 m-1 font-bold text-white sortClose"
                             />
                           </div>
                         )}
@@ -384,11 +385,11 @@ export default function TaskListViews({
             )}
       </div>
       <span
-        className="flex absolute right-1 top-1 items-center h-5 text-xs rounded-full p-1 font-semibold group"
+        className="absolute flex items-center h-5 p-1 text-xs font-semibold rounded-full right-1 top-1 group"
         style={{ color: '#78828d' }}
       >
-        <FiPlusCircle className="AddColumnDropdownButton font-black h-4 w-4" onClick={() => handleDropDown()} />
-        <span className="text-sm z-50">
+        <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton" onClick={() => handleDropDown()} />
+        <span className="z-50 text-sm">
           {dropDown && (
             <AddColumnDropdown
               setShowDropdownFieldModal={setShowDropdownFieldModal}

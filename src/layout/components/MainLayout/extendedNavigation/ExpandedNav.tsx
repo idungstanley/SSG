@@ -29,7 +29,7 @@ import { dimensions } from '../../../../app/config/dimensions';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { useResize } from '../../../../hooks/useResize';
 
-interface ItemData {
+export interface ItemData {
   id?: number;
   icon?: JSX.Element;
   source?: string;
@@ -159,7 +159,7 @@ function ExpandedNav() {
       <CloseExtBtn />
       <section className={`z-10 h-screen overflow-x-hidden overflow-y-auto border-r ${'border-gray-300'}`}>
         <div aria-labelledby="projects-headline">
-          <ExtendedItem item={sectionToExtend} />
+          <ExtendedItem name={sectionToExtend?.name} source={sectionToExtend?.source} icon={sectionToExtend?.icon} />
           <div>{sectionToExtend?.place}</div>
         </div>
 
