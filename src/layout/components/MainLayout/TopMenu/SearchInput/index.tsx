@@ -12,22 +12,22 @@ export default function SearchInput() {
   const { pathname } = useLocation();
 
   const { searchQuery } = useAppSelector((state) => state.search);
-
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const queryInput = useRef<HTMLInputElement>(null);
 
-  const isSearchRoute = pathname === '/search';
+  const isSearchRoute = pathname === `/${currentWorkspaceId}/search`;
 
   const onQueryChange = (query: string) => {
     dispatch(setSearchQuery(query));
 
     if (!isSearchRoute) {
-      navigate('/search');
+      navigate(`/${currentWorkspaceId}/search`);
     }
   };
 
   const onFocus = () => {
     if (!isSearchRoute) {
-      navigate('/search');
+      navigate(`/${currentWorkspaceId}/search`);
     }
   };
 

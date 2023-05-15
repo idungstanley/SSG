@@ -11,74 +11,73 @@ interface configData {
   buttonLabel: string | null;
 }
 
-const config: configData[] = [
-  {
-    path: '',
-    title: 'Home',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  },
-  {
-    path: 'notification',
-    title: 'Notification',
-    newd: 'New',
-    Cleared: 'Clear',
-    Assigned: 'Assigned to me',
-    buttonLabel: 'All'
-  },
-  {
-    path: 'community',
-    title: 'Community',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  },
-  {
-    path: 'goals',
-    title: 'Goals',
-    newd: null,
-    Cleared: null,
-    Assigned: null,
-    buttonLabel: null
-  },
-  {
-    path: 'inbox',
-    title: 'Inbox',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  },
-  {
-    path: 'dashboard',
-    title: 'Dashboard',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  },
-  {
-    path: 'calendar',
-    title: 'Calendar',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  },
-  {
-    path: '',
-    title: 'Favorites',
-    newd: null,
-    Cleared: null,
-    Assigned: 'Agenda',
-    buttonLabel: 'Calendar'
-  }
-];
-
 export default function Header() {
+  const config: configData[] = [
+    {
+      path: '',
+      title: 'Home',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    },
+    {
+      path: 'notification',
+      title: 'Notification',
+      newd: 'New',
+      Cleared: 'Clear',
+      Assigned: 'Assigned to me',
+      buttonLabel: 'All'
+    },
+    {
+      path: 'community',
+      title: 'Community',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    },
+    {
+      path: 'goals',
+      title: 'Goals',
+      newd: null,
+      Cleared: null,
+      Assigned: null,
+      buttonLabel: null
+    },
+    {
+      path: 'inbox',
+      title: 'Inbox',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    },
+    {
+      path: 'dashboard',
+      title: 'Dashboard',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    },
+    {
+      path: 'calendar',
+      title: 'Calendar',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    },
+    {
+      path: '',
+      title: 'Favorites',
+      newd: null,
+      Cleared: null,
+      Assigned: 'Agenda',
+      buttonLabel: 'Calendar'
+    }
+  ];
   const { pathname } = useLocation();
   const headerData = config.find((i) => i.path === pathname.split('/')[1]);
 

@@ -90,7 +90,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     dispatch(setActiveEntity({ id: id, type: taskType }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/h/${id}`, {
+    navigate(`tasks/h/${id}`, {
       replace: true
     });
     localStorage.setItem(
@@ -110,9 +110,10 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     } else {
       dispatch(setSubHubExt({ id: id, type: taskType }));
     }
+
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
-      navigate(`/h/${id}`, {
+      navigate(`tasks/h/${id}`, {
         replace: true
       });
     }

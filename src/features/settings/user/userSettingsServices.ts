@@ -23,13 +23,20 @@ interface IPasswordprops {
 
 //Get Self
 export const useGetSelf = () => {
-  return useQuery(['self'], async () => {
-    const data = await requestNew<IUserRes | undefined>({
-      url: 'user/self',
-      method: 'GET'
-    });
-    return data;
-  });
+  const AccessTokenFromLS = JSON.parse(localStorage.getItem('accessToken') || 'null') as string;
+  return useQuery(
+    ['self'],
+    async () => {
+      const data = await requestNew<IUserRes | undefined>({
+        url: 'user/self',
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: !!AccessTokenFromLS
+    }
+  );
 };
 
 // Update User Settings
