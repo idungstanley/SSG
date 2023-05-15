@@ -8,6 +8,7 @@ import TeamSettings from '../../../../../../pages/workspace/workspaceSettings/co
 import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettings/UserSettingsModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoNotificationsOutline } from 'react-icons/io5';
+import Toggle from '../Toggle';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -21,7 +22,7 @@ export default function Header() {
 
   return (
     <div
-      className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}
+      className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center')}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/">
@@ -47,6 +48,7 @@ export default function Header() {
           <TeamSettings />
         </div>
         <UserSettingsModal />
+        <Toggle />
       </div>
     </div>
   );

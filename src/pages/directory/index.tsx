@@ -7,6 +7,8 @@ import { useGetDirectoryTemplate, useGetDirectoryTemplates } from '../../feature
 import { cl } from '../../utils';
 import FieldItem from './components/FieldItem';
 import PilotSection, { pilotConfig } from './components/PilotSection';
+import libraryIcon from '../../assets/icons/library.svg';
+import LibraryData from './components/Sidebar/LibraryTabs';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 import TemplateItems from './components/TemplateItems';
 
@@ -30,6 +32,12 @@ function Directory() {
   const { data: templates, status: templatesStatus } = useGetDirectoryTemplates(directoryId);
 
   const { data: template, status: templateStatus } = useGetDirectoryTemplate(selectedTemplateId);
+
+  const extendedObj = {
+    name: 'Directory',
+    source: libraryIcon,
+    children: <LibraryData />
+  };
 
   return (
     <>
@@ -62,6 +70,7 @@ function Directory() {
             <CreateDirectorySideOver />
           </>
         }
+        extendedBar={extendedObj}
       >
         <div className="flex flex-col items-start w-full h-full py-2">
           {/* status checking */}

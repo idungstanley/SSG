@@ -43,7 +43,8 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
     transition,
     backgroundColor: isDragging ? '#f3f4f6' : activePlaceName === name ? '#BF00FF21' : undefined,
     zIndex: isDragging ? 1 : undefined,
-    height: '30px'
+    height: '30px',
+    paddingLeft: showSidebar ? '24px' : '18px'
   };
 
   if (!isVisible) {
@@ -55,7 +56,7 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
       className={cl(
         activePlaceName === item.name ? 'hover:bg-green-200' : 'hover:bg-gray-100',
         !showSidebar ? 'justify-center' : 'gap-2 items-center',
-        'relative flex cursor-pointer pl-6 p-2 w-full group'
+        'relative flex cursor-pointer p-2 w-full group'
       )}
       onClick={() => handleClick(item.name, item.href)}
       style={style}
