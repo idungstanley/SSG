@@ -38,7 +38,7 @@ export default function Recording() {
     const [audioTrack] = audioStream.getAudioTracks();
     const stream = new MediaStream([videoTrack, audioTrack]);
 
-    const recorder = new RecordRTC(stream, { type: 'video' });
+    const recorder = new RecordRTC(stream, { type: 'video', mimeType: 'video/webm;codecs=vp9' });
     await recorder.startRecording();
     setRecorderState('recording');
     setRecorder(recorder as RecordRTC);

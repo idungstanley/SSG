@@ -56,7 +56,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "craco start --openssl-legacy-provider",
+    "start": "craco --openssl-legacy-provider start",
     "start:linux": "craco --openssl-legacy-provider start",
     "build": "craco --max_old_space_size=4096 build",
     "test": "craco test",
