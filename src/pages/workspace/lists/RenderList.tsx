@@ -137,28 +137,30 @@ function RenderList() {
             )}
 
             {/* card */}
-            {listView && listId ? (
-              <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
-            ) : (
-              <span>listId required</span>
-            )}
-            {listView && (
-              <div className="pr-1 pt-0.5 w-full h-full ">
-                <div className="w-full overflow-auto" style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
-                  {paginatedTaskData?.map((task) => (
-                    <div key={task?.id}>
-                      {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
-                      {currentParentTaskId === task?.id ? (
-                        <div>
-                          <SubTask parentTaskId={currentParentTaskId} />
-                        </div>
-                      ) : null}
-                      {getSubTaskId === task?.id ? <RenderSubTasks /> : null}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <ul className="relative">
+              <li className="overflow-x-scroll">
+                {listView && listId ? (
+                  <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
+                ) : (
+                  <span>listId required</span>
+                )}
+                {listView && (
+                  <div style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
+                    {paginatedTaskData?.map((task) => (
+                      <div className="pl-6 group" key={task?.id}>
+                        {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
+                        {currentParentTaskId === task?.id ? (
+                          <div>
+                            <SubTask parentTaskId={currentParentTaskId} />
+                          </div>
+                        ) : null}
+                        {getSubTaskId === task?.id ? <RenderSubTasks /> : null}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+            </ul>
 
             {calenderView && (
               <div className="pr-1 pt-0.5 w-full h-full">
