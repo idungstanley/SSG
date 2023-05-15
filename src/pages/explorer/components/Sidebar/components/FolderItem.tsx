@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Dropdown from '../../../../../components/Dropdown/index';
 import { cl } from '../../../../../utils';
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   setItemActionForSideOver,
   setShowShareSideOver
@@ -51,6 +51,8 @@ export default function FolderItem({
     isDragging
   } = useDraggable({ id, data: { parentId, isFolder: true } });
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const { isOver, setNodeRef: droppableRef } = useDroppable({
     id,
     data: { parentId, isFolder: true }
@@ -72,7 +74,7 @@ export default function FolderItem({
     });
     if (isActiveFolder) {
       dispatch(resetSelectedItem());
-      navigate('/explorer', { replace: true });
+      navigate(`${currentWorkspaceId}/explorer`, { replace: true });
     }
   };
 

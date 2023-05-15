@@ -16,8 +16,9 @@ export default function Header() {
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const { showSidebar, scrollTop } = useAppSelector((state) => state.account);
   const { notificationCount } = useAppSelector((state) => state.notification);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const handleClick = () => {
-    navigate('/notification');
+    navigate(`/${currentWorkspaceId}/notification`);
   };
 
   return (

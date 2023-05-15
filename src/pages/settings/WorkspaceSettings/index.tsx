@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AvatarWithInitials } from '../../../components';
 import notificationFrame from '../../../assets/branding/notificationFrame.png';
 import { getAllWorkSpaceService } from '../../../features/workspace/workspaceService';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setFetchAllWorkspace } from '../../../features/workspace/workspaceSlice';
 import { Spinner } from '../../../common';
 import { cl } from '../../../utils';
@@ -23,6 +23,8 @@ function WorkspaceSettings() {
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
   }, []);
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
@@ -48,6 +50,7 @@ function WorkspaceSettings() {
     });
     queryClient.invalidateQueries(['workspace']);
   };
+
   return (
     <main className="flex-1 w-full h-full px-4 pb-10 overflow-y-scroll bg-white sm:px-6 lg:px-6">
       <div className="pb-8 mt-5 border rounded-md shadow-xl ">
