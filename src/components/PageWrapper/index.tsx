@@ -28,12 +28,14 @@ export default function PageWrapper({
   extendedBar
 }: PageWrapperProps) {
   return (
-    <main className="grid h-full grid-cols-autoFr">
+    <main className="grid h-full w-full grid-cols-autoFr">
       {extendedBar ? (
         <ExtendedBar name={extendedBar.name} icon={extendedBar.icon} source={extendedBar.source}>
           {extendedBar.children}
         </ExtendedBar>
-      ) : null}
+      ) : (
+        <div></div>
+      )}
 
       <section className="flex flex-col w-full h-full">
         {additionalHeader}
