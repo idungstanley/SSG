@@ -4,6 +4,7 @@ import { useUploadRecording } from '../../../../features/workspace/workspaceServ
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import RecordRTC from 'recordrtc';
+import { setScreenRecording } from '../../../../features/task/taskSlice';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -18,7 +19,7 @@ export default function Recording() {
 
   const [recorder, setRecorder] = useState<RecordRTC | null>();
   const [stream, setStream] = useState<MediaStream | null>();
-  const [recorderState, setRecorderState] = useState<'idle' | 'recording'>('idle');
+  const { screenRecording } = useAppSelector((state) => state.task);
 
   const startRecording = async () => {
     const mediaDevices = navigator.mediaDevices;
@@ -40,7 +41,7 @@ export default function Recording() {
 
     const recorder = new RecordRTC(stream, { type: 'video', mimeType: 'video/webm;codecs=vp9' });
     await recorder.startRecording();
-    setRecorderState('recording');
+    dispatch(setScreenRecording('recording'));
     setRecorder(recorder as RecordRTC);
     setStream(stream);
   };
@@ -59,12 +60,12 @@ export default function Recording() {
         activeItemType
       });
       stream?.getTracks().map((track) => track.stop());
-      setRecorderState('idle');
+      dispatch(setScreenRecording('idle'));
     }
   };
 
   useEffect(() => {
-    if (recorderState !== 'recording') {
+    if (screenRecording !== 'recording') {
       dispatch(
         setRecording({
           id: activeItemId as string,
@@ -72,11 +73,11 @@ export default function Recording() {
         })
       );
     }
-  }, [recorderState]);
+  }, [screenRecording]);
 
   return (
     <div>
-      {recorderState == 'recording' ? (
+      {screenRecording == 'recording' ? (
         <>
           <button onClick={stopRecording} className="screenRecording">
             Stop Recording

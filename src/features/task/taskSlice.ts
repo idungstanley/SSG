@@ -122,6 +122,7 @@ interface TaskState {
   sortArr: string[];
   timeArr: string[];
   timeSortArr: string[];
+  screenRecording: 'idle' | 'recording';
 }
 
 const initialState: TaskState = {
@@ -170,7 +171,8 @@ const initialState: TaskState = {
   sortAbleArr: [],
   sortArr: [],
   timeArr: [],
-  timeSortArr: []
+  timeSortArr: [],
+  screenRecording: 'idle'
 };
 
 export const taskSlice = createSlice({
@@ -347,6 +349,9 @@ export const taskSlice = createSlice({
     },
     setTimeSortArr(state, action: PayloadAction<string[]>) {
       state.timeSortArr = action.payload;
+    },
+    setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
+      state.screenRecording = action.payload;
     }
   }
 });
@@ -394,6 +399,7 @@ export const {
   setSortArray,
   setSortArr,
   setTimeArr,
-  setTimeSortArr
+  setTimeSortArr,
+  setScreenRecording
 } = taskSlice.actions;
 export default taskSlice.reducer;

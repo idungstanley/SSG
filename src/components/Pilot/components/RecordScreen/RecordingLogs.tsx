@@ -66,7 +66,7 @@ export default function VideoEntries() {
                   tabIndex={0}
                   className="recording-tag"
                   onMouseEnter={() => toggleControls(index, true)}
-                  // onMouseLeave={() => toggleControls(index, false)}
+                  onMouseLeave={() => toggleControls(index, false)}
                   onEnded={() => setPlayToggle(false)}
                 />
                 {playToggle && hoverIndex === index ? (
