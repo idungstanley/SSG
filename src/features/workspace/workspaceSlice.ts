@@ -44,6 +44,7 @@ interface workspaceState {
   activePlaceNameForNavigation: string | null;
   activePlaceIdForNavigation: number | null | string;
   createWlLink: boolean;
+  activeSubRecordsTabId: number | null;
 }
 
 const initialState: workspaceState = {
@@ -85,7 +86,8 @@ const initialState: workspaceState = {
   activeEntity: { id: null, type: null },
   activePlaceNameForNavigation: null,
   activePlaceIdForNavigation: null,
-  createWlLink: false
+  createWlLink: false,
+  activeSubRecordsTabId: 0
 };
 
 export const wsSlice = createSlice({
@@ -228,7 +230,10 @@ export const wsSlice = createSlice({
       state.activePlaceNameForNavigation = action.payload.activePlaceNameForNavigation;
       state.activePlaceIdForNavigation = action.payload.activePlaceIdForNavigation;
     },
-    checkIfWs: (state) => state
+    checkIfWs: (state) => state,
+    setActiveSubRecordTabId(state, action: PayloadAction<number | null>) {
+      state.activeSubRecordsTabId = action.payload;
+    }
   }
 });
 
@@ -269,7 +274,8 @@ export const {
   setActivePlaceName,
   setActivePlaceForNav,
   setCreateWlLink,
-  setFetchAllWorkspace
+  setFetchAllWorkspace,
+  setActiveSubRecordTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

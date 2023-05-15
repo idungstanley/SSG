@@ -91,7 +91,7 @@ function ListNav({
       >
         <section className="flex items-center justify-start">
           <span className="space-x-2">
-            <span className="font-bold font-bold pr-2">{navName}</span>
+            <span className="font-bold pr-2">{navName}</span>
           </span>
           <div className="flex pt-3">
             <div className="flex items-center justify-start space-x-1 " onClick={handleListView}>
