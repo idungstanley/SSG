@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Profile from '../components/UserSettings/Profile';
 import Personalization from '../components/UserSettings/Personalization';
-import { Spinner } from '../../../../common';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setActiveTab } from '../../../../features/settings/user/userSettingsSlice';
 import { IUserData } from '../../../../features/workspace/workspace.interfaces';
@@ -9,19 +8,11 @@ import { IUserData } from '../../../../features/workspace/workspace.interfaces';
 function UserSettings() {
   const dispatch = useAppDispatch();
 
-  const { userData, status } = useAppSelector((state) => state.userSetting);
+  const { userData } = useAppSelector((state) => state.userSetting);
 
   useEffect(() => {
     dispatch(setActiveTab('My Account'));
   }, []);
-
-  if (status === 'loading') {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <Spinner size={50} color="#0F70B7" />
-      </div>
-    );
-  }
 
   return (
     <section className="flex w-full">

@@ -17,11 +17,12 @@ function LoginPage() {
   useEffect(() => {
     if (data) {
       const { user } = data.data;
-      const { default_workspace_id } = user;
+      const { name, default_workspace_id } = user;
+      const userData = { name, default_workspace_id };
       const { accessToken, token } = data.data.token;
       const { user_id } = token;
 
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('accessToken', JSON.stringify(accessToken));
       localStorage.setItem('currentWorkspaceId', JSON.stringify(default_workspace_id));
       localStorage.setItem('currentUserId', JSON.stringify(user_id));
