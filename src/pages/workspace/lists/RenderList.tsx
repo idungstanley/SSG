@@ -137,7 +137,7 @@ function RenderList() {
             )}
 
             {/* card */}
-            <ul className="relative">
+            <ul className="relative pl-6">
               <li className="overflow-x-scroll">
                 {listView && listId ? (
                   <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
@@ -147,7 +147,7 @@ function RenderList() {
                 {listView && (
                   <div style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
                     {paginatedTaskData?.map((task) => (
-                      <div className="pl-6 group" key={task?.id}>
+                      <div className="group" key={task?.id}>
                         {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
                         {currentParentTaskId === task?.id ? (
                           <div>
