@@ -146,7 +146,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemId != null
+      enabled: query.activeItemId === 'list' && !!query.activeItemId
     }
   );
 };
