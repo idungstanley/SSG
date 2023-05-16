@@ -59,7 +59,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(`/l/${id}`);
+    navigate(`tasks/l/${id}`);
     dispatch(setActiveEntity({ id: id, type: 'list' }));
   };
 

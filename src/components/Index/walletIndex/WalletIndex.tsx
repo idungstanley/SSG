@@ -48,7 +48,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
   const handleLocation = (id: string, name: string) => {
     const type = 'wallet';
     dispatch(setShowHub(true));
-    navigate(`/w/${id}`);
+    navigate(`tasks/w/${id}`);
     setShowSubWallet(id);
     dispatch(setCurrentWalletId(id));
     dispatch(

@@ -4,13 +4,9 @@ import React from 'react';
 // import { useDispatch } from 'react-redux';
 // import { setWatchersData } from '../../../../features/task/taskSlice';
 // import { EyeIcon } from '@heroicons/react/24/outline';
-interface WatcherProps {
-  taskId: string | undefined;
-}
 
-export default function Watcher({ taskId }: WatcherProps) {
+export default function Watcher() {
   // eslint-disable-next-line no-console
-  console.log(taskId);
   // const [showWatchers, setShowWatcher] = useState<boolean>(false);
   // const dispatch = useDispatch();
 

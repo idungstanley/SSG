@@ -8,10 +8,6 @@ export default function TimeClock() {
   return (
     <>
       <SectionArea label="Time Clock" icon={<ClockIcon className="w-4 h-4" />} />
-      {/* <div>
-        <TimeEntries />
-      </div> */}
-
       <>
         <TimeClockTabs />
       </>

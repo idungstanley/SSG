@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { IAllWorkspacesRes, IAttachments, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace } from './workspaceSlice';
@@ -77,10 +77,48 @@ export const uploadRecording = async (
     };
 
     await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, options);
-    queryClient.invalidateQueries(['attachments']);
+    // queryClient.invalidateQueries(['welcome']);
   } catch (error) {
     return error;
   }
+};
+
+export const useUploadRecording = () => {
+  const uploadRecordingMutation = useMutation(
+    async ({
+      blob,
+      currentWorkspaceId,
+      accessToken,
+      activeItemId,
+      activeItemType
+    }: {
+      blob: Blob;
+      currentWorkspaceId: string | null | undefined;
+      accessToken: string | null;
+      activeItemId: string | null | undefined;
+      activeItemType: string | null | undefined;
+    }) => {
+      const formData: IFormData = new FormData();
+      formData.append('files[0]', blob, 'recording.webm');
+      formData.append('title', 'My Recording Title');
+      formData.append('type', `${activeItemType}`);
+      formData.append('id', `${activeItemId}`);
+      const options: RequestInit = {
+        method: 'POST',
+        body: formData as BodyInit,
+        headers: currentWorkspaceId
+          ? {
+              Authorization: `Bearer ${accessToken}`,
+              current_workspace_id: currentWorkspaceId
+            }
+          : undefined
+      };
+
+      await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, options);
+    }
+  );
+
+  return uploadRecordingMutation;
 };
 
 export const getUploadAttatchment = ({ id, type }: { id: string; type: string | null | undefined }) => {

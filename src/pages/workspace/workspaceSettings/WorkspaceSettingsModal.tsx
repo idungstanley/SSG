@@ -134,10 +134,14 @@ export default function WorkspaceSettingsModal() {
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/');
+      // navigate(`/${data.data.workspace.id}`);
+      // windows.location.href = `/${data.data.workspace.id}`;
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
+      if (data.data.workspace.id) {
+        window.location.href = `/${data.data.workspace.id}`;
+      }
     }
   });
   const onSwitchWorkspace = (id: string) => {
@@ -183,7 +187,7 @@ export default function WorkspaceSettingsModal() {
                   onClick={i.handleClick}
                 >
                   <div className="flex ">
-                    {i.title}{' '}
+                    {i.title}
                     {i.id == 3 ? (
                       <button
                         className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1"

@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setExtendedSidebarWidth } from '../../features/workspace/workspaceSlice';
+import { setExtendedSidebarWidth, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 import { useResize } from '../../hooks/useResize';
 import ExtendedItem from '../../layout/components/MainLayout/extendedNavigation/components/extendedItem';
 import { IPilotSection, IPilotTab } from '../../types';
@@ -68,7 +68,7 @@ const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
 function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
-  const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
+  const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const { blockRef, Dividers, size } = useResize({
     dimensions: {
@@ -79,6 +79,15 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
     direction: 'XR',
     defaultSize: dimensions.extendedBar.default
   });
+
+  const handleToggle = () => {
+    setShow((prev) => !prev);
+    if (showExtendedBar) {
+      dispatch(setShowExtendedBar(false));
+    } else {
+      dispatch(setShowExtendedBar(true));
+    }
+  };
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, sidebarWidthRD);
@@ -92,7 +101,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
       className={cl(show && 'border', 'relative w-60 h-full transition-all duration-300')}
     >
       <span
-        onClick={() => setShow((prev) => !prev)}
+        onClick={() => handleToggle()}
         className={cl(
           show ? 'bg-green-400 top-2 border-green-400' : 'bg-white top-4 border-inherit',
           'absolute z-50 border-2 rounded-full cursor-pointer -right-2'

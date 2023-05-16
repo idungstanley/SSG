@@ -35,7 +35,7 @@ function ListItem({ userWorkspace }: ListItemProps) {
       );
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      navigate('/explorer');
+      navigate(`/${currentWorkspaceId}/explorer`);
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());
