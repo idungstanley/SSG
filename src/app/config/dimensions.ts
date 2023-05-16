@@ -4,7 +4,7 @@ const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || '') as {
   sidebarWidth: number;
   showSidebar: boolean;
 };
-const showSidebar = sidebarFromLS.showSidebar;
+const showSidebar = !!sidebarFromLS.showSidebar;
 
 const PILOT_WIDTH = {
   DEFAULT: 25,
