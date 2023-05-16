@@ -4,6 +4,9 @@ import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMe
 import { cl } from '../../../utils';
 import { getCurrentDaysInMonth } from '../lib/getDaysInMonth';
 import { isSameOrBefore } from '../lib/dateUtils';
+import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { AvatarWithInitials } from '../../../components';
 
 const currentDate = dayjs();
 
@@ -87,12 +90,15 @@ const init: DayOff[] = [
 ];
 
 export default function NewWallchart() {
+  const { blacklistIds } = useAppSelector(selectCalendar);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
   const days = getCurrentDaysInMonth(currentDate);
   const firstDay = days[0].format('ddd');
   const weeks = generateWeekDays(firstDay, days[0].daysInMonth());
   const members = data?.data.team_members ?? [];
+
+  const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
 
   return (
     <section>
@@ -107,11 +113,15 @@ export default function NewWallchart() {
 
       {/* members */}
       <div className="w-full space-y-6">
-        {members.map((i) => (
+        {filteredMembers.map((i) => (
           <div key={i.id} className="flex items-center">
-            <div className="w-80 space-y-3 bg-gray-50 p-2">
-              <h3 className="truncate text-sm font-medium text-gray-900">{i.user.name}</h3>
-              <p className="mt-1 truncate text-sm text-gray-500">{i.user.email}</p>
+            <div className="w-80 bg-gray-50 p-2 flex space-x-2 items-center">
+              <AvatarWithInitials height="h-5" width="w-5" initials={i.user.initials} />
+
+              <div className="space-y-3">
+                <h3 className="truncate text-sm font-medium text-gray-900">{i.user.name}</h3>
+                <p className="mt-1 truncate text-sm text-gray-500">{i.user.email}</p>
+              </div>
             </div>
             <Month userId={i.user.id} />
           </div>
