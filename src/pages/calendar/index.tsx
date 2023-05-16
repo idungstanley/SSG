@@ -16,7 +16,7 @@ function Calendar() {
       extendedBar={{ children: <ExtendedBar />, name: 'Also HR', icon: <FaHandsHelping className="w-4 h-4" /> }}
     >
       <DaysOffProvider>
-        <div className="w-full h-full overflow-y-scroll pb-20">
+        <div className="w-full h-full overflow-y-scroll">
           <Outlet />
         </div>
 

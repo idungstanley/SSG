@@ -9,7 +9,7 @@ interface DropdownProps {
   children: ReactNode;
 }
 
-const HEIGHT = 100;
+const HEIGHT = 120;
 
 export default function Dropdown({ title, children }: DropdownProps) {
   const { updateCords } = useAppSelector(selectCalendar);

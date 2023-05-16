@@ -46,7 +46,9 @@ export function ExtendedBar() {
     }
   };
 
-  const filteredMembers = members.filter((i) => `${i.user.name} ${i.user.email}`.includes(query));
+  const filteredMembers = members.filter((i) =>
+    `${i.user.name} ${i.user.email}`.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <section className="space-y-3 w-full">
