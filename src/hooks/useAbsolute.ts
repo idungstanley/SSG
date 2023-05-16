@@ -14,20 +14,20 @@ interface Cords {
  *                    - relativeRef: A ref to attach to the element to track its position.
  *                    - cords: An object with the calculated top and left coordinates for absolute positioning.
  */
-
 export function useAbsolute<T>(
   update: T,
   blockHeight: number
 ): { cords: Cords; relativeRef: React.RefObject<HTMLDivElement> } {
   const RELATIVE_HEIGHT = 20;
+
   const relativeRef = useRef<HTMLDivElement>(null);
 
   const [cords, setCords] = useState<Cords>({ top: 0, left: 0 });
 
   useEffect(() => {
-    const isOverflowBottom = (y: number) => y - RELATIVE_HEIGHT + blockHeight > window.innerHeight;
+    const isOverflowBottom = (y: number) => y + RELATIVE_HEIGHT + blockHeight > window.innerHeight;
 
-    const isOverflowTop = (y: number) => y - RELATIVE_HEIGHT < 0;
+    const isOverflowTop = (y: number) => y + RELATIVE_HEIGHT < 0;
 
     if (relativeRef.current) {
       const { x, y } = relativeRef.current.getBoundingClientRect();
@@ -37,7 +37,7 @@ export function useAbsolute<T>(
         ? window.innerHeight - blockHeight - RELATIVE_HEIGHT
         : isOverflowTop(y)
         ? RELATIVE_HEIGHT
-        : y - RELATIVE_HEIGHT;
+        : y + RELATIVE_HEIGHT;
 
       setCords({ top: yCord, left: xCord });
     }

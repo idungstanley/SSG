@@ -1,7 +1,7 @@
 import { useAppDispatch } from '../../../../app/hooks';
 import { useLeaveTypes } from '../../../../features/calendar/api/leaveTypesApi';
 import { setUpdateCords } from '../../../../features/calendar/slice/calendarSlice';
-import { useThrottle } from '../../../../hooks/useThrottle';
+import { useScroll } from '../../../../hooks/useScroll';
 import { AddLeaveType } from './AddLeaveType';
 import { LeaveTypeRow } from './LeaveTypeRow';
 
@@ -9,9 +9,7 @@ export default function LeaveTypesTable() {
   const dispatch = useAppDispatch();
   const { data: leaveTypes } = useLeaveTypes();
 
-  const onScroll = useThrottle(() => {
-    dispatch(setUpdateCords());
-  }, 500);
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
     <div onScroll={onScroll} className="overflow-y-scroll h-2/3">

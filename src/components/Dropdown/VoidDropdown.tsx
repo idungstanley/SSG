@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectCalendar } from '../../features/calendar/slice/calendarSlice';
 import { useAbsolute } from '../../hooks/useAbsolute';
@@ -9,24 +9,18 @@ interface DropdownProps {
   children: ReactNode;
 }
 
+const HEIGHT = 100;
+
 export default function Dropdown({ title, children }: DropdownProps) {
   const { updateCords } = useAppSelector(selectCalendar);
-  const ref = useRef<HTMLDivElement>(null);
-  const [cords, setCords] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    if (ref.current) {
-      const { x, y } = ref.current.getBoundingClientRect();
-      const xCord = x + 20;
-      const yCord = y - 20;
-
-      setCords({ y: yCord, x: xCord });
-    }
-  }, [updateCords]);
+  const {
+    cords: { top, left },
+    relativeRef
+  } = useAbsolute(updateCords, HEIGHT);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div ref={ref}>
+      <div ref={relativeRef}>
         <Menu.Button className="flex items-center rounded-full focus:outline-none">{title}</Menu.Button>
       </div>
 
@@ -41,8 +35,9 @@ export default function Dropdown({ title, children }: DropdownProps) {
       >
         <Menu.Items
           style={{
-            left: cords.x,
-            top: cords.y
+            left,
+            top
+            // height: HEIGHT
           }}
           className="fixed h-fit p-2 divide-y z-10 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
