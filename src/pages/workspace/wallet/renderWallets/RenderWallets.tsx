@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import PageWrapper from '../../../../components/PageWrapper';
+import Page from '../../../../components/Page';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
 import { UseGetFullTaskList } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
@@ -102,7 +102,7 @@ function RenderWallets() {
   return (
     <>
       <PilotSection />
-      <PageWrapper
+      <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
@@ -141,7 +141,7 @@ function RenderWallets() {
             )}
           </div>
         </div>
-      </PageWrapper>
+      </Page>
     </>
   );
 }

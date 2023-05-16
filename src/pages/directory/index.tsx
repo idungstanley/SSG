@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
-import PageWrapper from '../../components/PageWrapper';
+import Page from '../../components/Page';
 import { useGetDirectoryTemplate, useGetDirectoryTemplates } from '../../features/directory/directoryService';
 import { cl } from '../../utils';
 import FieldItem from './components/FieldItem';
@@ -42,7 +42,7 @@ function Directory() {
   return (
     <>
       <PilotSection templateId={selectedTemplateId} />
-      <PageWrapper
+      <Page
         pilotConfig={pilotConfig}
         header={
           <div className="w-full border-b border-gray-200">
@@ -130,7 +130,7 @@ function Directory() {
 
           {selectedTemplateId ? <TemplateItems selectedTemplateId={selectedTemplateId} /> : null}
         </div>
-      </PageWrapper>
+      </Page>
     </>
   );
 }

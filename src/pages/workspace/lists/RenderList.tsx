@@ -15,7 +15,7 @@ import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
 import Board from '../tasks/component/views/listLevel/TaskBoardView';
 import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
-import PageWrapper from '../../../components/PageWrapper';
+import PageWrapper from '../../../components/Page';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
