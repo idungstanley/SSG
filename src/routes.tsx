@@ -141,7 +141,7 @@ export const routes = (user: IUser | null) => {
               element: <WallchartPage />
             },
             {
-              path: 'new',
+              path: 'wallchart',
               element: <NewWallchart />
             },
             {

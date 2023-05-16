@@ -49,7 +49,7 @@ export function ExtendedBar() {
   const filteredMembers = members.filter((i) => `${i.user.name} ${i.user.email}`.includes(query));
 
   return (
-    <section className="space-y-3 border w-full">
+    <section className="space-y-3 w-full">
       {/* header */}
       <Header onClickXIcon={onClickXIcon} onToggleSearch={onToggleSearch} onReset={onReset} showSearch={showSearch}>
         <input

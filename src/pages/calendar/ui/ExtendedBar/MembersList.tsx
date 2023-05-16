@@ -21,9 +21,9 @@ export function MembersList({ members, onCheckbox }: MembersListProps) {
             setChecked={(e) => onCheckbox(e, member.id)}
           />
 
-          <div className="space-y-2">
-            <h3>{member.user.name}</h3>
-            <p className="text-xs">{member.user.email}</p>
+          <div>
+            <h3 className="text-sm font-semibold leading-6 text-gray-900">{member.user.name}</h3>
+            <p className="truncate text-xs leading-5 text-gray-500">{member.user.email}</p>
           </div>
         </li>
       ))}

@@ -114,11 +114,11 @@ export default function NewWallchart() {
       {/* members */}
       <div className="w-full space-y-6">
         {filteredMembers.map((i) => (
-          <div key={i.id} className="flex items-center">
-            <div className="w-80 bg-gray-50 p-2 flex space-x-2 items-center">
-              <AvatarWithInitials height="h-5" width="w-5" initials={i.user.initials} />
+          <div key={i.id} className="grid grid-cols-autoFr items-center">
+            <div className="w-72 bg-gray-50 p-2 flex space-x-2 items-center">
+              <AvatarWithInitials initials={i.user.initials} />
 
-              <div className="space-y-3">
+              <div className="space-y-3 w-56">
                 <h3 className="truncate text-sm font-medium text-gray-900">{i.user.name}</h3>
                 <p className="mt-1 truncate text-sm text-gray-500">{i.user.email}</p>
               </div>

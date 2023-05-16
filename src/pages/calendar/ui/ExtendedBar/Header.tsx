@@ -17,7 +17,7 @@ export function Header({ onReset, onToggleSearch, onClickXIcon, showSearch, chil
   const { blacklistIds } = useAppSelector(selectCalendar);
 
   return (
-    <div className="relative h-10 p-2 border flex items-center overflow-hidden">
+    <div className="relative h-10 p-2 flex border-b items-center overflow-hidden">
       <div className="flex space-x-3 items-center">
         <Checkbox
           styles="text-primary-500 focus:ring-primary-500"
