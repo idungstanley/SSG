@@ -51,7 +51,8 @@ function GroupAssignee({
     setHoverInterval(false);
     setModalLoader(true);
   };
-  console.log(data);
+  // console.log(data);
+  // const currentModalId = useMemo(() => data?.flatMap((ids) => ids), [data]);
   return (
     <>
       {data && data?.length >= 5 ? (
@@ -128,6 +129,7 @@ function GroupAssignee({
                     roundedStyle="circular"
                     height="h-20"
                     width="w-20"
+                    currHoveredOnUser={newData.id}
                   />
                 )}
               </div>
@@ -207,6 +209,7 @@ function GroupAssignee({
                       roundedStyle="circular"
                       height="h-20"
                       width="w-20"
+                      currHoveredOnUser={newData.id}
                     />
                   )}
                 </div>

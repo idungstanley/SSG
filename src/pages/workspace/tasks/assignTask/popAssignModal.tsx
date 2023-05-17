@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { CiMail } from 'react-icons/ci';
@@ -8,22 +9,25 @@ export function PopAssignModal({
   modalLoader,
   roundedStyle,
   height,
-  width
+  width,
+  currHoveredOnUser
 }: {
   modalLoader: boolean;
   spinnerSize: number;
   roundedStyle: string;
   height: string;
   width: string;
+  currHoveredOnUser: string | undefined;
 }) {
   const { data } = useCommunity();
+  const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id == currHoveredOnUser), [data]);
 
   return (
     <div className="absolute bg-white shadow-xl z-1000 w-64 opacity-1 rounded mb-8">
       {modalLoader ? (
         <Spinner color="#4f46e5" />
       ) : (
-        data?.team_members.map((userData) => {
+        filteredUser?.map((userData) => {
           return (
             <div key={userData.id} className="flex flex-col space-y-5 items-start justify-center p-4">
               <div className="flex items-center w-20 h-20 rounded-full bg-gray-400 justify-center text-white">
