@@ -25,7 +25,7 @@ export default function Year({ year }: YearProps) {
 
   return (
     <section className="flex justify-center flex-wrap mx-auto max-w-3xl gap-x-8 gap-y-16 px-4 py-16 xl:max-w-none">
-      {months.map((month) => (
+      {/* {months.map((month) => (
         <Calendar.Month
           daysOff={currentDaysOff}
           handleEvent={handleEvent}
@@ -33,7 +33,7 @@ export default function Year({ year }: YearProps) {
           month={month}
           title={<Month.Title title={month.name} />}
         />
-      ))}
+      ))} */}
     </section>
   );
 }

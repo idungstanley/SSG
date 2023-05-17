@@ -31,7 +31,7 @@ export const ScreenRecordTabs = [
 ];
 
 const videoOptions = [
-  { id: 0, element: <Recording /> },
+  // { id: 0, element: <Recording /> },
   {
     id: 1,
     element: <VideoEntries />

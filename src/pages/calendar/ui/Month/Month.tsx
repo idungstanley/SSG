@@ -7,7 +7,7 @@ import { cl } from '../../../../utils';
 
 import { DayOff, MonthObject } from '../../types/calendar';
 import MonthTitle from './MonthTitle';
-import Weeks from './Weeks';
+// import Weeks from '../Wallchart/Weeks';
 
 interface MonthProps {
   daysOff: DayOff[];
