@@ -39,7 +39,7 @@ export function PopAssignModal({
                     } ${roundedStyle === 'rounded' && 'rounded'}`}
                   />
                 ) : (
-                  <span>{userData.initials}</span>
+                  <span>{userData.user.initials}</span>
                 )}
               </div>
 
