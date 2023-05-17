@@ -64,7 +64,6 @@ import { IUser } from './types';
 import ManagePage from './pages/calendar/pages/ManagePage';
 import NewWallchart from './pages/calendar/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
-import { useAppSelector } from './app/hooks';
 import TasksIndex from './pages/workspace/tasksIndex';
 
 const inbox = [
@@ -95,7 +94,9 @@ const inbox = [
 ];
 
 export const routes = (user: IUser | null) => {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const currentWorkspaceId: string | undefined = JSON.parse(
+    localStorage.getItem('currentWorkspaceId') || '"'
+  ) as string;
 
   return createBrowserRouter([
     {
