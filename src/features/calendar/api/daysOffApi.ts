@@ -20,7 +20,7 @@ export const useDaysOff = (hubId: string) =>
 
 export const useDisapprovedDaysOff = (hubId: string) =>
   useQuery(
-    ['daysOff', 'disapproved', hubId],
+    ['disapprovedDaysOff', hubId],
     () =>
       requestNew<UnapprovedDaysOffRes>({
         url: 'hr/day-off/requests',
@@ -49,6 +49,7 @@ export const useAddDayOff = (hubId?: string) => {
   return useMutation(addDayOff, {
     onSuccess: () => {
       queryClient.invalidateQueries(['daysOff', hubId]);
+      queryClient.invalidateQueries(['disapprovedDaysOff', hubId]);
     }
   });
 };
@@ -67,7 +68,7 @@ export const useApproveDayOff = (hubId?: string) => {
   return useMutation(approveDayOff, {
     onSuccess: () => {
       queryClient.invalidateQueries(['daysOff', hubId]);
-      queryClient.invalidateQueries(['daysOff', 'disapproved', hubId]);
+      queryClient.invalidateQueries(['disapprovedDaysOff', hubId]);
     }
   });
 };
@@ -86,7 +87,7 @@ export const useDisapproveDayOff = (hubId?: string) => {
   return useMutation(disapproveDayOff, {
     onSuccess: () => {
       queryClient.invalidateQueries(['daysOff', hubId]);
-      queryClient.invalidateQueries(['daysOff', 'disapproved', hubId]);
+      queryClient.invalidateQueries(['disapprovedDaysOff', hubId]);
     }
   });
 };
