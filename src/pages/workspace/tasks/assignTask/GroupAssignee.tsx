@@ -51,8 +51,7 @@ function GroupAssignee({
     setHoverInterval(false);
     setModalLoader(true);
   };
-  // console.log(data);
-  // const currentModalId = useMemo(() => data?.flatMap((ids) => ids), [data]);
+
   return (
     <>
       {data && data?.length >= 5 ? (
