@@ -28,17 +28,26 @@ function LeaveTypeIcon({ iconName }: LeaveTypeIconProps) {
 
 interface SelectProps {
   icon: string;
-  setIcon: (i: string) => void;
+  setIcon?: (i: string) => void;
   color: string;
+  noSelect?: boolean;
 }
 
-export function SelectIcon({ icon, setIcon, color }: SelectProps) {
+export function SelectIcon({ icon, setIcon, color, noSelect }: SelectProps) {
+  if (noSelect) {
+    return (
+      <span className={cl(`text-${color}-500`, 'cursor-pointer block p-2 text-sm')}>
+        <LeaveTypeIcon iconName={icon} />
+      </span>
+    );
+  }
+
   return (
     <Dropdown title={<LeaveTypeIcon iconName={icon} />}>
       {iconsConfig.map((i) => (
         <Dropdown.Item key={i.name}>
           <button
-            onClick={() => setIcon(i.name)}
+            onClick={setIcon ? () => setIcon(i.name) : undefined}
             className={cl(`text-${color}-700`, 'cursor-pointer block p-2 text-sm')}
           >
             <LeaveTypeIcon iconName={i.name} />

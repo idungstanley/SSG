@@ -3,7 +3,7 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { cl } from '../../../utils';
 
-type Value = { id: string; title: string };
+type Value = { id: string; name: string };
 
 interface SelectTypeListboxProps<T> {
   value: T;
@@ -20,7 +20,7 @@ export default function ListBox<T extends Value>({ value, setSelected, values, t
           <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">{title}</Listbox.Label>
           <div className="relative mt-1">
             <Listbox.Button className="relative cursor-pointer w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-600 sm:text-sm sm:leading-6">
-              <span className="block truncate">{value.title}</span>
+              <span className="block truncate">{value.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -47,7 +47,7 @@ export default function ListBox<T extends Value>({ value, setSelected, values, t
                   >
                     {({ active }) => (
                       <>
-                        <span className={cl(value ? 'font-semibold' : 'font-normal', 'block truncate')}>{i.title}</span>
+                        <span className={cl(value ? 'font-semibold' : 'font-normal', 'block truncate')}>{i.name}</span>
 
                         {value === i ? (
                           <span

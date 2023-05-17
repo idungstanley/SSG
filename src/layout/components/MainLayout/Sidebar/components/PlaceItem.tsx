@@ -53,7 +53,7 @@ export default function PlaceItem({
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : isActivePlace ? '1000' : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? 2 : undefined,
     height: '50px',
     paddingLeft: showSidebar ? '25px' : '20px'
   };
