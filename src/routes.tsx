@@ -57,7 +57,6 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import YearPage from './pages/calendar/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
 import { IUser } from './types';
 import ManagePage from './pages/calendar/pages/ManagePage';
@@ -140,10 +139,7 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-            {
-              path: 'year',
-              element: <YearPage />
-            },
+
             {
               path: 'types',
               element: <LeaveTypesPage />

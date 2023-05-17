@@ -29,8 +29,7 @@ export function Tabs() {
       href: '/calendar',
       icon: <WallchartIcon className="w-5 h-5 cursor-pointer" />
     },
-    { name: 'NewWallchart', href: '/calendar/wallchart', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
-    { name: 'Multi calendar', href: '/calendar/year', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
+    { name: 'Multi calendar', href: '/calendar', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
     {
       name: 'Leave types',
       href: '/calendar/types',
