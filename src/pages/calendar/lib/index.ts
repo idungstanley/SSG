@@ -1,3 +1,3 @@
-import { generateWeekDays } from './monthUtils';
+import { generateWeekDays, getCurrentDaysInMonth, getDatesInRange, isSameOrBefore, isSameOrAfter } from './monthUtils';
 
-export { generateWeekDays };
+export { generateWeekDays, getCurrentDaysInMonth, getDatesInRange, isSameOrBefore, isSameOrAfter };

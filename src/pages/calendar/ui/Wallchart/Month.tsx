@@ -1,106 +1,130 @@
+import { Menu, Transition } from '@headlessui/react';
+import dayjs, { Dayjs } from 'dayjs';
+import { Fragment, useState } from 'react';
+import { useDaysOff } from '../../../../features/calendar/api/daysOffApi';
+import { DayOff } from '../../../../features/calendar/types/daysOff';
+import { getCurrentDaysInMonth, isSameOrAfter, isSameOrBefore } from '../../lib';
+import { getDatesInRange } from '../../lib';
+import { MOCKED_HUB_ID } from '../DisapprovedDaysOffList';
+import { Day } from './Day';
+
 interface MonthProps {
   userId: string;
+  handleEvent: ({ start, end }: { start: Dayjs; end: Dayjs }) => void;
 }
 
-export function Month({ userId }: MonthProps) {
-  // const [daysOff, setDaysOff] = useState<DayOff[]>(init);
-  const [selectedDates, setSelectedDates] = useState<ExtendedDate[]>([]);
+const currentDate = dayjs();
+
+export function Month({ userId, handleEvent }: MonthProps) {
+  const { data } = useDaysOff(MOCKED_HUB_ID);
+  const daysOff = data?.find((i) => i.team_member.id === userId);
+
+  const [highlightedDates, setHighlightedDates] = useState<string[]>([]);
+  const [selectedDates, setSelectedDates] = useState<Dayjs[]>([]);
   const days = getCurrentDaysInMonth(currentDate);
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  const handleDateMouseDown = (day: Dayjs, part: Part) => {
+  // the user clicked on date
+  const handleDateMouseDown = (day: Dayjs) => {
     setIsMouseDown(true);
-    const date = {
-      day,
-      part
-    };
-
-    setSelectedDates([date]);
+    setSelectedDates([day]);
   };
 
-  const handleDateMouseOver = (day: Dayjs, part: Part) =>
+  // the user hover date
+  const handleDateMouseOver = (day: Dayjs) =>
     setSelectedDates((prev) => {
       const startDate = prev[0];
-      const endDate = { day, part };
+      const endDate = day;
 
       const datesInRange = [...getDatesInRange(startDate, endDate)];
       return [...datesInRange];
     });
 
+  // the user stopped selecting dates
   const handleDateMouseUp = () => {
     setIsMouseDown(false);
     const start = selectedDates[0];
-    const end = selectedDates.at(-1);
+    const end = selectedDates[selectedDates.length - 1];
 
-    if (end) {
-      const newDayOff: DayOff = {
-        start: {
-          day: start.day.format('YYYY-MM-DD'),
-          part: start.part
-        },
-        end: {
-          day: end.day.format('YYYY-MM-DD'),
-          part: end.part
-        },
-        user: { id: userId }
-      };
-
-      setDaysOff((prev) => [...prev, newDayOff]);
-      setSelectedDates([]);
-    }
+    handleEvent({ start, end });
+    setSelectedDates([]);
   };
 
-  return (
-    <div
-      className="flex"
-      onMouseLeave={
-        isMouseDown
-          ? () => {
-              setIsMouseDown(false);
-              setSelectedDates([]);
-            }
-          : undefined
+  // mouse leave from wallchart
+  const handleMouseLeave = isMouseDown
+    ? () => {
+        setIsMouseDown(false);
+        setSelectedDates([]);
       }
-    >
+    : undefined;
+
+  const handleDateMouseEnter = (event?: DayOff) => {
+    if (!event) {
+      return;
+    }
+
+    const { start_date, end_date } = event;
+    const startDate = dayjs(start_date);
+    const endDate = dayjs(end_date);
+
+    const datesArray = [...Array(endDate.diff(startDate, 'day') + 1)].map((_, index) =>
+      startDate.add(index, 'day').format('YYYY-MM-DD')
+    );
+
+    setHighlightedDates(datesArray);
+  };
+
+  const handleDateMouseLeave = () => setHighlightedDates([]);
+
+  return (
+    <div className="flex" onMouseLeave={handleMouseLeave}>
       {days.map((day) => {
-        const isSelectedStart = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'start');
-        const isSelectedEnd = !!selectedDates.find((i) => i.day.isSame(day, 'date') && i.part === 'end');
-        const isDayOffStart = daysOff.some(
-          (range) => isDateInRange({ day, part: 'start' }, range) && range.user.id === userId
-        );
-        const isDayOffEnd = daysOff.some(
-          (range) => isDateInRange({ day, part: 'end' }, range) && range.user.id === userId
+        const isSelected = !!selectedDates.find((i) => i.isSame(day, 'date'));
+        const isDayOff = daysOff?.day_offs.find(
+          (dayOff) => isSameOrBefore(day, dayjs(dayOff.end_date)) && isSameOrAfter(day, dayjs(dayOff.start_date))
         );
 
         return (
-          <div
+          <Day
+            isHighlighted={highlightedDates.includes(day.format('YYYY-MM-DD'))}
+            leaveType={isDayOff?.leave_type}
+            isDayOff={!!isDayOff}
             onMouseUp={isMouseDown ? () => handleDateMouseUp() : undefined}
-            className="relative p-2 border w-10 h-10 flex items-center justify-center"
+            onMouseDown={!isDayOff ? () => handleDateMouseDown(day) : undefined}
+            onMouseOver={isMouseDown ? () => handleDateMouseOver(day) : undefined}
+            day={day}
             key={day.format()}
+            isCurrentDay={currentDate.isSame(day, 'date')}
+            isSelected={isSelected}
+            // for highlight
+            onMouseEnter={isDayOff ? () => handleDateMouseEnter(isDayOff) : undefined}
+            onMouseLeave={isDayOff ? handleDateMouseLeave : undefined}
           >
-            <div className="top-0 left-0 w-10 h-10 absolute grid grid-cols-2">
-              <span
-                onMouseOver={isMouseDown ? () => handleDateMouseOver(day, 'start') : undefined}
-                onMouseDown={() => handleDateMouseDown(day, 'start')}
-                className={cl(
-                  'hover:bg-gray-200',
-                  isSelectedStart && 'bg-gray-200',
-                  isDayOffStart && 'bg-primary-500 opacity-50 hover:bg-primary-500'
-                )}
-              ></span>
+            {isDayOff ? (
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute p-2 gap-20 flex border justify-between items-start right-0 top-10 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="flex flex-col gap-2">
+                    <p className="whitespace-nowrap text-left text-sm font-medium text-gray-900">
+                      {daysOff?.team_member.user.name}
+                    </p>
+                    <p className="text-sm text-left w-32 text-gray-500">{isDayOff.reason}</p>
+                  </div>
 
-              <span
-                onMouseOver={isMouseDown ? () => handleDateMouseOver(day, 'end') : undefined}
-                onMouseDown={() => handleDateMouseDown(day, 'end')}
-                className={cl(
-                  'hover:bg-gray-200',
-                  isSelectedEnd && 'bg-gray-200',
-                  isDayOffEnd && 'bg-primary-500 opacity-50 hover:bg-primary-500'
-                )}
-              ></span>
-            </div>
-            <span className="select-none">{day.date()}</span>
-          </div>
+                  <span className="whitespace-nowrap rounded-lg px-2.5 py-1 border text-gray-600 text-sm font-semibold shadow-sm hover:bg-gray-50">
+                    {isDayOff.leave_type.name}
+                  </span>
+                </Menu.Items>
+              </Transition>
+            ) : null}
+          </Day>
         );
       })}
     </div>
