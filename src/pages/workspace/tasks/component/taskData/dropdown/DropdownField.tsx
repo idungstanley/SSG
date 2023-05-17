@@ -1,6 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 
 interface DropdownModalProps {
@@ -11,9 +13,11 @@ interface DropdownModalProps {
 const regex = /\w+/g;
 
 export default function DropdownField({ field, taskId }: DropdownModalProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const { updateCords } = useAppSelector((state) => state.task);
   const [activeOption, setActiveOption] = useState<string>(field.activeProperty);
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
   const properties = field.properties.match(regex) as string[] | null;
   const options = properties ? [...properties] : [];
@@ -31,7 +35,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   return (
     <Menu as="div" className="relative inline-block mt-2 text-left w-full">
-      <div ref={ref}>
+      <div ref={relativeRef}>
         <Menu.Button className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full">
           {activeOption}
         </Menu.Button>
@@ -48,10 +52,10 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
       >
         <div
           style={{
-            left: (ref.current?.getBoundingClientRect().x ?? 0) + 40,
-            bottom: window.innerHeight - (ref.current?.getBoundingClientRect().y ?? 0)
+            ...cords,
+            zIndex: 999
           }}
-          className="px-2 w-fit h-fit py-1 fixed mt-2 rounded-md bg-white shadow-lg focus:outline-none"
+          className="px-2 w-fit h-fit py-1 fixed mt-2 rounded-md bg-white shadow-lg outline-none"
         >
           <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
             select an option
