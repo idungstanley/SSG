@@ -81,7 +81,7 @@ export function Month({ userId }: MonthProps) {
   const handleDateMouseLeave = () => setHighlightedDates([]);
 
   return (
-    <div className="flex" onMouseLeave={handleMouseLeave}>
+    <div className="flex border border-gray-100" onMouseLeave={handleMouseLeave}>
       {days.map((day) => {
         const isSelected = !!selectedDates.find((i) => i.isSame(day, 'date'));
         const isDayOff = daysOff?.day_offs.find(

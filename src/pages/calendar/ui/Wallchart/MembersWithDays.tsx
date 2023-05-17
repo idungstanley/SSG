@@ -13,12 +13,12 @@ export function MembersWithDays() {
   const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-fit space-y-6">
       {filteredMembers.map((i) => (
-        <div key={i.id} className="grid grid-cols-autoFr items-center">
+        <div key={i.id} className="flex items-center w-fit">
           <MemberCard initials={i.user.initials} email={i.user.email} name={i.user.name} />
 
-          <Month userId={i.user.id} />
+          <Month userId={i.id} />
         </div>
       ))}
     </div>

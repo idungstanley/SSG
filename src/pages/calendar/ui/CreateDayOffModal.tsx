@@ -1,50 +1,50 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../app/hooks';
 import { ListBox } from '../../../components/ListBox';
 import { useAddDayOff } from '../../../features/calendar/api/daysOffApi';
 import { useLeaveTypes } from '../../../features/calendar/api/leaveTypesApi';
 import { selectCalendar, setNewDayOff } from '../../../features/calendar/slice/calendarSlice';
+import { LeaveType } from '../../../features/calendar/types/leaveTypes';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { checkIsOwner } from '../lib/userUtils';
 import { MOCKED_HUB_ID } from './DisapprovedDaysOffList';
 
 export default function CreateDayOffModal() {
   const dispatch = useAppDispatch();
-  const { newDayOff } = useSelector(selectCalendar);
-  const { data } = useLeaveTypes();
-  const { mutate: onAdd } = useAddDayOff(MOCKED_HUB_ID);
-
-  const leaveTypes = data || [];
-  const showModal = !!newDayOff;
-
-  const [type, setType] = useState(leaveTypes[0]);
   const reasonRef = useRef<HTMLInputElement>(null);
-  const [member, setMember] = useState<{ id: string; name: string } | null>(null);
-
+  const { newDayOff } = useSelector(selectCalendar);
+  const { data: types } = useLeaveTypes();
+  const { mutate: onAdd } = useAddDayOff(MOCKED_HUB_ID);
   const { data: teamMembers } = useGetTeamMembers({ page: 1, query: '' });
 
-  const isOwner = checkIsOwner(teamMembers?.data.team_members ?? []);
+  const showModal = !!newDayOff;
+  const leaveTypes = types ?? [];
+  const members = teamMembers?.data.team_members ?? [];
 
-  const members = useMemo(
-    () => teamMembers?.data.team_members.map((i) => ({ id: i.user.id, name: i.user.name })) ?? [],
-    [data]
-  );
+  const [type, setType] = useState<LeaveType | null>(null);
+  const [member, setMember] = useState<{ id: string; name: string } | null>(null);
+
+  const isOwner = checkIsOwner(teamMembers?.data.team_members ?? []);
 
   const onClose = () => dispatch(setNewDayOff(null));
 
   useEffect(() => {
-    if (members) {
-      const findMember = members.find((i) => i.id === newDayOff?.userId);
+    const findMember = members.find((i) => i.id === newDayOff?.userId);
 
-      if (findMember) {
-        setMember(findMember);
-      }
+    if (findMember) {
+      setMember({ id: findMember.id, name: findMember.user.name });
     }
-  }, [members]);
+  }, [members, newDayOff]);
+
+  useEffect(() => {
+    if (leaveTypes) {
+      setType(leaveTypes[0]);
+    }
+  }, [leaveTypes]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ export default function CreateDayOffModal() {
       return;
     }
 
-    if (reasonRef.current && member) {
+    if (reasonRef.current && member && type) {
       const reason = reasonRef.current.value;
       // const isApproved = isOwner;
 
@@ -103,7 +103,7 @@ export default function CreateDayOffModal() {
               <Dialog.Panel
                 as="form"
                 onSubmit={handleSubmit}
-                className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+                className="relative transform rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
               >
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
@@ -134,11 +134,16 @@ export default function CreateDayOffModal() {
                         </div>
                       ) : null}
 
-                      {isOwner && member ? (
-                        <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
+                      {member ? (
+                        <ListBox
+                          setSelected={setMember}
+                          value={member}
+                          values={members.map((i) => ({ id: i.id, name: i.user.name }))}
+                          title="Who for"
+                        />
                       ) : null}
 
-                      <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" />
+                      {type ? <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" /> : null}
 
                       <div>
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
