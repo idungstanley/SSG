@@ -21,7 +21,7 @@ interface PageProps {
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   return (
-    <main className="grid h-full w-full grid-cols-autoFr">
+    <main className="grid w-full h-full grid-cols-autoFr">
       {extendedBar ? (
         <ExtendedBar name={extendedBar.name} icon={extendedBar.icon} source={extendedBar.source}>
           {extendedBar.children}
@@ -108,9 +108,9 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
         <>
           <ExtendedItem name={name} icon={icon} source={source} />
           <div>{children}</div>
+          <Dividers />
         </>
       ) : null}
-      <Dividers />
     </aside>
   );
 }

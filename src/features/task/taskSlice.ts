@@ -19,6 +19,10 @@ export interface ICustomField {
     }
   ];
 }
+export interface ActiveTaskColumnProps {
+  id: string;
+  header: string;
+}
 
 export interface ImyTaskData {
   id: string;
@@ -123,6 +127,7 @@ interface TaskState {
   timeArr: string[];
   timeSortArr: string[];
   screenRecording: 'idle' | 'recording';
+  activeTaskColumn: ActiveTaskColumnProps;
 }
 
 const initialState: TaskState = {
@@ -172,7 +177,8 @@ const initialState: TaskState = {
   sortArr: [],
   timeArr: [],
   timeSortArr: [],
-  screenRecording: 'idle'
+  screenRecording: 'idle',
+  activeTaskColumn: { id: '', header: '' }
 };
 
 export const taskSlice = createSlice({
@@ -246,6 +252,9 @@ export const taskSlice = createSlice({
     },
     getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
+    },
+    setActiveTaskColumn(state, action: PayloadAction<ActiveTaskColumnProps>) {
+      state.activeTaskColumn = action.payload;
     },
     getCalendeView(state, action: PayloadAction<boolean>) {
       state.calenderView = action.payload;
@@ -400,6 +409,7 @@ export const {
   setSortArr,
   setTimeArr,
   setTimeSortArr,
-  setScreenRecording
+  setScreenRecording,
+  setActiveTaskColumn
 } = taskSlice.actions;
 export default taskSlice.reducer;
