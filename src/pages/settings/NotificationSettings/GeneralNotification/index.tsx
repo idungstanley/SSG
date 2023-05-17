@@ -1,7 +1,7 @@
 import React from 'react';
-import { SimpleSectionHeading } from '../../../components';
+import { SimpleSectionHeading } from '../../../../components';
 import NotificaitonTable from './components/Table';
-import notificationFrame from '../../../assets/branding/notificationFrame.png';
+import notificationFrame from '../../../../assets/branding/notificationFrame.png';
 // import NotificationSettings from './components/NotificationSettings';
 
 export default function NotificationSettingsPage() {

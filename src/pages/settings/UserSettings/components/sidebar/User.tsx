@@ -79,7 +79,7 @@ function User() {
           title: 'Subscriber Settings',
           onClick: () => {
             dispatch(setActiveTab('Subscriber Settings'));
-            navigate('construction');
+            navigate('subscribers');
           }
         },
         {

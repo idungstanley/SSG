@@ -77,9 +77,12 @@ export default function Row({ teamMemberInviteId }: RowProps) {
       }
     ];
 
-    // If invite is pending
     if (teamMemberInvite.accepted_at === null && moment(teamMemberInvite.expires_at).isAfter(moment())) {
+      // If invite is pending
       setDropdownItems(tempPropdownItemsForPendingInvite);
+    } else if (teamMemberInvite.accepted_at === null && moment(teamMemberInvite.expires_at).isBefore(moment())) {
+      // If invite is expired
+      setDropdownItems([tempPropdownItemsForPendingInvite[1]]);
     } else {
       setDropdownItems(tempDropdownItems);
     }
