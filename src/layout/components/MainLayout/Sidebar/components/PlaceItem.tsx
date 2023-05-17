@@ -39,6 +39,7 @@ export default function PlaceItem({
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const isActivePlace = !onClick;
 
   const baseColor = '#BF00FFB2';
@@ -52,14 +53,14 @@ export default function PlaceItem({
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : isActivePlace ? '1000' : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? 2 : undefined,
     height: '50px',
-    paddingLeft: '25px'
+    paddingLeft: showSidebar ? '25px' : '20px'
   };
 
   const resetSelectedPlace = () => {
     dispatch(setActivePlaceId(null));
-    navigate('/');
+    navigate(`/${currentWorkspaceId}`);
   };
   const handleCloseSearchView = () => {
     dispatch(setIsSearchActive(false));

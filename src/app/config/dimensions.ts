@@ -1,5 +1,11 @@
 import { getRelativeWidth } from '../../utils/widthUtils';
 
+const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || 'null') as {
+  sidebarWidth: number;
+  showSidebar: boolean;
+} | null;
+const showSidebar = !!sidebarFromLS?.showSidebar;
+
 const PILOT_WIDTH = {
   DEFAULT: 25,
   MAX: 30,
@@ -27,9 +33,10 @@ const dimensions = {
     max: getRelativeWidth(PILOT_WIDTH.MAX)
   },
   navigationBar: {
-    default: getRelativeWidth(NAVIGATION_BAR_WIDTH.DEFAULT),
+    default: showSidebar === true ? getRelativeWidth(NAVIGATION_BAR_WIDTH.DEFAULT) : 70,
     min: getRelativeWidth(NAVIGATION_BAR_WIDTH.MIN),
-    max: getRelativeWidth(NAVIGATION_BAR_WIDTH.MAX)
+    max: getRelativeWidth(NAVIGATION_BAR_WIDTH.MAX),
+    collapse: 70
   },
   extendedBar: {
     default: getRelativeWidth(EXTENDED_BAR_WIDTH.DEFAULT),

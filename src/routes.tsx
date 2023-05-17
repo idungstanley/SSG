@@ -57,13 +57,12 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import WallchartPage from './pages/calendar/ui/pages/WallchartPage';
-import YearPage from './pages/calendar/ui/pages/YearPage';
-import LeaveTypesPage from './pages/calendar/ui/pages/LeaveTypesPage';
+import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
 import { IUser } from './types';
-import ManagePage from './pages/calendar/ui/pages/ManagePage';
-import NewWallchart from './pages/calendar/ui/pages/NewWallchartPage';
+import ManagePage from './pages/calendar/pages/ManagePage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
+import TasksIndex from './pages/workspace/tasksIndex';
+import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 
 const inbox = [
   {
@@ -92,8 +91,12 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUser | null) =>
-  createBrowserRouter([
+export const routes = (user: IUser | null) => {
+  const currentWorkspaceId: string | undefined = JSON.parse(
+    localStorage.getItem('currentWorkspaceId') || '"'
+  ) as string;
+
+  return createBrowserRouter([
     {
       path: 'onboarding',
       element: user ? <CreateNewWorkspace /> : <Navigate to="/auth/login" />
@@ -106,13 +109,18 @@ export const routes = (user: IUser | null) =>
       path: '/',
       element: user ? (
         user.default_workspace_id ? (
-          <MainLayout />
+          // <MainLayout />
+          <Navigate to={`/${currentWorkspaceId}`} />
         ) : (
           <Navigate to="/onboarding" />
         )
       ) : (
         <Navigate to="/auth/login" />
-      ),
+      )
+    },
+    {
+      path: `/${currentWorkspaceId}`,
+      element: <MainLayout />,
       children: [
         { path: '', element: <Home /> },
         { path: 'explorer', element: <ExplorerPage /> },
@@ -131,14 +139,7 @@ export const routes = (user: IUser | null) =>
               path: '',
               element: <WallchartPage />
             },
-            {
-              path: 'new',
-              element: <NewWallchart />
-            },
-            {
-              path: 'year',
-              element: <YearPage />
-            },
+
             {
               path: 'types',
               element: <LeaveTypesPage />
@@ -150,16 +151,16 @@ export const routes = (user: IUser | null) =>
           ]
         },
         { path: 'dashboard', element: <Dashboard /> },
+        { path: 'tasks', element: <TasksIndex /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
-        { path: 'h', element: <RenderHubs /> },
-        { path: 'h/:hubId', element: <RenderHubs /> },
-        { path: 'h/:hubId/t/:taskId', element: <RenderHubs /> },
-        { path: 'w/:walletId', element: <RenderWallets /> },
-        { path: 'w/:walletId/t/:taskId', element: <RenderWallets /> },
-        { path: 'l/:listId', element: <RenderList /> },
-        { path: 'l/:listId/t/:taskId', element: <RenderList /> },
+        { path: 'tasks/h/:hubId', element: <RenderHubs /> },
+        { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
+        { path: 'tasks/w/:walletId', element: <RenderWallets /> },
+        { path: 'tasks/w/:walletId/t/:taskId', element: <RenderWallets /> },
+        { path: 'tasks/l/:listId', element: <RenderList /> },
+        { path: 'tasks/l/:listId/t/:taskId', element: <RenderList /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
@@ -212,5 +213,6 @@ export const routes = (user: IUser | null) =>
     },
     { path: '*', element: <NotFoundPage /> }
   ]);
+};
 
 export default routes;

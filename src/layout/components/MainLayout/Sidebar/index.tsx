@@ -7,7 +7,6 @@ import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import Search from './components/Search';
-import Toggle from './components/Toggle';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
@@ -43,18 +42,17 @@ export default function Sidebar() {
     <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
       <Dividers />
       {/* show / hide sidebar icon */}
-      <Toggle />
       {/* sidebar */}
       <section
         style={{
-          width: sidebarWidthRD
+          width: `${sidebarWidthRD}px`
         }}
         ref={blockRef}
         className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"
       >
         <Header />
         <section
-          className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-visible"
+          className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden"
           onScroll={(e) => handleScroll(e)}
         >
           {showSidebar ? <Search /> : null}

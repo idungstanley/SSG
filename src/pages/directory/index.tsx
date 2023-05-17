@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../common';
 import FullScreenMessage from '../../components/CenterMessage/FullScreenMessage';
-import PageWrapper from '../../components/PageWrapper';
+import Page from '../../components/Page';
 import { useGetDirectoryTemplate, useGetDirectoryTemplates } from '../../features/directory/directoryService';
 import { cl } from '../../utils';
 import FieldItem from './components/FieldItem';
 import PilotSection, { pilotConfig } from './components/PilotSection';
+import libraryIcon from '../../assets/icons/library.svg';
+import LibraryData from './components/Sidebar/LibraryTabs';
 import CreateDirectorySideOver from './components/SideOvers/CreateDirectorySideOver';
 import TemplateItems from './components/TemplateItems';
 
@@ -31,10 +33,16 @@ function Directory() {
 
   const { data: template, status: templateStatus } = useGetDirectoryTemplate(selectedTemplateId);
 
+  const extendedObj = {
+    name: 'Directory',
+    source: libraryIcon,
+    children: <LibraryData />
+  };
+
   return (
     <>
       <PilotSection templateId={selectedTemplateId} />
-      <PageWrapper
+      <Page
         pilotConfig={pilotConfig}
         header={
           <div className="w-full border-b border-gray-200">
@@ -62,6 +70,7 @@ function Directory() {
             <CreateDirectorySideOver />
           </>
         }
+        extendedBar={extendedObj}
       >
         <div className="flex flex-col items-start w-full h-full py-2">
           {/* status checking */}
@@ -121,7 +130,7 @@ function Directory() {
 
           {selectedTemplateId ? <TemplateItems selectedTemplateId={selectedTemplateId} /> : null}
         </div>
-      </PageWrapper>
+      </Page>
     </>
   );
 }

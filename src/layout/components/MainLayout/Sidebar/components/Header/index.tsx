@@ -8,6 +8,7 @@ import TeamSettings from '../../../../../../pages/workspace/workspaceSettings/co
 import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettings/UserSettingsModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoNotificationsOutline } from 'react-icons/io5';
+import Toggle from '../Toggle';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -15,13 +16,14 @@ export default function Header() {
   const { sidebarSettings } = useAppSelector((state) => state.hub);
   const { showSidebar, scrollTop } = useAppSelector((state) => state.account);
   const { notificationCount } = useAppSelector((state) => state.notification);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const handleClick = () => {
-    navigate('/notification');
+    navigate(`/${currentWorkspaceId}/notification`);
   };
 
   return (
     <div
-      className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-9 items-center' : 'pr-7 items-center')}
+      className={cl('flex py-2 border-b gap-1', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center')}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/">
@@ -47,6 +49,7 @@ export default function Header() {
           <TeamSettings />
         </div>
         <UserSettingsModal />
+        <Toggle />
       </div>
     </div>
   );

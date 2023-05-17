@@ -90,7 +90,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     dispatch(setActiveEntity({ id: id, type: taskType }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/h/${id}`, {
+    navigate(`tasks/h/${id}`, {
       replace: true
     });
     localStorage.setItem(
@@ -110,9 +110,10 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     } else {
       dispatch(setSubHubExt({ id: id, type: taskType }));
     }
+
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
-      navigate(`/h/${id}`, {
+      navigate(`tasks/h/${id}`, {
         replace: true
       });
     }
@@ -181,10 +182,10 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
             />
             {showSidebar && (
               <div>
-                {hub.children.length && showChildren === hub.id ? (
+                {hub.children.length && showChildren ? (
                   <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
                 ) : null}
-                {hub.wallets.length && showChildren === hub.id ? (
+                {hub.wallets.length && showChildren ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -192,7 +193,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
                     paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && showChildren === hub.id && !showExtendedBar ? (
+                {hub.lists.length && showChildren && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '48' : '50'}`} />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}

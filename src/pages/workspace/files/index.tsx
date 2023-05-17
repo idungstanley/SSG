@@ -7,11 +7,12 @@ import { cl } from '../../../utils';
 
 function Files() {
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   return (
     <>
       <PlaceItem label="Forms" id="5" icon={<DocumentTextIcon className="w-4 h-4" />} />
       <Link
-        to="/explorer"
+        to={`${currentWorkspaceId}/explorer`}
         id="home"
         key=""
         className={cl(

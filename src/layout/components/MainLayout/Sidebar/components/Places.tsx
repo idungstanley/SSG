@@ -5,7 +5,7 @@ import {
   setActivePlaceName,
   setCurrentItem
 } from '../../../../../features/workspace/workspaceSlice';
-import Dashboard from '../../../../../pages/workspace/dashboard';
+// import Dashboard from '../../../../../pages/workspace/dashboard';
 import Files from '../../../../../pages/workspace/files';
 import Hubs from '../../../../../pages/workspace/hubs';
 import Inbox from '../../../../../pages/workspace/inbox';
@@ -19,14 +19,12 @@ import AlsoHr from '../../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../../pages/workspace/commerce';
 import RoutePlanner from '../../../../../pages/workspace/routePlanner';
 import { IoBusinessOutline } from 'react-icons/io5';
-import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { FaHandsHelping } from 'react-icons/fa';
-import { MdAlternateEmail } from 'react-icons/md';
+import { MdAlternateEmail, MdInsights, MdOutlineManageAccounts } from 'react-icons/md';
 import { HiOutlineInbox } from 'react-icons/hi';
 import Email from '../../../../../pages/workspace/email';
 import { BsListCheck } from 'react-icons/bs';
-import Tracker from '../../../../../pages/workspace/tracker';
-import { SiPivotaltracker } from 'react-icons/si';
 import {
   closestCenter,
   DndContext,
@@ -38,6 +36,10 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { CiRoute } from 'react-icons/ci';
+import { TfiTicket } from 'react-icons/tfi';
+import Tickets from '../../../../../pages/workspace/tickets';
+import CrManager from '../../../../../pages/workspace/crManager';
+import WorkInsights from '../../../../../pages/workspace/tracker';
 
 export const places = [
   {
@@ -50,8 +52,8 @@ export const places = [
     name: 'TASKS',
     id: '2',
     place: <Hubs />,
-    icon: <BsListCheck className="w-4 h-4" />
-    // link: ''
+    icon: <BsListCheck className="w-4 h-4" />,
+    link: '/tasks'
   },
   {
     name: 'In-tray',
@@ -64,7 +66,7 @@ export const places = [
     id: '4',
     place: <ExtendedBar />,
     source: cabinetIcon,
-    link: 'explorer'
+    link: '/explorer'
   },
   {
     name: 'Forms',
@@ -73,33 +75,40 @@ export const places = [
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
-    name: 'Time clock',
+    name: 'WORK INSIGHTS',
     id: '6',
-    place: <Dashboard />,
-    icon: <ClockIcon className="w-4 h-4" />
-  },
-  {
-    name: 'TRACKER',
-    id: '7',
-    place: <Tracker />,
-    icon: <SiPivotaltracker className="w-4 h-4" />
+    place: <WorkInsights />,
+    icon: <MdInsights className="w-4 h-4" />
   },
   {
     name: 'ROUTEPLAN',
-    id: '8',
+    id: '7',
     place: <RoutePlanner />,
     icon: <CiRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
-    id: '9',
+    id: '8',
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />,
+    link: '/calendar'
+  },
+  {
+    name: 'TICKETS',
+    id: '9',
+    place: <Tickets />,
+    icon: <TfiTicket className="w-4 h-4" />
+  },
+  {
+    name: 'CR MANAGER',
+    id: '10',
+    place: <CrManager />,
+    icon: <MdOutlineManageAccounts className="w-4 h-4" />,
     link: 'calendar'
   },
   {
     name: 'Commerce',
-    id: '10',
+    id: '11',
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />
   }
@@ -111,6 +120,7 @@ function Places() {
   const { pathname } = useLocation();
 
   const { activePlaceId } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -119,6 +129,7 @@ function Places() {
   );
   const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
   const [items, setItems] = useState(places.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -162,7 +173,7 @@ function Places() {
       );
     }
     if (link) {
-      navigate('/' + link);
+      navigate(`/${currentWorkspaceId}` + link);
     }
   };
 
@@ -183,7 +194,9 @@ function Places() {
         <section>
           <ul
             aria-labelledby="projects-headline relative"
-            className="border-t border-b border-gray-200 divide-y divide-gray-200"
+            className={`border-t border-b border-gray-200 divide-y divide-gray-200 ${
+              showSidebar ? '' : 'flex flex-col items-center'
+            }`}
           >
             {places.map((place) => (
               <div key={place.id}>

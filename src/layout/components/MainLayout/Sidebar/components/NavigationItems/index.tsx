@@ -21,72 +21,6 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-const navigation = [
-  {
-    id: '1',
-    name: 'Home',
-    href: '/',
-    source: homeIcon,
-    alwaysShow: true
-  },
-  {
-    id: '2',
-    name: 'Notifications',
-    href: '/notification',
-    icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: true
-  },
-  {
-    id: '3',
-    name: 'Calendar',
-    href: '/calendar',
-    icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '4',
-    name: 'Community',
-    href: '/community',
-    icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '5',
-    name: 'Library',
-    href: '/directory',
-    icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '6',
-    name: 'Template',
-    href: '/template',
-    icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '7',
-    name: 'Goals',
-    href: '/goals',
-    source: groupIcon,
-    alwaysShow: false
-  },
-  {
-    id: '8',
-    name: 'Dashboards',
-    href: '/dashboard',
-    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '9',
-    name: 'Favorites',
-    href: '/favorites',
-    source: favoriteIcon,
-    alwaysShow: false
-  }
-];
-
 const showLessOrMore = [
   {
     name: 'Show Less',
@@ -99,6 +33,74 @@ const showLessOrMore = [
 ];
 
 export default function NavigationItems() {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const navigation = [
+    {
+      id: '1',
+      name: 'Home',
+      href: '/',
+      source: homeIcon,
+      alwaysShow: true
+    },
+    {
+      id: '2',
+      name: 'Notifications',
+      href: `/${currentWorkspaceId}/notification`,
+      icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: true
+    },
+    {
+      id: '3',
+      name: 'Calendar',
+      href: `/${currentWorkspaceId}/calendar`,
+      icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: false
+    },
+    {
+      id: '4',
+      name: 'Community',
+      href: `/${currentWorkspaceId}/community`,
+      icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: false
+    },
+    {
+      id: '5',
+      name: 'Library',
+      href: `/${currentWorkspaceId}/directory`,
+      icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: false
+    },
+    {
+      id: '6',
+      name: 'Template',
+      href: `/${currentWorkspaceId}/template`,
+      icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: false
+    },
+    {
+      id: '7',
+      name: 'Goals',
+      href: `/${currentWorkspaceId}/goals`,
+      source: groupIcon,
+      alwaysShow: false
+    },
+    {
+      id: '8',
+      name: 'Dashboards',
+      href: `/${currentWorkspaceId}/dashboard`,
+      icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
+      alwaysShow: false
+    },
+    {
+      id: '9',
+      name: 'Favorites',
+      href: `${currentWorkspaceId}/favorites`,
+      source: favoriteIcon,
+      alwaysShow: false
+    }
+  ];
+
   const [showMore, setShowMore] = useState(false);
   const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
@@ -140,7 +142,7 @@ export default function NavigationItems() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <nav className="flex flex-col mt-1">
+          <nav className="flex flex-col mt-1 items.center">
             {navigation.map((item) => (
               <NavigationItem key={item.name} item={item} isVisible={item.alwaysShow || showMore} />
             ))}
@@ -149,8 +151,8 @@ export default function NavigationItems() {
             <div
               onClick={() => setShowMore((prev) => !prev)}
               className={cl(
-                !showSidebar ? 'justify-center' : 'gap-2 items-center',
-                'flex cursor-pointer gap-2 items-center pl-6 p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
               style={{ height: '30px' }}
             >

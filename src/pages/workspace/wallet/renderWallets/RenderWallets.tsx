@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import ListNav from '../../lists/components/renderlist/ListNav';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import PageWrapper from '../../../../components/PageWrapper';
+import Page from '../../../../components/Page';
 import PilotSection, { pilotConfig } from '../components/PilotSection';
 import { UseGetFullTaskList } from '../../../../features/task/taskService';
 import ListFilter from '../../lists/components/renderlist/listDetails/ListFilter';
+import hubIcon from '../../../../assets/branding/hub.png';
 import TaskTemplateData from '../../tasks/component/views/hubLevel/TaskTemplateData';
 import NoTaskFound from '../../tasks/component/taskData/NoTaskFound';
 import { ImyTaskData2, ImyTaskData } from '../../../../features/task/taskSlice';
@@ -13,6 +14,8 @@ import FilterByAssigneesSliderOver from '../../lists/components/renderlist/filte
 import { useParams } from 'react-router-dom';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { setActiveItem, setCurrentWalletName } from '../../../../features/workspace/workspaceSlice';
+import ActiveHub from '../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import AdditionalHeader from '../../../../layout/components/MainLayout/Header/AdditionHeader';
 
 function RenderWallets() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -90,17 +93,25 @@ function RenderWallets() {
     }
   }
 
+  const extendedObj = {
+    name: 'TASKS',
+    children: <ActiveHub />,
+    source: hubIcon
+  };
+
   return (
     <>
       <PilotSection />
-      <PageWrapper
+      <Page
         pilotConfig={pilotConfig}
+        additionalHeader={<AdditionalHeader />}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
+        extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
-            className="w-full scrollbarDynCol overflow-auto"
+            className="w-full overflow-auto scrollbarDynCol"
             style={{ minHeight: '0', maxHeight: '100vh' }}
             ref={containerRef}
           >
@@ -130,7 +141,7 @@ function RenderWallets() {
             )}
           </div>
         </div>
-      </PageWrapper>
+      </Page>
     </>
   );
 }
