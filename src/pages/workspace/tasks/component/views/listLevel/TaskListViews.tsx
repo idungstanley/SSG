@@ -18,8 +18,6 @@ import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import { useList } from '../../../../../../features/list/listService';
 import CreateDropdownFieldModal from '../../../dropdown/CreateDropdownFieldModal';
 import SortModal from '../../../../../../components/SortModal/SortModal';
-import { AiOutlineClose } from 'react-icons/ai';
-import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 import SortDirectionCheck from './component/SortDirectionCheck';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];

@@ -2,7 +2,6 @@ import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
-import CalendarIcon from '../../../assets/icons/CalendarIcon';
 import WallchartIcon from '../../../assets/icons/WallchartIcon';
 import { useDaysOff, useDisapprovedDaysOff } from '../../../features/calendar/api/daysOffApi';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
