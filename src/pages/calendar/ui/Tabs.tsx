@@ -1,6 +1,7 @@
 import { AdjustmentsHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useAppSelector } from '../../../app/hooks';
 import CalendarIcon from '../../../assets/icons/CalendarIcon';
 import WallchartIcon from '../../../assets/icons/WallchartIcon';
 import { useDisapprovedDaysOff } from '../../../features/calendar/api/daysOffApi';
@@ -11,7 +12,7 @@ import { MOCKED_HUB_ID } from './DisapprovedDaysOffList';
 
 const tabs = [
   { name: 'Wallchart', href: '/calendar', icon: <WallchartIcon className="w-5 h-5 cursor-pointer" /> },
-  { name: 'NewWallchart', href: '/calendar/new', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
+  { name: 'NewWallchart', href: '/calendar/wallchart', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
   { name: 'Multi calendar', href: '/calendar/year', icon: <CalendarIcon className="w-5 h-5 cursor-pointer" /> },
   {
     name: 'Leave types',
@@ -20,9 +21,12 @@ const tabs = [
   }
 ];
 
+const unitePaths = (...paths: string[]) => paths.join('');
+
 const showInputOnTabs = [tabs[0].href, tabs[1].href, tabs[2].href];
 
 export function Tabs() {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { pathname } = useLocation();
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
@@ -51,12 +55,13 @@ export function Tabs() {
         {tabs.map((tab) => (
           <Link
             key={tab.name}
-            to={tab.href}
+            to={unitePaths('/', currentWorkspaceId || '', tab.href)}
             className={cl(
               'flex gap-3 rounded-md text-gray-900 items-center border whitespace-nowrap px-3 py-2 shadow-sm text-sm font-medium',
-              tab.href === pathname ? 'border-primary-200 bg-primary-200' : 'hover:bg-gray-300'
+              unitePaths('/', currentWorkspaceId || '', tab.href) === pathname
+                ? 'border-primary-200 bg-primary-200'
+                : 'hover:bg-gray-300'
             )}
-            aria-current={tab.href === pathname ? 'page' : undefined}
           >
             {tab.icon}
             {tab.name}
@@ -66,12 +71,13 @@ export function Tabs() {
         {privateTabs.map((tab) => (
           <Link
             key={tab.name}
-            to={tab.href}
+            to={unitePaths('/', currentWorkspaceId || '', tab.href)}
             className={cl(
               'flex gap-3 rounded-md items-center text-gray-900 border whitespace-nowrap px-3 py-2 shadow-sm text-sm font-medium relative',
-              tab.href === pathname ? 'border-primary-200 bg-primary-200' : 'hover:bg-gray-300'
+              unitePaths('/', currentWorkspaceId || '', tab.href) === pathname
+                ? 'border-primary-200 bg-primary-200'
+                : 'hover:bg-gray-300'
             )}
-            aria-current={tab.href === pathname ? 'page' : undefined}
           >
             {tab.icon}
             {tab.name}
