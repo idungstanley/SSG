@@ -120,7 +120,7 @@ export default function TaskListViews({
                         style={{ color: '#78828d', fontSize: '12px' }}
                       >
                         <span
-                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                          className="font-bold whitespace-nowrap cursor-pointer hover:text-clip hover:w-10"
                           onClick={() => setOptions(col.id)}
                         >
                           {col.value}
@@ -184,7 +184,7 @@ export default function TaskListViews({
                         style={{ color: '#78828d', fontSize: '12px' }}
                       >
                         <span
-                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                          className="font-bold whitespace-nowrap cursor-pointer hover:text-clip hover:w-10"
                           onClick={() => setOptions(col.id)}
                           // onClick={() => sortArr.length > 0 && setOptions(col.id)}
                         >
@@ -286,7 +286,7 @@ export default function TaskListViews({
                       <MdDragIndicator />
                     </span>
                     <span
-                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                      className="font-bold whitespace-nowrap cursor-pointer hover:text-clip hover:w-10"
                       onClick={() => sortArr.length > 0 && setOptions(col.id)}
                     >
                       {col.value}
@@ -354,7 +354,7 @@ export default function TaskListViews({
                       <MdDragIndicator />
                     </span>
                     <span
-                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+                      className="font-bold whitespace-nowrap cursor-pointer hover:text-clip hover:w-10"
                       onClick={() => sortArr.length > 0 && setOptions(col.id)}
                     >
                       {col.value}
