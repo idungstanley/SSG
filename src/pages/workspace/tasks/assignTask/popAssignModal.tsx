@@ -17,7 +17,7 @@ export function PopAssignModal({
   width: string;
 }) {
   const { data } = useCommunity();
-  console.log(data);
+
   return (
     <div className="absolute bg-white shadow-xl z-1000 w-64 opacity-1 rounded mb-8">
       {modalLoader ? (
