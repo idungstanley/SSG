@@ -1,4 +1,3 @@
-import { Dayjs } from 'dayjs';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectCalendar } from '../../../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -13,19 +12,13 @@ export function MembersWithDays() {
 
   const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
 
-  const handleEvent = (dates: { start: Dayjs; end: Dayjs }) => {
-    // setNewDayOff({ start, end });
-    // setShowCreateDayOffModal(true);
-    console.log(dates);
-  };
-
   return (
     <div className="w-full space-y-6">
       {filteredMembers.map((i) => (
         <div key={i.id} className="grid grid-cols-autoFr items-center">
           <MemberCard initials={i.user.initials} email={i.user.email} name={i.user.name} />
 
-          <Month handleEvent={handleEvent} userId={i.user.id} />
+          <Month userId={i.user.id} />
         </div>
       ))}
     </div>

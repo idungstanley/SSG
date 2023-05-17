@@ -1,7 +1,9 @@
 import { Menu, Transition } from '@headlessui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Fragment, useState } from 'react';
+import { useAppDispatch } from '../../../../app/hooks';
 import { useDaysOff } from '../../../../features/calendar/api/daysOffApi';
+import { setNewDayOff } from '../../../../features/calendar/slice/calendarSlice';
 import { DayOff } from '../../../../features/calendar/types/daysOff';
 import { getCurrentDaysInMonth, isSameOrAfter, isSameOrBefore } from '../../lib';
 import { getDatesInRange } from '../../lib';
@@ -10,12 +12,12 @@ import { Day } from './Day';
 
 interface MonthProps {
   userId: string;
-  handleEvent: ({ start, end }: { start: Dayjs; end: Dayjs }) => void;
 }
 
 const currentDate = dayjs();
 
-export function Month({ userId, handleEvent }: MonthProps) {
+export function Month({ userId }: MonthProps) {
+  const dispatch = useAppDispatch();
   const { data } = useDaysOff(MOCKED_HUB_ID);
   const daysOff = data?.find((i) => i.team_member.id === userId);
 
@@ -43,10 +45,12 @@ export function Month({ userId, handleEvent }: MonthProps) {
   // the user stopped selecting dates
   const handleDateMouseUp = () => {
     setIsMouseDown(false);
-    const start = selectedDates[0];
-    const end = selectedDates[selectedDates.length - 1];
+    const start_date = selectedDates[0].format('YYYY-MM-DD');
+    const end_date = selectedDates[selectedDates.length - 1].format('YYYY-MM-DD');
 
-    handleEvent({ start, end });
+    dispatch(setNewDayOff({ start_date, end_date, userId }));
+
+    // reset
     setSelectedDates([]);
   };
 
