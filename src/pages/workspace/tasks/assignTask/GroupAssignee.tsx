@@ -128,7 +128,7 @@ function GroupAssignee({
                     roundedStyle="circular"
                     height="h-20"
                     width="w-20"
-                    currHoveredOnUser={newData.id}
+                    currHoveredOnUser={newData.id ?? ''}
                   />
                 )}
               </div>
@@ -208,7 +208,7 @@ function GroupAssignee({
                       roundedStyle="circular"
                       height="h-20"
                       width="w-20"
-                      currHoveredOnUser={newData.id}
+                      currHoveredOnUser={newData.id ?? ''}
                     />
                   )}
                 </div>

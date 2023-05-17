@@ -17,7 +17,7 @@ export function PopAssignModal({
   roundedStyle: string;
   height: string;
   width: string;
-  currHoveredOnUser: string | undefined;
+  currHoveredOnUser: string | undefined | React.Key;
 }) {
   const { data } = useCommunity();
   const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id == currHoveredOnUser), [data]);
