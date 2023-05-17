@@ -1,20 +1,18 @@
 import { useAppDispatch } from '../../../../app/hooks';
 import { useLeaveTypes } from '../../../../features/calendar/api/leaveTypesApi';
 import { setUpdateCords } from '../../../../features/calendar/slice/calendarSlice';
-import { useThrottle } from '../../../../hooks/useThrottle';
+import { useScroll } from '../../../../hooks/useScroll';
 import { AddLeaveType } from './AddLeaveType';
 import { LeaveTypeRow } from './LeaveTypeRow';
 
 export default function LeaveTypesTable() {
   const dispatch = useAppDispatch();
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
   const { data: leaveTypes } = useLeaveTypes();
 
-  const onScroll = useThrottle(() => {
-    dispatch(setUpdateCords());
-  }, 500);
-
   return (
-    <div onScroll={onScroll} className="overflow-y-scroll h-2/3">
+    <div onScroll={onScroll} style={{ height: 500 }} className="overflow-y-scroll">
       <table className="min-w-full divide-y divide-gray-300">
         <thead>
           <tr>
@@ -44,6 +42,18 @@ export default function LeaveTypesTable() {
         <tbody className="divide-y divide-gray-200">
           <AddLeaveType />
 
+          {leaveTypes?.map((type) => (
+            <LeaveTypeRow
+              color={type.color}
+              name={type.name}
+              key={type.id}
+              id={type.id}
+              is_deducted={type.is_deducted}
+              icon={type.icon}
+              is_include_max_off={type.is_include_max_off}
+              is_require_approval={type.is_require_approval}
+            />
+          ))}
           {leaveTypes?.map((type) => (
             <LeaveTypeRow
               color={type.color}

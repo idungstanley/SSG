@@ -57,15 +57,13 @@ import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import WallchartPage from './pages/calendar/pages/WallchartPage';
-import YearPage from './pages/calendar/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
 import { IUser } from './types';
 import ManagePage from './pages/calendar/pages/ManagePage';
-import NewWallchart from './pages/calendar/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
 import TasksIndex from './pages/workspace/tasksIndex';
 import SubscribersSettings from './pages/settings/NotificationSettings/SubscribersSettings';
+import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 
 const inbox = [
   {
@@ -142,14 +140,7 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-            {
-              path: 'new',
-              element: <NewWallchart />
-            },
-            {
-              path: 'year',
-              element: <YearPage />
-            },
+
             {
               path: 'types',
               element: <LeaveTypesPage />

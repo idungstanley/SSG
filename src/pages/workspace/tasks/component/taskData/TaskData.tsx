@@ -68,7 +68,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     <div className={cl('w-full flex border-t border-b', taskBg)}>
       {/* sticky task name */}
       <div
-        className="absolute group pointer-events-none left-0 xl:left-6 -right-96 xl:right-0 z-50"
+        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
         style={{ zIndex: '60', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]

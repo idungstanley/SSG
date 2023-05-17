@@ -33,12 +33,12 @@ export default function DisapprovedDaysOffList() {
             actions={
               <div className="grid grid-cols-2 py-1">
                 <div className="flex w-full h-full items-center justify-center">
-                  <button onClick={() => onApprove(dayOff.id)} className="text-red-900 p-2">
+                  <button onClick={() => onDisapprove(dayOff.id)} className="text-red-900 p-2">
                     <XCircleIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
                 <div className="flex w-full h-full items-center justify-center">
-                  <button onClick={() => onDisapprove(dayOff.id)} className="text-green-900 p-2">
+                  <button onClick={() => onApprove(dayOff.id)} className="text-green-900 p-2">
                     <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>

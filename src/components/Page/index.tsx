@@ -10,25 +10,18 @@ import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
 
-interface PageWrapperProps {
+interface PageProps {
   header: JSX.Element;
   additionalHeader?: JSX.Element;
   children: ReactNode;
   additional?: JSX.Element;
   extendedBar?: ExtendedBarProps;
-  pilotConfig: { tabs: IPilotTab[]; sections: IPilotSection[] };
+  pilotConfig?: { tabs: IPilotTab[]; sections: IPilotSection[] };
 }
 
-export default function PageWrapper({
-  header,
-  additionalHeader,
-  children,
-  additional,
-  pilotConfig,
-  extendedBar
-}: PageWrapperProps) {
+export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   return (
-    <main className="grid h-full w-full grid-cols-autoFr">
+    <main className="grid w-full h-full grid-cols-autoFr">
       {extendedBar ? (
         <ExtendedBar name={extendedBar.name} icon={extendedBar.icon} source={extendedBar.source}>
           {extendedBar.children}
@@ -43,7 +36,8 @@ export default function PageWrapper({
 
         <div className="relative grid w-full h-full grid-cols-frAuto">
           <div className="overflow-scroll">{children}</div>
-          <Pilot pilotConfig={pilotConfig} />
+
+          {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
         </div>
       </section>
 
@@ -114,9 +108,9 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
         <>
           <ExtendedItem name={name} icon={icon} source={source} />
           <div>{children}</div>
+          <Dividers />
         </>
       ) : null}
-      <Dividers />
     </aside>
   );
 }
