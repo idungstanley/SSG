@@ -1,79 +1,81 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import dayjs from 'dayjs';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../../app/hooks';
 import { ListBox } from '../../../components/ListBox';
+import { useAddDayOff } from '../../../features/calendar/api/daysOffApi';
+import { useLeaveTypes } from '../../../features/calendar/api/leaveTypesApi';
+import { selectCalendar, setNewDayOff } from '../../../features/calendar/slice/calendarSlice';
+import { LeaveType } from '../../../features/calendar/types/leaveTypes';
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import { useDaysOff } from '../lib/daysOffContext';
 import { checkIsOwner } from '../lib/userUtils';
+import { MOCKED_HUB_ID } from './DisapprovedDaysOffList';
 
 export default function CreateDayOffModal() {
-  const {
-    showCreateDayOffModal: show,
-    newDayOff: dayOff,
-    setNewDayOff,
-    setShowCreateDayOffModal,
-    onCreateDayOff,
-    activeMemberId,
-    leaveTypes
-  } = useDaysOff();
-
-  const [type, setType] = useState(leaveTypes[0]);
+  const dispatch = useAppDispatch();
   const reasonRef = useRef<HTMLInputElement>(null);
-  const [member, setMember] = useState<{ id: string; title: string } | null>(null);
+  const { newDayOff } = useSelector(selectCalendar);
+  const { data: types } = useLeaveTypes();
+  const { mutate: onAdd } = useAddDayOff(MOCKED_HUB_ID);
+  const { data: teamMembers } = useGetTeamMembers({ page: 1, query: '' });
 
-  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const showModal = !!newDayOff;
+  const leaveTypes = types ?? [];
+  const members = teamMembers?.data.team_members ?? [];
 
-  const isOwner = checkIsOwner(data?.data.team_members ?? []);
+  const [type, setType] = useState<LeaveType | null>(null);
+  const [member, setMember] = useState<{ id: string; name: string } | null>(null);
 
-  const members = useMemo(
-    () => data?.data.team_members.map((i) => ({ id: i.user.id, title: i.user.name })) ?? [],
-    [data]
-  );
+  const isOwner = checkIsOwner(teamMembers?.data.team_members ?? []);
 
-  const onClose = () => {
-    setNewDayOff(null);
-    setShowCreateDayOffModal(false);
-  };
+  const onClose = () => dispatch(setNewDayOff(null));
 
   useEffect(() => {
-    if (members) {
-      const findMember = members.find((i) => i.id === activeMemberId);
+    const findMember = members.find((i) => i.id === newDayOff?.userId);
 
-      if (findMember) {
-        setMember(findMember);
-      }
+    if (findMember) {
+      setMember({ id: findMember.id, name: findMember.user.name });
     }
-  }, [members, activeMemberId]);
+  }, [members, newDayOff]);
+
+  useEffect(() => {
+    if (leaveTypes) {
+      setType(leaveTypes[0]);
+    }
+  }, [leaveTypes]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!dayOff) {
+    if (!newDayOff) {
       return;
     }
 
-    if (reasonRef.current && member) {
+    if (reasonRef.current && member && type) {
       const reason = reasonRef.current.value;
-      const isApproved = isOwner;
+      // const isApproved = isOwner;
 
-      onCreateDayOff({
-        type,
+      const { start_date, end_date, userId } = newDayOff;
+
+      onAdd({
+        hub_id: MOCKED_HUB_ID,
         reason,
-        start: dayOff.start.format('YYYY-MM-DD'),
-        end: dayOff.end.format('YYYY-MM-DD'),
-        memberId: member.id,
-        isApproved
+        start_date,
+        end_date,
+        team_member_id: userId,
+        leave_type_id: type.id
       });
 
       // reset
-      setNewDayOff(null);
+      onClose();
       setType(leaveTypes[0]);
-      setShowCreateDayOffModal(false);
     }
   };
 
   return (
-    <Transition.Root show={show} as={Fragment}>
+    <Transition.Root show={showModal} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
           as={Fragment}
@@ -101,7 +103,7 @@ export default function CreateDayOffModal() {
               <Dialog.Panel
                 as="form"
                 onSubmit={handleSubmit}
-                className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+                className="relative transform rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
               >
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
@@ -120,23 +122,28 @@ export default function CreateDayOffModal() {
 
                     {/* main */}
                     <div className="mt-2 p-2 w-full space-y-5">
-                      {dayOff ? (
+                      {newDayOff ? (
                         <div className="flex w-full justify-between items-center">
                           <p>
                             Starting
-                            <span className="border rounded-md p-2 ml-2">{dayOff.start.format('DD.MM.YYYY')}</span>
+                            <span className="border rounded-md p-2 ml-2">{newDayOff.start_date}</span>
                           </p>
                           <p>
-                            Ending <span className="border rounded-md p-2 ml-2">{dayOff.end.format('DD MM YYYY')}</span>{' '}
+                            Ending <span className="border rounded-md p-2 ml-2">{newDayOff.end_date}</span>
                           </p>
                         </div>
                       ) : null}
 
-                      {isOwner && member ? (
-                        <ListBox setSelected={setMember} value={member} values={members} title="Who for" />
+                      {member ? (
+                        <ListBox
+                          setSelected={setMember}
+                          value={member}
+                          values={members.map((i) => ({ id: i.id, name: i.user.name }))}
+                          title="Who for"
+                        />
                       ) : null}
 
-                      <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" />
+                      {type ? <ListBox setSelected={setType} value={type} values={leaveTypes} title="Type" /> : null}
 
                       <div>
                         <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
@@ -158,9 +165,10 @@ export default function CreateDayOffModal() {
                   </div>
                 </div>
 
-                {dayOff ? (
+                {newDayOff ? (
                   <p className="py-2 text-center">
-                    Takes {dayOff.end.diff(dayOff.start, 'day') + 1 || 1} days from allowance
+                    Takes {dayjs(newDayOff.end_date).diff(dayjs(newDayOff.start_date), 'day') + 1 || 1} days from
+                    allowance
                   </p>
                 ) : null}
 

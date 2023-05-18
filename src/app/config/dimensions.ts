@@ -1,10 +1,10 @@
 import { getRelativeWidth } from '../../utils/widthUtils';
 
-const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || '""') as {
+const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || 'null') as {
   sidebarWidth: number;
   showSidebar: boolean;
-};
-const showSidebar = sidebarFromLS.showSidebar;
+} | null;
+const showSidebar = !!sidebarFromLS?.showSidebar;
 
 const PILOT_WIDTH = {
   DEFAULT: 25,

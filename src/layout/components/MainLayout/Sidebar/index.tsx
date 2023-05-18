@@ -7,7 +7,6 @@ import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
 import Search from './components/Search';
-// import Toggle from './components/Toggle';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';

@@ -51,21 +51,19 @@ import Home from './pages/workspace/home/Home';
 import ExplorerPage from './pages/explorer';
 import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
-import NotificationSettingsPage from './pages/settings/NotificationSettings/index';
+import NotificationSettingsPage from './pages/settings/NotificationSettings/GeneralNotification/index';
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
 import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import WallchartPage from './pages/calendar/pages/WallchartPage';
-import YearPage from './pages/calendar/pages/YearPage';
 import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
 import { IUser } from './types';
 import ManagePage from './pages/calendar/pages/ManagePage';
-import NewWallchart from './pages/calendar/pages/NewWallchartPage';
 import WorkspaceSettings from './pages/settings/WorkspaceSettings';
-import { useAppSelector } from './app/hooks';
 import TasksIndex from './pages/workspace/tasksIndex';
+import SubscribersSettings from './pages/settings/NotificationSettings/SubscribersSettings';
+import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 
 const inbox = [
   {
@@ -95,7 +93,9 @@ const inbox = [
 ];
 
 export const routes = (user: IUser | null) => {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const currentWorkspaceId: string | undefined = JSON.parse(
+    localStorage.getItem('currentWorkspaceId') || '"'
+  ) as string;
 
   return createBrowserRouter([
     {
@@ -140,14 +140,7 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-            {
-              path: 'new',
-              element: <NewWallchart />
-            },
-            {
-              path: 'year',
-              element: <YearPage />
-            },
+
             {
               path: 'types',
               element: <LeaveTypesPage />
@@ -209,6 +202,7 @@ export const routes = (user: IUser | null) => {
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
         { path: 'settings/permisions', element: <PermissionsPage /> },
+        { path: 'subscribers', element: <SubscribersSettings /> },
         {
           path: 'team-members/groups/:teamMemberGroupId',
           element: <TeamMemberGroupGeneralSettingsPage />

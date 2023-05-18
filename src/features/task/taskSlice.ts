@@ -20,6 +20,10 @@ export interface ICustomField {
     }
   ];
 }
+export interface ActiveTaskColumnProps {
+  id: string;
+  header: string;
+}
 
 export interface ImyTaskData {
   id: string;
@@ -126,6 +130,8 @@ interface TaskState {
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
   stream: MediaStream | null;
+  updateCords: number;
+  activeTaskColumn: ActiveTaskColumnProps;
 }
 
 const initialState: TaskState = {
@@ -177,7 +183,9 @@ const initialState: TaskState = {
   timeSortArr: [],
   screenRecording: 'idle',
   stream: null,
-  recorder: null
+  recorder: null,
+  updateCords: Date.now(),
+  activeTaskColumn: { id: '', header: '' }
 };
 
 export const taskSlice = createSlice({
@@ -251,6 +259,9 @@ export const taskSlice = createSlice({
     },
     getBoardView(state, action: PayloadAction<boolean>) {
       state.boardView = action.payload;
+    },
+    setActiveTaskColumn(state, action: PayloadAction<ActiveTaskColumnProps>) {
+      state.activeTaskColumn = action.payload;
     },
     getCalendeView(state, action: PayloadAction<boolean>) {
       state.calenderView = action.payload;
@@ -362,6 +373,9 @@ export const taskSlice = createSlice({
       const { recorder, stream } = action.payload;
       state.stream = stream;
       state.recorder = recorder;
+    },
+    setUpdateCords(state) {
+      state.updateCords = Date.now();
     }
   }
 });
@@ -411,6 +425,8 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setScreenRecording,
-  setScreenRecordingMedia
+  setScreenRecordingMedia,
+  setUpdateCords,
+  setActiveTaskColumn
 } = taskSlice.actions;
 export default taskSlice.reducer;

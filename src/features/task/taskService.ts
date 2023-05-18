@@ -44,6 +44,7 @@ export const UseGetFullTaskList = ({
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId, sortArrUpdate],
     async ({ pageParam = 0 }: { pageParam?: number }) => {

@@ -20,7 +20,6 @@ export default function Recording() {
     // isStopping,
   } = useMediaStream();
   const { screenRecording } = useAppSelector((state) => state.task);
-
   const startRecording = async () => {
     await handleStartStream();
   };
@@ -28,7 +27,6 @@ export default function Recording() {
   const stopRecording = () => {
     handleStopStream({ stream, recorder });
   };
-
   useEffect(() => {
     if (screenRecording !== 'recording') {
       dispatch(
@@ -39,7 +37,6 @@ export default function Recording() {
       );
     }
   }, [screenRecording]);
-
   return (
     <div>
       {screenRecording == 'recording' ? (

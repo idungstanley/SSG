@@ -2,14 +2,13 @@ import React from 'react';
 import {
   GetNotificationSettingsService,
   useChangeNotificationSettings
-} from '../../../../features/general/notification/notificationService';
-// import THeadData from './THead';
+} from '../../../../../features/general/notification/notificationService';
 import { MdOpenInBrowser, MdOutlineAlternateEmail } from 'react-icons/md';
 import { GoDeviceMobile } from 'react-icons/go';
 import { GrApps } from 'react-icons/gr';
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { cl } from '../../../../utils';
+import { cl } from '../../../../../utils';
 
 export default function NotificaitonTable() {
   const { data } = GetNotificationSettingsService();

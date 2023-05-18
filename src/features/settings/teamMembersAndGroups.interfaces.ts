@@ -5,7 +5,7 @@ export interface ITeamMembersAndGroup {
     name: string;
     id: string;
     email: string;
-    initials?: string | undefined;
+    initials: string;
   };
   initials: string;
   colour: string;
