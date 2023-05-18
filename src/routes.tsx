@@ -64,6 +64,7 @@ import WorkspaceSettings from './pages/settings/WorkspaceSettings';
 import TasksIndex from './pages/workspace/tasksIndex';
 import SubscribersSettings from './pages/settings/NotificationSettings/SubscribersSettings';
 import { WallchartPage } from './pages/calendar/pages/WallchartPage';
+import { useAppSelector } from './app/hooks';
 
 const inbox = [
   {
@@ -92,7 +93,9 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
+export const routes = (user: IUser | null) => {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   return createBrowserRouter([
     {
       path: 'onboarding',
@@ -111,7 +114,7 @@ export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
       element: user ? (
         user.default_workspace_id ? (
           // <MainLayout />
-          <Navigate to={`/${currentWorkspaceIdLS}`} />
+          <Navigate to={`/${currentWorkspaceId}`} />
         ) : (
           <Navigate to="/onboarding" />
         )
@@ -179,7 +182,7 @@ export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
       ]
     },
     {
-      path: '/settings',
+      path: '/:WSID/settings',
       element: user ? (
         user.default_workspace_id ? (
           <SideBarSettings />

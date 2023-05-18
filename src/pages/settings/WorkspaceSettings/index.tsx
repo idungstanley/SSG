@@ -20,6 +20,9 @@ function WorkspaceSettings() {
   const [selectedWorkSpace, setSelectedWorkspace] = useState<string | undefined>('');
   const { data: workSpaceData } = getWorkspaceService();
   const { data: AllMyWorkSpace, status } = getAllWorkSpaceService();
+
+  console.log('AllMyWorkSpaceTEST', AllMyWorkSpace);
+
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
   }, []);

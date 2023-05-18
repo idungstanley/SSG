@@ -14,6 +14,7 @@ import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesServi
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
 import { cl } from '../../../../utils';
+import { useAppSelector } from '../../../../app/hooks';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
@@ -21,35 +22,36 @@ const navigation = [
   { name: 'Inbox', href: '/inbox', current: false }
 ];
 
-const leftMenuItems = [
-  {
-    id: 1,
-    type: 'link',
-    onClick: '/settings/team-members',
-    title: 'Team members'
-  },
-  {
-    id: 2,
-    type: 'link',
-    onClick: '/settings/team-members/invites',
-    title: 'Team member invites'
-  },
-  {
-    id: 3,
-    type: 'link',
-    onClick: '/settings/team-members/groups',
-    title: 'Team member groups'
-  },
-  {
-    id: 4,
-    type: 'link',
-    onClick: '/settings/permissions',
-    title: 'Permissions'
-  }
-];
-
 function TopMenu() {
   const dispatch = useDispatch();
+
+
+  const leftMenuItems = [
+    {
+      id: 1,
+      type: 'link',
+      onClick: '/settings/team-members',
+      title: 'Team members'
+    },
+    {
+      id: 2,
+      type: 'link',
+      onClick: '/settings/team-members/invites',
+      title: 'Team member invites'
+    },
+    {
+      id: 3,
+      type: 'link',
+      onClick: '/settings/team-members/groups',
+      title: 'Team member groups'
+    },
+    {
+      id: 4,
+      type: 'link',
+      onClick: '/settings/permissions',
+      title: 'Permissions'
+    }
+  ];
 
   const user = useSelector(selectCurrentUser);
 
