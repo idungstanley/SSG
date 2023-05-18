@@ -30,11 +30,11 @@ export function PopAssignModal({
         filteredUser?.map((userData) => {
           return (
             <div key={userData.id} className="flex flex-col space-y-5 items-start justify-center p-4">
-              <div className="flex items-center w-20 h-20 rounded-full bg-gray-400 justify-center text-white">
+              <div className="flex items-center w-20 h-20 rounded-full bg-gray-400 justify-center text-white ">
                 {userData.user.avatar_path ? (
                   <img
                     src={userData.user.avatar_path}
-                    className={`inline-flex items-center justify-center ${height} ${width} ${
+                    className={`inline-flex items-center justify-center object-contain ${height} ${width} ${
                       roundedStyle === 'circular' && 'rounded-full'
                     } ${roundedStyle === 'rounded' && 'rounded'}`}
                   />
