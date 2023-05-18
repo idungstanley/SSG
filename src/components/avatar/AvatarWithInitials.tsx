@@ -22,9 +22,9 @@ function AvatarWithInitials({
 }: AvatarWithInitialsProps) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   return (
-    <div className="relative ">
+    <div className="relative">
       <span
-        className={`inline-flex  items-center justify-center ${height} ${width} ${
+        className={`inline-flex items-center justify-center ${height} ${width} ${
           roundedStyle === 'circular' && 'rounded-full'
         } ${roundedStyle === 'rounded' && 'rounded'}`}
         style={{ backgroundColor: backgroundColour }}

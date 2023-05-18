@@ -23,7 +23,7 @@ type filterSwitch = {
   toggle: boolean;
 };
 
-export default function SortModal({ headers, toggleModal, anchorEl, handleClose, handleSortFn }: SortModalProps) {
+export default function SortModal({ toggleModal, anchorEl, handleClose, handleSortFn }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const { sortAbleArr, activeTaskColumn } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
@@ -48,7 +48,7 @@ export default function SortModal({ headers, toggleModal, anchorEl, handleClose,
       });
     }
   };
-
+  console.log(filterDropDown);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
