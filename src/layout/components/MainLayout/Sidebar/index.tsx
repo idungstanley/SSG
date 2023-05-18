@@ -45,7 +45,7 @@ export default function Sidebar() {
       {/* sidebar */}
       <section
         style={{
-          width: `${sidebarWidthRD}px`
+          width: sidebarWidthRD
         }}
         ref={blockRef}
         className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"
