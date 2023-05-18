@@ -21,6 +21,8 @@ import SortModal from '../../../../../../components/SortModal/SortModal';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 import SortDirectionCheck from './component/SortDirectionCheck';
+import RoundedArrowUpDown from './component/RoundedArrowUpDown';
+import TaskListPropertyHead from './component/TaskListPropertyHead';
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 export type SortOption = {
@@ -69,8 +71,8 @@ export default function TaskListViews({
 
   console.log(sortAbleArr);
 
-  const handleRemoveFilter = (title: string): void => {
-    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title.toLowerCase();
+  const handleRemoveFilter = (title?: string): void => {
+    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
     dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
   };
@@ -130,113 +132,12 @@ export default function TaskListViews({
               ? hideTask.map(
                   (col) =>
                     col.value == 'Task' &&
-                    !col.hidden && (
-                      <div
-                        key={col.id}
-                        className="relative flex items-center text-xs font-medium uppercase hover:bg-gray-200 hover:text-gray-50 group"
-                        style={{ color: '#78828d', fontSize: '12px' }}
-                      >
-                        <span
-                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
-                          onClick={(e) => setOptions(e, col.id, col.value)}
-                        >
-                          {col.value}
-                        </span>
-                        {sortAbles.includes(col.value) && (
-                          <>
-                            {sortArr.length >= 1 && sortArr.includes(col.value) ? (
-                              ''
-                            ) : (
-                              <div className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-2 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100">
-                                <FaSortUp
-                                  className="text-white cursor-pointer hover:text-fuchsia-400"
-                                  onClick={() => handleSort(col.value, col.id, 'asc')}
-                                />
-                                <FaSortDown
-                                  className="text-gray-200 cursor-pointer hover:text-fuchsia-400"
-                                  onClick={() => handleSort(col.value, col.id, 'desc')}
-                                />
-                              </div>
-                            )}
-                            {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                              <SortDirectionCheck
-                                bgColor={baseColor}
-                                sortItemLength={sortArr.length}
-                                sortIndex={sortArr.indexOf(col.value)}
-                                sortValue={col.value}
-                                sortDesc={dirCheck(col.value)?.dir === 'desc'}
-                                handleRemoveSortFn={handleRemoveFilter}
-                              />
-                            )}
-                          </>
-                        )}
-                        {showSortModal && headerId === col.id && (
-                          <SortModal
-                            handleClose={handleClose}
-                            anchorEl={anchorEl}
-                            headers={sortArr}
-                            toggleModal={setShowSortModal}
-                            handleSortFn={handleSort}
-                          />
-                        )}
-                      </div>
-                    )
+                    !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
                 )
               : columns.map(
                   (col) =>
                     col.value == 'Task' &&
-                    !col.hidden && (
-                      <div
-                        key={col.id}
-                        className="relative flex items-center space-x-1 text-xs font-medium uppercase hover:bg-gray-200 hover:text-gray-50 group"
-                        style={{ color: '#78828d', fontSize: '12px' }}
-                      >
-                        <span
-                          className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
-                          onClick={(e) => setOptions(e, col.id, col.value)}
-                          // onClick={() => sortArr.length > 0 && setOptions(col.id)}
-                        >
-                          {col.value}
-                        </span>
-                        {sortAbles.includes(col.value) && (
-                          <>
-                            {sortArr.length >= 1 && sortArr.includes(col.value) ? (
-                              ''
-                            ) : (
-                              <div className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-2 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100">
-                                <FaSortUp
-                                  className="text-white cursor-pointer hover:text-fuchsia-400"
-                                  onClick={() => handleSort(col.value, col.id, 'asc')}
-                                />
-                                <FaSortDown
-                                  className="text-white cursor-pointer hover:text-fuchsia-400"
-                                  onClick={() => handleSort(col.value, col.id, 'desc')}
-                                />
-                              </div>
-                            )}
-                            {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                              <SortDirectionCheck
-                                bgColor={baseColor}
-                                sortItemLength={sortArr.length}
-                                sortIndex={sortArr.indexOf(col.value)}
-                                sortValue={col.value}
-                                sortDesc={dirCheck(col.value)?.dir === 'desc'}
-                                handleRemoveSortFn={handleRemoveFilter}
-                              />
-                            )}
-                          </>
-                        )}
-                        {showSortModal && headerId === col.id && (
-                          <SortModal
-                            handleClose={handleClose}
-                            anchorEl={anchorEl}
-                            headers={sortArr}
-                            toggleModal={setShowSortModal}
-                            handleSortFn={handleSort}
-                          />
-                        )}
-                      </div>
-                    )
+                    !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
                 )}
           </div>
         </div>
@@ -275,119 +176,13 @@ export default function TaskListViews({
               (col) =>
                 col.value !== 'Task' &&
                 col.value !== 'Tags' &&
-                !col.hidden && (
-                  <div
-                    key={col.id}
-                    className="relative flex items-center space-x-1 text-xs font-medium uppercase hover:bg-gray-200 hover:text-gray-50 group"
-                    style={{ color: '#78828d', fontSize: '12px' }}
-                  >
-                    <span className="text-sm text-gray-600 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
-                      <MdDragIndicator />
-                    </span>
-                    <span
-                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
-                      onClick={(e) => sortArr.length > 0 && setOptions(e, col.id, col.value)}
-                    >
-                      {col.value}
-                    </span>
-                    {sortAbles.includes(col.value) && (
-                      <>
-                        {sortArr.length >= 1 && sortArr.includes(col.value) ? (
-                          ''
-                        ) : (
-                          <div className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-2 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100">
-                            <FaSortUp
-                              className="text-white cursor-pointer hover:text-fuchsia-400"
-                              onClick={() => handleSort(col.value, col.id, 'asc')}
-                            />
-                            <FaSortDown
-                              className="text-white cursor-pointer hover:text-fuchsia-400"
-                              onClick={() => handleSort(col.value, col.id, 'desc')}
-                            />
-                          </div>
-                        )}
-                        {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                          <SortDirectionCheck
-                            bgColor={baseColor}
-                            sortItemLength={sortArr.length}
-                            sortIndex={sortArr.indexOf(col.value)}
-                            sortValue={col.value}
-                            sortDesc={dirCheck(col.value)?.dir === 'desc'}
-                            handleRemoveSortFn={handleRemoveFilter}
-                          />
-                        )}
-                      </>
-                    )}
-                    {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
-                      <SortModal
-                        handleClose={handleClose}
-                        anchorEl={anchorEl}
-                        headers={sortArr}
-                        toggleModal={setShowSortModal}
-                        handleSortFn={handleSort}
-                      />
-                    )}
-                  </div>
-                )
+                !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
             )
           : columns.map(
               (col) =>
                 col.value !== 'Task' &&
                 col.value !== 'Tags' &&
-                !col.hidden && (
-                  <div
-                    key={col.id}
-                    className="relative flex items-center justify-center w-24 space-x-1 text-xs font-medium uppercase hover:bg-gray-200 hover:text-gray-50 group"
-                    style={{ color: '#78828d', fontSize: '12px' }}
-                  >
-                    <span className="text-sm text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
-                      <MdDragIndicator />
-                    </span>
-                    <span
-                      className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
-                      onClick={(e) => sortArr.length > 0 && setOptions(e, col.id, col.value)}
-                    >
-                      {col.value}
-                    </span>
-                    {sortAbles.includes(col.value) && (
-                      <>
-                        {sortArr.length >= 1 && sortArr.includes(col.value) ? (
-                          ''
-                        ) : (
-                          <div className="flex flex-col items-center justify-center w-6 h-6 p-1 -space-y-2 transition-opacity duration-500 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100">
-                            <FaSortUp
-                              className="text-white cursor-pointer hover:text-fuchsia-400"
-                              onClick={() => handleSort(col.value, col.id, 'asc')}
-                            />
-                            <FaSortDown
-                              className="text-white cursor-pointer hover:text-fuchsia-400"
-                              onClick={() => handleSort(col.value, col.id, 'desc')}
-                            />
-                          </div>
-                        )}
-                        {sortArr.includes(col.value) && sortAbles.includes(col.value) && (
-                          <SortDirectionCheck
-                            bgColor={baseColor}
-                            sortItemLength={sortArr.length}
-                            sortIndex={sortArr.indexOf(col.value)}
-                            sortValue={col.value}
-                            sortDesc={dirCheck(col.value)?.dir === 'desc'}
-                            handleRemoveSortFn={handleRemoveFilter}
-                          />
-                        )}
-                      </>
-                    )}
-                    {showSortModal && sortArr.includes(col.value) && headerId === col.id && (
-                      <SortModal
-                        handleClose={handleClose}
-                        anchorEl={anchorEl}
-                        headers={sortArr}
-                        toggleModal={setShowSortModal}
-                        handleSortFn={handleSort}
-                      />
-                    )}
-                  </div>
-                )
+                !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
             )}
       </div>
     </div>
