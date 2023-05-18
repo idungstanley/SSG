@@ -12,6 +12,13 @@ function App() {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
 
+  const currentWorkspaceIdLS: string | undefined = JSON.parse(
+    localStorage.getItem('currentWorkspaceId') || '"'
+  ) as string;
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const currWorkspaceId = currentWorkspaceIdLS ? currentWorkspaceIdLS : currentWorkspaceId;
+
   const { data, status } = useGetSelf();
 
   useEffect(() => {
@@ -23,7 +30,7 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={routes(user)} />
+      <RouterProvider router={routes(user, currentWorkspaceIdLS as string)} />
       <Toaster position="bottom-left" />
       <Prompt />
     </>

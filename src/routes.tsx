@@ -92,11 +92,7 @@ const inbox = [
   }
 ];
 
-export const routes = (user: IUser | null) => {
-  const currentWorkspaceId: string | undefined = JSON.parse(
-    localStorage.getItem('currentWorkspaceId') || '"'
-  ) as string;
-
+export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
   return createBrowserRouter([
     {
       path: 'onboarding',
@@ -111,7 +107,7 @@ export const routes = (user: IUser | null) => {
       element: user ? (
         user.default_workspace_id ? (
           // <MainLayout />
-          <Navigate to={`/${currentWorkspaceId}`} />
+          <Navigate to={`/${currentWorkspaceIdLS}`} />
         ) : (
           <Navigate to="/onboarding" />
         )
@@ -120,7 +116,7 @@ export const routes = (user: IUser | null) => {
       )
     },
     {
-      path: `/${currentWorkspaceId}`,
+      path: `/${currentWorkspaceIdLS}`,
       element: <MainLayout />,
       children: [
         { path: '', element: <Home /> },
