@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ITaskTemplateData } from '../../../../../../../tasks/component/views/hubLevel/TaskTableTemplateData';
 import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import { ICustomField, ImyTaskData, setAddNewTaskItem } from '../../../../../../../../../features/task/taskSlice';
+import {
+  ICustomField,
+  ImyTaskData,
+  setAddNewTaskItem,
+  setUpdateCords
+} from '../../../../../../../../../features/task/taskSlice';
 import { TaskDataGroupingsProps } from '../../../../../../../../../features/task/interface.tasks';
 import TaskListViews from '../../../../../../../tasks/component/views/listLevel/TaskListViews';
 import TaskData from '../../../../../../../tasks/component/taskData/TaskData';
@@ -11,6 +16,7 @@ import { useAppSelector } from '../../../../../../../../../app/hooks';
 import AddNewItem from '../../../../../../../tasks/component/taskColumn/AddNewItem';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../../../features/list/listSlice';
 import { useDispatch } from 'react-redux';
+import { useScroll } from '../../../../../../../../../hooks/useScroll';
 
 export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplateData) {
   const [taskDataGroupingsByStatus, setTaskDataGroupingsByStatus] = useState<TaskDataGroupingsProps>({});
@@ -84,8 +90,14 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
     };
   }, [getTaskDataGrouping, setTaskDataGroupingsByStatus]);
 
+  const handleScroll = useScroll(() => dispatch(setUpdateCords()));
+
   return (
-    <main className="block m-1 rounded overflow-x-scroll" style={{ backgroundColor: '#e1e4e5', maxHeight: '85vh' }}>
+    <main
+      onScroll={handleScroll}
+      className="block m-1 rounded overflow-x-scroll"
+      style={{ backgroundColor: '#e1e4e5', maxHeight: '85vh' }}
+    >
       {/* lists */}
 
       {Object.keys(taskDataGroupingsByStatus).map((value) => (
@@ -164,9 +176,9 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
             <AddNewItem listId={taskDataGroupingsByStatus[value].key} />
           )}
 
-          <ul className="relative">
+          <ul className="relative pl-6">
             {Object.keys(taskDataGroupingsByStatus[value].tasksByStatus).map((status) => (
-              <li className="overflow-x-scroll" key={status}>
+              <li className="overflow-x-scroll relative" key={status}>
                 <TaskListViews
                   listId={taskDataGroupingsByStatus[value].key}
                   taskLength={taskDataGroupingsByStatus[value].tasksByStatus[status].length}
@@ -174,7 +186,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                 />
 
                 {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                  <div className="pl-6 group" key={task.id}>
+                  <div className="group" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>

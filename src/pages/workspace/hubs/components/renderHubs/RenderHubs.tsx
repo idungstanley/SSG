@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
-import PageWrapper from '../../../../../components/PageWrapper';
+import Page from '../../../../../components/Page';
 import { UseGetFullTaskList } from '../../../../../features/task/taskService';
 import TaskTemplateData from '../../../tasks/component/views/hubLevel/TaskTemplateData';
 import hubIcon from '../../../../../assets/branding/hub.png';
@@ -118,7 +118,7 @@ function RenderHubs() {
   return (
     <>
       <PilotSection />
-      <PageWrapper
+      <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
         header={
@@ -241,7 +241,7 @@ function RenderHubs() {
             </div>
           )}
         </section>
-      </PageWrapper>
+      </Page>
     </>
   );
 }
