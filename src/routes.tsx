@@ -102,6 +102,10 @@ export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
     },
+    // {
+    //   path: '/:WSID',
+    //   element: <MainLayout />
+    // },
     {
       path: '/',
       element: user ? (
@@ -116,7 +120,7 @@ export const routes = (user: IUser | null, currentWorkspaceIdLS: string) => {
       )
     },
     {
-      path: `/${currentWorkspaceIdLS}`,
+      path: '/:WSID',
       element: <MainLayout />,
       children: [
         { path: '', element: <Home /> },

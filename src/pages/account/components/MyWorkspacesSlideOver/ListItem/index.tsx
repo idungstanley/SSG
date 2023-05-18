@@ -27,12 +27,9 @@ function ListItem({ userWorkspace }: ListItemProps) {
       // Clear react-query and redux cache
 
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
+      console.log(data);
 
-      dispatch(
-        setCurrentWorkspace({
-          workspaceId: data.data.workspace.id
-        })
-      );
+      dispatch(setCurrentWorkspace(data.data.workspace.id));
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       navigate(`/${currentWorkspaceId}/explorer`);

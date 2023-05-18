@@ -127,11 +127,7 @@ export default function WorkspaceSettingsModal() {
       // Clear react-query and redux cache
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
 
-      dispatch(
-        setCurrentWorkspace({
-          workspaceId: data.data.workspace.id
-        })
-      );
+      dispatch(setCurrentWorkspace(data.data.workspace.id));
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       // navigate(`/${data.data.workspace.id}`);

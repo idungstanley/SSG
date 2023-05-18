@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
@@ -9,6 +9,8 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function MainLayout() {
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const { WSID } = useParams();
+  console.log(WSID);
 
   return (
     <div className={cl('h-full flex flex-col')}>
