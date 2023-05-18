@@ -2,9 +2,11 @@ import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
+import { setScreenRecording, setScreenRecordingMedia, setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
+import RecordRTC from 'recordrtc';
+import { useUploadRecording } from '../workspace/workspaceService';
 
 export const createTaskService = (data: {
   name: string;
@@ -406,10 +408,6 @@ export const UpdateTimeEntriesService = (data: {
 };
 
 export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null }) => {
-  // const queryClient = useQueryClient();
-  // return useQuery(
-  //   ['timeclock', { data: data.timeEntryDeleteTriggerId }],
-  //   async () => {
   const response = requestNew({
     url: `time-entries/${data.timeEntryDeleteTriggerId}`,
     method: 'DELETE'
@@ -569,3 +567,72 @@ export const UseUnassignTask = () => {
     }
   });
 };
+
+export const startMediaStream = async () => {
+  const mediaDevices = navigator.mediaDevices;
+  const audioConstraints: MediaTrackConstraints = {
+    echoCancellation: true,
+    noiseSuppression: true,
+    sampleRate: 44100
+  };
+
+  const videoStream: MediaStream = await mediaDevices.getDisplayMedia({
+    audio: audioConstraints,
+    video: true
+  });
+  const audioStream: MediaStream = await mediaDevices.getUserMedia({ audio: true });
+
+  const [videoTrack] = videoStream.getVideoTracks();
+  const [audioTrack] = audioStream.getAudioTracks();
+  const stream = new MediaStream([videoTrack, audioTrack]);
+
+  const recorder = new RecordRTC(stream, { type: 'video' });
+  await recorder.startRecording();
+  return { recorder, stream };
+};
+
+export function useMediaStream() {
+  const dispatch = useAppDispatch();
+  const { mutateAsync: startStream, isLoading: isStarting } = useMutation(startMediaStream);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { mutate } = useUploadRecording();
+
+  const handleStartStream = async () => {
+    const { stream, recorder } = await startStream();
+    dispatch(setScreenRecording('recording'));
+    dispatch(setScreenRecordingMedia({ recorder, stream }));
+    return { stream, recorder };
+  };
+
+  const handleStopStream = async ({ stream, recorder }: { stream: MediaStream | null; recorder: RecordRTC | null }) => {
+    recorder?.stopRecording(async () => {
+      const blob: Blob | undefined = recorder?.getBlob();
+      if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
+        await mutate({
+          blob,
+          currentWorkspaceId,
+          accessToken,
+          activeItemId,
+          activeItemType
+        });
+        const tracks = stream?.getTracks();
+        if (tracks) {
+          tracks.forEach((track) => track.stop());
+        }
+      }
+    });
+    dispatch(setScreenRecording('idle'));
+    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = { stream: null, recorder: null };
+    dispatch(setScreenRecordingMedia(newAction));
+  };
+
+  return {
+    handleStartStream,
+    handleStopStream,
+    isStarting
+    // isStopping,
+    // recordMedia,
+    // recordStream
+  };
+}

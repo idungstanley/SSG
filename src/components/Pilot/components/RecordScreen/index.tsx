@@ -51,11 +51,8 @@ export default function RecordScreen() {
     [activeSubRecordsTabId]
   );
   return (
-    // <div>
-    //   <Recording />
-    // </div>
     <section>
-      <div className={`flex bg-gray-400 pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
+      <div className={'flex bg-gray-400 pt-0.5'}>
         {ScreenRecordTabs.map((item) => (
           <section
             className={`flex flex-col w-full bg-white ${

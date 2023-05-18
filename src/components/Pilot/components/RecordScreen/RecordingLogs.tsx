@@ -2,8 +2,10 @@ import { useRef, useState } from 'react';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import moment from 'moment';
-import { getUploadAttatchment } from '../../../../features/workspace/workspaceService';
+import { deleteUploadedAttachment, getUploadAttatchment } from '../../../../features/workspace/workspaceService';
 import { useAppSelector } from '../../../../app/hooks';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function VideoEntries() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -11,6 +13,11 @@ export default function VideoEntries() {
   const [playToggle, setPlayToggle] = useState<boolean>(false);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const query = useQueryClient();
+
+  const { mutate } = useMutation(deleteUploadedAttachment, {
+    onSuccess: () => query.invalidateQueries(['attachments'])
+  });
 
   const handlePlayBack = (index: number) => {
     const videoRef = videoRefs.current[index];
@@ -53,36 +60,48 @@ export default function VideoEntries() {
           const { created_at, updated_at, file_format } = videoFile.physical_file;
           const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
           return (
-            <tr key={videoFile.id} className="flex space-x-10 border-b items-center p-2 relative">
+            <tr key={videoFile.id} className="flex justify-between border-b items-center p-2 relative">
+              <>
+                <td>
+                  <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
+                </td>
+                <td className="relative">
+                  <video
+                    ref={(el) => (videoRefs.current[index] = el)}
+                    src={videoFile.path}
+                    height={60}
+                    width={100}
+                    tabIndex={0}
+                    className="recording-tag"
+                    onMouseEnter={() => toggleControls(index, true)}
+                    onMouseLeave={() => toggleControls(index, false)}
+                    onEnded={() => setPlayToggle(false)}
+                  />
+                  {playToggle && hoverIndex === index ? (
+                    <RiStopFill
+                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      onClick={() => handlePlayBack(index)}
+                    />
+                  ) : (
+                    <RiPlayFill
+                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      onClick={() => handlePlayBack(index)}
+                    />
+                  )}
+                </td>
+                <td>{file_format.extension}</td>
+                <td>{moment(duration).format('HH:mm:ss')}</td>
+              </>
               <td>
-                <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
-              </td>
-              <td className="relative">
-                <video
-                  ref={(el) => (videoRefs.current[index] = el)}
-                  src={videoFile.path}
-                  height={60}
-                  width={100}
-                  tabIndex={0}
-                  className="recording-tag"
-                  onMouseEnter={() => toggleControls(index, true)}
-                  onMouseLeave={() => toggleControls(index, false)}
-                  onEnded={() => setPlayToggle(false)}
+                <TrashIcon
+                  className="text-red-500 font-bold w-3 h-3 cursor-pointer"
+                  onClick={() => {
+                    mutate({
+                      id: videoFile.id
+                    });
+                  }}
                 />
-                {playToggle && hoverIndex === index ? (
-                  <RiStopFill
-                    className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
-                    onClick={() => handlePlayBack(index)}
-                  />
-                ) : (
-                  <RiPlayFill
-                    className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
-                    onClick={() => handlePlayBack(index)}
-                  />
-                )}
               </td>
-              <td>{file_format.extension}</td>
-              <td>{moment(duration).format('HH:mm:ss')}</td>
             </tr>
           );
         })}

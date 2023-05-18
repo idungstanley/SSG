@@ -28,7 +28,7 @@ export default function PageWrapper({
   extendedBar
 }: PageWrapperProps) {
   return (
-    <main className="grid h-full w-full grid-cols-autoFr">
+    <main className="grid h-full w-full grid-cols-autoFr pb-5">
       {extendedBar ? (
         <ExtendedBar name={extendedBar.name} icon={extendedBar.icon} source={extendedBar.source}>
           {extendedBar.children}
