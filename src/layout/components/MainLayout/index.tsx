@@ -6,7 +6,6 @@ import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllWorkSpaceService } from '../../../features/workspace/workspaceService';
 import { switchWorkspaceService } from '../../../features/account/accountService';
 import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
