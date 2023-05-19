@@ -15,13 +15,17 @@ import { getHub } from '../../../../../features/hubs/hubSlice';
 export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
 
-  const { listId, hubId, walletId } = useParams();
+  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { filteredResults } = useAppSelector((state) => state.search);
 
   const id = currentItemId;
-  const fetchTree = hubs.length === 0 && (!!listId || !!hubId || !!walletId);
+  const fetch = currentWorkspaceId == workSpaceId;
+
+  const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
 
   const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
 

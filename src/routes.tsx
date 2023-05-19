@@ -105,15 +105,10 @@ export const routes = (user: IUser | null) => {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
     },
-    // {
-    //   path: '/:workSpaceId',
-    //   element: <MainLayout />
-    // },
     {
       path: '/',
       element: user ? (
         user.default_workspace_id ? (
-          // <MainLayout />
           <Navigate to={`/${currentWorkspaceId}`} />
         ) : (
           <Navigate to="/onboarding" />
