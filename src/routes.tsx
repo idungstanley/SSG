@@ -106,7 +106,7 @@ export const routes = (user: IUser | null) => {
       element: <TeamMemberAcceptInvite />
     },
     // {
-    //   path: '/:WSID',
+    //   path: '/:workSpaceId',
     //   element: <MainLayout />
     // },
     {
@@ -123,7 +123,7 @@ export const routes = (user: IUser | null) => {
       )
     },
     {
-      path: '/:WSID',
+      path: '/:workSpaceId',
       element: <MainLayout />,
       children: [
         { path: '', element: <Home /> },
@@ -182,7 +182,7 @@ export const routes = (user: IUser | null) => {
       ]
     },
     {
-      path: '/:WSID/settings',
+      path: '/:workSpaceId/settings',
       element: user ? (
         user.default_workspace_id ? (
           <SideBarSettings />

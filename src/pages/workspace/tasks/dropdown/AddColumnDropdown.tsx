@@ -44,7 +44,7 @@ export default function AddColumnDropdown({
   const dispatch = useAppDispatch();
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <div
         className=" scrollbarDynCol absolute  border-2  right-0 mt-9 w-56  rounded-lg shadow-xl drop-shadow-md py-1   "
         style={{ height: '50vh' }}

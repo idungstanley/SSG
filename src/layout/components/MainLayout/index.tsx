@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 
 function MainLayout() {
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
-  const { WSID } = useParams();
+  const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const queryClient = useQueryClient();
@@ -35,19 +35,16 @@ function MainLayout() {
   });
   const onSwitchWorkspace = () => {
     switchWorkspaceMutation.mutate({
-      workspaceId: WSID as string
+      workspaceId: workSpaceId as string
     });
     queryClient.invalidateQueries(['workspace']);
   };
 
   useEffect(() => {
-    if (WSID != currentWorkspaceId) {
+    if (workSpaceId != currentWorkspaceId) {
       onSwitchWorkspace();
     }
   }, []);
-
-  console.log('WSID', WSID);
-  console.log('currentWorkspaceId', currentWorkspaceId);
 
   return (
     <div className={cl('h-full flex flex-col')}>
