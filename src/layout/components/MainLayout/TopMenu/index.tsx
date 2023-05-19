@@ -14,7 +14,6 @@ import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesServi
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
 import { cl } from '../../../../utils';
-import { useAppSelector } from '../../../../app/hooks';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
@@ -24,7 +23,6 @@ const navigation = [
 
 function TopMenu() {
   const dispatch = useDispatch();
-
 
   const leftMenuItems = [
     {
