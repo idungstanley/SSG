@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import { useMediaStream } from '../../../../features/task/taskService';
+import { BsFillRecord2Fill } from 'react-icons/bs';
+import { IoStopCircleSharp } from 'react-icons/io5';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -42,13 +44,19 @@ export default function Recording() {
       {screenRecording == 'recording' ? (
         <>
           <div className="screenRecording flex flex-col">
-            <button onClick={stopRecording}>Stop Recording</button>
+            <button onClick={stopRecording} className="flex space-x-2 items-center justify-center">
+              <IoStopCircleSharp className="w-7 h-7" />
+              Stop Recording
+            </button>
           </div>
         </>
       ) : (
         <>
           <div className="screenRecording flex flex-col">
-            <button onClick={startRecording}>Start Recording</button>
+            <button onClick={startRecording} className="flex space-x-2 items-center justify-center">
+              <BsFillRecord2Fill className="w-7 h-7" />
+              Start Recording
+            </button>
           </div>
         </>
       )}
