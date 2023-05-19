@@ -37,16 +37,20 @@ export const useGetHubs = ({
   wallet_id?: string | null;
   listId?: string;
 }) => {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const id = hub_id || wallet_id || listId;
-  const { hubId, walletId } = useParams();
+  const { hubId, walletId, workSpaceId } = useParams();
   const { currentItemType, activeItemType } = useAppSelector((state) => state.workspace);
 
-  const isActiveHub = hub_id && (currentItemType === 'hub' || activeItemType === 'hub') ? `hubs${'/' + hub_id}` : null;
+  const fetch = currentWorkspaceId == workSpaceId;
+
+  const isActiveHub =
+    hub_id && (currentItemType === 'hub' || activeItemType === 'hub') && fetch ? `hubs${'/' + hub_id}` : null;
   const isActiveWallet =
-    wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet')
+    wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet') && fetch
       ? `wallets${`?parent_id=${wallet_id}`}`
       : null;
-  const isActiveList = listId ? `lists${`?parent_id=${listId}`}` : null;
+  const isActiveList = listId && fetch ? `lists${`?parent_id=${listId}`}` : null;
 
   return useQuery(
     [id ?? 'root', includeTree ? 'tree' : undefined],
@@ -199,6 +203,10 @@ export const UseGetHubDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType?: string | null;
 }) => {
+  const { workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const fetch = currentWorkspaceId == workSpaceId;
   return useQuery(
     ['hub-details', query],
     async () => {
@@ -209,7 +217,7 @@ export const UseGetHubDetails = (query: {
       return data;
     },
     {
-      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId
+      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch
     }
   );
 };

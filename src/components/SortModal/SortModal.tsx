@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillCaretRight, AiFillCaretDown, AiOutlineBgColors } from 'react-icons/ai';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Menu from '@mui/material/Menu';
 // import MenuItem from '@mui/material/MenuItem';
 // import { useDispatch } from 'react-redux';
@@ -9,6 +9,9 @@ import Input from '../input/Input';
 import { BiSearch } from 'react-icons/bi';
 import { BsSortAlphaDown, BsSortAlphaUp } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
+import SortDirectionCheck from '../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
+import { setSortArr, setSortArray } from '../../features/task/taskSlice';
 
 type SortModalProps = {
   headers: string[];
@@ -16,6 +19,7 @@ type SortModalProps = {
   handleSortFn: (header: string, id: string, order: 'asc' | 'desc') => void;
   anchorEl: HTMLElement | null;
   handleClose: () => void;
+  setAnchorEl?: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 };
 
 type filterSwitch = {
@@ -23,11 +27,21 @@ type filterSwitch = {
   toggle: boolean;
 };
 
-export default function SortModal({ toggleModal, anchorEl, handleClose, handleSortFn }: SortModalProps) {
+export default function SortModal({
+  headers,
+  toggleModal,
+  setAnchorEl,
+  anchorEl,
+  handleClose,
+  handleSortFn
+}: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { sortAbleArr, activeTaskColumn } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+  const { sortAbleArr, activeTaskColumn, sortArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const [sortDropDown, setSortDropDown] = useState<boolean>(false);
+  const [sortItems, getSortItems] = useState<SortOption[]>([]);
+  const [isSortCheckerDrRemoved, setSortDrChecker] = useState<boolean>(false);
   const [filterDropDown, setFilterDropDown] = useState<filterSwitch[]>([
     { title: 'color', toggle: false },
     { title: 'condition', toggle: false },
@@ -36,6 +50,36 @@ export default function SortModal({ toggleModal, anchorEl, handleClose, handleSo
   const header = activeTaskColumn.header;
   const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'name' : header.toLowerCase();
   const getOrder = sortAbleArr.find((item) => item.field === headerTxt);
+
+  const hasDuplicate = sortAbleArr.some(
+    (obj, index, self) =>
+      self.findIndex((o) => o[header as keyof typeof obj] === obj[header as keyof typeof obj]) !== index
+  );
+
+  useEffect(() => {
+    getSortItems(sortAbleArr.filter((item) => item.field === headerTxt));
+    if (hasDuplicate) return;
+    if (isSortCheckerDrRemoved) dispatch(setSortArr(sortArr.filter((el) => el !== header)));
+    setSortDrChecker(false);
+  }, [sortAbleArr, isSortCheckerDrRemoved]);
+
+  const handleRemoveFilter = (title?: string, sortCriteria?: string) => {
+    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
+    if (hasDuplicate) {
+      dispatch(
+        setSortArray(
+          sortAbleArr.filter(
+            (el) => el.field !== headerTxt || !Object.prototype.hasOwnProperty.call(el, sortCriteria as PropertyKey)
+          )
+        )
+      );
+    } else {
+      setSortDrChecker(true);
+      setAnchorEl?.(null);
+      dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
+      dispatch(setSortArr(sortArr.filter((el) => el !== title)));
+    }
+  };
 
   const open = Boolean(anchorEl);
   const switchBtns = (event: React.MouseEvent, field: string) => {
@@ -107,18 +151,29 @@ export default function SortModal({ toggleModal, anchorEl, handleClose, handleSo
                 </>
               )}
             </div>
-            <div className="flex items-center">
-              <div className="flex flex-col items-center justify-center -space-y-1">
-                <IoIosArrowUp
-                  className="text-gray-400"
-                  style={{ color: getOrder?.dir == 'asc' ? baseColor : '' }}
-                  onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'asc')}
-                />
-                <IoIosArrowDown
-                  className="text-gray-400"
-                  style={{ color: getOrder?.dir == 'desc' ? baseColor : '' }}
-                  onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'desc')}
-                />
+            <div className="flex items-center justify-between">
+              <SortDirectionCheck
+                bgColor={baseColor}
+                sortItemLength={sortItems.length}
+                sortIndex={sortItems.findIndex((item) => item.field === getOrder?.field)}
+                sortValue={getOrder?.field}
+                sortDesc={getOrder?.dir == 'desc'}
+                handleRemoveSortFn={handleRemoveFilter}
+                sortCriteria="dir"
+              />
+              <div className="flex items-center">
+                <div className="flex flex-col items-center justify-center -space-y-1">
+                  <IoIosArrowUp
+                    className="text-gray-400"
+                    style={{ color: getOrder?.dir == 'asc' ? baseColor : '' }}
+                    onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'asc')}
+                  />
+                  <IoIosArrowDown
+                    className="text-gray-400"
+                    style={{ color: getOrder?.dir == 'desc' ? baseColor : '' }}
+                    onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'desc')}
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
+import { useParams } from 'react-router-dom';
 
 export const createTaskService = (data: {
   name: string;
@@ -44,6 +45,10 @@ export const UseGetFullTaskList = ({
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const fetch = currentWorkspaceId == workSpaceId;
 
   return useInfiniteQuery(
     ['task', itemId, itemType, assigneeUserId, sortArrUpdate],
@@ -63,7 +68,7 @@ export const UseGetFullTaskList = ({
       });
     },
     {
-      enabled,
+      enabled: fetch,
       onSuccess: (data) => {
         data.pages.map((page) =>
           page.data.tasks.map((task: ITaskFullList) => queryClient.setQueryData(['task', task.id], task))
@@ -81,6 +86,11 @@ export const UseGetFullTaskList = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
+  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const fetch = currentWorkspaceId == workSpaceId;
+
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
@@ -92,7 +102,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       // enabled: false
-      enabled: task_id != null
+      enabled: task_id != null && fetch
     }
   );
 };
@@ -239,6 +249,11 @@ export const getTaskListService = ({
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const fetch = currentWorkspaceId == workSpaceId;
+
   return useInfiniteQuery(
     ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
 
@@ -257,6 +272,7 @@ export const getTaskListService = ({
       });
     },
     {
+      enabled: fetch,
       onSuccess: (data) => {
         data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -272,6 +288,10 @@ export const getTaskListService = ({
 };
 
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
+  const { workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const fetch = currentWorkspaceId == workSpaceId;
+
   return useQuery(
     ['task', { query: query.parentId }],
     async () => {
@@ -285,7 +305,7 @@ export const getTaskListService2 = (query: { parentId: string | null | undefined
       return data;
     },
     {
-      enabled: query.parentId != null,
+      enabled: query.parentId != null && fetch,
       onSuccess: () => {
         // const taskData = data.data.tasks.map((task) => {
         //   queryClient.setQueryData(['task', task.id], task);

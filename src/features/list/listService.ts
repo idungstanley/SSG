@@ -6,6 +6,7 @@ import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
+import { useParams } from 'react-router-dom';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -214,13 +215,18 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
   });
 };
 
-export const useList = (listId?: string) =>
-  useQuery(
+export const useList = (listId?: string) => {
+  const { workSpaceId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const fetch = currentWorkspaceId == workSpaceId;
+
+  return useQuery(
     ['list', listId],
     () =>
       requestNew<IListDetailRes>({
         url: `lists/${listId}`,
         method: 'GET'
       }),
-    { enabled: !!listId, select: (res) => res.data.list }
+    { enabled: !!listId && fetch, select: (res) => res.data.list }
   );
+};

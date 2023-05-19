@@ -27,6 +27,7 @@ export default function UserSettingsModal() {
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
   // const { userData } = useAppSelector((state) => state.userSetting);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userData } = useAppSelector((state) => state.userSetting);
 
   const logoutMutation = useMutation(logoutService, {
@@ -55,14 +56,14 @@ export default function UserSettingsModal() {
       id: 1,
       title: 'My Settings',
       handleClick: () => {
-        navigate('settings/profile');
+        navigate(`/${currentWorkspaceId}/settings/profile`);
       }
     },
     {
       id: 2,
       title: 'Notificaitons',
       handleClick: () => {
-        navigate('settings/notifications');
+        navigate(`/${currentWorkspaceId}/settings/notifications`);
       }
     },
     {

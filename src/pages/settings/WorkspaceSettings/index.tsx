@@ -20,6 +20,7 @@ function WorkspaceSettings() {
   const [selectedWorkSpace, setSelectedWorkspace] = useState<string | undefined>('');
   const { data: workSpaceData } = getWorkspaceService();
   const { data: AllMyWorkSpace, status } = getAllWorkSpaceService();
+
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
   }, []);
@@ -31,11 +32,7 @@ function WorkspaceSettings() {
       // Clear react-query and redux cache
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data.data.workspace.id));
 
-      dispatch(
-        setCurrentWorkspace({
-          workspaceId: data.data.workspace.id
-        })
-      );
+      dispatch(setCurrentWorkspace(data.data.workspace.id));
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
       // navigate('/');
