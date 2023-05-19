@@ -21,35 +21,35 @@ const navigation = [
   { name: 'Inbox', href: '/inbox', current: false }
 ];
 
-const leftMenuItems = [
-  {
-    id: 1,
-    type: 'link',
-    onClick: '/settings/team-members',
-    title: 'Team members'
-  },
-  {
-    id: 2,
-    type: 'link',
-    onClick: '/settings/team-members/invites',
-    title: 'Team member invites'
-  },
-  {
-    id: 3,
-    type: 'link',
-    onClick: '/settings/team-members/groups',
-    title: 'Team member groups'
-  },
-  {
-    id: 4,
-    type: 'link',
-    onClick: '/settings/permissions',
-    title: 'Permissions'
-  }
-];
-
 function TopMenu() {
   const dispatch = useDispatch();
+
+  const leftMenuItems = [
+    {
+      id: 1,
+      type: 'link',
+      onClick: '/settings/team-members',
+      title: 'Team members'
+    },
+    {
+      id: 2,
+      type: 'link',
+      onClick: '/settings/team-members/invites',
+      title: 'Team member invites'
+    },
+    {
+      id: 3,
+      type: 'link',
+      onClick: '/settings/team-members/groups',
+      title: 'Team member groups'
+    },
+    {
+      id: 4,
+      type: 'link',
+      onClick: '/settings/permissions',
+      title: 'Permissions'
+    }
+  ];
 
   const user = useSelector(selectCurrentUser);
 
