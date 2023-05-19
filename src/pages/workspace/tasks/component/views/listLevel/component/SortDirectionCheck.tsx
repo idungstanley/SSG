@@ -4,12 +4,13 @@ import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 
 interface SortDirectionProps {
   bgColor: string;
-  handleRemoveSortFn: (value: string) => void;
-  sortValue: string;
+  handleRemoveSortFn: (value?: string, sortCriteria?: string) => void;
+  sortValue?: string;
   sortDesc?: boolean;
   sortAsc?: boolean;
   sortItemLength: number;
   sortIndex: number;
+  sortCriteria?: string;
 }
 
 export default function SortDirectionCheck({
@@ -17,11 +18,12 @@ export default function SortDirectionCheck({
   handleRemoveSortFn,
   sortValue,
   sortDesc,
-  sortItemLength = 0,
+  sortItemLength,
   sortIndex,
-  sortAsc
+  sortAsc,
+  sortCriteria
 }: SortDirectionProps) {
-  return (
+  return sortItemLength >= 1 ? (
     <div className="sortClose-group rounded-xl">
       <div
         className={
@@ -45,9 +47,9 @@ export default function SortDirectionCheck({
         )}
       </div>
       <AiOutlineClose
-        onClick={() => handleRemoveSortFn(sortValue)}
+        onClick={() => handleRemoveSortFn(sortValue, sortCriteria)}
         className="w-3 h-3 m-1 font-bold text-white transition-opacity duration-500 opacity-100 sortClose"
       />
     </div>
-  );
+  ) : null;
 }
