@@ -41,8 +41,8 @@ export const authSlice = createSlice({
       state.currentWorkspaceId = action.payload.currentWorkspaceId;
       state.currentUserId = action.payload.currentUserId;
     },
-    setCurrentWorkspace: (state, action: PayloadAction<{ workspaceId: string }>) => {
-      state.currentWorkspaceId = action.payload.workspaceId;
+    setCurrentWorkspace: (state, action: PayloadAction<string>) => {
+      state.currentWorkspaceId = action.payload;
     },
     setCurrentUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;

@@ -21,7 +21,6 @@ export default function SortDirectionCheck({
   sortIndex,
   sortAsc
 }: SortDirectionProps) {
-  console.log(sortAsc);
   return (
     <div className="sortClose-group rounded-xl">
       <div

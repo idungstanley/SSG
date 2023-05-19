@@ -42,11 +42,7 @@ function CreateNewWorkspace() {
         })
       );
       localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.workspace.id));
-      dispatch(
-        setCurrentWorkspace({
-          workspaceId: successData.data.workspace.id
-        })
-      );
+      dispatch(setCurrentWorkspace(successData.data.workspace.id));
       // window.location.href = '/';
       if (user) {
         dispatch(

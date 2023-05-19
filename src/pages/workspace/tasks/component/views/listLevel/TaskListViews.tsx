@@ -246,12 +246,14 @@ export default function TaskListViews({
           <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton" onClick={() => handleDropDown()} />
           <span className="z-50 text-sm">
             {dropDown && (
-              <AddColumnDropdown
-                setShowDropdownFieldModal={setShowDropdownFieldModal}
-                setdropDown={setdropDown}
-                title=""
-                listItems={hideTask.length ? hideTask : taskColumns}
-              />
+              <div onBlur={() => handleDropDown()} tabIndex={0}>
+                <AddColumnDropdown
+                  setShowDropdownFieldModal={setShowDropdownFieldModal}
+                  setdropDown={setdropDown}
+                  title=""
+                  listItems={hideTask.length ? hideTask : taskColumns}
+                />
+              </div>
             )}
 
             {listId ? (
