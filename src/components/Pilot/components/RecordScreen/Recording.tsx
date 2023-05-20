@@ -4,7 +4,7 @@ import { setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import { useMediaStream } from '../../../../features/task/taskService';
 import { BsFillRecord2Fill } from 'react-icons/bs';
-import { IoStopCircleSharp } from 'react-icons/io5';
+import { IoStopCircleSharp, IoVolumeHigh, IoVolumeMute } from 'react-icons/io5';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,12 +12,13 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { recorder, stream } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const {
     handleStartStream,
-    handleStopStream
+    handleStopStream,
+    handleToggleMute
     // isStarting,
     // isStopping,
   } = useMediaStream();
@@ -41,9 +42,13 @@ export default function Recording() {
   }, [screenRecording]);
   return (
     <div>
-      {screenRecording == 'recording' ? (
+      {screenRecording === 'recording' ? (
         <>
-          <div className="screenRecording flex flex-col">
+          <div className="screenRecording flex space-x-2">
+            <button onClick={() => handleToggleMute()} className="flex space-x-2 items-center justify-center">
+              {!isMuted ? <IoVolumeMute className="w-7 h-7" /> : <IoVolumeHigh className="w-7 h-7" />}
+              {/* {isMuted ? <span>Mute</span> : <span>UnMute</span>} */}
+            </button>
             <button onClick={stopRecording} className="flex space-x-2 items-center justify-center">
               <IoStopCircleSharp className="w-7 h-7" />
               Stop Recording

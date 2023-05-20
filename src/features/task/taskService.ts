@@ -8,6 +8,7 @@ import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
+import { toggleMute } from '../workspace/workspaceSlice';
 
 export const createTaskService = (data: {
   name: string;
@@ -615,12 +616,16 @@ export const startMediaStream = async () => {
 export function useMediaStream() {
   const dispatch = useAppDispatch();
   const { mutateAsync: startStream, isLoading: isStarting } = useMutation(startMediaStream);
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { mutate } = useUploadRecording();
+  const { stream } = useAppSelector((state) => state.task);
 
   const handleStartStream = async () => {
     const { stream, recorder } = await startStream();
+    stream.getAudioTracks().forEach((track) => {
+      track.enabled = false;
+    });
     dispatch(setScreenRecording('recording'));
     dispatch(setScreenRecordingMedia({ recorder, stream }));
     return { stream, recorder };
@@ -648,12 +653,20 @@ export function useMediaStream() {
     dispatch(setScreenRecordingMedia(newAction));
   };
 
+  const handleToggleMute = () => {
+    if (stream) {
+      const audioTracks = stream.getAudioTracks();
+      if (audioTracks.length > 0) {
+        audioTracks.map((tracks) => (tracks.enabled = !isMuted)); // Toggle the enabled state of the audio track
+        dispatch(toggleMute());
+      }
+    }
+  };
+
   return {
     handleStartStream,
     handleStopStream,
+    handleToggleMute,
     isStarting
-    // isStopping,
-    // recordMedia,
-    // recordStream
   };
 }

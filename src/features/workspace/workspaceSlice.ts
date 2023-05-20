@@ -32,6 +32,7 @@ interface workspaceState {
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
   getRecording: { id: string | null; type: string | null };
+  isMuted: boolean;
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | null;
@@ -61,6 +62,7 @@ const initialState: workspaceState = {
   searchIsActive: false,
   isExtSearchActive: false,
   getRecording: { id: null, type: null },
+  isMuted: false,
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
@@ -233,6 +235,9 @@ export const wsSlice = createSlice({
     checkIfWs: (state) => state,
     setActiveSubRecordTabId(state, action: PayloadAction<number | null>) {
       state.activeSubRecordsTabId = action.payload;
+    },
+    toggleMute(state) {
+      state.isMuted = !state.isMuted;
     }
   }
 });
@@ -275,7 +280,8 @@ export const {
   setActivePlaceForNav,
   setCreateWlLink,
   setFetchAllWorkspace,
-  setActiveSubRecordTabId
+  setActiveSubRecordTabId,
+  toggleMute
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
