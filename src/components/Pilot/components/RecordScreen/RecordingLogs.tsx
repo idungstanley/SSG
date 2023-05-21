@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { IoPlaySharp, IoStopSharp } from 'react-icons/io5';
 import { MdFullscreen } from 'react-icons/md';
 import { BiTrash } from 'react-icons/bi';
-import { VideoControlModal } from './VideoControlMedal';
+import { VideoControlModal } from './VideoControlModal';
 
 export default function VideoEntries() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
