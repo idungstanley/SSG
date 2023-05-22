@@ -110,7 +110,6 @@ export const UseUnAssignTagFromTask = ({
   tagId: string;
   currentTaskIdForTag: string;
 }) => {
-  // const queryClient = useQueryClient();
   return useQuery(
     ['task', { tagId: tagId, currentTaskIdForTag: currentTaskIdForTag }],
     async () => {

@@ -5,11 +5,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTagService, UseUnAssignTagService } from '../../../../../../features/workspace/tags/tagService';
 import EditTagModal from '../../../../../../components/tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
-import ColorsModal from '../../../../../../components/tags/ColorsModal';
 
 export default function TaskTag({ taskColField, task, checklist_itemId, entity_type }: renderDataProps) {
   const groupTags = (arr: tagItem[]) => {
-    const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
+    const { renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
     const queryClient = useQueryClient();
 
     const unAssignTagMutation = useMutation(UseUnAssignTagService, {
@@ -68,11 +67,7 @@ export default function TaskTag({ taskColField, task, checklist_itemId, entity_t
                           {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
-
-                      {/* <button className="mt-1"> */}
                       <EditTagModal taskId={task?.id} tagId={item?.id} />
-                      {/* </button> */}
-
                       <button
                         className="pr-2 font-bold text-gray-300"
                         style={{ fontSize: '9px' }}
@@ -86,12 +81,8 @@ export default function TaskTag({ taskColField, task, checklist_itemId, entity_t
                       >
                         <IoCloseSharp />
                       </button>
-
-                      {showTagColorDialogueBox && <ColorsModal />}
                     </div>
                   )}
-
-                  {/* <span>{arr.length}</span> */}
                 </>
               )}
             </div>

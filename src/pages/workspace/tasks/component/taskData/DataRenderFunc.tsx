@@ -7,7 +7,6 @@ import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
 import { useList } from '../../../../../features/list/listService';
 import DropdownField from './dropdown/DropdownField';
-import { ICheckListItems } from '../../../../../features/task/interface.tasks';
 
 export interface tagItem {
   id: string;
