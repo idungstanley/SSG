@@ -90,7 +90,6 @@ export default function TaskListPropertyHead({ id, value }: PropertyHeaderProps)
         <SortModal
           handleClose={handleClose}
           anchorEl={anchorEl}
-          headers={sortArr}
           toggleModal={setShowSortModal}
           handleSortFn={handleSort}
           setAnchorEl={setAnchorEl}
