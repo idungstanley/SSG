@@ -120,7 +120,7 @@ function RenderList() {
             </div>
           )}
           <div
-            className="relative block mx-2 border-l-4 border-gray-500 rounded-xl"
+            className="relative overflow-auto block mx-2 border-l-4 border-gray-500 rounded-xl"
             style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
           >
             {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
@@ -138,7 +138,7 @@ function RenderList() {
 
             {/* card */}
             <ul className="relative pl-6">
-              <li className="overflow-x-scroll">
+              <li className="overflow-x-scroll relative">
                 {listView && listId ? (
                   <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
                 ) : (
