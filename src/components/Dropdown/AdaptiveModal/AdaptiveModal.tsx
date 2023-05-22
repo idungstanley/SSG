@@ -1,13 +1,13 @@
-import { useRef, useState, useEffect, ReactNode } from 'react';
+import { useRef, useState, useEffect, ReactNode, RefObject } from 'react';
 
 interface AdaptiveModalProps {
   children: ReactNode;
   styles: string;
+  targetElementRef: RefObject<HTMLTableRowElement>;
 }
 
-function AdaptiveModal({ children, styles }: AdaptiveModalProps) {
+function AdaptiveModal({ children, styles, targetElementRef }: AdaptiveModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const targetElementRef = useRef<HTMLDivElement>(null);
   const [placement, setPlacement] = useState<'above' | 'below'>('below');
 
   useEffect(() => {
@@ -23,9 +23,19 @@ function AdaptiveModal({ children, styles }: AdaptiveModalProps) {
         const spaceBelow = viewportHeight - (targetRect.bottom - scrollY);
         const spaceAbove = targetRect.top - scrollY;
 
-        if (spaceBelow >= modalElement.offsetHeight) {
+        if (spaceBelow >= modalElement.offsetHeight && spaceAbove >= modalElement.offsetHeight) {
+          // Both space below and space above are sufficient
+          // Decide placement based on which space has more room
+          if (spaceBelow > spaceAbove) {
+            setPlacement('below');
+          } else {
+            setPlacement('above');
+          }
+        } else if (spaceBelow >= modalElement.offsetHeight) {
+          // Only space below is sufficient
           setPlacement('below');
         } else if (spaceAbove >= modalElement.offsetHeight) {
+          // Only space above is sufficient
           setPlacement('above');
         }
       }
@@ -38,12 +48,9 @@ function AdaptiveModal({ children, styles }: AdaptiveModalProps) {
       window.removeEventListener('resize', calculatePlacement);
     };
   }, []);
-
   return (
-    <div ref={targetElementRef} className="relative">
-      <div ref={modalRef} className={`absolute ${placement === 'above' ? 'bottom-1/2' : 'top-0'} left-1/2 ${styles}`}>
-        {children}
-      </div>
+    <div ref={modalRef} className={`absolute ${placement === 'above' ? 'bottom-1/2' : 'top-0'} left-1/2 ${styles}`}>
+      {children}
     </div>
   );
 }

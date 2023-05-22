@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { RiPictureInPicture2Line, RiPlayFill, RiStopFill } from 'react-icons/ri';
+import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import moment from 'moment';
-import { deleteUploadedAttachment, getUploadAttatchment } from '../../../../features/workspace/workspaceService';
+import { getUploadAttatchment } from '../../../../features/workspace/workspaceService';
 import { useAppSelector } from '../../../../app/hooks';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { IoPlaySharp, IoStopSharp } from 'react-icons/io5';
-import { MdFullscreen } from 'react-icons/md';
-import { BiTrash } from 'react-icons/bi';
 import { VideoControlModal } from './VideoControlModal';
+import AdaptiveModal from '../../../Dropdown/AdaptiveModal/AdaptiveModal';
 
 export default function VideoEntries() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -17,6 +14,7 @@ export default function VideoEntries() {
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [controlModal, setModal] = useState<boolean>(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const targetElementRef = useRef<HTMLTableRowElement>(null);
 
   const handlePlayBack = (index: number) => {
     const videoRef = videoRefs.current[index];
@@ -62,12 +60,12 @@ export default function VideoEntries() {
           <th className="capitalize font-bold">duration</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="relative">
         {data?.data.attachments.map((videoFile, index) => {
           const { created_at, updated_at, file_format } = videoFile.physical_file;
           const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
           return (
-            <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
+            <tr ref={targetElementRef} key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
               <td>
                 <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
               </td>
@@ -82,17 +80,18 @@ export default function VideoEntries() {
                   onMouseEnter={() =>
                     toggleControls({ index, showControls: true, videoElement: videoRefs.current[index] })
                   }
-                  // onMouseLeave={() => toggleControls(index, false)}
                   onEnded={() => setPlayToggle(false)}
                 />
                 {controlModal && hoverIndex === index && (
-                  <VideoControlModal
-                    index={index}
-                    videoElement={videoRefs.current[index]}
-                    videoId={videoFile.id}
-                    toggleFn={toggleControls}
-                    playToggleFn={setPlayToggle}
-                  />
+                  <AdaptiveModal styles="" targetElementRef={targetElementRef}>
+                    <VideoControlModal
+                      index={index}
+                      videoElement={videoRefs.current[index]}
+                      videoId={videoFile.id}
+                      toggleFn={toggleControls}
+                      playToggleFn={setPlayToggle}
+                    />
+                  </AdaptiveModal>
                 )}
                 {playToggle && hoverIndex === index ? (
                   <RiStopFill
