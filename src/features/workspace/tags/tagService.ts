@@ -61,17 +61,19 @@ export const UseDeleteTagsService = ({ trigger, tag_id }: { trigger: number; tag
 //assign tags
 export const UseAssignTagService = ({
   tagId,
-  currentTaskIdForTag
+  currentTaskIdForTag,
+  entity_type
 }: {
   tagId: string | null;
   currentTaskIdForTag: string | null | undefined;
+  entity_type?: string;
 }) => {
   const url = `tags/${tagId}/assign`;
   const response = requestNew({
     url,
     method: 'POST',
     params: {
-      type: 'task',
+      type: entity_type,
       id: currentTaskIdForTag
     }
   });
@@ -81,17 +83,19 @@ export const UseAssignTagService = ({
 //un-assign tags
 export const UseUnAssignTagService = ({
   tagId,
-  currentTaskIdForTag
+  currentTaskIdForTag,
+  entity_type
 }: {
   tagId: string | null;
   currentTaskIdForTag: string | null | undefined;
+  entity_type: string | undefined;
 }) => {
   const url = `tags/${tagId}/unassign`;
   const response = requestNew({
     url,
     method: 'POST',
     params: {
-      type: 'task',
+      type: entity_type,
       id: currentTaskIdForTag
     }
   });

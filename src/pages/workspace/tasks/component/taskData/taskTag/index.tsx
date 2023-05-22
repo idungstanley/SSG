@@ -7,7 +7,7 @@ import EditTagModal from '../../../../../../components/tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
 import ColorsModal from '../../../../../../components/tags/ColorsModal';
 
-export default function TaskTag({ taskColField, task }: renderDataProps) {
+export default function TaskTag({ taskColField, task, checklist_itemId, entity_type }: renderDataProps) {
   const groupTags = (arr: tagItem[]) => {
     const { showTagColorDialogueBox, renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
     const queryClient = useQueryClient();
@@ -69,9 +69,9 @@ export default function TaskTag({ taskColField, task }: renderDataProps) {
                         </p>
                       </div>
 
-                      <button className="mt-1">
-                        <EditTagModal taskId={task?.id} tagId={item?.id} />
-                      </button>
+                      {/* <button className="mt-1"> */}
+                      <EditTagModal taskId={task?.id} tagId={item?.id} />
+                      {/* </button> */}
 
                       <button
                         className="pr-2 font-bold text-gray-300"
@@ -79,7 +79,8 @@ export default function TaskTag({ taskColField, task }: renderDataProps) {
                         onClick={() =>
                           unAssignTagMutation.mutateAsync({
                             tagId: item.id,
-                            currentTaskIdForTag: task?.id
+                            currentTaskIdForTag: entity_type === 'checklist_item' ? checklist_itemId : task?.id,
+                            entity_type: entity_type
                           })
                         }
                       >
