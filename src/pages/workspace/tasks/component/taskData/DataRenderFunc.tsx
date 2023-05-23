@@ -28,6 +28,8 @@ export interface renderDataProps {
   getSubTaskId?: string | null | undefined;
   handleGetSubTask?: (id: string | undefined) => void;
   ShowPlusIcon?: null | boolean;
+  entity_type?: string;
+  checklist_itemId?: string;
 }
 
 export default function DataRenderFunc({
@@ -50,7 +52,7 @@ export default function DataRenderFunc({
   } else if (col?.field === 'tags') {
     return (
       <div className="">
-        <TaskTag task={task} taskColField={taskColField} />
+        <TaskTag task={task} taskColField={taskColField} entity_type="task" />
       </div>
     );
   } else if (col?.field == 'created_at' || col?.field == 'updated_at') {

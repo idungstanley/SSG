@@ -43,23 +43,14 @@ export default function ChecklistIndex() {
     activeItemId,
     activeItemType
   });
-
-  // if (hubStatus === 'success') {
-  //   dispatch(setChecklists(hub.data.hub.checklists));
-  // }
-
   const { data: wallet } = UseGetWalletDetails({
     activeItemId,
     activeItemType
   });
-  // if (walletStatus === 'success') {
-  //   console.log(wallet);
-  // }
   const { data: list } = UseGetListDetails({
     activeItemId,
     activeItemType
   });
-  // console.log(list);
 
   const { showChecklistInput } = useAppSelector((state) => state.checklist);
 

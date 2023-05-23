@@ -30,7 +30,7 @@ export default function CardState({ task }: TaskDataProps) {
           <PriorityDropdown TaskCurrentPriority={task?.priority} />
         </span>
         <span className="  text-xl" onClick={() => dispatch(setCurrentTaskIdForTag(task.id))}>
-          <TagModal />
+          <TagModal entity_type="task" />
         </span>
         <span className="  text-xl">
           <IoPeopleOutline />
