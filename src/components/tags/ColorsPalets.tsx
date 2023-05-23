@@ -14,7 +14,6 @@ export default function ColorPallete({ tag_id }: { tag_id: string | null | undef
     }
   });
   const handleChangeColor = async (color: string) => {
-    alert(tag_id);
     await changeColorMutation.mutateAsync({
       color,
       tag_id: tag_id
