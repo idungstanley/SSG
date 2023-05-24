@@ -35,7 +35,10 @@ export function Col({ value, field, sticky, task, ...props }: ColProps) {
     </td>
   ) : (
     <td
-      className={cl(DEFAULT_COL_BG, 'flex border-t justify-center items-center text-sm font-medium text-gray-900 p-4')}
+      className={cl(
+        DEFAULT_COL_BG,
+        'relative flex border-t justify-center items-center text-sm font-medium text-gray-900'
+      )}
       {...props}
     >
       {field in fields ? fields[field] : String(value)}

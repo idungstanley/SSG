@@ -19,7 +19,7 @@ export function Table({ heads, data }: TableProps) {
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const tableElement = useRef<HTMLTableElement>(null);
 
-  const columns = createHeaders(heads);
+  const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {

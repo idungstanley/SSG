@@ -12,8 +12,7 @@ export default function Todo({ taskColField, task }: renderDataProps) {
   };
   return (
     <div
-      className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-gray-400"
-      style={{ marginLeft: '-30px' }}
+      className="w-full flex flex-col items-center justify-center h-full text-xs font-medium text-center text-white capitalize bg-gray-400"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
       <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField as string} />

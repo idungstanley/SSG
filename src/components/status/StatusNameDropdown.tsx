@@ -72,7 +72,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
     if (status == 'new' || status == 'todo') {
       return (
-        <p className="pl-3.5 text-white capitalize" aria-hidden="true">
+        <p className="text-white capitalize" aria-hidden="true">
           {statusName}
         </p>
       );
@@ -90,7 +90,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       );
     } else if (status == 'archived') {
       return (
-        <p className="pl-2 text-white capitalize" aria-hidden="true">
+        <p className="text-white capitalize" aria-hidden="true">
           {statusName}
         </p>
       );

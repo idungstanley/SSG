@@ -9,41 +9,31 @@ export default function TaskStatus({ taskColField, task }: renderDataProps) {
   if (taskColField == 'completed') {
     return (
       <>
-        <div>
-          <Completed taskColField={taskColField} task={task} />
-        </div>
+        <Completed taskColField={taskColField} task={task} />
       </>
     );
   } else if (taskColField == 'in progress') {
     return (
       <>
-        <div>
-          <InProgress taskColField={taskColField} task={task} />
-        </div>
+        <InProgress taskColField={taskColField} task={task} />
       </>
     );
   } else if (taskColField == 'archived') {
     return (
       <>
-        <div>
-          <Archived taskColField={taskColField} task={task} />
-        </div>
+        <Archived taskColField={taskColField} task={task} />
       </>
     );
   } else if (taskColField == 'todo') {
     return (
       <>
-        <div>
-          <Todo taskColField={taskColField} task={task} />
-        </div>
+        <Todo taskColField={taskColField} task={task} />
       </>
     );
   } else {
     return (
       <>
-        <div>
-          <Todo taskColField={taskColField} task={task} />
-        </div>
+        <Todo taskColField={taskColField} task={task} />
       </>
     );
   }
