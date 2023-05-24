@@ -5,8 +5,7 @@ import TaskName from './taskName';
 import TaskPriority from './priority/index';
 import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
-import { useList } from '../../../../../features/list/listService';
-import DropdownField from './dropdown/DropdownField';
+import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
 
 export interface tagItem {
   id: string;
@@ -38,9 +37,6 @@ export default function DataRenderFunc({
   handleGetSubTask,
   ShowPlusIcon
 }: renderDataProps) {
-  const { data } = useList(task?.list_id);
-  const customFields = data?.custom_fields ?? [];
-
   if (col?.field === 'assignees') {
     return (
       <div className="-mt-0.5">
@@ -78,13 +74,13 @@ export default function DataRenderFunc({
   } else if (col?.field === 'priority') {
     return <TaskPriority task={task} />;
   } else if (col && col.field === 'dropdown' && task) {
-    const field = customFields.find((i) => i.id === col.id);
-    const property = task.custom_fields.find((i) => i.custom_field.id === col.id);
-
-    const activeProperty = property ? property.values[0].value : '-';
-
-    return field ? (
-      <DropdownField field={{ id: field.id, properties: field.properties, activeProperty }} taskId={task.id} />
-    ) : null;
+    return (
+      <DropdownFieldWrapper
+        taskId={task.id}
+        fieldId={col.id}
+        listId={task.list_id}
+        taskCustomFields={task.custom_fields}
+      />
+    );
   } else return <>{taskColField}</>;
 }

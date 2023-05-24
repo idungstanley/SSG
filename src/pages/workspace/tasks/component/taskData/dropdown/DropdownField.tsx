@@ -1,4 +1,4 @@
-import { Menu, Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
@@ -16,6 +16,11 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
   const { updateCords } = useAppSelector((state) => state.task);
   const [activeOption, setActiveOption] = useState<string>(field.activeProperty);
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
@@ -31,52 +36,47 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
         value: option,
         fieldId: field.id
       });
+
+    closeModal();
   };
 
   return (
-    <Menu as="div" className="relative inline-block mt-2 text-left w-full">
-      <div ref={relativeRef}>
-        <Menu.Button className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full">
+    <>
+      <div ref={relativeRef} className="flex items-center justify-center">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full"
+        >
           {activeOption}
-        </Menu.Button>
+        </button>
       </div>
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <div
-          style={{
-            ...cords,
-            zIndex: 999
-          }}
-          className="px-2 w-fit h-fit py-1 fixed mt-2 rounded-md bg-white shadow-lg outline-none"
-        >
-          <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
-            select an option
-          </p>
-          <Menu.Items className="space-y-2 pt-3">
-            {options?.map((option) => (
-              <Menu.Item key={option}>
-                <button
-                  onClick={() => handleClick(option)}
-                  className={cl(
-                    option === activeOption && 'bg-gray-100',
-                    'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
-                  )}
-                >
-                  {option}
-                </button>
-              </Menu.Item>
-            ))}
-          </Menu.Items>
-        </div>
+      <Transition appear show={isOpen} as="div">
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <div style={{ ...cords }} className="fixed overflow-y-auto">
+            <div className="flex-col border px-2 w-fit h-fit py-1 rounded-md bg-white shadow-lg outline-none flex items-center justify-center text-center">
+              <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
+                select an option
+              </p>
+              <div className="space-y-2 pt-3 w-full">
+                {options?.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => handleClick(option)}
+                    className={cl(
+                      option === activeOption && 'bg-gray-100',
+                      'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
+                    )}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Dialog>
       </Transition>
-    </Menu>
+    </>
   );
 }

@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAppDispatch } from '../../../../app/hooks';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { setUpdateCords } from '../../../../features/task/taskSlice';
+import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
 import { createHeaders } from '../../lib/tableHeadUtils';
 import { Head } from './Head/Head';
@@ -15,6 +18,7 @@ const MAX_COL_WIDTH = 300;
 const DEFAULT_COL_WIDTH = 150;
 
 export function Table({ heads, data }: TableProps) {
+  const dispatch = useAppDispatch();
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const tableElement = useRef<HTMLTableElement>(null);
@@ -84,9 +88,12 @@ export function Table({ heads, data }: TableProps) {
     setActiveIndex(index);
   };
 
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
   return (
     <div className="relative overflow-hidden pl-6">
       <table
+        onScroll={onScroll}
         style={{
           display: 'grid',
           gridTemplateColumns: `minmax(${MAX_COL_WIDTH}px, 1fr) ${columns

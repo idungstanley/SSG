@@ -2,6 +2,7 @@ import { TdHTMLAttributes } from 'react';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
+import DropdownFieldWrapper from '../../../workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
 import TaskPriority from '../../../workspace/tasks/component/taskData/priority';
 import TaskStatus from '../../../workspace/tasks/component/taskData/status';
 import DateForTask from '../../../workspace/tasks/component/taskData/taskDate';
@@ -12,18 +13,27 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskFullListValue;
   field: Pick<listColumnProps, 'field'>['field'];
   task: ITaskFullList;
+  fieldId: string;
   sticky?: boolean;
 }
 
 export const DEFAULT_COL_BG = 'bg-white opacity-90';
 
-export function Col({ value, field, sticky, task, ...props }: ColProps) {
+export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
     name: <TaskName task={task} />,
     created_at: <DateForTask taskColField={value} />,
-    updated_at: <DateForTask taskColField={value} />
+    updated_at: <DateForTask taskColField={value} />,
+    dropdown: (
+      <DropdownFieldWrapper
+        taskId={task.id}
+        fieldId={fieldId}
+        listId={task.list_id}
+        taskCustomFields={task.custom_fields}
+      />
+    )
   };
 
   return sticky ? (

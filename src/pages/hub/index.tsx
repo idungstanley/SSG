@@ -69,7 +69,7 @@ export default function HubPage() {
       >
         <section
           style={{ minHeight: '0', maxHeight: '90vh' }}
-          className="w-full h-full p-10 space-y-10 overflow-y-scroll"
+          className="w-full h-full p-4 space-y-10 overflow-y-scroll"
         >
           {/* lists */}
           {Object.keys(lists).map((listId) => (

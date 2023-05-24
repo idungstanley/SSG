@@ -1,5 +1,5 @@
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
-import { ImyTaskData } from './taskSlice';
+import { ICustomField, ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
   task_id: string | null | undefined;
@@ -72,7 +72,7 @@ export interface ITaskFullList {
   end_date: string | null;
   assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
   group_assignees?: [];
-  custom_fields?: [];
+  custom_fields?: ICustomField[];
   tags?: [];
   updated_at: string;
   created_at: string;
@@ -92,6 +92,7 @@ export interface ITaskFullList {
     | undefined
     | null
     | []
+    | ICustomField[]
     | ICheckListRes[]
     | {
         id: string;
