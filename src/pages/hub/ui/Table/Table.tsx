@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
-import { Column, createHeaders } from '../List/List';
+import { createHeaders } from '../../lib/tableHeadUtils';
 import { Head } from './Head/Head';
 import { Row } from './Row';
 
@@ -97,7 +97,7 @@ export function Table({ heads, data }: TableProps) {
         className="w-full overflow-x-scroll overflow-y-hidden"
         ref={tableElement}
       >
-        <Head columns={columns} mouseDown={mouseDown} activeIndex={activeIndex} tableHeight={tableHeight} />
+        <Head columns={columns} mouseDown={mouseDown} tableHeight={tableHeight} />
 
         <tbody className="contents">
           {data.map((i) => (

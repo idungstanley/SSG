@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ListNav from '../../../lists/components/renderlist/ListNav';
 import ListFilter from '../../../lists/components/renderlist/listDetails/ListFilter';
@@ -22,8 +22,6 @@ import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../../../layout/components/MainLayout/Header/AdditionHeader';
-import { columnsHead, listColumnProps } from '../../../tasks/component/views/ListColumns';
-import { useList } from '../../../../../features/list/listService';
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
@@ -139,8 +137,7 @@ function RenderHubs() {
         extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
       >
-        {unFilteredTaskData ? <List listId={unFilteredTaskData[0].list_id} /> : null}
-        {/* <section>
+        <section>
           <div className="w-full ">
             <ListFilter />
           </div>
@@ -243,271 +240,9 @@ function RenderHubs() {
               </div>
             </div>
           )}
-        </section> */}
+        </section>
       </Page>
     </>
-  );
-}
-
-const tasks = [
-  {
-    id: 1,
-    name: 11
-  },
-  {
-    id: 2,
-    name: 22
-  },
-  {
-    id: 3,
-    name: 33
-  },
-  {
-    id: 4,
-    name: 44
-  },
-  {
-    id: 5,
-    name: 55
-  },
-  {
-    id: 6,
-    name: 66
-  },
-  {
-    id: 7,
-    name: 77
-  }
-];
-
-interface ListProps {
-  listId: string;
-}
-
-function List({ listId }: ListProps) {
-  const { data } = useList(listId);
-
-  const columns = () => {
-    if (!data) {
-      return [];
-    }
-    const unique = (arr: listColumnProps[]) => [...new Set(arr)];
-    const customFieldNames = data.custom_fields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
-    const newColumns = unique([...columnsHead, ...customFieldNames]);
-
-    return newColumns;
-  };
-
-  return (
-    <div className="rounded-lg bg-purple-50 border-l-4 border-purple-500">
-      <div>
-        <h1 className="rounded-br-md p-2 px-4 text-white text-sm bg-purple-500 w-fit">List 1</h1>
-      </div>
-      {data ? <Table headers={columns()} tableContent={tasks} minCellWidth={100} /> : null}
-    </div>
-  );
-}
-
-interface Column {
-  text: string;
-  ref: React.RefObject<HTMLTableCellElement>;
-}
-
-const createHeaders = (headers: listColumnProps[]): Column[] => {
-  return headers.map((item) => ({
-    text: item.value,
-    ref: useRef<HTMLTableCellElement>(null)
-  }));
-};
-
-const MAX = 400;
-
-function Table({
-  headers,
-  minCellWidth,
-  tableContent
-}: {
-  headers: listColumnProps[];
-  minCellWidth: number;
-  tableContent: {
-    id: number;
-    name: number;
-  }[];
-}) {
-  const [tableHeight, setTableHeight] = useState<string | number>('auto');
-  const [activeIndex, setActiveIndex] = useState<null | number>(null);
-  const tableElement = useRef<HTMLTableElement>(null);
-  const columns = createHeaders(headers);
-
-  const mouseMove = useCallback(
-    (e: MouseEvent) => {
-      const gridColumns = columns.map((col, i) => {
-        if (i === activeIndex) {
-          if (col.ref.current) {
-            const mouseX = e.clientX;
-            const widthFromLeftToCurrentBlock = Math.round(col.ref.current.getBoundingClientRect().right);
-            const currentBlockWidth = col.ref.current.offsetWidth;
-
-            const width =
-              widthFromLeftToCurrentBlock -
-              (widthFromLeftToCurrentBlock - currentBlockWidth) -
-              (widthFromLeftToCurrentBlock - mouseX);
-
-            if (width >= minCellWidth && width <= MAX) {
-              return `${width}px`;
-            }
-          }
-        }
-
-        // Otherwise return the previous width (no changes)
-        return col.ref.current ? `${col.ref.current.offsetWidth}px` : null;
-      });
-
-      // Assign the px values to the table
-      if (tableElement.current) tableElement.current.style.gridTemplateColumns = `${gridColumns.join(' ')}`;
-    },
-    [activeIndex, columns, minCellWidth]
-  );
-
-  const removeListeners = useCallback(() => {
-    window.removeEventListener('mousemove', mouseMove);
-    window.removeEventListener('mouseup', removeListeners);
-  }, [mouseMove]);
-
-  const mouseUp = useCallback(() => {
-    document.body.style.userSelect = '';
-    setActiveIndex(null);
-    removeListeners();
-  }, [setActiveIndex, removeListeners]);
-
-  useEffect(() => {
-    if (activeIndex !== null) {
-      window.addEventListener('mousemove', mouseMove);
-      window.addEventListener('mouseup', mouseUp);
-    }
-
-    return () => {
-      removeListeners();
-    };
-  }, [activeIndex, mouseMove, mouseUp, removeListeners]);
-
-  useEffect(() => {
-    if (tableElement.current) {
-      setTableHeight(tableElement.current.offsetHeight);
-    }
-  }, []);
-
-  const mouseDown = (index: number) => {
-    document.body.style.userSelect = 'none';
-    setActiveIndex(index);
-  };
-
-  return (
-    <div className="relative overflow-hidden pl-6">
-      <table
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `minmax(400px, 1fr) ${columns
-            .slice(1)
-            .map(() => 'minmax(150px, 1fr)')
-            .join(' ')}`
-        }}
-        className="w-full overflow-x-scroll overflow-y-hidden"
-        ref={tableElement}
-      >
-        <Head columns={columns} mouseDown={mouseDown} activeIndex={activeIndex} tableHeight={tableHeight} />
-
-        <tbody className="contents">
-          {tableContent.map((i) => (
-            <Row task={i} key={i.id} />
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function Row({
-  task
-}: {
-  task: {
-    id: number;
-    name: number;
-  };
-}) {
-  return (
-    <>
-      <tr className="contents group">
-        <td className="sticky flex -left-1 z-1 text-center justify-center text-sm font-medium text-gray-900">
-          <div className="bg-purple-50 flex items-center">
-            <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
-          </div>
-          <div className="bg-white border-t border-gray-200 opacity-90 w-full h-full py-4 p-4">{task.name}</div>
-        </td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-        <td className="flex border-t justify-center text-sm font-medium text-gray-900 p-4">{task.name}</td>
-      </tr>
-    </>
-  );
-}
-
-interface HeadProps {
-  columns: Column[];
-  tableHeight: string | number;
-  activeIndex: number | null;
-  mouseDown: (i: number) => void;
-}
-
-function Head({ columns, tableHeight, activeIndex, mouseDown }: HeadProps) {
-  return (
-    <thead className="contents">
-      <tr className="contents">
-        <th className="sticky flex -left-1 z-10 font-extrabold" ref={columns[0].ref} key={columns[0].text}>
-          <div className="bg-purple-50 flex items-center">
-            <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
-          </div>
-          <span className="flex border-t border-gray-200 bg-white opacity-90 w-full h-full mx-auto justify-center truncate p-4">
-            {columns[0].text}
-          </span>
-
-          <div
-            style={{ height: tableHeight }}
-            onMouseDown={() => mouseDown(0)}
-            className={`block hover:border-red-500 absolute cursor-move w-2 -right-1 top-0 z-1 ${
-              activeIndex === 0 ? 'border-blue-500' : 'idle'
-            }`}
-          >
-            <div className="w-0.5 mx-auto h-full bg-gray-100" />
-          </div>
-        </th>
-
-        {columns.slice(1).map(({ ref, text }, i) => (
-          <th className="relative font-extrabold p-4 bg-white/90" ref={ref} key={text}>
-            <span className="flex justify-center truncate">{text}</span>
-            <div
-              style={{ height: tableHeight }}
-              onMouseDown={() => mouseDown(i + 1)}
-              className={`block hover:border-red-500 absolute cursor-move w-2 -right-1 top-0 z-1 ${
-                activeIndex === i + 1 ? 'border-blue-500' : 'idle'
-              }`}
-            >
-              <div className="w-0.5 mx-auto h-full bg-gray-100" />
-            </div>
-          </th>
-        ))}
-      </tr>
-    </thead>
   );
 }
 
