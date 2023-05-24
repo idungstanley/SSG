@@ -40,13 +40,13 @@ export const UseGetFullTaskList = ({
   assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-  const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
+  // const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const fetch = currentWorkspaceId == workSpaceId;
@@ -87,7 +87,7 @@ export const UseGetFullTaskList = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
-  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const fetch = currentWorkspaceId == workSpaceId;

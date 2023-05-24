@@ -9,7 +9,11 @@ import { useAppSelector } from '../../app/hooks';
 // import EditTagModal from "./EditTagModal";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export default function TagModal() {
+interface tagModalProps {
+  entity_type: string;
+}
+
+export default function TagModal({ entity_type }: tagModalProps) {
   const queryClient = useQueryClient();
 
   const { currentTaskIdForTag } = useAppSelector((state) => state.tag);
@@ -29,7 +33,8 @@ export default function TagModal() {
   const handleAssignTag = async (tagId: string) => {
     await assignTagMutation.mutateAsync({
       tagId,
-      currentTaskIdForTag
+      currentTaskIdForTag,
+      entity_type
     });
   };
 

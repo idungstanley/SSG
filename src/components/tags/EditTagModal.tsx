@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BiTrash } from 'react-icons/bi';
@@ -15,6 +15,7 @@ import {
   setRenameTagId,
   setShowTagColorDialogBox
 } from '../../features/workspace/tags/tagSlice';
+import ColorPallete from './ColorsPalets';
 
 interface itemsType {
   id: number;
@@ -33,6 +34,26 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { showTagColorDialogueBox } = useAppSelector((state) => state.tag);
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const buttonElement = buttonRef.current;
+    if (buttonElement && isOpen) {
+      const buttonRect = buttonElement.getBoundingClientRect();
+
+      // Calculate the top and left positions for the modal
+      const top = buttonRect.bottom;
+      const left = buttonRect.left;
+
+      // Set the top and left positions for the modal
+      const modalElement = document.getElementById('edit-tag-modal');
+      if (modalElement) {
+        modalElement.style.top = `${top}px`;
+        modalElement.style.left = `${left}px`;
+      }
+    }
+  }, [isOpen]);
 
   const deleteTagMutation = useMutation(UseDeleteTagsService, {
     onSuccess: () => {
@@ -92,34 +113,37 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
     }
   ];
 
-  const [isOpen, setIsOpen] = useState(false);
   function openModal() {
     setIsOpen(true);
   }
   return (
     <>
       <div className="relative inline-block text-left">
-        <button type="button" onClick={openModal} className="flex text-sm font-bold">
+        <button ref={buttonRef} type="button" onClick={openModal} className="flex text-sm font-bold">
           <AiOutlineEllipsis className="cursor-pointer" />
         </button>
       </div>
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        <div className="fixed -top-24 bottom-72 right-40 -left-40 flex items-center justify-center p-4">
-          <Dialog.Panel className="absolute z-20 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
-            {EditTagOptions.map((item) => (
-              <div key={item.id}>
-                <div key={item.id}>
-                  <div
-                    className={`flex items-center cursor-pointer p-2 space-x-2 text-xs text-left text-gray-600 hover:bg-${item.bg}-200`}
-                    onClick={item.handleClick}
-                  >
+        <div
+          id="edit-tag-modal"
+          className="fixed z-20 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+        >
+          {EditTagOptions.map((item) => (
+            <div key={item.id}>
+              {item.title !== 'Change Color' ? (
+                <div className={`p-2 cursor-pointer hover:bg-${item.bg}-200`} onClick={item.handleClick}>
+                  <div className="flex items-center space-x-2 text-xs text-gray-600">
                     {item.icon}
                     <p>{item.title}</p>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Dialog.Panel>
+              ) : (
+                <div className="w-full">
+                  <ColorPallete tag_id={tagId} />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </Dialog>
     </>
