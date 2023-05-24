@@ -49,7 +49,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 
   return sticky ? (
     <td
-      className="sticky flex left-0 text-center justify-center items-center text-sm font-medium text-gray-900"
+      className="sticky cursor-pointer flex left-0 text-center justify-center items-center text-sm font-medium text-gray-900"
       {...props}
     >
       {field in fields ? fields[field] : String(value)}

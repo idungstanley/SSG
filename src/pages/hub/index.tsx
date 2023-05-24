@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -19,7 +19,7 @@ export default function HubPage() {
   const { hubId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-
+  const containerRef = useRef<HTMLDivElement>(null);
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
 
   // set entity name
@@ -31,7 +31,7 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, status, isFetching, hasNextPage, fetchNextPage } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId,
     itemType: 'hub',
     assigneeUserId: filterTaskByAssigneeIds
@@ -40,6 +40,28 @@ export default function HubPage() {
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
 
   const lists = useMemo(() => generateLists(tasks), [tasks]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [fetchNextPage, hasNextPage]);
+
+  function handleScroll(event: Event) {
+    const container = event.target as HTMLElement;
+    const scrollDifference = container.scrollHeight - container.scrollTop - container.clientHeight;
+    const range = 1;
+
+    if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+      fetchNextPage();
+    }
+  }
 
   return (
     <>
@@ -68,6 +90,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver data={tasks} />}
       >
         <section
+          ref={containerRef}
           style={{ minHeight: '0', maxHeight: '90vh' }}
           className="w-full h-full p-4 space-y-10 overflow-y-scroll"
         >

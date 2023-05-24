@@ -26,20 +26,18 @@ export function Table({ heads, data }: TableProps) {
   const mouseMove = useCallback(
     (e: MouseEvent) => {
       const gridColumns = columns.map((col, i) => {
-        if (i === activeIndex) {
-          if (col.ref.current) {
-            const mouseX = e.clientX;
-            const widthFromLeftToCurrentBlock = Math.round(col.ref.current.getBoundingClientRect().right);
-            const currentBlockWidth = col.ref.current.offsetWidth;
+        if (i === activeIndex && col.ref.current) {
+          const mouseX = e.clientX;
+          const widthFromLeftToCurrentBlock = Math.round(col.ref.current.getBoundingClientRect().right);
+          const currentBlockWidth = col.ref.current.offsetWidth;
 
-            const width =
-              widthFromLeftToCurrentBlock -
-              (widthFromLeftToCurrentBlock - currentBlockWidth) -
-              (widthFromLeftToCurrentBlock - mouseX);
+          const width =
+            widthFromLeftToCurrentBlock -
+            (widthFromLeftToCurrentBlock - currentBlockWidth) -
+            (widthFromLeftToCurrentBlock - mouseX);
 
-            if (width >= MIN_COL_WIDTH && width <= MAX_COL_WIDTH) {
-              return `${width}px`;
-            }
+          if (width >= MIN_COL_WIDTH && width <= MAX_COL_WIDTH) {
+            return `${width}px`;
           }
         }
 
@@ -48,7 +46,9 @@ export function Table({ heads, data }: TableProps) {
       });
 
       // Assign the px values to the table
-      if (tableElement.current) tableElement.current.style.gridTemplateColumns = `${gridColumns.join(' ')}`;
+      if (tableElement.current) {
+        tableElement.current.style.gridTemplateColumns = `${gridColumns.join(' ')}`;
+      }
     },
     [activeIndex, columns]
   );
