@@ -6,12 +6,16 @@ import Menu from '@mui/material/Menu';
 // import { useDispatch } from 'react-redux';
 // import { setSortArray } from '../../features/task/taskSlice';
 import Input from '../input/Input';
-import { BiSearch } from 'react-icons/bi';
+import { BiHide, BiSearch } from 'react-icons/bi';
 import { BsSortAlphaDown, BsSortAlphaUp } from 'react-icons/bs';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowUp, IoIosColorFilter } from 'react-icons/io';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import SortDirectionCheck from '../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { setSortArr, setSortArray } from '../../features/task/taskSlice';
+import { RiFilter2Line } from 'react-icons/ri';
+import { MdEditNote, MdOutlineDeleteForever, MdOutlineFilter1 } from 'react-icons/md';
+import { HiOutlineDuplicate, HiOutlineSwitchHorizontal } from 'react-icons/hi';
+import { TbAlignJustified } from 'react-icons/tb';
 
 type SortModalProps = {
   headers: string[];
@@ -120,7 +124,7 @@ export default function SortModal({
       className="rounded-md shadow-2xl"
       PaperProps={{
         style: {
-          height: '150px',
+          height: '350px',
           overflowY: 'auto',
           width: '300px',
           padding: '8px'
@@ -189,8 +193,93 @@ export default function SortModal({
               <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'sortBtn')} />
             )}
           </div>
+          <hr />
+          {/* filter implementation */}
+          {/* <div className="flex flex-col space-y-1 capitalize p"> */}
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <IoIosColorFilter />
+              <span>filter by color</span>
+            </div>
+            {!filterDropDown[0].toggle ? (
+              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            ) : (
+              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            )}
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <RiFilter2Line />
+              <span>filter by condition</span>
+            </div>
+            {!filterDropDown[1].toggle ? (
+              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'condition')} />
+            ) : (
+              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'condition')} />
+            )}
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <MdOutlineFilter1 />
+              <span>filter by values</span>
+            </div>
+            {!filterDropDown[2].toggle ? (
+              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'value')} />
+            ) : (
+              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'value')} />
+            )}
+          </div>
+          <hr />
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <HiOutlineSwitchHorizontal />
+              <span>Move Columns</span>
+            </div>
+            {!filterDropDown[0].toggle ? (
+              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            ) : (
+              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            )}
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <TbAlignJustified />
+              <span>Ajust Alignment</span>
+            </div>
+            {!filterDropDown[0].toggle ? (
+              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            ) : (
+              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
+            )}
+          </div>
+          <hr />
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <MdEditNote />
+              <span>Edit Fields</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <HiOutlineDuplicate />
+              <span>Duplicate</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <BiHide />
+              <span>Hide Columns</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between h-8 px-1 text-xs text-red-500 hover:bg-gray-200">
+            <div className="flex items-center gap-1">
+              <MdOutlineDeleteForever />
+              <span>Remove From List</span>
+            </div>
+          </div>
         </div>
       </div>
+      {/* </div> */}
     </Menu>
   );
 }

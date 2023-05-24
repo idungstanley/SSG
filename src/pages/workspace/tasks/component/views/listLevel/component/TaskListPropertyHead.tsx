@@ -13,9 +13,10 @@ export type SortOption = {
 interface PropertyHeaderProps {
   id: string;
   value: string;
+  taskLength?: number;
 }
 
-export default function TaskListPropertyHead({ id, value }: PropertyHeaderProps) {
+export default function TaskListPropertyHead({ id, value, taskLength }: PropertyHeaderProps) {
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClose = () => {
@@ -59,33 +60,37 @@ export default function TaskListPropertyHead({ id, value }: PropertyHeaderProps)
       className={`relative flex items-center space-x-1 text-xs font-medium uppercase hover:bg-gray-200 hover:text-gray-50 group ${
         value !== 'Task' && value !== 'Tags' && 'justify-center w-24'
       }`}
-      style={{ color: '#78828d', fontSize: '12px' }}
+      style={{ color: 'black', fontSize: '12px' }}
     >
-      <span
-        className="font-bold truncate cursor-pointer hover:text-clip hover:w-10"
-        onClick={(e) => setOptions(e, id, value)}
-      >
-        {value}
-      </span>
-      {sortAbles.includes(value) && (
-        <>
-          {sortArr.length >= 1 && sortArr.includes(value) ? (
-            ''
-          ) : (
-            <RoundedArrowUpDown value={value} id={id} handleSort={handleSort} />
-          )}
-          {sortArr.includes(value) && sortAbles.includes(value) && (
-            <SortDirectionCheck
-              bgColor={baseColor}
-              sortItemLength={sortArr.length}
-              sortIndex={sortArr.indexOf(value)}
-              sortValue={value}
-              sortDesc={dirCheck(value)?.dir === 'desc'}
-              handleRemoveSortFn={handleRemoveFilter}
-            />
-          )}
-        </>
-      )}
+      <div className="flex items-center hover:bg-zinc-500 p-0.5 rounded-md space-x-1 border-2 border-transparent hover:border-gray-500">
+        <span
+          className="flex items-center space-x-1 font-bold truncate cursor-pointer hover:text-clip hover:w-10"
+          onClick={(e) => setOptions(e, id, value)}
+        >
+          {value == 'Task' && <span className="mr-1 text-xs font-bold">{taskLength}</span>}
+
+          {value}
+        </span>
+        {sortAbles.includes(value) && (
+          <>
+            {sortArr.length >= 1 && sortArr.includes(value) ? (
+              ''
+            ) : (
+              <RoundedArrowUpDown value={value} id={id} handleSort={handleSort} />
+            )}
+            {sortArr.includes(value) && sortAbles.includes(value) && (
+              <SortDirectionCheck
+                bgColor={baseColor}
+                sortItemLength={sortArr.length}
+                sortIndex={sortArr.indexOf(value)}
+                sortValue={value}
+                sortDesc={dirCheck(value)?.dir === 'desc'}
+                handleRemoveSortFn={handleRemoveFilter}
+              />
+            )}
+          </>
+        )}
+      </div>
       {showSortModal && headerId === id && (
         <SortModal
           handleClose={handleClose}

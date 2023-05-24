@@ -6,15 +6,16 @@ interface ModalProps {
   showModal: boolean;
   setShowModal: (i: boolean) => void;
   children: ReactNode;
+  position?: string;
 }
 
-export function Modal({ showModal, setShowModal, children }: ModalProps) {
+export function Modal({ showModal, setShowModal, position = 'top-20 right-3', children }: ModalProps) {
   const onClose = () => setShowModal(false);
 
   return (
     <Transition.Root show={showModal} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={setShowModal}>
-        <div className="fixed top-20 right-3 z-10 overflow-y-auto">
+      <Dialog as="div" className="relative" style={{ zIndex: '20000' }} onClose={setShowModal}>
+        <div className={`fixed z-10 ${position}`}>
           <div className="flex items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -26,16 +27,16 @@ export function Modal({ showModal, setShowModal, children }: ModalProps) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               {showModal ? (
-                <Dialog.Panel className="w-52 relative bg-white p-2 border transform overflow-hidden rounded-lg text-left shadow-xl transition-all">
+                <Dialog.Panel className="relative p-2 overflow-visible text-left transform bg-white border rounded-lg shadow-xl istransition-all w-52">
                   {/* header */}
                   <div className="flex justify-end">
                     <button
                       type="button"
-                      className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="text-gray-400 bg-white rounded-md hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={onClose}
                     >
                       <span className="sr-only">Close</span>
-                      <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+                      <XMarkIcon className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
 
