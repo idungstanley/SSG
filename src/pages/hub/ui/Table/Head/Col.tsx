@@ -16,7 +16,7 @@ export function Col({ value, isSticky, ref, ...props }: ColProps) {
         {value}
       </span>
 
-      <div className="block absolute cursor-move w-2 -right-1 top-0 idle">
+      <div className="block absolute cursor-move w-2 -right-1 top-0 idle" {...props}>
         <div className="w-0.5 mx-auto h-full bg-gray-100" />
       </div>
     </th>

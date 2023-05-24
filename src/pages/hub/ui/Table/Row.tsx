@@ -8,27 +8,32 @@ interface RowProps {
 }
 
 export function Row({ task, columns }: RowProps) {
+  const sticky = columns[0];
+  const otherColumns = columns.slice(1);
+
   return (
     <>
       <tr className="contents group">
         {/* first col sticky */}
-        <td
-          style={{ zIndex: 3 }}
-          className="sticky flex -left-1 text-center justify-center items-center text-sm font-medium text-gray-900"
-        >
-          <div className="bg-purple-50 h-full flex items-center">
-            <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
-          </div>
-          <div className="bg-white border-t border-gray-200 opacity-90 w-full h-full py-4 p-4">{task.name}</div>
-        </td>
+        <Col style={{ zIndex: 3 }} field={sticky.field} task={task} value={task[sticky.field]} sticky />
 
-        {columns.slice(1).map((col) => (
+        {otherColumns.map((col) => (
           <Col field={col.field} task={task} value={task[col.field]} key={col.id} style={{ zIndex: 2 }} />
         ))}
       </tr>
     </>
   );
 }
+
+//  {/* <td
+//           style={{ zIndex: 3 }}
+//           className="sticky flex -left-1 text-center justify-center items-center text-sm font-medium text-gray-900"
+//         >
+//           <div className="bg-purple-50 h-full flex items-center">
+//             <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
+//           </div>
+//           <div className="bg-white border-t border-gray-200 opacity-90 w-full h-full py-4 p-4">{task.name}</div>
+//         </td> */}
 
 // <td
 //   key={col.field}
