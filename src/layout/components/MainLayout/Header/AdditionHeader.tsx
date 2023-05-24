@@ -2,15 +2,25 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
-import { useMediaStream } from '../../../../features/task/taskService';
+import { GetTimeEntriesService, useMediaStream } from '../../../../features/task/taskService';
 import { ILastMemory } from '../../../../features/workspace/workspace.interfaces';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState } from 'react';
+import { IoAlarmSharp } from 'react-icons/io5';
+import moment from 'moment';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 
 export default function AdditionalHeader() {
   const { screenRecording } = useAppSelector((state) => state.task);
   const [show, setShow] = useState<boolean>(false);
+  const { workSpaceId, hubId, listId } = useParams();
+  const { activeItemId, activeItemType, activeTabId } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
+  const { data: getEntries } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
+  });
 
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
@@ -18,6 +28,15 @@ export default function AdditionalHeader() {
         Header
       </h1>
       <div className="flex space-x-2 items-center justify-center">
+        {activeTabId !== 6 && (
+          <div
+            className="flex items-center space-x-1 border border-purple-500 py-1 px-2 rounded-lg cursor-pointer"
+            onClick={() => dispatch(resetWorkSpace({ activeTabId: 6, workSpaceId, hubId, listId }))}
+          >
+            <IoAlarmSharp className="text-purple-500" />
+            <span>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</span>
+          </div>
+        )}
         <MdTab className="w-5 h-5" />
         {screenRecording === 'recording' && (
           <div className="w-2 relative" onMouseEnter={() => setShow(!show)}>
