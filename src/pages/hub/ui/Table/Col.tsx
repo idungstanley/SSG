@@ -3,10 +3,12 @@ import { MdDragIndicator } from 'react-icons/md';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
+import Assignee from '../../../workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
 import TaskPriority from '../../../workspace/tasks/component/taskData/priority';
 import TaskStatus from '../../../workspace/tasks/component/taskData/status';
 import DateForTask from '../../../workspace/tasks/component/taskData/taskDate';
+import TaskTag from '../../../workspace/tasks/component/taskData/taskTag';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
 import { TaskFullListValue } from '../../types/hub';
 
@@ -21,6 +23,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 export const DEFAULT_COL_BG = 'bg-white opacity-90';
 
 export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
+  //  fields config
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
@@ -34,7 +37,9 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
         listId={task.list_id}
         taskCustomFields={task.custom_fields}
       />
-    )
+    ),
+    tags: <TaskTag task={task as ImyTaskData} taskColField={value} />,
+    assignees: <Assignee task={task as ImyTaskData} itemId={task.id} option="task" />
   };
 
   return sticky ? (

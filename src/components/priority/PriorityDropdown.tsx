@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
+import { useAbsolute } from '../../hooks/useAbsolute';
 
 interface priorityType {
   id: number;
@@ -79,29 +80,37 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const { updateCords } = useAppSelector((state) => state.task);
+  const { cords, relativeRef } = useAbsolute(updateCords, 200);
+
   return (
-    <Menu as="div" className="relative inline-block text-left ">
+    <>
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">{setPriorityColor(TaskCurrentPriority)}</Menu.Button>
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="flex text-sm justify-center items-center focus:outline-none text-gray-400 hover:text-gray-700 w-full"
+        >
+          <div ref={relativeRef}>{setPriorityColor(TaskCurrentPriority)}</div>
+        </button>
       </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-        // show={sidebarSettings}
-      >
-        <Menu.Items className="origin-top-right absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
-          {priorityList.map((i) => (
-            <Menu.Item key={i.id}>
-              {({ active }) => (
+
+      <Transition appear show={isOpen} as="div">
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <div style={{ ...cords }} className="fixed overflow-y-auto">
+            <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              {priorityList.map((i) => (
                 <button
+                  key={i.id}
                   type="button"
                   className={cl(
-                    active ? `bg-${i.bg}-200` : '',
+                    TaskCurrentPriority === i.title ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}
@@ -111,11 +120,11 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
                   </p>
                   <p>{i.title}</p>
                 </button>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
+              ))}
+            </div>
+          </div>
+        </Dialog>
       </Transition>
-    </Menu>
+    </>
   );
 }
