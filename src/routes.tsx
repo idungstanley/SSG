@@ -65,6 +65,7 @@ import TasksIndex from './pages/workspace/tasksIndex';
 import SubscribersSettings from './pages/settings/NotificationSettings/SubscribersSettings';
 import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 import { useAppSelector } from './app/hooks';
+import HubPage from './pages/hub';
 
 const inbox = [
   {
@@ -154,6 +155,7 @@ export const routes = (user: IUser | null) => {
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
+        { path: 'tasks/newh/:hubId', element: <HubPage /> },
         { path: 'tasks/h/:hubId', element: <RenderHubs /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
         { path: 'tasks/w/:walletId', element: <RenderWallets /> },
