@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useDeleteChat, useGetChats } from '../../../features/chat/chatService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
-import { PlusIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '../../../common';
 import { CiSearch } from 'react-icons/ci';
 import { CgSortAz } from 'react-icons/cg';
@@ -78,7 +78,6 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
               <span>
                 <UsersIcon className="h-4 w-4 stroke-current" aria-hidden="true" />
               </span>
-
               {/* <TrashIcon
                 onClick={() => handleDelete(chat.id)}
                 className="w-5 h-5 cursor-pointer"

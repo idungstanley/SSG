@@ -103,7 +103,7 @@ export const useGetHubChildren = ({ query }: { query: string | null | undefined 
 
   return useQuery(['hubs', hubId], async () => {
     const data = await requestNew<IHubReq>({
-      url: `at/hubs/${hubId}`,
+      url: `/hubs/${hubId}`,
       method: 'GET'
     });
     return data;
@@ -155,7 +155,7 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
     ['hubs'],
     async () => {
       const data = await requestNew({
-        url: `at/hubs/${hubid}`,
+        url: `hubs/${hubid}`,
         method: 'DELETE'
       });
       return data;
@@ -165,8 +165,8 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
       enabled: data.delHub,
       // retry: false,
       onSuccess: () => {
-        queryClient.invalidateQueries();
         dispatch(setDelHub(false));
+        queryClient.invalidateQueries();
       }
     }
   );
@@ -181,7 +181,7 @@ export const ArchiveHubService = (hub: { query: string | null | undefined; archi
     ['hubs', hubid],
     async () => {
       const data = await requestNew({
-        url: `at/hubs/${hubid}/archive`,
+        url: `hubs/${hubid}/archive`,
         method: 'POST'
       });
       return data;

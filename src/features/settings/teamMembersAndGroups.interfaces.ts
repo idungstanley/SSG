@@ -1,6 +1,8 @@
 export interface ITeamMembersAndGroup {
   id: string;
   name?: string;
+  is_active?: boolean;
+  invited_at: boolean;
   user: {
     name: string;
     id: string;
