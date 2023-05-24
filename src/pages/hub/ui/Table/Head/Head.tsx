@@ -10,7 +10,7 @@ export function Head({ columns, tableHeight, mouseDown }: HeadProps) {
   return (
     <thead className="contents">
       <tr className="contents">
-        {/* first sticky */}
+        {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky flex left-0 font-extrabold" ref={columns[0].ref}>
           <div className="bg-purple-50 flex items-center w-10"></div>
           <span className="flex border-gray-200 bg-white opacity-90 w-full h-full mx-auto justify-center truncate p-4">

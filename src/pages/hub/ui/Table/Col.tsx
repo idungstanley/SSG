@@ -1,5 +1,6 @@
 import { TdHTMLAttributes } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
@@ -20,14 +21,18 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   sticky?: boolean;
 }
 
-export const DEFAULT_COL_BG = 'bg-white opacity-90';
+const DEFAULT_COL_BG = 'bg-white opacity-90';
+const ACTIVE_COL_BG = 'bg-primary-200 opacity-90';
 
 export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
+  const { taskId } = useParams();
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+
   //  fields config
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
-    name: <TaskName task={task} />,
+    name: <TaskName task={task} bg={COL_BG} />,
     created_at: <DateForTask taskColField={value} />,
     updated_at: <DateForTask taskColField={value} />,
     dropdown: (
@@ -51,10 +56,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
     </td>
   ) : (
     <td
-      className={cl(
-        DEFAULT_COL_BG,
-        'relative flex border-t justify-center items-center text-sm font-medium text-gray-900'
-      )}
+      className={cl(COL_BG, 'relative flex border-t justify-center items-center text-sm font-medium text-gray-900')}
       {...props}
     >
       {field in fields ? fields[field] : String(value)}
@@ -65,9 +67,10 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 // temporary component
 interface TaskNameProps {
   task: ITaskFullList;
+  bg: string;
 }
 
-function TaskName({ task }: TaskNameProps) {
+function TaskName({ task, bg }: TaskNameProps) {
   return (
     <>
       {/* change me */}
@@ -87,7 +90,7 @@ function TaskName({ task }: TaskNameProps) {
         <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
       </div>
 
-      <div className={cl(DEFAULT_COL_BG, ' border-t w-full h-full py-4 p-4')}>{task.name}</div>
+      <div className={cl(bg, 'border-t w-full h-full py-4 p-4')}>{task.name}</div>
     </>
   );
 }

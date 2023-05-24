@@ -156,6 +156,7 @@ export const routes = (user: IUser | null) => {
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
         { path: 'tasks/newh/:hubId', element: <HubPage /> },
+        { path: 'tasks/newh/:hubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/h/:hubId', element: <RenderHubs /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
         { path: 'tasks/w/:walletId', element: <RenderWallets /> },

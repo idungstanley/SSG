@@ -4,6 +4,8 @@ import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
+import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
+import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
 import { Head } from './Head/Head';
 import { Row } from './Row';
@@ -12,10 +14,6 @@ interface TableProps {
   heads: listColumnProps[];
   data: ITaskFullList[];
 }
-
-const MIN_COL_WIDTH = 100;
-const MAX_COL_WIDTH = 300;
-const DEFAULT_COL_WIDTH = 150;
 
 export function Table({ heads, data }: TableProps) {
   const dispatch = useAppDispatch();
@@ -55,35 +53,37 @@ export function Table({ heads, data }: TableProps) {
     [activeIndex, columns]
   );
 
-  const removeListeners = useCallback(() => {
+  const removeListeners = () => {
     window.removeEventListener('mousemove', mouseMove);
     window.removeEventListener('mouseup', removeListeners);
-  }, [mouseMove]);
+  };
 
-  const mouseUp = useCallback(() => {
+  // reset
+  const onMouseUp = () => {
     document.body.style.userSelect = '';
     setActiveIndex(null);
     removeListeners();
-  }, [setActiveIndex, removeListeners]);
+  };
 
   useEffect(() => {
     if (activeIndex !== null) {
       window.addEventListener('mousemove', mouseMove);
-      window.addEventListener('mouseup', mouseUp);
+      window.addEventListener('mouseup', onMouseUp);
     }
 
     return () => {
       removeListeners();
     };
-  }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+  }, [activeIndex]);
 
+  // init height
   useEffect(() => {
     if (tableElement.current) {
       setTableHeight(tableElement.current.offsetHeight);
     }
   }, []);
 
-  const mouseDown = (index: number) => {
+  const onMouseDown = (index: number) => {
     document.body.style.userSelect = 'none';
     setActiveIndex(index);
   };
@@ -95,16 +95,12 @@ export function Table({ heads, data }: TableProps) {
       <table
         onScroll={onScroll}
         style={{
-          display: 'grid',
-          gridTemplateColumns: `minmax(${MAX_COL_WIDTH}px, 1fr) ${columns
-            .slice(1)
-            .map(() => `minmax(${DEFAULT_COL_WIDTH}px, 1fr)`)
-            .join(' ')}`
+          gridTemplateColumns: generateGrid(columns.length)
         }}
-        className="w-full overflow-x-scroll overflow-y-hidden"
+        className="w-full overflow-x-scroll overflow-y-hidden grid"
         ref={tableElement}
       >
-        <Head columns={columns} mouseDown={mouseDown} tableHeight={tableHeight} />
+        <Head columns={columns} mouseDown={onMouseDown} tableHeight={tableHeight} />
 
         <tbody className="contents">
           {data.map((i) => (
