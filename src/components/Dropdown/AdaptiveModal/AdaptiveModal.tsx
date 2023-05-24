@@ -1,12 +1,13 @@
-import { useRef, useState, useEffect, ReactNode, RefObject } from 'react';
+import React, { useRef, useState, useEffect, ReactNode, RefObject } from 'react';
 
 interface AdaptiveModalProps {
   children: ReactNode;
   styles: string;
-  targetElementRef: RefObject<HTMLTableRowElement>;
+  targetElementRef: RefObject<HTMLTableCellElement>;
+  toggleFn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AdaptiveModal({ children, styles, targetElementRef }: AdaptiveModalProps) {
+export default function AdaptiveModal({ children, styles, targetElementRef, toggleFn }: AdaptiveModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [placement, setPlacement] = useState<'above' | 'below'>('below');
 
@@ -41,18 +42,28 @@ function AdaptiveModal({ children, styles, targetElementRef }: AdaptiveModalProp
       }
     };
 
-    window.addEventListener('resize', calculatePlacement);
     calculatePlacement();
 
-    return () => {
-      window.removeEventListener('resize', calculatePlacement);
+    const handleResize = () => {
+      calculatePlacement();
     };
-  }, []);
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleResize);
+    };
+  }, [targetElementRef]);
+
+  const modalStyles = `absolute ${
+    placement === 'above' ? 'bottom-full' : 'top-1/2'
+  } left-1/2 bg-white z-50 transform -translate-x-1/2 ${styles}`;
+
   return (
-    <div ref={modalRef} className={`absolute ${placement === 'above' ? 'bottom-1/2' : 'top-0'} left-1/2 ${styles}`}>
+    <div ref={modalRef} className={modalStyles} onMouseLeave={() => toggleFn(false)}>
       {children}
     </div>
   );
 }
-
-export default AdaptiveModal;

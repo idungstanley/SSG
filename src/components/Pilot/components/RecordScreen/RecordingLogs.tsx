@@ -14,7 +14,7 @@ export default function VideoEntries() {
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [controlModal, setModal] = useState<boolean>(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const targetElementRef = useRef<HTMLTableRowElement>(null);
+  const targetElementRef = useRef<HTMLTableCellElement>(null);
 
   const handlePlayBack = (index: number) => {
     const videoRef = videoRefs.current[index];
@@ -65,11 +65,11 @@ export default function VideoEntries() {
           const { created_at, updated_at, file_format } = videoFile.physical_file;
           const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
           return (
-            <tr ref={targetElementRef} key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
+            <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
               <td>
                 <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
               </td>
-              <td className="relative">
+              <td className="relative" ref={targetElementRef}>
                 <video
                   ref={(el) => (videoRefs.current[index] = el)}
                   src={videoFile.path}
@@ -83,7 +83,7 @@ export default function VideoEntries() {
                   onEnded={() => setPlayToggle(false)}
                 />
                 {controlModal && hoverIndex === index && (
-                  <AdaptiveModal styles="" targetElementRef={targetElementRef}>
+                  <AdaptiveModal styles="" targetElementRef={targetElementRef} toggleFn={setModal}>
                     <VideoControlModal
                       index={index}
                       videoElement={videoRefs.current[index]}

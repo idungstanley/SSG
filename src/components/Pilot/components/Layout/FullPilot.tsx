@@ -9,9 +9,7 @@ import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../
 import { dimensions } from '../../../../app/config/dimensions';
 
 interface FullPilotProps {
-  activeTabId: number | null;
   featureTabs: IPilotTab[];
-  setActiveTabId: (i: number | null) => void;
   activeSection?: IPilotSection;
   setShowModal: (i: boolean) => void;
   showModal: boolean;
@@ -22,14 +20,7 @@ const LS_PILOT_KEY = 'pilotWidth';
 
 const pilotWidthFromLS = DEFAULT_PILOT_WIDTH; // JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
 
-export default function FullPilot({
-  activeTabId,
-  featureTabs,
-  setActiveTabId,
-  activeSection,
-  setShowModal,
-  showModal
-}: FullPilotProps) {
+export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
   const { blockRef, Dividers } = useResize({
     dimensions: {
       min: dimensions.pilot.min,
@@ -56,7 +47,6 @@ export default function FullPilot({
 
       <Header
         isMinified={false}
-        setActiveTabId={setActiveTabId}
         menu={<Header.Menu setShowModal={setShowModal} />}
         additionalNavItems={
           <>
@@ -77,15 +67,9 @@ export default function FullPilot({
         </p>
       </Header>
 
-      <FullHotkeysList
-        tabs={featureTabs}
-        setShowModal={setShowModal}
-        showModal={showModal}
-        setActiveTabId={setActiveTabId}
-        activeTabId={activeTabId}
-      />
+      <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
-      <FullTabs tabs={featureTabs} activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <FullTabs tabs={featureTabs} />
 
       {activeSection?.element}
     </div>

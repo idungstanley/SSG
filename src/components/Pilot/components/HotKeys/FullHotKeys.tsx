@@ -3,25 +3,22 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import { Modal } from './components/Modal';
+import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
-  setActiveTabId: (i: number | null) => void;
-  activeTabId: number | null;
   showModal: boolean;
   setShowModal: (i: boolean) => void;
 }
 
 const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as number[];
 
-export default function FullHotkeysList({
-  tabs,
-  setActiveTabId,
-  activeTabId,
-  showModal,
-  setShowModal
-}: HotkeysListProps) {
+export default function FullHotkeysList({ tabs, showModal, setShowModal }: HotkeysListProps) {
   const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
+  const dispatch = useAppDispatch();
+
+  const { activeTabId } = useAppSelector((state) => state.workspace);
 
   const hotkeys = useMemo(() => tabs.filter((i) => activeHotkeyIds.includes(i.id)), [activeHotkeyIds, tabs]);
 
@@ -53,7 +50,7 @@ export default function FullHotkeysList({
           <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-row w-full">
             {hotkeys.map((hotkey) => (
               <button
-                onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
+                onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
                 title={hotkey.label}
                 className={cl(
                   activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',

@@ -104,3 +104,10 @@ export interface ITeamMembersRes {
     team_members: ITeamMember[];
   };
 }
+
+export interface ILastMemory {
+  activeTabId: number | 0;
+  hubId: string | '';
+  listId: string | '';
+  workSpaceId: string | '';
+}

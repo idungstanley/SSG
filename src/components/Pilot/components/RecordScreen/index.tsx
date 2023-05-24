@@ -51,7 +51,7 @@ export default function RecordScreen() {
     [activeSubRecordsTabId]
   );
   return (
-    <section>
+    <section className="mb-12 h-full">
       <div className={'flex bg-gray-400 pt-0.5'}>
         {ScreenRecordTabs.map((item) => (
           <section
@@ -85,7 +85,7 @@ export default function RecordScreen() {
           </section>
         ))}
       </div>
-      {showPilot && VideotabsView?.element}
+      {VideotabsView?.element}
     </section>
   );
 }

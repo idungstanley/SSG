@@ -6,7 +6,7 @@ import { MdFullscreen } from 'react-icons/md';
 import { RiPictureInPicture2Line } from 'react-icons/ri';
 import { BiTrash } from 'react-icons/bi';
 
-type toggleType = { index: number; showControls: boolean; videoElement: HTMLVideoElement | null };
+export type toggleType = { index: number; showControls: boolean; videoElement: HTMLVideoElement | null };
 interface VideoControlModalProps {
   index: number;
   videoElement: HTMLVideoElement | null;

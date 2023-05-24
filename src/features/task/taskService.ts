@@ -616,6 +616,7 @@ export const startMediaStream = async () => {
 export function useMediaStream() {
   const dispatch = useAppDispatch();
   const { mutateAsync: startStream, isLoading: isStarting } = useMutation(startMediaStream);
+  const queryClient = useQueryClient();
   const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { mutate } = useUploadRecording();
@@ -635,7 +636,7 @@ export function useMediaStream() {
     recorder?.stopRecording(async () => {
       const blob: Blob | undefined = recorder?.getBlob();
       if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-        await mutate({
+        mutate({
           blob,
           currentWorkspaceId,
           accessToken,
@@ -646,10 +647,16 @@ export function useMediaStream() {
         if (tracks) {
           tracks.forEach((track) => track.stop());
         }
+        // Invalidate React Query
+        queryClient.invalidateQueries(['attachments']);
       }
     });
+
     dispatch(setScreenRecording('idle'));
-    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = { stream: null, recorder: null };
+    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = {
+      stream: null,
+      recorder: null
+    };
     dispatch(setScreenRecordingMedia(newAction));
   };
 

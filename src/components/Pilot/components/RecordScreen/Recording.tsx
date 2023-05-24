@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setRecording } from '../../../../features/workspace/workspaceSlice';
+import { setLastMemory, setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import { useMediaStream } from '../../../../features/task/taskService';
 import { BsFillRecord2Fill } from 'react-icons/bs';
 import { IoStopCircleSharp, IoVolumeHigh, IoVolumeMute } from 'react-icons/io5';
+import { useParams } from 'react-router-dom';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,8 +13,10 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
+  const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { recorder, stream } = useAppSelector((state) => state.task);
+  const { hubId, listId, workSpaceId } = useParams();
+
   const dispatch = useAppDispatch();
   const {
     handleStartStream,
@@ -25,6 +28,7 @@ export default function Recording() {
   const { screenRecording } = useAppSelector((state) => state.task);
   const startRecording = async () => {
     await handleStartStream();
+    dispatch(setLastMemory({ activeTabId, workSpaceId, listId, hubId }));
   };
 
   const stopRecording = () => {
