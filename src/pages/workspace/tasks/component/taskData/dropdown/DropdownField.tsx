@@ -42,13 +42,13 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   return (
     <>
-      <div ref={relativeRef} className="flex items-center justify-center">
+      <div className="flex w-full h-full items-center justify-center">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full"
         >
-          {activeOption}
+          <div ref={relativeRef}>{activeOption}</div>
         </button>
       </div>
 

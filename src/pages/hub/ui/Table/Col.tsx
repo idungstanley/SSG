@@ -1,4 +1,5 @@
 import { TdHTMLAttributes } from 'react';
+import { MdDragIndicator } from 'react-icons/md';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
@@ -38,7 +39,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 
   return sticky ? (
     <td
-      className="sticky flex -left-1 text-center justify-center items-center text-sm font-medium text-gray-900"
+      className="sticky flex left-0 text-center justify-center items-center text-sm font-medium text-gray-900"
       {...props}
     >
       {field in fields ? fields[field] : String(value)}
@@ -65,9 +66,22 @@ function TaskName({ task }: TaskNameProps) {
   return (
     <>
       {/* change me */}
-      <div className="bg-purple-50 h-full flex items-center">
-        <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
+      <div className="bg-purple-50 w-10 h-full flex items-center space-x-1">
+        <input
+          type="checkbox"
+          id="checked-checkbox"
+          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100"
+          // ref={setNodeRef}
+          // {...attributes}
+          // {...listeners}
+          // onClick={() => {
+          //   displayNav(task?.id as string);
+          // }}
+        />
+
+        <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
       </div>
+
       <div className={cl(DEFAULT_COL_BG, ' border-t w-full h-full py-4 p-4')}>{task.name}</div>
     </>
   );

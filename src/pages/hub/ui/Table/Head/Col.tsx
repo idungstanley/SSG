@@ -8,10 +8,8 @@ interface ColProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Col({ value, isSticky, ref, ...props }: ColProps) {
   return isSticky ? (
-    <th style={{ zIndex: 2 }} className="sticky flex -left-1 font-extrabold" ref={ref}>
-      <div className="bg-purple-50 flex items-center">
-        <span className="p-1 group-hover:opacity-100 opacity-0">=</span>
-      </div>
+    <th style={{ zIndex: 2 }} className="sticky flex left-0 font-extrabold" ref={ref}>
+      <div className="bg-purple-50 flex items-center w-10"></div>
       <span className="flex border-gray-200 bg-white opacity-90 w-full h-full mx-auto justify-center truncate p-4">
         {value}
       </span>
