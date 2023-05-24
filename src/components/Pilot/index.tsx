@@ -36,14 +36,7 @@ export default function Pilot({ pilotConfig }: PilotProps) {
         <MinPilot featureTabs={tabs} activeSection={activeSection} setShowModal={setShowModal} showModal={showModal} />
       ) : null}
 
-      <FullPilot
-        activeTabId={activeTabId}
-        featureTabs={tabs}
-        setActiveTabId={setActiveTabId}
-        activeSection={activeSection}
-        setShowModal={setShowModal}
-        showModal={showModal}
-      />
+      <FullPilot featureTabs={tabs} activeSection={activeSection} setShowModal={setShowModal} showModal={showModal} />
     </>
   ) : null;
 }

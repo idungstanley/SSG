@@ -106,8 +106,8 @@ export interface ITeamMembersRes {
 }
 
 export interface ILastMemory {
-  activeTabId: number | 0;
-  hubId: string | '';
-  listId: string | '';
-  workSpaceId: string | '';
+  activeTabId: number | undefined;
+  hubId: string | undefined;
+  listId: string | undefined;
+  workSpaceId: string | undefined;
 }
