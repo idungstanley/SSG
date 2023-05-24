@@ -17,8 +17,8 @@ import { List } from './ui/List/List';
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId } = useParams();
-  const { activeEntityName, activeEntity } = useAppSelector((state) => state.workspace);
-  const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
 
@@ -71,9 +71,10 @@ export default function HubPage() {
           style={{ minHeight: '0', maxHeight: '90vh' }}
           className="w-full h-full p-10 space-y-10 overflow-y-scroll"
         >
-          {Object.keys(lists).length
-            ? Object.keys(lists).map((listId) => <List key={listId} tasks={lists[listId]} />)
-            : null}
+          {/* lists */}
+          {Object.keys(lists).map((listId) => (
+            <List key={listId} tasks={lists[listId]} />
+          ))}
         </section>
       </Page>
     </>

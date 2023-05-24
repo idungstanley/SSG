@@ -1,34 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { IField } from '../../../../features/list/list.interfaces';
+import { useMemo } from 'react';
 import { useList } from '../../../../features/list/listService';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
-import { columnsHead, listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
+import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 
 interface ListProps {
   tasks: ITaskFullList[];
 }
-function unique<T>(arr: T[]) {
-  return [...new Set(arr)];
-}
-
-export interface Column extends listColumnProps {
-  ref: React.RefObject<HTMLTableCellElement>;
-}
-
-export const createHeaders = (headers: listColumnProps[]): Column[] => {
-  return headers.map((item) => ({
-    ...item,
-    ref: useRef<HTMLTableCellElement>(null)
-  }));
-};
-
-const generateColumns = (customFields: IField[]) => {
-  const customFieldNames = customFields.map((i) => ({ value: i.name, id: i.id, field: i.type, hidden: false }));
-  const newColumns = unique([...columnsHead, ...customFieldNames]);
-
-  return newColumns;
-};
 
 export function List({ tasks }: ListProps) {
   const { data } = useList(tasks[0].list_id);

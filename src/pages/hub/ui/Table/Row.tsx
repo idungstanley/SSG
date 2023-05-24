@@ -1,13 +1,11 @@
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
-import { cl } from '../../../../utils';
-import { Column } from '../List/List';
+import { Column } from '../../types/hub';
+import { Col } from './Col';
 
 interface RowProps {
   task: ITaskFullList;
   columns: Column[];
 }
-
-const DEFAULT_ROW_BG = 'bg-white opacity-90';
 
 export function Row({ task, columns }: RowProps) {
   return (
@@ -25,18 +23,20 @@ export function Row({ task, columns }: RowProps) {
         </td>
 
         {columns.slice(1).map((col) => (
-          <td
-            key={col.id}
-            style={{ zIndex: 2 }}
-            className={cl(
-              DEFAULT_ROW_BG,
-              'flex border-t justify-center items-center text-sm font-medium text-gray-900 p-4'
-            )}
-          >
-            {task[col.field]?.toString()}
-          </td>
+          <Col field={col.field} task={task} value={task[col.field]} key={col.id} style={{ zIndex: 2 }} />
         ))}
       </tr>
     </>
   );
 }
+
+// <td
+//   key={col.field}
+//   style={{ zIndex: 2 }}
+//   className={cl(
+//     DEFAULT_COL_BG,
+//     'flex border-t justify-center items-center text-sm font-medium text-gray-900 p-4'
+//   )}
+// >
+//   {task[col.field]?.toString()}
+// </td>
