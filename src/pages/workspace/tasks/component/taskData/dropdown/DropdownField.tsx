@@ -6,11 +6,9 @@ import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 
 interface DropdownModalProps {
-  field: { properties: string; id: string; activeProperty: string };
+  field: { properties: string[]; id: string; activeProperty: string };
   taskId: string;
 }
-
-const regex = /\w+/g;
 
 export default function DropdownField({ field, taskId }: DropdownModalProps) {
   const { updateCords } = useAppSelector((state) => state.task);
@@ -24,8 +22,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const properties = field.properties.match(regex) as string[] | null;
-  const options = properties ? [...properties] : [];
+  const { properties } = field;
 
   const handleClick = (option: string) => {
     setActiveOption(option);
@@ -60,7 +57,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                 select an option
               </p>
               <div className="space-y-2 pt-3 w-full">
-                {options?.map((option) => (
+                {properties?.map((option) => (
                   <button
                     key={option}
                     onClick={() => handleClick(option)}

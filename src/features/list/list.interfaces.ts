@@ -7,7 +7,7 @@ export interface IField {
   model_id: string;
   name: string;
   type: string;
-  properties: string;
+  properties: string[];
   created_at: string;
 }
 
