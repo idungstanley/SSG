@@ -55,6 +55,8 @@ export default function HubItem({
     type === 'hub' ? 'blue' : 'orange'
   );
 
+  const collapseNavAndSubhub = !showSidebar && type === 'subhub';
+
   const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
@@ -89,7 +91,7 @@ export default function HubItem({
         onClick={() => handleClick(item.id, index)}
         style={{
           backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}`,
-          top: isSticky ? topNumber : '',
+          top: isSticky && showSidebar ? topNumber : '',
           zIndex: isSticky ? zNumber : '10'
         }}
       >
@@ -106,9 +108,9 @@ export default function HubItem({
           <div
             role="button"
             className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-            style={{ paddingLeft: type === 'subhub' ? '10px' : '' }}
+            style={{ paddingLeft: type === 'subhub' && !showSidebar ? '5px' : type === 'subhub' ? '10px' : '' }}
           >
-            {showSidebar && (
+            {!collapseNavAndSubhub && (
               <div>
                 {showChildren === item.id ? (
                   <span className="flex flex-col">
@@ -120,7 +122,7 @@ export default function HubItem({
               </div>
             )}
 
-            <div className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}>
+            <div className={`flex items-center flex-1 min-w-0 ${collapseNavAndSubhub && 'ml-3'}`}>
               <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />

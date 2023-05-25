@@ -17,7 +17,7 @@ export const DetailOptions = [
   }
 ];
 export default function Details() {
-  const { activeSubDetailsTabId, showPilot } = useAppSelector((state) => state.workspace);
+  const { activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
   const selectedSubSection = useMemo(
     () => DetailOptions.find((option) => option.id === activeSubDetailsTabId),
     [activeSubDetailsTabId]
@@ -27,7 +27,7 @@ export default function Details() {
     <>
       <SectionArea label="Details" icon={<DetailsIcon className="w-4 h-4" />} />
       <section className="flex flex-col overflow-y-scroll h-fit mb-11 ">
-        {showPilot && <DetailsSubTab />}
+        <DetailsSubTab />
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>
     </>
