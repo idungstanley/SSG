@@ -12,8 +12,7 @@ export default function InProgress({ taskColField, task }: renderDataProps) {
   };
   return (
     <div
-      className="absolute top-0 flex flex-col justify-center w-20 h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
-      style={{ marginLeft: '-30px' }}
+      className="w-full items-center top-0 flex flex-col justify-center h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
       <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField as string} />

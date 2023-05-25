@@ -72,11 +72,10 @@ export default function FullPilot({
           </>
         }
       >
-        <p className="truncate capitalize text-xs font-semibold">
+        <p className="text-xs font-semibold capitalize truncate">
           {type} | <span className="font-normal">{title}</span>
         </p>
       </Header>
-
       <FullHotkeysList
         tabs={featureTabs}
         setShowModal={setShowModal}

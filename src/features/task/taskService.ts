@@ -256,7 +256,7 @@ export const getTaskListService = ({
     ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
-      return requestNew<ITaskListRes | undefined>({
+      return requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
         params: {

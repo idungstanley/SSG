@@ -10,6 +10,7 @@ import { logout, setAuthData } from '../../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip';
+import { VscTriangleDown } from 'react-icons/vsc';
 
 interface UserSettingsType {
   id: number;
@@ -20,9 +21,12 @@ interface UserSettingsType {
 // interface User {
 //   initials: string;
 //   colour: string;
-// }
+// }s
+interface UserProps {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function UserSettingsModal() {
+export default function UserSettingsModal({ setShowModal }: UserProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -80,7 +84,7 @@ export default function UserSettingsModal() {
     {
       id: 5,
       title: 'HotKeys',
-      handleClick: () => ({})
+      handleClick: () => setShowModal(true)
     },
     {
       id: 6,
@@ -123,15 +127,18 @@ export default function UserSettingsModal() {
   // const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div className="mt-1">
+      <div>
         <Menu.Button>
           <ToolTip tooltip="User Settings">
-            <AvatarWithInitials
-              initials={userData?.initials.toUpperCase() as string}
-              height="h-5"
-              width="w-5"
-              backgroundColour={userData?.color as string | undefined}
-            />
+            <div className="flex">
+              <AvatarWithInitials
+                initials={userData?.initials.toUpperCase() as string}
+                height="h-5"
+                width="w-5"
+                backgroundColour={userData?.color as string | undefined}
+              />
+              <VscTriangleDown className="mt-3 text-gray-400" style={{ fontSize: '8px' }} />
+            </div>
           </ToolTip>
         </Menu.Button>
       </div>

@@ -103,11 +103,11 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
               </div>
             </section>
             {createTaskFromTop && <AddNewItem listId={listId} />}
-            <div>
-              <div>
+            <ul className="relative pl-6">
+              <li className="overflow-x-scroll relative">
                 {listId ? <TaskListViews listId={listId} /> : <span>listId required</span>}
                 {listTask?.map((task) => (
-                  <Fragment key={task.id}>
+                  <div className="group" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
                     {currentParentTaskId === task.id ? (
                       <div>
@@ -115,10 +115,10 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
                       </div>
                     ) : null}
                     {getSubTaskId === task.id ? <RenderSubTasks /> : null}
-                  </Fragment>
+                  </div>
                 ))}
-              </div>
-            </div>
+              </li>
+            </ul>
             {addNewTaskItem && !createTaskFromTop && <AddNewItem listId={listId} />}
             <div
               className=""

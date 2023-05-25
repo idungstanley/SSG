@@ -4,7 +4,7 @@ import { getTaskListService } from '../../../features/task/taskService';
 import ListNav from './components/renderlist/ListNav';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setAddNewTaskItem } from '../../../features/task/taskSlice';
+import { setAddNewTaskItem, setUpdateCords } from '../../../features/task/taskSlice';
 import TaskListViews from '../tasks/component/views/listLevel/TaskListViews';
 import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
@@ -25,6 +25,7 @@ import { setActiveEntityName, setActiveItem } from '../../../features/workspace/
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
+import { useScroll } from '../../../hooks/useScroll';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
@@ -91,6 +92,8 @@ function RenderList() {
     source: hubIcon
   };
 
+  const handleScrollList = useScroll(() => dispatch(setUpdateCords()));
+
   return (
     <>
       <PilotSection />
@@ -113,15 +116,18 @@ function RenderList() {
         extendedBar={extendedObj}
         additional={<FilterByAssigneesSliderOver data={paginatedTaskData as ITaskFullList[]} />}
       >
-        <div className="w-full">
+        <>
           {listView && (
             <div className="w-full">
               <ListFilter />
             </div>
           )}
           <div
-            className="relative block mx-2 border-l-4 border-gray-500 rounded-xl"
-            style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
+            style={{ minHeight: '0', maxHeight: '90vh' }}
+            ref={containerRef}
+            className="relative overflow-auto block mx-2 border-l-4 border-gray-500 rounded-xl"
+            // style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
+            onScroll={handleScrollList}
           >
             {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
 
@@ -138,14 +144,14 @@ function RenderList() {
 
             {/* card */}
             <ul className="relative pl-6">
-              <li className="overflow-x-scroll">
+              <li className="overflow-x-scroll relative">
                 {listView && listId ? (
                   <TaskListViews listId={listId} taskLength={paginatedTaskData?.length} />
                 ) : (
                   <span>listId required</span>
                 )}
                 {listView && (
-                  <div style={{ minHeight: '0', maxHeight: '90vh' }} ref={containerRef}>
+                  <div>
                     {paginatedTaskData?.map((task) => (
                       <div className="group" key={task?.id}>
                         {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
@@ -186,7 +192,7 @@ function RenderList() {
               </div>
             )}
           </div>
-        </div>
+        </>
       </PageWrapper>
     </>
   );

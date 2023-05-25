@@ -42,15 +42,15 @@ export default function FullHotkeysList({
       {activeHotkeyIds.length !== 0 ? (
         <div className="flex border-t">
           {/* unknown */}
-          <div className="flex flex-col p-1 bg-gray-50 text-gray-700 m-1">
-            <ChevronRightIcon className="h-2 w-2" aria-hidden="true" />
+          <div className="flex flex-col p-1 m-1 text-gray-700 bg-gray-50">
+            <ChevronRightIcon className="w-2 h-2" aria-hidden="true" />
             <p className="flex flex-col px-0.5 items-center" style={{ fontSize: '5px' }}>
               <span>1</span> <span className="w-full h-0.5 bg-gray-400"></span> <span>3</span>
             </p>
-            <ChevronLeftIcon className="h-2 w-2 text-gray-400" aria-hidden="true" />
+            <ChevronLeftIcon className="w-2 h-2 text-gray-400" aria-hidden="true" />
           </div>
 
-          <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-row w-full">
+          <div className="flex flex-row flex-wrap w-full col-span-1 p-2 gap-y-2">
             {hotkeys.map((hotkey) => (
               <button
                 onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
@@ -72,7 +72,7 @@ export default function FullHotkeysList({
 
       <Modal setShowModal={setShowModal} showModal={showModal}>
         {/* hotkeys list */}
-        <div className="flex items-start flex-col mt-4 z-50">
+        <div className="z-50 flex flex-col items-start mt-4">
           {tabs.map((tab) => (
             <button
               onClick={() => handleClick(tab.id)}
@@ -87,7 +87,7 @@ export default function FullHotkeysList({
                 <span className="block truncate">{tab.label}</span>
               </div>
 
-              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="h-4 w-4" aria-hidden="true" />}
+              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="w-4 h-4" aria-hidden="true" />}
             </button>
           ))}
         </div>

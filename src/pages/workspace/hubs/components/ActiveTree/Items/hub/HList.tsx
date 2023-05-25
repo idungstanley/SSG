@@ -180,11 +180,11 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
               zNumber={taskType === 'subhub' ? '100' : '110'}
             />
+            {hub.children.length && showChildren ? (
+              <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
+            ) : null}
             {showSidebar && (
               <div>
-                {hub.children.length && showChildren ? (
-                  <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
-                ) : null}
                 {hub.wallets.length && showChildren ? (
                   <WList
                     wallets={hub.wallets}

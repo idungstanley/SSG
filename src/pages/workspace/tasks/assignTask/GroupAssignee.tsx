@@ -55,7 +55,7 @@ function GroupAssignee({
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center -ml-5 relative">
+        <div className="flex items-center justify-center relative">
           {data?.slice(0, 3).map(
             (
               newData: {

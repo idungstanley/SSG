@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../utils';
@@ -17,6 +17,7 @@ interface PlaceItemProps {
   midContent?: ReactNode;
   bottomContent?: ReactNode;
   id: string;
+  isActiveLayoutCondition?: boolean;
   searchStatus?: boolean;
 }
 
@@ -28,19 +29,22 @@ export default function PlaceItem({
   rightContent,
   bottomContent,
   id,
-  searchStatus
+  searchStatus,
+  isActiveLayoutCondition
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const { showSidebar, lightBaseColor } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+
   // const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const isActivePlace = !onClick;
+  const placeActive = isActivePlace && isActiveLayoutCondition;
 
   const baseColor = '#BF00FFB2';
   const style = {
@@ -48,12 +52,14 @@ export default function PlaceItem({
     transition,
     backgroundColor: isDragging
       ? '#f3f4f6'
+      : placeActive
+      ? lightBaseColor
       : isActivePlace
       ? 'white'
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : isActivePlace ? 2 : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? 2000 : undefined,
     height: '50px',
     paddingLeft: showSidebar ? '25px' : '20px'
   };
@@ -77,6 +83,9 @@ export default function PlaceItem({
       style={style}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
+      {placeActive && (
+        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
+      )}
       {!searchStatus && (
         <div className="flex items-center">
           <span

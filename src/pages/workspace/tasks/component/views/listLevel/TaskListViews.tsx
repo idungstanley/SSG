@@ -64,12 +64,11 @@ export default function TaskListViews({
             />
           </span>
           <div className="relative flex items-center justify-center cursor-pointer">
-            <div className="flex items-center ml-2 group">
+            <div className="flex items-center mx-2 group">
               <span className="object-contain p-1 pr-2 text-xs text-black capitalize bg-gray-300 rounded-t-md whitespace-nowrap">
                 {status ? status : 'To Do'}
               </span>
             </div>
-            <span className="ml-3 mr-px text-xs font-bold text-gray-400 ">{taskLength}</span>
           </div>
 
           <div className="relative grid grid-flow-cols">
@@ -77,12 +76,16 @@ export default function TaskListViews({
               ? hideTask.map(
                   (col) =>
                     col.value == 'Task' &&
-                    !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
+                    !col.hidden && (
+                      <TaskListPropertyHead taskLength={taskLength} key={col.id} value={col.value} id={col.id} />
+                    )
                 )
               : columns.map(
                   (col) =>
                     col.value == 'Task' &&
-                    !col.hidden && <TaskListPropertyHead key={col.id} value={col.value} id={col.id} />
+                    !col.hidden && (
+                      <TaskListPropertyHead taskLength={taskLength} key={col.id} value={col.value} id={col.id} />
+                    )
                 )}
           </div>
         </div>
@@ -115,7 +118,7 @@ export default function TaskListViews({
         </span>
       </div>
 
-      <div style={{ marginRight: 314 }} className="h-5"></div>
+      <div style={{ marginRight: 300 }} className="h-5"></div>
 
       <div className="right-0 block text-gray-700 border dynamic">
         {hideTask.length

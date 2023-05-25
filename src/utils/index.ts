@@ -1,3 +1,4 @@
+import { generateLists } from './generateLists';
 export const cl = (...classes: Array<string | undefined | boolean | null | Record<string, unknown>>): string =>
   classes
     .map((i) =>
@@ -9,3 +10,5 @@ export const cl = (...classes: Array<string | undefined | boolean | null | Recor
 export const classNames = (...classes: (string | undefined | boolean | null)[]) => {
   return classes.filter((i) => !!i && typeof i === 'string').join(' ');
 };
+
+export { generateLists };
