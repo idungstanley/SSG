@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setLastMemory, setRecording } from '../../../../features/workspace/workspaceSlice';
+import { setRecorderLastMemory, setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import { useMediaStream } from '../../../../features/task/taskService';
 import { BsFillRecord2Fill } from 'react-icons/bs';
@@ -28,7 +28,7 @@ export default function Recording() {
   const { screenRecording } = useAppSelector((state) => state.task);
   const startRecording = async () => {
     await handleStartStream();
-    dispatch(setLastMemory({ activeTabId, workSpaceId, listId, hubId }));
+    dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId }));
   };
 
   const stopRecording = () => {

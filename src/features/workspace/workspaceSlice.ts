@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { IRecorderLastMemory } from './workspace.interfaces';
+import { IRecorderLastMemory, ITimerLastMemory } from './workspace.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -47,7 +47,8 @@ interface workspaceState {
   activePlaceIdForNavigation: number | null | string;
   createWlLink: boolean;
   activeSubRecordsTabId: number | null;
-  workSpaceLastMemory: IRecorderLastMemory;
+  recorderLastMemory: IRecorderLastMemory;
+  timerLastMemory: ITimerLastMemory;
 }
 
 const initialState: workspaceState = {
@@ -92,7 +93,8 @@ const initialState: workspaceState = {
   activePlaceIdForNavigation: null,
   createWlLink: false,
   activeSubRecordsTabId: 0,
-  workSpaceLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' }
+  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
+  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' }
 };
 
 export const wsSlice = createSlice({
@@ -242,10 +244,13 @@ export const wsSlice = createSlice({
     toggleMute(state) {
       state.isMuted = !state.isMuted;
     },
-    setLastMemory(state, action: PayloadAction<IRecorderLastMemory>) {
-      state.workSpaceLastMemory = action.payload;
+    setRecorderLastMemory(state, action: PayloadAction<IRecorderLastMemory>) {
+      state.recorderLastMemory = action.payload;
     },
-    resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory>) {
+    setTimerLastMemory(state, action: PayloadAction<ITimerLastMemory>) {
+      state.timerLastMemory = action.payload;
+    },
+    resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory | ITimerLastMemory>) {
       const { activeTabId, hubId, listId } = action.payload;
       activeTabId
         ? (state.activeTabId = activeTabId)
@@ -298,7 +303,8 @@ export const {
   setFetchAllWorkspace,
   setActiveSubRecordTabId,
   toggleMute,
-  setLastMemory,
+  setRecorderLastMemory,
+  setTimerLastMemory,
   resetWorkSpace
 } = wsSlice.actions;
 

@@ -10,17 +10,40 @@ import React, { useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
 import moment from 'moment';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
+export const handleEntity = ({
+  workSpaceId,
+  hubId,
+  listId
+}: {
+  workSpaceId: string | undefined;
+  hubId: string | undefined;
+  listId: string | undefined;
+}): string => {
+  return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;
+};
 
 export default function AdditionalHeader() {
   const { screenRecording } = useAppSelector((state) => state.task);
   const [show, setShow] = useState<boolean>(false);
-  const { workSpaceId, hubId, listId } = useParams();
-  const { activeItemId, activeItemType, activeTabId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
+  const {
+    activeItemId,
+    activeItemType,
+    activeTabId: tabsId,
+    timerLastMemory
+  } = useAppSelector((state) => state.workspace);
+  const navigate = useNavigate();
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
     trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
   });
+
+  const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
+
+  const handleResetTimer = () => {
+    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId }));
+    navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
+  };
 
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
@@ -28,10 +51,10 @@ export default function AdditionalHeader() {
         Header
       </h1>
       <div className="flex space-x-2 items-center justify-center">
-        {activeTabId !== 6 && (
+        {tabsId !== 6 && (
           <div
             className="flex items-center space-x-1 border border-purple-500 py-1 px-2 rounded-lg cursor-pointer"
-            onClick={() => dispatch(resetWorkSpace({ activeTabId: 6, workSpaceId, hubId, listId }))}
+            onClick={() => handleResetTimer()}
           >
             <IoAlarmSharp className="text-purple-500" />
             <span>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</span>
@@ -60,14 +83,10 @@ interface BlinkerProps {
 
 function BlinkerModal({ toggleFn }: BlinkerProps) {
   const { recorder, stream } = useAppSelector((state) => state.task);
-  const { workSpaceLastMemory } = useAppSelector((state) => state.workspace);
+  const { recorderLastMemory } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { activeTabId, workSpaceId, hubId, listId } = workSpaceLastMemory as IRecorderLastMemory;
-
-  const handleEntity = (): string => {
-    return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;
-  };
+  const { activeTabId, workSpaceId, hubId, listId } = recorderLastMemory as IRecorderLastMemory;
 
   const { handleStopStream } = useMediaStream();
 
@@ -77,7 +96,7 @@ function BlinkerModal({ toggleFn }: BlinkerProps) {
       stream
     });
     dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId }));
-    navigate(handleEntity(), { replace: true });
+    navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
   };
   return (
     <div

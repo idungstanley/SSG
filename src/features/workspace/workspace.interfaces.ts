@@ -111,3 +111,10 @@ export interface IRecorderLastMemory {
   listId: string | undefined;
   workSpaceId: string | undefined;
 }
+
+export interface ITimerLastMemory {
+  activeTabId: number | undefined;
+  hubId: string | undefined;
+  listId: string | undefined;
+  workSpaceId: string | undefined;
+}
