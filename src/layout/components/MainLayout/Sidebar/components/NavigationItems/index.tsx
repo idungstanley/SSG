@@ -139,7 +139,9 @@ export default function NavigationItems({
     })
   );
   const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
-  const [items, setItems] = useState(navigation.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
+  const [items, setItems] = useState(
+    (showSidebar ? hotkeys : navigation).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+  );
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;

@@ -3,10 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setActivePlaceName, setShowExtendedBar } from '../../../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../../../utils';
 import { useNavigate } from 'react-router-dom';
-import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
 import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
 import { VscPinned } from 'react-icons/vsc';
+import { GrDrag } from 'react-icons/gr';
 
 interface NavigationItemProps {
   item: {
@@ -35,7 +35,7 @@ export default function NavigationItem({ item, isVisible, handleHotkeyClick }: N
 
   const { activePlaceName } = useAppSelector((state) => state.workspace);
   useGetNotificationCountService();
-  const handleClick = (name: string | null, link: string, id: string | null) => {
+  const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
     if (name !== 'Favorites') {
@@ -63,21 +63,21 @@ export default function NavigationItem({ item, isVisible, handleHotkeyClick }: N
         !showSidebar ? 'justify-center' : 'gap-2 items-center justify-between',
         'relative flex cursor-pointer p-2 w-full group'
       )}
-      onClick={() => handleClick(item.name, item.href, item.id)}
+      onClick={() => handleClick(item.name, item.href)}
       style={style}
     >
       {activePlaceName === item.name ? (
         <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
       ) : null}
       <span
-        className={`absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1.5 group-hover:opacity-100 ${
+        className={`absolute justify-center text-xl opacity-0 cursor-move left-1.5 group-hover:opacity-100 ${
           name !== 'Home' ? 'block' : 'hidden'
         }`}
         ref={setNodeRef}
         {...attributes}
         {...listeners}
       >
-        <MdDragIndicator className="hover:text-fuchsia-500" />
+        <GrDrag className="text-gray-50 hover:text-fuchsia-500" />
       </span>
       <div className={cl(!showSidebar ? 'justify-center' : 'gap-2 items-center', 'relative flex cursor-pointer')}>
         <span className="relative w-5 h-5">
