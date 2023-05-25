@@ -17,6 +17,7 @@ import TagModal from '../../../tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
+import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 
 export interface checkListItemProps {
   Item: ICheckListItems[];
@@ -122,8 +123,15 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
               >
                 <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
               </div>
+
+              {item.tags.length > 0 && (
+                <div className="mr-4">
+                  <TaskTag taskColField={item.tags} entity_type="checklist_item" checklist_itemId={item.id} />{' '}
+                </div>
+              )}
+
               <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
-                <TagModal />
+                <TagModal entity_type="checklist_item" />
               </span>
               <div className="mx-1">
                 <ChecklistModal

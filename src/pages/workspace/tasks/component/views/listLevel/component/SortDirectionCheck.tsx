@@ -7,7 +7,6 @@ interface SortDirectionProps {
   handleRemoveSortFn: (value?: string, sortCriteria?: string) => void;
   sortValue?: string;
   sortDesc?: boolean;
-  sortAsc?: boolean;
   sortItemLength: number;
   sortIndex: number;
   sortCriteria?: string;
@@ -20,7 +19,6 @@ export default function SortDirectionCheck({
   sortDesc,
   sortItemLength,
   sortIndex,
-  sortAsc,
   sortCriteria
 }: SortDirectionProps) {
   return sortItemLength >= 1 ? (

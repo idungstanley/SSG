@@ -198,7 +198,7 @@ export default function TaskName({
           {/* tag here */}
           <ToolTip tooltip="Add Tag">
             <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
-              <TagModal />
+              <TagModal entity_type="task" />
             </button>
           </ToolTip>
         </p>

@@ -14,7 +14,6 @@ import SortDirectionCheck from '../../pages/workspace/tasks/component/views/list
 import { setSortArr, setSortArray } from '../../features/task/taskSlice';
 
 type SortModalProps = {
-  headers: string[];
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSortFn: (header: string, id: string, order: 'asc' | 'desc') => void;
   anchorEl: HTMLElement | null;
@@ -27,14 +26,7 @@ type filterSwitch = {
   toggle: boolean;
 };
 
-export default function SortModal({
-  headers,
-  toggleModal,
-  setAnchorEl,
-  anchorEl,
-  handleClose,
-  handleSortFn
-}: SortModalProps) {
+export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleClose, handleSortFn }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { sortAbleArr, activeTaskColumn, sortArr } = useAppSelector((state) => state.task);
