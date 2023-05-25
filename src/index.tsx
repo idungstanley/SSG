@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import { Provider } from 'react-redux';
 import { QueryClientProvider, QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
@@ -81,18 +81,15 @@ const queryClient = new QueryClient({
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          <App />
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <App />
 
-          {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
-          <ReactQueryDevtools position="bottom-right" />
-        </GoogleOAuthProvider>
-      </QueryClientProvider>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+        {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
+        <ReactQueryDevtools position="bottom-right" />
+      </GoogleOAuthProvider>
+    </QueryClientProvider>
+  </Provider>
 );
