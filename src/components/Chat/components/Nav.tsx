@@ -1,7 +1,5 @@
 import React from 'react';
-import { ChatBubbleBottomCenterTextIcon, PlusIcon, UsersIcon } from '@heroicons/react/24/outline';
-import { useAppDispatch } from '../../../app/hooks';
-import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
+import { ChatBubbleBottomCenterTextIcon, UsersIcon } from '@heroicons/react/24/outline';
 import ToolTip from '../../Tooltip';
 import { cl } from '../../../utils';
 
@@ -24,20 +22,8 @@ interface NavProps {
 }
 
 export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
-  const dispatch = useAppDispatch();
-
   return (
-    <div className="h-full flex flex-col items-center border-r w-20 p-2 gap-10">
-      <ToolTip tooltip="Create chat">
-        <button
-          onClick={() => dispatch(setShowCreateChatSideOver(true))}
-          type="button"
-          className="inline-flex text-gray-500 hover:text-gray-700 items-center rounded-full focus:outline-none ring-0 focus:ring-0"
-        >
-          <PlusIcon className="h-7 w-7" aria-hidden="true" />
-        </button>
-      </ToolTip>
-
+    <div className="h-full flex flex-col items-center border-r w-20 p-2 gap-10 bg-gray-400">
       <div className="flex flex-col items-center gap-2">
         {navItems.map((tab) => (
           <ToolTip key={tab.id} tooltip={tab.label}>

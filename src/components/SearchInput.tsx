@@ -6,7 +6,7 @@ import { Spinner } from '../common';
 interface SearchInputProps {
   value: string;
   placeholder: string;
-  loading?: boolean;
+  loading?: boolean | string;
   onChange: (value: string) => void;
 }
 
